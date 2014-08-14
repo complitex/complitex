@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.web.pages.subsidy;
 
 import org.apache.wicket.Component;
-import org.complitex.dictionary.entity.Cursor;
+import org.complitex.common.entity.Cursor;
 import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.entity.Subsidy;
 import org.complitex.osznconnection.file.entity.SubsidyDBF;
@@ -13,7 +13,6 @@ import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPane
 
 import javax.ejb.EJB;
 import java.util.Date;
-import java.util.List;
 
 public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
 

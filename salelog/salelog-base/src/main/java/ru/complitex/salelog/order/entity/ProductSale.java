@@ -1,6 +1,6 @@
 package ru.complitex.salelog.order.entity;
 
-import org.complitex.dictionary.entity.DictionaryTemporalObject;
+import org.complitex.common.entity.DictionaryTemporalObject;
 import ru.complitex.salelog.entity.Product;
 
 import java.math.BigDecimal;

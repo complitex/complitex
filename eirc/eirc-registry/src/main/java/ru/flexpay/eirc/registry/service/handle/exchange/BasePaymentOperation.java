@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.registry.service.handle.exchange;
 
-import org.complitex.dictionary.service.exception.AbstractException;
+import org.complitex.common.service.exception.AbstractException;
 import ru.flexpay.eirc.registry.entity.Container;
 import ru.flexpay.eirc.registry.entity.Registry;
 import ru.flexpay.eirc.registry.entity.RegistryRecordData;

@@ -3,11 +3,11 @@ package ru.complitex.salelog.order.service;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.builder.EqualsBuilder;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.SequenceBean;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.SequenceBean;
+import org.complitex.common.util.DateUtil;
 import ru.complitex.salelog.order.entity.Order;
 import ru.complitex.salelog.order.entity.ProductSale;
 

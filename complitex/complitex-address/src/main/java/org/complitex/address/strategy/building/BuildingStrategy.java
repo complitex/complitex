@@ -16,26 +16,26 @@ import org.complitex.address.strategy.building.web.edit.BuildingEditComponent;
 import org.complitex.address.strategy.building.web.edit.BuildingValidator;
 import org.complitex.address.strategy.building.web.list.BuildingList;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.Log;
-import org.complitex.dictionary.entity.StatusType;
-import org.complitex.dictionary.entity.description.EntityAttributeType;
-import org.complitex.dictionary.entity.description.EntityAttributeValueType;
-import org.complitex.dictionary.entity.example.AttributeExample;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.LogBean;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.service.StringCultureBean;
-import org.complitex.dictionary.strategy.DeleteException;
-import org.complitex.dictionary.strategy.web.AbstractComplexAttributesPanel;
-import org.complitex.dictionary.strategy.web.DomainObjectEditPanel;
-import org.complitex.dictionary.strategy.web.validate.IValidator;
-import org.complitex.dictionary.util.BuildingNumberConverter;
-import org.complitex.dictionary.util.ResourceUtil;
-import org.complitex.dictionary.web.component.search.ISearchCallback;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.Log;
+import org.complitex.common.entity.StatusType;
+import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.description.EntityAttributeValueType;
+import org.complitex.common.entity.example.AttributeExample;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.LogBean;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.DeleteException;
+import org.complitex.common.strategy.web.AbstractComplexAttributesPanel;
+import org.complitex.common.strategy.web.DomainObjectEditPanel;
+import org.complitex.common.strategy.web.validate.IValidator;
+import org.complitex.common.util.BuildingNumberConverter;
+import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -45,8 +45,8 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.*;
 
-import static org.complitex.dictionary.util.StringUtil.removeWhiteSpaces;
-import static org.complitex.dictionary.util.StringUtil.toCyrillic;
+import static org.complitex.common.util.StringUtil.removeWhiteSpaces;
+import static org.complitex.common.util.StringUtil.toCyrillic;
 
 @Stateless
 public class BuildingStrategy extends TemplateStrategy {

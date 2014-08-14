@@ -17,9 +17,9 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.LocaleBean;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.LocaleBean;
 import org.complitex.pspoffice.importing.legacy.entity.BuildingCorrection;
 import org.complitex.pspoffice.importing.legacy.service.exception.TooManyResultsException;
 

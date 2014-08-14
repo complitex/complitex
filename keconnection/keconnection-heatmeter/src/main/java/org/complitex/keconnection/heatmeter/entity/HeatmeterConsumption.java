@@ -1,13 +1,13 @@
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.dictionary.entity.ILongId;
+import org.complitex.common.entity.ILongId;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-import static org.complitex.dictionary.util.DateUtil.getDaysDiff;
-import static org.complitex.dictionary.util.DateUtil.getMax;
-import static org.complitex.dictionary.util.DateUtil.getMin;
+import static org.complitex.common.util.DateUtil.getDaysDiff;
+import static org.complitex.common.util.DateUtil.getMax;
+import static org.complitex.common.util.DateUtil.getMin;
 import static org.complitex.keconnection.heatmeter.entity.HeatmeterConsumptionStatus.NOT_LOADED;
 
 /**

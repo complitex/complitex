@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.service.exception;
 
-import org.complitex.dictionary.entity.IExecutorObject;
-import org.complitex.dictionary.service.executor.ExecuteException;
+import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.service.executor.ExecuteException;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

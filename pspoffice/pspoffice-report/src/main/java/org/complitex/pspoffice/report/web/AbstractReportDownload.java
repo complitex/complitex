@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.util.StringUtil;
 
 public abstract class AbstractReportDownload<T extends Serializable> implements Serializable {
 

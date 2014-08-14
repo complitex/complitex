@@ -34,7 +34,7 @@
         <module>osznconnection-address</module>
         <module>osznconnection-service-provider-type</module>
 
-        <module>../complitex/complitex-dictionary</module>
+        <module>../complitex/complitex-common</module>
         <module>../complitex/complitex-template</module>
         <module>../complitex/complitex-admin</module>
         <module>../complitex/complitex-address</module>
@@ -62,7 +62,7 @@
             <!-- Complitex Modules -->
             <dependency>
                 <groupId>org.complitex</groupId>
-                <artifactId>complitex-dictionary</artifactId>
+                <artifactId>complitex-common</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>

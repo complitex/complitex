@@ -10,14 +10,14 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.Preference;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.service.exception.WrongCurrentPasswordException;
-import org.complitex.dictionary.web.component.ShowMode;
-import org.complitex.dictionary.web.component.search.SearchComponentState;
-import org.complitex.dictionary.web.component.search.WiQuerySearchComponent;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.Preference;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.service.exception.WrongCurrentPasswordException;
+import org.complitex.common.web.component.ShowMode;
+import org.complitex.common.web.component.search.SearchComponentState;
+import org.complitex.common.web.component.search.WiQuerySearchComponent;
 import org.complitex.template.web.component.LocalePicker;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
@@ -30,12 +30,12 @@ import java.util.Locale;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.web.component.back.BackInfo;
-import org.complitex.dictionary.web.component.back.BackInfoManager;
+import org.complitex.common.web.component.back.BackInfo;
+import org.complitex.common.web.component.back.BackInfoManager;
 import org.complitex.template.web.component.IMainUserOrganizationPicker;
 import org.complitex.template.web.component.MainUserOrganizationPickerFactory;
 import org.complitex.template.web.template.MenuManager;
-import static org.complitex.dictionary.web.DictionaryFwSession.*;
+import static org.complitex.common.web.DictionaryFwSession.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

@@ -7,12 +7,12 @@
     </settings>
 
     <typeAliases>
-        <typeAlias type="org.complitex.dictionary.entity.Locale" alias="Locale"/>
-        <typeAlias type="org.complitex.dictionary.entity.StringCulture" alias="StringCulture"/>
-        <typeAlias type="org.complitex.dictionary.entity.Parameter" alias="Parameter"/>
-        <typeAlias type="org.complitex.dictionary.entity.DomainObject" alias="DomainObject"/>
-        <typeAlias type="org.complitex.dictionary.entity.Attribute" alias="Attribute"/>
-        <typeAlias type="org.complitex.dictionary.entity.example.DomainObjectExample" alias="DomainObjectExample"/>
+        <typeAlias type="org.complitex.common.entity.Locale" alias="Locale"/>
+        <typeAlias type="org.complitex.common.entity.StringCulture" alias="StringCulture"/>
+        <typeAlias type="org.complitex.common.entity.Parameter" alias="Parameter"/>
+        <typeAlias type="org.complitex.common.entity.DomainObject" alias="DomainObject"/>
+        <typeAlias type="org.complitex.common.entity.Attribute" alias="Attribute"/>
+        <typeAlias type="org.complitex.common.entity.example.DomainObjectExample" alias="DomainObjectExample"/>
     </typeAliases>
 
     <environments default="local">

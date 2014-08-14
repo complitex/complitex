@@ -5,7 +5,7 @@
 package org.complitex.pspoffice.person.report.entity;
 
 import java.io.Serializable;
-import org.complitex.dictionary.entity.DomainObject;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.pspoffice.person.strategy.entity.Registration;
 
 /**

@@ -1,7 +1,7 @@
 package org.complitex.organization_type;
 
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.LogManager;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.LogManager;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;

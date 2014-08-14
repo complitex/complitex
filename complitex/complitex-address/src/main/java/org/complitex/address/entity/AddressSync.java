@@ -1,7 +1,7 @@
 package org.complitex.address.entity;
 
 import com.google.common.base.Objects;
-import org.complitex.dictionary.entity.ILongId;
+import org.complitex.common.entity.ILongId;
 
 import java.util.Date;
 

@@ -14,9 +14,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.dictionary.web.component.form.TextFieldPanel;
+import org.complitex.common.web.component.form.TextFieldPanel;
 import org.complitex.osznconnection.file.entity.RequestFileType;
-import org.complitex.osznconnection.file.entity.example.SubsidyExample;
 import org.complitex.osznconnection.file.entity.example.SubsidySumFilter;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescription;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
@@ -26,7 +25,6 @@ import org.odlabs.wiquery.ui.dialog.Dialog;
 import javax.ejb.EJB;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

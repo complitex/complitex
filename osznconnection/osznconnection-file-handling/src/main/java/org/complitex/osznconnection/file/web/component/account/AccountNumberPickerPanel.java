@@ -18,10 +18,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.util.StringUtil;
-import org.complitex.dictionary.web.component.datatable.ArrowOrderByBorder;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
+import org.complitex.common.util.StringUtil;
+import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.osznconnection.file.entity.AccountDetail;
 
 import java.util.Collections;

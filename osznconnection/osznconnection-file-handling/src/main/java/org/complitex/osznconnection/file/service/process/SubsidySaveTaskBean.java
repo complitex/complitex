@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
-import org.complitex.dictionary.service.executor.ITaskBean;
+import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.Subsidy;
 import org.complitex.osznconnection.file.entity.SubsidyDBF;

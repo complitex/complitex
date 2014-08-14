@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Locale;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.dictionary.strategy.IStrategy;
-import org.complitex.dictionary.strategy.StrategyFactory;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.template.web.security.SecurityRole;
 
 /**

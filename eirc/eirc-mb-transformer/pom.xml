@@ -28,7 +28,7 @@
         </dependency-->
         <dependency>
             <groupId>org.complitex</groupId>
-            <artifactId>complitex-dictionary</artifactId>
+            <artifactId>complitex-common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.complitex</groupId>

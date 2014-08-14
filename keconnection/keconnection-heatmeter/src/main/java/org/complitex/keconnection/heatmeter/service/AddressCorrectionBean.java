@@ -2,11 +2,11 @@ package org.complitex.keconnection.heatmeter.service;
 
 import com.google.common.collect.Maps;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.strategy.IStrategy;
-import org.complitex.dictionary.web.component.search.SearchComponentState;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.keconnection.heatmeter.entity.BuildingCorrection;
 import org.complitex.keconnection.heatmeter.entity.Correction;
 import org.complitex.keconnection.heatmeter.entity.StreetCorrection;

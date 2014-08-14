@@ -1,6 +1,6 @@
 package org.complitex.keconnection.heatmeter.service.exception;
 
-import org.complitex.dictionary.service.exception.AbstractException;
+import org.complitex.common.service.exception.AbstractException;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

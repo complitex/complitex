@@ -21,10 +21,10 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.web.component.datatable.ArrowOrderByBorder;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample;
 import org.complitex.osznconnection.file.service.AddressService;
@@ -51,7 +51,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.complitex.dictionary.util.StringUtil.emptyOnNull;
+import static org.complitex.common.util.StringUtil.emptyOnNull;
 import static org.complitex.osznconnection.file.entity.DwellingCharacteristicsDBF.CDUL;
 
 /**

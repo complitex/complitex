@@ -1,16 +1,13 @@
 package org.complitex.address.service;
 
-import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.dictionary.entity.Cursor;
-import org.complitex.dictionary.entity.DictionaryConfig;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.service.ConfigBean;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.util.AttributeUtil;
-import org.complitex.dictionary.util.CloneUtil;
+import org.complitex.common.entity.Cursor;
+import org.complitex.common.entity.DictionaryConfig;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.service.ConfigBean;
+import org.complitex.common.util.CloneUtil;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

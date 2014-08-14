@@ -1,8 +1,8 @@
 package ru.flexpay.eirc.registry.entity;
 
-import org.complitex.dictionary.entity.description.ILocalizedType;
-import org.complitex.dictionary.mybatis.IFixedIdType;
-import org.complitex.dictionary.util.ResourceUtil;
+import org.complitex.common.entity.description.ILocalizedType;
+import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.common.util.ResourceUtil;
 
 import java.util.Locale;
 

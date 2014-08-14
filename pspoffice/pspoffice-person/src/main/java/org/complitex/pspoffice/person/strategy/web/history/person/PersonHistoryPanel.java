@@ -16,16 +16,16 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.*;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.description.Entity;
-import org.complitex.dictionary.entity.description.EntityAttributeType;
-import org.complitex.dictionary.service.IUserProfileBean;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.StringCultureBean;
-import org.complitex.dictionary.web.component.DisableAwareDropDownChoice;
-import org.complitex.dictionary.web.component.DomainObjectDisableAwareRenderer;
-import org.complitex.dictionary.web.component.css.CssAttributeBehavior;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.description.Entity;
+import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.service.IUserProfileBean;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.web.component.DisableAwareDropDownChoice;
+import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
+import org.complitex.common.web.component.css.CssAttributeBehavior;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
 import org.complitex.pspoffice.military.strategy.MilitaryServiceRelationStrategy;
@@ -47,8 +47,8 @@ import java.util.Locale;
 
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.newArrayList;
-import static org.complitex.dictionary.web.component.DomainObjectComponentUtil.labelModel;
-import static org.complitex.dictionary.web.component.DomainObjectComponentUtil.newInputComponent;
+import static org.complitex.common.web.component.DomainObjectComponentUtil.labelModel;
+import static org.complitex.common.web.component.DomainObjectComponentUtil.newInputComponent;
 import static org.complitex.pspoffice.person.strategy.PersonStrategy.*;
 
 /**

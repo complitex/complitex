@@ -1,7 +1,7 @@
 package org.complitex.logging.service;
 
-import org.complitex.dictionary.entity.Log;
-import org.complitex.dictionary.service.AbstractFilter;
+import org.complitex.common.entity.Log;
+import org.complitex.common.service.AbstractFilter;
 
 import java.util.Date;
 

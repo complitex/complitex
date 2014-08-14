@@ -6,8 +6,8 @@ package org.complitex.pspoffice.person.report.service;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;

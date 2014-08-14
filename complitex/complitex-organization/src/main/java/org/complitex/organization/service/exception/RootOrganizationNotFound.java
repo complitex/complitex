@@ -1,6 +1,6 @@
 package org.complitex.organization.service.exception;
 
-import org.complitex.dictionary.service.exception.AbstractException;
+import org.complitex.common.service.exception.AbstractException;
 
 import javax.ejb.ApplicationException;
 

@@ -4,12 +4,12 @@
  */
 package org.complitex.keconnection.tarif.strategy.web.edit;
 
-import org.complitex.dictionary.strategy.web.validate.CodeValidator;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.strategy.web.DomainObjectEditPanel;
-import org.complitex.dictionary.strategy.web.validate.DefaultValidator;
-import org.complitex.dictionary.strategy.web.validate.IValidator;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.strategy.web.validate.CodeValidator;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.strategy.web.DomainObjectEditPanel;
+import org.complitex.common.strategy.web.validate.DefaultValidator;
+import org.complitex.common.strategy.web.validate.IValidator;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.keconnection.tarif.strategy.TarifGroupStrategy;
 
 /**

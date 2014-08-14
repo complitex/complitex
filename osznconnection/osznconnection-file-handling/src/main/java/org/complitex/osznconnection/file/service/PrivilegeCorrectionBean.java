@@ -1,10 +1,10 @@
 package org.complitex.osznconnection.file.service;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.dictionary.entity.Correction;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.entity.Correction;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.PrivilegeCorrection;
 
 import javax.ejb.Stateless;

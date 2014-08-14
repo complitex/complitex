@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.mb_transformer.service;
 
 import com.google.common.collect.Maps;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.service.AbstractBean;
 
 import javax.ejb.Stateless;
 import java.util.Map;

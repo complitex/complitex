@@ -1,11 +1,11 @@
 package org.complitex.pspoffice.person;
 
-import org.complitex.dictionary.service.LogManager;
+import org.complitex.common.service.LogManager;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import org.complitex.dictionary.entity.DomainObject;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.pspoffice.person.strategy.web.edit.person.PersonEdit;
 import org.complitex.template.strategy.TemplateStrategy;
 

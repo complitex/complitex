@@ -5,8 +5,8 @@
 package org.complitex.keconnection.organization.service;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.keconnection.organization.entity.OrganizationImport;
 
 import javax.ejb.Stateless;

@@ -8,7 +8,7 @@
         <result column="id"     property="id"/>
         <result column="data"   property="data"/>
 
-        <result property="type"  column="type" typeHandler="org.complitex.dictionary.mybatis.FixedIdBaseTypeHandler"/>
+        <result property="type"  column="type" typeHandler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"/>
 
     </resultMap>
 </mapper>

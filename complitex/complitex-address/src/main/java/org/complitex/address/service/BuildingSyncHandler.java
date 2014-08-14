@@ -1,21 +1,15 @@
 package org.complitex.address.service;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
-import org.complitex.dictionary.entity.*;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.service.ConfigBean;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.Locales;
-import org.complitex.dictionary.util.AttributeUtil;
-import org.complitex.dictionary.util.CloneUtil;
+import org.complitex.common.entity.*;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.service.ConfigBean;
+import org.complitex.common.util.CloneUtil;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

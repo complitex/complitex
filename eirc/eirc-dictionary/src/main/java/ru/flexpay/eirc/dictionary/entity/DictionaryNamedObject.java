@@ -2,7 +2,7 @@ package ru.flexpay.eirc.dictionary.entity;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
-import org.complitex.dictionary.entity.Locale;
+import org.complitex.common.entity.Locale;
 
 import java.util.Map;
 

@@ -3,7 +3,7 @@
 
 <mapper namespace="ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountBean">
 
-    <cache type="org.complitex.dictionary.mybatis.caches.EhcacheCache"/>
+    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
     <resultMap id="ServiceProviderAccount" type="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccount">
         <id column="spa_pk_id" property="pkId"/>
@@ -110,7 +110,7 @@
         <include refid="ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountBean.serviceProviderAccountCondition"/>
     </sql>
 
-    <select id="selectServiceProviderAccounts" parameterType="org.complitex.dictionary.entity.FilterWrapper" 
+    <select id="selectServiceProviderAccounts" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="ServiceProviderAccount" flushCache="false" useCache="true">
         select
         <include refid="generalWithAddressSPAColumns"/>
@@ -165,7 +165,7 @@
         </if>
     </select>
 
-    <select id="countServiceProviderAccounts" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultType="integer" flushCache="false" useCache="true">
+    <select id="countServiceProviderAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer" flushCache="false" useCache="true">
         select count(distinct spa.`object_id`) from `service_provider_account` spa
         <if test="map.inactive == true or map.all == true">
             inner join (select max(pk_id) as max_pk_id from `service_provider_account` group by object_id) spa2 on spa.pk_id=spa2.max_pk_id

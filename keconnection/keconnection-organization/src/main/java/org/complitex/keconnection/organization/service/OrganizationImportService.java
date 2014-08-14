@@ -6,16 +6,16 @@ package org.complitex.keconnection.organization.service;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Strings;
-import org.complitex.dictionary.converter.BooleanConverter;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.AbstractImportService;
-import org.complitex.dictionary.service.IImportListener;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.exception.ImportFileNotFoundException;
-import org.complitex.dictionary.service.exception.ImportFileReadException;
-import org.complitex.dictionary.util.AttributeUtil;
-import org.complitex.dictionary.util.CloneUtil;
+import org.complitex.common.converter.BooleanConverter;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.IImportListener;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.exception.ImportFileNotFoundException;
+import org.complitex.common.service.exception.ImportFileReadException;
+import org.complitex.common.util.AttributeUtil;
+import org.complitex.common.util.CloneUtil;
 import org.complitex.keconnection.organization.entity.OrganizationImport;
 import org.complitex.keconnection.organization.service.exception.RootOrganizationNotFound;
 import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
@@ -28,8 +28,8 @@ import javax.ejb.Stateless;
 import java.io.IOException;
 import java.util.*;
 
-import static org.complitex.dictionary.strategy.organization.IOrganizationStrategy.CODE;
-import static org.complitex.dictionary.strategy.organization.IOrganizationStrategy.NAME;
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.CODE;
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.NAME;
 import static org.complitex.keconnection.organization.entity.OrganizationImportFile.ORGANIZATION;
 import static org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy.SHORT_NAME;
 

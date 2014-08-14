@@ -12,8 +12,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.complitex.dictionary.util.DateUtil;
-import org.complitex.dictionary.web.component.dateinput.MaskedDateInput;
+import org.complitex.common.util.DateUtil;
+import org.complitex.common.web.component.dateinput.MaskedDateInput;
 
 /**
  *

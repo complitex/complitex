@@ -5,7 +5,7 @@
 package org.complitex.keconnection.heatmeter.service;
 
 import org.apache.ibatis.session.SqlSession;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.util.DateUtil;
 import org.complitex.keconnection.heatmeter.service.ExternalHeatmeterService.ExternalHeatmetersAndStatus;
 import org.complitex.keconnection.heatmeter.service.exception.DBException;
 import org.slf4j.Logger;

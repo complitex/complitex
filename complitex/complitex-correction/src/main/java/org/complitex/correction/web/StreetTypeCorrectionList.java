@@ -7,10 +7,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.correction.entity.StreetTypeCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
-import org.complitex.dictionary.entity.Correction;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.service.SessionBean;
+import org.complitex.common.entity.Correction;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.SessionBean;
 
 import javax.ejb.EJB;
 import java.util.List;

@@ -21,7 +21,7 @@ import org.apache.wicket.util.string.Strings;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.complitex.dictionary.entity.DomainObject;
+import org.complitex.common.entity.DomainObject;
 import org.odlabs.wiquery.core.javascript.JsStatement;
 import org.odlabs.wiquery.core.javascript.JsUtils;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;

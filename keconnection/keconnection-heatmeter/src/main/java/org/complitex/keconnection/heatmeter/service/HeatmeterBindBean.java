@@ -6,9 +6,9 @@ package org.complitex.keconnection.heatmeter.service;
 
 import java.util.List;
 import javax.ejb.Stateless;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.mybatis.XmlMapper;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.mybatis.XmlMapper;
+import org.complitex.common.service.AbstractBean;
 
 /**
  *

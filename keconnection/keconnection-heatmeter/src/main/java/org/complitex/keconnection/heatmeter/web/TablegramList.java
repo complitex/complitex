@@ -15,12 +15,12 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.service.ContextProcessListener;
-import org.complitex.dictionary.util.ExceptionUtil;
-import org.complitex.dictionary.web.component.ajax.AjaxFeedbackPanel;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.ContextProcessListener;
+import org.complitex.common.util.ExceptionUtil;
+import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.keconnection.heatmeter.entity.Tablegram;
 import org.complitex.keconnection.heatmeter.entity.TablegramRecord;
 import org.complitex.keconnection.heatmeter.service.TablegramBean;
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import java.util.Locale;
 
-import static org.complitex.dictionary.util.PageUtil.*;
+import static org.complitex.common.util.PageUtil.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

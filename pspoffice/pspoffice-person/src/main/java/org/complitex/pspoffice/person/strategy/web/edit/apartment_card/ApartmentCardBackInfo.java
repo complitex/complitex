@@ -5,7 +5,7 @@
 package org.complitex.pspoffice.person.strategy.web.edit.apartment_card;
 
 import org.apache.wicket.Component;
-import org.complitex.dictionary.web.component.back.BackInfo;
+import org.complitex.common.web.component.back.BackInfo;
 import org.complitex.pspoffice.person.menu.OperationMenu;
 import org.complitex.template.web.template.MenuManager;
 

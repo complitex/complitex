@@ -5,11 +5,11 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.example.AttributeExample;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.util.AttributeUtil;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.example.AttributeExample;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.util.AttributeUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 

@@ -16,7 +16,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.util.DateUtil;
 import org.complitex.pspoffice.report.html.entity.Report;
 import org.complitex.pspoffice.report.html.entity.ReportSql;
 import org.complitex.pspoffice.report.html.service.ReportBean;

@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.wicket.Component;
-import org.complitex.dictionary.web.IWebComponentResolver;
+import org.complitex.common.web.IWebComponentResolver;
 
 /**
  *

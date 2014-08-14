@@ -7,7 +7,7 @@ package org.complitex.osznconnection.file.web.component.process;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
-import org.complitex.dictionary.web.component.css.CssAttributeBehavior;
+import org.complitex.common.web.component.css.CssAttributeBehavior;
 
 /**
  *

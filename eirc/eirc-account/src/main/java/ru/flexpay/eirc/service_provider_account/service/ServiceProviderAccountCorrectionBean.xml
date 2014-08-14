@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountCorrectionBean">
     <resultMap id="serviceProviderAccountCorrectionResultMap" type="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountCorrection"
-               extends="org.complitex.dictionary.entity.Correction.correction">
+               extends="org.complitex.common.entity.Correction.correction">
     </resultMap>
 
     <select id="selectServiceProviderAccountCorrection" resultMap="serviceProviderAccountCorrectionResultMap" parameterType="long">
@@ -10,16 +10,16 @@
     </select>
 
     <select id="selectServiceProviderAccountCorrections" resultMap="serviceProviderAccountCorrectionResultMap"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select * from `service_provider_account_correction` c
-        <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhere"/>
+        <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
     <select id="selectServiceProviderAccountCorrectionsCount" resultType="int"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `service_provider_account_correction` c
         <where>
-            <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhereIf"/>
+            <include refid="org.complitex.common.entity.Correction.selectCorrectionWhereIf"/>
         </where>
     </select>
 </mapper>

@@ -2,11 +2,11 @@ package org.complitex.osznconnection.file.strategy;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.example.AttributeExample;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.service.StringCultureBean;
-import org.complitex.dictionary.util.ResourceUtil;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.example.AttributeExample;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 

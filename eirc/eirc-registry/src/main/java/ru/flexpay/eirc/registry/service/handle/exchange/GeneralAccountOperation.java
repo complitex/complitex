@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.service.handle.exchange;
 
 import org.apache.commons.lang.StringUtils;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.util.DateUtil;
 import ru.flexpay.eirc.registry.entity.Container;
 
 import java.text.ParseException;

@@ -1,7 +1,7 @@
 package org.complitex.keconnection.heatmeter.service;
 
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.mybatis.XmlMapper;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.mybatis.XmlMapper;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterConsumption;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterInput;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterPeriodType;

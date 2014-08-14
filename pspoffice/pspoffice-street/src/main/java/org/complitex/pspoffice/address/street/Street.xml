@@ -3,12 +3,12 @@
 
 <mapper namespace="org.complitex.pspoffice.address.street.Street">
 
-    <select id="find" resultMap="org.complitex.dictionary.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
+    <select id="find" resultMap="org.complitex.common.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
         SELECT e.* FROM `street` e WHERE
         <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
         <include refid="org.complitex.pspoffice.address.street.Street.pspStreetFilter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.orderBy"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.limit"/>
+        <include refid="org.complitex.common.entity.DomainObject.orderBy"/>
+        <include refid="org.complitex.common.entity.DomainObject.limit"/>
     </select>
     
     <sql id="pspStreetFilter">

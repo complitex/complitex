@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.registry.service.handle.exchange;
 
-import org.complitex.dictionary.service.exception.AbstractException;
+import org.complitex.common.service.exception.AbstractException;
 
 /**
  * @author Pavel Sknar

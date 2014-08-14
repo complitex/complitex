@@ -1,7 +1,7 @@
 package org.complitex.pspoffice.person.report.service;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.dictionary.service.LocaleBean;
+import org.complitex.common.service.LocaleBean;
 import org.complitex.pspoffice.person.report.entity.RegistrationStopCoupon;
 import org.complitex.pspoffice.person.strategy.entity.PersonName.PersonNameType;
 import org.complitex.pspoffice.person.strategy.service.PersonNameBean;
@@ -13,11 +13,11 @@ import java.util.TreeSet;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.web.DictionaryFwSession;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;

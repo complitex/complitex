@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 

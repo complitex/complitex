@@ -3,8 +3,8 @@ package org.complitex.osznconnection.file.web.component.process;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.complitex.dictionary.entity.IExecutorObject;
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.util.StringUtil;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 
 public class ItemStatusLabel extends Label {

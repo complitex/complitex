@@ -19,14 +19,14 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.strategy.region.RegionStrategy;
-import org.complitex.dictionary.converter.BigDecimalConverter;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.entity.Person;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.web.component.DatePicker;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
+import org.complitex.common.converter.BigDecimalConverter;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.entity.Person;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.web.component.DatePicker;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.template.TemplatePage;
@@ -46,7 +46,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.complitex.dictionary.util.PageUtil.newSorting;
+import static org.complitex.common.util.PageUtil.newSorting;
 import static ru.complitex.salelog.order.service.OrderBean.OrderExt;
 
 /**

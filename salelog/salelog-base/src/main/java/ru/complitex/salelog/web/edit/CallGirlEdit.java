@@ -12,7 +12,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
-import org.complitex.dictionary.entity.FilterWrapper;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.template.web.template.FormTemplatePage;
 import ru.complitex.salelog.entity.CallGirl;
 import ru.complitex.salelog.service.CallGirlBean;

@@ -15,9 +15,9 @@ import org.apache.wicket.authroles.authorization.strategies.role.IRoleCheckingSt
 import org.apache.wicket.authroles.authorization.strategies.role.RoleAuthorizationStrategy;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.complitex.dictionary.entity.Log.EVENT;
-import org.complitex.dictionary.service.LogBean;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.entity.Log.EVENT;
+import org.complitex.common.service.LogBean;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.template.Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ru.flexpay.eirc.service.correction.service.ServiceCorrectionBean">
-    <cache type="org.complitex.dictionary.mybatis.caches.EhcacheCache"/>
+    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
     <resultMap id="serviceCorrectionResultMap" type="ru.flexpay.eirc.service.correction.entity.ServiceCorrection"
-               extends="org.complitex.dictionary.entity.Correction.correction">
+               extends="org.complitex.common.entity.Correction.correction">
     </resultMap>
 
     <select id="selectServiceCorrection" resultMap="serviceCorrectionResultMap" parameterType="long">
@@ -12,16 +12,16 @@
     </select>
 
     <select id="selectServiceCorrections" resultMap="serviceCorrectionResultMap"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select * from `service_correction` c
-        <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhere"/>
+        <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
     <select id="selectServiceCorrectionsCount" resultType="int"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `service_correction` c
         <where>
-            <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhereIf"/>
+            <include refid="org.complitex.common.entity.Correction.selectCorrectionWhereIf"/>
         </where>
     </select>
 </mapper>

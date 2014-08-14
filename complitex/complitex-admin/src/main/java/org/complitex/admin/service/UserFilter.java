@@ -1,8 +1,8 @@
 package org.complitex.admin.service;
 
-import org.complitex.dictionary.entity.UserGroup;
-import org.complitex.dictionary.entity.example.AttributeExample;
-import org.complitex.dictionary.service.AbstractFilter;
+import org.complitex.common.entity.UserGroup;
+import org.complitex.common.entity.example.AttributeExample;
+import org.complitex.common.service.AbstractFilter;
 
 import java.util.ArrayList;
 import java.util.List;

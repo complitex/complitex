@@ -27,7 +27,7 @@
 
     </sql>
 
-    <select id="selectTablegrams" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultMap="tablegramResultMap">
+    <select id="selectTablegrams" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="tablegramResultMap">
         select *,
         (select count(*) from `tablegram_record` r where r.`tablegram_id` = t.`id`) as `count`,
         (select count(*) from `tablegram_record` r where r.`tablegram_id` = t.`id` and r.`status` = 2) as `processed_count`
@@ -35,7 +35,7 @@
           order by ${sortProperty} ${asc} limit #{first}, #{count}
     </select>
 
-    <select id="selectTablegramsCount" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultType="int">
+    <select id="selectTablegramsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="int">
         select count(*) from `tablegram` <include refid="selectTablegramsWhere"/>
     </select>
 

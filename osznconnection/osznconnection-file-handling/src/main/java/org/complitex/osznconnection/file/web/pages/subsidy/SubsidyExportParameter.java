@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.web.pages.subsidy;
 
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.entity.ExportType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 

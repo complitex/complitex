@@ -8,7 +8,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.SharedResourceReference;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-import org.complitex.dictionary.web.component.search.CollapsibleInputSearchComponent;
+import org.complitex.common.web.component.search.CollapsibleInputSearchComponent;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 
 /**

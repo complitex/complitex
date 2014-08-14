@@ -10,10 +10,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.complitex.dictionary.entity.IComponentConfig;
-import org.complitex.dictionary.entity.IConfig;
-import org.complitex.dictionary.service.ConfigBean;
-import org.complitex.dictionary.web.component.type.InputPanel;
+import org.complitex.common.entity.IComponentConfig;
+import org.complitex.common.entity.IConfig;
+import org.complitex.common.service.ConfigBean;
+import org.complitex.common.web.component.type.InputPanel;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
 

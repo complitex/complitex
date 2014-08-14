@@ -8,7 +8,7 @@
                 <pathelement location="${jdbc}"/>
             </classpath>
 
-            <transaction src="../../complitex/complitex-db/complitex-dictionary-create.sql"/>
+            <transaction src="../../complitex/complitex-db/complitex-common-create.sql"/>
             <transaction src="../../complitex/complitex-db/complitex-create.sql"/>
 
             <transaction src="keconnection-create.sql"/>

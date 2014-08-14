@@ -3,19 +3,19 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <typeAlias type="org.complitex.dictionary.entity.Locale" alias="Locale"/>
-        <typeAlias type="org.complitex.dictionary.entity.StringCulture" alias="StringCulture"/>
-        <typeAlias type="org.complitex.dictionary.entity.Parameter" alias="Parameter"/>
-        <typeAlias type="org.complitex.dictionary.entity.DomainObject" alias="DomainObject"/>
-        <typeAlias type="org.complitex.dictionary.entity.Attribute" alias="Attribute"/>
-        <typeAlias type="org.complitex.dictionary.entity.example.DomainObjectExample" alias="DomainObjectExample"/>
+        <typeAlias type="org.complitex.common.entity.Locale" alias="Locale"/>
+        <typeAlias type="org.complitex.common.entity.StringCulture" alias="StringCulture"/>
+        <typeAlias type="org.complitex.common.entity.Parameter" alias="Parameter"/>
+        <typeAlias type="org.complitex.common.entity.DomainObject" alias="DomainObject"/>
+        <typeAlias type="org.complitex.common.entity.Attribute" alias="Attribute"/>
+        <typeAlias type="org.complitex.common.entity.example.DomainObjectExample" alias="DomainObjectExample"/>
     </typeAliases>
 
     <plugins>
-        <plugin interceptor="org.complitex.dictionary.mybatis.plugin.EhcacheExecutorPlugin">
+        <plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheExecutorPlugin">
             <property name="excludeNamespaces" value="
-            org.complitex.dictionary.entity.Locale,
-            org.complitex.dictionary.entity.description.Entity,
+            org.complitex.common.entity.Locale,
+            org.complitex.common.entity.description.Entity,
             ru.flexpay.eirc.service_provider_account.service.OwnerExemptionBean,
             ru.flexpay.eirc.registry.service.RegistryRecordBean,
             ru.flexpay.eirc.registry.service.RegistryBean"/>

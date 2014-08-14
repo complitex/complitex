@@ -7,7 +7,7 @@ package org.complitex.osznconnection.file.service_provider.util;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAccountNumberInfo;
 import org.complitex.osznconnection.file.service_provider.exception.ServiceProviderAccountNumberParseException;
 import static org.apache.wicket.util.string.Strings.*;
-import static org.complitex.dictionary.util.StringUtil.*;
+import static org.complitex.common.util.StringUtil.*;
 
 /**
  *

@@ -3,12 +3,12 @@ package org.complitex.admin.service;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.complitex.admin.strategy.UserInfoStrategy;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.IUserProfileBean;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.service.exception.WrongCurrentPasswordException;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.IUserProfileBean;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.service.exception.WrongCurrentPasswordException;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;

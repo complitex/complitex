@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.service.service;
 
-import org.complitex.dictionary.entity.FilterWrapper;
+import org.complitex.common.entity.FilterWrapper;
 import ru.flexpay.eirc.service.entity.Service;
 
 /**

@@ -11,8 +11,8 @@ import org.complitex.address.util.AddressRenderer;
 import org.complitex.correction.entity.StreetCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.correction.web.StreetCorrectionList;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.service.SessionBean;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.SessionBean;
 
 import javax.ejb.EJB;
 import java.util.List;

@@ -7,9 +7,9 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
-import org.complitex.dictionary.entity.Correction;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.entity.Correction;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;

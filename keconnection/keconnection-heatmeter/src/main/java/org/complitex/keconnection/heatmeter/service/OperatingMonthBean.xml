@@ -29,13 +29,13 @@
         </where>
     </sql>
 
-    <select id="selectOperatingMonths" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectOperatingMonths" parameterType="org.complitex.common.entity.FilterWrapper"
         resultMap="operatingMonthResultMap">
         select * from `operating_month` <include refid="selectOperatingMonthWhere"/>
           order by ${sortProperty} ${asc} limit #{first}, #{count}
     </select>
 
-    <select id="selectOperatingMonthsCount" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectOperatingMonthsCount" parameterType="org.complitex.common.entity.FilterWrapper"
         resultType="int">
         select count(*) from `operating_month` <include refid="selectOperatingMonthWhere"/>
     </select>

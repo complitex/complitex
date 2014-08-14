@@ -2,8 +2,8 @@ package org.complitex.osznconnection.file.service.file_description;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionValidateException.ValidationError;
 import org.complitex.osznconnection.file.service.file_description.jaxb.Field;
@@ -26,8 +26,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
-import static org.complitex.dictionary.util.ResourceUtil.getFormatString;
-import static org.complitex.dictionary.util.ResourceUtil.getString;
+import static org.complitex.common.util.ResourceUtil.getFormatString;
+import static org.complitex.common.util.ResourceUtil.getString;
 
 /**
  *

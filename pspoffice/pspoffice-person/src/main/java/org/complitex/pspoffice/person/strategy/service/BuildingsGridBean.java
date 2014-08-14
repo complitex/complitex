@@ -12,11 +12,11 @@ import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.pspoffice.person.strategy.entity.grid.BuildingsGridEntity;
 import org.complitex.pspoffice.person.strategy.entity.grid.BuildingsGridFilter;
 

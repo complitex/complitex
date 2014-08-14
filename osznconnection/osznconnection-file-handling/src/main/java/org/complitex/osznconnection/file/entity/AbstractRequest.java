@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.entity;
 
 import com.google.common.collect.Lists;
-import org.complitex.dictionary.entity.ILongId;
+import org.complitex.common.entity.ILongId;
 
 import java.util.HashMap;
 import java.util.List;

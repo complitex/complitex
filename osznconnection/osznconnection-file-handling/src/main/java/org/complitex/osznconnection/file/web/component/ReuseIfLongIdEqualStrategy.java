@@ -4,7 +4,7 @@ import org.apache.wicket.markup.repeater.IItemFactory;
 import org.apache.wicket.markup.repeater.IItemReuseStrategy;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
-import org.complitex.dictionary.entity.ILongId;
+import org.complitex.common.entity.ILongId;
 
 import java.util.HashMap;
 import java.util.Iterator;

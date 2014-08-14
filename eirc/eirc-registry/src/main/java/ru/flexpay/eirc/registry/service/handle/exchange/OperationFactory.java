@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.service.handle.exchange;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.dictionary.service.exception.AbstractException;
+import org.complitex.common.service.exception.AbstractException;
 import ru.flexpay.eirc.registry.entity.Container;
 import ru.flexpay.eirc.registry.entity.ContainerType;
 

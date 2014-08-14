@@ -2,17 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.complitex.admin.service.UserBean">
-    <resultMap id="userResultMap" type="org.complitex.dictionary.entity.User">
+    <resultMap id="userResultMap" type="org.complitex.common.entity.User">
         <id column="user_id" property="id"/>
         <result column="login" property="login"/>
         <result column="password" property="password"/>        
         <result column="user_info_object_id" property="userInfoObjectId"/>
-        <collection property="userGroups" ofType="org.complitex.dictionary.entity.UserGroup">
+        <collection property="userGroups" ofType="org.complitex.common.entity.UserGroup">
             <id column="user_group_id" property="id"/>
             <result column="user_group_login" property="login"/>
             <result column="group_name" property="groupName"/>
         </collection>
-        <collection property="userOrganizations" ofType="org.complitex.dictionary.entity.UserOrganization">
+        <collection property="userOrganizations" ofType="org.complitex.common.entity.UserOrganization">
             <id column="user_organization_id" property="id"/>
             <result column="organization_object_id" property="organizationObjectId"/>
             <result column="main" property="main"/>
@@ -124,11 +124,11 @@
         <include refid="userFilter"/>
     </select>
 
-    <insert id="insertUser" parameterType="org.complitex.dictionary.entity.User" keyProperty="id" useGeneratedKeys="true">
+    <insert id="insertUser" parameterType="org.complitex.common.entity.User" keyProperty="id" useGeneratedKeys="true">
         insert into `user` (`login`, `password`, `user_info_object_id`) values (#{login}, #{password}, #{userInfoObjectId})
     </insert>
 
-    <update id="updateUser" parameterType="org.complitex.dictionary.entity.User">
+    <update id="updateUser" parameterType="org.complitex.common.entity.User">
         update `user`
         <set>
             <if test="password != null"> `password` = #{password},</if>
@@ -138,7 +138,7 @@
     </update>
 
     <!--User Group-->
-    <insert id="insertUserGroup" parameterType="org.complitex.dictionary.entity.UserGroup">
+    <insert id="insertUserGroup" parameterType="org.complitex.common.entity.UserGroup">
         insert into `usergroup` (`login`, `group_name`) values (#{login}, #{groupName})
     </insert>
 
@@ -147,7 +147,7 @@
     </delete>
 
     <!--User Organization-->
-    <insert id="insertUserOrganization" parameterType="org.complitex.dictionary.entity.UserOrganization">
+    <insert id="insertUserOrganization" parameterType="org.complitex.common.entity.UserOrganization">
         insert into `user_organization` (`user_id`, `organization_object_id`, `main`)
             values (#{userId}, #{organizationObjectId}, #{main})
     </insert>
@@ -156,7 +156,7 @@
         delete from `user_organization` where id = #{id}
     </delete>
 
-    <update id="updateUserOrganization" parameterType="org.complitex.dictionary.entity.UserOrganization">
+    <update id="updateUserOrganization" parameterType="org.complitex.common.entity.UserOrganization">
         update `user_organization` set main = #{main} where id = #{id}
     </update>
 </mapper>

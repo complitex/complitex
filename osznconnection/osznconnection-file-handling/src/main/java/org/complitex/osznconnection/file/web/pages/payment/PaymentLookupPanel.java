@@ -5,7 +5,7 @@
 package org.complitex.osznconnection.file.web.pages.payment;
 
 import org.apache.wicket.Component;
-import org.complitex.dictionary.entity.Cursor;
+import org.complitex.common.entity.Cursor;
 import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.entity.Payment;
 import org.complitex.osznconnection.file.entity.PaymentDBF;
@@ -16,7 +16,6 @@ import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPane
 
 import javax.ejb.EJB;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Панель для поиска номера л/c по различным параметрам: по адресу, по номеру лиц. счета, по номеру в мегабанке.

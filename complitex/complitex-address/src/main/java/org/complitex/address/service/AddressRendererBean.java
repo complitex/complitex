@@ -5,12 +5,12 @@
 package org.complitex.address.service;
 
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.strategy.IStrategy;
-import org.complitex.dictionary.strategy.SimpleObjectInfo;
-import org.complitex.dictionary.strategy.StrategyFactory;
-import org.complitex.dictionary.web.component.search.SearchComponentState;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.SimpleObjectInfo;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.web.component.search.SearchComponentState;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

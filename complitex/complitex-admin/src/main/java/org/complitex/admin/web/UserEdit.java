@@ -20,16 +20,16 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.admin.Module;
 import org.complitex.admin.service.UserBean;
 import org.complitex.admin.strategy.UserInfoStrategy;
-import org.complitex.dictionary.entity.*;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.LogBean;
-import org.complitex.dictionary.service.PreferenceBean;
-import org.complitex.dictionary.util.CloneUtil;
-import org.complitex.dictionary.web.component.DomainObjectInputPanel;
-import org.complitex.dictionary.web.component.ShowMode;
-import org.complitex.dictionary.web.component.organization.OrganizationPicker;
-import org.complitex.dictionary.web.component.search.SearchComponentState;
-import org.complitex.dictionary.web.component.search.WiQuerySearchComponent;
+import org.complitex.common.entity.*;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.LogBean;
+import org.complitex.common.service.PreferenceBean;
+import org.complitex.common.util.CloneUtil;
+import org.complitex.common.web.component.DomainObjectInputPanel;
+import org.complitex.common.web.component.ShowMode;
+import org.complitex.common.web.component.organization.OrganizationPicker;
+import org.complitex.common.web.component.search.SearchComponentState;
+import org.complitex.common.web.component.search.WiQuerySearchComponent;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.template.web.component.LocalePicker;
 import org.complitex.template.web.security.SecurityRole;
@@ -40,8 +40,8 @@ import javax.ejb.EJB;
 import java.util.*;
 import java.util.Locale;
 
-import static org.complitex.dictionary.entity.UserGroup.GROUP_NAME.*;
-import static org.complitex.dictionary.web.DictionaryFwSession.*;
+import static org.complitex.common.entity.UserGroup.GROUP_NAME.*;
+import static org.complitex.common.web.DictionaryFwSession.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

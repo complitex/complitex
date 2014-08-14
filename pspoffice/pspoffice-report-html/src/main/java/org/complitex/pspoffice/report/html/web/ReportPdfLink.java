@@ -5,7 +5,7 @@ import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.apache.wicket.util.time.Time;
-import org.complitex.dictionary.web.component.NoCacheLink;
+import org.complitex.common.web.component.NoCacheLink;
 import org.complitex.pspoffice.report.html.entity.Report;
 import org.complitex.pspoffice.report.html.service.ReportBean;
 import org.complitex.pspoffice.report.html.service.ReportService;

@@ -4,7 +4,7 @@
 <mapper namespace="org.complitex.keconnection.organization.strategy.Organization">
 
     <resultMap id="organization" type="org.complitex.keconnection.organization.strategy.entity.Organization"
-                    extends="org.complitex.dictionary.entity.DomainObject.DomainObject">
+                    extends="org.complitex.common.entity.DomainObject.DomainObject">
            <result column="parent_short_name" property="parentShortName"/>
     </resultMap>
     
@@ -33,19 +33,19 @@
         FROM `organization` e
             <include refid="org.complitex.keconnection.organization.strategy.Organization.join"/>
         WHERE
-        <include refid="org.complitex.dictionary.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.permissionFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
         <include refid="org.complitex.keconnection.organization.strategy.Organization.filter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.orderBy"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.limit"/>
+        <include refid="org.complitex.common.entity.DomainObject.orderBy"/>
+        <include refid="org.complitex.common.entity.DomainObject.limit"/>
     </select>
     
     <select id="count" resultType="int" parameterType="DomainObjectExample">
         SELECT COUNT(1) FROM `organization` e 
             <include refid="org.complitex.keconnection.organization.strategy.Organization.join"/>
         WHERE
-        <include refid="org.complitex.dictionary.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.permissionFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
         <include refid="org.complitex.keconnection.organization.strategy.Organization.filter"/>
     </select>
     

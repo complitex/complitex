@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ru.flexpay.eirc.registry.service.RegistryRecordBean">
-    <cache type="org.complitex.dictionary.mybatis.caches.EhcacheCache"/>
+    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
     <resultMap id="RegistryRecord" type="ru.flexpay.eirc.registry.entity.RegistryRecord">
         <result column="registry_record_id"                         property="id"/>
@@ -30,8 +30,8 @@
         <result column="registry_record_building_id"                property="buildingId"/>
         <result column="registry_record_apartment_id"               property="apartmentId"/>
         <result column="registry_record_room_id"                    property="roomId"/>
-        <result column="registry_record_status"                     property="status" typeHandler="org.complitex.dictionary.mybatis.FixedIdBaseTypeHandler"/>
-        <result column="registry_record_import_error_type"          property="importErrorType" typeHandler="org.complitex.dictionary.mybatis.FixedIdBaseTypeHandler"/>
+        <result column="registry_record_status"                     property="status" typeHandler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"/>
+        <result column="registry_record_import_error_type"          property="importErrorType" typeHandler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"/>
 
 
         <association property="containers" columnPrefix="registry_record_container_"
@@ -41,13 +41,13 @@
 
     <resultMap id="StatusDetailInfo" type="ru.flexpay.eirc.registry.entity.StatusDetailInfo">
         <result column="count" property="count"/>
-        <result column="status" property="status" typeHandler="org.complitex.dictionary.mybatis.FixedIdBaseTypeHandler"/>
+        <result column="status" property="status" typeHandler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"/>
         <result column="import_error_exist" property="importErrorExist"/>
     </resultMap>
 
     <resultMap id="ImportErrorDetailInfo" type="ru.flexpay.eirc.registry.entity.ImportErrorDetailInfo">
         <result column="count" property="count"/>
-        <result column="import_error_type" property="importErrorType" typeHandler="org.complitex.dictionary.mybatis.FixedIdBaseTypeHandler"/>
+        <result column="import_error_type" property="importErrorType" typeHandler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"/>
     </resultMap>
 
     <resultMap id="ImportErrorDetail" type="ru.flexpay.eirc.registry.entity.ImportErrorDetail">
@@ -176,7 +176,7 @@
         rr.`middle_name`
     </sql>
 
-    <select id="selectRegistryRecords" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultMap="RegistryRecord">
+    <select id="selectRegistryRecords" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="RegistryRecord">
 
         select rr.*,
         <include refid="registryRecordContainerColumns"/>
@@ -210,7 +210,7 @@
 
     </select>
 
-    <select id="countRegistryRecords" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultType="integer">
+    <select id="countRegistryRecords" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer">
 
         select
           count(rr.`id`)
@@ -220,7 +220,7 @@
 
     </select>
 
-    <select id="selectRecordsToProcessing" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultMap="RegistryRecord">
+    <select id="selectRecordsToProcessing" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="RegistryRecord">
 
         select rr.*,
         <include refid="registryRecordContainerColumns"/>
@@ -234,7 +234,7 @@
 
     </select>
 
-    <select id="selectRecordsToLinking" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultMap="RegistryRecord">
+    <select id="selectRecordsToLinking" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="RegistryRecord">
 
         select rr.*,
         <include refid="registryRecordContainerColumns"/>
@@ -249,7 +249,7 @@
     </select>
 
 
-    <select id="selectCorrectionRecordsToLinking" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultMap="RegistryRecord">
+    <select id="selectCorrectionRecordsToLinking" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="RegistryRecord">
 
         select rr.*,
         <include refid="registryRecordContainerColumns"/>

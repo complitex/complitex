@@ -14,7 +14,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.service.AddressRendererBean;
-import org.complitex.dictionary.strategy.StrategyFactory;
+import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.pspoffice.ownerrelationship.strategy.OwnerRelationshipStrategy;
 import org.complitex.pspoffice.person.report.download.FamilyAndCommunalApartmentInfoDownload;
 import org.complitex.pspoffice.person.report.entity.FamilyAndCommunalApartmentInfo;
@@ -36,7 +36,7 @@ import java.util.Collection;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.wicket.feedback.FeedbackMessage.ERROR;
-import static org.complitex.dictionary.util.StringUtil.valueOf;
+import static org.complitex.common.util.StringUtil.valueOf;
 import static org.complitex.pspoffice.report.util.ReportDateFormatter.format;
 
 /**

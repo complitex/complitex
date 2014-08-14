@@ -2,8 +2,8 @@ package org.complitex.osznconnection.file.web.component.process;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.complitex.dictionary.entity.IExecutorObject;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;

@@ -8,7 +8,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.entity.DomainObject;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.pspoffice.person.strategy.web.component.AbstractAddressCreateDialog;
 import org.odlabs.wiquery.ui.autocomplete.EnhancedAutocompleteComponent;
 

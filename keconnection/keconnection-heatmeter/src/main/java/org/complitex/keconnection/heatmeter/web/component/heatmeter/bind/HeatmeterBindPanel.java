@@ -26,7 +26,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.util.StringUtil;
 import org.complitex.keconnection.heatmeter.entity.ExternalHeatmeter;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterBindingStatus;

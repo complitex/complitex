@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.service;
 
 import com.google.common.collect.Maps;
-import org.complitex.dictionary.service.SessionBean;
+import org.complitex.common.service.SessionBean;
 
 import javax.ejb.EJB;
 import java.util.Collections;

@@ -10,12 +10,12 @@ import javax.ejb.EJB;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.complitex.address.strategy.room.RoomStrategy;
 import org.complitex.address.strategy.room.web.edit.RoomEdit;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.Log;
-import org.complitex.dictionary.entity.StringCulture;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.LogBean;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.Log;
+import org.complitex.common.entity.StringCulture;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.LogBean;
+import org.complitex.common.util.DateUtil;
 import org.complitex.pspoffice.person.Module;
 
 /**

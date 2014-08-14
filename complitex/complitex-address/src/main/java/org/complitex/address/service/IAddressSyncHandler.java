@@ -1,15 +1,12 @@
 package org.complitex.address.service;
 
 import org.complitex.address.entity.AddressSync;
-import org.complitex.dictionary.entity.Cursor;
-import org.complitex.dictionary.entity.DomainObject;
+import org.complitex.common.entity.Cursor;
+import org.complitex.common.entity.DomainObject;
 
-import javax.ejb.Local;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import java.util.List;
 
 /**
  * @author Anatoly Ivanov

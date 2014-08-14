@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.service;
 
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.RequestFileHistory;
 
 import javax.ejb.Stateless;

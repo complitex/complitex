@@ -1,20 +1,18 @@
 package org.complitex.osznconnection.file.service.process;
 
 import com.google.common.collect.Lists;
-import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.entity.IExecutorObject;
-import org.complitex.dictionary.entity.Log;
-import org.complitex.dictionary.entity.Log.EVENT;
-import org.complitex.dictionary.service.ConfigBean;
-import org.complitex.dictionary.service.executor.ExecuteException;
-import org.complitex.dictionary.service.executor.ITaskBean;
+import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.entity.Log;
+import org.complitex.common.entity.Log.EVENT;
+import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.*;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
-import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
@@ -31,9 +29,6 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Map;
-
-import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
-import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)

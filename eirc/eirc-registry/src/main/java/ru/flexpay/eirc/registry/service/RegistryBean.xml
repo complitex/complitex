@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ru.flexpay.eirc.registry.service.RegistryBean">
-    <cache type="org.complitex.dictionary.mybatis.caches.EhcacheCache"/>
+    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
     <resultMap id="Registry" type="ru.flexpay.eirc.registry.entity.Registry">
         <result column="registry_id"                        property="id"/>
         <result column="registry_number"                    property="registryNumber"/>
-        <result column="registry_type"                      property="type" typeHandler="org.complitex.dictionary.mybatis.FixedIdBaseTypeHandler"/>
-        <result column="registry_status"                    property="status" typeHandler="org.complitex.dictionary.mybatis.FixedIdBaseTypeHandler"/>
+        <result column="registry_type"                      property="type" typeHandler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"/>
+        <result column="registry_status"                    property="status" typeHandler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"/>
 
         <result column="registry_records_count"             property="recordsCount"/>
         <result column="registry_errors_count"              property="errorsCount"/>
@@ -22,7 +22,7 @@
         <result column="registry_recipient_organization_id" property="recipientOrganizationId"/>
         <result column="registry_amount"                    property="amount"/>
 
-        <result column="registry_import_error_type"         property="importErrorType" typeHandler="org.complitex.dictionary.mybatis.FixedIdBaseTypeHandler"/>
+        <result column="registry_import_error_type"         property="importErrorType" typeHandler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"/>
 
         <association property="containers" columnPrefix="registry_container_"
                      resultMap="ru.flexpay.eirc.registry.service.ContainerBean.Container"/>
@@ -124,7 +124,7 @@
         </if>
     </sql>
 
-    <select id="selectRegistries" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultMap="Registry">
+    <select id="selectRegistries" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="Registry">
 
         select r.*,
         <include refid="registryContainerColumns"/>,
@@ -152,7 +152,7 @@
 
     </select>
 
-    <select id="countRegistries" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultType="integer">
+    <select id="countRegistries" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer">
 
         select
           count(r.`id`)

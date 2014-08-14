@@ -15,11 +15,11 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.dictionary.util.StringUtil;
-import org.complitex.dictionary.web.component.ajax.AjaxFeedbackPanel;
-import org.complitex.dictionary.web.component.DatePicker;
-import org.complitex.dictionary.web.component.YearDropDownChoice;
-import org.complitex.dictionary.web.component.datatable.ArrowOrderByBorder;
+import org.complitex.common.util.StringUtil;
+import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
+import org.complitex.common.web.component.DatePicker;
+import org.complitex.common.web.component.YearDropDownChoice;
+import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
@@ -41,7 +41,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.complitex.dictionary.util.DateUtil.getYear;
+import static org.complitex.common.util.DateUtil.getYear;
 import static org.complitex.osznconnection.file.service.process.ProcessType.LOAD_SUBSIDY_TARIF;
 
 /**

@@ -1,8 +1,8 @@
 package ru.complitex.salelog.service;
 
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
 import ru.complitex.salelog.entity.Product;
 
 import javax.ejb.Stateless;

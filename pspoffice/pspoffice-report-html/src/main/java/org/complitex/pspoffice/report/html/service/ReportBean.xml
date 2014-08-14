@@ -23,7 +23,7 @@
         select * from `report` where `id` = #{id}
     </select>
 
-    <select id="selectReportList" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectReportList" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="reportResultMap">
         select * from `report`
         <where>
@@ -38,7 +38,7 @@
         limit #{first}, #{count}
     </select>
 
-    <select id="selectReportListCount" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultType="int">
+    <select id="selectReportListCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="int">
         select count(*) from `report`
         <where>
             <if test="object.name != null">`name` like concat('%',#{object.name},'%')</if>

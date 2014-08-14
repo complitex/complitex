@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.service.status.details;
 
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.service.AbstractBean;
 
 import javax.ejb.Stateless;
 import java.util.List;

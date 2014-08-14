@@ -10,19 +10,19 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
-import org.complitex.dictionary.util.AttributeUtil;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
-import org.complitex.dictionary.web.model.AttributeExampleModel;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.AttributeUtil;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
+import org.complitex.common.web.model.AttributeExampleModel;
 
 import javax.ejb.EJB;
 import java.util.List;
 
-import static org.complitex.dictionary.strategy.organization.IOrganizationStrategy.*;
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

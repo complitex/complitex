@@ -1,6 +1,6 @@
 package org.complitex.address.entity;
 
-import org.complitex.dictionary.entity.IImportFile;
+import org.complitex.common.entity.IImportFile;
 
 /**
 * @author Anatoly A. Ivanov java@inheaven.ru

@@ -4,8 +4,8 @@
  */
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.dictionary.mybatis.FixedIdTypeHandler;
-import org.complitex.dictionary.mybatis.IFixedIdType;
+import org.complitex.common.mybatis.FixedIdTypeHandler;
+import org.complitex.common.mybatis.IFixedIdType;
 
 /**
  *

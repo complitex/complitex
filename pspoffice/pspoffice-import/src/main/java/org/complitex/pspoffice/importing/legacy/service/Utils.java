@@ -8,10 +8,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.StringCulture;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.StringCulture;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.util.EjbBeanLocator;
 
 /**
  *

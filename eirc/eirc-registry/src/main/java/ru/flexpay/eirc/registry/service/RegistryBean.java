@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.service;
 
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.AbstractBean;
 import ru.flexpay.eirc.registry.entity.Container;
 import ru.flexpay.eirc.registry.entity.Registry;
 

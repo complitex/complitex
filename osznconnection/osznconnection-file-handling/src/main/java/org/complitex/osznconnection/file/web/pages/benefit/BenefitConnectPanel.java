@@ -18,7 +18,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.complitex.address.util.AddressRenderer;
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.util.StringUtil;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.BenefitBean;
 import org.complitex.osznconnection.file.service.StatusRenderService;

@@ -2,9 +2,9 @@ package org.complitex.keconnection.heatmeter.web;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.dictionary.strategy.IStrategy;
-import org.complitex.dictionary.strategy.StrategyFactory;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.template.web.template.ITemplateLink;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 

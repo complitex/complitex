@@ -34,7 +34,7 @@ import java.util.Collection;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.wicket.feedback.FeedbackMessage.ERROR;
-import static org.complitex.dictionary.util.StringUtil.valueOf;
+import static org.complitex.common.util.StringUtil.valueOf;
 import static org.complitex.pspoffice.report.util.ReportDateFormatter.format;
 
 /**

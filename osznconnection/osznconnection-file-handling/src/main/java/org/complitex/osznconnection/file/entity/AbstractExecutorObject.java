@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.entity;
 
-import org.complitex.dictionary.entity.IExecutorObject;
+import org.complitex.common.entity.IExecutorObject;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

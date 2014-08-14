@@ -7,10 +7,10 @@ import org.complitex.pspoffice.report.web.AbstractReportDownload;
 
 import java.util.Map;
 import org.complitex.address.service.AddressRendererBean;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.util.EjbBeanLocator;
-import org.complitex.dictionary.util.ResourceUtil;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.pspoffice.military.strategy.MilitaryServiceRelationStrategy;
 import org.complitex.pspoffice.person.report.entity.RegistrationCard;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;

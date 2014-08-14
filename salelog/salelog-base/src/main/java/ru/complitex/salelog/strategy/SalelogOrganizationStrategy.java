@@ -1,6 +1,6 @@
 package ru.complitex.salelog.strategy;
 
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.organization.strategy.AbstractOrganizationStrategy;
 
 import javax.ejb.Stateless;

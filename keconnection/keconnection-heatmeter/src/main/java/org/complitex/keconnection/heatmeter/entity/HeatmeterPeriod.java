@@ -1,11 +1,11 @@
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.dictionary.entity.ILongId;
+import org.complitex.common.entity.ILongId;
 
 import java.util.Date;
 import java.util.Objects;
 
-import static org.complitex.dictionary.util.DateUtil.newDate;
+import static org.complitex.common.util.DateUtil.newDate;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

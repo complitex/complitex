@@ -5,8 +5,8 @@ import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.correction.entity.CityCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
-import org.complitex.dictionary.entity.Correction;
-import org.complitex.dictionary.entity.FilterWrapper;
+import org.complitex.common.entity.Correction;
+import org.complitex.common.entity.FilterWrapper;
 
 import javax.ejb.EJB;
 import java.util.List;

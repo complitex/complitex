@@ -6,8 +6,8 @@ package org.complitex.osznconnection.file.service.warning;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.RequestWarning;
 import org.complitex.osznconnection.file.entity.RequestWarningParameter;

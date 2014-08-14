@@ -2,12 +2,12 @@ package org.complitex.keconnection.heatmeter.service;
 
 import nl.knaw.dans.common.dbflib.Record;
 import nl.knaw.dans.common.dbflib.Table;
-import org.complitex.dictionary.entity.IImportFile;
-import org.complitex.dictionary.service.AbstractImportService;
-import org.complitex.dictionary.service.ConfigBean;
-import org.complitex.dictionary.service.IImportListener;
-import org.complitex.dictionary.service.exception.ImportFileNotFoundException;
-import org.complitex.dictionary.service.exception.ImportFileReadException;
+import org.complitex.common.entity.IImportFile;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.IImportListener;
+import org.complitex.common.service.exception.ImportFileNotFoundException;
+import org.complitex.common.service.exception.ImportFileReadException;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterConfig;
 import org.complitex.keconnection.heatmeter.entity.PayloadImportFile;
 import org.complitex.keconnection.heatmeter.entity.Tablegram;

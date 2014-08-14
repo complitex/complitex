@@ -1,8 +1,8 @@
 package org.complitex.osznconnection.file.service;
 
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.SessionBean;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.SessionBean;
 import org.complitex.osznconnection.file.entity.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.RequestFileGroupFilter;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;

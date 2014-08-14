@@ -6,8 +6,8 @@ package org.complitex.template.web.component;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.web.component.factory.WebComponentFactoryUtil;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.web.component.factory.WebComponentFactoryUtil;
 import org.slf4j.LoggerFactory;
 
 /**
