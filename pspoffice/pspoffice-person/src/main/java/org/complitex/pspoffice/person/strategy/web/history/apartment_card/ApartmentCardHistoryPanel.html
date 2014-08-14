@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:wicket>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <wicket:panel>
+            <h2 wicket:id="label"></h2>
+
+            <table style="float: right;" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td>
+                        <wicket:message key="edited_by_user_label"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span style="float: right;" wicket:id="editedByUser"></span>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="tbForm" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <wicket:container wicket:id="addressContainer">
+                        <th>
+                            <wicket:container wicket:id="label"/>
+                            <wicket:container wicket:id="required">
+                                <b class="blue">*</b>
+                            </wicket:container>:
+                        </th>
+                        <td>
+                            <div wicket:id="address"></div>
+                        </td>
+                    </wicket:container>
+                </tr>
+                <tr>
+                    <wicket:container wicket:id="ownerContainer">
+                        <th>
+                            <wicket:container wicket:id="label"/>
+                            <wicket:container wicket:id="required">
+                                <b class="blue">*</b>
+                            </wicket:container>:
+                        </th>
+                        <td>
+                            <div style="padding: 1px;" class="inline_block" wicket:id="owner"></div>
+                        </td>
+                    </wicket:container>
+                </tr>
+                <tr>
+                    <wicket:container wicket:id="formOfOwnershipContainer">
+                        <th>
+                            <wicket:container wicket:id="label"/>
+                            <wicket:container wicket:id="required">
+                                <b class="blue">*</b>
+                            </wicket:container>:
+                        </th>
+                        <td>
+                            <select wicket:id="formOfOwnership">
+                                <option></option>
+                            </select>
+                        </td>
+                    </wicket:container>
+                </tr>
+            </table>
+
+            <fieldset>
+                <legend>
+                    <h3>
+                        <wicket:message key="living"/>
+                    </h3>
+                </legend>
+                <table class="tbColor" style="border-collapse: collapse;" cellpadding="0" cellspacing="0" border="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                <wicket:message key="person_name"/>
+                            </th>
+                            <th>
+                                <wicket:message key="person_birth_date"/>
+                            </th>
+                            <th>
+                                <wicket:message key="registration_type"/>
+                            </th>
+                            <th>
+                                <wicket:message key="registration_start_date"/>
+                            </th>
+                            <th>
+                                <wicket:message key="registration_end_date"/>
+                            </th>
+                            <th>
+                                <wicket:message key="owner_relationship"/>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr wicket:id="registrations">
+                        <td>
+                            <span wicket:id="personName"></span>
+                        </td>
+                        <td>
+                            <span wicket:id="personBirthDate"></span>
+                        </td>
+                        <td>
+                            <span wicket:id="registrationType"></span>
+                        </td>
+                        <td>
+                            <span wicket:id="registrationStartDate"></span>
+                        </td>
+                        <td>
+                            <span wicket:id="registrationEndDate"></span>
+                        </td>
+                        <td>
+                            <span wicket:id="registrationOwnerRelationship"></span>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <table class="tbForm" cellpadding="0" cellspacing="0" border="0">
+                <tr wicket:id="restAttributesView">
+                    <th>
+                        <wicket:container wicket:id="label"/>
+                        <wicket:container wicket:id="required">
+                            <b class="blue">*</b>
+                        </wicket:container>:
+                    </th>
+                    <td>
+                        <div class="inline_block" wicket:id="input"></div>
+                    </td>
+                </tr>
+                <tr wicket:id="explanationContainer">
+                    <th>
+                        <wicket:container wicket:id="label"/>:
+                    </th>
+                    <td>
+                        <div wicket:id="wrapper">
+                            <textarea wicket:id="explanation" cols="45" rows="4"></textarea>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </wicket:panel>
+    </body>
+</html>

@@ -1,0 +1,16 @@
+fieldset{
+    margin-top: 15px;
+}
+
+fieldset > div {
+    margin-top: 15px;
+}
+
+fieldset > legend {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+td.center, th.center {
+    text-align: center;
+}

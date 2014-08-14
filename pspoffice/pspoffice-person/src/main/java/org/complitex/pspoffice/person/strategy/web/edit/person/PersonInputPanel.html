@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:wicket>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <wicket:panel>
+            <div wicket:id="personFullNamePanel"></div>
+
+            <table style="margin-bottom: 0; margin-top: 15px;" class="tbForm" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <wicket:container wicket:id="identityCodeContainer">
+                        <th>
+                            <wicket:container wicket:id="label"/>
+                            <wicket:container wicket:id="required">
+                                <b class="blue">*</b>
+                            </wicket:container>:
+                        </th>
+                        <td>
+                            <div wicket:id="input"></div>
+                        </td>
+                    </wicket:container>
+                </tr>
+                <tr>
+                    <wicket:container wicket:id="birthDateContainer">
+                        <th>
+                            <wicket:container wicket:id="label"/>
+                            <wicket:container wicket:id="required">
+                                <b class="blue">*</b>
+                            </wicket:container>:
+                        </th>
+                        <td>
+                            <div wicket:id="input"></div>
+                        </td>
+                    </wicket:container>
+                </tr>
+                <tr>
+                    <wicket:container wicket:id="genderContainer">
+                        <th>
+                            <wicket:container wicket:id="label"/>
+                            <wicket:container wicket:id="required">
+                                <b class="blue">*</b>
+                            </wicket:container>:
+                        </th>
+                        <td>
+                            <div wicket:id="input"></div>
+                        </td>
+                    </wicket:container>
+                </tr>
+                <tr>
+                    <wicket:container wicket:id="ukraineCitizenshipContainer">
+                        <th>
+                            <wicket:container wicket:id="label"/>
+                            <wicket:container wicket:id="required">
+                                <b class="blue">*</b>
+                            </wicket:container>:
+                        </th>
+                        <td>
+                            <div wicket:id="input"></div>
+                        </td>
+                    </wicket:container>
+                </tr>
+                <tr>
+                    <wicket:container wicket:id="militaryServiceRelationContainer">
+                        <th>
+                            <div wicket:id="militaryServiceRelationHead">
+                                <wicket:container wicket:id="label"/>
+                                <wicket:container wicket:id="required">
+                                    <b class="blue">*</b>
+                                </wicket:container>:
+                            </div>
+                        </th>
+                        <td>
+                            <div wicket:id="militaryServiceRelationBody">
+                                <select wicket:id="input"></select>
+                            </div>
+                        </td>
+                    </wicket:container>
+                </tr>
+                <tr wicket:id="deathDateZone">
+                    <wicket:container wicket:id="deathDateContainer">
+                        <th>
+                            <wicket:container wicket:id="label"/>
+                            <wicket:container wicket:id="required">
+                                <b class="blue">*</b>
+                            </wicket:container>:
+                        </th>
+                        <td>
+                            <div wicket:id="input"></div>
+                        </td>
+                    </wicket:container>
+                </tr>
+                <tr wicket:id="userAttributesView">
+                    <th>
+                        <wicket:container wicket:id="label"/>
+                        <wicket:container wicket:id="required">
+                            <b class="blue">*</b>
+                        </wicket:container>:
+                    </th>
+                    <td>
+                        <div wicket:id="input"></div>
+                    </td>
+                </tr>
+            </table>
+
+            <div wicket:id="birthPlaceFieldset">
+                <table class="tbForm" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <wicket:container wicket:id="birthCountryContainer">
+                            <th>
+                                <wicket:container wicket:id="label"/>
+                                <wicket:container wicket:id="required">
+                                    <b class="blue">*</b>
+                                </wicket:container>:
+                            </th>
+                            <td>
+                                <div wicket:id="input"></div>
+                            </td>
+                        </wicket:container>
+                    </tr>
+                    <tr>
+                        <wicket:container wicket:id="birthRegionContainer">
+                            <th>
+                                <wicket:container wicket:id="label"/>
+                                <wicket:container wicket:id="required">
+                                    <b class="blue">*</b>
+                                </wicket:container>:
+                            </th>
+                            <td>
+                                <div wicket:id="input"></div>
+                            </td>
+                        </wicket:container>
+                    </tr>
+                    <tr>
+                        <wicket:container wicket:id="birthDistrictContainer">
+                            <th>
+                                <wicket:container wicket:id="label"/>
+                                <wicket:container wicket:id="required">
+                                    <b class="blue">*</b>
+                                </wicket:container>:
+                            </th>
+                            <td>
+                                <div wicket:id="input"></div>
+                            </td>
+                        </wicket:container>
+                    </tr>
+                    <tr>
+                        <wicket:container wicket:id="birthCityContainer">
+                            <th>
+                                <wicket:container wicket:id="label"/>
+                                <wicket:container wicket:id="required">
+                                    <b class="blue">*</b>
+                                </wicket:container>:
+                            </th>
+                            <td>
+                                <div wicket:id="input"></div>
+                            </td>
+                        </wicket:container>
+                    </tr>
+                </table>
+            </div>
+
+            <div wicket:id="documentFieldset">
+                <div style="padding-left: 20px;">
+                    <form action="#" wicket:id="documentForm">
+                        <table>
+                            <tr>
+                                <th>
+                                    <wicket:container wicket:id="label"/>
+                                    <wicket:container wicket:id="required"><b class="blue">*</b></wicket:container>:
+                                </th>
+                                <td>
+                                    <select wicket:id="documentType">
+                                        <option></option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                        <div style="padding-top: 5px;">
+                            <div wicket:id="documentInputPanelWrapper">
+                                <div wicket:id="documentInputPanelContainer">
+                                    <div wicket:id="documentInputPanel"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div wicket:id="documentButtonsContainer" style="padding-top: 15px;">
+                        <input type="button" wicket:id="replaceDocument" wicket:message="value:replace_document" class="btnMiddle"/>
+                        <a style="float: right;" wicket:id="showPreviousDocuments">
+                            <wicket:message key="show_previous_documents"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div wicket:id="childrenFieldset">
+                <table class="tbForm" cellpadding="0" cellspacing="0" border="0">
+                    <tbody wicket:id="childrenContainer">
+                        <tr wicket:id="children">
+                            <wicket:container wicket:id="fakeContainer"/>
+                            <th>
+                                <wicket:container wicket:id="label"/>:
+                            </th>
+                            <td>
+                                <div wicket:id="searchChildComponent"></div>
+                            </td>
+                            <td>
+                                <input type="button" class="btnMiddle" wicket:id="removeChild" wicket:message="value:removeChild"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <input type="button" class="btnMiddle" wicket:id="addChild" wicket:message="value:addChild"/>
+                </div>
+            </div>
+
+            <div wicket:id="registrationsFieldset">
+                <div wicket:id="content">
+                    <table class="tbColor" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <wicket:message key="registration_address"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="registration_type"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="registration_start_date"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="registration_end_date"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="registration_owner_relationship"/>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr wicket:id="registrations">
+                                <td>
+                                    <span wicket:id="registrationAddress"></span>
+                                </td>
+                                <td>
+                                    <span wicket:id="registrationType"></span>
+                                </td>
+                                <td>
+                                    <span wicket:id="registrationStartDate"></span>
+                                </td>
+                                <td>
+                                    <span wicket:id="registrationEndDate"></span>
+                                </td>
+                                <td>
+                                    <span wicket:id="registrationOwnerRelationship"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div wicket:id="previousDocumentsDialog" wicket:message="title:previous_documents_dialog_title" style="display: none;">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tr wicket:id="previousDocuments">
+                        <td>
+                            <fieldset style="margin-top: 20px;">
+                                <legend>
+                                    <span style="font-weight: bold; font-size: 15px;" wicket:id="previousDocumentLabel"></span>
+                                </legend>
+                                <div wicket:id="previousDocument"></div>
+                            </fieldset>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </wicket:panel>
+    </body>
+</html>

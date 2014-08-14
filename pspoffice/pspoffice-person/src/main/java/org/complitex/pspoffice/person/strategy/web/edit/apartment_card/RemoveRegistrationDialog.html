@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:wicket>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <wicket:panel>
+            <div wicket:id="dialog" wicket:message="title:title" style="display: none;">
+                <div>
+                    <h3>
+                        <span wicket:id="label"></span>
+                    </h3>
+                    <div wicket:id="messages"></div>
+                    <form action="#" wicket:id="form">
+                        <table class="tbForm" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 0;">
+                            <tr>
+                                <th>
+                                    <wicket:message key="reason"/><b class="blue">*</b>:
+                                </th>
+                                <td>
+                                    <input type="text" wicket:id="reason"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <wicket:message key="date"/><b class="blue">*</b>:
+                                </th>
+                                <td>
+                                    <input type="text" wicket:id="date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <wicket:message key="explanation"/><b class="blue">*</b>:
+                                </th>
+                                <td>
+                                    <textarea wicket:id="explanation" cols="45" rows="4"></textarea>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div wicket:id="addressFieldset">
+                            <table class="tbForm" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <th>
+                                        <wicket:message key="country"/>:
+                                    </th>
+                                    <td>
+                                        <input type="text" wicket:id="country"/>
+                                    </td>
+                                    <th>
+                                        <wicket:message key="street"/>:
+                                    </th>
+                                    <td>
+                                        <input type="text" wicket:id="street"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <wicket:message key="region"/>:
+                                    </th>
+                                    <td>
+                                        <input type="text" wicket:id="region"/>
+                                    </td>
+                                    <th>
+                                        <wicket:message key="building_number"/>:
+                                    </th>
+                                    <td>
+                                        <input type="text" wicket:id="buildingNumber"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <wicket:message key="district"/>:
+                                    </th>
+                                    <td>
+                                        <input type="text" wicket:id="district"/>
+                                    </td>
+                                    <th>
+                                        <wicket:message key="building_corp"/>:
+                                    </th>
+                                    <td>
+                                        <input type="text" wicket:id="buildingCorp"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <wicket:message key="city"/>:
+                                    </th>
+                                    <td>
+                                        <input type="text" wicket:id="city"/>
+                                    </td>
+                                    <th>
+                                        <wicket:message key="apartment"/>:
+                                    </th>
+                                    <td>
+                                        <input type="text" wicket:id="apartment"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <input type="button" wicket:message="value:removeFromRegistration" wicket:id="removeFromRegistration" class="btnMiddle"/>
+                            <input type="button" wicket:message="value:cancel" wicket:id="cancel" class="btnMiddle"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </wicket:panel>
+    </body>
+</html>

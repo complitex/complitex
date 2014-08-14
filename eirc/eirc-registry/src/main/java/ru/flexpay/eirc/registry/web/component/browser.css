@@ -1,0 +1,40 @@
+.selected {
+    background-color:#87939D !important;
+    color: whitesmoke !important;
+}
+
+.tbColor2 > tbody {
+    width: auto !important;
+    height: 350px !important;
+    overflow-y: scroll !important;
+    display: block !important;
+    border-bottom: 1px groove #667584 !important;
+    border-left: 1px dotted #667584 !important;
+    cursor: default !important;
+}
+
+.tbColor2 > thead {
+    width: auto !important;
+    display: block !important;
+}
+
+.tbColor2 th {
+    border-top: 1px solid #667584 !important;
+}
+
+.nameColumn {
+    width: 252px;
+}
+
+.sizeColumn {
+    width: 110px;
+}
+
+.dateColumn {
+    width: 110px;
+}
+
+.folder {
+    font-weight: bold;
+}
+

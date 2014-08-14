@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<head>
+    <wicket:head>
+        <title wicket:id="title"></title>
+    </wicket:head>
+</head>
+
+<body>
+<wicket:extend>
+    <div>
+        <h1><wicket:message key="title"/></h1>
+        <div id="messages" wicket:id="messages"></div>
+
+        <form id="form" action="#" wicket:id="form">
+            <table  border="0" cellspacing="0" cellpadding="0" class="tbColor table_input">
+                <thead>
+                <tr>
+                    <th class="center" wicket:id="header.name"><wicket:message key="name"/></th>
+                    <th class="center" wicket:id="header.updated"><wicket:message key="updated"/></th>
+
+                    <th class="center">
+                        <input class="btnSmall"  wicket:id="filter_reset" type="button" wicket:message="value:reset"/>
+                    </th>
+                </tr>
+                <tr>
+                    <th class="center"><input type="text" wicket:id="name"/></th>
+                    <th class="center"><input type="text" wicket:id="updated"/></th>
+
+                    <th class="center">
+                        <input class="btnSmall default" type="submit" wicket:message="value:filter" tabindex="0" />
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr wicket:id="reports">
+                    <td><a href="#" wicket:id="link"><span wicket:id="name"></span></a></td>
+                    <td><span wicket:id="updated"></span></td>
+                    <td>
+                        <span wicket:id="view"></span>
+                        <span wicket:id="html"></span>
+                        <a wicket:id="pdf"><wicket:message key="pdf"/></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div>
+                <span wicket:id="paging"></span>
+            </div>
+        </form>
+    </div>
+</wicket:extend>
+</body>
+</html>

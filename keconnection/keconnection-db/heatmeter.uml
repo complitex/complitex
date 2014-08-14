@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_input</OriginalElement>
+  <nodes>
+    <node x="170.0" y="263.0">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.tablegram_record</node>
+    <node x="117.99696048632222" y="505.00607902735567">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_type</node>
+    <node x="631.0" y="522.0">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_bind</node>
+    <node x="424.0364741641338" y="510.4832826747721">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter</node>
+    <node x="657.1854103343464" y="609.9300911854103">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_correction</node>
+    <node x="177.31914893617022" y="82.12462006079028">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.tablegram</node>
+    <node x="354.44376899696056" y="85.88753799392097">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_payload</node>
+    <node x="466.0" y="239.0">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_period</node>
+    <node x="873.8883458187802" y="502.6817281006289">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_period_type</node>
+    <node x="762.6388272644325" y="271.7193033157802">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_consumption</node>
+    <node x="746.5562310030393" y="141.59574468085106">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_input</node>
+    <node x="381.2583586626139" y="699.8571428571429">e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.organization</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_bind" target="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_period" target="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter" target="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.organization">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter" target="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_type">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_consumption" target="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_input">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_correction" target="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.tablegram_record" target="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.tablegram_record" target="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.tablegram">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_payload" target="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_period">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_input" target="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_period">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.heatmeter_payload" target="e838a06f-d0d0-4dc0-9ca6-26b3c55205e0.table:keconnection.tablegram_record">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.7768595041322314" x="620.0" y="495.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+  </Categories>
+</Diagram>
+

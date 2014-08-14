@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:wicket="http://wicket.apache.org">
+    <head>
+        <wicket:head>
+            <title wicket:id="title"></title>
+        </wicket:head>
+    </head>
+    <body>
+        <wicket:extend>
+            <h2 wicket:id="label" style="margin-bottom: 20px;"></h2>
+            <table class="tbColor" cellpadding="0" cellspacing="0" border="0">
+                <thead>
+                    <tr>
+                        <th>
+                            <wicket:message key="order"/>
+                        </th>
+                        <th>
+                            <wicket:message key="personName"/>
+                        </th>
+                        <th>
+                            <wicket:message key="personBirthDate"/>
+                        </th>
+                        <th>
+                            <wicket:message key="registrationDate"/>
+                        </th>
+                        <th>
+                            <wicket:message key="registrationType"/>
+                        </th>
+                        <th>
+                            <wicket:message key="ownerRelationship"/>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr wicket:id="registrations">
+                        <td><span wicket:id="order"></span></td>
+                        <td>
+                            <a wicket:id="personLink">
+                                <span wicket:id="personName"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <span wicket:id="personBirthDate"></span>
+                        </td>
+                        <td>
+                            <span wicket:id="registrationDate"></span>
+                        </td>
+                        <td>
+                            <span wicket:id="registrationType"></span>
+                        </td>
+                        <td>
+                            <span wicket:id="ownerRelationship"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top: 20px;">
+                <a wicket:id="backSearch">
+                    <wicket:message key="backSearch"/>
+                </a>
+                <a wicket:id="back" style="margin-left: 20px;">
+                    <wicket:message key="back"/>
+                </a>
+            </div>
+        </wicket:extend>
+    </body>
+</html>

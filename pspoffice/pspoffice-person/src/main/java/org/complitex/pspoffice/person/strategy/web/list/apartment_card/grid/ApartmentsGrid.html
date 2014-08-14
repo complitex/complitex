@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:wicket="http://wicket.apache.org">
+    <head>
+        <wicket:head>
+            <title wicket:id="title"></title>
+        </wicket:head>
+    </head>
+    <body>
+        <wicket:extend>
+            <h2 wicket:id="label" style="margin-bottom: 20px;"></h2>
+            <div wicket:id="content" style="margin-top: 20px;">
+                <form action="#" wicket:id="filterForm">
+                    <table class="tbColor" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <wicket:message key="order"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="number"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="rooms"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="apartmentCards"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="registered"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="organizations"/>
+                                </th>
+                                <th style="width:110px">
+                                    <input wicket:id="reset" type="button" wicket:message="value:reset" class="btnSmall"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td class="filter-td" style="width:30px"></td>
+                                <td class="filter-td">
+                                    <input type="text" wicket:id="numberFilter"></input>
+                                </td>
+                                <td class="filter-td">
+                                </td>
+                                <td class="filter-td">
+                                </td>
+                                <td class="filter-td">
+                                </td>
+                                <td class="filter-td">
+                                </td>
+                                <td class="filter-td">
+                                    <input wicket:id="submit" type="submit" wicket:message="value:find" class="btnSmall"/>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr wicket:id="apartments">
+                                <td><span wicket:id="order"></span></td>
+                                <td>
+                                    <a wicket:id="objectLink">
+                                        <span wicket:id="number"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <table border="0" cellpadding="0" cellspacing="0">
+                                        <tr wicket:id="rooms">
+                                            <td>
+                                                <a wicket:id="roomLink">
+                                                    <span wicket:id="room"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table border="0" cellpadding="0" cellspacing="0" wicket:id="apartmentCardsContainer">
+                                        <tr wicket:id="apartmentCards">
+                                            <td>
+                                                <a wicket:id="apartmentCardLink">
+                                                    <span wicket:id="apartmentCard"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <a wicket:id="apartmentCardsGridLink">0</a>
+                                </td>
+                                <td>
+                                    <span wicket:id="registered"></span>
+                                </td>
+                                <td>
+                                    <table border="0" cellpadding="0" cellspacing="0">
+                                        <tr wicket:id="organizations">
+                                            <td>
+                                                <a wicket:id="organizationLink">
+                                                    <span wicket:id="organizationCode"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+                <div wicket:id="navigator"></div>
+
+                <div style="margin-top: 10px;">
+                    <a wicket:id="backSearch">
+                        <wicket:message key="backSearch"/>
+                    </a>
+                    <a wicket:id="back" style="margin-left: 20px;">
+                        <wicket:message key="back"/>
+                    </a>
+                </div>
+            </div>
+            
+            <div wicket:id="apartmentCreateDialog"></div>
+            <div wicket:id="roomCreateDialog"></div>
+        </wicket:extend>
+    </body>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.complitex.pspoffice.address.street.Street">
+
+    <select id="find" resultMap="org.complitex.dictionary.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
+        SELECT e.* FROM `street` e WHERE
+        <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
+        <include refid="org.complitex.pspoffice.address.street.Street.pspStreetFilter"/>
+        <include refid="org.complitex.dictionary.entity.DomainObject.orderBy"/>
+        <include refid="org.complitex.dictionary.entity.DomainObject.limit"/>
+    </select>
+    
+    <sql id="pspStreetFilter">
+        <if test="additionalParams != null and additionalParams['building_address_permission_string'] != null">
+            AND EXISTS(
+                SELECT 1 FROM `building_address` addr WHERE addr.`status` IN ('ACTIVE', 'INACTIVE') AND 
+                    addr.`parent_id` = e.`object_id` AND addr.`parent_entity_id` = 300
+                    AND addr.`permission_id` IN ${additionalParams.building_address_permission_string}
+            )
+        </if>
+    </sql>
+
+    <select id="count" resultType="integer" parameterType="DomainObjectExample">
+        SELECT COUNT(1) FROM `street` e WHERE
+        <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
+        <include refid="org.complitex.pspoffice.address.street.Street.pspStreetFilter"/>
+    </select>
+
+</mapper>

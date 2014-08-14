@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.complitex.address.service.AddressSyncAdapter">
+    <resultMap id="districtSyncCursorResultMap" type="org.complitex.address.entity.AddressSync">
+        <result column="c_code" property="externalId"/>
+        <result column="c_name" property="name"/>
+    </resultMap>
+
+    <resultMap id="streetTypeSyncCursorResultMap" type="org.complitex.address.entity.AddressSync">
+        <result column="id" property="externalId"/>
+        <result column="c_short_name" property="additionalName"/>
+        <result column="c_name" property="name"/>
+    </resultMap>
+
+    <resultMap id="streetSyncCursorResultMap" type="org.complitex.address.entity.AddressSync">
+        <result column="c_code" property="externalId"/>
+        <result column="c_short_name" property="additionalName"/>
+        <result column="c_name" property="name"/>
+    </resultMap>
+
+    <resultMap id="buildingSyncCursorResultMap" type="org.complitex.address.entity.AddressSync">
+        <result column="c_code" property="additionalExternalId"/>
+        <result column="id" property="externalId"/>
+        <result column="c_name" property="name"/>
+        <result column="c_part" property="additionalName"/>
+    </resultMap>
+
+    <select id="selectDistrictSyncs" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call z$runtime_sz_utl.getDistricts(#{cityName}, #{cityTypeName},
+          #{date}, #{out, mode=OUT, jdbcType=CURSOR, resultMap=districtSyncCursorResultMap})}
+    </select>
+
+    <select id="selectStreetTypeSyncs" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call z$runtime_sz_utl.getStreetTypes(
+          #{out, mode=OUT, jdbcType=CURSOR, resultMap=streetTypeSyncCursorResultMap})}
+    </select>
+
+    <select id="selectStreetSyncs" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call z$runtime_sz_utl.getStreets(#{cityName}, #{cityTypeName},
+          #{date}, #{out, mode=OUT, jdbcType=CURSOR, resultMap=streetSyncCursorResultMap})}
+    </select>
+
+    <select id="selectBuildingSyncs" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call z$runtime_sz_utl.getBuildings(#{districtName}, #{streetName},
+          #{streetTypeName}, #{date}, #{out, mode=OUT, jdbcType=CURSOR, resultMap=buildingSyncCursorResultMap})}
+    </select>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:wicket="http://wicket.apache.org">
+    <head>
+        <wicket:head>
+            <title wicket:id="title"></title>
+        </wicket:head>
+    </head>
+    <body>
+        <wicket:extend>
+            <div wicket:id="messages"></div>
+            <h3 wicket:id="address_label"></h3>
+            <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td>
+                        <div wicket:id="searchPanelContainer">
+                            <div wicket:id="searchPanel"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <input type="button" wicket:id="search" wicket:message="value:search" class="btnMiddle"
+                               style="margin-left: 20px;"/>
+                    </td>
+                </tr>
+            </table>
+        </wicket:extend>
+    </body>
+</html>

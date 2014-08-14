@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:wicket>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <wicket:panel>
+            <h2 wicket:id="label" style="margin-bottom: 20px;"></h2>
+            <div wicket:id="messages"></div>
+            <form wicket:id="form" action="#">
+                <div wicket:id="personInputPanel"></div>
+                
+                <div style="margin-top: 15px;">
+                    <a wicket:id="history">
+                        <wicket:message key="history"/>
+                    </a>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <input type="button" wicket:message="value:save" wicket:id="submit" class="btnMiddle"/>
+                    <input type="button" wicket:message="value:cancel" wicket:id="cancel" class="btnMiddle"/>
+                    <input type="button" wicket:message="value:back" wicket:id="back" class="btnMiddle"/>
+                </div>
+            </form>
+            <div wicket:id="registerChildrenDialog"></div>
+            <div wicket:id="personExplanationDialog"></div>
+        </wicket:panel>
+    </body>
+</html>

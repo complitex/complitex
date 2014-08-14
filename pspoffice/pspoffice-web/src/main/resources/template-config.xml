@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<template xmlns="http://www.complitex.org/web/template">
+    <homepage-class>
+        org.complitex.pspoffice.web.template.PspWelcomePage
+    </homepage-class>
+    <sidebar>
+        <menu class="org.complitex.pspoffice.person.menu.OperationMenu"/>
+        <menu class="org.complitex.pspoffice.person.menu.PersonMenu"/>
+        <menu class="org.complitex.pspoffice.web.admin.AdminMenu"/>
+        <menu class="org.complitex.address.menu.AddressMenu"/>
+        <menu class="org.complitex.pspoffice.web.reference_data.menu.ReferenceDataMenu"/>
+        <menu class="org.complitex.organization.web.OrganizationMenu"/>
+        <menu class="org.complitex.organization_type.menu.OrganizationTypeMenu"/>
+        <menu class="org.complitex.pspoffice.person.menu.PersonDescriptionMenu"/>
+        <menu class="org.complitex.address.menu.AddressDescriptionMenu"/>
+    </sidebar>
+</template>

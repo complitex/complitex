@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:wicket="http://wicket.apache.org">
+    <head>
+        <wicket:head>
+            <title wicket:id="title"></title>
+        </wicket:head>
+    </head>
+    <body>
+        <table border="0" cellspacing="0" cellpadding="0" width="100%">
+            <tr>
+                <td id="Header">
+                </td>
+            </tr>
+            <tr>
+                <td id="TopPanel">
+                    <div>
+                        <span wicket:id="saveReportButton"></span>
+                        <span wicket:id="printReportButton"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div align="center">
+                        <table border="0" cellspacing="0" cellpadding="0" class="formFrame">
+                            <tr valign="top">
+                                <td class="ff_l"><wicket:image src="images/formFrame-tl.gif" width="4" height="180" alt=""/>
+                                </td>
+                                <td class="ff_t">
+                                    <wicket:fragment wicket:id="messages">
+                                        <h3>
+                                            <div wicket:id="messages"></div>
+                                        </h3>
+                                    </wicket:fragment>
+
+                                    <wicket:fragment wicket:id="report">
+                                        <h2 wicket:id="label"></h2>
+                                        <div wicket:id="headInfo"></div>
+                                        <div>
+                                            <wicket:message key="familyLabel"/>
+                                        </div>
+                                        <table class="tbColor" cellpadding="0" cellspacing="0" border="0" style="margin-top: 20px;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="center">
+                                                        <wicket:message key="familyMemberNumberHeader"/>
+                                                    </th>
+                                                    <th class="center">
+                                                        <wicket:message key="familyMemberNameHeader"/>
+                                                    </th>
+                                                    <th class="center">
+                                                        <wicket:message key="familyMemberRelationHeader"/>
+                                                    </th>
+                                                    <th class="center">
+                                                        <wicket:message key="familyMemberBirthDateHeader"/>
+                                                    </th>
+                                                    <th class="center">
+                                                        <wicket:message key="familyMemberPassportHeader"/>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr wicket:id="familyMembers">
+                                                    <td class="center">
+                                                        <span wicket:id="familyMemberNumber"></span>
+                                                    </td>
+                                                    <td class="center">
+                                                        <span wicket:id="familyMemberName"/>
+                                                    </td>
+                                                    <td class="center">
+                                                        <span wicket:id="familyMemberRelation"/>
+                                                    </td>
+                                                    <td class="center">
+                                                        <span wicket:id="familyMemberBirthDate"></span>
+                                                    </td>
+                                                    <td class="center">
+                                                        <span wicket:id="familyMemberPassport"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div>
+                                            <span wicket:id="total"></span>
+                                        </div>
+
+                                        <div style="margin-top: 20px;">
+                                            <div wicket:id="formOfOwnership"></div>
+                                            <div wicket:id="floorsInfo"></div>
+                                            <div wicket:id="leftInfo"></div>
+                                            <div wicket:id="hostelInfo"></div>
+                                            <div wicket:id="roomsInfo"></div>
+                                            <div wicket:id="floorInfo"></div>
+                                            <div wicket:id="stoveType"></div>
+                                            <div wicket:id="areaInfo"></div>
+                                            <div wicket:id="benefits"></div>
+                                            <div wicket:id="paymentsAdjustedForBenefits"></div>
+                                            <div wicket:id="paymentsInfo"></div>
+                                            <div wicket:id="debt"></div>
+                                        </div>
+                                    </wicket:fragment>
+
+                                    <div wicket:id="content"></div>
+                                    <div wicket:id="saveReportDownload"></div>
+                                    <div wicket:id="printReportDownload"></div>
+                                </td>
+                                <td class="ff_r"><wicket:image src="images/formFrame-tr.gif" width="4" height="180" alt=""/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ff_bl"><wicket:image src="images/formFrame-bl.gif" width="4" height="4" alt=""/>
+                                </td>
+                                <td class="ff_b"><wicket:image src="images/spacer.gif" width="4" height="4" alt=""/>
+                                </td>
+                                <td class="ff_br"><wicket:image src="images/formFrame-br.gif" width="4" height="4" alt=""/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div><wicket:image src="images/spacer.gif" width="800" height="1" alt=""/></div>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

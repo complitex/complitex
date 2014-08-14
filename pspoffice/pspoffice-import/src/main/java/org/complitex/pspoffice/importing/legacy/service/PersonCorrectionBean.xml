@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.complitex.pspoffice.importing.legacy.service.PersonCorrectionBean">
+    
+    <resultMap id="personCorrection" type="org.complitex.pspoffice.importing.legacy.entity.PersonCorrection">
+        <id column="pk_id" property="pkId"/>
+        <result column="system_person_id" property="systemPersonId"/>
+        <result column="system_registration_id" property="systemRegistrationId"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="org.complitex.pspoffice.importing.legacy.entity.PersonCorrection" useGeneratedKeys="true" keyProperty="pkId">
+        INSERT INTO `person_correction`
+	(`pk_id`, `id`, `idbud`, `rah`,	`kv`, `fam`, `im`, `ot`, `datar`, `reltovlaskv`, `grajd`, `pol`, `idrel`, `nkra`, 
+	`nobl`, `nrayon`, `nmisto`, `iddok`, `dokseria`, `doknom`, `dokvidan`, `dokdatvid`, `idarm`, `pkra`, `pobl`, `prayon`, 
+	`pmisto`, `pdpribza`, `pidul`, `pbud`, `pkorp`, `pkv`, `pdpribvm`, `dprop`, `idvidp`, `vkra`, `vobl`, `vrayon`, 
+	`vmisto`, `vidul`, `vbud`, `vkorp`, `vkv`, `vdata`, `idvip`, `larc`, `nom`, `parentnom`, `kid`, 
+        `system_person_id`, `system_registration_id`, `processed`, `content`)
+	VALUES
+	(#{pkId}, #{id}, #{idbud}, #{rah}, #{kv}, #{fam}, #{im}, #{ot} , #{datar}, #{reltovlaskv}, #{grajd}, #{pol}, #{idrel}, #{nkra}, 
+	#{nobl}, #{nrayon}, #{nmisto}, #{iddok}, #{dokseria}, #{doknom}, #{dokvidan}, #{dokdatvid}, #{idarm}, #{pkra}, #{pobl}, #{prayon}, 
+	#{pmisto}, #{pdpribza}, #{pidul}, #{pbud}, #{pkorp}, #{pkv}, #{pdpribvm}, #{dprop}, #{idvidp}, #{vkra}, #{vobl}, #{vrayon}, 
+	#{vmisto}, #{vidul}, #{vbud}, #{vkorp}, #{vkv}, #{vdata}, #{idvip}, #{larc}, #{nom}, #{parentnom}, #{kid}, 
+        #{systemPersonId}, #{systemRegistrationId}, #{processed}, #{content});
+    </insert>
+    
+    <update id="update" parameterType="org.complitex.pspoffice.importing.legacy.entity.PersonCorrection">
+        UPDATE `person_correction` SET `processed` = #{processed}, `system_person_id` = #{systemPersonId},
+        `kid` = #{kid}
+        WHERE `pk_id` = #{pkId}
+    </update>
+    
+    <delete id="delete">
+        DELETE FROM `person_correction`
+    </delete>
+    
+    <select id="exists" resultType="int">
+        SELECT COUNT(1) FROM `person_correction`
+    </select>
+    
+    <update id="clearProcessingStatus">
+        UPDATE `person_correction` SET `processed` = 0
+    </update>
+    
+    <select id="countForProcessing" parameterType="string" resultType="int">
+        SELECT COUNT(1) FROM `person_correction` WHERE `processed` = 0 AND `larc` = #{NONARCHIVE_INDICATOR}
+    </select>
+    
+    <select id="archiveCount" parameterType="string" resultType="int">
+        SELECT COUNT(1) FROM `person_correction` WHERE `larc` != #{NONARCHIVE_INDICATOR}
+    </select>
+    
+    <select id="findForProcessing" resultMap="org.complitex.pspoffice.importing.legacy.service.PersonCorrectionBean.personCorrection"
+            parameterType="map">
+        SELECT * FROM `person_correction` WHERE `processed` = 0 AND `larc` = #{NONARCHIVE_INDICATOR}
+        LIMIT ${size}
+    </select>
+    
+    <select id="findSystemPerson" parameterType="map" resultType="long">
+        SELECT e.`object_id` FROM `person` e
+        <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
+        JOIN `person_attribute` pid ON (pid.`object_id` = e.`object_id` AND pid.`attribute_type_id` = #{personIdAT}
+            AND pid.`status` = 'ACTIVE')
+        JOIN `person_string_culture` pid_value ON (pid_value.`id` = pid.`value_id` AND pid_value.`locale_id` = sys.`id`)
+        
+        AND (ln.`name` = #{lastName} OR sys_ln.`name` = #{lastName})
+        AND (fn.`name` = #{firstName} OR sys_fn.`name` = #{firstName})
+        AND (mn.`name` = #{middleName} OR sys_mn.`name` = #{middleName})
+        AND pid_value.`value` = #{personId}
+    </select>
+    
+    <select id="findSystemParent" parameterType="map" resultType="long">
+        SELECT `system_person_id` FROM `person_correction` WHERE `larc` = #{NONARCHIVE_INDICATOR}
+            AND `idbud` = #{idbud} AND `kv` = #{kv} AND `nom` = #{nom}
+            AND `system_person_id` IS NOT NULL
+    </select>
+    
+    <select id="findChildren" parameterType="map" resultMap="org.complitex.pspoffice.importing.legacy.service.PersonCorrectionBean.personCorrection">
+        SELECT * FROM `person_correction` WHERE `larc` = #{NONARCHIVE_INDICATOR}
+        AND `kid` = 1 AND `processed` = 0 AND `system_person_id` IS NOT NULL
+        LIMIT ${size}
+    </select>
+    
+    <select id="getOwnerByType" parameterType="map" resultMap="org.complitex.pspoffice.importing.legacy.service.PersonCorrectionBean.personCorrection">
+        SELECT * FROM `person_correction` WHERE `idbud` = #{buildingId} AND `kv` = #{apartment} AND `reltovlaskv` = #{OWNER_TYPE}
+        AND `larc` = #{NONARCHIVE_INDICATOR}
+    </select>
+    
+    <select id="getOwnerByName" parameterType="map" resultMap="org.complitex.pspoffice.importing.legacy.service.PersonCorrectionBean.personCorrection">
+        SELECT * FROM `person_correction` WHERE `idbud` = #{buildingId} AND `kv` = #{apartment} 
+            AND CONCAT(`fam`, ' ', `im`, ' ', `ot`) = #{fio}
+        AND `larc` = #{NONARCHIVE_INDICATOR}
+    </select>
+    
+    <select id="findPersonByAddress" parameterType="map" resultMap="org.complitex.pspoffice.importing.legacy.service.PersonCorrectionBean.personCorrection">
+        SELECT * FROM `person_correction` WHERE `idbud` = #{buildingId} AND `kv` = #{apartment}
+    </select>
+    
+</mapper>

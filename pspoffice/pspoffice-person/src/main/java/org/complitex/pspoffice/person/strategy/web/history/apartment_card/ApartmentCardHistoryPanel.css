@@ -1,0 +1,9 @@
+.finished_registration {
+    font-style: italic;
+}
+
+.empty_owner_relationship {
+    display: block;
+    width: 120px;
+    height: 9px;
+}

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.flexpay.eirc.service.service.ServiceBean">
+
+    <cache type="org.complitex.dictionary.mybatis.caches.EhcacheCache"/>
+    <!--cache-ref namespace="ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountBean"/-->
+
+    <resultMap id="Service" type="ru.flexpay.eirc.service.entity.Service">
+        <result column="service_id"        property="id"/>
+        <result column="service_code"      property="code"/>
+        <result column="service_parent_id" property="parentId"/>
+
+        <collection property="name" javaType="ArrayList" ofType="java.util.HashMap">
+            <result property="value" column="service_name"/>
+            <association property="key" resultMap="Locale">
+            </association>
+        </collection>
+    </resultMap>
+
+    <resultMap id="Locale" type="org.complitex.dictionary.entity.Locale">
+        <constructor>
+            <idArg column="service_locale_id"     javaType="Long"/>
+            <arg   column="service_locale_name"   javaType="String"/>
+            <arg   column="service_locale_system" javaType="_boolean" jdbcType="TINYINT"/>
+        </constructor>
+    </resultMap>
+
+    <sql id="serviceCondition">
+        <if test="map.service != null">
+            <if test="map.service.name != null and map.service.name != ''">
+                and sn.`value` like concat('%', #{map.service.name}, '%')
+            </if>
+            <if test="map.service.code != null and like == true">
+                and s.`code` like concat('%', #{map.service.code}, '%')
+            </if>
+            <if test="map.service.code != null and like == false">
+                and s.`code` = #{map.service.code}
+            </if>
+            <if test="map.service.parentId != null">
+                and s.`parent_id` = #{map.service.parentId}
+            </if>
+        </if>
+    </sql>
+
+    <sql id="serviceWhere">
+        <if test="object != null">
+            where 1 = 1
+            <include refid="serviceCondition"/>
+        </if>
+    </sql>
+
+    <sql id="serviceColumns">
+        s.`id` as `service_id`, s.`code` as `service_code`, s.`parent_id` as `service_parent_id`,
+        sn.`value` as `service_name`, sn.`locale_id` as `service_locale_id`, sl.`locale` as `service_locale_name`, sl.`system` as `service_locale_system`
+    </sql>
+
+    <sql id="serviceJoin">
+        left join `service_string_culture` sn on s.`id` = sn.`service_id`
+        <if test="_parameter instanceof org.complitex.dictionary.entity.FilterWrapper and locale != null">
+            and sn.`locale_id` = #{locale.id}
+        </if>
+        left join `locales` sl on sn.`locale_id` = sl.`id`
+    </sql>
+
+    <select id="selectServices" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultMap="Service" flushCache="false" useCache="true">
+        select
+        <include refid="serviceColumns"/>
+        from `service` s
+        <include refid="serviceJoin"/>
+
+        <include refid="serviceWhere"/>
+
+        <if test="sortProperty != null">
+            order by ${sortProperty}
+
+            <if test="asc">
+                ${asc}
+            </if>
+        </if>
+        <if test="count > 0">
+            limit ${first},${count}
+        </if>
+    </select>
+
+    <select id="countServices" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultType="integer" flushCache="false" useCache="true">
+        select count(distinct s.`id`) from `service` s
+          left join `service_string_culture` sn on s.`id` = sn.`service_id`
+        <include refid="serviceWhere"/>
+    </select>
+
+    <select id="selectService" parameterType="long" resultMap="Service" flushCache="false" useCache="false">
+        select
+        <include refid="serviceColumns"/>
+        from `service` s
+        <include refid="serviceJoin"/>
+        where s.`id` = #{id}
+    </select>
+
+    <select id="selectServicesByIds" parameterType="list" resultMap="Service" flushCache="false" useCache="false">
+        select
+        <include refid="serviceColumns"/>
+        from `service` s
+        <include refid="serviceJoin"/>
+        where s.`id` IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insertService" parameterType="ru.flexpay.eirc.service.entity.Service" keyProperty="id" useGeneratedKeys="true" >
+        insert into `service` (`code`, `parent_id`)
+                            values (#{code}, #{parentId})
+    </insert>
+
+    <update id="updateService" parameterType="ru.flexpay.eirc.service.entity.Service" >
+        update `service` set `code` = #{code}, `parent_id` = #{parentId} where `id` = #{id}
+    </update>
+
+    <insert id="insertServiceName" parameterType="map" >
+        insert into `service_string_culture` (`service_id`, `locale_id`, `value`) values (#{serviceId}, #{localeId}, #{value})
+    </insert>
+
+    <update id="updateServiceName" parameterType="map" >
+        update `service_string_culture` set `value` = #{value} where `service_id` = #{serviceId} and `locale_id` = #{localeId}
+    </update>
+
+    <delete id="deleteServiceName" parameterType="map" >
+        delete from `service_string_culture` where `service_id` = #{serviceId} and `locale_id` = #{localeId}
+    </delete>
+
+    <delete id="deleteServiceNames" parameterType="ru.flexpay.eirc.service.entity.Service" >
+        delete from `service_string_culture` where `service_id` = #{id}
+    </delete>
+
+    <delete id="deleteService" parameterType="ru.flexpay.eirc.service.entity.Service" >
+        delete from `service` where `id` = #{id}
+    </delete>
+
+</mapper>

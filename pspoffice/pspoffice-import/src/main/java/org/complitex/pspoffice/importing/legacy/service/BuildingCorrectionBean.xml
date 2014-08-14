@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.complitex.pspoffice.importing.legacy.service.BuildingCorrectionBean">
+    
+    <resultMap id="buildingCorrection" type="org.complitex.pspoffice.importing.legacy.entity.BuildingCorrection">
+        <id column="pk_id" property="pkId"/>
+        <result column="system_building_id" property="systemBuildingId"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="org.complitex.pspoffice.importing.legacy.entity.BuildingCorrection" useGeneratedKeys="true" keyProperty="pkId">
+        INSERT INTO `building_correction`(`id`, `idjek`, `idul`, `dom`, `korpus`, `system_building_id`, `processed`, `content`) VALUES
+            (#{id}, #{idjek}, #{idul}, #{dom}, #{korpus}, #{systemBuildingId}, #{processed}, #{content})
+    </insert>
+    
+    <update id="update" parameterType="org.complitex.pspoffice.importing.legacy.entity.BuildingCorrection">
+        UPDATE `building_correction` SET `processed` = #{processed}, `system_building_id` = #{systemBuildingId} 
+        WHERE `pk_id` = #{pkId}
+    </update>
+    
+    <select id="exists" parameterType="string" resultType="int">
+        SELECT COUNT(1) FROM `building_correction` WHERE `idjek` = #{idjek}
+    </select>
+    
+    <delete id="delete" parameterType="map">
+        DELETE FROM `building_correction` WHERE `idjek` IN 
+        <foreach open="(" close=")" separator="," collection="value" item="idjek">
+            #{idjek}
+        </foreach>
+    </delete>
+    
+    <update id="clearProcessingStatus" parameterType="string">
+        UPDATE `building_correction` SET `processed` = 0 WHERE `idjek` IN 
+        <foreach open="(" close=")" separator="," collection="value" item="idjek">
+            #{idjek}
+        </foreach>
+    </update>
+    
+    <select id="countForProcessingForJeks" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM `building_correction` WHERE `system_building_id` IS NULL
+            AND `processed` = 0 AND `idjek` IN 
+            <foreach open="(" close=")" separator="," collection="value" item="idjek">
+                #{idjek}
+            </foreach>
+    </select>
+    
+    <select id="countForProcessing" parameterType="string" resultType="int">
+        SELECT COUNT(1) FROM `building_correction` WHERE `system_building_id` IS NULL
+            AND `processed` = 0 AND `idjek` = #{idjek}
+    </select>
+    
+    <select id="findForProcessing" resultMap="org.complitex.pspoffice.importing.legacy.service.BuildingCorrectionBean.buildingCorrection"
+            parameterType="map">
+        SELECT * FROM `building_correction` WHERE `idjek` = #{idjek} AND `system_building_id` IS NULL
+            AND `processed` = 0 LIMIT ${size}
+    </select>
+    
+    <select id="findSystemBuilding" parameterType="map" resultType="long">
+        SELECT DISTINCT b.`object_id` FROM `building` b
+                JOIN `building_address` addr ON (((b.`parent_id` = addr.`object_id`) OR
+                    EXISTS(SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = b.`object_id` 
+                            AND ba.`status` = 'ACTIVE' AND ba.`attribute_type_id` = #{buildingBuildingAddressAT}
+                            AND ba.`value_id` = addr.`object_id`)) AND addr.`status` = 'ACTIVE')
+                JOIN `building_address_attribute` num ON (num.`object_id` = addr.`object_id` AND num.`status` = 'ACTIVE' 
+                        AND num.`attribute_type_id` = #{buildingAddressNumberAT})
+                JOIN `building_address_string_culture` num_sc ON (num_sc.`id` = num.`value_id`)
+                LEFT JOIN `building_address_attribute` corp ON (corp.`object_id` = addr.`object_id` AND corp.`status` = 'ACTIVE' 
+                        AND corp.`attribute_type_id` = #{buildingAddressCorpAT})
+                LEFT JOIN `building_address_string_culture` corp_sc ON (corp_sc.`id` = corp.`value_id`)
+
+            WHERE b.`status` IN ('ACTIVE', 'INACTIVE')
+            AND num_sc.`value` = #{dom}
+            AND
+                <choose>
+                    <when test="corp == null">
+                        corp_sc.`value` IS NULL
+                    </when>
+                    <otherwise>
+                        corp_sc.`value` = #{corp}
+                    </otherwise>
+                </choose>
+            AND
+            addr.`parent_entity_id` = #{parentEntityId} AND addr.`parent_id` = #{parentId}    
+    </select>
+    
+    <select id="findById" parameterType="map" resultMap="org.complitex.pspoffice.importing.legacy.service.BuildingCorrectionBean.buildingCorrection">
+        SELECT * FROM `building_correction` WHERE `id` = #{id} AND 
+        `idjek` IN 
+        <foreach open="(" close=")" separator="," collection="jekIds" item="idjek">
+            #{idjek}
+        </foreach>
+    </select>
+    
+</mapper>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<template xmlns="http://www.complitex.org/web/template">
+    <sidebar>
+        <menu class="ru.complitex.salelog.web.admin.AdminTemplateMenu"/>
+        <menu class="ru.complitex.salelog.web.SalelogTemplateMenu"/>
+        <menu class="org.complitex.address.menu.AddressMenu"/>
+    </sidebar>
+    <homepage-class>ru.complitex.salelog.order.web.list.OrderList</homepage-class>
+</template>

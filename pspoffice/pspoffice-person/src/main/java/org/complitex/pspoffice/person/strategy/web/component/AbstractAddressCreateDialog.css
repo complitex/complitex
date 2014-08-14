@@ -1,0 +1,8 @@
+.addressCreateDialog a{
+    color: #007AAE !important;
+    text-decoration: none !important;
+}
+
+.addressCreateDialog {
+    max-height: 350px;
+}

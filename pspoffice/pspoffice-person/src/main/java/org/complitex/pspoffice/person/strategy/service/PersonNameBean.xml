@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.complitex.pspoffice.person.strategy.service.PersonNameBean">
+
+    <resultMap id="PersonName" type="org.complitex.pspoffice.person.strategy.entity.PersonName">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="locale_id" property="localeId"/>
+    </resultMap>
+
+    <select id="findById" parameterType="map" resultMap="org.complitex.pspoffice.person.strategy.service.PersonNameBean.PersonName">
+        SELECT * FROM `person_${personNameType}` WHERE `id` = #{id}
+    </select>
+
+    <select id="find" parameterType="map" resultMap="org.complitex.pspoffice.person.strategy.service.PersonNameBean.PersonName">
+        SELECT * FROM `person_${personNameType}` WHERE `name` LIKE CONCAT(#{filter}, '%') AND `locale_id` = #{localeId} LIMIT #{size}
+    </select>
+
+    <select id="findByName" parameterType="map" resultMap="org.complitex.pspoffice.person.strategy.service.PersonNameBean.PersonName">
+        SELECT * FROM `person_${personNameType}` WHERE `name` = #{name} AND `locale_id` = #{localeId}
+    </select>
+
+    <insert id="save" parameterType="map" keyProperty="personName.id" useGeneratedKeys="true">
+        INSERT INTO `person_${personNameType}` (`name`, `locale_id`) values (#{personName.name}, #{personName.localeId})
+    </insert>
+    
+</mapper>

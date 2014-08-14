@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:wicket="http://wicket.apache.org">
+    <head>
+        <wicket:head>
+            <title wicket:id="title"></title>
+        </wicket:head>
+    </head>
+    <body>
+        <wicket:extend>
+            <h2 wicket:id="label" style="margin-bottom: 20px;"></h2>
+            <div wicket:id="content" style="margin-top: 20px;">
+                <form action="#" wicket:id="filterForm">
+                    <table class="tbColor" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <wicket:message key="order"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="district"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="street"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="building"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="apartments"/>
+                                </th>
+                                <th>
+                                    <wicket:message key="organizations"/>
+                                </th>
+                                <th style="width:110px">
+                                    <input wicket:id="reset" type="button" wicket:message="value:reset" class="btnSmall"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td class="filter-td" style="width:30px"></td>
+                                <td class="filter-td">
+                                    <div wicket:id="districtFilter"></div>
+                                </td>
+                                <td class="filter-td">
+                                    <div wicket:id="streetFilter"></div>
+                                </td>
+                                <td class="filter-td">
+                                    <input type="text" wicket:id="buildingFilter"/>
+                                </td>
+                                <td class="filter-td">
+                                </td>
+                                <td class="filter-td">
+                                </td>
+                                <td class="filter-td">
+                                    <input wicket:id="submit" type="submit" wicket:message="value:find" class="btnSmall"/>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr wicket:id="buildings">
+                                <td><span wicket:id="order"></span></td>
+                                <td>
+                                    <a wicket:id="districtLink">
+                                        <span wicket:id="district"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a wicket:id="streetLink">
+                                        <span wicket:id="street"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a wicket:id="buildingLink">
+                                        <span wicket:id="building"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a wicket:id="apartmentsLink">
+                                        <span wicket:id="apartments"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <table border="0" cellpadding="0" cellspacing="0">
+                                        <tr wicket:id="organizations">
+                                            <td>
+                                                <a wicket:id="organizationLink">
+                                                    <span wicket:id="organizationCode"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+                <div wicket:id="navigator"></div>
+
+                <div style="margin-top: 10px;">
+                    <a wicket:id="backSearch">
+                        <wicket:message key="backSearch"/>
+                    </a>
+                </div>
+            </div>
+        </wicket:extend>
+    </body>
+</html>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.complitex.pspoffice.person.strategy.Person">
+
+    <resultMap id="Person" type="org.complitex.pspoffice.person.strategy.entity.Person"
+            extends="org.complitex.dictionary.entity.DomainObject.DomainObject">
+    </resultMap>
+
+    <resultMap id="PersonRegistration" type="org.complitex.pspoffice.person.strategy.PersonStrategy$PersonRegistration">
+        <id column="registrationId" property="registrationId"/>
+        <result column="addressTypeId" property="addressTypeId"/>
+        <result column="addressId" property="addressId"/>
+    </resultMap>
+
+    <resultMap id="PersonApartmentCardAddress" type="org.complitex.pspoffice.person.strategy.PersonStrategy$PersonApartmentCardAddress">
+        <id column="apartmentCardId" property="apartmentCardId"/>
+        <result column="addressTypeId" property="addressTypeId"/>
+        <result column="addressId" property="addressId"/>
+    </resultMap>
+
+    <sql id="join">
+        JOIN `locales` sys ON sys.`system` = 1
+        JOIN `person_attribute` sys_lna ON (sys_lna.`status` = 'ACTIVE' AND sys_lna.`object_id` = e.`object_id` AND sys_lna.`attribute_type_id` = 2000
+            AND sys_lna.`attribute_id` = sys.`id`)
+        JOIN `person_last_name` sys_ln ON sys_ln.`id` = sys_lna.`value_id`
+        LEFT JOIN `person_attribute` lna ON (lna.`status` = 'ACTIVE' AND lna.`object_id` = e.`object_id` AND lna.`attribute_type_id` = 2000
+            AND lna.`attribute_id` = #{localeId})
+        LEFT JOIN `person_last_name` ln ON ln.`id` = lna.`value_id`
+
+        JOIN `person_attribute` sys_fna ON (sys_fna.`status` = 'ACTIVE' AND sys_fna.`object_id` = e.`object_id` AND sys_fna.`attribute_type_id` = 2001
+            AND sys_fna.`attribute_id` = sys.`id`)
+        JOIN `person_first_name` sys_fn ON sys_fn.`id` = sys_fna.`value_id`
+        LEFT JOIN `person_attribute` fna ON (fna.`status` = 'ACTIVE' AND fna.`object_id` = e.`object_id` AND fna.`attribute_type_id` = 2001
+            AND fna.`attribute_id` = #{localeId})
+        LEFT JOIN `person_first_name` fn ON fn.`id` = fna.`value_id`
+        
+        JOIN `person_attribute` sys_mna ON (sys_mna.`status` = 'ACTIVE' AND sys_mna.`object_id` = e.`object_id` AND sys_mna.`attribute_type_id` = 2002
+            AND sys_mna.`attribute_id` = sys.`id`)
+        JOIN `person_middle_name` sys_mn ON sys_mn.`id` = sys_mna.`value_id`
+        LEFT JOIN `person_attribute` mna ON (mna.`status` = 'ACTIVE' AND mna.`object_id` = e.`object_id` AND mna.`attribute_type_id` = 2002
+            AND mna.`attribute_id` = #{localeId})
+        LEFT JOIN `person_middle_name` mn ON mn.`id` = mna.`value_id`
+    </sql>
+
+    <sql id="filter">
+        <if test="id != null">
+            AND e.`object_id` = #{id}
+        </if>
+        <if test="additionalParams != null">
+            <if test="additionalParams['last_name'] != null">
+                AND (ln.`name` LIKE CONCAT('%', #{additionalParams.last_name}, '%') OR
+                    sys_ln.`name` LIKE CONCAT('%', #{additionalParams.last_name}, '%'))
+            </if>
+            <if test="additionalParams['first_name'] != null">
+                AND (fn.`name` LIKE CONCAT('%', #{additionalParams.first_name}, '%') OR
+                    sys_fn.`name` LIKE CONCAT('%', #{additionalParams.first_name}, '%'))
+            </if>
+            <if test="additionalParams['middle_name'] != null">
+                AND (mn.`name` LIKE CONCAT('%', #{additionalParams.middle_name}, '%') OR
+                    sys_mn.`name` LIKE CONCAT('%', #{additionalParams.middle_name}, '%'))
+            </if>
+        </if>
+    </sql>
+
+    <select id="find" resultMap="org.complitex.pspoffice.person.strategy.Person.Person" parameterType="DomainObjectExample">
+        SELECT e.* FROM `person` e
+            <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
+        WHERE
+        <include refid="org.complitex.dictionary.entity.DomainObject.statusFilter"/>
+        <include refid="org.complitex.dictionary.entity.DomainObject.permissionFilter"/>
+        <include refid="org.complitex.pspoffice.person.strategy.Person.filter"/>
+        <include refid="org.complitex.pspoffice.person.strategy.Person.orderBy"/>
+        <include refid="org.complitex.dictionary.entity.DomainObject.limit"/>
+    </select>
+
+    <select id="count" resultType="integer" parameterType="DomainObjectExample">
+        SELECT COUNT(1) FROM `person` e
+            <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
+        WHERE
+        <include refid="org.complitex.dictionary.entity.DomainObject.statusFilter"/>
+        <include refid="org.complitex.dictionary.entity.DomainObject.permissionFilter"/>
+        <include refid="org.complitex.pspoffice.person.strategy.Person.filter"/>
+    </select>
+
+    <sql id="orderBy">
+        <if test="orderByAttributeTypeId != null">
+            ORDER BY
+            <choose>
+                <when test="orderByAttributeTypeId == 2000">
+                    IFNULL(ln.`name`, sys_ln.`name`)
+                </when>
+                <when test="orderByAttributeTypeId == 2001">
+                    IFNULL(fn.`name`, sys_fn.`name`)
+                </when>
+                <when test="orderByAttributeTypeId == 2002">
+                    IFNULL(mn.`name`, sys_mn.`name`)
+                </when>
+                <when test="orderByAttributeTypeId == -1">
+                    IFNULL(ln.`name`, sys_ln.`name`), IFNULL(fn.`name`, sys_fn.`name`),
+                            IFNULL(mn.`name`, sys_mn.`name`)
+                </when>
+                <otherwise>
+                    1
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="asc">
+                    ASC
+                </when>
+                <otherwise>
+                    DESC
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
+
+    <select id="findByName" resultMap="org.complitex.pspoffice.person.strategy.Person.Person" parameterType="DomainObjectExample">
+        SELECT e.* FROM `person` e
+        <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
+        WHERE
+            e.`status` = 'ACTIVE'
+            <include refid="org.complitex.dictionary.entity.DomainObject.permissionFilter"/>
+            AND (ln.`name` = #{additionalParams.last_name} OR sys_ln.`name` = #{additionalParams.last_name})
+            <if test="additionalParams['first_name'] != null">
+                AND (fn.`name` LIKE CONCAT(#{additionalParams.first_name}, '%') OR
+                        sys_fn.`name` LIKE CONCAT(#{additionalParams.first_name}, '%'))
+            </if>
+            <if test="additionalParams['middle_name'] != null">
+                AND (mn.`name` LIKE CONCAT(#{additionalParams.middle_name}, '%') OR
+                        sys_mn.`name` LIKE CONCAT(#{additionalParams.middle_name}, '%'))
+            </if>
+        ORDER BY IFNULL(ln.`name`, sys_ln.`name`), IFNULL(fn.`name`, sys_fn.`name`), IFNULL(mn.`name`, sys_mn.`name`)
+    </select>
+
+    <select id="findPreviousDocumentAttributes" parameterType="map" 
+                    resultMap="org.complitex.dictionary.entity.Attribute.Attribute">
+        SELECT p.* FROM `person_attribute` p WHERE p.`status` = 'ARCHIVE' AND p.`attribute_type_id` = #{personDocumentAT} 
+                    AND p.`object_id` = #{personId}
+        ORDER BY p.`end_date`
+    </select>
+
+    <sql id="findPersonRegistrationsSql">
+        FROM `registration_attribute` ra
+            JOIN `registration` r ON (ra.`object_id` = r.`object_id` AND r.`status` IN ('ACTIVE', 'INACTIVE'))
+            JOIN `apartment_card_attribute` ar ON (r.`object_id` = ar.`value_id` AND ar.`status` = 'ACTIVE')
+            JOIN `apartment_card` a ON (a.`object_id` = ar.`object_id` AND a.`status` = 'ACTIVE')
+            JOIN `apartment_card_attribute` address ON (address.`object_id` = a.`object_id` AND address.`status` = 'ACTIVE')
+            WHERE ra.`attribute_type_id` = #{registrationPersonAT}
+                    AND ar.`attribute_type_id` = #{apartmentCardRegistrationAT}
+                    AND address.`attribute_type_id` = #{apartmentCardAddressAT}
+                    AND ra.`value_id` = #{personId}
+    </sql>
+
+    <select id="findPersonRegistrations" parameterType="map"
+                resultMap="org.complitex.pspoffice.person.strategy.Person.PersonRegistration">
+        SELECT r.`object_id` registrationId, address.`value_id` addressId, address.`value_type_id` addressTypeId
+        <include refid="org.complitex.pspoffice.person.strategy.Person.findPersonRegistrationsSql"/>
+        ORDER BY 
+                CASE ra.`status`
+                    WHEN 'ACTIVE' THEN 1
+                    ELSE 2
+                END
+    </select>
+
+    <select id="countPersonRegistrations" parameterType="map" resultType="int">
+        SELECT COUNT(DISTINCT ra.`object_id`)
+        <include refid="org.complitex.pspoffice.person.strategy.Person.findPersonRegistrationsSql"/>
+    </select>
+
+    <select id="findPersonApartmentCardAddresses" parameterType="map"
+                resultMap="org.complitex.pspoffice.person.strategy.Person.PersonApartmentCardAddress">
+        SELECT ar.`object_id` apartmentCardId, address.`value_id` addressId, address.`value_type_id` addressTypeId
+        <include refid="org.complitex.pspoffice.person.strategy.Person.findPersonRegistrationsSql"/>
+            AND r.`status` = 'ACTIVE'
+    </select>
+
+    <select id="findParents" parameterType="map" resultType="long">
+        SELECT DISTINCT p.`object_id` FROM `person` p
+            JOIN `person_attribute` child_attr ON (p.`object_id` = child_attr.`object_id` AND
+                child_attr.`attribute_type_id` = #{personChildrenAT} AND child_attr.`status` = 'ACTIVE' AND
+                child_attr.`value_id` = #{childId})
+            WHERE p.`status` IN ('ACTIVE', 'INACTIVE')
+    </select>
+
+    <select id="findPermanentRegistrationAddress" parameterType="map"
+                resultMap="org.complitex.pspoffice.person.strategy.Person.PersonRegistration">
+        SELECT r.`object_id` registrationId, address.`value_id` addressId, address.`value_type_id` addressTypeId
+        FROM `registration_attribute` ra
+            JOIN `registration` r ON (ra.`object_id` = r.`object_id` AND r.`status` = 'ACTIVE')
+            JOIN `registration_attribute` rt ON (rt.`object_id` = r.`object_id` AND rt.`status` = 'ACTIVE')
+            JOIN `apartment_card_attribute` ar ON (r.`object_id` = ar.`value_id` AND ar.`status` = 'ACTIVE')
+            JOIN `apartment_card` a ON (a.`object_id` = ar.`object_id` AND a.`status` = 'ACTIVE')
+            JOIN `apartment_card_attribute` address ON (address.`object_id` = a.`object_id` AND address.`status` = 'ACTIVE')
+            WHERE ra.`attribute_type_id` = #{registrationPersonAT}
+                    AND rt.`attribute_type_id` = #{registrationTypeAT}
+                    AND ar.`attribute_type_id` = #{apartmentCardRegistrationAT}
+                    AND address.`attribute_type_id` = #{apartmentCardAddressAT}
+                    AND ra.`value_id` = #{personId}
+                    AND ra.`status` = 'ACTIVE'
+                    AND rt.`value_id` = #{permanentRegistrationTypeId}
+    </select>
+    
+    <!-- History -->
+    
+    <sql id="nontraceblaAttributesSql">
+        <if test="nontraceableAttributes != null and !nontraceableAttributes.isEmpty()">
+            AND a.`attribute_type_id` NOT IN 
+            <foreach open="(" close=")" separator="," item="item" collection="nontraceableAttributes">
+                #{item}
+            </foreach>
+        </if>
+    </sql>
+    
+    <select id="getPreviousModificationDate" parameterType="map" resultType="date">
+        SELECT MAX(d.`date`) FROM (
+            SELECT a.`start_date` `date` FROM `person_attribute` a WHERE a.`object_id` = #{personId} 
+                AND a.`start_date` <![CDATA[ < ]]> #{date}
+                <include refid="org.complitex.pspoffice.person.strategy.Person.nontraceblaAttributesSql"/>
+            UNION
+            SELECT a.`end_date` `date` FROM `person_attribute` a WHERE a.`object_id` = #{personId} 
+                AND a.`end_date` <![CDATA[ < ]]> #{date}
+                <include refid="org.complitex.pspoffice.person.strategy.Person.nontraceblaAttributesSql"/>
+            UNION
+            SELECT p.`end_date` FROM `person` p WHERE p.`end_date` <![CDATA[ < ]]> #{date} 
+                AND p.`object_id` = #{personId}
+            UNION
+            SELECT da.`start_date` FROM `document_attribute` da WHERE da.`start_date` <![CDATA[ < ]]> #{date}
+                AND da.`object_id` IN (SELECT pa.`value_id` FROM `person_attribute` pa WHERE pa.`object_id` = #{personId}
+                    AND pa.`start_date` <![CDATA[ < ]]> #{date} AND pa.`attribute_type_id` = #{personDocumentAT})
+        ) d
+    </select>
+    
+    <select id="getNextModificationDate" parameterType="map" resultType="date">
+        SELECT MIN(d.`date`) FROM (
+            SELECT a.`start_date` `date` FROM `person_attribute` a WHERE a.`object_id` = #{personId} 
+                AND a.`start_date` <![CDATA[ > ]]> #{date}
+                <include refid="org.complitex.pspoffice.person.strategy.Person.nontraceblaAttributesSql"/>
+            UNION
+            SELECT a.`end_date` `date` FROM `person_attribute` a WHERE a.`object_id` = #{personId} 
+                AND a.`end_date` <![CDATA[ > ]]> #{date}
+                <include refid="org.complitex.pspoffice.person.strategy.Person.nontraceblaAttributesSql"/>
+            UNION
+            SELECT p.`end_date` FROM `person` p WHERE p.`end_date` <![CDATA[ > ]]> #{date} 
+                AND p.`object_id` = #{personId}
+            UNION
+            SELECT da.`start_date` FROM `document_attribute` da WHERE da.`start_date` <![CDATA[ > ]]> #{date}
+                AND da.`object_id` IN (SELECT pa.`value_id` FROM `person_attribute` pa WHERE pa.`object_id` = #{personId}
+                    AND pa.`attribute_type_id` = #{personDocumentAT})
+        ) d
+    </select>
+
+</mapper>

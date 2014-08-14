@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.complitex.pspoffice.importing.legacy.service.RegistrationCorrectionBean">
+    
+    <update id="updateApartmentCard" parameterType="org.complitex.pspoffice.importing.legacy.entity.ApartmentCardCorrection">
+        UPDATE `apartment_card_correction` SET `processed` = #{processed}
+        WHERE `pk_id` = #{pkId}
+    </update>
+    
+    <update id="updatePerson" parameterType="org.complitex.pspoffice.importing.legacy.entity.PersonCorrection">
+        UPDATE `person_correction` SET `system_registration_id` = #{systemRegistrationId}
+        WHERE `pk_id` = #{pkId}
+    </update>
+    
+    <update id="clearProcessingStatus">
+        UPDATE `apartment_card_correction` SET `processed` = 0
+    </update>
+    
+    <select id="countForProcessing" resultType="int">
+        SELECT COUNT(1) FROM `apartment_card_correction` WHERE `processed` = 0 
+        AND `system_apartment_card_id` IS NOT NULL
+    </select>
+    
+    <select id="findApartmentCardsForProcessing" 
+            resultMap="org.complitex.pspoffice.importing.legacy.service.ApartmentCardCorrectionBean.apartmentCardCorrection"
+            parameterType="int">
+        SELECT * FROM `apartment_card_correction` WHERE `processed` = 0 
+        AND `system_apartment_card_id` IS NOT NULL
+        LIMIT ${value}
+    </select>
+    
+</mapper>

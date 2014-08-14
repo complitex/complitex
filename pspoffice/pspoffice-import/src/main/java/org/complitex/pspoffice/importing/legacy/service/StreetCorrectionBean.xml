@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.complitex.pspoffice.importing.legacy.service.StreetCorrectionBean">
+    
+    <resultMap id="streetCorrection" type="org.complitex.pspoffice.importing.legacy.entity.StreetCorrection">
+        <id column="pk_id" property="pkId"/>
+        <result column="system_street_id" property="systemStreetId"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="org.complitex.pspoffice.importing.legacy.entity.StreetCorrection" useGeneratedKeys="true" keyProperty="pkId">
+        INSERT INTO `street_correction`(`id`, `idjek`, `utype`, `nkod`, `rtype`, `nkod1`, `system_street_id`, `content`) VALUES
+            (#{id}, #{idjek}, #{utype}, #{nkod}, #{rtype}, #{nkod1}, #{systemStreetId}, #{content})
+    </insert>
+    
+    <update id="update" parameterType="org.complitex.pspoffice.importing.legacy.entity.StreetCorrection">
+        UPDATE `street_correction` SET `processed` = #{processed}, `system_street_id` = #{systemStreetId} 
+        WHERE `pk_id` = #{pkId}
+    </update>
+    
+    <select id="getById" parameterType="map" resultMap="org.complitex.pspoffice.importing.legacy.service.StreetCorrectionBean.streetCorrection">
+        SELECT * FROM `street_correction` WHERE `id` = #{id} AND `idjek` = #{idjek}
+    </select>
+    
+    <delete id="delete" parameterType="collection">
+        DELETE FROM `street_correction` WHERE `idjek` IN 
+        <foreach open="(" close=")" separator="," collection="value" item="idjek">
+            #{idjek}
+        </foreach>
+    </delete>
+    
+    <select id="exists" parameterType="string" resultType="int">
+        SELECT COUNT(1) FROM `street_correction` WHERE `idjek` = #{idjek}
+    </select>
+    
+    <update id="clearProcessingStatus" parameterType="string">
+        UPDATE `street_correction` SET `processed` = 0 WHERE `idjek` IN 
+        <foreach open="(" close=")" separator="," collection="value" item="idjek">
+            #{idjek}
+        </foreach>
+    </update>
+
+    <select id="findSystemStreetType" parameterType="map" resultType="long">
+        SELECT DISTINCT e.`object_id` FROM `street_type` e 
+            JOIN `street_type_attribute` namea ON (e.`object_id` = namea.`object_id` 
+                    AND namea.`attribute_type_id` = #{streetTypeShortNameAT} AND namea.`status` = 'ACTIVE')
+            LEFT JOIN `street_type_string_culture` name ON (namea.`value_id` = name.`id` AND name.`locale_id` = #{localeId})
+        WHERE e.`status` IN ('ACTIVE', 'INACTIVE') AND
+            name.`value` = #{name} 
+    </select>
+    
+    <select id="findSystemStreet" parameterType="map" resultType="long">
+        SELECT DISTINCT e.`object_id` FROM `street` e 
+            JOIN `street_attribute` t ON (e.`object_id` = t.`object_id` 
+                AND t.`attribute_type_id` = #{streetTypeAT} AND t.`status` = 'ACTIVE')
+            JOIN `street_attribute` n ON (e.`object_id` = n.`object_id` 
+                AND n.`attribute_type_id` = #{streetNameAT} AND n.`status` = 'ACTIVE')
+            LEFT JOIN `street_string_culture` name ON (n.`value_id` = name.`id` AND name.`locale_id` = #{localeId})
+            WHERE e.`status` IN ('ACTIVE', 'INACTIVE') AND
+                t.`value_id` = #{streetTypeId} AND name.`value` = #{name}
+                AND e.`parent_id` = #{cityId}
+                
+    </select>
+    
+</mapper>
