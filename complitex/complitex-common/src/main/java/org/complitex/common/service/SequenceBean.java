@@ -11,7 +11,7 @@ import javax.ejb.Stateless;
 @Stateless
 public class SequenceBean extends AbstractBean{
 
-    private static final String MAPPING_NAMESPACE = "org.complitex.dictionary.entity.Sequence";
+    private static final String MAPPING_NAMESPACE = "org.complitex.common.entity.Sequence";
 
     @Transactional
     public long nextStringId(String entityTable) {

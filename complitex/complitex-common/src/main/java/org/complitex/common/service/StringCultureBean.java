@@ -28,7 +28,7 @@ import java.util.*;
 @Stateless
 public class StringCultureBean extends AbstractBean {
 
-    private static final String MAPPING_NAMESPACE = "org.complitex.dictionary.entity.StringCulture";
+    private static final String MAPPING_NAMESPACE = "org.complitex.common.entity.StringCulture";
     @EJB
     private SequenceBean sequenceBean;
     @EJB

@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class LocaleBean extends AbstractBean {
 
-    private static final String MAPPING_NAMESPACE = "org.complitex.dictionary.entity.Locale";
+    private static final String MAPPING_NAMESPACE = "org.complitex.common.entity.Locale";
 
     /*
      * Caches for locales.

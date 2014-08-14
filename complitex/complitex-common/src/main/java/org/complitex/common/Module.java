@@ -10,5 +10,5 @@ import javax.ejb.Startup;
 @Singleton(name="DictionaryModule")
 @Startup
 public class Module {
-    public final static String NAME = "org.complitex.dictionary";
+    public final static String NAME = "org.complitex.common";
 }

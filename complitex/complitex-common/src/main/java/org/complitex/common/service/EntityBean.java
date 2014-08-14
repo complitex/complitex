@@ -22,7 +22,7 @@ import java.util.*;
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class EntityBean extends AbstractBean {
 
-    private static final String MAPPING_NAMESPACE = "org.complitex.dictionary.entity.description.Entity";
+    private static final String MAPPING_NAMESPACE = "org.complitex.common.entity.description.Entity";
     @EJB
     private StringCultureBean stringBean;
     @EJB

@@ -22,9 +22,9 @@ import java.util.*;
  */
 public interface IStrategy {
     String ARCHIVE_ATTRIBUTES_OPERATION = "archiveAttributes";
-    String ATTRIBUTE_NAMESPACE = "org.complitex.dictionary.entity.Attribute";
+    String ATTRIBUTE_NAMESPACE = "org.complitex.common.entity.Attribute";
     String COUNT_OPERATION = "count";
-    String DOMAIN_OBJECT_NAMESPACE = "org.complitex.dictionary.entity.DomainObject";
+    String DOMAIN_OBJECT_NAMESPACE = "org.complitex.common.entity.DomainObject";
     String FIND_BY_ID_OPERATION = "findById";
     String FIND_HISTORY_ATTRIBUTES_OPERATION = "findHistoryAttributes";
     String FIND_HISTORY_OBJECT_OPERATION = "findHistoryObject";
