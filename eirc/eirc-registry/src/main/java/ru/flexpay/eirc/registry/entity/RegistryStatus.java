@@ -25,6 +25,8 @@ public enum  RegistryStatus implements IFixedIdType, ILocalizedType {
     ROLLBACKING(10L),
     ROLLBACKED(11L),
 
+    PROCESSING_PARTLY(12L),
+
     LINKING(19L),
     LINKING_WITH_ERROR(20L),
     LINKED(21L),

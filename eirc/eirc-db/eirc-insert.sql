@@ -127,6 +127,7 @@ INSERT INTO `registry_status` (`code`, `name`) values
     (9, 'Обработка отменена'),
     (10, 'Откатывается'),
     (11, 'Откачен'),
+    (12, 'Частично обработан'),
     (19, 'Связывается'),
     (20, 'Связывается с ошибками'),
     (21, 'Связан'),
@@ -235,4 +236,4 @@ insert into `config` (`name`, `value`) values
 ;
 
 -- Current database version
- INSERT INTO `update` (`version`) VALUE ('20140610_201_0.0.3');
+ INSERT INTO `update` (`version`) VALUE ('eirc_20140814_0.0.4');
