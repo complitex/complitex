@@ -32,19 +32,19 @@
     </environments>
 
     <mappers>
-        <mapper resource="org/complitex/dictionary/entity/Locale.xml"/>
-        <mapper resource="org/complitex/dictionary/entity/Sequence.xml"/>
-        <mapper resource="org/complitex/dictionary/entity/StringCulture.xml"/>
-        <mapper resource="org/complitex/dictionary/entity/description/Entity.xml"/>
-        <mapper resource="org/complitex/dictionary/entity/Attribute.xml"/>
-        <mapper resource="org/complitex/dictionary/entity/DomainObject.xml"/>
+        <mapper resource="org/complitex/common/entity/Locale.xml"/>
+        <mapper resource="org/complitex/common/entity/Sequence.xml"/>
+        <mapper resource="org/complitex/common/entity/StringCulture.xml"/>
+        <mapper resource="org/complitex/common/entity/description/Entity.xml"/>
+        <mapper resource="org/complitex/common/entity/Attribute.xml"/>
+        <mapper resource="org/complitex/common/entity/DomainObject.xml"/>
 
-        <mapper resource="org/complitex/dictionary/service/LogBean.xml"/>
-        <mapper resource="org/complitex/dictionary/service/SessionBean.xml"/>
-        <mapper resource="org/complitex/dictionary/service/PreferenceBean.xml"/>
-        <mapper resource="org/complitex/dictionary/service/PermissionBean.xml"/>
-        <mapper resource="org/complitex/dictionary/service/NameBean.xml"/>
-        <mapper resource="org/complitex/dictionary/service/ConfigBean.xml"/>
+        <mapper resource="org/complitex/common/service/LogBean.xml"/>
+        <mapper resource="org/complitex/common/service/SessionBean.xml"/>
+        <mapper resource="org/complitex/common/service/PreferenceBean.xml"/>
+        <mapper resource="org/complitex/common/service/PermissionBean.xml"/>
+        <mapper resource="org/complitex/common/service/NameBean.xml"/>
+        <mapper resource="org/complitex/common/service/ConfigBean.xml"/>
 
         <mapper resource="org/complitex/address/strategy/building/Building.xml"/>
         <mapper resource="org/complitex/address/strategy/building_address/BuildingAddress.xml"/>
@@ -61,14 +61,14 @@
         <mapper resource="org/complitex/organization/strategy/Organization.xml"/>
         <mapper resource="org/complitex/organization/service/OrganizationImportBean.xml"/>
 
-        <mapper resource="org/complitex/dictionary/entity/Correction.xml"/>
+        <mapper resource="org/complitex/common/entity/Correction.xml"/>
         <mapper resource="org/complitex/correction/service/AddressCorrectionBean.xml"/>
         <mapper resource="org/complitex/correction/service/OrganizationCorrectionBean.xml"/>
         <mapper resource="ru/flexpay/eirc/service/correction/service/ServiceCorrectionBean.xml"/>
         <mapper resource="ru/flexpay/eirc/service_provider_account/service/ServiceProviderAccountCorrectionBean.xml"/>
 
-        <mapper resource="ru/flexpay/eirc/dictionary/service/PersonBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/dictionary/strategy/ModuleInstanceStrategy.xml"/>
+        <mapper resource="ru/flexpay/eirc/common/service/PersonBean.xml"/>
+        <mapper resource="ru/flexpay/eirc/common/strategy/ModuleInstanceStrategy.xml"/>
         <mapper resource="ru/flexpay/eirc/eirc_account/service/EircAccountBean.xml"/>
         <mapper resource="ru/flexpay/eirc/service/service/ServiceBean.xml"/>
         <mapper resource="ru/flexpay/eirc/service_provider_account/service/ServiceProviderAccountBean.xml"/>
