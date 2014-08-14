@@ -44,35 +44,35 @@ public class Registration extends DomainObject {
     }
 
     public String getArrivalCountry() {
-        return getStringValue(this, ARRIVAL_COUNTRY);
+        return getStringValue(ARRIVAL_COUNTRY);
     }
 
     public String getArrivalRegion() {
-        return getStringValue(this, ARRIVAL_REGION);
+        return getStringValue(ARRIVAL_REGION);
     }
 
     public String getArrivalDistrict() {
-        return getStringValue(this, ARRIVAL_DISTRICT);
+        return getStringValue(ARRIVAL_DISTRICT);
     }
 
     public String getArrivalCity() {
-        return getStringValue(this, ARRIVAL_CITY);
+        return getStringValue(ARRIVAL_CITY);
     }
 
     public String getArrivalStreet() {
-        return getStringValue(this, ARRIVAL_STREET);
+        return getStringValue(ARRIVAL_STREET);
     }
 
     public String getArrivalBuildingNumber() {
-        return getStringValue(this, ARRIVAL_BUILDING_NUMBER);
+        return getStringValue(ARRIVAL_BUILDING_NUMBER);
     }
 
     public String getArrivalBuildingCorp() {
-        return getStringValue(this, ARRIVAL_BUILDING_CORP);
+        return getStringValue(ARRIVAL_BUILDING_CORP);
     }
 
     public String getArrivalApartment() {
-        return getStringValue(this, ARRIVAL_APARTMENT);
+        return getStringValue(ARRIVAL_APARTMENT);
     }
 
     public Date getArrivalDate() {
@@ -80,35 +80,35 @@ public class Registration extends DomainObject {
     }
 
     public String getDepartureCountry() {
-        return getStringValue(this, DEPARTURE_COUNTRY);
+        return getStringValue(DEPARTURE_COUNTRY);
     }
 
     public String getDepartureRegion() {
-        return getStringValue(this, DEPARTURE_REGION);
+        return getStringValue(DEPARTURE_REGION);
     }
 
     public String getDepartureDistrict() {
-        return getStringValue(this, DEPARTURE_DISTRICT);
+        return getStringValue(DEPARTURE_DISTRICT);
     }
 
     public String getDepartureCity() {
-        return getStringValue(this, DEPARTURE_CITY);
+        return getStringValue(DEPARTURE_CITY);
     }
 
     public String getDepartureStreet() {
-        return getStringValue(this, DEPARTURE_STREET);
+        return getStringValue(DEPARTURE_STREET);
     }
 
     public String getDepartureBuildingNumber() {
-        return getStringValue(this, DEPARTURE_BUILDING_NUMBER);
+        return getStringValue(DEPARTURE_BUILDING_NUMBER);
     }
 
     public String getDepartureBuildingCorp() {
-        return getStringValue(this, DEPARTURE_BUILDING_CORP);
+        return getStringValue(DEPARTURE_BUILDING_CORP);
     }
 
     public String getDepartureApartment() {
-        return getStringValue(this, DEPARTURE_APARTMENT);
+        return getStringValue(DEPARTURE_APARTMENT);
     }
 
     public Date getDepartureDate() {
@@ -116,7 +116,7 @@ public class Registration extends DomainObject {
     }
 
     public String getDepartureReason() {
-        return getStringValue(this, DEPARTURE_REASON);
+        return getStringValue(DEPARTURE_REASON);
     }
 
     public Date getRegistrationDate() {
@@ -140,6 +140,6 @@ public class Registration extends DomainObject {
     }
 
     public String getExplanation() {
-        return getStringValue(this, EXPLANATION);
+        return getStringValue(EXPLANATION);
     }
 }

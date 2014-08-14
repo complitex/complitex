@@ -49,15 +49,15 @@ public class Document extends DomainObject {
     }
 
     public String getSeries() {
-        return getStringValue(this, DocumentStrategy.DOCUMENT_SERIA);
+        return getStringValue(DocumentStrategy.DOCUMENT_SERIA);
     }
 
     public String getNumber() {
-        return getStringValue(this, DocumentStrategy.DOCUMENT_NUMBER);
+        return getStringValue(DocumentStrategy.DOCUMENT_NUMBER);
     }
 
     public String getOrganizationIssued() {
-        return getStringValue(this, DocumentStrategy.ORGANIZATION_ISSUED);
+        return getStringValue(DocumentStrategy.ORGANIZATION_ISSUED);
     }
 
     public Date getDateIssued() {

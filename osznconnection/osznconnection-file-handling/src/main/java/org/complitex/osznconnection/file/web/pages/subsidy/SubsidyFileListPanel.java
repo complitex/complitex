@@ -66,7 +66,8 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
         addColumn(new Column() {
             @Override
             public Component head(ISortStateLocator stateLocator, DataView<?> dataView, Component refresh) {
-                return new ArrowOrderByBorder("header.servicing_organization", "servicing_organization", stateLocator, dataView, refresh);
+                return new ArrowOrderByBorder("header.servicing_organization", "servicing_organization", stateLocator,
+                        dataView, refresh);
             }
 
             @Override

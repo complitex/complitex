@@ -82,7 +82,7 @@ public class Person extends DomainObject {
     }
 
     public String getIdentityCode() {
-        return getStringValue(this, IDENTITY_CODE);
+        return getStringValue(IDENTITY_CODE);
     }
 
     public Date getBirthDate() {
@@ -90,19 +90,19 @@ public class Person extends DomainObject {
     }
 
     public String getBirthCountry() {
-        return getStringValue(this, BIRTH_COUNTRY);
+        return getStringValue(BIRTH_COUNTRY);
     }
 
     public String getBirthRegion() {
-        return getStringValue(this, BIRTH_REGION);
+        return getStringValue(BIRTH_REGION);
     }
 
     public String getBirthDistrict() {
-        return getStringValue(this, BIRTH_DISTRICT);
+        return getStringValue(BIRTH_DISTRICT);
     }
 
     public String getBirthCity() {
-        return getStringValue(this, BIRTH_CITY);
+        return getStringValue(BIRTH_CITY);
     }
 
     public Date getDeathDate() {
@@ -163,6 +163,6 @@ public class Person extends DomainObject {
     }
 
     public String getExplanation() {
-        return getStringValue(this, EXPLANATION);
+        return getStringValue(EXPLANATION);
     }
 }

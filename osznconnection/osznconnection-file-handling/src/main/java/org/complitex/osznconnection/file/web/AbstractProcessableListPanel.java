@@ -685,11 +685,11 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
 
     }
 
-    public WebMarkupContainer getDataViewContainer() {
+    protected WebMarkupContainer getDataViewContainer() {
         return dataViewContainer;
     }
 
-    public AjaxFeedbackPanel getMessages() {
+    protected AjaxFeedbackPanel getMessages() {
         return messages;
     }
 }

@@ -30,7 +30,7 @@ public class ApartmentCard extends DomainObject {
     }
 
     public String getPersonalAccount() {
-        return getStringValue(this, PERSONAL_ACCOUNT);
+        return getStringValue(PERSONAL_ACCOUNT);
     }
 
     public Person getOwner() {
@@ -66,7 +66,7 @@ public class ApartmentCard extends DomainObject {
     }
 
     public String getHousingRights() {
-        return getStringValue(this, HOUSING_RIGHTS);
+        return getStringValue(HOUSING_RIGHTS);
     }
 
     public int getRegisteredCount() {
@@ -84,6 +84,6 @@ public class ApartmentCard extends DomainObject {
     }
 
     public String getExplanation() {
-        return getStringValue(this, EXPLANATION);
+        return getStringValue(EXPLANATION);
     }
 }

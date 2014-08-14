@@ -43,6 +43,8 @@ public class OrganizationCorrectionDialog extends Panel {
     public OrganizationCorrectionDialog(String id, final List<WebMarkupContainer> toUpdate) {
         super(id);
 
+        setOutputMarkupId(true);
+
         dialog = new Dialog("dialog");
         dialog.setTitle(new ResourceModel("title"));
         dialog.setOutputMarkupId(true);
