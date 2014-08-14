@@ -5,10 +5,10 @@
 package org.complitex.osznconnection.file.web.component.process;
 
 import org.apache.wicket.Component;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.util.EjbBeanLocator;
-import org.complitex.dictionary.util.ResourceUtil;
-import org.complitex.dictionary.web.DictionaryFwSession;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.web.DictionaryFwSession;
 
 import java.io.Serializable;
 

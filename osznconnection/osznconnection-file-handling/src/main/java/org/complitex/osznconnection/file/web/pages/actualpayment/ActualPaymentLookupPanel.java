@@ -5,7 +5,7 @@
 package org.complitex.osznconnection.file.web.pages.actualpayment;
 
 import org.apache.wicket.Component;
-import org.complitex.dictionary.entity.Cursor;
+import org.complitex.common.entity.Cursor;
 import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.entity.ActualPayment;
 import org.complitex.osznconnection.file.entity.ActualPaymentDBF;
@@ -18,7 +18,6 @@ import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
 
 import javax.ejb.EJB;
-import java.util.List;
 
 /**
  *

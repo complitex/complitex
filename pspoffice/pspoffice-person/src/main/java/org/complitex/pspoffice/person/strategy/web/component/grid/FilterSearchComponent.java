@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Set;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.example.ComparisonType;
-import org.complitex.dictionary.web.component.search.WiQuerySearchComponent;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.example.ComparisonType;
+import org.complitex.common.web.component.search.WiQuerySearchComponent;
 import org.odlabs.wiquery.ui.autocomplete.AutocompleteAjaxComponent;
 
 /**

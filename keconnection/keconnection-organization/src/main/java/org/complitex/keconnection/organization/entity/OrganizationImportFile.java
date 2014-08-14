@@ -4,7 +4,7 @@
  */
 package org.complitex.keconnection.organization.entity;
 
-import org.complitex.dictionary.entity.IImportFile;
+import org.complitex.common.entity.IImportFile;
 
 /**
  *

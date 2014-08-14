@@ -1,8 +1,8 @@
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.dictionary.entity.IConfig;
+import org.complitex.common.entity.IConfig;
 
-import static org.complitex.dictionary.entity.DictionaryConfig.IMPORT_FILE_STORAGE_DIR;
+import static org.complitex.common.entity.DictionaryConfig.IMPORT_FILE_STORAGE_DIR;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

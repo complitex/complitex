@@ -4,17 +4,17 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.dictionary.converter.BooleanConverter;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.description.EntityAttributeType;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.StringCultureBean;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
-import org.complitex.dictionary.strategy.web.AbstractComplexAttributesPanel;
-import org.complitex.dictionary.util.AttributeUtil;
+import org.complitex.common.converter.BooleanConverter;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.strategy.web.AbstractComplexAttributesPanel;
+import org.complitex.common.util.AttributeUtil;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
 import org.complitex.keconnection.organization.strategy.web.edit.KeConnectionOrganizationEditComponent;
 import org.complitex.keconnection.organization.strategy.web.list.OrganizationList;
@@ -28,8 +28,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static org.complitex.dictionary.util.DateUtil.addMonth;
-import static org.complitex.dictionary.util.DateUtil.getCurrentDate;
+import static org.complitex.common.util.DateUtil.addMonth;
+import static org.complitex.common.util.DateUtil.getCurrentDate;
 
 /**
  *

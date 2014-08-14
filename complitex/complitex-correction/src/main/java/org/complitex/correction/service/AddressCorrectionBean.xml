@@ -2,37 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.correction.service.AddressCorrectionBean">
     <resultMap id="cityCorrectionResultMap" type="org.complitex.correction.entity.CityCorrection"
-               extends="org.complitex.dictionary.entity.Correction.correction">
+               extends="org.complitex.common.entity.Correction.correction">
     </resultMap>
 
     <resultMap id="streetTypeCorrectionResultMap" type="org.complitex.correction.entity.StreetTypeCorrection"
-               extends="org.complitex.dictionary.entity.Correction.correction">
+               extends="org.complitex.common.entity.Correction.correction">
     </resultMap>
 
     <resultMap id="streetCorrectionResultMap" type="org.complitex.correction.entity.StreetCorrection"
-               extends="org.complitex.dictionary.entity.Correction.correction">
+               extends="org.complitex.common.entity.Correction.correction">
         <result column="city_object_id" property="cityObjectId"/>
         <result column="street_type_object_id" property="streetTypeObjectId"/>
     </resultMap>
 
     <resultMap id="districtCorrectionResultMap" type="org.complitex.correction.entity.DistrictCorrection"
-               extends="org.complitex.dictionary.entity.Correction.correction">
+               extends="org.complitex.common.entity.Correction.correction">
         <result column="city_object_id" property="cityObjectId"/>
     </resultMap>
 
     <resultMap id="buildingCorrectionResultMap" type="org.complitex.correction.entity.BuildingCorrection"
-               extends="org.complitex.dictionary.entity.Correction.correction">
+               extends="org.complitex.common.entity.Correction.correction">
         <result column="street_object_id" property="streetObjectId"/>
         <result column="correction_corp" property="correctionCorp"/>
     </resultMap>
 
     <resultMap id="apartmentCorrectionResultMap" type="org.complitex.correction.entity.ApartmentCorrection"
-               extends="org.complitex.dictionary.entity.Correction.correction">
+               extends="org.complitex.common.entity.Correction.correction">
         <result column="building_object_id" property="buildingObjectId"/>
     </resultMap>
 
     <resultMap id="roomCorrectionResultMap" type="org.complitex.correction.entity.RoomCorrection"
-               extends="org.complitex.dictionary.entity.Correction.correction">
+               extends="org.complitex.common.entity.Correction.correction">
         <result column="building_object_id" property="buildingObjectId"/>
         <result column="apartment_object_id" property="apartmentObjectId"/>
     </resultMap>
@@ -51,15 +51,15 @@
     </select>
 
     <select id="selectCityCorrections" resultMap="cityCorrectionResultMap"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select * from `city_correction` c
-        <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhere"/>
+        <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
     <select id="selectCityCorrectionsCount" resultType="int"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `city_correction` c
-        <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhere"/>
+        <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
     <!--District-->
@@ -71,18 +71,18 @@
     <sql id="selectDistrictCorrectionsWhere">
         <where>
             <if test="object.cityObjectId != null">c.`city_object_id` = #{object.cityObjectId}</if>
-            <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhereIf"/>
+            <include refid="org.complitex.common.entity.Correction.selectCorrectionWhereIf"/>
         </where>
     </sql>
 
-    <select id="selectDistrictCorrections" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectDistrictCorrections" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="districtCorrectionResultMap">
         select * from `district_correction` c
         <include refid="selectDistrictCorrectionsWhere"/>
-        <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionOrderLimit"/>
+        <include refid="org.complitex.common.entity.Correction.selectCorrectionOrderLimit"/>
     </select>
 
-    <select id="selectDistrictCorrectionsCount" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectDistrictCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper"
             resultType="int">
         select count(*) from `district_correction` c
         <include refid="selectDistrictCorrectionsWhere"/>
@@ -111,15 +111,15 @@
     </select>
 
     <select id="selectStreetTypeCorrections" resultMap="streetTypeCorrectionResultMap"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select * from `street_type_correction` c
-        <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhere"/>
+        <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
     <select id="selectStreetTypeCorrectionsCount" resultType="int"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `street_type_correction` c
-        <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhere"/>
+        <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
     <!--Street-->
@@ -132,19 +132,19 @@
         <where>
             <if test="object.cityObjectId != null">and c.`city_object_id` = #{object.cityObjectId}</if>
             <if test="object.streetTypeObjectId != null">and c.`street_type_object_id` = #{object.streetTypeObjectId}</if>
-            <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhereIf"/>
+            <include refid="org.complitex.common.entity.Correction.selectCorrectionWhereIf"/>
         </where>
     </sql>
     
     <select id="selectStreetCorrections" resultMap="streetCorrectionResultMap"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select distinct c.* from `street_correction` c
         <include refid="selectStreetCorrectionsWhere"/>
-        <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionOrderLimit"/>
+        <include refid="org.complitex.common.entity.Correction.selectCorrectionOrderLimit"/>
     </select>
 
     <select id="selectStreetCorrectionsCount" resultType="int"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `street_correction` c
         <include refid="selectStreetCorrectionsWhere"/>
     </select>
@@ -185,19 +185,19 @@
         <where>
             <if test="object.streetObjectId != null">and c.`street_object_id` = #{object.streetObjectId}</if>
             <if test="object.correctionCorp != null">and c.`correction_corp` = #{object.correctionCorp}</if>
-            <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhereIf"/>
+            <include refid="org.complitex.common.entity.Correction.selectCorrectionWhereIf"/>
         </where>
     </sql>
 
     <select id="selectBuildingCorrections" resultMap="buildingCorrectionResultMap"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select * from `building_correction` c
         <include refid="selectBuildingCorrectionsWhere"/>
-        <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionOrderLimit"/>
+        <include refid="org.complitex.common.entity.Correction.selectCorrectionOrderLimit"/>
     </select>
 
     <select id="selectBuildingCorrectionsCount" resultType="int"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `building_correction` c
         <include refid="selectBuildingCorrectionsWhere"/>
     </select>
@@ -345,18 +345,18 @@
     <sql id="selectApartmentCorrectionsWhere">
         <where>
             <if test="object.buildingObjectId != null">c.`building_object_id` = #{object.buildingObjectId}</if>
-            <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhereIf"/>
+            <include refid="org.complitex.common.entity.Correction.selectCorrectionWhereIf"/>
         </where>
     </sql>
 
-    <select id="selectApartmentCorrections" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectApartmentCorrections" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="apartmentCorrectionResultMap">
         select * from `apartment_correction` c
         <include refid="selectApartmentCorrectionsWhere"/>
-        <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionOrderLimit"/>
+        <include refid="org.complitex.common.entity.Correction.selectCorrectionOrderLimit"/>
     </select>
 
-    <select id="selectApartmentCorrectionsCount" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectApartmentCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper"
             resultType="int">
         select count(*) from `apartment_correction` c
         <include refid="selectApartmentCorrectionsWhere"/>
@@ -382,18 +382,18 @@
                 <when test="object.apartmentObjectId != null">c.`apartment_object_id` = #{object.apartmentObjectId}</when>
                 <when test="object.buildingObjectId != null">c.`building_object_id` = #{object.buildingObjectId}</when>
             </choose>
-            <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionWhereIf"/>
+            <include refid="org.complitex.common.entity.Correction.selectCorrectionWhereIf"/>
         </where>
     </sql>
 
-    <select id="selectRoomCorrections" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectRoomCorrections" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="roomCorrectionResultMap">
         select * from `room_correction` c
         <include refid="selectRoomCorrectionsWhere"/>
-        <include refid="org.complitex.dictionary.entity.Correction.selectCorrectionOrderLimit"/>
+        <include refid="org.complitex.common.entity.Correction.selectCorrectionOrderLimit"/>
     </select>
 
-    <select id="selectRoomCorrectionsCount" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectRoomCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper"
             resultType="int">
         select count(*) from `room_correction` c
         <include refid="selectRoomCorrectionsWhere"/>

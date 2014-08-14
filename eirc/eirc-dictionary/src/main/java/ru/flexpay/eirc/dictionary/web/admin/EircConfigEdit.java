@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.dictionary.web.admin;
 
-import org.complitex.dictionary.entity.IConfig;
+import org.complitex.common.entity.IConfig;
 import org.complitex.template.web.pages.ConfigEdit;
 import ru.flexpay.eirc.dictionary.service.EircConfigBean;
 

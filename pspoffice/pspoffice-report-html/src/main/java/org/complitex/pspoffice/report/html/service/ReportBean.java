@@ -1,8 +1,8 @@
 package org.complitex.pspoffice.report.html.service;
 
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.util.IdListUtil;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.util.IdListUtil;
 import org.complitex.pspoffice.report.html.entity.Report;
 import org.complitex.pspoffice.report.html.entity.ReportSql;
 import org.slf4j.Logger;

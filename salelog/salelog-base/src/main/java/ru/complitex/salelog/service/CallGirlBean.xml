@@ -7,7 +7,7 @@
         <id column="cg_id" property="id"/>
         <result column="cg_code" property="code"/>
 
-        <association property="person" columnPrefix="cg_" resultMap="org.complitex.dictionary.service.PersonBean.Person"/>
+        <association property="person" columnPrefix="cg_" resultMap="org.complitex.common.service.PersonBean.Person"/>
     </resultMap>
 
     <sql id="callGirlColumns">
@@ -45,7 +45,7 @@
         </if>
     </sql>
 
-    <select id="selectCallGirls" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectCallGirls" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="CallGirl">
         select
         <include refid="callGirlColumns"/>
@@ -83,7 +83,7 @@
         </if>
     </select>
 
-    <select id="countCallGirls" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultType="integer">
+    <select id="countCallGirls" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer">
         select count(distinct cg.`id`) from `call_girl` cg
         where 1=1
         <include refid="callGirlCondition"/>

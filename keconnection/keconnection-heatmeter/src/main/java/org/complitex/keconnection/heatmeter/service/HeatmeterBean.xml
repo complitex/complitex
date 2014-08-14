@@ -182,7 +182,7 @@
         SELECT * FROM `heatmeter` WHERE `id` = #{id}
     </select>
 
-    <select id="selectHeatmeters" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectHeatmeters" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="heatmeterWithActiveCollectionsResultMap">
         select distinct h.*, heatmeter_status(h.`id`) as `status`, heatmeter_active_om(h.`id`) as `om`,
             hc.`binding_status`
@@ -199,7 +199,7 @@
         limit #{first}, #{count}
     </select>
 
-    <select id="selectHeatmetersCount" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectHeatmetersCount" parameterType="org.complitex.common.entity.FilterWrapper"
             resultType="int">
         select count(distinct h.id) from `heatmeter` h
         <include refid="selectHeatmeterJoin"/>

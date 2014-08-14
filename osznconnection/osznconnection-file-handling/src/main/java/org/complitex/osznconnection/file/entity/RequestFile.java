@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.entity;
 
-import org.complitex.dictionary.entity.LogChangeList;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.entity.LogChangeList;
+import org.complitex.common.util.DateUtil;
 
 import java.io.File;
 import java.math.BigDecimal;

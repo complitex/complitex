@@ -20,7 +20,7 @@ import org.complitex.template.web.component.toolbar.DeleteItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
-import org.complitex.dictionary.web.component.EntityTypePanel;
+import org.complitex.common.web.component.EntityTypePanel;
 import org.complitex.keconnection.heatmeter.web.correction.component.edit.AbstractCorrectionEditPanel;
 
 /**

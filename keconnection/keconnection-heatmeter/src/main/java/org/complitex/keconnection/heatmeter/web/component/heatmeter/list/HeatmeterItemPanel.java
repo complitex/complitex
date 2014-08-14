@@ -22,8 +22,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.service.AddressRendererBean;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
-import org.complitex.dictionary.web.component.css.CssAttributeBehavior;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.web.component.css.CssAttributeBehavior;
 import org.complitex.keconnection.heatmeter.entity.*;
 import org.complitex.keconnection.heatmeter.service.*;
 import org.complitex.keconnection.heatmeter.web.HeatmeterEdit;
@@ -39,7 +39,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import static com.google.common.collect.Iterables.toArray;
-import static org.complitex.dictionary.util.DateUtil.*;
+import static org.complitex.common.util.DateUtil.*;
 
 /**
  *

@@ -1,6 +1,6 @@
 package org.complitex.address.entity;
 
-import org.complitex.dictionary.entity.ILongId;
+import org.complitex.common.entity.ILongId;
 
 import java.util.Date;
 

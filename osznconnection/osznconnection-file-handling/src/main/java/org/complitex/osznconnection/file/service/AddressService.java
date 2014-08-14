@@ -15,12 +15,12 @@ import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.ModuleBean;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.ModuleBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import static org.complitex.dictionary.util.StringUtil.removeWhiteSpaces;
+import static org.complitex.common.util.StringUtil.removeWhiteSpaces;
 
 @Stateless(name = "OsznAddressService")
 public class AddressService extends AbstractBean {

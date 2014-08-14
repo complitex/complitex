@@ -1,7 +1,7 @@
 package ru.complitex.salelog.entity;
 
-import org.complitex.dictionary.entity.DictionaryObject;
-import org.complitex.dictionary.entity.Person;
+import org.complitex.common.entity.DictionaryObject;
+import org.complitex.common.entity.Person;
 
 /**
  * @author Pavel Sknar

@@ -2,16 +2,15 @@ package org.complitex.organization.service;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Strings;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.AbstractImportService;
-import org.complitex.dictionary.service.IImportListener;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.exception.ImportFileNotFoundException;
-import org.complitex.dictionary.service.exception.ImportFileReadException;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
-import org.complitex.dictionary.util.AttributeUtil;
-import org.complitex.dictionary.util.CloneUtil;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.IImportListener;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.exception.ImportFileNotFoundException;
+import org.complitex.common.service.exception.ImportFileReadException;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.CloneUtil;
 import org.complitex.organization.entity.OrganizationImport;
 import org.complitex.organization.service.exception.RootOrganizationNotFound;
 import org.slf4j.Logger;
@@ -22,7 +21,7 @@ import javax.ejb.Stateless;
 import java.io.IOException;
 import java.util.*;
 
-import static org.complitex.dictionary.strategy.organization.IOrganizationStrategy.*;
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.*;
 import static org.complitex.organization.entity.OrganizationImportFile.ORGANIZATION;
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE;
 

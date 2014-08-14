@@ -1,14 +1,14 @@
 package org.complitex.osznconnection.file.service;
 
 import au.com.bytecode.opencsv.CSVReader;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.AbstractImportService;
-import org.complitex.dictionary.service.IImportListener;
-import org.complitex.dictionary.service.StringCultureBean;
-import org.complitex.dictionary.service.exception.ImportFileNotFoundException;
-import org.complitex.dictionary.service.exception.ImportFileReadException;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.IImportListener;
+import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.service.exception.ImportFileNotFoundException;
+import org.complitex.common.service.exception.ImportFileReadException;
+import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.strategy.OwnershipStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.service;
 
-import org.complitex.dictionary.util.ResourceUtil;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 
 import javax.ejb.ConcurrencyManagement;

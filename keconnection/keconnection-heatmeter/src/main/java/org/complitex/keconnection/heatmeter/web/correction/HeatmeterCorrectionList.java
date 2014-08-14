@@ -19,9 +19,9 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterCorrectionView;
 import org.complitex.keconnection.heatmeter.service.HeatmeterCorrectionBean;
 import org.complitex.template.web.security.SecurityRole;
@@ -29,7 +29,7 @@ import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
 
-import static org.complitex.dictionary.util.PageUtil.*;
+import static org.complitex.common.util.PageUtil.*;
 
 /**
  *

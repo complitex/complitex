@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
-import org.complitex.dictionary.service.executor.ITaskBean;
+import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.ActualPaymentDBF;
 import org.complitex.osznconnection.file.entity.RequestFile;

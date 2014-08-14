@@ -3,11 +3,11 @@ package org.complitex.address.service;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.entity.AddressSyncStatus;
-import org.complitex.dictionary.entity.Cursor;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.util.DateUtil;
-import org.complitex.dictionary.util.EjbBeanLocator;
-import org.complitex.dictionary.util.ExceptionUtil;
+import org.complitex.common.entity.Cursor;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.common.util.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

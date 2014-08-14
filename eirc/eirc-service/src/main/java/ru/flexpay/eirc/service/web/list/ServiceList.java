@@ -17,12 +17,12 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.entity.Locale;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
-import org.complitex.dictionary.web.component.scroll.ScrollBookmarkablePageLink;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.entity.Locale;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
+import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
@@ -34,7 +34,7 @@ import ru.flexpay.eirc.service.web.edit.ServiceEdit;
 import javax.ejb.EJB;
 import java.util.List;
 
-import static org.complitex.dictionary.util.PageUtil.newSorting;
+import static org.complitex.common.util.PageUtil.newSorting;
 
 /**
  * @author Pavel Sknar

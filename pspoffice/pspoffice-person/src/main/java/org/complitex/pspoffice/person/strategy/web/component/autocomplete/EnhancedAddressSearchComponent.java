@@ -8,11 +8,11 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.web.component.ShowMode;
-import org.complitex.dictionary.web.component.search.CollapsibleSearchComponent;
-import org.complitex.dictionary.web.component.search.ISearchCallback;
-import org.complitex.dictionary.web.component.search.SearchComponentState;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.web.component.ShowMode;
+import org.complitex.common.web.component.search.CollapsibleSearchComponent;
+import org.complitex.common.web.component.search.ISearchCallback;
+import org.complitex.common.web.component.search.SearchComponentState;
 
 /**
  *

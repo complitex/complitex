@@ -6,7 +6,7 @@ package org.complitex.pspoffice.person.strategy.entity.grid;
 
 import java.io.Serializable;
 import java.util.List;
-import org.complitex.dictionary.entity.DomainObject;
+import org.complitex.common.entity.DomainObject;
 
 /**
  *

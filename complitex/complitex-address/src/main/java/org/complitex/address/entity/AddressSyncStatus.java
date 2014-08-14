@@ -1,7 +1,7 @@
 package org.complitex.address.entity;
 
-import org.complitex.dictionary.mybatis.FixedIdTypeHandler;
-import org.complitex.dictionary.mybatis.IFixedIdType;
+import org.complitex.common.mybatis.FixedIdTypeHandler;
+import org.complitex.common.mybatis.IFixedIdType;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

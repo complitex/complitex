@@ -4,7 +4,7 @@
  */
 package org.complitex.pspoffice.importing.legacy.entity;
 
-import org.complitex.dictionary.entity.IImportFile;
+import org.complitex.common.entity.IImportFile;
 
 /**
  *

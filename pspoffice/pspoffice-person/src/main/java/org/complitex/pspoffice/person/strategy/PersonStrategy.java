@@ -7,23 +7,23 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.service.AddressRendererBean;
-import org.complitex.dictionary.converter.BooleanConverter;
-import org.complitex.dictionary.converter.DateConverter;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.StatusType;
-import org.complitex.dictionary.entity.StringCulture;
-import org.complitex.dictionary.entity.description.EntityAttributeType;
-import org.complitex.dictionary.entity.description.EntityAttributeValueType;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.service.StringCultureBean;
-import org.complitex.dictionary.util.CloneUtil;
-import org.complitex.dictionary.util.DateUtil;
-import org.complitex.dictionary.util.Numbers;
-import org.complitex.dictionary.util.ResourceUtil;
+import org.complitex.common.converter.BooleanConverter;
+import org.complitex.common.converter.DateConverter;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.StatusType;
+import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.description.EntityAttributeValueType;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.util.CloneUtil;
+import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.Numbers;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
@@ -391,7 +391,7 @@ public class PersonStrategy extends TemplateStrategy {
     private void updateNameAttributeForNewLocales(DomainObject person, final long nameAttributeTypeId) {
         List<Attribute> nameAttributes = person.getAttributes(nameAttributeTypeId);
         person.removeAttribute(nameAttributeTypeId);
-        for (final org.complitex.dictionary.entity.Locale locale : localeBean.getAllLocales()) {
+        for (final org.complitex.common.entity.Locale locale : localeBean.getAllLocales()) {
             boolean found = false;
             for (Attribute nameAttribute : nameAttributes) {
                 if (nameAttribute.getAttributeId().equals(locale.getId())) {

@@ -1,8 +1,8 @@
 package org.complitex.address.service;
 
 import org.complitex.address.entity.*;
-import org.complitex.dictionary.entity.Cursor;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.entity.Cursor;
+import org.complitex.common.service.AbstractBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -6,7 +6,7 @@ import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 
 import java.util.Date;
 
-import static org.complitex.dictionary.util.DateUtil.isSameMonth;
+import static org.complitex.common.util.DateUtil.isSameMonth;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

@@ -5,10 +5,10 @@
 package org.complitex.pspoffice.person.strategy.entity;
 
 import java.util.Date;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.StatusType;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.StatusType;
 import static org.complitex.pspoffice.person.strategy.RegistrationStrategy.*;
-import static org.complitex.dictionary.util.AttributeUtil.*;
+import static org.complitex.common.util.AttributeUtil.*;
 
 /**
  *

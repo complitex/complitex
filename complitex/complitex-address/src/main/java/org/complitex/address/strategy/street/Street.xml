@@ -2,19 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.complitex.address.strategy.street.Street">
-    <cache type="org.complitex.dictionary.mybatis.caches.EhcacheCache"/>
+    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
-    <select id="find" resultMap="org.complitex.dictionary.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
+    <select id="find" resultMap="org.complitex.common.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
         SELECT e.* FROM `street` e WHERE
         <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.orderBy"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.limit"/>
+        <include refid="org.complitex.common.entity.DomainObject.orderBy"/>
+        <include refid="org.complitex.common.entity.DomainObject.limit"/>
     </select>
     
     <sql id="streetFilter">
-        <include refid="org.complitex.dictionary.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.permissionFilter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.filter"/>
+        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.filter"/>
         
         <if test="additionalParams != null and additionalParams['district'] != null">
             AND (EXISTS(

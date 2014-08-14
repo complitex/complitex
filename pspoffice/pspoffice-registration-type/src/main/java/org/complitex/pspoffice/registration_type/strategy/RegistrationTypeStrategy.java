@@ -7,14 +7,14 @@ package org.complitex.pspoffice.registration_type.strategy;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import static com.google.common.collect.ImmutableSet.*;
-import static org.complitex.dictionary.util.ResourceUtil.*;
+import static org.complitex.common.util.ResourceUtil.*;
 import static com.google.common.collect.Lists.*;
 import java.util.Collection;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.example.AttributeExample;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.util.ResourceUtil;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.example.AttributeExample;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import org.complitex.dictionary.entity.StringCulture;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.strategy.DeleteException;
-import static org.complitex.dictionary.util.AttributeUtil.*;
+import org.complitex.common.entity.StringCulture;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.strategy.DeleteException;
+import static org.complitex.common.util.AttributeUtil.*;
 
 /**
  *

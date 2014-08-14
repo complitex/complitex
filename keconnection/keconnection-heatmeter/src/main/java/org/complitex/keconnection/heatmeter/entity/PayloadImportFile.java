@@ -1,6 +1,6 @@
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.dictionary.entity.AbstractImportFile;
+import org.complitex.common.entity.AbstractImportFile;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

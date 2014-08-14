@@ -2,8 +2,8 @@ package ru.flexpay.eirc.mb_transformer.web.component;
 
 import org.apache.ibatis.session.SqlSessionManager;
 import org.apache.wicket.model.IModel;
-import org.complitex.dictionary.mybatis.SqlSessionFactoryBean;
-import org.complitex.dictionary.service.ConfigBean;
+import org.complitex.common.mybatis.SqlSessionFactoryBean;
+import org.complitex.common.service.ConfigBean;
 import ru.flexpay.eirc.mb_transformer.entity.MbTransformerConfig;
 
 import javax.ejb.EJB;
@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 /**
  * @author Pavel Sknar
  */
-public class OrganizationPicker extends org.complitex.dictionary.web.component.organization.OrganizationPicker {
+public class OrganizationPicker extends org.complitex.common.web.component.organization.OrganizationPicker {
 
     @EJB
     private ConfigBean configBean;

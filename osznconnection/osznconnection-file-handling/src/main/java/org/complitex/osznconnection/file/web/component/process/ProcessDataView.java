@@ -8,7 +8,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
-import org.complitex.dictionary.entity.IExecutorObject;
+import org.complitex.common.entity.IExecutorObject;
 import org.complitex.osznconnection.file.web.component.ReuseIfLongIdEqualStrategy;
 
 /**

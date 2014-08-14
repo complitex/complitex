@@ -14,7 +14,7 @@ import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.util.EjbBeanLocator;
 
 import java.util.Locale;
 

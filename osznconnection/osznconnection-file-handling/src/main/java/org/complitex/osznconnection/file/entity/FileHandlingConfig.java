@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.entity;
 
-import org.complitex.dictionary.entity.IConfig;
+import org.complitex.common.entity.IConfig;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

@@ -1,11 +1,11 @@
 package org.complitex.address.util;
 
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.util.StringUtil;
 
 import java.util.Locale;
 
-import static org.complitex.dictionary.util.ResourceUtil.getString;
+import static org.complitex.common.util.ResourceUtil.getString;
 
 /**
  *

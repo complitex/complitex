@@ -8,9 +8,9 @@ import com.google.common.base.Predicate;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 import java.util.List;
-import org.complitex.dictionary.entity.DomainObject;
+import org.complitex.common.entity.DomainObject;
 import static org.complitex.pspoffice.person.strategy.ApartmentCardStrategy.*;
-import static org.complitex.dictionary.util.AttributeUtil.*;
+import static org.complitex.common.util.AttributeUtil.*;
 
 /**
  *

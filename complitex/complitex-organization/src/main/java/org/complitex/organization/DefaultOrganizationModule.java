@@ -2,10 +2,10 @@ package org.complitex.organization;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.LogManager;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.LogManager;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.template.strategy.TemplateStrategy;
 
 import javax.annotation.PostConstruct;

@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.mb_transformer.console;
 
 import org.apache.commons.cli.*;
-import org.complitex.dictionary.service.exception.AbstractException;
+import org.complitex.common.service.exception.AbstractException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.mb_transformer.entity.MbFile;

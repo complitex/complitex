@@ -44,12 +44,12 @@
         </where>
     </sql>
 
-    <select id="selectAddressSyncList" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectAddressSyncList" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="addressSyncResultMap">
         select * from `address_sync` <include refid="selectDistrictSyncWhere"/> ${orderLimit}
     </select>
 
-    <select id="selectAddressSyncCount" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultType="long">
+    <select id="selectAddressSyncCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(1) from `address_sync` <include refid="selectDistrictSyncWhere"/>
     </select>
 </mapper>

@@ -1,8 +1,8 @@
 package ru.flexpay.eirc.service_provider_account.service;
 
-import org.complitex.dictionary.entity.Correction;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.entity.Correction;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.AbstractBean;
 import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountCorrection;
 
 import javax.ejb.Stateless;

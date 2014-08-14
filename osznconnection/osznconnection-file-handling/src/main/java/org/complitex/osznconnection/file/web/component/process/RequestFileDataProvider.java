@@ -5,8 +5,8 @@
 package org.complitex.osznconnection.file.web.component.process;
 
 import org.apache.wicket.model.IModel;
-import org.complitex.dictionary.util.EjbBeanLocator;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
+import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.service.RequestFileBean;

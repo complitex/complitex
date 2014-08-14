@@ -4,8 +4,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.complitex.dictionary.entity.LogChange;
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.entity.LogChange;
+import org.complitex.common.util.StringUtil;
 
 import java.util.List;
 import org.apache.wicket.util.string.Strings;

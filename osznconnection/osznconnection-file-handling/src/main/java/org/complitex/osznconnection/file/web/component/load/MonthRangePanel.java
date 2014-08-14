@@ -9,7 +9,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.complitex.dictionary.web.component.MonthDropDownChoice;
+import org.complitex.common.web.component.MonthDropDownChoice;
 
 /**
  *

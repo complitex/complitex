@@ -1,6 +1,6 @@
 package org.complitex.correction.entity;
 
-import org.complitex.dictionary.mybatis.IFixedIdType;
+import org.complitex.common.mybatis.IFixedIdType;
 
 /**
  * @author Pavel Sknar

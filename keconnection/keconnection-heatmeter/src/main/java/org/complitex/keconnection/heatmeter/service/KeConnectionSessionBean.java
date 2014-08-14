@@ -1,10 +1,10 @@
 package org.complitex.keconnection.heatmeter.service;
 
 import com.google.common.collect.Sets;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.strategy.StrategyFactory;
-import org.complitex.dictionary.web.DictionaryFwSession;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.keconnection.heatmeter.entity.example.CorrectionExample;
 import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
 

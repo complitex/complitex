@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.converter.GenderConverter;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.Gender;
-import org.complitex.dictionary.entity.StatusType;
-import static org.complitex.dictionary.util.DateUtil.*;
+import org.complitex.common.converter.GenderConverter;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.Gender;
+import org.complitex.common.entity.StatusType;
+import static org.complitex.common.util.DateUtil.*;
 import org.complitex.pspoffice.document.strategy.entity.Document;
-import static org.complitex.dictionary.util.AttributeUtil.*;
+import static org.complitex.common.util.AttributeUtil.*;
 import static org.complitex.pspoffice.person.strategy.PersonStrategy.*;
 
 /**

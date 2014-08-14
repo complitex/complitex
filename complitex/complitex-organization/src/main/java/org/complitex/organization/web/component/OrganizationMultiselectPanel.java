@@ -14,8 +14,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 
 import javax.ejb.EJB;
 import java.util.ArrayList;

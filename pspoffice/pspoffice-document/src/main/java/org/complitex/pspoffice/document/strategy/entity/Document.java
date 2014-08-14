@@ -5,12 +5,12 @@
 package org.complitex.pspoffice.document.strategy.entity;
 
 import java.util.Date;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
 import static org.complitex.pspoffice.document.strategy.DocumentStrategy.*;
-import static org.complitex.dictionary.util.AttributeUtil.*;
+import static org.complitex.common.util.AttributeUtil.*;
 
 /**
  *

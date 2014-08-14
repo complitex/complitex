@@ -1,8 +1,8 @@
 package org.complitex.template.web.template;
 
 import org.apache.wicket.request.Request;
-import org.complitex.dictionary.web.DictionaryFwSession;
-import org.complitex.dictionary.web.ISessionStorage;
+import org.complitex.common.web.DictionaryFwSession;
+import org.complitex.common.web.ISessionStorage;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

@@ -1,15 +1,14 @@
 package org.complitex.pspoffice.registration_type.service;
 
 import au.com.bytecode.opencsv.CSVReader;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.StringCulture;
-import org.complitex.dictionary.service.AbstractImportService;
-import org.complitex.dictionary.service.IImportListener;
-import org.complitex.dictionary.service.exception.ImportFileNotFoundException;
-import org.complitex.dictionary.service.exception.ImportFileReadException;
-import org.complitex.dictionary.util.CloneUtil;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.StringCulture;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.IImportListener;
+import org.complitex.common.service.exception.ImportFileNotFoundException;
+import org.complitex.common.service.exception.ImportFileReadException;
+import org.complitex.common.util.CloneUtil;
+import org.complitex.common.util.DateUtil;
 import org.complitex.pspoffice.registration_type.strategy.RegistrationTypeStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

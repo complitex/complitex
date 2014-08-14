@@ -18,11 +18,11 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.complitex.dictionary.entity.Log;
-import org.complitex.dictionary.service.LogManager;
-import org.complitex.dictionary.web.component.DatePicker;
-import org.complitex.dictionary.web.component.datatable.ArrowOrderByBorder;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
+import org.complitex.common.entity.Log;
+import org.complitex.common.service.LogManager;
+import org.complitex.common.web.component.DatePicker;
+import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
+import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 import org.complitex.logging.service.LogFilter;
@@ -35,7 +35,7 @@ import java.util.*;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.request.resource.SharedResourceReference;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.datatable.DataProvider;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

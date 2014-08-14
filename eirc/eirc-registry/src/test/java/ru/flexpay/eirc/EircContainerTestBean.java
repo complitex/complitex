@@ -1,8 +1,8 @@
 package ru.flexpay.eirc;
 
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.TestBean;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.TestBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

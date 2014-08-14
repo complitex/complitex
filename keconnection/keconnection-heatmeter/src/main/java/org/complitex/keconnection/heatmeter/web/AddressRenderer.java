@@ -6,8 +6,8 @@ package org.complitex.keconnection.heatmeter.web;
 
 import java.util.Locale;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.util.ResourceUtil;
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.util.StringUtil;
 
 /**
  *

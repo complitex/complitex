@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.service.process;
 
-import org.complitex.dictionary.service.ConfigBean;
-import org.complitex.dictionary.service.executor.ITaskBean;
+import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.FacilityServiceTypeDBF;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;

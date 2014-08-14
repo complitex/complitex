@@ -1,11 +1,11 @@
 package org.complitex.osznconnection.file.service;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.service.executor.ExecuteException;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.entity.*;
 
 import javax.ejb.EJB;

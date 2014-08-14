@@ -14,8 +14,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.service.EntityBean;
-import org.complitex.dictionary.service.StringCultureBean;
+import org.complitex.common.service.EntityBean;
+import org.complitex.common.service.StringCultureBean;
 import org.odlabs.wiquery.ui.autocomplete.AutocompleteAjaxComponent;
 
 import javax.ejb.EJB;

@@ -2,7 +2,7 @@ package org.complitex.keconnection.heatmeter.entity;
 
 import java.util.Date;
 
-import static org.complitex.dictionary.util.DateUtil.format;
+import static org.complitex.common.util.DateUtil.format;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

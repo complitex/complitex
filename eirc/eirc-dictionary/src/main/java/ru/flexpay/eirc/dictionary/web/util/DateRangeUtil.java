@@ -2,8 +2,8 @@ package ru.flexpay.eirc.dictionary.web.util;
 
 import com.googlecode.wicket.jquery.ui.plugins.datepicker.DateRange;
 import org.apache.commons.lang.time.DateUtils;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.util.DateUtil;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 

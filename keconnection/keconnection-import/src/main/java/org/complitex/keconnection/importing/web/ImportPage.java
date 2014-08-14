@@ -19,11 +19,11 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.time.Duration;
 import org.complitex.address.entity.AddressImportFile;
-import org.complitex.dictionary.entity.IImportFile;
-import org.complitex.dictionary.entity.ImportMessage;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.web.component.ajax.AjaxFeedbackPanel;
-import org.complitex.dictionary.web.component.dateinput.MaskedDateInput;
+import org.complitex.common.entity.IImportFile;
+import org.complitex.common.entity.ImportMessage;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
+import org.complitex.common.web.component.dateinput.MaskedDateInput;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterImportFile;
 import org.complitex.keconnection.heatmeter.service.HeatmeterImportService;
 import org.complitex.keconnection.heatmeter.service.TablegramImportService;
@@ -36,7 +36,7 @@ import org.complitex.template.web.template.TemplatePage;
 import javax.ejb.EJB;
 import java.util.*;
 
-import static org.complitex.dictionary.util.DateUtil.*;
+import static org.complitex.common.util.DateUtil.*;
 
 /**
  *

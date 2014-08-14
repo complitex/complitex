@@ -1,9 +1,9 @@
 package org.complitex.admin.web;
 
 import org.apache.wicket.model.IModel;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.strategy.web.AbstractComplexAttributesPanel;
-import org.complitex.dictionary.web.component.name.FullNamePanel;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.strategy.web.AbstractComplexAttributesPanel;
+import org.complitex.common.web.component.name.FullNamePanel;
 
 import static org.complitex.admin.strategy.UserInfoStrategy.*;
 

@@ -1,10 +1,10 @@
 package org.complitex.osznconnection.file.service.process;
 
-import org.complitex.dictionary.entity.IExecutorObject;
-import org.complitex.dictionary.entity.Log;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.executor.ExecuteException;
-import org.complitex.dictionary.service.executor.ITaskBean;
+import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.entity.Log;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.FacilityReferenceBookBean;

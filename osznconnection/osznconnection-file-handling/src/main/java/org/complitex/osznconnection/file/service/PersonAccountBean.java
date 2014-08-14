@@ -1,23 +1,14 @@
 package org.complitex.osznconnection.file.service;
 
-import com.google.common.collect.Lists;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.mysql.MySqlErrors;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.SessionBean;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.SessionBean;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import java.sql.SQLException;
 import java.util.List;
 
 /**

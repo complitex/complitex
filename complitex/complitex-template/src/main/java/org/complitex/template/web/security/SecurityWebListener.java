@@ -1,8 +1,8 @@
 package org.complitex.template.web.security;
 
-import org.complitex.dictionary.entity.Log;
-import org.complitex.dictionary.service.LogBean;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.entity.Log;
+import org.complitex.common.service.LogBean;
+import org.complitex.common.util.DateUtil;
 import org.complitex.template.Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

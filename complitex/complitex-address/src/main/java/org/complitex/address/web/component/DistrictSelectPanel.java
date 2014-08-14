@@ -13,12 +13,12 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.complitex.address.strategy.district.DistrictStrategy;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.util.AttributeUtil;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
-import org.complitex.dictionary.web.model.AttributeExampleModel;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.util.AttributeUtil;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
+import org.complitex.common.web.model.AttributeExampleModel;
 
 import javax.ejb.EJB;
 import java.util.List;

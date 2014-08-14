@@ -54,7 +54,7 @@
     </sql>
     
     <select id="find" resultMap="org.complitex.keconnection.heatmeter.service.HeatmeterCorrectionBean.heatmeterCorrectionView"
-            parameterType="org.complitex.dictionary.entity.FilterWrapper">
+            parameterType="org.complitex.common.entity.FilterWrapper">
         SELECT c.*, h.`ls` as `heatmeter_ls`
         FROM `heatmeter_correction` c
         <include refid="org.complitex.keconnection.heatmeter.service.HeatmeterCorrectionBean.join"/>
@@ -63,7 +63,7 @@
         LIMIT #{first}, #{count}
     </select>
     
-    <select id="count" resultType="int" parameterType="org.complitex.dictionary.entity.FilterWrapper">
+    <select id="count" resultType="int" parameterType="org.complitex.common.entity.FilterWrapper">
         SELECT COUNT(1) FROM `heatmeter_correction` c
         <include refid="org.complitex.keconnection.heatmeter.service.HeatmeterCorrectionBean.join"/>
         <include refid="org.complitex.keconnection.heatmeter.service.HeatmeterCorrectionBean.where"/>

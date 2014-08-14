@@ -4,13 +4,13 @@
 <mapper namespace="org.complitex.organization.strategy.Organization">
     <!--<cache type="org.complitex.dictionary.mybatis.caches.EhcacheCache"/> todo fix import building cache flush-->
 
-    <select id="find" resultMap="org.complitex.dictionary.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
+    <select id="find" resultMap="org.complitex.common.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
         SELECT e.* FROM `organization` e WHERE
-        <include refid="org.complitex.dictionary.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.permissionFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
         <include refid="org.complitex.organization.strategy.Organization.filter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.orderBy"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.limit"/>
+        <include refid="org.complitex.common.entity.DomainObject.orderBy"/>
+        <include refid="org.complitex.common.entity.DomainObject.limit"/>
     </select>
 
     <sql id="filter">
@@ -61,8 +61,8 @@
 
     <select id="count" resultType="integer" parameterType="DomainObjectExample">
         SELECT COUNT(1) FROM `organization` e WHERE
-        <include refid="org.complitex.dictionary.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.permissionFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
         <include refid="org.complitex.organization.strategy.Organization.filter"/>
     </select>
 
@@ -92,7 +92,7 @@
             WHERE oa.`value_id` = #{parentId} AND o.`status` IN ('ACTIVE', 'INACTIVE')
     </select>
 
-    <select id="findOrganizationChildrenPermissionInfo" parameterType="long" resultMap="org.complitex.dictionary.entity.DomainObject.DomainObjectPermissionInfo">
+    <select id="findOrganizationChildrenPermissionInfo" parameterType="long" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
         SELECT DISTINCT o.`object_id`, o.`permission_id` FROM `organization` o
             LEFT JOIN `organization_attribute` oa ON (oa.`status` = 'ACTIVE' AND oa.`object_id` = o.`object_id` AND oa.`attribute_type_id` = 903)
             WHERE oa.`value_id` = #{parentId} AND o.`status` IN ('ACTIVE', 'INACTIVE')

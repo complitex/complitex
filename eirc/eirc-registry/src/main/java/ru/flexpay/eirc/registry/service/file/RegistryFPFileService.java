@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.service.file;
 
-import org.complitex.dictionary.service.exception.AbstractException;
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.service.exception.AbstractException;
+import org.complitex.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.registry.entity.*;

@@ -8,7 +8,7 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.util.DateUtil;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import ru.flexpay.eirc.dictionary.web.util.DateRangeUtil;

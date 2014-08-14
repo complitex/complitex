@@ -1,7 +1,7 @@
 package org.complitex.keconnection.tarif;
 
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.LogManager;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.LogManager;
 import org.complitex.template.web.pages.DomainObjectEdit;
 
 import javax.annotation.PostConstruct;

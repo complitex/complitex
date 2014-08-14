@@ -8,7 +8,7 @@ import java.util.Date;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.model.Model;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.util.DateUtil;
 
 /**
  *

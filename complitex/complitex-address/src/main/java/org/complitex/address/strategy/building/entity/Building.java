@@ -5,10 +5,10 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.StringCultureBean;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.util.EjbBeanLocator;
 
 import java.util.ArrayList;
 import java.util.List;

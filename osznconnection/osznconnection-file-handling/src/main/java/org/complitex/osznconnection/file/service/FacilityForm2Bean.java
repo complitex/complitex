@@ -4,7 +4,7 @@
  */
 package org.complitex.osznconnection.file.service;
 
-import org.complitex.dictionary.mybatis.Transactional;
+import org.complitex.common.mybatis.Transactional;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 

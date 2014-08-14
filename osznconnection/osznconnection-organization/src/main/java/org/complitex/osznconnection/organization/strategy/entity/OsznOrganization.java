@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.organization.strategy.entity;
 
-import org.complitex.dictionary.entity.DomainObject;
+import org.complitex.common.entity.DomainObject;
 
 //todo is it oszn organization or user organization with service association?
 public class OsznOrganization extends DomainObject {

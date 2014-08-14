@@ -8,11 +8,11 @@ import java.util.List;
 import javax.ejb.EJB;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.web.component.ShowMode;
-import org.complitex.dictionary.web.component.search.ISearchCallback;
-import org.complitex.dictionary.web.component.search.SearchComponentState;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.web.component.ShowMode;
+import org.complitex.common.web.component.search.ISearchCallback;
+import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.pspoffice.person.strategy.web.component.autocomplete.EnhancedAddressSearchComponent;
 
 /**

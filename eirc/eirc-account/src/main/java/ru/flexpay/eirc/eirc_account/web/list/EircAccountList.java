@@ -25,15 +25,15 @@ import org.apache.wicket.model.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.util.AddressRenderer;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.web.component.ShowMode;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
-import org.complitex.dictionary.web.component.scroll.ScrollBookmarkablePageLink;
-import org.complitex.dictionary.web.component.search.CollapsibleSearchPanel;
-import org.complitex.dictionary.web.component.search.ISearchCallback;
-import org.complitex.dictionary.web.component.search.IToggleCallback;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.web.component.ShowMode;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
+import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
+import org.complitex.common.web.component.search.CollapsibleSearchPanel;
+import org.complitex.common.web.component.search.ISearchCallback;
+import org.complitex.common.web.component.search.IToggleCallback;
 import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.DeleteItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
@@ -50,9 +50,9 @@ import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
 
-import static org.complitex.dictionary.util.PageUtil.newSorting;
-import static org.complitex.dictionary.web.component.ShowMode.ACTIVE;
-import static org.complitex.dictionary.web.component.ShowMode.ALL;
+import static org.complitex.common.util.PageUtil.newSorting;
+import static org.complitex.common.web.component.ShowMode.ACTIVE;
+import static org.complitex.common.web.component.ShowMode.ALL;
 
 /**
  * @author Pavel Sknar

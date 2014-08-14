@@ -14,10 +14,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.service.ModuleBean;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
-import org.complitex.dictionary.web.component.organization.OrganizationPicker;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.ModuleBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 
 import javax.ejb.EJB;

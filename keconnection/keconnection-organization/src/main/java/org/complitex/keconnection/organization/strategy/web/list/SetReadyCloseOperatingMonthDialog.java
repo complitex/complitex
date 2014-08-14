@@ -10,7 +10,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
 import org.odlabs.wiquery.ui.dialog.Dialog;

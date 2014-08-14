@@ -1,8 +1,8 @@
 package org.complitex.organization.web.component;
 
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
-import org.complitex.dictionary.web.component.permission.organization.OrganizationPermissionParameters;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.web.component.permission.organization.OrganizationPermissionParameters;
 
 import javax.ejb.EJB;
 import java.util.ArrayList;

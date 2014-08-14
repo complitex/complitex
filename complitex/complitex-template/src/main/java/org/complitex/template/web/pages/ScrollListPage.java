@@ -2,7 +2,7 @@ package org.complitex.template.web.pages;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.web.component.scroll.ScrollListBehavior;
+import org.complitex.common.web.component.scroll.ScrollListBehavior;
 import org.complitex.template.web.template.TemplatePage;
 
 /**

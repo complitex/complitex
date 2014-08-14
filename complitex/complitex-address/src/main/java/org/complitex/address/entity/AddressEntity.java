@@ -1,7 +1,7 @@
 package org.complitex.address.entity;
 
-import org.complitex.dictionary.entity.description.IEntity;
-import org.complitex.dictionary.mybatis.IFixedIdType;
+import org.complitex.common.entity.description.IEntity;
+import org.complitex.common.mybatis.IFixedIdType;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

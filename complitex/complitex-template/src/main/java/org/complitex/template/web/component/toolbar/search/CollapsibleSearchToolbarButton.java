@@ -6,7 +6,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.SharedResourceReference;
-import org.complitex.dictionary.web.component.search.CollapsibleSearchPanel;
+import org.complitex.common.web.component.search.CollapsibleSearchPanel;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 
 /**

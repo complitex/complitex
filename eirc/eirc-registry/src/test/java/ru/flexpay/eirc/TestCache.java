@@ -2,9 +2,9 @@ package ru.flexpay.eirc;
 
 import org.apache.commons.lang.time.StopWatch;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.dictionary.EjbTestBeanLocator;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.util.CloneUtil;
+import org.complitex.common.EjbTestBeanLocator;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.util.CloneUtil;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

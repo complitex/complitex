@@ -9,7 +9,7 @@ import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.util.EjbBeanLocator;
 
 /**
  *

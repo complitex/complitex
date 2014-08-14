@@ -8,10 +8,10 @@ import org.complitex.address.strategy.room.RoomStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.correction.entity.*;
-import org.complitex.dictionary.entity.Correction;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.entity.Correction;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

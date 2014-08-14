@@ -16,7 +16,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.complitex.dictionary.entity.IExecutorObject;
+import org.complitex.common.entity.IExecutorObject;
 
 /**
  *

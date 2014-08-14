@@ -2,8 +2,8 @@ package org.complitex.osznconnection.file.web.component.process;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 
 import javax.ejb.EJB;
 

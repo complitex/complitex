@@ -1,14 +1,14 @@
 package org.complitex.osznconnection.file.service.process;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.dictionary.entity.IExecutorObject;
-import org.complitex.dictionary.entity.Log;
-import org.complitex.dictionary.service.ConfigBean;
-import org.complitex.dictionary.service.LogBean;
-import org.complitex.dictionary.service.executor.ExecutorBean;
-import org.complitex.dictionary.service.executor.IExecutorListener;
-import org.complitex.dictionary.service.executor.ITaskBean;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.entity.Log;
+import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.LogBean;
+import org.complitex.common.service.executor.ExecutorBean;
+import org.complitex.common.service.executor.IExecutorListener;
+import org.complitex.common.service.executor.ITaskBean;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.RequestFileBean;

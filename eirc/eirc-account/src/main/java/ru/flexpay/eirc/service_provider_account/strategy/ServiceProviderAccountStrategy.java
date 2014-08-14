@@ -1,15 +1,15 @@
 package ru.flexpay.eirc.service_provider_account.strategy;
 
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.SimpleTypes;
-import org.complitex.dictionary.entity.StringCulture;
-import org.complitex.dictionary.entity.description.EntityAttributeType;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.service.StringCultureBean;
-import org.complitex.dictionary.util.Numbers;
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.SimpleTypes;
+import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.util.Numbers;
+import org.complitex.common.util.StringUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 

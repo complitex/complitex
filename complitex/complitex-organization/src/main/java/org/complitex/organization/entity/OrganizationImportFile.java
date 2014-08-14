@@ -1,6 +1,6 @@
 package org.complitex.organization.entity;
 
-import org.complitex.dictionary.entity.IImportFile;
+import org.complitex.common.entity.IImportFile;
 
 public enum OrganizationImportFile implements IImportFile {
 

@@ -55,13 +55,13 @@
         </where>
     </sql>
 
-    <select id="selectFacilityStreetTypes" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectFacilityStreetTypes" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="facilityStreetTypeResultMap">
         select * from `facility_street_type_reference` <include refid="selectFacilityStreetTypesWhere"/>
           order by ${sortProperty} <if test="sortProperty == 'KLKUL_CODE'">+ 0</if> ${asc} limit #{first}, #{count}
     </select>
 
-    <select id="selectFacilityStreetTypesCount" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectFacilityStreetTypesCount" parameterType="org.complitex.common.entity.FilterWrapper"
             resultType="int">
         select count(*) from `facility_street_type_reference` <include refid="selectFacilityStreetTypesWhere"/>
     </select>
@@ -93,13 +93,13 @@
         </where>
     </sql>
 
-    <select id="selectFacilityStreets" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectFacilityStreets" parameterType="org.complitex.common.entity.FilterWrapper"
         resultMap="facilityStreetResultMap">
         select * from `facility_street_reference` <include refid="selectFacilityStreetsWhere"/>
           order by ${sortProperty} <if test="sortProperty != 'KL_NAME'">+ 0</if> ${asc} limit #{first}, #{count}
     </select>
 
-    <select id="selectFacilityStreetsCount" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultType="int">
+    <select id="selectFacilityStreetsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="int">
         select count(*) from `facility_street_reference` <include refid="selectFacilityStreetsWhere"/>
     </select>
 
@@ -177,14 +177,14 @@
         </where>
     </sql>
 
-    <select id="selectFacilityTarifs" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectFacilityTarifs" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="facilityTarifResultMap">
         select * from `facility_tarif_reference` <include refid="selectFacilityTarifsWhere"/>
           order by ${sortProperty} <if test="sortProperty != 'TAR_DATEB' and  sortProperty != 'TAR_DATEE'">+ 0</if>
             ${asc} limit #{first}, #{count}
     </select>
 
-    <select id="selectFacilityTarifsCount" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultType="int">
+    <select id="selectFacilityTarifsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="int">
         select count(*) from `facility_tarif_reference` <include refid="selectFacilityTarifsWhere"/>
     </select>
 </mapper>

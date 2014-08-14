@@ -1,8 +1,8 @@
 package org.complitex.keconnection.heatmeter.service;
 
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.service.exception.ConcurrentModificationException;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.service.exception.ConcurrentModificationException;
+import org.complitex.common.util.DateUtil;
 import org.complitex.keconnection.heatmeter.entity.*;
 
 import javax.ejb.EJB;
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static org.complitex.dictionary.util.DateUtil.isSameMonth;
+import static org.complitex.common.util.DateUtil.isSameMonth;
 import static org.complitex.keconnection.heatmeter.entity.HeatmeterPeriodSubType.ADJUSTMENT;
 import static org.complitex.keconnection.heatmeter.entity.HeatmeterPeriodSubType.OPERATING;
 import static org.complitex.keconnection.heatmeter.entity.HeatmeterValidateStatus.*;

@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.service.correction.entity;
 
-import org.complitex.dictionary.entity.Correction;
+import org.complitex.common.entity.Correction;
 
 /**
  * @author Pavel Sknar

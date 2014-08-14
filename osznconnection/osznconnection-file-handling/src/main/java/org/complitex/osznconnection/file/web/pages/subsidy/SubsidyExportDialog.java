@@ -16,10 +16,10 @@ import org.apache.wicket.model.*;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.apache.wicket.util.template.TextTemplate;
 import org.complitex.address.web.component.DistrictSelectPanel;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.web.component.DatePicker;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.web.component.DatePicker;
 import org.complitex.organization.web.component.OrganizationMultiselectPanel;
-import org.complitex.dictionary.web.component.organization.OrganizationPicker;
+import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.ExportType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
@@ -31,7 +31,7 @@ import javax.ejb.EJB;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.complitex.dictionary.util.DomainObjectUtil.getIds;
+import static org.complitex.common.util.DomainObjectUtil.getIds;
 import static org.complitex.osznconnection.file.entity.ExportType.*;
 
 /**

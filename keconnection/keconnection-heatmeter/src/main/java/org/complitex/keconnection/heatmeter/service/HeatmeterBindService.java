@@ -7,8 +7,8 @@ package org.complitex.keconnection.heatmeter.service;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.BuildingCode;
-import org.complitex.dictionary.service.IProcessListener;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.service.IProcessListener;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.keconnection.heatmeter.entity.ExternalHeatmeter;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterBindingStatus;
@@ -26,7 +26,7 @@ import javax.ejb.*;
 import javax.transaction.UserTransaction;
 import java.util.*;
 
-import static org.complitex.dictionary.util.DateUtil.*;
+import static org.complitex.common.util.DateUtil.*;
 
 /**
  *

@@ -19,13 +19,13 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.entity.ILongId;
-import org.complitex.dictionary.web.component.ajax.AjaxFeedbackPanel;
-import org.complitex.dictionary.web.component.TextLabel;
-import org.complitex.dictionary.web.component.datatable.ArrowOrderByBorder;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.entity.ILongId;
+import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
+import org.complitex.common.web.component.TextLabel;
+import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.template.web.component.InputPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.complitex.dictionary.util.StringUtil.lowerCamelToUnderscore;
+import static org.complitex.common.util.StringUtil.lowerCamelToUnderscore;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

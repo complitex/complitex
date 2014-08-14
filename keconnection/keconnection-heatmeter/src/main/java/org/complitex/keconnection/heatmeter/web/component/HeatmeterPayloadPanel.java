@@ -12,9 +12,9 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-import org.complitex.dictionary.util.DateUtil;
-import org.complitex.dictionary.web.component.LabelDateField;
-import org.complitex.dictionary.web.component.LabelTextField;
+import org.complitex.common.util.DateUtil;
+import org.complitex.common.web.component.LabelDateField;
+import org.complitex.common.web.component.LabelTextField;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterPayload;
 import org.complitex.keconnection.heatmeter.service.HeatmeterPayloadBean;
@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import static org.complitex.dictionary.web.component.LabelTextField.Converter.BIG_DECIMAL_CONVERTER_2;
+import static org.complitex.common.web.component.LabelTextField.Converter.BIG_DECIMAL_CONVERTER_2;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

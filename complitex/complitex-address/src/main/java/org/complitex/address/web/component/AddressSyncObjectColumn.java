@@ -12,13 +12,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
-import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.dictionary.entity.DictionaryObject;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.strategy.IStrategy;
-import org.complitex.dictionary.strategy.StrategyFactory;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.util.EjbBeanLocator;
 
 import java.util.Locale;
 

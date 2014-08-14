@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.mb_transformer.web.admin;
 
-import org.complitex.dictionary.entity.IConfig;
+import org.complitex.common.entity.IConfig;
 import org.complitex.template.web.pages.ConfigEdit;
 import ru.flexpay.eirc.mb_transformer.service.MbTransformerConfigBean;
 

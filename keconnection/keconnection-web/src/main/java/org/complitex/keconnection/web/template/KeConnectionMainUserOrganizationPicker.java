@@ -5,8 +5,8 @@
 package org.complitex.keconnection.web.template;
 
 import org.apache.wicket.model.IModel;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
 import org.complitex.template.web.component.MainUserOrganizationPicker;
 

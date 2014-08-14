@@ -4,7 +4,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 
 import java.util.Set;
-import org.complitex.dictionary.entity.DomainObject;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.organization.strategy.web.edit.OrganizationValidator;
 

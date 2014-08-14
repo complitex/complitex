@@ -4,7 +4,7 @@
  */
 package org.complitex.pspoffice.departure_reason.entity;
 
-import org.complitex.dictionary.entity.IImportFile;
+import org.complitex.common.entity.IImportFile;
 
 /**
  *

@@ -4,7 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.complitex.dictionary.entity.FilterWrapper;
+import org.complitex.common.entity.FilterWrapper;
 import ru.flexpay.eirc.mb_transformer.service.MbConverterException;
 import ru.flexpay.eirc.registry.entity.Registry;
 import ru.flexpay.eirc.registry.entity.RegistryRecordData;

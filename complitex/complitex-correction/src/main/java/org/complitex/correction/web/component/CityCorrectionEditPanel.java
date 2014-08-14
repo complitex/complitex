@@ -7,7 +7,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.complitex.correction.entity.CityCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.correction.web.CityCorrectionList;
-import org.complitex.dictionary.entity.FilterWrapper;
+import org.complitex.common.entity.FilterWrapper;
 
 import javax.ejb.EJB;
 import java.util.List;

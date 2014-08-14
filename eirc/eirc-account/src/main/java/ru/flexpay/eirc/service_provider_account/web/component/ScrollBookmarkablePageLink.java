@@ -14,8 +14,8 @@ public class ScrollBookmarkablePageLink<T> extends Panel {
                                                        String markupId, IModel<String> linkLabelModel) {
         super(id);
 
-        org.complitex.dictionary.web.component.scroll.ScrollBookmarkablePageLink link =
-                new org.complitex.dictionary.web.component.scroll.ScrollBookmarkablePageLink<>("link", pageClass, parameters, markupId);
+        org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink link =
+                new org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink<>("link", pageClass, parameters, markupId);
         add(link);
 
         link.add(new Label("label", linkLabelModel));

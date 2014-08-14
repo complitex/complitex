@@ -1,8 +1,8 @@
 package org.complitex.osznconnection.file.service.process;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.complitex.dictionary.service.ConfigBean;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.service.ConfigBean;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileGroup;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static org.complitex.dictionary.util.DateUtil.newDate;
+import static org.complitex.common.util.DateUtil.newDate;
 import static org.complitex.osznconnection.file.entity.FileHandlingConfig.*;
 import static org.complitex.osznconnection.file.service.process.RequestFileDirectoryType.*;
 

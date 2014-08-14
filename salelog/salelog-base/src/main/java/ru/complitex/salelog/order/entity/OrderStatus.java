@@ -1,8 +1,8 @@
 package ru.complitex.salelog.order.entity;
 
-import org.complitex.dictionary.mybatis.FixedIdTypeHandler;
-import org.complitex.dictionary.mybatis.IFixedIdType;
-import org.complitex.dictionary.util.ResourceUtil;
+import org.complitex.common.mybatis.FixedIdTypeHandler;
+import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.common.util.ResourceUtil;
 
 import java.util.Locale;
 

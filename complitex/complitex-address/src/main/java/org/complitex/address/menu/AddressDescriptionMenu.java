@@ -2,7 +2,7 @@ package org.complitex.address.menu;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.Page;
-import org.complitex.dictionary.service.StringCultureBean;
+import org.complitex.common.service.StringCultureBean;
 import org.complitex.template.web.pages.EntityDescription;
 import org.complitex.template.web.template.ITemplateLink;
 import org.complitex.template.web.template.ResourceTemplateMenu;
@@ -13,8 +13,8 @@ import java.util.Locale;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.AddressInfoProvider;
-import org.complitex.dictionary.strategy.StrategyFactory;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.template.web.security.SecurityRole;
 
 /**

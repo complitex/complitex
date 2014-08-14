@@ -7,7 +7,7 @@ package org.complitex.pspoffice.person.report.download;
 import java.util.Locale;
 import java.util.Map;
 import org.complitex.address.service.AddressRendererBean;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.pspoffice.ownerrelationship.strategy.OwnerRelationshipStrategy;
 import org.complitex.pspoffice.ownership.strategy.OwnershipFormStrategy;
 import org.complitex.pspoffice.person.report.entity.F3Reference;

@@ -2,12 +2,12 @@ package org.complitex.organization.strategy.web.edit;
 
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
-import org.complitex.dictionary.strategy.web.DomainObjectEditPanel;
-import org.complitex.dictionary.strategy.web.validate.IValidator;
-import org.complitex.dictionary.util.AttributeUtil;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.strategy.web.DomainObjectEditPanel;
+import org.complitex.common.strategy.web.validate.IValidator;
+import org.complitex.common.util.AttributeUtil;
+import org.complitex.common.util.EjbBeanLocator;
 
 import java.text.MessageFormat;
 import java.util.Locale;

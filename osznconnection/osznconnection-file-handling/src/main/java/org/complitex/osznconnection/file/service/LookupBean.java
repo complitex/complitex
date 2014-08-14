@@ -1,17 +1,13 @@
 package org.complitex.osznconnection.file.service;
 
-import org.complitex.address.strategy.district.DistrictStrategy;
-import org.complitex.correction.service.AddressCorrectionBean;
-import org.complitex.dictionary.entity.Cursor;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.LocaleBean;
+import org.complitex.common.entity.Cursor;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
-import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

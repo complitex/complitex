@@ -10,9 +10,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.service.SessionBean;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.service.SessionBean;
 
 /**
  * Street strategy delegate.

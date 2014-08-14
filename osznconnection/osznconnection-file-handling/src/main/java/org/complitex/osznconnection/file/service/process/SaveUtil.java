@@ -1,9 +1,9 @@
 package org.complitex.osznconnection.file.service.process;
 
 import com.google.common.collect.ImmutableSet;
-import org.complitex.dictionary.entity.IExecutorObject;
-import org.complitex.dictionary.util.DateUtil;
-import org.complitex.dictionary.util.ResourceUtil;
+import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.StatusRenderService;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;

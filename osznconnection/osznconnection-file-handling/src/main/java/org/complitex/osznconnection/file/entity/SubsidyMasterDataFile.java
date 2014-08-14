@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.entity;
 
-import org.complitex.dictionary.entity.LogChangeList;
+import org.complitex.common.entity.LogChangeList;
 
 import java.util.List;
 

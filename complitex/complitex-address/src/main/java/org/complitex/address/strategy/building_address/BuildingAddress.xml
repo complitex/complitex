@@ -28,21 +28,21 @@
     </sql>
 
     <!-- permissions -->
-    <select id="findBuildingPermissionInfoByParent" parameterType="long" resultMap="org.complitex.dictionary.entity.DomainObject.DomainObjectPermissionInfo">
+    <select id="findBuildingPermissionInfoByParent" parameterType="long" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
         SELECT e.`object_id`, e.`permission_id` <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByParent"/>
     </select>
 
-    <select id="findBuildingPermissionInfoByReference" parameterType="long" resultMap="org.complitex.dictionary.entity.DomainObject.DomainObjectPermissionInfo">
+    <select id="findBuildingPermissionInfoByReference" parameterType="long" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
          SELECT DISTINCT e.`object_id`, e.`permission_id`
          <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByReference"/>
     </select>
 
-    <select id="findReferenceAddressPermissionInfo" parameterType="long" resultMap="org.complitex.dictionary.entity.DomainObject.DomainObjectPermissionInfo">
+    <select id="findReferenceAddressPermissionInfo" parameterType="long" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
         SELECT DISTINCT e.`object_id`, e.`permission_id`
         <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectReferenceAddress"/>
     </select>
 
-    <select id="findParentAddressPermissionInfo" parameterType="long" resultMap="org.complitex.dictionary.entity.DomainObject.DomainObjectPermissionInfo">
+    <select id="findParentAddressPermissionInfo" parameterType="long" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
         SELECT DISTINCT e.`object_id`, e.`permission_id`
         <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectParentAddress"/>
     </select>
@@ -125,7 +125,7 @@
         </if>
     </sql>
 
-    <select id="find" resultMap="org.complitex.dictionary.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
+    <select id="find" resultMap="org.complitex.common.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
         SELECT e.*
         FROM `building_address` e
         <if test="additionalParams.districtId != null">
@@ -137,16 +137,16 @@
 
         WHERE
 
-        <include refid="org.complitex.dictionary.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.permissionFilter"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.filter"/>
+        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
+        <include refid="org.complitex.common.entity.DomainObject.filter"/>
 
         <if test="additionalParams.districtId != null">
             and ba.`value_id` = e.`object_id` and d.`value_id` = #{additionalParams.districtId}
         </if>
 
         <include refid="org.complitex.address.strategy.building_address.BuildingAddress.orderBy"/>
-        <include refid="org.complitex.dictionary.entity.DomainObject.limit"/>
+        <include refid="org.complitex.common.entity.DomainObject.limit"/>
     </select>
 
 </mapper>

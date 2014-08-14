@@ -5,9 +5,9 @@
 package org.complitex.pspoffice.person.strategy.service;
 
 import com.google.common.collect.Lists;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.pspoffice.ownership.strategy.OwnershipFormStrategy;
 import org.complitex.pspoffice.person.strategy.ApartmentCardStrategy;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;

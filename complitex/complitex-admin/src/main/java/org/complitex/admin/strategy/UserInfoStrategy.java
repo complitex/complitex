@@ -1,11 +1,11 @@
 package org.complitex.admin.strategy;
 
 import org.complitex.admin.web.UserInfoComplexAttributesPanel;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.service.NameBean;
-import org.complitex.dictionary.strategy.web.AbstractComplexAttributesPanel;
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.NameBean;
+import org.complitex.common.strategy.web.AbstractComplexAttributesPanel;
+import org.complitex.common.util.StringUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 

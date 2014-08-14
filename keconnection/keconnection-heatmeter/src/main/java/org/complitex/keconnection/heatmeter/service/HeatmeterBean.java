@@ -1,14 +1,14 @@
 package org.complitex.keconnection.heatmeter.service;
 
 import com.google.common.collect.ImmutableSet;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.mybatis.XmlMapper;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.exception.ConcurrentModificationException;
-import org.complitex.dictionary.web.DictionaryFwSession;
-import org.complitex.dictionary.web.component.search.SearchComponentState;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.mybatis.XmlMapper;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.exception.ConcurrentModificationException;
+import org.complitex.common.web.DictionaryFwSession;
+import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterBindingStatus;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterPeriod;

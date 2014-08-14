@@ -7,8 +7,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.service.AddressSyncAdapter;
-import org.complitex.dictionary.entity.Cursor;
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.entity.Cursor;
+import org.complitex.common.util.StringUtil;
 
 import javax.ejb.EJB;
 import java.util.Date;

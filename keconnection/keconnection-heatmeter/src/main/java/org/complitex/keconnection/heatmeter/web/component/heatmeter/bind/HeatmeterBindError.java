@@ -6,8 +6,8 @@ package org.complitex.keconnection.heatmeter.web.component.heatmeter.bind;
 
 import java.util.Locale;
 import org.complitex.address.service.AddressRendererBean;
-import org.complitex.dictionary.util.EjbBeanLocator;
-import org.complitex.dictionary.util.ResourceUtil;
+import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterBindingStatus;
 import org.complitex.keconnection.heatmeter.service.exception.CriticalHeatmeterBindException;

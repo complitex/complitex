@@ -2,12 +2,12 @@ package org.complitex.admin.service;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.complitex.admin.strategy.UserInfoStrategy;
-import org.complitex.dictionary.entity.*;
-import org.complitex.dictionary.entity.description.EntityAttributeType;
-import org.complitex.dictionary.entity.example.AttributeExample;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.util.DateUtil;
+import org.complitex.common.entity.*;
+import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.example.AttributeExample;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.util.DateUtil;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.complitex.dictionary.web.DictionaryFwSession;
+import org.complitex.common.web.DictionaryFwSession;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

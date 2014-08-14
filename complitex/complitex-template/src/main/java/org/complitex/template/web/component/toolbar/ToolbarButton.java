@@ -11,7 +11,7 @@ import org.apache.wicket.model.IComponentAssignedModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.complitex.dictionary.web.component.image.StaticImage;
+import org.complitex.common.web.component.image.StaticImage;
 
 /**
  *

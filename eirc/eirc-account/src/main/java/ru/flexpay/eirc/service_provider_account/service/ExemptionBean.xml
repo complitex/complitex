@@ -42,7 +42,7 @@
         </if>
     </sql>
 
-    <select id="selectExemptions" parameterType="org.complitex.dictionary.entity.FilterWrapper"
+    <select id="selectExemptions" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="Exemption">
         select
         <include refid="exemptionColumns"/>
@@ -81,7 +81,7 @@
         </if>
     </select>
 
-    <select id="countExemptions" parameterType="org.complitex.dictionary.entity.FilterWrapper" resultType="integer">
+    <select id="countExemptions" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer">
         select count(distinct e.`object_id`) from `exemption` e
         where e.`end_date` is null
 

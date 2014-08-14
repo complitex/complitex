@@ -4,7 +4,7 @@
  */
 package org.complitex.pspoffice.importing.legacy.service.exception;
 
-import org.complitex.dictionary.service.exception.AbstractException;
+import org.complitex.common.service.exception.AbstractException;
 
 /**
  *

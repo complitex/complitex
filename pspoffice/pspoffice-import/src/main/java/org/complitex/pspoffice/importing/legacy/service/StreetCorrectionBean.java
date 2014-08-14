@@ -12,7 +12,7 @@ import java.util.Set;
 import javax.ejb.Stateless;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.pspoffice.importing.legacy.entity.StreetCorrection;
 
 /**

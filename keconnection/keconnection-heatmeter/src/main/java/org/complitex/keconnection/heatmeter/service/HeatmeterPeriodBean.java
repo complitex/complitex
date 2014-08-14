@@ -1,8 +1,8 @@
 package org.complitex.keconnection.heatmeter.service;
 
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.mybatis.XmlMapper;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.mybatis.XmlMapper;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterPeriod;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterPeriodType;
 
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.complitex.dictionary.util.DateUtil.isSameMonth;
-import static org.complitex.dictionary.util.DateUtil.previousMonth;
-import static org.complitex.dictionary.util.IdListUtil.getDiff;
+import static org.complitex.common.util.DateUtil.isSameMonth;
+import static org.complitex.common.util.DateUtil.previousMonth;
+import static org.complitex.common.util.IdListUtil.getDiff;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
-import org.complitex.dictionary.service.executor.ExecutorCommand;
+import org.complitex.common.service.executor.ExecutorCommand;
 import org.complitex.osznconnection.file.entity.RequestFile;
 
 import java.util.ArrayList;

@@ -4,7 +4,7 @@
  */
 package org.complitex.osznconnection.file.service_provider.exception;
 
-import org.complitex.dictionary.service.exception.AbstractException;
+import org.complitex.common.service.exception.AbstractException;
 
 /**
  *

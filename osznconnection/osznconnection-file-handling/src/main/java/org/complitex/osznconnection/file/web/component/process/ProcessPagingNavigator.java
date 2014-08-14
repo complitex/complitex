@@ -6,8 +6,8 @@ package org.complitex.osznconnection.file.web.component.process;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.complitex.dictionary.web.component.paging.IPagingNavigatorListener;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
+import org.complitex.common.web.component.paging.IPagingNavigatorListener;
+import org.complitex.common.web.component.paging.PagingNavigator;
 
 /**
  *

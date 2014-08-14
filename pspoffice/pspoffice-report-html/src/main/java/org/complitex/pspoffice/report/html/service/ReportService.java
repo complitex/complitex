@@ -1,6 +1,6 @@
 package org.complitex.pspoffice.report.html.service;
 
-import org.complitex.dictionary.util.StringUtil;
+import org.complitex.common.util.StringUtil;
 import org.complitex.pspoffice.report.html.entity.Report;
 import org.complitex.pspoffice.report.html.entity.ReportSql;
 import org.jsoup.Jsoup;

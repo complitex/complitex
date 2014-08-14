@@ -7,10 +7,10 @@ package org.complitex.pspoffice.ownership.strategy;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.example.AttributeExample;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.util.ResourceUtil;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.example.AttributeExample;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -18,7 +18,7 @@ import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import static org.complitex.dictionary.util.AttributeUtil.*;
+import static org.complitex.common.util.AttributeUtil.*;
 
 /**
  *

@@ -6,7 +6,7 @@ import org.complitex.pspoffice.report.web.AbstractReportDownload;
 
 import java.util.Map;
 import org.complitex.address.service.AddressRendererBean;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.pspoffice.ownerrelationship.strategy.OwnerRelationshipStrategy;
 import org.complitex.pspoffice.ownership.strategy.OwnershipFormStrategy;
 import org.complitex.pspoffice.person.report.entity.FamilyMember;

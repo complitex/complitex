@@ -4,15 +4,15 @@
  */
 package org.complitex.keconnection.organization.strategy.entity;
 
-import org.complitex.dictionary.converter.BooleanConverter;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.util.AttributeUtil;
+import org.complitex.common.converter.BooleanConverter;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.util.AttributeUtil;
 import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
 
 import java.util.Date;
 import java.util.Locale;
 
-import static org.complitex.dictionary.util.DateUtil.*;
+import static org.complitex.common.util.DateUtil.*;
 
 /**
  *

@@ -10,9 +10,9 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.request.resource.SharedResourceReference;
-import org.complitex.dictionary.entity.IExecutorObject;
-import org.complitex.dictionary.web.component.css.CssAttributeBehavior;
-import org.complitex.dictionary.web.component.image.StaticImage;
+import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.web.component.css.CssAttributeBehavior;
+import org.complitex.common.web.component.image.StaticImage;
 
 /**
  *

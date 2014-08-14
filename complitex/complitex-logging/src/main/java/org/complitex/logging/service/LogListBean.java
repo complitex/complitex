@@ -1,8 +1,8 @@
 package org.complitex.logging.service;
 
-import org.complitex.dictionary.entity.Log;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.entity.Log;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
 
 import javax.ejb.Stateless;
 import java.util.List;

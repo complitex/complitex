@@ -1,6 +1,6 @@
 package org.complitex.keconnection.heatmeter.service;
 
-import org.complitex.dictionary.service.IProcessListener;
+import org.complitex.common.service.IProcessListener;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterPayload;
 import org.complitex.keconnection.heatmeter.entity.Tablegram;
@@ -11,7 +11,7 @@ import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
 
-import static org.complitex.dictionary.util.DateUtil.getFirstDayOfMonth;
+import static org.complitex.common.util.DateUtil.getFirstDayOfMonth;
 import static org.complitex.keconnection.heatmeter.entity.HeatmeterType.HEATING;
 import static org.complitex.keconnection.heatmeter.entity.TablegramRecordStatus.*;
 import static org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy.KE_ORGANIZATION_OBJECT_ID;

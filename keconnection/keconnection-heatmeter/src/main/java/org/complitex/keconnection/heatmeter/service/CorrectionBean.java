@@ -5,12 +5,12 @@
 package org.complitex.keconnection.heatmeter.service;
 
 import com.google.common.collect.Maps;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.strategy.IStrategy;
-import org.complitex.dictionary.strategy.StrategyFactory;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StrategyFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

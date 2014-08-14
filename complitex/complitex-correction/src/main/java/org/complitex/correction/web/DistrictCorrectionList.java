@@ -6,11 +6,11 @@ import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.correction.entity.DistrictCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
-import org.complitex.dictionary.entity.Correction;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.service.SessionBean;
-import org.complitex.dictionary.strategy.IStrategy;
+import org.complitex.common.entity.Correction;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.SessionBean;
+import org.complitex.common.strategy.IStrategy;
 
 import javax.ejb.EJB;
 import java.util.List;

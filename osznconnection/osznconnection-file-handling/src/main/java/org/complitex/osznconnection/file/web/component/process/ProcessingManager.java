@@ -1,8 +1,8 @@
 package org.complitex.osznconnection.file.web.component.process;
 
 import com.google.common.collect.ImmutableSet;
-import org.complitex.dictionary.entity.IExecutorObject;
-import org.complitex.dictionary.util.EjbBeanLocator;
+import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 

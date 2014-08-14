@@ -2,9 +2,9 @@ package ru.flexpay.eirc;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.complitex.dictionary.EjbTestBeanLocator;
-import org.complitex.dictionary.service.TestBean;
-import org.complitex.dictionary.service.executor.ExecuteException;
+import org.complitex.common.EjbTestBeanLocator;
+import org.complitex.common.service.TestBean;
+import org.complitex.common.service.executor.ExecuteException;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

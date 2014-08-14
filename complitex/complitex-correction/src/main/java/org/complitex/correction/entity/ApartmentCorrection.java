@@ -1,7 +1,7 @@
 package org.complitex.correction.entity;
 
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.dictionary.entity.Correction;
+import org.complitex.common.entity.Correction;
 
 /**
  * @author Pavel Sknar

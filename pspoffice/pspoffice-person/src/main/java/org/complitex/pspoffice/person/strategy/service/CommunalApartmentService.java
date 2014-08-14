@@ -6,8 +6,8 @@ package org.complitex.pspoffice.person.strategy.service;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.AbstractBean;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.pspoffice.person.strategy.ApartmentCardStrategy;
 import org.complitex.pspoffice.person.strategy.entity.ApartmentCard;
 

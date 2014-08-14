@@ -12,10 +12,10 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.dictionary.entity.FilterWrapper;
-import org.complitex.dictionary.web.component.ajax.AjaxFeedbackPanel;
-import org.complitex.dictionary.web.component.datatable.DataProvider;
-import org.complitex.dictionary.web.component.paging.PagingNavigator;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.keconnection.heatmeter.entity.OperatingMonth;
 import org.complitex.keconnection.heatmeter.service.OperatingMonthBean;
 import org.complitex.template.web.security.SecurityRole;
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 
-import static org.complitex.dictionary.util.PageUtil.*;
+import static org.complitex.common.util.PageUtil.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

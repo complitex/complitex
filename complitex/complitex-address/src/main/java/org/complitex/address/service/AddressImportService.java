@@ -15,11 +15,11 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.region.RegionStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.dictionary.entity.*;
-import org.complitex.dictionary.service.*;
-import org.complitex.dictionary.service.exception.*;
-import org.complitex.dictionary.strategy.organization.IOrganizationStrategy;
-import org.complitex.dictionary.util.*;
+import org.complitex.common.entity.*;
+import org.complitex.common.service.*;
+import org.complitex.common.service.exception.*;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

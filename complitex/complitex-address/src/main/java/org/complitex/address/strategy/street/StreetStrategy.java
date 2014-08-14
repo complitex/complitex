@@ -8,21 +8,20 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.address.resource.CommonResources;
 import org.complitex.address.strategy.street.web.edit.StreetTypeComponent;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.dictionary.entity.Attribute;
-import org.complitex.dictionary.entity.DomainObject;
-import org.complitex.dictionary.entity.example.AttributeExample;
-import org.complitex.dictionary.entity.example.DomainObjectExample;
-import org.complitex.dictionary.mybatis.Transactional;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.StringCultureBean;
-import org.complitex.dictionary.strategy.IStrategy;
-import org.complitex.dictionary.strategy.StrategyFactory;
-import org.complitex.dictionary.strategy.web.AbstractComplexAttributesPanel;
-import org.complitex.dictionary.strategy.web.DomainObjectListPanel;
-import org.complitex.dictionary.util.BuildingNumberConverter;
-import org.complitex.dictionary.util.ResourceUtil;
-import org.complitex.dictionary.web.component.DomainObjectInputPanel;
-import org.complitex.dictionary.web.component.search.ISearchCallback;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.example.AttributeExample;
+import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.web.AbstractComplexAttributesPanel;
+import org.complitex.common.strategy.web.DomainObjectListPanel;
+import org.complitex.common.util.BuildingNumberConverter;
+import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.web.component.DomainObjectInputPanel;
+import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -31,8 +30,8 @@ import javax.ejb.Stateless;
 import java.io.Serializable;
 import java.util.*;
 
-import static org.complitex.dictionary.util.StringUtil.removeWhiteSpaces;
-import static org.complitex.dictionary.util.StringUtil.toCyrillic;
+import static org.complitex.common.util.StringUtil.removeWhiteSpaces;
+import static org.complitex.common.util.StringUtil.toCyrillic;
 
 /**
  * Street strategy.

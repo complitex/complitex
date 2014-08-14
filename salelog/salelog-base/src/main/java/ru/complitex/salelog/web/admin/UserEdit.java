@@ -16,13 +16,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.admin.Module;
 import org.complitex.admin.service.UserBean;
 import org.complitex.admin.strategy.UserInfoStrategy;
-import org.complitex.dictionary.entity.*;
-import org.complitex.dictionary.service.LocaleBean;
-import org.complitex.dictionary.service.LogBean;
-import org.complitex.dictionary.service.PreferenceBean;
-import org.complitex.dictionary.util.CloneUtil;
-import org.complitex.dictionary.web.component.DomainObjectInputPanel;
-import org.complitex.dictionary.web.component.search.SearchComponentState;
+import org.complitex.common.entity.*;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.LogBean;
+import org.complitex.common.service.PreferenceBean;
+import org.complitex.common.util.CloneUtil;
+import org.complitex.common.web.component.DomainObjectInputPanel;
+import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.template.web.component.LocalePicker;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
@@ -34,8 +34,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import static org.complitex.dictionary.entity.UserGroup.GROUP_NAME.*;
-import static org.complitex.dictionary.web.DictionaryFwSession.*;
+import static org.complitex.common.entity.UserGroup.GROUP_NAME.*;
+import static org.complitex.common.web.DictionaryFwSession.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

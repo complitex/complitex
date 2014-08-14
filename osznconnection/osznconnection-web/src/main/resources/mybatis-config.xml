@@ -7,12 +7,12 @@
     </settings>
 
     <typeAliases>
-        <typeAlias type="org.complitex.dictionary.entity.Locale" alias="Locale"/>
-        <typeAlias type="org.complitex.dictionary.entity.StringCulture" alias="StringCulture"/>
-        <typeAlias type="org.complitex.dictionary.entity.Parameter" alias="Parameter"/>
-        <typeAlias type="org.complitex.dictionary.entity.DomainObject" alias="DomainObject"/>
-        <typeAlias type="org.complitex.dictionary.entity.Attribute" alias="Attribute"/>
-        <typeAlias type="org.complitex.dictionary.entity.example.DomainObjectExample" alias="DomainObjectExample"/>
+        <typeAlias type="org.complitex.common.entity.Locale" alias="Locale"/>
+        <typeAlias type="org.complitex.common.entity.StringCulture" alias="StringCulture"/>
+        <typeAlias type="org.complitex.common.entity.Parameter" alias="Parameter"/>
+        <typeAlias type="org.complitex.common.entity.DomainObject" alias="DomainObject"/>
+        <typeAlias type="org.complitex.common.entity.Attribute" alias="Attribute"/>
+        <typeAlias type="org.complitex.common.entity.example.DomainObjectExample" alias="DomainObjectExample"/>
     </typeAliases>
 
     <typeHandlers>
@@ -25,25 +25,25 @@
         <typeHandler handler="org.complitex.osznconnection.file.mybatis.EnumCodeTypeHandler"
                      javaType="org.complitex.osznconnection.file.entity.RequestWarningStatus"/>
 
-        <typeHandler handler="org.complitex.dictionary.mybatis.FixedIdBaseTypeHandler"
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
                      javaType="org.complitex.address.entity.AddressSyncStatus"/>
-        <typeHandler handler="org.complitex.dictionary.mybatis.FixedIdBaseTypeHandler"
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
                      javaType="org.complitex.address.entity.AddressEntity"/>
     </typeHandlers>
 
     <!--cursor plugin-->
     <plugins>
-        <plugin interceptor="org.complitex.dictionary.mybatis.CursorResultSetHandlerPlugin"/>
+        <plugin interceptor="org.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>
 
-        <plugin interceptor="org.complitex.dictionary.mybatis.plugin.EhcacheClearCachePlugin">
+        <plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheClearCachePlugin">
             <property name="excludeNamespaces" value="
-            org.complitex.dictionary.entity.Locale,
-            org.complitex.dictionary.entity.description.Entity"/>
+            org.complitex.common.entity.Locale,
+            org.complitex.common.entity.description.Entity"/>
         </plugin>
-        <plugin interceptor="org.complitex.dictionary.mybatis.plugin.SelectStatementPlugin">
+        <plugin interceptor="org.complitex.common.mybatis.plugin.SelectStatementPlugin">
             <property name="excludeNamespaces" value="
-            org.complitex.dictionary.entity.Locale,
-            org.complitex.dictionary.entity.description.Entity"/>
+            org.complitex.common.entity.Locale,
+            org.complitex.common.entity.description.Entity"/>
         </plugin>
     </plugins>
 
