@@ -36,6 +36,7 @@ import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
@@ -393,7 +394,7 @@ public final class DomainObjectListPanel extends Panel {
                         break;
                     }
                 }else if ("ORGANIZATION".equals(name)){
-                    filter = new OrganizationPicker("filter", new IModel<Long>() {
+                    filter = new OrganizationIdPicker("filter", new IModel<Long>() {
                         @Override
                         public Long getObject() {
                             return filterModel.getObject() == null? null : Long.valueOf(filterModel.getObject());
@@ -412,7 +413,7 @@ public final class DomainObjectListPanel extends Panel {
                         public void detach() {
 
                         }
-                    }, (Long) null);
+                    });
                 }
 
                 item.add(filter);

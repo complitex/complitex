@@ -16,6 +16,7 @@ import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.web.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.model.AttributeStringModel;
 import org.complitex.common.web.model.LongModel;
@@ -81,9 +82,13 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
         final EntityAttributeType attributeType =
                 moduleInstanceStrategy.getEntity().getAttributeType(ModuleInstanceStrategy.ORGANIZATION);
 
-        container.add(new OrganizationPicker("organization", new LongModel(new AttributeStringModel(attribute)),
-                attributeType.isMandatory(), new Model<>(getString("organization")),
-                true, OrganizationType.USER_ORGANIZATION.getId()));
+        OrganizationIdPicker picker = new OrganizationIdPicker("organization",
+                new LongModel(new AttributeStringModel(attribute)),
+                OrganizationType.USER_ORGANIZATION.getId());
+        picker.setRequired(attributeType.isMandatory());
+        picker.setLabel(new Model<>(getString("organization")));
+
+        container.add(picker);
 
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));

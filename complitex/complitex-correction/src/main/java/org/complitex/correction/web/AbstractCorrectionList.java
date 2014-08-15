@@ -33,6 +33,7 @@ import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
@@ -176,9 +177,13 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
         dataProvider.setSort("", SortOrder.ASCENDING);
 
 
-        filterForm.add(new OrganizationPicker("object.organizationId", filterWrapper, getOrganizationTypeIds()));
+        filterForm.add(new OrganizationIdPicker("object.organizationId",
+                new PropertyModel<Long>(filterWrapper, "object.organizationId"),
+                getOrganizationTypeIds()));
 
-        filterForm.add(new OrganizationPicker("object.userOrganizationId", filterWrapper, OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
+        filterForm.add(new OrganizationIdPicker("object.userOrganizationId",
+                new PropertyModel<Long>(filterWrapper, "object.userOrganizationId"),
+                OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
         filterForm.add(new TextField<>("correctionFilter", new PropertyModel<String>(filterWrapper, "object.correction")));
         filterForm.add(new TextField<>("codeFilter", new PropertyModel<String>(filterWrapper, "object.externalId")));
@@ -268,7 +273,7 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
         return false;
     }
 
-    protected List<Long> getOrganizationTypeIds(){
+    protected Long[] getOrganizationTypeIds(){
         return null;
     }
 }

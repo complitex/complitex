@@ -9,6 +9,8 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.correction.web.component.OrganizationCorrectionDialog;
 import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
@@ -30,6 +32,8 @@ import javax.ejb.EJB;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -72,7 +76,9 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
 
             @Override
             public Component filter() {
-                return new OrganizationPicker("servicingOrganization", OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE);
+                return new OrganizationPicker("servicingOrganization",
+                        new PropertyModel<DomainObject>(getModel(), "servicingOrganization"),
+                        SERVICING_ORGANIZATION_TYPE);
             }
 
             @Override

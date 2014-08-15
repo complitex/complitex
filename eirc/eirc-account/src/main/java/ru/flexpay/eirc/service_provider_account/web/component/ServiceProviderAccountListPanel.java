@@ -37,6 +37,7 @@ import org.complitex.common.service.LocaleBean;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.ShowModePanel;
 import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
 import ru.flexpay.eirc.dictionary.entity.Person;
@@ -179,7 +180,7 @@ public class ServiceProviderAccountListPanel extends Panel {
                         return new AbstractFilter<Long>(s, components, new PropertyModel<Long>(filterObject, "organizationId")) {
                             @Override
                             protected Component createFilterComponent(String id, IModel<Long> model) {
-                                return new OrganizationPicker(id, model, OrganizationType.SERVICE_PROVIDER.getId());
+                                return new OrganizationIdPicker(id, model, OrganizationType.SERVICE_PROVIDER.getId());
                             }
                         };
                     }

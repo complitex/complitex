@@ -27,6 +27,7 @@ import org.complitex.common.service.PreferenceBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.ShowMode;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
@@ -42,6 +43,7 @@ import java.util.Locale;
 
 import static org.complitex.common.entity.UserGroup.GROUP_NAME.*;
 import static org.complitex.common.web.DictionaryFwSession.*;
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.USER_ORGANIZATION_TYPE;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -210,7 +212,8 @@ public class UserEdit extends FormTemplatePage {
                 final ListView listView = this;
 
                 item.add(new Radio<>("radio", new Model<>(item.getIndex())));
-                item.add(new OrganizationPicker("organizationObjectId", userOrganization, OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
+                item.add(new OrganizationIdPicker("organizationObjectId",
+                        new PropertyModel<Long>(userOrganization, "organizationObjectId"), USER_ORGANIZATION_TYPE));
                 item.add(new AjaxLink<Void>("delete") {
 
                     @Override

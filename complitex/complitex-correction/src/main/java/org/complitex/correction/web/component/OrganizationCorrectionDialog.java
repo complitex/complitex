@@ -8,10 +8,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.*;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.common.entity.FilterWrapper;
@@ -43,13 +41,10 @@ public class OrganizationCorrectionDialog extends Panel {
     public OrganizationCorrectionDialog(String id, final List<WebMarkupContainer> toUpdate) {
         super(id);
 
-        setOutputMarkupId(true);
-
         dialog = new Dialog("dialog");
         dialog.setTitle(new ResourceModel("title"));
-        dialog.setOutputMarkupId(true);
         dialog.setWidth(500);
-        dialog.setModal(true);
+
         add(dialog);
 
         form = new Form<>("form", new CompoundPropertyModel<>(Model.of(new OrganizationCorrection())));
@@ -71,7 +66,7 @@ public class OrganizationCorrectionDialog extends Panel {
             }
         }));
 
-        form.add(new OrganizationPicker("objectId", form.getModelObject()));
+        form.add(new OrganizationIdPicker("objectId", new PropertyModel<Long>(form.getModelObject(), "objectId")));
 
         form.add(new Label("correction"));
 

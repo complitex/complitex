@@ -40,7 +40,7 @@ public class ServiceCorrectionList extends AbstractCorrectionList<ServiceCorrect
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private EircOrganizationStrategy organizationStrategy;
 
-    private static final List<Long> ORGANIZATION_TYPES = null;
+    private static final Long[] ORGANIZATION_TYPES = null;
 
     public ServiceCorrectionList() {
         super("organization");
@@ -89,7 +89,7 @@ public class ServiceCorrectionList extends AbstractCorrectionList<ServiceCorrect
     }
 
     @Override
-    protected List<Long> getOrganizationTypeIds(){
+    protected Long[] getOrganizationTypeIds(){
         return ORGANIZATION_TYPES;
     }
 }

@@ -42,14 +42,14 @@ public class ServiceProviderAccountCorrectionEdit extends FormTemplatePage {
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private EircOrganizationStrategy organizationStrategy;
 
-    private static final List<Long> ORGANIZATION_TYPES = ImmutableList.of(OrganizationType.PAYMENT_COLLECTOR.getId());
+    private static final Long[] ORGANIZATION_TYPES = {OrganizationType.PAYMENT_COLLECTOR.getId()};
 
     public ServiceProviderAccountCorrectionEdit(PageParameters params) {
         add(new AbstractCorrectionEditPanel<ServiceProviderAccountCorrection>("service_provider_account_edit_panel",
                 params.get(CORRECTION_ID).toOptionalLong()) {
 
             @Override
-            protected List<Long> getOrganizationTypeIds() {
+            protected Long[] getOrganizationTypeIds() {
                 return ORGANIZATION_TYPES;
             }
 
