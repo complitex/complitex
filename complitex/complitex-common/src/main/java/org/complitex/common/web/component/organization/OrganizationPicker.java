@@ -22,7 +22,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
     public OrganizationPicker(String id, IModel<DomainObject> model, Long... organizationTypeIds) {
         super(id, model);
 
-        pickerDialog = new OrganizationPickerDialog("dialog", model, organizationTypeIds){
+        pickerDialog = new OrganizationPickerDialog("dialog", getModel(), organizationTypeIds){
             @Override
             protected void onSelect(AjaxRequestTarget target) {
                 target.add(organizationLabel);
@@ -60,5 +60,10 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
     }
 
     protected void onSelect(AjaxRequestTarget target){
+    }
+
+    @Override
+    protected void convertInput() {
+        setConvertedInput(getModelObject());
     }
 }

@@ -63,7 +63,7 @@ public class OrganizationPickerDialog extends FormComponentPanel<DomainObject> {
         example.addAttributeExample(new AttributeExample(CODE));
         example.setLocaleId(Locales.getLocaleId(getLocale()));
 
-        if (organizationTypeIds != null) {
+        if (organizationTypeIds != null && organizationTypeIds.length > 0) {
             example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, organizationTypeIds);
         }
 
@@ -86,7 +86,7 @@ public class OrganizationPickerDialog extends FormComponentPanel<DomainObject> {
 
         form.add(new TextField<>("codeFilter", new AttributeExampleModel(example, CODE)));
 
-        final RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup", getModel());
+        final RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup", organizationModel);
         form.add(radioGroup);
 
         DataView<DomainObject> data = new DataView<DomainObject>("data", dataProvider) {
@@ -145,5 +145,10 @@ public class OrganizationPickerDialog extends FormComponentPanel<DomainObject> {
     }
 
     protected void onSelect(AjaxRequestTarget target){
+    }
+
+    @Override
+    protected void convertInput() {
+        setConvertedInput(getModelObject());
     }
 }

@@ -12,7 +12,7 @@ import javax.ejb.EJB;
  * @author Anatoly Ivanov
  *         Date: 015 15.08.14 18:33
  */
-public class OrganizationIdPicker extends FormComponentPanel{
+public class OrganizationIdPicker extends FormComponentPanel<Long>{
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     protected IOrganizationStrategy organizationStrategy;
 
@@ -27,7 +27,7 @@ public class OrganizationIdPicker extends FormComponentPanel{
 
             @Override
             public void setObject(DomainObject object) {
-                model.setObject(object.getId());
+                model.setObject(object != null ? object.getId() : null);
             }
 
             @Override
@@ -35,5 +35,10 @@ public class OrganizationIdPicker extends FormComponentPanel{
 
             }
         }, organizationTypeIds).setLabel(getLabel()).setEnabled(isEnabled()));
+    }
+
+    @Override
+    protected void convertInput() {
+        setConvertedInput(getModelObject());
     }
 }
