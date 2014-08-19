@@ -46,4 +46,14 @@ public abstract class BaseFinancialOperation<T extends FinancialAttribute> exten
     }
 
     abstract protected FinancialAttributeBean<T> getBean();
+
+    @Override
+    public void rollback(OperationResult<?> operationResult, Container container) throws AbstractException {
+
+    }
+
+    @Override
+    public boolean canRollback(OperationResult<?> operationResult, Container container) throws AbstractException {
+        return false;
+    }
 }

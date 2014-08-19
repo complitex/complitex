@@ -1,10 +1,7 @@
 package ru.flexpay.eirc.service_provider_account.strategy;
 
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.SimpleTypes;
-import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.*;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.StringCultureBean;
@@ -12,6 +9,7 @@ import org.complitex.common.util.Numbers;
 import org.complitex.common.util.StringUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
+import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -24,6 +22,7 @@ import java.util.Locale;
  */
 @Stateless
 public class ServiceProviderAccountStrategy extends TemplateStrategy {
+    public static final String SPA_ATTRIBUTE_NS = ServiceProviderAccountAttribute.class.getName();
 
     /**
      * Attribute ids
@@ -201,5 +200,33 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     @Override
     public String[] getEditRoles() {
         return new String[]{SecurityRole.AUTHORIZED};
+    }
+
+    @Override
+    protected Attribute getNewAttributeInstance() {
+        return new ServiceProviderAccountAttribute();
+    }
+
+    @Override
+    protected String getInsertAttributeStatement() {
+        return SPA_ATTRIBUTE_NS + "." + INSERT_OPERATION;
+    }
+
+    @Override
+    protected String getLoadAttributesStatement() {
+        return SPA_ATTRIBUTE_NS + "." + FIND_OPERATION;
+    }
+
+    public void deleteAttribute(ServiceProviderAccountAttribute attribute) {
+        Parameter parameter = new Parameter(getEntityTable(), attribute);
+        sqlSession().delete(SPA_ATTRIBUTE_NS + "." + DELETE_OPERATION, parameter);
+    }
+
+    public void updateAttribute(ServiceProviderAccountAttribute attribute) {
+        sqlSession().update(ATTRIBUTE_NAMESPACE + "." + UPDATE_OPERATION, new Parameter(getEntityTable(), attribute));
+    }
+
+    public ServiceProviderAccountAttribute findByPkId(Long pkId) {
+        return sqlSession().selectOne(SPA_ATTRIBUTE_NS + ".findByPkId", new Parameter(getEntityTable(), new ServiceProviderAccountAttribute(pkId)));
     }
 }

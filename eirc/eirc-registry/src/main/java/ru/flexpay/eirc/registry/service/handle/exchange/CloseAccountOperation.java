@@ -48,4 +48,14 @@ public class CloseAccountOperation extends GeneralAccountOperation {
 
         serviceProviderAccountBean.archive(serviceProviderAccount);
     }
+
+    @Override
+    public void rollback(OperationResult<?> operationResult, Container container) throws AbstractException {
+
+    }
+
+    @Override
+    public boolean canRollback(OperationResult<?> operationResult, Container container) throws AbstractException {
+        return true;
+    }
 }

@@ -128,4 +128,14 @@ public class OpenAccountOperation extends GeneralAccountOperation {
 
         results.add(new OperationResult<>(null, serviceProviderAccount, getCode()));
     }
+
+    @Override
+    public void rollback(OperationResult<?> operationResult, Container container) throws AbstractException {
+
+    }
+
+    @Override
+    public boolean canRollback(OperationResult<?> operationResult, Container container) throws AbstractException {
+        return false;
+    }
 }
