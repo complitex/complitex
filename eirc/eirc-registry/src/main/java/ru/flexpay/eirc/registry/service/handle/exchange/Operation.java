@@ -53,6 +53,10 @@ public abstract class Operation {
 		}
 	}
 
+    public abstract void rollback(OperationResult<?> operationResult, Container container) throws AbstractException;
+
+    public abstract boolean canRollback(OperationResult<?> operationResult, Container container) throws AbstractException;
+
     /**
      * Split string with delimiter taking in account {@link Operation#ESCAPE_SYMBOL}
      *

@@ -49,7 +49,7 @@ public class RegistryWorkflowManager {
                 put(LINKING_WITH_ERROR, ImmutableList.of(LINKED_WITH_ERROR, LINKING_CANCELED, LINKED_WITH_ERROR)).
                 put(LINKED_WITH_ERROR, ImmutableList.of(LINKING)).
                 put(LINKING_CANCELED, ImmutableList.of(LINKING)).
-                put(PROCESSING, ImmutableList.of(PROCESSED, PROCESSING_WITH_ERROR, PROCESSING_CANCELED)).
+                put(PROCESSING, ImmutableList.of(PROCESSED, PROCESSING_CANCELED, PROCESSING_WITH_ERROR)).
                 // allow set processed with errors if there are any not processed records
                 put(PROCESSED, ImmutableList.of(ROLLBACKING, PROCESSED_WITH_ERROR)).
                 put(PROCESSING_WITH_ERROR, ImmutableList.of(PROCESSED_WITH_ERROR, PROCESSING_CANCELED, PROCESSED_WITH_ERROR)).

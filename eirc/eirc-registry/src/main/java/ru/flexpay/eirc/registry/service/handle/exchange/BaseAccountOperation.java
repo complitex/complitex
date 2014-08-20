@@ -21,6 +21,10 @@ public abstract class BaseAccountOperation extends Operation {
     private ServiceProviderAccountBean serviceProviderAccountBean;
 
     public ServiceProviderAccount getServiceProviderAccount(Registry registry, RegistryRecordData registryRecord) throws DataNotFoundException {
+        return getServiceProviderAccount(registry, registryRecord, false);
+    }
+
+    public ServiceProviderAccount getServiceProviderAccount(Registry registry, RegistryRecordData registryRecord, boolean inactive) throws DataNotFoundException {
         Address address = registryRecord.getAddress();
         String serviceProviderAccountNumber = registryRecord.getPersonalAccountExt();
         Long organizationId = registry.getType().isPayments()? registry.getRecipientOrganizationId() : registry.getSenderOrganizationId();
@@ -39,6 +43,9 @@ public abstract class BaseAccountOperation extends Operation {
 
         FilterWrapper<ServiceProviderAccount> filter = FilterWrapper.of(serviceProviderAccount);
         filter.setSortProperty(null);
+        if (inactive) {
+            filter.add("inactive", true);
+        }
 
         List<ServiceProviderAccount> serviceProviderAccounts =
                 serviceProviderAccountBean.getServiceProviderAccounts(filter);

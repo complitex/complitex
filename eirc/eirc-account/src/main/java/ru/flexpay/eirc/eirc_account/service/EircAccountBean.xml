@@ -427,6 +427,9 @@
                 <when test="sortProperty == 'eirc_account_address'">
                     <include refid="eircAccountAddressSort"/>
                 </when>
+                <when test="sortProperty == 'id'">
+                    `eirc_account_number`
+                </when>
                 <otherwise>
                     ${sortProperty}
                 </otherwise>

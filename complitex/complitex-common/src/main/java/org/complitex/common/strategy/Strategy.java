@@ -204,7 +204,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                 put("id", object.getId()).
                 build();
 
-        List<Attribute> attributes = (dataSource == null ? sqlSession() : sqlSession(dataSource)).selectList(ATTRIBUTE_NAMESPACE + "." + FIND_OPERATION, params);
+        List<Attribute> attributes = (dataSource == null ? sqlSession() : sqlSession(dataSource)).selectList(getLoadAttributesStatement(), params);
 
         if (dataSource != null) {
             loadStringCultures(dataSource, attributes);
@@ -213,6 +213,10 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
 
         object.setAttributes(attributes);
+    }
+
+    protected String getLoadAttributesStatement() {
+        return ATTRIBUTE_NAMESPACE + "." + FIND_OPERATION;
     }
 
     protected void loadStringCultures(List<Attribute> attributes) {
@@ -317,7 +321,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
             if (!attributeType.isObsolete()) {
                 if (object.getAttributes(attributeType.getId()).isEmpty()) {
                     if (attributeType.getEntityAttributeValueTypes().size() == 1) {
-                        Attribute attribute = new Attribute();
+                        Attribute attribute = getNewAttributeInstance();
                         EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
                         attribute.setAttributeTypeId(attributeType.getId());
                         attribute.setValueTypeId(attributeValueType.getId());
@@ -340,6 +344,10 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         if (!toAdd.isEmpty()) {
             object.getAttributes().addAll(toAdd);
         }
+    }
+
+    protected Attribute getNewAttributeInstance() {
+        return new Attribute();
     }
 
     protected Attribute fillManyValueTypesAttribute(EntityAttributeType attributeType, Long objectId) {
@@ -432,8 +440,12 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
 
         if (attribute.getValueId() != null || getEntity().getAttributeType(attribute.getAttributeTypeId()).isMandatory()) {
-            sqlSession().insert(ATTRIBUTE_NAMESPACE + "." + INSERT_OPERATION, new Parameter(getEntityTable(), attribute));
+            sqlSession().insert(getInsertAttributeStatement(), new Parameter(getEntityTable(), attribute));
         }
+    }
+
+    protected String getInsertAttributeStatement() {
+        return ATTRIBUTE_NAMESPACE + "." + INSERT_OPERATION;
     }
 
     @Transactional

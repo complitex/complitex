@@ -2,11 +2,11 @@ package ru.flexpay.eirc.registry.service.handle;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.complitex.correction.service.AddressService;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.correction.service.AddressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.cal10n.LocLogger;
@@ -125,9 +125,9 @@ public class RegistryHandler {
                     }
 
                     // check registry records status
-                    if (!EjbBeanLocator.getBean(RegistryHandler.class).registryRecordBean.hasRecordsToProcessing(registry)) {
+                    if (!registryRecordBean.hasRecordsToProcessing(registry)) {
                         logger.info(Handling.NOT_FOUND_HANDLING_REGISTRY_RECORDS);
-                        EjbBeanLocator.getBean(RegistryHandler.class).setHandlingStatus(registry);
+                        EjbBeanLocator.getBean(RegistryHandler.class).setHandledStatus(registry);
                         return null;
                     }
 
@@ -271,6 +271,29 @@ public class RegistryHandler {
             registryRecordWorkflowManager.setNextSuccessStatus(registryRecord);
         } catch (Exception ex) {
             EjbBeanLocator.getBean(RegistryHandler.class).setErrorStatus(registryRecord, registry);
+            throw new TransactionRolledbackLocalException("Error in registry record " + registryRecord.getId() +
+                    "(account number - " + registryRecord.getPersonalAccountExt() + ")", ex);
+        }
+    }
+
+    public boolean rollbackRegistryRecord(Registry registry, RegistryRecordData registryRecord) throws TransitionNotAllowed {
+        try {
+            boolean canRollback = true;
+            for (Container container : registryRecord.getContainers()) {
+                Operation operation = operationFactory.getOperation(container);
+                canRollback &= operation.canRollback(null, container);
+            }
+            if (!canRollback) {
+                return false;
+            }
+            for (Container container : registryRecord.getContainers()) {
+                Operation operation = operationFactory.getOperation(container);
+                operation.rollback(null, container);
+            }
+            //registryRecordWorkflowManager.setNextSuccessStatus(registryRecord);
+            return true;
+        } catch (Exception ex) {
+            //EjbBeanLocator.getBean(RegistryHandler.class).setErrorStatus(registryRecord, registry);
             throw new TransactionRolledbackLocalException("Error in registry record " + registryRecord.getId() +
                     "(account number - " + registryRecord.getPersonalAccountExt() + ")", ex);
         }

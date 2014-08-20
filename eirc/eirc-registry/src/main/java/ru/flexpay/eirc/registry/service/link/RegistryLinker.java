@@ -1,13 +1,13 @@
 package ru.flexpay.eirc.registry.service.link;
 
 import org.apache.commons.lang.StringUtils;
-import org.complitex.correction.service.AddressService;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.correction.service.AddressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.cal10n.LocLogger;
@@ -149,7 +149,7 @@ public class RegistryLinker {
                     // check registry records status
                     if (!registryRecordBean.hasRecordsToLinking(registry)) {
                         logger.info(Linking.NOT_FOUND_LINKING_REGISTRY_RECORDS);
-                        EjbBeanLocator.getBean(RegistryLinker.class).setLinkingStatus(registry);
+                        EjbBeanLocator.getBean(RegistryLinker.class).setLinkedStatus(registry);
                         return null;
                     }
 

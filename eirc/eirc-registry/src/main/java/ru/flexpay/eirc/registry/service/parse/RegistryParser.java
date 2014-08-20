@@ -3,7 +3,6 @@ package ru.flexpay.eirc.registry.service.parse;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.AtomicDouble;
 import org.apache.commons.lang.StringUtils;
-import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.common.entity.DictionaryConfig;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
@@ -12,6 +11,7 @@ import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -231,7 +231,7 @@ public class RegistryParser implements Serializable {
             }
             context.getBatchProcessor().waitEndWorks();
             final Registry registry = context.getRegistry();
-            if (!canceledProcessing.isCancel(registry.getId(), new Runnable() {
+            if (registry != null && !canceledProcessing.isCancel(registry.getId(), new Runnable() {
                 @Override
                 public void run() {
                     EjbBeanLocator.getBean(RegistryParser.class).setCancelStatus(registry);

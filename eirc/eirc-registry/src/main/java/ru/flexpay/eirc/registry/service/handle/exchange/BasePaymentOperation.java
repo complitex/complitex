@@ -44,5 +44,15 @@ public abstract class BasePaymentOperation <T extends PaymentAttribute> extends 
     }
 
     abstract protected PaymentAttributeBean<T> getBean();
+
+    @Override
+    public void rollback(OperationResult<?> operationResult, Container container) throws AbstractException {
+
+    }
+
+    @Override
+    public boolean canRollback(OperationResult<?> operationResult, Container container) throws AbstractException {
+        return false;
+    }
 }
 
