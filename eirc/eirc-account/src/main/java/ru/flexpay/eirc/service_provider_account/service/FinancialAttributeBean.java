@@ -49,6 +49,14 @@ public abstract class FinancialAttributeBean<T extends FinancialAttribute> exten
         }
     }
 
+    public boolean financialAttributeExists(long registryRecordContainerId) {
+        return sqlSession().selectOne(getNameSpace() + ".financialAttributeExists", registryRecordContainerId) != null;
+    }
+
+    public void deleteByRRContainerId(long registryRecordContainerId) {
+        sqlSession().delete(getNameSpace() + ".deleteFinancialAttributeByRRContainerId", registryRecordContainerId);
+    }
+
     private void insert(T financialAttribute) {
         sqlSession().insert(getNameSpace() + ".insertFinancialAttribute", financialAttribute);
     }

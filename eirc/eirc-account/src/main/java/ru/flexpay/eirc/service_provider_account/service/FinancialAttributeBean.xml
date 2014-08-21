@@ -7,6 +7,7 @@
         <id     column="fa_id"                             property="id"/>
         <result column="fa_amount"                         property="amount"/>
         <result column="fa_date_formation"                 property="dateFormation"/>
+        <result column="fa_registry_record_container_id"      property="registryRecordContainerId"/>
         <association property="serviceProviderAccount"  resultMap="ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountBean.ServiceProviderAccount"/>
     </resultMap>
 
@@ -16,7 +17,8 @@
 
     <sql id="financialAttributeColumns">
         fa.`id` as `fa_id`, fa.`amount` as `fa_amount`, fa.`date_formation` as `fa_date_formation`,
-        fa.`service_provider_account_id` as `fa_service_provider_account_id`
+        fa.`service_provider_account_id` as `fa_service_provider_account_id`,
+        fa.`registry_record_container_id` as `fa_registry_record_container_id`
     </sql>
 
     <sql id="financialAttributeWhere">
@@ -128,13 +130,21 @@
     </sql>
 
     <sql id="insertFinancialAttribute">
-        insert into <include refid="tableName"/> (`service_provider_account_id`, `amount`, `date_formation`)
-                            values (#{serviceProviderAccount.id}, #{amount}, #{dateFormation})
+        insert into <include refid="tableName"/> (`service_provider_account_id`, `amount`, `date_formation`, `registry_record_container_id`)
+                            values (#{serviceProviderAccount.id}, #{amount}, #{dateFormation}, #{registryRecordContainerId})
     </sql>
 
     <sql id="updateFinancialAttribute">
         update <include refid="tableName"/> set `service_provider_account_id` = #{serviceProviderAccount.id},
             `amount` = #{amount}, `date_formation` = #{dateFormation} where `id` = #{id}
+    </sql>
+
+    <sql id="financialAttributeExists">
+        select 1 from <include refid="tableName"/> where `registry_record_container_id` = #{registryRecordContainerId}
+    </sql>
+
+    <sql id="deleteFinancialAttributeByRRContainerId">
+        delete from <include refid="tableName"/> where `registry_record_container_id` = #{registryRecordContainerId}
     </sql>
 
 </mapper>
