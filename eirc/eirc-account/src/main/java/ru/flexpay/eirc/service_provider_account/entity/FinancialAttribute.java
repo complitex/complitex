@@ -16,6 +16,8 @@ public abstract class FinancialAttribute extends DictionaryObject {
 
     private Date dateFormation;
 
+    private Long registryRecordContainerId;
+
     protected FinancialAttribute() {
     }
 
@@ -45,5 +47,13 @@ public abstract class FinancialAttribute extends DictionaryObject {
 
     public void setDateFormation(Date dateFormation) {
         this.dateFormation = dateFormation;
+    }
+
+    public Long getRegistryRecordContainerId() {
+        return registryRecordContainerId;
+    }
+
+    public void setRegistryRecordContainerId(Long registryRecordContainerId) {
+        this.registryRecordContainerId = registryRecordContainerId;
     }
 }

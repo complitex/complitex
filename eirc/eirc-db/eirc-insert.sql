@@ -236,4 +236,4 @@ insert into `config` (`name`, `value`) values
 ;
 
 -- Current database version
- INSERT INTO `update` (`version`) VALUE ('eirc_20140814_0.0.4');
+ INSERT INTO `update` (`version`) VALUE ('eirc_20140821_0.0.6');

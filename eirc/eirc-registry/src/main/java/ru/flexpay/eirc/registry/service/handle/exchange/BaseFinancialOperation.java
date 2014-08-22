@@ -34,6 +34,7 @@ public abstract class BaseFinancialOperation<T extends FinancialAttribute> exten
         try {
             data.setServiceProviderAccount(serviceProviderAccount);
             data.setAmount(new BigDecimal(containerData.get(1)));
+            data.setRegistryRecordContainerId(container.getId());
             data.setDateFormation(DATE_TIME_FORMATTER.parseDateTime(containerData.get(2)).toDate());
         } catch (Exception e) {
             throw new ContainerDataException("Cannot parse date: {0}" + containerData.get(1));
@@ -49,11 +50,11 @@ public abstract class BaseFinancialOperation<T extends FinancialAttribute> exten
 
     @Override
     public void rollback(OperationResult<?> operationResult, Container container) throws AbstractException {
-
+        getBean().deleteByRRContainerId(container.getId());
     }
 
     @Override
     public boolean canRollback(OperationResult<?> operationResult, Container container) throws AbstractException {
-        return false;
+        return getBean().financialAttributeExists(container.getId());
     }
 }

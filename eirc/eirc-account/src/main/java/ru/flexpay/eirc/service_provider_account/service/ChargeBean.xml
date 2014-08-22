@@ -36,4 +36,12 @@
         <include refid="ru.flexpay.eirc.service_provider_account.service.FinancialAttributeBean.updateFinancialAttribute"/>
     </update>
 
+    <select id="financialAttributeExists" parameterType="long" resultType="integer">
+        <include refid="ru.flexpay.eirc.service_provider_account.service.FinancialAttributeBean.financialAttributeExists"/>
+    </select>
+
+    <delete id="deleteFinancialAttributeByRRContainerId" parameterType="long">
+        <include refid="ru.flexpay.eirc.service_provider_account.service.FinancialAttributeBean.deleteFinancialAttributeByRRContainerId"/>
+    </delete>
+
 </mapper>
