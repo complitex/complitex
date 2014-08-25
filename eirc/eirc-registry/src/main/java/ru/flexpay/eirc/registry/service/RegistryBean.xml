@@ -197,7 +197,7 @@
 
     <insert id="insertRegistryContainer" parameterType="ru.flexpay.eirc.registry.entity.Container"
             keyProperty="id" useGeneratedKeys="true">
-        insert into `registry_container` (`data`, `registry_record_id`, `type`) value (#{data}, #{parentId}, #{type.id})
+        insert into `registry_container` (`data`, `registry_id`, `type`) value (#{data}, #{parentId}, #{type.id})
     </insert>
 
     <update id="updateRegistry" parameterType="ru.flexpay.eirc.registry.entity.Registry">

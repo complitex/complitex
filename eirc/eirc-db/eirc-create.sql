@@ -207,10 +207,13 @@ CREATE TABLE `cash_payment` (
   `amount` decimal(19,2) NOT NULL,
   `number_quittance` VARCHAR(20),
   `date_formation` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `registry_record_container_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор контейнера записи реестра сделавшей изменение',
   PRIMARY KEY  (`id`),
   KEY `cash_payment_sp_account__date_formation` (`service_provider_account_id`, `date_formation`),
   CONSTRAINT `fk_cash_payment__organization` FOREIGN KEY (`payment_collector_id`) REFERENCES `organization` (`object_id`),
-  CONSTRAINT `fk_cash_payment__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`)
+  CONSTRAINT `fk_cash_payment__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`),
+  CONSTRAINT `fk_cash_payment__registry_record_container` FOREIGN KEY (`registry_record_container_id`)
+  REFERENCES `registry_record_container` (`id`) ON UPDATE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Наличные оплаты';
 
 DROP TABLE IF EXISTS `cashless_payment`;
@@ -221,10 +224,13 @@ CREATE TABLE `cashless_payment` (
   `amount` decimal(19,2) NOT NULL,
   `number_quittance` VARCHAR(20),
   `date_formation` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `registry_record_container_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор контейнера записи реестра сделавшей изменение',
   PRIMARY KEY  (`id`),
   KEY `cashless_payment_sp_account__date_formation_formation` (`service_provider_account_id`, `date_formation`),
   CONSTRAINT `fk_cashless_payment__organization` FOREIGN KEY (`payment_collector_id`) REFERENCES `organization` (`object_id`),
-  CONSTRAINT `fk_cashless_payment__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`)
+  CONSTRAINT `fk_cashless_payment__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`),
+  CONSTRAINT `fk_cashless_payment__registry_record_container` FOREIGN KEY (`registry_record_container_id`)
+  REFERENCES `registry_record_container` (`id`) ON UPDATE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Безналичные оплаты';
 
 -- Registry status --

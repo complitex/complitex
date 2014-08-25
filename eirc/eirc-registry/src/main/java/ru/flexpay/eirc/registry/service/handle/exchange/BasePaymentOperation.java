@@ -36,6 +36,7 @@ public abstract class BasePaymentOperation <T extends PaymentAttribute> extends 
         data.setDateFormation(registryRecord.getOperationDate());
         data.setNumberQuittance(containerData.get(2));
         data.setPaymentCollectorId(registry.getSenderOrganizationId());
+        data.setRegistryRecordContainerId(container.getId());
 
         getBean().save(data);
 
@@ -47,12 +48,12 @@ public abstract class BasePaymentOperation <T extends PaymentAttribute> extends 
 
     @Override
     public void rollback(OperationResult<?> operationResult, Container container) throws AbstractException {
-
+        getBean().deleteByRRContainerId(container.getId());
     }
 
     @Override
     public boolean canRollback(OperationResult<?> operationResult, Container container) throws AbstractException {
-        return false;
+        return getBean().financialAttributeExists(container.getId());
     }
 }
 

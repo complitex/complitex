@@ -21,14 +21,14 @@
     </sql>
 
     <sql id="insertFinancialAttribute">
-        insert into <include refid="tableName"/> (`service_provider_account_id`, `amount`, `date_formation`, `number_quittance`, `payment_collector_id`)
-        values (#{serviceProviderAccountId}, #{amount}, #{dateFormation}, #{numberQuittance}, #{paymentCollectorId})
+        insert into <include refid="tableName"/> (`service_provider_account_id`, `amount`, `date_formation`, `number_quittance`, `payment_collector_id`, `registry_record_container_id`)
+        values (#{serviceProviderAccount.id}, #{amount}, #{dateFormation}, #{numberQuittance}, #{paymentCollectorId}, #{registryRecordContainerId})
     </sql>
 
     <sql id="updateFinancialAttribute">
-        update <include refid="tableName"/> set `service_provider_account_id` = #{serviceProviderAccountId},
+        update <include refid="tableName"/> set `service_provider_account_id` = #{serviceProviderAccount.id},
         `amount` = #{amount}, `date_formation` = #{dateFormation}, `number_quittance` = #{numberQuittance},
-        `payment_collector_id` = #{paymentCollectorId} where `id` = #{id}
+        `payment_collector_id` = #{paymentCollectorId}, `registry_record_container_id` = #{registryRecordContainerId} where `id` = #{id}
     </sql>
 
 </mapper>

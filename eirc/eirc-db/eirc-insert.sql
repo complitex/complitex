@@ -218,6 +218,7 @@ INSERT INTO `container_type` (`code`, `name`) values
     (501,'Аннотация к реестру'),
     (502,'Синхронизация идентификаторов'),
     (503,'Номер экземпляра приложения'),
+    (504,'Реквизиты платежного документа'),
 
     (600,'Кол-во проживающих'),
     (601,'Кол-во зарегистрированных'),
@@ -236,4 +237,4 @@ insert into `config` (`name`, `value`) values
 ;
 
 -- Current database version
- INSERT INTO `update` (`version`) VALUE ('eirc_20140821_0.0.6');
+ INSERT INTO `update` (`version`) VALUE ('eirc_20140822_0.0.7');
