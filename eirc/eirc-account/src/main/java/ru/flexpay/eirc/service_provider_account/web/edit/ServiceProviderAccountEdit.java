@@ -253,6 +253,7 @@ public class ServiceProviderAccountEdit extends FormTemplatePage {
                 }
 
                 serviceProviderAccount.setEircAccount(eircAccount);
+                serviceProviderAccount.setRegistryRecordContainerId(null);
 
                 try {
                     serviceProviderAccountBean.save(serviceProviderAccount);

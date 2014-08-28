@@ -8,8 +8,8 @@ import org.complitex.common.util.CloneUtil;
 import ru.flexpay.eirc.registry.entity.Container;
 import ru.flexpay.eirc.registry.entity.Registry;
 import ru.flexpay.eirc.registry.entity.RegistryRecordData;
-import ru.flexpay.eirc.registry.entity.changing.ServiceProviderAccountAttrChanging;
-import ru.flexpay.eirc.registry.service.handle.changing.ServiceProviderAccountAttrChangingBean;
+import ru.flexpay.eirc.registry.entity.changing.ObjectChanging;
+import ru.flexpay.eirc.registry.service.handle.changing.ObjectChangingBean;
 import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccount;
 import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute;
 import ru.flexpay.eirc.service_provider_account.strategy.ServiceProviderAccountStrategy;
@@ -29,7 +29,7 @@ public abstract class ServiceProviderAccountAttrOperation extends GeneralAccount
     private LocaleBean localeBean;
 
     @EJB
-    private ServiceProviderAccountAttrChangingBean serviceProviderAccountAttrChangingBean;
+    private ObjectChangingBean objectChangingBean;
 
     @Override
     public void process(Registry registry, RegistryRecordData registryRecord, Container container,
@@ -49,8 +49,8 @@ public abstract class ServiceProviderAccountAttrOperation extends GeneralAccount
 
         serviceProviderAccountStrategy.update(oldObject, newObject, data.getChangeApplyingDate());
 
-        serviceProviderAccountAttrChangingBean.create(
-                new ServiceProviderAccountAttrChanging(oldObjectAttribute.getPkId(), newObjectAttribute.getPkId(), container.getId())
+        objectChangingBean.create(
+                new ObjectChanging(oldObjectAttribute.getPkId(), newObjectAttribute.getPkId(), container.getId())
         );
         results.add(new OperationResult<>(oldObjectAttribute, newObjectAttribute, getCode()));
     }
@@ -59,8 +59,8 @@ public abstract class ServiceProviderAccountAttrOperation extends GeneralAccount
 
     @Override
     public boolean canRollback(OperationResult<?> operationResult, Container container) throws AbstractException {
-        ServiceProviderAccountAttrChanging changing = serviceProviderAccountAttrChangingBean.findChanging(container.getId());
-        ServiceProviderAccountAttribute newAttribute = serviceProviderAccountStrategy.findByPkId(changing.getSpaNewAttributePkId());
+        ObjectChanging changing = objectChangingBean.findChanging(container.getId());
+        ServiceProviderAccountAttribute newAttribute = serviceProviderAccountStrategy.findByPkId(changing.getNewPkId());
 
         return newAttribute != null && newAttribute.getEndDate() == null;
     }
@@ -68,18 +68,18 @@ public abstract class ServiceProviderAccountAttrOperation extends GeneralAccount
     @Override
     public void rollback(OperationResult<?> operationResult, Container container) throws AbstractException {
         // find changing
-        ServiceProviderAccountAttrChanging changing = serviceProviderAccountAttrChangingBean.findChanging(container.getId());
-        if (changing.getSpaOldAttributePkId() != null) {
+        ObjectChanging changing = objectChangingBean.findChanging(container.getId());
+        if (changing.getOldPkId() != null) {
             // old attribute set active
-            ServiceProviderAccountAttribute oldAttribute = serviceProviderAccountStrategy.findByPkId(changing.getSpaOldAttributePkId());
+            ServiceProviderAccountAttribute oldAttribute = serviceProviderAccountStrategy.findByPkId(changing.getOldPkId());
             oldAttribute.setEndDate(null);
             oldAttribute.setStatus(StatusType.ACTIVE);
             serviceProviderAccountStrategy.updateAttribute(oldAttribute);
         }
         // delete new attribute
-        ServiceProviderAccountAttribute newAttribute = serviceProviderAccountStrategy.findByPkId(changing.getSpaNewAttributePkId());
+        ServiceProviderAccountAttribute newAttribute = serviceProviderAccountStrategy.findByPkId(changing.getNewPkId());
         serviceProviderAccountStrategy.deleteAttribute(newAttribute);
         // delete changing
-        serviceProviderAccountAttrChangingBean.delete(changing);
+        objectChangingBean.delete(changing);
     }
 }

@@ -1,14 +1,23 @@
 package ru.flexpay.eirc.registry.service.handle.exchange;
 
+import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.entity.StatusType;
 import org.complitex.common.service.exception.AbstractException;
+import org.complitex.common.util.CloneUtil;
 import ru.flexpay.eirc.eirc_account.service.EircAccountBean;
 import ru.flexpay.eirc.registry.entity.Container;
 import ru.flexpay.eirc.registry.entity.ContainerType;
 import ru.flexpay.eirc.registry.entity.Registry;
 import ru.flexpay.eirc.registry.entity.RegistryRecordData;
+import ru.flexpay.eirc.registry.entity.changing.ObjectChanging;
+import ru.flexpay.eirc.registry.service.handle.changing.ObjectChangingBean;
+import ru.flexpay.eirc.service_provider_account.entity.SaldoOut;
 import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccount;
+import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute;
+import ru.flexpay.eirc.service_provider_account.service.SaldoOutBean;
 import ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountBean;
+import ru.flexpay.eirc.service_provider_account.strategy.ServiceProviderAccountStrategy;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -21,10 +30,19 @@ import java.util.List;
 public class CloseAccountOperation extends GeneralAccountOperation {
 
     @EJB
+    private ServiceProviderAccountStrategy serviceProviderAccountStrategy;
+
+    @EJB
     private ServiceProviderAccountBean serviceProviderAccountBean;
 
     @EJB
     private EircAccountBean eircAccountBean;
+
+    @EJB
+    private SaldoOutBean saldoOutBean;
+
+    @EJB
+    private ObjectChangingBean objectChangingBean;
 
     @Override
     public Long getCode() {
@@ -34,28 +52,69 @@ public class CloseAccountOperation extends GeneralAccountOperation {
     @Override
     public void process(Registry registry, RegistryRecordData registryRecord, Container container, List<OperationResult> results) throws AbstractException {
         ServiceProviderAccount serviceProviderAccount = getServiceProviderAccount(registry, registryRecord);
+        List<SaldoOut> saldoOuts = saldoOutBean.getFinancialAttributes(FilterWrapper.of(new SaldoOut(serviceProviderAccount)), true);
+        // Сальдо на счету должно быть нулевым, если нет, то устанавливаем атрибут "На закрытие" с идом контейнера
+        if (saldoOuts.size() > 0 && saldoOuts.get(0).getAmount() != null && saldoOuts.get(0).getAmount().doubleValue() != 0.) {
+            DomainObject newObject = serviceProviderAccountStrategy.findById(serviceProviderAccount.getId(), true);
+            DomainObject oldObject = CloneUtil.cloneObject(newObject);
 
-        List<ServiceProviderAccount> serviceProviderAccounts =
-                serviceProviderAccountBean.getServiceProviderAccounts(
-                        new FilterWrapper<>(new ServiceProviderAccount(serviceProviderAccount.getEircAccount())));
+            ServiceProviderAccountAttribute newObjectAttribute = (ServiceProviderAccountAttribute)newObject.getAttribute(ServiceProviderAccountStrategy.TO_CLOSE);
+            ServiceProviderAccountAttribute oldObjectAttribute = CloneUtil.cloneObject(newObjectAttribute);
 
-        if (serviceProviderAccounts.size() == 0 ||
-                (serviceProviderAccounts.size() == 1 &&
-                        serviceProviderAccounts.get(0).getPkId().equals(serviceProviderAccount.getPkId()))) {
-            // if service provider accounts list is empty then close EIRC account
-            eircAccountBean.archive(serviceProviderAccount.getEircAccount());
+            BaseAccountOperationData data = getContainerData(container);
+
+            newObjectAttribute.setValueId(container.getId());
+
+            serviceProviderAccountStrategy.update(oldObject, newObject, data.getChangeApplyingDate());
+
+            objectChangingBean.create(
+                    new ObjectChanging(oldObjectAttribute.getPkId(), newObjectAttribute.getPkId(), container.getId())
+            );
+            results.add(new OperationResult<>(oldObjectAttribute, newObjectAttribute, getCode()));
+            return;
         }
-
-        serviceProviderAccountBean.archive(serviceProviderAccount);
+        ServiceProviderAccount oldObject = CloneUtil.cloneObject(serviceProviderAccount);
+        // Сальдо нулевое - закрываем счет
+        serviceProviderAccount.setRegistryRecordContainerId(container.getId());
+        serviceProviderAccountBean.close(serviceProviderAccount);
+        results.add(new OperationResult<>(oldObject, serviceProviderAccount, getCode()));
     }
 
     @Override
     public void rollback(OperationResult<?> operationResult, Container container) throws AbstractException {
+        ServiceProviderAccount serviceProviderAccount = serviceProviderAccountBean.getServiceProviderAccountByRRContainerId(container.getId());
 
+        if (serviceProviderAccount == null) {
+            ObjectChanging changing = objectChangingBean.findChanging(container.getId());
+            if (changing.getOldPkId() != null) {
+                // old attribute set active
+                ServiceProviderAccountAttribute oldAttribute = serviceProviderAccountStrategy.findByPkId(changing.getOldPkId());
+                oldAttribute.setEndDate(null);
+                oldAttribute.setStatus(StatusType.ACTIVE);
+                serviceProviderAccountStrategy.updateAttribute(oldAttribute);
+            }
+            // delete new attribute
+            ServiceProviderAccountAttribute newAttribute = serviceProviderAccountStrategy.findByPkId(changing.getNewPkId());
+            serviceProviderAccountStrategy.deleteAttribute(newAttribute);
+            // delete changing
+            objectChangingBean.delete(changing);
+            return;
+        }
+        serviceProviderAccountBean.restore(serviceProviderAccount);
     }
 
     @Override
     public boolean canRollback(OperationResult<?> operationResult, Container container) throws AbstractException {
-        return true;
+        ServiceProviderAccount serviceProviderAccount = serviceProviderAccountBean.getServiceProviderAccountByRRContainerId(container.getId());
+        if (serviceProviderAccount != null) {
+            return true;
+        }
+        ObjectChanging changing = objectChangingBean.findChanging(container.getId());
+        if (changing == null) {
+            return false;
+        }
+        ServiceProviderAccountAttribute newAttribute = serviceProviderAccountStrategy.findByPkId(changing.getNewPkId());
+
+        return newAttribute != null && newAttribute.getEndDate() == null;
     }
 }

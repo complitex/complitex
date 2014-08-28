@@ -90,7 +90,7 @@
         <mapper resource="ru/flexpay/eirc/registry/service/RegistryRecordBean.xml"/>
         <mapper resource="ru/flexpay/eirc/registry/service/RegistryBean.xml"/>
         <mapper resource="ru/flexpay/eirc/service_provider_account/entity/ServiceProviderAccountAttribute.xml"/>
-        <mapper resource="ru/flexpay/eirc/registry/service/handle/changing/ServiceProviderAccountAttrChangingBean.xml"/>
+        <mapper resource="ru/flexpay/eirc/registry/service/handle/changing/ObjectChangingBean.xml"/>
 
         <mapper resource="org/complitex/common/service/TestBean.xml"/>
     </mappers>

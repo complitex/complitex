@@ -104,9 +104,14 @@ public class TestPaymentAttribute {
                 List<EircAccount> eircAccounts = eircAccountBean.getEircAccounts(new FilterWrapper<>(new EircAccount()));
                 for (EircAccount eircAccount : eircAccounts) {
                     try {
-                        eircAccountBean.archive(eircAccount);
+                        List<ServiceProviderAccount> serviceProviderAccounts = serviceProviderAccountBean.getServiceProviderAccounts(FilterWrapper.of(new ServiceProviderAccount(eircAccount)));
+                        for (ServiceProviderAccount serviceProviderAccount : serviceProviderAccounts) {
+                            serviceProviderAccountBean.delete(serviceProviderAccount);
+                        }
+                        eircAccountBean.delete(eircAccount);
                     } catch (Throwable th) {
-                        //
+                        System.err.print("Can not delete eirc account: " + th.getLocalizedMessage());
+                        assertTrue(false);
                     }
                 }
 

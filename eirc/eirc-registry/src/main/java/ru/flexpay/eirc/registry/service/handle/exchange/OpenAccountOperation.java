@@ -85,6 +85,7 @@ public class OpenAccountOperation extends GeneralAccountOperation {
             eircAccount.setAddress(address);
             eircAccount.setAccountNumber(eircAccountNumber);
             eircAccount.setPerson(person);
+            eircAccount.setCreatedFromRegistry(true);
             eircAccountBean.save(eircAccount);
 
             results.add(new OperationResult<>(null, eircAccount, getCode()));
@@ -123,6 +124,7 @@ public class OpenAccountOperation extends GeneralAccountOperation {
         serviceProviderAccount.setService(service);
         serviceProviderAccount.setPerson(person);
         serviceProviderAccount.setBeginDate(getContainerData(container).getChangeApplyingDate());
+        serviceProviderAccount.setRegistryRecordContainerId(container.getId());
 
         serviceProviderAccountBean.save(serviceProviderAccount);
 
@@ -131,11 +133,20 @@ public class OpenAccountOperation extends GeneralAccountOperation {
 
     @Override
     public void rollback(OperationResult<?> operationResult, Container container) throws AbstractException {
-
+        ServiceProviderAccount serviceProviderAccount = serviceProviderAccountBean.getServiceProviderAccountByRRContainerId(container.getId());
+        // TODO Здесь возможен эксепшен на удаление при существующих внешних ключах
+        serviceProviderAccountBean.delete(serviceProviderAccount);
+        if (serviceProviderAccount.getEircAccount().isCreatedFromRegistry2() &&
+                !serviceProviderAccountBean.serviceProviderAccountsExists(serviceProviderAccount.getEircAccount().getId()) &&
+                !eircAccountBean.hasHistory(serviceProviderAccount.getEircAccount().getId())) {
+            eircAccountBean.delete(serviceProviderAccount.getEircAccount());
+        }
     }
 
     @Override
     public boolean canRollback(OperationResult<?> operationResult, Container container) throws AbstractException {
-        return false;
+        ServiceProviderAccount serviceProviderAccount = serviceProviderAccountBean.getServiceProviderAccountByRRContainerId(container.getId());
+        //TODO Необходимо проверить есть ли ссылки на созданную запись, например, оплаты
+        return serviceProviderAccount != null && serviceProviderAccount.getEndDate() == null;
     }
 }

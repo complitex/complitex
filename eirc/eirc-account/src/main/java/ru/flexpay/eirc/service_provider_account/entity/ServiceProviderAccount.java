@@ -22,6 +22,8 @@ public class ServiceProviderAccount extends DictionaryTemporalObject {
 
     private Person person;
 
+    private Long registryRecordContainerId;
+
     public ServiceProviderAccount() {
     }
 
@@ -85,5 +87,13 @@ public class ServiceProviderAccount extends DictionaryTemporalObject {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public Long getRegistryRecordContainerId() {
+        return registryRecordContainerId;
+    }
+
+    public void setRegistryRecordContainerId(Long registryRecordContainerId) {
+        this.registryRecordContainerId = registryRecordContainerId;
     }
 }

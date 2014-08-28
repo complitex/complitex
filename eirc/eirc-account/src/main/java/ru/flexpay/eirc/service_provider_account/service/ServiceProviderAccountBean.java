@@ -10,6 +10,7 @@ import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.SequenceBean;
 import org.complitex.common.util.DateUtil;
+import ru.flexpay.eirc.eirc_account.service.EircAccountBean;
 import ru.flexpay.eirc.organization.entity.Organization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 import ru.flexpay.eirc.service_provider_account.entity.ServiceNotAllowableException;
@@ -17,6 +18,7 @@ import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccount;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,11 +42,30 @@ public class ServiceProviderAccountBean extends AbstractBean {
     @EJB
     private EircOrganizationStrategy eircOrganizationStrategy;
 
+    @EJB
+    private EircAccountBean eircAccountBean;
+
     public void archive(ServiceProviderAccount object) {
         if (object.getEndDate() == null) {
             object.setEndDate(DateUtil.getCurrentDate());
         }
         sqlSession().update(NS + ".updateServiceProviderAccountEndDate", object);
+    }
+
+    public void restore(ServiceProviderAccount object) {
+        if (object.getBeginDate().equals(object.getEndDate())) {
+            delete(object);
+            object = getServiceProviderAccount(object.getId());
+        } else {
+            object.setRegistryRecordContainerId(null);
+        }
+        if (object.getEndDate() != null) {
+            object.setEndDate(null);
+        }
+        sqlSession().update(NS + ".updateServiceProviderAccountEndDate", object);
+        if (object.getEircAccount().getEndDate() != null) {
+            eircAccountBean.restore(object.getEircAccount());
+        }
     }
 
     public ServiceProviderAccount getServiceProviderAccount(long id) {
@@ -58,6 +79,10 @@ public class ServiceProviderAccountBean extends AbstractBean {
             filter.setSortProperty("spa_object_id");
         }
         return sqlSession().selectList(NS + ".selectServiceProviderAccounts", filter);
+    }
+
+    public boolean serviceProviderAccountsExists(Long eircAccountId) {
+        return sqlSession().selectOne(NS + ".serviceProviderAccountsExists", eircAccountId) != null;
     }
 
     public int count(FilterWrapper<ServiceProviderAccount> filter) {
@@ -112,8 +137,48 @@ public class ServiceProviderAccountBean extends AbstractBean {
     public ServiceProviderAccount getServiceProviderAccountByPkId(long pkId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("pkId", pkId);
-        params.put("locale", localeBean.convert(localeBean.getSystemLocale()).getId());
-        return sqlSession().selectOne(NS + ".selectServiceProviderAccountByPkId", pkId);
+        params.put("locale", localeBean.convert(localeBean.getSystemLocale()));
+        List<ServiceProviderAccount> serviceProviderAccounts =  sqlSession().selectList(NS + ".selectServiceProviderAccountByPkId", params);
+        return serviceProviderAccounts.size() > 0? serviceProviderAccounts.get(0) : null;
+    }
+
+    public ServiceProviderAccount getServiceProviderAccountByRRContainerId(long registryRecordContainerId) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("registryRecordContainerId", registryRecordContainerId);
+        params.put("locale", localeBean.convert(localeBean.getSystemLocale()));
+        List<ServiceProviderAccount> serviceProviderAccounts = sqlSession().selectList(NS + ".selectServiceProviderAccountByRRContainerId", params);
+        return serviceProviderAccounts.size() > 0? serviceProviderAccounts.get(0) : null;
+    }
+
+    /**
+     * Use only for rollback
+     *
+     * @param serviceProviderAccount
+     */
+    public void delete(ServiceProviderAccount serviceProviderAccount) {
+        sqlSession().delete(NS + ".deleteServiceProviderAccount", serviceProviderAccount);
+    }
+
+    public void close(ServiceProviderAccount serviceProviderAccount) throws ServiceNotAllowableException {
+        List<ServiceProviderAccount> serviceProviderAccounts =
+                getServiceProviderAccounts(
+                        new FilterWrapper<>(new ServiceProviderAccount(serviceProviderAccount.getEircAccount())));
+        ServiceProviderAccount oldObject = getServiceProviderAccountByPkId(serviceProviderAccount.getPkId());
+        if (oldObject.getRegistryRecordContainerId() != null) {
+            // Для того чтобы можно было сделать откат создания
+            Date currentDate = DateUtil.getCurrentDate();
+            serviceProviderAccount.setBeginDate(currentDate);
+            serviceProviderAccount.setEndDate(currentDate);
+            update(serviceProviderAccount);
+        } else {
+            archive(serviceProviderAccount);
+        }
+        if (serviceProviderAccounts.size() == 0 ||
+                (serviceProviderAccounts.size() == 1 &&
+                        serviceProviderAccounts.get(0).getId().equals(serviceProviderAccount.getId()))) {
+            // if service provider accounts list is empty then close EIRC account
+            eircAccountBean.archive(serviceProviderAccount.getEircAccount());
+        }
     }
 
     @Override

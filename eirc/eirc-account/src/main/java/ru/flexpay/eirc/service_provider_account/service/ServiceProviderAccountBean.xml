@@ -13,6 +13,7 @@
         <result column="spa_organization_name" property="organizationName"/>
         <result column="spa_begin_date" property="beginDate"/>
         <result column="spa_end_date" property="endDate"/>
+        <result column="spa_registry_record_container_id" property="registryRecordContainerId"/>
 
         <association property="eircAccount" resultMap="ru.flexpay.eirc.eirc_account.service.EircAccountBean.EircAccount"/>
         <association property="service" resultMap="ru.flexpay.eirc.service.service.ServiceBean.Service"/>
@@ -24,7 +25,8 @@
         spa.`organization_id` as `spa_organization_id`, oc.`value` as `spa_organization_name`,
         spa.`account_number` as `spa_account_number`,
         spa.`service_id` as `spa_service_id`, spa.`first_name` as `spa_first_name`, spa.`last_name` as `spa_last_name`,
-        spa.`middle_name` as `spa_middle_name`, spa.`begin_date` as `spa_begin_date`, spa.`end_date` as `spa_end_date`
+        spa.`middle_name` as `spa_middle_name`, spa.`begin_date` as `spa_begin_date`, spa.`end_date` as `spa_end_date`,
+        spa.`registry_record_container_id` as `spa_registry_record_container_id`
     </sql>
 
     <sql id="serviceProviderAccountCondition">
@@ -111,7 +113,7 @@
     </sql>
 
     <select id="selectServiceProviderAccounts" parameterType="org.complitex.common.entity.FilterWrapper"
-            resultMap="ServiceProviderAccount" flushCache="false" useCache="true">
+            resultMap="ServiceProviderAccount">
         select
         <include refid="generalWithAddressSPAColumns"/>
         from `service_provider_account` spa
@@ -165,7 +167,7 @@
         </if>
     </select>
 
-    <select id="countServiceProviderAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer" flushCache="false" useCache="true">
+    <select id="countServiceProviderAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer">
         select count(distinct spa.`object_id`) from `service_provider_account` spa
         <if test="map.inactive == true or map.all == true">
             inner join (select max(pk_id) as max_pk_id from `service_provider_account` group by object_id) spa2 on spa.pk_id=spa2.max_pk_id
@@ -175,7 +177,7 @@
         <include refid="generalWithAddressSPACondition"/>
     </select>
 
-    <select id="selectServiceProviderAccount" parameterType="map" resultMap="ServiceProviderAccount" flushCache="false" useCache="true">
+    <select id="selectServiceProviderAccount" parameterType="map" resultMap="ServiceProviderAccount">
         select
         <include refid="generalSPAColumns"/>
 
@@ -185,7 +187,7 @@
         where spa.`object_id` = #{id} order by `spa_begin_date` desc
     </select>
 
-    <select id="selectServiceProviderAccountByPkId" parameterType="map" resultMap="ServiceProviderAccount" flushCache="false" useCache="true">
+    <select id="selectServiceProviderAccountByPkId" parameterType="map" resultMap="ServiceProviderAccount">
         select
         <include refid="generalSPAColumns"/>
 
@@ -195,7 +197,17 @@
         where spa.`pk_id` = #{pkId}
     </select>
 
-    <select id="selectServiceProviderAccountsByPkId" parameterType="map" resultMap="ServiceProviderAccount" flushCache="false" useCache="true">
+    <select id="selectServiceProviderAccountByRRContainerId" parameterType="map" resultMap="ServiceProviderAccount">
+        select
+        <include refid="generalSPAColumns"/>
+
+        from `service_provider_account` spa
+        <include refid="generalSPAJoin"/>
+
+        where spa.`registry_record_container_id` = #{registryRecordContainerId} order by `spa_begin_date` asc
+    </select>
+
+    <select id="selectServiceProviderAccountsByPkId" parameterType="map" resultMap="ServiceProviderAccount">
         select
         <include refid="generalSPAColumns"/>
 
@@ -205,17 +217,30 @@
         where spa.`pk_id` in #{pkIds}
     </select>
 
+    <select id="serviceProviderAccountsExists" parameterType="long" resultType="integer">
+        select 1
+
+        from `service_provider_account`
+
+        where `eirc_account_id` = #{eircAccountId} limit 0,1
+    </select>
+
     <insert id="insertServiceProviderAccount"
-            parameterType="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccount" keyProperty="pkId" useGeneratedKeys="true" flushCache="true">
+            parameterType="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccount" keyProperty="pkId" useGeneratedKeys="true">
         insert into `service_provider_account` (`object_id`, `eirc_account_id`, `organization_id`, `account_number`, `service_id`,
-                                    `first_name`, `last_name`, `middle_name`, `begin_date`, `end_date`)
+                                    `first_name`, `last_name`, `middle_name`, `begin_date`, `end_date`, `registry_record_container_id`)
                             values (#{id}, #{eircAccount.id}, #{organizationId}, #{accountNumber}, #{service.id},
-                                    #{person.firstName}, #{person.lastName}, #{person.middleName}, #{beginDate}, #{endDate})
+                                    #{person.firstName}, #{person.lastName}, #{person.middleName}, #{beginDate}, #{endDate}, #{registryRecordContainerId})
     </insert>
 
     <update id="updateServiceProviderAccountEndDate"
-            parameterType="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccount" flushCache="true">
-        update `service_provider_account` set `end_date` = #{endDate} where `pk_id` = #{pkId}
+            parameterType="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccount">
+        update `service_provider_account` set `end_date` = #{endDate}, `registry_record_container_id` = #{registryRecordContainerId} where `pk_id` = #{pkId}
     </update>
+
+    <delete id="deleteServiceProviderAccount"
+            parameterType="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccount">
+        delete from `service_provider_account` where `pk_id` = #{pkId}
+    </delete>
 
 </mapper>
