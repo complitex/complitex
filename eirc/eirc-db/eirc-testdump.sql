@@ -608,7 +608,7 @@ CREATE TABLE `charge` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `charge_unique_sp_account__date_formation` (`service_provider_account_id`,`date_formation`),
   KEY `fk_charge__registry_record_container` (`registry_record_container_id`),
-  CONSTRAINT `fk_charge__registry_record_container` FOREIGN KEY (`registry_record_container_id`) REFERENCES `registry_record_container` (`id`) ON UPDATE SET NULL,
+  CONSTRAINT `fk_charge__registry_record_container` FOREIGN KEY (`registry_record_container_id`) REFERENCES `registry_record_container` (`id`) ON DELETE SET NULL,
   CONSTRAINT `fk_charge__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Начисление';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2898,7 +2898,7 @@ CREATE TABLE `saldo_out` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `saldo_out_unique_sp_account__date_formation` (`service_provider_account_id`,`date_formation`),
   KEY `fk_saldo_out__registry_record_container` (`registry_record_container_id`),
-  CONSTRAINT `fk_saldo_out__registry_record_container` FOREIGN KEY (`registry_record_container_id`) REFERENCES `registry_record_container` (`id`) ON UPDATE SET NULL,
+  CONSTRAINT `fk_saldo_out__registry_record_container` FOREIGN KEY (`registry_record_container_id`) REFERENCES `registry_record_container` (`id`) ON DELETE SET NULL,
   CONSTRAINT `fk_saldo_out__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Исходящее сальдо';
 /*!40101 SET character_set_client = @saved_cs_client */;

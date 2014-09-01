@@ -46,7 +46,7 @@ public class SaldoOutOperation extends BaseFinancialOperation<SaldoOut> {
             Long containerId;
             // Проверяем, что исходящее сальдо нулевое, счет не закрыт и счет стоит на закрытие
             if (result.getCode().equals(getCode()) && ((SaldoOut)result.getNewObject()).getAmount().doubleValue() == 0. &&
-                    ((SaldoOut) result.getNewObject()).getServiceProviderAccount().getEndDate() != null &&
+                    ((SaldoOut) result.getNewObject()).getServiceProviderAccount().getEndDate() == null &&
                     (containerId = requestCloseFromContainer(((SaldoOut) result.getNewObject()).getServiceProviderAccount())) != null) {
                 ServiceProviderAccount serviceProviderAccount = ((SaldoOut) result.getNewObject()).getServiceProviderAccount();
                 // TODO Контейнер закрытия счета мог быть удален вместе с реестром

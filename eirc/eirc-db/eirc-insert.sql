@@ -76,6 +76,10 @@ INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (6006, 1, UPPER(
 INSERT INTO `entity_attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (6005, 6000, 0, 6006, 1);
 INSERT INTO `entity_attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (6005, 6005, UPPER('string'));
 
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (6007, 1, UPPER('Л/с на закрытие')), (6007, 2, UPPER('Л/п на закриття'));
+INSERT INTO `entity_attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (6006, 6000, 0, 6007, 1);
+INSERT INTO `entity_attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (6006, 6006, UPPER('other'));
+
 INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (1010, 1, 'Модуль'), (1010, 2, 'Модуль');
 INSERT INTO `entity`(`id`, `entity_table`, `entity_name_id`, `strategy_factory`) VALUES (1010, 'module_instance', 1010, '');
 
@@ -237,4 +241,4 @@ insert into `config` (`name`, `value`) values
 ;
 
 -- Current database version
- INSERT INTO `update` (`version`) VALUE ('eirc_20140826_0.0.8');
+ INSERT INTO `update` (`version`) VALUE ('eirc_20140831_0.0.9');

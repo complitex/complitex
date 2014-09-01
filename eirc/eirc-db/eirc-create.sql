@@ -183,7 +183,7 @@ CREATE TABLE `saldo_out` (
   UNIQUE KEY `saldo_out_unique_sp_account__date_formation` (`service_provider_account_id`,`date_formation`),
   CONSTRAINT `fk_saldo_out__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`),
   CONSTRAINT `fk_saldo_out__registry_record_container` FOREIGN KEY (`registry_record_container_id`)
-  REFERENCES `registry_record_container` (`id`) ON UPDATE SET NULL
+  REFERENCES `registry_record_container` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Исходящее сальдо';
 
 DROP TABLE IF EXISTS `charge`;
@@ -197,7 +197,7 @@ CREATE TABLE `charge` (
   UNIQUE KEY `charge_unique_sp_account__date_formation` (`service_provider_account_id`,`date_formation`),
   CONSTRAINT `fk_charge__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`),
   CONSTRAINT `fk_charge__registry_record_container` FOREIGN KEY (`registry_record_container_id`)
-  REFERENCES `registry_record_container` (`id`) ON UPDATE SET NULL
+  REFERENCES `registry_record_container` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Начисление';
 
 DROP TABLE IF EXISTS `cash_payment`;

@@ -278,13 +278,11 @@ public class RegistryHandler {
 
     public boolean rollbackRegistryRecord(Registry registry, RegistryRecordData registryRecord) throws TransitionNotAllowed {
         try {
-            boolean canRollback = true;
             for (Container container : registryRecord.getContainers()) {
                 Operation operation = operationFactory.getOperation(container);
-                canRollback &= operation.canRollback(null, container);
-            }
-            if (!canRollback) {
-                return false;
+                if (!operation.canRollback(null, container)) {
+                    return false;
+                }
             }
             for (Container container : registryRecord.getContainers()) {
                 Operation operation = operationFactory.getOperation(container);
