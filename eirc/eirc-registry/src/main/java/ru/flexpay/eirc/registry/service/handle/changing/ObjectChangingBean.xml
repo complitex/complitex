@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.flexpay.eirc.registry.service.handle.changing.ObjectChangingBean">
+    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
+
+    <resultMap id="ObjectChanging" type="ru.flexpay.eirc.registry.entity.changing.ObjectChanging">
+        <id     column="id"                             property="id"/>
+        <result column="old_pk_id"                      property="oldPkId"/>
+        <result column="new_pk_id"                      property="newPkId"/>
+        <result column="registry_record_container_id"   property="registryRecordContainerId"/>
+        <result column="object_type"                    property="objectType"/>
+    </resultMap>
+
+    <select id="selectObjectChanging" parameterType="long" resultMap="ObjectChanging">
+        select * from `registry_changing` where `registry_record_container_id`= #{containerId}
+    </select>
+
+    <insert id="insertObjectChanging" parameterType="ru.flexpay.eirc.registry.entity.changing.ObjectChanging">
+        insert into `registry_changing` (`old_pk_id`, `new_pk_id`, `registry_record_container_id`, `object_type`)
+          value (#{oldPkId}, #{newPkId}, #{registryRecordContainerId}, #{objectType});
+    </insert>
+
+    <delete id="deleteObjectChanging" parameterType="ru.flexpay.eirc.registry.entity.changing.ObjectChanging">
+        delete from `registry_changing` where `id` = #{id}
+    </delete>
+</mapper>

@@ -15,6 +15,8 @@ public class EircAccount extends DictionaryTemporalObject {
 
     private Person person;
 
+    private Boolean createdFromRegistry;
+
     public EircAccount() {
     }
 
@@ -52,5 +54,17 @@ public class EircAccount extends DictionaryTemporalObject {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public boolean isCreatedFromRegistry2() {
+        return createdFromRegistry != null? createdFromRegistry : false;
+    }
+
+    public Boolean getCreatedFromRegistry() {
+        return createdFromRegistry;
+    }
+
+    public void setCreatedFromRegistry(Boolean createdFromRegistry) {
+        this.createdFromRegistry = createdFromRegistry;
     }
 }

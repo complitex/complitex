@@ -20,6 +20,7 @@ CREATE TABLE `eirc_account` (
   `middle_name` VARCHAR(255),
   `begin_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
+  `created_from_registry` BOOLEAN COMMENT 'В TRUE, если ЕИРЦ счет создан из реестра',
   PRIMARY KEY  (`pk_id`),
   UNIQUE KEY `unique_object_id__start_date` (`object_id`,`begin_date`),
   KEY `key_object_id` (object_id),
@@ -67,6 +68,7 @@ CREATE TABLE `service_provider_account` (
   `middle_name` VARCHAR(255),
   `begin_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
+  `registry_record_container_id` BIGINT(20) COMMENT 'Идентификатор контейнера записи реестра сделавшей изменение',
   PRIMARY KEY  (`pk_id`),
   UNIQUE KEY `unique_object_id__start_date` (`object_id`,`begin_date`),
   KEY `key_object_id` (object_id),
@@ -74,7 +76,9 @@ CREATE TABLE `service_provider_account` (
   KEY `key_end_date` (`end_date`),
   CONSTRAINT `fk_service_provider_account__eirc_account` FOREIGN KEY (`eirc_account_id`) REFERENCES `eirc_account` (`object_id`),
   CONSTRAINT `fk_service_provider_account__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
-  CONSTRAINT `fk_service_provider_account__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`)
+  CONSTRAINT `fk_service_provider_account__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`),
+  CONSTRAINT `fk_service_provider_account__registry_record_container` FOREIGN KEY (`registry_record_container_id`)
+  REFERENCES `registry_record_container` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `service_provider_account_attribute`;
@@ -121,19 +125,16 @@ CREATE TABLE `service_provider_account_string_culture` (
 
 DROP TABLE IF EXISTS `registry_changing_spa_attribute`;
 
-CREATE TABLE `registry_changing_spa_attribute` (
+CREATE TABLE `registry_changing` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор изменения',
-  `spa_old_attribute_pk_id` BIGINT(20) COMMENT 'Идентификатор предыдущего значения дополнительного атрибута л/с ПУ',
-  `spa_new_attribute_pk_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор нового значения дополнительного атрибута л/с ПУ',
+  `old_pk_id` BIGINT(20) COMMENT 'Идентификатор предыдущего значения',
+  `new_pk_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор нового значения',
   `registry_record_container_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор контейнера записи реестра сделавшей изменение',
+  `object_type` VARCHAR(255),
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_registry_changing_spa_attribute__spa_attribute_new` FOREIGN KEY (`spa_new_attribute_pk_id`)
-  REFERENCES `service_provider_account_attribute` (`pk_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_registry_changing_spa_attribute__spa_attribute_old` FOREIGN KEY (`spa_old_attribute_pk_id`)
-  REFERENCES `service_provider_account_attribute` (`pk_id`) ON DELETE CASCADE,
   CONSTRAINT `fk_registry_changing_spa_attribute__registry_record_container` FOREIGN KEY (`registry_record_container_id`)
   REFERENCES `registry_record_container` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Изменение дополнительных атрибутов л/с ПУ из записи реестра';
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Изменение изменяемых во времени данных из записи реестра';
 
 DROP TABLE IF EXISTS `owner_exemption`;
 CREATE TABLE `owner_exemption` (
@@ -182,7 +183,7 @@ CREATE TABLE `saldo_out` (
   UNIQUE KEY `saldo_out_unique_sp_account__date_formation` (`service_provider_account_id`,`date_formation`),
   CONSTRAINT `fk_saldo_out__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`),
   CONSTRAINT `fk_saldo_out__registry_record_container` FOREIGN KEY (`registry_record_container_id`)
-  REFERENCES `registry_record_container` (`id`) ON UPDATE SET NULL
+  REFERENCES `registry_record_container` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Исходящее сальдо';
 
 DROP TABLE IF EXISTS `charge`;
@@ -196,7 +197,7 @@ CREATE TABLE `charge` (
   UNIQUE KEY `charge_unique_sp_account__date_formation` (`service_provider_account_id`,`date_formation`),
   CONSTRAINT `fk_charge__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`),
   CONSTRAINT `fk_charge__registry_record_container` FOREIGN KEY (`registry_record_container_id`)
-  REFERENCES `registry_record_container` (`id`) ON UPDATE SET NULL
+  REFERENCES `registry_record_container` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Начисление';
 
 DROP TABLE IF EXISTS `cash_payment`;
@@ -207,10 +208,13 @@ CREATE TABLE `cash_payment` (
   `amount` decimal(19,2) NOT NULL,
   `number_quittance` VARCHAR(20),
   `date_formation` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `registry_record_container_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор контейнера записи реестра сделавшей изменение',
   PRIMARY KEY  (`id`),
   KEY `cash_payment_sp_account__date_formation` (`service_provider_account_id`, `date_formation`),
   CONSTRAINT `fk_cash_payment__organization` FOREIGN KEY (`payment_collector_id`) REFERENCES `organization` (`object_id`),
-  CONSTRAINT `fk_cash_payment__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`)
+  CONSTRAINT `fk_cash_payment__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`),
+  CONSTRAINT `fk_cash_payment__registry_record_container` FOREIGN KEY (`registry_record_container_id`)
+  REFERENCES `registry_record_container` (`id`) ON UPDATE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Наличные оплаты';
 
 DROP TABLE IF EXISTS `cashless_payment`;
@@ -221,10 +225,13 @@ CREATE TABLE `cashless_payment` (
   `amount` decimal(19,2) NOT NULL,
   `number_quittance` VARCHAR(20),
   `date_formation` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `registry_record_container_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор контейнера записи реестра сделавшей изменение',
   PRIMARY KEY  (`id`),
   KEY `cashless_payment_sp_account__date_formation_formation` (`service_provider_account_id`, `date_formation`),
   CONSTRAINT `fk_cashless_payment__organization` FOREIGN KEY (`payment_collector_id`) REFERENCES `organization` (`object_id`),
-  CONSTRAINT `fk_cashless_payment__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`)
+  CONSTRAINT `fk_cashless_payment__sp_account` FOREIGN KEY (`service_provider_account_id`) REFERENCES `service_provider_account` (`object_id`),
+  CONSTRAINT `fk_cashless_payment__registry_record_container` FOREIGN KEY (`registry_record_container_id`)
+  REFERENCES `registry_record_container` (`id`) ON UPDATE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Безналичные оплаты';
 
 -- Registry status --

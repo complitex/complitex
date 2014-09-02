@@ -139,6 +139,19 @@
             `amount` = #{amount}, `date_formation` = #{dateFormation} where `id` = #{id}
     </sql>
 
+    <sql id="selectFinancialAttributeByRRContainerId">
+        <bind name="last" value="0"/>
+        select
+        <include refid="ru.flexpay.eirc.service_provider_account.service.FinancialAttributeBean.financialAttributeColumns"/>,
+        <include refid="ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountBean.generalWithAddressSPAColumns"/>
+        from <include refid="tableName"/> as fa
+
+        left join `service_provider_account` spa on spa.`object_id` = fa.`service_provider_account_id`
+        <include refid="ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountBean.generalWithAddressSPAJoin"/>
+
+        where fa.`registry_record_container_id` = #{object.registryRecordContainerId}
+    </sql>
+
     <sql id="financialAttributeExists">
         select 1 from <include refid="tableName"/> where `registry_record_container_id` = #{registryRecordContainerId}
     </sql>

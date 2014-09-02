@@ -49,6 +49,14 @@ public abstract class FinancialAttributeBean<T extends FinancialAttribute> exten
         }
     }
 
+    public T getFinancialAttributeByRRContainerId(long registryRecordContainerId) {
+        FilterWrapper<T> filter = FilterWrapper.of(getInstance());
+        filter.getObject().setRegistryRecordContainerId(registryRecordContainerId);
+        FinancialAttributeUtil.addFilterMappingObject(filter);
+        List<T> resultOrderByDescData = sqlSession().selectList(getNameSpace() + ".selectFinancialAttributeByRRContainerId", filter);
+        return resultOrderByDescData.size() > 0? resultOrderByDescData.get(0): null;
+    }
+
     public boolean financialAttributeExists(long registryRecordContainerId) {
         return sqlSession().selectOne(getNameSpace() + ".financialAttributeExists", registryRecordContainerId) != null;
     }

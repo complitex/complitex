@@ -43,6 +43,7 @@ public abstract class QueueProcessor {
 
     public void run() throws InterruptedException {
         processor.processJob(new AbstractJob<Object>() {
+            @Override
             public Object execute() throws ExecuteException {
                 while (true) {
 

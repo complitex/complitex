@@ -66,6 +66,13 @@ public class EircAccountBean extends AbstractBean {
         sqlSession().update("updateEndDate", object);
     }
 
+    public void restore(EircAccount object) {
+        if (object.getEndDate() != null) {
+            object.setEndDate(null);
+        }
+        sqlSession().update(NS + ".updateEndDate", object);
+    }
+
     public EircAccount getEircAccount(long id) {
         List<EircAccount> resultOrderByDescData = sqlSession().selectList(NS + ".selectEircAccount", id);
         return resultOrderByDescData.size() > 0? resultOrderByDescData.get(0): null;
@@ -118,7 +125,7 @@ public class EircAccountBean extends AbstractBean {
     }
 
     private void update(EircAccount eircAccount) {
-        EircAccount oldObject = getEricAccountByPkId(eircAccount.getPkId());
+        EircAccount oldObject = getEircAccountByPkId(eircAccount.getPkId());
         if (EqualsBuilder.reflectionEquals(oldObject, eircAccount)) {
             return;
         }
@@ -127,8 +134,21 @@ public class EircAccountBean extends AbstractBean {
         sqlSession().insert(NS + ".insertEircAccount", eircAccount);
     }
 
-    public EircAccount getEricAccountByPkId(long pkId) {
+    public EircAccount getEircAccountByPkId(long pkId) {
         return sqlSession().selectOne(NS + ".selectEircAccountByPkId", pkId);
+    }
+
+    public boolean hasHistory(long id) {
+        return sqlSession().selectList(NS + ".hasEircAccountHistory", id).size() > 1;
+    }
+
+    /**
+     * Use only for rollback
+     *
+     * @param eircAccount
+     */
+    public void delete(EircAccount eircAccount) {
+        sqlSession().delete(NS + ".deleteEircAccount", eircAccount.getPkId());
     }
 
     public List<String> getSearchFilters() {

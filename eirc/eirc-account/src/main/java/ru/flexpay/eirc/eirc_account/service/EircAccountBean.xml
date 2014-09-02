@@ -12,6 +12,7 @@
         <result column="eirc_account_number" property="accountNumber"/>
         <result column="eirc_account_begin_date" property="beginDate"/>
         <result column="eirc_account_end_date" property="endDate"/>
+        <result column="eirc_account_created_from_registry" property="createdFromRegistry"/>
 
         <association property="address" resultMap="Address"
                      columnPrefix="eirc_account_"/>
@@ -359,7 +360,8 @@
         e.`account_number`    as `eirc_account_number`,            e.`address_id`  as `eirc_account_address_id`,
         e.`address_entity_id` as `eirc_account_address_entity_id`, e.`first_name`  as `eirc_account_first_name`,
         e.`last_name`         as `eirc_account_last_name`,         e.`middle_name` as `eirc_account_middle_name`,
-        e.`begin_date`        as `eirc_account_begin_date`,        e.`end_date`    as `eirc_account_end_date`
+        e.`begin_date`        as `eirc_account_begin_date`,        e.`end_date`    as `eirc_account_end_date`,
+        e.`created_from_registry` as `eirc_account_created_from_registry`
     </sql>
 
 
@@ -404,7 +406,7 @@
         `eirc_account_room`
     </sql>
 
-    <select id="selectEircAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="EircAccount" flushCache="false" useCache="true">
+    <select id="selectEircAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="EircAccount" >
         select
         <include refid="ru.flexpay.eirc.eirc_account.service.EircAccountBean.eircAccountColumns"/>,
         <include refid="ru.flexpay.eirc.eirc_account.service.EircAccountBean.addressColumns"/>
@@ -444,7 +446,7 @@
         </if>
     </select>
 
-    <select id="countEircAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer" flushCache="false" useCache="true">
+    <select id="countEircAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer" >
         select count(distinct e.`object_id`) from `eirc_account` e
         <if test="map.inactive == true or map.all == true">
             inner join (select max(pk_id) as max_pk_id from eirc_account group by object_id) e2 on e.pk_id=e2.max_pk_id
@@ -456,7 +458,7 @@
         <include refid="ru.flexpay.eirc.eirc_account.service.EircAccountBean.otherConditions"/>
     </select>
 
-    <select id="selectEircAccount" parameterType="long" resultMap="EircAccount" flushCache="false" useCache="true">
+    <select id="selectEircAccount" parameterType="long" resultMap="EircAccount" >
         select <include refid="ru.flexpay.eirc.eirc_account.service.EircAccountBean.eircAccountColumns"/> from `eirc_account` e where e.`object_id` = #{id} order by `eirc_account_begin_date` desc
     </select>
 
@@ -464,18 +466,18 @@
         select <include refid="ru.flexpay.eirc.eirc_account.service.EircAccountBean.eircAccountColumns"/> from `eirc_account` e where e.`pk_id` = #{pkId}
     </select>
 
-    <select id="selectEircAccountsByPkId" parameterType="map" resultMap="EircAccount" flushCache="false" useCache="true">
+    <select id="selectEircAccountsByPkId" parameterType="map" resultMap="EircAccount" >
         select <include refid="ru.flexpay.eirc.eirc_account.service.EircAccountBean.eircAccountColumns"/> from `eirc_account` e where e.`pk_id` in #{pkIds}
     </select>
 
-    <select id="eircAccountNumberExists" parameterType="map" resultType="integer" flushCache="false" useCache="true">
+    <select id="eircAccountNumberExists" parameterType="map" resultType="integer" >
         select 1 from `eirc_account` e where e.`end_date` is null and e.`account_number` = #{accountNumber}
         <if test="objectId != null">
             and e.`object_id` != #{objectId}
         </if>
     </select>
 
-    <select id="eircAccountByAddressExists" parameterType="map" resultType="integer" flushCache="false" useCache="true">
+    <select id="eircAccountByAddressExists" parameterType="map" resultType="integer" >
         select 1 from `eirc_account` e where e.`address_id` = #{addressId} and e.`address_entity_id` = #{addressEntityId} and e.`end_date` is null
         <if test="objectId != null">
             and e.`object_id` != #{objectId}
@@ -483,19 +485,28 @@
     </select>
 
 
-    <select id="selectEircAccountByAddress" parameterType="ru.flexpay.eirc.dictionary.entity.Address" resultMap="EircAccount" flushCache="false" useCache="true">
+    <select id="selectEircAccountByAddress" parameterType="ru.flexpay.eirc.dictionary.entity.Address" resultMap="EircAccount" >
         select <include refid="ru.flexpay.eirc.eirc_account.service.EircAccountBean.eircAccountColumns"/> from `eirc_account` e where e.`address_id` = #{id} and e.`address_entity_id` = #{entity.id} and e.`end_date` is null
     </select>
 
-    <insert id="insertEircAccount" parameterType="ru.flexpay.eirc.eirc_account.entity.EircAccount" keyProperty="pkId" useGeneratedKeys="true" flushCache="true">
+    <select id="hasEircAccountHistory" parameterType="long" resultType="long">
+        select `pk_id` from `eirc_account` where `object_id` = #{id} limit 0,2
+    </select>
+
+    <insert id="insertEircAccount" parameterType="ru.flexpay.eirc.eirc_account.entity.EircAccount" keyProperty="pkId" useGeneratedKeys="true" >
         insert into `eirc_account` (`object_id`, `account_number`, `address_id`, `address_entity_id`,
-                                    `first_name`, `last_name`, `middle_name`, `begin_date`, `end_date`)
+                                    `first_name`, `last_name`, `middle_name`, `begin_date`, `end_date`, `created_from_registry`)
                             values (#{id}, #{accountNumber}, #{address.id}, #{address.entity.id},
-                                    #{person.firstName}, #{person.lastName}, #{person.middleName}, #{beginDate}, #{endDate})
+                                    #{person.firstName}, #{person.lastName}, #{person.middleName}, #{beginDate}, #{endDate},
+                                    #{createdFromRegistry})
     </insert>
 
-    <update id="updateEndDate" parameterType="ru.flexpay.eirc.eirc_account.entity.EircAccount" flushCache="true">
+    <update id="updateEndDate" parameterType="ru.flexpay.eirc.eirc_account.entity.EircAccount" >
         update `eirc_account` set `end_date` = #{endDate} where `pk_id` = #{pkId}
     </update>
+
+    <delete id="deleteEircAccount" parameterType="ru.flexpay.eirc.eirc_account.entity.EircAccount" >
+        delete from `eirc_account` where `pk_id` = #{pkId}
+    </delete>
 
 </mapper>

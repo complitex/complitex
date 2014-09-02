@@ -83,5 +83,6 @@
         <mapper resource="ru/flexpay/eirc/registry/service/ContainerBean.xml"/>
         <mapper resource="ru/flexpay/eirc/registry/service/RegistryRecordBean.xml"/>
         <mapper resource="ru/flexpay/eirc/registry/service/RegistryBean.xml"/>
+        <mapper resource="ru/flexpay/eirc/registry/service/handle/changing/ObjectChangingBean.xml"/>
     </mappers>
 </configuration>
