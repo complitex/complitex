@@ -4,12 +4,10 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.complitex.common.EjbTestBeanLocator;
 import org.complitex.common.service.TestBean;
-import org.complitex.common.service.executor.ExecuteException;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
-import ru.flexpay.eirc.registry.service.AbstractJob;
 import ru.flexpay.eirc.registry.service.JobProcessor;
 
 import javax.ejb.embeddable.EJBContainer;
@@ -19,6 +17,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -48,28 +47,30 @@ public class TestTransaction {
             for (int i = 0; i < n; i++) {
                 final int j = 10000 * i + 1;
                 final int m = 10000 * (i + 1);
-                jobProcessor.processJob(new AbstractJob<Object>() {
-                    @Override
-                    public Object execute() throws ExecuteException {
+                jobProcessor.processJob(
+                        new Callable<Object>() {
+                            @Override
+                            public Object call() throws Exception {
 
-                        try {
-                            for (long idx = j; idx < m; idx++) {
-                                EircOrganizationStrategy organizationStrategy = EjbTestBeanLocator.getBean(context, EircOrganizationStrategy.BEAN_NAME);
-                                assertNotNull("Can not find EircOrganizationStrategy", organizationStrategy);
                                 try {
-                                    organizationStrategy.findById(idx, false);
-                                } catch (Exception e) {
-                                    exceptionInfos.add(new ExceptionInfo(new Date(), idx));
-                                    return null;
-                                }
-                            }
+                                    for (long idx = j; idx < m; idx++) {
+                                        EircOrganizationStrategy organizationStrategy = EjbTestBeanLocator.getBean(context, EircOrganizationStrategy.BEAN_NAME);
+                                        assertNotNull("Can not find EircOrganizationStrategy", organizationStrategy);
+                                        try {
+                                            organizationStrategy.findById(idx, false);
+                                        } catch (Exception e) {
+                                            exceptionInfos.add(new ExceptionInfo(new Date(), idx));
+                                            return null;
+                                        }
+                                    }
 
-                        } finally {
-                            finished.release();
-                        }
-                        return null;
+                                } finally {
+                                    finished.release();
+                                }
+                                return null;
+                            }
                     }
-                });
+                );
             }
             try {
                 finished.acquire();
@@ -98,37 +99,39 @@ public class TestTransaction {
             for (int i = 0; i < n; i++) {
                 final int j = 1000 * i + 1;
                 final int m = 1000 * (i + 1);
-                jobProcessor.processJob(new AbstractJob<Object>() {
-                    @Override
-                    public Object execute() throws ExecuteException {
+                jobProcessor.processJob(
+                        new Callable<Object>() {
+                            @Override
+                            public Object call() throws Exception {
 
-                        try {
-                            for (long idx = j; idx < m; idx++) {
-                                EircContainerTestBean containerTestBean = EjbTestBeanLocator.getBean(context, "EircContainerTestBean");
-                                assertNotNull("Can not find ContainerTestBean", containerTestBean);
-
-                                long sleepTime = 0;
-                                //long sleepTime = Math.abs(random.nextLong()%100);
                                 try {
-                                    //containerTestBean.testTransactionalWithSleep(sleepTime);
-                                    containerTestBean.testTransactional();
-                                } catch (Exception e) {
-                                    log.info("exception {} - idx: {}, sleep: {}", Thread.currentThread().getId(), idx, sleepTime);
-                                    exceptionInfos.add(new ExceptionInfo(new Date(), idx));
-                                    return null;
-                                }
-                                if (exceptionInfos.size() > 0) {
-                                    log.info("interrupted {} - idx: {}, sleep: {}", Thread.currentThread().getId(), idx, sleepTime);
-                                    return null;
-                                }
-                            }
+                                    for (long idx = j; idx < m; idx++) {
+                                        EircContainerTestBean containerTestBean = EjbTestBeanLocator.getBean(context, "EircContainerTestBean");
+                                        assertNotNull("Can not find ContainerTestBean", containerTestBean);
 
-                        } finally {
-                            finished.release();
+                                        long sleepTime = 0;
+                                        //long sleepTime = Math.abs(random.nextLong()%100);
+                                        try {
+                                            //containerTestBean.testTransactionalWithSleep(sleepTime);
+                                            containerTestBean.testTransactional();
+                                        } catch (Exception e) {
+                                            log.info("exception {} - idx: {}, sleep: {}", Thread.currentThread().getId(), idx, sleepTime);
+                                            exceptionInfos.add(new ExceptionInfo(new Date(), idx));
+                                            return null;
+                                        }
+                                        if (exceptionInfos.size() > 0) {
+                                            log.info("interrupted {} - idx: {}, sleep: {}", Thread.currentThread().getId(), idx, sleepTime);
+                                            return null;
+                                        }
+                                    }
+
+                                } finally {
+                                    finished.release();
+                                }
+                                return null;
+                            }
                         }
-                        return null;
-                    }
-                });
+                );
             }
             try {
                 finished.acquire();
@@ -208,31 +211,33 @@ public class TestTransaction {
             for (int i = 0; i < n; i++) {
                 final int j = 10000 * i + 1;
                 final int m = 10000 * (i + 1);
-                jobProcessor.processJob(new AbstractJob<Object>() {
-                    @Override
-                    public Object execute() throws ExecuteException {
+                jobProcessor.processJob(
+                        new Callable<Object>() {
+                            @Override
+                            public Object call() throws Exception {
 
-                        try {
-                            for (long idx = j; idx < m; idx++) {
-                                TestBean testBean = EjbTestBeanLocator.getBean(context, "TestBean");
-                                if (testBean == null) {
-                                    canNotFindTestBean.set(true);
-                                    return null;
-                                }
                                 try {
-                                    testBean.testSelectTransactional("");
-                                } catch (Exception e) {
-                                    exceptionInfos.add(new ExceptionInfo(new Date(), idx));
-                                    return null;
-                                }
-                            }
+                                    for (long idx = j; idx < m; idx++) {
+                                        TestBean testBean = EjbTestBeanLocator.getBean(context, "TestBean");
+                                        if (testBean == null) {
+                                            canNotFindTestBean.set(true);
+                                            return null;
+                                        }
+                                        try {
+                                            testBean.testSelectTransactional("");
+                                        } catch (Exception e) {
+                                            exceptionInfos.add(new ExceptionInfo(new Date(), idx));
+                                            return null;
+                                        }
+                                    }
 
-                        } finally {
-                            finished.release();
+                                } finally {
+                                    finished.release();
+                                }
+                                return null;
+                            }
                         }
-                        return null;
-                    }
-                });
+                );
             }
             try {
                 finished.acquire();

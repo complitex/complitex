@@ -24,21 +24,22 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.SharedResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.correction.service.AddressService;
-import org.complitex.correction.service.exception.DuplicateCorrectionException;
-import org.complitex.correction.service.exception.MoreOneCorrectionException;
-import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.complitex.correction.web.component.AddressCorrectionPanel;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.description.ILocalizedType;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.AttributeUtil;
+import org.complitex.common.web.component.TextLabel;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.ajax.AjaxFilterToolbar;
 import org.complitex.common.web.component.ajax.AjaxLinkPanel;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.AjaxNavigationToolbar;
+import org.complitex.correction.service.AddressService;
+import org.complitex.correction.service.exception.DuplicateCorrectionException;
+import org.complitex.correction.service.exception.MoreOneCorrectionException;
+import org.complitex.correction.service.exception.NotFoundCorrectionException;
+import org.complitex.correction.web.component.AddressCorrectionPanel;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
@@ -48,6 +49,7 @@ import ru.flexpay.eirc.dictionary.strategy.ModuleInstanceStrategy;
 import ru.flexpay.eirc.dictionary.web.RangeDatePickerTextField;
 import ru.flexpay.eirc.registry.entity.*;
 import ru.flexpay.eirc.registry.service.*;
+import ru.flexpay.eirc.registry.service.handle.RegistryHandler;
 import ru.flexpay.eirc.registry.service.link.RegistryLinker;
 import ru.flexpay.eirc.registry.web.component.ColumnsPropertiesDialog;
 import ru.flexpay.eirc.registry.web.component.ContainerListPanel;
@@ -93,6 +95,9 @@ public class RegistryRecordList extends TemplatePage {
 
     @EJB
     private RegistryLinker registryLinker;
+
+    @EJB
+    private RegistryHandler handler;
 
     @EJB
     private RegistryMessenger imessengerService;
@@ -285,26 +290,47 @@ public class RegistryRecordList extends TemplatePage {
                                              IModel<RegistryRecordData> serviceProviderAccountIModel) {
 
                         final RegistryRecordData registryRecord = serviceProviderAccountIModel.getObject();
-                        AjaxLinkPanel addressCorrectionLink = new AjaxLinkPanel(s, new ResourceModel("correctAddress")) {
+                        if (registryRecord.getStatus() == RegistryRecordStatus.LINKED_WITH_ERROR &&
+                                registryRecord.getImportErrorType() != null &&
+                                (registryRecord.getImportErrorType().getId() < 17 || registryRecord.getImportErrorType().getId() > 18) &&
+                                registryWorkflowManager.canLink(registry)) {
+                            AjaxLinkPanel addressCorrectionLink = new AjaxLinkPanel(s, new ResourceModel("correctAddress")) {
 
-                            @Override
-                            public void onClick(AjaxRequestTarget target) {
-                                addressCorrectionPanel.open(target, registryRecord, registryRecord.getFirstName(),
-                                        registryRecord.getMiddleName(), registryRecord.getLastName(),
-                                        registryRecord.getCity(), registryRecord.getStreetType(), registryRecord.getStreet(),
-                                        registryRecord.getBuildingNumber(), registryRecord.getBuildingCorp(),
-                                        registryRecord.getApartment(), registryRecord.getRoom(),
-                                        registryRecord.getCityId(), registryRecord.getStreetTypeId(), registryRecord.getStreetId(),
-                                        registryRecord.getBuildingId(),
-                                        registryRecord.getApartmentId(), registryRecord.getRoomId());
-                            }
-                        };
-                        addressCorrectionLink.setVisible(registryRecord.getStatus() == RegistryRecordStatus.LINKED_WITH_ERROR &&
-                                        registryRecord.getImportErrorType() != null &&
-                                        (registryRecord.getImportErrorType().getId() < 17 || registryRecord.getImportErrorType().getId() > 18) &&
-                                        registryWorkflowManager.canLink(registry)
-                        );
-                        components.add(addressCorrectionLink);
+                                @Override
+                                public void onClick(AjaxRequestTarget target) {
+                                    addressCorrectionPanel.open(target, registryRecord, registryRecord.getFirstName(),
+                                            registryRecord.getMiddleName(), registryRecord.getLastName(),
+                                            registryRecord.getCity(), registryRecord.getStreetType(), registryRecord.getStreet(),
+                                            registryRecord.getBuildingNumber(), registryRecord.getBuildingCorp(),
+                                            registryRecord.getApartment(), registryRecord.getRoom(),
+                                            registryRecord.getCityId(), registryRecord.getStreetTypeId(), registryRecord.getStreetId(),
+                                            registryRecord.getBuildingId(),
+                                            registryRecord.getApartmentId(), registryRecord.getRoomId());
+                                }
+                            };
+                            components.add(addressCorrectionLink);
+                        } else if (registryRecord.getStatus() == RegistryRecordStatus.PROCESSED &&
+                                registryWorkflowManager.canRollback(registry)) {
+                            AjaxLinkPanel rollbackLink = new AjaxLinkPanel(s, new ResourceModel("rollback")) {
+
+                                @Override
+                                public void onClick(AjaxRequestTarget target) {
+                                    initTimerBehavior();
+                                    target.add(container);
+                                    try {
+                                        handler.rollbackRegistryRecords(registry, ImmutableList.of(registryRecord), imessenger, finishCallback);
+                                    } catch (Exception e) {
+                                        imessenger.addMessageError(e.getLocalizedMessage());
+                                    } finally {
+                                        showIMessages(target);
+                                    }
+                                }
+                            };
+                            components.add(rollbackLink);
+                        } else {
+                            components.add(new TextLabel(s, "").setVisible(false));
+                        }
+
                     }
                 });
 

@@ -1,10 +1,10 @@
 package ru.flexpay.eirc.registry.service;
 
-import org.complitex.common.service.executor.ExecuteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 /**
@@ -17,12 +17,12 @@ public class JobProcessor {
     private final Logger log = LoggerFactory.getLogger(JobProcessor.class);
 
     @Asynchronous
-    public <T> Future<T> processJob(AbstractJob<T> job) {
+    public <T> Future<T> processJob(Callable<T> job) {
 
         T result;
         try {
-            result = job.execute();
-        } catch (ExecuteException e) {
+            result = job.call();
+        } catch (Exception e) {
             Thread.interrupted();
             throw new IllegalStateException(e);
         }

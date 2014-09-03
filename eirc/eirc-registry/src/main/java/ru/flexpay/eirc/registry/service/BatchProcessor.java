@@ -1,10 +1,10 @@
 package ru.flexpay.eirc.registry.service;
 
-import org.complitex.common.service.executor.ExecuteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
@@ -31,14 +31,13 @@ public class BatchProcessor<T> implements Serializable {
         semaphore = new Semaphore(batchSize);
     }
 
-    public Future<T> processJob(final AbstractJob<T> job) {
+    public Future<T> processJob(final Callable<T> job) {
 
-        AbstractJob<T> innerJob = new AbstractJob<T>() {
-
+        Callable<T> innerJob = new Callable<T>() {
             @Override
-            public T execute() throws ExecuteException {
+            public T call() throws Exception {
                 try {
-                    return job.execute();
+                    return job.call();
                 } finally {
                     lock.lock();
                     semaphore.release();

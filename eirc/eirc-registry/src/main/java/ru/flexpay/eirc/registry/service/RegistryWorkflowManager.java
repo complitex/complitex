@@ -55,7 +55,8 @@ public class RegistryWorkflowManager {
                 put(PROCESSING_WITH_ERROR, ImmutableList.of(PROCESSED_WITH_ERROR, PROCESSING_CANCELED, PROCESSED_WITH_ERROR)).
                 put(PROCESSED_WITH_ERROR, ImmutableList.of(PROCESSING, ROLLBACKING)).
                 put(PROCESSING_CANCELED, ImmutableList.of(PROCESSING, ROLLBACKING)).
-                put(ROLLBACKING, ImmutableList.of(ROLLBACKED)).
+                put(ROLLBACKING, ImmutableList.of(ROLLBACKED, PROCESSED_PARTLY, PROCESSED_WITH_ERROR)).
+                put(PROCESSED_PARTLY, ImmutableList.of(ROLLBACKING)).
                 put(ROLLBACKED, ImmutableList.of(PROCESSING)).build();
 
     private static final Set<RegistryStatus> transitionsToProcessing =
@@ -66,17 +67,23 @@ public class RegistryWorkflowManager {
     private static final Set<RegistryStatus> transitionsToLinking =
             ImmutableSet.of(LOADED, LINKED_WITH_ERROR, LINKING_CANCELED);
 
+    private static final Set<RegistryStatus> transitionsToRollbacking =
+            ImmutableSet.of(PROCESSED, PROCESSED_WITH_ERROR, PROCESSED_PARTLY, PROCESSING_CANCELED);
+
     private static final Set<RegistryStatus> linkingStates = ImmutableSet.of(LINKING, LINKING_WITH_ERROR);
 
     private static final Set<RegistryStatus> loadingStates = ImmutableSet.of(LOADING, LOADING_WITH_ERROR);
 
     private static final Set<RegistryStatus> loadedStates = ImmutableSet.of(LOADED, LOADED_WITH_ERROR);
 
+    private static final Set<RegistryStatus> rollbackingStates = ImmutableSet.of(ROLLBACKING);
+
 
     private static final Set<RegistryStatus> inWorkStates = ImmutableSet.<RegistryStatus>builder().
             addAll(linkingStates).
             addAll(loadingStates).
             addAll(processingStates).
+            addAll(rollbackingStates).
             build();
 
 
@@ -367,11 +374,49 @@ public class RegistryWorkflowManager {
      */
     public void markProcessingCanceled(Registry registry) throws TransitionNotAllowed {
         if (!processingStates.contains(registry.getStatus())) {
-            throw new TransitionNotAllowed("Cannot mark loading canceled. Current registry code", registry.getStatus());
+            throw new TransitionNotAllowed("Cannot mark processing canceled. Current registry code", registry.getStatus());
         }
 
         log.debug("Setting registry processing canceled: {}", registry);
 
         setCanceledStatus(registry);
+    }
+
+    public boolean isRollbacking(Registry registry) {
+        return RegistryStatus.ROLLBACKING.equals(registry.getStatus());
+    }
+
+    /**
+     * Set registry canceled status to {@link ru.flexpay.eirc.registry.entity.RegistryStatus#PROCESSED_PARTLY} or
+     * {@link ru.flexpay.eirc.registry.entity.RegistryStatus#PROCESSED_WITH_ERROR}
+     *
+     * @param registry Registry to update
+     * @throws TransitionNotAllowed if registry status is not {@link ru.flexpay.eirc.registry.entity.RegistryStatus#ROLLBACKING}
+     */
+    public void markRollbackingCanceled(Registry registry, boolean withErrors) throws TransitionNotAllowed {
+        if (!isRollbacking(registry)) {
+            throw new TransitionNotAllowed("Cannot mark rollbacking canceled. Current registry code", registry.getStatus());
+        }
+
+        log.debug("Setting registry rollbacking canceled: {}", registry);
+
+        if (withErrors) {
+            setNextErrorStatus(registry);
+        } else {
+            setCanceledStatus(registry);
+        }
+    }
+
+    /**
+     * Check if registry can be rollback, i.e. has one of the following statuses:
+     * {@link ru.flexpay.eirc.registry.entity.RegistryStatus#PROCESSED},
+     * {@link ru.flexpay.eirc.registry.entity.RegistryStatus#PROCESSED_PARTLY} or
+     * {@link ru.flexpay.eirc.registry.entity.RegistryStatus#PROCESSED_WITH_ERROR}
+     *
+     * @param registry Registry to check
+     * @return <code>true</code> if registry is allowed to be rollback
+     */
+    public boolean canRollback(Registry registry) {
+        return transitionsToRollbacking.contains(registry.getStatus());
     }
 }

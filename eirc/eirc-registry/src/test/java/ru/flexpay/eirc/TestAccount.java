@@ -7,6 +7,7 @@ import org.junit.Test;
 import ru.flexpay.eirc.eirc_account.entity.EircAccount;
 import ru.flexpay.eirc.eirc_account.service.EircAccountBean;
 import ru.flexpay.eirc.registry.entity.*;
+import ru.flexpay.eirc.registry.service.AbstractFinishCallback;
 import ru.flexpay.eirc.registry.service.RegistryBean;
 import ru.flexpay.eirc.registry.service.RegistryRecordBean;
 import ru.flexpay.eirc.registry.service.TransitionNotAllowed;
@@ -98,6 +99,79 @@ public class TestAccount {
     }
 
     @Test
+    public void testOpen2() throws Exception {
+        try (final EJBContainer container = EjbTestBeanLocator.createEJBContainer()) {
+            final Context context = container.getContext();
+
+            RegistryHandler registryHandler = EjbTestBeanLocator.getBean(context, "RegistryHandler");
+            RegistryBean registryBean = EjbTestBeanLocator.getBean(context, "RegistryBean");
+            EircAccountBean eircAccountBean = EjbTestBeanLocator.getBean(context, "EircAccountBean");
+            RegistryRecordBean registryRecordBean = EjbTestBeanLocator.getBean(context, "RegistryRecordBean");
+            ServiceProviderAccountBean serviceProviderAccountBean = EjbTestBeanLocator.getBean(context, "ServiceProviderAccountBean");
+
+
+            Registry registry = null;
+            try {
+                registry = RegistryTestUtil.processingRegistry(context, "ree_open_account.txt");
+                List<EircAccount> eircAccounts = eircAccountBean.getEircAccounts(new FilterWrapper<>(new EircAccount()));
+                assertEquals(3, eircAccounts.size());
+                for (EircAccount eircAccount : eircAccounts) {
+                    List<ServiceProviderAccount> serviceProviderAccounts = serviceProviderAccountBean.getServiceProviderAccounts(FilterWrapper.of(new ServiceProviderAccount(eircAccount)));
+                    assertEquals(1, serviceProviderAccounts.size());
+                }
+
+                List<RegistryRecordData> records = registryRecordBean.getRegistryRecords(FilterWrapper.<RegistryRecordData>of(new RegistryRecord(registry.getId())));
+                for (RegistryRecordData record : records) {
+                    for (Container recordContainer : record.getContainers()) {
+                        if (ContainerType.OPEN_ACCOUNT.equals(recordContainer.getType())) {
+                            assertNotNull(serviceProviderAccountBean.getServiceProviderAccountByRRContainerId(recordContainer.getId()));
+                        }
+                    }
+                }
+
+                AbstractFinishCallback finishCallback = RegistryTestUtil.getFinishCallback();
+                List<Registry> registries = registryBean.getRegistries(FilterWrapper.of(new Registry(registry.getId())));
+                assertEquals(1, registries.size());
+                registry = registries.get(0);
+                registryHandler.rollbackRegistryRecords(registry, records, RegistryTestUtil.getMessengerInstance(), finishCallback);
+                while (!finishCallback.isCompleted()) {
+                    Thread.sleep(100L);
+                }
+
+                eircAccounts = eircAccountBean.getEircAccounts(new FilterWrapper<>(new EircAccount()));
+                assertEquals(0, eircAccounts.size());
+                records = registryRecordBean.getRegistryRecords(FilterWrapper.<RegistryRecordData>of(new RegistryRecord(registry.getId())));
+                for (RegistryRecordData record : records) {
+                    for (Container recordContainer : record.getContainers()) {
+                        if (ContainerType.OPEN_ACCOUNT.equals(recordContainer.getType())) {
+                            assertNull(serviceProviderAccountBean.getServiceProviderAccountByRRContainerId(recordContainer.getId()));
+                        }
+                    }
+                }
+
+            } finally {
+                try {
+                    if (registry != null) {
+                        registryBean.delete(registry);
+                    }
+                } catch (Throwable th) {
+                    //
+                }
+                List<EircAccount> eircAccounts = eircAccountBean.getEircAccounts(new FilterWrapper<>(new EircAccount()));
+                for (EircAccount eircAccount : eircAccounts) {
+                    try {
+                        eircAccountBean.delete(eircAccount);
+                    } catch (Throwable th) {
+                        System.err.print("Can not delete eirc account: " + th.getLocalizedMessage());
+                        assertTrue(false);
+                    }
+                }
+
+            }
+        }
+    }
+
+    @Test
     public void testClose() throws InterruptedException, IOException, ExecuteException, TransitionNotAllowed {
         try (final EJBContainer container = EjbTestBeanLocator.createEJBContainer()) {
             final Context context = container.getContext();
@@ -148,6 +222,88 @@ public class TestAccount {
                 records = registryRecordBean.getRegistryRecords(FilterWrapper.<RegistryRecordData>of(new RegistryRecord(registryOpen.getId())));
                 for (RegistryRecordData record : records) {
                     assertTrue(registryHandler.rollbackRegistryRecord(registryOpen, record));
+                }
+
+                eircAccounts = eircAccountBean.getEircAccounts(new FilterWrapper<>(new EircAccount()));
+                assertEquals(0, eircAccounts.size());
+                records = registryRecordBean.getRegistryRecords(FilterWrapper.<RegistryRecordData>of(new RegistryRecord(registryOpen.getId())));
+                for (RegistryRecordData record : records) {
+                    for (Container recordContainer : record.getContainers()) {
+                        if (ContainerType.OPEN_ACCOUNT.equals(recordContainer.getType())) {
+                            assertNull(serviceProviderAccountBean.getServiceProviderAccountByRRContainerId(recordContainer.getId()));
+                        }
+                    }
+                }
+
+            } finally {
+                try {
+                    if (registryClose != null) {
+                        registryBean.delete(registryClose);
+                    }
+                    if (registryOpen != null) {
+                        registryBean.delete(registryOpen);
+                    }
+                } catch (Throwable th) {
+                    //
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testClose2() throws InterruptedException, IOException, ExecuteException, TransitionNotAllowed {
+        try (final EJBContainer container = EjbTestBeanLocator.createEJBContainer()) {
+            final Context context = container.getContext();
+
+            RegistryHandler registryHandler = EjbTestBeanLocator.getBean(context, "RegistryHandler");
+            RegistryBean registryBean = EjbTestBeanLocator.getBean(context, "RegistryBean");
+            EircAccountBean eircAccountBean = EjbTestBeanLocator.getBean(context, "EircAccountBean");
+            RegistryRecordBean registryRecordBean = EjbTestBeanLocator.getBean(context, "RegistryRecordBean");
+            ServiceProviderAccountBean serviceProviderAccountBean = EjbTestBeanLocator.getBean(context, "ServiceProviderAccountBean");
+
+
+            Registry registryOpen = null;
+            Registry registryClose = null;
+            try {
+                registryOpen = RegistryTestUtil.processingRegistry(context, "ree_open_account.txt");
+                List<EircAccount> eircAccounts = eircAccountBean.getEircAccounts(new FilterWrapper<>(new EircAccount()));
+                assertEquals(3, eircAccounts.size());
+                for (EircAccount eircAccount : eircAccounts) {
+                    List<ServiceProviderAccount> serviceProviderAccounts = serviceProviderAccountBean.getServiceProviderAccounts(FilterWrapper.of(new ServiceProviderAccount(eircAccount)));
+                    assertEquals(1, serviceProviderAccounts.size());
+                }
+
+                List<RegistryRecordData> records = registryRecordBean.getRegistryRecords(FilterWrapper.<RegistryRecordData>of(new RegistryRecord(registryOpen.getId())));
+                for (RegistryRecordData record : records) {
+                    for (Container recordContainer : record.getContainers()) {
+                        if (ContainerType.OPEN_ACCOUNT.equals(recordContainer.getType())) {
+                            assertNotNull(serviceProviderAccountBean.getServiceProviderAccountByRRContainerId(recordContainer.getId()));
+                        }
+                    }
+                }
+
+                registryClose = RegistryTestUtil.processingRegistry(context, "ree_close_account.txt");
+                eircAccounts = eircAccountBean.getEircAccounts(new FilterWrapper<>(new EircAccount()));
+                assertEquals(0, eircAccounts.size());
+
+                AbstractFinishCallback finishCallback = RegistryTestUtil.getFinishCallback();
+                registryHandler.rollbackRegistry(FilterWrapper.<RegistryRecordData>of(new RegistryRecord(registryClose.getId())),
+                        RegistryTestUtil.getMessengerInstance(), finishCallback);
+                while (!finishCallback.isCompleted()) {
+                    Thread.sleep(100L);
+                }
+
+                eircAccounts = eircAccountBean.getEircAccounts(new FilterWrapper<>(new EircAccount()));
+                assertEquals(3, eircAccounts.size());
+                for (EircAccount eircAccount : eircAccounts) {
+                    List<ServiceProviderAccount> serviceProviderAccounts = serviceProviderAccountBean.getServiceProviderAccounts(FilterWrapper.of(new ServiceProviderAccount(eircAccount)));
+                    assertEquals(1, serviceProviderAccounts.size());
+                }
+
+                registryHandler.rollbackRegistry(FilterWrapper.<RegistryRecordData>of(new RegistryRecord(registryOpen.getId())),
+                        RegistryTestUtil.getMessengerInstance(), finishCallback);
+                while (!finishCallback.isCompleted()) {
+                    Thread.sleep(100L);
                 }
 
                 eircAccounts = eircAccountBean.getEircAccounts(new FilterWrapper<>(new EircAccount()));

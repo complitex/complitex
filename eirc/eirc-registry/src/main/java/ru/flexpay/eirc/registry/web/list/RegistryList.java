@@ -24,7 +24,6 @@ import org.apache.wicket.request.resource.SharedResourceReference;
 import org.complitex.common.entity.DictionaryConfig;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.DataProvider;
@@ -56,6 +55,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 import static org.complitex.common.util.PageUtil.newSorting;
@@ -280,6 +280,15 @@ public class RegistryList extends TemplatePage {
                             } finally {
                                 showIMessages(target);
                             }
+                        } else if (registryWorkflowManager.canRollback(registry)) {
+
+                            initTimerBehavior();
+
+                            try {
+                                handler.rollback(registry.getId(), imessenger, finishCallback);
+                            } finally {
+                                showIMessages(target);
+                            }
                         } else if (canCanceled(registry)) {
                             canceledProcessing.cancel(registry.getId());
                         }
@@ -288,7 +297,7 @@ public class RegistryList extends TemplatePage {
                     @Override
                     public boolean isVisible() {
                         return registryWorkflowManager.canLink(registry) || registryWorkflowManager.canProcess(registry) ||
-                                canCanceled(registry);
+                                registryWorkflowManager.canRollback(registry) || canCanceled(registry);
                     }
                 };
                 actionLink.add(new Label("actionMessage", new AbstractReadOnlyModel<String>() {
@@ -299,6 +308,8 @@ public class RegistryList extends TemplatePage {
                             return getString("link");
                         } else if (registryWorkflowManager.canProcess(registry)) {
                             return getString("process");
+                        } else if (registryWorkflowManager.canRollback(registry)) {
+                            return getString("rollback");
                         } else if (canCanceled(registry)) {
                             return getString("cancel");
                         }
@@ -429,28 +440,30 @@ public class RegistryList extends TemplatePage {
                         for (final Map.Entry<Registry, AjaxCheckBox> entry : selected.entrySet()) {
                             if (entry.getValue().getModelObject()) {
                                 finishCallback.init();
-                                processor.processJob(new AbstractJob<Void>() {
-                                    @Override
-                                    public Void execute() throws ExecuteException {
-                                        try {
-                                            Registry registry = entry.getKey();
+                                processor.processJob(
+                                        new Callable<Object>() {
+                                            @Override
+                                            public Object call() throws Exception {
+                                                try {
+                                                    Registry registry = entry.getKey();
 
-                                            RegistryStatus oldStatus = registry.getStatus();
-                                            registry.setStatus(null);
-                                            registryBean.updateInNewTransaction(registry);
+                                                    RegistryStatus oldStatus = registry.getStatus();
+                                                    registry.setStatus(null);
+                                                    registryBean.updateInNewTransaction(registry);
 
-                                            try {
-                                                registryBean.delete(registry);
-                                            } catch (Throwable th) {
-                                                registry.setStatus(oldStatus);
-                                                registryBean.updateInNewTransaction(registry);
+                                                    try {
+                                                        registryBean.delete(registry);
+                                                    } catch (Throwable th) {
+                                                        registry.setStatus(oldStatus);
+                                                        registryBean.updateInNewTransaction(registry);
+                                                    }
+                                                } finally {
+                                                    finishCallback.complete();
+                                                }
+                                                return null;
                                             }
-                                        } finally {
-                                            finishCallback.complete();
                                         }
-                                        return null;
-                                    }
-                                });
+                                );
                             }
                         }
                         selected.clear();
