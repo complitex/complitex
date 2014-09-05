@@ -28,6 +28,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -123,117 +124,120 @@ public class RegistryLinker {
         logger.info(Linking.STARTING_LINK_REGISTRIES);
         finishLink.init(registry.getId());
 
-        linkQueueProcessor.execute(new AbstractJob<Void>() {
-            @Override
-            public Void execute() throws ExecuteException {
-                try {
+        linkQueueProcessor.execute(
+                new Callable<Void>() {
+                    @Override
+                    public Void call() throws Exception {
+                        try {
 
-                    // one process on linking
-                    registryLock.writeLock().lock();
-                    try {
-                        // check registry status
-                        if (!registryWorkflowManager.canLink(registry)) {
-                            logger.error(Linking.REGISTRY_FAILED_STATUS);
-                            return null;
+                            // one process on linking
+                            registryLock.writeLock().lock();
+                            try {
+                                // check registry status
+                                if (!registryWorkflowManager.canLink(registry)) {
+                                    logger.error(Linking.REGISTRY_FAILED_STATUS);
+                                    return null;
+                                }
+
+                                // change registry status
+                                if (!EjbBeanLocator.getBean(RegistryLinker.class).setLinkingStatus(registry)) {
+                                    logger.error(Linking.REGISTRY_STATUS_INNER_ERROR);
+                                    return null;
+                                }
+                            } finally {
+                                registryLock.writeLock().unlock();
+                            }
+
+                            // check registry records status
+                            if (!registryRecordBean.hasRecordsToLinking(registry)) {
+                                logger.info(Linking.NOT_FOUND_LINKING_REGISTRY_RECORDS);
+                                EjbBeanLocator.getBean(RegistryLinker.class).setLinkedStatus(registry);
+                                return null;
+                            }
+
+                            try {
+
+                                final BatchProcessor<JobResult> batchProcessor = new BatchProcessor<>(10, processor);
+
+                                final Statistics statistics = new Statistics(registry.getRegistryNumber(), imessenger);
+
+                                int numberFlushRegistryRecords = configBean.getInteger(EircConfig.NUMBER_FLUSH_REGISTRY_RECORDS, true);
+                                FilterWrapper<RegistryRecordData> innerFilter = FilterWrapper.of(filter.getObject(), 0, numberFlushRegistryRecords);
+                                do {
+                                    final List<RegistryRecordData> recordsToLinking = afterCorrection ?
+                                            registryRecordBean.getCorrectionRecordsToLinking(innerFilter) :
+                                            registryRecordBean.getRecordsToLinking(innerFilter);
+
+                                    if (!isContinue(recordsToLinking, registry)) {
+                                        finishReadRecords.set(true);
+                                    }
+
+                                    if (recordsToLinking.size() > 0) {
+
+                                        recordLinkingCounter.incrementAndGet();
+
+                                        batchProcessor.processJob(
+                                                new Callable<JobResult>() {
+                                                    @Override
+                                                    public JobResult call() throws Exception {
+
+                                                        try {
+                                                            int successLinked = EjbBeanLocator.getBean(RegistryLinker.class).linkRegistryRecords(registry, recordsToLinking, userOrganizationId.get());
+
+                                                            statistics.add(recordsToLinking.size(), successLinked, recordsToLinking.size() - successLinked);
+
+                                                            return JobResult.SUCCESSFUL;
+                                                        } catch (Throwable th) {
+                                                            EjbBeanLocator.getBean(RegistryLinker.class).setErrorStatus(registry);
+                                                            logger.error(Linking.REGISTRY_FAILED_LINKED, th.getMessage());
+                                                            throw new ExecuteException(th, "Failed link registry " + registryId);
+                                                        } finally {
+                                                            if (recordLinkingCounter.decrementAndGet() == 0 && finishReadRecords.get()) {
+                                                                finalizeRegistryLinked(logger, finishLink, registry, afterCorrection, filter);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                        );
+
+                                        // next registry record`s id is last in this partition
+                                        innerFilter.setFirst(recordsToLinking.get(recordsToLinking.size() - 1).getId().intValue() + 1);
+                                    } else if (recordLinkingCounter.get() == 0) {
+                                        finalizeRegistryLinked(logger, finishLink, registry, afterCorrection, filter);
+                                    }
+                                } while (!finishReadRecords.get());
+
+                            } catch (Throwable th) {
+
+                                logger.error(Linking.REGISTRY_FAILED_LINKED, th.getMessage());
+                                log.error("Can not link registry " + registryId, th);
+
+                                EjbBeanLocator.getBean(RegistryLinker.class).setErrorStatus(registry);
+
+                            }
+                        } finally {
+                            if (!finishReadRecords.get()) {
+                                if (registryWorkflowManager.isLinking(registry)) {
+                                    try {
+                                        setErrorStatus(registry);
+                                    } catch (Throwable th) {
+                                        log.error("Can not change status", th);
+                                        logger.error(Linking.REGISTRY_STATUS_INNER_ERROR);
+                                    }
+                                    try {
+                                        setLinkedStatus(registry);
+                                    } catch (Throwable th) {
+                                        log.error("Can not change status", th);
+                                        logger.error(Linking.REGISTRY_STATUS_INNER_ERROR);
+                                    }
+                                }
+                                logger.info(Linking.REGISTRY_FINISH_LINK);
+                                finishLink.complete();
+                            }
                         }
-
-                        // change registry status
-                        if (!EjbBeanLocator.getBean(RegistryLinker.class).setLinkingStatus(registry)) {
-                            logger.error(Linking.REGISTRY_STATUS_INNER_ERROR);
-                            return null;
-                        }
-                    } finally {
-                        registryLock.writeLock().unlock();
-                    }
-
-                    // check registry records status
-                    if (!registryRecordBean.hasRecordsToLinking(registry)) {
-                        logger.info(Linking.NOT_FOUND_LINKING_REGISTRY_RECORDS);
-                        EjbBeanLocator.getBean(RegistryLinker.class).setLinkedStatus(registry);
                         return null;
                     }
-
-                    try {
-
-                        final BatchProcessor<JobResult> batchProcessor = new BatchProcessor<>(10, processor);
-
-                        final Statistics statistics = new Statistics(registry.getRegistryNumber(), imessenger);
-
-                        int numberFlushRegistryRecords = configBean.getInteger(EircConfig.NUMBER_FLUSH_REGISTRY_RECORDS, true);
-                        FilterWrapper<RegistryRecordData> innerFilter = FilterWrapper.of(filter.getObject(), 0, numberFlushRegistryRecords);
-                        do {
-                            final List<RegistryRecordData> recordsToLinking = afterCorrection?
-                                    registryRecordBean.getCorrectionRecordsToLinking(innerFilter) :
-                                    registryRecordBean.getRecordsToLinking(innerFilter);
-
-                            if (!isContinue(recordsToLinking, registry)) {
-                                finishReadRecords.set(true);
-                            }
-
-                            if (recordsToLinking.size() > 0) {
-
-                                recordLinkingCounter.incrementAndGet();
-
-                                batchProcessor.processJob(new AbstractJob<JobResult>() {
-                                    @Override
-                                    public JobResult execute() throws ExecuteException {
-
-                                        try {
-                                            int successLinked = EjbBeanLocator.getBean(RegistryLinker.class).linkRegistryRecords(registry, recordsToLinking, userOrganizationId.get());
-
-                                            statistics.add(recordsToLinking.size(), successLinked, recordsToLinking.size() - successLinked);
-
-                                            return JobResult.SUCCESSFUL;
-                                        } catch (Throwable th) {
-                                            EjbBeanLocator.getBean(RegistryLinker.class).setErrorStatus(registry);
-                                            logger.error(Linking.REGISTRY_FAILED_LINKED, th.getMessage());
-                                            throw new ExecuteException(th, "Failed link registry " + registryId);
-                                        } finally {
-                                            if (recordLinkingCounter.decrementAndGet() == 0 && finishReadRecords.get()) {
-                                                finalizeRegistryLinked(logger, finishLink, registry, afterCorrection, filter);
-                                            }
-                                        }
-                                    }
-                                });
-
-                                // next registry record`s id is last in this partition
-                                innerFilter.setFirst(recordsToLinking.get(recordsToLinking.size() - 1).getId().intValue() + 1);
-                            } else if (recordLinkingCounter.get() == 0) {
-                                finalizeRegistryLinked(logger, finishLink, registry, afterCorrection, filter);
-                            }
-                        } while (!finishReadRecords.get());
-
-                    } catch (Throwable th) {
-
-                        logger.error(Linking.REGISTRY_FAILED_LINKED, th.getMessage());
-                        log.error("Can not link registry " + registryId, th);
-
-                        EjbBeanLocator.getBean(RegistryLinker.class).setErrorStatus(registry);
-
-                    }
-                } finally {
-                    if (!finishReadRecords.get()) {
-                        if (registryWorkflowManager.isLinking(registry)) {
-                            try {
-                                setErrorStatus(registry);
-                            } catch (Throwable th) {
-                                log.error("Can not change status", th);
-                                logger.error(Linking.REGISTRY_STATUS_INNER_ERROR);
-                            }
-                            try {
-                                setLinkedStatus(registry);
-                            } catch (Throwable th) {
-                                log.error("Can not change status", th);
-                                logger.error(Linking.REGISTRY_STATUS_INNER_ERROR);
-                            }
-                        }
-                        logger.info(Linking.REGISTRY_FINISH_LINK);
-                        finishLink.complete();
-                    }
-                }
-                return null;
-            }
-        });
+                });
     }
 
     public void finalizeRegistryLinked(final LocLogger logger, AbstractFinishCallback finishLink, final Registry registry,
@@ -409,9 +413,9 @@ public class RegistryLinker {
         public void add(int totalLinkedRecords, int successLinkedRecords, int errorLinkedRecords) {
             lock.lock();
             try {
-                this.totalLinkedRecords   += totalLinkedRecords;
+                this.totalLinkedRecords += totalLinkedRecords;
                 this.successLinkedRecords += successLinkedRecords;
-                this.errorLinkedRecords   += errorLinkedRecords;
+                this.errorLinkedRecords += errorLinkedRecords;
 
                 logger.info(Linking.LINKED_BULK_RECORDS, this.totalLinkedRecords, this.successLinkedRecords, this.errorLinkedRecords);
             } finally {

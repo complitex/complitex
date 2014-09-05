@@ -10,15 +10,14 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.ibatis.session.SqlSessionManager;
 import org.apache.wicket.util.io.IOUtils;
-import org.complitex.correction.entity.LinkStatus;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
 import org.complitex.common.service.exception.AbstractException;
-import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.correction.entity.LinkStatus;
+import org.complitex.correction.entity.OrganizationCorrection;
+import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.dictionary.entity.Address;
@@ -29,7 +28,10 @@ import ru.flexpay.eirc.mb_transformer.entity.MbTransformerConfig;
 import ru.flexpay.eirc.mb_transformer.entity.RegistryRecordMapped;
 import ru.flexpay.eirc.mb_transformer.util.MbParsingConstants;
 import ru.flexpay.eirc.registry.entity.*;
-import ru.flexpay.eirc.registry.service.*;
+import ru.flexpay.eirc.registry.service.AbstractFinishCallback;
+import ru.flexpay.eirc.registry.service.AbstractMessenger;
+import ru.flexpay.eirc.registry.service.FinishCallback;
+import ru.flexpay.eirc.registry.service.IMessenger;
 import ru.flexpay.eirc.registry.service.file.RegistryFPFileService;
 import ru.flexpay.eirc.registry.service.handle.MbConverterQueueProcessor;
 import ru.flexpay.eirc.registry.service.parse.ParseRegistryConstants;
@@ -47,6 +49,7 @@ import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -121,9 +124,9 @@ public class MbCorrectionsFileConverter {
         finishConvert.init();
 
         mbConverterQueueProcessor.execute(
-                new AbstractJob<Void>() {
+                new Callable<Void>() {
                     @Override
-                    public Void execute() throws ExecuteException {
+                    public Void call() throws Exception {
                         try {
 
                             final String dir = configBean.getString(MbTransformerConfig.WORK_DIR, true);
@@ -202,23 +205,24 @@ public class MbCorrectionsFileConverter {
         finishConvert.init();
 
         mbConverterQueueProcessor.execute(
-            new AbstractJob<Void>() {
-                @Override
-                public Void execute() throws ExecuteException {
-                    try {
-                        convertFile(correctionsFile, chargesFile, dir, eircFileName, tmpDir, mbOrganizationId,
-                                eircOrganizationId, imessenger);
-                    } catch (Exception e) {
-                        log.error("Can not convert files", e);
-                        imessenger.addMessageError("mb_registries_fail_convert",
-                                e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
-                    } finally {
-                        imessenger.addMessageInfo("mb_registry_convert_finish");
-                        finishConvert.complete();
+                new Callable<Void>() {
+                    @Override
+                    public Void call() throws Exception {
+
+                        try {
+                            convertFile(correctionsFile, chargesFile, dir, eircFileName, tmpDir, mbOrganizationId,
+                                    eircOrganizationId, imessenger);
+                        } catch (Exception e) {
+                            log.error("Can not convert files", e);
+                            imessenger.addMessageError("mb_registries_fail_convert",
+                                    e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
+                        } finally {
+                            imessenger.addMessageInfo("mb_registry_convert_finish");
+                            finishConvert.complete();
+                        }
+                        return null;
                     }
-                    return null;
                 }
-            }
         );
     }
 

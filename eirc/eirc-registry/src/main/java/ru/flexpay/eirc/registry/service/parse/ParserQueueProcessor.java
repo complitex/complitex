@@ -20,7 +20,7 @@ public class ParserQueueProcessor extends QueueProcessor {
 
     private final Logger log = LoggerFactory.getLogger(ParserQueueProcessor.class);
 
-    @EJB
+    @EJB(name = "JobProcessor")
     private JobProcessor processor;
 
     @PostConstruct

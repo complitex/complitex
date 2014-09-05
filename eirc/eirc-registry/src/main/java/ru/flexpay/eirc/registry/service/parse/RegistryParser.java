@@ -38,6 +38,7 @@ import javax.ejb.TransactionAttributeType;
 import java.io.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -114,9 +115,10 @@ public class RegistryParser implements Serializable {
             finishUpload.init();
         }
 
-        parserQueueProcessor.execute(new AbstractJob<Void>() {
+        parserQueueProcessor.execute(new Callable<Void>() {
             @Override
-            public Void execute() throws ExecuteException {
+            public Void call() throws Exception {
+
                 try {
                     InputStream is = new FileInputStream(new File(dir, fileName));
                     Registry registry = EjbBeanLocator.getBean(RegistryParser.class).parse(imessenger, finishUpload, is, fileName);
@@ -192,7 +194,7 @@ public class RegistryParser implements Serializable {
                                 return null;
                             }
                             if (finishUpload != null) {
-                                finishUpload.setProcessId(registry.getId());
+                                finishUpload.setProcessId(registry.getRegistryNumber());
                             }
                             EjbBeanLocator.getBean(RegistryParser.class).saveRegistry(registry);
                         } finally {
@@ -217,8 +219,8 @@ public class RegistryParser implements Serializable {
                 nextIterate = isContinue(listMessage, context);
                 listMessage.clear();
 
-            } while(nextIterate);
-        } catch(Exception e) {
+            } while (nextIterate);
+        } catch (Exception e) {
             log.error("Processing error", e);
             processLog.error(Parsing.INNER_ERROR);
             EjbBeanLocator.getBean(RegistryParser.class).setErrorStatus(context.getRegistry());
@@ -270,29 +272,24 @@ public class RegistryParser implements Serializable {
 
             final List<RegistryRecordData> records = context.getRecords();
 
-            context.getBatchProcessor().processJob(new AbstractJob<JobResult>() {
-                @Override
-                public JobResult execute() throws ExecuteException {
-                    /*
-                    long i = context.getNumberFlushRegistryRecords()*inc.incrementAndGet();
-                    for (RegistryRecordData record : records) {
-                        ((RegistryRecord)record).setUniqueOperationNumber(i);
-                        ((RegistryRecord)record).setContainers(Lists.newArrayList(new Container(String.valueOf(i), ContainerType.BASE)));
-                        i++;
-                    }*/
-                    registryRecordService.createBulk(records);
-                    //TODO save intermediate state
-                    int currentCounter = context.addRecordCounter(records.size());
-                    context.addMessageInfo(Parsing.REGISTRY_RECORD_UPLOAD, currentCounter);
-                    return JobResult.SUCCESSFUL;
-                }
-            });
+            context.getBatchProcessor().processJob(new Callable<JobResult>() {
+                                                       @Override
+                                                       public JobResult call() throws Exception {
+
+                                                           registryRecordService.createBulk(records);
+                                                           //TODO save intermediate state
+                                                           int currentCounter = context.addRecordCounter(records.size());
+                                                           context.addMessageInfo(Parsing.REGISTRY_RECORD_UPLOAD, currentCounter);
+                                                           return JobResult.SUCCESSFUL;
+                                                       }
+                                                   }
+            );
 
             context.clearRecords();
         }
     }
 
-    private void finalizeRegistry(final  Context context) throws ExecuteException {
+    private void finalizeRegistry(final Context context) throws ExecuteException {
 
         if (context.getRegistry() == null) {
             return;
@@ -467,7 +464,7 @@ public class RegistryParser implements Serializable {
     private Organization getProvider(Registry registry) {
         // for payments registry assume recipient is a service provider
 
-        Long providerId = registry.getType().isPayments()? registry.getRecipientOrganizationId() : registry.getSenderOrganizationId();
+        Long providerId = registry.getType().isPayments() ? registry.getRecipientOrganizationId() : registry.getSenderOrganizationId();
 
         return organizationStrategy.findById(providerId, false);
     }

@@ -57,6 +57,15 @@ public class RegistryRecordBean extends AbstractBean {
         return getSqlSessionManager().selectList(NS + ".selectRecordsToProcessing", filter);
     }
 
+    /**
+     * Get registry records to rollback
+     * @param filter Filter must content registryId, count, first
+     * @return registry records
+     */
+    public List<RegistryRecordData> getRecordsToRollback(FilterWrapper<RegistryRecordData> filter) {
+        return getSqlSessionManager().selectList(NS + ".selectRecordsToRollback", filter);
+    }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void createBulk(List<RegistryRecordData> registryRecords) {
         Map<String, Object> params = createBulkRecords(registryRecords);
@@ -145,11 +154,15 @@ public class RegistryRecordBean extends AbstractBean {
     }
 
     public boolean hasRecordsToLinking(Registry registry) {
-        return sqlSession().selectOne(NS + ".hasRecordsToLinking", registry.getId()) != null;
+        return sqlSession().selectList(NS + ".hasRecordsToLinking", registry.getId()).size() > 0;
     }
 
     public boolean hasRecordsToProcessing(Registry registry) {
-        return sqlSession().selectOne(NS + ".hasRecordsToProcessing", registry.getId()) != null;
+        return sqlSession().selectList(NS + ".hasRecordsToProcessing", registry.getId()).size() > 0;
+    }
+
+    public boolean hasRecordsToRollback(Registry registry) {
+        return sqlSession().selectList(NS + ".hasRecordsToRollback", registry.getId()).size() > 0;
     }
 
     public List<StatusDetailInfo> getStatusStatistics(RegistryRecordData registryRecord) {

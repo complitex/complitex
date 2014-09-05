@@ -6,12 +6,12 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.util.io.IOUtils;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.exception.AbstractException;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.util.DateUtil;
+import org.complitex.correction.entity.OrganizationCorrection;
+import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
@@ -22,7 +22,6 @@ import ru.flexpay.eirc.organization.entity.Organization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 import ru.flexpay.eirc.registry.entity.*;
 import ru.flexpay.eirc.registry.service.AbstractFinishCallback;
-import ru.flexpay.eirc.registry.service.AbstractJob;
 import ru.flexpay.eirc.registry.service.AbstractMessenger;
 import ru.flexpay.eirc.registry.service.handle.MbConverterQueueProcessor;
 import ru.flexpay.eirc.registry.service.parse.FileReader;
@@ -47,6 +46,7 @@ import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -60,36 +60,36 @@ import static ru.flexpay.eirc.registry.service.parse.ParseRegistryConstants.*;
 @TransactionAttribute(TransactionAttributeType.NEVER)
 public class EircPaymentsRegistryConverter {
 
-	private static final Logger log = LoggerFactory.getLogger(EircPaymentsRegistryConverter.class.getClass());
+    private static final Logger log = LoggerFactory.getLogger(EircPaymentsRegistryConverter.class.getClass());
 
     private static final int NUMBER_READ_CHARS = 10000;
 
-	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("dd.MM.yyyy");
-	private static final DateTimeFormatter EIRC_PAYMENT_DATE_FORMATTER = DateTimeFormat.forPattern("ddMMyyyy");
-	private static final DateTimeFormatter MB_OPERATION_DATE_FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
-	private static final DateTimeFormatter PAYMENT_PERIOD_DATE_FORMATTER = DateTimeFormat.forPattern("yyyyMM");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("dd.MM.yyyy");
+    private static final DateTimeFormatter EIRC_PAYMENT_DATE_FORMATTER = DateTimeFormat.forPattern("ddMMyyyy");
+    private static final DateTimeFormatter MB_OPERATION_DATE_FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
+    private static final DateTimeFormatter PAYMENT_PERIOD_DATE_FORMATTER = DateTimeFormat.forPattern("yyyyMM");
 
     private static final String FORMAT_FILE_NAME = "00001001.YMD";
 
-	private static final String[] TABLE_HEADERS = {
-			"код квит",
-			"л.с. ЕРЦ ",
-			"  л.с.    ",
-			" Ф. И. О.      ",
-			"   ",
-			" Улица          ",
-			"Дом    ",
-			"Кв. ",
-			"Услуга       ",
-			" Нач. ",
-			" Кон. ",
-			"Рзн",
-			"Дата пл.",
-			"   с  ",
-			"   по ",
-			"Всего  "
-	};
-	private static final Map<String, String> SERVICE_NAMES = ImmutableMap.<String, String>builder()
+    private static final String[] TABLE_HEADERS = {
+            "код квит",
+            "л.с. ЕРЦ ",
+            "  л.с.    ",
+            " Ф. И. О.      ",
+            "   ",
+            " Улица          ",
+            "Дом    ",
+            "Кв. ",
+            "Услуга       ",
+            " Нач. ",
+            " Кон. ",
+            "Рзн",
+            "Дата пл.",
+            "   с  ",
+            "   по ",
+            "Всего  "
+    };
+    private static final Map<String, String> SERVICE_NAMES = ImmutableMap.<String, String>builder()
             .put("01", "ЭЛЕКТР  ")
             .put("02", "КВ/ЭКСПЛ") // точно известно
             .put("03", "ОТОПЛ   ")
@@ -153,9 +153,9 @@ public class EircPaymentsRegistryConverter {
         finishConvert.init();
 
         mbConverterQueueProcessor.execute(
-                new AbstractJob<Void>() {
+                new Callable<Void>() {
                     @Override
-                    public Void execute() throws ExecuteException {
+                    public Void call() throws Exception {
                         try {
                             exportToMegaBank(reader, dir, mbFileName, mbOrganizationId, eircOrganizationId, imessenger);
                         } catch (Exception e) {
@@ -192,7 +192,7 @@ public class EircPaymentsRegistryConverter {
                     FileReader.Message message = null;
                     try {
                         message = getNextMessage();
-                    } catch (RegistryFormatException | ExecuteException e ) {
+                    } catch (RegistryFormatException | ExecuteException e) {
                         fileMessenger.addMessageError("eirc_payments_fail_convert", e.toString());
                         log.error("Failed message", e);
                     }
@@ -237,7 +237,7 @@ public class EircPaymentsRegistryConverter {
                     }
                     List<String> listMessage = parseMessage(message.getBody());
                     RegistryRecord record = new RegistryRecord();
-                    return ParseUtil.fillUpRecord(listMessage, record)? record : null;
+                    return ParseUtil.fillUpRecord(listMessage, record) ? record : null;
                 }
 
                 private FileReader.Message getNextMessage() throws RegistryFormatException, ExecuteException {
@@ -250,7 +250,7 @@ public class EircPaymentsRegistryConverter {
                     }
                     totalCount++;
                     FileReader.Message message = listMessage.get(idx++);
-                    if (message != null && totalCount%10000 == 0) {
+                    if (message != null && totalCount % 10000 == 0) {
                         fileMessenger.addMessageInfo("processed_lines", totalCount);
                     }
                     return message;
@@ -283,7 +283,7 @@ public class EircPaymentsRegistryConverter {
 
             try {
                 exportToMegaBank(dataSource, serviceProvider, mbOrganizationId, eircOrganizationId, dir,
-                        mbFileName, 2*reader.getFileLength() + 2048, fileMessenger);
+                        mbFileName, 2 * reader.getFileLength() + 2048, fileMessenger);
             } catch (Exception e) {
                 fileMessenger.addMessageError("eirc_payments_fail_convert", e.toString());
                 log.error("Failed export EIRC payments to MB payments", e);
@@ -295,16 +295,16 @@ public class EircPaymentsRegistryConverter {
         }
     }
 
-	/**
-	 * Export EIRC registry to MB registry file.
-	 *
-	 * @param serviceProviderOrganization Service provider organization
-	 * @throws ExecutionException
-	 */
-	public void exportToMegaBank(DataSource dataSource, Organization serviceProviderOrganization,
-                                     Long mbOrganizationId, Long eircOrganizationId,
-                                     String dir, String mbFileName, long mbFileLength,
-                                     AbstractMessenger imessenger)
+    /**
+     * Export EIRC registry to MB registry file.
+     *
+     * @param serviceProviderOrganization Service provider organization
+     * @throws ExecutionException
+     */
+    public void exportToMegaBank(DataSource dataSource, Organization serviceProviderOrganization,
+                                 Long mbOrganizationId, Long eircOrganizationId,
+                                 String dir, String mbFileName, long mbFileLength,
+                                 AbstractMessenger imessenger)
             throws ExecutionException, AbstractException {
 
         Registry registry = dataSource.getRegistry();
@@ -312,8 +312,8 @@ public class EircPaymentsRegistryConverter {
         FileChannel outChannel = null;
 
         File outFile = null;
-        
-		try {
+
+        try {
 
             String eircDataSource = getDataSource();
 
@@ -360,40 +360,40 @@ public class EircPaymentsRegistryConverter {
             writeLine(buffer, "");
             writeCharToLine(buffer, '_', 128);
 
-			// заголовочные строки
-			writeLine(buffer, "\tРеестр поступивших платежей. Мемориальный ордер №" + detailsData[1]);
-			writeLine(buffer, "\tДля \"" + eircOrganizationStrategy.displayDomainObject(serviceProviderOrganization, getLocation()) + "\". День распределения платежей " +
-						 DATE_FORMATTER.print(paymentDate.getTime()) + ".");
-			writeCharToLine(buffer, ' ', 128);
-			writeCharToLine(buffer, ' ', 128);
-			BigDecimal amount = registry.getAmount();
-			if (amount == null) {
-				amount = new BigDecimal(0);
-			}
+            // заголовочные строки
+            writeLine(buffer, "\tРеестр поступивших платежей. Мемориальный ордер №" + detailsData[1]);
+            writeLine(buffer, "\tДля \"" + eircOrganizationStrategy.displayDomainObject(serviceProviderOrganization, getLocation()) + "\". День распределения платежей " +
+                    DATE_FORMATTER.print(paymentDate.getTime()) + ".");
+            writeCharToLine(buffer, ' ', 128);
+            writeCharToLine(buffer, ' ', 128);
+            BigDecimal amount = registry.getAmount();
+            if (amount == null) {
+                amount = new BigDecimal(0);
+            }
 
-			writeLine(buffer, "\tВсего " + (amount.multiply(new BigDecimal("100")).intValue()) +
-						 " коп. Суммы указаны в копейках. Всего строк " + registry.getRecordsCount());
-			writeCharToLine(buffer, ' ', 128);
+            writeLine(buffer, "\tВсего " + (amount.multiply(new BigDecimal("100")).intValue()) +
+                    " коп. Суммы указаны в копейках. Всего строк " + registry.getRecordsCount());
+            writeCharToLine(buffer, ' ', 128);
 
-			// шапка таблицы
-			writeLine(buffer, TABLE_HEADERS, "|");
-			StringBuilder builder = new StringBuilder();
-			for (String s : TABLE_HEADERS) {
-				builder.append('+');
-				for (int i = 0; i < s.length(); i++) {
-					builder.append('-');
-				}
-			}
-			writeLine(buffer, builder.toString());
+            // шапка таблицы
+            writeLine(buffer, TABLE_HEADERS, "|");
+            StringBuilder builder = new StringBuilder();
+            for (String s : TABLE_HEADERS) {
+                builder.append('+');
+                for (int i = 0; i < s.length(); i++) {
+                    builder.append('-');
+                }
+            }
+            writeLine(buffer, builder.toString());
 
-			// информационные строки
+            // информационные строки
             log.debug("Write info lines");
-			log.debug("Total info lines: {}", registry.getRecordsCount());
+            log.debug("Total info lines: {}", registry.getRecordsCount());
 
             RegistryRecordData registryRecord;
-            while ((registryRecord = dataSource.getNextRecord()) != null){
+            while ((registryRecord = dataSource.getNextRecord()) != null) {
                 writeInfoLine(buffer, registryRecord, serviceProviderOrganization.getId(), eircOrganizationId, mbOrganizationId, eircDataSource);
-			}
+            }
 
             outChannel.truncate(buffer.position());
 
@@ -401,22 +401,22 @@ public class EircPaymentsRegistryConverter {
 
             imessenger.addMessageInfo("mb_payments_created", mbFileName, registry.getRecordsCount());
 
-		} catch (Exception e) {
+        } catch (Exception e) {
             if (outFile != null && outFile.exists()) {
                 outFile.delete();
             }
-			throw new ExecutionException(e);
-		} finally {
+            throw new ExecutionException(e);
+        } finally {
             IOUtils.closeQuietly(outChannel);
-		}
-	}
+        }
+    }
 
-	private String getExternalServiceProviderId(Registry registry, Organization serviceProviderOrganization,
+    private String getExternalServiceProviderId(Registry registry, Organization serviceProviderOrganization,
                                                 Long mbOrganizationId, Long eircOrganizationId, String dataSource) throws MbConverterException {
 
         List<OrganizationCorrection> organizationCorrections = organizationCorrectionBean.getOrganizationCorrections(dataSource,
-            FilterWrapper.of(new OrganizationCorrection(null, serviceProviderOrganization.getId(), null,
-                    registry.getSenderOrganizationId(), eircOrganizationId, null)));
+                FilterWrapper.of(new OrganizationCorrection(null, serviceProviderOrganization.getId(), null,
+                        registry.getSenderOrganizationId(), eircOrganizationId, null)));
         if (organizationCorrections.size() <= 0) {
             throw new MbConverterException("No service provider correction with id {0}: organizationId={1}, userOrganizationId={2}",
                     serviceProviderOrganization.getId(), registry.getSenderOrganizationId(), eircOrganizationId);
@@ -426,7 +426,7 @@ public class EircPaymentsRegistryConverter {
                     serviceProviderOrganization.getId(), registry.getSenderOrganizationId(), eircOrganizationId);
         }
         return organizationCorrections.get(0).getCorrection();
-	}
+    }
 
     public String getOutServiceCode(String innerServiceCode, Long mbOrganizationId, Long eircOrganizationId, String dataSource) throws MbConverterException {
         String serviceCode = serviceCorrectionCache.getIfPresent(innerServiceCode);
@@ -475,10 +475,10 @@ public class EircPaymentsRegistryConverter {
                                String dataSource)
             throws ExecutionException, MbConverterException, IOException {
 
-		//граница таблицы
-		//writeCellData(buffer, DELIMITER, "", 0, ' ');
+        //граница таблицы
+        //writeCellData(buffer, DELIMITER, "", 0, ' ');
 
-		// номер квитанции
+        // номер квитанции
         String numberQuittance = null;
         for (Container container : record.getContainers()) {
             if (container.getType().equals(ContainerType.CASH_PAYMENT) ||
@@ -487,94 +487,94 @@ public class EircPaymentsRegistryConverter {
                 numberQuittance = data[2];
             }
         }
-		writeCellData(buffer, DELIMITER, numberQuittance, TABLE_HEADERS[0].length(), ' ');
+        writeCellData(buffer, DELIMITER, numberQuittance, TABLE_HEADERS[0].length(), ' ');
 
-		// лиц. счёт ЕРЦ
-		String eircAccount  = getEircAccount(record, serviceProviderId, eircOrganizationId, mbOrganizationId);
-		writeCellData(buffer, DELIMITER, eircAccount, TABLE_HEADERS[1].length(), ' ');
+        // лиц. счёт ЕРЦ
+        String eircAccount = getEircAccount(record, serviceProviderId, eircOrganizationId, mbOrganizationId);
+        writeCellData(buffer, DELIMITER, eircAccount, TABLE_HEADERS[1].length(), ' ');
 
-		// лиц. счёт поставщика услуг
-		writeCellData(buffer, DELIMITER, record.getPersonalAccountExt(), TABLE_HEADERS[2].length(), ' ');
+        // лиц. счёт поставщика услуг
+        writeCellData(buffer, DELIMITER, record.getPersonalAccountExt(), TABLE_HEADERS[2].length(), ' ');
 
-		// ФИО
-		String fio = record.getLastName();
-		if (record.getFirstName() != null && record.getFirstName().length() > 0) {
-			fio += " " + record.getFirstName().charAt(0);
-			if (record.getMiddleName() != null && record.getMiddleName().length() > 0) {
-				fio += " " + record.getMiddleName().charAt(0);
-			}
-		}
-		writeCellData(buffer, DELIMITER, fio, TABLE_HEADERS[3].length(), ' ');
+        // ФИО
+        String fio = record.getLastName();
+        if (record.getFirstName() != null && record.getFirstName().length() > 0) {
+            fio += " " + record.getFirstName().charAt(0);
+            if (record.getMiddleName() != null && record.getMiddleName().length() > 0) {
+                fio += " " + record.getMiddleName().charAt(0);
+            }
+        }
+        writeCellData(buffer, DELIMITER, fio, TABLE_HEADERS[3].length(), ' ');
 
-		// тип улицы
-		String streetType = record.getStreetType();
-		if (streetType != null && streetType.length() > 3) {
-			streetType = streetType.substring(0, 2);
-		}
-		writeCellData(buffer, DELIMITER, streetType, TABLE_HEADERS[4].length(), ' ');
+        // тип улицы
+        String streetType = record.getStreetType();
+        if (streetType != null && streetType.length() > 3) {
+            streetType = streetType.substring(0, 2);
+        }
+        writeCellData(buffer, DELIMITER, streetType, TABLE_HEADERS[4].length(), ' ');
 
-		// название улицы
-		writeCellData(buffer, DELIMITER, record.getStreet(), TABLE_HEADERS[5].length(), ' ');
+        // название улицы
+        writeCellData(buffer, DELIMITER, record.getStreet(), TABLE_HEADERS[5].length(), ' ');
 
-		// дом
-		String building = record.getBuildingNumber();
-		if (building != null && record.getBuildingCorp() != null) {
-			building += " " + record.getBuildingCorp();
-		}
-		writeCellData(buffer, DELIMITER, building, TABLE_HEADERS[6].length(), ' ');
+        // дом
+        String building = record.getBuildingNumber();
+        if (building != null && record.getBuildingCorp() != null) {
+            building += " " + record.getBuildingCorp();
+        }
+        writeCellData(buffer, DELIMITER, building, TABLE_HEADERS[6].length(), ' ');
 
-		// квартира
-		writeCellData(buffer, DELIMITER, record.getApartment(), TABLE_HEADERS[7].length(), ' ');
+        // квартира
+        writeCellData(buffer, DELIMITER, record.getApartment(), TABLE_HEADERS[7].length(), ' ');
 
-		// услуга
-		String serviceCode = record.getServiceCode();
-		if (serviceCode == null) {
-			throw new MbConverterException("Registry record`s service code is null. Registry record Id: " + record.getId());
-		}
-		serviceCode = getOutServiceCode(serviceCode, mbOrganizationId, eircOrganizationId, dataSource);
-		if (serviceCode == null) {
-			return;
-		}
-		serviceCode = StringUtils.leftPad(serviceCode, 2, '0');
+        // услуга
+        String serviceCode = record.getServiceCode();
+        if (serviceCode == null) {
+            throw new MbConverterException("Registry record`s service code is null. Registry record Id: " + record.getId());
+        }
+        serviceCode = getOutServiceCode(serviceCode, mbOrganizationId, eircOrganizationId, dataSource);
+        if (serviceCode == null) {
+            return;
+        }
+        serviceCode = StringUtils.leftPad(serviceCode, 2, '0');
 
-		String service = serviceCode + "." + SERVICE_NAMES.get(serviceCode) + " " + "*";
-		writeCellData(buffer, DELIMITER, service, TABLE_HEADERS[8].length(), ' ');
+        String service = serviceCode + "." + SERVICE_NAMES.get(serviceCode) + " " + "*";
+        writeCellData(buffer, DELIMITER, service, TABLE_HEADERS[8].length(), ' ');
 
-		// начальное показание счётчика
-		writeCellData(buffer, DELIMITER, "0", TABLE_HEADERS[9].length(), ' ');
+        // начальное показание счётчика
+        writeCellData(buffer, DELIMITER, "0", TABLE_HEADERS[9].length(), ' ');
 
-		// конечное показание счётчика
-		writeCellData(buffer, DELIMITER, "0", TABLE_HEADERS[10].length(), ' ');
+        // конечное показание счётчика
+        writeCellData(buffer, DELIMITER, "0", TABLE_HEADERS[10].length(), ' ');
 
-		// разница показаний счётчика
-		writeCellData(buffer, DELIMITER, "0", TABLE_HEADERS[11].length(), ' ');
+        // разница показаний счётчика
+        writeCellData(buffer, DELIMITER, "0", TABLE_HEADERS[11].length(), ' ');
 
-		// дата платежа
-		Date operationDate = record.getOperationDate();
-		String paymentDate = operationDate != null ? MB_OPERATION_DATE_FORMATTER.print(operationDate.getTime()) : null;
-		writeCellData(buffer, DELIMITER, paymentDate, TABLE_HEADERS[12].length(), ' ');
+        // дата платежа
+        Date operationDate = record.getOperationDate();
+        String paymentDate = operationDate != null ? MB_OPERATION_DATE_FORMATTER.print(operationDate.getTime()) : null;
+        writeCellData(buffer, DELIMITER, paymentDate, TABLE_HEADERS[12].length(), ' ');
 
-		// с какого месяца оплачена услуга
-		String paymentMonth = null;
-		if (operationDate != null) {
-			Calendar cal = (Calendar) Calendar.getInstance().clone();
-			cal.setTime(operationDate);
-			cal.set(Calendar.DAY_OF_MONTH, 1);
-			cal.roll(Calendar.MONTH, -1);
-			paymentMonth = PAYMENT_PERIOD_DATE_FORMATTER.print(cal.getTime().getTime());
-		}
-		writeCellData(buffer, DELIMITER, paymentMonth, TABLE_HEADERS[13].length(), ' ');
+        // с какого месяца оплачена услуга
+        String paymentMonth = null;
+        if (operationDate != null) {
+            Calendar cal = (Calendar) Calendar.getInstance().clone();
+            cal.setTime(operationDate);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.roll(Calendar.MONTH, -1);
+            paymentMonth = PAYMENT_PERIOD_DATE_FORMATTER.print(cal.getTime().getTime());
+        }
+        writeCellData(buffer, DELIMITER, paymentMonth, TABLE_HEADERS[13].length(), ' ');
 
-		// по какой месяц оплачена услуга
-		writeCellData(buffer, DELIMITER, paymentMonth, TABLE_HEADERS[14].length(), ' ');
+        // по какой месяц оплачена услуга
+        writeCellData(buffer, DELIMITER, paymentMonth, TABLE_HEADERS[14].length(), ' ');
 
-		// сумма (значение суммы изначально передаётся в рублях, но должно быть записано в копейках)\
-		int sum = record.getAmount().multiply(new BigDecimal("100")).intValue();
-		writeCellData(buffer, DELIMITER, String.valueOf(sum), null, ' ');
+        // сумма (значение суммы изначально передаётся в рублях, но должно быть записано в копейках)\
+        int sum = record.getAmount().multiply(new BigDecimal("100")).intValue();
+        writeCellData(buffer, DELIMITER, String.valueOf(sum), null, ' ');
 
         writeLine(buffer, null);
 
-	}
+    }
 
     @SuppressWarnings("unused")
     private String getEircAccount(RegistryRecordData record, Long serviceProviderId, Long eircOrganizationId, Long mbOrganizationId) throws MbConverterException {
@@ -610,28 +610,28 @@ public class EircPaymentsRegistryConverter {
         buffer.put(cell.getBytes(MbParsingConstants.REGISTRY_FILE_CHARSET));
     }
 
-	private String createCellData(String data, Integer length, char ch) {
-		String cellData = data;
-		if (cellData == null) {
-			cellData = "";
-		}
-		if (length == null) {
-			return cellData;
-		}
-		if (cellData.length() > length) {
-			return cellData.substring(0, length);
-		}
-		StringBuilder sb = new StringBuilder(cellData);
-		while (sb.length() < length) {
-			sb.append(ch);
-		}
-		return sb.toString();
-	}
+    private String createCellData(String data, Integer length, char ch) {
+        String cellData = data;
+        if (cellData == null) {
+            cellData = "";
+        }
+        if (length == null) {
+            return cellData;
+        }
+        if (cellData.length() > length) {
+            return cellData.substring(0, length);
+        }
+        StringBuilder sb = new StringBuilder(cellData);
+        while (sb.length() < length) {
+            sb.append(ch);
+        }
+        return sb.toString();
+    }
 
-	private Locale getLocation() {
-		return new Locale("ru");
-	}
-    
+    private Locale getLocation() {
+        return new Locale("ru");
+    }
+
     private void writeLine(ByteBuffer buffer, String line) throws IOException {
         FileUtil.writeLine(buffer, line, null, MbParsingConstants.REGISTRY_FILE_CHARSET);
     }
@@ -653,7 +653,7 @@ public class EircPaymentsRegistryConverter {
             throw new IllegalArgumentException("The number must have range [1, 31]");
         }
 
-        return value <= 9 ? String.valueOf(value).charAt(0) : (char)('A' + (value - 10));
+        return value <= 9 ? String.valueOf(value).charAt(0) : (char) ('A' + (value - 10));
     }
 
     private class FileProxyMessenger extends AbstractMessenger {

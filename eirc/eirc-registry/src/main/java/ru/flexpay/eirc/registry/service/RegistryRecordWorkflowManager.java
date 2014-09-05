@@ -9,7 +9,6 @@ import ru.flexpay.eirc.registry.entity.*;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +32,7 @@ public class RegistryRecordWorkflowManager {
                     put(LINKED_WITH_ERROR,      ImmutableList.of(LINKED)).
                     put(LINKED,                 ImmutableList.of(PROCESSED, PROCESSED_WITH_ERROR)).
                     put(PROCESSED_WITH_ERROR,   ImmutableList.of(PROCESSED)).
-                    put(PROCESSED,              Collections.<RegistryRecordStatus>emptyList()).
+                    put(PROCESSED,              ImmutableList.of(LINKED)).
                 build();
 
     /**
