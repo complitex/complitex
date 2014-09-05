@@ -12,12 +12,12 @@ import javax.ejb.EJB;
  * @author Anatoly Ivanov
  *         Date: 015 15.08.14 18:33
  */
-public class OrganizationIdPicker extends FormComponentPanel<Long>{
+public class OrganizationIdPicker extends Panel{
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     protected IOrganizationStrategy organizationStrategy;
 
     public OrganizationIdPicker(String id, final IModel<Long> model, Long... organizationTypeIds) {
-        super(id);
+        super(id, model);
 
         add(new OrganizationPicker("picker", new IModel<DomainObject>() {
             @Override
@@ -34,11 +34,6 @@ public class OrganizationIdPicker extends FormComponentPanel<Long>{
             public void detach() {
 
             }
-        }, organizationTypeIds).setLabel(getLabel()).setEnabled(isEnabled()));
-    }
-
-    @Override
-    protected void convertInput() {
-        setConvertedInput(getModelObject());
+        }, organizationTypeIds).setEnabled(isEnabled()));
     }
 }

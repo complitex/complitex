@@ -12,17 +12,17 @@ import org.complitex.common.strategy.organization.IOrganizationStrategy;
 
 import javax.ejb.EJB;
 
-public class OrganizationPicker extends FormComponentPanel<DomainObject> {
+public class OrganizationPicker extends Panel {
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     protected IOrganizationStrategy organizationStrategy;
 
     private OrganizationPickerDialog pickerDialog;
     private Label organizationLabel;
 
-    public OrganizationPicker(String id, IModel<DomainObject> model, Long... organizationTypeIds) {
+    public OrganizationPicker(String id, final IModel<DomainObject> model, Long... organizationTypeIds) {
         super(id, model);
 
-        pickerDialog = new OrganizationPickerDialog("dialog", getModel(), organizationTypeIds){
+        pickerDialog = new OrganizationPickerDialog("dialog", model, organizationTypeIds){
             @Override
             protected void onSelect(AjaxRequestTarget target) {
                 target.add(organizationLabel);
@@ -37,7 +37,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
 
                     @Override
                     public String getObject() {
-                        DomainObject organization = getModelObject();
+                        DomainObject organization = model.getObject();
                         if (organization != null) {
                             return organizationStrategy.displayShortNameAndCode(organization, getLocale());
                         } else {
@@ -60,10 +60,5 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
     }
 
     protected void onSelect(AjaxRequestTarget target){
-    }
-
-    @Override
-    protected void convertInput() {
-        setConvertedInput(getModelObject());
     }
 }

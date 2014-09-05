@@ -193,10 +193,12 @@ public class RegistryParser implements Serializable {
                             if (registry == null) {
                                 return null;
                             }
+
+                            EjbBeanLocator.getBean(RegistryParser.class).saveRegistry(registry);
+
                             if (finishUpload != null) {
                                 finishUpload.setProcessId(registry.getRegistryNumber());
                             }
-                            EjbBeanLocator.getBean(RegistryParser.class).saveRegistry(registry);
                         } finally {
                             registryLock.writeLock().unlock();
                         }

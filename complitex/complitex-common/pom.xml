@@ -11,7 +11,7 @@
     <artifactId>complitex-common</artifactId>
     <packaging>jar</packaging>
 
-    <name>Complitex - Dictionary</name>
+    <name>Complitex - Common</name>
 
     <dependencies>
         <dependency>

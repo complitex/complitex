@@ -1,5 +1,6 @@
 package org.complitex.common.web.component.organization;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -11,6 +12,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.IModelComparator;
 import org.apache.wicket.model.Model;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
@@ -33,7 +35,7 @@ import static org.complitex.common.strategy.organization.IOrganizationStrategy.O
  * @author Anatoly Ivanov
  *         Date: 015 15.08.14 17:42
  */
-public class OrganizationPickerDialog extends FormComponentPanel<DomainObject> {
+public class OrganizationPickerDialog extends Panel {
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     protected IOrganizationStrategy organizationStrategy;
 
@@ -86,7 +88,19 @@ public class OrganizationPickerDialog extends FormComponentPanel<DomainObject> {
 
         form.add(new TextField<>("codeFilter", new AttributeExampleModel(example, CODE)));
 
-        final RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup", organizationModel);
+        final RadioGroup<DomainObject> radioGroup = new RadioGroup<DomainObject>("radioGroup", organizationModel){
+            @Override
+            public IModelComparator getModelComparator() {
+                return new IModelComparator() {
+                    @Override
+                    public boolean compare(Component component, Object newObject) {
+                        return !(component.getDefaultModelObject() == null || newObject == null)
+                                && ((DomainObject) component.getDefaultModelObject()).getId()
+                                .equals(((DomainObject) newObject).getId());
+                    }
+                };
+            }
+        };
         form.add(radioGroup);
 
         DataView<DomainObject> data = new DataView<DomainObject>("data", dataProvider) {
@@ -120,6 +134,7 @@ public class OrganizationPickerDialog extends FormComponentPanel<DomainObject> {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 dialog.close(target);
+                content.setVisible(false);
 
                 onSelect(target);
             }
@@ -145,10 +160,5 @@ public class OrganizationPickerDialog extends FormComponentPanel<DomainObject> {
     }
 
     protected void onSelect(AjaxRequestTarget target){
-    }
-
-    @Override
-    protected void convertInput() {
-        setConvertedInput(getModelObject());
     }
 }

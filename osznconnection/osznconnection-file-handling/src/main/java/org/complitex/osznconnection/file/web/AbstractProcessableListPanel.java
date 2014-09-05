@@ -288,6 +288,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(messages);
             }
         };
         form.add(find);

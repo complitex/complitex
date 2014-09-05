@@ -35,12 +35,7 @@
     <plugins>
         <plugin interceptor="org.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>
 
-        <plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheClearCachePlugin">
-            <property name="excludeNamespaces" value="
-            org.complitex.common.entity.Locale,
-            org.complitex.common.entity.description.Entity"/>
-        </plugin>
-        <plugin interceptor="org.complitex.common.mybatis.plugin.SelectStatementPlugin">
+        <plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheExecutorPlugin">
             <property name="excludeNamespaces" value="
             org.complitex.common.entity.Locale,
             org.complitex.common.entity.description.Entity"/>
@@ -94,7 +89,7 @@
 
         <mapper resource="org/complitex/organization/strategy/Organization.xml"/>
         <mapper resource="org/complitex/organization/service/OrganizationImportBean.xml"/>
-        
+
         <mapper resource="org/complitex/osznconnection/organization/strategy/OsznOrganization.xml"/>
 
         <mapper resource="org/complitex/osznconnection/file/service/AbstractRequestBean.xml"/>
@@ -117,9 +112,9 @@
 
         <mapper resource="org/complitex/osznconnection/file/service/status/details/StatusDetailBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/warning/RequestWarningBean.xml"/>
-        
+
         <mapper resource="org/complitex/osznconnection/file/service/file_description/RequestFileDescriptionBean.xml"/>
-        
+
         <mapper resource="org/complitex/address/service/AddressSyncBean.xml"/>
 
         <!--remote mappers-->
