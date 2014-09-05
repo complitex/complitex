@@ -20,6 +20,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.AbstractFilter;
@@ -84,6 +85,8 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
 
     private SelectManager selectManager;
     private TimerManager timerManager;
+
+    private IModel<F> model;
 
     public AbstractProcessableListPanel(String id) {
         super(id);
@@ -258,7 +261,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
 
         //Фильтр модель
         F filter = getSession().getPreferenceObject(getPreferencePage(), PreferenceKey.FILTER_OBJECT, newFilter());
-        final IModel<F> model = new CompoundPropertyModel<>(filter);
+        model = new CompoundPropertyModel<>(filter);
 
         //Фильтр форма
         form = new Form<>("form", model);
@@ -285,6 +288,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(messages);
             }
         };
         form.add(find);
@@ -302,7 +306,9 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
         form.add(new OsznFilter("organization"));
 
         // Организация пользователя
-        form.add(new OrganizationPicker("userOrganization", OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
+        form.add(new OrganizationPicker("userOrganization",
+                new PropertyModel<DomainObject>(model, "userOrganization"),
+                OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
         //Месяц
         form.add(new MonthDropDownChoice("month").setNullValid(true));
@@ -691,5 +697,9 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
 
     protected AjaxFeedbackPanel getMessages() {
         return messages;
+    }
+
+    public IModel<F> getModel() {
+        return model;
     }
 }

@@ -92,7 +92,7 @@ public class PagingNavigator extends Panel {
 
             @Override
             public void setObject(Long items) {
-                dataView.setItemsPerPage(items);
+                dataView.setItemsPerPage(items != null ? items : SUPPORTED_PAGE_SIZES.get(0));
             }
 
             @Override

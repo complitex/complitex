@@ -21,6 +21,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.service.SessionBean;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.template.web.template.TemplateSession;
@@ -220,7 +221,9 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
         form.add(code);
 
         //Organization
-        final OrganizationPicker organization = new OrganizationPicker("organizationId", correction, getOrganizationTypeIds());
+        final OrganizationIdPicker organization = new OrganizationIdPicker("organizationId",
+                new PropertyModel<Long>(correction, "organizationId"),
+                getOrganizationTypeIds());
         organization.setEnabled(isNew()).add();
         form.add(organization);
 
@@ -239,7 +242,9 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
         }
 
         //User Organization
-        form.add(new OrganizationPicker("userOrganizationId", correction, OrganizationTypeStrategy.USER_ORGANIZATION_TYPE).
+        form.add(new OrganizationIdPicker("userOrganizationId",
+                new PropertyModel<Long>(correction, "userOrganizationId"),
+                OrganizationTypeStrategy.USER_ORGANIZATION_TYPE).
                 setEnabled(isNew() && sessionBean.isAdmin()));
 
         if (isNew()) {
@@ -288,7 +293,7 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
         form.add(cancel);
     }
 
-    protected List<Long> getOrganizationTypeIds(){
+    protected Long[] getOrganizationTypeIds(){
         return null;
     }
 

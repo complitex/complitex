@@ -2,10 +2,12 @@ package org.complitex.correction.web;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
@@ -49,8 +51,8 @@ public class OrganizationCorrectionEdit extends FormTemplatePage {
             }
 
             @Override
-            protected OrganizationPicker internalObjectPanel(String id) {
-                return new OrganizationPicker(id, new PropertyModel<Long>(getCorrection(), "objectId"),
+            protected WebMarkupContainer internalObjectPanel(String id) {
+                return new OrganizationIdPicker(id, new PropertyModel<Long>(getCorrection(), "objectId"),
                         OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE);
             }
 

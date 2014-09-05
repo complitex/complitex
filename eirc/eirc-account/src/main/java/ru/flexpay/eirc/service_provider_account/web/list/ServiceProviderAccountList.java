@@ -26,6 +26,7 @@ import org.complitex.common.entity.Locale;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
@@ -259,7 +260,8 @@ public class ServiceProviderAccountList extends TemplatePage {
 
         filterForm.add(new ServicePicker("serviceFilter", new PropertyModel<Service>(filterObject, "service")));
 
-        filterForm.add(new OrganizationPicker("organizationId", filterObject, OrganizationType.SERVICE_PROVIDER.getId()));
+        filterForm.add(new OrganizationIdPicker("organizationId", new PropertyModel<Long>(filterObject, "organizationId"),
+                OrganizationType.SERVICE_PROVIDER.getId()));
 
         //Reset Action
         AjaxLink reset = new AjaxLink("reset") {

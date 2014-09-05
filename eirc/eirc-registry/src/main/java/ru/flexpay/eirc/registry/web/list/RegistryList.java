@@ -28,6 +28,7 @@ import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.image.StaticImage;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
@@ -329,8 +330,8 @@ public class RegistryList extends TemplatePage {
         //Filters
         filterForm.add(new RangeDatePickerTextField("creationDate", creationDateModel));
         filterForm.add(new TextField<>("registryNumber"));
-        filterForm.add(new OrganizationPicker("senderOrganizationId", filterModel));
-        filterForm.add(new OrganizationPicker("recipientOrganizationId", filterModel));
+        filterForm.add(new OrganizationIdPicker("senderOrganizationId", new PropertyModel<Long>(filterModel, "senderOrganizationId")));
+        filterForm.add(new OrganizationIdPicker("recipientOrganizationId", new PropertyModel<Long>(filterModel, "recipientOrganizationId")));
 
         filterForm.add(new DropDownChoice<>("type",
                 Arrays.asList(RegistryType.values()),

@@ -1,2 +1,4 @@
+*.ipr
 *.iml
-.idea
+*.iws
+.idea/

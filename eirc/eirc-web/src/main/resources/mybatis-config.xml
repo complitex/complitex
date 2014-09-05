@@ -16,9 +16,7 @@
             <property name="excludeNamespaces" value="
             org.complitex.common.entity.Locale,
             org.complitex.common.entity.description.Entity,
-            ru.flexpay.eirc.service_provider_account.service.OwnerExemptionBean,
-            ru.flexpay.eirc.registry.service.RegistryRecordBean,
-            ru.flexpay.eirc.registry.service.RegistryBean"/>
+            ru.flexpay.eirc.service_provider_account.service.OwnerExemptionBean"/>
         </plugin>
     </plugins>
 

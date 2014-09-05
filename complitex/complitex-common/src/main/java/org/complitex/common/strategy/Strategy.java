@@ -506,10 +506,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
             newObject.setPermissionId(getNewPermissionId(newObject.getSubjectIds()));
         }
 
-        long oldPermission = oldObject.getPermissionId();
-        long newPermission = newObject.getPermissionId();
-
-        if (!Numbers.isEqual(oldPermission, newPermission)) {
+        if (!Numbers.isEqual(oldObject.getPermissionId(), newObject.getPermissionId())) {
             updatePermissionId(newObject.getId(), newObject.getPermissionId());
         }
 
