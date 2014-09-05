@@ -3,14 +3,21 @@ package org.complitex.osznconnection.file.web.pages.subsidy;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.ModuleBean;
+import org.complitex.common.web.component.organization.OrganizationPickerDialog;
+import org.complitex.correction.entity.OrganizationCorrection;
+import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.correction.web.component.OrganizationCorrectionDialog;
 import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
@@ -29,6 +36,7 @@ import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
 import javax.ejb.EJB;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -51,14 +59,43 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     @EJB
     private SubsidyService subsidyService;
 
-    private OrganizationCorrectionDialog organizationCorrectionDialog;
+    @EJB
+    private OrganizationCorrectionBean organizationCorrectionBean;
+
+    @EJB
+    private ModuleBean moduleBean;
+
+    private OrganizationPickerDialog organizationPickerDialog;
+    private Model<RequestFile> selectedRequestFileModel = Model.of(new RequestFile());
+
     private SubsidyExportDialog subsidyExportDialog;
 
     public SubsidyFileListPanel(String id) {
         super(id);
 
-        add(organizationCorrectionDialog = new OrganizationCorrectionDialog("organization_correction_dialog",
-                Arrays.asList(getDataViewContainer(), getMessages())));
+        add(organizationPickerDialog = new OrganizationPickerDialog("organization_correction_dialog",
+                Model.of(new DomainObject()), SERVICING_ORGANIZATION_TYPE){
+            @Override
+            protected void onSelect(AjaxRequestTarget target) {
+                RequestFile requestFile = selectedRequestFileModel.getObject();
+                DomainObject organization = getOrganizationModel().getObject();
+
+                OrganizationCorrection correction = new OrganizationCorrection(null, organization.getId(),
+                        requestFile.getCode(), requestFile.getOrganizationId(), requestFile.getUserOrganizationId(),
+                        moduleBean.getModuleId());
+
+                if (organizationCorrectionBean.getOrganizationCorrectionsCount(FilterWrapper.of(correction)) == 0){
+                    organizationCorrectionBean.save(correction);
+
+                    getSession().info(String.format(getString("info_correction_added"),
+                            organizationStrategy.displayShortNameAndCode(organization, getLocale())));
+                }else {
+                    getSession().error(getString("error_correction_exist"));
+                }
+
+                target.add(getMessages(), getDataViewContainer());
+            }
+        });
 
         add(subsidyExportDialog = new SubsidyExportDialog("subsidy_export_dialog"){
             @Override
@@ -101,8 +138,8 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
                 }) {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        organizationCorrectionDialog.open(target, code, rf.getOrganizationId(),
-                                rf.getUserOrganizationId());
+                        organizationPickerDialog.open(target);
+                        selectedRequestFileModel.setObject(rf);
                     }
 
                     @Override

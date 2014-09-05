@@ -27,6 +27,8 @@ import org.complitex.common.web.model.AttributeExampleModel;
 
 import javax.ejb.EJB;
 
+import java.util.Objects;
+
 import static org.complitex.common.strategy.organization.IOrganizationStrategy.CODE;
 import static org.complitex.common.strategy.organization.IOrganizationStrategy.NAME;
 import static org.complitex.common.strategy.organization.IOrganizationStrategy.ORGANIZATION_TYPE_PARAMETER;
@@ -42,8 +44,12 @@ public class OrganizationPickerDialog extends Panel {
     private ExtendedDialog dialog;
     private WebMarkupContainer content;
 
+    private IModel<DomainObject> organizationModel;
+
     public OrganizationPickerDialog(String id, IModel<DomainObject> organizationModel, Long... organizationTypeIds) {
-        super(id, organizationModel);
+        super(id);
+
+        this.organizationModel = organizationModel;
 
         dialog = new ExtendedDialog("lookupDialog") {{getOptions().putLiteral("width", "auto");}};
 
@@ -95,8 +101,8 @@ public class OrganizationPickerDialog extends Panel {
                     @Override
                     public boolean compare(Component component, Object newObject) {
                         return !(component.getDefaultModelObject() == null || newObject == null)
-                                && ((DomainObject) component.getDefaultModelObject()).getId()
-                                .equals(((DomainObject) newObject).getId());
+                                && Objects.equals(((DomainObject) component.getDefaultModelObject()).getId(),
+                                ((DomainObject) newObject).getId());
                     }
                 };
             }
@@ -157,6 +163,10 @@ public class OrganizationPickerDialog extends Panel {
         target.add(content);
 
         dialog.open(target);
+    }
+
+    protected IModel<DomainObject> getOrganizationModel(){
+        return organizationModel;
     }
 
     protected void onSelect(AjaxRequestTarget target){
