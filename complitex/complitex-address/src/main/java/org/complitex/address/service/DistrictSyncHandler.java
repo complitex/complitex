@@ -48,8 +48,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
 
     @Override
     public Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) {
-        return addressSyncAdapter.getDistrictSyncs(configBean.getString(DictionaryConfig.SYNC_DATA_SOURCE),
-                cityStrategy.getName(parent),
+        return addressSyncAdapter.getDistrictSyncs(cityStrategy.getName(parent),
                 cityTypeStrategy.getShortName(parent.getAttribute(CityStrategy.CITY_TYPE).getValueId()),
                 date);
     }

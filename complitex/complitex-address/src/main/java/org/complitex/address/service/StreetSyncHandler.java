@@ -47,9 +47,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
 
     @Override
     public Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) {
-        return addressSyncAdapter.getStreetSyncs(
-                configBean.getString(DictionaryConfig.SYNC_DATA_SOURCE),
-                cityStrategy.getName(parent),
+        return addressSyncAdapter.getStreetSyncs(cityStrategy.getName(parent),
                 cityTypeStrategy.getShortName(parent.getAttribute(CityStrategy.CITY_TYPE).getValueId()),
                 date);
     }

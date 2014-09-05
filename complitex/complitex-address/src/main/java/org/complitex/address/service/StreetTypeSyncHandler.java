@@ -35,7 +35,7 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
 
     @Override
     public Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) {
-        return addressSyncAdapter.getStreetTypeSyncs(configBean.getString(DictionaryConfig.SYNC_DATA_SOURCE));
+        return addressSyncAdapter.getStreetTypeSyncs();
     }
 
     @Override

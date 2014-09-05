@@ -43,6 +43,11 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
      * Organization type.
      */
     long ORGANIZATION_TYPE = 904;
+
+    /**
+     * Reference to jdbc data source. It is calculation center only attribute.
+     */
+    public final static long DATA_SOURCE = 913;
     
     /**
      * Filter parameter to filter out organizations by organization types.

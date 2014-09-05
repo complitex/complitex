@@ -2,10 +2,15 @@ package org.complitex.address.service;
 
 import org.complitex.address.entity.*;
 import org.complitex.common.entity.Cursor;
+import org.complitex.common.entity.DictionaryConfig;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.ConfigBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -23,6 +28,20 @@ public class AddressSyncAdapter extends AbstractBean {
     private final static String NS = AddressSyncAdapter.class.getName();
     private final Logger log = LoggerFactory.getLogger(AddressSyncAdapter.class);
 
+    @EJB
+    private ConfigBean configBean;
+
+    @EJB(lookup = IOrganizationStrategy.BEAN_LOOKUP)
+    private IOrganizationStrategy organizationStrategy;
+
+    public String getDataSource(){
+        Long organizationId = configBean.getLong(DictionaryConfig.SYNC_DATA_SOURCE, true);
+
+        DomainObject organization = organizationStrategy.findById(organizationId, true);
+
+        return organization.getStringValue(IOrganizationStrategy.DATA_SOURCE);
+    }
+
     /**
      * function z$runtime_sz_utl.getDistricts(
      *     pCityName varchar2,    -- Название нас.пункта
@@ -37,7 +56,7 @@ public class AddressSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Cursor<AddressSync> getDistrictSyncs(String dataSource, String cityName, String cityTypeName, Date date){
+    public Cursor<AddressSync> getDistrictSyncs(String cityName, String cityTypeName, Date date){
         Map<String, Object> param = new HashMap<>();
 
         param.put("cityName", cityName);
@@ -45,7 +64,7 @@ public class AddressSyncAdapter extends AbstractBean {
         param.put("date", date);
         param.put("okCode", 0);
 
-        sqlSession(dataSource).selectOne(NS + ".selectDistrictSyncs", param);
+        sqlSession(getDataSource()).selectOne(NS + ".selectDistrictSyncs", param);
 
         log.info("getDistrictSyncs: " + param);
 
@@ -64,11 +83,11 @@ public class AddressSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Cursor<AddressSync> getStreetTypeSyncs(String dataSource){
+    public Cursor<AddressSync> getStreetTypeSyncs(){
         Map<String, Object> param = new HashMap<>();
         param.put("okCode", 0);
 
-        sqlSession(dataSource).selectOne(NS + ".selectStreetTypeSyncs", param);
+        sqlSession(getDataSource()).selectOne(NS + ".selectStreetTypeSyncs", param);
 
         log.info("getStreetTypeSyncs: " + param);
 
@@ -90,7 +109,7 @@ public class AddressSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Cursor<AddressSync> getStreetSyncs(String dataSource, String cityName, String cityTypeName, Date date){
+    public Cursor<AddressSync> getStreetSyncs(String cityName, String cityTypeName, Date date){
         Map<String, Object> param = new HashMap<>();
 
         param.put("cityName", cityName);
@@ -99,7 +118,7 @@ public class AddressSyncAdapter extends AbstractBean {
         param.put("okCode", 0);
 
         try {
-            sqlSession(dataSource).selectOne(NS + ".selectStreetSyncs", param);
+            sqlSession(getDataSource()).selectOne(NS + ".selectStreetSyncs", param);
         } catch (Exception e) {
             log.error("Ошибка удаленной функции получения списка улиц", e);
         }
@@ -134,7 +153,7 @@ public class AddressSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Cursor<AddressSync> getBuildingSyncs(String dataSource, String districtName, String streetTypeName,
+    public Cursor<AddressSync> getBuildingSyncs(String districtName, String streetTypeName,
                                                String streetName, Date date){
         Map<String, Object> param = new HashMap<>();
 
@@ -145,7 +164,7 @@ public class AddressSyncAdapter extends AbstractBean {
         param.put("okCode", 0);
 
         try {
-            sqlSession(dataSource).selectOne(NS + ".selectBuildingSyncs", param);
+            sqlSession(getDataSource()).selectOne(NS + ".selectBuildingSyncs", param);
         } catch (Exception e) {
             log.error("Ошибка удаленной функции получения списка домов", e);
         }

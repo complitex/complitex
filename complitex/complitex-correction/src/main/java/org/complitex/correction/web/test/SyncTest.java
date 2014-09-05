@@ -44,7 +44,6 @@ public class SyncTest extends WebPage {
 
                 //districts
                 Cursor<AddressSync> districtSyncs = addressSyncService.getDistrictSyncs(
-                        dataSource,
                         "Тверь", "г", new Date());
                 if (districtSyncs != null) {
                     String t = "";
@@ -57,7 +56,7 @@ public class SyncTest extends WebPage {
                 }
 
                 //street types
-                Cursor<AddressSync> streetTypeSyncs = addressSyncService.getStreetTypeSyncs(dataSource);
+                Cursor<AddressSync> streetTypeSyncs = addressSyncService.getStreetTypeSyncs();
                 if (streetTypeSyncs != null) {
                     String t = "";
 
@@ -69,8 +68,7 @@ public class SyncTest extends WebPage {
                 }
 
                 //streets
-                Cursor<AddressSync> streetSyncs = addressSyncService.getStreetSyncs(dataSource,
-                        "Тверь", "г", new Date());
+                Cursor<AddressSync> streetSyncs = addressSyncService.getStreetSyncs("Тверь", "г", new Date());
                 if (streetSyncs != null){
                     String t = "";
 
@@ -82,7 +80,7 @@ public class SyncTest extends WebPage {
                 }
 
                 //buildings
-                Cursor<AddressSync> buildingAddressSyncs = addressSyncService.getBuildingSyncs(dataSource,
+                Cursor<AddressSync> buildingAddressSyncs = addressSyncService.getBuildingSyncs(
                         "Центральный", "ул", "ФРАНТИШЕКА КРАЛА", new Date());
                 if (streetSyncs != null){
                     String t = "";

@@ -38,10 +38,7 @@ import static org.complitex.osznconnection.organization_type.strategy.OsznOrgani
  */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
 public class OsznOrganizationStrategy extends AbstractOrganizationStrategy<DomainObject> {
-    /**
-     * Reference to jdbc data source. It is calculation center only attribute.
-     */
-    public final static long DATA_SOURCE = 913;
+
 
     /**
      * References to associations between service provider types and calculation centres. It is user organization only attribute.

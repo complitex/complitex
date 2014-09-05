@@ -27,9 +27,6 @@ import static org.complitex.address.strategy.building_address.BuildingAddressStr
 @Stateless
 public class BuildingSyncHandler implements IAddressSyncHandler {
     @EJB
-    private ConfigBean configBean;
-
-    @EJB
     private AddressSyncAdapter addressSyncAdapter;
 
     @EJB
@@ -49,10 +46,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public Cursor<AddressSync> getAddressSyncs(final DomainObject parent, Date date) {
-            return addressSyncAdapter.getBuildingSyncs(
-                    configBean.getString(DictionaryConfig.SYNC_DATA_SOURCE),
-                    districtStrategy.getName(parent),
-                    "", "", date);
+            return addressSyncAdapter.getBuildingSyncs(districtStrategy.getName(parent), "", "", date);
     }
 
     @Override
