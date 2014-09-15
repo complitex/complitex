@@ -13,25 +13,18 @@ import ru.flexpay.eirc.mb_transformer.web.component.OrganizationPicker;
  */
 public enum MbTransformerConfig implements IComponentConfig {
 
-    EIRC_ORGANIZATION_ID("-1", "general"),
-    MB_ORGANIZATION_ID("-1", "general"),
+    EIRC_ORGANIZATION_ID("general"),
+    MB_ORGANIZATION_ID("general"),
 
-    WORK_DIR("/var/tmp/data", "general"),
-    TMP_DIR("/tmp", "general"),
+    WORK_DIR("general"),
+    TMP_DIR("general"),
 
-    EIRC_DATA_SOURCE("jdbc/eircResource", "general");
+    EIRC_DATA_SOURCE("general");
 
-    private String defaultValue;
     private String groupKey;
 
-    MbTransformerConfig(String defaultValue, String groupKey) {
-        this.defaultValue = defaultValue;
+    MbTransformerConfig(String groupKey) {
         this.groupKey = groupKey;
-    }
-
-    @Override
-    public String getDefaultValue() {
-        return defaultValue;
     }
 
     @Override

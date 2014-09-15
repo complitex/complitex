@@ -1,4 +1,12 @@
 -- --------------------------------
+-- Config
+-- --------------------------------
+
+INSERT INTO `config` (`name`,`value`) VALUES ('IMPORT_FILE_STORAGE_DIR','c:\\storage\\import');
+INSERT INTO `config` (`name`,`value`) VALUES ('SYNC_DATA_SOURCE','2');
+INSERT INTO `config` (`name`,`value`) VALUES ('MODULE_ID','0');
+
+-- --------------------------------
 -- Locale
 -- --------------------------------
 

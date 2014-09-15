@@ -1,3 +1,9 @@
+-- --------------------------------
+-- Config
+-- --------------------------------
+
+INSERT INTO `config` (`name`,`value`) VALUES ('DEFAULT_LEGACY_IMPORT_FILE_DIR','c:\\storage\\pspoffice\\legacy_data\\import');
+INSERT INTO `config` (`name`,`value`) VALUES ('DEFAULT_LEGACY_IMPORT_FILE_ERRORS_DIR','c:\\storage\\pspoffice\\legacy_data\\import\\errors');
 
 -- Person --
 INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES ('person',1), ('person_string_culture',1);

@@ -1,3 +1,20 @@
+-- --------------------------------
+-- Config
+-- --------------------------------
+
+INSERT INTO `config` (`name`,`value`) VALUES ('MODULE_ID','-1');
+INSERT INTO `config` (`name`,`value`) VALUES ('IMPORT_FILE_STORAGE_DIR','/var/tmp/data/import"');
+INSERT INTO `config` (`name`,`value`) VALUES ('SYNC_DATA_SOURCE','organization_id_here');
+INSERT INTO `config` (`name`,`value`) VALUES ('TMP_DIR','/tmp');
+INSERT INTO `config` (`name`,`value`) VALUES ('NUMBER_FLUSH_REGISTRY_RECORDS','10000');
+INSERT INTO `config` (`name`,`value`) VALUES ('NUMBER_READ_CHARS','32000');
+INSERT INTO `config` (`name`,`value`) VALUES ('EIRC_ORGANIZATION_ID','');
+INSERT INTO `config` (`name`,`value`) VALUES ('EIRC_ORGANIZATION_ID','-1');
+INSERT INTO `config` (`name`,`value`) VALUES ('MB_ORGANIZATION_ID','-1');
+INSERT INTO `config` (`name`,`value`) VALUES ('WORK_DIR','/var/tmp/data');
+INSERT INTO `config` (`name`,`value`) VALUES ('TMP_DIR','/tmp');
+INSERT INTO `config` (`name`,`value`) VALUES ('EIRC_DATA_SOURCE','jdbc/eircResource');
+
 INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES
 ('eirc_account',1), ('service_provider_account', 1), ('service_provider_account_string_culture', 1), ('module_instance', 1), ('module_instance_string_culture', 1);
 

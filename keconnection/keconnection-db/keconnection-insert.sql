@@ -153,3 +153,10 @@ INSERT INTO `heatmeter_period_type_string_culture`(`id`, `locale_id`, `value`) V
 (2, 1, UPPER('юстировка')), (2, 2, UPPER('юстировка'));
 INSERT INTO `heatmeter_period_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
 (1,1,3500,1,3500),(1,2,3500,2,3500);
+
+-- --------------------------------
+-- Config
+-- --------------------------------
+
+INSERT INTO `config` (`name`, `value`) VALUES ('IMPORT_HEATMETER_DIR','c:\\storage\\import\\heatmeter');
+INSERT INTO `config` (`name`, `value`) VALUES ('IMPORT_PAYLOAD_DIR','c:\\storage\\import\\payload');

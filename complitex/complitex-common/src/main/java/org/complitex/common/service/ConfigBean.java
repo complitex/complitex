@@ -47,11 +47,11 @@ public class ConfigBean extends AbstractBean{
         resourceBundle.add(bundle);
 
         for (IConfig config : configs){
-            if (!isExist(config.name())){
-                insert(config.name(), config.getDefaultValue());
-            }
+            String value = getValue(config.name());
 
-            configMap.put(config, getValue(config.name()));
+            if (value != null) {
+                configMap.put(config, value);
+            }
         }
     }
 
@@ -91,13 +91,9 @@ public class ConfigBean extends AbstractBean{
         if (flush){
             String value = getValue(config.name());
 
-            if (value == null){
-                value = config.getDefaultValue();
-
-                log.warn("хм.. нет записи для конфигурации {} в базе данных, используем значение по умолчанию {}", config.name(), value);
+            if (value != null){
+                configMap.put(config, value);
             }
-
-            configMap.put(config, value);
         }
 
         return configMap.get(config);

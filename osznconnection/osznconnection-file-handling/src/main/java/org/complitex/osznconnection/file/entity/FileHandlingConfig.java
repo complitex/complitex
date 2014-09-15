@@ -7,52 +7,45 @@ import org.complitex.common.entity.IConfig;
  *         Date: 04.10.2010 11:12:46
  */
 public enum FileHandlingConfig implements IConfig {
-    PAYMENT_FILENAME_PREFIX("A_", "mask"),
-    BENEFIT_FILENAME_PREFIX("AF", "mask"),
-    PAYMENT_BENEFIT_FILENAME_SUFFIX("\\d{4}{MM}\\.DBF", "mask"),
+    PAYMENT_FILENAME_PREFIX("mask"),
+    BENEFIT_FILENAME_PREFIX("mask"),
+    PAYMENT_BENEFIT_FILENAME_SUFFIX("mask"),
     
-    ACTUAL_PAYMENT_FILENAME_MASK(".*{MM}{YY}\\.DBF", "mask"),
-    SUBSIDY_FILENAME_MASK(".*{MM}{YY}\\.DBF", "mask"),
+    ACTUAL_PAYMENT_FILENAME_MASK("mask"),
+    SUBSIDY_FILENAME_MASK("mask"),
     
-    DWELLING_CHARACTERISTICS_INPUT_FILENAME_MASK("\\d{8}\\.a\\d{2}", "mask"),
-    DWELLING_CHARACTERISTICS_OUTPUT_FILE_EXTENSION_PREFIX("c", "mask"),
+    DWELLING_CHARACTERISTICS_INPUT_FILENAME_MASK("mask"),
+    DWELLING_CHARACTERISTICS_OUTPUT_FILE_EXTENSION_PREFIX("mask"),
     
-    FACILITY_SERVICE_TYPE_INPUT_FILENAME_MASK("\\d{8}\\.b\\d{2}", "mask"),
-    FACILITY_SERVICE_TYPE_OUTPUT_FILE_EXTENSION_PREFIX("d", "mask"),
+    FACILITY_SERVICE_TYPE_INPUT_FILENAME_MASK("mask"),
+    FACILITY_SERVICE_TYPE_OUTPUT_FILE_EXTENSION_PREFIX("mask"),
     
-    SUBSIDY_TARIF_FILENAME_MASK("TARIF12\\.DBF", "mask"),
+    SUBSIDY_TARIF_FILENAME_MASK("mask"),
     
-    FACILITY_STREET_TYPE_REFERENCE_FILENAME_MASK("KLKATUL\\.DBF", "mask"),
-    FACILITY_STREET_REFERENCE_FILENAME_MASK("KLUL\\.DBF", "mask"),
-    FACILITY_TARIF_REFERENCE_FILENAME_MASK("TARIF\\.DBF", "mask"),
+    FACILITY_STREET_TYPE_REFERENCE_FILENAME_MASK("mask"),
+    FACILITY_STREET_REFERENCE_FILENAME_MASK("mask"),
+    FACILITY_TARIF_REFERENCE_FILENAME_MASK("mask"),
 
-    LOAD_THREAD_SIZE("2", "thread"),
-    BIND_THREAD_SIZE("4", "thread"),
-    FILL_THREAD_SIZE("4", "thread"),
-    SAVE_THREAD_SIZE("4", "thread"),
+    LOAD_THREAD_SIZE("thread"),
+    BIND_THREAD_SIZE("thread"),
+    FILL_THREAD_SIZE("thread"),
+    SAVE_THREAD_SIZE("thread"),
 
-    LOAD_BATCH_SIZE("16", "batch"),
-    BIND_BATCH_SIZE("64", "batch"),
-    FILL_BATCH_SIZE("64", "batch"),
+    LOAD_BATCH_SIZE("batch"),
+    BIND_BATCH_SIZE("batch"),
+    FILL_BATCH_SIZE("batch"),
 
-    LOAD_MAX_ERROR_COUNT("10", "error"),
-    BIND_MAX_ERROR_COUNT("10", "error"),
-    FILL_MAX_ERROR_COUNT("10", "error"),
-    SAVE_MAX_ERROR_COUNT("10", "error"),
+    LOAD_MAX_ERROR_COUNT("error"),
+    BIND_MAX_ERROR_COUNT("error"),
+    FILL_MAX_ERROR_COUNT("error"),
+    SAVE_MAX_ERROR_COUNT("error"),
     
-    DEFAULT_REQUEST_FILE_CITY("", "request_file_params");
+    DEFAULT_REQUEST_FILE_CITY("request_file_params");
 
-    private String defaultValue;
     private String groupKey;
 
-    FileHandlingConfig(String defaultValue, String groupKey) {
-        this.defaultValue = defaultValue;
+    FileHandlingConfig(String groupKey) {
         this.groupKey = groupKey;
-    }
-
-    @Override
-    public String getDefaultValue() {
-        return defaultValue;
     }
 
     @Override

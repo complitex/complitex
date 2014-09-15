@@ -11,20 +11,7 @@ import org.complitex.common.web.component.type.InputPanel;
  *         Date: 02.03.11 16:31
  */
 public enum DictionaryConfig implements IComponentConfig {
-    IMPORT_FILE_STORAGE_DIR("c:\\storage\\import"),
-    SYNC_DATA_SOURCE("2"),
-    MODULE_ID("0");
-
-    private String defaultValue;
-
-    DictionaryConfig(String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-
-    @Override
-    public String getDefaultValue() {
-        return defaultValue;
-    }
+    IMPORT_FILE_STORAGE_DIR, SYNC_DATA_SOURCE, MODULE_ID;
 
     @Override
     public String getGroupKey() {

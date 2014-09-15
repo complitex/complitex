@@ -12,25 +12,18 @@ import ru.flexpay.eirc.dictionary.web.ModuleInstancePicker;
  */
 public enum EircConfig implements IComponentConfig {
 
-    MODULE_ID("-1", "general"),
+    MODULE_ID("general"),
 
-    IMPORT_FILE_STORAGE_DIR("/var/tmp/data/import", "import"),
-    SYNC_DATA_SOURCE("jdbc/eircConnectionRemoteResource", "import"),
-    TMP_DIR("/tmp", "import"),
-    NUMBER_FLUSH_REGISTRY_RECORDS("10000", "import"),
-    NUMBER_READ_CHARS("32000", "import");
+    IMPORT_FILE_STORAGE_DIR("import"),
+    SYNC_DATA_SOURCE("import"),
+    TMP_DIR("import"),
+    NUMBER_FLUSH_REGISTRY_RECORDS("import"),
+    NUMBER_READ_CHARS("import");
 
-    private String defaultValue;
     private String groupKey;
 
-    EircConfig(String defaultValue, String groupKey) {
-        this.defaultValue = defaultValue;
+    EircConfig(String groupKey) {
         this.groupKey = groupKey;
-    }
-
-    @Override
-    public String getDefaultValue() {
-        return defaultValue;
     }
 
     @Override

@@ -5,6 +5,36 @@ INSERT INTO `update` (`version`) VALUE ('20140729_1016_0.3.4');
 -- --------------------------------
 
 -- --------------------------------
+-- Config
+-- --------------------------------
+
+INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_FILENAME_PREFIX','A_');
+INSERT INTO `config` (`name`,`value`) VALUES ('BENEFIT_FILENAME_PREFIX','AF');
+INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_BENEFIT_FILENAME_SUFFIX','\\d{4}{MM}\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('ACTUAL_PAYMENT_FILENAME_MASK','.*{MM}{YY}\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('SUBSIDY_FILENAME_MASK','.*{MM}{YY}\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('DWELLING_CHARACTERISTICS_INPUT_FILENAME_MASK','\\d{8}\\.a\\d{2}');
+INSERT INTO `config` (`name`,`value`) VALUES ('DWELLING_CHARACTERISTICS_OUTPUT_FILE_EXTENSION_PREFIX','c');
+INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_SERVICE_TYPE_INPUT_FILENAME_MASK','\\d{8}\\.b\\d{2}');
+INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_SERVICE_TYPE_OUTPUT_FILE_EXTENSION_PREFIX','d');
+INSERT INTO `config` (`name`,`value`) VALUES ('SUBSIDY_TARIF_FILENAME_MASK','TARIF12\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_STREET_TYPE_REFERENCE_FILENAME_MASK','KLKATUL\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_STREET_REFERENCE_FILENAME_MASK','KLUL\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_TARIF_REFERENCE_FILENAME_MASK','TARIF\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('LOAD_THREAD_SIZE','2');
+INSERT INTO `config` (`name`,`value`) VALUES ('BIND_THREAD_SIZE','4');
+INSERT INTO `config` (`name`,`value`) VALUES ('FILL_THREAD_SIZE','4');
+INSERT INTO `config` (`name`,`value`) VALUES ('SAVE_THREAD_SIZE','4');
+INSERT INTO `config` (`name`,`value`) VALUES ('LOAD_BATCH_SIZE','16');
+INSERT INTO `config` (`name`,`value`) VALUES ('BIND_BATCH_SIZE','64');
+INSERT INTO `config` (`name`,`value`) VALUES ('FILL_BATCH_SIZE','64');
+INSERT INTO `config` (`name`,`value`) VALUES ('LOAD_MAX_ERROR_COUNT','10');
+INSERT INTO `config` (`name`,`value`) VALUES ('BIND_MAX_ERROR_COUNT','10');
+INSERT INTO `config` (`name`,`value`) VALUES ('FILL_MAX_ERROR_COUNT','10');
+INSERT INTO `config` (`name`,`value`) VALUES ('SAVE_MAX_ERROR_COUNT','10');
+INSERT INTO `config` (`name`,`value`) VALUES ('DEFAULT_REQUEST_FILE_CITY','');
+
+-- --------------------------------
 -- Sequence
 -- --------------------------------
 INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES
