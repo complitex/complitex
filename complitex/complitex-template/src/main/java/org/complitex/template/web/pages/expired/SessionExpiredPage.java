@@ -6,6 +6,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.http.WebResponse;
 import org.complitex.resources.WebCommonResourceInitializer;
@@ -18,8 +19,9 @@ import javax.servlet.http.HttpServletResponse;
  * @author Artem
  */
 public final class SessionExpiredPage extends WebPage {
-
     public SessionExpiredPage() {
+        setResponsePage(Login.class);
+
         init();
     }
 

@@ -39,6 +39,11 @@
             <artifactId>wicket-request</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-native-websocket-core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.odlabs.wiquery</groupId>
             <artifactId>wiquery-core</artifactId>
         </dependency>

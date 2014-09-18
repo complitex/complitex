@@ -41,10 +41,10 @@
 
     <properties>
         <!-- wicket version -->
-        <wicket.version>6.16.0</wicket.version>
+        <wicket.version>6.17.0</wicket.version>
 
         <!-- wicketstuff inject -->
-        <wicket-stuff.version>6.16.0</wicket-stuff.version>
+        <wicket-stuff.version>6.17.0</wicket-stuff.version>
 
         <!-- wiquery version -->
         <wiquery.version>6.13.0</wiquery.version>
@@ -194,6 +194,12 @@
                 <artifactId>wicket-util</artifactId>
                 <version>${wicket.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-native-websocket-core</artifactId>
+                <version>${wicket.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.wicketstuff</groupId>
                 <artifactId>wicketstuff-javaee-inject</artifactId>
