@@ -4,6 +4,12 @@
 <head>
     <wicket:head>
         <title wicket:id="title"></title>
+
+        <script type="text/javascript">
+            function bubble(event){
+                event.stopPropagation ? event.stopPropagation() : (event.cancelBubble=true);
+            }
+        </script>
     </wicket:head>
 </head>
 <body>
@@ -19,6 +25,7 @@
             <table class="tbColor" cellpadding="0" cellspacing="0" border="0">
                 <thead>
                 <tr>
+                    <th></th>
                     <th wicket:id="rashHeader"><wicket:message key="rash"/></th>
                     <th wicket:id="lastNameHeader"><wicket:message key="last_name"/></th>
                     <th wicket:id="firstNameHeader"><wicket:message key="first_name"/></th>
@@ -42,6 +49,7 @@
                     </th>
                 </tr>
                 <tr class="table_input">
+                    <th><input type="checkbox" wicket:id="checkAll"/></th>
                     <th><input type="text" wicket:id="rashFilter"/></th>
                     <th><input type="text" wicket:id="lastNameFilter"/></th>
                     <th><input type="text" wicket:id="firstNameFilter"/></th>
@@ -69,8 +77,9 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody wicket:id="checkGroup">
                 <tr wicket:id="data" class="data-row data-row-link" style="cursor: pointer">
+                    <td onclick="bubble(event)"><input type="checkbox" wicket:id="check"/></td>
                     <td><span wicket:id="rash"></span></td>
                     <td><span wicket:id="lastName"></span></td>
                     <td><span wicket:id="firstName"></span></td>
@@ -124,6 +133,7 @@
             <div style="margin-top:10px">
                 <input type="button" class="btnMiddle" wicket:id="back" wicket:message="value:back"/>
                 <input type="button" class="btnMiddle" wicket:id="sum_filter" wicket:message="value:sum_filter"/>
+                <input type="button" class="btnMiddle" wicket:id="bind" wicket:message="value:bind"/>
             </div>
         </form>
     </div>

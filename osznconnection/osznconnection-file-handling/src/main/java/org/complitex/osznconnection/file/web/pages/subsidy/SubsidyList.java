@@ -5,17 +5,18 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.CancelEventIfAjaxListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
@@ -27,6 +28,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.util.AddressRenderer;
+import org.complitex.common.util.ExceptionUtil;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
@@ -43,6 +45,7 @@ import org.complitex.osznconnection.file.service.status.details.StatusDetailBean
 import org.complitex.osznconnection.file.service.status.details.SubsidyExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.SubsidyStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
+import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.SubsidyFileList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
@@ -53,9 +56,7 @@ import org.complitex.template.web.template.TemplatePage;
 import javax.ejb.EJB;
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.complitex.common.util.StringUtil.decimal;
 
@@ -242,7 +243,12 @@ public final class SubsidyList extends TemplatePage {
         final SubsidyEditDialog editPanel = new SubsidyEditDialog("edit_panel", content);
         add(editPanel);
 
-        DataView<Subsidy> data = new DataView<Subsidy>("data", dataProvider, 1) {
+        final CheckGroup<Subsidy> checkGroup = new CheckGroup<>("checkGroup", new ArrayList<Subsidy>());
+        filterForm.add(checkGroup);
+
+        filterForm.add(new CheckGroupSelector("checkAll", checkGroup));
+
+        final DataView<Subsidy> data = new DataView<Subsidy>("data", dataProvider, 1) {
 
             @Override
             protected void populateItem(final Item<Subsidy> item) {
@@ -258,6 +264,7 @@ public final class SubsidyList extends TemplatePage {
                     }
                 });
 
+                item.add(new Check<>("check", Model.of(subsidy), checkGroup));
                 item.add(new Label("rash", subsidy.getStringField(SubsidyDBF.RASH)));
                 item.add(new Label("firstName", subsidy.getFirstName()));
                 item.add(new Label("middleName", subsidy.getMiddleName()));
@@ -342,7 +349,8 @@ public final class SubsidyList extends TemplatePage {
                 });
             }
         };
-        filterForm.add(data);
+        checkGroup.add(data);
+        checkGroup.add(new PagingNavigator("navigator", data, getPreferencesPage() + fileId, content));
 
         filterForm.add(new ArrowOrderByBorder("rashHeader", SubsidyBean.OrderBy.RASH.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", SubsidyBean.OrderBy.FIRST_NAME.getOrderBy(), dataProvider, data, content));
@@ -363,6 +371,7 @@ public final class SubsidyList extends TemplatePage {
 
         filterForm.add(new ArrowOrderByBorder("statusHeader", SubsidyBean.OrderBy.STATUS.getOrderBy(), dataProvider, data, content));
 
+        //Назад
         filterForm.add(new Link("back") {
 
             @Override
@@ -385,6 +394,31 @@ public final class SubsidyList extends TemplatePage {
             }
         });
 
-        filterForm.add(new PagingNavigator("navigator", data, getPreferencesPage() + fileId, content));
+        //Связать
+        filterForm.add(new AjaxSubmitLink("bind") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form form) {
+                Collection<Subsidy> subsidies = checkGroup.getModelObject();
+
+                for (Subsidy subsidy : subsidies){
+                    try {
+                        subsidyService.bind(subsidy);
+
+                        if (subsidy.getStatus().isAddressResolved()){
+                            info(getStringFormat("info_bound", subsidy.getFio()));
+                        }else {
+                            error(getStringFormat("error_bound", subsidy.getFio(),
+                                    statusRenderService.displayStatus(subsidy.getStatus(), getLocale())));
+
+                        }
+                    } catch (Exception e) {
+                        error(ExceptionUtil.getCauseMessage(e));
+                    }
+                }
+
+                checkGroup.getModelObject().clear();
+                target.add(content);
+            }
+        });
     }
 }

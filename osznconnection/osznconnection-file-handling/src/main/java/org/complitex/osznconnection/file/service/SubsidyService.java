@@ -1,10 +1,15 @@
 package org.complitex.osznconnection.file.service;
 
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.service.exception.BindException;
+import org.complitex.osznconnection.file.service.process.SubsidyBindTaskBean;
+import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
+import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.entity.OsznOrganization;
 import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociation;
@@ -31,6 +36,15 @@ public class SubsidyService {
 
     @EJB
     private RequestFileBean requestFileBean;
+
+    @EJB
+    private CalculationCenterBean calculationCenterBean;
+
+    @EJB
+    private SubsidyBean subsidyBean;
+
+    @EJB
+    private SubsidyBindTaskBean subsidyBindTaskBean;
 
     public SubsidySum getSubsidySum(AbstractRequest request){
         OsznOrganization organization = organizationStrategy.findById(request.getUserOrganizationId(), true);
@@ -108,6 +122,17 @@ public class SubsidyService {
             return organizationStrategy.displayShortNameAndCode(organizationStrategy.findById(organizationId, true), locale);
         }else {
             return subsidyRequestFile.getName().substring(0, subsidyRequestFile.getName().length() - 8);
+        }
+    }
+
+    public void bind(Subsidy subsidy) throws DBException {
+        subsidyBindTaskBean.bind(subsidy, calculationCenterBean.getContextWithAnyCalculationCenter(
+                subsidy.getUserOrganizationId()), false);
+
+        if (subsidyBean.isSubsidyFileBound(subsidy.getRequestFileId())) {
+            RequestFile requestFile = requestFileBean.findById(subsidy.getRequestFileId());
+            requestFile.setStatus(RequestFileStatus.BOUND);
+            requestFileBean.save(requestFile);
         }
     }
 }

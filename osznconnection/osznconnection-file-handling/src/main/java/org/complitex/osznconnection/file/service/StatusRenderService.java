@@ -8,7 +8,7 @@ import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Singleton;
 import java.util.Locale;
 
-@Singleton
+@Singleton //todo move to static
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class StatusRenderService {
 

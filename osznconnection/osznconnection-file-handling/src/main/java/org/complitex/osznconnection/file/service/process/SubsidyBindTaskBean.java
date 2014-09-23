@@ -5,6 +5,7 @@ import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
@@ -32,7 +33,7 @@ import java.util.Map;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidyBindTaskBean implements ITaskBean {
+public class SubsidyBindTaskBean extends AbstractTaskBean {
 
     private final Logger log = LoggerFactory.getLogger(SubsidyBindTaskBean.class);
     @Resource
@@ -62,7 +63,7 @@ public class SubsidyBindTaskBean implements ITaskBean {
     @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
 
-    private void bind(Subsidy subsidy, CalculationContext calculationContext, boolean updatePuAccount) throws DBException {
+    public void bind(Subsidy subsidy, CalculationContext calculationContext, boolean updatePuAccount) throws DBException {
         //resolve address
         addressService.resolveAddress(subsidy, calculationContext);
 
