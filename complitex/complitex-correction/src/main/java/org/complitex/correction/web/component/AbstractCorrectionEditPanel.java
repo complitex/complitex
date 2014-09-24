@@ -227,19 +227,19 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
         organization.setEnabled(isNew()).add();
         form.add(organization);
 
-        if (freezeOrganization()) {
-            organization.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    organization.setEnabled(false);
-                    target.add(organization);
-                    if (correctionInputPanel.isVisible() && freezeOrganization()) {
-                        target.add(correctionInputPanel);
-                    }
-                }
-            });
-        }
+//        if (freezeOrganization()) {
+//            organization.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+//
+//                @Override
+//                protected void onUpdate(AjaxRequestTarget target) {
+//                    organization.setEnabled(false);
+//                    target.add(organization);
+//                    if (correctionInputPanel.isVisible() && freezeOrganization()) {
+//                        target.add(correctionInputPanel);
+//                    }
+//                }
+//            });
+//        }
 
         //User Organization
         form.add(new OrganizationIdPicker("userOrganizationId",

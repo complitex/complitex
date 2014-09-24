@@ -48,10 +48,9 @@ public class DomainObject implements Serializable {
     }
 
 
-    //todo add return first actual attribute
     public Attribute getAttribute(Long attributeTypeId) {
         for (Attribute a : attributes) {
-            if (a.getAttributeTypeId().equals(attributeTypeId)) {
+            if (a.getAttributeTypeId().equals(attributeTypeId) && status.equals(StatusType.ACTIVE)) {
                 return a;
             }
         }

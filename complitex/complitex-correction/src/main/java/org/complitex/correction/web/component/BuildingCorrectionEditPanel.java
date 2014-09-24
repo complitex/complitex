@@ -6,6 +6,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.correction.entity.BuildingCorrection;
@@ -24,6 +25,9 @@ import java.util.List;
 public class BuildingCorrectionEditPanel extends AddressCorrectionEditPanel<BuildingCorrection> {
     @EJB
     private StreetStrategy streetStrategy;
+
+    @EJB
+    private CityStrategy cityStrategy;
 
     @EJB
     private AddressCorrectionBean addressCorrectionBean;
@@ -49,11 +53,10 @@ public class BuildingCorrectionEditPanel extends AddressCorrectionEditPanel<Buil
     protected String displayCorrection() {
         BuildingCorrection correction = getCorrection();
 
-        String city = ""; //todo display city
-
         DomainObject streetDomainObject = streetStrategy.findById(correction.getStreetObjectId(), true);
-
         String street = streetStrategy.displayDomainObject(streetDomainObject, getLocale());
+
+        String city = cityStrategy.displayDomainObject(streetDomainObject.getId(), getLocale());
 
         return AddressRenderer.displayAddress(null, city, null, street, correction.getCorrection(),
                 correction.getCorrectionCorp(), null, getLocale());
