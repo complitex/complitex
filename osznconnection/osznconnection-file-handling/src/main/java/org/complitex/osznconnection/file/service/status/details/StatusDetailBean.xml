@@ -380,13 +380,6 @@
                 GROUP BY 1
             </when>
 
-            <!--city TODO: do not expose any city details. Check it and delete city block.-->
-<!--            <when test="status == 200 or status == 205 or status == 221">
-                SELECT '' `id`, COUNT(1) `count` FROM `dwelling_characteristics`
-                WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
-            </when>-->
-
             <!--street-->
             <when test="status == 201 or status == 237 or status == 208 or status == 207 or status == 223 or status == 224">
                 SELECT CONCAT(`CDUL`) `id`, COUNT(1) `count`, `CDUL` FROM `dwelling_characteristics`
@@ -460,13 +453,6 @@
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
                 GROUP BY 1
             </when>
-
-            <!--city TODO: do not expose any city details. Check it and delete city block.-->
-<!--            <when test="status == 200 or status == 205 or status == 221">
-                SELECT '' `id`, COUNT(1) `count` FROM `facility_service_type`
-                WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
-            </when>-->
 
             <!--street-->
             <when test="status == 201 or status == 237 or status == 208 or status == 207 or status == 223 or status == 224">

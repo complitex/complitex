@@ -48,8 +48,7 @@ public class CityCorrectionList extends AddressCorrectionList<CityCorrection> {
 
     @Override
     protected String displayInternalObject(Correction correction) {
-        // todo tune getName
-        return cityStrategy.displayDomainObject(cityStrategy.findById(correction.getObjectId(), true), getLocale());
+        return cityStrategy.displayDomainObject(correction.getObjectId(), getLocale());
     }
 
     @Override

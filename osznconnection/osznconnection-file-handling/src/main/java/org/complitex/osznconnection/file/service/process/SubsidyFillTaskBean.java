@@ -125,11 +125,9 @@ public class SubsidyFillTaskBean implements ITaskBean{
 
         String districtName = addressService.resolveOutgoingDistrict(subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
 
-//  todo TEST
-//        List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(calculationContext,
-//                subsidy, districtName, subsidy.getAccountNumber() + "");
+        List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(calculationContext,
+                subsidy, districtName, subsidy.getAccountNumber() + "");
 
-        List<AccountDetail> accountDetails = new ArrayList<>();
         accountDetails.add(new AccountDetail());
 
         if (!accountDetails.isEmpty()){
@@ -189,8 +187,14 @@ public class SubsidyFillTaskBean implements ITaskBean{
         subsidyMasterData.putField(SubsidyMasterDataDBF.BEGIN0, DateUtil.getFirstDayOfMonth(date));
         subsidyMasterData.putField(SubsidyMasterDataDBF.END0, DateUtil.getLastDayOfMonth(date));
 
-        //servicing organization | todo handle empty servicing organization id exception
-        subsidyMasterData.setServicingOrganizationId(subsidyService.getServicingOrganizationId(subsidy.getRequestFileId()));
+        //servicing organization
+        Long servicingOrganizationId = subsidyService.getServicingOrganizationId(subsidy.getRequestFileId());
+
+        if (servicingOrganizationId == null){
+            throw new RuntimeException("Null servicing organization for requestFileId " + subsidy.getRequestFileId());
+        }
+
+        subsidyMasterData.setServicingOrganizationId(servicingOrganizationId);
 
         subsidyMasterDataBean.save(subsidyMasterData);
     }

@@ -408,7 +408,7 @@ public class AddressService extends AbstractBean {
             }else if (streetTypeCorrections.size() == 1){
                 request.setOutgoingStreetType(streetTypeCorrections.get(0).getCorrection());
             }else {
-                request.setStatus(RequestStatus.MORE_ONE_REMOTE_STREET_CORRECTION); //todo add status
+                request.setStatus(RequestStatus.MORE_ONE_LOCAL_STREET_TYPE_CORRECTION);
 
                 return;
             }
