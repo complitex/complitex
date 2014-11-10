@@ -15,6 +15,18 @@
         <typeAlias type="org.complitex.common.entity.example.DomainObjectExample" alias="DomainObjectExample"/>
     </typeAliases>
 
+    <plugins>
+        <!--cursor plugin-->
+        <plugin interceptor="org.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>
+
+        <!--cache plugin-->
+        <plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheExecutorPlugin">
+            <property name="excludeNamespaces" value="
+            org.complitex.common.entity.Locale,
+            org.complitex.common.entity.description.Entity"/>
+        </plugin>
+    </plugins>
+
     <environments default="local">
         <environment id="local">
             <transactionManager type="MANAGED"/>

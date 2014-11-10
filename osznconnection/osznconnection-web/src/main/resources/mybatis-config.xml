@@ -31,10 +31,11 @@
                      javaType="org.complitex.address.entity.AddressEntity"/>
     </typeHandlers>
 
-    <!--cursor plugin-->
     <plugins>
+        <!--cursor plugin-->
         <plugin interceptor="org.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>
 
+        <!--cache plugin-->
         <plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheExecutorPlugin">
             <property name="excludeNamespaces" value="
             org.complitex.common.entity.Locale,

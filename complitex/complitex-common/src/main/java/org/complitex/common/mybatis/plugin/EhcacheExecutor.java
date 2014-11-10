@@ -1,6 +1,7 @@
 package org.complitex.common.mybatis.plugin;
 
 import com.google.common.collect.Lists;
+import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.CachingExecutor;
 import org.apache.ibatis.executor.Executor;
@@ -40,44 +41,43 @@ public class EhcacheExecutor extends CachingExecutor {
 
     @Override
     public int update(MappedStatement ms, Object parameterObject) throws SQLException {
-        EhcacheCache mscache = (EhcacheCache)ms.getCache();
-        if (mscache == null || !ms.isFlushCacheRequired() || namespaces.contains(mscache.getId())) {
-            return super.update(ms, parameterObject);
+        Cache mscache = ms.getCache();
+
+        if (mscache != null && mscache instanceof EhcacheCache && ms.isFlushCacheRequired() && !namespaces.contains(mscache.getId())) {
+            BoundSql boundSql = ms.getBoundSql(parameterObject);
+            String tableName = getTableFromQuery(boundSql);
+            if (tableName != null) {
+                String environmentId = ms.getConfiguration().getEnvironment().getId();
+                ((EhcacheCache) mscache).addDependTableForClear(environmentId + "." + tableName);
+            }
         }
-        BoundSql boundSql = ms.getBoundSql(parameterObject);
-        String tableName = getTableFromQuery(boundSql);
-        if (tableName != null) {
-            String environmentId = ms.getConfiguration().getEnvironment().getId();
-            mscache.addDependTableForClear(environmentId + "." + tableName);
-        }
+
         return super.update(ms, parameterObject);
     }
 
     @Override
     public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql) throws SQLException {
 
-        EhcacheCache mscache = (EhcacheCache)ms.getCache();
+        Cache mscache = ms.getCache();
 
-        if (mscache == null || namespaces.contains(mscache.getId())) {
-            return super.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
-        }
+        if (mscache != null && mscache instanceof EhcacheCache && !namespaces.contains(mscache.getId())) {
+            boolean cachedQuery;
+            mscache.getReadWriteLock().readLock().lock();
+            try {
+                cachedQuery = mscache.getObject(key) != null;
+            } finally {
+                mscache.getReadWriteLock().readLock().unlock();
+            }
+            if (cachedQuery) {
+                return super.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
+            }
 
-        boolean cachedQuery;
-        mscache.getReadWriteLock().readLock().lock();
-        try {
-            cachedQuery = mscache.getObject(key) != null;
-        } finally {
-            mscache.getReadWriteLock().readLock().unlock();
-        }
-        if (cachedQuery) {
-            return super.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
-        }
+            String environmentId = ms.getConfiguration().getEnvironment().getId();
+            List<String> tables = getTablesFromQuery(environmentId, boundSql);
 
-        String environmentId = ms.getConfiguration().getEnvironment().getId();
-        List<String> tables = getTablesFromQuery(environmentId, boundSql);
-
-        if (!tables.isEmpty()) {
-            EhcacheTableUtil.addCaches(tables, mscache.getInnerId(), key);
+            if (!tables.isEmpty()) {
+                EhcacheTableUtil.addCaches(tables, ((EhcacheCache)mscache).getInnerId(), key);
+            }
         }
 
         return super.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);

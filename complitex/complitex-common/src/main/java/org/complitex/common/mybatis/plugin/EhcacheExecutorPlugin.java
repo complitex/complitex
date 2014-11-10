@@ -23,8 +23,8 @@ public class EhcacheExecutorPlugin extends ExcludeNamespacePlugin {
         delegateField = CachingExecutor.class.getDeclaredField("delegate");
         delegateField.setAccessible(true);
 
-        autocommitField = CachingExecutor.class.getDeclaredField("autoCommit");
-        autocommitField.setAccessible(true);
+//        autocommitField = CachingExecutor.class.getDeclaredField("autoCommit");
+//        autocommitField.setAccessible(true);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class EhcacheExecutorPlugin extends ExcludeNamespacePlugin {
         if (target instanceof CachingExecutor) {
             try {
                 Executor delegate = (Executor)delegateField.get(target);
-                boolean autocommit = autocommitField.getBoolean(target);
+                boolean autocommit = false; //autocommitField.getBoolean(target);
 
                 return new EhcacheExecutor(delegate, autocommit, namespaces);
 
