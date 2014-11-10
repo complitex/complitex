@@ -2,16 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.keconnection.heatmeter.service.TablegramRecordBean">
     <resultMap id="tablegramRecordResultMap" type="org.complitex.keconnection.heatmeter.entity.TablegramRecord">
-        <id property="id"/>
-        <result property="tablegramId"/>
-        <result property="heatmeterId"/>
-        <result property="ls"/>
-        <result property="name"/>
-        <result property="address"/>
-        <result property="payload1"/>
-        <result property="payload2"/>
-        <result property="payload3"/>
-        <result property="status"/>
+        <id property="id" column="id"/>
+        <result property="tablegramId" column="tablegram_id"/>
+        <result property="heatmeterId" column="heatmeter_id"/>
+        <result property="ls" column="ls"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="payload1" column="payload1"/>
+        <result property="payload2" column="payload2"/>
+        <result property="payload3" column="payload3"/>
+        <result property="status" column="status"/>
     </resultMap>
 
     <insert id="insertTablegramRecord" parameterType="org.complitex.keconnection.heatmeter.entity.TablegramRecord"

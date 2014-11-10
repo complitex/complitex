@@ -3,9 +3,9 @@
 <mapper namespace="org.complitex.keconnection.heatmeter.service.HeatmeterConnectionBean">
     <resultMap id="heatmeterConnectionResultMap" type="org.complitex.keconnection.heatmeter.entity.HeatmeterConnection"
             extends="org.complitex.keconnection.heatmeter.service.HeatmeterPeriodBean.heatmeterPeriodResultMap">
-        <result property="buildingId"/>
-        <result property="organizationId"/>
-        <result property="code"/>
+        <result property="buildingId" column="building_id"/>
+        <result property="organizationId" column="organization_id"/>
+        <result property="code" column="code"/>
     </resultMap>
 
     <select id="selectHeatmeterConnectionsByOm" parameterType="map" resultMap="heatmeterConnectionResultMap">

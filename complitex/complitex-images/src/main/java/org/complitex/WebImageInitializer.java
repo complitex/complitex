@@ -7,6 +7,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.file.Files;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.net.URI;
 import java.util.Arrays;
@@ -17,7 +18,6 @@ import java.util.List;
  * @author Artem
  */
 public final class WebImageInitializer implements IInitializer {
-
     private static final List<String> IMAGE_EXTENSIONS = Arrays.asList(
             "jpg", "jpeg", "gif", "bmp", "png");
     private static final String IMAGES_DIRECTORY_NAME = "images";
@@ -28,6 +28,7 @@ public final class WebImageInitializer implements IInitializer {
             SharedResources sharedResources = application.getSharedResources();
             URI imagesURI = getClass().getResource(IMAGES_DIRECTORY_NAME).toURI();
             File images = new File(imagesURI);
+
             if (!images.exists()) {
                 throw new RuntimeException("Directory " + images.getAbsolutePath() + " doesn't exist.");
             }
@@ -50,7 +51,7 @@ public final class WebImageInitializer implements IInitializer {
                 sharedResources.add(resourceName, new PackageResourceReference(getClass(), relatedPath).getResource());
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 

@@ -5,12 +5,12 @@
             extends="org.complitex.keconnection.heatmeter.service.HeatmeterPeriodBean.heatmeterPeriodResultMap">
         <id column="payload_id" property="id"/>
 
-        <result property="tablegramRecordId"/>
-        <result property="heatmeterId"/>
-        <result property="payload1"/>
-        <result property="payload2"/>
-        <result property="payload3"/>
-        <result property="ls"/>
+        <result property="tablegramRecordId" column="tablegram_record_rd"/>
+        <result property="heatmeterId" column="heatmeter_id"/>
+        <result property="payload1" column="payload1"/>
+        <result property="payload2" column="payload2"/>
+        <result property="payload3" column="payload3"/>
+        <result property="ls" column="ls"/>
     </resultMap>
 
     <insert id="insertHeatmeterPayload" parameterType="org.complitex.keconnection.heatmeter.entity.HeatmeterPayload"

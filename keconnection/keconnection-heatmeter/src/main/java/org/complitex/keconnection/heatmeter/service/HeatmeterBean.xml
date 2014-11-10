@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.keconnection.heatmeter.service.HeatmeterBean">
     <resultMap id="heatmeterResultMap" type="org.complitex.keconnection.heatmeter.entity.Heatmeter">
-        <id property="id"/>
-        <result property="ls"/>
-        <result property="type"/>
-        <result property="calculating"/>
-        <result property="organizationId"/>
-        <result property="status"/>
-        <result property="bindingStatus"/>
+        <id property="id" column="id"/>
+        <result property="ls" column="ls"/>
+        <result property="type" column="type"/>
+        <result property="calculating" column="calculating"/>
+        <result property="organizationId" column="organization_id"/>
+        <result property="status" column="status"/>
+        <result property="bindingStatus" column="binding_status"/>
 
-        <result property="om"/>
+        <result property="om" column="om"/>
     </resultMap>
 
     <resultMap id="heatmeterWithActiveCollectionsResultMap" type="org.complitex.keconnection.heatmeter.entity.Heatmeter">
@@ -19,9 +19,9 @@
         <result property="type" column="type"/>
         <result property="calculating" column="calculating"/>
         <result property="organizationId" column="organization_id"/>
-        <result property="status"/>
+        <result property="status" column="status"/>
         <result property="bindingStatus" column="binding_status"/>
-        <result property="updated"/>
+        <result property="updated" column="updated"/>
         <collection property="connections"
                     select="org.complitex.keconnection.heatmeter.service.HeatmeterConnectionBean.selectHeatmeterConnectionsByOm"
                     column="heatmeterId=id,om=om"/>
@@ -42,7 +42,7 @@
         <result property="type" column="type"/>
         <result property="calculating" column="calculating"/>
         <result property="organizationId" column="organization_id"/>
-        <result property="status"/>
+        <result property="status" column="status"/>
         <collection property="connections"
                     select="org.complitex.keconnection.heatmeter.service.HeatmeterConnectionBean.selectHeatmeterConnectionsByHeatmeterId"
                     column="id"/>

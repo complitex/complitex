@@ -53,7 +53,3 @@ insert into street_correction(id, organization_id, correction, object_id, intern
 insert into building_correction(organization_id, correction, correction_corp, object_id, internal_organization_id, parent_id) values (21,UPPER('23'),UPPER(''),8,0,4);
 
 insert into district_correction(organization_id, correction, object_id, internal_organization_id, parent_id) values (21,UPPER('Центральный'),3,0,2);
-
--- config
-insert into config(`name`, `value`) values ('IMPORT_FILE_STORAGE_DIR', 'D:\\Artem\\Projects\\org.complitex\\storage\\keconnection_import\\kiev');
---insert into config(`name`, `value`) values ('IMPORT_HEATMETER_DIR', 'D:\\Artem\\Projects\\org.complitex\\keconnection\\docs');

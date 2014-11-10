@@ -75,9 +75,7 @@ public class PrivilegeImportService extends AbstractImportService{
             }
 
             listener.completeImport(PRIVILEGE, recordIndex);
-        } catch (IOException e) {
-            throw new ImportFileReadException(e, PRIVILEGE.getFileName(), recordIndex);
-        } catch (NumberFormatException e){
+        } catch (IOException | NumberFormatException e) {
             throw new ImportFileReadException(e, PRIVILEGE.getFileName(), recordIndex);
         } finally {
             try {

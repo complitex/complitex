@@ -34,7 +34,7 @@ public class EhcacheExecutor extends CachingExecutor {
     }
 
     public EhcacheExecutor(Executor delegate, boolean autoCommit, Set<String> namespaces) {
-        super(delegate, autoCommit);
+        super(delegate);
         this.namespaces = namespaces;
     }
 
