@@ -44,7 +44,7 @@
         <wicket.version>6.18.0</wicket.version>
 
         <!-- wicketstuff inject -->
-        <wicket-stuff.version>6.18.0</wicket-stuff.version>
+        <wicket-stuff.version>6.17.0</wicket-stuff.version>
 
         <!-- wiquery version -->
         <wiquery.version>6.13.0</wiquery.version>
