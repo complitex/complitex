@@ -3,7 +3,9 @@ package org.complitex.common.mybatis.caches;
 import com.google.common.collect.Sets;
 import org.apache.ibatis.cache.Cache;
 
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReadWriteLock;
 
@@ -18,6 +20,8 @@ public class EhcacheCache implements Cache {
 
     private String id;
     private Set<String> dependTableNames = Sets.newHashSet();
+
+    private static List<EhcacheCache> instances = new CopyOnWriteArrayList<>();
     
     /**
      * @param id
@@ -25,6 +29,14 @@ public class EhcacheCache implements Cache {
     public EhcacheCache(String id) {
         this.id = id;
         ehcacheCache = new org.mybatis.caches.ehcache.EhcacheCache(id + "." + counter.incrementAndGet());
+
+        instances.add(this);
+    }
+
+    public static void clearAll() {
+        for (EhcacheCache cache : instances){
+            cache.clear();
+        }
     }
 
     public String getInnerId() {

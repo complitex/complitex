@@ -27,7 +27,7 @@ import org.complitex.common.web.component.dateinput.MaskedDateInput;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterImportFile;
 import org.complitex.keconnection.heatmeter.service.HeatmeterImportService;
 import org.complitex.keconnection.heatmeter.service.TablegramImportService;
-import org.complitex.keconnection.importing.service.ImportService;
+import org.complitex.keconnection.importing.service.KeImportService;
 import org.complitex.keconnection.organization.entity.OrganizationImportFile;
 import org.complitex.template.web.component.LocalePicker;
 import org.complitex.template.web.security.SecurityRole;
@@ -46,12 +46,13 @@ import static org.complitex.common.util.DateUtil.*;
 public final class ImportPage extends TemplatePage {
 
     @EJB
-    private ImportService importService;
+    private KeImportService importService;
     @EJB
     private TablegramImportService tablegramImportService;
     @EJB
     private HeatmeterImportService heatmeterImportService;
     @EJB
+
     private LocaleBean localeBean;
     private final IModel<List<IImportFile>> addressDataModel;
     private final IModel<List<IImportFile>> organizationDataModel;

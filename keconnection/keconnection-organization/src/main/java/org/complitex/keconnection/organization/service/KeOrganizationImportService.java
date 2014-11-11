@@ -38,12 +38,12 @@ import static org.complitex.keconnection.organization.strategy.KeConnectionOrgan
  * @author Artem
  */
 @Stateless
-public class OrganizationImportService extends AbstractImportService {
+public class KeOrganizationImportService extends AbstractImportService {
 
-    private final Logger log = LoggerFactory.getLogger(OrganizationImportService.class);
+    private final Logger log = LoggerFactory.getLogger(KeOrganizationImportService.class);
 
     @EJB
-    private OrganizationImportBean organizationImportBean;
+    private KeOrganizationImportBean organizationImportBean;
 
     @EJB
     private KeConnectionOrganizationStrategy organizationStrategy;
@@ -146,9 +146,12 @@ public class OrganizationImportService extends AbstractImportService {
             //parent
             Long parentId = organization.getHlevel();
             if (parentId != null) {
-                long parentObjectId = organizationStrategy.getObjectId(parentId.toString());
-                newObject.getAttribute(KeConnectionOrganizationStrategy.USER_ORGANIZATION_PARENT).
-                        setValueId(parentObjectId);
+                Long parentObjectId = organizationStrategy.getObjectId(parentId.toString());
+
+                if (parentObjectId != null) {
+                    newObject.getAttribute(KeConnectionOrganizationStrategy.USER_ORGANIZATION_PARENT).
+                            setValueId(parentObjectId);
+                }
             }
 
             //type

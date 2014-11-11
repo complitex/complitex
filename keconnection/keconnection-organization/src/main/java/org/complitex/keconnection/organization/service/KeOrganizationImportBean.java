@@ -20,9 +20,9 @@ import java.util.List;
  * @author Artem
  */
 @Stateless
-public class OrganizationImportBean extends AbstractBean {
+public class KeOrganizationImportBean extends AbstractBean {
 
-    private static final String MAPPING_NAMESPACE = OrganizationImportBean.class.getName();
+    private static final String MAPPING_NAMESPACE = KeOrganizationImportBean.class.getName();
 
     @Transactional
     public void importOrganization(OrganizationImport importOrganization) {

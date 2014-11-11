@@ -17,7 +17,7 @@ import org.complitex.keconnection.heatmeter.service.HeatmeterImportService;
 import org.complitex.keconnection.heatmeter.service.TablegramImportService;
 import org.complitex.keconnection.importing.Module;
 import org.complitex.keconnection.organization.entity.OrganizationImportFile;
-import org.complitex.keconnection.organization.service.OrganizationImportService;
+import org.complitex.keconnection.organization.service.KeOrganizationImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +35,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class ImportService {
-    private final Logger log = LoggerFactory.getLogger(ImportService.class);
+public class KeImportService {
+    private final Logger log = LoggerFactory.getLogger(KeImportService.class);
 
     @Resource
     private UserTransaction userTransaction;
@@ -48,7 +48,7 @@ public class ImportService {
     private LogBean logBean;
 
     @EJB
-    private OrganizationImportService organizationImportService;
+    private KeOrganizationImportService organizationImportService;
 
     @EJB
     private AddressImportService addressImportService;
@@ -89,7 +89,7 @@ public class ImportService {
         @Override
         public void completeImport(IImportFile importFile, int recordCount) {
             messageMap.get(importFile).setCompleted();
-            logBean.info(Module.NAME, ImportService.class, importFile.getClass(), null, Log.EVENT.CREATE,
+            logBean.info(Module.NAME, KeImportService.class, importFile.getClass(), null, Log.EVENT.CREATE,
                     "Имя файла: {0}, количество записей: {1}, Идентификатор локали: {2}",
                     importFile.getFileName(), recordCount, locale);
         }
@@ -104,12 +104,12 @@ public class ImportService {
                 String warning = MessageFormat.format("Предупреждение при импорте файла улиц {0}: {1}",
                         AddressImportFile.STREET.getFileName(), message);
                 log.warn(warning);
-                logBean.warn(Module.NAME, ImportService.class, AddressImportFile.class, null, Log.EVENT.CREATE, warning);
+                logBean.warn(Module.NAME, KeImportService.class, AddressImportFile.class, null, Log.EVENT.CREATE, warning);
             } else if (importFile == AddressImportFile.BUILDING) {
                 String warning = MessageFormat.format("Предупреждение при импорте файла домов {0}: {1}",
                         AddressImportFile.BUILDING.getFileName(), message);
                 log.warn(warning);
-                logBean.warn(Module.NAME, ImportService.class, AddressImportFile.class, null, Log.EVENT.CREATE, warning);
+                logBean.warn(Module.NAME, KeImportService.class, AddressImportFile.class, null, Log.EVENT.CREATE, warning);
             }
         }
     }
@@ -210,7 +210,7 @@ public class ImportService {
             error = true;
             errorMessage = e instanceof AbstractException ? e.getMessage() : new ImportCriticalException(e).getMessage();
 
-            logBean.error(Module.NAME, ImportService.class, null, null, Log.EVENT.CREATE, errorMessage);
+            logBean.error(Module.NAME, KeImportService.class, null, null, Log.EVENT.CREATE, errorMessage);
         } finally {
             processing = false;
         }

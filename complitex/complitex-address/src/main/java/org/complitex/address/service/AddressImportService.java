@@ -16,6 +16,7 @@ import org.complitex.address.strategy.region.RegionStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.*;
+import org.complitex.common.mybatis.caches.EhcacheCache;
 import org.complitex.common.service.*;
 import org.complitex.common.service.exception.*;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
@@ -28,6 +29,7 @@ import javax.ejb.*;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.Locale;
 
@@ -143,6 +145,9 @@ public class AddressImportService extends AbstractImportService {
     public <T extends IImportFile> void process(T importFile, IImportListener listener, Locale locale, Date beginDate)
             throws ImportFileNotFoundException, ImportFileReadException, ImportObjectLinkException, ImportDuplicateException,
             ImportDistrictLinkException {
+        //clear cache
+        EhcacheCache.clearAll();
+
         switch ((AddressImportFile) importFile) {
             case COUNTRY:
                 importCountry(listener, locale, beginDate);
@@ -831,7 +836,9 @@ public class AddressImportService extends AbstractImportService {
                                 locale, buildingNum, buildingAddressExternalId, buildingCode));
                     }
                 }else{
-                    throw new ImportObjectLinkException(BUILDING.getFileName(), recordIndex, String.valueOf(organizationExternalId));
+                    listener.warn(BUILDING, MessageFormat.format("Организация {0} не найдена при обработки строки {1}", organizationExternalId, recordIndex));
+
+                    //throw new ImportObjectLinkException(BUILDING.getFileName(), recordIndex, String.valueOf(organizationExternalId));
                 }
 
                 //save
