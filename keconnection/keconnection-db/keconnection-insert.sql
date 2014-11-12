@@ -2,10 +2,11 @@
 -- Sequence
 -- --------------------------------
 INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES
-('tarif_group',1), ('tarif_group_string_culture',1),
-('tarif',1), ('tarif_string_culture',1),
-('heatmeter_type',1), ('heatmeter_type_string_culture',1),
-('heatmeter_period_type',1), ('heatmeter_period_type_string_culture',1);
+  ('tarif_group',1), ('tarif_group_string_culture',1),
+  ('tarif',1), ('tarif_string_culture',1),
+  ('heatmeter_type',1), ('heatmeter_type_string_culture',1),
+  ('heatmeter_period_type',1), ('heatmeter_period_type_string_culture',1),
+  ('service',1), ('service_string_culture',1);
 
 -- --------------------------------
 -- Organization type
@@ -13,27 +14,27 @@ INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES
 
 INSERT INTO `organization_type`(`object_id`) VALUES (2);
 INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
-  VALUES (2, 1, UPPER('МОДУЛЬ НАЧИСЛЕНИЙ')), (2, 2, UPPER('МОДУЛЬ НАЧИСЛЕНИЙ'));
+VALUES (2, 1, UPPER('МОДУЛЬ НАЧИСЛЕНИЙ')), (2, 2, UPPER('МОДУЛЬ НАЧИСЛЕНИЙ'));
 INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
-  VALUES (1, 2, 2300, 2, 2300);
+VALUES (1, 2, 2300, 2, 2300);
 
 INSERT INTO `organization_type`(`object_id`) VALUES (3);
 INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
-  VALUES (3, 1, UPPER('БАЛАНСОДЕРЖАТЕЛЬ')), (3, 2, UPPER('БАЛАНСОДЕРЖАТЕЛЬ'));
+VALUES (3, 1, UPPER('БАЛАНСОДЕРЖАТЕЛЬ')), (3, 2, UPPER('БАЛАНСОДЕРЖАТЕЛЬ'));
 INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
-  VALUES (1, 3, 2300, 3, 2300);
+VALUES (1, 3, 2300, 3, 2300);
 
 INSERT INTO `organization_type`(`object_id`) VALUES (5);
 INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
-  VALUES (5, 1, UPPER('ПОСТАВЩИК УСЛУГ')), (5, 2, UPPER('ПОСТАВЩИК УСЛУГ'));
+VALUES (5, 1, UPPER('ПОСТАВЩИК УСЛУГ')), (5, 2, UPPER('ПОСТАВЩИК УСЛУГ'));
 INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
-  VALUES (1, 5, 2300, 5, 2300);
+VALUES (1, 5, 2300, 5, 2300);
 
 INSERT INTO `organization_type`(`object_id`) VALUES (6);
 INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
-  VALUES (6, 1, UPPER('ПОДРЯДЧИК')), (6, 2, UPPER('ПОДРЯДЧИК'));
+VALUES (6, 1, UPPER('ПОДРЯДЧИК')), (6, 2, UPPER('ПОДРЯДЧИК'));
 INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
-  VALUES (1, 6, 2300, 6, 2300);
+VALUES (1, 6, 2300, 6, 2300);
 
 -- --------------------------------
 -- Organization
@@ -59,17 +60,17 @@ INSERT INTO `entity_attribute_value_type`(`id`, `attribute_type_id`, `attribute_
 -- Itself organization
 INSERT INTO `organization`(`object_id`) VALUES (0);
 INSERT INTO `organization_string_culture`(`id`, `locale_id`, `value`) VALUES
-(1, 1, UPPER('Модуль №1')), (1,2,UPPER('Модуль №1')), (2, (SELECT `id` FROM `locales` WHERE `system` = 1), UPPER('0'));
+  (1, 1, UPPER('Модуль №1')), (1,2,UPPER('Модуль №1')), (2, (SELECT `id` FROM `locales` WHERE `system` = 1), UPPER('0'));
 INSERT INTO `organization_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
-(1,0,900,1,900), (1,0,901,2,901);
+  (1,0,900,1,900), (1,0,901,2,901);
 
 -- КИЕВЭНЕРГО
 INSERT INTO `organization`(`object_id`) VALUES (1);
 INSERT INTO `organization_string_culture`(`id`, `locale_id`, `value`) VALUES
-(3, 1, UPPER('КИЕВЭНЕРГО')), (3,2,UPPER('КИЕВЭНЕРГО')),
-(4, (SELECT `id` FROM `locales` WHERE `system` = 1), UPPER('1'));
+  (3, 1, UPPER('КИЕВЭНЕРГО')), (3,2,UPPER('КИЕВЭНЕРГО')),
+  (4, (SELECT `id` FROM `locales` WHERE `system` = 1), UPPER('1'));
 INSERT INTO `organization_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
-(1,1,900,3,900), (1,1,901,4,901), (1,1,904,5,904);
+  (1,1,900,3,900), (1,1,901,4,901), (1,1,904,5,904);
 
 -- ------------------------------
 -- Tarif group
@@ -89,12 +90,12 @@ INSERT INTO `entity_attribute_value_type`(`id`, `attribute_type_id`, `attribute_
 -- Predefined tarif groups
 -- ------------------------------
 INSERT INTO `tarif_group`(`object_id`) VALUES (1),(2),(3);
-INSERT INTO `tarif_group_string_culture`(`id`, `locale_id`, `value`) VALUES 
-(1, 1, UPPER('население')), (1, 2,UPPER('население')), (2,(SELECT `id` FROM `locales` WHERE `system` = 1), UPPER('1')),
-(3, 1, UPPER('бюджетные организации')), (3, 2, UPPER('бюджетные организации')), (4,(SELECT `id` FROM `locales` WHERE `system` = 1), UPPER('2')),
-(5, 1, UPPER('прочие потребители')), (5, 2, UPPER('прочие потребители')), (6,(SELECT `id` FROM `locales` WHERE `system` = 1), UPPER('3'));
+INSERT INTO `tarif_group_string_culture`(`id`, `locale_id`, `value`) VALUES
+  (1, 1, UPPER('население')), (1, 2,UPPER('население')), (2,(SELECT `id` FROM `locales` WHERE `system` = 1), UPPER('1')),
+  (3, 1, UPPER('бюджетные организации')), (3, 2, UPPER('бюджетные организации')), (4,(SELECT `id` FROM `locales` WHERE `system` = 1), UPPER('2')),
+  (5, 1, UPPER('прочие потребители')), (5, 2, UPPER('прочие потребители')), (6,(SELECT `id` FROM `locales` WHERE `system` = 1), UPPER('3'));
 INSERT INTO `tarif_group_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
-(1,1,3200,1,3200),(1,1,3201,2,3201),(1,2,3200,3,3200),(1,2,3201,4,3201),(1,3,3200,5,3200),(1,3,3201,6,3201);
+  (1,1,3200,1,3200),(1,1,3201,2,3201),(1,2,3200,3,3200),(1,2,3201,4,3201),(1,3,3200,5,3200),(1,3,3201,6,3201);
 
 -- ------------------------------
 -- Tarif
@@ -128,11 +129,11 @@ INSERT INTO `entity_attribute_value_type`(`id`, `attribute_type_id`, `attribute_
 -- Predefined heatmeter types
 -- ------------------------------
 INSERT INTO `heatmeter_type`(`object_id`) VALUES (1),(2);
-INSERT INTO `heatmeter_type_string_culture`(`id`, `locale_id`, `value`) VALUES 
-(1, 1, UPPER('отопление')), (1, 2,UPPER('отопление')),
-(2, 1, UPPER('отопление и подогрев воды')), (2, 2, UPPER('отопление и подогрев воды'));
+INSERT INTO `heatmeter_type_string_culture`(`id`, `locale_id`, `value`) VALUES
+  (1, 1, UPPER('отопление')), (1, 2,UPPER('отопление')),
+  (2, 1, UPPER('отопление и подогрев воды')), (2, 2, UPPER('отопление и подогрев воды'));
 INSERT INTO `heatmeter_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
-(1,1,3400,1,3400),(1,2,3400,2,3400);
+  (1,1,3400,1,3400),(1,2,3400,2,3400);
 
 -- ------------------------------
 -- Heatmeater Period Type
@@ -148,11 +149,11 @@ INSERT INTO `entity_attribute_value_type`(`id`, `attribute_type_id`, `attribute_
 -- Predefined heatmeter period types
 -- ------------------------------
 INSERT INTO `heatmeter_period_type`(`object_id`) VALUES (1),(2);
-INSERT INTO `heatmeter_period_type_string_culture`(`id`, `locale_id`, `value`) VALUES 
-(1, 1, UPPER('функционирование')), (1, 2,UPPER('функционирование')),
-(2, 1, UPPER('юстировка')), (2, 2, UPPER('юстировка'));
+INSERT INTO `heatmeter_period_type_string_culture`(`id`, `locale_id`, `value`) VALUES
+  (1, 1, UPPER('функционирование')), (1, 2,UPPER('функционирование')),
+  (2, 1, UPPER('юстировка')), (2, 2, UPPER('юстировка'));
 INSERT INTO `heatmeter_period_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
-(1,1,3500,1,3500),(1,2,3500,2,3500);
+  (1,1,3500,1,3500),(1,2,3500,2,3500);
 
 -- --------------------------------
 -- Config
@@ -160,3 +161,21 @@ INSERT INTO `heatmeter_period_type_attribute`(`attribute_id`, `object_id`, `attr
 
 INSERT INTO `config` (`name`, `value`) VALUES ('IMPORT_HEATMETER_DIR','c:\\storage\\import\\heatmeter');
 INSERT INTO `config` (`name`, `value`) VALUES ('IMPORT_PAYLOAD_DIR','c:\\storage\\import\\payload');
+
+-- ------------------------------
+-- Service
+-- ------------------------------
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (3600, 1, 'Услуга'), (3600, 2, 'Услуга');
+INSERT INTO `entity`(`id`, `entity_table`, `entity_name_id`, `strategy_factory`) VALUES (3600, 'service', 3600, '');
+
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (3601, 1, UPPER('Название')), (3601, 2, UPPER('Название'));
+INSERT INTO `entity_attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (3601, 3600, 1, 3601, 1);
+INSERT INTO `entity_attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (3601, 3601, 'STRING_CULTURE');
+
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (3602, 1, UPPER('Короткое название')), (3602, 2, UPPER('Короткое название'));
+INSERT INTO `entity_attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (3602, 3600, 1, 3602, 1);
+INSERT INTO `entity_attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (3602, 3602, 'STRING_CULTURE');
+
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (3603, 1, UPPER('Код')), (3603, 2, UPPER('Код'));
+INSERT INTO `entity_attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (3603, 3600, 1, 3603, 1);
+INSERT INTO `entity_attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (3603, 3603, 'STRING_CULTURE');

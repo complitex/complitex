@@ -12,3 +12,4 @@ update sequence set sequence_value = 100 where sequence_name = 'heatmeter_type_s
 update sequence set sequence_value = 100 where sequence_name = 'heatmeter_type';
 update sequence set sequence_value = 100 where sequence_name = 'heatmeter_period_type_string_culture';
 update sequence set sequence_value = 100 where sequence_name = 'heatmeter_period_type';
+update sequence set sequence_value = 100 where sequence_name = 'service' or sequence_name = 'service_string_culture';

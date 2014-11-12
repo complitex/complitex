@@ -25,6 +25,7 @@
 
         <menu class="org.complitex.keconnection.heatmeter.web.HeatmeterTypeMenu"/>
         <menu class="org.complitex.keconnection.organization_type.menu.KeConnectionOrganizationTypeMenu"/>
+        <menu class="org.complitex.keconnection.heatmeter.web.ServiceMenu"/>
 
 <!--        <menu class="org.complitex.address.menu.AddressDescriptionMenu"/>-->
         <menu class="org.complitex.keconnection.tarif.menu.TarifDescriptionMenu"/>

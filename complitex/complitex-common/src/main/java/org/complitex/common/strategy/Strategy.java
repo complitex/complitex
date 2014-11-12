@@ -1050,6 +1050,12 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         long attributeTypeId = getEntity().getId();
 
         Attribute attribute = object.getAttribute(attributeTypeId);
+
+        //first attribute id is entityId + 1
+        if (attribute == null){
+            attribute = object.getAttribute(attributeTypeId + 1);
+        }
+
         if (attribute == null) {
             throw new IllegalStateException("Domain object(entity = " + getEntityTable() + ", id = " + object.getId()
                     + ") has no attribute with attribute type id = " + attributeTypeId + "!");
