@@ -35,7 +35,7 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         List<IColumn<T, String>> columns = new ArrayList<>();
 
         for (String field : fields){
-            IColumn<T, String> column = columnMap.get(field);
+            IColumn<T, String> column = columnMap != null ? columnMap.get(field) : null;
 
             if (column == null){
                 Field f = FieldUtils.getField(objectClass, field, true);
@@ -51,7 +51,7 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
             columns.add(column);
         }
 
-        if (!actions.isEmpty()){
+        if (actions != null && !actions.isEmpty()){
             columns.add(new FilteredActionColumn<>(actions));
         }
 
@@ -63,5 +63,9 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         table.addBottomToolbar(new AjaxNavigationToolbar(table));
 
         form.add(table);
+    }
+
+    public FilteredDataTable(String id, Class<T> objectClass, String... fields){
+        this(id, objectClass, null, null, fields);
     }
 }

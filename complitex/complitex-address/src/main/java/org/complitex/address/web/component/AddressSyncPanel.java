@@ -9,7 +9,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.time.Duration;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
@@ -148,10 +147,10 @@ public class AddressSyncPanel extends Panel {
 
         Map<String, IColumn<AddressSync, String>> columnMap = new HashMap<>();
 
-        columnMap.put("objectId", new AddressSyncObjectColumn(new ResourceModel("objectId"), getLocale()));
-        columnMap.put("parentObjectId", new AddressSyncParentColumn(new ResourceModel("parentObjectId"), getLocale()));
-        columnMap.put("type", new EnumColumn<AddressSync, AddressEntity>(new ResourceModel("type"), "type", AddressEntity.class, getLocale()));
-        columnMap.put("status", new EnumColumn<AddressSync, AddressSyncStatus>(new ResourceModel("status"), "status", AddressSyncStatus.class, getLocale()));
+        columnMap.put("objectId", new AddressSyncObjectColumn("objectId"));
+        columnMap.put("parentObjectId", new AddressSyncParentColumn("parentObjectId"));
+        columnMap.put("type", new EnumColumn<AddressSync, AddressEntity>("type", AddressEntity.class, getLocale()));
+        columnMap.put("status", new EnumColumn<AddressSync, AddressSyncStatus>("status", AddressSyncStatus.class, getLocale()));
 
         add(new FilteredDataTable<AddressSync>("table", AddressSync.class, columnMap, actions, FIELDS) {
             @Override

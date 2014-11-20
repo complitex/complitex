@@ -35,7 +35,12 @@ public class FilteredActionColumn<T> implements IColumn<T, String>, IFilteredCol
             repeatingView.add(new AjaxLinkPanel(repeatingView.newChildId(), action.getNameModel()) {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    actionDialogPanel.open(target, action, rowModel);
+                    if (action.isConfirm()){
+                        actionDialogPanel.open(target, action, rowModel);
+                    }else {
+                        action.onAction(target, rowModel);
+                    }
+
                 }
 
                 @Override

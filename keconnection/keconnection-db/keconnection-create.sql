@@ -697,6 +697,37 @@ CREATE TABLE `service_string_culture` (
   CONSTRAINT `fk_service_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута услуги';
 
+-- ------------------------------
+-- Contract services
+-- ------------------------------
+
+DROP TABLE IF EXISTS `service_contract`;
+CREATE TABLE `service_contract`(
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
+  `begin_date` DATE NOT NULL COMMENT  'Дата начала',
+  `end_date` DATE COMMENT  'Дата окончания',
+  `number` VARCHAR(64) NOT NULL COMMENT 'Номер',
+  `organization_id` BIGINT(20) NOT NULL COMMENT 'Поставщик услуг',
+
+  PRIMARY KEY (`id`),
+  KEY `key_organization_id` (`organization_id`),
+  CONSTRAINT `fk_service_contract__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`)
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Договор на поставку услуги';
+
+DROP TABLE IF EXISTS `service_contract_building`;
+CREATE TABLE `service_contract_building`(
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
+  `building_code_id` BIGINT(20) NOT NULL COMMENT 'Код дома',
+  `service_contract_id` BIGINT(20) NOT NULL COMMENT 'Договор на поставку услуги',
+
+  PRIMARY KEY (`id`),
+  KEY `key_building_code_id` (`building_code_id`),
+  CONSTRAINT `fk_service_contract_building__building_code` FOREIGN KEY (`building_code_id`) REFERENCES `building_code` (`id`),
+  KEY `key_service_contract_id` (`service_contract_id`),
+  CONSTRAINT `fk_service_contract_building__service_contract` FOREIGN KEY (`service_contract_id`) REFERENCES `service_contract` (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Договор на поставку услуги';
+
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

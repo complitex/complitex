@@ -13,14 +13,20 @@ import java.io.Serializable;
 public abstract class Action<T> implements Serializable{
     private IModel<String> nameModel;
     private IModel<String> messageModel;
+    private boolean confirm;
 
     public Action(String nameKey, String messageKey) {
-        this(new ResourceModel(nameKey), new ResourceModel(messageKey));
+        this(new ResourceModel(nameKey), new ResourceModel(messageKey), true);
     }
 
-    public Action(IModel<String> nameModel, IModel<String> messageModel) {
+    public Action(String nameKey) {
+        this(new ResourceModel(nameKey), null, false);
+    }
+
+    public Action(IModel<String> nameModel, IModel<String> messageModel, boolean confirm) {
         this.nameModel = nameModel;
         this.messageModel = messageModel;
+        this.confirm = confirm;
     }
 
     public IModel<String> getNameModel() {
@@ -36,5 +42,9 @@ public abstract class Action<T> implements Serializable{
 
     public boolean isVisible(IModel<T> model){
         return true;
+    }
+
+    public boolean isConfirm() {
+        return confirm;
     }
 }

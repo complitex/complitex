@@ -2,7 +2,6 @@ package org.complitex.address.web.component;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilteredColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextFilter;
@@ -10,6 +9,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
@@ -17,21 +17,20 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.EjbBeanLocator;
-
-import java.util.Locale;
+import org.complitex.common.web.component.datatable.FilteredColumn;
 
 /**
  * @author Anatoly Ivanov
  *         Date: 031 31.07.14 15:44
  */
-public class AddressSyncObjectColumn extends AbstractColumn<AddressSync, String>
+public class AddressSyncObjectColumn extends FilteredColumn<AddressSync>
         implements IFilteredColumn<AddressSync, String> {
-    private Locale locale;
+    public AddressSyncObjectColumn(IModel<String> displayModel, String id) {
+        super(displayModel, id);
+    }
 
-    public AddressSyncObjectColumn(IModel<String> displayModel, Locale locale) {
-        super(displayModel);
-
-        this.locale = locale;
+    public AddressSyncObjectColumn(String id) {
+        super(new ResourceModel(id), id);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class AddressSyncObjectColumn extends AbstractColumn<AddressSync, String>
             }else {
                 IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(addressSync.getType().getEntityTable());
 
-                objectName = strategy.displayDomainObject(addressSync.getObjectId(), locale);
+                objectName = strategy.displayDomainObject(addressSync.getObjectId(), cellItem.getLocale());
             }
         }
 

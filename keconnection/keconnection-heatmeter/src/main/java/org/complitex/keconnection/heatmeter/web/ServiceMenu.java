@@ -2,6 +2,7 @@ package org.complitex.keconnection.heatmeter.web;
 
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.keconnection.heatmeter.strategy.ServiceStrategy;
+import org.complitex.keconnection.heatmeter.web.service.ServiceContractList;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
 /**
@@ -13,5 +14,6 @@ public class ServiceMenu extends ResourceTemplateMenu{
 
     public ServiceMenu() {
         add("service", serviceStrategy.getListPage(), serviceStrategy.getListPageParams());
+        add("service_contract", ServiceContractList.class);
     }
 }

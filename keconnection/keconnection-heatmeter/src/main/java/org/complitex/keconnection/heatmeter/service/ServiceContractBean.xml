@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.complitex.keconnection.heatmeter.service.ServiceContractBean">
+    <resultMap id="serviceContractResultMap" type="org.complitex.keconnection.heatmeter.entity.ServiceContract">
+        <id column="id" property="id"/>
+        <result column="begin_date" property="beginDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="number" property="number"/>
+        <result column="organization_id" property="organizationId"/>
+
+        <collection property="buildingCodes" ofType="org.complitex.address.strategy.building.entity.BuildingCode"
+                    select="selectBuildingCodeList" column="id"/>
+    </resultMap>
+
+    <!-- Service Contract -->
+
+    <insert id="insertServiceContract" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContract"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into service_contract (begin_date, end_date, number, organization_id)
+            value (#{beginDate}, #{endDate}, #{number}, #{organizationId});
+    </insert>
+
+    <update id="updateServiceContract" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContract">
+        update service_contract set begin_date = #{beginDate}, end_date = #{endDate}, number = #{number},
+            organization_id = #{organizationId}
+    </update>
+
+    <select id="selectServiceContract" parameterType="long" resultMap="serviceContractResultMap">
+        select * from service_contract where id = #{id}
+    </select>
+
+    <sql id="selectServiceWhere">
+        <where>
+            <if test="object.beginDate != null">and begin_date > #{object.beginDate}</if>
+            <if test="object.endDate != null">and end_date > #{object.endDate}</if>
+            <if test="object.number != null">and number = #{object.number}</if>
+            <if test="object.organizationId">and organization_id = #{object.organizationId}</if>
+        </where>
+    </sql>
+
+    <select id="selectServiceContractList" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="serviceContractResultMap">
+        select * from service_contract <include refid="selectServiceWhere"/>
+        order by ${sortProperty} ${asc} limit #{first}, #{count}
+    </select>
+
+    <select id="selectServiceContractListCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
+        select count(*) from service_contract <include refid="selectServiceWhere"/>
+    </select>
+
+    <delete id="deleteServiceContract" parameterType="long">
+        delete from service_contract where id = #{id}
+    </delete>
+
+    <!-- Service Contract Building -->
+
+
+    <insert id="insertServiceContractBuilding" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContractBuilding"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into service_contract_building (building_code_id, service_contract_id)
+                value (#{buildingCodeId}, #{serviceContractId})
+    </insert>
+
+    <delete id="deleteServiceContractBuilding" parameterType="long">
+        delete from service_contract_building
+        <where>
+            <choose>
+                <when test="id != null">and id = #{id}</when>
+                <otherwise>and building_code_id = #{buildingCodeId} and service_contract_id = #{serviceContractId}</otherwise>
+            </choose>
+        </where>
+
+    </delete>
+
+    <select id="selectServiceContractBuildingList" parameterType="org.complitex.common.entity.FilterWrapper">
+        select * from service_contract_building
+        <where>
+            <if test="object.buildingCodeId != null">and building_code_id = #{buildingCodeId}</if>
+            <if test="object.serviceContractId != null">and service_contract_id = #{serviceContractId}</if>
+        </where>
+    </select>
+
+    <!-- Building Code -->
+
+    <select id="selectBuildingCodeList" parameterType="long" resultType="org.complitex.address.strategy.building.entity.BuildingCode">
+        select bc.id id, bc.organization_id organizationId, bc.code buildingCode, bc.building_id buildingId
+          from building_code bc left join service_contract_building scb on (bc.id = scb.building_code_id)
+            where scb.service_contract_id = #{serviceContractId}
+    </select>
+
+</mapper>
+        
+        

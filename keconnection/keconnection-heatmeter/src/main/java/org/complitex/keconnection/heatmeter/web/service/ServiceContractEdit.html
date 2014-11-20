@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org"  xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <wicket:head >
+        <title wicket:id="title"></title>
+    </wicket:head>
+</head>
+<body>
+<wicket:extend>
+    <h1><wicket:message key="title"/></h1>
+    <div wicket:id="messages"></div>
+
+    <form wicket:id="form" class="tbForm">
+        <table>
+            <tr>
+                <th><wicket:message key="beginDate"/></th>
+                <td><span wicket:id="beginDate"></span></td>
+            </tr>
+            <tr>
+                <th><wicket:message key="endDate"/></th>
+                <td><span wicket:id="endDate"></span></td>
+            </tr>
+            <tr>
+                <th><wicket:message key="number"/></th>
+                <td><input type="text" wicket:id="number"/></td>
+            </tr>
+            <tr>
+                <th><wicket:message key="organizationId"/></th>
+                <td><span wicket:id="organizationId"></span></td>
+            </tr>
+        </table>
+        <div style="padding-top: 20px">
+            <input type="submit" class="btnMiddle" wicket:message="value:save" wicket:id="save"/>
+            <input type="button" class="btnMiddle" wicket:message="value:cancel" wicket:id="cancel"/>
+        </div>
+
+    </form>
+
+
+</wicket:extend>
+</body>
+</html>

@@ -4,6 +4,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.Choic
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.WildcardListModel;
 import org.complitex.common.web.component.form.EnumChoiceRenderer;
 
@@ -21,6 +22,10 @@ public class EnumColumn<T, Y extends Enum<Y>> extends ChoiceFilteredPropertyColu
         super(displayModel, propertyExpression, new WildcardListModel<>(Arrays.asList(enumClass.getEnumConstants())));
 
         enumChoiceRenderer = new EnumChoiceRenderer<>(locale);
+    }
+
+    public EnumColumn(String id, Class<? extends Y> enumClass, Locale locale) {
+        this(new ResourceModel(id), id, enumClass, locale);
     }
 
     @Override
