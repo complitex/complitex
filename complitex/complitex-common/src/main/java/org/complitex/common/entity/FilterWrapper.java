@@ -1,5 +1,7 @@
 package org.complitex.common.entity;
 
+import com.google.common.base.CaseFormat;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +29,8 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
     private Map<String, Object> map = new HashMap<>();
 
     private Locale locale;
+
+    private boolean camelToUnderscore = false;
 
     public FilterWrapper() {
     }
@@ -96,6 +100,10 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
     }
 
     public String getSortProperty() {
+        if (camelToUnderscore){
+            return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, sortProperty);
+        }
+
         return sortProperty;
     }
 
@@ -165,5 +173,13 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
 
     public void setOuterOrganizationsString(String outerOrganizationsString) {
         this.outerOrganizationsString = outerOrganizationsString;
+    }
+
+    public boolean isCamelToUnderscore() {
+        return camelToUnderscore;
+    }
+
+    public void setCamelToUnderscore(boolean camelToUnderscore) {
+        this.camelToUnderscore = camelToUnderscore;
     }
 }

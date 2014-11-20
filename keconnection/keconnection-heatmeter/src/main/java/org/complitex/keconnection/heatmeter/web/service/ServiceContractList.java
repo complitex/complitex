@@ -55,6 +55,8 @@ public class ServiceContractList extends TemplatePage {
         add(new FilteredDataTable<ServiceContract>("dataTable", ServiceContract.class, null, actions, FIELDS) {
             @Override
             public List<ServiceContract> getList(FilterWrapper<ServiceContract> filterWrapper) {
+                filterWrapper.setCamelToUnderscore(true);
+
                 return serviceContractBean.getServiceContracts(filterWrapper);
             }
 
