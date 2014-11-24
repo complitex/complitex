@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.organization.web.component;
 
 import org.complitex.common.entity.DomainObject;
@@ -32,7 +28,7 @@ public class KeConnectionOrganizationPermissionPanel extends KeConnectionDomainO
 
     @Override
     protected boolean isAllowModifyOrganization(int index, Long subjectId) {
-        return organizationId != null && organizationId > 0 ? index != 0 : true;
+        return !(organizationId != null && organizationId > 0) || index != 0;
     }
 
     @Override
@@ -40,7 +36,7 @@ public class KeConnectionOrganizationPermissionPanel extends KeConnectionDomainO
         final List<DomainObject> superSelectedSubjects = super.initializeSelectedSubjects(selectedSubjectIds);
 
         DomainObject itself = organizationStrategy.findById(organizationId, true);
-        if (organizationStrategy.isUserOrganization(itself)) {
+        if (itself != null && organizationStrategy.isUserOrganization(itself)) {
             if (organizationId != null && organizationId > 0) {
                 List<DomainObject> selectedSubjects = new ArrayList<>();
 

@@ -9,7 +9,6 @@ import org.complitex.common.entity.StatusType;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.PermissionBean;
 import org.complitex.common.service.SequenceBean;
@@ -111,7 +110,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         return organizationTypeIds;
     }
 
-    @Transactional
     @Override
     public void insert(DomainObject object, Date insertDate) {
         object.setId(sequenceBean.nextId(getEntityTable()));
@@ -131,7 +129,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         changeDistrictPermissions(object);
     }
 
-    @Transactional
     protected void changeDistrictPermissions(DomainObject newOrganization) {
         if (isUserOrganization(newOrganization)) {
             Attribute districtAttribute = newOrganization.getAttribute(DISTRICT);
@@ -148,14 +145,12 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         }
     }
 
-    @Transactional
     @Override
     public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
         super.update(oldObject, newObject, updateDate);
         changeDistrictPermissions(oldObject, newObject);
     }
 
-    @Transactional
     protected void changeDistrictPermissions(DomainObject oldOrganization, DomainObject newOrganization) {
         if (isUserOrganization(newOrganization)) {
             long organizationId = newOrganization.getId();
@@ -181,14 +176,12 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         }
     }
 
-    @Transactional
     @Override
     public void updateAndPropagate(DomainObject oldObject, DomainObject newObject, Date updateDate) {
         super.updateAndPropagate(oldObject, newObject, updateDate);
         changeDistrictPermissions(oldObject, newObject);
     }
 
-    @Transactional
     @Override
     public void replaceChildrenPermissions(long parentId, Set<Long> subjectIds) {
         for (DomainObjectPermissionInfo childPermissionInfo : getTreeChildrenPermissionInfo(parentId)) {
@@ -202,7 +195,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         }
     }
 
-    @Transactional
     protected List<DomainObjectPermissionInfo> getTreeChildrenPermissionInfo(long parentId) {
         List<DomainObjectPermissionInfo> childrenPermissionInfo = sqlSession().selectList(NS
                 + ".findOrganizationChildrenPermissionInfo", parentId);
@@ -233,7 +225,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         return OrganizationEditComponent.class;
     }
 
-    @Transactional
     @Override
     public List<T> find(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
@@ -257,7 +248,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         return organizations;
     }
 
-    @Transactional
     @Override
     public int count(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
@@ -268,7 +258,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         return sqlSession().selectOne(NS + "." + COUNT_OPERATION, example);
     }
 
-    @Transactional
     @Override
     public Long validateCode(Long id, String code) {
         List<Long> results = sqlSession().selectList(NS + ".validateCode", code);
@@ -280,7 +269,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         return null;
     }
 
-    @Transactional
     @Override
     public Long validateName(Long id, String name, Locale locale) {
         Map<String, Object> params = Maps.newHashMap();
@@ -295,7 +283,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         return null;
     }
 
-    @Transactional
     @Override
     public List<T> getUserOrganizations(Locale locale, Long... excludeOrganizationsId) {
         DomainObjectExample example = new DomainObjectExample();
@@ -325,7 +312,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         return finalUserOrganizations;
     }
 
-    @Transactional
     @Override
     public Set<Long> getTreeChildrenOrganizationIds(long parentOrganizationId) {
         List<Long> results = sqlSession().selectList(NS + ".findOrganizationChildrenObjectIds",
@@ -350,7 +336,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         return new String[]{SecurityRole.ORGANIZATION_MODULE_VIEW};
     }
 
-    @Transactional
     @Override
     public void changeChildrenActivity(long parentId, boolean enable) {
         Set<Long> childrenIds = getTreeChildrenOrganizationIds(parentId);
@@ -359,7 +344,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         }
     }
 
-    @Transactional
     private void updateChildrenActivity(Set<Long> childrenIds, boolean enabled) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("childrenIds", childrenIds);
@@ -368,7 +352,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         sqlSession().update(NS + "." + UPDATE_CHILDREN_ACTIVITY_OPERATION, params);
     }
 
-    @Transactional
     @Override
     protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
         if (permissionBean.isOrganizationPermissionExists(getEntityTable(), objectId)) {
@@ -403,7 +386,6 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
     }
 
     @Override
-    @Transactional
     public List<T> getAllOuterOrganizations(Locale locale) {
         return null;
     }

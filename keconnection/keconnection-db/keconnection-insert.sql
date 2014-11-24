@@ -40,10 +40,6 @@ VALUES (1, 6, 2300, 6, 2300);
 -- Organization
 -- --------------------------------
 
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (920, 1, UPPER('Короткое наименование')), (920, 2, UPPER('Короткое наименование'));
-INSERT INTO `entity_attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (920, 900, 0, 920, 1);
-INSERT INTO `entity_attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (920, 920, 'string_culture');
-
 INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (921, 1, UPPER('ИСПОЛНИТЕЛЬ')), (921, 2, UPPER('ИСПОЛНИТЕЛЬ'));
 INSERT INTO `entity_attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (921, 900, 1, 921, 1);
 INSERT INTO `entity_attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (921, 921, 'boolean');

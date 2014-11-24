@@ -9,6 +9,7 @@ import com.google.common.base.Strings;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.mybatis.caches.EhcacheCache;
 import org.complitex.common.service.AbstractImportService;
 import org.complitex.common.service.IImportListener;
 import org.complitex.common.service.LocaleBean;
@@ -146,11 +147,12 @@ public class KeOrganizationImportService extends AbstractImportService {
             //parent
             Long parentId = organization.getHlevel();
             if (parentId != null) {
+                EhcacheCache.clearAll(); //todo optimize cache clear
+
                 Long parentObjectId = organizationStrategy.getObjectId(parentId.toString());
 
                 if (parentObjectId != null) {
-                    newObject.getAttribute(KeConnectionOrganizationStrategy.USER_ORGANIZATION_PARENT).
-                            setValueId(parentObjectId);
+                    newObject.getAttribute(KeConnectionOrganizationStrategy.USER_ORGANIZATION_PARENT).setValueId(parentObjectId);
                 }
             }
 

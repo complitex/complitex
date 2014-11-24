@@ -38,13 +38,7 @@ import static org.complitex.common.util.DateUtil.getCurrentDate;
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
 public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrategy {
     public final static String KECONNECTION_ORGANIZATION_STRATEGY_NAME =  IOrganizationStrategy.BEAN_NAME;
-    /*
-     * Attribute type ids
-     */
-    /**
-     * Organization's short name.
-     */
-    public final static long SHORT_NAME = 920;
+
     /**
      * Flag of organization being performer.
      */
