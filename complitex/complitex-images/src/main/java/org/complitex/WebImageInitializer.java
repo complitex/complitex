@@ -8,15 +8,17 @@ import org.apache.wicket.util.file.Files;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.CodeSource;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  *
@@ -27,7 +29,7 @@ public final class WebImageInitializer implements IInitializer {
             "jpg", "jpeg", "gif", "bmp", "png");
     private static final String IMAGES_DIRECTORY_NAME = "images";
 
-   @Override
+   /*@Override
     public void init(Application application) {
         try {
             SharedResources sharedResources = application.getSharedResources();
@@ -58,15 +60,15 @@ public final class WebImageInitializer implements IInitializer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
-   /* @Override
+  /* @Override
     public void init(Application application) {
         try {
             final SharedResources sharedResources = application.getSharedResources();
 
             final Map<String, String> env = new HashMap<>();
-            final String[] array = getClass().getResource(IMAGES_DIRECTORY_NAME).toURI().toString().split("!");
+            final String[] array = WebImageInitializer.class.getResource(IMAGES_DIRECTORY_NAME).toURI().toString().split("!");
 
             URI uri = URI.create(array[0]);
             FileSystem fs;
@@ -89,6 +91,31 @@ public final class WebImageInitializer implements IInitializer {
             e.printStackTrace();
         }
     }*/
+
+    @Override
+    public void init(Application application) {
+        try {
+            final SharedResources sharedResources = application.getSharedResources();
+
+            CodeSource src = WebImageInitializer.class.getProtectionDomain().getCodeSource();
+
+            if( src != null ) {
+                URL jar = src.getLocation();
+                ZipInputStream zip = new ZipInputStream(jar.openStream());
+                ZipEntry ze;
+
+                while((ze = zip.getNextEntry() ) != null) {
+                    String entryName = ze.getName();
+                    if (entryName.contains(".") && entryName.contains("/images")){
+                        String p = IMAGES_DIRECTORY_NAME + entryName.substring(entryName.lastIndexOf('/'));
+                        sharedResources.add(p, new PackageResourceReference(WebImageInitializer.class, p).getResource());
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void destroy(Application application) {
