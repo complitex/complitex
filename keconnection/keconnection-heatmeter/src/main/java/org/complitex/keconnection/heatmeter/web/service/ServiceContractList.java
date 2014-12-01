@@ -31,7 +31,7 @@ import java.util.List;
 public class ServiceContractList extends TemplatePage {
     private Logger log = LoggerFactory.getLogger(ServiceContractList.class);
 
-    private final String[] FIELDS = {"id", "beginDate", "endDate", "number", "organizationId"};
+    private final String[] FIELDS = {"id", "beginDate", "endDate", "number", "organizationId", "servicingOrganizationId"};
 
     @EJB
     private ServiceContractBean serviceContractBean;

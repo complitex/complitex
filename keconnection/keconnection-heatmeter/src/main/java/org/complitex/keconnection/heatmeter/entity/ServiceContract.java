@@ -15,6 +15,7 @@ public class ServiceContract extends AbstractEntity{
     private Date endDate;
     private String number;
     private Long organizationId;
+    private Long servicingOrganizationId;
 
     private List<BuildingCode> buildingCodes = new ArrayList<>();
 
@@ -48,6 +49,14 @@ public class ServiceContract extends AbstractEntity{
 
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
+    }
+
+    public Long getServicingOrganizationId() {
+        return servicingOrganizationId;
+    }
+
+    public void setServicingOrganizationId(Long servicingOrganizationId) {
+        this.servicingOrganizationId = servicingOrganizationId;
     }
 
     public List<BuildingCode> getBuildingCodes() {

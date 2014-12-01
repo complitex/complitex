@@ -7,6 +7,7 @@
         <result column="end_date" property="endDate"/>
         <result column="number" property="number"/>
         <result column="organization_id" property="organizationId"/>
+        <result column="servicing_organization_id" property="servicingOrganizationId"/>
 
         <collection property="buildingCodes" ofType="org.complitex.address.strategy.building.entity.BuildingCode"
                     select="selectBuildingCodeList" column="id"/>
@@ -16,13 +17,13 @@
 
     <insert id="insertServiceContract" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContract"
             useGeneratedKeys="true" keyProperty="id">
-        insert into service_contract (begin_date, end_date, number, organization_id)
-            value (#{beginDate}, #{endDate}, #{number}, #{organizationId});
+        insert into service_contract (begin_date, end_date, number, organization_id, servicing_organization_id)
+            value (#{beginDate}, #{endDate}, #{number}, #{organizationId}, #{servicingOrganizationId});
     </insert>
 
     <update id="updateServiceContract" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContract">
         update service_contract set begin_date = #{beginDate}, end_date = #{endDate}, number = #{number},
-            organization_id = #{organizationId}
+            organization_id = #{organizationId}, servicing_organization_id = #{servicingOrganizationId}
     </update>
 
     <select id="selectServiceContract" parameterType="long" resultMap="serviceContractResultMap">
@@ -35,6 +36,7 @@
             <if test="object.endDate != null">and end_date > #{object.endDate}</if>
             <if test="object.number != null">and number = #{object.number}</if>
             <if test="object.organizationId">and organization_id = #{object.organizationId}</if>
+            <if test="object.servicingOrganizationId">and servicing_organization_id = #{object.servicingOrganizationId}</if>
         </where>
     </sql>
 

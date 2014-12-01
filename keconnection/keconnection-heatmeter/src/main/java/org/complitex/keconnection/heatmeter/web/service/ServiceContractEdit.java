@@ -25,6 +25,7 @@ import javax.ejb.EJB;
 import java.util.Date;
 
 import static org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER;
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE;
 
 
 /**
@@ -56,6 +57,7 @@ public class ServiceContractEdit extends FormTemplatePage {
         form.add(new LabelDateField("endDate", new PropertyModel<Date>(model, "endDate"), true));
         form.add(new RequiredTextField<>("number"));
         form.add(new OrganizationIdPicker("organizationId", new PropertyModel<Long>(model, "organizationId"), SERVICE_PROVIDER));
+        form.add(new OrganizationIdPicker("servicingOrganizationId", new PropertyModel<Long>(model, "servicingOrganizationId"), SERVICING_ORGANIZATION_TYPE));
 
         form.add(new Button("save"){
             @Override
@@ -64,6 +66,9 @@ public class ServiceContractEdit extends FormTemplatePage {
 
                 if (serviceContract.getOrganizationId() == null){
                     error(getString("error_organizationId"));
+                    return;
+                }else if (serviceContract.getServicingOrganizationId() == null){
+                    error(getString("error_servicingOrganizationId"));
                     return;
                 }else if (serviceContract.getBeginDate() == null){
                     error(getString("error_beginDate"));
