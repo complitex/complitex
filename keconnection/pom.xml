@@ -143,6 +143,8 @@
                 <version>10.2.0.4.0</version>
                 <scope>test</scope>
             </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 </project>

@@ -4,7 +4,10 @@ import org.apache.wicket.Application;
 import org.apache.wicket.IInitializer;
 import org.apache.wicket.SharedResources;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.util.file.Files;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -24,7 +27,7 @@ public final class WebImageInitializer implements IInitializer {
             "jpg", "jpeg", "gif", "bmp", "png");
     private static final String IMAGES_DIRECTORY_NAME = "images";
 
-   /* @Override
+   @Override
     public void init(Application application) {
         try {
             SharedResources sharedResources = application.getSharedResources();
@@ -55,9 +58,9 @@ public final class WebImageInitializer implements IInitializer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
-    @Override
+   /* @Override
     public void init(Application application) {
         try {
             final SharedResources sharedResources = application.getSharedResources();
@@ -85,7 +88,7 @@ public final class WebImageInitializer implements IInitializer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @Override
     public void destroy(Application application) {

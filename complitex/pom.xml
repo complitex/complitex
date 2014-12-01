@@ -382,6 +382,24 @@
                 <artifactId>orai18n</artifactId>
                 <version>10.2.0.4.0</version>
             </dependency>
+
+            <!--Bootstrap-->
+
+            <dependency>
+                <groupId>de.agilecoders.wicket</groupId>
+                <artifactId>wicket-bootstrap-core</artifactId>
+                <version>0.9.7</version>
+            </dependency>
+            <dependency>
+                <groupId>de.agilecoders.wicket</groupId>
+                <artifactId>wicket-bootstrap-extensions</artifactId>
+                <version>0.9.7</version>
+            </dependency>
+            <dependency>
+                <groupId>de.agilecoders.wicket</groupId>
+                <artifactId>wicket-bootstrap-themes</artifactId>
+                <version>0.9.7</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

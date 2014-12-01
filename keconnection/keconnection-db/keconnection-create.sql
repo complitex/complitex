@@ -630,7 +630,6 @@ CREATE TABLE `operating_month`(
 -- ------------------------------
 
 DROP TABLE IF EXISTS `service`;
-
 CREATE TABLE `service` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
@@ -656,7 +655,6 @@ CREATE TABLE `service` (
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Услуга';
 
 DROP TABLE IF EXISTS `service_attribute`;
-
 CREATE TABLE `service_attribute` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор атрибута',
@@ -684,7 +682,6 @@ CREATE TABLE `service_attribute` (
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты услуги';
 
 DROP TABLE IF EXISTS `service_string_culture`;
-
 CREATE TABLE `service_string_culture` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор значения',
@@ -728,8 +725,20 @@ CREATE TABLE `service_contract_building`(
   CONSTRAINT `fk_service_contract_building__building_code` FOREIGN KEY (`building_code_id`) REFERENCES `building_code` (`id`),
   KEY `key_service_contract_id` (`service_contract_id`),
   CONSTRAINT `fk_service_contract_building__service_contract` FOREIGN KEY (`service_contract_id`) REFERENCES `service_contract` (`id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Договор на поставку услуги';
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Список домов договора поставки услуг';
 
+DROP TABLE IF EXISTS `service_contract_service`;
+CREATE TABLE `service_contract_service`(
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
+  `service_object_id` BIGINT(20) NOT NULL COMMENT 'Услуга',
+  `service_contract_id` BIGINT(20) NOT NULL COMMENT 'Договор на поставку услуги',
+
+  PRIMARY KEY (`id`),
+  KEY `key_service_object_id` (`service_object_id`),
+  CONSTRAINT `fk_service_contract_service__service` FOREIGN KEY (`service_object_id`) REFERENCES `service` (`object_id`),
+  KEY `key_service_contract_id` (`service_contract_id`),
+  CONSTRAINT `fk_service_contract_building__service_contract2` FOREIGN KEY (`service_contract_id`) REFERENCES `service_contract` (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Список услуг договора поставки услуг';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -10,9 +10,9 @@ import org.complitex.template.web.template.ResourceTemplateMenu;
  *         Date: 12.11.2014 18:38
  */
 public class ServiceMenu extends ResourceTemplateMenu{
-    ServiceStrategy serviceStrategy = EjbBeanLocator.getBean(ServiceStrategy.class);
-
     public ServiceMenu() {
+        ServiceStrategy serviceStrategy = EjbBeanLocator.getBean(ServiceStrategy.class);
+
         add("service", serviceStrategy.getListPage(), serviceStrategy.getListPageParams());
         add("service_contract", ServiceContractList.class);
     }
