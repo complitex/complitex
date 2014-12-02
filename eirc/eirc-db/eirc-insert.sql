@@ -2,17 +2,17 @@
 -- Config
 -- --------------------------------
 
-INSERT INTO `config` (`name`,`value`) VALUES ('MODULE_ID','-1');
-INSERT INTO `config` (`name`,`value`) VALUES ('IMPORT_FILE_STORAGE_DIR','/var/tmp/data/import"');
-INSERT INTO `config` (`name`,`value`) VALUES ('SYNC_DATA_SOURCE','organization_id_here');
+-- INSERT INTO `config` (`name`,`value`) VALUES ('MODULE_ID','-1');
+-- INSERT INTO `config` (`name`,`value`) VALUES ('IMPORT_FILE_STORAGE_DIR','/var/tmp/data/import"');
+-- INSERT INTO `config` (`name`,`value`) VALUES ('SYNC_DATA_SOURCE','organization_id_here');
 INSERT INTO `config` (`name`,`value`) VALUES ('TMP_DIR','/tmp');
 INSERT INTO `config` (`name`,`value`) VALUES ('NUMBER_FLUSH_REGISTRY_RECORDS','10000');
 INSERT INTO `config` (`name`,`value`) VALUES ('NUMBER_READ_CHARS','32000');
-INSERT INTO `config` (`name`,`value`) VALUES ('EIRC_ORGANIZATION_ID','');
+-- INSERT INTO `config` (`name`,`value`) VALUES ('EIRC_ORGANIZATION_ID','');
 INSERT INTO `config` (`name`,`value`) VALUES ('EIRC_ORGANIZATION_ID','-1');
 INSERT INTO `config` (`name`,`value`) VALUES ('MB_ORGANIZATION_ID','-1');
 INSERT INTO `config` (`name`,`value`) VALUES ('WORK_DIR','/var/tmp/data');
-INSERT INTO `config` (`name`,`value`) VALUES ('TMP_DIR','/tmp');
+-- INSERT INTO `config` (`name`,`value`) VALUES ('TMP_DIR','/tmp');
 INSERT INTO `config` (`name`,`value`) VALUES ('EIRC_DATA_SOURCE','jdbc/eircResource');
 
 INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES
@@ -248,14 +248,6 @@ INSERT INTO `container_type` (`code`, `name`) values
     (604,'Отапливаемая площадь')
 ;
 
-insert into `config` (`name`, `value`) values
-    ('IMPORT_FILE_STORAGE_DIR', '/var/tmp/data'),
-    ('SYNC_DATA_SOURCE', 'jdbc/eircConnectionRemoteResource'),
-    ('MODULE_ID', '1'),
-    ('TMP_DIR', '/tmp'),
-    ('NUMBER_FLUSH_REGISTRY_RECORDS', '1000'),
-    ('NUMBER_READ_CHARS', '32000')
-;
 
 -- Current database version
  INSERT INTO `update` (`version`) VALUE ('eirc_20140831_0.0.9');
