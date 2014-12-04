@@ -47,12 +47,14 @@ import org.complitex.common.strategy.IStrategy;
  * @author Artem
  */
 public class EntityDescriptionPanel extends Panel {
-
     private static final String DATE_FORMAT = "HH:mm dd.MM.yyyy";
+
     @EJB
     private StrategyFactory strategyFactory;
+
     @EJB
     private StringCultureBean stringBean;
+
     @EJB
     private EntityBean entityBean;
 

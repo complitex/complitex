@@ -20,6 +20,8 @@
 
     <name>Osznconnection</name>
 
+
+<!--test-->
     <scm>
         <connection>scm:svn:https://osznconnection.googlecode.com/svn/trunk</connection>
         <developerConnection>scm:svn:https://osznconnection.googlecode.com/svn/trunk</developerConnection>

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.entity.description;
 
 import org.complitex.common.entity.StringCulture;
@@ -10,22 +6,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
 public class EntityAttributeType implements Serializable {
-
     private Long id;
-
     private Long entityId;
-
     private boolean mandatory;
-
     private Date startDate;
-
     private Date endDate;
-
     private Long attributeNameId;
 
     private List<StringCulture> attributeNames;
@@ -33,6 +19,15 @@ public class EntityAttributeType implements Serializable {
     private List<EntityAttributeValueType> entityAttributeValueTypes;
 
     private boolean system;
+
+    public EntityAttributeValueType getAttributeValueType(long attributeValueTypeId){
+        for(EntityAttributeValueType valueType : getEntityAttributeValueTypes()){
+            if(valueType.getId().equals(attributeValueTypeId)){
+                return valueType;
+            }
+        }
+        return null;
+    }
 
     public List<StringCulture> getAttributeNames() {
         return attributeNames;
@@ -108,14 +103,5 @@ public class EntityAttributeType implements Serializable {
 
     public boolean isObsolete() {
         return endDate != null;
-    }
-
-    public EntityAttributeValueType getAttributeValueType(long attributeValueTypeId){
-        for(EntityAttributeValueType valueType : getEntityAttributeValueTypes()){
-            if(valueType.getId().equals(attributeValueTypeId)){
-                return valueType;
-            }
-        }
-        return null;
     }
 }

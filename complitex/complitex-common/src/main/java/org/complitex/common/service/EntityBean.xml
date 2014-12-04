@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.complitex.common.entity.description.Entity">
+<mapper namespace="org.complitex.common.service.EntityBean">
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
-    <resultMap type="org.complitex.common.entity.description.Entity" id="Entity">
+    <resultMap id="entityResultMap" type="org.complitex.common.entity.description.Entity">
         <id column="entity_id" property="id"/>
+
         <result column="entity_table" property="entityTable"/>
-        <collection property="entityNames" ofType="StringCulture" column="entity_name_id"
-                    select="org.complitex.common.entity.description.Entity.findNames"/>
+
+        <collection property="entityNames" ofType="StringCulture" column="entity_name_id" select="findNames"/>
+
         <collection property="entityAttributeTypes" ofType="org.complitex.common.entity.description.EntityAttributeType">
             <id column="entity_attribute_type_id" property="id"/>
+
             <result column="mandatory" property="mandatory" javaType="_boolean" jdbcType="TINYINT"/>
             <result column="attr_start_date" property="startDate"/>
             <result column="attr_end_date" property="endDate"/>
             <result column="system" property="system" javaType="_boolean" jdbcType="TINYINT"/>
-            <collection property="attributeNames" ofType="StringCulture" column="attribute_type_name_id"
-                        select="org.complitex.common.entity.description.Entity.findNames"/>
+            <collection property="attributeNames" ofType="StringCulture" column="attribute_type_name_id" select="findNames"/>
                 <collection property="entityAttributeValueTypes" ofType="org.complitex.common.entity.description.EntityAttributeValueType">
                     <id column="entity_attribute_value_type_id" property="id"/>
                     <result column="attribute_value_type" property="valueType"/>
@@ -23,7 +25,7 @@
         </collection>
     </resultMap>
 
-    <select id="load" parameterType="hashmap" resultMap="org.complitex.common.entity.description.Entity.Entity">
+    <select id="load" parameterType="map" resultMap="entityResultMap">
         SELECT
         e.`id` as entity_id,
         e.`entity_table`,
@@ -59,7 +61,7 @@
         SELECT e.`entity_table` FROM `entity` e
     </select>
 
-    <update id="removeAttributeTypes" parameterType="hashmap">
+    <update id="removeAttributeTypes" parameterType="map">
         UPDATE `entity_attribute_type` SET `end_date` = #{endDate} WHERE `id` IN
         <foreach item="id" collection="attributeTypeIds" open="(" close=")" separator=",">
             #{id}

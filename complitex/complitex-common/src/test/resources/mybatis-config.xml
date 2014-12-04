@@ -32,10 +32,11 @@
         <mapper resource="org/complitex/common/entity/Locale.xml"/>
         <mapper resource="org/complitex/common/entity/Sequence.xml"/>
         <mapper resource="org/complitex/common/entity/StringCulture.xml"/>
-        <mapper resource="org/complitex/common/entity/description/Entity.xml"/>
+
         <mapper resource="org/complitex/common/entity/Attribute.xml"/>
         <mapper resource="org/complitex/common/entity/DomainObject.xml"/>
 
+        <mapper resource="org/complitex/common/service/EntityBean.xml"/>
         <mapper resource="org/complitex/common/service/LogBean.xml"/>
         <mapper resource="org/complitex/common/service/SessionBean.xml"/>
         <mapper resource="org/complitex/common/service/PreferenceBean.xml"/>
