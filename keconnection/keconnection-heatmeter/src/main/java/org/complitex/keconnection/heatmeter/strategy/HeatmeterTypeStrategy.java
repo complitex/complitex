@@ -7,11 +7,6 @@ package org.complitex.keconnection.heatmeter.strategy;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import javax.ejb.Stateless;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
@@ -22,6 +17,12 @@ import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
+
+import javax.ejb.Stateless;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -78,7 +79,7 @@ public class HeatmeterTypeStrategy extends TemplateStrategy {
     public List<DomainObject> getAll() {
         DomainObjectExample example = new DomainObjectExample();
         configureExample(example, ImmutableMap.<String, Long>of(), null);
-        return (List<DomainObject>) find(example);
+        return (List<DomainObject>) getList(example);
     }
 
     @Transactional

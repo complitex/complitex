@@ -36,10 +36,6 @@ import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.newTreeSet;
 
-/**
- *
- * @author Artem
- */
 public abstract class Strategy extends AbstractBean implements IStrategy {
     private static final String RESOURCE_BUNDLE = Strategy.class.getName();
     private final Logger log = LoggerFactory.getLogger(Strategy.class);
@@ -253,7 +249,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
         DomainObjectExample example = new DomainObjectExample(objectId);
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
 
         if (!runAsAdmin) {
             prepareExampleForPermissionCheck(example);
@@ -367,12 +363,12 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     @Override
-    public List<? extends DomainObject> find(DomainObjectExample example) {
+    public List<? extends DomainObject> getList(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
             return Collections.emptyList();
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
         extendOrderBy(example);
 
@@ -386,10 +382,10 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     public List<? extends DomainObject> find(DomainObjectExample example, long first, long count){
-        example.setStart(first);
-        example.setSize(count);
+        example.setFirst(first);
+        example.setCount(count);
 
-        return find(example);
+        return getList(example);
     }
 
     @Override
@@ -398,7 +394,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
             return 0;
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
 
         return (Integer) sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + "." + COUNT_OPERATION, example);
@@ -865,7 +861,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     @Override
     public SimpleObjectInfo findParentInSearchComponent(long id, Date date) {
         DomainObjectExample example = new DomainObjectExample(id);
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         example.setStartDate(date);
         Map<String, Object> result = (Map<String, Object>) sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + "." + FIND_PARENT_IN_SEARCH_COMPONENT_OPERATION,
                 example);
@@ -955,7 +951,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     @Override
     public TreeSet<Date> getHistoryDates(long objectId) {
         DomainObjectExample example = new DomainObjectExample(objectId);
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         List<Date> results = sqlSession().selectList(DOMAIN_OBJECT_NAMESPACE + ".historyDates", example);
 
         return newTreeSet(filter(results, new Predicate<Date>() {
@@ -971,7 +967,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     @Override
     public DomainObject findHistoryObject(long objectId, Date date) {
         DomainObjectExample example = new DomainObjectExample(objectId);
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         example.setStartDate(date);
 
         DomainObject object = sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + "." + FIND_HISTORY_OBJECT_OPERATION, example);
@@ -989,7 +985,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     @Transactional
     protected List<Attribute> loadHistoryAttributes(long objectId, Date date) {
         DomainObjectExample example = new DomainObjectExample(objectId);
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         example.setStartDate(date);
         return sqlSession().selectList(ATTRIBUTE_NAMESPACE + "." + FIND_HISTORY_ATTRIBUTES_OPERATION, example);
     }

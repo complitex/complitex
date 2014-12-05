@@ -37,7 +37,6 @@ import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.common.web.component.search.CollapsibleSearchPanel;
@@ -120,7 +119,7 @@ public final class DomainObjectListPanel extends Panel {
 
         if (example == null) {
             example = new DomainObjectExample();
-            example.setTable(entity);
+            example.setEntityTable(entity);
         }
 
         //Search
@@ -180,9 +179,9 @@ public final class DomainObjectListPanel extends Panel {
                 example.setStatus(showModeModel.getObject().name());
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
                 example.setAsc(getSort().isAscending());
-                example.setStart(first);
-                example.setSize(count);
-                return getStrategy().find(example);
+                example.setFirst(first);
+                example.setCount(count);
+                return getStrategy().getList(example);
             }
 
             @Override

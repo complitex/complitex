@@ -69,7 +69,7 @@ public class OwnershipStrategy extends TemplateStrategy {
         DomainObjectExample example = new DomainObjectExample();
         example.setOrderByAttributeTypeId(NAME);
         configureExample(example, ImmutableMap.<String, Long>of(), null);
-        return (List<DomainObject>) find(example);
+        return (List<DomainObject>) getList(example);
     }
 
     @Override

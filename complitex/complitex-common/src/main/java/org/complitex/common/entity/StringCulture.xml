@@ -12,11 +12,11 @@
     </resultMap>
 
     <insert id="insert" parameterType="Parameter">
-        insert into `${table}_string_culture`(`id`, `locale_id`, `value`) values (#{object.id}, #{object.localeId}, #{object.value})
+        insert into `${entityTable}_string_culture`(`id`, `locale_id`, `value`) values (#{object.id}, #{object.localeId}, #{object.value})
     </insert>
 
     <select id="find" parameterType="map" resultMap="org.complitex.common.entity.StringCulture.StringCulture">
-        SELECT sc.* FROM `${table}_string_culture` sc WHERE sc.`id` = #{id}
+        SELECT sc.* FROM `${entityTable}_string_culture` sc WHERE sc.`id` = #{id}
     </select>
 
     <insert id="insertDescriptionData" parameterType="StringCulture">
@@ -25,8 +25,8 @@
 
     <!-- deletion -->
     <delete id="delete" parameterType="map">
-        DELETE FROM `${table}_string_culture` WHERE `id` IN
-           (SELECT a.`value_id` FROM `${table}_attribute` a WHERE a.`object_id` = #{objectId}
+        DELETE FROM `${entityTable}_string_culture` WHERE `id` IN
+           (SELECT a.`value_id` FROM `${entityTable}_attribute` a WHERE a.`object_id` = #{objectId}
                 AND a.`value_type_id` IN
                     <foreach open="(" separator="," close=")" collection="localizedValueTypeIds" item="id">
                         #{id}

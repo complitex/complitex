@@ -5,22 +5,24 @@
 package org.complitex.pspoffice.military.strategy;
 
 import com.google.common.collect.ImmutableMap;
-import javax.ejb.EJB;
-import org.complitex.common.mybatis.Transactional;
-import org.complitex.common.service.LocaleBean;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import javax.ejb.Stateless;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.service.LocaleBean;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
-import static com.google.common.collect.Lists.*;
-import static org.complitex.common.util.AttributeUtil.*;
-import static org.complitex.common.util.ResourceUtil.*;
-import static org.apache.wicket.util.string.Strings.*;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import static com.google.common.collect.Lists.newArrayList;
+import static org.apache.wicket.util.string.Strings.isEmpty;
+import static org.complitex.common.util.AttributeUtil.getStringCultureValue;
+import static org.complitex.common.util.ResourceUtil.getString;
 
 /**
  *
@@ -74,7 +76,7 @@ public class MilitaryServiceRelationStrategy extends TemplateStrategy {
             example.setOrderByAttributeTypeId(NAME);
         }
         configureExample(example, ImmutableMap.<String, Long>of(), null);
-        return (List<DomainObject>) find(example);
+        return (List<DomainObject>) getList(example);
     }
 
     @Override

@@ -6,12 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
 public class Attribute implements Serializable {
-
     private Long attributeId;
 
     private Long objectId;

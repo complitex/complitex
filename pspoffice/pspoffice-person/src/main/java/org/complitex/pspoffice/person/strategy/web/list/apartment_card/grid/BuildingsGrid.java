@@ -108,11 +108,11 @@ public final class BuildingsGrid extends TemplatePage {
             strategy.configureExample(example, ImmutableMap.of("city", cityId), term);
             example.setOrderByAttributeTypeId(strategy.getDefaultOrderByAttributeId());
             example.setAsc(true);
-            example.setSize(size);
+            example.setCount(size);
             example.setLocaleId(localeBean.convert(getLocale()).getId());
             example.setComparisonType(comparisonType.name());
             example.setStatus(ShowMode.ACTIVE.name());
-            return strategy.find(example);
+            return strategy.getList(example);
         }
         
         @Override

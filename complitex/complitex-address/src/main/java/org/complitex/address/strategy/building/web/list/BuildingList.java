@@ -135,10 +135,10 @@ public class BuildingList extends ScrollListPage {
                 example.setStatus(showModeModel.getObject().name());
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
                 example.setAsc(asc);
-                example.setStart(first);
-                example.setSize(count);
+                example.setFirst(first);
+                example.setCount(count);
 
-                return getBuildingStrategy().find(example);
+                return getBuildingStrategy().getList(example);
             }
 
             @Override

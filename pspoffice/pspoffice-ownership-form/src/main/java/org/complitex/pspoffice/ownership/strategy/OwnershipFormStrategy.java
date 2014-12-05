@@ -18,7 +18,8 @@ import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import static org.complitex.common.util.AttributeUtil.*;
+
+import static org.complitex.common.util.AttributeUtil.getStringCultureValue;
 
 /**
  *
@@ -69,7 +70,7 @@ public class OwnershipFormStrategy extends TemplateStrategy {
         DomainObjectExample example = new DomainObjectExample();
         example.setOrderByAttributeTypeId(NAME);
         configureExample(example, ImmutableMap.<String, Long>of(), null);
-        return (List<DomainObject>) find(example);
+        return (List<DomainObject>) getList(example);
     }
 
     @Override

@@ -38,8 +38,8 @@
         SELECT DISTINCT e.`object_id` FROM `apartment_card` e
         <include refid="org.complitex.pspoffice.person.strategy.ApartmentCard.findByApartmentSql"/>
         
-        <if test="size > 0">
-            LIMIT ${start},${size}
+        <if test="count > 0">
+            LIMIT ${first},${count}
         </if>
     </select>
 
@@ -81,8 +81,8 @@
         SELECT DISTINCT e.`object_id` FROM `apartment_card` e
         <include refid="org.complitex.pspoffice.person.strategy.ApartmentCard.findByBuildingSql"/>
         
-        <if test="size > 0">
-            LIMIT ${start},${size}
+        <if test="count > 0">
+            LIMIT ${first},${count}
         </if>
     </select>
 

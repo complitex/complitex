@@ -56,7 +56,7 @@ public interface IStrategy {
 
     void enable(DomainObject object);
     
-    List<? extends DomainObject> find(DomainObjectExample example);
+    List<? extends DomainObject> getList(DomainObjectExample example);
     
     DomainObject findById(Long id, boolean runAsAdmin);
     

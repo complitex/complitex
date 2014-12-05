@@ -28,7 +28,7 @@
                     <if test="attrExample.value != null">
                         AND EXISTS(SELECT 1 FROM `organization_attribute` attr WHERE attr.`object_id` = e.`object_id`
                             AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attrExample.attributeTypeId}
-                            AND attr.`value_id` IN (SELECT sc.`id` FROM `${table}_string_culture` sc WHERE sc.`value`
+                            AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityTable}_string_culture` sc WHERE sc.`value`
                                 <choose>
                                     <when test="comparisonType == 'LIKE'">
                                         LIKE CONCAT('%', #{attrExample.value}, '%')

@@ -145,9 +145,9 @@ public class OrganizationList extends ScrollListPage {
                 example.setStatus(showModeModel.getObject().name());
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
                 example.setAsc(asc);
-                example.setStart(first);
-                example.setSize(count);
-                return organizationStrategy.find(example);
+                example.setFirst(first);
+                example.setCount(count);
+                return organizationStrategy.getList(example);
             }
 
             @Override

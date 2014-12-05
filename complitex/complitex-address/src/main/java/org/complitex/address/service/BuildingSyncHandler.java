@@ -6,19 +6,19 @@ import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
-import org.complitex.common.entity.*;
+import org.complitex.common.entity.Cursor;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.CloneUtil;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
-import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.CORP;
-import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.DISTRICT_ID;
-import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.NUMBER;
+import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.*;
 
 /**
  * @author Anatoly Ivanov
@@ -51,12 +51,12 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return buildingAddressStrategy.find(new DomainObjectExample().addAdditionalParam(DISTRICT_ID, parent.getId()));
+        return buildingAddressStrategy.getList(new DomainObjectExample().addAdditionalParam(DISTRICT_ID, parent.getId()));
     }
 
     @Override
     public List<? extends DomainObject> getParentObjects() {
-        return districtStrategy.find(new DomainObjectExample());
+        return districtStrategy.getList(new DomainObjectExample());
     }
 
     @Override

@@ -121,7 +121,7 @@
             <include refid="org.complitex.keconnection.heatmeter.service.CorrectionBean.asc"/>
         </if>
 
-        LIMIT #{start},#{size}
+        LIMIT #{first},#{count}
     </sql>
 
     <select id="find" parameterType="org.complitex.keconnection.heatmeter.entity.example.CorrectionExample"

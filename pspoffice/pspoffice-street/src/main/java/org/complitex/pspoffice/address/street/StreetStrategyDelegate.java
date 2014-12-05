@@ -4,15 +4,16 @@
  */
 package org.complitex.pspoffice.address.street;
 
-import java.util.Collections;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.SessionBean;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Street strategy delegate.
@@ -34,12 +35,12 @@ public class StreetStrategyDelegate extends StreetStrategy {
     private SessionBean sessionBean;
 
     @Override
-    public List<DomainObject> find(DomainObjectExample example) {
+    public List<DomainObject> getList(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
             return Collections.emptyList();
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
         prepareExampleForBuildingCheck(example);
 
@@ -59,7 +60,7 @@ public class StreetStrategyDelegate extends StreetStrategy {
             return 0;
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
         prepareExampleForBuildingCheck(example);
 

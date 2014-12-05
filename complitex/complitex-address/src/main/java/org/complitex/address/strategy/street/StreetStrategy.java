@@ -77,12 +77,12 @@ public class StreetStrategy extends TemplateStrategy {
     @SuppressWarnings({"unchecked"})
     @Override
     @Transactional
-    public List<DomainObject> find(DomainObjectExample example) {
+    public List<DomainObject> getList(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
             return Collections.emptyList();
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
 
         List<DomainObject> objects = sqlSession().selectList(NS + "." + FIND_OPERATION, example);
@@ -101,7 +101,7 @@ public class StreetStrategy extends TemplateStrategy {
             return 0;
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
 
         return (Integer) sqlSession().selectOne(NS + "." + COUNT_OPERATION, example);

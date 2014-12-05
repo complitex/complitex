@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.resource.CommonResources;
 import org.complitex.address.strategy.building.BuildingStrategy;
@@ -25,7 +26,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.io.Serializable;
 import java.util.*;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  *
@@ -88,12 +88,12 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<? extends DomainObject> find(DomainObjectExample example) {
+    public List<? extends DomainObject> getList(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
             return Collections.emptyList();
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
 
         List<DomainObject> objects = sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + "." + FIND_OPERATION, example);

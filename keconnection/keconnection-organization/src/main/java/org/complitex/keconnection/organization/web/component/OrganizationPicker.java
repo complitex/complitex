@@ -122,9 +122,9 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
                     return Collections.emptyList();
                 }
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
-                example.setStart(first);
-                example.setSize(count);
-                return keConnectionOrganizationStrategy.find(example);
+                example.setFirst(first);
+                example.setCount(count);
+                return keConnectionOrganizationStrategy.getList(example);
             }
 
             @Override

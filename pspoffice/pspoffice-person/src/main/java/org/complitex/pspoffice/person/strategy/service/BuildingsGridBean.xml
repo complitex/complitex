@@ -91,6 +91,6 @@
         ORDER BY street.`value`, stype.`value`,
             LPAD(num_sort.`value`, 15, ' '), LPAD(corp.`value`, 15, ' '), LPAD(struct.`value`, 15, ' ')
             
-        LIMIT ${start},${size}
+        LIMIT ${first},${count}
     </select>
 </mapper>

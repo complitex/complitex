@@ -4,15 +4,15 @@
     <!--select names by filter-->
 
     <select id="selectFirstNames" parameterType="map" resultType="string">
-        select `name` from `first_name` where `name` like CONCAT('%', #{filter}, '%') limit #{size}
+        select `name` from `first_name` where `name` like CONCAT('%', #{filter}, '%') limit #{count}
     </select>
 
     <select id="selectMiddleNames" parameterType="map" resultType="string">
-        select `name` from `middle_name` where `name` like CONCAT('%', #{filter}, '%') limit #{size}
+        select `name` from `middle_name` where `name` like CONCAT('%', #{filter}, '%') limit #{count}
     </select>
 
     <select id="selectLastNames" parameterType="map" resultType="string">
-        select `name` from `last_name` where `name` like CONCAT('%', #{filter}, '%') limit #{size}
+        select `name` from `last_name` where `name` like CONCAT('%', #{filter}, '%') limit #{count}
     </select>
 
     <!--select name by id-->

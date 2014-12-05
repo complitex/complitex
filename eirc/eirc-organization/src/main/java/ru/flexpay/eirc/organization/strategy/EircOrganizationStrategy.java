@@ -145,7 +145,7 @@ public class EircOrganizationStrategy extends AbstractOrganizationStrategy<Domai
         }
 //        example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationType.SERVICE_PROVIDER.getId()));
         configureExample(example, ImmutableMap.<String, Long>of(), null);
-        return find(example);
+        return getList(example);
     }
 
     /**
@@ -168,7 +168,7 @@ public class EircOrganizationStrategy extends AbstractOrganizationStrategy<Domai
 
         configureExample(example, ImmutableMap.<String, Long>of(), null);
 
-        return find(example);
+        return getList(example);
     }
 
     /**
@@ -191,7 +191,7 @@ public class EircOrganizationStrategy extends AbstractOrganizationStrategy<Domai
 
         configureExample(example, ImmutableMap.<String, Long>of(), null);
 
-        return find(example);
+        return getList(example);
     }
 
     @Override

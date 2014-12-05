@@ -6,27 +6,24 @@ package org.complitex.pspoffice.registration_type.strategy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import static com.google.common.collect.ImmutableSet.*;
-import static org.complitex.common.util.ResourceUtil.*;
-import static com.google.common.collect.Lists.*;
-import java.util.Collection;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.StringCulture;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.mybatis.Transactional;
+import org.complitex.common.strategy.DeleteException;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.Stateless;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import org.complitex.common.entity.StringCulture;
-import org.complitex.common.mybatis.Transactional;
-import org.complitex.common.strategy.DeleteException;
-import static org.complitex.common.util.AttributeUtil.*;
+import java.util.*;
+
+import static com.google.common.collect.ImmutableSet.of;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.complitex.common.util.AttributeUtil.getStringCultureValue;
+import static org.complitex.common.util.ResourceUtil.getString;
 
 /**
  *
@@ -80,7 +77,7 @@ public class RegistrationTypeStrategy extends TemplateStrategy {
         DomainObjectExample example = new DomainObjectExample();
         example.setOrderByAttributeTypeId(NAME);
         configureExample(example, ImmutableMap.<String, Long>of(), null);
-        return (List<DomainObject>) find(example);
+        return (List<DomainObject>) getList(example);
     }
 
     @Override

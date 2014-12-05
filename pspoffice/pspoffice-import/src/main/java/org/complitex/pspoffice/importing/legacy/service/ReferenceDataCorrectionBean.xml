@@ -47,7 +47,7 @@
     <select id="findForProcessing" resultMap="org.complitex.pspoffice.importing.legacy.service.ReferenceDataCorrectionBean.referenceDataCorrection"
             parameterType="map">
         SELECT c.*, '${entity}' `entity` FROM `${entity}_correction` c WHERE c.`idjek` = #{idjek} AND c.`system_object_id` IS NULL
-            AND c.`processed` = 0 LIMIT ${size}
+            AND c.`processed` = 0 LIMIT ${count}
     </select>
     
     <update id="clearProcessingStatus" parameterType="map">

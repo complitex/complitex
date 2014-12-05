@@ -79,7 +79,7 @@ public class OrganizationTypeStrategy extends TemplateStrategy {
         DomainObjectExample example = new DomainObjectExample();
         configureExample(example, ImmutableMap.<String, Long>of(), null);
 
-        return find(example);
+        return getList(example);
     }
 
     @Override

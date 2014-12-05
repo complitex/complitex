@@ -39,7 +39,7 @@
             </if>
             and c.`correction` like concat('%', #{correction},'%')
             order by c.`correction`
-            limit #{start}, #{size}
+            limit #{first}, #{count}
     </select>
     
     <select id="findStreetCorrectionById" resultMap="org.complitex.keconnection.heatmeter.service.AddressCorrectionBean.streetCorrection" parameterType="long">
@@ -58,7 +58,7 @@
             and c.`parent_id` = #{parentId} and
             c.`correction` like concat('%', #{correction},'%')
             order by c.`correction`
-            limit #{start}, #{size}
+            limit #{first}, #{count}
     </select>
 
     <select id="findStreetTypeCorrections" resultMap="org.complitex.keconnection.heatmeter.service.CorrectionBean.correction" parameterType="map">
@@ -413,7 +413,7 @@
                 </otherwise>
             </choose>
         </if>
-        LIMIT #{start},#{size}
+        LIMIT #{first},#{count}
     </select>
 
     <sql id="asc">

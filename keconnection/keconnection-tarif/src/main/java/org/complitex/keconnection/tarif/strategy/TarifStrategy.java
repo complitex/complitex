@@ -6,10 +6,6 @@ package org.complitex.keconnection.tarif.strategy;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import javax.ejb.Stateless;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
@@ -23,6 +19,11 @@ import org.complitex.keconnection.tarif.strategy.web.edit.TarifEditComponent;
 import org.complitex.keconnection.tarif.strategy.web.edit.TarifValidator;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
+
+import javax.ejb.Stateless;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  *
@@ -78,7 +79,7 @@ public class TarifStrategy extends TemplateStrategy {
         codeExample.setValue(String.valueOf(code));
         example.addAttributeExample(codeExample);
         configureExample(example, ImmutableMap.<String, Long>of(), null);
-        List<? extends DomainObject> results = find(example);
+        List<? extends DomainObject> results = getList(example);
         if (results == null || results.isEmpty()) {
             return null;
         } else if (results.size() > 1) {

@@ -13,7 +13,7 @@
     </select>
 
     <select id="find" parameterType="map" resultMap="org.complitex.pspoffice.person.strategy.service.PersonNameBean.PersonName">
-        SELECT * FROM `person_${personNameType}` WHERE `name` LIKE CONCAT(#{filter}, '%') AND `locale_id` = #{localeId} LIMIT #{size}
+        SELECT * FROM `person_${personNameType}` WHERE `name` LIKE CONCAT(#{filter}, '%') AND `locale_id` = #{localeId} LIMIT #{count}
     </select>
 
     <select id="findByName" parameterType="map" resultMap="org.complitex.pspoffice.person.strategy.service.PersonNameBean.PersonName">

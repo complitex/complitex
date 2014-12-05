@@ -182,12 +182,12 @@ public class PersonStrategy extends TemplateStrategy {
 
     @Transactional
     @Override
-    public List<Person> find(DomainObjectExample example) {
+    public List<Person> getList(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
             return Collections.emptyList();
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         if (!example.isAdmin()) {
             prepareExampleForPermissionCheck(example);
         }
@@ -209,7 +209,7 @@ public class PersonStrategy extends TemplateStrategy {
             return 0;
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
         return (Integer) sqlSession().selectOne(PERSON_MAPPING + "." + COUNT_OPERATION, example);
     }
@@ -318,7 +318,7 @@ public class PersonStrategy extends TemplateStrategy {
                 Long childId = childAttribute.getValueId();
                 DomainObjectExample example = new DomainObjectExample(childId);
                 example.setAdmin(true);
-                List<Person> children = find(example);
+                List<Person> children = getList(example);
                 if (children != null && children.size() == 1) {
                     Person child = children.get(0);
                     if (child != null) {

@@ -4,20 +4,12 @@
  */
 package org.complitex.pspoffice.document_type.strategy;
 
-import com.google.common.collect.ImmutableList;
-import java.util.Collection;
-import org.complitex.common.entity.StringCulture;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-import static com.google.common.collect.ImmutableSet.*;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.StringCulture;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.mybatis.Transactional;
@@ -25,10 +17,16 @@ import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.DeleteException;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
-import static com.google.common.collect.Lists.*;
-import static org.complitex.common.util.AttributeUtil.*;
-import static org.complitex.common.util.ResourceUtil.*;
-import static org.apache.wicket.util.string.Strings.*;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.*;
+
+import static com.google.common.collect.ImmutableSet.of;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.apache.wicket.util.string.Strings.isEmpty;
+import static org.complitex.common.util.AttributeUtil.getStringCultureValue;
+import static org.complitex.common.util.ResourceUtil.getString;
 
 /**
  *
@@ -92,7 +90,7 @@ public class DocumentTypeStrategy extends TemplateStrategy {
             example.setAsc(true);
         }
         configureExample(example, ImmutableMap.<String, Long>of(), null);
-        return (List<DomainObject>) find(example);
+        return (List<DomainObject>) getList(example);
     }
 
     @Transactional

@@ -226,12 +226,12 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
     }
 
     @Override
-    public List<T> find(DomainObjectExample example) {
+    public List<T> getList(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
             return Collections.emptyList();
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         if (!example.isAdmin()) {
             prepareExampleForPermissionCheck(example);
         }
@@ -253,7 +253,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         if (example.getId() != null && example.getId() <= 0) {
             return 0;
         }
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
         return sqlSession().selectOne(NS + "." + COUNT_OPERATION, example);
     }
@@ -293,7 +293,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
             example.setAsc(true);
         }
         configureExample(example, ImmutableMap.<String, Long>of(), null);
-        List<T> userOrganizations = find(example);
+        List<T> userOrganizations = getList(example);
 
         if (excludeOrganizationsId == null) {
             return userOrganizations;
@@ -404,7 +404,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
 
         configureExample(example, ImmutableMap.<String, Long>of(), null);
 
-        return find(example);
+        return getList(example);
     }
 
     public String displayShortNameAndCode(DomainObject organization, Locale locale) {

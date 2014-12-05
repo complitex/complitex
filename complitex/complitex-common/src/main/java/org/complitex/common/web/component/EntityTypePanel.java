@@ -6,22 +6,23 @@ package org.complitex.common.web.component;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
-import static com.google.common.collect.Iterables.*;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 
 import javax.ejb.EJB;
 import java.util.List;
 import java.util.Locale;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.strategy.IStrategy;
+
+import static com.google.common.collect.Iterables.find;
 
 /**
  *
@@ -113,6 +114,6 @@ public class EntityTypePanel extends Panel {
         example.setOrderByAttributeTypeId(entityTypeDisplayAttributeTypeId);
         example.setAsc(true);
         strategy.configureExample(example, ImmutableMap.<String, Long>of(), null);
-        return strategy.find(example);
+        return strategy.getList(example);
     }
 }

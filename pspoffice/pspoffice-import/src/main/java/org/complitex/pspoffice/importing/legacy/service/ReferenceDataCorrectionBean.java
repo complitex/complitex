@@ -5,10 +5,6 @@
 package org.complitex.pspoffice.importing.legacy.service;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.List;
-import java.util.Set;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
@@ -19,6 +15,11 @@ import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.pspoffice.importing.legacy.entity.ReferenceDataCorrection;
 import org.complitex.pspoffice.importing.legacy.service.exception.TooManyResultsException;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -97,7 +98,7 @@ public class ReferenceDataCorrectionBean extends AbstractBean {
         example.addAttributeExample(nameExample);
         example.setComparisonType(ComparisonType.EQUALITY.name());
 
-        List<? extends DomainObject> objects = strategy.find(example);
+        List<? extends DomainObject> objects = strategy.getList(example);
         if (objects.size() == 1) {
             return objects.get(0).getId();
         } else if (objects.isEmpty()) {

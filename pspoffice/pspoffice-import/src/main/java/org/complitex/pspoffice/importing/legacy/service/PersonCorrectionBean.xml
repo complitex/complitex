@@ -53,7 +53,7 @@
     <select id="findForProcessing" resultMap="org.complitex.pspoffice.importing.legacy.service.PersonCorrectionBean.personCorrection"
             parameterType="map">
         SELECT * FROM `person_correction` WHERE `processed` = 0 AND `larc` = #{NONARCHIVE_INDICATOR}
-        LIMIT ${size}
+        LIMIT ${count}
     </select>
     
     <select id="findSystemPerson" parameterType="map" resultType="long">
@@ -78,7 +78,7 @@
     <select id="findChildren" parameterType="map" resultMap="org.complitex.pspoffice.importing.legacy.service.PersonCorrectionBean.personCorrection">
         SELECT * FROM `person_correction` WHERE `larc` = #{NONARCHIVE_INDICATOR}
         AND `kid` = 1 AND `processed` = 0 AND `system_person_id` IS NOT NULL
-        LIMIT ${size}
+        LIMIT ${count}
     </select>
     
     <select id="getOwnerByType" parameterType="map" resultMap="org.complitex.pspoffice.importing.legacy.service.PersonCorrectionBean.personCorrection">

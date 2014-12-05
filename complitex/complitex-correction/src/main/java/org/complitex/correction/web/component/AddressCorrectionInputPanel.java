@@ -13,8 +13,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.correction.entity.*;
-import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.DomainObjectExample;
@@ -26,6 +24,8 @@ import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
+import org.complitex.correction.entity.*;
+import org.complitex.correction.service.AddressCorrectionBean;
 
 import javax.ejb.EJB;
 import java.util.Collections;
@@ -175,7 +175,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
         //StreetType
         DomainObjectExample example = new DomainObjectExample();
-        List<? extends DomainObject> streetTypes = streetTypeStrategy.find(example);
+        List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(example);
         Collections.sort(streetTypes, new Comparator<DomainObject>() {
             @Override
             public int compare(DomainObject o1, DomainObject o2) {

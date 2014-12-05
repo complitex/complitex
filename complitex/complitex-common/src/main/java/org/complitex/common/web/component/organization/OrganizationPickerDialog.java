@@ -7,13 +7,15 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IModelComparator;
-import org.apache.wicket.model.Model;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
@@ -26,12 +28,9 @@ import org.complitex.common.web.component.wiquery.ExtendedDialog;
 import org.complitex.common.web.model.AttributeExampleModel;
 
 import javax.ejb.EJB;
-
 import java.util.Objects;
 
-import static org.complitex.common.strategy.organization.IOrganizationStrategy.CODE;
-import static org.complitex.common.strategy.organization.IOrganizationStrategy.NAME;
-import static org.complitex.common.strategy.organization.IOrganizationStrategy.ORGANIZATION_TYPE_PARAMETER;
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.*;
 
 /**
  * @author Anatoly Ivanov
@@ -78,10 +77,10 @@ public class OrganizationPickerDialog extends Panel {
         final DataProvider<DomainObject> dataProvider = new DataProvider<DomainObject>() {
             @Override
             protected Iterable<? extends DomainObject> getData(long first, long count) {
-                example.setStart(first);
-                example.setSize(count);
+                example.setFirst(first);
+                example.setCount(count);
 
-                return organizationStrategy.find(example);
+                return organizationStrategy.getList(example);
             }
 
             @Override

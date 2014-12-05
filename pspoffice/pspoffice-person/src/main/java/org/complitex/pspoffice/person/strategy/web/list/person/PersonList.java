@@ -139,9 +139,9 @@ public final class PersonList extends ScrollListPage {
                 example.setStatus(showModeModel.getObject().name());
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
                 example.setAsc(asc);
-                example.setStart(first);
-                example.setSize(count);
-                return personStrategy.find(example);
+                example.setFirst(first);
+                example.setCount(count);
+                return personStrategy.getList(example);
             }
 
             @Override

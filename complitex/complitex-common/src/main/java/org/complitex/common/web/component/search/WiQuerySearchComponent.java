@@ -531,13 +531,13 @@ public class WiQuerySearchComponent extends Panel {
         strategy.configureExample(example, WiQuerySearchComponent.<Long>transformToIds(previousInfo), searchTextInput);
         example.setOrderByAttributeTypeId(strategy.getDefaultOrderByAttributeId());
         example.setAsc(true);
-        example.setSize(size);
+        example.setCount(size);
         example.setLocaleId(localeBean.convert(getLocale()).getId());
         example.setComparisonType(comparisonType.name());
         example.setStatus(showMode.name());
         example.setUserPermissionString(userPermissionString);
 
-        return strategy.find(example);
+        return strategy.getList(example);
     }
 
     public void reinitialize(AjaxRequestTarget target) {

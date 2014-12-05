@@ -49,7 +49,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<? extends DomainObject> find(DomainObjectExample example) {
+    public List<? extends DomainObject> getList(DomainObjectExample example) {
         throw new UnsupportedOperationException("Use findById");
     }
 

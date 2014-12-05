@@ -268,7 +268,7 @@ public class OrderList extends TemplatePage {
 
                     }
                 },
-                regionStrategy.find(new DomainObjectExample()),
+                regionStrategy.getList(new DomainObjectExample()),
                 new IChoiceRenderer<DomainObject>() {
                     @Override
                     public Object getDisplayValue(DomainObject region) {

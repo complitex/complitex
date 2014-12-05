@@ -5,29 +5,31 @@ import org.complitex.common.web.component.ShowMode;
 import java.io.Serializable;
 import java.util.*;
 
-/**
- *
- * @author Artem
- */
 public class DomainObjectExample implements Serializable {
-
-    private String table;
-    private long start;
-    private long size;
+    private Long id;
+    private Long parentId;
     private Long localeId;
+
+    private String entityTable;
+    private String parentEntity;
+
+    private long first;
+    private long count;
+
     private Long orderByAttributeTypeId;
     private boolean orderByNumber;
     private boolean asc;
-    private Long id;
-    private String parentEntity;
-    private Long parentId;
+
     private Date startDate;
-    private Map<String, Object> additionalParams = new HashMap<>();
     private String comparisonType = ComparisonType.LIKE.name();
-    private List<AttributeExample> attributeExamples = new ArrayList<AttributeExample>();
     private String status = ShowMode.ALL.name();
+
     private String userPermissionString;
     private boolean admin;
+
+    private List<AttributeExample> attributeExamples = new ArrayList<AttributeExample>();
+
+    private Map<String, Object> additionalParams = new HashMap<>();
 
     public DomainObjectExample() {
     }
@@ -57,75 +59,6 @@ public class DomainObjectExample implements Serializable {
         return this;
     }
 
-
-    public DomainObjectExample(ComparisonType comparisonType) {
-        this.comparisonType = comparisonType.name();
-    }
-
-    public DomainObjectExample(Long id) {
-        this.id = id;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
-
-    public long getStart() {
-        return start;
-    }
-
-    public void setStart(long start) {
-        this.start = start;
-    }
-
-    public Long getLocaleId() {
-        return localeId;
-    }
-
-    public void setLocaleId(Long localeId) {
-        this.localeId = localeId;
-    }
-
-    public String getTable() {
-        return table;
-    }
-
-    public void setTable(String table) {
-        this.table = table;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long entityId) {
-        this.id = entityId;
-    }
-
-    public boolean isAsc() {
-        return asc;
-    }
-
-    public void setAsc(boolean asc) {
-        this.asc = asc;
-    }
-
-    public Long getOrderByAttributeTypeId() {
-        return orderByAttributeTypeId;
-    }
-
-    public void setOrderByAttributeTypeId(Long orderByAttributeTypeId) {
-        this.orderByAttributeTypeId = orderByAttributeTypeId;
-    }
-
-    public List<AttributeExample> getAttributeExamples() {
-        return attributeExamples;
-    }
-
     public AttributeExample getAttributeExample(long attributeTypeId) {
         for (AttributeExample attrExample : attributeExamples) {
             if (attrExample.getAttributeTypeId().equals(attributeTypeId)) {
@@ -135,20 +68,27 @@ public class DomainObjectExample implements Serializable {
         return null;
     }
 
-    public void setAttributeExamples(List<AttributeExample> attributeExamples) {
-        this.attributeExamples = attributeExamples;
-    }
-
     public void addAttributeExample(AttributeExample attributeExample) {
         attributeExamples.add(attributeExample);
     }
 
-    public String getParentEntity() {
-        return parentEntity;
+    public DomainObjectExample addAdditionalParam(String key, Object value) {
+        additionalParams.put(key, value);
+
+        return this;
     }
 
-    public void setParentEntity(String parentEntity) {
-        this.parentEntity = parentEntity;
+    @SuppressWarnings("unchecked")
+    public <T> T getAdditionalParam(String key) {
+        return additionalParams != null ? (T) additionalParams.get(key) : null;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getParentId() {
@@ -159,30 +99,68 @@ public class DomainObjectExample implements Serializable {
         this.parentId = parentId;
     }
 
-    public Map<String, Object> getAdditionalParams() {
-        return additionalParams;
+    public Long getLocaleId() {
+        return localeId;
     }
 
-    public void setAdditionalParams(Map<String, Object> additionalParams) {
-        this.additionalParams = additionalParams;
+    public void setLocaleId(Long localeId) {
+        this.localeId = localeId;
     }
 
-    public DomainObjectExample addAdditionalParam(String key, Object value) {
-        additionalParams.put(key, value);
-
-        return this;
+    public String getEntityTable() {
+        return entityTable;
     }
 
-    public <T> T getAdditionalParam(String key) {
-        return additionalParams != null ? (T) additionalParams.get(key) : null;
+    public void setEntityTable(String entityTable) {
+        this.entityTable = entityTable;
     }
 
-    public String getStatus() {
-        return status;
+    public String getParentEntity() {
+        return parentEntity;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setParentEntity(String parentEntity) {
+        this.parentEntity = parentEntity;
+    }
+
+    public long getFirst() {
+        return first;
+    }
+
+    public void setFirst(long first) {
+        this.first = first;
+    }
+
+    public long getCount() {
+        return count;
+    }
+
+    public void setCount(long count) {
+        this.count = count;
+    }
+
+    public Long getOrderByAttributeTypeId() {
+        return orderByAttributeTypeId;
+    }
+
+    public void setOrderByAttributeTypeId(Long orderByAttributeTypeId) {
+        this.orderByAttributeTypeId = orderByAttributeTypeId;
+    }
+
+    public boolean isOrderByNumber() {
+        return orderByNumber;
+    }
+
+    public void setOrderByNumber(boolean orderByNumber) {
+        this.orderByNumber = orderByNumber;
+    }
+
+    public boolean isAsc() {
+        return asc;
+    }
+
+    public void setAsc(boolean asc) {
+        this.asc = asc;
     }
 
     public Date getStartDate() {
@@ -201,6 +179,14 @@ public class DomainObjectExample implements Serializable {
         this.comparisonType = comparisonType;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getUserPermissionString() {
         return userPermissionString;
     }
@@ -217,11 +203,19 @@ public class DomainObjectExample implements Serializable {
         this.admin = admin;
     }
 
-    public boolean isOrderByNumber() {
-        return orderByNumber;
+    public List<AttributeExample> getAttributeExamples() {
+        return attributeExamples;
     }
 
-    public void setOrderByNumber(boolean orderByNumber) {
-        this.orderByNumber = orderByNumber;
+    public void setAttributeExamples(List<AttributeExample> attributeExamples) {
+        this.attributeExamples = attributeExamples;
+    }
+
+    public Map<String, Object> getAdditionalParams() {
+        return additionalParams;
+    }
+
+    public void setAdditionalParams(Map<String, Object> additionalParams) {
+        this.additionalParams = additionalParams;
     }
 }

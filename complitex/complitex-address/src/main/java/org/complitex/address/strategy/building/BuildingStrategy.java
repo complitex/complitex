@@ -104,12 +104,12 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<Building> find(DomainObjectExample example) {
+    public List<Building> getList(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
             return Collections.emptyList();
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
 
         List<Building> buildings = Lists.newArrayList();
@@ -143,7 +143,7 @@ public class BuildingStrategy extends TemplateStrategy {
                 buildings.add(building);
             }
         } else {
-            List<? extends DomainObject> addresses = buildingAddressStrategy.find(createAddressExample(example));
+            List<? extends DomainObject> addresses = buildingAddressStrategy.getList(createAddressExample(example));
 
             for (DomainObject address : addresses) {
                 example.addAdditionalParam("buildingAddressId", address.getId());
@@ -189,8 +189,8 @@ public class BuildingStrategy extends TemplateStrategy {
         addressExample.setComparisonType(buildingExample.getComparisonType());
         addressExample.setLocaleId(buildingExample.getLocaleId());
         addressExample.setOrderByAttributeTypeId(buildingExample.getOrderByAttributeTypeId());
-        addressExample.setStart(buildingExample.getStart());
-        addressExample.setSize(buildingExample.getSize());
+        addressExample.setFirst(buildingExample.getFirst());
+        addressExample.setCount(buildingExample.getCount());
         addressExample.setStatus(buildingExample.getStatus());
         addressExample.setAdmin(buildingExample.isAdmin());
         addressExample.setUserPermissionString(sessionBean.getPermissionString("building_address"));
@@ -250,7 +250,7 @@ public class BuildingStrategy extends TemplateStrategy {
     @Transactional
     public Building findById(Long id, boolean runAsAdmin) {
         DomainObjectExample example = new DomainObjectExample(id);
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         if (!runAsAdmin) {
             prepareExampleForPermissionCheck(example);
         } else {
@@ -656,7 +656,7 @@ public class BuildingStrategy extends TemplateStrategy {
     @Override
     public Building findHistoryObject(long objectId, Date date) {
         DomainObjectExample example = new DomainObjectExample();
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         example.setId(objectId);
         example.setStartDate(date);
 

@@ -150,12 +150,12 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<? extends DomainObject> find(DomainObjectExample example) {
+    public List<? extends DomainObject> getList(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
             return Collections.emptyList();
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         if (!example.isAdmin()) {
             prepareExampleForPermissionCheck(example);
         }

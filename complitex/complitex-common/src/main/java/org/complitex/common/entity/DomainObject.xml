@@ -16,7 +16,7 @@
 
     <insert id="insert" parameterType="Parameter">
         INSERT INTO
-            `${table}` (`object_id`, `status`, `start_date`, `end_date`, `parent_id`, `parent_entity_id`,
+            `${entityTable}` (`object_id`, `status`, `start_date`, `end_date`, `parent_id`, `parent_entity_id`,
                  `permission_id`, `external_id`)
         VALUES
            (#{object.id}, #{object.status}, #{object.startDate}, #{object.endDate}, #{object.parentId},
@@ -25,17 +25,17 @@
 
     <select id="findById" resultMap="org.complitex.common.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
         SELECT e.*
-        FROM `${table}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{id}
+        FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{id}
             <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
     </select>
 
     <select id="selectObjectIdByExternalId" resultType="long" parameterType="map">
-        SELECT e.`object_id` FROM `${table}` e WHERE e.`external_id` = #{externalId}
+        SELECT e.`object_id` FROM `${entityTable}` e WHERE e.`external_id` = #{externalId}
     </select>
     
     <sql id="orderByAtrributeTypeIdFragment">
-        SELECT sc.`value` FROM `${table}_string_culture` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
-            (SELECT orderByAttr.`value_id` FROM `${table}_attribute` orderByAttr WHERE orderByAttr.`object_id` = e.`object_id`
+        SELECT sc.`value` FROM `${entityTable}_string_culture` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
+            (SELECT orderByAttr.`value_id` FROM `${entityTable}_attribute` orderByAttr WHERE orderByAttr.`object_id` = e.`object_id`
                 AND orderByAttr.`status` = 'ACTIVE' AND orderByAttr.`attribute_type_id` = #{orderByAttributeTypeId}
             )
     </sql>
@@ -67,7 +67,7 @@
 
     <select id="find" resultMap="org.complitex.common.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
         SELECT e.*
-        FROM `${table}` e WHERE
+        FROM `${entityTable}` e WHERE
         <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
         <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
         <include refid="org.complitex.common.entity.DomainObject.filter"/>
@@ -98,9 +98,9 @@
         </if>
         <foreach item="attrExample" collection="attributeExamples">
             <if test="attrExample.value != null">
-                AND EXISTS(SELECT 1 FROM `${table}_attribute` attr WHERE attr.`object_id` = e.`object_id`
+                AND EXISTS(SELECT 1 FROM `${entityTable}_attribute` attr WHERE attr.`object_id` = e.`object_id`
                     AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attrExample.attributeTypeId}
-                    AND attr.`value_id` IN (SELECT sc.`id` FROM `${table}_string_culture` sc WHERE sc.`value`
+                    AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityTable}_string_culture` sc WHERE sc.`value`
                         <choose>
                             <when test="comparisonType == 'LIKE'">
                                 LIKE CONCAT('%', #{attrExample.value}, '%')
@@ -114,7 +114,7 @@
             </if>
 
             <if test="attrExample.valueId != null">
-                AND EXISTS(SELECT 1 FROM `${table}_attribute` attr WHERE attr.`object_id` = e.`object_id`
+                AND EXISTS(SELECT 1 FROM `${entityTable}_attribute` attr WHERE attr.`object_id` = e.`object_id`
                     AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attrExample.attributeTypeId}
                     AND attr.`value_id` = #{valueId}
                 )
@@ -126,20 +126,20 @@
     </sql>
 
     <select id="count" resultType="integer" parameterType="DomainObjectExample">
-        SELECT COUNT(1) FROM `${table}` e WHERE
+        SELECT COUNT(1) FROM `${entityTable}` e WHERE
         <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
         <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
         <include refid="org.complitex.common.entity.DomainObject.filter"/>
     </select>
 
     <sql id="limit">
-        <if test="size > 0">
-            limit ${start},${size}
+        <if test="count > 0">
+            limit ${first},${count}
         </if>
     </sql>
 
     <update id="update" parameterType="Parameter">
-        UPDATE `${table}` SET `end_date` = #{object.endDate}, `status` = #{object.status} WHERE `object_id` = #{object.id}
+        UPDATE `${entityTable}` SET `end_date` = #{object.endDate}, `status` = #{object.status} WHERE `object_id` = #{object.id}
             AND `start_date` = #{object.startDate}
     </update>
 
@@ -166,11 +166,11 @@
 
     <select id="findParentInSearchComponent" parameterType="hashmap" resultType="hashmap">
         SELECT (SELECT ent.`entity_table` FROM `entity` ent WHERE ent.`id` = e.`parent_entity_id`) parentEntity,
-            e.`parent_id` parentId FROM `${table}` e WHERE e.`object_id` = #{id}
+            e.`parent_id` parentId FROM `${entityTable}` e WHERE e.`object_id` = #{id}
         <choose>
             <when test="startDate != null">
                 AND e.`start_date` =
-                    (SELECT MAX(e1.`start_date`) FROM `${table}` e1 WHERE e1.`object_id` = #{id} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+                    (SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{id} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
             </when>
             <otherwise>
                 AND (e.`status` IN ('ACTIVE', 'INACTIVE'))
@@ -181,19 +181,19 @@
     <!-- history -->
 
     <select id="historyDates" resultType="date" parameterType="DomainObjectExample">
-        SELECT e.`start_date` FROM `${table}` e WHERE e.`object_id`= #{id}
+        SELECT e.`start_date` FROM `${entityTable}` e WHERE e.`object_id`= #{id}
         UNION
-        SELECT e.`end_date` FROM `${table}` e WHERE e.`object_id`= #{id}
+        SELECT e.`end_date` FROM `${entityTable}` e WHERE e.`object_id`= #{id}
         UNION
-        SELECT aa.`start_date` FROM `${table}_attribute` aa WHERE aa.`object_id`= #{id}
+        SELECT aa.`start_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{id}
         UNION
-        SELECT aa.`end_date` FROM `${table}_attribute` aa WHERE aa.`object_id`= #{id}
+        SELECT aa.`end_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{id}
     </select>
 
     <sql id="findHistoryObject">
         SELECT e.*
-        FROM `${table}` e WHERE e.`object_id` = #{id} AND e.`start_date` = (
-            SELECT MAX(e1.`start_date`) FROM `${table}` e1 WHERE e1.`object_id` = #{id} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+        FROM `${entityTable}` e WHERE e.`object_id` = #{id} AND e.`start_date` = (
+            SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{id} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
     </sql>
 
     <select id="findHistoryObject" parameterType="DomainObjectExample" resultMap="org.complitex.common.entity.DomainObject.DomainObject">
@@ -242,7 +242,7 @@
 
     <!-- deletion -->
     <delete id="delete" parameterType="map">
-        DELETE FROM `${table}` WHERE `object_id` = #{objectId}
+        DELETE FROM `${entityTable}` WHERE `object_id` = #{objectId}
     </delete>
 
     <select id="childrenExistCheck" parameterType="map" resultType="int">

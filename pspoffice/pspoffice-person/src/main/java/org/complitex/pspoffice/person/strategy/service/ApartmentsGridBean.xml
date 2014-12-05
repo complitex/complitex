@@ -70,6 +70,6 @@
             ) apartmentsAndRooms
             ORDER BY apartmentsAndRooms.`prevalence`, LPAD(apartmentsAndRooms.`value_sort`, 15, ' ')
 
-        LIMIT ${start},${size}
+        LIMIT ${first},${count}
     </select>
 </mapper>

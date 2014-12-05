@@ -52,7 +52,7 @@
     <select id="findForProcessing" resultMap="org.complitex.pspoffice.importing.legacy.service.BuildingCorrectionBean.buildingCorrection"
             parameterType="map">
         SELECT * FROM `building_correction` WHERE `idjek` = #{idjek} AND `system_building_id` IS NULL
-            AND `processed` = 0 LIMIT ${size}
+            AND `processed` = 0 LIMIT ${count}
     </select>
     
     <select id="findSystemBuilding" parameterType="map" resultType="long">

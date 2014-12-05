@@ -45,7 +45,7 @@
             parameterType="map">
         SELECT * FROM `apartment_card_correction` WHERE `processed` = 0 
         AND `larc` = #{NONARCHIVE_INDICATOR}
-        LIMIT ${size}
+        LIMIT ${count}
     </select>
     
     <select id="findSystemApartment" parameterType="map" resultType="long">

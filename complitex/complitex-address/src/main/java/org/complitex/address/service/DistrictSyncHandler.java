@@ -5,7 +5,6 @@ import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Cursor;
-import org.complitex.common.entity.DictionaryConfig;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.ConfigBean;
@@ -43,7 +42,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getParentObjects() {
-        return cityStrategy.find(new DomainObjectExample());
+        return cityStrategy.getList(new DomainObjectExample());
     }
 
     @Override
@@ -55,7 +54,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return districtStrategy.find(new DomainObjectExample().setParent("city", parent.getId()));
+        return districtStrategy.getList(new DomainObjectExample().setParent("city", parent.getId()));
     }
 
     @Override

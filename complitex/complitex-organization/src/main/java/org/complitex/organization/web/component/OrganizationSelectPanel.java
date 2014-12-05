@@ -107,10 +107,10 @@ public class OrganizationSelectPanel extends Panel {
             @Override
             protected Iterable<? extends DomainObject> getData(long first, long count) {
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
-                example.setStart(first);
-                example.setSize(count);
+                example.setFirst(first);
+                example.setCount(count);
 
-                return organizationStrategy.find(example);
+                return organizationStrategy.getList(example);
             }
 
             @Override

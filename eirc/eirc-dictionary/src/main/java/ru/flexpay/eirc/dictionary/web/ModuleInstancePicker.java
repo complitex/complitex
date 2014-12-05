@@ -134,9 +134,9 @@ public class ModuleInstancePicker extends FormComponentPanel<DomainObject> {
                     return Collections.emptyList();
                 }
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
-                example.setStart(first);
-                example.setSize(count);
-                return moduleInstanceStrategy.find(example);
+                example.setFirst(first);
+                example.setCount(count);
+                return moduleInstanceStrategy.getList(example);
             }
 
             @Override

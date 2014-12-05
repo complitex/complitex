@@ -100,7 +100,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
             example.setAsc(true);
         }
         configureExample(example, ImmutableMap.<String, Long>of(), null);
-        return find(example);
+        return getList(example);
     }
 
     public String displayShortName(Long organizationId, Locale locale) {
@@ -141,7 +141,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
                     KeConnectionOrganizationTypeStrategy.CALCULATION_MODULE));
         configureExample(example, ImmutableMap.<String, Long>of(), null);
 
-        return find(example);
+        return getList(example);
     }
     @Override
     public Class<? extends AbstractComplexAttributesPanel> getComplexAttributesPanelAfterClass() {
@@ -168,7 +168,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
 
     @Transactional
     @Override
-    public List<Organization> find(DomainObjectExample example) {
+    public List<Organization> getList(DomainObjectExample example) {
         if (example.getLocaleId() == null){
             example.setLocaleId(-1L);
         }
@@ -177,7 +177,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
             return Collections.emptyList();
         }
 
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         if (!example.isAdmin()) {
             prepareExampleForPermissionCheck(example);
         }
@@ -207,7 +207,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
         if (example.getId() != null && example.getId() <= 0) {
             return 0;
         }
-        example.setTable(getEntityTable());
+        example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
         setupFindOperationParameters(example);
         return (Integer) sqlSession().selectOne(MAPPING_NAMESPACE + "." + COUNT_OPERATION, example);

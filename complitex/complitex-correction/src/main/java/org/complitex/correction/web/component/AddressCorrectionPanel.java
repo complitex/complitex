@@ -21,9 +21,6 @@ import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.address.util.AddressRenderer;
-import org.complitex.correction.service.exception.DuplicateCorrectionException;
-import org.complitex.correction.service.exception.MoreOneCorrectionException;
-import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.strategy.IStrategy;
@@ -33,6 +30,9 @@ import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
+import org.complitex.correction.service.exception.DuplicateCorrectionException;
+import org.complitex.correction.service.exception.MoreOneCorrectionException;
+import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.odlabs.wiquery.core.javascript.JsStatement;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 import org.odlabs.wiquery.ui.dialog.Dialog;
@@ -129,7 +129,7 @@ public abstract class AddressCorrectionPanel<T> extends Panel {
         container.add(searchComponent);
 
         DomainObjectExample example = new DomainObjectExample();
-        List<? extends DomainObject> streetTypes = streetTypeStrategy.find(example);
+        List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(example);
         Collections.sort(streetTypes, new Comparator<DomainObject>() {
             @Override
             public int compare(DomainObject o1, DomainObject o2) {
