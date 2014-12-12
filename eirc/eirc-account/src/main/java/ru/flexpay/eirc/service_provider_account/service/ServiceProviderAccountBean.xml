@@ -167,7 +167,7 @@
         </if>
     </select>
 
-    <select id="countServiceProviderAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer">
+    <select id="countServiceProviderAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(distinct spa.`object_id`) from `service_provider_account` spa
         <if test="map.inactive == true or map.all == true">
             inner join (select max(pk_id) as max_pk_id from `service_provider_account` group by object_id) spa2 on spa.pk_id=spa2.max_pk_id

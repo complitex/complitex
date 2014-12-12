@@ -142,10 +142,10 @@ public class BuildingList extends ScrollListPage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 example.setStatus(showModeModel.getObject().name());
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
-                return getBuildingStrategy().count(example);
+                return getBuildingStrategy().getCount(example);
             }
         };
         dataProvider.setSort(String.valueOf(getBuildingStrategy().getDefaultSortAttributeTypeId()), SortOrder.ASCENDING);

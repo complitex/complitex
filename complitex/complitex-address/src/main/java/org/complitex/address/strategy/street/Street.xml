@@ -38,7 +38,7 @@
         </if>
     </sql>
 
-    <select id="count" resultType="integer" parameterType="DomainObjectExample">
+    <select id="count" resultType="long" parameterType="DomainObjectExample">
         SELECT COUNT(1) FROM `street` e WHERE
         <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
     </select>

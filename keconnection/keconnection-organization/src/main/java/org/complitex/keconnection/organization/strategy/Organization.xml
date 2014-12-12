@@ -40,7 +40,7 @@
         <include refid="org.complitex.common.entity.DomainObject.limit"/>
     </select>
     
-    <select id="count" resultType="int" parameterType="DomainObjectExample">
+    <select id="count" resultType="long" parameterType="DomainObjectExample">
         SELECT COUNT(1) FROM `organization` e 
             <include refid="org.complitex.keconnection.organization.strategy.Organization.join"/>
         WHERE

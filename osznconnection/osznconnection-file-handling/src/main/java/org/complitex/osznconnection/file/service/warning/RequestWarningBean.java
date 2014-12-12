@@ -6,7 +6,6 @@ package org.complitex.osznconnection.file.service.warning;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.RequestWarning;
@@ -26,7 +25,7 @@ public class RequestWarningBean extends AbstractBean {
 
     private static final String MAPPING_NAMESPACE = RequestWarningBean.class.getName();
 
-    @Transactional
+
     public void save(RequestWarning requestWarning) {
         sqlSession().insert(MAPPING_NAMESPACE + ".insertWarning", requestWarning);
         for (RequestWarningParameter parameter : requestWarning.getParameters()) {
@@ -35,7 +34,7 @@ public class RequestWarningBean extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public List<RequestWarning> getWarnings(long requestId, RequestFileType requestFileType) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("requestId", requestId);
@@ -55,7 +54,7 @@ public class RequestWarningBean extends AbstractBean {
     /**
      * Helper methods
      */
-    @Transactional
+
     public void save(RequestFileType requestFileType, long requestId, RequestWarningStatus warningStatus, RequestWarningParameter... parameters) {
         RequestWarning warning = new RequestWarning(requestId, requestFileType, warningStatus);
         if (parameters != null) {
@@ -64,7 +63,7 @@ public class RequestWarningBean extends AbstractBean {
         save(warning);
     }
 
-    @Transactional
+
     protected List<Long> getWarningIdsByFile(RequestFileType requestFileType, long requestFileId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("requestFileId", requestFileId);

@@ -85,7 +85,7 @@ public class ServiceProviderAccountBean extends AbstractBean {
         return sqlSession().selectOne(NS + ".serviceProviderAccountsExists", eircAccountId) != null;
     }
 
-    public int count(FilterWrapper<ServiceProviderAccount> filter) {
+    public Long getCount(FilterWrapper<ServiceProviderAccount> filter) {
         ServiceProviderAccountUtil.addFilterMappingObject(filter);
         return sqlSession().selectOne(NS + ".countServiceProviderAccounts", filter);
     }

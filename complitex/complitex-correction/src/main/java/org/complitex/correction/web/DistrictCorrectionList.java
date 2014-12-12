@@ -4,13 +4,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.util.AddressRenderer;
-import org.complitex.correction.entity.DistrictCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.IStrategy;
+import org.complitex.correction.entity.DistrictCorrection;
+import org.complitex.correction.service.AddressCorrectionBean;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -72,7 +72,7 @@ public class DistrictCorrectionList extends AddressCorrectionList<DistrictCorrec
     }
 
     @Override
-    protected Integer getCorrectionsCount(FilterWrapper<DistrictCorrection> filterWrapper) {
+    protected Long getCorrectionsCount(FilterWrapper<DistrictCorrection> filterWrapper) {
         return addressCorrectionBean.getDistrictCorrectionsCount(filterWrapper);
     }
 

@@ -4,17 +4,18 @@
  */
 package org.complitex.pspoffice.person.strategy.service;
 
-import static com.google.common.collect.ImmutableMap.*;
-import java.util.List;
-import java.util.Locale;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.pspoffice.person.strategy.entity.PersonName;
 import org.complitex.pspoffice.person.strategy.entity.PersonName.PersonNameType;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.List;
+import java.util.Locale;
+
+import static com.google.common.collect.ImmutableMap.of;
 
 /**
  *
@@ -47,7 +48,7 @@ public class PersonNameBean extends AbstractBean {
         return personNames;
     }
 
-    @Transactional
+
     public PersonName findOrSave(PersonNameType personNameType, String name, Locale locale, boolean createIfNotExist) {
         if (Strings.isEmpty(name)) {
             throw new IllegalArgumentException("Name must be not null");
@@ -69,7 +70,7 @@ public class PersonNameBean extends AbstractBean {
         return findOrSave(personNameType, name, localeBean.getLocale(localeId), true);
     }
 
-    @Transactional
+
     public PersonName save(PersonNameType personNameType, String name, Locale locale) {
         PersonName personName = new PersonName();
         personName.setName(normalizeName(name));

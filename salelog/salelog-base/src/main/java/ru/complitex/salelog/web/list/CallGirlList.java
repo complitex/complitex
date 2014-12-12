@@ -84,9 +84,9 @@ public class CallGirlList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 FilterWrapper<CallGirl> filterWrapper = FilterWrapper.of(new CallGirl());
-                return callGirlBean.count(filterWrapper);
+                return callGirlBean.getCount(filterWrapper);
             }
         };
         dataProvider.setSort("cg_code", SortOrder.ASCENDING);

@@ -17,8 +17,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
-    <select id="selectServiceCorrectionsCount" resultType="int"
-            parameterType="org.complitex.common.entity.FilterWrapper">
+    <select id="selectServiceCorrectionsCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `service_correction` c
         <where>
             <include refid="org.complitex.common.entity.Correction.selectCorrectionWhereIf"/>

@@ -20,7 +20,7 @@ import java.util.Iterator;
  */
 public abstract class DataProvider<T extends Serializable> extends SortableDataProvider<T, String> {
 
-    private Integer size;
+    private Long size;
 
     @Override
     public long size() {
@@ -48,5 +48,5 @@ public abstract class DataProvider<T extends Serializable> extends SortableDataP
 
     protected abstract Iterable<? extends T> getData(long first, long count);
 
-    protected abstract int getSize();
+    protected abstract Long getSize();
 }

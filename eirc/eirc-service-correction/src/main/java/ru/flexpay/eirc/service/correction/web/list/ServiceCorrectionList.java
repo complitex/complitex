@@ -5,11 +5,11 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.template.web.security.SecurityRole;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 import ru.flexpay.eirc.service.correction.entity.ServiceCorrection;
@@ -57,7 +57,7 @@ public class ServiceCorrectionList extends AbstractCorrectionList<ServiceCorrect
     }
 
     @Override
-    protected Integer getCorrectionsCount(FilterWrapper<ServiceCorrection> filterWrapper) {
+    protected Long getCorrectionsCount(FilterWrapper<ServiceCorrection> filterWrapper) {
         return serviceCorrectionBean.getServiceCorrectionsCount(filterWrapper);
     }
 

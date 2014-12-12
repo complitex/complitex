@@ -21,8 +21,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
-    <select id="selectPrivilegeCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper"
-            resultType="int">
+    <select id="selectPrivilegeCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(*) from `privilege_correction` c
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>

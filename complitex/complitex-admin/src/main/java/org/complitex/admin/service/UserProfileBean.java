@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.complitex.admin.strategy.UserInfoStrategy;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.IUserProfileBean;
 import org.complitex.common.service.SessionBean;
@@ -39,7 +38,7 @@ public class UserProfileBean extends AbstractBean implements IUserProfileBean {
         return userInfo != null ? userInfoStrategy.displayDomainObject(userInfo, locale) : "";
     }
 
-    @Transactional
+
     public void updatePassword(String currentPassword, final String password) throws WrongCurrentPasswordException {
         final String login = sessionContext.getCallerPrincipal().getName();
 
@@ -53,7 +52,7 @@ public class UserProfileBean extends AbstractBean implements IUserProfileBean {
         sqlSession().update(NS + ".updatePassword", ImmutableMap.of("login", login, "password", md5Password));
     }
 
-    @Transactional
+
     public void updateMainUserOrganization(long mainUserOrganizationId) {
         long userId = sessionBean.getCurrentUserId();
         sqlSession().update(NS + ".clearMainOrganizationStatus", userId);

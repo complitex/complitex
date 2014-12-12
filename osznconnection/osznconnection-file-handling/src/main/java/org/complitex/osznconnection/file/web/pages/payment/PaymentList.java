@@ -25,15 +25,16 @@ import org.complitex.common.service.SessionBean;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
+import org.complitex.correction.service.exception.DuplicateCorrectionException;
+import org.complitex.correction.service.exception.MoreOneCorrectionException;
+import org.complitex.correction.service.exception.NotFoundCorrectionException;
+import org.complitex.correction.web.component.AddressCorrectionPanel;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.PaymentExample;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PaymentBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderService;
-import org.complitex.correction.service.exception.DuplicateCorrectionException;
-import org.complitex.correction.service.exception.MoreOneCorrectionException;
-import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.complitex.osznconnection.file.service.status.details.PaymentBenefitStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.PaymentExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -42,7 +43,6 @@ import org.complitex.osznconnection.file.web.GroupList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;
-import org.complitex.correction.web.component.AddressCorrectionPanel;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
@@ -147,9 +147,10 @@ public final class PaymentList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 example.getObject().setAsc(getSort().isAscending());
-                return paymentBean.count(example.getObject());
+
+                return paymentBean.getCount(example.getObject());
             }
         };
         dataProvider.setSort("", SortOrder.ASCENDING);

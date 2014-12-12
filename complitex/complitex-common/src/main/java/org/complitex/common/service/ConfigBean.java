@@ -1,7 +1,6 @@
 package org.complitex.common.service;
 
 import org.complitex.common.entity.IConfig;
-import org.complitex.common.mybatis.Transactional;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,7 +128,7 @@ public class ConfigBean extends AbstractBean{
         }
     }
     
-    @Transactional
+
     public void update(final IConfig config, final String value){
         sqlSession().update(MAPPING_NAMESPACE + ".updateConfig", new HashMap<String, String>() {{
             put("name", config.name());
@@ -143,7 +142,7 @@ public class ConfigBean extends AbstractBean{
         return reflections.getSubTypesOf(IConfig.class);
     }
 
-    @Transactional
+
     private void insert(final String name, final String value){
         sqlSession().insert(MAPPING_NAMESPACE + ".insertConfig", new HashMap<String, String>(){{
             put("name", name);
@@ -151,7 +150,7 @@ public class ConfigBean extends AbstractBean{
         }});
     }
 
-    @Transactional
+
     private boolean isExist(String name){
         return (Boolean) sqlSession().selectOne(MAPPING_NAMESPACE + ".isExistConfig", name);
     }

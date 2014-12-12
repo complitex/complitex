@@ -86,8 +86,8 @@ public class BuildingsGridBean extends AbstractBean {
         return params;
     }
 
-    public int count(BuildingsGridFilter filter) {
-        return (Integer) sqlSession().selectOne(MAPPING + ".count", newParamsMap(filter));
+    public Long getCount(BuildingsGridFilter filter) {
+        return (Long) sqlSession().selectOne(MAPPING + ".count", newParamsMap(filter));
     }
 
     public List<BuildingsGridEntity> find(BuildingsGridFilter filter) {

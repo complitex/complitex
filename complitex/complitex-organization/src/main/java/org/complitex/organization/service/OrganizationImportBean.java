@@ -1,6 +1,5 @@
 package org.complitex.organization.service;
 
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.organization.entity.OrganizationImport;
 
@@ -14,7 +13,7 @@ import java.util.List;
 public class OrganizationImportBean extends AbstractBean {
     private static final String NS = OrganizationImportBean.class.getName();
 
-    @Transactional
+
     public void importOrganization(OrganizationImport importOrganization) {
         sqlSession().insert(NS + ".insertOrganizationImport", importOrganization);
     }

@@ -95,8 +95,8 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     }
 
     @Override
-    protected int getSize(RequestFileFilter filter) {
-        return requestFileBean.size(filter);
+    protected Long getCount(RequestFileFilter filter) {
+        return requestFileBean.getCount(filter);
     }
 
     @Override

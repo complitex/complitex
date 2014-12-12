@@ -6,7 +6,6 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.UserGroup.GROUP_NAME;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.exception.WrongCurrentPasswordException;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
@@ -208,7 +207,7 @@ public class SessionBean extends AbstractBean {
         return oId != null ? strategy.findById(oId, true) : null;
     }
 
-    @Transactional
+
     public void updatePassword(String currentPassword, final String password) throws WrongCurrentPasswordException {
         userProfileBean.updatePassword(currentPassword, password);
     }
@@ -240,7 +239,7 @@ public class SessionBean extends AbstractBean {
     /**
      * Updates main user's organization in database and session.
      */
-    @Transactional
+
     public void updateMainUserOrganization(DictionaryFwSession session, DomainObject mainUserOrganization) {
         userProfileBean.updateMainUserOrganization(mainUserOrganization.getId());
         session.setMainUserOrganization(mainUserOrganization);

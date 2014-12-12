@@ -64,7 +64,7 @@ public class ServiceBean extends AbstractBean {
         return sqlSession(dataSource).selectList(NS + ".selectServices", filter);
     }
 
-    public int count(FilterWrapper<Service> filter) {
+    public Long getCount(FilterWrapper<Service> filter) {
         ServiceUtil.addFilterMappingObject(filter);
         return sqlSession().selectOne(NS + ".countServices", filter);
     }

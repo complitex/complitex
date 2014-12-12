@@ -99,8 +99,8 @@ public abstract class AbstractCorrectionList extends ScrollListPage {
         return correctionBean.find(example);
     }
 
-    protected int count(CorrectionExample example) {
-        return correctionBean.count(example);
+    protected Long getCount(CorrectionExample example) {
+        return correctionBean.getCount(example);
     }
 
     protected String displayCorrection(Correction correction) {
@@ -154,9 +154,9 @@ public abstract class AbstractCorrectionList extends ScrollListPage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 example.getObject().setAsc(getSort().isAscending());
-                return count(example.getObject());
+                return getCount(example.getObject());
             }
         };
         dataProvider.setSort("", SortOrder.ASCENDING);

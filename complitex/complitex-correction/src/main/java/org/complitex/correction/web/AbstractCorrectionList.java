@@ -34,7 +34,6 @@ import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
@@ -105,7 +104,7 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
 
     protected abstract List<T> getCorrections(FilterWrapper<T> filterWrapper);
 
-    protected abstract Integer getCorrectionsCount(FilterWrapper<T> filterWrapper);
+    protected abstract Long getCorrectionsCount(FilterWrapper<T> filterWrapper);
 
     protected String displayCorrection(T correction) {
         return correction.getCorrection();
@@ -163,11 +162,11 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 long limitCount = filterWrapper.getCount();
                 filterWrapper.setCount(0);
 
-                int count = getCorrectionsCount(filterWrapper);
+                Long count = getCorrectionsCount(filterWrapper);
 
                 filterWrapper.setCount(limitCount);
 

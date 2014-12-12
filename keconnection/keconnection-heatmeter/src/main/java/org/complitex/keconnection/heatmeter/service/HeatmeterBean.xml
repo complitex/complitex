@@ -199,8 +199,7 @@
         limit #{first}, #{count}
     </select>
 
-    <select id="selectHeatmetersCount" parameterType="org.complitex.common.entity.FilterWrapper"
-            resultType="int">
+    <select id="selectHeatmetersCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(distinct h.id) from `heatmeter` h
         <include refid="selectHeatmeterJoin"/>
         <include refid="selectHeatmetersWhere"/>

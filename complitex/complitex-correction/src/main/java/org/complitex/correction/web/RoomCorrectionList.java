@@ -4,13 +4,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.util.AddressRenderer;
-import org.complitex.correction.entity.RoomCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.web.component.search.SearchComponentState;
+import org.complitex.correction.entity.RoomCorrection;
+import org.complitex.correction.service.AddressCorrectionBean;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -72,7 +72,7 @@ public class RoomCorrectionList extends AddressCorrectionList<RoomCorrection> {
     }
 
     @Override
-    protected Integer getCorrectionsCount(FilterWrapper<RoomCorrection> filterWrapper) {
+    protected Long getCorrectionsCount(FilterWrapper<RoomCorrection> filterWrapper) {
         return addressCorrectionBean.getRoomCorrectionsCount(filterWrapper);
     }
 

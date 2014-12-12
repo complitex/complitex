@@ -35,7 +35,7 @@
           order by ${sortProperty} ${asc} limit #{first}, #{count}
     </select>
 
-    <select id="selectTablegramsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="int">
+    <select id="selectTablegramsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(*) from `tablegram` <include refid="selectTablegramsWhere"/>
     </select>
 

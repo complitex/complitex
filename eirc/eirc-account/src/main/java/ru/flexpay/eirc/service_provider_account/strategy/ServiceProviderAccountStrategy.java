@@ -66,7 +66,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     }
 
     @Override
-    public int count(DomainObjectExample example) {
+    public Long getCount(DomainObjectExample example) {
         throw new UnsupportedOperationException();
     }
 

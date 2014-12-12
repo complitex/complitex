@@ -74,7 +74,7 @@
         <include refid="org.complitex.common.entity.DomainObject.limit"/>
     </select>
 
-    <select id="count" resultType="integer" parameterType="DomainObjectExample">
+    <select id="count" resultType="long" parameterType="DomainObjectExample">
         SELECT COUNT(1) FROM `person` e
             <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
         WHERE

@@ -12,7 +12,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.StatusType;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.DomainObjectPermissionInfo;
 import org.complitex.common.strategy.IStrategy;
@@ -169,7 +168,7 @@ public class DistrictStrategy extends TemplateStrategy {
         return stringBean.getSystemStringCulture(district.getAttribute(CODE).getLocalizedValues()).getValue();
     }
 
-    @Transactional
+
     @Override
     protected List<DomainObjectPermissionInfo> findChildrenPermissionInfo(long parentId, String childEntity, int start, int size) {
         Map<String, Object> params = Maps.newHashMap();
@@ -184,7 +183,7 @@ public class DistrictStrategy extends TemplateStrategy {
         return new String[]{SecurityRole.ADDRESS_MODULE_EDIT};
     }
 
-    @Transactional
+
     protected Set<Long> findChildrenActivityInfo(long districtId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("districtId", districtId);
@@ -192,7 +191,7 @@ public class DistrictStrategy extends TemplateStrategy {
         return Sets.newHashSet(results);
     }
 
-    @Transactional
+
     protected void updateChildrenActivity(Set<Long> streetIds, boolean enabled) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("enabled", enabled);

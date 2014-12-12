@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.service;
 
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.osznconnection.file.entity.RequestFileGroup;
@@ -31,9 +30,9 @@ public class RequestFileGroupBean extends AbstractBean {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".selectRequestFilesGroups", filter);
     }
 
-    public int getRequestFileGroupsCount(RequestFileGroupFilter filter) {
+    public Long getRequestFileGroupsCount(RequestFileGroupFilter filter) {
         sessionBean.prepareFilterForPermissionCheck(filter);
-        return (Integer) sqlSession().selectOne(MAPPING_NAMESPACE + ".selectRequestFilesGroupsCount", filter);
+        return sqlSession().selectOne(MAPPING_NAMESPACE + ".selectRequestFilesGroupsCount", filter);
     }
 
     public RequestFileGroup getRequestFileGroup(Long id) {
@@ -68,7 +67,7 @@ public class RequestFileGroupBean extends AbstractBean {
         sqlSession().delete(MAPPING_NAMESPACE + ".clearEmptyGroup");
     }
 
-    @Transactional
+
     public void updateStatus(final long requestFileId, final RequestFileStatus status) {
         sqlSession().update(MAPPING_NAMESPACE + ".updateStatus", new HashMap<String, Object>() {
 
@@ -79,12 +78,12 @@ public class RequestFileGroupBean extends AbstractBean {
         });
     }
 
-    @Transactional
+
     public long getPaymentFileId(long benefitFileId) {
         return (Long) sqlSession().selectOne(MAPPING_NAMESPACE + ".getPaymentFileId", benefitFileId);
     }
 
-    @Transactional
+
     public long getBenefitFileId(long paymentFileId) {
         return (Long) sqlSession().selectOne(MAPPING_NAMESPACE + ".getBenefitFileId", paymentFileId);
     }

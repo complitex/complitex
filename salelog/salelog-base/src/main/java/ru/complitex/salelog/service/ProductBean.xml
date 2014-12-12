@@ -65,7 +65,7 @@
         </if>
     </select>
 
-    <select id="countProducts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer">
+    <select id="countProducts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(distinct `id`) from `product` p
         where 1=1
         <include refid="productCondition"/>

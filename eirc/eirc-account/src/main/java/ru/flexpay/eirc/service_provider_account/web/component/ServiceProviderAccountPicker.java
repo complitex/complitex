@@ -128,12 +128,12 @@ public class ServiceProviderAccountPicker extends FormComponentPanel<ServiceProv
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 if (!showData) {
-                    return 0;
+                    return 0L;
                 }
                 filterWrapper.setLocale(localeBean.convert(getLocale()));
-                return serviceProviderAccountBean.count(filterWrapper);
+                return serviceProviderAccountBean.getCount(filterWrapper);
             }
         };
 

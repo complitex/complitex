@@ -91,9 +91,9 @@ public class ProductList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 FilterWrapper<Product> filterWrapper = FilterWrapper.of(new Product());
-                return productBean.count(filterWrapper);
+                return productBean.getCount(filterWrapper);
             }
         };
         dataProvider.setSort("code", SortOrder.ASCENDING);

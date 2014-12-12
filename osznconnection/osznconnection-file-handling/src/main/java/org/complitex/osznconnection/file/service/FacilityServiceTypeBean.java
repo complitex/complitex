@@ -7,7 +7,6 @@ package org.complitex.osznconnection.file.service;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.FacilityServiceTypeExample;
 
@@ -59,12 +58,12 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
         }
     }
 
-    @Transactional
+
     public void delete(long requestFileId) {
         sqlSession().delete(NS + ".deleteFacilityServiceType", requestFileId);
     }
 
-    @Transactional
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void insert(List<AbstractRequest> abstractRequests) {
         if (abstractRequests.isEmpty()) {
@@ -73,12 +72,12 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
         sqlSession().insert(NS + ".insertFacilityServiceTypeList", abstractRequests);
     }
 
-    @Transactional
-    public int count(FacilityServiceTypeExample example) {
+
+    public Long getCount(FacilityServiceTypeExample example) {
         return sqlSession().selectOne(NS + ".count", example);
     }
 
-    @Transactional
+
     public List<FacilityServiceType> find(FacilityServiceTypeExample example) {
         List<FacilityServiceType> list = sqlSession().selectList(NS + ".find", example);
 
@@ -87,7 +86,7 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
         return list;
     }
 
-    @Transactional
+
     public boolean isFacilityServiceTypeFileBound(long fileId) {
         return unboundCount(fileId) == 0;
     }
@@ -103,27 +102,27 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
         return sqlSession().selectOne(NS + ".countByFile", params);
     }
 
-    @Transactional
+
     public void update(FacilityServiceType facilityServiceType) {
         sqlSession().update(NS + ".update", facilityServiceType);
     }
 
-    @Transactional
+
     public void updateAccountNumber(FacilityServiceType facilityServiceType) {
         sqlSession().update(NS + ".updateAccountNumber", facilityServiceType);
     }
 
-    @Transactional
+
     public List<Long> findIdsForBinding(long fileId) {
         return findIdsForOperation(fileId);
     }
 
-    @Transactional
+
     private List<Long> findIdsForOperation(long fileId) {
         return sqlSession().selectList(NS + ".findIdsForOperation", fileId);
     }
 
-    @Transactional
+
     public List<FacilityServiceType> findForOperation(long fileId, List<Long> ids) {
         List<FacilityServiceType> list = sqlSession().selectList(NS + ".findForOperation",
                 of("requestFileId", fileId, "ids", ids));
@@ -133,7 +132,7 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
         return list;
     }
 
-    @Transactional
+
     public void clearBeforeBinding(long fileId, Set<Long> serviceProviderTypeIds) {
         Map<String, String> updateFieldMap = null;
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
@@ -160,7 +159,7 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
         return Collections.unmodifiableSet(updatableFields);
     }
 
-    @Transactional
+
     public void markCorrected(FacilityServiceType facilityServiceType, AddressEntity addressEntity) {
         Map<String, Object> params = Maps.newHashMap();
 

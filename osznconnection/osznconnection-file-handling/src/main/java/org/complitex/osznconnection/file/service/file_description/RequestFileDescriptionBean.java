@@ -2,7 +2,6 @@ package org.complitex.osznconnection.file.service.file_description;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionValidateException.ValidationError;
@@ -61,7 +60,7 @@ public class RequestFileDescriptionBean extends AbstractBean {
 
     private final static String DATE_PATTERN = "dd.MM.yyyy";
 
-    @Transactional
+
     private void insert(RequestFileDescription fileDescription) {
         sqlSession().insert(MAPPING_NAMESPACE + ".insertFileDescription", fileDescription);
         if (!fileDescription.getFields().isEmpty()) {
@@ -72,13 +71,13 @@ public class RequestFileDescriptionBean extends AbstractBean {
         }
     }
 
-    @Transactional
+
     private void delete() {
         sqlSession().delete(MAPPING_NAMESPACE + ".deleteFileFieldDescription");
         sqlSession().delete(MAPPING_NAMESPACE + ".deleteFileDescription");
     }
 
-    @Transactional
+
     public void update(List<RequestFileDescription> requestFileDescriptions) {
         synchronized (cache) {
             cache.clear();

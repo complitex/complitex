@@ -26,7 +26,7 @@ public class RegistryRecordBean extends AbstractBean {
         return getSqlSessionManager().selectList(NS + ".selectRegistryRecords", filter);
     }
 
-    public int count(FilterWrapper<RegistryRecordData> filter) {
+    public Long getCount(FilterWrapper<RegistryRecordData> filter) {
         return getSqlSessionManager().selectOne(NS + ".countRegistryRecords", filter);
     }
 

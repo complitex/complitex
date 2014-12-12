@@ -128,16 +128,18 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 if (!showData) {
-                    return 0;
+                    return 0L;
                 }
+
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
-                return keConnectionOrganizationStrategy.count(example);
+
+                return keConnectionOrganizationStrategy.getCount(example);
             }
         };
 
-        filterForm.add(new TextField<String>("nameFilter", new Model<String>() {
+        filterForm.add(new TextField<>("nameFilter", new Model<String>() {
 
             @Override
             public String getObject() {
@@ -149,7 +151,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
                 example.getAttributeExample(KeConnectionOrganizationStrategy.NAME).setValue(name);
             }
         }));
-        filterForm.add(new TextField<String>("codeFilter", new Model<String>() {
+        filterForm.add(new TextField<>("codeFilter", new Model<String>() {
 
             @Override
             public String getObject() {
@@ -164,7 +166,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
 
         final IModel<DomainObject> organizationModel = new Model<>();
 
-        final AjaxLink<Void> select = new AjaxLink<Void>("select") {
+        final AjaxLink select = new AjaxLink("select") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -181,7 +183,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
         select.setVisible(false);
         content.add(select);
 
-        final RadioGroup<DomainObject> radioGroup = new RadioGroup<DomainObject>("radioGroup", organizationModel);
+        final RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup", organizationModel);
         radioGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 
             @Override
@@ -231,7 +233,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
         };
         filterForm.add(find);
 
-        AjaxLink<Void> cancel = new AjaxLink<Void>("cancel") {
+        AjaxLink cancel = new AjaxLink("cancel") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -240,7 +242,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
         };
         content.add(cancel);
 
-        AjaxLink<Void> choose = new AjaxLink<Void>("choose") {
+        AjaxLink choose = new AjaxLink("choose") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {

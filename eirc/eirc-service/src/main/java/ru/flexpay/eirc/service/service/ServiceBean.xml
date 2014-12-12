@@ -83,7 +83,7 @@
         </if>
     </select>
 
-    <select id="countServices" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer" flushCache="false" useCache="true">
+    <select id="countServices" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long" flushCache="false" useCache="true">
         select count(distinct s.`id`) from `service` s
           left join `service_string_culture` sn on s.`id` = sn.`service_id`
         <include refid="serviceWhere"/>

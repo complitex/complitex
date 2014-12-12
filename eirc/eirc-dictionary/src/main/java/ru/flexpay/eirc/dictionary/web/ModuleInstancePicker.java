@@ -140,12 +140,12 @@ public class ModuleInstancePicker extends FormComponentPanel<DomainObject> {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 if (!showData) {
-                    return 0;
+                    return 0L;
                 }
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
-                return moduleInstanceStrategy.count(example);
+                return moduleInstanceStrategy.getCount(example);
             }
         };
 

@@ -113,11 +113,11 @@ public class OrderList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 FilterWrapper<OrderExt> filterWrapper = FilterWrapper.of(filterModel.getObject());
                 filterWrapper.setLike(true);
 
-                return orderBean.count(filterWrapper);
+                return orderBean.getCount(filterWrapper);
             }
         };
         dataProvider.setSort("order_object_id", SortOrder.ASCENDING);
@@ -149,8 +149,8 @@ public class OrderList extends TemplatePage {
                     }
 
                     @Override
-                    protected int getSize() {
-                        return order.getProductSales().size();
+                    protected Long getSize() {
+                        return Long.valueOf(order.getProductSales().size());
                     }
                 };
 

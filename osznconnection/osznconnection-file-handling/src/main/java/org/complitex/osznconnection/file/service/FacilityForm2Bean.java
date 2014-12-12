@@ -4,7 +4,6 @@
  */
 package org.complitex.osznconnection.file.service;
 
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 
@@ -22,12 +21,12 @@ public class FacilityForm2Bean extends AbstractRequestBean {
 
     public static final String MAPPING_NAMESPACE = FacilityForm2Bean.class.getName();
 
-    @Transactional
+
     public void delete(long requestFileId) {
         sqlSession().delete(MAPPING_NAMESPACE + ".deleteFacilityForm2", requestFileId);
     }
 
-    @Transactional
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void insert(List<AbstractRequest> abstractRequests) {
         if (abstractRequests.isEmpty()) {

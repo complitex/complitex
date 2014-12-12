@@ -3,7 +3,6 @@ package org.complitex.keconnection.heatmeter.service;
 import com.google.common.collect.ImmutableSet;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.mybatis.XmlMapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.exception.ConcurrentModificationException;
@@ -55,7 +54,7 @@ public class HeatmeterBean extends AbstractBean {
     @EJB
     private KeConnectionOrganizationStrategy organizationStrategy;
 
-    @Transactional
+
     public void save(Heatmeter heatmeter) throws ConcurrentModificationException {
         Long heatmeterId = heatmeter.getId();
         Date om = heatmeter.getOm();
@@ -126,7 +125,7 @@ public class HeatmeterBean extends AbstractBean {
         return sqlSession().selectList("selectHeatmeters", filterWrapper);
     }
 
-    public int getHeatmeterCount(FilterWrapper<Heatmeter> filterWrapper) {
+    public Long getHeatmeterCount(FilterWrapper<Heatmeter> filterWrapper) {
         addUnboundStatusParameter(filterWrapper);
 
         return sqlSession().selectOne("selectHeatmetersCount", filterWrapper);

@@ -119,7 +119,7 @@
         left join `user_organization` o on uc.`user_id` = o.`user_id`
     </select>
 
-    <select id="selectUsersCount" resultType="int" parameterType="org.complitex.admin.service.UserFilter">
+    <select id="selectUsersCount" resultType="long" parameterType="org.complitex.admin.service.UserFilter">
         select count(distinct u.id)
         <include refid="userFilter"/>
     </select>

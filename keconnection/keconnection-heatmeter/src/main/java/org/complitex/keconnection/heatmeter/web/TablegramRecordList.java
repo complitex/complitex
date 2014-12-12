@@ -16,8 +16,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.EnumDropDownChoice;
+import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.keconnection.heatmeter.entity.Tablegram;
@@ -132,7 +132,7 @@ public class TablegramRecordList extends TemplatePage{
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 return tablegramRecordBean.getTablegramRecordsCount(filterModel.getObject());
             }
 

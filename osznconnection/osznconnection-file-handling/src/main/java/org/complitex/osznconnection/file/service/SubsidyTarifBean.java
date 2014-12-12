@@ -1,7 +1,6 @@
 package org.complitex.osznconnection.file.service;
 
 import com.google.common.collect.Maps;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.RequestFileType;
@@ -28,7 +27,7 @@ public class SubsidyTarifBean extends AbstractBean {
     @EJB
     private RequestFileDescriptionBean requestFileDescriptionBean;
 
-    @Transactional
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void insert(List<AbstractRequest> abstractRequests) {
         for (AbstractRequest abstractRequest : abstractRequests) {
@@ -36,7 +35,7 @@ public class SubsidyTarifBean extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void delete(long requestFileId) {
         sqlSession().delete(MAPPING_NAMESPACE + ".deleteTarifs", requestFileId);
     }
@@ -47,7 +46,7 @@ public class SubsidyTarifBean extends AbstractBean {
      * @param osznId ОСЗН
      * @return значение поля T11_CODE2 из таблицы тарифов по коду тарифа в ЦН и ОСЗН
      */
-    @Transactional
+
     public String getCode2(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId) {
         RequestFileDescription tarifDescription = requestFileDescriptionBean.getFileDescription(RequestFileType.SUBSIDY_TARIF);
         Map<String, Object> params = Maps.newHashMap();

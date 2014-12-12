@@ -37,10 +37,10 @@ import org.complitex.common.service.ContextProcessListener;
 import org.complitex.common.service.IProcessListener;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.EnumDropDownChoice;
 import org.complitex.common.web.component.MonthDropDownChoice;
 import org.complitex.common.web.component.ShowMode;
+import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.dateinput.MaskedDateInput;
 import org.complitex.common.web.component.image.StaticImage;
@@ -400,7 +400,7 @@ public class HeatmeterList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 return heatmeterBean.getHeatmeterCount(filterModel.getObject());
             }
 

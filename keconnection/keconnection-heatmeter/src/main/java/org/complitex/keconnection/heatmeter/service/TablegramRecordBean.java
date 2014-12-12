@@ -27,7 +27,7 @@ public class TablegramRecordBean extends AbstractBean{
         return sqlSession().selectList("selectTablegramRecords", filterWrapper);
     }
 
-    public Integer getTablegramRecordsCount(FilterWrapper<TablegramRecord> filterWrapper){
+    public Long getTablegramRecordsCount(FilterWrapper<TablegramRecord> filterWrapper){
         return sqlSession().selectOne("selectTablegramRecordsCount", filterWrapper);
     }
 

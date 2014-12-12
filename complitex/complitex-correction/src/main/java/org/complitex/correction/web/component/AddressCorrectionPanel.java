@@ -50,8 +50,13 @@ import java.util.List;
 public abstract class AddressCorrectionPanel<T> extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
+
     @EJB
     private StreetTypeStrategy streetTypeStrategy;
+
+    @EJB
+    private StreetStrategy streetStrategy;
+
     private AddressEntity correctedEntity;
     private Dialog dialog;
     private WiQuerySearchComponent searchComponent;
@@ -217,12 +222,12 @@ public abstract class AddressCorrectionPanel<T> extends Panel {
         container.add(cancel);
     }
 
-    private static Long getObjectId(DomainObject object) {
+    private Long getObjectId(DomainObject object) {
         return object == null ? null : object.getId();
     }
 
-    private static Long getStreetTypeId(DomainObject streetObject) {
-        return streetObject == null ? null : StreetStrategy.getStreetType(streetObject);
+    private Long getStreetTypeId(DomainObject streetObject) {
+        return streetObject == null ? null : streetStrategy.getStreetType(streetObject);
     }
 
     protected abstract void correctAddress(T request, AddressEntity entity, Long cityId, Long streetTypeId,

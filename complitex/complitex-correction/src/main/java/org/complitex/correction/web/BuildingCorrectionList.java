@@ -5,8 +5,6 @@ import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.util.AddressRenderer;
-import org.complitex.correction.entity.BuildingCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
@@ -14,6 +12,8 @@ import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.web.component.search.SearchComponentState;
+import org.complitex.correction.entity.BuildingCorrection;
+import org.complitex.correction.service.AddressCorrectionBean;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -91,7 +91,7 @@ public class BuildingCorrectionList extends AddressCorrectionList<BuildingCorrec
     }
 
     @Override
-    protected Integer getCorrectionsCount(FilterWrapper<BuildingCorrection> filterWrapper) {
+    protected Long getCorrectionsCount(FilterWrapper<BuildingCorrection> filterWrapper) {
         return addressCorrectionBean.getBuildingCorrectionsCount(filterWrapper);
     }
 

@@ -11,7 +11,6 @@ import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.description.EntityAttributeValueType;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.mysql.MySqlErrors;
 import org.complitex.common.service.*;
 import org.complitex.common.strategy.web.AbstractComplexAttributesPanel;
@@ -125,7 +124,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }).start();
     }
 
-    @Transactional
+
     protected void changeActivity(DomainObject object, boolean enable) {
         object.setStatus(enable ? StatusType.ACTIVE : StatusType.INACTIVE);
         sqlSession().update(DOMAIN_OBJECT_NAMESPACE + "." + UPDATE_OPERATION, new Parameter(getEntityTable(), object));
@@ -152,7 +151,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }).start();
     }
 
-    @Transactional
+
     @Override
     public void changeChildrenActivity(long parentId, boolean enable) {
         String[] childrenEntities = getLogicalChildren();
@@ -163,7 +162,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected void changeChildrenActivity(long parentId, String childEntity, boolean enable) {
         IStrategy childStrategy = strategyFactory.getStrategy(childEntity);
 
@@ -240,7 +239,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         attribute.setLocalizedValues(strings);
     }
 
-    @Transactional
+
     @Override
     public DomainObject findById(String dataSource, Long objectId, boolean runAsAdmin) {
         if (objectId == null){
@@ -271,7 +270,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return object;
     }
 
-    @Transactional
+
     @Override
     public DomainObject findById(Long objectId, boolean runAsAdmin) {
         return findById(null, objectId, runAsAdmin);
@@ -283,7 +282,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                 ImmutableMap.of("table", getEntityTable(), "externalId", externalId));
     }
 
-    @Transactional
+
     protected Set<Long> loadSubjects(String dataSource, long permissionId) {
         if (permissionId == PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID) {
             return newHashSet(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID);
@@ -292,7 +291,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected Set<Long> loadSubjects(long permissionId) {
         return loadSubjects(null, permissionId);
     }
@@ -389,15 +388,15 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     @Override
-    public int count(DomainObjectExample example) {
+    public Long getCount(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
-            return 0;
+            return 0L;
         }
 
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
 
-        return (Integer) sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + "." + COUNT_OPERATION, example);
+        return (Long) sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + "." + COUNT_OPERATION, example);
     }
 
     /**
@@ -425,7 +424,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return object;
     }
 
-    @Transactional
+
     protected void insertAttribute(Attribute attribute) {
         final List<StringCulture> strings = attribute.getLocalizedValues();
         if (strings == null) {
@@ -444,12 +443,12 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return ATTRIBUTE_NAMESPACE + "." + INSERT_OPERATION;
     }
 
-    @Transactional
+
     protected Long insertStrings(long attributeTypeId, List<StringCulture> strings) {
         return stringBean.insertStrings(strings, getEntityTable());
     }
 
-    @Transactional
+
     @Override
     public void insert(DomainObject object, Date insertDate) {
         object.setId(sequenceBean.nextId(getEntityTable()));
@@ -462,7 +461,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected Long getNewPermissionId(Set<Long> newSubjectIds) {
         if (newSubjectIds.size() == 1 && newSubjectIds.contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
             return PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID;
@@ -475,13 +474,13 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected void insertDomainObject(DomainObject object, Date insertDate) {
         object.setStartDate(insertDate);
         sqlSession().insert(DOMAIN_OBJECT_NAMESPACE + "." + INSERT_OPERATION, new Parameter(getEntityTable(), object));
     }
 
-    @Transactional
+
     @Override
     public void archiveAttributes(Collection<Long> attributeTypeIds, Date endDate) {
         if (attributeTypeIds != null && !attributeTypeIds.isEmpty()) {
@@ -494,7 +493,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     @Override
     public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
         //permission comparison
@@ -622,7 +621,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected void archiveAttribute(Attribute attribute, Date archiveDate) {
         attribute.setEndDate(archiveDate);
         attribute.setStatus(StatusType.ARCHIVE);
@@ -634,7 +633,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return !newSubjectIds.equals(oldSubjectIds);
     }
 
-    @Transactional
+
     @Override
     public void updateAndPropagate(DomainObject oldObject, final DomainObject newObject, Date updateDate) {
         if (!canPropagatePermissions(newObject)) {
@@ -673,7 +672,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return ResourceUtil.getString(Strategy.class.getName(), "replace_permissions_success", localeBean.getSystemLocale());
     }
 
-    @Transactional
+
     protected List<DomainObjectPermissionInfo> findChildrenPermissionInfo(long parentId, String childEntity, int start, int size) {
         Map<String, Object> params = newHashMap();
 
@@ -686,14 +685,14 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return sqlSession().selectList(DOMAIN_OBJECT_NAMESPACE + "." + FIND_CHILDREN_PERMISSION_INFO_OPERATION, params);
     }
 
-    @Transactional
+
     @Override
     public void replacePermissions(DomainObjectPermissionInfo objectPermissionInfo, Set<Long> subjectIds) {
         replaceObjectPermissions(objectPermissionInfo, subjectIds);
         replaceChildrenPermissions(objectPermissionInfo.getId(), subjectIds);
     }
 
-    @Transactional
+
     protected void replaceChildrenPermissions(long parentId, Set<Long> subjectIds) {
         String[] childrenEntities = getLogicalChildren();
         if (childrenEntities != null && childrenEntities.length > 0) {
@@ -703,7 +702,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected void replaceObjectPermissions(DomainObjectPermissionInfo objectPermissionInfo, Set<Long> subjectIds) {
         Set<Long> oldSubjectIds = loadSubjects(objectPermissionInfo.getPermissionId());
         if (isNeedToChangePermission(oldSubjectIds, subjectIds)) {
@@ -716,7 +715,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected void replaceChildrenPermissions(String childEntity, long parentId, Set<Long> subjectIds) {
         IStrategy childStrategy = strategyFactory.getStrategy(childEntity);
 
@@ -742,7 +741,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected void updatePermissionId(long objectId, long permissionId) {
         Map<String, Object> params = newHashMap();
 
@@ -753,12 +752,12 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         sqlSession().update(DOMAIN_OBJECT_NAMESPACE + ".updatePermissionId", params);
     }
 
-    @Transactional
+
     protected void insertUpdatedDomainObject(DomainObject object, Date updateDate) {
         insertDomainObject(object, updateDate);
     }
 
-    @Transactional
+
     @Override
     public void archive(DomainObject object, Date endDate) {
         object.setStatus(StatusType.ARCHIVE);
@@ -857,7 +856,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     @SuppressWarnings({"unchecked"})
-    @Transactional
+
     @Override
     public SimpleObjectInfo findParentInSearchComponent(long id, Date date) {
         DomainObjectExample example = new DomainObjectExample(id);
@@ -933,7 +932,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return null;
     }
 
-    @Transactional
+
     @Override
     public List<History> getHistory(long objectId) {
         List<History> historyList = newArrayList();
@@ -947,7 +946,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return historyList;
     }
 
-    @Transactional
+
     @Override
     public TreeSet<Date> getHistoryDates(long objectId) {
         DomainObjectExample example = new DomainObjectExample(objectId);
@@ -963,7 +962,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }));
     }
 
-    @Transactional
+
     @Override
     public DomainObject findHistoryObject(long objectId, Date date) {
         DomainObjectExample example = new DomainObjectExample(objectId);
@@ -982,7 +981,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return object;
     }
 
-    @Transactional
+
     protected List<Attribute> loadHistoryAttributes(long objectId, Date date) {
         DomainObjectExample example = new DomainObjectExample(objectId);
         example.setEntityTable(getEntityTable());
@@ -1027,7 +1026,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     /**
      * Default validation
      */
-    @Transactional
+
     @Override
     public Long performDefaultValidation(DomainObject object, Locale locale) {
         Map<String, Object> params = createValidationParams(object, locale);
@@ -1075,14 +1074,14 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return params;
     }
 
-    @Transactional
+
     @Override
     public void changePermissions(DomainObjectPermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         changeObjectPermissions(objectPermissionInfo, addSubjectIds, removeSubjectIds);
         changeChildrenPermissions(objectPermissionInfo.getId(), addSubjectIds, removeSubjectIds);
     }
 
-    @Transactional
+
     protected void changeObjectPermissions(DomainObjectPermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         Set<Long> currentSubjectIds = loadSubjects(objectPermissionInfo.getPermissionId());
         Set<Long> newSubjectIds = newHashSet(currentSubjectIds);
@@ -1147,7 +1146,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return ResourceUtil.getString(Strategy.class.getName(), "change_permissions_success", localeBean.getSystemLocale());
     }
 
-    @Transactional
+
     protected void changeChildrenPermissions(long parentId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         String[] childrenEntities = getLogicalChildren();
         if (childrenEntities != null && childrenEntities.length > 0) {
@@ -1157,7 +1156,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected void changeChildrenPermissions(String childEntity, long parentId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         IStrategy childStrategy = strategyFactory.getStrategy(childEntity);
 
@@ -1183,7 +1182,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected Set<Long> findChildrenActivityInfo(long parentId, String childEntity, int start, int size) {
         Map<String, Object> params = newHashMap();
         params.put("entity", childEntity);
@@ -1195,7 +1194,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return newHashSet(results);
     }
 
-    @Transactional
+
     protected void updateChildrenActivity(long parentId, String childEntity, boolean enabled) {
         Map<String, Object> params = newHashMap();
         params.put("entity", childEntity);
@@ -1217,7 +1216,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return stringBean.displayValue(attribute.getLocalizedValues(), locale);
     }
 
-    @Transactional
+
     @Override
     public void delete(long objectId, Locale locale) throws DeleteException {
         deleteChecks(objectId, locale);
@@ -1226,13 +1225,13 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         deleteObject(objectId, locale);
     }
 
-    @Transactional
+
     protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
         childrenExistCheck(objectId, locale);
         referenceExistCheck(objectId, locale);
     }
 
-    @Transactional
+
     protected void deleteStrings(long objectId) {
         Set<Long> localizedValueTypeIds = getLocalizedValueTypeIds();
         if (localizedValueTypeIds != null && !localizedValueTypeIds.isEmpty()) {
@@ -1240,7 +1239,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected void deleteAttribute(long objectId) {
         Map<String, Object> params = newHashMap();
         params.put("table", getEntityTable());
@@ -1248,7 +1247,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         sqlSession().delete(ATTRIBUTE_NAMESPACE + "." + DELETE_OPERATION, params);
     }
 
-    @Transactional
+
     protected void deleteObject(long objectId, Locale locale) throws DeleteException {
         Map<String, Object> params = newHashMap();
         params.put("table", getEntityTable());
@@ -1277,7 +1276,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected void childrenExistCheck(long objectId, Locale locale) throws DeleteException {
         String[] realChildren = getRealChildren();
         if (realChildren != null && realChildren.length > 0) {
@@ -1289,7 +1288,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
     }
 
-    @Transactional
+
     protected boolean childrenExistCheck(String childEntity, long objectId) {
         Map<String, Object> params = newHashMap();
         params.put("childEntity", childEntity);
@@ -1299,7 +1298,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return result != null;
     }
 
-    @Transactional
+
     protected Set<Long> getLocalizedValueTypeIds() {
         Set<Long> localizedValueTypeIds = newHashSet();
         for (EntityAttributeType attributeType : getEntity().getEntityAttributeTypes()) {
@@ -1312,7 +1311,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return localizedValueTypeIds;
     }
 
-    @Transactional
+
     protected void referenceExistCheck(long objectId, Locale locale) throws DeleteException {
         for (String entityTable : entityBean.getAllEntities()) {
             Entity entity = entityBean.getEntity(entityTable);

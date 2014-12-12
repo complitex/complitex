@@ -123,7 +123,7 @@ public class TablegramList extends TemplatePage{
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 return tablegramBean.getTablegramsCount(filterModel.getObject());
             }
 

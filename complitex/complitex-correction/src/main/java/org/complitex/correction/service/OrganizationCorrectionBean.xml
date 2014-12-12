@@ -15,8 +15,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
-    <select id="selectOrganizationCorrectionsCount" resultType="int"
-            parameterType="org.complitex.common.entity.FilterWrapper">
+    <select id="selectOrganizationCorrectionsCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `organization_correction` c
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>

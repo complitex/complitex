@@ -3,7 +3,6 @@ package org.complitex.osznconnection.file.service;
 import com.google.common.collect.ImmutableMap;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.PrivilegeCorrection;
 
@@ -26,7 +25,7 @@ public class PrivilegeCorrectionBean extends AbstractBean {
      * @param calculationCenterId
      * @return
      */
-    @Transactional
+
     public Long findInternalPrivilege(String organizationCode, long calculationCenterId) {
         Map<String, Object> params = ImmutableMap.<String, Object>of("code", organizationCode, "organizationId", calculationCenterId);
         List<Long> ids = sqlSession().selectList(NS + ".findInternalPrivilege", params);
@@ -42,7 +41,7 @@ public class PrivilegeCorrectionBean extends AbstractBean {
      * @param osznId
      * @return
      */
-    @Transactional
+
     public String findPrivilegeCode(long objectId, long osznId, long userOrganizationId) {
         Map<String, Long> params = ImmutableMap.of("objectId", objectId, "organizationId", osznId,
                 "userOrganizationId", userOrganizationId);
@@ -53,7 +52,7 @@ public class PrivilegeCorrectionBean extends AbstractBean {
         return null;
     }
 
-    @Transactional
+    
     public void save(PrivilegeCorrection privilegeCorrection) {
         if (privilegeCorrection.getId() == null) {
             sqlSession().insert(NS_CORRECTION + ".insertCorrection", privilegeCorrection);
@@ -74,7 +73,7 @@ public class PrivilegeCorrectionBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectPrivilegeCorrections", filterWrapper);
     }
 
-    public Integer getPrivilegeCorrectionCount(FilterWrapper<PrivilegeCorrection> filterWrapper){
+    public Long getPrivilegeCorrectionCount(FilterWrapper<PrivilegeCorrection> filterWrapper){
         return sqlSession().selectOne(NS + ".selectPrivilegeCorrectionsCount", filterWrapper);
     }
 }

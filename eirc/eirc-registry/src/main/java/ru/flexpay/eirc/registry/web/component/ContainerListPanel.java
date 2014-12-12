@@ -42,8 +42,8 @@ public class ContainerListPanel<T> extends Panel {
             }
 
             @Override
-            protected int getSize() {
-                return containers.size();
+            protected Long getSize() {
+                return Long.valueOf(containers.size());
             }
         };
 

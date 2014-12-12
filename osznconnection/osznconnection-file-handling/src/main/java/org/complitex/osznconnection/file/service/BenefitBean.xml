@@ -142,7 +142,7 @@
         </if>
     </sql>
 
-    <select id="count" resultType="int" parameterType="org.complitex.osznconnection.file.entity.example.BenefitExample">
+    <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.BenefitExample">
         SELECT
             COUNT(DISTINCT b.`id`)
         FROM

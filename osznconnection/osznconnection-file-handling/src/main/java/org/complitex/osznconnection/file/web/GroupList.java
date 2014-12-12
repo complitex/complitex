@@ -17,7 +17,10 @@ import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.scroll.ScrollListBehavior;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileGroup;
+import org.complitex.osznconnection.file.entity.RequestFileGroupFilter;
+import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
@@ -223,7 +226,7 @@ public class GroupList extends ScrollListPage {
         }
 
         @Override
-        protected int getSize(RequestFileGroupFilter filter) {
+        protected Long getCount(RequestFileGroupFilter filter) {
             return requestFileGroupBean.getRequestFileGroupsCount(filter);
         }
 

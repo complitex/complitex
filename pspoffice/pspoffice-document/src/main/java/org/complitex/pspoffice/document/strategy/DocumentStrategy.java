@@ -4,21 +4,22 @@
  */
 package org.complitex.pspoffice.document.strategy;
 
-import static com.google.common.collect.Lists.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.description.EntityAttributeValueType;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  *
@@ -43,13 +44,13 @@ public class DocumentStrategy extends TemplateStrategy {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Transactional
+
     public void disable(Document document, Date endDate) {
         document.setEndDate(endDate);
         changeActivity(document, false);
     }
 
-    @Transactional
+
     public Document findById(long id) {
         DomainObject object = super.findById(id, true);
         if (object != null) {

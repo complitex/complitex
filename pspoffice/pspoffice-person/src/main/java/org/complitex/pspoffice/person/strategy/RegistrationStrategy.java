@@ -12,7 +12,6 @@ import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.description.EntityAttributeValueType;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.Strategy;
@@ -86,13 +85,13 @@ public class RegistrationStrategy extends Strategy {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Transactional
+
     @Override
     public Registration findById(Long id, boolean runAsAdmin) {
         return findById(id, runAsAdmin, true, true, true);
     }
 
-    @Transactional
+
     public Registration findById(long id, boolean runAsAdmin, boolean loadPerson, boolean loadOwnerRelationship,
             boolean loadRegistrationType) {
         DomainObject registrationObject = super.findById(id, runAsAdmin);
@@ -112,14 +111,14 @@ public class RegistrationStrategy extends Strategy {
         return registration;
     }
 
-    @Transactional
+
     private void loadPerson(Registration registration) {
         long personId = registration.getAttribute(PERSON).getValueId();
         Person person = personStrategy.findById(personId, true, true, false, false, false);
         registration.setPerson(person);
     }
 
-    @Transactional
+
     private void loadOwnerRelationship(Registration registration) {
         Attribute ownerRelationshipAttribute = registration.getAttribute(OWNER_RELATIONSHIP);
         if (ownerRelationshipAttribute != null) {
@@ -131,7 +130,7 @@ public class RegistrationStrategy extends Strategy {
         }
     }
 
-    @Transactional
+
     private void loadRegistrationType(Registration registration) {
         long registrationTypeId = registration.getAttribute(REGISTRATION_TYPE).getValueId();
         DomainObject registrationType = registrationTypeStrategy.findById(registrationTypeId, true);
@@ -159,14 +158,14 @@ public class RegistrationStrategy extends Strategy {
                 setValue(String.valueOf(userId));
     }
 
-    @Transactional
+
     @Override
     public void insert(DomainObject registration, Date insertDate) {
         setEditedByUserId(registration);
         super.insert(registration, insertDate);
     }
 
-    @Transactional
+
     @Override
     public void update(DomainObject oldRegistration, DomainObject newRegistration, Date updateDate) {
         setEditedByUserId(newRegistration);
@@ -279,13 +278,13 @@ public class RegistrationStrategy extends Strategy {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Transactional
+
     public void disable(Registration registration, Date endDate) {
         registration.setEndDate(endDate);
         changeActivity(registration, false);
     }
 
-    @Transactional
+
     public boolean validateDuplicatePerson(long apartmentCardId, long personId) {
         Map<String, Long> params = ImmutableMap.of("apartmentCardRegistrationAT", ApartmentCardStrategy.REGISTRATIONS,
                 "registrationPersonAT", PERSON, "personId", personId, "apartmentCardId", apartmentCardId);

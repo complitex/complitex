@@ -21,7 +21,7 @@
             <ejb-name>StreetStrategy</ejb-name>
             <interceptor-class>org.complitex.pspoffice.address.street.StreetStrategyInterceptor</interceptor-class>
             <method>
-                <method-name>count</method-name>
+                <method-name>getCount</method-name>
             </method>
         </interceptor-binding>
     </assembly-descriptor>

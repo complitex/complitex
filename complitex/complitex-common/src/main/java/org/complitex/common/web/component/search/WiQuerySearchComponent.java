@@ -330,7 +330,7 @@ public class WiQuerySearchComponent extends Panel {
         DomainObjectExample example = new DomainObjectExample();
         strategy.configureExample(example, WiQuerySearchComponent.<Long>transformToIds(previousInfo), null);
         example.setStatus(getShowMode(strategy.getEntityTable()).name());
-        return strategy.count(example) == 1;
+        return strategy.getCount(example) == 1;
     }
 
     protected final void onUpdate(AjaxRequestTarget target, String entity) {

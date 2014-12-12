@@ -162,7 +162,7 @@ public class UserList extends ScrollListPage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 return userBean.getUsersCount(filterModel.getObject());
             }
         };

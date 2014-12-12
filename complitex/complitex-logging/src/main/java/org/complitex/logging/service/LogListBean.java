@@ -1,7 +1,6 @@
 package org.complitex.logging.service;
 
 import org.complitex.common.entity.Log;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 
 import javax.ejb.Stateless;
@@ -15,27 +14,27 @@ import java.util.List;
 public class LogListBean extends AbstractBean {
     public static final String STATEMENT_PREFIX = LogListBean.class.getCanonicalName();
 
-    @Transactional
+
     public List<Log> getLogs(LogFilter filter){
         return sqlSession().selectList(STATEMENT_PREFIX + ".selectLogs", filter);
     }
 
-    @Transactional
-    public int getLogsCount(LogFilter filter){
-        return (Integer) sqlSession().selectOne(STATEMENT_PREFIX + ".selectLogsCount", filter);
+
+    public Long getLogsCount(LogFilter filter){
+        return sqlSession().selectOne(STATEMENT_PREFIX + ".selectLogsCount", filter);
     }
 
-    @Transactional
+
     public List<String> getModules(){
         return sqlSession().selectList(STATEMENT_PREFIX + ".selectModules");
     }
 
-    @Transactional
+
     public List<String> getControllers(){
         return sqlSession().selectList(STATEMENT_PREFIX + ".selectControllers");
     }
 
-    @Transactional
+
     public List<String> getModels(){
         return sqlSession().selectList(STATEMENT_PREFIX + ".selectModels");
     }

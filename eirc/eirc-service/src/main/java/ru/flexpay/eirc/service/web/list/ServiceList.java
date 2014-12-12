@@ -102,9 +102,9 @@ public class ServiceList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 FilterWrapper<Service> filterWrapper = FilterWrapper.of(new Service());
-                return serviceBean.count(filterWrapper);
+                return serviceBean.getCount(filterWrapper);
             }
         };
         dataProvider.setSort("service_name", SortOrder.ASCENDING);

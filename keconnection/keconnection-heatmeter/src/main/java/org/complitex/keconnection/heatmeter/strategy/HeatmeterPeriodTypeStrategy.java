@@ -11,7 +11,6 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.strategy.DeleteException;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.ResourceUtil;
@@ -82,7 +81,7 @@ public class HeatmeterPeriodTypeStrategy extends TemplateStrategy {
         return (List<DomainObject>) getList(example);
     }
 
-    @Transactional
+
     @Override
     protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
         if (RESERVED_HEATMETER_PERIOD_TYPE_IDS.contains(objectId)) {

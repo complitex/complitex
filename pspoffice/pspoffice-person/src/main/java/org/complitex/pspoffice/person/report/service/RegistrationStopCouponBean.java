@@ -1,28 +1,29 @@
 package org.complitex.pspoffice.person.report.service;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.pspoffice.person.report.entity.RegistrationStopCoupon;
-import org.complitex.pspoffice.person.strategy.entity.PersonName.PersonNameType;
-import org.complitex.pspoffice.person.strategy.service.PersonNameBean;
-import static com.google.common.collect.Sets.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.TreeSet;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
+import org.complitex.pspoffice.person.report.entity.RegistrationStopCoupon;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
+import org.complitex.pspoffice.person.strategy.entity.PersonName.PersonNameType;
 import org.complitex.pspoffice.person.strategy.entity.Registration;
+import org.complitex.pspoffice.person.strategy.service.PersonNameBean;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.TreeSet;
+
+import static com.google.common.collect.Sets.newTreeSet;
 import static org.complitex.pspoffice.report.util.ReportDateFormatter.format;
 
 /**
@@ -42,7 +43,7 @@ public class RegistrationStopCouponBean extends AbstractBean {
     @EJB
     private LocaleBean localeBean;
 
-    @Transactional
+
     public RegistrationStopCoupon get(Registration registration, String addressEntity, long addressId,
             DictionaryFwSession session) {
         RegistrationStopCoupon coupon = new RegistrationStopCoupon();
@@ -79,7 +80,7 @@ public class RegistrationStopCouponBean extends AbstractBean {
         return info;
     }
 
-    @Transactional
+
     public String getPreviousNames(long personId, Locale locale) {
         final long localeId = localeBean.convert(locale).getId();
         List<Date> results = sqlSession().selectList(MAPPING_NAMESPACE + ".findPreviousNameStartDates",

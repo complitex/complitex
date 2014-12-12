@@ -10,7 +10,6 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.strategy.web.AbstractComplexAttributesPanel;
 import org.complitex.common.strategy.web.validate.IValidator;
 import org.complitex.common.util.AttributeUtil;
@@ -94,7 +93,7 @@ public class TarifStrategy extends TemplateStrategy {
         return object != null ? object.getId() : null;
     }
 
-    @Transactional
+
     public Long validateCode(Long id, String code) {
         Map<String, Object> params = ImmutableMap.<String, Object>of("codeAT", CODE, "code", code);
         List<Long> results = sqlSession().selectList(MAPPING_NAMESPACE + ".validateCode", params);

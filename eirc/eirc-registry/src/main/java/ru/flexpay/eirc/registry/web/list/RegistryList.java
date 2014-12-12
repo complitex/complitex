@@ -29,7 +29,6 @@ import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.image.StaticImage;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.template.web.component.toolbar.DeleteItemButton;
@@ -181,14 +180,14 @@ public class RegistryList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 FilterWrapper<Registry> filterWrapper = FilterWrapper.of(new Registry());
                 filterWrapper.setLike(true);
 
                 setDate(filterWrapper, RegistryBean.CREATION_DATE_RANGE, creationDateModel.getObject());
                 setDate(filterWrapper, RegistryBean.LOAD_DATE_RANGE, loadDateModel.getObject());
 
-                return registryBean.count(filterWrapper);
+                return registryBean.getCount(filterWrapper);
             }
         };
         dataProvider.setSort("creation_date", SortOrder.ASCENDING);

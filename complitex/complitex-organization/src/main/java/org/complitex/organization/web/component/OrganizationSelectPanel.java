@@ -114,9 +114,9 @@ public class OrganizationSelectPanel extends Panel {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
-                return organizationStrategy.count(example);
+                return organizationStrategy.getCount(example);
             }
         };
     }

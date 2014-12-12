@@ -21,7 +21,7 @@
         </if>
     </sql>
 
-    <select id="count" resultType="integer" parameterType="DomainObjectExample">
+    <select id="count" resultType="long" parameterType="DomainObjectExample">
         SELECT COUNT(1) FROM `street` e WHERE
         <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
         <include refid="org.complitex.pspoffice.address.street.Street.pspStreetFilter"/>

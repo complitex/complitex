@@ -183,7 +183,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
         }
     }
 
-    protected abstract int getSize(F filter);
+    protected abstract Long getCount(F filter);
 
     protected abstract List<M> getObjects(F filter);
 
@@ -345,8 +345,8 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
             }
 
             @Override
-            protected int getSize() {
-                return AbstractProcessableListPanel.this.getSize(model.getObject());
+            protected Long getSize() {
+                return AbstractProcessableListPanel.this.getCount(model.getObject());
             }
         };
         dataProvider.setSort(filter.getSortProperty(), SortOrder.DESCENDING);

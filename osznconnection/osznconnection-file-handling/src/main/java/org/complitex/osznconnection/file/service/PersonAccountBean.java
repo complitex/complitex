@@ -3,7 +3,7 @@ package org.complitex.osznconnection.file.service;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.PersonAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class PersonAccountBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectPersonAccounts", filterWrapper);
     }
 
-    public Integer getPersonAccountsCount(FilterWrapper<PersonAccount> filterWrapper){
+    public Long getPersonAccountsCount(FilterWrapper<PersonAccount> filterWrapper){
         sessionBean.prepareFilterForPermissionCheck(filterWrapper);
 
         return sqlSession().selectOne(NS + ".selectPersonAccountsCount", filterWrapper);

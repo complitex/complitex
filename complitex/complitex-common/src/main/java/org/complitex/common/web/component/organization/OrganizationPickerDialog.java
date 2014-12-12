@@ -84,8 +84,8 @@ public class OrganizationPickerDialog extends Panel {
             }
 
             @Override
-            protected int getSize() {
-                return organizationStrategy.count(example);
+            protected Long getSize() {
+                return organizationStrategy.getCount(example);
             }
         };
 

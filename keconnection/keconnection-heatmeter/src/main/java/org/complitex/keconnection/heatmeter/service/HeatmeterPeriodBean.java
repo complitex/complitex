@@ -1,6 +1,5 @@
 package org.complitex.keconnection.heatmeter.service;
 
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.mybatis.XmlMapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterPeriod;
@@ -24,7 +23,7 @@ public abstract class HeatmeterPeriodBean<T extends HeatmeterPeriod> extends Abs
 
     public abstract List<T> getList(Long heatmeterId, Date om);
 
-    @Transactional
+
     public void save(T object, Date om) {
         if (object.getId() == null) {
             sqlSession().insert("insertHeatmeterPeriod", object);
@@ -35,20 +34,20 @@ public abstract class HeatmeterPeriodBean<T extends HeatmeterPeriod> extends Abs
         }
     }
 
-    @Transactional
+
     public void insertAdditionalInfo(T o, Date om) {
     }
 
-    @Transactional
+
     public void updateAdditionalInfo(T o, Date om) {
     }
 
-    @Transactional
+
     public void delete(Long id) {
         sqlSession().delete("deleteHeatmeterPeriod", id);
     }
 
-    @Transactional
+
     public void save(Long heatmeterId, Date om, List<T> list) {
         List<T> db = om != null ? getList(heatmeterId, om) : new ArrayList<T>();
 

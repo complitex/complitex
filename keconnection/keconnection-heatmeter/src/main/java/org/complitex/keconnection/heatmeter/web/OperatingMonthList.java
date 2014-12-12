@@ -107,7 +107,7 @@ public class OperatingMonthList extends TemplatePage{
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 return operatingMonthBean.getOperatingMonthsCount(filterModel.getObject());
             }
 

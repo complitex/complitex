@@ -55,16 +55,16 @@ public class StreetStrategyDelegate extends StreetStrategy {
     }
 
     @Override
-    public int count(DomainObjectExample example) {
+    public Long getCount(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
-            return 0;
+            return 0L;
         }
 
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
         prepareExampleForBuildingCheck(example);
 
-        return (Integer) sqlSession().selectOne(PSP_STREET_NAMESPACE + "." + COUNT_OPERATION, example);
+        return sqlSession().selectOne(PSP_STREET_NAMESPACE + "." + COUNT_OPERATION, example);
     }
 
     private void prepareExampleForBuildingCheck(DomainObjectExample example) {

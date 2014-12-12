@@ -24,7 +24,7 @@ public class ServiceProviderAccountCorrectionBean extends AbstractBean{
         return sqlSession().selectList(NS + ".selectServiceProviderAccountCorrections", filterWrapper);
     }
 
-    public Integer getServiceProviderAccountCorrectionsCount(FilterWrapper<ServiceProviderAccountCorrection> filterWrapper){
+    public Long getServiceProviderAccountCorrectionsCount(FilterWrapper<ServiceProviderAccountCorrection> filterWrapper){
         return sqlSession().selectOne(NS + ".selectServiceProviderAccountCorrectionsCount", filterWrapper);
     }
 

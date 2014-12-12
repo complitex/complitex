@@ -161,12 +161,12 @@ public class EircAccountList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 FilterWrapper<EircAccount> filterWrapper = FilterWrapper.of(filterObject);
 
                 setShowModel(filterWrapper);
 
-                return eircAccountBean.count(filterWrapper);
+                return eircAccountBean.getCount(filterWrapper);
             }
 
             private void setShowModel(FilterWrapper<EircAccount> filterWrapper) {

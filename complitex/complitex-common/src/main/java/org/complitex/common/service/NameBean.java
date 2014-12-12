@@ -1,7 +1,6 @@
 package org.complitex.common.service;
 
 import org.complitex.common.entity.Name;
-import org.complitex.common.mybatis.Transactional;
 
 import javax.ejb.Stateless;
 import java.util.HashMap;
@@ -60,7 +59,7 @@ public class NameBean extends AbstractBean{
 
     /*select id by name*/
 
-    @Transactional
+
     public Long getFirstNameId(String firstName, boolean createIfNotExist){
         Long id = (Long) sqlSession().selectOne(NS + ".selectFirstNameId", firstName);
 
@@ -71,7 +70,7 @@ public class NameBean extends AbstractBean{
         return id;
     }
 
-    @Transactional
+
     public Long getMiddleNameId(String middleName, boolean createIfNotExist){
         Long id = (Long) sqlSession().selectOne(NS + ".selectMiddleNameId", middleName);
 
@@ -82,7 +81,7 @@ public class NameBean extends AbstractBean{
         return id;
     }
 
-    @Transactional
+
     public Long getLastNameId(String lastName, boolean createIfNotExist){
         Long id = (Long) sqlSession().selectOne(NS + ".selectLastNameId", lastName);
 
@@ -95,7 +94,7 @@ public class NameBean extends AbstractBean{
 
     /*save name*/
 
-    @Transactional
+
     public Long saveFirstName(String firstName){
         Name name = new Name(formatCase(firstName));
 
@@ -104,7 +103,7 @@ public class NameBean extends AbstractBean{
         return name.getId();
     }
 
-    @Transactional
+
     public Long saveMiddleName(String middleName){
         Name name = new Name(formatCase(middleName));
 
@@ -113,7 +112,7 @@ public class NameBean extends AbstractBean{
         return name.getId();
     }
 
-    @Transactional
+
     public Long  saveLastName(String lastName){
         Name name = new Name(formatCase(lastName));
 

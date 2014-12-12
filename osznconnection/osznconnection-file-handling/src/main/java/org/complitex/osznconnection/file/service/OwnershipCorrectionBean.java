@@ -3,7 +3,6 @@ package org.complitex.osznconnection.file.service;
 import com.google.common.collect.ImmutableMap;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.OwnershipCorrection;
 
@@ -26,7 +25,7 @@ public class OwnershipCorrectionBean extends AbstractBean {
      * @param calculationCenterId
      * @return
      */
-    @Transactional
+
     public Long findInternalOwnership(String correction, long calculationCenterId) {
         Map<String, Object> params = ImmutableMap.<String, Object>of("correction", correction, "organizationId", calculationCenterId);
         List<Long> ids = sqlSession().selectList(NS + ".findInternalOwnership", params);
@@ -42,7 +41,7 @@ public class OwnershipCorrectionBean extends AbstractBean {
      * @param osznId
      * @return
      */
-    @Transactional
+
     public String findOwnershipCode(long objectId, long osznId, long userOrganizationId) {
         Map<String, Long> params = ImmutableMap.of("objectId", objectId, "organizationId", osznId,
                 "userOrganizationId", userOrganizationId);
@@ -73,7 +72,7 @@ public class OwnershipCorrectionBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectOwnershipCorrections", filterWrapper);
     }
 
-    public Integer getOwnershipCorrectionsCount(FilterWrapper<OwnershipCorrection> filterWrapper){
+    public Long getOwnershipCorrectionsCount(FilterWrapper<OwnershipCorrection> filterWrapper){
         return sqlSession().selectOne(NS + ".selectOwnershipCorrectionsCount", filterWrapper);
     }
 }

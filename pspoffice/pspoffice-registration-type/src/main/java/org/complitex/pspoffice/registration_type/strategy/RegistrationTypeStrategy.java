@@ -11,7 +11,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.StringCulture;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.strategy.DeleteException;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
@@ -90,7 +89,7 @@ public class RegistrationTypeStrategy extends TemplateStrategy {
         return new String[]{SecurityRole.REFERENCE_DATA_MODULE_VIEW};
     }
 
-    @Transactional
+
     @Override
     protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
         if (RESERVED_INSTANCE_IDS.contains(objectId)) {

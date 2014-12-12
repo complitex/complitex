@@ -1,7 +1,6 @@
 package ru.complitex.salelog.service;
 
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import ru.complitex.salelog.entity.CallGirl;
 
@@ -23,11 +22,11 @@ public class CallGirlBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectCallGirls", filter);
     }
 
-    public int count(FilterWrapper<CallGirl> filter) {
+    public Long getCount(FilterWrapper<CallGirl> filter) {
         return sqlSession().selectOne(NS + ".countCallGirls", filter);
     }
 
-    @Transactional
+
     public void save(CallGirl callGirl) {
         if (callGirl.getId() == null) {
             create(callGirl);

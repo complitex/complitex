@@ -1,10 +1,9 @@
 package org.complitex.correction.service;
 
-import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
+import org.complitex.correction.entity.OrganizationCorrection;
 
 import javax.ejb.Stateless;
 import java.util.List;
@@ -30,7 +29,7 @@ public class OrganizationCorrectionBean extends AbstractBean{
         return sqlSession(dataSource).selectList(NS + ".selectOrganizationCorrections", filterWrapper);
     }
 
-    public Integer getOrganizationCorrectionsCount(FilterWrapper<OrganizationCorrection> filterWrapper){
+    public Long getOrganizationCorrectionsCount(FilterWrapper<OrganizationCorrection> filterWrapper){
         return sqlSession().selectOne(NS + ".selectOrganizationCorrectionsCount", filterWrapper);
     }
 
@@ -42,7 +41,7 @@ public class OrganizationCorrectionBean extends AbstractBean{
         }
     }
 
-    @Transactional
+
     public void delete(OrganizationCorrection organizationCorrection){
         sqlSession().delete(NS_CORRECTION + ".deleteCorrection", organizationCorrection);
     }

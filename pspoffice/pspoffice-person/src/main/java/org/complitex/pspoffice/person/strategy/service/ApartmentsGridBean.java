@@ -71,8 +71,8 @@ public class ApartmentsGridBean extends AbstractBean {
         return params;
     }
 
-    public int count(ApartmentsGridFilter filter) {
-        return (Integer) sqlSession().selectOne(MAPPING + ".count", newParamsMap(filter));
+    public Long getCount(ApartmentsGridFilter filter) {
+        return sqlSession().selectOne(MAPPING + ".count", newParamsMap(filter));
     }
 
     private List<? extends DomainObject> findRooms(long apartmentId) {

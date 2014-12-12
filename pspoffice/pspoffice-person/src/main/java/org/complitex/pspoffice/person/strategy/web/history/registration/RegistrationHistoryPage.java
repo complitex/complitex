@@ -4,8 +4,6 @@
  */
 package org.complitex.pspoffice.person.strategy.web.history.registration;
 
-import java.util.Date;
-import javax.ejb.EJB;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -16,19 +14,25 @@ import org.complitex.pspoffice.person.strategy.entity.Registration;
 import org.complitex.pspoffice.person.strategy.web.edit.registration.RegistrationEdit;
 import org.complitex.pspoffice.person.strategy.web.history.AbstractHistoryPage;
 
+import javax.ejb.EJB;
+import java.util.Date;
+
 /**
  *
  * @author Artem
  */
 public class RegistrationHistoryPage extends AbstractHistoryPage {
-
     @EJB
     private RegistrationStrategy registrationStrategy;
+
+    @EJB
+    private ApartmentCardStrategy apartmentCardStrategy;
+
     private final ApartmentCard apartmentCard;
     private final Registration registration;
 
     public RegistrationHistoryPage(ApartmentCard apartmentCard, Registration registration) {
-        super(registration.getId(), new StringResourceModel("title", null, new Object[]{registration.getId()}),
+        super(registration.getId(), new StringResourceModel("title", null, registration.getId()),
                 new ResourceModel("object_link_message"));
         this.apartmentCard = apartmentCard;
         this.registration = registration;
@@ -46,13 +50,13 @@ public class RegistrationHistoryPage extends AbstractHistoryPage {
 
     @Override
     protected Component newHistoryContent(String id, long objectId, Date currentEndDate) {
-        return new RegistrationHistoryPanel(id, objectId, ApartmentCardStrategy.getAddressEntity(apartmentCard),
+        return new RegistrationHistoryPanel(id, objectId, apartmentCardStrategy.getAddressEntity(apartmentCard),
                 apartmentCard.getAddressId(), currentEndDate);
     }
 
     @Override
     protected void returnBackToObject(long objectId) {
-        setResponsePage(new RegistrationEdit(apartmentCard, ApartmentCardStrategy.getAddressEntity(apartmentCard),
+        setResponsePage(new RegistrationEdit(apartmentCard, apartmentCardStrategy.getAddressEntity(apartmentCard),
                 apartmentCard.getAddressId(), registration));
     }
 }

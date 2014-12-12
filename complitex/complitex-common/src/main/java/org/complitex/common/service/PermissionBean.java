@@ -5,7 +5,6 @@ import com.google.common.collect.Sets;
 import org.complitex.common.entity.Permission;
 import org.complitex.common.entity.Subject;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
-import org.complitex.common.mybatis.Transactional;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -95,7 +94,7 @@ public class PermissionBean extends AbstractBean{
         return permissionId;
     }
 
-    @Transactional
+
     public Long getPermission(String table, List<Subject> subjects){
         if (subjects == null || subjects.size() == 0){
             return null;
@@ -150,7 +149,7 @@ public class PermissionBean extends AbstractBean{
         return permissionId;
     }
 
-    @Transactional
+
     public boolean isOrganizationPermissionExists(String organizationTable, long organizationId){
         Map<String, Object> params = Maps.newHashMap();
         params.put("organizationTable", organizationTable);

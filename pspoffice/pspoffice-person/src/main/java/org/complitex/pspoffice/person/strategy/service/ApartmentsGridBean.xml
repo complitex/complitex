@@ -45,7 +45,7 @@
         </if>
     </sql>
     
-    <select id="count" parameterType="map" resultType="int">
+    <select id="count" parameterType="map" resultType="long">
         SELECT (SELECT COUNT(DISTINCT a.`object_id`) FROM `apartment` a
             <include refid="org.complitex.pspoffice.person.strategy.service.ApartmentsGridBean.apartmentsJoin"/>
             <include refid="org.complitex.pspoffice.person.strategy.service.ApartmentsGridBean.apartmentsWhere"/>

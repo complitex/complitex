@@ -2,7 +2,6 @@ package org.complitex.common.service;
 
 import com.beust.jcommander.internal.Maps;
 import com.google.common.collect.ImmutableMap;
-import org.complitex.common.mybatis.Transactional;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -140,7 +139,7 @@ public class TestBean extends AbstractBean {
         System.out.println(1/0);
     }
 
-    @Transactional
+
     public Long testSaveTransactional(String value) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("value", value);
@@ -148,7 +147,7 @@ public class TestBean extends AbstractBean {
         return (Long)params.get("id");
     }
 
-    @Transactional
+
     public List<Long> testSelectTransactional(String value) {
         return testSelectSimple(value);
     }

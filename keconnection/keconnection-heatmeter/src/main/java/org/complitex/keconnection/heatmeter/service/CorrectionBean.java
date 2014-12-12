@@ -6,18 +6,17 @@ package org.complitex.keconnection.heatmeter.service;
 
 import com.google.common.collect.Maps;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.keconnection.heatmeter.entity.Correction;
+import org.complitex.keconnection.heatmeter.entity.example.CorrectionExample;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Map;
-import org.complitex.keconnection.heatmeter.entity.Correction;
-import org.complitex.keconnection.heatmeter.entity.example.CorrectionExample;
 
 /**
  * Обобщенный класс для работы с коррекциями.
@@ -53,7 +52,7 @@ public class CorrectionBean extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public List<Correction> find(CorrectionExample example) {
         keConnectionSessionBean.prepareExampleForPermissionCheck(example);
         List<Correction> corrections = sqlSession().selectList(CORRECTION_BEAN_MAPPING_NAMESPACE + ".find", example);
@@ -77,13 +76,14 @@ public class CorrectionBean extends AbstractBean {
         }
     }
 
-    @Transactional
-    public int count(CorrectionExample example) {
+
+    public Long getCount(CorrectionExample example) {
         keConnectionSessionBean.prepareExampleForPermissionCheck(example);
-        return (Integer) sqlSession().selectOne(CORRECTION_BEAN_MAPPING_NAMESPACE + ".count", example);
+
+        return sqlSession().selectOne(CORRECTION_BEAN_MAPPING_NAMESPACE + ".count", example);
     }
 
-    @Transactional
+
     public Correction findById(String entity, Long correctionId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("entity", entity);
@@ -98,7 +98,7 @@ public class CorrectionBean extends AbstractBean {
         return correction;
     }
 
-    @Transactional
+
     protected Long getCorrectionId(String entity, Long objectId, Long organizationId, Long internalOrganizationId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("entity", entity);
@@ -109,22 +109,22 @@ public class CorrectionBean extends AbstractBean {
         return (Long) sqlSession().selectOne(CORRECTION_BEAN_MAPPING_NAMESPACE + ".findByObjectId", params);
     }
 
-    @Transactional
+
     public void update(Correction correction) {
         sqlSession().update(CORRECTION_BEAN_MAPPING_NAMESPACE + ".update", correction);
     }
 
-    @Transactional
+
     public void insert(Correction correction) {
         sqlSession().insert(CORRECTION_BEAN_MAPPING_NAMESPACE + ".insert", correction);
     }
 
-    @Transactional
+
     public void delete(Correction correction) {
         sqlSession().delete(CORRECTION_BEAN_MAPPING_NAMESPACE + ".delete", correction);
     }
 
-    @Transactional
+
     public boolean checkExistence(Correction correction) {
         return (Integer) sqlSession().selectOne(CORRECTION_BEAN_MAPPING_NAMESPACE + ".checkExistence", correction) > 0;
     }

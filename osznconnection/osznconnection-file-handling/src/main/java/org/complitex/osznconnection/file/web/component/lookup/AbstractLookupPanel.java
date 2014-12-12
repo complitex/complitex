@@ -58,6 +58,9 @@ public abstract class AbstractLookupPanel<T extends AbstractRequest> extends Pan
     @EJB(name = "OsznAddressService")
     private AddressService addressService;
 
+    @EJB
+    private StreetStrategy streetStrategy;
+
     private IModel<String> apartmentModel;
     private IModel<List<? extends AccountDetail>> accountDetailsModel;
     private IModel<AccountDetail> accountDetailModel;
@@ -365,7 +368,7 @@ public abstract class AbstractLookupPanel<T extends AbstractRequest> extends Pan
     }
 
     protected Long getStreetType(DomainObject streetObject) {
-        return streetObject == null ? null : StreetStrategy.getStreetType(streetObject);
+        return streetObject == null ? null : streetStrategy.getStreetType(streetObject);
     }
 
     protected abstract void initInternalAddress(T request, Long cityId, Long streetId, Long streetTypeId, Long buildingId, String apartment);

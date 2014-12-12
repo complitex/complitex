@@ -127,7 +127,7 @@
         ${orderLimit}
     </select>
 
-    <select id="selectPersonAccountsCount" resultType="int" parameterType="org.complitex.common.entity.FilterWrapper">
+    <select id="selectPersonAccountsCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
         select count(1) from `person_account` pa
         <include refid="selectPersonAccountsWhere"/>
     </select>

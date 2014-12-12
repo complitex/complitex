@@ -15,7 +15,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
-    <select id="selectServiceProviderAccountCorrectionsCount" resultType="int"
+    <select id="selectServiceProviderAccountCorrectionsCount" resultType="long"
             parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `service_provider_account_correction` c
         <where>

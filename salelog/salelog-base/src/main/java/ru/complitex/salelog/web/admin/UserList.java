@@ -29,7 +29,10 @@ import org.complitex.common.entity.UserOrganization;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringUtil;
-import org.complitex.common.web.component.*;
+import org.complitex.common.web.component.AttributeColumnsPanel;
+import org.complitex.common.web.component.AttributeFiltersPanel;
+import org.complitex.common.web.component.AttributeHeadersPanel;
+import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
@@ -159,7 +162,7 @@ public class UserList extends ScrollListPage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 return userBean.getUsersCount(filterModel.getObject());
             }
         };

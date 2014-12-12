@@ -28,7 +28,7 @@ public class ServiceCorrectionBean extends AbstractBean {
         return sqlSession(dataSource).selectList(NS + ".selectServiceCorrections", filterWrapper);
     }
 
-    public Integer getServiceCorrectionsCount(FilterWrapper<ServiceCorrection> filterWrapper){
+    public Long getServiceCorrectionsCount(FilterWrapper<ServiceCorrection> filterWrapper){
         return sqlSession().selectOne(NS + ".selectServiceCorrectionsCount", filterWrapper);
     }
 

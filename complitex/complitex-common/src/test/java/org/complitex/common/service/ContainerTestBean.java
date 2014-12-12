@@ -1,7 +1,5 @@
 package org.complitex.common.service;
 
-import org.complitex.common.mybatis.Transactional;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -43,7 +41,7 @@ public class ContainerTestBean extends AbstractBean {
         assertFalse("Value is exists", testBean.isExistInNewTransaction("test2"));
     }
 
-    @Transactional
+
     public void executeInOneTransactionWithTransactional() {
         testBean.deleteInNewTransaction(null);
 

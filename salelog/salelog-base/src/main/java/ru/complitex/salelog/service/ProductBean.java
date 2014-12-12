@@ -1,7 +1,6 @@
 package ru.complitex.salelog.service;
 
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import ru.complitex.salelog.entity.Product;
 
@@ -23,11 +22,11 @@ public class ProductBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectProducts", filter);
     }
 
-    public int count(FilterWrapper<Product> filter) {
+    public Long getCount(FilterWrapper<Product> filter) {
         return sqlSession().selectOne(NS + ".countProducts", filter);
     }
 
-    @Transactional
+
     public void save(Product product) {
         if (product.getId() == null) {
             create(product);

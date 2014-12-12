@@ -8,7 +8,6 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -92,7 +91,7 @@ public class ServiceProviderTypeStrategy extends TemplateStrategy {
         return AttributeUtil.getStringCultureValue(object, NAME, locale);
     }
 
-    @Transactional
+
     @Override
     public DomainObject findById(Long id, boolean runAsAdmin) {
         if (runAsAdmin) {

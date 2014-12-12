@@ -95,8 +95,8 @@ public final class HeatmeterCorrectionList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
-                return heatmeterCorrectionBean.count(filterModel.getObject());
+            protected Long getSize() {
+                return heatmeterCorrectionBean.getCount(filterModel.getObject());
             }
 
             @Override

@@ -152,7 +152,7 @@
 
     </select>
 
-    <select id="countRegistries" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer">
+    <select id="countRegistries" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
 
         select
           count(r.`id`)

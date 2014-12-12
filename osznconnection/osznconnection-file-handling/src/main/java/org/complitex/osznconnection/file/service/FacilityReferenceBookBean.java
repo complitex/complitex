@@ -4,18 +4,17 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.correction.entity.CityCorrection;
-import org.complitex.correction.entity.StreetCorrection;
-import org.complitex.correction.entity.StreetTypeCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.Log;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.*;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.util.ResourceUtil;
+import org.complitex.correction.entity.CityCorrection;
+import org.complitex.correction.entity.StreetCorrection;
+import org.complitex.correction.entity.StreetTypeCorrection;
+import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.process.FacilityStreetLoadTaskBean;
@@ -65,7 +64,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
     @EJB
     private ModuleBean moduleBean;
 
-    @Transactional
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void insert(List<AbstractRequest> requests) {
         if (requests != null && !requests.isEmpty()) {
@@ -91,7 +90,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void delete(long requestFileId, RequestFileType requestFileType) {
         sqlSession().delete(NS + ".deleteFacilityReferences", of("requestFileId", requestFileId, "table",
                 getTableName(requestFileType)));
@@ -103,7 +102,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectFacilityStreetTypes", filterWrapper);
     }
 
-    public Integer getFacilityStreetTypesCount(FilterWrapper<FacilityStreetType> filterWrapper){
+    public Long getFacilityStreetTypesCount(FilterWrapper<FacilityStreetType> filterWrapper){
         return sqlSession().selectOne(NS + ".selectFacilityStreetTypesCount", filterWrapper);
     }
 
@@ -113,7 +112,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectFacilityStreets", filterWrapper);
     }
 
-    public Integer getFacilityStreetsCount(FilterWrapper<FacilityStreet> filterWrapper){
+    public Long getFacilityStreetsCount(FilterWrapper<FacilityStreet> filterWrapper){
         return sqlSession().selectOne(NS + ".selectFacilityStreetsCount", filterWrapper);
     }
 
@@ -133,7 +132,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectFacilityTarifs", filterWrapper);
     }
 
-    public Integer getFacilityTarifsCount(FilterWrapper<FacilityTarif> filterWrapper){
+    public Long getFacilityTarifsCount(FilterWrapper<FacilityTarif> filterWrapper){
         return sqlSession().selectOne(NS + ".selectFacilityTarifsCount", filterWrapper);
     }
 

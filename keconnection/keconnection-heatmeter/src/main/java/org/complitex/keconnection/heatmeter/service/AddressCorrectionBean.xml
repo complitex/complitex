@@ -420,7 +420,7 @@
         <choose><when test="asc">ASC</when><otherwise>DESC</otherwise></choose>
     </sql>
 
-    <select id="countBuildings" resultType="int" parameterType="org.complitex.keconnection.heatmeter.entity.example.CorrectionExample">
+    <select id="countBuildings" resultType="long" parameterType="org.complitex.keconnection.heatmeter.entity.example.CorrectionExample">
         SELECT COUNT(distinct c.`id`) FROM `building_correction` c
         <include refid="buildingJoin"/>
         <include refid="buildingFilter"/>

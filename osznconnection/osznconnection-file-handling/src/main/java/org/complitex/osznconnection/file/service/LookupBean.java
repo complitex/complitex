@@ -1,9 +1,10 @@
 package org.complitex.osznconnection.file.service;
 
 import org.complitex.common.entity.Cursor;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
@@ -35,7 +36,7 @@ public class LookupBean extends AbstractBean {
      * Делегирует всю работу AddressService.resolveOutgoingAddress().
      * @param request
      */
-    @Transactional
+
     public void resolveOutgoingAddress(AbstractAccountRequest request, long userOrganizationId) {
         addressService.resolveOutgoingAddress(request, calculationCenterBean.getContextWithAnyCalculationCenter(userOrganizationId));
     }
@@ -51,7 +52,7 @@ public class LookupBean extends AbstractBean {
                 district, streetType, street, buildingNumber, buildingCorp, apartment, date);
     }
 
-    @Transactional
+
     @TransactionAttribute(TransactionAttributeType.NEVER)
     public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district, String account,
             long userOrganizationId) throws DBException, UnknownAccountNumberTypeException {

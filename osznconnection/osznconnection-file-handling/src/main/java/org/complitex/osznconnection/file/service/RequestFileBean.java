@@ -1,7 +1,6 @@
 package org.complitex.osznconnection.file.service;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.service.executor.ExecuteException;
@@ -126,12 +125,12 @@ public class RequestFileBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectSubsidyTarifFiles", filter);
     }
 
-    public int size(RequestFileFilter filter) {
+    public Long getCount(RequestFileFilter filter) {
         sessionBean.prepareFilterForPermissionCheck(filter);
         return sqlSession().selectOne(NS + ".selectRequestFilesCount", filter);
     }
 
-    @Transactional
+
     public void save(RequestFile requestFile) {
         if (requestFile.getId() == null) {
             sqlSession().insert(NS + ".insertRequestFile", requestFile);
@@ -151,7 +150,7 @@ public class RequestFileBean extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void delete(RequestFile requestFile) {
         if (requestFile.getType() != null && requestFile.getId() != null) {
             switch (requestFile.getType()) {
@@ -197,7 +196,7 @@ public class RequestFileBean extends AbstractBean {
         return sqlSession().selectOne(NS + ".selectIsLoaded", requestFile);
     }
 
-    @Transactional
+
     public void deleteSubsidyTarifFiles(Long organizationId) {
         List<RequestFile> subsidyTarifs = sqlSession().selectList(NS + ".findSubsidyTarifFiles", organizationId);
         for (RequestFile subsidyTarif : subsidyTarifs) {
@@ -205,7 +204,7 @@ public class RequestFileBean extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void deleteFacilityReferenceFiles(long osznId, long userOrganizationId, RequestFileType requestFileType) {
         List<RequestFile> facilityReferenceFiles = sqlSession().selectList(NS + ".getFacilityReferenceFiles",
                 ImmutableMap.of("osznId", osznId, "userOrganizationId", userOrganizationId,

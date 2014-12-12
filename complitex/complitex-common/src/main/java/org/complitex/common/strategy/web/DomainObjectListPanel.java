@@ -185,10 +185,10 @@ public final class DomainObjectListPanel extends Panel {
             }
 
             @Override
-            public int getSize() {
+            public Long getSize() {
                 example.setStatus(showModeModel.getObject().name());
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
-                return getStrategy().count(example);
+                return getStrategy().getCount(example);
             }
         };
         dataProvider.setSort(String.valueOf(getStrategy().getDefaultSortAttributeTypeId()), SortOrder.ASCENDING);

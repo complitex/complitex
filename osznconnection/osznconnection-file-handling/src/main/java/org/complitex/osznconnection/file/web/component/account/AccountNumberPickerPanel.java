@@ -149,8 +149,8 @@ public class AccountNumberPickerPanel extends Panel {
             }
 
             @Override
-            protected int getSize() {
-                return getList().size();
+            protected Long getSize() {
+                return Long.valueOf(getList().size());
             }
         };
 

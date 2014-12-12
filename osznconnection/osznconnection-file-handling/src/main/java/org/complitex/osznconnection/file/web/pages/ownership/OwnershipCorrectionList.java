@@ -4,8 +4,8 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.osznconnection.file.entity.OwnershipCorrection;
 import org.complitex.osznconnection.file.service.OwnershipCorrectionBean;
 
@@ -35,7 +35,7 @@ public class OwnershipCorrectionList extends AbstractCorrectionList<OwnershipCor
     }
 
     @Override
-    protected Integer getCorrectionsCount(FilterWrapper<OwnershipCorrection> filter) {
+    protected Long getCorrectionsCount(FilterWrapper<OwnershipCorrection> filter) {
         return ownershipCorrectionBean.getOwnershipCorrectionsCount(filter);
     }
 

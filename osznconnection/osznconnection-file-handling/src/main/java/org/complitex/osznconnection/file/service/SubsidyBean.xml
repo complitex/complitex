@@ -157,7 +157,7 @@
         <if test="!sumFilter.map.isEmpty">)</if>
     </sql>
 
-    <select id="count" resultType="int" parameterType="org.complitex.osznconnection.file.entity.example.SubsidyExample">
+    <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.SubsidyExample">
         SELECT COUNT(1) FROM `subsidy` s WHERE s.`request_file_id` = #{requestFileId}
         <include refid="org.complitex.osznconnection.file.service.SubsidyBean.filter"/>
     </select>

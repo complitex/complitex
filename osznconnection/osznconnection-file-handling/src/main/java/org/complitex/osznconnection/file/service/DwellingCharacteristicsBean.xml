@@ -125,7 +125,7 @@
         </if>
     </sql>
 
-    <select id="count" resultType="int" parameterType="org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample">
+    <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample">
         SELECT COUNT(distinct d.`id`) FROM `dwelling_characteristics` d
           LEFT JOIN `facility_street_reference` s ON d.`CDUL` = s.`KL_CODEUL`
         WHERE d.`request_file_id` = #{requestFileId}

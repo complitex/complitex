@@ -14,7 +14,6 @@ import org.complitex.common.entity.Locale;
 import org.complitex.common.entity.Parameter;
 import org.complitex.common.entity.StringCulture;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
-import org.complitex.common.mybatis.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -62,7 +61,7 @@ public class StringCultureBean extends AbstractBean {
         stringCultureComparator = new StringCultureComparator(localeBean.getSystemLocaleObject().getId());
     }
 
-    @Transactional
+
     public Long insertStrings(List<StringCulture> strings, String entityTable, boolean upperCase) {
         if (strings != null && !strings.isEmpty()) {
             boolean allValuesAreEmpty = true;
@@ -94,12 +93,12 @@ public class StringCultureBean extends AbstractBean {
      * @param entityTable
      * @return String's generated ID.
      */
-    @Transactional
+
     public Long insertStrings(List<StringCulture> strings, String entityTable) {
         return insertStrings(strings, entityTable, true);
     }
 
-    @Transactional
+
     protected void insert(StringCulture string, String entityTable, boolean upperCase) {
         //if string should be in upper case:
         if (upperCase) {

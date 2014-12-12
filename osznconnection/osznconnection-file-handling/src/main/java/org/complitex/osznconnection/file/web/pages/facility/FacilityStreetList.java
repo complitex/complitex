@@ -38,7 +38,7 @@ public class FacilityStreetList extends ListTemplatePage<FacilityStreet>{
     }
 
     @Override
-    protected int getCount(FilterWrapper<FacilityStreet> filterWrapper) {
+    protected Long getCount(FilterWrapper<FacilityStreet> filterWrapper) {
         return facilityReferenceBookBean.getFacilityStreetsCount(filterWrapper);
     }
 

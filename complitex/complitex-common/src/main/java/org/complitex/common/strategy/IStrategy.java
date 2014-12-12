@@ -44,7 +44,9 @@ public interface IStrategy {
 
     void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput);
     
-    int count(DomainObjectExample example);
+    Long getCount(DomainObjectExample example);
+
+    List<? extends DomainObject> getList(DomainObjectExample example);
 
     void disable(DomainObject object);
 
@@ -55,8 +57,6 @@ public interface IStrategy {
     String displayAttribute(Attribute attribute, Locale locale);
 
     void enable(DomainObject object);
-    
-    List<? extends DomainObject> getList(DomainObjectExample example);
     
     DomainObject findById(Long id, boolean runAsAdmin);
     

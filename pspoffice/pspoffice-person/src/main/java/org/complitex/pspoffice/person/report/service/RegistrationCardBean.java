@@ -4,11 +4,7 @@
  */
 package org.complitex.pspoffice.person.report.service;
 
-import java.util.Date;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
@@ -16,6 +12,11 @@ import org.complitex.pspoffice.person.report.entity.RegistrationCard;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
 import org.complitex.pspoffice.person.strategy.entity.Registration;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.Date;
+
 import static org.complitex.pspoffice.report.util.ReportDateFormatter.format;
 
 /**
@@ -28,7 +29,7 @@ public class RegistrationCardBean extends AbstractBean {
     @EJB
     private PersonStrategy personStrategy;
 
-    @Transactional
+
     public RegistrationCard get(Registration registration, String addressEntity, long addressId) {
         RegistrationCard card = new RegistrationCard();
         Person person = registration.getPerson();

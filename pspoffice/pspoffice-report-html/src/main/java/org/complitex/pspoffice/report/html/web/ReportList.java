@@ -82,7 +82,7 @@ public class ReportList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 return reportBean.getReportListCount(filterWrapper);
             }
         };

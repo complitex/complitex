@@ -1,7 +1,6 @@
 package org.complitex.osznconnection.file.service;
 
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
@@ -129,7 +128,7 @@ public class PersonAccountService extends AbstractBean {
     /**
      * Корректировать account number из UI в случае когда в ЦН больше одного человека соответствуют номеру л/c.
      */
-    @Transactional
+
     public void updateAccountNumber(Payment payment, String accountNumber, long userOrganizationId) {
         payment.setAccountNumber(accountNumber);
         payment.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
@@ -151,7 +150,7 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void updateAccountNumber(ActualPayment actualPayment, String accountNumber, long userOrganizationId) {
         actualPayment.setAccountNumber(accountNumber);
         actualPayment.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
@@ -174,7 +173,7 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void updateAccountNumber(Subsidy subsidy, String accountNumber, long userOrganizationId) {
         subsidy.setAccountNumber(accountNumber);
         subsidy.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
@@ -196,7 +195,7 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics, String accountNumber, long userOrganizationId) {
         dwellingCharacteristics.setAccountNumber(accountNumber);
         dwellingCharacteristics.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
@@ -219,7 +218,7 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void updateAccountNumber(FacilityServiceType facilityServiceType, String accountNumber, long userOrganizationId) {
         facilityServiceType.setAccountNumber(accountNumber);
         facilityServiceType.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);

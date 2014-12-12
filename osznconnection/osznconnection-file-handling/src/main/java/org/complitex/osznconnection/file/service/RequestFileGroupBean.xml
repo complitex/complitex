@@ -139,7 +139,7 @@
     </select>
 
     <select id="selectRequestFilesGroupsCount" parameterType="org.complitex.osznconnection.file.entity.RequestFileFilter"
-            resultType="int">
+            resultType="long">
         SELECT COUNT(DISTINCT g.`id`)
                 <include refid="requestFileGroupFilterFrom"/>
                 <include refid="requestFileGroupFilterWhere"/>

@@ -38,7 +38,6 @@ import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.ShowModePanel;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.common.web.component.organization.OrganizationPicker;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
 import ru.flexpay.eirc.dictionary.entity.Person;
 import ru.flexpay.eirc.eirc_account.entity.EircAccount;
@@ -293,12 +292,12 @@ public class ServiceProviderAccountListPanel extends Panel {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 FilterWrapper<ServiceProviderAccount> filterWrapper = FilterWrapper.of(filterObject);
 
                 setShowModel(filterWrapper);
 
-                return serviceProviderAccountBean.count(filterWrapper);
+                return serviceProviderAccountBean.getCount(filterWrapper);
             }
 
             private void setShowModel(FilterWrapper<ServiceProviderAccount> filterWrapper) {

@@ -24,7 +24,6 @@ import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.description.EntityAttributeValueType;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
@@ -211,19 +210,19 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     @Override
-    @Transactional
-    public int count(DomainObjectExample example) {
+
+    public Long getCount(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
-            return 0;
+            return 0L;
         }
 
         prepareExampleForPermissionCheck(example);
         if (example.getId() != null) {
             Building building = findById(example.getId(), false);
-            return building == null ? 0 : 1;
+            return building == null ? 0L : 1L;
         } else {
             DomainObjectExample addressExample = createAddressExample(example);
-            return buildingAddressStrategy.count(addressExample);
+            return buildingAddressStrategy.getCount(addressExample);
         }
     }
 
@@ -247,7 +246,7 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     @Override
-    @Transactional
+
     public Building findById(Long id, boolean runAsAdmin) {
         DomainObjectExample example = new DomainObjectExample(id);
         example.setEntityTable(getEntityTable());
@@ -421,7 +420,7 @@ public class BuildingStrategy extends TemplateStrategy {
         return true;
     }
 
-    @Transactional
+
     @Override
     protected void insertDomainObject(DomainObject object, Date insertDate) {
         Building building = (Building) object;
@@ -443,7 +442,7 @@ public class BuildingStrategy extends TemplateStrategy {
         addBuildingCode(building);
     }
 
-    @Transactional
+
     @Override
     protected void insertUpdatedDomainObject(DomainObject object, Date updateDate) {
         super.insertDomainObject(object, updateDate);
@@ -507,7 +506,7 @@ public class BuildingStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     @Override
     public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
         Building oldBuilding = (Building) oldObject;
@@ -634,7 +633,7 @@ public class BuildingStrategy extends TemplateStrategy {
         return BuildingAddressStrategy.DEFAULT_ORDER_BY_ID;
     }
 
-    @Transactional
+
     @Override
     public TreeSet<Date> getHistoryDates(long objectId) {
         TreeSet<Date> historyDates = super.getHistoryDates(objectId);
@@ -646,13 +645,13 @@ public class BuildingStrategy extends TemplateStrategy {
         return historyDates;
     }
 
-    @Transactional
+
     private Set<Long> findBuildingAddresses(long buildingId) {
         List<Long> results = sqlSession().selectList(NS + ".findBuildingAddresses", buildingId);
         return Sets.newHashSet(results);
     }
 
-    @Transactional
+
     @Override
     public Building findHistoryObject(long objectId, Date date) {
         DomainObjectExample example = new DomainObjectExample();
@@ -681,7 +680,7 @@ public class BuildingStrategy extends TemplateStrategy {
         return building;
     }
 
-    @Transactional
+
     @Override
     protected void changeActivity(DomainObject object, boolean enable) {
         super.changeActivity(object, enable);
@@ -697,7 +696,7 @@ public class BuildingStrategy extends TemplateStrategy {
         return new String[]{SecurityRole.ADDRESS_MODULE_EDIT};
     }
 
-    @Transactional
+
     public void updateBuildingActivity(long buildingId, boolean enabled) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("buildingId", buildingId);
@@ -711,7 +710,7 @@ public class BuildingStrategy extends TemplateStrategy {
         return new String[]{"apartment", "room"};
     }
 
-    @Transactional
+
     @Override
     public void delete(long objectId, Locale locale) throws DeleteException {
         deleteChecks(objectId, locale);
@@ -813,7 +812,7 @@ public class BuildingStrategy extends TemplateStrategy {
         return codes.get(0);
     }
 
-    @Transactional
+
     private void addBuildingCode(Building building) {
         building.removeAttribute(BUILDING_CODE);
 
@@ -836,7 +835,7 @@ public class BuildingStrategy extends TemplateStrategy {
         return a;
     }
 
-    @Transactional
+
     private void saveBuildingCode(BuildingCode buildingCode) {
         sqlSession().insert(NS + ".insertBuildingCode", buildingCode);
     }

@@ -4,9 +4,6 @@
  */
 package org.complitex.pspoffice.person.report.service;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
@@ -19,6 +16,9 @@ import org.complitex.pspoffice.person.strategy.entity.ApartmentCard;
 import org.complitex.pspoffice.person.strategy.entity.Person;
 import org.complitex.pspoffice.person.strategy.entity.Registration;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
 /**
  *
  * @author Artem
@@ -28,13 +28,16 @@ public class HousingPaymentsBean extends AbstractBean {
 
     @EJB
     private PersonStrategy personStrategy;
+
     @EJB
     private DocumentStrategy documentStrategy;
 
-    @Transactional
+    @EJB
+    private ApartmentCardStrategy apartmentCardStrategy;
+
     public HousingPayments get(ApartmentCard apartmentCard) {
         HousingPayments payments = new HousingPayments();
-        payments.setAddressEntity(ApartmentCardStrategy.getAddressEntity(apartmentCard));
+        payments.setAddressEntity(apartmentCardStrategy.getAddressEntity(apartmentCard));
         payments.setAddressId(apartmentCard.getAddressId());
         payments.setOwner(apartmentCard.getOwner());
         payments.setPersonalAccount("");

@@ -446,7 +446,7 @@
         </if>
     </select>
 
-    <select id="countEircAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer" >
+    <select id="countEircAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long" >
         select count(distinct e.`object_id`) from `eirc_account` e
         <if test="map.inactive == true or map.all == true">
             inner join (select max(pk_id) as max_pk_id from eirc_account group by object_id) e2 on e.pk_id=e2.max_pk_id

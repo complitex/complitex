@@ -249,9 +249,9 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
     }
 
     @Override
-    public int count(DomainObjectExample example) {
+    public Long getCount(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
-            return 0;
+            return 0L;
         }
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);

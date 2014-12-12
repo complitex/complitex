@@ -60,20 +60,26 @@ import static org.complitex.pspoffice.person.strategy.ApartmentCardStrategy.*;
  * @author Artem
  */
 final class ApartmentCardHistoryPanel extends Panel {
-
     private final Logger log = LoggerFactory.getLogger(ApartmentCardHistoryPanel.class);
     private static final String EMPTY_OWNER_RELATIONSHIP = "               ";
+
     @EJB
     private ApartmentCardStrategy apartmentCardStrategy;
+
     @EJB
     private PersonStrategy personStrategy;
+
     @EJB
     private OwnerRelationshipStrategy ownerRelationshipStrategy;
+
     @EJB
     private OwnershipFormStrategy ownershipFormStrategy;
+
     @EJB
     private RegistrationTypeStrategy registrationTypeStrategy;
+
     @EJB(name = "UserProfileBean")
+
     private IUserProfileBean userProfileBean;
     private final Entity ENTITY = apartmentCardStrategy.getEntity();
 
@@ -109,7 +115,7 @@ final class ApartmentCardHistoryPanel extends Panel {
         addressContainer.add(new Label("label", labelModel(addressAttributeType.getAttributeNames(), getLocale())));
         addressContainer.add(new WebMarkupContainer("required").setVisible(addressAttributeType.isMandatory()));
         final Component address = new CollapsibleSearchComponent("address",
-                apartmentCardStrategy.initAddressSearchComponentState(getAddressEntity(card), card.getAddressId()),
+                apartmentCardStrategy.initAddressSearchComponentState(apartmentCardStrategy.getAddressEntity(card), card.getAddressId()),
                 of("city", "street", "building", "apartment", "room"), null, ShowMode.ALL, false);
         address.add(new CssAttributeBehavior(modification.getModificationType(ADDRESS).getCssClass()));
         addressContainer.add(address);
@@ -142,7 +148,7 @@ final class ApartmentCardHistoryPanel extends Panel {
                 }
             }
         }
-        final Component formOfOwnership = new DisableAwareDropDownChoice<DomainObject>("formOfOwnership",
+        final Component formOfOwnership = new DisableAwareDropDownChoice<>("formOfOwnership",
                 ownershipFormModel, allOwnershipForms, new DomainObjectDisableAwareRenderer() {
 
             @Override

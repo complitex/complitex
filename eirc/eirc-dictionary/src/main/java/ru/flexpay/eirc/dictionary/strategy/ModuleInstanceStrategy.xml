@@ -44,7 +44,7 @@
         </if>
     </sql>
 
-    <select id="count" resultType="integer" parameterType="DomainObjectExample">
+    <select id="count" resultType="long" parameterType="DomainObjectExample">
         SELECT COUNT(1) FROM `module_instance` e WHERE
         <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
         <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>

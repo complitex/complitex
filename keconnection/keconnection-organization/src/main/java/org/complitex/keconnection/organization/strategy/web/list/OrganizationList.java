@@ -151,10 +151,10 @@ public class OrganizationList extends ScrollListPage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 example.setStatus(showModeModel.getObject().name());
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
-                return organizationStrategy.count(example);
+                return organizationStrategy.getCount(example);
             }
         };
         dataProvider.setSort(String.valueOf(organizationStrategy.getDefaultSortAttributeTypeId()), SortOrder.ASCENDING);

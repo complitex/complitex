@@ -5,9 +5,9 @@ import org.complitex.admin.strategy.UserInfoStrategy;
 import org.complitex.common.entity.*;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.util.DateUtil;
+import org.complitex.common.web.DictionaryFwSession;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.complitex.common.web.DictionaryFwSession;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -37,17 +36,17 @@ public class UserBean extends AbstractBean {
         return user;
     }
 
-    @Transactional
+
     public boolean isUniqueLogin(String login) {
         return (Boolean) sqlSession().selectOne(STATEMENT_PREFIX + ".isUniqueLogin", login);
     }
 
-    @Transactional
+
     public User getUser(Long id) {
         return getUser(id, true);
     }
 
-    @Transactional
+
     public User getUser(Long id, boolean createUserInfo) {
         User user = (User) sqlSession().selectOne(STATEMENT_PREFIX + ".selectUser", id);
 
@@ -60,7 +59,7 @@ public class UserBean extends AbstractBean {
         return user;
     }
 
-    @Transactional
+
     public void save(User user, DictionaryFwSession session) {
         //удаление дубликатов организаций
         Map<Long, UserOrganization> userOrganizationMap = new HashMap<Long, UserOrganization>();
@@ -207,7 +206,7 @@ public class UserBean extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public List<User> getUsers(UserFilter filter) {
         List<User> users = sqlSession().selectList(STATEMENT_PREFIX + ".selectUsers", filter);
         for (User user : users) {
@@ -219,9 +218,9 @@ public class UserBean extends AbstractBean {
         return users;
     }
 
-    @Transactional
-    public int getUsersCount(UserFilter filter) {
-        return (Integer) sqlSession().selectOne(STATEMENT_PREFIX + ".selectUsersCount", filter);
+
+    public Long getUsersCount(UserFilter filter) {
+        return sqlSession().selectOne(STATEMENT_PREFIX + ".selectUsersCount", filter);
     }
 
     public UserFilter newUserFilter() {

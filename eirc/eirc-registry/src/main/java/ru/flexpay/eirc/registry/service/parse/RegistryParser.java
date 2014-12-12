@@ -527,11 +527,13 @@ public class RegistryParser implements Serializable {
     public boolean validateRegistry(Registry registry, LocLogger processLog) {
         Registry filterObject = new Registry();
         filterObject.setRegistryNumber(registry.getRegistryNumber());
-        int countRegistries = registryService.count(FilterWrapper.of(filterObject));
+        Long countRegistries = registryService.getCount(FilterWrapper.of(filterObject));
+
         if (countRegistries > 0) {
             processLog.error(Parsing.REGISTRY_WAS_ALREADY_UPLOADED, registry.getRegistryNumber());
             return false;
         }
+
         return true;
     }
 

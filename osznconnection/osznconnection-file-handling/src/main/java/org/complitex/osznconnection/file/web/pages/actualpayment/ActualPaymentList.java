@@ -30,15 +30,16 @@ import org.complitex.common.service.SessionBean;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
+import org.complitex.correction.service.exception.DuplicateCorrectionException;
+import org.complitex.correction.service.exception.MoreOneCorrectionException;
+import org.complitex.correction.service.exception.NotFoundCorrectionException;
+import org.complitex.correction.web.component.AddressCorrectionPanel;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.ActualPaymentExample;
 import org.complitex.osznconnection.file.service.ActualPaymentBean;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderService;
-import org.complitex.correction.service.exception.DuplicateCorrectionException;
-import org.complitex.correction.service.exception.MoreOneCorrectionException;
-import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.complitex.osznconnection.file.service.status.details.ActualPaymentExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.ActualPaymentStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -47,7 +48,6 @@ import org.complitex.osznconnection.file.web.ActualPaymentFileList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;
-import org.complitex.correction.web.component.AddressCorrectionPanel;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
@@ -151,9 +151,9 @@ public final class ActualPaymentList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 example.getObject().setAsc(getSort().isAscending());
-                return actualPaymentBean.count(example.getObject());
+                return actualPaymentBean.getCount(example.getObject());
             }
         };
         dataProvider.setSort("", SortOrder.ASCENDING);

@@ -62,7 +62,7 @@
     </select>
 
     <select id="selectFacilityStreetTypesCount" parameterType="org.complitex.common.entity.FilterWrapper"
-            resultType="int">
+            resultType="long">
         select count(*) from `facility_street_type_reference` <include refid="selectFacilityStreetTypesWhere"/>
     </select>
 
@@ -99,7 +99,7 @@
           order by ${sortProperty} <if test="sortProperty != 'KL_NAME'">+ 0</if> ${asc} limit #{first}, #{count}
     </select>
 
-    <select id="selectFacilityStreetsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="int">
+    <select id="selectFacilityStreetsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(*) from `facility_street_reference` <include refid="selectFacilityStreetsWhere"/>
     </select>
 
@@ -184,7 +184,7 @@
             ${asc} limit #{first}, #{count}
     </select>
 
-    <select id="selectFacilityTarifsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="int">
+    <select id="selectFacilityTarifsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(*) from `facility_tarif_reference` <include refid="selectFacilityTarifsWhere"/>
     </select>
 </mapper>

@@ -9,7 +9,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.ActualPaymentExample;
 import org.complitex.osznconnection.service_provider_type.strategy.ServiceProviderTypeStrategy;
@@ -63,23 +62,23 @@ public class ActualPaymentBean extends AbstractRequestBean {
         }
     }
 
-    @Transactional
+
     public void delete(long requestFileId) {
         sqlSession().delete(MAPPING_NAMESPACE + ".deleteActualPayments", requestFileId);
     }
 
-    @Transactional
-    public int count(ActualPaymentExample example) {
-        return (Integer) sqlSession().selectOne(MAPPING_NAMESPACE + ".count", example);
+
+    public Long getCount(ActualPaymentExample example) {
+        return sqlSession().selectOne(MAPPING_NAMESPACE + ".count", example);
     }
 
-    @Transactional
+
     @SuppressWarnings("unchecked")
     public List<ActualPayment> find(ActualPaymentExample example) {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".find", example);
     }
 
-    @Transactional
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void insert(List<AbstractRequest> abstractRequests) {
         if (abstractRequests.isEmpty()) {
@@ -92,17 +91,17 @@ public class ActualPaymentBean extends AbstractRequestBean {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".selectActualPayments", requestFileId);
     }
 
-    @Transactional
+
     public void insert(ActualPayment actualPayment) {
         sqlSession().insert(MAPPING_NAMESPACE + ".insertActualPayment", actualPayment);
     }
 
-    @Transactional
+
     public void update(ActualPayment actualPayment) {
         sqlSession().update(MAPPING_NAMESPACE + ".update", actualPayment);
     }
 
-    @Transactional
+
     public void update(ActualPayment actualPayment, Set<Long> serviceProviderTypeIds) {
         Map<String, Object> updateFieldMap = null;
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
@@ -128,7 +127,7 @@ public class ActualPaymentBean extends AbstractRequestBean {
         return Collections.unmodifiableSet(updateableFields);
     }
 
-    @Transactional
+
     @SuppressWarnings("unchecked")
     public List<ActualPayment> findForOperation(long fileId, List<Long> ids) {
         Map<String, Object> params = Maps.newHashMap();
@@ -137,18 +136,18 @@ public class ActualPaymentBean extends AbstractRequestBean {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".findForOperation", params);
     }
 
-    @Transactional
+
     @SuppressWarnings("unchecked")
     private List<Long> findIdsForOperation(long fileId) {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".findIdsForOperation", fileId);
     }
 
-    @Transactional
+
     public List<Long> findIdsForBinding(long fileId) {
         return findIdsForOperation(fileId);
     }
 
-    @Transactional
+
     public List<Long> findIdsForProcessing(long fileId) {
         return findIdsForOperation(fileId);
     }
@@ -169,17 +168,17 @@ public class ActualPaymentBean extends AbstractRequestBean {
         return (Integer) sqlSession().selectOne(MAPPING_NAMESPACE + ".countByFile", params);
     }
 
-    @Transactional
+
     public boolean isActualPaymentFileBound(long fileId) {
         return unboundCount(fileId) == 0;
     }
 
-    @Transactional
+
     public boolean isActualPaymentFileProcessed(long fileId) {
         return unprocessedCount(fileId) == 0;
     }
 
-    @Transactional
+
     public void markCorrected(ActualPayment actualPayment, AddressEntity addressEntity) {
         Map<String, Object> params = Maps.newHashMap();
 
@@ -200,12 +199,12 @@ public class ActualPaymentBean extends AbstractRequestBean {
         sqlSession().update(MAPPING_NAMESPACE + ".markCorrected", params);
     }
 
-    @Transactional
+
     public void updateAccountNumber(ActualPayment actualPayment) {
         sqlSession().update(MAPPING_NAMESPACE + ".updateAccountNumber", actualPayment);
     }
 
-    @Transactional
+
     public void clearBeforeBinding(long fileId, Set<Long> serviceProviderTypeIds) {
         Map<String, String> updateFieldMap = null;
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
@@ -220,7 +219,7 @@ public class ActualPaymentBean extends AbstractRequestBean {
         clearWarnings(fileId, RequestFileType.ACTUAL_PAYMENT);
     }
 
-    @Transactional
+
     public void clearBeforeProcessing(long fileId, Set<Long> serviceProviderTypeIds) {
         Map<String, String> updateFieldMap = null;
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {

@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.PaymentExample;
 import org.complitex.osznconnection.service_provider_type.strategy.ServiceProviderTypeStrategy;
@@ -62,22 +61,22 @@ public class PaymentBean extends AbstractRequestBean {
         }
     }
 
-    @Transactional
+
     public void delete(long requestFileId) {
         sqlSession().delete(MAPPING_NAMESPACE + ".deletePayments", requestFileId);
     }
 
-    @Transactional
-    public int count(PaymentExample example) {
+
+    public Long getCount(PaymentExample example) {
         return sqlSession().selectOne(MAPPING_NAMESPACE + ".count", example);
     }
 
-    @Transactional
+
     public List<Payment> find(PaymentExample example) {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".find", example);
     }
 
-    @Transactional
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void insert(List<AbstractRequest> abstractRequests) {
         if (abstractRequests.isEmpty()) {
@@ -91,17 +90,17 @@ public class PaymentBean extends AbstractRequestBean {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".selectPayments", requestFileId);
     }
 
-    @Transactional
+
     public void insert(Payment payment) {
         sqlSession().insert(MAPPING_NAMESPACE + ".insertPayment", payment);
     }
 
-    @Transactional
+
     public void update(Payment payment) {
         sqlSession().update(MAPPING_NAMESPACE + ".update", payment);
     }
 
-    @Transactional
+
     public void update(Payment payment, Set<Long> serviceProviderTypeIds) {
         Map<String, Object> updateFieldMap = null;
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
@@ -133,7 +132,7 @@ public class PaymentBean extends AbstractRequestBean {
      * @param ids ids
      * @return все payment записи в файле с id из списка ids
      */
-    @Transactional
+
     @SuppressWarnings("unchecked")
     public List<Payment> findForOperation(long fileId, List<Long> ids) {
         Map<String, Object> params = Maps.newHashMap();
@@ -147,7 +146,7 @@ public class PaymentBean extends AbstractRequestBean {
      * @param fileId fileId
      * @return все id payment записей в файле
      */
-    @Transactional
+
     @SuppressWarnings("unchecked")
     private List<Long> findIdsForOperation(long fileId) {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".findIdsForOperation", fileId);
@@ -158,7 +157,7 @@ public class PaymentBean extends AbstractRequestBean {
      * @param fileId fileId
      * @return все id payment записей в файле для связывания
      */
-    @Transactional
+
     public List<Long> findIdsForBinding(long fileId) {
         return findIdsForOperation(fileId);
     }
@@ -168,7 +167,7 @@ public class PaymentBean extends AbstractRequestBean {
      * @param fileId fileId
      * @return все id payment записей в файле для обработки
      */
-    @Transactional
+
     public List<Long> findIdsForProcessing(long fileId) {
         return findIdsForOperation(fileId);
     }
@@ -208,7 +207,7 @@ public class PaymentBean extends AbstractRequestBean {
      * @param fileId fileId
      * @return Связан ли файл
      */
-    @Transactional
+
     public boolean isPaymentFileBound(long fileId) {
         return unboundCount(fileId) == 0;
     }
@@ -218,12 +217,12 @@ public class PaymentBean extends AbstractRequestBean {
      * @param fileId fileId
      * @return Обработан ли файл
      */
-    @Transactional
+
     public boolean isPaymentFileProcessed(long fileId) {
         return unprocessedCount(fileId) == 0;
     }
 
-    @Transactional
+
     public void markCorrected(Payment payment, AddressEntity entity) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("fileId", payment.getRequestFileId());
@@ -241,7 +240,7 @@ public class PaymentBean extends AbstractRequestBean {
         sqlSession().update(MAPPING_NAMESPACE + ".markCorrected", params);
     }
 
-    @Transactional
+
     public void updateAccountNumber(Payment payment) {
         sqlSession().update(MAPPING_NAMESPACE + ".updateAccountNumber", payment);
     }
@@ -250,7 +249,7 @@ public class PaymentBean extends AbstractRequestBean {
      * очищает колонки которые заполняются во время связывания и обработки для записей payment
      * @param fileId fileId
      */
-    @Transactional
+
     public void clearBeforeBinding(long fileId, Set<Long> serviceProviderTypeIds) {
         Map<String, String> updateFieldMap = null;
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
@@ -269,7 +268,7 @@ public class PaymentBean extends AbstractRequestBean {
      * очищает колонки которые заполняются во время обработки для записей payment
      * @param fileId fileId
      */
-    @Transactional
+
     public void clearBeforeProcessing(long fileId, Set<Long> serviceProviderTypeIds) {
         Map<String, String> updateFieldMap = null;
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
@@ -292,7 +291,7 @@ public class PaymentBean extends AbstractRequestBean {
      * @return дату из поля DAT1 в записи payment, у которой account number = accountNumber и
      * кроме того поле FROG больше 0
      */
-    @Transactional
+
     public Date findDat1(String accountNumber, long benefitFileId) {
         @SuppressWarnings("unchecked")
         List<Payment> payments = sqlSession().selectList(MAPPING_NAMESPACE + ".findDat1",

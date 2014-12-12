@@ -2,7 +2,9 @@ package org.complitex.logging.web;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
@@ -18,24 +20,25 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.SharedResourceReference;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.LogManager;
 import org.complitex.common.web.component.DatePicker;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
+import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.template.web.security.SecurityRole;
-import org.complitex.template.web.template.TemplatePage;
 import org.complitex.logging.service.LogFilter;
 import org.complitex.logging.service.LogListBean;
 import org.complitex.logging.web.component.LogChangePanel;
 import org.complitex.resources.WebCommonResourceInitializer;
+import org.complitex.template.web.security.SecurityRole;
+import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
-import java.util.*;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
-import org.apache.wicket.request.resource.SharedResourceReference;
-import org.complitex.common.web.component.datatable.DataProvider;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -191,7 +194,7 @@ public class LogList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 return logListBean.getLogsCount(filterModel.getObject());
             }
         };

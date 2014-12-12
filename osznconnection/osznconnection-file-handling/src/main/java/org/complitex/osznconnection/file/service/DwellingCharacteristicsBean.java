@@ -3,7 +3,6 @@ package org.complitex.osznconnection.file.service;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample;
 
@@ -54,12 +53,12 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
         }
     }
 
-    @Transactional
+
     public void delete(long requestFileId) {
         sqlSession().delete(MAPPING_NAMESPACE + ".deleteDwellingCharacteristics", requestFileId);
     }
 
-    @Transactional
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void insert(List<AbstractRequest> abstractRequests) {
         if (abstractRequests.isEmpty()) {
@@ -68,12 +67,12 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
         sqlSession().insert(MAPPING_NAMESPACE + ".insertDwellingCharacteristicsList", abstractRequests);
     }
 
-    @Transactional
-    public Integer count(DwellingCharacteristicsExample example) {
+
+    public Long getCount(DwellingCharacteristicsExample example) {
         return sqlSession().selectOne(MAPPING_NAMESPACE + ".count", example);
     }
 
-    @Transactional
+
     public List<DwellingCharacteristics> find(DwellingCharacteristicsExample example) {
         List<DwellingCharacteristics> list = sqlSession().selectList(MAPPING_NAMESPACE + ".find", example);
 
@@ -82,7 +81,7 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
         return list;
     }
 
-    @Transactional
+
     public boolean isDwellingCharacteristicsFileBound(long fileId) {
         return unboundCount(fileId) == 0;
     }
@@ -98,27 +97,27 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
         return sqlSession().selectOne(MAPPING_NAMESPACE + ".countByFile", params);
     }
 
-    @Transactional
+
     public void update(DwellingCharacteristics dwellingCharacteristics) {
         sqlSession().update(MAPPING_NAMESPACE + ".update", dwellingCharacteristics);
     }
 
-    @Transactional
+
     public void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics) {
         sqlSession().update(MAPPING_NAMESPACE + ".updateAccountNumber", dwellingCharacteristics);
     }
 
-    @Transactional
+
     public List<Long> findIdsForBinding(long fileId) {
         return findIdsForOperation(fileId);
     }
 
-    @Transactional
+
     private List<Long> findIdsForOperation(long fileId) {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".findIdsForOperation", fileId);
     }
 
-    @Transactional
+
     public List<DwellingCharacteristics> findForOperation(long fileId, List<Long> ids) {
         List<DwellingCharacteristics> list = sqlSession().selectList(MAPPING_NAMESPACE + ".findForOperation",
                 of("requestFileId", fileId, "ids", ids));
@@ -140,7 +139,7 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
         }
     }
 
-    @Transactional
+
     public void clearBeforeBinding(long fileId, Set<Long> serviceProviderTypeIds) {
         Map<String, String> updateFieldMap = null;
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
@@ -168,7 +167,7 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
         return Collections.unmodifiableSet(updateableFields);
     }
 
-    @Transactional
+
     public void markCorrected(DwellingCharacteristics dwellingCharacteristics, AddressEntity addressEntity) {
         Map<String, Object> params = Maps.newHashMap();
 

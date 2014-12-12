@@ -141,7 +141,7 @@
         </if>
     </sql>
 
-    <select id="count" resultType="int" parameterType="org.complitex.osznconnection.file.entity.example.FacilityServiceTypeExample">
+    <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.FacilityServiceTypeExample">
         SELECT COUNT(distinct fst.`id`) FROM `facility_service_type` fst
           LEFT JOIN `facility_street_reference` fsr ON fst.`CDUL` = fsr.`KL_CODEUL`
         WHERE fst.`request_file_id` = #{requestFileId}

@@ -21,8 +21,8 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.ILongId;
-import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.TextLabel;
+import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
@@ -52,7 +52,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
 
     protected abstract List<T> getList(FilterWrapper<T> filterWrapper);
 
-    protected abstract int getCount(FilterWrapper<T> filterWrapper);
+    protected abstract Long getCount(FilterWrapper<T> filterWrapper);
 
     protected abstract List<String> getProperties();
 
@@ -132,7 +132,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 return getCount(filterModel.getObject());
             }
 

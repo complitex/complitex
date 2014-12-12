@@ -10,7 +10,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.StringCulture;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.DeleteException;
 import org.complitex.template.strategy.TemplateStrategy;
@@ -79,7 +78,7 @@ public class OwnerRelationshipStrategy extends TemplateStrategy {
         return getString(RESOURCE_BUNDLE, getEntityTable(), locale);
     }
 
-    @Transactional
+
     public List<DomainObject> getAll(Locale sortLocale) {
         DomainObjectExample example = new DomainObjectExample();
         if (sortLocale != null) {
@@ -101,7 +100,7 @@ public class OwnerRelationshipStrategy extends TemplateStrategy {
         return new String[]{SecurityRole.REFERENCE_DATA_MODULE_VIEW};
     }
 
-    @Transactional
+
     @Override
     protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
         if (RESERVED_INSTANCE_IDS.contains(objectId)) {

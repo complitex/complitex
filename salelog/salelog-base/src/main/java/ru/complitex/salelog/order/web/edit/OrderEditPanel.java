@@ -541,8 +541,8 @@ public class OrderEditPanel extends Panel {
             }
 
             @Override
-            protected int getSize() {
-                return order.getProductSales().size();
+            protected Long getSize() {
+                return Long.valueOf(order.getProductSales().size());
             }
         };
 
@@ -630,8 +630,8 @@ public class OrderEditPanel extends Panel {
             }
 
             @Override
-            protected int getSize() {
-                return history.size();
+            protected Long getSize() {
+                return Long.valueOf(history.size());
             }
         };
         dataProvider.setSort("order_object_id", SortOrder.ASCENDING);
@@ -678,8 +678,8 @@ public class OrderEditPanel extends Panel {
                     }
 
                     @Override
-                    protected int getSize() {
-                        return order.getProductSales().size();
+                    protected Long getSize() {
+                        return Long.valueOf(order.getProductSales().size());
                     }
                 };
 

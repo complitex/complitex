@@ -14,7 +14,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.StatusType;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.strategy.DomainObjectPermissionInfo;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
@@ -188,51 +187,51 @@ public class BuildingAddressStrategy extends TemplateStrategy {
         return new String[]{SecurityRole.ADDRESS_MODULE_EDIT};
     }
 
-    @Transactional
+
     private List<DomainObjectPermissionInfo> findBuildingPermissionInfoByParent(long buildingAddressId) {
         return sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findBuildingPermissionInfoByParent", buildingAddressId);
     }
 
-    @Transactional
+
     private List<DomainObjectPermissionInfo> findBuildingPermissionInfoByReference(long buildingAddressId) {
         return sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findBuildingPermissionInfoByReference", buildingAddressId);
     }
 
-    @Transactional
+
     private List<DomainObjectPermissionInfo> findReferenceAddressPermissionInfo(long buildingId) {
         return sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findReferenceAddressPermissionInfo", buildingId);
     }
 
-    @Transactional
+
     private List<DomainObjectPermissionInfo> findParentAddressPermissionInfo(long buildingId) {
         return sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findParentAddressPermissionInfo", buildingId);
     }
 
-    @Transactional
+
     private Set<Long> findBuildingActivityInfoByParent(long buildingAddressId) {
         List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findBuildingActivityInfoByParent", buildingAddressId);
         return Sets.newHashSet(results);
     }
 
-    @Transactional
+
     private Set<Long> findBuildingActivityInfoByReference(long buildingAddressId) {
         List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findBuildingActivityInfoByReference", buildingAddressId);
         return Sets.newHashSet(results);
     }
 
-    @Transactional
+
     private Set<Long> findReferenceAddressActivityInfo(long buildingId) {
         List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findReferenceAddressActivityInfo", buildingId);
         return Sets.newHashSet(results);
     }
 
-    @Transactional
+
     private Set<Long> findParentAddressActivityInfo(long buildingId) {
         List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findParentAddressActivityInfo", buildingId);
         return Sets.newHashSet(results);
     }
 
-    @Transactional
+
     @Override
     protected void replaceChildrenPermissions(long parentId, Set<Long> subjectIds) {
         long buildingAddressId = parentId;
@@ -258,7 +257,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     @Override
     protected void changeChildrenPermissions(long parentId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         long buildingAddressId = parentId;
@@ -284,7 +283,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     public void updateBuildingAddressActivity(long addressId, boolean enabled) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("addressId", addressId);
@@ -293,7 +292,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
         sqlSession().update(BUILDING_ADDRESS_NAMESPACE + ".updateBuildingAddressActivity", params);
     }
 
-    @Transactional
+
     @Override
     public void changeChildrenActivity(long parentId, boolean enable) {
         long buildingAddressId = parentId;

@@ -31,7 +31,7 @@ public class OperatingMonthBean extends AbstractBean{
         return sqlSession().selectList("selectOperatingMonths", filterWrapper);
     }
 
-    public Integer getOperatingMonthsCount(FilterWrapper<OperatingMonth> filterWrapper){
+    public Long getOperatingMonthsCount(FilterWrapper<OperatingMonth> filterWrapper){
         return sqlSession().selectOne("selectOperatingMonthsCount", filterWrapper);
     }
 }

@@ -4,12 +4,7 @@
  */
 package org.complitex.pspoffice.person.report.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.pspoffice.person.report.entity.FamilyAndCommunalApartmentInfo;
@@ -19,22 +14,26 @@ import org.complitex.pspoffice.person.strategy.ApartmentCardStrategy;
 import org.complitex.pspoffice.person.strategy.entity.ApartmentCard;
 import org.complitex.pspoffice.person.strategy.entity.Registration;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Artem
  */
 @Stateless
 public class FamilyAndCommunalApartmentInfoBean extends AbstractBean {
-
     @EJB
     private ApartmentCardStrategy apartmentCardStrategy;
+
     @EJB
     private StrategyFactory strategyFactory;
 
-    @Transactional
     public FamilyAndCommunalApartmentInfo get(ApartmentCard apartmentCard) {
         FamilyAndCommunalApartmentInfo info = new FamilyAndCommunalApartmentInfo();
-        info.setAddressEntity(ApartmentCardStrategy.getAddressEntity(apartmentCard));
+        info.setAddressEntity(apartmentCardStrategy.getAddressEntity(apartmentCard));
         info.setAddressId(apartmentCard.getAddressId());
         info.setOwner(apartmentCard.getOwner());
 

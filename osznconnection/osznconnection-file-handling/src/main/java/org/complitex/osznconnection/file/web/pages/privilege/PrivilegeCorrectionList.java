@@ -4,8 +4,8 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.osznconnection.file.entity.PrivilegeCorrection;
 import org.complitex.osznconnection.file.service.PrivilegeCorrectionBean;
 
@@ -36,7 +36,7 @@ public class PrivilegeCorrectionList extends AbstractCorrectionList<PrivilegeCor
     }
 
     @Override
-    protected Integer getCorrectionsCount(FilterWrapper<PrivilegeCorrection> filterWrapper) {
+    protected Long getCorrectionsCount(FilterWrapper<PrivilegeCorrection> filterWrapper) {
         return privilegeCorrectionBean.getPrivilegeCorrectionCount(filterWrapper);
     }
 

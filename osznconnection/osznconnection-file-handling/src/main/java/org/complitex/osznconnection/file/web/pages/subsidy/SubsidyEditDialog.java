@@ -28,7 +28,8 @@ import org.complitex.osznconnection.file.service.file_description.RequestFileFie
 import javax.ejb.EJB;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestStatus.SUBSIDY_NM_PAY_ERROR;
 import static org.complitex.osznconnection.file.entity.SubsidyDBF.*;
@@ -170,7 +171,7 @@ public class SubsidyEditDialog extends Panel {
                         SubsidyExample all = new SubsidyExample();
                         all.setRequestFileId(subsidy.getRequestFileId());
 
-                        if (subsidyBean.count(loaded) == subsidyBean.count(all)) {
+                        if (subsidyBean.getCount(loaded) == subsidyBean.getCount(all)) {
                             requestFile.setStatus(RequestFileStatus.LOADED);
 
                             requestFileBean.save(requestFile);

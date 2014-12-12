@@ -11,7 +11,6 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.strategy.DeleteException;
 import org.complitex.common.strategy.web.validate.IValidator;
 import org.complitex.common.util.AttributeUtil;
@@ -109,7 +108,7 @@ public class TarifGroupStrategy extends TemplateStrategy {
         return object != null ? object.getId() : null;
     }
 
-    @Transactional
+
     @Override
     protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
         if (RESERVED_TARIF_GROUP_IDS.contains(objectId)) {
@@ -118,7 +117,7 @@ public class TarifGroupStrategy extends TemplateStrategy {
         super.deleteChecks(objectId, locale);
     }
 
-    @Transactional
+
     public Long validateCode(Long id, String code) {
         Map<String, Object> params = ImmutableMap.<String, Object>of("codeAT", CODE, "code", code);
         List<Long> results = sqlSession().selectList(MAPPING_NAMESPACE + ".validateCode", params);

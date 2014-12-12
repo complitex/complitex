@@ -27,7 +27,6 @@ import org.complitex.common.service.LocaleBean;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.common.web.component.search.CollapsibleSearchPanel;
@@ -164,9 +163,9 @@ public class ServiceProviderAccountList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 FilterWrapper<ServiceProviderAccount> filterWrapper = FilterWrapper.of(filterObject);
-                return serviceProviderAccountBean.count(filterWrapper);
+                return serviceProviderAccountBean.getCount(filterWrapper);
             }
         };
         dataProvider.setSort("spa_account_number", SortOrder.ASCENDING);

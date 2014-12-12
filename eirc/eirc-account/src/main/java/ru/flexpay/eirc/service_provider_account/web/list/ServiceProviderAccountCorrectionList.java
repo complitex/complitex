@@ -1,16 +1,15 @@
 package ru.flexpay.eirc.service_provider_account.web.list;
 
-import com.google.common.collect.ImmutableList;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.template.web.security.SecurityRole;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
@@ -59,7 +58,7 @@ public class ServiceProviderAccountCorrectionList extends AbstractCorrectionList
     }
 
     @Override
-    protected Integer getCorrectionsCount(FilterWrapper<ServiceProviderAccountCorrection> filterWrapper) {
+    protected Long getCorrectionsCount(FilterWrapper<ServiceProviderAccountCorrection> filterWrapper) {
         return serviceProviderAccountCorrectionBean.getServiceProviderAccountCorrectionsCount(filterWrapper);
     }
 

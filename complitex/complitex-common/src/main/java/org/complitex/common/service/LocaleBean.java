@@ -1,7 +1,6 @@
 package org.complitex.common.service;
 
 import org.complitex.common.entity.Locale;
-import org.complitex.common.mybatis.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
@@ -84,7 +83,7 @@ public class LocaleBean extends AbstractBean {
         return convert(getLocaleObject(localeId));
     }
 
-    @Transactional
+
     protected List<Locale> loadAllLocales() {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".loadAllLocales");
     }

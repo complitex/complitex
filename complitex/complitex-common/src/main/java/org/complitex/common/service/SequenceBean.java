@@ -1,7 +1,6 @@
 package org.complitex.common.service;
 
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.mybatis.Transactional;
 
 import javax.ejb.Stateless;
 /**
@@ -13,7 +12,7 @@ public class SequenceBean extends AbstractBean{
 
     private static final String MAPPING_NAMESPACE = "org.complitex.common.entity.Sequence";
 
-    @Transactional
+
     public long nextStringId(String entityTable) {
         long nextStringId;
         if (Strings.isEmpty(entityTable)) {
@@ -26,14 +25,14 @@ public class SequenceBean extends AbstractBean{
         return nextStringId;
     }
 
-    @Transactional
+
     public long nextId(String entityTable) {
         long nextId = (Long) sqlSession().selectOne(MAPPING_NAMESPACE + ".nextId", entityTable);
         sqlSession().update(MAPPING_NAMESPACE + ".incrementId", entityTable);
         return nextId;
     }
 
-    @Transactional
+
     public long nextIdOrInit(String entityTable) {
         try {
             return nextId(entityTable);

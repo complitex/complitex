@@ -143,9 +143,10 @@ public final class BenefitList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 example.getObject().setAsc(getSort().isAscending());
-                return benefitBean.count(example.getObject());
+
+                return benefitBean.getCount(example.getObject());
             }
         };
         dataProvider.setSort("", SortOrder.ASCENDING);

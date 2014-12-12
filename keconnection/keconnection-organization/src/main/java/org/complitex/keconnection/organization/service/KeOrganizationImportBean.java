@@ -5,7 +5,6 @@
 package org.complitex.keconnection.organization.service;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.keconnection.organization.entity.OrganizationImport;
 
@@ -24,7 +23,7 @@ public class KeOrganizationImportBean extends AbstractBean {
 
     private static final String MAPPING_NAMESPACE = KeOrganizationImportBean.class.getName();
 
-    @Transactional
+
     public void importOrganization(OrganizationImport importOrganization) {
         sqlSession().insert(MAPPING_NAMESPACE + ".insert", importOrganization);
     }
@@ -47,7 +46,7 @@ public class KeOrganizationImportBean extends AbstractBean {
         return result != null && result == 1;
     }
 
-    @Transactional
+
     public void insertOperatingMonth(long organizationId, Date beginOm) {
         sqlSession().insert(MAPPING_NAMESPACE + ".insertOperatingMonth",
                 ImmutableMap.of("organizationId", organizationId, "beginOm", beginOm));

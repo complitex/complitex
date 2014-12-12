@@ -4,17 +4,17 @@
  */
 package org.complitex.keconnection.heatmeter.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.ejb.Stateless;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.mybatis.XmlMapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterBindingStatus;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterCorrection;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterCorrectionView;
+
+import javax.ejb.Stateless;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -26,17 +26,17 @@ public class HeatmeterCorrectionBean extends AbstractBean {
 
     private static final String MAPPING_NAMESPACE = HeatmeterCorrectionBean.class.getName();
 
-    @Transactional
+
     public void insert(HeatmeterCorrection correction) {
         sqlSession().insert(MAPPING_NAMESPACE + ".insert", correction);
     }
 
-    @Transactional
+
     public void updateBindingDate(HeatmeterCorrection correction) {
         sqlSession().update(MAPPING_NAMESPACE + ".updateBindingDate", correction);
     }
 
-    @Transactional
+
     public void markHistory(long heatmeterId) {
         sqlSession().update(MAPPING_NAMESPACE + ".markHistory", heatmeterId);
     }
@@ -55,7 +55,7 @@ public class HeatmeterCorrectionBean extends AbstractBean {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".find", filter);
     }
 
-    public int count(FilterWrapper<HeatmeterCorrectionView> filter) {
+    public Long getCount(FilterWrapper<HeatmeterCorrectionView> filter) {
         return sqlSession().selectOne(MAPPING_NAMESPACE + ".count", filter);
     }
 
@@ -63,7 +63,7 @@ public class HeatmeterCorrectionBean extends AbstractBean {
         return sqlSession().selectOne(MAPPING_NAMESPACE + ".findById", correctionId);
     }
 
-    @Transactional
+
     public void save(HeatmeterCorrectionView correction) {
         correction.setBindingStatus(HeatmeterBindingStatus.BOUND);
         correction.setBindingDate(DateUtil.getCurrentDate());

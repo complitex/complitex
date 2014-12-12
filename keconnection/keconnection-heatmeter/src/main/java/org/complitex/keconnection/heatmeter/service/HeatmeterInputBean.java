@@ -1,6 +1,5 @@
 package org.complitex.keconnection.heatmeter.service;
 
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.mybatis.XmlMapper;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterConsumption;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterInput;
@@ -30,7 +29,7 @@ public class HeatmeterInputBean extends HeatmeterPeriodBean<HeatmeterInput> {
         return INPUT;
     }
 
-    @Transactional
+
     @Override
     public void insertAdditionalInfo(HeatmeterInput input, Date om) {
         sqlSession().insert("insertHeatmeterInput", input);
@@ -38,7 +37,7 @@ public class HeatmeterInputBean extends HeatmeterPeriodBean<HeatmeterInput> {
         updateConsumptions(input.getId(), om, input.getConsumptions());
     }
 
-    @Transactional
+
     @Override
     public void updateAdditionalInfo(HeatmeterInput input, Date om) {
         sqlSession().update("updateHeatmeterInput", input);

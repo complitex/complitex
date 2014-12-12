@@ -2,7 +2,6 @@ package org.complitex.common.strategy.organization;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.strategy.IStrategy;
 
 import java.util.List;
@@ -64,7 +63,7 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
      * @param excludeOrganizationsId Ids of user organizations that should be excluded from returned list.
      * @return User organizations that current user can see.
      */
-    @Transactional
+
     List<T> getUserOrganizations(Locale locale, Long... excludeOrganizationsId);
 
     /**
@@ -74,7 +73,7 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
      * @param parentOrganizationId Id of given user organization object.
      * @return Ids of all descendant user organizations.
      */
-    @Transactional
+
     Set<Long> getTreeChildrenOrganizationIds(long parentOrganizationId);
 
     /**
@@ -97,7 +96,7 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
      * @param code Code of tested organization.
      * @return Id of any existing organization with the same code but another id if such exists and <code>null</code> otherwise.
      */
-    @Transactional
+
     Long validateCode(Long id, String code);
 
     /**
@@ -108,7 +107,7 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
      * @param locale Locale. It is used to validate only for names in given {@code locale}.
      * @return Id of any existing organization with the same name but another id if such exists and <code>null</code> otherwise.
      */
-    @Transactional
+
     Long validateName(Long id, String name, Locale locale);
 
     /**
@@ -141,7 +140,7 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
      * @param locale Locale. It is used in sorting of organizations by name.
      * @return All outer organizations visible to user.
      */
-    @Transactional
+
     List<T> getAllOuterOrganizations(Locale locale);
 
     List<T> getOrganizations(List<Long> types,Locale locale);

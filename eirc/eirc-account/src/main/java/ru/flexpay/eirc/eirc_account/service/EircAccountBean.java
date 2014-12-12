@@ -106,7 +106,7 @@ public class EircAccountBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectEircAccounts", filter);
     }
 
-    public int count(FilterWrapper<EircAccount> filter) {
+    public Long getCount(FilterWrapper<EircAccount> filter) {
         EircAccountUtil.addFilterMappingObject(filter);
         return sqlSession().selectOne(NS + ".countEircAccounts", filter);
     }

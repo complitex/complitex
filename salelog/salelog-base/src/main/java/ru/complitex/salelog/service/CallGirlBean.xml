@@ -83,7 +83,7 @@
         </if>
     </select>
 
-    <select id="countCallGirls" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer">
+    <select id="countCallGirls" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(distinct cg.`id`) from `call_girl` cg
         where 1=1
         <include refid="callGirlCondition"/>

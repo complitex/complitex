@@ -25,7 +25,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
-    <select id="selectOwnershipCorrectionsCount" parameterType="long" resultType="int">
+    <select id="selectOwnershipCorrectionsCount" parameterType="long" resultType="long">
         select count(*) from `ownership_correction` c
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>

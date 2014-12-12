@@ -53,7 +53,7 @@
         left join `log_change` as lc on l.id = lc.log_id
     </select>
 
-    <select id="selectLogsCount" resultType="int">
+    <select id="selectLogsCount" resultType="long">
         select count(1) from `log` <include refid="logFilterWhere"/>
     </select>
 

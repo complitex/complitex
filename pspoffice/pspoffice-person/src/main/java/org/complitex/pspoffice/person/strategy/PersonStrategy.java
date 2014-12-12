@@ -16,7 +16,6 @@ import org.complitex.common.entity.StringCulture;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.description.EntityAttributeValueType;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.service.StringCultureBean;
@@ -106,24 +105,36 @@ public class PersonStrategy extends TemplateStrategy {
     public static final String FIRST_NAME_FILTER = "first_name";
     public static final String MIDDLE_NAME_FILTER = "middle_name";
     public static final long DEFAULT_ORDER_BY_ID = -1;
+
     @EJB
     private StringCultureBean stringBean;
+
     @EJB
     private PersonNameBean personNameBean;
+
     @EJB
     private DocumentStrategy documentStrategy;
+
     @EJB
     private DocumentTypeStrategy documentTypeStrategy;
+
     @EJB
     private MilitaryServiceRelationStrategy militaryServiceRelationStrategy;
+
     @EJB
     private LocaleBean localeBean;
+
     @EJB
     private RegistrationStrategy registrationStrategy;
+
     @EJB
     private AddressRendererBean addressRendererBean;
+
     @EJB
     private SessionBean sessionBean;
+
+    @EJB
+    private ApartmentCardStrategy apartmentCardStrategy;
 
     @Override
     public String getEntityTable() {
@@ -180,7 +191,7 @@ public class PersonStrategy extends TemplateStrategy {
         return lastName + " " + firstName + " " + middleName;
     }
 
-    @Transactional
+
     @Override
     public List<Person> getList(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
@@ -202,16 +213,16 @@ public class PersonStrategy extends TemplateStrategy {
         return persons;
     }
 
-    @Transactional
+
     @Override
-    public int count(DomainObjectExample example) {
+    public Long getCount(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
-            return 0;
+            return 0L;
         }
 
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
-        return (Integer) sqlSession().selectOne(PERSON_MAPPING + "." + COUNT_OPERATION, example);
+        return sqlSession().selectOne(PERSON_MAPPING + "." + COUNT_OPERATION, example);
     }
 
     @Override
@@ -224,13 +235,13 @@ public class PersonStrategy extends TemplateStrategy {
         return new Person(super.newInstance());
     }
 
-    @Transactional
+
     @Override
     public Person findById(Long id, boolean runAsAdmin) {
         return findById(id, runAsAdmin, true, true, true, true);
     }
 
-    @Transactional
+
     public Person findById(long id, boolean runAsAdmin, boolean loadName, boolean loadChildren,
             boolean loadDocument, boolean loadMilitaryServiceRelation) {
         DomainObject personObject = super.findById(id, runAsAdmin);
@@ -253,7 +264,7 @@ public class PersonStrategy extends TemplateStrategy {
         return person;
     }
 
-    @Transactional
+
     private void loadName(Person person) {
         //first name
         for (Attribute firstNameAttribute : person.getAttributes(FIRST_NAME)) {
@@ -283,7 +294,7 @@ public class PersonStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     public void loadDocument(Person person) {
         if (person.getDocument() == null) {
             long documentId = person.getAttribute(DOCUMENT).getValueId();
@@ -292,7 +303,7 @@ public class PersonStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     public List<Document> findPreviousDocuments(Long personId) {
         if (personId == null) {
             return null;
@@ -310,7 +321,7 @@ public class PersonStrategy extends TemplateStrategy {
         return previousDocuments;
     }
 
-    @Transactional
+
     public void loadChildren(Person person) {
         List<Attribute> childrenAttributes = person.getAttributes(CHILDREN);
         if (childrenAttributes != null && !childrenAttributes.isEmpty() && person.getChildren().isEmpty()) {
@@ -329,7 +340,7 @@ public class PersonStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     public void loadMilitaryServiceRelation(Person person) {
         if (person.getMilitaryServiceRelation() == null) {
             Attribute militaryServiceRelationAttribute = person.getAttribute(MILITARY_SERVICE_RELATION);
@@ -445,7 +456,7 @@ public class PersonStrategy extends TemplateStrategy {
         return new String[]{SecurityRole.PERSON_MODULE_DESCRIPTION_EDIT};
     }
 
-    @Transactional
+
     public List<Person> findByName(PersonAgeType personAgeType, String lastName, String firstName, String middleName,
             Locale locale) {
         if (Strings.isEmpty(lastName)) {
@@ -486,7 +497,7 @@ public class PersonStrategy extends TemplateStrategy {
         return results;
     }
 
-    @Transactional
+
     @Override
     protected void insertDomainObject(DomainObject object, Date insertDate) {
         Person person = (Person) object;
@@ -514,7 +525,7 @@ public class PersonStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     @Override
     protected void insertUpdatedDomainObject(DomainObject person, Date updateDate) {
         super.insertDomainObject(person, updateDate);
@@ -544,7 +555,7 @@ public class PersonStrategy extends TemplateStrategy {
         person.addAttribute(explAttribute);
     }
 
-    @Transactional
+
     @Override
     public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
         Person oldPerson = (Person) oldObject;
@@ -596,7 +607,7 @@ public class PersonStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     private void removeKidFromParent(final long childId, Date updateDate) {
         Map<String, Long> params = of("childId", childId, "personChildrenAT", CHILDREN);
         List<Long> parentIds = sqlSession().selectList(PERSON_MAPPING + ".findParents", params);
@@ -677,20 +688,19 @@ public class PersonStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     public int countPersonRegistrations(long personId) {
         return (Integer) sqlSession().selectOne(PERSON_MAPPING + ".countPersonRegistrations",
                 newFindPersonRegistrationParameters(personId));
     }
 
-    @Transactional
     public List<PersonRegistration> findPersonRegistrations(long personId) {
         List<PersonRegistration> personRegistrations = sqlSession().selectList(PERSON_MAPPING + ".findPersonRegistrations",
                 newFindPersonRegistrationParameters(personId));
         for (PersonRegistration personRegistration : personRegistrations) {
             personRegistration.setRegistration(
                     registrationStrategy.findById(personRegistration.getRegistrationId(), true, false, true, true));
-            personRegistration.setAddressEntity(ApartmentCardStrategy.getAddressEntity(personRegistration.getAddressTypeId()));
+            personRegistration.setAddressEntity(apartmentCardStrategy.getAddressEntity(personRegistration.getAddressTypeId()));
         }
         return personRegistrations;
     }
@@ -742,17 +752,17 @@ public class PersonStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     public List<PersonApartmentCardAddress> findPersonApartmentCardAddresses(long personId) {
         List<PersonApartmentCardAddress> personApartmentCardAddresses = sqlSession().selectList(PERSON_MAPPING
                 + ".findPersonApartmentCardAddresses", newFindPersonRegistrationParameters(personId));
         for (PersonApartmentCardAddress personApartmentCardAddress : personApartmentCardAddresses) {
-            personApartmentCardAddress.setAddressEntity(ApartmentCardStrategy.getAddressEntity(personApartmentCardAddress.getAddressTypeId()));
+            personApartmentCardAddress.setAddressEntity(apartmentCardStrategy.getAddressEntity(personApartmentCardAddress.getAddressTypeId()));
         }
         return personApartmentCardAddresses;
     }
 
-    @Transactional
+
     public String findPermanentRegistrationAddress(long personId, Locale locale) {
         Map<Object, Object> params = builder().putAll(newFindPersonRegistrationParameters(personId)).
                 put("registrationTypeAT", RegistrationStrategy.REGISTRATION_TYPE).
@@ -762,13 +772,13 @@ public class PersonStrategy extends TemplateStrategy {
                 PERSON_MAPPING + ".findPermanentRegistrationAddress", params);
         if (!personRegistrations.isEmpty()) {
             return addressRendererBean.displayAddress(
-                    ApartmentCardStrategy.getAddressEntity(personRegistrations.get(0).getAddressTypeId()),
+                    apartmentCardStrategy.getAddressEntity(personRegistrations.get(0).getAddressTypeId()),
                     personRegistrations.get(0).getAddressId(), locale);
         }
         return null;
     }
 
-    @Transactional
+
     public void registerPersonDeath(Person person, Date deathDate, List<PersonRegistration> activePersonRegistrations,
             Locale locale) {
         Date updateDate = DateUtil.getCurrentDate();
@@ -800,7 +810,7 @@ public class PersonStrategy extends TemplateStrategy {
         disable(person, updateDate);
     }
 
-    @Transactional
+
     private void disable(Person person, Date endDate) {
         person.setEndDate(endDate);
         changeActivity(person, false);

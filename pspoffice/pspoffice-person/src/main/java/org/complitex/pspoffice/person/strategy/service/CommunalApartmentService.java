@@ -4,12 +4,12 @@
  */
 package org.complitex.pspoffice.person.strategy.service;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.pspoffice.person.strategy.ApartmentCardStrategy;
 import org.complitex.pspoffice.person.strategy.entity.ApartmentCard;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
 /**
  *
@@ -21,7 +21,7 @@ public class CommunalApartmentService extends AbstractBean {
     @EJB
     private ApartmentCardStrategy apartmentCardStrategy;
 
-    @Transactional
+
     public boolean isCommunalApartmentCard(ApartmentCard apartmentCard) {
         if (apartmentCard.getId() == null) {
             return false;

@@ -206,7 +206,7 @@
         </if>
     </sql>
 
-    <select id="count" resultType="int" parameterType="org.complitex.osznconnection.file.entity.example.PaymentExample">
+    <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.PaymentExample">
         SELECT COUNT(1) FROM `payment` p WHERE p.`request_file_id` = #{requestFileId}
         <include refid="org.complitex.osznconnection.file.service.PaymentBean.filter"/>
     </select>

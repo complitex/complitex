@@ -1,6 +1,5 @@
 package org.complitex.keconnection.heatmeter.service;
 
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.mybatis.XmlMapper;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterPayload;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterPeriodType;
@@ -25,13 +24,13 @@ public class HeatmeterPayloadBean extends HeatmeterPeriodBean<HeatmeterPayload> 
         return PAYLOAD;
     }
 
-    @Transactional
+
     @Override
     public void insertAdditionalInfo(HeatmeterPayload payload, Date om) {
         sqlSession().insert("insertHeatmeterPayload", payload);
     }
 
-    @Transactional
+
     @Override
     public void updateAdditionalInfo(HeatmeterPayload payload, Date om) {
         sqlSession().update("updateHeatmeterPayload", payload);

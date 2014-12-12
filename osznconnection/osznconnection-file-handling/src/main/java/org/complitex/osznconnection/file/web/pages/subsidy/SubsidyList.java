@@ -5,8 +5,6 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.CancelEventIfAjaxListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -28,15 +26,15 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.util.AddressRenderer;
+import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.ExceptionUtil;
+import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
+import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.complitex.correction.web.component.AddressCorrectionPanel;
-import org.complitex.common.service.SessionBean;
-import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
-import org.complitex.common.web.component.datatable.DataProvider;
-import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.SubsidyExample;
 import org.complitex.osznconnection.file.entity.example.SubsidySumFilter;
@@ -45,7 +43,6 @@ import org.complitex.osznconnection.file.service.status.details.StatusDetailBean
 import org.complitex.osznconnection.file.service.status.details.SubsidyExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.SubsidyStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.SubsidyFileList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
@@ -157,9 +154,10 @@ public final class SubsidyList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 example.getObject().setAsc(getSort().isAscending());
-                return subsidyBean.count(example.getObject());
+
+                return subsidyBean.getCount(example.getObject());
             }
         };
         dataProvider.setSort("", SortOrder.ASCENDING);

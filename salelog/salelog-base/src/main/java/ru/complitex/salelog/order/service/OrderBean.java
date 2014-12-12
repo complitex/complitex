@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.SequenceBean;
 import org.complitex.common.util.DateUtil;
@@ -27,7 +26,7 @@ public class OrderBean extends AbstractBean {
     @EJB
     private SequenceBean sequenceBean;
 
-    @Transactional
+
     public void archive(Order object) {
         if (object.getEndDate() == null) {
             object.setEndDate(DateUtil.getCurrentDate());
@@ -73,11 +72,11 @@ public class OrderBean extends AbstractBean {
         return orders;
     }
 
-    public int count(FilterWrapper<OrderExt> filter) {
+    public Long getCount(FilterWrapper<OrderExt> filter) {
         return sqlSession().selectOne(NS + ".countOrders", filter);
     }
 
-    @Transactional
+
     public void save(Order order) {
         if (order.getId() == null) {
             create(order);

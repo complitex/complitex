@@ -56,8 +56,8 @@ public class DistrictSelectPanel extends Panel {
             }
 
             @Override
-            protected int getSize() {
-                return districtStrategy.count(example);
+            protected Long getSize() {
+                return districtStrategy.getCount(example);
             }
         };
 

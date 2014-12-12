@@ -7,11 +7,10 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.room.RoomStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.correction.entity.*;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
+import org.complitex.correction.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,11 +48,11 @@ public class AddressCorrectionBean extends AbstractBean {
         return getCityCorrections(FilterWrapper.of(new CityCorrection(null, objectId, correction, osznId, userOrganizationId, null)));
     }
 
-    public Integer getCityCorrectionsCount(FilterWrapper<CityCorrection> filterWrapper) {
+    public Long getCityCorrectionsCount(FilterWrapper<CityCorrection> filterWrapper) {
         return sqlSession().selectOne(NS + ".selectCityCorrectionsCount", filterWrapper);
     }
 
-    @Transactional
+
     public boolean save(CityCorrection cityCorrection) {
         if (cityCorrection.getId() == null) {
             if (!isCityObjectExists(cityCorrection.getCorrection(), cityCorrection.getObjectId())){
@@ -68,7 +67,7 @@ public class AddressCorrectionBean extends AbstractBean {
         return true;
     }
 
-    @Transactional
+
     public void delete(CityCorrection cityCorrection){
         sqlSession().delete(NS_CORRECTION + ".deleteCorrection", cityCorrection);
     }
@@ -97,11 +96,11 @@ public class AddressCorrectionBean extends AbstractBean {
                 correction, organizationId, userOrganizationId, null)));
     }
 
-    public Integer getDistrictCorrectionsCount(FilterWrapper<DistrictCorrection> filterWrapper){
+    public Long getDistrictCorrectionsCount(FilterWrapper<DistrictCorrection> filterWrapper){
         return sqlSession().selectOne(NS + ".selectDistrictCorrectionsCount", filterWrapper);
     }
 
-    @Transactional
+
     public boolean save(DistrictCorrection districtCorrection){
         if (districtCorrection.getId() == null) {
             if (!isDistrictObjectExists(districtCorrection.getCorrection(), districtCorrection.getObjectId())) {
@@ -116,7 +115,7 @@ public class AddressCorrectionBean extends AbstractBean {
         return true;
     }
 
-    @Transactional
+
     public void delete(DistrictCorrection districtCorrection){
         sqlSession().delete(NS_CORRECTION + ".deleteCorrection", districtCorrection);
     }
@@ -144,11 +143,11 @@ public class AddressCorrectionBean extends AbstractBean {
                 userOrganizationId, null)));
     }
 
-    public Integer getStreetTypeCorrectionsCount(FilterWrapper<StreetTypeCorrection> filterWrapper) {
+    public Long getStreetTypeCorrectionsCount(FilterWrapper<StreetTypeCorrection> filterWrapper) {
         return sqlSession().selectOne(NS + ".selectStreetTypeCorrectionsCount", filterWrapper);
     }
 
-    @Transactional
+
     public boolean save(StreetTypeCorrection streetTypeCorrection) {
         if (streetTypeCorrection.getId() == null) {
             if (!isStreetTypeObjectExists(streetTypeCorrection.getCorrection(), streetTypeCorrection.getObjectId())) {
@@ -163,7 +162,7 @@ public class AddressCorrectionBean extends AbstractBean {
         return true;
     }
 
-    @Transactional
+
     public void delete(StreetTypeCorrection streetTypeCorrection){
         sqlSession().delete(NS_CORRECTION + ".deleteCorrection", streetTypeCorrection);
     }
@@ -186,7 +185,7 @@ public class AddressCorrectionBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectStreetCorrections", filterWrapper);
     }
 
-    public Integer getStreetCorrectionsCount(FilterWrapper<StreetCorrection> filterWrapper) {
+    public Long getStreetCorrectionsCount(FilterWrapper<StreetCorrection> filterWrapper) {
         return sqlSession().selectOne(NS + ".selectStreetCorrectionsCount", filterWrapper);
     }
 
@@ -197,7 +196,7 @@ public class AddressCorrectionBean extends AbstractBean {
                 objectId, street, osznId, userOrganizationId, null)));
     }
 
-    @Transactional
+
     public boolean save(StreetCorrection streetCorrection) {
         if (streetCorrection.getId() == null) {
             if (!isStreetObjectExists(streetCorrection.getCorrection(), streetCorrection.getObjectId())) {
@@ -237,7 +236,7 @@ public class AddressCorrectionBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectBuildingCorrections", filterWrapper);
     }
 
-    public Integer getBuildingCorrectionsCount(FilterWrapper<BuildingCorrection> filterWrapper) {
+    public Long getBuildingCorrectionsCount(FilterWrapper<BuildingCorrection> filterWrapper) {
         return sqlSession().selectOne(NS + ".selectBuildingCorrectionsCount", filterWrapper);
     }
 
@@ -247,7 +246,7 @@ public class AddressCorrectionBean extends AbstractBean {
                 buildingNumber, buildingCorp, osznId, userOrganizationId, null)));
     }
 
-    @Transactional
+
     public boolean save(BuildingCorrection buildingCorrection){
         if (buildingCorrection.getCorrectionCorp() == null) {
             buildingCorrection.setCorrectionCorp("");
@@ -294,11 +293,11 @@ public class AddressCorrectionBean extends AbstractBean {
                 correction, organizationId, userOrganizationId, null)));
     }
 
-    public Integer getApartmentCorrectionsCount(FilterWrapper<ApartmentCorrection> filterWrapper){
+    public Long getApartmentCorrectionsCount(FilterWrapper<ApartmentCorrection> filterWrapper){
         return sqlSession().selectOne(NS + ".selectApartmentCorrectionsCount", filterWrapper);
     }
 
-    @Transactional
+
     public boolean save(ApartmentCorrection apartmentCorrection){
         if (apartmentCorrection.getId() == null) {
             if (!isApartmentObjectExists(apartmentCorrection.getCorrection(), apartmentCorrection.getObjectId())) {
@@ -313,7 +312,7 @@ public class AddressCorrectionBean extends AbstractBean {
         return true;
     }
 
-    @Transactional
+
     public void delete(ApartmentCorrection apartmentCorrection){
         sqlSession().delete(NS_CORRECTION + ".deleteCorrection", apartmentCorrection);
     }
@@ -343,11 +342,11 @@ public class AddressCorrectionBean extends AbstractBean {
                 correction, organizationId, userOrganizationId, null)));
     }
 
-    public Integer getRoomCorrectionsCount(FilterWrapper<RoomCorrection> filterWrapper) {
+    public Long getRoomCorrectionsCount(FilterWrapper<RoomCorrection> filterWrapper) {
         return sqlSession().selectOne(NS + ".selectRoomCorrectionsCount", filterWrapper);
     }
 
-    @Transactional
+
     public boolean save(RoomCorrection roomCorrection) {
         if (roomCorrection.getId() == null) {
             if (!isRoomObjectExists(roomCorrection.getCorrection(), roomCorrection.getObjectId())) {
@@ -362,7 +361,7 @@ public class AddressCorrectionBean extends AbstractBean {
         return true;
     }
 
-    @Transactional
+
     public void delete(RoomCorrection roomCorrection) {
         sqlSession().delete(NS_CORRECTION + ".deleteCorrection", roomCorrection);
     }

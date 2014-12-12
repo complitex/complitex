@@ -232,7 +232,7 @@
     </sql>
 
     <select id="selectRequestFilesCount" parameterType="org.complitex.osznconnection.file.entity.RequestFileFilter"
-            resultType="int">
+            resultType="long">
         SELECT COUNT(1) FROM `request_file` rf <include refid="requestFilesFilterWhere"/>
     </select>
 

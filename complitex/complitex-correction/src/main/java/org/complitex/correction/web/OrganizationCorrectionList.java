@@ -5,11 +5,11 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.correction.entity.OrganizationCorrection;
+import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;
@@ -43,7 +43,7 @@ public class OrganizationCorrectionList extends AbstractCorrectionList<Organizat
     }
 
     @Override
-    protected Integer getCorrectionsCount(FilterWrapper<OrganizationCorrection> filterWrapper) {
+    protected Long getCorrectionsCount(FilterWrapper<OrganizationCorrection> filterWrapper) {
         return organizationCorrectionBean.getOrganizationCorrectionsCount(filterWrapper);
     }
 

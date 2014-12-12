@@ -66,7 +66,7 @@
             </if>
     </sql>
     
-    <select id="count" parameterType="map" resultType="int">
+    <select id="count" parameterType="map" resultType="long">
         SELECT COUNT(DISTINCT b.`object_id`)
             <include refid="org.complitex.pspoffice.person.strategy.service.BuildingsGridBean.from"/>
             <include refid="org.complitex.pspoffice.person.strategy.service.BuildingsGridBean.where"/>

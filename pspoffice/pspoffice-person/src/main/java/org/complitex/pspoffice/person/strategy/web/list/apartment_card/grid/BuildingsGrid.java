@@ -181,8 +181,8 @@ public final class BuildingsGrid extends TemplatePage {
             }
             
             @Override
-            protected int getSize() {
-                return buildingsGridBean.count(filter);
+            protected Long getSize() {
+                return buildingsGridBean.getCount(filter);
             }
         };
 

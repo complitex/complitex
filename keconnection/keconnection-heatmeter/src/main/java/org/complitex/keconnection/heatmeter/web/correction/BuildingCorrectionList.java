@@ -4,8 +4,6 @@
  */
 package org.complitex.keconnection.heatmeter.web.correction;
 
-import javax.ejb.EJB;
-import java.util.List;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.keconnection.heatmeter.entity.BuildingCorrection;
@@ -14,6 +12,9 @@ import org.complitex.keconnection.heatmeter.entity.example.BuildingCorrectionExa
 import org.complitex.keconnection.heatmeter.entity.example.CorrectionExample;
 import org.complitex.keconnection.heatmeter.service.AddressCorrectionBean;
 import org.complitex.keconnection.heatmeter.web.AddressRenderer;
+
+import javax.ejb.EJB;
+import java.util.List;
 
 /**
  * Список коррекций домов.
@@ -46,7 +47,7 @@ public class BuildingCorrectionList extends AddressCorrectionList {
     }
 
     @Override
-    protected int count(CorrectionExample example) {
+    protected Long getCount(CorrectionExample example) {
         return addressCorrectionBean.countBuildings(example);
     }
 

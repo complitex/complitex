@@ -12,14 +12,13 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.room.RoomStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.LocaleBean;
 import org.complitex.correction.entity.*;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.mybatis.Transactional;
-import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -177,7 +176,7 @@ public class AddressService extends AbstractBean {
                     data.setStreetId(streetObjectId);
 
                     DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
-                    data.setStreetTypeId(StreetStrategy.getStreetType(streetObject));
+                    data.setStreetTypeId(streetStrategy.getStreetType(streetObject));
 
                     //перейти к обработке дома
                 } else if (streetIds.size() > 1) { // нашли больше одной улицы
@@ -191,7 +190,7 @@ public class AddressService extends AbstractBean {
 
 
                         DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
-                        data.setStreetTypeId(StreetStrategy.getStreetType(streetObject));
+                        data.setStreetTypeId(streetStrategy.getStreetType(streetObject));
 
                         //перейти к обработке дома
                     } else {
@@ -204,7 +203,7 @@ public class AddressService extends AbstractBean {
                             data.setStreetId(streetObjectId);
 
                             DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
-                            data.setStreetTypeId(StreetStrategy.getStreetType(streetObject));
+                            data.setStreetTypeId(streetStrategy.getStreetType(streetObject));
 
                             //проставить дом для payment и выйти
                             List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(data.getCityId(),
@@ -240,7 +239,7 @@ public class AddressService extends AbstractBean {
                 data.setStreetId(streetId);
 
                 DomainObject streetObject = streetStrategy.findById(streetId, true);
-                data.setStreetTypeId(StreetStrategy.getStreetType(streetObject));
+                data.setStreetTypeId(streetStrategy.getStreetType(streetObject));
 
                 // перейти к обработке дома
             } else if (streetIds.size() > 1) { // нашли более одной улицы
@@ -252,7 +251,7 @@ public class AddressService extends AbstractBean {
                     data.setStreetId(streetId);
 
                     DomainObject streetObject = streetStrategy.findById(streetId, true);
-                    data.setStreetTypeId(StreetStrategy.getStreetType(streetObject));
+                    data.setStreetTypeId(streetStrategy.getStreetType(streetObject));
                     // перейти к обработке дома
                 } else {
                     // пытаемся искать дополнительно по номеру и корпусу дома
@@ -385,7 +384,7 @@ public class AddressService extends AbstractBean {
      * @param apartmentObjectId Откорректированная квартира
      * @param roomObjectId Откорректированная квартира
      */
-    @Transactional
+
     public void correctAddress(AddressLinkData data, AddressEntity entity, Long cityObjectId,
                                Long streetTypeObjectId, Long streetObjectId, Long buildingObjectId,
                                Long apartmentObjectId, Long roomObjectId,

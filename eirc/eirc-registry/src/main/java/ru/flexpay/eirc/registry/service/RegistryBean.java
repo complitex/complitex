@@ -28,7 +28,7 @@ public class RegistryBean extends AbstractBean {
         return sqlSession().selectList(NS + ".selectRegistries", filter);
     }
 
-    public int count(FilterWrapper<Registry> filter) {
+    public Long getCount(FilterWrapper<Registry> filter) {
         return sqlSession().selectOne(NS + ".countRegistries", filter);
     }
 

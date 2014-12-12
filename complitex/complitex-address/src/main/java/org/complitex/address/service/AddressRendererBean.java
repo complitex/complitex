@@ -6,7 +6,6 @@ package org.complitex.address.service;
 
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.SimpleObjectInfo;
 import org.complitex.common.strategy.StrategyFactory;
@@ -26,7 +25,7 @@ public class AddressRendererBean {
     @EJB
     private StrategyFactory strategyFactory;
 
-    @Transactional
+
     public String displayAddress(String addressEntity, long addressId, Locale locale, String[] addressUnits) {
         if (addressUnits == null || addressUnits.length == 0) {
             throw new IllegalArgumentException("Address units list is null or empty.");
@@ -66,7 +65,7 @@ public class AddressRendererBean {
         return addressLabel.toString();
     }
 
-    @Transactional
+
     public String displayAddress(String addressEntity, long addressId, Locale locale) {
         return displayAddress(addressEntity, addressId, locale, new String[]{"city", "street", "building", "apartment", "room"});
     }

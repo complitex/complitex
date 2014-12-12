@@ -10,17 +10,16 @@ import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.LocaleBean;
+import org.complitex.common.service.ModuleBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.correction.entity.*;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.mybatis.Transactional;
-import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.ModuleBean;
-import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -187,7 +186,7 @@ public class AddressService extends AbstractBean {
                     request.setStreetObjectId(streetObjectId);
 
                     DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
-                    request.setStreetTypeObjectId(StreetStrategy.getStreetType(streetObject));
+                    request.setStreetTypeObjectId(streetStrategy.getStreetType(streetObject));
 
                     //перейти к обработке дома
                 } else if (streetIds.size() > 1) { // нашли больше одной улицы
@@ -201,7 +200,7 @@ public class AddressService extends AbstractBean {
 
 
                         DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
-                        request.setStreetTypeObjectId(StreetStrategy.getStreetType(streetObject));
+                        request.setStreetTypeObjectId(streetStrategy.getStreetType(streetObject));
 
                         //перейти к обработке дома
                     } else {
@@ -214,7 +213,7 @@ public class AddressService extends AbstractBean {
                             request.setStreetObjectId(streetObjectId);
 
                             DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
-                            request.setStreetTypeObjectId(StreetStrategy.getStreetType(streetObject));
+                            request.setStreetTypeObjectId(streetStrategy.getStreetType(streetObject));
 
                             //проставить дом для payment и выйти
                             List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(request.getCityObjectId(),
@@ -250,7 +249,7 @@ public class AddressService extends AbstractBean {
                 request.setStreetObjectId(streetId);
 
                 DomainObject streetObject = streetStrategy.findById(streetId, true);
-                request.setStreetTypeObjectId(StreetStrategy.getStreetType(streetObject));
+                request.setStreetTypeObjectId(streetStrategy.getStreetType(streetObject));
 
                 // перейти к обработке дома
             } else if (streetIds.size() > 1) { // нашли более одной улицы
@@ -262,7 +261,7 @@ public class AddressService extends AbstractBean {
                     request.setStreetObjectId(streetId);
 
                     DomainObject streetObject = streetStrategy.findById(streetId, true);
-                    request.setStreetTypeObjectId(StreetStrategy.getStreetType(streetObject));
+                    request.setStreetTypeObjectId(streetStrategy.getStreetType(streetObject));
                     // перейти к обработке дома
                 } else {
                     // пытаемся искать дополнительно по номеру и корпусу дома
@@ -335,7 +334,7 @@ public class AddressService extends AbstractBean {
      * Квартиры не ищем, а проставляем напрямую, обрезая пробелы.
      * Алгоритм аналогичен для поиска остальных составляющих адреса.
      */
-    @Transactional
+
     public void resolveOutgoingAddress(AbstractAddressRequest request, CalculationContext calculationContext) {
         Long calcId = calculationContext.getCalculationCenterId();
         Long userOrganizationId = calculationContext.getUserOrganizationId();
@@ -477,7 +476,7 @@ public class AddressService extends AbstractBean {
     /**
      * разрешить адрес по схеме "ОСЗН адрес -> локальная адресная база -> адрес центра начислений"
      */
-    @Transactional
+
     public void resolveAddress(Payment payment, CalculationContext calculationContext) {
         //разрешить адрес локально
         resolveLocalAddress(payment);
@@ -487,7 +486,7 @@ public class AddressService extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void resolveAddress(ActualPayment actualPayment, CalculationContext calculationContext) {
         //разрешить адрес локально
         resolveLocalAddress(actualPayment);
@@ -498,7 +497,7 @@ public class AddressService extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void resolveAddress(Subsidy subsidy, CalculationContext calculationContext) {
         //разрешить адрес локально
         resolveLocalAddress(subsidy);
@@ -509,7 +508,7 @@ public class AddressService extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void resolveAddress(DwellingCharacteristics dwellingCharacteristics, CalculationContext calculationContext) {
         //разрешить адрес локально
         resolveLocalAddress(dwellingCharacteristics);
@@ -520,7 +519,7 @@ public class AddressService extends AbstractBean {
         }
     }
 
-    @Transactional
+
     public void resolveAddress(FacilityServiceType facilityServiceType, CalculationContext calculationContext) {
         //разрешить адрес локально
         resolveLocalAddress(facilityServiceType);
@@ -546,7 +545,7 @@ public class AddressService extends AbstractBean {
      * @param streetTypeObjectId Откорректированный тип улицы
      * @param buildingObjectId Откорректированный дом
      */
-    @Transactional
+
     public void correctLocalAddress(AbstractAccountRequest request, AddressEntity entity, Long cityObjectId,
                                     Long streetTypeObjectId, Long streetObjectId, Long buildingObjectId,
                                     Long userOrganizationId)

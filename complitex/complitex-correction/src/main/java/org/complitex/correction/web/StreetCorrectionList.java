@@ -5,13 +5,13 @@ import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.address.util.AddressRenderer;
-import org.complitex.correction.entity.StreetCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.IStrategy;
+import org.complitex.correction.entity.StreetCorrection;
+import org.complitex.correction.service.AddressCorrectionBean;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -83,7 +83,7 @@ public class StreetCorrectionList extends AddressCorrectionList<StreetCorrection
     }
 
     @Override
-    protected Integer getCorrectionsCount(FilterWrapper<StreetCorrection> filterWrapper) {
+    protected Long getCorrectionsCount(FilterWrapper<StreetCorrection> filterWrapper) {
         return addressCorrectionBean.getStreetCorrectionsCount(filterWrapper);
     }
 

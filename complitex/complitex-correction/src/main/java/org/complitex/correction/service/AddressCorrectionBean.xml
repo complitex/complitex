@@ -56,7 +56,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
-    <select id="selectCityCorrectionsCount" resultType="int"
+    <select id="selectCityCorrectionsCount" resultType="long"
             parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `city_correction` c
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
@@ -82,8 +82,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionOrderLimit"/>
     </select>
 
-    <select id="selectDistrictCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper"
-            resultType="int">
+    <select id="selectDistrictCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(*) from `district_correction` c
         <include refid="selectDistrictCorrectionsWhere"/>
     </select>
@@ -116,7 +115,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
     </select>
 
-    <select id="selectStreetTypeCorrectionsCount" resultType="int"
+    <select id="selectStreetTypeCorrectionsCount" resultType="long"
             parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `street_type_correction` c
         <include refid="org.complitex.common.entity.Correction.selectCorrectionWhere"/>
@@ -143,8 +142,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionOrderLimit"/>
     </select>
 
-    <select id="selectStreetCorrectionsCount" resultType="int"
-            parameterType="org.complitex.common.entity.FilterWrapper">
+    <select id="selectStreetCorrectionsCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `street_correction` c
         <include refid="selectStreetCorrectionsWhere"/>
     </select>
@@ -196,8 +194,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionOrderLimit"/>
     </select>
 
-    <select id="selectBuildingCorrectionsCount" resultType="int"
-            parameterType="org.complitex.common.entity.FilterWrapper">
+    <select id="selectBuildingCorrectionsCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `building_correction` c
         <include refid="selectBuildingCorrectionsWhere"/>
     </select>
@@ -356,8 +353,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionOrderLimit"/>
     </select>
 
-    <select id="selectApartmentCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper"
-            resultType="int">
+    <select id="selectApartmentCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(*) from `apartment_correction` c
         <include refid="selectApartmentCorrectionsWhere"/>
     </select>
@@ -393,8 +389,7 @@
         <include refid="org.complitex.common.entity.Correction.selectCorrectionOrderLimit"/>
     </select>
 
-    <select id="selectRoomCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper"
-            resultType="int">
+    <select id="selectRoomCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(*) from `room_correction` c
         <include refid="selectRoomCorrectionsWhere"/>
     </select>

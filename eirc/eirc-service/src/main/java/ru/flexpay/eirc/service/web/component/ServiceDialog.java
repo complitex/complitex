@@ -91,12 +91,12 @@ public class ServiceDialog extends FormComponentPanel<Service> {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 if (!showData) {
-                    return 0;
+                    return 0L;
                 }
                 filterWrapper.setLocale(localeBean.convert(getLocale()));
-                return serviceBean.count(filterWrapper);
+                return serviceBean.getCount(filterWrapper);
             }
         };
 

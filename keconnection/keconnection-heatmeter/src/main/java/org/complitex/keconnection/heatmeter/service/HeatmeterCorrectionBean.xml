@@ -63,7 +63,7 @@
         LIMIT #{first}, #{count}
     </select>
     
-    <select id="count" resultType="int" parameterType="org.complitex.common.entity.FilterWrapper">
+    <select id="count" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
         SELECT COUNT(1) FROM `heatmeter_correction` c
         <include refid="org.complitex.keconnection.heatmeter.service.HeatmeterCorrectionBean.join"/>
         <include refid="org.complitex.keconnection.heatmeter.service.HeatmeterCorrectionBean.where"/>

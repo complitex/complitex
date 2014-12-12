@@ -8,7 +8,6 @@ import com.google.common.collect.ImmutableMap;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -67,7 +66,7 @@ public class MilitaryServiceRelationStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     public List<DomainObject> getAll(Locale sortLocale) {
         DomainObjectExample example = new DomainObjectExample();
         if (sortLocale != null) {

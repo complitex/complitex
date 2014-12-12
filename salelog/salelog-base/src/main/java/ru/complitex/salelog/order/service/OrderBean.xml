@@ -190,7 +190,7 @@
         left join `product` p on ps.`product_id` = p.`id`
     </select>
 
-    <select id="countOrders" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer">
+    <select id="countOrders" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(distinct o.`object_id`) from `order` o
         left join `call_girl` cg on o.`call_girl_id` = cg.`id`
         <if test="object.productCode != null">

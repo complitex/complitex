@@ -9,7 +9,6 @@ import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
@@ -153,7 +152,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
         return new Organization(super.newInstance());
     }
 
-    @Transactional
+
     @Override
     public Organization findById(Long id, boolean runAsAdmin) {
         DomainObject object = super.findById(id, runAsAdmin);
@@ -166,7 +165,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
         return organization;
     }
 
-    @Transactional
+
     @Override
     public List<Organization> getList(DomainObjectExample example) {
         if (example.getLocaleId() == null){
@@ -201,16 +200,17 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
         example.addAdditionalParam("organizationShortNameAT", SHORT_NAME);
     }
 
-    @Transactional
+
     @Override
-    public int count(DomainObjectExample example) {
+    public Long getCount(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
-            return 0;
+            return 0L;
         }
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
         setupFindOperationParameters(example);
-        return (Integer) sqlSession().selectOne(MAPPING_NAMESPACE + "." + COUNT_OPERATION, example);
+
+        return sqlSession().selectOne(MAPPING_NAMESPACE + "." + COUNT_OPERATION, example);
     }
 
     private void loadOperatingMonthDate(Organization organization) {
@@ -259,7 +259,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
         }
     }
 
-    @Transactional
+
     @Override
     public DomainObject findHistoryObject(long objectId, Date date) {
         DomainObject object = super.findHistoryObject(objectId, date);
@@ -272,13 +272,13 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
         return organization;
     }
 
-    @Transactional
+
     public void setReadyCloseOperatingMonthFlag(Organization organization) {
         organization.setStringValue(READY_CLOSE_OPER_MONTH, new BooleanConverter().toString(Boolean.TRUE));
         update(findById(organization.getId(), true), organization, getCurrentDate());
     }
 
-    @Transactional
+
     public void closeOperatingMonth(Organization organization) {
         organization.setStringValue(READY_CLOSE_OPER_MONTH, new BooleanConverter().toString(Boolean.FALSE));
         update(findById(organization.getId(), true), organization, getCurrentDate());

@@ -38,7 +38,7 @@
         limit #{first}, #{count}
     </select>
 
-    <select id="selectReportListCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="int">
+    <select id="selectReportListCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(*) from `report`
         <where>
             <if test="object.name != null">`name` like concat('%',#{object.name},'%')</if>

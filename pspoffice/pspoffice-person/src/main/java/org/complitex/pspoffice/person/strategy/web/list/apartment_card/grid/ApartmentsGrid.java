@@ -150,8 +150,8 @@ public final class ApartmentsGrid extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
-                return apartmentGridBean.count(filter);
+            protected Long getSize() {
+                return apartmentGridBean.getCount(filter);
             }
         };
 

@@ -16,7 +16,6 @@ import org.complitex.common.entity.StatusType;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.description.EntityAttributeValueType;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.IStrategy;
@@ -170,7 +169,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         return apartmentCard;
     }
 
-    @Transactional
+
     @Override
     public ApartmentCard findById(Long id, boolean runAsAdmin) {
         return findById(id, runAsAdmin, true, true, true);
@@ -195,21 +194,21 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         return apartmentCard;
     }
 
-    @Transactional
+
     private void loadOwnershipForm(ApartmentCard apartmentCard) {
         long ownershipFormId = apartmentCard.getAttribute(FORM_OF_OWNERSHIP).getValueId();
         DomainObject ownershipForm = ownershipFormStrategy.findById(ownershipFormId, true);
         apartmentCard.setOwnershipForm(ownershipForm);
     }
 
-    @Transactional
+
     private void loadOwner(ApartmentCard apartmentCard) {
         long ownerId = apartmentCard.getAttribute(OWNER).getValueId();
         Person owner = personStrategy.findById(ownerId, true, true, false, false, false);
         apartmentCard.setOwner(owner);
     }
 
-    public static String getAddressEntity(long addressValueTypeId) {
+    public String getAddressEntity(long addressValueTypeId) {
         if (ADDRESS_ROOM == addressValueTypeId) {
             return "room";
         } else if (ADDRESS_APARTMENT == addressValueTypeId) {
@@ -222,7 +221,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         }
     }
 
-    public static String getAddressEntity(ApartmentCard apartmentCard) {
+    public String getAddressEntity(ApartmentCard apartmentCard) {
         long valueTypeId = apartmentCard.getAttribute(ADDRESS).getValueTypeId();
         return getAddressEntity(valueTypeId);
     }
@@ -283,14 +282,14 @@ public class ApartmentCardStrategy extends TemplateStrategy {
                 setValue(String.valueOf(userId));
     }
 
-    @Transactional
+
     @Override
     public void insert(DomainObject apartmentCard, Date insertDate) {
         setEditedByUserId(apartmentCard);
         super.insert(apartmentCard, insertDate);
     }
 
-    @Transactional
+
     @Override
     public void update(DomainObject oldApartmentCard, DomainObject newApartmentCard, Date updateDate) {
         setEditedByUserId(newApartmentCard);
@@ -316,7 +315,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     public boolean isLeafAddress(long addressId, String addressEntity) {
         boolean isLeaf = true;
         IStrategy addressStrategy = strategyFactory.getStrategy(addressEntity);
@@ -329,7 +328,8 @@ public class ApartmentCardStrategy extends TemplateStrategy {
             example.setStatus(ShowMode.ACTIVE.name());
             for (String child : children) {
                 IStrategy childStrategy = strategyFactory.getStrategy(child);
-                int count = childStrategy.count(example);
+                Long count = childStrategy.getCount(example);
+
                 if (count > 0) {
                     isLeaf = false;
                     break;
@@ -352,7 +352,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         return params;
     }
 
-    @Transactional
+
     public int countByAddress(String addressEntity, long addressId) {
         checkEntity(addressEntity);
         addressEntity = Strings.capitalize(addressEntity);
@@ -366,12 +366,12 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     public ApartmentCard findOneByAddress(String addressEntity, long addressId) {
         return findByAddress(addressEntity, addressId, 0, 1).get(0);
     }
 
-    @Transactional
+
     public List<ApartmentCard> findByAddress(String addressEntity, long addressId, int start, int size) {
         checkEntity(addressEntity);
         Map<String, Object> params = newSearchByAddressParams(addressId);
@@ -391,7 +391,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
      * @param apartmentCard
      * @return
      */
-    @Transactional
+
     public Long getApartmentId(ApartmentCard apartmentCard) {
         Long apartmentId = null;
 
@@ -409,7 +409,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         return apartmentId;
     }
 
-    @Transactional
+
     public List<ApartmentCard> getNeighbourApartmentCards(ApartmentCard apartmentCard) {
         Long apartmentId = getApartmentId(apartmentCard);
 
@@ -427,7 +427,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         return neighbourApartmentCards;
     }
 
-    @Transactional
+
     private void loadAllRegistrations(ApartmentCard apartmentCard) {
         List<Registration> registrations = newArrayList();
         List<Attribute> registrationAttributes = apartmentCard.getAttributes(REGISTRATIONS);
@@ -444,20 +444,20 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         apartmentCard.setRegistrations(registrations);
     }
 
-    @Transactional
+
     private void addRegistration(ApartmentCard apartmentCard, Registration registration, long attributeId, Date insertDate) {
         registration.setSubjectIds(apartmentCard.getSubjectIds());
         registrationStrategy.insert(registration, insertDate);
         insertRegistrationAttribute(apartmentCard, registration.getId(), attributeId, insertDate);
     }
 
-    @Transactional
+
     public void addRegistration(ApartmentCard apartmentCard, Registration registration, Date insertDate) {
         long attributeId = apartmentCard.getRegistrations().size() + 1;
         addRegistration(apartmentCard, registration, attributeId, insertDate);
     }
 
-    @Transactional
+
     private void insertRegistrationAttribute(ApartmentCard apartmentCard, long registrationId, long attributeId, Date insertDate) {
         Attribute registrationAttribute = new Attribute();
         registrationAttribute.setObjectId(apartmentCard.getId());
@@ -469,7 +469,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         insertAttribute(registrationAttribute);
     }
 
-    @Transactional
+
     public void removeRegistrations(List<Registration> removeRegistrations, RemoveRegistrationCard removeRegistrationCard) {
         Date updateDate = DateUtil.getCurrentDate();
 
@@ -506,14 +506,14 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     public void storeSearchState(DictionaryFwSession session, SearchComponentState searchComponentState) {
         SearchComponentState globalSearchComponentState = session.getGlobalSearchComponentState();
         globalSearchComponentState.updateState(searchComponentState);
         session.storeGlobalSearchComponentState();
     }
 
-    @Transactional
+
     public SearchComponentState restoreSearchState(DictionaryFwSession session) {
         SearchComponentState searchComponentState = new SearchComponentState();
         for (Map.Entry<String, DomainObject> searchFilterEntry : session.getGlobalSearchComponentState().entrySet()) {
@@ -528,7 +528,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         return searchComponentState;
     }
 
-    @Transactional
+
     public void changeRegistrationType(List<Registration> registrationsToChangeType,
             ChangeRegistrationTypeCard changeRegistrationTypeCard) {
         Date updateDate = DateUtil.getCurrentDate();
@@ -543,7 +543,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         }
     }
 
-    @Transactional
+
     public void registerOwner(ApartmentCard apartmentCard, RegisterOwnerCard registerOwnerCard, List<Person> children,
             Date insertDate) {
         long attributeId = apartmentCard.getAttributes(REGISTRATIONS).size() + 1;
@@ -595,7 +595,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         return registration;
     }
 
-    @Transactional
+
     public boolean validateOwnerAddressUniqueness(long addressId, long addressTypeId, long ownerId, Long apartmentCardId) {
         Map<String, Long> params = newHashMap();
         params.put("apartmentCardAddressAT", ADDRESS);
@@ -607,7 +607,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         return sqlSession().selectOne(APARTMENT_CARD_MAPPING + ".validateOwnerAddressUniqueness", params) == null;
     }
 
-    @Transactional
+
     public void registerChildren(RegisterChildrenCard registerChildrenCard, List<Person> children) {
         Date insertDate = DateUtil.getCurrentDate();
         ApartmentCard apartmentCard = findById(registerChildrenCard.getApartmentCardId(), true, false, false, false);
@@ -628,7 +628,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         return registration;
     }
 
-    @Transactional
+
     public void disable(ApartmentCard apartmentCard, Date endDate) {
         apartmentCard.setEndDate(endDate);
         changeActivity(apartmentCard, false);

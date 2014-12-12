@@ -38,7 +38,7 @@ public class FacilityTarifList extends ListTemplatePage<FacilityTarif> {
     }
 
     @Override
-    protected int getCount(FilterWrapper<FacilityTarif> filterWrapper) {
+    protected Long getCount(FilterWrapper<FacilityTarif> filterWrapper) {
         return facilityReferenceBookBean.getFacilityTarifsCount(filterWrapper);
     }
 

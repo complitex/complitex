@@ -145,10 +145,10 @@ public final class PersonList extends ScrollListPage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 example.setStatus(showModeModel.getObject().name());
                 example.setLocaleId(localeBean.convert(getLocale()).getId());
-                return personStrategy.count(example);
+                return personStrategy.getCount(example);
             }
         };
         dataProvider.setSort(String.valueOf(personStrategy.getDefaultSortAttributeTypeId()), SortOrder.ASCENDING);

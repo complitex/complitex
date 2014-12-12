@@ -1,6 +1,5 @@
 package org.complitex.keconnection.heatmeter.service;
 
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.mybatis.XmlMapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterConsumption;
@@ -18,7 +17,7 @@ import static com.google.common.collect.ImmutableMap.of;
 @XmlMapper
 @Stateless
 public class HeatmeterConsumptionBean extends AbstractBean{
-    @Transactional
+
     public void save(HeatmeterConsumption consumption) {
         if (consumption.getId() == null){
             sqlSession().insert("insertHeatmeterConsumption", consumption);

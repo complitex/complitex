@@ -2,7 +2,6 @@ package org.complitex.common.service;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Preference;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.component.search.SearchComponentState;
 
@@ -46,7 +45,7 @@ public class PreferenceBean extends AbstractBean{
         return sqlSession().selectList(MAPPING_NAMESPACE + ".selectPreferences", userId);
     }
 
-    @Transactional
+
     public void save(Preference preference){
         if (preference.getId() == null){
             sqlSession().insert(MAPPING_NAMESPACE + ".insertPreference", preference);

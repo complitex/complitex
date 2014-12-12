@@ -12,7 +12,6 @@ import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.StrategyFactory;
@@ -41,9 +40,9 @@ import static org.complitex.common.util.StringUtil.toCyrillic;
  * to intercept calls to relevant operations and to apply custom logic instead of all-project general code. 
  * For example, in pspoffice project <code>org.complitex.pspoffice.address.street.StreetStrategyInterceptor</code>
  * is used to replace logic for "found" and "count" operations.</p>
- * 
+ *
  * @see StreetStrategyInterceptor
- * 
+ *
  * @author Artem
  */
 @Stateless
@@ -76,7 +75,7 @@ public class StreetStrategy extends TemplateStrategy {
 
     @SuppressWarnings({"unchecked"})
     @Override
-    @Transactional
+
     public List<DomainObject> getList(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
             return Collections.emptyList();
@@ -94,17 +93,17 @@ public class StreetStrategy extends TemplateStrategy {
         return objects;
     }
 
-    @Transactional
+
     @Override
-    public int count(DomainObjectExample example) {
+    public Long getCount(DomainObjectExample example) {
         if (example.getId() != null && example.getId() <= 0) {
-            return 0;
+            return 0L;
         }
 
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
 
-        return (Integer) sqlSession().selectOne(NS + "." + COUNT_OPERATION, example);
+        return sqlSession().selectOne(NS + "." + COUNT_OPERATION, example);
     }
 
     @Override
@@ -142,7 +141,7 @@ public class StreetStrategy extends TemplateStrategy {
         return ImmutableList.of("country", "region", "city");
     }
 
-    private static void configureExampleImpl(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    private void configureExampleImpl(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
             AttributeExample attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
@@ -172,17 +171,18 @@ public class StreetStrategy extends TemplateStrategy {
 
     @Override
     public ISearchCallback getSearchCallback() {
-        return new SearchCallback();
-    }
+        return new ISearchCallback(){
 
-    private static class SearchCallback implements ISearchCallback, Serializable {
+            @Override
+            public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
+                DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
 
-        @Override
-        public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
-            DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
-            configureExampleImpl(list.getExample(), ids, null);
-            list.refreshContent(target);
-        }
+                if (list != null) {
+                    configureExampleImpl(list.getExample(), ids, null);
+                    list.refreshContent(target);
+                }
+            }
+        };
     }
 
     @Override
@@ -195,13 +195,15 @@ public class StreetStrategy extends TemplateStrategy {
         @Override
         public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
             DomainObjectInputPanel inputPanel = component.findParent(DomainObjectInputPanel.class);
-            Long cityId = ids.get("city");
-            if (cityId != null && cityId > 0) {
-                inputPanel.getObject().setParentId(cityId);
-                inputPanel.getObject().setParentEntityId(PARENT_ENTITY_ID);
-            } else {
-                inputPanel.getObject().setParentId(null);
-                inputPanel.getObject().setParentEntityId(null);
+            if (inputPanel != null) {
+                Long cityId = ids.get("city");
+                if (cityId != null && cityId > 0) {
+                    inputPanel.getObject().setParentId(cityId);
+                    inputPanel.getObject().setParentEntityId(PARENT_ENTITY_ID);
+                } else {
+                    inputPanel.getObject().setParentId(null);
+                    inputPanel.getObject().setParentEntityId(null);
+                }
             }
         }
     }
@@ -231,12 +233,11 @@ public class StreetStrategy extends TemplateStrategy {
         return new String[]{"city"};
     }
 
-    public static Long getStreetType(DomainObject streetObject) {
+    public Long getStreetType(DomainObject streetObject) {
         return streetObject.getAttribute(STREET_TYPE).getValueId();
     }
 
     @SuppressWarnings({"unchecked"})
-    @Transactional
     @Override
     public Long performDefaultValidation(DomainObject streetObject, Locale locale) {
         Map<String, Object> params = super.createValidationParams(streetObject, locale);
@@ -253,19 +254,19 @@ public class StreetStrategy extends TemplateStrategy {
         return null;
     }
 
-    @Transactional
+
     @Override
     public void replaceChildrenPermissions(long parentId, Set<Long> subjectIds) {
         replaceChildrenPermissions("building_address", parentId, subjectIds);
     }
 
-    @Transactional
+
     @Override
     protected void changeChildrenPermissions(long parentId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         changeChildrenPermissions("building_address", parentId, addSubjectIds, removeSubjectIds);
     }
 
-    @Transactional
+
     @Override
     public void changeChildrenActivity(long parentId, boolean enable) {
         changeChildrenActivity(parentId, "building_address", enable);

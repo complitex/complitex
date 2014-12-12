@@ -3,10 +3,10 @@ package org.complitex.correction.web;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.strategy.city.CityStrategy;
-import org.complitex.correction.entity.CityCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.correction.entity.CityCorrection;
+import org.complitex.correction.service.AddressCorrectionBean;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -37,7 +37,7 @@ public class CityCorrectionList extends AddressCorrectionList<CityCorrection> {
     }
 
     @Override
-    protected Integer getCorrectionsCount(FilterWrapper<CityCorrection> filterWrapper) {
+    protected Long getCorrectionsCount(FilterWrapper<CityCorrection> filterWrapper) {
         return addressCorrectionBean.getCityCorrectionsCount(filterWrapper);
     }
 

@@ -106,24 +106,34 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     public static final String PAGE_SESSION_KEY = "apartment_card_edit_page";
     @EJB
     private ApartmentCardStrategy apartmentCardStrategy;
+
     @EJB
     private StringCultureBean stringBean;
+
     @EJB
     private LogBean logBean;
+
     @EJB
     private PersonStrategy personStrategy;
+
     @EJB
     private RegistrationStrategy registrationStrategy;
+
     @EJB
     private OwnerRelationshipStrategy ownerRelationshipStrategy;
+
     @EJB
     private OwnershipFormStrategy ownershipFormStrategy;
+
     @EJB
     private RegistrationTypeStrategy registrationTypeStrategy;
+
     @EJB
     private SessionBean sessionBean;
+
     @EJB
     private CommunalApartmentService communalApartmentService;
+
     private final Entity ENTITY = apartmentCardStrategy.getEntity();
     private String addressEntity;
     private Long addressId;
@@ -527,7 +537,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
                     @Override
                     public void onClick() {
-                        setResponsePage(new RegistrationEdit(newApartmentCard, ApartmentCardStrategy.getAddressEntity(newApartmentCard),
+                        setResponsePage(new RegistrationEdit(newApartmentCard, apartmentCardStrategy.getAddressEntity(newApartmentCard),
                                 newApartmentCard.getAddressId(), registration));
                     }
                 };
@@ -784,11 +794,11 @@ public final class ApartmentCardEdit extends FormTemplatePage {
             }
         } else {
             addressObjectId = newApartmentCard.getAddressId();
-            if (ApartmentCardStrategy.getAddressEntity(newApartmentCard).equals("building")) {
+            if (apartmentCardStrategy.getAddressEntity(newApartmentCard).equals("building")) {
                 addressTypeId = ADDRESS_BUILDING;
-            } else if (ApartmentCardStrategy.getAddressEntity(newApartmentCard).equals("apartment")) {
+            } else if (apartmentCardStrategy.getAddressEntity(newApartmentCard).equals("apartment")) {
                 addressTypeId = ADDRESS_APARTMENT;
-            } else if (ApartmentCardStrategy.getAddressEntity(newApartmentCard).equals("room")) {
+            } else if (apartmentCardStrategy.getAddressEntity(newApartmentCard).equals("room")) {
                 addressTypeId = ADDRESS_ROOM;
             }
         }
@@ -805,7 +815,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     }
 
     private String getAddressEntity() {
-        return addressEntity != null ? addressEntity : ApartmentCardStrategy.getAddressEntity(newApartmentCard);
+        return addressEntity != null ? addressEntity : apartmentCardStrategy.getAddressEntity(newApartmentCard);
     }
 
     private long getAddressId() {
@@ -953,7 +963,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
                     @Override
                     protected void onClick() {
                         setResponsePage(new ApartmentCardEdit(
-                                ApartmentCardStrategy.getAddressEntity(oldApartmentCard), oldApartmentCard.getAddressId(), null));
+                                apartmentCardStrategy.getAddressEntity(oldApartmentCard), oldApartmentCard.getAddressId(), null));
                     }
 
                     @Override

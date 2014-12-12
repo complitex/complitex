@@ -4,9 +4,6 @@
  */
 package org.complitex.pspoffice.person.report.service;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import org.complitex.common.mybatis.Transactional;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.pspoffice.person.report.entity.F3Reference;
 import org.complitex.pspoffice.person.report.entity.FamilyMember;
@@ -14,6 +11,9 @@ import org.complitex.pspoffice.person.report.entity.NeighbourFamily;
 import org.complitex.pspoffice.person.strategy.ApartmentCardStrategy;
 import org.complitex.pspoffice.person.strategy.entity.ApartmentCard;
 import org.complitex.pspoffice.person.strategy.entity.Registration;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
 /**
  *
@@ -25,7 +25,7 @@ public class F3ReferenceBean extends AbstractBean {
     @EJB
     private ApartmentCardStrategy apartmentCardStrategy;
 
-    @Transactional
+
     public F3Reference get(Registration registration, ApartmentCard apartmentCard) {
         F3Reference f3 = new F3Reference();
 
@@ -34,7 +34,7 @@ public class F3ReferenceBean extends AbstractBean {
 
         //address
         f3.setAddressId(apartmentCard.getAddressId());
-        f3.setAddressEntity(ApartmentCardStrategy.getAddressEntity(apartmentCard));
+        f3.setAddressEntity(apartmentCardStrategy.getAddressEntity(apartmentCard));
         f3.setPersonalAccountOwner(apartmentCard.getOwner());
         f3.setOwnershipForm(apartmentCard.getOwnershipForm());
 

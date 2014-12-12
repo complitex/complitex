@@ -348,11 +348,11 @@ public class RegistryRecordList extends TemplatePage {
             }
 
             @Override
-            protected int getSize() {
+            protected Long getSize() {
                 FilterWrapper<RegistryRecordData> filterWrapper = FilterWrapper.of(filterModel.getObject());
                 setDate(filterWrapper, RegistryRecordBean.OPERATION_DATE_RANGE, operationDateModel.getObject());
 
-                return registryRecordBean.count(filterWrapper);
+                return registryRecordBean.getCount(filterWrapper);
             }
         };
         provider.setSort("registry_record_id", SortOrder.ASCENDING);
