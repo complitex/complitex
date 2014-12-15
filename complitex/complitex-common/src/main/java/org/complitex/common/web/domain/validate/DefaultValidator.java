@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.complitex.common.strategy.web.validate;
+package org.complitex.common.web.domain.validate;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.web.DomainObjectEditPanel;
+import org.complitex.common.web.domain.DomainObjectEditPanel;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ResourceUtil;
 

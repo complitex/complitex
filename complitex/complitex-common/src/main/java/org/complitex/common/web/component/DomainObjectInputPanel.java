@@ -17,8 +17,8 @@ import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.SimpleObjectInfo;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.web.AbstractComplexAttributesPanel;
-import org.complitex.common.strategy.web.DomainObjectEditPanel;
+import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.domain.DomainObjectEditPanel;
 import org.complitex.common.web.component.search.CollapsibleInputSearchComponent;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
@@ -31,7 +31,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newLinkedHashMap;
-import static org.complitex.common.strategy.web.DomainObjectAccessUtil.canEdit;
+import static org.complitex.common.web.domain.DomainObjectAccessUtil.canEdit;
 
 /**
  *

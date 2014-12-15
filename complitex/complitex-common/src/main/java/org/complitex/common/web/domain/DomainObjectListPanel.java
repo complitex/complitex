@@ -1,4 +1,4 @@
-package org.complitex.common.strategy.web;
+package org.complitex.common.web.domain;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

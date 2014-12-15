@@ -23,7 +23,7 @@ import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.web.DomainObjectAccessUtil;
+import org.complitex.common.web.domain.DomainObjectAccessUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;

@@ -9,8 +9,8 @@ import org.complitex.common.entity.History;
 import org.complitex.common.entity.description.Entity;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.strategy.web.AbstractComplexAttributesPanel;
-import org.complitex.common.strategy.web.validate.IValidator;
+import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
 

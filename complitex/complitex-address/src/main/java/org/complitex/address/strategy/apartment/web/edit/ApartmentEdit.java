@@ -13,7 +13,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.StringCulture;
 import org.complitex.common.service.LogBean;
-import org.complitex.common.strategy.web.DomainObjectEditPanel;
+import org.complitex.common.web.domain.DomainObjectEditPanel;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.EjbBeanLocator;

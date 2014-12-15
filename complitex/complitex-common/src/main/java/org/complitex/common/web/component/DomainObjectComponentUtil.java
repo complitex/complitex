@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static org.complitex.common.strategy.web.DomainObjectAccessUtil.canEdit;
+import static org.complitex.common.web.domain.DomainObjectAccessUtil.canEdit;
 import static org.complitex.common.util.EjbBeanLocator.getBean;
 
 /**

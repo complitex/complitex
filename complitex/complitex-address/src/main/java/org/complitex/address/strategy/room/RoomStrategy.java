@@ -17,7 +17,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.strategy.web.DomainObjectListPanel;
+import org.complitex.common.web.domain.DomainObjectListPanel;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.search.ISearchCallback;

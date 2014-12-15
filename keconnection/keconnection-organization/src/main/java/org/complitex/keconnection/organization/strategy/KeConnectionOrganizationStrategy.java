@@ -12,7 +12,7 @@ import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.strategy.web.AbstractComplexAttributesPanel;
+import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
 import org.complitex.keconnection.organization.strategy.web.edit.KeConnectionOrganizationEditComponent;

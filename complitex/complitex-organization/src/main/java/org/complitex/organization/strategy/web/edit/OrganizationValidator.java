@@ -4,8 +4,8 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.strategy.web.DomainObjectEditPanel;
-import org.complitex.common.strategy.web.validate.IValidator;
+import org.complitex.common.web.domain.DomainObjectEditPanel;
+import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.EjbBeanLocator;
 

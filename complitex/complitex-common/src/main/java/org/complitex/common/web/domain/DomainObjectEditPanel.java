@@ -1,4 +1,4 @@
-package org.complitex.common.strategy.web;
+package org.complitex.common.web.domain;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
@@ -29,7 +29,7 @@ import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.DeleteException;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.web.validate.IValidator;
+import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.common.web.component.ChildrenContainer;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.back.BackInfo;

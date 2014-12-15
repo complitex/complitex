@@ -15,8 +15,8 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.web.DomainObjectEditPanel;
-import org.complitex.common.strategy.web.validate.IValidator;
+import org.complitex.common.web.domain.DomainObjectEditPanel;
+import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.Numbers;
 

@@ -22,7 +22,7 @@ import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.strategy.web.DomainObjectAccessUtil;
+import org.complitex.common.web.domain.DomainObjectAccessUtil;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;

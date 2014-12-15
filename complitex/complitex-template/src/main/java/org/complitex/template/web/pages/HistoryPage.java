@@ -6,7 +6,7 @@ package org.complitex.template.web.pages;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.strategy.web.HistoryPanel;
+import org.complitex.common.web.domain.HistoryPanel;
 import static org.complitex.template.strategy.TemplateStrategy.*;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;

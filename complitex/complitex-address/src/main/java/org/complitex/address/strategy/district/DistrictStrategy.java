@@ -16,7 +16,7 @@ import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.DomainObjectPermissionInfo;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.web.DomainObjectListPanel;
+import org.complitex.common.web.domain.DomainObjectListPanel;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.search.ISearchCallback;

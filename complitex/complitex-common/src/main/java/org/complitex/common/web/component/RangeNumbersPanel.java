@@ -26,7 +26,7 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import org.complitex.common.entity.StringCulture;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.strategy.web.DomainObjectEditPanel;
+import org.complitex.common.web.domain.DomainObjectEditPanel;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
 import org.complitex.common.web.component.type.StringCulturePanel;
