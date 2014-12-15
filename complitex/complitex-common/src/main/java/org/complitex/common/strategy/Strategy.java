@@ -115,10 +115,10 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                 try {
                     changeActivity(object, false);
                     log.info("The process of disabling of {} tree has been successful.", getEntityTable());
-                    logBean.logChangeActivity(STATUS.OK, getEntityTable(), object.getId(), false, getDisableSuccess());
+                    logBean.logChangeActivity(STATUS.OK, getEntityTable(), object.getObjectId(), false, getDisableSuccess());
                 } catch (Exception e) {
                     log.error("The process of disabling of " + getEntityTable() + " tree has been failed.", e);
-                    logBean.logChangeActivity(STATUS.ERROR, getEntityTable(), object.getId(), false, getDisableError());
+                    logBean.logChangeActivity(STATUS.ERROR, getEntityTable(), object.getObjectId(), false, getDisableError());
                 }
                 log.info("The process of disabling of {} tree took {} sec.", getEntityTable(), (System.currentTimeMillis() - start) / 1000);
             }
@@ -129,7 +129,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     protected void changeActivity(DomainObject object, boolean enable) {
         object.setStatus(enable ? StatusType.ACTIVE : StatusType.INACTIVE);
         sqlSession().update(DOMAIN_OBJECT_NAMESPACE + "." + UPDATE_OPERATION, new Parameter(getEntityTable(), object));
-        changeChildrenActivity(object.getId(), enable);
+        changeChildrenActivity(object.getObjectId(), enable);
     }
 
     @Override
@@ -142,10 +142,10 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                 try {
                     changeActivity(object, true);
                     log.info("The process of enabling of {} tree has been successful.", getEntityTable());
-                    logBean.logChangeActivity(STATUS.OK, getEntityTable(), object.getId(), true, getEnableSuccess());
+                    logBean.logChangeActivity(STATUS.OK, getEntityTable(), object.getObjectId(), true, getEnableSuccess());
                 } catch (Exception e) {
                     log.error("The process of enabling of " + getEntityTable() + " tree has been failed.", e);
-                    logBean.logChangeActivity(STATUS.ERROR, getEntityTable(), object.getId(), true, getEnableError());
+                    logBean.logChangeActivity(STATUS.ERROR, getEntityTable(), object.getObjectId(), true, getEnableError());
                 }
                 log.info("The process of enabling of {} tree took {} sec.", getEntityTable(), (System.currentTimeMillis() - start) / 1000);
             }
@@ -197,7 +197,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     protected void loadAttributes(String dataSource, DomainObject object) {
         Map<String, Object> params = ImmutableMap.<String, Object>builder().
                 put("entityTable", getEntityTable()).
-                put("id", object.getId()).
+                put("objectId", object.getObjectId()).
                 build();
 
         List<Attribute> attributes = (dataSource == null ? sqlSession() : sqlSession(dataSource)).selectList(getLoadAttributesStatement(), params);
@@ -247,9 +247,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
             return null;
         }
 
-        DomainObjectExample example = new DomainObjectExample(objectId);
-
-        example.setEntityTable(getEntityTable());
+        DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable());
 
         if (!runAsAdmin) {
             prepareExampleForPermissionCheck(example);
@@ -322,7 +320,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                         EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
                         attribute.setAttributeTypeId(attributeType.getId());
                         attribute.setValueTypeId(attributeValueType.getId());
-                        attribute.setObjectId(object.getId());
+                        attribute.setObjectId(object.getObjectId());
                         attribute.setAttributeId(1L);
 
                         if (isSimpleAttributeType(attributeType)) {
@@ -330,7 +328,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                         }
                         toAdd.add(attribute);
                     } else {
-                        Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(attributeType, object.getId());
+                        Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(attributeType, object.getObjectId());
                         if (manyValueTypesAttribute != null) {
                             toAdd.add(manyValueTypesAttribute);
                         }
@@ -365,7 +363,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     @Override
     public List<? extends DomainObject> getList(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
 
@@ -391,7 +389,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     @Override
     public Long getCount(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
 
@@ -453,11 +451,11 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     @Override
     public void insert(DomainObject object, Date insertDate) {
-        object.setId(sequenceBean.nextId(getEntityTable()));
+        object.setObjectId(sequenceBean.nextId(getEntityTable()));
         object.setPermissionId(getNewPermissionId(object.getSubjectIds()));
         insertDomainObject(object, insertDate);
         for (Attribute attribute : object.getAttributes()) {
-            attribute.setObjectId(object.getId());
+            attribute.setObjectId(object.getObjectId());
             attribute.setStartDate(insertDate);
             insertAttribute(attribute);
         }
@@ -504,7 +502,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
 
         if (!Numbers.isEqual(oldObject.getPermissionId(), newObject.getPermissionId())) {
-            updatePermissionId(newObject.getId(), newObject.getPermissionId());
+            updatePermissionId(newObject.getObjectId(), newObject.getPermissionId());
         }
 
         //attributes comparison
@@ -586,7 +584,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                     if (needToUpdateAttribute) {
                         archiveAttribute(oldAttr, updateDate);
                         newAttr.setStartDate(updateDate);
-                        newAttr.setObjectId(newObject.getId());
+                        newAttr.setObjectId(newObject.getObjectId());
                         insertAttribute(newAttr);
                     }
                 }
@@ -608,7 +606,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
             if (added) {
                 newAttr.setStartDate(updateDate);
-                newAttr.setObjectId(newObject.getId());
+                newAttr.setObjectId(newObject.getObjectId());
                 insertAttribute(newAttr);
             }
         }
@@ -651,10 +649,10 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                 try {
                     propagatePermissions(newObject);
                     log.info("The process of permissions replacement for {} tree has been successful.", getEntityTable());
-                    logBean.logReplacePermissions(STATUS.OK, getEntityTable(), newObject.getId(), getReplacePermissionsSuccess());
+                    logBean.logReplacePermissions(STATUS.OK, getEntityTable(), newObject.getObjectId(), getReplacePermissionsSuccess());
                 } catch (Exception e) {
                     log.error("The process of permissions replacement for " + getEntityTable() + " tree has been failed.", e);
-                    logBean.logReplacePermissions(STATUS.ERROR, getEntityTable(), newObject.getId(), getReplacePermissionsError());
+                    logBean.logReplacePermissions(STATUS.ERROR, getEntityTable(), newObject.getObjectId(), getReplacePermissionsError());
                 }
                 log.info("The process of permissions replacement for {} tree took {} sec.", getEntityTable(),
                         (System.currentTimeMillis() - start) / 1000);
@@ -663,7 +661,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     protected void propagatePermissions(DomainObject object) {
-        replaceChildrenPermissions(object.getId(), object.getSubjectIds());
+        replaceChildrenPermissions(object.getObjectId(), object.getSubjectIds());
     }
 
     protected String getReplacePermissionsError() {
@@ -748,7 +746,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         Map<String, Object> params = newHashMap();
 
         params.put("entity", getEntityTable());
-        params.put("id", objectId);
+        params.put("objectId", objectId);
         params.put("permissionId", permissionId);
 
         sqlSession().update(DOMAIN_OBJECT_NAMESPACE + ".updatePermissionId", params);
@@ -769,7 +767,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         Map<String, Object> params = ImmutableMap.<String, Object>builder().
                 put("entityTable", getEntityTable()).
                 put("endDate", endDate).
-                put("objectId", object.getId()).build();
+                put("objectId", object.getObjectId()).build();
         sqlSession().update(ATTRIBUTE_NAMESPACE + ".archiveObjectAttributes", params);
     }
 
@@ -861,8 +859,8 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     @Override
     public SimpleObjectInfo findParentInSearchComponent(long id, Date date) {
-        DomainObjectExample example = new DomainObjectExample(id);
-        example.setEntityTable(getEntityTable());
+        DomainObjectExample example = new DomainObjectExample(id, getEntityTable());
+
         example.setStartDate(date);
         Map<String, Object> result = (Map<String, Object>) sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + "." + FIND_PARENT_IN_SEARCH_COMPONENT_OPERATION,
                 example);
@@ -951,8 +949,8 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     @Override
     public TreeSet<Date> getHistoryDates(long objectId) {
-        DomainObjectExample example = new DomainObjectExample(objectId);
-        example.setEntityTable(getEntityTable());
+        DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable());
+
         List<Date> results = sqlSession().selectList(DOMAIN_OBJECT_NAMESPACE + ".historyDates", example);
 
         return newTreeSet(filter(results, new Predicate<Date>() {
@@ -967,8 +965,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     @Override
     public DomainObject findHistoryObject(long objectId, Date date) {
-        DomainObjectExample example = new DomainObjectExample(objectId);
-        example.setEntityTable(getEntityTable());
+        DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable());
         example.setStartDate(date);
 
         DomainObject object = sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + "." + FIND_HISTORY_OBJECT_OPERATION, example);
@@ -985,9 +982,9 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
 
     protected List<Attribute> loadHistoryAttributes(long objectId, Date date) {
-        DomainObjectExample example = new DomainObjectExample(objectId);
-        example.setEntityTable(getEntityTable());
+        DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable());
         example.setStartDate(date);
+
         return sqlSession().selectList(ATTRIBUTE_NAMESPACE + "." + FIND_HISTORY_ATTRIBUTES_OPERATION, example);
     }
 
@@ -1034,7 +1031,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         Map<String, Object> params = createValidationParams(object, locale);
         List<Long> results = sqlSession().selectList(DOMAIN_OBJECT_NAMESPACE + ".defaultValidation", params);
         for (Long result : results) {
-            if (!result.equals(object.getId())) {
+            if (!result.equals(object.getObjectId())) {
                 return result;
             }
         }
@@ -1054,11 +1051,11 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
 
         if (attribute == null) {
-            throw new IllegalStateException("Domain object(entity = " + getEntityTable() + ", id = " + object.getId()
+            throw new IllegalStateException("Domain object(entity = " + getEntityTable() + ", id = " + object.getObjectId()
                     + ") has no attribute with attribute type id = " + attributeTypeId + "!");
         }
         if (attribute.getLocalizedValues() == null) {
-            throw new IllegalStateException("Attribute of domain object(entity = " + getEntityTable() + ", id = " + object.getId()
+            throw new IllegalStateException("Attribute of domain object(entity = " + getEntityTable() + ", id = " + object.getObjectId()
                     + ") with attribute type id = " + attributeTypeId + " and attribute id = " + attribute.getAttributeId()
                     + " has null lozalized values.");
         }

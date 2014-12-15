@@ -125,7 +125,7 @@ public class ProfilePage extends FormTemplatePage {
 
                 //Главная организация пользователя
                 final DomainObject mainUserOrganization = mainUserOrganizationModel.getObject();
-                if (mainUserOrganization != null && mainUserOrganization.getId() != null) {
+                if (mainUserOrganization != null && mainUserOrganization.getObjectId() != null) {
                     sessionBean.updateMainUserOrganization(getTemplateSession(), mainUserOrganization);
                 }
 
@@ -134,7 +134,7 @@ public class ProfilePage extends FormTemplatePage {
                     DomainObject domainObject = defaultSearchComponentState.get(s);
 
                     if (domainObject != null) {
-                        getTemplateSession().putPreference(DEFAULT_STATE_PAGE, s, String.valueOf(domainObject.getId()), true);
+                        getTemplateSession().putPreference(DEFAULT_STATE_PAGE, s, String.valueOf(domainObject.getObjectId()), true);
                     }
 
                     //update session search component state to the default state:

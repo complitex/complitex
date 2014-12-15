@@ -237,8 +237,8 @@ public class OrganizationList extends ScrollListPage {
 
                 ScrollBookmarkablePageLink<WebPage> detailsLink = new ScrollBookmarkablePageLink<WebPage>("detailsLink",
                         organizationStrategy.getEditPage(),
-                        organizationStrategy.getEditPageParams(organization.getId(), null, null),
-                        String.valueOf(organization.getId()));
+                        organizationStrategy.getEditPageParams(organization.getObjectId(), null, null),
+                        String.valueOf(organization.getObjectId()));
                 detailsLink.add(new Label("editMessage", new AbstractReadOnlyModel<String>() {
 
                     @Override
@@ -297,7 +297,7 @@ public class OrganizationList extends ScrollListPage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 filterForm.clearInput();
-                example.setId(null);
+                example.setObjectId(null);
                 example.getAttributeExample(NAME).setValue(null);
                 example.getAttributeExample(KeConnectionOrganizationStrategy.CODE).setValue(null);
                 example.getAttributeExample(SHORT_NAME).setValue(null);

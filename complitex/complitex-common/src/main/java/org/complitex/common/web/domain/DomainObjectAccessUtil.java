@@ -28,7 +28,7 @@ public final class DomainObjectAccessUtil {
     }
 
     private static boolean isNew(DomainObject object) {
-        return object.getId() == null;
+        return object.getObjectId() == null;
     }
 
     public static boolean canAddNew(String strategyName, String entity) {

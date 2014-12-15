@@ -37,7 +37,7 @@ public class DistrictSelectPanel extends Panel {
     public DistrictSelectPanel(String id, IModel<List<DomainObject>> districtModel) {
         super(id);
 
-        final DomainObjectExample example = new DomainObjectExample(NAME, CODE);
+        final DomainObjectExample example = new DomainObjectExample().addAttributes(NAME, CODE);
 
         final Form form = new Form("form");
         form.setOutputMarkupId(true);

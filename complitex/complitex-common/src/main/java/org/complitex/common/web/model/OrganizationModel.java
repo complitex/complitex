@@ -21,7 +21,7 @@ public abstract class OrganizationModel extends Model<DomainObject> {
 
                 @Override
                 public boolean apply(DomainObject object) {
-                    return object.getId().equals(organizationId);
+                    return object.getObjectId().equals(organizationId);
                 }
             });
         }
@@ -31,7 +31,7 @@ public abstract class OrganizationModel extends Model<DomainObject> {
     @Override
     public void setObject(DomainObject object) {
         if (object != null) {
-            setOrganizationId(object.getId());
+            setOrganizationId(object.getObjectId());
         } else {
             setOrganizationId(null);
         }

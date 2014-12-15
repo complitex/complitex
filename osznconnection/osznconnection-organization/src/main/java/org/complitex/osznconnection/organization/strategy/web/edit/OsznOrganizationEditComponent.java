@@ -129,7 +129,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                             Long serviceProviderTypeId = serviceAssociation.getServiceProviderTypeId();
                             if (serviceProviderTypeId != null) {
                                 for (DomainObject o : allServiceProviderTypes) {
-                                    if (serviceProviderTypeId.equals(o.getId())) {
+                                    if (serviceProviderTypeId.equals(o.getObjectId())) {
                                         return o;
                                     }
                                 }
@@ -140,14 +140,14 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                         @Override
                         public void setObject(DomainObject serviceProviderType) {
                             serviceAssociation.setServiceProviderTypeId(serviceProviderType != null
-                                    ? serviceProviderType.getId() : null);
+                                    ? serviceProviderType.getObjectId() : null);
                         }
                     };
                     //initialize model:
                     Long serviceProviderTypeId = serviceAssociation.getServiceProviderTypeId();
                     if (serviceProviderTypeId != null) {
                         for (DomainObject o : allServiceProviderTypes) {
-                            if (serviceProviderTypeId.equals(o.getId())) {
+                            if (serviceProviderTypeId.equals(o.getObjectId())) {
                                 serviceProviderTypeModel.setObject(o);
                             }
                         }
@@ -161,8 +161,8 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
                             Long serviceProviderTypeId = serviceAssociation.getServiceProviderTypeId();
                             for (DomainObject spt : allServiceProviderTypes) {
-                                if (!serviceAssociationList.containsServiceProviderType(spt.getId())
-                                        || spt.getId().equals(serviceProviderTypeId)) {
+                                if (!serviceAssociationList.containsServiceProviderType(spt.getObjectId())
+                                        || spt.getObjectId().equals(serviceProviderTypeId)) {
                                     selectList.add(spt);
                                 }
                             }
@@ -191,7 +191,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                             Long calculationCenterId = serviceAssociation.getCalculationCenterId();
                             if (calculationCenterId != null) {
                                 for (DomainObject o : allCalculationCentres) {
-                                    if (calculationCenterId.equals(o.getId())) {
+                                    if (calculationCenterId.equals(o.getObjectId())) {
                                         return o;
                                     }
                                 }
@@ -202,14 +202,14 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                         @Override
                         public void setObject(DomainObject calculationCenter) {
                             serviceAssociation.setCalculationCenterId(calculationCenter != null
-                                    ? calculationCenter.getId() : null);
+                                    ? calculationCenter.getObjectId() : null);
                         }
                     };
                     //initialize model:
                     Long calculationCenterId = serviceAssociation.getCalculationCenterId();
                     if (calculationCenterId != null) {
                         for (DomainObject o : allCalculationCentres) {
-                            if (calculationCenterId.equals(o.getId())) {
+                            if (calculationCenterId.equals(o.getObjectId())) {
                                 calculationCenterModel.setObject(o);
                             }
                         }
@@ -317,7 +317,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     if (attribute == null) {
                         attribute = new Attribute();
                         attribute.setAttributeTypeId(attributeTypeId);
-                        attribute.setObjectId(organization.getId());
+                        attribute.setObjectId(organization.getObjectId());
                         attribute.setAttributeId(1L);
                         attribute.setLocalizedValues(StringCultures.newStringCultures());
                     }
@@ -341,7 +341,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             if (attribute == null) {
                 attribute = new Attribute();
                 attribute.setAttributeTypeId(OsznOrganizationStrategy.EDRPOU);
-                attribute.setObjectId(organization.getId());
+                attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
                 attribute.setLocalizedValues(StringCultures.newStringCultures());
             }
@@ -369,7 +369,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             if (attribute == null) {
                 attribute = new Attribute();
                 attribute.setAttributeTypeId(attributeTypeId);
-                attribute.setObjectId(organization.getId());
+                attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
                 attribute.setLocalizedValues(StringCultures.newStringCultures());
             }
@@ -397,7 +397,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             if (attribute == null) {
                 attribute = new Attribute();
                 attribute.setAttributeTypeId(attributeTypeId);
-                attribute.setObjectId(organization.getId());
+                attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
                 attribute.setLocalizedValues(StringCultures.newStringCultures());
             }
@@ -482,7 +482,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
     public boolean isCalculationCenter() {
         for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
-            if (organizationType.getId().equals(OsznOrganizationTypeStrategy.CALCULATION_CENTER_TYPE)) {
+            if (organizationType.getObjectId().equals(OsznOrganizationTypeStrategy.CALCULATION_CENTER_TYPE)) {
                 return true;
             }
         }
@@ -491,7 +491,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
     public boolean isOszn() {
         for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
-            if (organizationType.getId().equals(OsznOrganizationTypeStrategy.OSZN_TYPE)) {
+            if (organizationType.getObjectId().equals(OsznOrganizationTypeStrategy.OSZN_TYPE)) {
                 return true;
             }
         }
@@ -528,7 +528,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             final List<DomainObject> allServiceProviderTypes = serviceProviderTypeStrategy.getAll(getLocale());
             for (long serviceProviderTypeId : duplicates) {
                 for (DomainObject spt : allServiceProviderTypes) {
-                    if (spt.getId().equals(serviceProviderTypeId)) {
+                    if (spt.getObjectId().equals(serviceProviderTypeId)) {
                         result.add(serviceProviderTypeStrategy.displayDomainObject(spt, getLocale()));
                         break;
                     }

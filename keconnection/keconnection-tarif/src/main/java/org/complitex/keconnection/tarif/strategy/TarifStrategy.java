@@ -89,7 +89,7 @@ public class TarifStrategy extends TemplateStrategy {
 
     public Long getIdByCode(int code) {
         DomainObject object = getObjectByCode(code);
-        return object != null ? object.getId() : null;
+        return object != null ? object.getObjectId() : null;
     }
 
 

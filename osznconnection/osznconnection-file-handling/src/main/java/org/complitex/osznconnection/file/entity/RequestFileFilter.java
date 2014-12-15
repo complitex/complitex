@@ -141,7 +141,7 @@ public class RequestFileFilter extends AbstractFilter {
 
     public void setOrganization(DomainObject organization) {
         this.organization = organization;
-        this.organizationId = organization != null ? organization.getId() : null;
+        this.organizationId = organization != null ? organization.getObjectId() : null;
     }
 
     public RequestFileType getType() {

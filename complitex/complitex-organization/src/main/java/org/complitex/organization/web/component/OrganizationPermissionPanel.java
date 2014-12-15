@@ -39,7 +39,7 @@ public class OrganizationPermissionPanel extends DomainObjectPermissionPanel {
                     List<DomainObject> selectedSubjects = new ArrayList<>();
 
                     for (DomainObject o : superSelectedSubjects) {
-                        if (!o.getId().equals(organizationId)) {
+                        if (!o.getObjectId().equals(organizationId)) {
                             selectedSubjects.add(o);
                         }
                     }

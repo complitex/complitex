@@ -99,8 +99,8 @@ public class OrganizationPickerDialog extends Panel {
                     @Override
                     public boolean compare(Component component, Object newObject) {
                         return !(component.getDefaultModelObject() == null || newObject == null)
-                                && Objects.equals(((DomainObject) component.getDefaultModelObject()).getId(),
-                                ((DomainObject) newObject).getId());
+                                && Objects.equals(((DomainObject) component.getDefaultModelObject()).getObjectId(),
+                                ((DomainObject) newObject).getObjectId());
                     }
                 };
             }

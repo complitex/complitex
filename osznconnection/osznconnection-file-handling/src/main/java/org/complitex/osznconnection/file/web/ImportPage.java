@@ -152,7 +152,7 @@ public class ImportPage extends TemplatePage {
 
                 if (!importService.isProcessing()) {
                     importService.process(dictionaryModel.getObject(), correctionModel.getObject(),
-                            organizationModel.getObject() != null ? organizationModel.getObject().getId() : null,
+                            organizationModel.getObject() != null ? organizationModel.getObject().getObjectId() : null,
                             localeModel.getObject());
 
                     container.add(newTimer());

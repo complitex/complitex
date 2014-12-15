@@ -49,7 +49,7 @@
     <select id="findHistoryAttributes" parameterType="DomainObjectExample" resultMap="org.complitex.common.entity.Attribute.Attribute">
         SELECT aa.*
         FROM `${entityTable}_attribute` aa
-        WHERE aa.`object_id` = #{id}
+        WHERE aa.`object_id` = #{objectId}
         AND aa.`start_date` <![CDATA[ <= ]]> #{startDate} AND ((aa.`end_date` IS NULL) OR (aa.`end_date` <![CDATA[ > ]]> #{startDate}))
         ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
     </select>

@@ -33,7 +33,7 @@ public class OrganizationPermissionsPanel extends DomainObjectPermissionsPanel {
         Map<String, String> superAttributes = super.enhanceOptionWithAttributes(choice, index, selected);
 
         Map<String, String> attributes = Maps.newHashMap(superAttributes != null ? superAttributes : new HashMap<String, String>());
-        if (choice.getId().equals(organizationId)) {
+        if (choice.getObjectId().equals(organizationId)) {
             attributes.put("data-always-selected", "data-always-selected");
         }
         return attributes;

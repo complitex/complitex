@@ -74,7 +74,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     @Override
     public void insert(DomainObject object, Date insertDate) {
         for (Attribute attribute : object.getAttributes()) {
-            attribute.setObjectId(object.getId());
+            attribute.setObjectId(object.getObjectId());
             attribute.setStartDate(insertDate);
             insertAttribute(attribute);
         }
@@ -162,7 +162,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
                     if (needToUpdateAttribute) {
                         archiveAttribute(oldAttr, updateDate);
                         newAttr.setStartDate(updateDate);
-                        newAttr.setObjectId(newObject.getId());
+                        newAttr.setObjectId(newObject.getObjectId());
                         insertAttribute(newAttr);
                     }
                 }
@@ -184,7 +184,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
 
             if (added) {
                 newAttr.setStartDate(updateDate);
-                newAttr.setObjectId(newObject.getId());
+                newAttr.setObjectId(newObject.getObjectId());
                 insertAttribute(newAttr);
             }
         }

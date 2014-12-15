@@ -1,6 +1,5 @@
 package org.complitex.common.web.component.organization;
 
-import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.DomainObject;
@@ -27,7 +26,7 @@ public class OrganizationIdPicker extends Panel{
 
             @Override
             public void setObject(DomainObject object) {
-                model.setObject(object != null ? object.getId() : null);
+                model.setObject(object != null ? object.getObjectId() : null);
             }
 
             @Override

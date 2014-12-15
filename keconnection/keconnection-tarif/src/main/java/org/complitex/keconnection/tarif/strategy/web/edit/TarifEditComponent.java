@@ -64,7 +64,7 @@ public final class TarifEditComponent extends AbstractComplexAttributesPanel {
 
             @Override
             public void setObject(DomainObject tarifGroup) {
-                Long tarifGroupId = tarifGroup != null ? tarifGroup.getId() : null;
+                Long tarifGroupId = tarifGroup != null ? tarifGroup.getObjectId() : null;
                 tarif.getAttribute(TarifStrategy.TARIF_GROUP).setValueId(tarifGroupId);
             }
 
@@ -73,7 +73,7 @@ public final class TarifEditComponent extends AbstractComplexAttributesPanel {
                 Long tarifGroupId = tarif.getAttribute(TarifStrategy.TARIF_GROUP).getValueId();
                 if (tarifGroupId != null) {
                     for (DomainObject tarifGroup : allTarifGroups) {
-                        if (tarifGroup.getId().equals(tarifGroupId)) {
+                        if (tarifGroup.getObjectId().equals(tarifGroupId)) {
                             return tarifGroup;
                         }
                     }

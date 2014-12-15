@@ -302,7 +302,7 @@ public class WiQuerySearchComponent extends Panel {
 
             final Set<Long> idsSet = newHashSet();
             for (DomainObject o : equalToExample) {
-                idsSet.add(o.getId());
+                idsSet.add(o.getObjectId());
             }
 
             final List<? extends DomainObject> likeExample = findByExample(entity, term, previousInfo, ComparisonType.LIKE,
@@ -311,9 +311,9 @@ public class WiQuerySearchComponent extends Panel {
             final Iterator<? extends DomainObject> likeIterator = likeExample.iterator();
             while (likeIterator.hasNext() && choiceList.size() < AUTO_COMPLETE_SIZE) {
                 final DomainObject likeObject = likeIterator.next();
-                if (!idsSet.contains(likeObject.getId())) {
+                if (!idsSet.contains(likeObject.getObjectId())) {
                     choiceList.add(likeObject);
-                    idsSet.add(likeObject.getId());
+                    idsSet.add(likeObject.getObjectId());
                 }
             }
         }
@@ -384,7 +384,7 @@ public class WiQuerySearchComponent extends Panel {
 
             @Override
             public Object getDisplayValue(DomainObject object) {
-                if (object.getId().equals(SearchComponentState.NOT_SPECIFIED_ID)) {
+                if (object.getObjectId().equals(SearchComponentState.NOT_SPECIFIED_ID)) {
                     return getString(NOT_SPECIFIED_KEY);
                 } else {
                     return strategyFactory.getStrategy(entity).displayDomainObject(object, getLocale());
@@ -393,7 +393,7 @@ public class WiQuerySearchComponent extends Panel {
 
             @Override
             public String getIdValue(DomainObject object, int index) {
-                return String.valueOf(object.getId());
+                return String.valueOf(object.getObjectId());
             }
         };
     }
@@ -474,7 +474,7 @@ public class WiQuerySearchComponent extends Panel {
             @Override
             @SuppressWarnings("unchecked")
             public T apply(DomainObject from) {
-                return from != null ? (T) from.getId() : null;
+                return from != null ? (T) from.getObjectId() : null;
             }
         });
     }

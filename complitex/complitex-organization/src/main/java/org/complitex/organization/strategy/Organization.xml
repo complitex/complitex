@@ -15,7 +15,7 @@
 
     <sql id="filter">
         <if test="id != null">
-            AND e.`object_id` = #{id}
+            AND e.`object_id` = #{objectId}
         </if>
         <foreach item="attrExample" collection="attributeExamples">
             <choose>
@@ -48,7 +48,7 @@
                         AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = 904
                         AND attr.`value_id` IN
                             <foreach open="(" close=")" separator="," item="id" collection="additionalParams['organizationTypeIds']">
-                                #{id}
+                                #{objectId}
                             </foreach>
                       )
         </if>

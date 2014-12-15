@@ -55,7 +55,7 @@ public class KeConnectionSessionBean {
         List<Long> objectIds = new ArrayList<Long>();
 
         for (DomainObject o : organizationStrategy.getAllOuterOrganizations(null)) {
-            objectIds.add(o.getId());
+            objectIds.add(o.getObjectId());
         }
 
         return objectIds;
@@ -79,8 +79,8 @@ public class KeConnectionSessionBean {
      */
     public Long getCurrentUserOrganizationId(DictionaryFwSession session) {
         DomainObject mainUserOrganization = sessionBean.getMainUserOrganization(session);
-        return mainUserOrganization != null && mainUserOrganization.getId() != null
-                && mainUserOrganization.getId() > 0 ? mainUserOrganization.getId() : null;
+        return mainUserOrganization != null && mainUserOrganization.getObjectId() != null
+                && mainUserOrganization.getObjectId() > 0 ? mainUserOrganization.getObjectId() : null;
     }
 
     public void prepareExampleForPermissionCheck(CorrectionExample example) {

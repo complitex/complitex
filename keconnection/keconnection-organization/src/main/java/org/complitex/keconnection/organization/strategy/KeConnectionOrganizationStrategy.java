@@ -172,7 +172,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
             example.setLocaleId(-1L);
         }
 
-        if (example.getId() != null && example.getId() <= 0) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
 
@@ -203,7 +203,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
 
     @Override
     public Long getCount(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
         example.setEntityTable(getEntityTable());
@@ -214,7 +214,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
     }
 
     private void loadOperatingMonthDate(Organization organization) {
-        organization.setOperatingMonthDate(getOperatingMonthDate(organization.getId()));
+        organization.setOperatingMonthDate(getOperatingMonthDate(organization.getObjectId()));
     }
 
     public Date getOperatingMonthDate(long organizationId) {
@@ -275,16 +275,16 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
 
     public void setReadyCloseOperatingMonthFlag(Organization organization) {
         organization.setStringValue(READY_CLOSE_OPER_MONTH, new BooleanConverter().toString(Boolean.TRUE));
-        update(findById(organization.getId(), true), organization, getCurrentDate());
+        update(findById(organization.getObjectId(), true), organization, getCurrentDate());
     }
 
 
     public void closeOperatingMonth(Organization organization) {
         organization.setStringValue(READY_CLOSE_OPER_MONTH, new BooleanConverter().toString(Boolean.FALSE));
-        update(findById(organization.getId(), true), organization, getCurrentDate());
+        update(findById(organization.getObjectId(), true), organization, getCurrentDate());
 
         sqlSession().insert(MAPPING_NAMESPACE + ".insertOperatingMonth",
-                ImmutableMap.of("organizationId", organization.getId(),
+                ImmutableMap.of("organizationId", organization.getObjectId(),
                         "beginOm", addMonth(organization.getOperatingMonthDate(), 1),
                         "updated", getCurrentDate()));
     }

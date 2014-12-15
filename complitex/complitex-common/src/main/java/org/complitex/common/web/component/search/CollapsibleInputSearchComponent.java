@@ -71,7 +71,7 @@ public class CollapsibleInputSearchComponent extends WiQuerySearchComponent {
         final SearchComponentState searchComponentState = getSearchComponentState();
         for (String searchFilter : leftSearchFilters) {
             final DomainObject object = searchComponentState.get(searchFilter);
-            if (object == null || object.getId() == null || object.getId() <= 0) {
+            if (object == null || object.getObjectId() == null || object.getObjectId() <= 0) {
                 return true;
             }
         }

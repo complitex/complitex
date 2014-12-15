@@ -22,7 +22,7 @@
 
     <select id="findById" resultMap="org.complitex.address.strategy.building.Building.Building" parameterType="DomainObjectExample">
         SELECT e.*
-        FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{id}
+        FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
             <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
     </select>
 

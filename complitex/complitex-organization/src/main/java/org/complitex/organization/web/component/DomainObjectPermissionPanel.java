@@ -144,7 +144,7 @@ public class DomainObjectPermissionPanel extends AbstractDomainObjectPermissionP
                 organizationModel.setObject(organization);
                 
                 boolean allowModifyOrganization = isAllowModifyOrganization(getCurrentIndex(fakeContainer),
-                        organization != null ? organization.getId() : null);
+                        organization != null ? organization.getObjectId() : null);
                 OrganizationPicker organizationPicker = new OrganizationPicker("organizationPicker",
                         organizationModel, OrganizationTypeStrategy.USER_ORGANIZATION_TYPE);
                 organizationPicker.setEnabled(parameters.isEnabled() && allowModifyOrganization);
@@ -202,8 +202,8 @@ public class DomainObjectPermissionPanel extends AbstractDomainObjectPermissionP
     private void setupSubjectIds(Set<Long> subjectIds, List<DomainObject> selectedSubjects) {
         subjectIds.clear();
         for (DomainObject selectedSubject : selectedSubjects) {
-            if (selectedSubject != null && selectedSubject.getId() != null && selectedSubject.getId() > 0) {
-                subjectIds.add(selectedSubject.getId());
+            if (selectedSubject != null && selectedSubject.getObjectId() != null && selectedSubject.getObjectId() > 0) {
+                subjectIds.add(selectedSubject.getObjectId());
             }
         }
     }

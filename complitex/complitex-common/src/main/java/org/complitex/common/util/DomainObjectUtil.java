@@ -14,7 +14,7 @@ public class DomainObjectUtil {
         List<Long> ids = new ArrayList<>(objects.size());
 
         for (DomainObject o : objects){
-            ids.add(o.getId());
+            ids.add(o.getObjectId());
         }
 
         return ids;

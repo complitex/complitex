@@ -140,7 +140,7 @@ public class AddressSyncService {
             for (DomainObject object : objects) {
                 //все норм
                 if (sync.getExternalId().equals(object.getExternalId()) && handler.isEqualNames(sync, object)) {
-                    sync.setObjectId(object.getId());
+                    sync.setObjectId(object.getObjectId());
                     sync.setStatus(AddressSyncStatus.LOCAL);
 
                     break;
@@ -148,7 +148,7 @@ public class AddressSyncService {
 
                 //новое название
                 if (sync.getExternalId().equals(object.getExternalId())) {
-                    sync.setObjectId(object.getId());
+                    sync.setObjectId(object.getObjectId());
                     sync.setStatus(AddressSyncStatus.NEW_NAME);
 
                     if (addressSyncBean.isExist(sync)) {
@@ -161,7 +161,7 @@ public class AddressSyncService {
 
                 //дубликат
                 if (handler.isEqualNames(sync, object)) {
-                    sync.setObjectId(object.getId());
+                    sync.setObjectId(object.getObjectId());
                     sync.setStatus(AddressSyncStatus.DUPLICATE);
 
                     if (addressSyncBean.isExist(sync)) {
@@ -207,10 +207,10 @@ public class AddressSyncService {
                 AddressSync s = new AddressSync();
 
                 if (parent != null){
-                    s.setParentObjectId(parent.getId());
+                    s.setParentObjectId(parent.getObjectId());
                 }
 
-                s.setObjectId(object.getId());
+                s.setObjectId(object.getObjectId());
                 s.setExternalId(object.getExternalId());
                 s.setName("");
                 s.setType(type);

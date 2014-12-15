@@ -35,7 +35,7 @@ public class KeConnectionUserOrganizationPicker extends Panel {
 
             @Override
             public void setObject(DomainObject object) {
-                organizationIdModel.setObject(object != null ? object.getId() : null);
+                organizationIdModel.setObject(object != null ? object.getObjectId() : null);
             }
         }, OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
     }

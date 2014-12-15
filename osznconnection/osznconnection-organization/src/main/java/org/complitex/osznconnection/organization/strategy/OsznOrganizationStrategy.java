@@ -447,7 +447,7 @@ public class OsznOrganizationStrategy extends AbstractOrganizationStrategy<Domai
 
     private ServiceAssociationList loadServiceAssociations(DomainObject userOrganization) {
         if (!isUserOrganization(userOrganization)) {
-            throw new IllegalArgumentException("DomainObject is not user organization. Organization id: " + userOrganization.getId());
+            throw new IllegalArgumentException("DomainObject is not user organization. Organization id: " + userOrganization.getObjectId());
         }
 
         List<Attribute> serviceAssociationAttributes = userOrganization.getAttributes(SERVICE_ASSOCIATIONS);

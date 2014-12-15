@@ -166,7 +166,7 @@ public class HeatmeterBean extends AbstractBean {
             final String searchFilter = searchFilterEntry.getKey();
             final DomainObject filterObject = searchFilterEntry.getValue();
             if (SEARCH_STATE_ENTITIES.contains(searchFilter)) {
-                if (filterObject != null && filterObject.getId() != null && filterObject.getId() > 0) {
+                if (filterObject != null && filterObject.getObjectId() != null && filterObject.getObjectId() > 0) {
                     searchComponentState.put(searchFilter, filterObject);
                 }
             }

@@ -59,7 +59,7 @@ public final class OwnershipCorrectionEdit extends FormTemplatePage {
 
                             @Override
                             public boolean apply(DomainObject object) {
-                                return object.getId().equals(ownershipId);
+                                return object.getObjectId().equals(ownershipId);
                             }
                         });
                     }
@@ -68,7 +68,7 @@ public final class OwnershipCorrectionEdit extends FormTemplatePage {
 
                 @Override
                 public void setObject(DomainObject object) {
-                    ownershipCorrection.setObjectId(object.getId());
+                    ownershipCorrection.setObjectId(object.getObjectId());
                 }
             };
             DomainObjectDisableAwareRenderer renderer = new DomainObjectDisableAwareRenderer() {

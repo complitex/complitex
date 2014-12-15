@@ -4,7 +4,7 @@
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
     <resultMap id="DomainObject" type="DomainObject">
-        <id column="object_id" property="id"/>
+        <id column="object_id" property="objectId"/>
         <id column="start_date" property="startDate"/>
         <result column="end_date" property="endDate"/>
         <result column="status" property="status"/>
@@ -25,7 +25,7 @@
 
     <select id="findById" resultMap="org.complitex.common.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
         SELECT e.*
-        FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{id}
+        FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
             <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
     </select>
 
@@ -94,7 +94,7 @@
 
     <sql id="filter">
         <if test="id != null">
-            AND e.`object_id` = #{id}
+            AND e.`object_id` = #{objectId}
         </if>
         <foreach item="attrExample" collection="attributeExamples">
             <if test="attrExample.value != null">
@@ -166,11 +166,11 @@
 
     <select id="findParentInSearchComponent" parameterType="hashmap" resultType="hashmap">
         SELECT (SELECT ent.`entity_table` FROM `entity` ent WHERE ent.`id` = e.`parent_entity_id`) parentEntity,
-            e.`parent_id` parentId FROM `${entityTable}` e WHERE e.`object_id` = #{id}
+            e.`parent_id` parentId FROM `${entityTable}` e WHERE e.`object_id` = #{objectId}
         <choose>
             <when test="startDate != null">
                 AND e.`start_date` =
-                    (SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{id} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+                    (SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{objectId} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
             </when>
             <otherwise>
                 AND (e.`status` IN ('ACTIVE', 'INACTIVE'))
@@ -181,19 +181,19 @@
     <!-- history -->
 
     <select id="historyDates" resultType="date" parameterType="DomainObjectExample">
-        SELECT e.`start_date` FROM `${entityTable}` e WHERE e.`object_id`= #{id}
+        SELECT e.`start_date` FROM `${entityTable}` e WHERE e.`object_id`= #{objectId}
         UNION
-        SELECT e.`end_date` FROM `${entityTable}` e WHERE e.`object_id`= #{id}
+        SELECT e.`end_date` FROM `${entityTable}` e WHERE e.`object_id`= #{objectId}
         UNION
-        SELECT aa.`start_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{id}
+        SELECT aa.`start_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{objectId}
         UNION
-        SELECT aa.`end_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{id}
+        SELECT aa.`end_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{objectId}
     </select>
 
     <sql id="findHistoryObject">
         SELECT e.*
-        FROM `${entityTable}` e WHERE e.`object_id` = #{id} AND e.`start_date` = (
-            SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{id} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+        FROM `${entityTable}` e WHERE e.`object_id` = #{objectId} AND e.`start_date` = (
+            SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{objectId} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
     </sql>
 
     <select id="findHistoryObject" parameterType="DomainObjectExample" resultMap="org.complitex.common.entity.DomainObject.DomainObject">
@@ -215,7 +215,7 @@
     </select>
 
     <update id="updatePermissionId" parameterType="map">
-        UPDATE `${entity}` e SET e.`permission_id` = #{permissionId} WHERE e.`status` IN ('ACTIVE', 'INACTIVE') AND e.`object_id` = #{id}
+        UPDATE `${entity}` e SET e.`permission_id` = #{permissionId} WHERE e.`status` IN ('ACTIVE', 'INACTIVE') AND e.`object_id` = #{objectId}
     </update>
 
     <!-- disable/enable functionality -->

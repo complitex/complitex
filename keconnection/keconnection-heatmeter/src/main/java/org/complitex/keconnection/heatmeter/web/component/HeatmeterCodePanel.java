@@ -85,7 +85,7 @@ public class HeatmeterCodePanel extends Panel {
                     public void setObject(DomainObject object) {
                         super.setObject(object);
 
-                        heatmeterConnection.setOrganizationId(object != null ? object.getId() : null);
+                        heatmeterConnection.setOrganizationId(object != null ? object.getObjectId() : null);
                         updateHeatmeterCode(heatmeterConnection);
                     }
                 };
@@ -110,7 +110,7 @@ public class HeatmeterCodePanel extends Panel {
                                 DomainObject b = searchComponentState.get("building");
 
                                 if (b != null) {
-                                    Building building = buildingStrategy.findById(b.getId(), true);
+                                    Building building = buildingStrategy.findById(b.getObjectId(), true);
 
                                     if (building != null && building.getBuildingCodes() != null){
                                         for (BuildingCode buildingCode : building.getBuildingCodes()){

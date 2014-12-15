@@ -63,7 +63,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
             if (attribute == null) {
                 attribute = new Attribute();
                 attribute.setAttributeTypeId(attributeTypeId);
-                attribute.setObjectId(organization.getId());
+                attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
                 attribute.setLocalizedValues(StringCultures.newStringCultures());
             }
@@ -126,7 +126,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
 
     public boolean isServicingOrganization() {
         for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
-            if (organizationType.getId().equals(KeConnectionOrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE)) {
+            if (organizationType.getObjectId().equals(KeConnectionOrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE)) {
                 return true;
             }
         }
@@ -135,7 +135,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
 
     @Override
     protected boolean isOrganizationTypeEnabled() {
-        Long organizationId = getDomainObject().getId();
+        Long organizationId = getDomainObject().getObjectId();
         return !(organizationId != null && (organizationId == KeConnectionOrganizationStrategy.ITSELF_ORGANIZATION_OBJECT_ID))
                 && super.isOrganizationTypeEnabled();
     }

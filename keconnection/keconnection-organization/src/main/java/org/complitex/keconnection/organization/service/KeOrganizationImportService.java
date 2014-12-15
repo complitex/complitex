@@ -168,7 +168,7 @@ public class KeOrganizationImportService extends AbstractImportService {
             }
 
             //add operating month entry if necessary. Only for servicing organizations.
-            addOperatingMonth(newObject.getId(), beginOm);
+            addOperatingMonth(newObject.getObjectId(), beginOm);
 
             listener.recordProcessed(ORGANIZATION, recordIndex);
         }

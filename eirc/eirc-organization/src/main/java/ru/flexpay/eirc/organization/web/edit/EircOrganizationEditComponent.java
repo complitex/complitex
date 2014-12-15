@@ -85,7 +85,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
         if (attribute == null) {
             attribute = new Attribute();
             attribute.setAttributeTypeId(attributeTypeId);
-            attribute.setObjectId(organization.getId());
+            attribute.setObjectId(organization.getObjectId());
             attribute.setAttributeId(1L);
             attribute.setLocalizedValues(StringCultures.newStringCultures());
         }
@@ -112,7 +112,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
         if (attribute == null) {
             attribute = new Attribute();
             attribute.setAttributeTypeId(attributeTypeId);
-            attribute.setObjectId(organization.getId());
+            attribute.setObjectId(organization.getObjectId());
             attribute.setAttributeId(1L);
             attribute.setLocalizedValues(StringCultures.newStringCultures());
         }
@@ -157,8 +157,8 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
     public boolean isServiceProvider() {
         List<DomainObject> types = getOrganizationTypesModel().getObject();
         for (DomainObject type : types) {
-            if (type.getId() != null &&
-                    type.getId().equals(OrganizationType.SERVICE_PROVIDER.getId())) {
+            if (type.getObjectId() != null &&
+                    type.getObjectId().equals(OrganizationType.SERVICE_PROVIDER.getId())) {
                 return true;
             }
         }

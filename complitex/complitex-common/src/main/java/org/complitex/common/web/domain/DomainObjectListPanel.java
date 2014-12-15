@@ -147,7 +147,7 @@ public final class DomainObjectListPanel extends Panel {
             for (String filterEntity : searchFilters) {
                 DomainObject domainObject = getSession().getGlobalSearchComponentState().get(filterEntity);
                 if (domainObject != null) {
-                    ids.put(filterEntity, domainObject.getId());
+                    ids.put(filterEntity, domainObject.getObjectId());
                 }
             }
             getStrategy().configureExample(example, ids, null);
@@ -201,7 +201,7 @@ public final class DomainObjectListPanel extends Panel {
             protected void populateItem(Item<DomainObject> item) {
                 DomainObject object = item.getModelObject();
 
-                item.add(new Label("order", Model.of(object.getId())));
+                item.add(new Label("order", Model.of(object.getObjectId())));
 
                 final Map<Attribute, EntityAttributeType> attrToTypeMap = Maps.newLinkedHashMap();
                 for (EntityAttributeType attrType : listAttributeTypes) {
@@ -267,8 +267,8 @@ public final class DomainObjectListPanel extends Panel {
                 item.add(dataColumns);
 
                 ScrollBookmarkablePageLink<WebPage> detailsLink = new ScrollBookmarkablePageLink<WebPage>("detailsLink",
-                        getStrategy().getEditPage(), getStrategy().getEditPageParams(object.getId(), null, null),
-                        String.valueOf(object.getId()));
+                        getStrategy().getEditPage(), getStrategy().getEditPageParams(object.getObjectId(), null, null),
+                        String.valueOf(object.getObjectId()));
                 detailsLink.add(new Label("editMessage", new AbstractReadOnlyModel<String>() {
 
                     @Override
@@ -429,7 +429,7 @@ public final class DomainObjectListPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 filterForm.clearInput();
 
-                example.setId(null);
+                example.setObjectId(null);
                 for (EntityAttributeType attrType : listAttributeTypes) {
                     AttributeExample attrExample = example.getAttributeExample(attrType.getId());
                     attrExample.setValue(null);

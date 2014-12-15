@@ -138,9 +138,9 @@ public class DomainObjectInputPanel extends Panel {
                 protected void onSelect(AjaxRequestTarget target, String entity) {
                     super.onSelect(target, entity);
 
-                    if (object.getId() == null) {
+                    if (object.getObjectId() == null) {
                         DomainObject parent = getModelObject(entity);
-                        if (parent != null && parent.getId() != null && parent.getId() > 0) {
+                        if (parent != null && parent.getObjectId() != null && parent.getObjectId() > 0) {
                             DomainObjectEditPanel editPanel = visitParents(DomainObjectEditPanel.class,
                                     new IVisitor<DomainObjectEditPanel, DomainObjectEditPanel>() {
 
@@ -235,7 +235,7 @@ public class DomainObjectInputPanel extends Panel {
     protected SearchComponentState initParentSearchComponentState() {
         //parent search
         SearchComponentState componentState = null;
-        if (object.getId() == null) {
+        if (object.getObjectId() == null) {
             if (parentId != null && !Strings.isEmpty(parentEntity)) {
                 if (parentId > 0) {
                     componentState = getStrategy().getSearchComponentStateForParent(parentId, parentEntity, null);
@@ -244,7 +244,7 @@ public class DomainObjectInputPanel extends Panel {
                 }
             }
         } else {
-            SimpleObjectInfo info = getStrategy().findParentInSearchComponent(object.getId(), isHistory() ? date : null);
+            SimpleObjectInfo info = getStrategy().findParentInSearchComponent(object.getObjectId(), isHistory() ? date : null);
             if (info != null) {
                 componentState = getStrategy().getSearchComponentStateForParent(info.getId(), info.getEntityTable(), date);
             }

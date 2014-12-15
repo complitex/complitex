@@ -49,7 +49,7 @@ public class UserOrganizationPicker extends Panel {
                     // check whether current organization within list already
                     boolean found = false;
                     for (DomainObject o : userOrganizatons) {
-                        if (o.getId().equals(currentOrganizationId)) {
+                        if (o.getObjectId().equals(currentOrganizationId)) {
                             found = true;
                             break;
                         }
@@ -79,7 +79,7 @@ public class UserOrganizationPicker extends Panel {
 
                         @Override
                         public boolean apply(DomainObject input) {
-                            return id.equals(input.getId());
+                            return id.equals(input.getObjectId());
                         }
                     });
                 }
@@ -88,7 +88,7 @@ public class UserOrganizationPicker extends Panel {
 
             @Override
             public void setObject(DomainObject object) {
-                organizationIdModel.setObject(object != null ? object.getId() : null);
+                organizationIdModel.setObject(object != null ? object.getObjectId() : null);
             }
         };
         DisableAwareDropDownChoice<DomainObject> select = new DisableAwareDropDownChoice<DomainObject>("select", model,

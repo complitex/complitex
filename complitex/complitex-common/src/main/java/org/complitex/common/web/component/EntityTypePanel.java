@@ -74,7 +74,7 @@ public class EntityTypePanel extends Panel {
 
                         @Override
                         public boolean apply(DomainObject entityTypeId) {
-                            return entityTypeId.getId().equals(entityTypeObjectId);
+                            return entityTypeId.getObjectId().equals(entityTypeObjectId);
                         }
                     });
                 }
@@ -83,7 +83,7 @@ public class EntityTypePanel extends Panel {
 
             @Override
             public void setObject(DomainObject entityTypeObject) {
-                entityTypeObjectIdModel.setObject(entityTypeObject.getId());
+                entityTypeObjectIdModel.setObject(entityTypeObject.getObjectId());
             }
         };
         DomainObjectDisableAwareRenderer renderer = new DomainObjectDisableAwareRenderer() {

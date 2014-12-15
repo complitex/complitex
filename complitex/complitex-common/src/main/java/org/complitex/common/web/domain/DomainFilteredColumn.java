@@ -37,6 +37,6 @@ public class DomainFilteredColumn extends AbstractColumn<DomainObject, Long> imp
     @Override
     public void populateItem(Item<ICellPopulator<DomainObject>> cellItem, String componentId, IModel<DomainObject> rowModel) {
 
-        cellItem.add(new Label(componentId, Model.of(rowModel.getObject().getId())));
+        cellItem.add(new Label(componentId, Model.of(rowModel.getObject().getObjectId())));
     }
 }

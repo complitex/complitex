@@ -51,7 +51,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return buildingAddressStrategy.getList(new DomainObjectExample().addAdditionalParam(DISTRICT_ID, parent.getId()));
+        return buildingAddressStrategy.getList(new DomainObjectExample().addAdditionalParam(DISTRICT_ID, parent.getObjectId()));
     }
 
     @Override
@@ -76,7 +76,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
             DomainObject streetObject = streetStrategy.findById(objectId, true);
 
             if (streetObject != null){
-                return streetObject.getId();
+                return streetObject.getObjectId();
             }
         }
 

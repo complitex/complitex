@@ -116,7 +116,7 @@ public class LogBean extends AbstractBean {
         String controller = controllerClass != null ? controllerClass.getName() : null;
         String model = DomainObject.class.getName() + "#" + strategy.getEntityTable();
 
-        log(module, controller, model, newDomainObject.getId(), event, status,
+        log(module, controller, model, newDomainObject.getObjectId(), event, status,
                 getLogChanges(strategy, oldDomainObject, newDomainObject),
                 descriptionPattern, descriptionArguments);
     }

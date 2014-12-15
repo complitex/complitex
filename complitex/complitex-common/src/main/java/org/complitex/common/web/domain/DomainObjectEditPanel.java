@@ -137,7 +137,7 @@ public class DomainObjectEditPanel extends Panel {
                 final String entityName = getStrategy().getEntity().getName(getLocale());
 
                 return isNew() || !sessionBean.isAdmin() ? entityName
-                        : MessageFormat.format(getString("label_edit"), entityName, newObject.getId());
+                        : MessageFormat.format(getString("label_edit"), entityName, newObject.getObjectId());
             }
         };
         Label title = new Label("title", labelModel);
@@ -169,7 +169,7 @@ public class DomainObjectEditPanel extends Panel {
 
             @Override
             public void onClick() {
-                setResponsePage(getStrategy().getHistoryPage(), getStrategy().getHistoryPageParams(newObject.getId()));
+                setResponsePage(getStrategy().getHistoryPage(), getStrategy().getHistoryPageParams(newObject.getObjectId()));
             }
         };
         historyContainer.add(history);
@@ -320,7 +320,7 @@ public class DomainObjectEditPanel extends Panel {
                 SearchComponentState parentSearchComponentState = objectInputPanel.getParentSearchComponentState();
                 for (String searchFilterEntity : inverseParentSearchFilters) {
                     DomainObject object = parentSearchComponentState.get(searchFilterEntity);
-                    if (object != null && object.getId() != null && object.getId() > 0) {
+                    if (object != null && object.getObjectId() != null && object.getObjectId() > 0) {
                         parentPermissions = object.getSubjectIds();
                         break;
                     }
@@ -376,7 +376,7 @@ public class DomainObjectEditPanel extends Panel {
         if (isNew() || (parentId == null && Strings.isEmpty(parentEntity))) {
             //return to list page for current entity.
             PageParameters listPageParams = getStrategy().getListPageParams();
-            listPageParams.set(scrollListPageParameterName, newObject.getId());
+            listPageParams.set(scrollListPageParameterName, newObject.getObjectId());
             setResponsePage(getStrategy().getListPage(), listPageParams);
         } else {
             //return to edit page for parent entity.
@@ -407,7 +407,7 @@ public class DomainObjectEditPanel extends Panel {
 
     public void delete() {
         try {
-            getStrategy().delete(newObject.getId(), getLocale());
+            getStrategy().delete(newObject.getObjectId(), getLocale());
             back();
         } catch (DeleteException e) {
             if (!Strings.isEmpty(e.getMessage())) {

@@ -67,7 +67,7 @@ public class CollapsibleSearchComponent extends WiQuerySearchComponent {
         SearchComponentState globalComponentState = getSession().getGlobalSearchComponentState();
         for (String searchFilter : topSearchFilters) {
             final DomainObject object = globalComponentState.get(searchFilter);
-            if (object == null || object.getId() == null || object.getId() <= 0) {
+            if (object == null || object.getObjectId() == null || object.getObjectId() <= 0) {
                 return true;
             }
         }

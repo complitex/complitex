@@ -54,7 +54,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return districtStrategy.getList(new DomainObjectExample().setParent("city", parent.getId()));
+        return districtStrategy.getList(new DomainObjectExample().setParent("city", parent.getObjectId()));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
 
     @Override
     public Long getParentId(AddressSync sync, DomainObject parent) {
-        return parent.getId();
+        return parent.getObjectId();
     }
 
     public void insert(AddressSync sync, Locale locale){

@@ -46,9 +46,9 @@ public class MainUserOrganizationPicker extends Panel implements IMainUserOrgani
             @Override
             public DomainObject getObject() {
                 DomainObject object = model.getObject();
-                if (object != null && object.getId() != null) {
+                if (object != null && object.getObjectId() != null) {
                     for (DomainObject o : userOrganizations) {
-                        if (o.getId().equals(object.getId())) {
+                        if (o.getObjectId().equals(object.getObjectId())) {
                             return o;
                         }
                     }

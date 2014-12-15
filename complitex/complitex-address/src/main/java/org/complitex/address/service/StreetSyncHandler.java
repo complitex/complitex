@@ -53,7 +53,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return streetStrategy.getList(new DomainObjectExample().setParent("city", parent.getId()));
+        return streetStrategy.getList(new DomainObjectExample().setParent("city", parent.getObjectId()));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
 
     @Override
     public Long getParentId(AddressSync sync, DomainObject parent) {
-        return parent.getId();
+        return parent.getObjectId();
     }
 
     @Override
@@ -90,7 +90,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
         if (streetTypes.isEmpty()) {
             throw new RuntimeException("StreetType not found: " + sync.getAdditionalName());
         }
-        newObject.setLongValue(StreetStrategy.STREET_TYPE, streetTypes.get(0).getId());
+        newObject.setLongValue(StreetStrategy.STREET_TYPE, streetTypes.get(0).getObjectId());
 
         streetStrategy.insert(newObject, sync.getDate());
         addressSyncBean.delete(sync.getId());
@@ -108,7 +108,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
         if (streetTypes.isEmpty()) {
             throw new RuntimeException("StreetType not found: " + sync.getAdditionalName());
         }
-        newObject.getAttribute(StreetStrategy.STREET_TYPE).setValueId(streetTypes.get(0).getId());
+        newObject.getAttribute(StreetStrategy.STREET_TYPE).setValueId(streetTypes.get(0).getObjectId());
 
         streetStrategy.update(oldObject, newObject, sync.getDate());
         addressSyncBean.delete(sync.getId());

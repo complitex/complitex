@@ -62,7 +62,7 @@ public class RoomCorrectionList extends AddressCorrectionList<RoomCorrection> {
             DomainObject street = state.get("street");
             DomainObject city = state.get("city");
             String displayRoom = roomStrategy.displayDomainObject(room, locale);
-            String displayApartment = apartment == null || apartment.getId() < 1? "" : apartmentStrategy.displayDomainObject(apartment, locale);
+            String displayApartment = apartment == null || apartment.getObjectId() < 1? "" : apartmentStrategy.displayDomainObject(apartment, locale);
             String displayBuilding = buildingStrategy.displayDomainObject(building, locale);
             String displayStreet = streetStrategy.displayDomainObject(street, locale);
             String displayCity = cityStrategy.displayDomainObject(city, locale);

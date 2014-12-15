@@ -28,10 +28,8 @@ import org.complitex.common.util.CloneUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
-import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.template.web.component.LocalePicker;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
@@ -279,7 +277,7 @@ public class UserEdit extends FormTemplatePage {
                         for (String s : SEARCH_FILTERS) {
                             DomainObject domainObject = searchComponentState.get(s);
                             if (domainObject != null) {
-                                preferenceBean.save(user.getId(), DEFAULT_STATE_PAGE, s, domainObject.getId() + "");
+                                preferenceBean.save(user.getId(), DEFAULT_STATE_PAGE, s, domainObject.getObjectId() + "");
                             }
                         }
 

@@ -14,7 +14,7 @@
 
     <sql id="filter">
         <if test="id != null">
-            AND e.`object_id` = #{id}
+            AND e.`object_id` = #{objectId}
         </if>
         <foreach item="attrExample" collection="attributeExamples">
             <if test="attrExample.value != null">

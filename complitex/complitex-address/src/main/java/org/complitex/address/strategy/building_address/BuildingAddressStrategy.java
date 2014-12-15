@@ -88,7 +88,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
 
     @Override
     public List<? extends DomainObject> getList(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
 

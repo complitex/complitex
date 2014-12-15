@@ -136,7 +136,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
             public SearchComponentState initParentSearchComponentState() {
                 SearchComponentState primaryAddressComponentState = super.initParentSearchComponentState();
 
-                if (primaryBuildingAddress.getId() == null) {
+                if (primaryBuildingAddress.getObjectId() == null) {
                     primaryAddressComponentState.updateState(parentSearchComponentState);
                 }
                 return primaryAddressComponentState;
@@ -159,7 +159,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
                     @Override
                     public SearchComponentState initParentSearchComponentState() {
                         SearchComponentState alternativeAddressComponentState = null;
-                        if (address.getId() == null) {
+                        if (address.getObjectId() == null) {
                             alternativeAddressComponentState = new SearchComponentState();
                             alternativeAddressComponentState.updateState(parentSearchComponentState);
                             alternativeAddressComponentState.put("street", null);
@@ -199,7 +199,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
         //
         //Building Code
         //
-        if (building.getId() == null) { // new building
+        if (building.getObjectId() == null) { // new building
             building.getBuildingCodes().add(new BuildingCode());
         }
 
@@ -240,7 +240,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
                                 Long organizationId = association.getOrganizationId();
                                 if (organizationId != null) {
                                     for (DomainObject o : allServicingOrganizations) {
-                                        if (organizationId.equals(o.getId())) {
+                                        if (organizationId.equals(o.getObjectId())) {
                                             return o;
                                         }
                                     }
@@ -251,14 +251,14 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
                             @Override
                             public void setObject(DomainObject organization) {
                                 association.setOrganizationId(organization != null
-                                        ? organization.getId() : null);
+                                        ? organization.getObjectId() : null);
                             }
                         };
                         //initialize model:
                         Long organizationId = association.getOrganizationId();
                         if (organizationId != null) {
                             for (DomainObject o : allServicingOrganizations) {
-                                if (organizationId.equals(o.getId())) {
+                                if (organizationId.equals(o.getObjectId())) {
                                     organizationModel.setObject(o);
                                 }
                             }
@@ -315,8 +315,8 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
     private void beforePersist() {
         final Attribute districtAttribute = getDomainObject().getAttribute(BuildingStrategy.DISTRICT);
         final DomainObject district = districtSearchComponentState.get("district");
-        if (district != null && district.getId() > 0 && district.getId() > 0) {
-            districtAttribute.setValueId(district.getId());
+        if (district != null && district.getObjectId() > 0 && district.getObjectId() > 0) {
+            districtAttribute.setValueId(district.getObjectId());
         } else {
             districtAttribute.setValueId(null);
         }

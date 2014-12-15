@@ -120,7 +120,7 @@ public final class Children extends Panel {
                 } else {
                     example.setStatus(ShowMode.ALL.name());
                 }
-                getChildrenStrategy().configureExample(example, ImmutableMap.of(parentEntity, parentObject.getId()), null);
+                getChildrenStrategy().configureExample(example, ImmutableMap.of(parentEntity, parentObject.getObjectId()), null);
                 children = getChildrenStrategy().getList(example);
             }
         };
@@ -131,7 +131,7 @@ public final class Children extends Panel {
             protected void populateItem(ListItem<DomainObject> item) {
                 DomainObject child = item.getModelObject();
                 BookmarkablePageLink<WebPage> link = new BookmarkablePageLink<WebPage>("link", getChildrenStrategy().getEditPage(),
-                        getChildrenStrategy().getEditPageParams(child.getId(), parentObject.getId(), parentEntity));
+                        getChildrenStrategy().getEditPageParams(child.getObjectId(), parentObject.getObjectId(), parentEntity));
                 link.add(new Label("displayName", getChildrenStrategy().displayDomainObject(child, getLocale())));
                 item.add(link);
             }
@@ -139,7 +139,7 @@ public final class Children extends Panel {
         children.setReuseItems(true);
         content.add(children);
         BookmarkablePageLink addLink = new BookmarkablePageLink("add", getChildrenStrategy().getEditPage(),
-                getChildrenStrategy().getEditPageParams(null, parentObject.getId(), parentEntity));
+                getChildrenStrategy().getEditPageParams(null, parentObject.getObjectId(), parentEntity));
         content.add(addLink);
         if (!DomainObjectAccessUtil.canEdit(childStrategyName, parentEntity, parentObject)) {
             addLink.setVisible(false);

@@ -364,7 +364,7 @@ public abstract class AbstractLookupPanel<T extends AbstractRequest> extends Pan
     }
 
     protected final Long getObjectId(DomainObject object) {
-        return object == null ? null : object.getId();
+        return object == null ? null : object.getObjectId();
     }
 
     protected Long getStreetType(DomainObject streetObject) {

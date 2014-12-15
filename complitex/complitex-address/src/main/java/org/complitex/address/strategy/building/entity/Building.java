@@ -117,7 +117,7 @@ public class Building extends DomainObject {
         }));
         long attributeId = 1;
         for (DomainObject alternativeAddress : alternativeAddresses) {
-            addBuildingAddressAttribute(alternativeAddress.getId(), attributeId++);
+            addBuildingAddressAttribute(alternativeAddress.getObjectId(), attributeId++);
         }
     }
 

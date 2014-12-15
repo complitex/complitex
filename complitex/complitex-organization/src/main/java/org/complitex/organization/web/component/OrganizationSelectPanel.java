@@ -57,7 +57,7 @@ public class OrganizationSelectPanel extends Panel {
         filterForm.add(find);
 
         //Example
-        final DomainObjectExample example = new DomainObjectExample(NAME, CODE);
+        final DomainObjectExample example = new DomainObjectExample().addAttributes(NAME, CODE);
 
         if (organizationTypeIds != null && !organizationTypeIds.isEmpty()) {
             example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, organizationTypeIds);

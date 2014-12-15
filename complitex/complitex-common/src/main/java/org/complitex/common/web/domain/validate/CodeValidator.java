@@ -41,11 +41,11 @@ public abstract class CodeValidator implements IValidator {
     public boolean validate(DomainObject object, DomainObjectEditPanel editPanel) {
         Attribute codeAttribute = object.getAttribute(codeAttributeTypeId);
         if (codeAttribute == null) {
-            throw new IllegalStateException("Domain object(entity = " + entity + ", id = " + object.getId()
+            throw new IllegalStateException("Domain object(entity = " + entity + ", id = " + object.getObjectId()
                     + ") has no attribute with attribute type id = " + codeAttributeTypeId + "!");
         }
         if (codeAttribute.getLocalizedValues() == null) {
-            throw new IllegalStateException("Attribute of domain object(entity = " + entity + ", id = " + object.getId()
+            throw new IllegalStateException("Attribute of domain object(entity = " + entity + ", id = " + object.getObjectId()
                     + ") with attribute type id = " + codeAttribute + " and attribute id = " + codeAttribute.getAttributeId()
                     + " has null lozalized values.");
         }
@@ -53,7 +53,7 @@ public abstract class CodeValidator implements IValidator {
         LocaleBean localeBean = EjbBeanLocator.getBean(LocaleBean.class);
         String code = StringCultures.getValue(codeAttribute.getLocalizedValues(), localeBean.getSystemLocale());
 
-        Long existingId = validateCode(object.getId(), code);
+        Long existingId = validateCode(object.getObjectId(), code);
         if (existingId != null) {
             editPanel.error(getErrorMessage(existingId, code, editPanel.getLocale()));
             return false;

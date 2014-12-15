@@ -32,7 +32,7 @@ public final class OrganizationEdit extends DomainObjectEdit {
                 return OrganizationPermissionPanelFactory.create(id, new OrganizationPermissionParameters(
                         new DomainObjectPermissionParameters(getNewObject().getSubjectIds(), parentSubjectIds,
                         DomainObjectAccessUtil.canEdit(strategy, entity, getNewObject())),
-                        getNewObject().getId()));
+                        getNewObject().getObjectId()));
             }
 
             @Override

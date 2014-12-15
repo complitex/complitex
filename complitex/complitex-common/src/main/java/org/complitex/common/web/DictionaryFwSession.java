@@ -123,7 +123,7 @@ public class DictionaryFwSession extends WebSession {
             for (String key : state.keySet()) {
                 DomainObject object = state.get(key);
                 long objectId = object == null ? SearchComponentState.NOT_SPECIFIED_ID
-                        : (object.getId() != null ? object.getId() : SearchComponentState.NOT_SPECIFIED_ID);
+                        : (object.getObjectId() != null ? object.getObjectId() : SearchComponentState.NOT_SPECIFIED_ID);
                 putPreference(GLOBAL_STATE_PAGE, key, String.valueOf(objectId), true);
             }
         }

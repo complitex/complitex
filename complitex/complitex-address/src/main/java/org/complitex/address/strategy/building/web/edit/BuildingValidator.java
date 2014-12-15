@@ -77,7 +77,7 @@ public class BuildingValidator implements IValidator {
 
         //город для района(если район задан) должен совпадать с городом каждого адреса.
         DomainObject district = building.getDistrict();
-        if (district != null && district.getId() != null && district.getId() > 0) {
+        if (district != null && district.getObjectId() != null && district.getObjectId() > 0) {
             Long cityFromDistrict = district.getParentId();
 
             for (DomainObject address : building.getAllAddresses()) {
@@ -216,7 +216,7 @@ public class BuildingValidator implements IValidator {
             String corp = address.getStringValue(CORP);
             String structure = address.getStringValue(STRUCTURE);
 
-            Long existingBuildingId = buildingStrategy.checkForExistingAddress(building.getId(), number, Strings.isEmpty(corp) ? null : corp,
+            Long existingBuildingId = buildingStrategy.checkForExistingAddress(building.getObjectId(), number, Strings.isEmpty(corp) ? null : corp,
                     Strings.isEmpty(structure) ? null : structure, address.getParentEntityId(), address.getParentId(), systemLocale);
             if (existingBuildingId != null) {
                 valid = false;

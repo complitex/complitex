@@ -180,7 +180,7 @@ public class CityStrategy extends TemplateStrategy {
         params.put("cityTypeId", cityTypeId);
         List<Long> results = sqlSession().selectList(CITY_NAMESPACE + ".defaultValidation", params);
         for (Long result : results) {
-            if (!result.equals(cityObject.getId())) {
+            if (!result.equals(cityObject.getObjectId())) {
                 return result;
             }
         }

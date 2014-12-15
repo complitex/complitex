@@ -200,7 +200,7 @@ public class AddressCorrectionInputPanel extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (correction instanceof StreetCorrection){
-                    ((StreetCorrection) correction).setStreetTypeObjectId(streetTypeModel.getObject().getId());
+                    ((StreetCorrection) correction).setStreetTypeObjectId(streetTypeModel.getObject().getObjectId());
                 }
             }
         });

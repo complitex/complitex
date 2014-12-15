@@ -187,7 +187,7 @@ public abstract class RequestFileLoadPanel extends Panel {
                             monthRange.getMonthFrom(), monthRange.getMonthTo());
                 }
 
-                load(currentUserOrganizationId, oszn.getId(), dateParameter, target);
+                load(currentUserOrganizationId, oszn.getObjectId(), dateParameter, target);
 
                 target.add(messages);
                 dialog.close(target);

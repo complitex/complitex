@@ -105,7 +105,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
     @Override
     public List<Building> getList(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
 
@@ -114,9 +114,9 @@ public class BuildingStrategy extends TemplateStrategy {
 
         List<Building> buildings = Lists.newArrayList();
 
-        if (example.getId() != null) {
+        if (example.getObjectId() != null) {
             boolean buildingFound = false;
-            Building building = findById(example.getId(), false);
+            Building building = findById(example.getObjectId(), false);
 
             if (building != null) {
                 buildingFound = true;
@@ -146,7 +146,7 @@ public class BuildingStrategy extends TemplateStrategy {
             List<? extends DomainObject> addresses = buildingAddressStrategy.getList(createAddressExample(example));
 
             for (DomainObject address : addresses) {
-                example.addAdditionalParam("buildingAddressId", address.getId());
+                example.addAdditionalParam("buildingAddressId", address.getObjectId());
                 List<Building> result = sqlSession().selectList(NS + "." + FIND_OPERATION, example);
                 if (result.size() == 1) {
                     Building building = result.get(0);
@@ -157,7 +157,7 @@ public class BuildingStrategy extends TemplateStrategy {
                     buildings.add(building);
                 } else {
                     if (result.isEmpty()) {
-                        String message = "There are no building object linked to active building address object. Building address object id = " + address.getId()
+                        String message = "There are no building object linked to active building address object. Building address object id = " + address.getObjectId()
                                 + ". Address base is in inconsistent state!";
                         throw new IllegalStateException(message);
                     } else {
@@ -165,11 +165,11 @@ public class BuildingStrategy extends TemplateStrategy {
 
                             @Override
                             public Long apply(Building building) {
-                                return building.getId();
+                                return building.getObjectId();
                             }
                         }));
                         String message = "There are more than one building objects linked to one building address object. Building address object id = "
-                                + address.getId() + ", building object's ids linked to specified building address object: " + buildingIds;
+                                + address.getObjectId() + ", building object's ids linked to specified building address object: " + buildingIds;
                         throw new IllegalStateException(message);
                     }
                 }
@@ -213,13 +213,13 @@ public class BuildingStrategy extends TemplateStrategy {
     @Override
 
     public Long getCount(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
 
         prepareExampleForPermissionCheck(example);
-        if (example.getId() != null) {
-            Building building = findById(example.getId(), false);
+        if (example.getObjectId() != null) {
+            Building building = findById(example.getObjectId(), false);
             return building == null ? 0L : 1L;
         } else {
             DomainObjectExample addressExample = createAddressExample(example);
@@ -249,8 +249,8 @@ public class BuildingStrategy extends TemplateStrategy {
     @Override
 
     public Building findById(Long id, boolean runAsAdmin) {
-        DomainObjectExample example = new DomainObjectExample(id);
-        example.setEntityTable(getEntityTable());
+        DomainObjectExample example = new DomainObjectExample(id, getEntityTable());
+
         if (!runAsAdmin) {
             prepareExampleForPermissionCheck(example);
         } else {
@@ -430,7 +430,7 @@ public class BuildingStrategy extends TemplateStrategy {
             buildingAddressStrategy.insert(buildingAddress, insertDate);
         }
         building.enhanceAlternativeAddressAttributes();
-        building.setParentId(building.getPrimaryAddress().getId());
+        building.setParentId(building.getPrimaryAddress().getObjectId());
         building.setParentEntityId(PARENT_ENTITY_ID);
         super.insertDomainObject(object, insertDate);
 
@@ -491,7 +491,7 @@ public class BuildingStrategy extends TemplateStrategy {
                         EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
                         attribute.setAttributeTypeId(attributeType.getId());
                         attribute.setValueTypeId(attributeValueType.getId());
-                        attribute.setObjectId(object.getId());
+                        attribute.setObjectId(object.getObjectId());
                         attribute.setAttributeId(1L);
 
                         if (isSimpleAttributeType(attributeType)) {
@@ -523,7 +523,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
         for (BuildingCode bc : newBuilding.getBuildingCodes()){
             if (bc.getId() == null){
-                bc.setBuildingId(newBuilding.getId());
+                bc.setBuildingId(newBuilding.getObjectId());
                 saveBuildingCode(bc);
 
                 newBuilding.addAttribute(newBuildingCodeAttribute(++index, bc.getId()));
@@ -587,7 +587,7 @@ public class BuildingStrategy extends TemplateStrategy {
         for (DomainObject oldAddress : oldAddresses) {
             boolean removed = true;
             for (DomainObject newAddress : newAddresses) {
-                if (oldAddress.getId().equals(newAddress.getId())) {
+                if (oldAddress.getObjectId().equals(newAddress.getObjectId())) {
                     removed = false;
                     break;
                 }
@@ -605,7 +605,7 @@ public class BuildingStrategy extends TemplateStrategy {
         List<DomainObject> newAddresses = newBuilding.getAllAddresses();
 
         for (DomainObject newAddress : newAddresses) {
-            if (newAddress.getId() == null) {
+            if (newAddress.getObjectId() == null) {
                 addedAddresses.add(newAddress);
             }
         }
@@ -620,7 +620,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
         for (DomainObject oldAddress : oldAddresses) {
             for (DomainObject newAddress : newAddresses) {
-                if (oldAddress.getId().equals(newAddress.getId())) {
+                if (oldAddress.getObjectId().equals(newAddress.getObjectId())) {
                     updatedAddressesMap.put(oldAddress, newAddress);
                     break;
                 }
@@ -657,7 +657,7 @@ public class BuildingStrategy extends TemplateStrategy {
     public Building findHistoryObject(long objectId, Date date) {
         DomainObjectExample example = new DomainObjectExample();
         example.setEntityTable(getEntityTable());
-        example.setId(objectId);
+        example.setObjectId(objectId);
         example.setStartDate(date);
 
         Building building = sqlSession().selectOne(NS + "." + FIND_HISTORY_OBJECT_OPERATION, example);
@@ -688,7 +688,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
         Building building = (Building) object;
         for (DomainObject address : building.getAllAddresses()) {
-            buildingAddressStrategy.updateBuildingAddressActivity(address.getId(), !enable);
+            buildingAddressStrategy.updateBuildingAddressActivity(address.getObjectId(), !enable);
         }
     }
 
@@ -819,7 +819,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
         long i = 1;
         for (BuildingCode buildingCode : building.getBuildingCodes()) {
-            buildingCode.setBuildingId(building.getId());
+            buildingCode.setBuildingId(building.getObjectId());
             saveBuildingCode(buildingCode);
 
             building.addAttribute(newBuildingCodeAttribute(i++, buildingCode.getId()));

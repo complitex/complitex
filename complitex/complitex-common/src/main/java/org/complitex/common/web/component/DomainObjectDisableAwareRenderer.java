@@ -20,6 +20,6 @@ public abstract class DomainObjectDisableAwareRenderer implements IDisableAwareC
 
     @Override
     public String getIdValue(DomainObject object, int index) {
-        return String.valueOf(object.getId());
+        return String.valueOf(object.getObjectId());
     }
 }

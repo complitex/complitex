@@ -188,7 +188,7 @@ public class SessionBean extends AbstractBean {
         try {
             IStrategy strategy = strategyFactory.getStrategy(ORGANIZATION_ENTITY);
             DomainObject mainUserOrganization = getMainUserOrganization(session);
-            return mainUserOrganization != null && mainUserOrganization.getId() != null
+            return mainUserOrganization != null && mainUserOrganization.getObjectId() != null
                     ? strategy.displayDomainObject(mainUserOrganization, session.getLocale()) : "";
         } catch (Exception e) {
             return "[NA]";
@@ -226,7 +226,7 @@ public class SessionBean extends AbstractBean {
     public DomainObject getMainUserOrganization(DictionaryFwSession session) {
         DomainObject sessionOrganization = session.getMainUserOrganization();
 
-        if (sessionOrganization != null && sessionOrganization.getId() != null) {
+        if (sessionOrganization != null && sessionOrganization.getObjectId() != null) {
             return sessionOrganization;
         } else {
             DomainObject mainUserOrganization = loadMainUserOrganization();
@@ -241,7 +241,7 @@ public class SessionBean extends AbstractBean {
      */
 
     public void updateMainUserOrganization(DictionaryFwSession session, DomainObject mainUserOrganization) {
-        userProfileBean.updateMainUserOrganization(mainUserOrganization.getId());
+        userProfileBean.updateMainUserOrganization(mainUserOrganization.getObjectId());
         session.setMainUserOrganization(mainUserOrganization);
     }
 
@@ -261,7 +261,7 @@ public class SessionBean extends AbstractBean {
         List<Long> objectIds = new ArrayList<>();
 
         for (DomainObject o : organizationStrategy.getAllOuterOrganizations(null)) {
-            objectIds.add(o.getId());
+            objectIds.add(o.getObjectId());
         }
 
         return objectIds;
@@ -286,8 +286,8 @@ public class SessionBean extends AbstractBean {
     public Long getCurrentUserOrganizationId(DictionaryFwSession session) {
         DomainObject mainUserOrganization = getMainUserOrganization(session);
 
-        return mainUserOrganization != null && mainUserOrganization.getId() != null
-                && mainUserOrganization.getId() > 0 ? mainUserOrganization.getId() : null;
+        return mainUserOrganization != null && mainUserOrganization.getObjectId() != null
+                && mainUserOrganization.getObjectId() > 0 ? mainUserOrganization.getObjectId() : null;
     }
 
     public void prepareFilterForPermissionCheck(AbstractFilter filter) {

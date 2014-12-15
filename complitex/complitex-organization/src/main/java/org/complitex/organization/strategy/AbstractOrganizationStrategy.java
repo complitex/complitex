@@ -87,8 +87,8 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
 
     @Override
     public boolean canPropagatePermissions(DomainObject organization) {
-        return isUserOrganization(organization) && organization.getId() != null
-                && !getTreeChildrenOrganizationIds(organization.getId()).isEmpty();
+        return isUserOrganization(organization) && organization.getObjectId() != null
+                && !getTreeChildrenOrganizationIds(organization.getObjectId()).isEmpty();
     }
 
     @Override
@@ -112,16 +112,16 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
 
     @Override
     public void insert(DomainObject object, Date insertDate) {
-        object.setId(sequenceBean.nextId(getEntityTable()));
+        object.setObjectId(sequenceBean.nextId(getEntityTable()));
 
         if (!object.getSubjectIds().contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
-            object.getSubjectIds().add(object.getId());
+            object.getSubjectIds().add(object.getObjectId());
         }
 
         object.setPermissionId(getNewPermissionId(object.getSubjectIds()));
         insertDomainObject(object, insertDate);
         for (Attribute attribute : object.getAttributes()) {
-            attribute.setObjectId(object.getId());
+            attribute.setObjectId(object.getObjectId());
             attribute.setStartDate(insertDate);
             insertAttribute(attribute);
         }
@@ -138,7 +138,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
 
                 DomainObject districtObject = districtStrategy.findById(districtId, false);
                 if (districtObject != null) {
-                    Set<Long> addSubjectIds = Sets.newHashSet(newOrganization.getId());
+                    Set<Long> addSubjectIds = Sets.newHashSet(newOrganization.getObjectId());
                     districtStrategy.changePermissionsInDistinctThread(districtId, districtObject.getPermissionId(), addSubjectIds, null);
                 }
             }
@@ -153,7 +153,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
 
     protected void changeDistrictPermissions(DomainObject oldOrganization, DomainObject newOrganization) {
         if (isUserOrganization(newOrganization)) {
-            long organizationId = newOrganization.getId();
+            long organizationId = newOrganization.getObjectId();
             Set<Long> subjectIds = Sets.newHashSet(organizationId);
             Attribute oldDistrictAttribute = oldOrganization.getAttribute(DISTRICT);
             Attribute newDistrictAttribute = newOrganization.getAttribute(DISTRICT);
@@ -227,7 +227,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
 
     @Override
     public List<T> getList(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
 
@@ -250,7 +250,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
 
     @Override
     public Long getCount(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
         example.setEntityTable(getEntityTable());
@@ -304,7 +304,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         Set<Long> excludeSet = Sets.newHashSet(excludeOrganizationsId);
 
         for (T userOrganization : userOrganizations) {
-            if (!excludeSet.contains(userOrganization.getId())) {
+            if (!excludeSet.contains(userOrganization.getObjectId())) {
                 finalUserOrganizations.add(userOrganization);
             }
         }

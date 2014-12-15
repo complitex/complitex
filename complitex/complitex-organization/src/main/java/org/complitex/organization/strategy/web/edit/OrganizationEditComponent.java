@@ -69,7 +69,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
     }
 
     protected boolean isNew() {
-        return getDomainObject().getId() == null;
+        return getDomainObject().getObjectId() == null;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
                 for (Attribute attribute : organization.getAttributes(IOrganizationStrategy.ORGANIZATION_TYPE)) {
                     if (attribute.getValueId() != null) {
                         for (DomainObject organizationType : allOrganizationTypes) {
-                            if (organizationType.getId().equals(attribute.getValueId())) {
+                            if (organizationType.getObjectId().equals(attribute.getValueId())) {
                                 organizationTypes.add(organizationType);
                             }
                         }
@@ -120,7 +120,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         if (isNew()) {
             DomainObject defaultOrganizationType = null;
             for (DomainObject organizationType : allOrganizationTypes) {
-                if (organizationType.getId().equals(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE)
+                if (organizationType.getObjectId().equals(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE)
                         && (organizationType.getStatus() == StatusType.ACTIVE)) {
                     defaultOrganizationType = organizationType;
                     break;
@@ -215,15 +215,15 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
 
                 @Override
                 protected void onUpdate(AjaxRequestTarget target, DomainObject newOrganization) {
-                    if (newOrganization != null && newOrganization.getId() != null && newOrganization.getId() > 0) {
+                    if (newOrganization != null && newOrganization.getObjectId() != null && newOrganization.getObjectId() > 0) {
                         DomainObjectEditPanel editPanel = findParent(DomainObjectEditPanel.class);
                         editPanel.updateParentPermissions(target, newOrganization.getSubjectIds());
                     }
                 }
             });
         } else {
-            Set<Long> excludeOrganizationIds = Sets.newHashSet(organization.getId());
-            excludeOrganizationIds.addAll(organizationStrategy.getTreeChildrenOrganizationIds(organization.getId()));
+            Set<Long> excludeOrganizationIds = Sets.newHashSet(organization.getObjectId());
+            excludeOrganizationIds.addAll(organizationStrategy.getTreeChildrenOrganizationIds(organization.getObjectId()));
             Long[] excludeAsArray = new Long[excludeOrganizationIds.size()];
             UserOrganizationPicker parent = new UserOrganizationPicker("parent", parentModel, true,
                     excludeOrganizationIds.toArray(excludeAsArray));
@@ -269,14 +269,14 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
 
     public boolean isDistrictEntered() {
         DomainObject district = districtSearchComponentState.get("district");
-        Long districtId = district != null ? district.getId() : null;
+        Long districtId = district != null ? district.getObjectId() : null;
         return districtId != null && districtId > 0;
     }
 
     protected boolean isParentVisible() {
         for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
-            if (organizationType.getId().equals(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE)
-                    || organizationType.getId().equals(OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE)) {
+            if (organizationType.getObjectId().equals(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE)
+                    || organizationType.getObjectId().equals(OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE)) {
                 return true;
             }
         }
@@ -285,7 +285,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
 
     protected boolean isDistrictVisible() {
         for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
-            if (organizationType.getId().equals(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE)) {
+            if (organizationType.getObjectId().equals(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE)) {
                 return true;
             }
         }
@@ -294,7 +294,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
 
     protected boolean isUserOrganization() {
         for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
-            if (organizationType.getId().equals(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE)) {
+            if (organizationType.getObjectId().equals(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE)) {
                 return true;
             }
         }
@@ -323,7 +323,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         //district
         Attribute districtAttribute = getDomainObject().getAttribute(IOrganizationStrategy.DISTRICT);
         if (isDistrictVisible()) {
-            districtAttribute.setValueId(isDistrictEntered() ? districtSearchComponentState.get("district").getId() : null);
+            districtAttribute.setValueId(isDistrictEntered() ? districtSearchComponentState.get("district").getObjectId() : null);
         } else {
             districtAttribute.setValueId(null);
         }
@@ -342,7 +342,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
 
                 @Override
                 public int compare(DomainObject o1, DomainObject o2) {
-                    return o1.getId().compareTo(o2.getId());
+                    return o1.getObjectId().compareTo(o2.getObjectId());
                 }
             });
             long attributeId = 1;
@@ -351,7 +351,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
                 attribute.setAttributeId(attributeId++);
                 attribute.setAttributeTypeId(IOrganizationStrategy.ORGANIZATION_TYPE);
                 attribute.setValueTypeId(IOrganizationStrategy.ORGANIZATION_TYPE);
-                attribute.setValueId(organizationType.getId());
+                attribute.setValueId(organizationType.getObjectId());
                 getDomainObject().addAttribute(attribute);
             }
         }

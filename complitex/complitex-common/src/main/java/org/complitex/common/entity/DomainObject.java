@@ -14,8 +14,7 @@ import java.util.Locale;
  * @author Artem
  */
 public class DomainObject implements Serializable {
-
-    private Long id;
+    private Long objectId;
     private StatusType status = StatusType.ACTIVE;
     private Date startDate;
     private Date endDate;
@@ -29,12 +28,12 @@ public class DomainObject implements Serializable {
     public DomainObject() {
     }
 
-    public DomainObject(Long id) {
-        this.id = id;
+    public DomainObject(Long objectId) {
+        this.objectId = objectId;
     }
 
     protected DomainObject(DomainObject copy) {
-        id = copy.id;
+        objectId = copy.objectId;
         status = copy.status;
         startDate = copy.startDate;
         endDate = copy.endDate;
@@ -106,12 +105,12 @@ public class DomainObject implements Serializable {
         this.endDate = endDate;
     }
 
-    public Long getId() {
-        return id;
+    public Long getObjectId() {
+        return objectId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setObjectId(Long objectId) {
+        this.objectId = objectId;
     }
 
     public Long getParentId() {

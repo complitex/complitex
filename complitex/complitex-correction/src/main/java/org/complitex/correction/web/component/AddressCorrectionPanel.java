@@ -223,7 +223,7 @@ public abstract class AddressCorrectionPanel<T> extends Panel {
     }
 
     private Long getObjectId(DomainObject object) {
-        return object == null ? null : object.getId();
+        return object == null ? null : object.getObjectId();
     }
 
     private Long getStreetTypeId(DomainObject streetObject) {
@@ -240,26 +240,26 @@ public abstract class AddressCorrectionPanel<T> extends Panel {
         switch (correctedEntity) {
             case ROOM:
                 DomainObject roomObject = componentState.get("room");
-                validated = roomObject != null && roomObject.getId() != null && roomObject.getId() > 0;
+                validated = roomObject != null && roomObject.getObjectId() != null && roomObject.getObjectId() > 0;
             case APARTMENT:
                 DomainObject apartmentObject = componentState.get("apartment");
                 validated &= StringUtils.isEmpty(apartment) && apartmentObject == null && correctedEntity == AddressEntity.ROOM ||
-                        apartmentObject != null && apartmentObject.getId() != null && apartmentObject.getId() > 0;
+                        apartmentObject != null && apartmentObject.getObjectId() != null && apartmentObject.getObjectId() > 0;
             case BUILDING:
                 DomainObject buildingObject = componentState.get("building");
-                validated &= buildingObject != null && buildingObject.getId() != null && buildingObject.getId() > 0;
+                validated &= buildingObject != null && buildingObject.getObjectId() != null && buildingObject.getObjectId() > 0;
             case STREET:
                 DomainObject streetObject = componentState.get("street");
-                validated &= streetObject != null && streetObject.getId() != null && streetObject.getId() > 0;
+                validated &= streetObject != null && streetObject.getObjectId() != null && streetObject.getObjectId() > 0;
             case CITY:
                 errorMessageKey = "address_mistake";
                 DomainObject cityObject = componentState.get("city");
-                validated &= cityObject != null && cityObject.getId() != null && cityObject.getId() > 0;
+                validated &= cityObject != null && cityObject.getObjectId() != null && cityObject.getObjectId() > 0;
                 break;
             case STREET_TYPE:
                 errorMessageKey = "street_type_required";
                 DomainObject streetTypeObject = streetTypeModel.getObject();
-                validated = streetTypeObject != null && streetTypeObject.getId() != null && streetTypeObject.getId() > 0;
+                validated = streetTypeObject != null && streetTypeObject.getObjectId() != null && streetTypeObject.getObjectId() > 0;
                 break;
         }
         if (!validated) {

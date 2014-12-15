@@ -20,7 +20,7 @@ public class SearchComponentState extends HashMap<String, DomainObject> implemen
         boolean empty = true;
         for (Entry<String, DomainObject> entry : entrySet()) {
             DomainObject object = entry.getValue();
-            if (object != null && object.getId() != null && object.getId() > 0) {
+            if (object != null && object.getObjectId() != null && object.getObjectId() > 0) {
                 empty = false;
                 break;
             }
@@ -37,7 +37,7 @@ public class SearchComponentState extends HashMap<String, DomainObject> implemen
                 //changed
                 return false;
             } else {
-                return Numbers.isEqual(o1.getId(), o2.getId());
+                return Numbers.isEqual(o1.getObjectId(), o2.getObjectId());
             }
         }
     }

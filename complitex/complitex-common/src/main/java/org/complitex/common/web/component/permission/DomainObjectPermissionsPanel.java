@@ -35,7 +35,7 @@ public class DomainObjectPermissionsPanel extends AbstractDomainObjectPermission
     protected static final DomainObject VISIBLE_BY_ALL = new DomainObject();
 
     static {
-        VISIBLE_BY_ALL.setId(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID);
+        VISIBLE_BY_ALL.setObjectId(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID);
     }
     private Set<Long> subjectIds;
     private Set<Long> parentSubjectIds;
@@ -68,7 +68,7 @@ public class DomainObjectPermissionsPanel extends AbstractDomainObjectPermission
 
             @Override
             public String getDisplayValue(DomainObject object) {
-                if (object.getId().equals(VISIBLE_BY_ALL.getId())) {
+                if (object.getObjectId().equals(VISIBLE_BY_ALL.getObjectId())) {
                     return getString("visible_by_all");
                 } else {
                     return organizationStrategy.displayDomainObject(object, getLocale());
@@ -85,7 +85,7 @@ public class DomainObjectPermissionsPanel extends AbstractDomainObjectPermission
                         : subjectIds;
                 for (DomainObject userSubject : userSubjectsModel.getObject()) {
                     for (long organizationId : selectedSubjectIds) {
-                        if (userSubject.getId().equals(organizationId)) {
+                        if (userSubject.getObjectId().equals(organizationId)) {
                             selectedSubjects.add(userSubject);
                         }
                     }
@@ -102,15 +102,15 @@ public class DomainObjectPermissionsPanel extends AbstractDomainObjectPermission
                 for (DomainObject userSubject : userSubjectsModel.getObject()) {
                     boolean selected = false;
                     for (DomainObject selectedSubject : subjects) {
-                        if (selectedSubject.getId().equals(userSubject.getId())) {
+                        if (selectedSubject.getObjectId().equals(userSubject.getObjectId())) {
                             selected = true;
                             break;
                         }
                     }
                     if (selected) {
-                        subjectIds.add(userSubject.getId());
+                        subjectIds.add(userSubject.getObjectId());
                     } else {
-                        subjectIds.remove(userSubject.getId());
+                        subjectIds.remove(userSubject.getObjectId());
                     }
                 }
                 normalizeSubjectIds(subjectIds);
@@ -172,7 +172,7 @@ public class DomainObjectPermissionsPanel extends AbstractDomainObjectPermission
     }
 
     protected Map<String, String> enhanceOptionWithAttributes(DomainObject choice, int index, String selected) {
-        if (choice.getId().equals(VISIBLE_BY_ALL.getId())) {
+        if (choice.getObjectId().equals(VISIBLE_BY_ALL.getObjectId())) {
             return of("data-all", "data-all");
         }
         return null;

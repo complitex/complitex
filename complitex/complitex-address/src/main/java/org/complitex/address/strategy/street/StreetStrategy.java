@@ -78,7 +78,7 @@ public class StreetStrategy extends TemplateStrategy {
     @Override
 
     public List<DomainObject> getList(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
 
@@ -97,7 +97,7 @@ public class StreetStrategy extends TemplateStrategy {
 
     @Override
     public Long getCount(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
 
@@ -248,7 +248,7 @@ public class StreetStrategy extends TemplateStrategy {
         params.put("streetTypeId", streetTypeId);
         List<Long> results = sqlSession().selectList(NS + ".defaultValidation", params);
         for (Long result : results) {
-            if (!result.equals(streetObject.getId())) {
+            if (!result.equals(streetObject.getObjectId())) {
                 return result;
             }
         }

@@ -106,7 +106,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
             @Override
             public void setObject(DomainObject object) {
                 super.setObject(object);
-                attribute.setValueId(object.getId());
+                attribute.setValueId(object.getObjectId());
             }
         };
         container.add(
@@ -121,7 +121,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
 
                         @Override
                         public String getIdValue(DomainObject type, int i) {
-                            return type != null && type.getId() != null ? type.getId().toString(): "-1";
+                            return type != null && type.getObjectId() != null ? type.getObjectId().toString(): "-1";
                         }
                     }
             )
@@ -143,7 +143,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
         if (attribute == null) {
             attribute = new Attribute();
             attribute.setAttributeTypeId(attributeTypeId);
-            attribute.setObjectId(moduleInstance.getId());
+            attribute.setObjectId(moduleInstance.getObjectId());
             attribute.setAttributeId(1L);
             attribute.setLocalizedValues(StringCultures.newStringCultures());
         }

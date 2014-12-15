@@ -155,13 +155,13 @@ public class EircAccountEdit extends TemplatePage {
                 if (isNullAddressInput(addressInput)) {
                     addressInput = componentState.get("apartment");
                 } else {
-                    address = new Address(addressInput.getId(), AddressEntity.ROOM);
+                    address = new Address(addressInput.getObjectId(), AddressEntity.ROOM);
                 }
 
                 if (isNullAddressInput(addressInput)) {
                     addressInput = componentState.get("building");
                 } else if (address == null) {
-                    address = new Address(addressInput.getId(), AddressEntity.APARTMENT);
+                    address = new Address(addressInput.getObjectId(), AddressEntity.APARTMENT);
                 }
 
                 if (isNullAddressInput(addressInput)) {
@@ -169,7 +169,7 @@ public class EircAccountEdit extends TemplatePage {
                     target.add(messages);
                     return;
                 } else if (address == null) {
-                    address = new Address(addressInput.getId(), AddressEntity.BUILDING);
+                    address = new Address(addressInput.getObjectId(), AddressEntity.BUILDING);
                 }
 
                 if (eircAccountBean.eircAccountExists(eircAccount.getId(), address)) {
@@ -212,7 +212,7 @@ public class EircAccountEdit extends TemplatePage {
     }
 
     private boolean isNullAddressInput(DomainObject addressInput) {
-        return addressInput == null || addressInput.getId() == -1;
+        return addressInput == null || addressInput.getObjectId() == -1;
     }
 
     private void initSearchComponentState(SearchComponentState componentState) {

@@ -392,7 +392,7 @@ public class EircPaymentsRegistryConverter {
 
             RegistryRecordData registryRecord;
             while ((registryRecord = dataSource.getNextRecord()) != null) {
-                writeInfoLine(buffer, registryRecord, serviceProviderOrganization.getId(), eircOrganizationId, mbOrganizationId, eircDataSource);
+                writeInfoLine(buffer, registryRecord, serviceProviderOrganization.getObjectId(), eircOrganizationId, mbOrganizationId, eircDataSource);
             }
 
             outChannel.truncate(buffer.position());
@@ -415,15 +415,15 @@ public class EircPaymentsRegistryConverter {
                                                 Long mbOrganizationId, Long eircOrganizationId, String dataSource) throws MbConverterException {
 
         List<OrganizationCorrection> organizationCorrections = organizationCorrectionBean.getOrganizationCorrections(dataSource,
-                FilterWrapper.of(new OrganizationCorrection(null, serviceProviderOrganization.getId(), null,
+                FilterWrapper.of(new OrganizationCorrection(null, serviceProviderOrganization.getObjectId(), null,
                         registry.getSenderOrganizationId(), eircOrganizationId, null)));
         if (organizationCorrections.size() <= 0) {
             throw new MbConverterException("No service provider correction with id {0}: organizationId={1}, userOrganizationId={2}",
-                    serviceProviderOrganization.getId(), registry.getSenderOrganizationId(), eircOrganizationId);
+                    serviceProviderOrganization.getObjectId(), registry.getSenderOrganizationId(), eircOrganizationId);
         }
         if (organizationCorrections.size() > 1) {
             throw new MbConverterException("Found several correction for service provider {0}: organizationId={1}, userOrganizationId={2}",
-                    serviceProviderOrganization.getId(), registry.getSenderOrganizationId(), eircOrganizationId);
+                    serviceProviderOrganization.getObjectId(), registry.getSenderOrganizationId(), eircOrganizationId);
         }
         return organizationCorrections.get(0).getCorrection();
     }

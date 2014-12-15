@@ -66,13 +66,13 @@ public class OrganizationValidator implements IValidator {
 
         boolean valid = true;
 
-        Long byName = organizationStrategy.validateName(object.getId(), object.getStringValue(NAME, systemLocale), systemLocale);
+        Long byName = organizationStrategy.validateName(object.getObjectId(), object.getStringValue(NAME, systemLocale), systemLocale);
         if (byName != null) {
             valid = false;
             editComponent.error(MessageFormat.format(editComponent.getString("unique_name"), byName));
         }
 
-        Long byCode = organizationStrategy.validateCode(object.getId(), object.getStringValue(CODE, systemLocale));
+        Long byCode = organizationStrategy.validateCode(object.getObjectId(), object.getStringValue(CODE, systemLocale));
         if (byCode != null) {
             valid = false;
             editComponent.error(MessageFormat.format(editComponent.getString("unique_code"), byCode));

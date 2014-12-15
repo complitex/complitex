@@ -204,8 +204,8 @@ public class BuildingList extends ScrollListPage {
 
                 ScrollBookmarkablePageLink<WebPage> detailsLink = new ScrollBookmarkablePageLink<WebPage>("detailsLink",
                         getBuildingStrategy().getEditPage(),
-                        getBuildingStrategy().getEditPageParams(building.getId(), null, null),
-                        String.valueOf(building.getId()));
+                        getBuildingStrategy().getEditPageParams(building.getObjectId(), null, null),
+                        String.valueOf(building.getObjectId()));
                 detailsLink.add(new Label("editMessage", new AbstractReadOnlyModel<String>() {
 
                     @Override
@@ -235,7 +235,7 @@ public class BuildingList extends ScrollListPage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 filterForm.clearInput();
-                example.setId(null);
+                example.setObjectId(null);
                 example.addAdditionalParam(BuildingStrategy.NUMBER, null);
                 example.addAdditionalParam(BuildingStrategy.CORP, null);
                 example.addAdditionalParam(BuildingStrategy.STRUCTURE, null);

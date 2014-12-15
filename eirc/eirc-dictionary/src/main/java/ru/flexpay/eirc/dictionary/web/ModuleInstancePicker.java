@@ -318,7 +318,7 @@ public class ModuleInstancePicker extends FormComponentPanel<DomainObject> {
         public void setObject(DomainObject object) {
             super.setObject(object);
             if (object != null) {
-                model.setObject(String.valueOf(object.getId()));
+                model.setObject(String.valueOf(object.getObjectId()));
             } else {
                 model.setObject(null);
             }

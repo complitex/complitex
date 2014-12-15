@@ -3,7 +3,6 @@ package org.complitex.osznconnection.file.web.pages.subsidy;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
@@ -12,22 +11,17 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
-import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
-import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.web.component.organization.OrganizationPickerDialog;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
-import org.complitex.correction.web.component.OrganizationCorrectionDialog;
 import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.ajax.AjaxLinkPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.organization.OrganizationPicker;
-import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.SubsidyService;
@@ -39,8 +33,6 @@ import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
 import javax.ejb.EJB;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -83,7 +75,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
                 RequestFile requestFile = selectedRequestFileModel.getObject();
                 DomainObject organization = getOrganizationModel().getObject();
 
-                OrganizationCorrection correction = new OrganizationCorrection(null, organization.getId(),
+                OrganizationCorrection correction = new OrganizationCorrection(null, organization.getObjectId(),
                         requestFile.getCode(), requestFile.getOrganizationId(), requestFile.getUserOrganizationId(),
                         moduleBean.getModuleId());
 

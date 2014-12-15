@@ -120,7 +120,7 @@ public class ServiceProviderTypeStrategy extends TemplateStrategy {
 
             @Override
             public int compare(DomainObject o1, DomainObject o2) {
-                return o1.getId().compareTo(o2.getId());
+                return o1.getObjectId().compareTo(o2.getObjectId());
             }
         });
         return all;

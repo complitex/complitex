@@ -448,7 +448,7 @@ public class RegistryParser implements Serializable {
         }
         */
         if (!provider.isServiceProvider()) {
-            processLog.error(Parsing.ORGANIZATION_NOT_SERVICE_PROVIDER, provider.getId(), registry.getRegistryNumber());
+            processLog.error(Parsing.ORGANIZATION_NOT_SERVICE_PROVIDER, provider.getObjectId(), registry.getRegistryNumber());
             return false;
         }
         return true;
@@ -457,7 +457,7 @@ public class RegistryParser implements Serializable {
     private boolean validatePaymentCollector(Registry registry, LocLogger processLog) {
         Organization paymentCollector = organizationStrategy.findById(registry.getSenderOrganizationId(), false);
         if (registry.getType().isPayments() && !paymentCollector.isPaymentCollector()) {
-            processLog.error(Parsing.ORGANIZATION_NOT_PAYMENT_COLLECTOR, paymentCollector.getId(), registry.getRegistryNumber());
+            processLog.error(Parsing.ORGANIZATION_NOT_PAYMENT_COLLECTOR, paymentCollector.getObjectId(), registry.getRegistryNumber());
             return false;
         }
         return true;

@@ -175,8 +175,8 @@ public class ServiceProviderAccountEdit extends FormTemplatePage {
             public void setObject(DomainObject domainObject) {
                 List<Long> allowableServices;
                 if (domainObject != null) {
-                    serviceProviderAccount.setOrganizationId(domainObject.getId());
-                    organization = organizationStrategy.findById(domainObject.getId(), false);
+                    serviceProviderAccount.setOrganizationId(domainObject.getObjectId());
+                    organization = organizationStrategy.findById(domainObject.getObjectId(), false);
                     allowableServices = getAllowableServices();
                 } else {
                     serviceProviderAccount.setOrganizationId(null);
@@ -228,13 +228,13 @@ public class ServiceProviderAccountEdit extends FormTemplatePage {
                 if (isNullAddressInput(addressInput)) {
                     addressInput = componentState.get("apartment");
                 } else {
-                    address = new Address(addressInput.getId(), AddressEntity.ROOM);
+                    address = new Address(addressInput.getObjectId(), AddressEntity.ROOM);
                 }
 
                 if (isNullAddressInput(addressInput)) {
                     addressInput = componentState.get("building");
                 } else if (address == null) {
-                    address = new Address(addressInput.getId(), AddressEntity.APARTMENT);
+                    address = new Address(addressInput.getObjectId(), AddressEntity.APARTMENT);
                 }
 
                 if (isNullAddressInput(addressInput)) {
@@ -242,7 +242,7 @@ public class ServiceProviderAccountEdit extends FormTemplatePage {
                     target.add(messages);
                     return;
                 } else if (address == null) {
-                    address = new Address(addressInput.getId(), AddressEntity.BUILDING);
+                    address = new Address(addressInput.getObjectId(), AddressEntity.BUILDING);
                 }
 
                 EircAccount eircAccount = eircAccountBean.getEircAccount(address);
@@ -288,7 +288,7 @@ public class ServiceProviderAccountEdit extends FormTemplatePage {
     }
 
     private boolean isNullAddressInput(DomainObject addressInput) {
-        return addressInput == null || addressInput.getId() == -1;
+        return addressInput == null || addressInput.getObjectId() == -1;
     }
 
     @Override

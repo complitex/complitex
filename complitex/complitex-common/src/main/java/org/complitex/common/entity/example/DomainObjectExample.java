@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 public class DomainObjectExample implements Serializable {
-    private Long id;
+    private Long objectId;
     private Long parentId;
     private Long localeId;
 
@@ -34,10 +34,21 @@ public class DomainObjectExample implements Serializable {
     public DomainObjectExample() {
     }
 
-    public DomainObjectExample(Long... attributeTypeIds) {
+    public DomainObjectExample(Long objectId) {
+        this.objectId = objectId;
+    }
+
+    public DomainObjectExample(Long objectId, String entityTable) {
+        this.objectId = objectId;
+        this.entityTable = entityTable;
+    }
+
+    public DomainObjectExample addAttributes(Long... attributeTypeIds){
         for (Long a : attributeTypeIds){
             attributeExamples.add(new AttributeExample(a));
         }
+
+        return this;
     }
 
     public DomainObjectExample setParent(String parentEntity, Long parentId){
@@ -83,12 +94,12 @@ public class DomainObjectExample implements Serializable {
         return additionalParams != null ? (T) additionalParams.get(key) : null;
     }
 
-    public Long getId() {
-        return id;
+    public Long getObjectId() {
+        return objectId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setObjectId(Long objectId) {
+        this.objectId = objectId;
     }
 
     public Long getParentId() {
