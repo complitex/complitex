@@ -24,7 +24,6 @@ import java.util.*;
 import static com.google.common.collect.ImmutableSet.of;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.wicket.util.string.Strings.isEmpty;
-import static org.complitex.common.util.AttributeUtil.getStringCultureValue;
 import static org.complitex.common.util.ResourceUtil.getString;
 
 /**
@@ -44,7 +43,8 @@ public class DocumentTypeStrategy extends TemplateStrategy {
      */
     public static final long PASSPORT = 1;
     public static final long BIRTH_CERTIFICATE = 2;
-    private static final Set<Long> RESERVED_INSTANCE_IDS = of(PASSPORT, BIRTH_CERTIFICATE);
+    public static final Set<Long> RESERVED_INSTANCE_IDS = of(PASSPORT, BIRTH_CERTIFICATE);
+
     @EJB
     private LocaleBean localeBean;
 
@@ -60,7 +60,7 @@ public class DocumentTypeStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return getStringCultureValue(object, NAME, locale);
+        return object.getStringValue(NAME, locale);
     }
 
     @Override
@@ -133,15 +133,11 @@ public class DocumentTypeStrategy extends TemplateStrategy {
         super.deleteChecks(objectId, locale);
     }
 
-    public static boolean isKidDocumentType(long documentTypeId) {
-        if (RESERVED_INSTANCE_IDS.contains(documentTypeId)) {
-            return documentTypeId == BIRTH_CERTIFICATE;
-        } else {
-            return true;
-        }
+    public boolean isKidDocumentType(long documentTypeId) {
+        return !RESERVED_INSTANCE_IDS.contains(documentTypeId) || documentTypeId == BIRTH_CERTIFICATE;
     }
 
-    public static boolean isAdultDocumentType(long documentTypeId) {
+    public boolean isAdultDocumentType(long documentTypeId) {
         return true;
     }
 

@@ -26,6 +26,7 @@ import org.complitex.common.entity.description.Entity;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.service.IUserProfileBean;
 import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.css.CssAttributeBehavior;
@@ -292,7 +293,7 @@ final class RegistrationHistoryPanel extends Panel {
         Attribute attribute = registration.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setLocalizedValues(stringBean.newStringCultures());
+            attribute.setLocalizedValues(StringCultures.newStringCultures());
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }

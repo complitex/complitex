@@ -15,12 +15,13 @@ import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.domain.DomainObjectListPanel;
 import org.complitex.common.util.BuildingNumberConverter;
 import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.search.ISearchCallback;
+import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.domain.DomainObjectListPanel;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -41,7 +42,7 @@ import static org.complitex.common.util.StringUtil.toCyrillic;
  * For example, in pspoffice project <code>org.complitex.pspoffice.address.street.StreetStrategyInterceptor</code>
  * is used to replace logic for "found" and "count" operations.</p>
  *
- * @see StreetStrategyInterceptor
+ * see StreetStrategyInterceptor
  *
  * @author Artem
  */
@@ -288,7 +289,7 @@ public class StreetStrategy extends TemplateStrategy {
     }
 
     public String getName(DomainObject street, Locale locale) {
-        return stringBean.displayValue(Iterables.find(street.getAttributes(), new Predicate<Attribute>() {
+        return StringCultures.getValue(Iterables.find(street.getAttributes(), new Predicate<Attribute>() {
 
             @Override
             public boolean apply(Attribute attr) {

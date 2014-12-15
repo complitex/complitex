@@ -37,8 +37,8 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.transform;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
-import static org.complitex.common.strategy.web.DomainObjectAccessUtil.canEdit;
 import static org.complitex.common.web.component.DomainObjectComponentUtil.labelModel;
+import static org.complitex.common.web.domain.DomainObjectAccessUtil.canEdit;
 import static org.complitex.pspoffice.person.strategy.PersonStrategy.*;
 
 /**
@@ -86,7 +86,7 @@ public abstract class PersonEditPanel extends Panel {
 
             @Override
             public String getObject() {
-                final String entityName = stringBean.displayValue(personStrategy.getEntity().getEntityNames(), getLocale());
+                final String entityName = personStrategy.getEntity().getName(getLocale());
                 return isNew() || !sessionBean.isAdmin() ? entityName
                         : MessageFormat.format(getString("label_edit"), entityName, newPerson.getId());
             }

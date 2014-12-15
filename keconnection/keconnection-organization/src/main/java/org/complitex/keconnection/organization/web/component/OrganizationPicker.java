@@ -26,7 +26,6 @@ import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
@@ -36,6 +35,8 @@ import org.odlabs.wiquery.ui.dialog.Dialog;
 
 import javax.ejb.EJB;
 import java.util.Collections;
+
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.NAME;
 
 /**
  *
@@ -143,12 +144,12 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
 
             @Override
             public String getObject() {
-                return example.getAttributeExample(KeConnectionOrganizationStrategy.NAME).getValue();
+                return example.getAttributeExample(NAME).getValue();
             }
 
             @Override
             public void setObject(String name) {
-                example.getAttributeExample(KeConnectionOrganizationStrategy.NAME).setValue(name);
+                example.getAttributeExample(NAME).setValue(name);
             }
         }));
         filterForm.add(new TextField<>("codeFilter", new Model<String>() {
@@ -199,9 +200,8 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
             protected void populateItem(Item<DomainObject> item) {
                 final DomainObject organization = item.getModelObject();
 
-                item.add(new Radio<DomainObject>("radio", item.getModel(), radioGroup));
-                item.add(new Label("name", AttributeUtil.getStringCultureValue(organization,
-                        KeConnectionOrganizationStrategy.NAME, getLocale())));
+                item.add(new Radio<>("radio", item.getModel(), radioGroup));
+                item.add(new Label("name", organization.getStringValue(NAME, getLocale())));
                 item.add(new Label("code", keConnectionOrganizationStrategy.getCode(organization)));
             }
         };
@@ -273,7 +273,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
 
     private DomainObjectExample newExample(long organizationTypeId) {
         DomainObjectExample e = new DomainObjectExample();
-        e.addAttributeExample(new AttributeExample(KeConnectionOrganizationStrategy.NAME));
+        e.addAttributeExample(new AttributeExample(NAME));
         e.addAttributeExample(new AttributeExample(KeConnectionOrganizationStrategy.CODE));
         e.addAdditionalParam(KeConnectionOrganizationStrategy.ORGANIZATION_TYPE_PARAMETER,
                 ImmutableList.of(organizationTypeId));
@@ -281,7 +281,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
     }
 
     private void clearExample() {
-        example.getAttributeExample(KeConnectionOrganizationStrategy.NAME).setValue(null);
+        example.getAttributeExample(NAME).setValue(null);
         example.getAttributeExample(KeConnectionOrganizationStrategy.CODE).setValue(null);
     }
 

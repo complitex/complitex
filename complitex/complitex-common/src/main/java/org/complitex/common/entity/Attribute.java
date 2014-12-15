@@ -1,6 +1,7 @@
 package org.complitex.common.entity;
 
-import org.complitex.common.service.Locales;
+import org.complitex.common.util.Locales;
+import org.complitex.common.util.StringCultures;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -47,6 +48,10 @@ public class Attribute implements Serializable {
 
     public String getStringValue(){
         return getStringCulture(Locales.getSystemLocaleId()).getValue();
+    }
+
+    public String getStringValue(java.util.Locale locale){
+        return StringCultures.getValue(localizedValues, locale);
     }
 
     public Long getAttributeId() {

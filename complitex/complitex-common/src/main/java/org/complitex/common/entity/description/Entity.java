@@ -1,21 +1,40 @@
 package org.complitex.common.entity.description;
 
 import org.complitex.common.entity.StringCulture;
+import org.complitex.common.util.StringCultures;
 
 import java.util.List;
+import java.util.Locale;
 
 public class Entity implements IEntity {
     private Long id;
-    private String entityTable;
-    private List<StringCulture> entityNames;
+    private String table;
+    private List<StringCulture> names;
     private List<EntityAttributeType> entityAttributeTypes;
 
-    public String getEntityTable() {
-        return entityTable;
+    public EntityAttributeType getAttributeType(Long attributeTypeId) {
+        for (EntityAttributeType attributeType : getEntityAttributeTypes()) {
+            if (attributeType.getId().equals(attributeTypeId)) {
+                return attributeType;
+            }
+        }
+        return null;
     }
 
-    public void setEntityTable(String entityTable) {
-        this.entityTable = entityTable;
+    public String getName(Locale locale){
+        return StringCultures.getValue(names, locale);
+    }
+
+    public String getName(Long attributeTypeId, Locale locale){
+        return StringCultures.getValue(getAttributeType(attributeTypeId).getAttributeNames(), locale);
+    }
+
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
     }
 
     public Long getId() {
@@ -34,20 +53,13 @@ public class Entity implements IEntity {
         this.entityAttributeTypes = entityAttributeTypes;
     }
 
-    public List<StringCulture> getEntityNames() {
-        return entityNames;
+    public List<StringCulture> getNames() {
+        return names;
     }
 
-    public void setEntityNames(List<StringCulture> entityNames) {
-        this.entityNames = entityNames;
+    public void setNames(List<StringCulture> names) {
+        this.names = names;
     }
 
-    public EntityAttributeType getAttributeType(Long attributeTypeId) {
-        for (EntityAttributeType attributeType : getEntityAttributeTypes()) {
-            if (attributeType.getId().equals(attributeTypeId)) {
-                return attributeType;
-            }
-        }
-        return null;
-    }
+
 }

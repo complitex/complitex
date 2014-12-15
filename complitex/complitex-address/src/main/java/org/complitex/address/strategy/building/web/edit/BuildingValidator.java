@@ -10,20 +10,21 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.Building;
-import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.web.domain.DomainObjectEditPanel;
-import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.Numbers;
+import org.complitex.common.web.domain.DomainObjectEditPanel;
+import org.complitex.common.web.domain.validate.IValidator;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.*;
 
 /**
  *
@@ -211,9 +212,9 @@ public class BuildingValidator implements IValidator {
         boolean valid = true;
 
         for (DomainObject address : addresses) {
-            String number = stringBean.displayValue(address.getAttribute(BuildingAddressStrategy.NUMBER).getLocalizedValues(), systemLocale);
-            String corp = stringBean.displayValue(address.getAttribute(BuildingAddressStrategy.CORP).getLocalizedValues(), systemLocale);
-            String structure = stringBean.displayValue(address.getAttribute(BuildingAddressStrategy.STRUCTURE).getLocalizedValues(), systemLocale);
+            String number = address.getStringValue(NUMBER);
+            String corp = address.getStringValue(CORP);
+            String structure = address.getStringValue(STRUCTURE);
 
             Long existingBuildingId = buildingStrategy.checkForExistingAddress(building.getId(), number, Strings.isEmpty(corp) ? null : corp,
                     Strings.isEmpty(structure) ? null : structure, address.getParentEntityId(), address.getParentId(), systemLocale);

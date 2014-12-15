@@ -45,7 +45,7 @@ public class OwnershipStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return stringBean.displayValue(object.getAttribute(NAME).getLocalizedValues(), locale);
+        return object.getStringValue(NAME, locale);
     }
 
     @Override

@@ -20,7 +20,11 @@ import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.AttributeUtil;
-import org.complitex.common.web.component.*;
+import org.complitex.common.util.StringCultures;
+import org.complitex.common.web.component.DisableAwareDropDownChoice;
+import org.complitex.common.web.component.DomainObjectComponentUtil;
+import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
+import org.complitex.common.web.component.IDisableAwareChoiceRenderer;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -315,7 +319,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                         attribute.setAttributeTypeId(attributeTypeId);
                         attribute.setObjectId(organization.getId());
                         attribute.setAttributeId(1L);
-                        attribute.setLocalizedValues(stringBean.newStringCultures());
+                        attribute.setLocalizedValues(StringCultures.newStringCultures());
                     }
                     item.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(), organization,
                             attribute, getLocale(), isDisabled));
@@ -339,7 +343,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setAttributeTypeId(OsznOrganizationStrategy.EDRPOU);
                 attribute.setObjectId(organization.getId());
                 attribute.setAttributeId(1L);
-                attribute.setLocalizedValues(stringBean.newStringCultures());
+                attribute.setLocalizedValues(StringCultures.newStringCultures());
             }
             final EntityAttributeType attributeType =
                     osznOrganizationStrategy.getEntity().getAttributeType(OsznOrganizationStrategy.EDRPOU);
@@ -367,7 +371,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setAttributeTypeId(attributeTypeId);
                 attribute.setObjectId(organization.getId());
                 attribute.setAttributeId(1L);
-                attribute.setLocalizedValues(stringBean.newStringCultures());
+                attribute.setLocalizedValues(StringCultures.newStringCultures());
             }
             final EntityAttributeType attributeType =
                     osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
@@ -395,7 +399,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setAttributeTypeId(attributeTypeId);
                 attribute.setObjectId(organization.getId());
                 attribute.setAttributeId(1L);
-                attribute.setLocalizedValues(stringBean.newStringCultures());
+                attribute.setLocalizedValues(StringCultures.newStringCultures());
             }
             final EntityAttributeType attributeType =
                     osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
@@ -566,7 +570,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
         } else {
             //data source
             String dataSource = dataSourceModel.getObject().getDataSource();
-            stringBean.getSystemStringCulture(organization.getAttribute(OsznOrganizationStrategy.DATA_SOURCE).getLocalizedValues()).
+            StringCultures.getSystemStringCulture(organization.getAttribute(OsznOrganizationStrategy.DATA_SOURCE).getLocalizedValues()).
                     setValue(new StringConverter().toString(dataSource));
         }
     }

@@ -25,7 +25,7 @@ public enum AddressEntity implements IEntity, IFixedIdType{
         return id;
     }
 
-    public String getEntityTable() {
+    public String getTable() {
         return entityTable;
     }
 }

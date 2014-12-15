@@ -9,6 +9,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.description.EntityAttributeValueType;
 import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.util.StringCultures;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -91,7 +92,7 @@ public class DocumentStrategy extends TemplateStrategy {
                 attribute.setAttributeId(1L);
 
                 if (isSimpleAttributeType(attributeType)) {
-                    attribute.setLocalizedValues(stringBean.newStringCultures());
+                    attribute.setLocalizedValues(StringCultures.newStringCultures());
                 }
                 toAdd.add(attribute);
             }

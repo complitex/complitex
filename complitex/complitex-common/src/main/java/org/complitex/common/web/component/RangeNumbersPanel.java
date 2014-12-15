@@ -24,12 +24,11 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.complitex.common.entity.StringCulture;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.web.domain.DomainObjectEditPanel;
-import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.common.util.Locales;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
 import org.complitex.common.web.component.type.StringCulturePanel;
+import org.complitex.common.web.domain.DomainObjectEditPanel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -77,9 +76,10 @@ public class RangeNumbersPanel extends Panel {
         }
 
         private void addNumber(String number) {
-            StringCultureBean stringBean = EjbBeanLocator.getBean(StringCultureBean.class);
-            List<StringCulture> strings = stringBean.newStringCultures();
-            stringBean.getSystemStringCulture(strings).setValue(number);
+            List<StringCulture> strings = StringCultures.newStringCultures();
+
+            StringCultures.getSystemStringCulture(strings).setValue(number);
+
             entries.add(new Entry(strings));
         }
 
@@ -88,19 +88,20 @@ public class RangeNumbersPanel extends Panel {
         }
 
         public List<List<StringCulture>> getNumbers() {
-            StringCultureBean stringBean = EjbBeanLocator.getBean(StringCultureBean.class);
-
             final Map<String, List<StringCulture>> numbersMap = Maps.newLinkedHashMap();
+
             for (Entry entry : entries) {
                 if (entry.number != null) {
-                    final String systemNumber = stringBean.getSystemStringCulture(entry.number).getValue();
+                    final String systemNumber = StringCultures.getSystemStringCulture(entry.number).getValue();
                     numbersMap.put(systemNumber, entry.number);
                 } else {
                     for (int number = entry.range.from, to = entry.range.to; number <= to; number++) {
                         final String systemNumber = String.valueOf(number);
                         if (!numbersMap.containsKey(systemNumber)) {
-                            final List<StringCulture> strings = stringBean.newStringCultures();
-                            stringBean.getSystemStringCulture(strings).setValue(systemNumber);
+                            final List<StringCulture> strings = StringCultures.newStringCultures();
+
+                            StringCultures.getSystemStringCulture(strings).setValue(systemNumber);
+
                             numbersMap.put(systemNumber, strings);
                         }
                     }
@@ -110,14 +111,13 @@ public class RangeNumbersPanel extends Panel {
         }
 
         public String asString(List<StringCulture> strings) {
-            StringCultureBean stringBean = EjbBeanLocator.getBean(StringCultureBean.class);
-            LocaleBean localeBean = EjbBeanLocator.getBean(LocaleBean.class);
 
-            final StringBuilder builder = new StringBuilder(stringBean.getSystemStringCulture(strings).getValue());
+
+            final StringBuilder builder = new StringBuilder(StringCultures.getSystemStringCulture(strings).getValue());
 
             final List<String> otherLanguageValues = Lists.newLinkedList();
             for (StringCulture string : strings) {
-                if (!localeBean.getSystemLocaleObject().getId().equals(string.getLocaleId())
+                if (!Locales.getSystemLocaleId().equals(string.getLocaleId())
                         && !Strings.isEmpty(string.getValue())) {
                     otherLanguageValues.add(string.getValue());
                 }

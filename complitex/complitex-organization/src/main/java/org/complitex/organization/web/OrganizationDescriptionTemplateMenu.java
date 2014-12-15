@@ -2,18 +2,17 @@ package org.complitex.organization.web;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.Page;
-import org.complitex.common.service.StringCultureBean;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.template.web.pages.EntityDescription;
+import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.ITemplateLink;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
 import java.util.List;
 import java.util.Locale;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.template.web.security.SecurityRole;
 
 /**
  *
@@ -33,8 +32,7 @@ public class OrganizationDescriptionTemplateMenu extends ResourceTemplateMenu {
 
             @Override
             public String getLabel(Locale locale) {
-                return EjbBeanLocator.getBean(StringCultureBean.class).displayValue(
-                        EjbBeanLocator.getBean(StrategyFactory.class).getStrategy("organization").getEntity().getEntityNames(), locale);
+                return EjbBeanLocator.getBean(StrategyFactory.class).getStrategy("organization").getEntity().getName(locale);
             }
 
             @Override

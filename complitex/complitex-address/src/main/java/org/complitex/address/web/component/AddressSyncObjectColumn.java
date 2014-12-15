@@ -51,7 +51,7 @@ public class AddressSyncObjectColumn extends FilteredColumn<AddressSync>
                 DomainObject domainObject = strategy.findById(addressSync.getObjectId(), true);
                 objectName = strategy.getName(domainObject) + " (" + strategy.getShortName(domainObject) + ")";
             }else {
-                IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(addressSync.getType().getEntityTable());
+                IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(addressSync.getType().getTable());
 
                 objectName = strategy.displayDomainObject(addressSync.getObjectId(), cellItem.getLocale());
             }

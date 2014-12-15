@@ -9,9 +9,9 @@ import org.complitex.common.converter.*;
 import org.complitex.common.entity.*;
 import org.complitex.common.entity.description.Entity;
 import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.type.*;
 import org.complitex.common.web.model.AttributeStringModel;
 import org.complitex.common.web.model.SimpleTypeModel;
@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static org.complitex.common.web.domain.DomainObjectAccessUtil.canEdit;
 import static org.complitex.common.util.EjbBeanLocator.getBean;
+import static org.complitex.common.web.domain.DomainObjectAccessUtil.canEdit;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -30,16 +30,12 @@ import static org.complitex.common.util.EjbBeanLocator.getBean;
 public class DomainObjectComponentUtil {
     public static final String INPUT_COMPONENT_ID = "input";
 
-    private static StringCultureBean stringBean() {
-        return getBean(StringCultureBean.class);
-    }
-
     public static IModel<String> labelModel(final List<StringCulture> attributeNames, final Locale locale) {
         return new AbstractReadOnlyModel<String>() {
 
             @Override
             public String getObject() {
-                return Strings.capitalize(stringBean().displayValue(attributeNames, locale).toLowerCase(locale));
+                return Strings.capitalize(StringCultures.getValue(attributeNames, locale).toLowerCase(locale));
             }
         };
     }

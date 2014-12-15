@@ -8,6 +8,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
@@ -86,7 +87,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
             attribute.setAttributeTypeId(attributeTypeId);
             attribute.setObjectId(organization.getId());
             attribute.setAttributeId(1L);
-            attribute.setLocalizedValues(stringBean.newStringCultures());
+            attribute.setLocalizedValues(StringCultures.newStringCultures());
         }
         final EntityAttributeType attributeType =
                 organizationStrategy.getEntity().getAttributeType(attributeTypeId);
@@ -113,7 +114,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
             attribute.setAttributeTypeId(attributeTypeId);
             attribute.setObjectId(organization.getId());
             attribute.setAttributeId(1L);
-            attribute.setLocalizedValues(stringBean.newStringCultures());
+            attribute.setLocalizedValues(StringCultures.newStringCultures());
         }
         final EntityAttributeType attributeType =
                 organizationStrategy.getEntity().getAttributeType(attributeTypeId);

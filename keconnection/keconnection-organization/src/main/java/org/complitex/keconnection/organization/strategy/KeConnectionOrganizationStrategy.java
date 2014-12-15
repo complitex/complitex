@@ -12,8 +12,8 @@ import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.util.AttributeUtil;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
 import org.complitex.keconnection.organization.strategy.web.edit.KeConnectionOrganizationEditComponent;
 import org.complitex.keconnection.organization.strategy.web.list.OrganizationList;
@@ -106,7 +106,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
         DomainObject domainObject = findById(organizationId, true);
 
         if (domainObject != null) {
-            return AttributeUtil.getStringCultureValue(domainObject, SHORT_NAME, locale);
+            return domainObject.getStringValue(SHORT_NAME, locale);
         }
 
         return "";
@@ -239,7 +239,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
 
         for (long attributeTypeId : CUSTOM_ATTRIBUTE_TYPES) {
             if (object.getAttribute(attributeTypeId).getLocalizedValues() == null) {
-                object.getAttribute(attributeTypeId).setLocalizedValues(stringBean.newStringCultures());
+                object.getAttribute(attributeTypeId).setLocalizedValues(StringCultures.newStringCultures());
             }
         }
     }
@@ -253,7 +253,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
                 if (attribute.getValueId() != null) {
                     loadStringCultures(attribute);
                 } else {
-                    attribute.setLocalizedValues(stringBean.newStringCultures());
+                    attribute.setLocalizedValues(StringCultures.newStringCultures());
                 }
             }
         }

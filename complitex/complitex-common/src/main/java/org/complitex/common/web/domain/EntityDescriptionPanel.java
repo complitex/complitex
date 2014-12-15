@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.*;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.SimpleTypes;
 import org.complitex.common.entity.StringCulture;
 import org.complitex.common.entity.description.Entity;
@@ -30,17 +31,16 @@ import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.description.EntityAttributeValueType;
 import org.complitex.common.service.EntityBean;
 import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.CloneUtil;
-import org.complitex.common.web.component.type.StringCulturePanel;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
+import org.complitex.common.web.component.type.StringCulturePanel;
 
 import javax.ejb.EJB;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.strategy.IStrategy;
 
 /**
  *
@@ -71,7 +71,7 @@ public class EntityDescriptionPanel extends Panel {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(description.getEntityNames(), getLocale());
+                return description.getName(getLocale());
             }
         };
         IModel<String> labelModel = new StringResourceModel("label", null, new Object[]{entityLabelModel});
@@ -172,7 +172,7 @@ public class EntityDescriptionPanel extends Panel {
 
                         @Override
                         public String getObject() {
-                            return stringBean.displayValue(attributeType.getAttributeNames(), getLocale());
+                            return attributeType.getAttributeName(getLocale());
                         }
                     }));
 
@@ -259,7 +259,7 @@ public class EntityDescriptionPanel extends Panel {
         for (int i = 0; i < parents.length; i++) {
             IStrategy parentStrategy = strategyFactory.getStrategy(parents[i]);
             parentsLabel.append("'").
-                    append(stringBean.displayValue(parentStrategy.getEntity().getEntityNames(), getLocale())).
+                    append(parentStrategy.getEntity().getName(getLocale())).
                     append("'");
             if (i < parents.length - 1) {
                 parentsLabel.append(", ");
@@ -277,7 +277,7 @@ public class EntityDescriptionPanel extends Panel {
                 return new StringResourceModel("reference_table", this, null, new Object[]{valueType.toUpperCase()}).getObject();
             } else {
                 return new StringResourceModel("reference", this, null, new Object[]{
-                            stringBean.displayValue(referenceEntityStrategy.getEntity().getEntityNames(), getLocale())
+                        referenceEntityStrategy.getEntity().getName(getLocale())
                         }).getObject();
             }
         }

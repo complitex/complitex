@@ -21,7 +21,7 @@ public class ApartmentCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return AddressEntity.APARTMENT.getEntityTable();
+        return AddressEntity.APARTMENT.getTable();
     }
 
     public Long getBuildingObjectId() {

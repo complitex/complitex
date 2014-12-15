@@ -22,7 +22,7 @@ public class DistrictCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return AddressEntity.DISTRICT.getEntityTable();
+        return AddressEntity.DISTRICT.getTable();
     }
 
     public Long getCityObjectId() {

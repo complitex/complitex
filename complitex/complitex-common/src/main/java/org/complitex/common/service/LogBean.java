@@ -231,8 +231,7 @@ public class LogBean extends AbstractBean {
                         }
                     } else {
                         logChanges.add(new LogChange(na.getAttributeId(), null,
-                                strategy.getAttributeLabel(na, systemLocale), null,
-                                stringBean.getSystemStringCulture(na.getLocalizedValues()).getValue(), null));
+                                strategy.getAttributeLabel(na, systemLocale), null, na.getStringValue(), null));
                     }
                 } else {
                     logChanges.add(new LogChange(na.getAttributeId(), null, strategy.getAttributeLabel(na, systemLocale),
@@ -269,8 +268,9 @@ public class LogBean extends AbstractBean {
                                     }
                                 }
                             } else {
-                                String oldValue = stringBean.getSystemStringCulture(oa.getLocalizedValues()).getValue();
-                                String newValue = stringBean.getSystemStringCulture(na.getLocalizedValues()).getValue();
+                                String oldValue = oa.getStringValue();
+                                String newValue = na.getStringValue();
+
                                 if (!Strings.isEqual(oldValue, newValue)) {
                                     logChanges.add(new LogChange(oa.getAttributeId(), null,
                                             strategy.getAttributeLabel(oa, systemLocale), oldValue, newValue, null));
@@ -302,7 +302,7 @@ public class LogBean extends AbstractBean {
                         } else {
                             logChanges.add(new LogChange(oa.getAttributeId(), null,
                                     strategy.getAttributeLabel(oa, systemLocale),
-                                    stringBean.getSystemStringCulture(oa.getLocalizedValues()).getValue(),
+                                    oa.getStringValue(),
                                     null, null));
                         }
                     } else {
@@ -339,7 +339,7 @@ public class LogBean extends AbstractBean {
                         } else {
                             logChanges.add(new LogChange(na.getAttributeId(), null,
                                     strategy.getAttributeLabel(na, systemLocale), null,
-                                    stringBean.getSystemStringCulture(na.getLocalizedValues()).getValue(), null));
+                                    na.getStringValue(), null));
                         }
                     } else {
                         logChanges.add(new LogChange(na.getAttributeId(), null, strategy.getAttributeLabel(na, systemLocale),

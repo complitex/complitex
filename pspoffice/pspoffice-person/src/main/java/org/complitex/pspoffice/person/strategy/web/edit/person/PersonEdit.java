@@ -5,8 +5,6 @@
 package org.complitex.pspoffice.person.strategy.web.edit.person;
 
 import com.google.common.collect.ImmutableList;
-import java.util.List;
-import javax.ejb.EJB;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
@@ -28,6 +26,9 @@ import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.pages.DomainObjectList;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
+
+import javax.ejb.EJB;
+import java.util.List;
 
 /**
  *
@@ -75,7 +76,7 @@ public class PersonEdit extends FormTemplatePage {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(personStrategy.getEntity().getEntityNames(), getLocale());
+                return personStrategy.getEntity().getName(getLocale());
             }
         });
         add(title);

@@ -29,12 +29,13 @@ import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.DeleteException;
+import org.complitex.common.util.BuildingNumberConverter;
+import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.util.StringCultures;
+import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.domain.DomainObjectEditPanel;
 import org.complitex.common.web.domain.validate.IValidator;
-import org.complitex.common.util.BuildingNumberConverter;
-import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -494,7 +495,7 @@ public class BuildingStrategy extends TemplateStrategy {
                         attribute.setAttributeId(1L);
 
                         if (isSimpleAttributeType(attributeType)) {
-                            attribute.setLocalizedValues(stringBean.newStringCultures());
+                            attribute.setLocalizedValues(StringCultures.newStringCultures());
                         }
                         toAdd.add(attribute);
                     }

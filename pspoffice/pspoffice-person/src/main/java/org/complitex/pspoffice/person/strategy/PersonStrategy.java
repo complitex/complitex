@@ -19,10 +19,7 @@ import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.util.CloneUtil;
-import org.complitex.common.util.DateUtil;
-import org.complitex.common.util.Numbers;
-import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.util.*;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
@@ -371,14 +368,14 @@ public class PersonStrategy extends TemplateStrategy {
                         attribute.setAttributeId(1L);
 
                         if (isSimpleAttributeType(attributeType)) {
-                            attribute.setLocalizedValues(stringBean.newStringCultures());
+                            attribute.setLocalizedValues(StringCultures.newStringCultures());
                         }
                         toAdd.add(attribute);
 
                         //by default UKRAINE_CITIZENSHIP attribute set to TRUE.
                         if (attributeType.getId().equals(UKRAINE_CITIZENSHIP)) {
                             StringCulture systemLocaleStringCulture =
-                                    stringBean.getSystemStringCulture(attribute.getLocalizedValues());
+                                    StringCultures.getSystemStringCulture(attribute.getLocalizedValues());
                             systemLocaleStringCulture.setValue(new BooleanConverter().toString(Boolean.TRUE));
                         }
                     }
@@ -539,7 +536,7 @@ public class PersonStrategy extends TemplateStrategy {
 
     private void setEditedByUserId(DomainObject person) {
         long userId = sessionBean.getCurrentUserId();
-        stringBean.getSystemStringCulture(person.getAttribute(EDITED_BY_USER_ID).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(person.getAttribute(EDITED_BY_USER_ID).getLocalizedValues()).
                 setValue(String.valueOf(userId));
     }
 
@@ -547,8 +544,8 @@ public class PersonStrategy extends TemplateStrategy {
         person.removeAttribute(EXPLANATION);
 
         Attribute explAttribute = new Attribute();
-        explAttribute.setLocalizedValues(stringBean.newStringCultures());
-        stringBean.getSystemStringCulture(explAttribute.getLocalizedValues()).setValue(explanation);
+        explAttribute.setLocalizedValues(StringCultures.newStringCultures());
+        StringCultures.getSystemStringCulture(explAttribute.getLocalizedValues()).setValue(explanation);
         explAttribute.setAttributeTypeId(EXPLANATION);
         explAttribute.setValueTypeId(EXPLANATION);
         explAttribute.setAttributeId(1L);
@@ -788,10 +785,10 @@ public class PersonStrategy extends TemplateStrategy {
                 final Registration oldRegistration = personRegistration.getRegistration();
                 final Registration newRegistration = CloneUtil.cloneObject(oldRegistration);
                 //departure reason
-                stringBean.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_REASON).getLocalizedValues()).
+                StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_REASON).getLocalizedValues()).
                         setValue(ResourceUtil.getString(RESOURCE_BUNDLE, "death_departure_reason", locale));
                 //departure date
-                stringBean.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_DATE).getLocalizedValues()).
+                StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_DATE).getLocalizedValues()).
                         setValue(new DateConverter().toString(deathDate));
                 registrationStrategy.update(oldRegistration, newRegistration, updateDate);
                 registrationStrategy.disable(newRegistration, updateDate);
@@ -801,7 +798,7 @@ public class PersonStrategy extends TemplateStrategy {
         removeKidFromParent(person.getId(), updateDate);
 
         Person newPerson = CloneUtil.cloneObject(person);
-        stringBean.getSystemStringCulture(newPerson.getAttribute(PersonStrategy.DEATH_DATE).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(newPerson.getAttribute(PersonStrategy.DEATH_DATE).getLocalizedValues()).
                 setValue(new DateConverter().toString(deathDate));
         update(person, newPerson, updateDate);
 

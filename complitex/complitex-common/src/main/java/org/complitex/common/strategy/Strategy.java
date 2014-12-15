@@ -13,13 +13,14 @@ import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
 import org.complitex.common.mysql.MySqlErrors;
 import org.complitex.common.service.*;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.common.util.Numbers;
 import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
+import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.domain.validate.IValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -224,7 +225,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                 if (attribute.getValueId() != null) {
                     loadStringCultures(dataSource, attribute);
                 } else {
-                    attribute.setLocalizedValues(stringBean.newStringCultures());
+                    attribute.setLocalizedValues(StringCultures.newStringCultures());
                 }
             }
         }
@@ -299,8 +300,9 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     protected void updateStringsForNewLocales(DomainObject object) {
         for (Attribute attribute : object.getAttributes()) {
             List<StringCulture> strings = attribute.getLocalizedValues();
+
             if (strings != null) {
-                stringBean.updateForNewLocales(strings);
+                StringCultures.updateForNewLocales(strings);
             }
         }
     }
@@ -324,7 +326,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                         attribute.setAttributeId(1L);
 
                         if (isSimpleAttributeType(attributeType)) {
-                            attribute.setLocalizedValues(stringBean.newStringCultures());
+                            attribute.setLocalizedValues(StringCultures.newStringCultures());
                         }
                         toAdd.add(attribute);
                     } else {
@@ -553,8 +555,8 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                                 case MASKED_DATE:
                                 case DOUBLE:
                                 case INTEGER: {
-                                    String oldString = stringBean.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
-                                    String newString = stringBean.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
+                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
+                                    String newString = StringCultures.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
                                     if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }
@@ -563,8 +565,8 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
                                 case BIG_STRING:
                                 case STRING: {
-                                    String oldString = stringBean.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
-                                    String newString = stringBean.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
+                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
+                                    String newString = StringCultures.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
                                     if (!Strings.isEqual(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }
@@ -1060,7 +1062,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                     + ") with attribute type id = " + attributeTypeId + " and attribute id = " + attribute.getAttributeId()
                     + " has null lozalized values.");
         }
-        String text = stringBean.displayValue(attribute.getLocalizedValues(), locale);
+        String text = StringCultures.getValue(attribute.getLocalizedValues(), locale);
 
         Map<String, Object> params = newHashMap();
 
@@ -1213,7 +1215,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
      //todo add display simple types
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
-        return stringBean.displayValue(attribute.getLocalizedValues(), locale);
+        return StringCultures.getValue(attribute.getLocalizedValues(), locale);
     }
 
 
@@ -1318,7 +1320,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
             for (EntityAttributeType attributeType : entity.getEntityAttributeTypes()) {
                 for (EntityAttributeValueType attributeValueType : attributeType.getEntityAttributeValueTypes()) {
                     if (getEntityTable().equals(attributeValueType.getValueType())) {
-                        String referenceEntity = entity.getEntityTable();
+                        String referenceEntity = entity.getTable();
                         long attributeTypeId = attributeType.getId();
 
                         Map<String, Object> params = newHashMap();

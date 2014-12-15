@@ -6,9 +6,9 @@
     <resultMap id="entityResultMap" type="org.complitex.common.entity.description.Entity">
         <id column="entity_id" property="id"/>
 
-        <result column="entity_table" property="entityTable"/>
+        <result column="entity_table" property="table"/>
 
-        <collection property="entityNames" ofType="StringCulture" column="entity_name_id" select="findNames"/>
+        <collection property="names" ofType="StringCulture" column="entity_name_id" select="findNames"/>
 
         <collection property="entityAttributeTypes" ofType="org.complitex.common.entity.description.EntityAttributeType">
             <id column="entity_attribute_type_id" property="id"/>

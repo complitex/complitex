@@ -210,7 +210,7 @@ public class ModuleInstancePicker extends FormComponentPanel<DomainObject> {
                 final DomainObject moduleInstance = item.getModelObject();
 
                 item.add(new Radio<>("radio", item.getModel(), radioGroup));
-                item.add(new Label("name", AttributeUtil.getStringCultureValue(moduleInstance, NAME, getLocale())));
+                item.add(new Label("name", moduleInstance.getStringValue(NAME, getLocale())));
                 item.add(new Label("index", AttributeUtil.getStringValue(moduleInstance, UNIQUE_INDEX)));
             }
         };

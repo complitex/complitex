@@ -43,7 +43,7 @@ public class DomainSelectDialog extends Panel{
         List<IColumn<DomainObject, Long>> columns = new ArrayList<>();
 
         for (EntityAttributeType entityAttributeType : entity.getEntityAttributeTypes()){
-            columns.add(new DomainFilteredColumn(entityTable, entityAttributeType));
+            columns.add(new DomainFilteredColumn(entityTable, entityAttributeType, getLocale()));
         }
 
         DataTable<DomainObject, Long> table = new DataTable<>("table", columns, provider, 10);

@@ -22,8 +22,6 @@ import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.web.domain.DomainObjectAccessUtil;
-import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
@@ -31,6 +29,7 @@ import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.common.web.component.search.CollapsibleSearchPanel;
+import org.complitex.common.web.domain.DomainObjectAccessUtil;
 import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
 import org.complitex.template.web.component.toolbar.AddItemButton;
@@ -42,6 +41,9 @@ import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;
 import java.util.List;
+
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.NAME;
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.SHORT_NAME;
 
 /**
  *
@@ -82,9 +84,9 @@ public class OrganizationList extends ScrollListPage {
 
     private DomainObjectExample newExample() {
         DomainObjectExample e = new DomainObjectExample();
-        e.addAttributeExample(new AttributeExample(KeConnectionOrganizationStrategy.NAME));
+        e.addAttributeExample(new AttributeExample(NAME));
         e.addAttributeExample(new AttributeExample(KeConnectionOrganizationStrategy.CODE));
-        e.addAttributeExample(new AttributeExample(KeConnectionOrganizationStrategy.SHORT_NAME));
+        e.addAttributeExample(new AttributeExample(SHORT_NAME));
         return e;
     }
 
@@ -164,12 +166,12 @@ public class OrganizationList extends ScrollListPage {
 
             @Override
             public String getObject() {
-                return example.getAttributeExample(KeConnectionOrganizationStrategy.NAME).getValue();
+                return example.getAttributeExample(NAME).getValue();
             }
 
             @Override
             public void setObject(String name) {
-                example.getAttributeExample(KeConnectionOrganizationStrategy.NAME).setValue(name);
+                example.getAttributeExample(NAME).setValue(name);
             }
         }));
         filterForm.add(new TextField<String>("codeFilter", new Model<String>() {
@@ -188,12 +190,12 @@ public class OrganizationList extends ScrollListPage {
 
             @Override
             public String getObject() {
-                return example.getAttributeExample(KeConnectionOrganizationStrategy.SHORT_NAME).getValue();
+                return example.getAttributeExample(SHORT_NAME).getValue();
             }
 
             @Override
             public void setObject(String shortName) {
-                example.getAttributeExample(KeConnectionOrganizationStrategy.SHORT_NAME).setValue(shortName);
+                example.getAttributeExample(SHORT_NAME).setValue(shortName);
             }
         }));
         filterForm.add(new TextField<String>("parentShortNameFilter", new Model<String>() {
@@ -227,11 +229,9 @@ public class OrganizationList extends ScrollListPage {
                 final Organization organization = item.getModelObject();
 
                 item.add(new Label("order", StringUtil.valueOf(getFirstItemOffset() + item.getIndex() + 1)));
-                item.add(new Label("name", AttributeUtil.getStringCultureValue(organization,
-                        KeConnectionOrganizationStrategy.NAME, getLocale())));
+                item.add(new Label("name", organization.getStringValue(NAME, getLocale())));
                 item.add(new Label("code", organizationStrategy.getCode(organization)));
-                item.add(new Label("shortName", AttributeUtil.getStringCultureValue(organization,
-                        KeConnectionOrganizationStrategy.SHORT_NAME, getLocale())));
+                item.add(new Label("shortName",organization.getStringValue(SHORT_NAME, getLocale())));
                 item.add(new Label("parentShortName", organization.getParentShortName()));
                 item.add(new Label("om", organization.getOperatingMonth(getLocale())));
 
@@ -285,11 +285,11 @@ public class OrganizationList extends ScrollListPage {
         filterForm.add(dataView);
 
         filterForm.add(new ArrowOrderByBorder("nameHeader",
-                String.valueOf(KeConnectionOrganizationStrategy.NAME), dataProvider, dataView, content));
+                String.valueOf(NAME), dataProvider, dataView, content));
         filterForm.add(new ArrowOrderByBorder("codeHeader",
                 String.valueOf(KeConnectionOrganizationStrategy.CODE), dataProvider, dataView, content));
         filterForm.add(new ArrowOrderByBorder("shortNameHeader",
-                String.valueOf(KeConnectionOrganizationStrategy.SHORT_NAME), dataProvider, dataView, content));
+                String.valueOf(SHORT_NAME), dataProvider, dataView, content));
 
         //Reset Action
         AjaxLink<Void> reset = new AjaxLink<Void>("reset") {
@@ -298,9 +298,9 @@ public class OrganizationList extends ScrollListPage {
             public void onClick(AjaxRequestTarget target) {
                 filterForm.clearInput();
                 example.setId(null);
-                example.getAttributeExample(KeConnectionOrganizationStrategy.NAME).setValue(null);
+                example.getAttributeExample(NAME).setValue(null);
                 example.getAttributeExample(KeConnectionOrganizationStrategy.CODE).setValue(null);
-                example.getAttributeExample(KeConnectionOrganizationStrategy.SHORT_NAME).setValue(null);
+                example.getAttributeExample(SHORT_NAME).setValue(null);
                 example.addAdditionalParam(KeConnectionOrganizationStrategy.PARENT_SHORT_NAME_FILTER, null);
                 target.add(content);
             }

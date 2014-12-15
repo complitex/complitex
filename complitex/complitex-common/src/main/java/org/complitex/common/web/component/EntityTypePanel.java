@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component;
 
 import com.google.common.base.Predicate;
@@ -10,7 +6,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.LocaleBean;
@@ -58,8 +53,7 @@ public class EntityTypePanel extends Panel {
     }
 
     private String displayEntityTypeObject(DomainObject entityTypeObject, Locale locale) {
-        Attribute displayAttribute = entityTypeObject.getAttribute(entityTypeDisplayAttributeTypeId);
-        return stringBean.displayValue(displayAttribute.getLocalizedValues(), locale);
+        return entityTypeObject.getAttribute(entityTypeDisplayAttributeTypeId).getStringValue(locale);
     }
 
     private void init() {

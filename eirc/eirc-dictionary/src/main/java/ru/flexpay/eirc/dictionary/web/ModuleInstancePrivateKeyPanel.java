@@ -14,9 +14,10 @@ import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
+import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.model.AttributeStringModel;
 import org.complitex.common.web.model.LongModel;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
@@ -144,7 +145,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
             attribute.setAttributeTypeId(attributeTypeId);
             attribute.setObjectId(moduleInstance.getId());
             attribute.setAttributeId(1L);
-            attribute.setLocalizedValues(stringBean.newStringCultures());
+            attribute.setLocalizedValues(StringCultures.newStringCultures());
         }
         final AttributeStringModel attributeModel = new AttributeStringModel(attribute);
         final EntityAttributeType attributeType =

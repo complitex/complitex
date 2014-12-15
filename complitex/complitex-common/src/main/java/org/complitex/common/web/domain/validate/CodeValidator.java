@@ -4,16 +4,17 @@
  */
 package org.complitex.common.web.domain.validate;
 
-import java.util.Locale;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.web.domain.DomainObjectEditPanel;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.util.StringCultures;
+import org.complitex.common.web.domain.DomainObjectEditPanel;
+
+import java.util.Locale;
 
 /**
  *
@@ -50,7 +51,7 @@ public abstract class CodeValidator implements IValidator {
         }
 
         LocaleBean localeBean = EjbBeanLocator.getBean(LocaleBean.class);
-        String code = getStringBean().displayValue(codeAttribute.getLocalizedValues(), localeBean.getSystemLocale());
+        String code = StringCultures.getValue(codeAttribute.getLocalizedValues(), localeBean.getSystemLocale());
 
         Long existingId = validateCode(object.getId(), code);
         if (existingId != null) {
@@ -62,12 +63,8 @@ public abstract class CodeValidator implements IValidator {
 
     protected String getErrorMessage(Long existingId, String code, Locale locale) {
         IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(strategyName, entity);
-        String entityName = getStringBean().displayValue(strategy.getEntity().getEntityNames(), locale);
+        String entityName = StringCultures.getValue(strategy.getEntity().getNames(), locale);
         return ResourceUtil.getFormatString(RESOURCE_BUNDLE, "code_validation_error", locale, entityName, existingId);
-    }
-
-    protected final StringCultureBean getStringBean() {
-        return EjbBeanLocator.getBean(StringCultureBean.class);
     }
 
     protected abstract Long validateCode(Long id, String code);

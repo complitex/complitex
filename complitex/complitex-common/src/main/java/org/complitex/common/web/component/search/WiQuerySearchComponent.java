@@ -26,6 +26,7 @@ import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.wiquery.autocomplete.AbstractAutocompleteComponent;
 import org.complitex.common.web.component.wiquery.autocomplete.AutocompleteAjaxComponent;
@@ -204,8 +205,8 @@ public class WiQuerySearchComponent extends Panel {
 
                     @Override
                     public String getObject() {
-                        return stringBean.displayValue(strategyFactory.getStrategy(entityTable).getEntity().
-                                getEntityNames(), getLocale());
+                        return StringCultures.getValue(strategyFactory.getStrategy(entityTable).getEntity().
+                                getNames(), getLocale());
                     }
                 };
 

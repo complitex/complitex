@@ -4,19 +4,20 @@
  */
 package org.complitex.pspoffice.housing_rights.strategy;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import javax.ejb.Stateless;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
-import static com.google.common.collect.Lists.*;
-import static org.complitex.common.util.AttributeUtil.*;
-import static org.complitex.common.util.ResourceUtil.*;
-import static org.apache.wicket.util.string.Strings.*;
+
+import javax.ejb.Stateless;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import static com.google.common.collect.Lists.newArrayList;
+import static org.apache.wicket.util.string.Strings.isEmpty;
+import static org.complitex.common.util.ResourceUtil.getString;
 
 /**
  *
@@ -44,7 +45,7 @@ public class HousingRightsStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return getStringCultureValue(object, NAME, locale);
+        return object.getStringValue(NAME, locale);
     }
 
     @Override

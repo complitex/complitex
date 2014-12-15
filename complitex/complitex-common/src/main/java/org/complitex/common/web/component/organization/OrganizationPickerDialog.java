@@ -19,9 +19,8 @@ import org.apache.wicket.model.IModelComparator;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.Locales;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.AttributeUtil;
+import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.wiquery.ExtendedDialog;
@@ -115,7 +114,7 @@ public class OrganizationPickerDialog extends Panel {
                 final DomainObject organization = item.getModelObject();
 
                 item.add(new Radio<>("radio", item.getModel(), radioGroup));
-                item.add(new Label("name", AttributeUtil.getStringCultureValue(organization, NAME, getLocale())));
+                item.add(new Label("name", organization.getStringValue(NAME, getLocale())));
                 item.add(new Label("code", organizationStrategy.getCode(organization)));
             }
         };

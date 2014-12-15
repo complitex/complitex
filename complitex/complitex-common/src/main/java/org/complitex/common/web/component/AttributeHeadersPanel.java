@@ -7,22 +7,17 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 
-import javax.ejb.EJB;
 import java.util.List;
-import org.apache.wicket.util.string.Strings;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 14.08.2010 21:59:20
  */
 public class AttributeHeadersPanel extends Panel {
-
-    @EJB(name = "StringCultureBean")
-    private StringCultureBean stringBean;
 
     public AttributeHeadersPanel(String id, List<EntityAttributeType> entityAttributeTypes,
             final ISortStateLocator stateLocator, final DataView dataView,
@@ -39,9 +34,7 @@ public class AttributeHeadersPanel extends Panel {
                         stateLocator, dataView, refreshComponent);
                 item.add(header);
 
-                header.add(new Label("header_name",
-                        Strings.capitalize(stringBean.displayValue(entityAttributeType.getAttributeNames(),
-                        getLocale()).toLowerCase(getLocale()))));
+                header.add(new Label("header_name", Strings.capitalize(entityAttributeType.getAttributeName(getLocale()))));
             }
         };
 

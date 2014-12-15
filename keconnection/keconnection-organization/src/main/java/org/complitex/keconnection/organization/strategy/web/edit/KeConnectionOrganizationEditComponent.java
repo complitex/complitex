@@ -12,6 +12,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
@@ -64,7 +65,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
                 attribute.setAttributeTypeId(attributeTypeId);
                 attribute.setObjectId(organization.getId());
                 attribute.setAttributeId(1L);
-                attribute.setLocalizedValues(stringBean.newStringCultures());
+                attribute.setLocalizedValues(StringCultures.newStringCultures());
             }
             final EntityAttributeType attributeType =
                     organizationStrategy.getEntity().getAttributeType(attributeTypeId);

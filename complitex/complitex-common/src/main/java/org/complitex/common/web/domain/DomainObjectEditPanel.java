@@ -25,11 +25,9 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.DeleteException;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.common.web.component.ChildrenContainer;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.back.BackInfo;
@@ -39,6 +37,7 @@ import org.complitex.common.web.component.permission.DomainObjectPermissionPanel
 import org.complitex.common.web.component.permission.DomainObjectPermissionParameters;
 import org.complitex.common.web.component.permission.PermissionPropagationDialogPanel;
 import org.complitex.common.web.component.search.SearchComponentState;
+import org.complitex.common.web.domain.validate.IValidator;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
@@ -59,12 +58,13 @@ import static org.complitex.resources.WebCommonResourceInitializer.SCROLL_JS;
 public class DomainObjectEditPanel extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
-    @EJB
-    private StringCultureBean stringBean;
+
     @EJB
     private LogBean logBean;
+
     @EJB
     private SessionBean sessionBean;
+
     private String entity;
     private String strategyName;
     private DomainObject oldObject;
@@ -134,7 +134,8 @@ public class DomainObjectEditPanel extends Panel {
 
             @Override
             protected String load() {
-                final String entityName = stringBean.displayValue(getStrategy().getEntity().getEntityNames(), getLocale());
+                final String entityName = getStrategy().getEntity().getName(getLocale());
+
                 return isNew() || !sessionBean.isAdmin() ? entityName
                         : MessageFormat.format(getString("label_edit"), entityName, newObject.getId());
             }

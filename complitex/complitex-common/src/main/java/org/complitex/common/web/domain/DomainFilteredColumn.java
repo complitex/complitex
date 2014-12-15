@@ -13,6 +13,8 @@ import org.apache.wicket.model.Model;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.description.EntityAttributeType;
 
+import java.util.Locale;
+
 /**
  * @author inheaven on 14.12.2014 21:39.
  */
@@ -20,7 +22,7 @@ public class DomainFilteredColumn extends AbstractColumn<DomainObject, Long> imp
     private String entityTable;
     private EntityAttributeType entityAttributeType;
 
-    public DomainFilteredColumn(String tableName, EntityAttributeType entityAttributeType) {
+    public DomainFilteredColumn(String entityTable, EntityAttributeType entityAttributeType, Locale locale) {
         super(Model.of("Hello!"));
 
         this.entityTable = entityTable;

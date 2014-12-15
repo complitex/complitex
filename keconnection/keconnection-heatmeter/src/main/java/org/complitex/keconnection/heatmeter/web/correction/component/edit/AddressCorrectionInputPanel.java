@@ -5,6 +5,7 @@
 package org.complitex.keconnection.heatmeter.web.correction.component.edit;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
@@ -16,18 +17,17 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.service.EntityBean;
 import org.complitex.common.service.StringCultureBean;
+import org.complitex.keconnection.heatmeter.entity.Correction;
+import org.complitex.keconnection.heatmeter.entity.StreetCorrection;
+import org.complitex.keconnection.heatmeter.entity.example.CorrectionExample;
+import org.complitex.keconnection.heatmeter.service.AddressCorrectionBean;
+import org.complitex.keconnection.heatmeter.web.AddressRenderer;
 import org.odlabs.wiquery.ui.autocomplete.AutocompleteAjaxComponent;
 
 import javax.ejb.EJB;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.complitex.keconnection.heatmeter.entity.Correction;
-import org.complitex.keconnection.heatmeter.entity.StreetCorrection;
-import org.complitex.keconnection.heatmeter.entity.example.CorrectionExample;
-import org.complitex.keconnection.heatmeter.service.AddressCorrectionBean;
-import org.complitex.keconnection.heatmeter.web.AddressRenderer;
 
 /**
  *
@@ -67,7 +67,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(entityBean.getEntity("city").getEntityNames(), getLocale());
+                return entityBean.getEntity("city").getName(getLocale());
             }
         }));
         WebMarkupContainer districtLabelContainer = new WebMarkupContainer("districtLabelContainer");
@@ -77,7 +77,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(entityBean.getEntity("district").getEntityNames(), getLocale());
+                return entityBean.getEntity("district").getName(getLocale());
             }
         }));
         WebMarkupContainer streetLabelContainer = new WebMarkupContainer("streetLabelContainer");
@@ -87,7 +87,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(entityBean.getEntity("street").getEntityNames(), getLocale());
+                return entityBean.getEntity("street").getName(getLocale());
             }
         }));
 
@@ -98,7 +98,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(entityBean.getEntity("building").getEntityNames(), getLocale());
+                return entityBean.getEntity("building").getName(getLocale());
             }
         }));
 

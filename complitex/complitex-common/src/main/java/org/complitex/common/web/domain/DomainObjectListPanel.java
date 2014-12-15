@@ -32,6 +32,7 @@ import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
@@ -223,11 +224,11 @@ public final class DomainObjectListPanel extends Panel {
                             String valueType = attrType.getEntityAttributeValueTypes().get(0).getValueType().toUpperCase();
 
                             if (SimpleTypes.isSimpleType(valueType)) {
-                                String systemLocaleValue = stringBean.getSystemStringCulture(attr.getLocalizedValues()).getValue();
+                                String systemLocaleValue = StringCultures.getSystemStringCulture(attr.getLocalizedValues()).getValue();
 
                                 switch (SimpleTypes.valueOf(valueType)) {
                                     case STRING_CULTURE:
-                                        attributeValue = stringBean.displayValue(attr.getLocalizedValues(), getLocale());
+                                        attributeValue = StringCultures.getValue(attr.getLocalizedValues(), getLocale());
                                         break;
                                     case STRING:
                                         attributeValue = systemLocaleValue;
@@ -296,7 +297,7 @@ public final class DomainObjectListPanel extends Panel {
 
                     @Override
                     public String getObject() {
-                        return Strings.capitalize(stringBean.displayValue(attributeType.getAttributeNames(), getLocale()).
+                        return Strings.capitalize(StringCultures.getValue(attributeType.getAttributeNames(), getLocale()).
                                 toLowerCase(getLocale()));
                     }
                 }));

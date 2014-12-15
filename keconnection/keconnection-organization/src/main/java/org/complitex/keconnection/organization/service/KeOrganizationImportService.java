@@ -15,7 +15,6 @@ import org.complitex.common.service.IImportListener;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.exception.ImportFileNotFoundException;
 import org.complitex.common.service.exception.ImportFileReadException;
-import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.keconnection.organization.entity.OrganizationImport;
 import org.complitex.keconnection.organization.service.exception.RootOrganizationNotFound;
@@ -194,7 +193,8 @@ public class KeOrganizationImportService extends AbstractImportService {
 
     private void addReadyCloseOperatingMonthFlag(DomainObject organization, long systemLocaleId) {
         final Attribute attribute = organization.getAttribute(KeConnectionOrganizationStrategy.READY_CLOSE_OPER_MONTH);
-        String value = AttributeUtil.getSystemStringCultureValue(attribute);
+        String value = attribute.getStringValue();
+
         if (Strings.isNullOrEmpty(value)) {
             value = new BooleanConverter().toString(Boolean.FALSE);
             attribute.setStringValue(value, systemLocaleId);

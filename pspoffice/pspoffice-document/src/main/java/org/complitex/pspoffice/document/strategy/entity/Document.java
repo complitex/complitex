@@ -4,13 +4,15 @@
  */
 package org.complitex.pspoffice.document.strategy.entity;
 
-import java.util.Date;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
-import static org.complitex.pspoffice.document.strategy.DocumentStrategy.*;
-import static org.complitex.common.util.AttributeUtil.*;
+
+import java.util.Date;
+
+import static org.complitex.common.util.AttributeUtil.getDateValue;
+import static org.complitex.pspoffice.document.strategy.DocumentStrategy.DOCUMENT_TYPE;
 
 /**
  *
@@ -27,7 +29,7 @@ public class Document extends DomainObject {
         super(object);
     }
 
-    public long getDocumentTypeId() {
+    public Long getDocumentTypeId() {
         Attribute documentTypeAttribute = getAttribute(DOCUMENT_TYPE);
         return documentTypeAttribute != null ? documentTypeAttribute.getValueId() : null;
     }
@@ -41,11 +43,12 @@ public class Document extends DomainObject {
     }
 
     public boolean isKidDocument() {
-        return DocumentTypeStrategy.isKidDocumentType(getDocumentTypeId());
+        return !DocumentTypeStrategy.RESERVED_INSTANCE_IDS.contains(getDocumentTypeId())
+                || getDocumentTypeId() == DocumentTypeStrategy.BIRTH_CERTIFICATE;
     }
 
     public boolean isAdultDocument() {
-        return DocumentTypeStrategy.isAdultDocumentType(getDocumentTypeId());
+        return true;
     }
 
     public String getSeries() {

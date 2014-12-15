@@ -12,7 +12,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.strategy.DeleteException;
-import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -55,7 +54,7 @@ public class HeatmeterPeriodTypeStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return AttributeUtil.getStringCultureValue(object, NAME, locale);
+        return object.getStringValue(NAME, locale);
     }
 
     @Override

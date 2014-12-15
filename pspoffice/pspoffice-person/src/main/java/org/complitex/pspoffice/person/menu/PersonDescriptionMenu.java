@@ -6,19 +6,18 @@ package org.complitex.pspoffice.person.menu;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.Page;
-import org.complitex.common.service.StringCultureBean;
-import org.complitex.template.web.pages.EntityDescription;
-import org.complitex.template.web.template.ITemplateLink;
-import org.complitex.template.web.template.ResourceTemplateMenu;
-
-import java.util.List;
-import java.util.Locale;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.template.web.pages.EntityDescription;
 import org.complitex.template.web.security.SecurityRole;
+import org.complitex.template.web.template.ITemplateLink;
+import org.complitex.template.web.template.ResourceTemplateMenu;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -33,9 +32,8 @@ public class PersonDescriptionMenu extends ResourceTemplateMenu {
     }
 
     private String getEntityName(String entity, Locale locale) {
-        StringCultureBean stringBean = EjbBeanLocator.getBean(StringCultureBean.class);
         IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(entity);
-        return stringBean.displayValue(strategy.getEntity().getEntityNames(), locale);
+        return strategy.getEntity().getName(locale);
     }
 
     @Override

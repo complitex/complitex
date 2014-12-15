@@ -1,10 +1,12 @@
 package org.complitex.common.entity.description;
 
 import org.complitex.common.entity.StringCulture;
+import org.complitex.common.util.StringCultures;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class EntityAttributeType implements Serializable {
     private Long id;
@@ -27,6 +29,10 @@ public class EntityAttributeType implements Serializable {
             }
         }
         return null;
+    }
+
+    public String getAttributeName(Locale locale){
+        return StringCultures.getValue(attributeNames, locale);
     }
 
     public List<StringCulture> getAttributeNames() {

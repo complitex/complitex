@@ -23,6 +23,7 @@ import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.service.IUserProfileBean;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.css.CssAttributeBehavior;
@@ -360,7 +361,7 @@ final class PersonHistoryPanel extends Panel {
         Attribute attribute = person.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setLocalizedValues(stringBean.newStringCultures());
+            attribute.setLocalizedValues(StringCultures.newStringCultures());
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }

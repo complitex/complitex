@@ -14,10 +14,11 @@ import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.util.StringCultures;
+import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.domain.DomainObjectListPanel;
-import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.pages.DomainObjectEdit;
 import ru.flexpay.eirc.dictionary.strategy.resource.EircResources;
@@ -71,7 +72,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return stringBean.displayValue(object.getAttribute(NAME).getLocalizedValues(), locale);
+        return object.getStringValue(NAME, locale);
     }
 
     @Override
@@ -184,7 +185,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
 
         for (long attributeTypeId : CUSTOM_ATTRIBUTES) {
             if (object.getAttribute(attributeTypeId).getLocalizedValues() == null) {
-                object.getAttribute(attributeTypeId).setLocalizedValues(stringBean.newStringCultures());
+                object.getAttribute(attributeTypeId).setLocalizedValues(StringCultures.newStringCultures());
             }
         }
     }
@@ -198,7 +199,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
                 if (attribute.getValueId() != null) {
                     loadStringCultures(attribute);
                 } else {
-                    attribute.setLocalizedValues(stringBean.newStringCultures());
+                    attribute.setLocalizedValues(StringCultures.newStringCultures());
                 }
             }
         }

@@ -1,7 +1,6 @@
 package org.complitex.keconnection.heatmeter.strategy;
 
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.util.AttributeUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -20,7 +19,7 @@ public class ServiceStrategy extends TemplateStrategy{
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return AttributeUtil.getStringCultureValue(object, NAME, locale);
+        return object.getStringValue(NAME, locale);
     }
 
     @Override

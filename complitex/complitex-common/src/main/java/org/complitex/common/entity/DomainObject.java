@@ -3,8 +3,7 @@ package org.complitex.common.entity;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import org.complitex.common.service.Locales;
-
+import org.complitex.common.util.Locales;
 
 import java.io.Serializable;
 import java.util.*;
@@ -79,6 +78,12 @@ public class DomainObject implements Serializable {
 
     public String getStringValue(Long attributeTypeId){
         return getAttribute(attributeTypeId).getStringValue();
+    }
+
+    public String getStringValue(Long attributeTypeId, Locale locale){
+        Attribute attribute = getAttribute(attributeTypeId);
+
+        return attribute != null ? attribute.getStringValue(locale) : null;
     }
 
     public void setStringValue(Long attributeTypeId, String value, Locale locale){

@@ -9,6 +9,7 @@ import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.service.exception.ImportFileNotFoundException;
 import org.complitex.common.service.exception.ImportFileReadException;
 import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.StringCultures;
 import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,14 +61,14 @@ public class PrivilegeImportService extends AbstractImportService{
 
                 //Код
                 Attribute code = domainObject.getAttribute(PrivilegeStrategy.CODE);
-                stringCultureBean.getSystemStringCulture(code.getLocalizedValues()).setValue(line[1].trim());
+                StringCultures.getSystemStringCulture(code.getLocalizedValues()).setValue(line[1].trim());
 
                 //Короткое наименование
                 //todo implement in future release
 
                 //Название привилегии
                 Attribute name = domainObject.getAttribute(PrivilegeStrategy.NAME);
-                stringCultureBean.getSystemStringCulture(name.getLocalizedValues()).setValue(line[3].trim());
+                StringCultures.getSystemStringCulture(name.getLocalizedValues()).setValue(line[3].trim());
 
                 privilegeStrategy.insert(domainObject, DateUtil.getCurrentDate());
 

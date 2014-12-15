@@ -68,7 +68,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(entityBean.getEntity("district").getEntityNames(), getLocale());
+                return entityBean.getEntity("district").getName(getLocale());
             }
         }));
         districtContainer.add(new TextField<>("district", new PropertyModel<String>(correction, "correction"))
@@ -84,7 +84,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(entityBean.getEntity("street_type").getEntityNames(), getLocale());
+                return entityBean.getEntity("street_type").getName(getLocale());
             }
         }).setVisible(isStreet));
 
@@ -92,7 +92,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(entityBean.getEntity("street").getEntityNames(), getLocale());
+                return entityBean.getEntity("street").getName(getLocale());
             }
         }).setVisible(isStreet));
 
@@ -105,7 +105,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(entityBean.getEntity("building").getEntityNames(), getLocale());
+                return entityBean.getEntity("building").getName(getLocale());
             }
         }));
 
@@ -123,7 +123,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(entityBean.getEntity("apartment").getEntityNames(), getLocale());
+                return entityBean.getEntity("apartment").getName(getLocale());
             }
         }));
 
@@ -136,7 +136,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
             @Override
             public String getObject() {
-                return stringBean.displayValue(entityBean.getEntity("room").getEntityNames(), getLocale());
+                return entityBean.getEntity("room").getName(getLocale());
             }
         }));
 

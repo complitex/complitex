@@ -16,6 +16,7 @@ import org.complitex.common.service.SessionBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.Strategy;
 import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.StringCultures;
 import org.complitex.pspoffice.ownerrelationship.strategy.OwnerRelationshipStrategy;
 import org.complitex.pspoffice.person.strategy.entity.ModificationType;
 import org.complitex.pspoffice.person.strategy.entity.Person;
@@ -154,7 +155,7 @@ public class RegistrationStrategy extends Strategy {
 
     private void setEditedByUserId(DomainObject registration) {
         long userId = sessionBean.getCurrentUserId();
-        stringBean.getSystemStringCulture(registration.getAttribute(EDITED_BY_USER_ID).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(EDITED_BY_USER_ID).getLocalizedValues()).
                 setValue(String.valueOf(userId));
     }
 
@@ -208,7 +209,7 @@ public class RegistrationStrategy extends Strategy {
                             attribute.setAttributeId(1L);
 
                             if (isSimpleAttributeType(attributeType)) {
-                                attribute.setLocalizedValues(stringBean.newStringCultures());
+                                attribute.setLocalizedValues(StringCultures.newStringCultures());
                             }
                             toAdd.add(attribute);
                         } else {
@@ -230,8 +231,8 @@ public class RegistrationStrategy extends Strategy {
         registration.removeAttribute(EXPLANATION);
 
         Attribute explAttribute = new Attribute();
-        explAttribute.setLocalizedValues(stringBean.newStringCultures());
-        stringBean.getSystemStringCulture(explAttribute.getLocalizedValues()).setValue(explanation);
+        explAttribute.setLocalizedValues(StringCultures.newStringCultures());
+        StringCultures.getSystemStringCulture(explAttribute.getLocalizedValues()).setValue(explanation);
         explAttribute.setAttributeTypeId(EXPLANATION);
         explAttribute.setValueTypeId(EXPLANATION);
         explAttribute.setAttributeId(1L);

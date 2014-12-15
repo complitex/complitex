@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.pspoffice.ownership.strategy;
 
 import com.google.common.collect.ImmutableMap;
@@ -18,8 +14,6 @@ import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import static org.complitex.common.util.AttributeUtil.getStringCultureValue;
 
 /**
  *
@@ -46,7 +40,7 @@ public class OwnershipFormStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return getStringCultureValue(object, NAME, locale);
+        return object.getStringValue(NAME, locale);
     }
 
     @Override

@@ -4,14 +4,17 @@
  */
 package org.complitex.common.web.domain;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.History;
 import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 
@@ -21,9 +24,6 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import org.apache.wicket.Component;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.strategy.IStrategy;
 
 /**
  *
@@ -83,8 +83,7 @@ public class HistoryPanel extends Panel {
 
             @Override
             public String getObject() {
-                return MessageFormat.format(getString("label"), stringBean.displayValue(getStrategy().getEntity().
-                        getEntityNames(), getLocale()), getObjectId());
+                return MessageFormat.format(getString("label"), getStrategy().getEntity().getName(getLocale()), getObjectId());
             }
         };
         Label title = new Label("title", labelModel);

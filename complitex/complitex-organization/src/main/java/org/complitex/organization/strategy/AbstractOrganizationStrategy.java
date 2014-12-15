@@ -17,11 +17,11 @@ import org.complitex.common.strategy.DomainObjectPermissionInfo;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.Numbers;
 import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.organization.strategy.web.edit.OrganizationEdit;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.organization.strategy.web.edit.OrganizationValidator;
@@ -65,7 +65,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return AttributeUtil.getStringCultureValue(object, NAME, locale);
+        return object.getStringValue(NAME, locale);
     }
 
     @Override
@@ -408,8 +408,8 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
     }
 
     public String displayShortNameAndCode(DomainObject organization, Locale locale) {
-        final String fullName = AttributeUtil.getStringCultureValue(organization, NAME, locale);
-        final String shortName = AttributeUtil.getStringCultureValue(organization, SHORT_NAME, locale);
+        final String fullName = organization.getStringValue(NAME, locale);
+        final String shortName = organization.getStringValue(SHORT_NAME, locale);
         final String code = getCode(organization);
         final String name = !com.google.common.base.Strings.isNullOrEmpty(shortName) ? shortName : fullName;
         return name + " (" + code + ")";

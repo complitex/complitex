@@ -6,6 +6,7 @@ import org.complitex.common.entity.description.Entity;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.description.EntityAttributeValueType;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.util.StringCultures;
 
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
@@ -52,13 +53,13 @@ public class EntityBean extends AbstractBean {
     }
 
     public String getAttributeLabel(String entityTable, long attributeTypeId, Locale locale) {
-        return stringBean.displayValue(getEntity(entityTable).getAttributeType(attributeTypeId).getAttributeNames(), locale);
+        return getEntity(entityTable).getAttributeType(attributeTypeId).getAttributeName(locale);
     }
 
     public EntityAttributeType newAttributeType() {
         EntityAttributeType attributeType = new EntityAttributeType();
 
-        attributeType.setAttributeNames(stringBean.newStringCultures());
+        attributeType.setAttributeNames(StringCultures.newStringCultures());
         attributeType.setEntityAttributeValueTypes(new ArrayList<EntityAttributeValueType>());
 
         return attributeType;
@@ -85,7 +86,7 @@ public class EntityBean extends AbstractBean {
                 toDeleteAttributeIds.add(oldAttributeType.getId());
             }
         }
-        removeAttributeTypes(oldEntity.getEntityTable(), toDeleteAttributeIds, updateDate);
+        removeAttributeTypes(oldEntity.getTable(), toDeleteAttributeIds, updateDate);
 
         for (EntityAttributeType attributeType : newEntity.getEntityAttributeTypes()) {
             if (attributeType.getId() == null) {
@@ -95,7 +96,7 @@ public class EntityBean extends AbstractBean {
         }
 
         if (changed) {
-            updateCache(oldEntity.getEntityTable());
+            updateCache(oldEntity.getTable());
         }
     }
 

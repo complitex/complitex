@@ -30,10 +30,10 @@ import org.complitex.common.entity.description.Entity;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.strategy.web.DomainObjectAccessUtil;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.Numbers;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.combobox.Combobox;
@@ -41,6 +41,7 @@ import org.complitex.common.web.component.dateinput.MaskedDateInput;
 import org.complitex.common.web.component.fieldset.CollapsibleFieldset;
 import org.complitex.common.web.component.scroll.ScrollToElementUtil;
 import org.complitex.common.web.component.type.MaskedDateInputPanel;
+import org.complitex.common.web.domain.DomainObjectAccessUtil;
 import org.complitex.pspoffice.ownerrelationship.strategy.OwnerRelationshipStrategy;
 import org.complitex.pspoffice.person.Module;
 import org.complitex.pspoffice.person.report.web.F3ReferencePage;
@@ -189,7 +190,7 @@ public class RegistrationEdit extends FormTemplatePage {
             initSystemAttributeInput(form, "registrationDate", REGISTRATION_DATE, true);
             if (!isInactive()) {
                 if (newRegistration.getRegistrationDate() == null) {
-                    stringBean.getSystemStringCulture(newRegistration.getAttribute(REGISTRATION_DATE).getLocalizedValues()).
+                    StringCultures.getSystemStringCulture(newRegistration.getAttribute(REGISTRATION_DATE).getLocalizedValues()).
                             setValue(new DateConverter().toString(DateUtil.getCurrentDate()));
                 }
                 if (!isNew()) {
@@ -469,7 +470,7 @@ public class RegistrationEdit extends FormTemplatePage {
         Attribute attribute = newRegistration.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setLocalizedValues(stringBean.newStringCultures());
+            attribute.setLocalizedValues(StringCultures.newStringCultures());
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }

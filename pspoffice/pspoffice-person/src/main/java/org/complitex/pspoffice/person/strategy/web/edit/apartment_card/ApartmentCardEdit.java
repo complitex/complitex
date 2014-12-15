@@ -89,10 +89,10 @@ import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
-import static org.complitex.common.strategy.web.DomainObjectAccessUtil.canEdit;
 import static org.complitex.common.util.DateUtil.getCurrentDate;
 import static org.complitex.common.web.component.DomainObjectComponentUtil.labelModel;
 import static org.complitex.common.web.component.DomainObjectComponentUtil.newInputComponent;
+import static org.complitex.common.web.domain.DomainObjectAccessUtil.canEdit;
 import static org.complitex.pspoffice.person.strategy.ApartmentCardStrategy.*;
 
 /**
@@ -276,7 +276,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
             @Override
             protected String load() {
-                final String entityName = stringBean.displayValue(ENTITY.getEntityNames(), getLocale());
+                final String entityName = ENTITY.getName(getLocale());
                 return isNew() || !sessionBean.isAdmin() ? entityName
                         : MessageFormat.format(getString("label_edit"), entityName, newApartmentCard.getId());
             }

@@ -4,7 +4,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.StringCultureBean;
@@ -13,6 +12,8 @@ import org.complitex.common.util.EjbBeanLocator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.*;
 
 public class Building extends DomainObject {
 
@@ -79,23 +80,15 @@ public class Building extends DomainObject {
     }
 
     public String getAccompaniedNumber(Locale locale) {
-        return getStringBean().displayValue(accompaniedAddress.getAttribute(BuildingAddressStrategy.NUMBER).getLocalizedValues(), locale);
+        return getStringValue(NUMBER, locale);
     }
 
     public String getAccompaniedCorp(Locale locale) {
-        Attribute corpAttr = accompaniedAddress.getAttribute(BuildingAddressStrategy.CORP);
-        if (corpAttr != null) {
-            return getStringBean().displayValue(corpAttr.getLocalizedValues(), locale);
-        }
-        return null;
+        return getStringValue(CORP, locale);
     }
 
     public String getAccompaniedStructure(Locale locale) {
-        Attribute structureAttr = accompaniedAddress.getAttribute(BuildingAddressStrategy.STRUCTURE);
-        if (structureAttr != null) {
-            return getStringBean().displayValue(structureAttr.getLocalizedValues(), locale);
-        }
-        return null;
+        return accompaniedAddress.getStringValue(STRUCTURE, locale);
     }
 
     public Long getAccompaniedStreetId() {

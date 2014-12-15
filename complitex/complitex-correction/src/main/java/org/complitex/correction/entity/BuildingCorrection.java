@@ -24,7 +24,7 @@ public class BuildingCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return AddressEntity.BUILDING.getEntityTable();
+        return AddressEntity.BUILDING.getTable();
     }
 
     public Long getStreetObjectId() {

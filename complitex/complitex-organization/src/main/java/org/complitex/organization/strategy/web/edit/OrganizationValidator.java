@@ -4,13 +4,15 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.web.domain.DomainObjectEditPanel;
 import org.complitex.common.web.domain.validate.IValidator;
-import org.complitex.common.util.AttributeUtil;
-import org.complitex.common.util.EjbBeanLocator;
 
 import java.text.MessageFormat;
 import java.util.Locale;
+
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.CODE;
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.NAME;
 
 /**
  *
@@ -64,15 +66,13 @@ public class OrganizationValidator implements IValidator {
 
         boolean valid = true;
 
-        Long byName = organizationStrategy.validateName(object.getId(), AttributeUtil.getStringCultureValue(object,
-                IOrganizationStrategy.NAME, systemLocale), systemLocale);
+        Long byName = organizationStrategy.validateName(object.getId(), object.getStringValue(NAME, systemLocale), systemLocale);
         if (byName != null) {
             valid = false;
             editComponent.error(MessageFormat.format(editComponent.getString("unique_name"), byName));
         }
 
-        Long byCode = organizationStrategy.validateCode(object.getId(), AttributeUtil.getStringCultureValue(object,
-                IOrganizationStrategy.CODE, systemLocale));
+        Long byCode = organizationStrategy.validateCode(object.getId(), object.getStringValue(CODE, systemLocale));
         if (byCode != null) {
             valid = false;
             editComponent.error(MessageFormat.format(editComponent.getString("unique_code"), byCode));

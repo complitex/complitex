@@ -13,6 +13,7 @@ import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.DeleteException;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.organization.strategy.AbstractOrganizationStrategy;
@@ -208,7 +209,7 @@ public class EircOrganizationStrategy extends AbstractOrganizationStrategy<Domai
 
         for (long attributeTypeId : ALL_ATTRIBUTE_TYPES) {
             if (object.getAttribute(attributeTypeId).getLocalizedValues() == null) {
-                object.getAttribute(attributeTypeId).setLocalizedValues(stringBean.newStringCultures());
+                object.getAttribute(attributeTypeId).setLocalizedValues(StringCultures.newStringCultures());
             }
         }
     }
@@ -222,7 +223,7 @@ public class EircOrganizationStrategy extends AbstractOrganizationStrategy<Domai
                 if (attribute.getValueId() != null) {
                     loadStringCultures(attribute);
                 } else {
-                    attribute.setLocalizedValues(stringBean.newStringCultures());
+                    attribute.setLocalizedValues(StringCultures.newStringCultures());
                 }
             }
         }

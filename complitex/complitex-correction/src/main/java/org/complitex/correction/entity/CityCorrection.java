@@ -18,6 +18,6 @@ public class CityCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return AddressEntity.CITY.getEntityTable();
+        return AddressEntity.CITY.getTable();
     }
 }

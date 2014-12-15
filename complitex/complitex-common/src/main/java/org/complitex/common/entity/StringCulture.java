@@ -1,6 +1,6 @@
 package org.complitex.common.entity;
 
-import org.complitex.common.service.Locales;
+import org.complitex.common.util.Locales;
 
 import java.io.Serializable;
 
@@ -8,6 +8,10 @@ public class StringCulture implements Serializable {
     private Long id;
     private Long localeId;
     private String value;
+
+    public StringCulture(Long localeId) {
+        this.localeId = localeId;
+    }
 
     public StringCulture(Long localeId, String value) {
         this.localeId = localeId;

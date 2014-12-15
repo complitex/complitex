@@ -49,12 +49,11 @@ public class StreetTypeStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        String streetType = stringBean.displayValue(object.getAttribute(SHORT_NAME).getLocalizedValues(), locale);
-        return streetType.toLowerCase(locale) + ".";
+        return object.getStringValue(SHORT_NAME, locale).toLowerCase(locale) + ".";
     }
 
     public String getShortName(DomainObject object, Locale locale){
-        return stringBean.displayValue(object.getAttribute(SHORT_NAME).getLocalizedValues(), locale);
+        return object.getStringValue(SHORT_NAME, locale);
     }
 
     public String getShortName(DomainObject object){
@@ -62,11 +61,11 @@ public class StreetTypeStrategy extends TemplateStrategy {
     }
 
     public String getName(DomainObject object, Locale locale){
-        return stringBean.displayValue(object.getAttribute(NAME).getLocalizedValues(), locale);
+        return object.getStringValue(NAME, locale);
     }
 
     public String getName(DomainObject object){
-        return stringBean.displayValue(object.getAttribute(NAME).getLocalizedValues(), getSystemLocale());
+        return object.getStringValue(NAME);
     }
 
     @Deprecated

@@ -10,10 +10,10 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.web.domain.DomainObjectListPanel;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.search.ISearchCallback;
+import org.complitex.common.web.domain.DomainObjectListPanel;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -52,12 +52,22 @@ public class RegionStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return stringBean.displayValue(object.getAttribute(NAME).getLocalizedValues(), locale);
+        return object.getStringValue(NAME, locale);
     }
 
     @Override
     public ISearchCallback getSearchCallback() {
-        return new SearchCallback();
+        return new ISearchCallback(){
+            @Override
+            public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
+                DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
+
+                if (list != null) {
+                    configureExampleImpl(list.getExample(), ids, null);
+                    list.refreshContent(target);
+                }
+            }
+        };
     }
 
     @Override
@@ -65,7 +75,7 @@ public class RegionStrategy extends TemplateStrategy {
         configureExampleImpl(example, ids, searchTextInput);
     }
 
-    private static void configureExampleImpl(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    private void configureExampleImpl(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
             AttributeExample attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
@@ -87,16 +97,6 @@ public class RegionStrategy extends TemplateStrategy {
     @Override
     public List<String> getSearchFilters() {
         return ImmutableList.of("country");
-    }
-
-    private static class SearchCallback implements ISearchCallback, Serializable {
-
-        @Override
-        public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
-            DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
-            configureExampleImpl(list.getExample(), ids, null);
-            list.refreshContent(target);
-        }
     }
 
     @Override

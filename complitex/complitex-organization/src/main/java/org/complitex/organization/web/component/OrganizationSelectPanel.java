@@ -14,7 +14,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.model.AttributeExampleModel;
@@ -77,7 +76,7 @@ public class OrganizationSelectPanel extends Panel {
             protected void populateItem(Item<DomainObject> item) {
                 final DomainObject domainObject = item.getModelObject();
 
-                item.add(new Label("name", AttributeUtil.getStringCultureValue(domainObject, NAME, getLocale())));
+                item.add(new Label("name", domainObject.getStringValue(NAME, getLocale())));
                 item.add(new Label("code", organizationStrategy.getCode(domainObject)));
                 item.add(new AjaxLink("select") {
                     @Override

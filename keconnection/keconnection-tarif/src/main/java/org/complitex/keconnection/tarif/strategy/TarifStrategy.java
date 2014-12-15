@@ -10,10 +10,9 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.domain.validate.IValidator;
-import org.complitex.common.util.AttributeUtil;
-import org.complitex.common.util.ResourceUtil;
 import org.complitex.keconnection.tarif.strategy.web.edit.TarifEditComponent;
 import org.complitex.keconnection.tarif.strategy.web.edit.TarifValidator;
 import org.complitex.template.strategy.TemplateStrategy;
@@ -52,7 +51,7 @@ public class TarifStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return AttributeUtil.getStringCultureValue(object, NAME, locale);
+        return object.getStringValue(NAME, locale);
     }
 
     @Override

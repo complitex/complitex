@@ -6,6 +6,7 @@ import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.util.Numbers;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.util.StringUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -130,8 +131,8 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
                                 case MASKED_DATE:
                                 case DOUBLE:
                                 case INTEGER: {
-                                    String oldString = stringBean.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
-                                    String newString = stringBean.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
+                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
+                                    String newString = StringCultures.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
                                     if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }
@@ -140,8 +141,8 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
 
                                 case BIG_STRING:
                                 case STRING: {
-                                    String oldString = stringBean.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
-                                    String newString = stringBean.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
+                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
+                                    String newString = StringCultures.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
                                     if (!Strings.isEqual(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }

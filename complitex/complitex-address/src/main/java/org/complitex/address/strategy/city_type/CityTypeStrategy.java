@@ -52,7 +52,7 @@ public class CityTypeStrategy extends TemplateStrategy {
         DomainObject object = findById(objectId, true);
 
         if (object != null){
-            return stringBean.displayValue(object.getAttribute(SHORT_NAME).getLocalizedValues(), localeBean.getSystemLocale());
+            return object.getStringValue(SHORT_NAME);
         }
 
         return null;
@@ -60,8 +60,7 @@ public class CityTypeStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        String cityType = stringBean.displayValue(object.getAttribute(SHORT_NAME).getLocalizedValues(), locale);
-        return cityType.toLowerCase(locale) + ".";
+        return object.getStringValue(SHORT_NAME, locale).toLowerCase(locale) + ".";
     }
 
     @Override

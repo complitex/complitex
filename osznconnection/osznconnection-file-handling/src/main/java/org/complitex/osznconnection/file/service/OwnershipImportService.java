@@ -9,6 +9,7 @@ import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.service.exception.ImportFileNotFoundException;
 import org.complitex.common.service.exception.ImportFileReadException;
 import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.StringCultures;
 import org.complitex.osznconnection.file.strategy.OwnershipStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +61,7 @@ public class OwnershipImportService extends AbstractImportService{
                 domainObject.setExternalId(line[0].trim());
 
                 //Название формы собственности
-                stringCultureBean.getSystemStringCulture(name.getLocalizedValues()).setValue(line[1].trim());
+                StringCultures.getSystemStringCulture(name.getLocalizedValues()).setValue(line[1].trim());
 
                 ownershipStrategy.insert(domainObject, DateUtil.getCurrentDate());
 

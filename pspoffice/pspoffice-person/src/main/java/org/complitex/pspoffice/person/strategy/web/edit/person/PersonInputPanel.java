@@ -31,8 +31,8 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.StatusType;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.strategy.web.DomainObjectAccessUtil;
 import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
@@ -43,6 +43,7 @@ import org.complitex.common.web.component.fieldset.ICollapsibleFieldsetListener;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
 import org.complitex.common.web.component.scroll.ScrollToElementUtil;
 import org.complitex.common.web.component.type.MaskedDateInputPanel;
+import org.complitex.common.web.domain.DomainObjectAccessUtil;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
@@ -295,7 +296,7 @@ public class PersonInputPanel extends Panel {
         Attribute attribute = person.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setLocalizedValues(stringBean.newStringCultures());
+            attribute.setLocalizedValues(StringCultures.newStringCultures());
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }

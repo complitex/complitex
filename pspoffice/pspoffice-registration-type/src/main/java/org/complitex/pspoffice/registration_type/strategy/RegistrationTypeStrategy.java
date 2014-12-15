@@ -21,7 +21,6 @@ import java.util.*;
 
 import static com.google.common.collect.ImmutableSet.of;
 import static com.google.common.collect.Lists.newArrayList;
-import static org.complitex.common.util.AttributeUtil.getStringCultureValue;
 import static org.complitex.common.util.ResourceUtil.getString;
 
 /**
@@ -51,7 +50,7 @@ public class RegistrationTypeStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return getStringCultureValue(object, NAME, locale);
+        return object.getStringValue(NAME, locale);
     }
 
     @Override

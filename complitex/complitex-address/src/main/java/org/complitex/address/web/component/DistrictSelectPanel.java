@@ -67,7 +67,7 @@ public class DistrictSelectPanel extends Panel {
                 final DomainObject domainObject = item.getModelObject();
 
                 item.add(new Check<>("check", Model.of(domainObject)));
-                item.add(new Label("name", AttributeUtil.getStringCultureValue(domainObject, NAME, getLocale())));
+                item.add(new Label("name", domainObject.getStringValue(NAME, getLocale())));
                 item.add(new Label("code", AttributeUtil.getStringValue(domainObject, CODE)));
             }
         };

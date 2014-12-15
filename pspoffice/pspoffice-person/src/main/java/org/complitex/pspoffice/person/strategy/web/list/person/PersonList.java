@@ -23,11 +23,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.strategy.web.DomainObjectAccessUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
@@ -35,6 +33,7 @@ import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.common.web.component.search.CollapsibleSearchPanel;
+import org.complitex.common.web.domain.DomainObjectAccessUtil;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
 import org.complitex.template.web.component.toolbar.AddItemButton;
@@ -72,8 +71,7 @@ public final class PersonList extends ScrollListPage {
 
         @Override
         public String getObject() {
-            EntityAttributeType attributeType = personStrategy.getEntity().getAttributeType(attributeTypeId);
-            return Strings.capitalize(stringBean.displayValue(attributeType.getAttributeNames(), getLocale()).toLowerCase(getLocale()));
+            return personStrategy.getEntity().getName(attributeTypeId, getLocale()).toLowerCase();
         }
     }
 
