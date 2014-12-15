@@ -22,11 +22,11 @@ public class Locales {
         LocaleBean localeBean = EjbBeanLocator.getBean(LocaleBean.class);
 
         for (org.complitex.common.entity.Locale l : localeBean.getAllLocales()){
-            instance.map.put(new Locale(l.getLanguage()), l.getId());
+            map.put(new Locale(l.getLanguage()), l.getId());
 
             if (l.isSystem()){
-                instance.systemLocaleId = l.getId();
-                instance.systemLocale = new Locale(l.getLanguage());
+                systemLocaleId = l.getId();
+                systemLocale = new Locale(l.getLanguage());
             }
         }
     }
