@@ -10,12 +10,12 @@ package org.complitex.common.entity;
  */
 public class Parameter {
 
-    private String table;
+    private String entityTable;
 
     private Object object;
 
-    public Parameter(String table, Object parameter) {
-        this.table = table;
+    public Parameter(String entityTable, Object parameter) {
+        this.entityTable = entityTable;
         this.object = parameter;
     }
 
@@ -27,11 +27,11 @@ public class Parameter {
         this.object = entity;
     }
 
-    public String getTable() {
-        return table;
+    public String getEntityTable() {
+        return entityTable;
     }
 
-    public void setTable(String table) {
-        this.table = table;
+    public void setEntityTable(String entityTable) {
+        this.entityTable = entityTable;
     }
 }

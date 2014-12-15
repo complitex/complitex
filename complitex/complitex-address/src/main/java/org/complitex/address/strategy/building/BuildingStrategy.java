@@ -282,13 +282,13 @@ public class BuildingStrategy extends TemplateStrategy {
         Building building = new Building(super.newInstance());
         building.setPrimaryAddress(buildingAddressStrategy.newInstance());
 
-
         return building;
     }
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
         Building building = (Building) object;
+
         return displayBuilding(building.getAccompaniedNumber(locale), building.getAccompaniedCorp(locale),
                 building.getAccompaniedStructure(locale), locale);
     }

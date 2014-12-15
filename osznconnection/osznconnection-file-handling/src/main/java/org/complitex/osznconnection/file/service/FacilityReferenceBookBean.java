@@ -72,7 +72,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
             final String table = getTableName(requestFileType);
 
             for (AbstractRequest request : requests) {
-                sqlSession().insert(NS + ".insertFacilityReferences", of("table", table, "request", request));
+                sqlSession().insert(NS + ".insertFacilityReferences", of("entityTable", table, "request", request));
             }
         }
     }
@@ -92,7 +92,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
 
 
     public void delete(long requestFileId, RequestFileType requestFileType) {
-        sqlSession().delete(NS + ".deleteFacilityReferences", of("requestFileId", requestFileId, "table",
+        sqlSession().delete(NS + ".deleteFacilityReferences", of("requestFileId", requestFileId, "entityTable",
                 getTableName(requestFileType)));
     }
 

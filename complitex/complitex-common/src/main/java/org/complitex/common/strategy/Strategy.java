@@ -196,7 +196,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     protected void loadAttributes(String dataSource, DomainObject object) {
         Map<String, Object> params = ImmutableMap.<String, Object>builder().
-                put("table", getEntityTable()).
+                put("entityTable", getEntityTable()).
                 put("id", object.getId()).
                 build();
 
@@ -280,7 +280,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     @Override
     public Long getObjectId(String externalId) {
         return (Long) sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + ".selectObjectIdByExternalId",
-                ImmutableMap.of("table", getEntityTable(), "externalId", externalId));
+                ImmutableMap.of("entityTable", getEntityTable(), "externalId", externalId));
     }
 
 
@@ -487,7 +487,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     public void archiveAttributes(Collection<Long> attributeTypeIds, Date endDate) {
         if (attributeTypeIds != null && !attributeTypeIds.isEmpty()) {
             Map<String, Object> params = ImmutableMap.<String, Object>builder().
-                    put("table", getEntityTable()).
+                    put("entityTable", getEntityTable()).
                     put("endDate", endDate).
                     put("attributeTypeIds", attributeTypeIds).
                     build();
@@ -767,7 +767,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         sqlSession().update(DOMAIN_OBJECT_NAMESPACE + "." + UPDATE_OPERATION, new Parameter(getEntityTable(), object));
 
         Map<String, Object> params = ImmutableMap.<String, Object>builder().
-                put("table", getEntityTable()).
+                put("entityTable", getEntityTable()).
                 put("endDate", endDate).
                 put("objectId", object.getId()).build();
         sqlSession().update(ATTRIBUTE_NAMESPACE + ".archiveObjectAttributes", params);
@@ -1244,7 +1244,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     protected void deleteAttribute(long objectId) {
         Map<String, Object> params = newHashMap();
-        params.put("table", getEntityTable());
+        params.put("entityTable", getEntityTable());
         params.put("objectId", objectId);
         sqlSession().delete(ATTRIBUTE_NAMESPACE + "." + DELETE_OPERATION, params);
     }
@@ -1252,7 +1252,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     protected void deleteObject(long objectId, Locale locale) throws DeleteException {
         Map<String, Object> params = newHashMap();
-        params.put("table", getEntityTable());
+        params.put("entityTable", getEntityTable());
         params.put("objectId", objectId);
         try {
             sqlSession().delete(DOMAIN_OBJECT_NAMESPACE + "." + DELETE_OPERATION, params);

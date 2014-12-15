@@ -91,7 +91,7 @@ public class StringCultureBean extends AbstractBean {
 
     public List<StringCulture> findStrings(String dataSource, long id, String entityTable) {
         Map<String, Object> params = ImmutableMap.<String, Object>builder().
-                put("table", entityTable).
+                put("entityTable", entityTable).
                 put("id", id).
                 build();
         return (dataSource == null? sqlSession() : sqlSession(dataSource)).selectList(MAPPING_NAMESPACE + ".find", params);
@@ -99,7 +99,7 @@ public class StringCultureBean extends AbstractBean {
 
     public void delete(String entityTable, long objectId, Set<Long> localizedValueTypeIds) {
         Map<String, Object> params = Maps.newHashMap();
-        params.put("table", entityTable);
+        params.put("entityTable", entityTable);
         params.put("objectId", objectId);
         params.put("localizedValueTypeIds", localizedValueTypeIds);
         sqlSession().delete(MAPPING_NAMESPACE + ".delete", params);
