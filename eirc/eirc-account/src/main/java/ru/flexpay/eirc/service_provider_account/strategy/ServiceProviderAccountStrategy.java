@@ -1,7 +1,10 @@
 package ru.flexpay.eirc.service_provider_account.strategy;
 
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.*;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.SimpleTypes;
+import org.complitex.common.entity.StringCulture;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.service.StringCultureBean;
@@ -221,15 +224,20 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     }
 
     public void deleteAttribute(ServiceProviderAccountAttribute attribute) {
-        Parameter parameter = new Parameter(getEntityTable(), attribute);
-        sqlSession().delete(SPA_ATTRIBUTE_NS + "." + DELETE_OPERATION, parameter);
+        attribute.setEntityTable(getEntityTable());
+
+        sqlSession().delete(SPA_ATTRIBUTE_NS + "." + DELETE_OPERATION, attribute);
     }
 
     public void updateAttribute(ServiceProviderAccountAttribute attribute) {
-        sqlSession().update(ATTRIBUTE_NAMESPACE + "." + UPDATE_OPERATION, new Parameter(getEntityTable(), attribute));
+        attribute.setEntityTable(getEntityTable());
+        sqlSession().update(NS + "." + UPDATE_OPERATION, attribute);
     }
 
     public ServiceProviderAccountAttribute findByPkId(Long pkId) {
-        return sqlSession().selectOne(SPA_ATTRIBUTE_NS + ".findByPkId", new Parameter(getEntityTable(), new ServiceProviderAccountAttribute(pkId)));
+        ServiceProviderAccountAttribute attribute =  new ServiceProviderAccountAttribute(pkId);
+        attribute.setEntityTable(getEntityTable());
+
+        return sqlSession().selectOne(SPA_ATTRIBUTE_NS + ".findByPkId", attribute);
     }
 }

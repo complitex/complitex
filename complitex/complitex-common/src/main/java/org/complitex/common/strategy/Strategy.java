@@ -128,7 +128,10 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     protected void changeActivity(DomainObject object, boolean enable) {
         object.setStatus(enable ? StatusType.ACTIVE : StatusType.INACTIVE);
-        sqlSession().update(DOMAIN_OBJECT_NAMESPACE + "." + UPDATE_OPERATION, new Parameter(getEntityTable(), object));
+        object.setEntityTable(getEntityTable());
+
+        sqlSession().update(NS + ".updateDomainObject", object);
+
         changeChildrenActivity(object.getObjectId(), enable);
     }
 
@@ -212,7 +215,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     protected String getLoadAttributesStatement() {
-        return ATTRIBUTE_NAMESPACE + "." + FIND_OPERATION;
+        return NS + ".selectAttribute";
     }
 
     protected void loadStringCultures(List<Attribute> attributes) {

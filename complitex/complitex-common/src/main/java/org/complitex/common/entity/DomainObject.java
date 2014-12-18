@@ -14,6 +14,7 @@ import java.util.Locale;
  * @author Artem
  */
 public class DomainObject implements Serializable {
+    private String entityTable;
     private Long objectId;
     private StatusType status = StatusType.ACTIVE;
     private Date startDate;
@@ -22,6 +23,7 @@ public class DomainObject implements Serializable {
     private Long parentEntityId;
     private Long permissionId;
     private String externalId;
+
     private List<Attribute> attributes = new ArrayList<>();
     private Set<Long> subjectIds = new HashSet<>();
 
@@ -97,12 +99,12 @@ public class DomainObject implements Serializable {
         getAttribute(attributeTypeId).setValueId(value);
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public String getEntityTable() {
+        return entityTable;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setEntityTable(String entityTable) {
+        this.entityTable = entityTable;
     }
 
     public Long getObjectId() {
@@ -113,12 +115,12 @@ public class DomainObject implements Serializable {
         this.objectId = objectId;
     }
 
-    public Long getParentId() {
-        return parentId;
+    public StatusType getStatus() {
+        return status;
     }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
+    public void setStatus(StatusType status) {
+        this.status = status;
     }
 
     public Date getStartDate() {
@@ -129,24 +131,20 @@ public class DomainObject implements Serializable {
         this.startDate = startDate;
     }
 
-    public StatusType getStatus() {
-        return status;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setStatus(StatusType status) {
-        this.status = status;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
-    public List<Attribute> getAttributes() {
-        return attributes;
+    public Long getParentId() {
+        return parentId;
     }
 
-    public void setAttributes(List<Attribute> attributes) {
-        this.attributes = attributes;
-    }
-
-    public void addAttribute(Attribute attribute) {
-        attributes.add(attribute);
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     public Long getParentEntityId() {
@@ -171,6 +169,14 @@ public class DomainObject implements Serializable {
 
     public void setExternalId(String externalId) {
         this.externalId = externalId;
+    }
+
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<Attribute> attributes) {
+        this.attributes = attributes;
     }
 
     public Set<Long> getSubjectIds() {

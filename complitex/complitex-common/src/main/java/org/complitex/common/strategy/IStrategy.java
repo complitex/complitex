@@ -9,10 +9,10 @@ import org.complitex.common.entity.History;
 import org.complitex.common.entity.description.Entity;
 import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
+import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.domain.validate.IValidator;
 
 import java.util.*;
 
@@ -21,10 +21,10 @@ import java.util.*;
  * @author Artem
  */
 public interface IStrategy {
+    String NS = "org.complitex.common.strategy.Strategy";
+
     String ARCHIVE_ATTRIBUTES_OPERATION = "archiveAttributes";
-    String ATTRIBUTE_NAMESPACE = "org.complitex.common.entity.Attribute";
     String COUNT_OPERATION = "count";
-    String DOMAIN_OBJECT_NAMESPACE = "org.complitex.common.entity.DomainObject";
     String FIND_BY_ID_OPERATION = "findById";
     String FIND_HISTORY_ATTRIBUTES_OPERATION = "findHistoryAttributes";
     String FIND_HISTORY_OBJECT_OPERATION = "findHistoryObject";

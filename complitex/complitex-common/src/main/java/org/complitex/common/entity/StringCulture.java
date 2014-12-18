@@ -5,6 +5,7 @@ import org.complitex.common.util.Locales;
 import java.io.Serializable;
 
 public class StringCulture implements Serializable {
+    private String entityTable;
     private Long id;
     private Long localeId;
     private String value;
@@ -20,6 +21,14 @@ public class StringCulture implements Serializable {
 
     public boolean isSystemLocale(){
         return Locales.getSystemLocaleId().equals(localeId);
+    }
+
+    public String getEntityTable() {
+        return entityTable;
+    }
+
+    public void setEntityTable(String entityTable) {
+        this.entityTable = entityTable;
     }
 
     public Long getId() {

@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.complitex.common.strategy.Strategy">
+    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
+
+    <resultMap id="domainObjectResultMap" type="org.complitex.common.entity.DomainObject">
+        <id column="object_id" property="objectId"/>
+        <id column="start_date" property="startDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="status" property="status"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="parent_entity_id" property="parentEntityId"/>
+        <result column="permission_id" property="permissionId"/>
+        <result column="external_id" property="externalId"/>
+    </resultMap>
+
+    <resultMap id="attributeResultMap" type="org.complitex.common.entity.Attribute">
+        <id column="attribute_id" property="attributeId"/>
+        <id column="object_id" property="objectId"/>
+        <id column="attribute_type_id" property="attributeTypeId"/>
+        <id column="start_date" property="startDate"/>
+        <result column="status" property="status"/>
+        <result column="end_date" property="endDate"/>
+        <result column="value_id" property="valueId"/>
+        <result column="value_type_id" property="valueTypeId"/>
+    </resultMap>
+
+    <resultMap id="stringCultureResultMap" type="org.complitex.common.entity.StringCulture">
+        <constructor>
+            <idArg column="locale_id" javaType="Long"/>
+            <arg column="value" javaType="String"/>
+        </constructor>
+        <id column="id" property="id"/>
+    </resultMap>
+
+    <resultMap id="domainObjectPermissionInfoResultMap" type="org.complitex.common.strategy.DomainObjectPermissionInfo">
+        <id column="object_id" property="id"/>
+        <result column="permission_id" property="permissionId"/>
+    </resultMap>
+
+    <!--DomainObject-->
+
+    <insert id="insertDomainObject" parameterType="org.complitex.common.entity.DomainObject">
+        INSERT INTO `${entityTable}` (`object_id`, `status`, `start_date`, `end_date`, `parent_id`, `parent_entity_id`,
+          `permission_id`, `external_id`)
+        VALUES
+          (#{id}, #{status}, #{startDate}, #{endDate}, #{parentId}, #{parentEntityId}, #{permissionId}, #{externalId})
+    </insert>
+
+    <select id="selectDomainObject" parameterType="org.complitex.common.entity.example.DomainObjectExample"
+            resultMap="domainObjectResultMap">
+        SELECT e.*
+        FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
+        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
+    </select>
+
+    <select id="selectDomainObjectId" resultType="long" parameterType="map">
+        SELECT e.`object_id` FROM `${entityTable}` e WHERE e.`external_id` = #{externalId}
+    </select>
+
+    <sql id="domainObjectOrderByAttributeTypeId">
+        SELECT sc.`value` FROM `${entityTable}_string_culture` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
+        (SELECT orderByAttr.`value_id` FROM `${entityTable}_attribute` orderByAttr WHERE orderByAttr.`object_id` = e.`object_id`
+        AND orderByAttr.`status` = 'ACTIVE' AND orderByAttr.`attribute_type_id` = #{orderByAttributeTypeId}
+        )
+    </sql>
+
+    <sql id="domainObjectOrderBy">
+        <if test="orderByAttributeTypeId != null">
+            ORDER BY
+            <choose>
+                <when test="orderByNumber">
+                    LPAD(
+                    (<include refid="domainObjectOrderByAttributeTypeId"/>),
+                    15, ' ')
+                </when>
+                <otherwise>
+                    (<include refid="domainObjectOrderByAttributeTypeId"/>)
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="asc">
+                    ASC
+                </when>
+                <otherwise>
+                    DESC
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
+
+    <sql id="domainObjectPermissionFilter">
+        <if test="not admin">
+            AND (e.`permission_id` IN ${userPermissionString})
+        </if>
+    </sql>
+
+    <sql id="domainObjectStatusFilter">
+        <choose>
+            <when test="status == 'ALL'">
+                (e.`status` IN ('ACTIVE', 'INACTIVE'))
+            </when>
+            <otherwise>
+                e.`status` = #{status}
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="domainObjectFilter">
+        <if test="objectId != null">
+            AND e.`object_id` = #{objectId}
+        </if>
+        <foreach item="attrExample" collection="attributeExamples">
+            <if test="attrExample.value != null">
+                AND EXISTS(SELECT 1 FROM `${entityTable}_attribute` attr WHERE attr.`object_id` = e.`object_id`
+                AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attrExample.attributeTypeId}
+                AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityTable}_string_culture` sc WHERE sc.`value`
+                <choose>
+                    <when test="comparisonType == 'LIKE'">
+                        LIKE CONCAT('%', #{attrExample.value}, '%')
+                    </when>
+                    <when test="comparisonType == 'EQUALITY'">
+                        = #{attrExample.value}
+                    </when>
+                </choose>
+                )
+                )
+            </if>
+
+            <if test="attrExample.valueId != null">
+                AND EXISTS(SELECT 1 FROM `${entityTable}_attribute` attr WHERE attr.`object_id` = e.`object_id`
+                AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attrExample.attributeTypeId}
+                AND attr.`value_id` = #{valueId}
+                )
+            </if>
+        </foreach>
+        <if test="parentId != null and parentEntity != null">
+            AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity_table` = #{parentEntity}) AND e.`parent_id` = #{parentId}
+        </if>
+    </sql>
+
+    <sql id="domainObjectLimit">
+        <if test="count > 0">
+            limit ${first},${count}
+        </if>
+    </sql>
+
+    <select id="selectDomainObject" parameterType="org.complitex.common.entity.example.DomainObjectExample"
+            resultMap="domainObjectResultMap" >
+        SELECT e.*
+        FROM `${entityTable}` e WHERE
+        <include refid="domainObjectStatusFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
+        <include refid="domainObjectFilter"/>
+        <include refid="domainObjectOrderBy"/>
+        <include refid="domainObjectLimit"/>
+    </select>
+
+    <select id="count" resultType="long" parameterType="DomainObjectExample">
+        SELECT COUNT(1) FROM `${entityTable}` e WHERE
+        <include refid="domainObjectStatusFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
+        <include refid="domainObjectFilter"/>
+    </select>
+
+    <update id="updateDomainObject" parameterType="org.complitex.common.entity.DomainObject">
+        UPDATE `${entityTable}` SET `end_date` = #{endDate}, `status` = #{status}
+          WHERE `object_id` = #{id} AND `start_date` = #{startDate}
+    </update>
+
+    <!-- Validation -->
+
+    <select id="defaultValidation" resultType="long" parameterType="map">
+        SELECT DISTINCT e.`object_id` FROM `${entity}` e
+        JOIN `${entity}_attribute` a ON (e.`object_id` = a.`object_id` AND a.`status` = 'ACTIVE')
+        JOIN `${entity}_string_culture` sc ON (a.`value_id` = sc.`id`)
+        WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND sc.`locale_id` = #{localeId} AND a.`attribute_type_id` = #{attributeTypeId}
+        AND sc.`value` = #{text}
+        <choose>
+            <when test="parentEntityId != null and parentId != null">
+                AND e.`parent_entity_id` = #{parentEntityId} AND e.`parent_id` = #{parentId}
+            </when>
+            <otherwise>
+                AND e.`parent_entity_id` IS NULL AND e.`parent_id` IS NULL
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- SearchComponent -->
+
+    <select id="findParentInSearchComponent" parameterType="map" resultType="map">
+        SELECT (SELECT ent.`entity_table` FROM `entity` ent WHERE ent.`id` = e.`parent_entity_id`) parentEntity,
+        e.`parent_id` parentId FROM `${entityTable}` e WHERE e.`object_id` = #{objectId}
+        <choose>
+            <when test="startDate != null">
+                AND e.`start_date` =
+                (SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{objectId} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+            </when>
+            <otherwise>
+                AND (e.`status` IN ('ACTIVE', 'INACTIVE'))
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- history -->
+
+    <select id="historyDates" resultType="date" parameterType="org.complitex.common.entity.example.DomainObjectExample">
+        SELECT e.`start_date` FROM `${entityTable}` e WHERE e.`object_id`= #{objectId}
+        UNION
+        SELECT e.`end_date` FROM `${entityTable}` e WHERE e.`object_id`= #{objectId}
+        UNION
+        SELECT aa.`start_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{objectId}
+        UNION
+        SELECT aa.`end_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{objectId}
+    </select>
+
+    <select id="findHistoryObject" parameterType="DomainObjectExample" resultMap="domainObjectResultMap">
+        SELECT e.* FROM `${entityTable}` e WHERE e.`object_id` = #{objectId} AND e.`start_date` = (
+            SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{objectId}
+                AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+    </select>
+
+    <select id="findChildrenPermissionInfo" parameterType="map" resultMap="domainObjectPermissionInfoResultMap">
+        SELECT e.`object_id`, e.`permission_id` FROM `${entity}` e WHERE e.`status` IN ('ACTIVE', 'INACTIVE')
+        AND e.`parent_id` = #{parentId} AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent
+          WHERE ent.`entity_table` = #{parentEntity})
+          ORDER BY e.`object_id`
+        <include refid="domainObjectLimit"/>
+    </select>
+
+    <update id="updatePermissionId" parameterType="map">
+        UPDATE `${entity}` e SET e.`permission_id` = #{permissionId} WHERE e.`status` IN ('ACTIVE', 'INACTIVE')
+          AND e.`object_id` = #{objectId}
+    </update>
+
+    <select id="findChildrenActivityInfo" parameterType="map" resultType="long">
+        SELECT e.`object_id` FROM `${entity}` e WHERE e.`parent_id` = #{parentId} AND
+        e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity_table` = #{parentEntity})
+        ORDER BY e.`object_id`
+        <include refid="domainObjectLimit"/>
+    </select>
+
+    <update id="updateChildrenActivity" parameterType="map">
+        UPDATE `${entity}` e SET e.`status` = #{status} WHERE e.`parent_id` = #{parentId} AND
+        e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity_table` = #{parentEntity})
+        AND
+        <choose>
+            <when test="enabled">
+                e.`status` = 'ACTIVE'
+            </when>
+            <otherwise>
+                e.`status` = 'INACTIVE'
+            </otherwise>
+        </choose>
+    </update>
+
+    <delete id="deleteDomainObject" parameterType="map">
+        DELETE FROM `${entityTable}` WHERE `object_id` = #{objectId}
+    </delete>
+
+    <select id="childrenExistCheck" parameterType="map" resultType="int">
+        SELECT 1 FROM DUAL WHERE EXISTS(SELECT e.`object_id` FROM `${childEntity}` e WHERE e.`parent_id` = #{objectId}
+        AND e.`parent_entity_id` = #{entityId})
+    </select>
+
+    <select id="referenceExistCheck" parameterType="map" resultType="int">
+        SELECT 1 FROM DUAL WHERE EXISTS(SELECT a.`object_id` FROM `${referenceEntity}_attribute` a
+          WHERE a.`value_id` = #{objectId} AND a.`attribute_type_id` = #{attributeTypeId})
+    </select>
+
+    <!--Attribute-->
+
+    <insert id="insertAttribute" parameterType="org.complitex.common.entity.Attribute">
+        INSERT INTO `${entityTable}_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `status`,
+          `start_date`, `end_date`, `value_id`, `value_type_id`)
+        VALUES (#{attributeId}, #{objectId}, #{attributeTypeId}, #{status}, #{startDate}, #{endDate}, #{valueId},
+          #{valueTypeId})
+    </insert>
+
+    <update id="updateAttribute" parameterType="org.complitex.common.entity.Attribute">
+        UPDATE `${entityTable}_attribute` SET `end_date` = #{endDate}, `status` = #{status}
+        WHERE `attribute_id` = #{attributeId} AND `object_id` = #{objectId} AND `attribute_type_id` = #{attributeTypeId}
+          AND `start_date` = #{startDate}
+    </update>
+
+    <update id="archiveAttributes" parameterType="map">
+        UPDATE `${entityTable}_attribute` SET `end_date` = #{endDate}, `status` = 'ARCHIVE' WHERE
+        `status` IN ('ACTIVE', 'INACTIVE') AND
+        `attribute_type_id` IN
+        <foreach item="id" collection="attributeTypeIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="archiveObjectAttributes" parameterType="map">
+        UPDATE `${entityTable}_attribute` SET `end_date` = #{endDate}, `status` = 'ARCHIVE' WHERE
+        `object_id` = #{objectId} AND `status` IN ('ACTIVE', 'INACTIVE')
+    </update>
+
+    <select id="selectAttribute" parameterType="map" resultMap="attributeResultMap">
+        SELECT aa.* FROM `${entityTable}_attribute` aa WHERE  aa.`object_id` = #{id} AND aa.`status` = 'ACTIVE'
+          ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
+    </select>
+
+    <select id="findHistoryAttributes" parameterType="org.complitex.common.entity.example.DomainObjectExample"
+            resultMap="attributeResultMap">
+        SELECT aa.*
+        FROM `${entityTable}_attribute` aa
+        WHERE aa.`object_id` = #{objectId}
+        AND aa.`start_date` <![CDATA[ <= ]]> #{startDate} AND ((aa.`end_date` IS NULL) OR (aa.`end_date` <![CDATA[ > ]]> #{startDate}))
+        ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
+    </select>
+
+    <delete id="deleteAttribute" parameterType="map">
+        DELETE FROM `${entityTable}_attribute` WHERE `object_id` = #{objectId}
+    </delete>
+
+    <!--StringCulture-->
+
+    <insert id="insertStringCulture" parameterType="org.complitex.common.entity.StringCulture">
+        insert into `${entityTable}_string_culture`(`id`, `locale_id`, `value`)
+          values (#{object.id}, #{object.localeId}, #{object.value})
+    </insert>
+
+    <select id="selectStringCulture" parameterType="map" resultMap="stringCultureResultMap">
+        SELECT sc.* FROM `${entityTable}_string_culture` sc WHERE sc.`id` = #{id}
+    </select>
+
+    <insert id="insertDescriptionData" parameterType="org.complitex.common.entity.StringCulture">
+        insert into `string_culture`(`id`, `locale_id`, `value`) values (#{id}, #{localeId}, #{value})
+    </insert>
+
+    <delete id="deleteStringCulture" parameterType="map">
+        DELETE FROM `${entityTable}_string_culture` WHERE `id` IN
+        (SELECT a.`value_id` FROM `${entityTable}_attribute` a WHERE a.`object_id` = #{objectId}
+        AND a.`value_type_id` IN
+        <foreach open="(" separator="," close=")" collection="localizedValueTypeIds" item="id">
+            #{id}
+        </foreach>
+        )
+    </delete>
+</mapper>

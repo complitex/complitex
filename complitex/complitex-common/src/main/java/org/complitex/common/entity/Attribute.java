@@ -8,23 +8,20 @@ import java.util.Date;
 import java.util.List;
 
 public class Attribute implements Serializable {
+    private String entityTable;
     private Long attributeId;
-
     private Long objectId;
-
     private Long attributeTypeId;
-
     private Long valueId;
-
     private Long valueTypeId;
-
-    private List<StringCulture> localizedValues;
-
     private Date startDate;
-
     private Date endDate;
 
     private StatusType status = StatusType.ACTIVE;
+
+    private List<StringCulture> localizedValues;
+
+
 
     public StringCulture getStringCulture(Long localeId){
         if (localizedValues != null){
@@ -52,6 +49,14 @@ public class Attribute implements Serializable {
 
     public String getStringValue(java.util.Locale locale){
         return StringCultures.getValue(localizedValues, locale);
+    }
+
+    public String getEntityTable() {
+        return entityTable;
+    }
+
+    public void setEntityTable(String entityTable) {
+        this.entityTable = entityTable;
     }
 
     public Long getAttributeId() {
