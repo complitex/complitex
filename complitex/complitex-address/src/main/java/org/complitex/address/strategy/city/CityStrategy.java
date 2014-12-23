@@ -34,7 +34,7 @@ import java.util.Map;
  */
 @Stateless
 public class CityStrategy extends TemplateStrategy {
-    private static final String CITY_NAMESPACE = CityStrategy.class.getPackage().getName() + ".City";
+    private static final String CITY_NS = CityStrategy.class.getName();
 
     @EJB
     private StringCultureBean stringBean;
@@ -178,7 +178,7 @@ public class CityStrategy extends TemplateStrategy {
         Map<String, Object> params = super.createValidationParams(cityObject, locale);
         Long cityTypeId = getCityType(cityObject);
         params.put("cityTypeId", cityTypeId);
-        List<Long> results = sqlSession().selectList(CITY_NAMESPACE + ".defaultValidation", params);
+        List<Long> results = sqlSession().selectList(CITY_NS + ".defaultValidation", params);
         for (Long result : results) {
             if (!result.equals(cityObject.getObjectId())) {
                 return result;

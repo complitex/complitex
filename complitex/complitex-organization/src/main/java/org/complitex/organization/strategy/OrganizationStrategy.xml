@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.complitex.organization.strategy.Organization">
+<mapper namespace="org.complitex.organization.strategy.OrganizationStrategy">
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
-    <select id="find" resultMap="org.complitex.common.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
+    <select id="selectOrganizations" resultMap="domainObjectResultMap" parameterType="org.complitex.common.entity.example.DomainObjectExample">
         SELECT e.* FROM `organization` e WHERE
-        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
-        <include refid="org.complitex.organization.strategy.Organization.filter"/>
-        <include refid="org.complitex.common.entity.DomainObject.orderBy"/>
-        <include refid="org.complitex.common.entity.DomainObject.limit"/>
+
+        <include refid="domainObjectStatusFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
+        <include refid="organizationFilter"/>
+        <include refid="domainObjectOrderBy"/>
+        <include refid="domainObjectLimit"/>
     </select>
 
-    <sql id="filter">
+    <sql id="organizationFilter">
         <if test="id != null">
             AND e.`object_id` = #{objectId}
         </if>
@@ -59,7 +60,7 @@
         </if>
     </sql>
 
-    <select id="count" resultType="long" parameterType="DomainObjectExample">
+    <select id="selectOrganizationCount" resultType="long" parameterType="DomainObjectExample">
         SELECT COUNT(1) FROM `organization` e WHERE
         <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
         <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
@@ -86,13 +87,13 @@
             WHERE o.`status` IN ('ACTIVE', 'INACTIVE')
     </select>
 
-    <select id="findOrganizationChildrenObjectIds" parameterType="long" resultType="long">
+    <select id="selectOrganizationChildrenObjectIds" parameterType="long" resultType="long">
         SELECT o.`object_id` FROM `organization` o
             LEFT JOIN `organization_attribute` oa ON (oa.`status` = 'ACTIVE' AND oa.`object_id` = o.`object_id` AND oa.`attribute_type_id` = 903)
             WHERE oa.`value_id` = #{parentId} AND o.`status` IN ('ACTIVE', 'INACTIVE')
     </select>
 
-    <select id="findOrganizationChildrenPermissionInfo" parameterType="long" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
+    <select id="selectOrganizationChildrenPermissionInfo" parameterType="long" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
         SELECT DISTINCT o.`object_id`, o.`permission_id` FROM `organization` o
             LEFT JOIN `organization_attribute` oa ON (oa.`status` = 'ACTIVE' AND oa.`object_id` = o.`object_id` AND oa.`attribute_type_id` = 903)
             WHERE oa.`value_id` = #{parentId} AND o.`status` IN ('ACTIVE', 'INACTIVE')

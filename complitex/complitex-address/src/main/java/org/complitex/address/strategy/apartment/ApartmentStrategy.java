@@ -33,6 +33,7 @@ import java.util.Map;
  */
 @Stateless
 public class ApartmentStrategy extends TemplateStrategy {
+    public static final String APARTMENT_NS = ApartmentStrategy.class.getName();
 
     @EJB
     private StringCultureBean stringBean;
@@ -42,7 +43,7 @@ public class ApartmentStrategy extends TemplateStrategy {
      */
     public static final long NAME = 100L;
     public static final long PARENT_ENTITY_ID = 500L;
-    private static final String APARTMENT_NAMESPACE = ApartmentStrategy.class.getPackage().getName() + ".Apartment";
+
 
     @Override
     protected List<Long> getListAttributeTypes() {
@@ -179,6 +180,6 @@ public class ApartmentStrategy extends TemplateStrategy {
         params.put("buildingId", buildingId);
         params.put("number", apartment);
 
-        return sqlSession().selectList(APARTMENT_NAMESPACE + ".selectApartmentObjectIds", params);
+        return sqlSession().selectList(APARTMENT_NS + ".selectApartmentObjectIds", params);
     }
 }

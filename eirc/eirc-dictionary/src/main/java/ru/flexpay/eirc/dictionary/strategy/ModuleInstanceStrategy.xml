@@ -3,13 +3,13 @@
 
 <mapper namespace="ru.flexpay.eirc.dictionary.strategy.ModuleInstanceStrategy">
 
-    <select id="find" resultMap="org.complitex.common.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
+    <select id="selectDomainObject" resultMap="domainObjectResultMap" parameterType="DomainObjectExample">
         SELECT e.* FROM `module_instance` e WHERE
-        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
-        <include refid="ru.flexpay.eirc.dictionary.strategy.ModuleInstanceStrategy.filter"/>
-        <include refid="org.complitex.common.entity.DomainObject.orderBy"/>
-        <include refid="org.complitex.common.entity.DomainObject.limit"/>
+        <include refid="domainObjectStatusFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
+        <include refid="filter"/>
+        <include refid="domainObjectOrderBy"/>
+        <include refid="domainObjectLimit"/>
     </select>
 
     <sql id="filter">
@@ -44,11 +44,11 @@
         </if>
     </sql>
 
-    <select id="count" resultType="long" parameterType="DomainObjectExample">
+    <select id="selectDomainObjectCount" resultType="long" parameterType="DomainObjectExample">
         SELECT COUNT(1) FROM `module_instance` e WHERE
-        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
-        <include refid="ru.flexpay.eirc.dictionary.strategy.ModuleInstanceStrategy.filter"/>
+        <include refid="domainObjectStatusFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
+        <include refid="filter"/>
     </select>
 
     <select id="selectModuleInstanceId" parameterType="map" resultType="long">

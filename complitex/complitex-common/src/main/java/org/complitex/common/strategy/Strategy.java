@@ -37,6 +37,8 @@ import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.newTreeSet;
 
 public abstract class Strategy extends AbstractBean implements IStrategy {
+    public final static String NS = Strategy.class.getName();
+
     private static final String RESOURCE_BUNDLE = Strategy.class.getName();
     private final Logger log = LoggerFactory.getLogger(Strategy.class);
 
@@ -239,7 +241,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     protected void loadStringCultures(String dataSource, Attribute attribute) {
-        List<StringCulture> strings = stringBean.findStrings(dataSource, attribute.getValueId(), getEntityTable());
+        List<StringCulture> strings = stringBean.getStringCultures(dataSource, attribute.getValueId(), getEntityTable());
         attribute.setLocalizedValues(strings);
     }
 
@@ -258,7 +260,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
             example.setAdmin(true);
         }
 
-        DomainObject object = (dataSource == null ? sqlSession(): sqlSession(dataSource)).selectOne(DOMAIN_OBJECT_NAMESPACE + "." + FIND_BY_ID_OPERATION, example);
+        DomainObject object = (dataSource == null ? sqlSession(): sqlSession(dataSource)).selectOne(NS + ".selectDomainObject", example);
 
         if (object != null) {
             loadAttributes(dataSource, object);
@@ -280,8 +282,8 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     @Override
     public Long getObjectId(String externalId) {
-        return (Long) sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + ".selectObjectIdByExternalId",
-                ImmutableMap.of("entityTable", getEntityTable(), "externalId", externalId));
+        return (Long) sqlSession().selectOne(NS + ".selectDomainObjectId", ImmutableMap.of("entityTable", getEntityTable(),
+                "externalId", externalId));
     }
 
 
@@ -374,7 +376,8 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         prepareExampleForPermissionCheck(example);
         extendOrderBy(example);
 
-        List<DomainObject> objects = sqlSession().selectList(DOMAIN_OBJECT_NAMESPACE + "." + FIND_OPERATION, example);
+        List<DomainObject> objects = sqlSession().selectList(NS + ".selectDomainObjects", example);
+
         for (DomainObject object : objects) {
             loadAttributes(object);
             //load subject ids
@@ -399,7 +402,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
 
-        return (Long) sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + "." + COUNT_OPERATION, example);
+        return (Long) sqlSession().selectOne(NS + ".selectDomainObjectCount", example);
     }
 
     /**
@@ -438,17 +441,19 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         }
 
         if (attribute.getValueId() != null || getEntity().getAttributeType(attribute.getAttributeTypeId()).isMandatory()) {
-            sqlSession().insert(getInsertAttributeStatement(), new Parameter(getEntityTable(), attribute));
+            attribute.setEntityTable(getEntityTable());
+
+            sqlSession().insert(getInsertAttributeStatement(), attribute);
         }
     }
 
     protected String getInsertAttributeStatement() {
-        return ATTRIBUTE_NAMESPACE + "." + INSERT_OPERATION;
+        return NS + ".insertAttribute";
     }
 
 
     protected Long insertStrings(long attributeTypeId, List<StringCulture> strings) {
-        return stringBean.insertStrings(strings, getEntityTable());
+        return stringBean.save(strings, getEntityTable());
     }
 
 
@@ -480,7 +485,9 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     protected void insertDomainObject(DomainObject object, Date insertDate) {
         object.setStartDate(insertDate);
-        sqlSession().insert(DOMAIN_OBJECT_NAMESPACE + "." + INSERT_OPERATION, new Parameter(getEntityTable(), object));
+        object.setEntityTable(getEntityTable());
+
+        sqlSession().insert(NS + ".insertDomainObject", object);
     }
 
 
@@ -492,7 +499,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                     put("endDate", endDate).
                     put("attributeTypeIds", attributeTypeIds).
                     build();
-            sqlSession().update(ATTRIBUTE_NAMESPACE + "." + ARCHIVE_ATTRIBUTES_OPERATION, params);
+            sqlSession().update(NS + ".archiveAttributes", params);
         }
     }
 
@@ -619,7 +626,9 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                 || (!Objects.equals(oldObject.getExternalId(), newObject.getExternalId()))) {
             oldObject.setStatus(StatusType.ARCHIVE);
             oldObject.setEndDate(updateDate);
-            sqlSession().update(DOMAIN_OBJECT_NAMESPACE + "." + UPDATE_OPERATION, new Parameter(getEntityTable(), oldObject));
+            oldObject.setEntityTable(getEntityTable());
+
+            sqlSession().update(NS + ".updateDomainObject", oldObject);
             insertUpdatedDomainObject(newObject, updateDate);
         }
     }
@@ -628,7 +637,9 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     protected void archiveAttribute(Attribute attribute, Date archiveDate) {
         attribute.setEndDate(archiveDate);
         attribute.setStatus(StatusType.ARCHIVE);
-        sqlSession().update(ATTRIBUTE_NAMESPACE + "." + UPDATE_OPERATION, new Parameter(getEntityTable(), attribute));
+        attribute.setEntityTable(getEntityTable());
+
+        sqlSession().update(NS + ".updateAttribute", attribute);
     }
 
     @Override
@@ -647,7 +658,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         new Thread(new Runnable() {
 
             @Override
-            public void run() {
+            public void run() { //todo thread to async
                 long start = System.currentTimeMillis();
                 try {
                     propagatePermissions(newObject);
@@ -685,7 +696,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         params.put("start", start);
         params.put("size", size);
 
-        return sqlSession().selectList(DOMAIN_OBJECT_NAMESPACE + "." + FIND_CHILDREN_PERMISSION_INFO_OPERATION, params);
+        return sqlSession().selectList(NS + ".selectChildrenPermissionInfo", params);
     }
 
 
@@ -752,7 +763,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         params.put("objectId", objectId);
         params.put("permissionId", permissionId);
 
-        sqlSession().update(DOMAIN_OBJECT_NAMESPACE + ".updatePermissionId", params);
+        sqlSession().update(NS + ".updatePermissionId", params);
     }
 
 
@@ -760,18 +771,20 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         insertDomainObject(object, updateDate);
     }
 
-
     @Override
     public void archive(DomainObject object, Date endDate) {
         object.setStatus(StatusType.ARCHIVE);
         object.setEndDate(endDate);
-        sqlSession().update(DOMAIN_OBJECT_NAMESPACE + "." + UPDATE_OPERATION, new Parameter(getEntityTable(), object));
+        object.setEntityTable(getEntityTable());
+
+        sqlSession().update(NS + ".updateDomainObject", object);
 
         Map<String, Object> params = ImmutableMap.<String, Object>builder().
                 put("entityTable", getEntityTable()).
                 put("endDate", endDate).
                 put("objectId", object.getObjectId()).build();
-        sqlSession().update(ATTRIBUTE_NAMESPACE + ".archiveObjectAttributes", params);
+
+        sqlSession().update(NS + ".archiveObjectAttributes", params);
     }
 
     /*
@@ -865,8 +878,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         DomainObjectExample example = new DomainObjectExample(id, getEntityTable());
 
         example.setStartDate(date);
-        Map<String, Object> result = (Map<String, Object>) sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + "." + FIND_PARENT_IN_SEARCH_COMPONENT_OPERATION,
-                example);
+        Map<String, Object> result = sqlSession().selectOne(NS + ".selectParentInSearchComponent", example);
         if (result != null) {
             Long parentId = (Long) result.get("parentId");
             String parentEntity = (String) result.get("parentEntity");
@@ -954,7 +966,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     public TreeSet<Date> getHistoryDates(long objectId) {
         DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable());
 
-        List<Date> results = sqlSession().selectList(DOMAIN_OBJECT_NAMESPACE + ".historyDates", example);
+        List<Date> results = sqlSession().selectList(NS + ".historyDates", example);
 
         return newTreeSet(filter(results, new Predicate<Date>() {
 
@@ -971,7 +983,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable());
         example.setStartDate(date);
 
-        DomainObject object = sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + "." + FIND_HISTORY_OBJECT_OPERATION, example);
+        DomainObject object = sqlSession().selectOne(NS + ".selectHistoryObject", example);
         if (object == null) {
             return null;
         }
@@ -988,7 +1000,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable());
         example.setStartDate(date);
 
-        return sqlSession().selectList(ATTRIBUTE_NAMESPACE + "." + FIND_HISTORY_ATTRIBUTES_OPERATION, example);
+        return sqlSession().selectList(NS + ".selectHistoryAttributes", example);
     }
 
     /*
@@ -1032,12 +1044,14 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     @Override
     public Long performDefaultValidation(DomainObject object, Locale locale) {
         Map<String, Object> params = createValidationParams(object, locale);
-        List<Long> results = sqlSession().selectList(DOMAIN_OBJECT_NAMESPACE + ".defaultValidation", params);
+        List<Long> results = sqlSession().selectList(NS + ".defaultValidation", params);
+
         for (Long result : results) {
             if (!result.equals(object.getObjectId())) {
                 return result;
             }
         }
+
         return null;
     }
 
@@ -1192,7 +1206,8 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         params.put("parentEntity", getEntityTable());
         params.put("start", start);
         params.put("size", size);
-        List<Long> results = sqlSession().selectList(DOMAIN_OBJECT_NAMESPACE + "." + FIND_CHILDREN_ACTIVITY_INFO_OPERATION, params);
+        List<Long> results = sqlSession().selectList(NS + ".selectChildrenActivityInfo", params);
+
         return newHashSet(results);
     }
 
@@ -1204,7 +1219,8 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         params.put("parentEntity", getEntityTable());
         params.put("enabled", enabled);
         params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
-        sqlSession().update(DOMAIN_OBJECT_NAMESPACE + "." + UPDATE_CHILDREN_ACTIVITY_OPERATION, params);
+
+        sqlSession().update(NS + ".updateChildrenActivity", params);
     }
 
     @Override
@@ -1224,7 +1240,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         deleteChecks(objectId, locale);
         deleteStrings(objectId);
         deleteAttribute(objectId);
-        deleteObject(objectId, locale);
+        deleteDomainObject(objectId, locale);
     }
 
 
@@ -1246,16 +1262,18 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         Map<String, Object> params = newHashMap();
         params.put("entityTable", getEntityTable());
         params.put("objectId", objectId);
-        sqlSession().delete(ATTRIBUTE_NAMESPACE + "." + DELETE_OPERATION, params);
+
+        sqlSession().delete(NS + ".deleteAttribute", params);
     }
 
 
-    protected void deleteObject(long objectId, Locale locale) throws DeleteException {
+    protected void deleteDomainObject(long objectId, Locale locale) throws DeleteException {
         Map<String, Object> params = newHashMap();
         params.put("entityTable", getEntityTable());
         params.put("objectId", objectId);
+
         try {
-            sqlSession().delete(DOMAIN_OBJECT_NAMESPACE + "." + DELETE_OPERATION, params);
+            sqlSession().delete(NS + ".deleteDomainObject", params);
         } catch (Exception e) {
             SQLException sqlException = null;
             Throwable t = e;
@@ -1296,8 +1314,8 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         params.put("childEntity", childEntity);
         params.put("objectId", objectId);
         params.put("entityId", getEntity().getId());
-        Object result = sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + ".childrenExistCheck", params);
-        return result != null;
+
+        return sqlSession().selectOne(NS + ".childrenExistCheck", params) != null;
     }
 
 
@@ -1327,7 +1345,9 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
                         params.put("referenceEntity", referenceEntity);
                         params.put("objectId", objectId);
                         params.put("attributeTypeId", attributeTypeId);
-                        Object result = sqlSession().selectOne(DOMAIN_OBJECT_NAMESPACE + ".referenceExistCheck", params);
+
+                        Object result = sqlSession().selectOne(NS + ".referenceExistCheck", params);
+
                         if (result != null) {
                             throw new DeleteException(ResourceUtil.getString(RESOURCE_BUNDLE, "delete_error", locale));
                         }

@@ -104,7 +104,7 @@ public class EntityBean extends AbstractBean {
         attributeType.setStartDate(startDate);
         attributeType.setEntityId(entityId);
 
-        Long stringId = stringBean.insertStrings(attributeType.getAttributeNames(), null);
+        Long stringId = stringBean.save(attributeType.getAttributeNames(), null);
 
         attributeType.setAttributeNameId(stringId);
 

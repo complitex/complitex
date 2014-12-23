@@ -15,7 +15,7 @@ import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.domain.validate.IValidator;
-import org.complitex.organization.strategy.AbstractOrganizationStrategy;
+import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.entity.OsznOrganization;
 import org.complitex.osznconnection.organization.strategy.entity.RemoteDataSource;
 import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociation;
@@ -38,7 +38,7 @@ import static org.complitex.osznconnection.organization_type.strategy.OsznOrgani
  * @author Artem
  */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
-public class OsznOrganizationStrategy extends AbstractOrganizationStrategy<DomainObject> {
+public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject> {
 
 
     /**
@@ -323,7 +323,7 @@ public class OsznOrganizationStrategy extends AbstractOrganizationStrategy<Domai
 
         deleteStrings(objectId);
         deleteAttribute(objectId);
-        deleteObject(objectId, locale);
+        deleteDomainObject(objectId, locale);
     }
 
     /**
@@ -441,7 +441,7 @@ public class OsznOrganizationStrategy extends AbstractOrganizationStrategy<Domai
          * or root directory for loading and saving request files
          * then string value should be inserted as is and not upper cased. */
         return ATTRIBUTE_TYPES_WITH_CUSTOM_STRING_PROCESSING.contains(attributeTypeId)
-                ? stringBean.insertStrings(strings, getEntityTable(), false)
+                ? stringBean.save(strings, getEntityTable(), false)
                 : super.insertStrings(attributeTypeId, strings);
     }
 

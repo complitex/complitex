@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.complitex.address.strategy.street.Street">
+<mapper namespace="org.complitex.address.strategy.street.StreetStrategy">
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
-    <select id="find" resultMap="org.complitex.common.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
+    <select id="selectDomainObjects" resultMap="domainObjectResultMap" parameterType="DomainObjectExample">
         SELECT e.* FROM `street` e WHERE
-        <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.orderBy"/>
-        <include refid="org.complitex.common.entity.DomainObject.limit"/>
+        <include refid="streetFilter"/>
+        <include refid="domainObjectOrderBy"/>
+        <include refid="domainObjectLimit"/>
     </select>
     
     <sql id="streetFilter">
-        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.filter"/>
+        <include refid="domainObjectStatusFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
+        <include refid="domainObjectFilter"/>
         
         <if test="additionalParams != null and additionalParams['district'] != null">
             AND (EXISTS(
@@ -38,9 +38,8 @@
         </if>
     </sql>
 
-    <select id="count" resultType="long" parameterType="DomainObjectExample">
-        SELECT COUNT(1) FROM `street` e WHERE
-        <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
+    <select id="selectDomainObjectCount" resultType="long" parameterType="DomainObjectExample">
+        SELECT COUNT(1) FROM `street` e WHERE <include refid="streetFilter"/>
     </select>
 
     <!-- Validation -->

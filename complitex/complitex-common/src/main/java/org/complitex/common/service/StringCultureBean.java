@@ -1,13 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.service;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.Parameter;
 import org.complitex.common.entity.StringCulture;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
 
@@ -17,21 +12,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- *
- * @author Artem
- */
+import static org.complitex.common.strategy.Strategy.NS;
+
 @Stateless
 public class StringCultureBean extends AbstractBean {
-    private static final String MAPPING_NAMESPACE = "org.complitex.common.entity.StringCulture";
-
     @EJB
     private SequenceBean sequenceBean;
 
     @EJB
     private LocaleBean localeBean;
 
-    public Long insertStrings(List<StringCulture> strings, String entityTable, boolean upperCase) {
+    public Long save(List<StringCulture> strings, String entityTable, boolean upperCase) {
         if (strings != null && !strings.isEmpty()) {
             boolean allValuesAreEmpty = true;
             for (StringCulture string : strings) {
@@ -48,7 +39,7 @@ public class StringCultureBean extends AbstractBean {
             for (StringCulture string : strings) {
                 if (!Strings.isEmpty(string.getValue())) {
                     string.setId(stringId);
-                    insert(string, entityTable, upperCase);
+                    save(string, entityTable, upperCase);
                 }
             }
             return stringId;
@@ -56,45 +47,40 @@ public class StringCultureBean extends AbstractBean {
         return null;
     }
 
-    /**
-     * Inserts strings in upper case by default.
-     * @param strings
-     * @param entityTable
-     * @return String's generated ID.
-     */
-
-    public Long insertStrings(List<StringCulture> strings, String entityTable) {
-        return insertStrings(strings, entityTable, true);
+    public Long save(List<StringCulture> strings, String entityTable) {
+        return save(strings, entityTable, true);
     }
 
-
-    protected void insert(StringCulture string, String entityTable, boolean upperCase) {
+    protected void save(StringCulture stringCulture, String entityTable, boolean upperCase) {
         //if string should be in upper case:
         if (upperCase) {
             //find given string culture's locale
-            final java.util.Locale locale = localeBean.getLocale(string.getLocaleId());
+            final java.util.Locale locale = localeBean.getLocale(stringCulture.getLocaleId());
 
             //upper case string culture's value
-            string.setValue(string.getValue().toUpperCase(locale));
+            stringCulture.setValue(stringCulture.getValue().toUpperCase(locale));
         }
 
         if (Strings.isEmpty(entityTable)) {
-            sqlSession().insert(MAPPING_NAMESPACE + ".insertDescriptionData", string);
+            sqlSession().insert(NS + ".insertDescriptionData", stringCulture);
         } else {
-            sqlSession().insert(MAPPING_NAMESPACE + ".insert", new Parameter(entityTable, string));
+            stringCulture.setEntityTable(entityTable);
+
+            sqlSession().insert(NS + ".insertStringCulture", stringCulture);
         }
     }
 
-    public List<StringCulture> findStrings(long id, String entityTable) {
-        return findStrings(null, id, entityTable);
+    public List<StringCulture> getStringCultures(long id, String entityTable) {
+        return getStringCultures(null, id, entityTable);
     }
 
-    public List<StringCulture> findStrings(String dataSource, long id, String entityTable) {
+    public List<StringCulture> getStringCultures(String dataSource, long id, String entityTable) {
         Map<String, Object> params = ImmutableMap.<String, Object>builder().
                 put("entityTable", entityTable).
                 put("id", id).
                 build();
-        return (dataSource == null? sqlSession() : sqlSession(dataSource)).selectList(MAPPING_NAMESPACE + ".find", params);
+
+        return (dataSource == null? sqlSession() : sqlSession(dataSource)).selectList(NS + ".selectStringCulture", params);
     }
 
     public void delete(String entityTable, long objectId, Set<Long> localizedValueTypeIds) {
@@ -102,12 +88,14 @@ public class StringCultureBean extends AbstractBean {
         params.put("entityTable", entityTable);
         params.put("objectId", objectId);
         params.put("localizedValueTypeIds", localizedValueTypeIds);
-        sqlSession().delete(MAPPING_NAMESPACE + ".delete", params);
+
+        sqlSession().delete(NS + ".deleteStringCulture", params);
     }
 
     @Override
     public void setSqlSessionFactoryBean(SqlSessionFactoryBean sqlSessionFactoryBean) {
         super.setSqlSessionFactoryBean(sqlSessionFactoryBean);
+
         localeBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         sequenceBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
     }

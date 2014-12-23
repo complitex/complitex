@@ -37,6 +37,7 @@ import java.util.Map;
  */
 @Stateless
 public class RoomStrategy extends TemplateStrategy {
+    public static final String ROOM_NS = RoomStrategy.class.getName();
 
     @EJB
     private StringCultureBean stringBean;
@@ -45,7 +46,6 @@ public class RoomStrategy extends TemplateStrategy {
      * Attribute type ids
      */
     public static final Long NAME = 200L;
-    private static final String ROOM_NAMESPACE = RoomStrategy.class.getPackage().getName() + ".Room";
 
     @Override
     public String getEntityTable() {
@@ -194,6 +194,6 @@ public class RoomStrategy extends TemplateStrategy {
         params.put("apartmentId", apartmentId);
         params.put("number", room);
 
-        return sqlSession().selectList(ROOM_NAMESPACE + ".selectRoomObjectIds", params);
+        return sqlSession().selectList(ROOM_NS + ".selectRoomObjectIds", params);
     }
 }

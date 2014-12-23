@@ -36,10 +36,10 @@ import java.util.*;
  *
  * @author Artem
  */
-public abstract class AbstractOrganizationStrategy<T extends DomainObject> extends TemplateStrategy
-        implements IOrganizationStrategy<T> {
-    private static final String NS = AbstractOrganizationStrategy.class.getPackage().getName() + ".Organization";
-    private static final String RESOURCE_BUNDLE = AbstractOrganizationStrategy.class.getName();
+public abstract class OrganizationStrategy<T extends DomainObject> extends TemplateStrategy implements IOrganizationStrategy<T> {
+    public static final String ORGANIZATION_NS = OrganizationStrategy.class.getName();
+
+    private static final String RESOURCE_BUNDLE = OrganizationStrategy.class.getName();
 
     @EJB
     private LocaleBean localeBean;
@@ -196,7 +196,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
     }
 
     protected List<DomainObjectPermissionInfo> getTreeChildrenPermissionInfo(long parentId) {
-        List<DomainObjectPermissionInfo> childrenPermissionInfo = sqlSession().selectList(NS
+        List<DomainObjectPermissionInfo> childrenPermissionInfo = sqlSession().selectList(ORGANIZATION_NS
                 + ".findOrganizationChildrenPermissionInfo", parentId);
         List<DomainObjectPermissionInfo> treeChildrenPermissionInfo = Lists.newArrayList(childrenPermissionInfo);
         for (DomainObjectPermissionInfo childPermissionInfo : childrenPermissionInfo) {
@@ -237,7 +237,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         }
         extendOrderBy(example);
 
-        List<T> organizations = sqlSession().selectList(NS + "." + FIND_OPERATION, example);
+        List<T> organizations = sqlSession().selectList(ORGANIZATION_NS + ".selectOrganizations", example);
 
         for (DomainObject object : organizations) {
             loadAttributes(object);
@@ -255,12 +255,13 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         }
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
-        return sqlSession().selectOne(NS + "." + COUNT_OPERATION, example);
+
+        return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationCount", example);
     }
 
     @Override
     public Long validateCode(Long id, String code) {
-        List<Long> results = sqlSession().selectList(NS + ".validateCode", code);
+        List<Long> results = sqlSession().selectList(ORGANIZATION_NS + ".validateCode", code);
         for (Long result : results) {
             if (!result.equals(id)) {
                 return result;
@@ -274,7 +275,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         Map<String, Object> params = Maps.newHashMap();
         params.put("name", name);
         params.put("localeId", localeBean.convert(locale).getId());
-        List<Long> results = sqlSession().selectList(NS + ".validateName", params);
+        List<Long> results = sqlSession().selectList(ORGANIZATION_NS + ".validateName", params);
         for (Long result : results) {
             if (!result.equals(id)) {
                 return result;
@@ -314,7 +315,7 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
 
     @Override
     public Set<Long> getTreeChildrenOrganizationIds(long parentOrganizationId) {
-        List<Long> results = sqlSession().selectList(NS + ".findOrganizationChildrenObjectIds",
+        List<Long> results = sqlSession().selectList(ORGANIZATION_NS + ".findOrganizationChildrenObjectIds",
                 parentOrganizationId);
         Set<Long> childrenIds = Sets.newHashSet(results);
         Set<Long> treeChildrenIds = Sets.newHashSet(childrenIds);
@@ -349,7 +350,8 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
         params.put("childrenIds", childrenIds);
         params.put("enabled", enabled);
         params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
-        sqlSession().update(NS + "." + UPDATE_CHILDREN_ACTIVITY_OPERATION, params);
+
+        sqlSession().update(ORGANIZATION_NS + ".updateChildrenActivity", params);
     }
 
     @Override
@@ -378,11 +380,11 @@ public abstract class AbstractOrganizationStrategy<T extends DomainObject> exten
 
     @Override
     public Long getObjectId(String externalId) {
-        return sqlSession().selectOne(NS + ".selectOrganizationObjectId", externalId);
+        return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationObjectId", externalId);
     }
 
     public Long getObjectIdByCode(String code) {
-        return sqlSession().selectOne(NS + ".selectOrganizationObjectIdByCode", code);
+        return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationObjectIdByCode", code);
     }
 
     @Override

@@ -16,7 +16,7 @@ import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.domain.validate.IValidator;
-import org.complitex.organization.strategy.AbstractOrganizationStrategy;
+import org.complitex.organization.strategy.OrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
@@ -35,7 +35,7 @@ import java.util.Map;
  * @author Artem
  */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
-public class EircOrganizationStrategy extends AbstractOrganizationStrategy<DomainObject> {
+public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject> {
     /**
      * KPP. It is EIRC only attribute.
      */
@@ -289,7 +289,7 @@ public class EircOrganizationStrategy extends AbstractOrganizationStrategy<Domai
 
         deleteStrings(objectId);
         deleteAttribute(objectId);
-        deleteObject(objectId, locale);
+        deleteDomainObject(objectId, locale);
     }
 
     @Override
@@ -298,7 +298,7 @@ public class EircOrganizationStrategy extends AbstractOrganizationStrategy<Domai
          * or root directory for loading and saving request files
          * then string value should be inserted as is and not upper cased. */
         return ALL_ATTRIBUTE_TYPES.contains(attributeTypeId)
-                ? stringBean.insertStrings(strings, getEntityTable(), false)
+                ? stringBean.save(strings, getEntityTable(), false)
                 : super.insertStrings(attributeTypeId, strings);
     }
 

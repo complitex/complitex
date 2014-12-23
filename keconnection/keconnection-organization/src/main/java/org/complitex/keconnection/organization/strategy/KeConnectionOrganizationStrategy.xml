@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.complitex.keconnection.organization.strategy.Organization">
-
-    <resultMap id="organization" type="org.complitex.keconnection.organization.strategy.entity.Organization"
-                    extends="org.complitex.common.entity.DomainObject.DomainObject">
+<mapper namespace="org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy">
+    <resultMap id="organizationResultMap" type="org.complitex.keconnection.organization.strategy.entity.Organization"
+                    extends="domainResultMap">
            <result column="parent_short_name" property="parentShortName"/>
     </resultMap>
     
@@ -27,26 +26,23 @@
         </if>
     </sql>
     
-    <select id="find" resultMap="org.complitex.keconnection.organization.strategy.Organization.organization" 
-                parameterType="DomainObjectExample">
+    <select id="selectOrganizations" resultMap="organizationResultMap" parameterType="org.complitex.common.entity.example.DomainObjectExample">
         SELECT e.*, IFNULL(pn.`value`, pn_sys.`value`) `parent_short_name` 
-        FROM `organization` e
-            <include refid="org.complitex.keconnection.organization.strategy.Organization.join"/>
+        FROM `organization` e <include refid="join"/>
         WHERE
-        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
-        <include refid="org.complitex.keconnection.organization.strategy.Organization.filter"/>
-        <include refid="org.complitex.common.entity.DomainObject.orderBy"/>
-        <include refid="org.complitex.common.entity.DomainObject.limit"/>
+        <include refid="domainObjectStatusFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
+        <include refid="filter"/>
+        <include refid="domainObjectOrderBy"/>
+        <include refid="domainObjectLimit"/>
     </select>
     
-    <select id="count" resultType="long" parameterType="DomainObjectExample">
-        SELECT COUNT(1) FROM `organization` e 
-            <include refid="org.complitex.keconnection.organization.strategy.Organization.join"/>
+    <select id="selectOrganizationCount" resultType="long" parameterType="org.complitex.common.entity.example.DomainObjectExample">
+        SELECT COUNT(1) FROM `organization` e <include refid="join"/>
         WHERE
-        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
-        <include refid="org.complitex.keconnection.organization.strategy.Organization.filter"/>
+        <include refid="domainObjectStatusFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
+        <include refid="filter"/>
     </select>
     
     <select id="findOperatingMonthDate" parameterType="long" resultType="date">

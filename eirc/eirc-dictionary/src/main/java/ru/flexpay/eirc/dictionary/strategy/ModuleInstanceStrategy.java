@@ -58,7 +58,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
 
     public static final List<Long> CUSTOM_ATTRIBUTES = ImmutableList.of(PRIVATE_KEY, ORGANIZATION);
 
-    private static final String MODULE_INSTANCE_NAMESPACE = ModuleInstanceStrategy.class.getName();
+    private static final String MODULE_INSTANCE_NS = ModuleInstanceStrategy.class.getName();
 
     @Override
     protected List<Long> getListAttributeTypes() {
@@ -147,7 +147,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
 
         params.put("uniqueIndex", uniqueIndex);
 
-        return sqlSession().selectOne(MODULE_INSTANCE_NAMESPACE + ".selectModuleInstanceId", params);
+        return sqlSession().selectOne(MODULE_INSTANCE_NS + ".selectModuleInstanceId", params);
     }
 
     @Override
@@ -162,7 +162,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
         }
         extendOrderBy(example);
 
-        List<DomainObject> organizations = sqlSession().selectList(MODULE_INSTANCE_NAMESPACE + "." + FIND_OPERATION, example);
+        List<DomainObject> organizations = sqlSession().selectList(MODULE_INSTANCE_NS + ".selectDomainObject", example);
 
         for (DomainObject object : organizations) {
             loadAttributes(object);
@@ -211,7 +211,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
          * or root directory for loading and saving request files
          * then string value should be inserted as is and not upper cased. */
         return CUSTOM_ATTRIBUTES.contains(attributeTypeId)
-                ? stringBean.insertStrings(strings, getEntityTable(), false)
+                ? stringBean.save(strings, getEntityTable(), false)
                 : super.insertStrings(attributeTypeId, strings);
     }
 

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.complitex.address.strategy.district.District">
+<mapper namespace="org.complitex.address.strategy.district.DistrictStrategy">
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
     <!-- permission -->
     
-    <select id="findChildrenPermissionInfo" parameterType="map" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
+    <select id="selectChildrenPermissionInfo" parameterType="map" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
         SELECT e.`object_id`, e.`permission_id` FROM `street` e
                 JOIN `building_address` addr ON (addr.`parent_id` = e.`object_id` AND addr.`status` IN ('ACTIVE', 'INACTIVE') AND addr.`parent_entity_id` = 300)
                 JOIN `building` b ON (b.`parent_id` = addr.`object_id` AND b.`status` IN ('ACTIVE', 'INACTIVE'))
@@ -24,11 +24,11 @@
             WHERE e.`status` IN ('ACTIVE', 'INACTIVE')
         
         ORDER BY 1
-        <include refid="org.complitex.common.entity.DomainObject.limit"/>
+        <include refid="domainObjectLimit"/>
     </select>
 
     <!-- disable/enable functionality -->
-    <select id="findChildrenActivityInfo" parameterType="map" resultType="long">
+    <select id="selectChildrenActivityInfo" parameterType="map" resultType="long">
         SELECT e.`object_id` FROM `street` e
                 JOIN `building_address` addr ON (addr.`parent_id` = e.`object_id` AND addr.`status` IN ('ACTIVE', 'INACTIVE') AND addr.`parent_entity_id` = 300)
                 JOIN `building` b ON (b.`parent_id` = addr.`object_id` AND b.`status` IN ('ACTIVE', 'INACTIVE'))

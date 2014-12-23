@@ -48,7 +48,7 @@ import static org.complitex.common.util.StringUtil.toCyrillic;
  */
 @Stateless
 public class StreetStrategy extends TemplateStrategy {
-    private static final String NS = StreetStrategy.class.getPackage().getName() + ".Street";
+    private static final String STREET_NS = StreetStrategy.class.getName();
 
     @EJB
     private StringCultureBean stringBean;
@@ -85,7 +85,7 @@ public class StreetStrategy extends TemplateStrategy {
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
 
-        List<DomainObject> objects = sqlSession().selectList(NS + "." + FIND_OPERATION, example);
+        List<DomainObject> objects = sqlSession().selectList(STREET_NS + ".selectDomainObjects", example);
         for (DomainObject object : objects) {
             loadAttributes(object);
             //load subject ids
@@ -104,7 +104,7 @@ public class StreetStrategy extends TemplateStrategy {
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
 
-        return sqlSession().selectOne(NS + "." + COUNT_OPERATION, example);
+        return sqlSession().selectOne(STREET_NS + ".selectDomainObjectCount", example);
     }
 
     @Override
@@ -246,7 +246,7 @@ public class StreetStrategy extends TemplateStrategy {
         params.put("streetTypeAT", STREET_TYPE);
         Long streetTypeId = getStreetType(streetObject);
         params.put("streetTypeId", streetTypeId);
-        List<Long> results = sqlSession().selectList(NS + ".defaultValidation", params);
+        List<Long> results = sqlSession().selectList(STREET_NS + ".defaultValidation", params);
         for (Long result : results) {
             if (!result.equals(streetObject.getObjectId())) {
                 return result;
@@ -310,11 +310,11 @@ public class StreetStrategy extends TemplateStrategy {
         parameter.put("streetTypeObjectId", streetTypeObjectId);
         parameter.put("streetName", streetName);
 
-        return sqlSession().selectList(NS + ".selectStreetObjectIds", parameter);
+        return sqlSession().selectList(STREET_NS + ".selectStreetObjectIds", parameter);
     }
 
     public List<Long> getStreetObjectIdsByDistrict(Long cityObjectId, String street, Long osznId) {
-        return sqlSession().selectList(NS + ".selectStreetObjectIdsByDistrict",
+        return sqlSession().selectList(STREET_NS + ".selectStreetObjectIdsByDistrict",
                 ImmutableMap.of("street", toCyrillic(street), "cityId", cityObjectId, "osznId", osznId));
     }
 
@@ -327,7 +327,7 @@ public class StreetStrategy extends TemplateStrategy {
         String preparedCorp = removeWhiteSpaces(toCyrillic(buildingCorp));
         params.put("corp", Strings.isEmpty(preparedCorp) ? null : preparedCorp);
 
-        return sqlSession().selectList(NS + ".selectStreetObjectIdsByBuilding", params);
+        return sqlSession().selectList(STREET_NS + ".selectStreetObjectIdsByBuilding", params);
     }
 
 }

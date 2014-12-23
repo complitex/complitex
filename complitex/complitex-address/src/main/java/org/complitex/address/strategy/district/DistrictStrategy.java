@@ -37,7 +37,7 @@ import java.util.Set;
  */
 @Stateless
 public class DistrictStrategy extends TemplateStrategy {
-    private static final String DISTRICT_NAMESPACE = DistrictStrategy.class.getPackage().getName() + ".District";
+    private static final String DISTRICT_NS = DistrictStrategy.class.getName();
 
     @EJB
     private StringCultureBean stringBean;
@@ -171,7 +171,7 @@ public class DistrictStrategy extends TemplateStrategy {
         params.put("parentId", parentId);
         params.put("start", start);
         params.put("size", size);
-        return sqlSession().selectList(DISTRICT_NAMESPACE + "." + FIND_CHILDREN_PERMISSION_INFO_OPERATION, params);
+        return sqlSession().selectList(DISTRICT_NS + ".selectChildrenPermissionInfo", params);
     }
 
     @Override
@@ -183,7 +183,7 @@ public class DistrictStrategy extends TemplateStrategy {
     protected Set<Long> findChildrenActivityInfo(long districtId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("districtId", districtId);
-        List<Long> results = sqlSession().selectList(DISTRICT_NAMESPACE + "." + FIND_CHILDREN_ACTIVITY_INFO_OPERATION, params);
+        List<Long> results = sqlSession().selectList(DISTRICT_NS + ".selectChildrenActivityInfo", params);
         return Sets.newHashSet(results);
     }
 
@@ -193,7 +193,7 @@ public class DistrictStrategy extends TemplateStrategy {
         params.put("enabled", enabled);
         params.put("streetIds", streetIds);
         params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
-        sqlSession().update(DISTRICT_NAMESPACE + "." + UPDATE_CHILDREN_ACTIVITY_OPERATION, params);
+        sqlSession().update(DISTRICT_NS + ".updateChildrenActivity", params);
     }
 
     @Override

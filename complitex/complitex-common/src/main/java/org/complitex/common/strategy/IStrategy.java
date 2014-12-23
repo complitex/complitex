@@ -21,22 +21,8 @@ import java.util.*;
  * @author Artem
  */
 public interface IStrategy {
-    String NS = "org.complitex.common.strategy.Strategy";
 
-    String ARCHIVE_ATTRIBUTES_OPERATION = "archiveAttributes";
-    String COUNT_OPERATION = "count";
-    String FIND_BY_ID_OPERATION = "findById";
-    String FIND_HISTORY_ATTRIBUTES_OPERATION = "findHistoryAttributes";
-    String FIND_HISTORY_OBJECT_OPERATION = "findHistoryObject";
-    String FIND_OPERATION = "find";
-    String FIND_PARENT_IN_SEARCH_COMPONENT_OPERATION = "findParentInSearchComponent";
-    String HAS_HISTORY_OPERATION = "hasHistory";
-    String INSERT_OPERATION = "insert";
-    String UPDATE_OPERATION = "update";
-    String FIND_CHILDREN_PERMISSION_INFO_OPERATION = "findChildrenPermissionInfo";
-    String FIND_CHILDREN_ACTIVITY_INFO_OPERATION = "findChildrenActivityInfo";
-    String UPDATE_CHILDREN_ACTIVITY_OPERATION = "updateChildrenActivity";
-    String DELETE_OPERATION = "delete";
+
     
     void archive(DomainObject object, Date endDate);
     

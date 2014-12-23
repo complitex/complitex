@@ -18,7 +18,7 @@ import org.complitex.keconnection.organization.strategy.entity.Organization;
 import org.complitex.keconnection.organization.strategy.web.edit.KeConnectionOrganizationEditComponent;
 import org.complitex.keconnection.organization.strategy.web.list.OrganizationList;
 import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy;
-import org.complitex.organization.strategy.AbstractOrganizationStrategy;
+import org.complitex.organization.strategy.OrganizationStrategy;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -35,7 +35,7 @@ import static org.complitex.common.util.DateUtil.getCurrentDate;
  * @author Artem
  */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
-public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrategy {
+public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
     public final static String KECONNECTION_ORGANIZATION_STRATEGY_NAME =  IOrganizationStrategy.BEAN_NAME;
 
     /**
@@ -55,7 +55,8 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
      */
     public final static long KE_ORGANIZATION_OBJECT_ID = 1;
 
-    private static final String MAPPING_NAMESPACE = KeConnectionOrganizationStrategy.class.getPackage().getName() + ".Organization";
+    private static final String NS = KeConnectionOrganizationStrategy.class.getName();
+
     private static final List<Long> CUSTOM_ATTRIBUTE_TYPES = ImmutableList.of(READY_CLOSE_OPER_MONTH);
     public static final String PARENT_SHORT_NAME_FILTER = "parentShortName";
 
@@ -183,7 +184,8 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
         extendOrderBy(example);
 
         setupFindOperationParameters(example);
-        List<Organization> organizations = sqlSession().selectList(MAPPING_NAMESPACE + "." + FIND_OPERATION, example);
+        List<Organization> organizations = sqlSession().selectList(NS + ".selectOrganizations", example);
+
         for (Organization organization : organizations) {
             loadAttributes(organization);
             //load subject ids
@@ -210,7 +212,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
         prepareExampleForPermissionCheck(example);
         setupFindOperationParameters(example);
 
-        return sqlSession().selectOne(MAPPING_NAMESPACE + "." + COUNT_OPERATION, example);
+        return sqlSession().selectOne(NS + ".selectOrganizationCount", example);
     }
 
     private void loadOperatingMonthDate(Organization organization) {
@@ -218,11 +220,11 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
     }
 
     public Date getOperatingMonthDate(long organizationId) {
-        return sqlSession().selectOne(MAPPING_NAMESPACE + ".findOperatingMonthDate", organizationId);
+        return sqlSession().selectOne(NS + ".findOperatingMonthDate", organizationId);
     }
 
     public Date getMinOperatingMonthDate(long organizationId) {
-        return sqlSession().selectOne(MAPPING_NAMESPACE + ".findMinOperatingMonthDate", organizationId);
+        return sqlSession().selectOne(NS + ".findMinOperatingMonthDate", organizationId);
     }
 
     @Override
@@ -283,7 +285,7 @@ public class KeConnectionOrganizationStrategy extends AbstractOrganizationStrate
         organization.setStringValue(READY_CLOSE_OPER_MONTH, new BooleanConverter().toString(Boolean.FALSE));
         update(findById(organization.getObjectId(), true), organization, getCurrentDate());
 
-        sqlSession().insert(MAPPING_NAMESPACE + ".insertOperatingMonth",
+        sqlSession().insert(NS + ".insertOperatingMonth",
                 ImmutableMap.of("organizationId", organization.getObjectId(),
                         "beginOm", addMonth(organization.getOperatingMonthDate(), 1),
                         "updated", getCurrentDate()));

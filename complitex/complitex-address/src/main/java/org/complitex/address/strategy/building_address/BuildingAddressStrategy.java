@@ -32,7 +32,7 @@ import java.util.*;
  */
 @Stateless
 public class BuildingAddressStrategy extends TemplateStrategy {
-    private static final String BUILDING_ADDRESS_NAMESPACE = BuildingAddressStrategy.class.getPackage().getName() + ".BuildingAddress";
+    private static final String BUILDING_ADDRESS_NS = BuildingAddressStrategy.class.getName();
 
     public static final long NUMBER = 1500;
     public static final long CORP = 1501;
@@ -95,7 +95,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
 
-        List<DomainObject> objects = sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + "." + FIND_OPERATION, example);
+        List<DomainObject> objects = sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectBuildingAddresses", example);
 
         for (DomainObject object : objects) {
             loadAttributes(object);
@@ -121,6 +121,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
         public void found(Component component, final Map<String, Long> ids, final AjaxRequestTarget target) {
             DomainObjectInputPanel inputPanel = component.findParent(DomainObjectInputPanel.class);
             Long streetId = ids.get("street");
+
             if (streetId != null && streetId > 0) {
                 inputPanel.getObject().setParentId(streetId);
                 inputPanel.getObject().setParentEntityId(PARENT_STREET_ENTITY_ID);
@@ -188,46 +189,46 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     }
 
 
-    private List<DomainObjectPermissionInfo> findBuildingPermissionInfoByParent(long buildingAddressId) {
-        return sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findBuildingPermissionInfoByParent", buildingAddressId);
+    private List<DomainObjectPermissionInfo> getBuildingPermissionInfoByParent(long buildingAddressId) {
+        return sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectBuildingPermissionInfoByParent", buildingAddressId);
     }
 
 
-    private List<DomainObjectPermissionInfo> findBuildingPermissionInfoByReference(long buildingAddressId) {
-        return sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findBuildingPermissionInfoByReference", buildingAddressId);
+    private List<DomainObjectPermissionInfo> getBuildingPermissionInfoByReference(long buildingAddressId) {
+        return sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectBuildingPermissionInfoByReference", buildingAddressId);
     }
 
 
-    private List<DomainObjectPermissionInfo> findReferenceAddressPermissionInfo(long buildingId) {
-        return sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findReferenceAddressPermissionInfo", buildingId);
+    private List<DomainObjectPermissionInfo> getReferenceAddressPermissionInfo(long buildingId) {
+        return sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectReferenceAddressPermissionInfo", buildingId);
     }
 
 
-    private List<DomainObjectPermissionInfo> findParentAddressPermissionInfo(long buildingId) {
-        return sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findParentAddressPermissionInfo", buildingId);
+    private List<DomainObjectPermissionInfo> getParentAddressPermissionInfo(long buildingId) {
+        return sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectParentAddressPermissionInfo", buildingId);
     }
 
 
-    private Set<Long> findBuildingActivityInfoByParent(long buildingAddressId) {
-        List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findBuildingActivityInfoByParent", buildingAddressId);
+    private Set<Long> getBuildingActivityInfoByParent(long buildingAddressId) {
+        List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectBuildingActivityInfoByParent", buildingAddressId);
         return Sets.newHashSet(results);
     }
 
 
-    private Set<Long> findBuildingActivityInfoByReference(long buildingAddressId) {
-        List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findBuildingActivityInfoByReference", buildingAddressId);
+    private Set<Long> getBuildingActivityInfoByReference(long buildingAddressId) {
+        List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectBuildingActivityInfoByReference", buildingAddressId);
         return Sets.newHashSet(results);
     }
 
 
-    private Set<Long> findReferenceAddressActivityInfo(long buildingId) {
-        List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findReferenceAddressActivityInfo", buildingId);
+    private Set<Long> getReferenceAddressActivityInfo(long buildingId) {
+        List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectReferenceAddressActivityInfo", buildingId);
         return Sets.newHashSet(results);
     }
 
 
-    private Set<Long> findParentAddressActivityInfo(long buildingId) {
-        List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NAMESPACE + ".findParentAddressActivityInfo", buildingId);
+    private Set<Long> getParentAddressActivityInfo(long buildingId) {
+        List<Long> results = sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectParentAddressActivityInfo", buildingId);
         return Sets.newHashSet(results);
     }
 
@@ -236,20 +237,20 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     protected void replaceChildrenPermissions(long parentId, Set<Long> subjectIds) {
         long buildingAddressId = parentId;
 
-        List<DomainObjectPermissionInfo> buildingPermissionInfoByParent = findBuildingPermissionInfoByParent(buildingAddressId);
+        List<DomainObjectPermissionInfo> buildingPermissionInfoByParent = getBuildingPermissionInfoByParent(buildingAddressId);
         for (DomainObjectPermissionInfo buildingPermissionInfo : buildingPermissionInfoByParent) {
             long buildingId = buildingPermissionInfo.getId();
-            List<DomainObjectPermissionInfo> referenceAddressPermissionInfos = findReferenceAddressPermissionInfo(buildingId);
+            List<DomainObjectPermissionInfo> referenceAddressPermissionInfos = getReferenceAddressPermissionInfo(buildingId);
             for (DomainObjectPermissionInfo referenceAddressPermissionInfo : referenceAddressPermissionInfos) {
                 replaceObjectPermissions(referenceAddressPermissionInfo, subjectIds);
             }
             buildingStrategy.replacePermissions(buildingPermissionInfo, subjectIds);
         }
 
-        List<DomainObjectPermissionInfo> buildingPermissionInfoByReference = findBuildingPermissionInfoByReference(buildingAddressId);
+        List<DomainObjectPermissionInfo> buildingPermissionInfoByReference = getBuildingPermissionInfoByReference(buildingAddressId);
         for (DomainObjectPermissionInfo buildingPermissionInfo : buildingPermissionInfoByReference) {
             long buildingId = buildingPermissionInfo.getId();
-            List<DomainObjectPermissionInfo> parentAddressPermissionInfos = findParentAddressPermissionInfo(buildingId);
+            List<DomainObjectPermissionInfo> parentAddressPermissionInfos = getParentAddressPermissionInfo(buildingId);
             for (DomainObjectPermissionInfo parentAddressPermissionInfo : parentAddressPermissionInfos) {
                 replaceObjectPermissions(parentAddressPermissionInfo, subjectIds);
             }
@@ -262,20 +263,20 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     protected void changeChildrenPermissions(long parentId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         long buildingAddressId = parentId;
 
-        List<DomainObjectPermissionInfo> buildingPermissionInfoByParent = findBuildingPermissionInfoByParent(buildingAddressId);
+        List<DomainObjectPermissionInfo> buildingPermissionInfoByParent = getBuildingPermissionInfoByParent(buildingAddressId);
         for (DomainObjectPermissionInfo buildingPermissionInfo : buildingPermissionInfoByParent) {
             long buildingId = buildingPermissionInfo.getId();
-            List<DomainObjectPermissionInfo> referenceAddressPermissionInfos = findReferenceAddressPermissionInfo(buildingId);
+            List<DomainObjectPermissionInfo> referenceAddressPermissionInfos = getReferenceAddressPermissionInfo(buildingId);
             for (DomainObjectPermissionInfo referenceAddressPermissionInfo : referenceAddressPermissionInfos) {
                 changeObjectPermissions(referenceAddressPermissionInfo, addSubjectIds, removeSubjectIds);
             }
             buildingStrategy.changePermissions(buildingPermissionInfo, addSubjectIds, removeSubjectIds);
         }
 
-        List<DomainObjectPermissionInfo> buildingPermissionInfoByReference = findBuildingPermissionInfoByReference(buildingAddressId);
+        List<DomainObjectPermissionInfo> buildingPermissionInfoByReference = getBuildingPermissionInfoByReference(buildingAddressId);
         for (DomainObjectPermissionInfo buildingPermissionInfo : buildingPermissionInfoByReference) {
             long buildingId = buildingPermissionInfo.getId();
-            List<DomainObjectPermissionInfo> parentAddressPermissionInfos = findParentAddressPermissionInfo(buildingId);
+            List<DomainObjectPermissionInfo> parentAddressPermissionInfos = getParentAddressPermissionInfo(buildingId);
             for (DomainObjectPermissionInfo parentAddressPermissionInfo : parentAddressPermissionInfos) {
                 changeObjectPermissions(parentAddressPermissionInfo, addSubjectIds, removeSubjectIds);
             }
@@ -289,7 +290,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
         params.put("addressId", addressId);
         params.put("enabled", enabled);
         params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
-        sqlSession().update(BUILDING_ADDRESS_NAMESPACE + ".updateBuildingAddressActivity", params);
+        sqlSession().update(BUILDING_ADDRESS_NS + ".updateBuildingAddressActivity", params);
     }
 
 
@@ -297,9 +298,9 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     public void changeChildrenActivity(long parentId, boolean enable) {
         long buildingAddressId = parentId;
 
-        Set<Long> buildingActivityInfoByParent = findBuildingActivityInfoByParent(buildingAddressId);
+        Set<Long> buildingActivityInfoByParent = getBuildingActivityInfoByParent(buildingAddressId);
         for (long buildingId : buildingActivityInfoByParent) {
-            Set<Long> referenceAddressActivityInfo = findReferenceAddressActivityInfo(buildingId);
+            Set<Long> referenceAddressActivityInfo = getReferenceAddressActivityInfo(buildingId);
             for (long referenceAddressId : referenceAddressActivityInfo) {
                 updateBuildingAddressActivity(referenceAddressId, !enable);
             }
@@ -307,9 +308,9 @@ public class BuildingAddressStrategy extends TemplateStrategy {
         }
         updateChildrenActivity(buildingAddressId, "building", !enable);
 
-        Set<Long> buildingActivityInfoByReference = findBuildingActivityInfoByReference(buildingAddressId);
+        Set<Long> buildingActivityInfoByReference = getBuildingActivityInfoByReference(buildingAddressId);
         for (long buildingId : buildingActivityInfoByReference) {
-            Set<Long> parentAddressActivityInfo = findParentAddressActivityInfo(buildingId);
+            Set<Long> parentAddressActivityInfo = getParentAddressActivityInfo(buildingId);
             for (long parentAddressId : parentAddressActivityInfo) {
                 updateBuildingAddressActivity(parentAddressId, !enable);
             }

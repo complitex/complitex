@@ -26,7 +26,7 @@ import java.util.Locale;
  */
 @Stateless
 public class ServiceProviderAccountStrategy extends TemplateStrategy {
-    public static final String SPA_ATTRIBUTE_NS = ServiceProviderAccountAttribute.class.getName();
+    public static final String SPA_NS = ServiceProviderAccountStrategy.class.getName();
 
     /**
      * Attribute ids
@@ -215,29 +215,29 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
 
     @Override
     protected String getInsertAttributeStatement() {
-        return SPA_ATTRIBUTE_NS + "." + INSERT_OPERATION;
+        return SPA_NS + ".insertServiceProviderAccountAttribute";
     }
 
     @Override
     protected String getLoadAttributesStatement() {
-        return SPA_ATTRIBUTE_NS + "." + FIND_OPERATION;
+        return SPA_NS + ".selectServiceProviderAccountAttribute";
     }
 
     public void deleteAttribute(ServiceProviderAccountAttribute attribute) {
         attribute.setEntityTable(getEntityTable());
 
-        sqlSession().delete(SPA_ATTRIBUTE_NS + "." + DELETE_OPERATION, attribute);
+        sqlSession().delete(SPA_NS + ".deleteServiceProviderAccountAttribute", attribute);
     }
 
     public void updateAttribute(ServiceProviderAccountAttribute attribute) {
         attribute.setEntityTable(getEntityTable());
-        sqlSession().update(NS + "." + UPDATE_OPERATION, attribute);
+        sqlSession().update(NS + ".updateServiceProviderAccountAttribute", attribute);
     }
 
     public ServiceProviderAccountAttribute findByPkId(Long pkId) {
         ServiceProviderAccountAttribute attribute =  new ServiceProviderAccountAttribute(pkId);
         attribute.setEntityTable(getEntityTable());
 
-        return sqlSession().selectOne(SPA_ATTRIBUTE_NS + ".findByPkId", attribute);
+        return sqlSession().selectOne(SPA_NS + ".selectServiceProviderAccountAttributeByPkId", attribute);
     }
 }

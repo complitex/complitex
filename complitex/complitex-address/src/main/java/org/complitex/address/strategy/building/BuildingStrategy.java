@@ -50,8 +50,9 @@ import static org.complitex.common.util.StringUtil.toCyrillic;
 
 @Stateless
 public class BuildingStrategy extends TemplateStrategy {
+    public static final String BUILDING_NS = BuildingStrategy.class.getName();
+
     private static final String RESOURCE_BUNDLE = BuildingStrategy.class.getPackage().getName() + ".Building";
-    private static final String NS = BuildingStrategy.class.getPackage().getName() + ".Building";
 
     /**
      * Attribute ids
@@ -147,7 +148,8 @@ public class BuildingStrategy extends TemplateStrategy {
 
             for (DomainObject address : addresses) {
                 example.addAdditionalParam("buildingAddressId", address.getObjectId());
-                List<Building> result = sqlSession().selectList(NS + "." + FIND_OPERATION, example);
+                List<Building> result = sqlSession().selectList(BUILDING_NS + ".selectBuildings", example);
+
                 if (result.size() == 1) {
                     Building building = result.get(0);
                     building.setAccompaniedAddress(address);
@@ -257,7 +259,8 @@ public class BuildingStrategy extends TemplateStrategy {
             example.setAdmin(true);
         }
 
-        Building building = (Building) sqlSession().selectOne(NS + "." + FIND_BY_ID_OPERATION, example);
+        Building building = sqlSession().selectOne(BUILDING_NS + ".selectBuildingById", example);
+
         if (building != null) {
             loadAttributes(building);
             DomainObject primaryAddress = findBuildingAddress(building.getParentId(), null);
@@ -463,7 +466,7 @@ public class BuildingStrategy extends TemplateStrategy {
         params.put("parentId", parentId);
         params.put("localeId", localeBean.convert(locale).getId());
 
-        return sqlSession().selectList(NS + ".checkBuildingAddress", params);
+        return sqlSession().selectList(BUILDING_NS + ".checkBuildingAddress", params);
     }
 
     public Long checkForExistingAddress(Long id, String number, String corp, String structure, long parentEntityId,
@@ -648,19 +651,16 @@ public class BuildingStrategy extends TemplateStrategy {
 
 
     private Set<Long> findBuildingAddresses(long buildingId) {
-        List<Long> results = sqlSession().selectList(NS + ".findBuildingAddresses", buildingId);
+        List<Long> results = sqlSession().selectList(BUILDING_NS + ".findBuildingAddresses", buildingId);
         return Sets.newHashSet(results);
     }
 
 
     @Override
     public Building findHistoryObject(long objectId, Date date) {
-        DomainObjectExample example = new DomainObjectExample();
-        example.setEntityTable(getEntityTable());
-        example.setObjectId(objectId);
-        example.setStartDate(date);
+        DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable(), date);
 
-        Building building = sqlSession().selectOne(NS + "." + FIND_HISTORY_OBJECT_OPERATION, example);
+        Building building = sqlSession().selectOne(BUILDING_NS + ".selectHistoryObject", example);
         if (building == null) {
             return null;
         }
@@ -703,7 +703,7 @@ public class BuildingStrategy extends TemplateStrategy {
         params.put("buildingId", buildingId);
         params.put("enabled", enabled);
         params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
-        sqlSession().update(NS + ".updateBuildingActivity", params);
+        sqlSession().update(BUILDING_NS + ".updateBuildingActivity", params);
     }
 
     @Override
@@ -716,14 +716,14 @@ public class BuildingStrategy extends TemplateStrategy {
     public void delete(long objectId, Locale locale) throws DeleteException {
         deleteChecks(objectId, locale);
 
-        sqlSession().delete(NS + ".deleteBuildingCodes", ImmutableMap.of("objectId", objectId,
+        sqlSession().delete(BUILDING_NS + ".deleteBuildingCodes", ImmutableMap.of("objectId", objectId,
                 "buildingCodesAT", BUILDING_CODE));
 
         Set<Long> addressIds = findBuildingAddresses(objectId);
 
         deleteStrings(objectId);
         deleteAttribute(objectId);
-        deleteObject(objectId, locale);
+        deleteDomainObject(objectId, locale);
 
         //delete building address:
         for (Long addressId : addressIds) {
@@ -766,7 +766,7 @@ public class BuildingStrategy extends TemplateStrategy {
         params.put("parentId", streetId != null ? streetId : cityId);
         params.put("parentEntityId", streetId != null ? 300 : 400);
 
-        return sqlSession().selectList(NS + ".selectBuildingObjectIds", params);
+        return sqlSession().selectList(BUILDING_NS + ".selectBuildingObjectIds", params);
     }
 
     public List<BuildingCode> loadBuildingCodes(Building building) {
@@ -792,16 +792,16 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     public List<BuildingCode> getBuildingCodes(Set<Long> buildingCodeIds) {
-        return sqlSession().selectList(NS + ".getBuildingCodes", ImmutableMap.of("ids", buildingCodeIds));
+        return sqlSession().selectList(BUILDING_NS + ".getBuildingCodes", ImmutableMap.of("ids", buildingCodeIds));
     }
 
     public Long getBuildingCodeId(final Long organizationId, final String buildingCode) {
-        return sqlSession().selectOne(NS + ".selectBuildingCodeIdByCode",
+        return sqlSession().selectOne(BUILDING_NS + ".selectBuildingCodeIdByCode",
                 ImmutableMap.of("organizationId", organizationId, "buildingCode", buildingCode));
     }
 
     public Long getBuildingCodeId(final Long organizationId, final Long buildingId) {
-        return sqlSession().selectOne(NS + ".selectBuildingCodeIdByBuilding",
+        return sqlSession().selectOne(BUILDING_NS + ".selectBuildingCodeIdByBuilding",
                 ImmutableMap.of("organizationId", organizationId, "buildingId", buildingId));
     }
 
@@ -838,6 +838,6 @@ public class BuildingStrategy extends TemplateStrategy {
 
 
     private void saveBuildingCode(BuildingCode buildingCode) {
-        sqlSession().insert(NS + ".insertBuildingCode", buildingCode);
+        sqlSession().insert(BUILDING_NS + ".insertBuildingCode", buildingCode);
     }
 }

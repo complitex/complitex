@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute">
+    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
+
+    <resultMap id="serviceProviderAccountAttributeResultMap" type="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute"
+               extends="org.complitex.common.strategy.Strategy.attributeResultMap">
+        <id column="pk_id" property="pkId"/>
+    </resultMap>
+
+    <select id="selectServiceProviderAccountAttributeByPkId" parameterType="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute"
+            resultMap="serviceProviderAccountAttributeResultMap">
+        SELECT * FROM `${entityTable}_attribute` where `pk_id` = #{object.pkId}
+    </select>
+
+    <!-- insert - generate pkId -->
+    <insert id="insertServiceProviderAccountAttribute" parameterType="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute"
+            keyProperty="object.pkId" useGeneratedKeys="true">
+        INSERT INTO `${entityTable}_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `status`, `start_date`,
+                                                `end_date`, `value_id`, `value_type_id`)
+          VALUES (#{attributeId}, #{objectId}, #{attributeTypeId}, #{status}, #{startDate}, #{endDate}, #{valueId}, #{valueTypeId})
+    </insert>
+
+    <!-- deletion -->
+    <delete id="deleteServiceProviderAccountAttribute" parameterType="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute">
+        DELETE FROM `${entityTable}_attribute` WHERE `pk_id` = #{object.pkId}
+    </delete>
+
+    <select id="selectServiceProviderAccountAttribute" parameterType="hashmap" resultMap="serviceProviderAccountAttributeResultMap">
+        SELECT aa.* FROM `${entityTable}_attribute` aa WHERE  aa.`object_id` = #{id} AND aa.`status` = 'ACTIVE'
+          ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
+    </select>
+
+</mapper>

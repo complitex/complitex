@@ -43,6 +43,12 @@ public class DomainObjectExample implements Serializable {
         this.entityTable = entityTable;
     }
 
+    public DomainObjectExample(Long objectId, String entityTable, Date startDate) {
+        this.objectId = objectId;
+        this.entityTable = entityTable;
+        this.startDate = startDate;
+    }
+
     public DomainObjectExample addAttributes(Long... attributeTypeIds){
         for (Long a : attributeTypeIds){
             attributeExamples.add(new AttributeExample(a));

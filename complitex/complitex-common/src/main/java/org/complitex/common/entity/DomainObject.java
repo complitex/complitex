@@ -9,10 +9,6 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.Locale;
 
-/**
- *
- * @author Artem
- */
 public class DomainObject implements Serializable {
     private String entityTable;
     private Long objectId;
@@ -47,6 +43,9 @@ public class DomainObject implements Serializable {
         subjectIds = copy.subjectIds;
     }
 
+    public void addAttribute(Attribute attribute) {
+        attributes.add(attribute);
+    }
 
     public Attribute getAttribute(Long attributeTypeId) {
         for (Attribute a : attributes) {

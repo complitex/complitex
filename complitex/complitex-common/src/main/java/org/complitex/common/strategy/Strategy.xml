@@ -146,7 +146,7 @@
         </if>
     </sql>
 
-    <select id="selectDomainObject" parameterType="org.complitex.common.entity.example.DomainObjectExample"
+    <select id="selectDomainObjects" parameterType="org.complitex.common.entity.example.DomainObjectExample"
             resultMap="domainObjectResultMap" >
         SELECT e.*
         FROM `${entityTable}` e WHERE
@@ -157,7 +157,7 @@
         <include refid="domainObjectLimit"/>
     </select>
 
-    <select id="count" resultType="long" parameterType="DomainObjectExample">
+    <select id="selectDomainObjectCount" resultType="long" parameterType="DomainObjectExample">
         SELECT COUNT(1) FROM `${entityTable}` e WHERE
         <include refid="domainObjectStatusFilter"/>
         <include refid="domainObjectPermissionFilter"/>
@@ -189,7 +189,7 @@
 
     <!-- SearchComponent -->
 
-    <select id="findParentInSearchComponent" parameterType="map" resultType="map">
+    <select id="selectParentInSearchComponent" parameterType="map" resultType="map">
         SELECT (SELECT ent.`entity_table` FROM `entity` ent WHERE ent.`id` = e.`parent_entity_id`) parentEntity,
         e.`parent_id` parentId FROM `${entityTable}` e WHERE e.`object_id` = #{objectId}
         <choose>
@@ -215,13 +215,13 @@
         SELECT aa.`end_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{objectId}
     </select>
 
-    <select id="findHistoryObject" parameterType="DomainObjectExample" resultMap="domainObjectResultMap">
+    <select id="selectHistoryObject" parameterType="DomainObjectExample" resultMap="domainObjectResultMap">
         SELECT e.* FROM `${entityTable}` e WHERE e.`object_id` = #{objectId} AND e.`start_date` = (
             SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{objectId}
                 AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
     </select>
 
-    <select id="findChildrenPermissionInfo" parameterType="map" resultMap="domainObjectPermissionInfoResultMap">
+    <select id="selectChildrenPermissionInfo" parameterType="map" resultMap="domainObjectPermissionInfoResultMap">
         SELECT e.`object_id`, e.`permission_id` FROM `${entity}` e WHERE e.`status` IN ('ACTIVE', 'INACTIVE')
         AND e.`parent_id` = #{parentId} AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent
           WHERE ent.`entity_table` = #{parentEntity})
@@ -234,7 +234,7 @@
           AND e.`object_id` = #{objectId}
     </update>
 
-    <select id="findChildrenActivityInfo" parameterType="map" resultType="long">
+    <select id="selectChildrenActivityInfo" parameterType="map" resultType="long">
         SELECT e.`object_id` FROM `${entity}` e WHERE e.`parent_id` = #{parentId} AND
         e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity_table` = #{parentEntity})
         ORDER BY e.`object_id`
@@ -303,7 +303,7 @@
           ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
     </select>
 
-    <select id="findHistoryAttributes" parameterType="org.complitex.common.entity.example.DomainObjectExample"
+    <select id="selectHistoryAttributes" parameterType="org.complitex.common.entity.example.DomainObjectExample"
             resultMap="attributeResultMap">
         SELECT aa.*
         FROM `${entityTable}_attribute` aa
