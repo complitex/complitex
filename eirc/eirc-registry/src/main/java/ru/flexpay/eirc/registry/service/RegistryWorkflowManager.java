@@ -3,7 +3,7 @@ package ru.flexpay.eirc.registry.service;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.registry.entity.Registry;
@@ -33,7 +33,7 @@ public class RegistryWorkflowManager {
     private RegistryRecordBean registryRecordBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     // allowed transitions from source status code to target codes
     // first status in lists is the successfull one, the second is transition with some processing error

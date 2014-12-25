@@ -21,9 +21,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.strategy.region.RegionStrategy;
 import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.Person;
-import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.web.component.DatePicker;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
@@ -260,7 +260,7 @@ public class OrderList extends TemplatePage {
 
                     @Override
                     public void setObject(DomainObject region) {
-                        filterModel.getObject().setRegionId(region.getId());
+                        filterModel.getObject().setRegionId(region.getObjectId());
                     }
 
                     @Override
@@ -268,7 +268,7 @@ public class OrderList extends TemplatePage {
 
                     }
                 },
-                regionStrategy.getList(new DomainObjectExample()),
+                regionStrategy.getList(new DomainObjectFilter()),
                 new IChoiceRenderer<DomainObject>() {
                     @Override
                     public Object getDisplayValue(DomainObject region) {
@@ -277,7 +277,7 @@ public class OrderList extends TemplatePage {
 
                     @Override
                     public String getIdValue(DomainObject region, int i) {
-                        return region != null ? region.getId().toString() : "-1";
+                        return region != null ? region.getObjectId().toString() : "-1";
                     }
                 }
         ));

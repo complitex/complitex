@@ -4,19 +4,20 @@
  */
 package org.complitex.pspoffice.person.strategy.web.component;
 
-import java.text.MessageFormat;
-import java.util.List;
-import javax.ejb.EJB;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.complitex.address.strategy.room.RoomStrategy;
 import org.complitex.address.strategy.room.web.edit.RoomEdit;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.StringCulture;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.LogBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.pspoffice.person.Module;
+
+import javax.ejb.EJB;
+import java.text.MessageFormat;
+import java.util.List;
 
 /**
  *
@@ -25,7 +26,7 @@ import org.complitex.pspoffice.person.Module;
 public abstract class RoomCreateDialog extends AbstractAddressCreateDialog {
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private LogBean logBean;
     @EJB
@@ -50,13 +51,13 @@ public abstract class RoomCreateDialog extends AbstractAddressCreateDialog {
         DomainObject room = roomStrategy.newInstance();
         room.getAttribute(RoomStrategy.NAME).setLocalizedValues(number);
         room.setParentEntityId("apartment".equals(getParentEntity()) ? 100L : 500L);
-        room.setParentId(getParentObject().getId());
+        room.setParentId(getParentObject().getObjectId());
         return room;
     }
 
     @Override
     protected boolean validate(DomainObject object) {
-        Long existingObjectId = roomStrategy.performDefaultValidation(object, localeBean.getSystemLocale());
+        Long existingObjectId = roomStrategy.performDefaultValidation(object, stringLocaleBean.getSystemLocale());
         if (existingObjectId != null) {
             error(MessageFormat.format(getString("validation_error"), existingObjectId));
         }
@@ -69,7 +70,7 @@ public abstract class RoomCreateDialog extends AbstractAddressCreateDialog {
         logBean.log(Log.STATUS.OK, Module.NAME, RoomCreateDialog.class,
                 Log.EVENT.CREATE, roomStrategy, null, object, null);
 
-        return roomStrategy.findById(object.getId(), true);
+        return roomStrategy.findById(object.getObjectId(), true);
     }
 
     @Override

@@ -4,8 +4,6 @@
  */
 package org.complitex.pspoffice.person.strategy.web.edit.person;
 
-import java.util.Locale;
-import javax.ejb.EJB;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -15,12 +13,15 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
 import org.complitex.pspoffice.person.strategy.entity.PersonName.PersonNameType;
 import org.complitex.pspoffice.person.strategy.web.component.PersonNameAutocompleteComponent;
+
+import javax.ejb.EJB;
+import java.util.Locale;
 
 /**
  *
@@ -29,7 +30,7 @@ import org.complitex.pspoffice.person.strategy.web.component.PersonNameAutocompl
 class PersonFullNamePanel extends Panel {
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private PersonStrategy personStrategy;
 
@@ -88,11 +89,11 @@ class PersonFullNamePanel extends Panel {
     private void populateItem(ListItem<Attribute> item, PersonNameType personNameType, String personNameComponentId,
             IModel<String> labelModel, Locale defaultNameLocale, String defaultNameValue) {
         Attribute personNameAttribute = item.getModelObject();
-        Locale locale = localeBean.getLocale(personNameAttribute.getAttributeId());
-        boolean isSystemLocale = localeBean.getLocaleObject(personNameAttribute.getAttributeId()).isSystem();
+        Locale locale = stringLocaleBean.getLocale(personNameAttribute.getAttributeId());
+        boolean isSystemLocale = stringLocaleBean.getLocaleObject(personNameAttribute.getAttributeId()).isSystem();
         final PersonNameAutocompleteComponent personNameComponent =
                 (!Strings.isEmpty(defaultNameValue) && defaultNameLocale != null
-                && localeBean.convert(defaultNameLocale).getId().equals(personNameAttribute.getAttributeId()))
+                && stringLocaleBean.convert(defaultNameLocale).getId().equals(personNameAttribute.getAttributeId()))
                 ? new PersonNameAutocompleteComponent(personNameComponentId, newNameModel(personNameAttribute), new Model<String>(defaultNameValue),
                 personNameType, locale, true)
                 : new PersonNameAutocompleteComponent(personNameComponentId, newNameModel(personNameAttribute), personNameType, locale, true);

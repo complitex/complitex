@@ -10,11 +10,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.resource.CommonResources;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StatusType;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.strategy.DomainObjectPermissionInfo;
+import org.complitex.common.entity.*;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.search.ISearchCallback;
@@ -60,11 +56,11 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeExample number = example.getAttributeExample(NUMBER);
+            AttributeFilter number = example.getAttributeExample(NUMBER);
             if (number == null) {
-                number = new AttributeExample(NUMBER);
+                number = new AttributeFilter(NUMBER);
                 example.addAttributeExample(number);
             }
             number.setValue(searchTextInput);
@@ -87,7 +83,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<? extends DomainObject> getList(DomainObjectExample example) {
+    public List<? extends DomainObject> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
@@ -189,22 +185,22 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     }
 
 
-    private List<DomainObjectPermissionInfo> getBuildingPermissionInfoByParent(long buildingAddressId) {
+    private List<PermissionInfo> getBuildingPermissionInfoByParent(long buildingAddressId) {
         return sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectBuildingPermissionInfoByParent", buildingAddressId);
     }
 
 
-    private List<DomainObjectPermissionInfo> getBuildingPermissionInfoByReference(long buildingAddressId) {
+    private List<PermissionInfo> getBuildingPermissionInfoByReference(long buildingAddressId) {
         return sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectBuildingPermissionInfoByReference", buildingAddressId);
     }
 
 
-    private List<DomainObjectPermissionInfo> getReferenceAddressPermissionInfo(long buildingId) {
+    private List<PermissionInfo> getReferenceAddressPermissionInfo(long buildingId) {
         return sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectReferenceAddressPermissionInfo", buildingId);
     }
 
 
-    private List<DomainObjectPermissionInfo> getParentAddressPermissionInfo(long buildingId) {
+    private List<PermissionInfo> getParentAddressPermissionInfo(long buildingId) {
         return sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectParentAddressPermissionInfo", buildingId);
     }
 
@@ -237,21 +233,21 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     protected void replaceChildrenPermissions(long parentId, Set<Long> subjectIds) {
         long buildingAddressId = parentId;
 
-        List<DomainObjectPermissionInfo> buildingPermissionInfoByParent = getBuildingPermissionInfoByParent(buildingAddressId);
-        for (DomainObjectPermissionInfo buildingPermissionInfo : buildingPermissionInfoByParent) {
+        List<PermissionInfo> buildingPermissionInfoByParent = getBuildingPermissionInfoByParent(buildingAddressId);
+        for (PermissionInfo buildingPermissionInfo : buildingPermissionInfoByParent) {
             long buildingId = buildingPermissionInfo.getId();
-            List<DomainObjectPermissionInfo> referenceAddressPermissionInfos = getReferenceAddressPermissionInfo(buildingId);
-            for (DomainObjectPermissionInfo referenceAddressPermissionInfo : referenceAddressPermissionInfos) {
+            List<PermissionInfo> referenceAddressPermissionInfos = getReferenceAddressPermissionInfo(buildingId);
+            for (PermissionInfo referenceAddressPermissionInfo : referenceAddressPermissionInfos) {
                 replaceObjectPermissions(referenceAddressPermissionInfo, subjectIds);
             }
             buildingStrategy.replacePermissions(buildingPermissionInfo, subjectIds);
         }
 
-        List<DomainObjectPermissionInfo> buildingPermissionInfoByReference = getBuildingPermissionInfoByReference(buildingAddressId);
-        for (DomainObjectPermissionInfo buildingPermissionInfo : buildingPermissionInfoByReference) {
+        List<PermissionInfo> buildingPermissionInfoByReference = getBuildingPermissionInfoByReference(buildingAddressId);
+        for (PermissionInfo buildingPermissionInfo : buildingPermissionInfoByReference) {
             long buildingId = buildingPermissionInfo.getId();
-            List<DomainObjectPermissionInfo> parentAddressPermissionInfos = getParentAddressPermissionInfo(buildingId);
-            for (DomainObjectPermissionInfo parentAddressPermissionInfo : parentAddressPermissionInfos) {
+            List<PermissionInfo> parentAddressPermissionInfos = getParentAddressPermissionInfo(buildingId);
+            for (PermissionInfo parentAddressPermissionInfo : parentAddressPermissionInfos) {
                 replaceObjectPermissions(parentAddressPermissionInfo, subjectIds);
             }
             buildingStrategy.replacePermissions(buildingPermissionInfo, subjectIds);
@@ -263,21 +259,21 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     protected void changeChildrenPermissions(long parentId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         long buildingAddressId = parentId;
 
-        List<DomainObjectPermissionInfo> buildingPermissionInfoByParent = getBuildingPermissionInfoByParent(buildingAddressId);
-        for (DomainObjectPermissionInfo buildingPermissionInfo : buildingPermissionInfoByParent) {
+        List<PermissionInfo> buildingPermissionInfoByParent = getBuildingPermissionInfoByParent(buildingAddressId);
+        for (PermissionInfo buildingPermissionInfo : buildingPermissionInfoByParent) {
             long buildingId = buildingPermissionInfo.getId();
-            List<DomainObjectPermissionInfo> referenceAddressPermissionInfos = getReferenceAddressPermissionInfo(buildingId);
-            for (DomainObjectPermissionInfo referenceAddressPermissionInfo : referenceAddressPermissionInfos) {
+            List<PermissionInfo> referenceAddressPermissionInfos = getReferenceAddressPermissionInfo(buildingId);
+            for (PermissionInfo referenceAddressPermissionInfo : referenceAddressPermissionInfos) {
                 changeObjectPermissions(referenceAddressPermissionInfo, addSubjectIds, removeSubjectIds);
             }
             buildingStrategy.changePermissions(buildingPermissionInfo, addSubjectIds, removeSubjectIds);
         }
 
-        List<DomainObjectPermissionInfo> buildingPermissionInfoByReference = getBuildingPermissionInfoByReference(buildingAddressId);
-        for (DomainObjectPermissionInfo buildingPermissionInfo : buildingPermissionInfoByReference) {
+        List<PermissionInfo> buildingPermissionInfoByReference = getBuildingPermissionInfoByReference(buildingAddressId);
+        for (PermissionInfo buildingPermissionInfo : buildingPermissionInfoByReference) {
             long buildingId = buildingPermissionInfo.getId();
-            List<DomainObjectPermissionInfo> parentAddressPermissionInfos = getParentAddressPermissionInfo(buildingId);
-            for (DomainObjectPermissionInfo parentAddressPermissionInfo : parentAddressPermissionInfos) {
+            List<PermissionInfo> parentAddressPermissionInfos = getParentAddressPermissionInfo(buildingId);
+            for (PermissionInfo parentAddressPermissionInfo : parentAddressPermissionInfos) {
                 changeObjectPermissions(parentAddressPermissionInfo, addSubjectIds, removeSubjectIds);
             }
             buildingStrategy.changePermissions(buildingPermissionInfo, addSubjectIds, removeSubjectIds);

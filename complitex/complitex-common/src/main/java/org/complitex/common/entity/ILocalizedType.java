@@ -1,4 +1,4 @@
-package org.complitex.common.entity.description;
+package org.complitex.common.entity;
 
 import java.io.Serializable;
 import java.util.Locale;

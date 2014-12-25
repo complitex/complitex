@@ -1,7 +1,7 @@
 package org.complitex.pspoffice.person.strategy;
 
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.organization.strategy.AbstractOrganizationStrategy;
+import org.complitex.organization.strategy.OrganizationStrategy;
 
 import javax.ejb.Stateless;
 
@@ -10,6 +10,6 @@ import javax.ejb.Stateless;
  *         Date: 02.07.13 17:56
  */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
-public class PspOrganizationStrategy extends AbstractOrganizationStrategy{
+public class PspOrganizationStrategy extends OrganizationStrategy {
 
 }

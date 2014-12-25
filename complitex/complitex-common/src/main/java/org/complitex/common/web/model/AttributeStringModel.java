@@ -2,7 +2,7 @@ package org.complitex.common.web.model;
 
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 
 /**
@@ -18,12 +18,12 @@ public class AttributeStringModel implements IModel<String>{
 
     @Override
     public String getObject() {
-        return attribute.getStringCulture(EjbBeanLocator.getBean(LocaleBean.class).getSystemLocaleId()).getValue();
+        return attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue();
     }
 
     @Override
     public void setObject(String object) {
-        attribute.getStringCulture(EjbBeanLocator.getBean(LocaleBean.class).getSystemLocaleId()).setValue(object);
+        attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).setValue(object);
     }
 
     @Override

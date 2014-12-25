@@ -143,7 +143,7 @@ public final class ApartmentCardsGrid extends TemplatePage {
                             @Override
                             public void onClick() {
                                 MenuManager.setMenuItem(OrganizationMenu.ORGANIZATION_MENU_ITEM);
-                                PageParameters params = organizationStrategy.getEditPageParams(organization.getId(), null, null);
+                                PageParameters params = organizationStrategy.getEditPageParams(organization.getObjectId(), null, null);
                                 BackInfoManager.put(this, PAGE_SESSION_KEY, gridBackInfo(apartmentId, backInfoSessionKey));
                                 params.set(BACK_INFO_SESSION_KEY, PAGE_SESSION_KEY);
                                 setResponsePage(organizationStrategy.getEditPage(), params);

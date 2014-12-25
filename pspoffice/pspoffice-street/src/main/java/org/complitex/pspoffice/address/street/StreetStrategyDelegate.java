@@ -7,7 +7,7 @@ package org.complitex.pspoffice.address.street;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.SessionBean;
 
 import javax.ejb.EJB;
@@ -28,15 +28,15 @@ import java.util.List;
 @Stateless(name = "PspofficeStreetStrategy")
 public class StreetStrategyDelegate extends StreetStrategy {
 
-    private static final String PSP_STREET_NAMESPACE = StreetStrategyDelegate.class.getPackage().getName() + ".Street";
+    private static final String PSP_STREET_NS = StreetStrategyDelegate.class.getPackage().getName() + ".Street";
     @EJB
     private BuildingAddressStrategy buildingAddressStrategy;
     @EJB
     private SessionBean sessionBean;
 
     @Override
-    public List<DomainObject> getList(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+    public List<DomainObject> getList(DomainObjectFilter example) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
 
@@ -44,7 +44,7 @@ public class StreetStrategyDelegate extends StreetStrategy {
         prepareExampleForPermissionCheck(example);
         prepareExampleForBuildingCheck(example);
 
-        List<DomainObject> objects = sqlSession().selectList(PSP_STREET_NAMESPACE + "." + FIND_OPERATION, example);
+        List<DomainObject> objects = sqlSession().selectList(PSP_STREET_NS + ".selectStreets", example);
         for (DomainObject object : objects) {
             loadAttributes(object);
             //load subject ids
@@ -55,8 +55,8 @@ public class StreetStrategyDelegate extends StreetStrategy {
     }
 
     @Override
-    public Long getCount(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+    public Long getCount(DomainObjectFilter example) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
 
@@ -64,10 +64,10 @@ public class StreetStrategyDelegate extends StreetStrategy {
         prepareExampleForPermissionCheck(example);
         prepareExampleForBuildingCheck(example);
 
-        return sqlSession().selectOne(PSP_STREET_NAMESPACE + "." + COUNT_OPERATION, example);
+        return sqlSession().selectOne(PSP_STREET_NS + ".selectStreetCount", example);
     }
 
-    private void prepareExampleForBuildingCheck(DomainObjectExample example) {
+    private void prepareExampleForBuildingCheck(DomainObjectFilter example) {
         if (!example.isAdmin()) {
             example.addAdditionalParam("building_address_permission_string",
                     sessionBean.getPermissionString(buildingAddressStrategy.getEntityTable()));

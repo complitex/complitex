@@ -18,7 +18,7 @@ import org.complitex.address.entity.AddressImportFile;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.IImportFile;
 import org.complitex.common.entity.ImportMessage;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
@@ -55,7 +55,7 @@ public class ImportPage extends TemplatePage {
     private OsznOrganizationStrategy organizationStrategy;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     private int stopTimer = 0;
 
@@ -137,7 +137,7 @@ public class ImportPage extends TemplatePage {
                     }
                 }));
 
-        localeModel = new Model<>(localeBean.getSystemLocale());
+        localeModel = new Model<>(stringLocaleBean.getSystemLocale());
         form.add(new LocalePicker("localePicker", localeModel, false));
 
         //Кнопка импортировать

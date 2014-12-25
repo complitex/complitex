@@ -4,7 +4,8 @@
 <mapper namespace="org.complitex.address.strategy.street.StreetStrategy">
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
-    <select id="selectDomainObjects" resultMap="domainObjectResultMap" parameterType="DomainObjectExample">
+    <select id="selectDomainObjects" parameterType="org.complitex.common.entity.DomainObjectFilter"
+            resultMap="domainObjectResultMap">
         SELECT e.* FROM `street` e WHERE
         <include refid="streetFilter"/>
         <include refid="domainObjectOrderBy"/>
@@ -38,7 +39,8 @@
         </if>
     </sql>
 
-    <select id="selectDomainObjectCount" resultType="long" parameterType="DomainObjectExample">
+    <select id="selectDomainObjectCount" parameterType="org.complitex.common.entity.DomainObjectFilter"
+            resultType="long">
         SELECT COUNT(1) FROM `street` e WHERE <include refid="streetFilter"/>
     </select>
 

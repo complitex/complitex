@@ -21,9 +21,9 @@ import org.complitex.admin.Module;
 import org.complitex.admin.service.UserBean;
 import org.complitex.admin.strategy.UserInfoStrategy;
 import org.complitex.common.entity.*;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.PreferenceBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.ShowMode;
@@ -37,7 +37,6 @@ import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
 import java.util.*;
-import java.util.Locale;
 
 import static org.complitex.common.entity.UserGroup.GROUP_NAME.*;
 import static org.complitex.common.web.DictionaryFwSession.*;
@@ -61,7 +60,7 @@ public class UserEdit extends FormTemplatePage {
     @EJB
     private PreferenceBean preferenceBean;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     public UserEdit() {
         super();
@@ -95,7 +94,7 @@ public class UserEdit extends FormTemplatePage {
             Preference localePreference = preferenceBean.getPreference(userId, GLOBAL_PAGE, LOCALE_KEY);
             userLocale = localePreference != null ? new Locale(localePreference.getValue()) : null;
         }
-        final IModel<Locale> localeModel = new Model<Locale>(userLocale != null ? userLocale : localeBean.getSystemLocale());
+        final IModel<Locale> localeModel = new Model<Locale>(userLocale != null ? userLocale : stringLocaleBean.getSystemLocale());
 
         Boolean copyUseDefaultAddressFlag = null;
         //Копирование

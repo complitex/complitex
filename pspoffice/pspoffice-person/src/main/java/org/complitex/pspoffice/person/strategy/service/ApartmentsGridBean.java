@@ -10,10 +10,10 @@ import com.google.common.collect.Maps;
 import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.room.RoomStrategy;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.SessionBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.pspoffice.person.strategy.ApartmentCardStrategy;
 import org.complitex.pspoffice.person.strategy.entity.ApartmentCard;
@@ -49,7 +49,7 @@ public class ApartmentsGridBean extends AbstractBean {
     private IOrganizationStrategy organizationStrategy;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     public ApartmentsGridFilter newFilter(long buildingId, Locale locale) {
         final boolean isAdmin = sessionBean.isAdmin();
@@ -76,14 +76,14 @@ public class ApartmentsGridBean extends AbstractBean {
     }
 
     private List<? extends DomainObject> findRooms(long apartmentId) {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         roomStrategy.configureExample(example, ImmutableMap.of("apartment", apartmentId), null);
         return roomStrategy.getList(example);
     }
 
     public List<ApartmentsGridEntity> find(ApartmentsGridFilter filter) {
         Map<String, Object> params = newParamsMap(filter);
-        params.put("sortLocaleId", localeBean.convert(filter.getLocale()).getId());
+        params.put("sortLocaleId", stringLocaleBean.convert(filter.getLocale()).getId());
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> data = sqlSession().selectList(MAPPING + ".find", params);
         final List<ApartmentsGridEntity> result = Lists.newArrayList();

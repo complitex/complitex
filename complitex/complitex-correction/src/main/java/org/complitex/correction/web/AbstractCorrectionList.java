@@ -27,9 +27,9 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
@@ -55,7 +55,7 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
     protected StrategyFactory strategyFactory;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     private String entity;
     private FilterWrapper<T> filterWrapper;
@@ -85,7 +85,7 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
     protected abstract T newCorrection();
 
     protected void setUpDisplayObject(List<? extends Correction> corrections, String entity) {
-        Long localeId = localeBean.convert(getLocale()).getId();
+        Long localeId = stringLocaleBean.convert(getLocale()).getId();
 
         if (corrections != null && !corrections.isEmpty()) {
             IStrategy strategy = strategyFactory.getStrategy(entity);
@@ -97,7 +97,7 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
                     correction.setEditable(false);
                 }
 
-                correction.setDisplayObject(strategy.displayDomainObject(object, localeBean.convert(localeBean.getLocaleObject(localeId))));
+                correction.setDisplayObject(strategy.displayDomainObject(object, stringLocaleBean.convert(stringLocaleBean.getLocaleObject(localeId))));
             }
         }
     }

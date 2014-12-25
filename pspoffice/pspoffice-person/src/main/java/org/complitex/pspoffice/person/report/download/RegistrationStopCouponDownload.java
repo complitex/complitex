@@ -1,16 +1,9 @@
 package org.complitex.pspoffice.person.report.download;
 
-import org.complitex.pspoffice.report.entity.IReportField;
-import org.complitex.pspoffice.report.entity.RegistrationStopCouponField;
-import org.complitex.pspoffice.report.web.AbstractReportDownload;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import org.complitex.address.service.AddressRendererBean;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.pspoffice.person.report.entity.RegistrationStopCoupon;
@@ -18,8 +11,16 @@ import org.complitex.pspoffice.person.report.service.RegistrationStopCouponBean;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
 import org.complitex.pspoffice.person.strategy.entity.Registration;
-import static org.complitex.pspoffice.report.util.ReportDateFormatter.format;
+import org.complitex.pspoffice.report.entity.IReportField;
+import org.complitex.pspoffice.report.entity.RegistrationStopCouponField;
+import org.complitex.pspoffice.report.web.AbstractReportDownload;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 import static org.complitex.pspoffice.report.entity.RegistrationStopCouponField.*;
+import static org.complitex.pspoffice.report.util.ReportDateFormatter.format;
 
 public class RegistrationStopCouponDownload extends AbstractReportDownload<RegistrationStopCoupon> {
 
@@ -38,14 +39,14 @@ public class RegistrationStopCouponDownload extends AbstractReportDownload<Regis
         AddressRendererBean addressRendererBean = EjbBeanLocator.getBean(AddressRendererBean.class);
         RegistrationStopCouponBean registrationStopCouponBean = EjbBeanLocator.getBean(RegistrationStopCouponBean.class);
         IStrategy organizationStrategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy("organization");
-        final Locale systemLocale = EjbBeanLocator.getBean(LocaleBean.class).getSystemLocale();
+        final Locale systemLocale = EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocale();
 
         Registration registration = report.getRegistration();
         Person person = registration.getPerson();
         map.put(FIRST_NAME, person.getFirstName(locale, systemLocale));
         map.put(LAST_NAME, person.getLastName(locale, systemLocale));
         map.put(MIDDLE_NAME, person.getMiddleName(locale, systemLocale));
-        putMultilineValue(map, registrationStopCouponBean.getPreviousNames(person.getId(), locale), 50,
+        putMultilineValue(map, registrationStopCouponBean.getPreviousNames(person.getObjectId(), locale), 50,
                 PREVIOUS_NAMES0, PREVIOUS_NAMES1);
         map.put(BIRTH_DATE, person.getBirthDate());
         map.put(BIRTH_COUNTRY, person.getBirthCountry());

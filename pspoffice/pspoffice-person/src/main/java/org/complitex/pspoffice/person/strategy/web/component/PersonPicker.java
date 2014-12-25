@@ -111,7 +111,7 @@ public final class PersonPicker extends FormComponentPanel<Person> {
                 Person person = PersonPicker.this.getModelObject();
 
                 MenuManager.setMenuItem(PersonMenu.PERSON_MENU_ITEM);
-                PageParameters params = personStrategy.getEditPageParams(person.getId(), null, null);
+                PageParameters params = personStrategy.getEditPageParams(person.getObjectId(), null, null);
                 BackInfoManager.put(this, ApartmentCardEdit.PAGE_SESSION_KEY, new ApartmentCardBackInfo(apartmentCardId, null));
                 params.set(TemplatePage.BACK_INFO_SESSION_KEY, ApartmentCardEdit.PAGE_SESSION_KEY);
                 setResponsePage(personStrategy.getEditPage(), params);
@@ -359,7 +359,7 @@ public final class PersonPicker extends FormComponentPanel<Person> {
 
             @Override
             protected void onSave(Person oldPerson, Person newPerson, AjaxRequestTarget target) {
-                Person createdPerson = personStrategy.findById(newPerson.getId(), false, true, false, false, false);
+                Person createdPerson = personStrategy.findById(newPerson.getObjectId(), false, true, false, false, false);
                 PersonPicker.this.getModel().setObject(createdPerson);
 
                 target.add(personLabelContainer);

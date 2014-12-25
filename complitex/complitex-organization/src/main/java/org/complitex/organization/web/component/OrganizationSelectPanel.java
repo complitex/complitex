@@ -11,8 +11,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
@@ -29,7 +29,7 @@ import static org.complitex.common.strategy.organization.IOrganizationStrategy.*
  */
 public class OrganizationSelectPanel extends Panel {
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private IOrganizationStrategy organizationStrategy;
@@ -57,7 +57,7 @@ public class OrganizationSelectPanel extends Panel {
         filterForm.add(find);
 
         //Example
-        final DomainObjectExample example = new DomainObjectExample().addAttributes(NAME, CODE);
+        final DomainObjectFilter example = new DomainObjectFilter().addAttributes(NAME, CODE);
 
         if (organizationTypeIds != null && !organizationTypeIds.isEmpty()) {
             example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, organizationTypeIds);
@@ -100,12 +100,12 @@ public class OrganizationSelectPanel extends Panel {
         });
     }
 
-    protected DataProvider<DomainObject> getDataProvider(final DomainObjectExample example) {
+    protected DataProvider<DomainObject> getDataProvider(final DomainObjectFilter example) {
         return new DataProvider<DomainObject>() {
 
             @Override
             protected Iterable<? extends DomainObject> getData(long first, long count) {
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 example.setFirst(first);
                 example.setCount(count);
 
@@ -114,7 +114,7 @@ public class OrganizationSelectPanel extends Panel {
 
             @Override
             protected Long getSize() {
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 return organizationStrategy.getCount(example);
             }
         };

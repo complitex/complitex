@@ -3,7 +3,7 @@
 
 <mapper namespace="org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy">
     <resultMap id="organizationResultMap" type="org.complitex.keconnection.organization.strategy.entity.Organization"
-                    extends="domainResultMap">
+                    extends="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
            <result column="parent_short_name" property="parentShortName"/>
     </resultMap>
     
@@ -26,7 +26,7 @@
         </if>
     </sql>
     
-    <select id="selectOrganizations" resultMap="organizationResultMap" parameterType="org.complitex.common.entity.example.DomainObjectExample">
+    <select id="selectOrganizations" resultMap="organizationResultMap" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT e.*, IFNULL(pn.`value`, pn_sys.`value`) `parent_short_name` 
         FROM `organization` e <include refid="join"/>
         WHERE
@@ -37,7 +37,7 @@
         <include refid="domainObjectLimit"/>
     </select>
     
-    <select id="selectOrganizationCount" resultType="long" parameterType="org.complitex.common.entity.example.DomainObjectExample">
+    <select id="selectOrganizationCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT COUNT(1) FROM `organization` e <include refid="join"/>
         WHERE
         <include refid="domainObjectStatusFilter"/>

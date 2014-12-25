@@ -4,16 +4,11 @@
  */
 package org.complitex.pspoffice.person.strategy.web.list.apartment_card;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import javax.ejb.EJB;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import static com.google.common.collect.ImmutableList.*;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
@@ -36,6 +31,13 @@ import org.complitex.template.web.component.toolbar.search.CollapsibleSearchTool
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
 import org.odlabs.wiquery.core.javascript.JsQuery;
+
+import javax.ejb.EJB;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.collect.ImmutableList.of;
 
 /**
  *
@@ -91,8 +93,8 @@ public class ApartmentCardSearch extends FormTemplatePage {
 
             private Long getObjectId(String entity) {
                 final DomainObject object = addressSearchComponentState.get(entity);
-                if (object != null && object.getId() != null && object.getId() > 0) {
-                    return object.getId();
+                if (object != null && object.getObjectId() != null && object.getObjectId() > 0) {
+                    return object.getObjectId();
                 }
                 return null;
             }

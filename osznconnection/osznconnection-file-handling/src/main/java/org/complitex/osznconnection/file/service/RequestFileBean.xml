@@ -81,7 +81,7 @@
             <if test="servicingOrganization != null">
                 and `name` like concat('${servicingOrganization.getAttribute(901).localizedValues[0].value}', '%')
             </if>
-            <include refid="org.complitex.osznconnection.file.service.RequestFileBean.permissionFilter"/>
+            <include refid="permissionFilter"/>
         </where>
     </sql>
     

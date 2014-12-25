@@ -21,10 +21,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.apache.wicket.util.template.TextTemplate;
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
@@ -48,9 +48,9 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
             new PackageTextTemplate(OrganizationPicker.class, "CenterDialog.js");
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     private boolean showData;
-    private final DomainObjectExample example;
+    private final DomainObjectFilter example;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private KeConnectionOrganizationStrategy keConnectionOrganizationStrategy;
@@ -122,7 +122,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
                 if (!showData) {
                     return Collections.emptyList();
                 }
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 example.setFirst(first);
                 example.setCount(count);
                 return keConnectionOrganizationStrategy.getList(example);
@@ -134,7 +134,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
                     return 0L;
                 }
 
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
 
                 return keConnectionOrganizationStrategy.getCount(example);
             }
@@ -271,10 +271,10 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
         lookupDialog.close(target);
     }
 
-    private DomainObjectExample newExample(long organizationTypeId) {
-        DomainObjectExample e = new DomainObjectExample();
-        e.addAttributeExample(new AttributeExample(NAME));
-        e.addAttributeExample(new AttributeExample(KeConnectionOrganizationStrategy.CODE));
+    private DomainObjectFilter newExample(long organizationTypeId) {
+        DomainObjectFilter e = new DomainObjectFilter();
+        e.addAttributeExample(new AttributeFilter(NAME));
+        e.addAttributeExample(new AttributeFilter(KeConnectionOrganizationStrategy.CODE));
         e.addAdditionalParam(KeConnectionOrganizationStrategy.ORGANIZATION_TYPE_PARAMETER,
                 ImmutableList.of(organizationTypeId));
         return e;

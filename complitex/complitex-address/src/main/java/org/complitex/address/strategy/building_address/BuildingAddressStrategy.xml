@@ -8,8 +8,8 @@
 
     <sql id="selectByReference">
         FROM `building` e
-        JOIN `building_attribute` ref ON (ref.`status` = 'ACTIVE' AND ref.`object_id` = e.`object_id` AND ref.`attribute_type_id` = 501
-            AND ref.`value_id` = #{addressId})
+        JOIN `building_attribute` ref ON (ref.`status` = 'ACTIVE' AND ref.`object_id` = e.`object_id`
+          AND ref.`attribute_type_id` = 501 AND ref.`value_id` = #{addressId})
         WHERE e.`status` IN ('ACTIVE', 'INACTIVE')
     </sql>
 
@@ -27,40 +27,49 @@
     </sql>
 
     <!-- permissions -->
-    <select id="selectBuildingPermissionInfoByParent" parameterType="long" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
-        SELECT e.`object_id`, e.`permission_id` <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByParent"/>
+    <select id="selectBuildingPermissionInfoByParent" parameterType="long"
+            resultMap="org.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
+        SELECT e.`object_id`, e.`permission_id`
+        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByParent"/>
     </select>
 
-    <select id="selectBuildingPermissionInfoByReference" parameterType="long" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
+    <select id="selectBuildingPermissionInfoByReference" parameterType="long"
+            resultMap="org.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
          SELECT DISTINCT e.`object_id`, e.`permission_id`
          <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByReference"/>
     </select>
 
-    <select id="selectReferenceAddressPermissionInfo" parameterType="long" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
+    <select id="selectReferenceAddressPermissionInfo" parameterType="long"
+            resultMap="org.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
         SELECT DISTINCT e.`object_id`, e.`permission_id`
         <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectReferenceAddress"/>
     </select>
 
-    <select id="selectParentAddressPermissionInfo" parameterType="long" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
+    <select id="selectParentAddressPermissionInfo" parameterType="long"
+            resultMap="org.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
         SELECT DISTINCT e.`object_id`, e.`permission_id`
         <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectParentAddress"/>
     </select>
 
     <!-- disable/enable -->
     <select id="selectBuildingActivityInfoByParent" parameterType="long" resultType="long">
-        SELECT e.`object_id` <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByParent"/>
+        SELECT e.`object_id`
+        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByParent"/>
     </select>
 
     <select id="selectBuildingActivityInfoByReference" parameterType="long" resultType="long">
-         SELECT e.`object_id` <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByReference"/>
+         SELECT e.`object_id`
+        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByReference"/>
     </select>
 
     <select id="selectReferenceAddressActivityInfo" parameterType="long" resultType="long">
-        SELECT e.`object_id` <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectReferenceAddress"/>
+        SELECT e.`object_id`
+        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectReferenceAddress"/>
     </select>
 
     <select id="selectParentAddressActivityInfo" parameterType="long" resultType="long">
-        SELECT e.`object_id` <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectParentAddress"/>
+        SELECT e.`object_id`
+        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectParentAddress"/>
     </select>
 
     <update id="updateBuildingAddressActivity" parameterType="map">
@@ -124,7 +133,7 @@
         </if>
     </sql>
 
-    <select id="selectBuildingAddresses" parameterType="org.complitex.common.entity.example.DomainObjectExample"
+    <select id="selectBuildingAddresses" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="domainObjectResultMap" >
         SELECT e.*
         FROM `building_address` e

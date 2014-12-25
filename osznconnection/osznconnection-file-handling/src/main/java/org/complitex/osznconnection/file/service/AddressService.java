@@ -12,8 +12,8 @@ import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.ModuleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.correction.entity.*;
 import org.complitex.correction.service.AddressCorrectionBean;
@@ -42,7 +42,7 @@ public class AddressService extends AbstractBean {
     private AddressCorrectionBean addressCorrectionBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private CityStrategy cityStrategy;
@@ -339,7 +339,7 @@ public class AddressService extends AbstractBean {
         Long calcId = calculationContext.getCalculationCenterId();
         Long userOrganizationId = calculationContext.getUserOrganizationId();
 
-        Locale locale = localeBean.getSystemLocale();
+        Locale locale = stringLocaleBean.getSystemLocale();
 
         //город
         List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(request.getCityObjectId(),
@@ -628,14 +628,14 @@ public class AddressService extends AbstractBean {
         DomainObject organization = organizationStrategy.findById(organizationId, true);
         Long districtId = organization.getAttribute(IOrganizationStrategy.DISTRICT).getValueId();
 
-        String districtName = districtStrategy.displayDomainObject(districtId, localeBean.getSystemLocale());
+        String districtName = districtStrategy.displayDomainObject(districtId, stringLocaleBean.getSystemLocale());
 
         if (districtName != null){
             List<DistrictCorrection> districtCorrections = addressCorrectionBean.getDistrictCorrections(null, null, null,
                     districtName, organizationId, userOrganizationId);
 
             return !districtCorrections.isEmpty()
-                    ? districtStrategy.displayDomainObject(districtCorrections.get(0).getObjectId(), localeBean.getSystemLocale())
+                    ? districtStrategy.displayDomainObject(districtCorrections.get(0).getObjectId(), stringLocaleBean.getSystemLocale())
                     : districtName;
         }
 

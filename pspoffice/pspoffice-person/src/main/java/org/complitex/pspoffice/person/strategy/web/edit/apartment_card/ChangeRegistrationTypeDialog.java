@@ -4,9 +4,6 @@
  */
 package org.complitex.pspoffice.person.strategy.web.edit.apartment_card;
 
-import java.text.MessageFormat;
-import java.util.List;
-import javax.ejb.EJB;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -31,6 +28,10 @@ import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ejb.EJB;
+import java.text.MessageFormat;
+import java.util.List;
 
 /**
  *
@@ -61,7 +62,7 @@ final class ChangeRegistrationTypeDialog extends Panel {
 
         allRegistrationTypes = registrationTypeStrategy.getAll();
         for (DomainObject regType : allRegistrationTypes) {
-            if (regType.getId().equals(RegistrationTypeStrategy.PERMANENT)) {
+            if (regType.getObjectId().equals(RegistrationTypeStrategy.PERMANENT)) {
                 defaultRegistrationType = regType;
                 break;
             }
@@ -171,11 +172,11 @@ final class ChangeRegistrationTypeDialog extends Panel {
         boolean valid = true;
 
         //permanent registration type
-        Long registrationTypeId = model.getObject().getRegistrationType().getId();
+        Long registrationTypeId = model.getObject().getRegistrationType().getObjectId();
         if (registrationTypeId.equals(RegistrationTypeStrategy.PERMANENT)) {
             for (Registration registration : registrationsToChangeType) {
                 Person person = registration.getPerson();
-                String address = personStrategy.findPermanentRegistrationAddress(person.getId(), getLocale());
+                String address = personStrategy.findPermanentRegistrationAddress(person.getObjectId(), getLocale());
                 if (!Strings.isEmpty(address)) {
                     String personName = personStrategy.displayDomainObject(person, getLocale());
                     error(MessageFormat.format(getString("permanent_registration_error"), personName, address));

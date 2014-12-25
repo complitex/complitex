@@ -8,10 +8,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.strategy.DeleteException;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.exception.DeleteException;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.keconnection.tarif.strategy.web.edit.TarifGroupValidator;
@@ -64,11 +64,11 @@ public class TarifGroupStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeExample attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
-                attrExample = new AttributeExample(NAME);
+                attrExample = new AttributeFilter(NAME);
                 example.addAttributeExample(attrExample);
             }
             attrExample.setValue(searchTextInput);
@@ -81,14 +81,14 @@ public class TarifGroupStrategy extends TemplateStrategy {
     }
 
     public List<DomainObject> getAll() {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         configureExample(example, ImmutableMap.<String, Long>of(), null);
         return (List<DomainObject>) getList(example);
     }
 
     public DomainObject getObjectByCode(int code) {
-        DomainObjectExample example = new DomainObjectExample();
-        AttributeExample codeExample = new AttributeExample(CODE);
+        DomainObjectFilter example = new DomainObjectFilter();
+        AttributeFilter codeExample = new AttributeFilter(CODE);
         codeExample.setValue(String.valueOf(code));
         example.addAttributeExample(codeExample);
         configureExample(example, ImmutableMap.<String, Long>of(), null);
@@ -134,7 +134,7 @@ public class TarifGroupStrategy extends TemplateStrategy {
     }
 
     @Override
-    protected void extendOrderBy(DomainObjectExample example) {
+    protected void extendOrderBy(DomainObjectFilter example) {
         if (example.getOrderByAttributeTypeId() != null
                 && example.getOrderByAttributeTypeId().equals(CODE)) {
             example.setOrderByNumber(true);

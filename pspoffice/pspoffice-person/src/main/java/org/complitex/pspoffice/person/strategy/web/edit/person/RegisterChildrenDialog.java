@@ -6,12 +6,6 @@ package org.complitex.pspoffice.person.strategy.web.edit.person;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
-import java.text.MessageFormat;
-import static com.google.common.collect.Lists.*;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import javax.ejb.EJB;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -21,11 +15,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.*;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.entity.DomainObject;
@@ -45,6 +35,14 @@ import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ejb.EJB;
+import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  *
@@ -242,9 +240,9 @@ abstract class RegisterChildrenDialog extends Panel {
         }
 
         //permanent registration type
-        if (model.getObject().getRegistrationType().getId().equals(RegistrationTypeStrategy.PERMANENT)) {
+        if (model.getObject().getRegistrationType().getObjectId().equals(RegistrationTypeStrategy.PERMANENT)) {
             for (Person child : children) {
-                String address = personStrategy.findPermanentRegistrationAddress(child.getId(), getLocale());
+                String address = personStrategy.findPermanentRegistrationAddress(child.getObjectId(), getLocale());
                 if (!Strings.isEmpty(address)) {
                     String childName = personStrategy.displayDomainObject(child, getLocale());
                     error(MessageFormat.format(getString("permanent_registration_error"), childName, address));

@@ -30,8 +30,8 @@
             AND room.`parent_entity_id` = 100)
 
         WHERE (apartment_a.`value_id` = #{addressId} OR apartment.`object_id` = #{addressId})
-        <include refid="org.complitex.pspoffice.person.strategy.ApartmentCard.permissionFilter"/>
-        <include refid="org.complitex.pspoffice.person.strategy.ApartmentCard.statusFilter"/>
+        <include refid="permissionFilter"/>
+        <include refid="statusFilter"/>
     </sql>
 
     <select id="findByApartment" parameterType="map" resultType="long">

@@ -22,14 +22,9 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.converter.DateConverter;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.Log;
-import org.complitex.common.entity.StatusType;
-import org.complitex.common.entity.description.Entity;
-import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.*;
 import org.complitex.common.service.LogBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.Numbers;
@@ -120,7 +115,7 @@ public class RegistrationEdit extends FormTemplatePage {
         this.addressEntity = addressEntity;
         this.addressId = addressId;
 
-        if (registration.getId() == null) {
+        if (registration.getObjectId() == null) {
             newRegistration = registration;
             oldRegistration = null;
         } else {
@@ -376,7 +371,7 @@ public class RegistrationEdit extends FormTemplatePage {
         };
         if (newRegistration.getOwnerRelationship() != null) {
             for (DomainObject ownerRelationship : allOwnerRelationships) {
-                if (ownerRelationship.getId().equals(newRegistration.getOwnerRelationship().getId())) {
+                if (ownerRelationship.getObjectId().equals(newRegistration.getOwnerRelationship().getObjectId())) {
                     ownerRelationshipModel.setObject(ownerRelationship);
                     break;
                 }
@@ -427,7 +422,7 @@ public class RegistrationEdit extends FormTemplatePage {
         };
         if (newRegistration.getRegistrationType() != null) {
             for (DomainObject registrationType : allRegistrationTypes) {
-                if (registrationType.getId().equals(newRegistration.getRegistrationType().getId())) {
+                if (registrationType.getObjectId().equals(newRegistration.getRegistrationType().getObjectId())) {
                     registrationTypeModel.setObject(registrationType);
                     break;
                 }
@@ -480,18 +475,18 @@ public class RegistrationEdit extends FormTemplatePage {
 
     public void beforePersist() {
         // person
-        newRegistration.getAttribute(PERSON).setValueId(newRegistration.getPerson().getId());
+        newRegistration.getAttribute(PERSON).setValueId(newRegistration.getPerson().getObjectId());
 
         // owner relationship
         Attribute ownerRelationshipAttribute = newRegistration.getAttribute(OWNER_RELATIONSHIP);
         DomainObject ownerRelationship = newRegistration.getOwnerRelationship();
-        Long ownerRelationshipId = ownerRelationship != null ? ownerRelationship.getId() : null;
+        Long ownerRelationshipId = ownerRelationship != null ? ownerRelationship.getObjectId() : null;
         ownerRelationshipAttribute.setValueId(ownerRelationshipId);
 
         // registration type
         Attribute registrationTypeAttribute = newRegistration.getAttribute(REGISTRATION_TYPE);
         DomainObject registrationType = newRegistration.getRegistrationType();
-        Long registrationTypeId = registrationType != null ? registrationType.getId() : null;
+        Long registrationTypeId = registrationType != null ? registrationType.getObjectId() : null;
         registrationTypeAttribute.setValueId(registrationTypeId);
     }
 
@@ -502,17 +497,17 @@ public class RegistrationEdit extends FormTemplatePage {
         }
 
         //permanent registration type
-        Long oldRegistrationTypeId = oldRegistration == null ? null : oldRegistration.getRegistrationType().getId();
-        if (newRegistration.getRegistrationType().getId().equals(RegistrationTypeStrategy.PERMANENT)
-                && !newRegistration.getRegistrationType().getId().equals(oldRegistrationTypeId)) {
-            String address = personStrategy.findPermanentRegistrationAddress(newRegistration.getPerson().getId(), getLocale());
+        Long oldRegistrationTypeId = oldRegistration == null ? null : oldRegistration.getRegistrationType().getObjectId();
+        if (newRegistration.getRegistrationType().getObjectId().equals(RegistrationTypeStrategy.PERMANENT)
+                && !newRegistration.getRegistrationType().getObjectId().equals(oldRegistrationTypeId)) {
+            String address = personStrategy.findPermanentRegistrationAddress(newRegistration.getPerson().getObjectId(), getLocale());
             if (!Strings.isEmpty(address)) {
                 error(MessageFormat.format(getString("permanent_registration_error"), address));
             }
         }
 
         //duplicate person registration check
-        if (isNew() && !registrationStrategy.validateDuplicatePerson(apartmentCard.getId(), newRegistration.getPerson().getId())) {
+        if (isNew() && !registrationStrategy.validateDuplicatePerson(apartmentCard.getObjectId(), newRegistration.getPerson().getObjectId())) {
             error(getString("person_already_registered"));
         }
 
@@ -541,14 +536,14 @@ public class RegistrationEdit extends FormTemplatePage {
 
         Set<String> modifiedAttributes = newHashSet();
         //registration type
-        if (!oldRegistration.getRegistrationType().getId().equals(newRegistration.getRegistrationType().getId())) {
+        if (!oldRegistration.getRegistrationType().getObjectId().equals(newRegistration.getRegistrationType().getObjectId())) {
             modifiedAttributes.add(labelModel(ENTITY.getAttributeType(REGISTRATION_TYPE).getAttributeNames(), getLocale()).getObject());
         }
         //owner relationship
         final Long oldOwnerRelationshipId = oldRegistration.getOwnerRelationship() != null
-                ? oldRegistration.getOwnerRelationship().getId() : null;
+                ? oldRegistration.getOwnerRelationship().getObjectId() : null;
         final Long newOwnerRelationshipId = newRegistration.getOwnerRelationship() != null
-                ? newRegistration.getOwnerRelationship().getId() : null;
+                ? newRegistration.getOwnerRelationship().getObjectId() : null;
         if (!Numbers.isEqual(oldOwnerRelationshipId, newOwnerRelationshipId)) {
             modifiedAttributes.add(labelModel(ENTITY.getAttributeType(OWNER_RELATIONSHIP).getAttributeNames(), getLocale()).getObject());
         }
@@ -565,7 +560,7 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private void back() {
-        setResponsePage(new ApartmentCardEdit(apartmentCard.getId(), null));
+        setResponsePage(new ApartmentCardEdit(apartmentCard.getObjectId(), null));
     }
 
     @Override

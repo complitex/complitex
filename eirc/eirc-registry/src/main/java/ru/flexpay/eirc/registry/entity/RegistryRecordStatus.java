@@ -1,11 +1,11 @@
 package ru.flexpay.eirc.registry.entity;
 
-import org.complitex.correction.entity.AddressLinkStatus;
-import org.complitex.correction.entity.LinkStatus;
-import org.complitex.common.entity.description.ILocalizedType;
+import org.complitex.common.entity.ILocalizedType;
 import org.complitex.common.mybatis.FixedIdTypeHandler;
 import org.complitex.common.mybatis.IFixedIdType;
 import org.complitex.common.util.ResourceUtil;
+import org.complitex.correction.entity.AddressLinkStatus;
+import org.complitex.correction.entity.LinkStatus;
 
 import java.util.Locale;
 

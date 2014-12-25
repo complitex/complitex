@@ -6,9 +6,9 @@ package org.complitex.pspoffice.document.strategy;
 
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.description.EntityAttributeValueType;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.EntityAttributeType;
+import org.complitex.common.entity.EntityAttributeValueType;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.StringCultures;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.template.strategy.TemplateStrategy;
@@ -88,7 +88,7 @@ public class DocumentStrategy extends TemplateStrategy {
                 EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
                 attribute.setAttributeTypeId(attributeType.getId());
                 attribute.setValueTypeId(attributeValueType.getId());
-                attribute.setObjectId(document.getId());
+                attribute.setObjectId(document.getObjectId());
                 attribute.setAttributeId(1L);
 
                 if (isSimpleAttributeType(attributeType)) {

@@ -21,7 +21,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.apache.wicket.util.template.TextTemplate;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.odlabs.wiquery.core.javascript.JsStatement;
@@ -45,7 +45,7 @@ public class ServiceProviderAccountPicker extends FormComponentPanel<ServiceProv
             new PackageTextTemplate(ServiceProviderAccountPicker.class, "CenterDialog.js");
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     private boolean showData;
     private final FilterWrapper<ServiceProviderAccount> filterWrapper;
 
@@ -120,7 +120,7 @@ public class ServiceProviderAccountPicker extends FormComponentPanel<ServiceProv
                 if (!showData) {
                     return Collections.emptyList();
                 }
-                filterWrapper.setLocale(localeBean.convert(getLocale()));
+                filterWrapper.setStringLocale(stringLocaleBean.convert(getLocale()));
                 filterWrapper.setFirst(first);
                 filterWrapper.setCount(count);
                 filterWrapper.setSortProperty("spa_account_number");
@@ -132,7 +132,7 @@ public class ServiceProviderAccountPicker extends FormComponentPanel<ServiceProv
                 if (!showData) {
                     return 0L;
                 }
-                filterWrapper.setLocale(localeBean.convert(getLocale()));
+                filterWrapper.setStringLocale(stringLocaleBean.convert(getLocale()));
                 return serviceProviderAccountBean.getCount(filterWrapper);
             }
         };
@@ -167,12 +167,12 @@ public class ServiceProviderAccountPicker extends FormComponentPanel<ServiceProv
 
             @Override
             public String getObject() {
-                return filterWrapper.getObject().getService().getName(localeBean.convert(getLocale()));
+                return filterWrapper.getObject().getService().getName(stringLocaleBean.convert(getLocale()));
             }
 
             @Override
             public void setObject(String name) {
-                filterWrapper.getObject().getService().addName(localeBean.convert(getLocale()), name);
+                filterWrapper.getObject().getService().addName(stringLocaleBean.convert(getLocale()), name);
             }
         }));
 
@@ -227,7 +227,7 @@ public class ServiceProviderAccountPicker extends FormComponentPanel<ServiceProv
                 item.add(new Radio<>("radio", item.getModel(), radioGroup));
                 item.add(new Label("spaAccountNumber", serviceProviderAccount.getAccountNumber()));
                 item.add(new Label("eircAccountNumber", serviceProviderAccount.getEircAccount().getAccountNumber()));
-                item.add(new Label("serviceName", serviceProviderAccount.getService().getName(localeBean.convert(getLocale()))));
+                item.add(new Label("serviceName", serviceProviderAccount.getService().getName(stringLocaleBean.convert(getLocale()))));
                 item.add(new Label("serviceProviderName", serviceProviderAccount.getOrganizationName()));
             }
         };

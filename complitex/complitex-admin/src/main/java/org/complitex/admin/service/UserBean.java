@@ -3,8 +3,6 @@ package org.complitex.admin.service;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.complitex.admin.strategy.UserInfoStrategy;
 import org.complitex.common.entity.*;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.web.DictionaryFwSession;
@@ -227,7 +225,7 @@ public class UserBean extends AbstractBean {
         UserFilter userFilter = new UserFilter();
 
         for (EntityAttributeType entityAttributeType : userInfoStrategy.getListColumns()) {
-            userFilter.getAttributeExamples().add(new AttributeExample(entityAttributeType.getId()));
+            userFilter.getAttributeFilters().add(new AttributeFilter(entityAttributeType.getId()));
         }
 
         return userFilter;

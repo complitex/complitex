@@ -7,8 +7,8 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.Preference;
 import org.complitex.common.entity.PreferenceKey;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.web.component.search.SearchComponentState;
 
@@ -48,8 +48,8 @@ public class DictionaryFwSession extends WebSession {
 
         //locale
         final String language = getPreferenceString(GLOBAL_PAGE, LOCALE_KEY);
-        final LocaleBean localeBean = EjbBeanLocator.getBean(LocaleBean.class);
-        super.setLocale(language != null ? new Locale(language) : localeBean.getSystemLocale());
+        final StringLocaleBean stringLocaleBean = EjbBeanLocator.getBean(StringLocaleBean.class);
+        super.setLocale(language != null ? new Locale(language) : stringLocaleBean.getSystemLocale());
     }
 
     public Map<String, Preference> getPreferenceMap(String page) {
@@ -271,8 +271,8 @@ public class DictionaryFwSession extends WebSession {
     @Override
     public Locale getLocale() {
         if (getPreferenceString(GLOBAL_PAGE, LOCALE_KEY) == null) {
-            final LocaleBean localeBean = EjbBeanLocator.getBean(LocaleBean.class);
-            setLocale(localeBean.getSystemLocale());
+            final StringLocaleBean stringLocaleBean = EjbBeanLocator.getBean(StringLocaleBean.class);
+            setLocale(stringLocaleBean.getSystemLocale());
         }
         return super.getLocale();
     }

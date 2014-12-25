@@ -1,10 +1,10 @@
-package org.complitex.common.strategy;
+package org.complitex.common.entity;
 
 /**
 * @author Anatoly Ivanov
 *         Date: 003 03.07.14 17:35
 */
-public class DomainObjectPermissionInfo {
+public class PermissionInfo {
 
     private Long id;
     private Long permissionId;

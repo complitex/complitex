@@ -17,8 +17,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.entity.StatusType;
-import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.domain.DomainObjectAccessUtil;
@@ -114,7 +114,7 @@ public final class Children extends Panel {
             }
 
             private void initChildren() {
-                DomainObjectExample example = new DomainObjectExample();
+                DomainObjectFilter example = new DomainObjectFilter();
                 if (StatusType.ACTIVE.equals(parentObject.getStatus())) {
                     example.setStatus(ShowMode.ACTIVE.name());
                 } else {

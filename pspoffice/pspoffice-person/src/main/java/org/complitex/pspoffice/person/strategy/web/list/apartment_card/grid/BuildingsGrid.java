@@ -28,11 +28,10 @@ import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.ComparisonType;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
@@ -90,7 +89,7 @@ public final class BuildingsGrid extends TemplatePage {
         @EJB
         private StrategyFactory strategyFactory;
         @EJB
-        private LocaleBean localeBean;
+        private StringLocaleBean stringLocaleBean;
         private final String entity;
         private final long cityId;
         
@@ -102,14 +101,14 @@ public final class BuildingsGrid extends TemplatePage {
         }
         
         @Override
-        protected List<? extends DomainObject> find(ComparisonType comparisonType, String term, int size) {
+        protected List<? extends DomainObject> find(DomainObjectFilter.ComparisonType comparisonType, String term, int size) {
             IStrategy strategy = strategy();
-            DomainObjectExample example = new DomainObjectExample();
+            DomainObjectFilter example = new DomainObjectFilter();
             strategy.configureExample(example, ImmutableMap.of("city", cityId), term);
             example.setOrderByAttributeTypeId(strategy.getDefaultOrderByAttributeId());
             example.setAsc(true);
             example.setCount(size);
-            example.setLocaleId(localeBean.convert(getLocale()).getId());
+            example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
             example.setComparisonType(comparisonType.name());
             example.setStatus(ShowMode.ACTIVE.name());
             return strategy.getList(example);
@@ -193,7 +192,7 @@ public final class BuildingsGrid extends TemplatePage {
             @Override
             public void setObject(DomainObject district) {
                 super.setObject(district);
-                filter.setDistrictId(district != null ? district.getId() : null);
+                filter.setDistrictId(district != null ? district.getObjectId() : null);
             }
         };
         filterForm.add(new BuildingsGridFilterSearchComponent("districtFilter", "district", cityId, districtFilterModel));
@@ -204,7 +203,7 @@ public final class BuildingsGrid extends TemplatePage {
             @Override
             public void setObject(DomainObject street) {
                 super.setObject(street);
-                filter.setStreetId(street != null ? street.getId() : null);
+                filter.setStreetId(street != null ? street.getObjectId() : null);
             }
         };
         final BuildingsGridFilterSearchComponent streetFilter =
@@ -298,7 +297,7 @@ public final class BuildingsGrid extends TemplatePage {
                             @Override
                             public void onClick() {
                                 MenuManager.setMenuItem(OrganizationMenu.ORGANIZATION_MENU_ITEM);
-                                PageParameters params = organizationStrategy.getEditPageParams(organization.getId(), null, null);
+                                PageParameters params = organizationStrategy.getEditPageParams(organization.getObjectId(), null, null);
                                 BackInfoManager.put(this, PAGE_SESSION_KEY, gridBackInfo(cityId, streetId));
                                 params.set(BACK_INFO_SESSION_KEY, PAGE_SESSION_KEY);
                                 setResponsePage(organizationStrategy.getEditPage(), params);

@@ -6,8 +6,8 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.oracle.OracleErrors;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.LogBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
@@ -55,7 +55,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     @EJB
     private LogBean logBean;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private RequestWarningBean warningBean;
     @EJB
@@ -269,7 +269,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             log.error("acquireAccountDetailsByAccount. Result code is null. Request id: {}, request class: {}, calculation center: {}",
                     request.getId(), request.getClass(), calculationCenterInfo);
             logBean.error(Module.NAME, getClass(), request.getClass(), request.getId(), EVENT.GETTING_DATA,
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", localeBean.getSystemLocale(),
+                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
                             "GETATTRSBYACCCODE", "null", calculationCenterInfo));
             request.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
         } else {
@@ -283,7 +283,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                                 request.getId(), request.getClass(), calculationCenterInfo);
                         logBean.error(Module.NAME, getClass(), request.getClass(), request.getId(), EVENT.GETTING_DATA,
                                 ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent",
-                                        localeBean.getSystemLocale(), "GETATTRSBYACCCODE", calculationCenterInfo));
+                                        stringLocaleBean.getSystemLocale(), "GETATTRSBYACCCODE", calculationCenterInfo));
                         request.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     }
                     break;
@@ -295,7 +295,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                                     "Request id: {}, request class: {}, calculation center: {}",
                             accountType, request.getId(), request.getClass(), calculationCenterInfo);
                     logBean.error(Module.NAME, getClass(), request.getClass(), request.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "wrong_account_type_code", localeBean.getSystemLocale(),
+                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "wrong_account_type_code", stringLocaleBean.getSystemLocale(),
                                     "GETATTRSBYACCCODE", accountType, calculationCenterInfo));
                     request.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     break;
@@ -306,7 +306,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                     log.error("acquireAccountDetailsByAccount. Unexpected result code: {}. Request id: {}, request class: {}"
                             + ", calculation center: {}", resultCode, request.getId(), request.getClass(), calculationCenterInfo);
                     logBean.error(Module.NAME, getClass(), request.getClass(), request.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", localeBean.getSystemLocale(),
+                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
                                     "GETATTRSBYACCCODE", resultCode, calculationCenterInfo));
                     request.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
             }
@@ -375,7 +375,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             log.error("processPaymentAndBenefit. Result code is null. Payment id: {}, calculation center: {}",
                     payment.getId(), calculationContext);
             logBean.error(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.GETTING_DATA,
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", localeBean.getSystemLocale(),
+                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
                             "GETCHARGEANDPARAMS", "null", calculationContext));
             payment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
         } else {
@@ -390,7 +390,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                             log.warn("processPaymentAndBenefit. Size of list of paymentAndBenefitData is more than 1. Only first entry will be used."
                                     + "Calculation center: {}", calculationContext);
                             logBean.warn(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.GETTING_DATA,
-                                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "data_size_more_one", localeBean.getSystemLocale(),
+                                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "data_size_more_one", stringLocaleBean.getSystemLocale(),
                                             "GETCHARGEANDPARAMS", calculationContext));
                         }
                         processPaymentAndBenefitData(calculationContext, payment, benefits, data);
@@ -399,7 +399,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                                 + "calculation center: {}",
                                 payment.getId(), calculationContext);
                         logBean.error(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.GETTING_DATA,
-                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", localeBean.getSystemLocale(),
+                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
                                         "GETCHARGEANDPARAMS", calculationContext));
                         payment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     }
@@ -411,7 +411,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                     log.error("processPaymentAndBenefit. Unexpected result code: {}. Payment id: {}, calculation center: {}",
                             resultCode, payment.getId(), calculationContext);
                     logBean.error(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", localeBean.getSystemLocale(),
+                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
                                     "GETCHARGEANDPARAMS", resultCode, calculationContext));
                     payment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
             }
@@ -545,7 +545,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             warningBean.save(warning);
 
             logBean.error(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.EDIT,
-                    webWarningRenderer.display(warning, localeBean.getSystemLocale()));
+                    webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
         }
 
         //benefits
@@ -564,7 +564,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                     warningBean.save(warning);
 
                     logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                            webWarningRenderer.display(warning, localeBean.getSystemLocale()));
+                            webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
                 }
             } else {
                 final long osznId = payment.getOrganizationId();
@@ -582,7 +582,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                         warningBean.save(warning);
 
                         logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                                webWarningRenderer.display(warning, localeBean.getSystemLocale()));
+                                webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
                     }
                 } else {
                     Integer ownershipCodeAsInt = null;
@@ -601,7 +601,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                             warningBean.save(warning);
 
                             logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                                    webWarningRenderer.display(warning, localeBean.getSystemLocale()));
+                                    webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
                         }
                     }
 
@@ -670,7 +670,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             log.error("getBenefitData. Result code is null. Benefit id: {}, dat1: {}, calculation center: {}",
                     benefit.getId(), dat1, calculationContext);
             logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", localeBean.getSystemLocale(),
+                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
                             "GETPRIVS", "null", calculationContext));
             benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
         } else {
@@ -695,7 +695,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                                 + "calculation center: {}",
                                 benefit.getId(), dat1, calculationContext);
                         logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", localeBean.getSystemLocale(),
+                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
                                         "GETPRIVS", calculationContext));
                         benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     }
@@ -707,7 +707,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                     log.error("getBenefitData. Unexpected result code: {}. Benefit id: {}, dat1: {}, calculation center: {}",
                             resultCode, benefit.getId(), dat1, calculationContext);
                     logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", localeBean.getSystemLocale(),
+                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
                                     "GETPRIVS", resultCode, calculationContext));
                     benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
             }
@@ -801,7 +801,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                 for (Benefit benefit : benefits) {
                     benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_order_fam_null", localeBean.getSystemLocale(),
+                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_order_fam_null", stringLocaleBean.getSystemLocale(),
                                     "GETPRIVS", accountNumber, dat1, calculationContext));
                 }
                 return false;
@@ -818,7 +818,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                 for (Benefit benefit : benefits) {
                     benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_order_fam_not_unique", localeBean.getSystemLocale(),
+                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_order_fam_not_unique", stringLocaleBean.getSystemLocale(),
                                     "GETPRIVS", accountNumber, dat1, calculationContext));
                 }
                 return false;
@@ -839,7 +839,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                 for (Benefit benefit : benefits) {
                     benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_code_null", localeBean.getSystemLocale(),
+                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_code_null", stringLocaleBean.getSystemLocale(),
                                     "GETPRIVS", accountNumber, dat1, calculationContext));
                 }
                 return false;
@@ -855,7 +855,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                 accountNumber, dat1, calculationCenterInfo);
         for (Benefit benefit : benefits) {
             logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_id_empty", localeBean.getSystemLocale(),
+                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_id_empty", stringLocaleBean.getSystemLocale(),
                             "GETPRIVS", accountNumber, dat1, calculationCenterInfo));
         }
     }
@@ -982,7 +982,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                     accountNumber, dat1, calculationContext);
             for (Benefit benefit : benefits) {
                 logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                        ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", localeBean.getSystemLocale(),
+                        ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
                                 "GETPRIVS", "null", calculationContext));
                 benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
             }
@@ -1001,7 +1001,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                                 accountNumber, dat1, calculationContext);
                         for (Benefit benefit : benefits) {
                             logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", localeBean.getSystemLocale(),
+                                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
                                             "GETPRIVS", calculationContext));
                             benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                         }
@@ -1015,7 +1015,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                             resultCode, accountNumber, dat1, calculationContext);
                     for (Benefit benefit : benefits) {
                         logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", localeBean.getSystemLocale(),
+                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
                                         "GETPRIVS", resultCode, calculationContext));
                         benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     }
@@ -1100,7 +1100,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                     warningBean.save(warning);
 
                     logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                            webWarningRenderer.display(warning, localeBean.getSystemLocale()));
+                            webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
                 }
             } else {
                 String osznBenefitCode = findOSZNPrivilegeCode(internalPrivilegeId, osznId, userOrganizationId);
@@ -1118,7 +1118,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                         warningBean.save(warning);
 
                         logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                                webWarningRenderer.display(warning, localeBean.getSystemLocale()));
+                                webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
                     }
                 } else {
                     //set benefit code and ord fam into benefit.
@@ -1138,7 +1138,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                             warningBean.save(warning);
 
                             logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                                    webWarningRenderer.display(warning, localeBean.getSystemLocale()));
+                                    webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
                         }
                     }
 
@@ -1155,7 +1155,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                             warningBean.save(warning);
 
                             logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                                    webWarningRenderer.display(warning, localeBean.getSystemLocale()));
+                                    webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
                         }
                     }
 
@@ -1268,7 +1268,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             log.error("processActualPayment. Result code is null. ActualPayment id: {}, calculation center: {}",
                     actualPayment.getId(), calculationCenterInfo);
             logBean.error(Module.NAME, getClass(), ActualPayment.class, actualPayment.getId(), EVENT.GETTING_DATA,
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", localeBean.getSystemLocale(),
+                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
                             "GETFACTCHARGEANDTARIF", "null", calculationCenterInfo));
             actualPayment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
         } else {
@@ -1281,7 +1281,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                             log.warn("processActualPayment. Size of list of actualPaymentData is more than 1. Only first entry will be used."
                                     + "Calculation center: {}", calculationCenterInfo);
                             logBean.warn(Module.NAME, getClass(), ActualPayment.class, actualPayment.getId(), EVENT.GETTING_DATA,
-                                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "data_size_more_one", localeBean.getSystemLocale(),
+                                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "data_size_more_one", stringLocaleBean.getSystemLocale(),
                                             "GETFACTCHARGEANDTARIF", calculationCenterInfo));
                         }
                         processActualPaymentData(actualPayment, data, calculationCenterInfo.getServiceProviderTypeIds());
@@ -1290,7 +1290,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                                 + ", calculation center: {}",
                                 actualPayment.getId(), calculationCenterInfo);
                         logBean.error(Module.NAME, getClass(), ActualPayment.class, actualPayment.getId(), EVENT.GETTING_DATA,
-                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", localeBean.getSystemLocale(),
+                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
                                         "GETFACTCHARGEANDTARIF", calculationCenterInfo));
                         actualPayment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     }
@@ -1302,7 +1302,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                     log.error("processActualPayment. Unexpected result code: {}. ActualPayment id: {}, calculation center: {}",
                             resultCode, actualPayment.getId(), calculationCenterInfo);
                     logBean.error(Module.NAME, getClass(), ActualPayment.class, actualPayment.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", localeBean.getSystemLocale(),
+                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
                                     "GETFACTCHARGEANDTARIF", resultCode, calculationCenterInfo));
                     actualPayment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
             }

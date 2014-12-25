@@ -7,9 +7,9 @@ package org.complitex.keconnection.heatmeter.service;
 import com.google.common.collect.Maps;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.keconnection.heatmeter.entity.Correction;
 import org.complitex.keconnection.heatmeter.entity.example.CorrectionExample;
 
@@ -29,7 +29,7 @@ public class CorrectionBean extends AbstractBean {
     @EJB
     protected StrategyFactory strategyFactory;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private KeConnectionSessionBean keConnectionSessionBean;
 
@@ -71,7 +71,7 @@ public class CorrectionBean extends AbstractBean {
                     correction.setEditable(false);
                 }
 
-                correction.setDisplayObject(strategy.displayDomainObject(object, localeBean.convert(localeBean.getLocaleObject(localeId))));
+                correction.setDisplayObject(strategy.displayDomainObject(object, stringLocaleBean.convert(stringLocaleBean.getLocaleObject(localeId))));
             }
         }
     }

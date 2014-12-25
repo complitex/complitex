@@ -98,7 +98,7 @@
             <if test="month != null">and MONTH(p.`begin_date`) = #{month}</if>
             <if test="status != null">and g.`status` = #{status}</if>
             
-            <include refid="org.complitex.osznconnection.file.service.RequestFileGroupBean.permissionFilter"/>
+            <include refid="permissionFilter"/>
         </where>
     </sql>
 

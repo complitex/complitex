@@ -6,13 +6,6 @@ package org.complitex.pspoffice.person.strategy.web.edit.person;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import java.text.MessageFormat;
-import java.util.Collections;
-import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
-import java.util.Date;
-import java.util.List;
-import javax.ejb.EJB;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -34,6 +27,16 @@ import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ejb.EJB;
+import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.transform;
 
 /**
  *
@@ -120,7 +123,7 @@ final class PersonDeathDialog extends Panel {
     }
 
     private void loadActivePersonRegistrations() {
-        personRegistrations = newArrayList(filter(personStrategy.findPersonRegistrations(person.getId()), new Predicate<PersonRegistration>() {
+        personRegistrations = newArrayList(filter(personStrategy.findPersonRegistrations(person.getObjectId()), new Predicate<PersonRegistration>() {
 
             @Override
             public boolean apply(PersonRegistration personRegistration) {

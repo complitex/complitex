@@ -63,24 +63,25 @@
         </if>
     </sql>
 
-    <select id="find" resultMap="org.complitex.pspoffice.person.strategy.Person.Person" parameterType="DomainObjectExample">
+    <select id="find" resultMap="org.complitex.pspoffice.person.strategy.Person.Person"
+            parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT e.* FROM `person` e
             <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
         WHERE
-        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
+        <include refid="domainObjectStatusFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
         <include refid="org.complitex.pspoffice.person.strategy.Person.filter"/>
         <include refid="org.complitex.pspoffice.person.strategy.Person.orderBy"/>
-        <include refid="org.complitex.common.entity.DomainObject.limit"/>
+        <include refid="domainObjectLimit"/>
     </select>
 
-    <select id="count" resultType="long" parameterType="DomainObjectExample">
+    <select id="count" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT COUNT(1) FROM `person` e
             <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
         WHERE
-        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
-        <include refid="org.complitex.pspoffice.person.strategy.Person.filter"/>
+        <include refid="domainObjectStatusFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
+        <include refid="filter"/>
     </select>
 
     <sql id="orderBy">
@@ -115,12 +116,13 @@
         </if>
     </sql>
 
-    <select id="findByName" resultMap="org.complitex.pspoffice.person.strategy.Person.Person" parameterType="DomainObjectExample">
+    <select id="findByName" resultMap="org.complitex.pspoffice.person.strategy.Person.Person"
+            parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT e.* FROM `person` e
         <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
         WHERE
             e.`status` = 'ACTIVE'
-            <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
+            <include refid="domainObjectPermissionFilter"/>
             AND (ln.`name` = #{additionalParams.last_name} OR sys_ln.`name` = #{additionalParams.last_name})
             <if test="additionalParams['first_name'] != null">
                 AND (fn.`name` LIKE CONCAT(#{additionalParams.first_name}, '%') OR

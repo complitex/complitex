@@ -7,7 +7,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.template.web.security.SecurityRole;
@@ -35,7 +35,7 @@ public class ServiceCorrectionList extends AbstractCorrectionList<ServiceCorrect
     private ServiceBean serviceBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private EircOrganizationStrategy organizationStrategy;
@@ -85,7 +85,7 @@ public class ServiceCorrectionList extends AbstractCorrectionList<ServiceCorrect
     @Override
     protected String displayInternalObject(Correction correction) {
         Service service = serviceBean.getService(correction.getObjectId());
-        return service == null? "" : service.getName(localeBean.convert(getLocale()));
+        return service == null? "" : service.getName(stringLocaleBean.convert(getLocale()));
     }
 
     @Override

@@ -4,7 +4,7 @@
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
     <resultMap id="correction" type="org.complitex.common.entity.Correction">
-        <result column="id" property="id"/>
+        <id column="id" property="id"/>
         <result column="external_id" property="externalId"/>
         <result column="object_id" property="objectId"/>
         <result column="correction" property="correction"/>

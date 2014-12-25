@@ -7,7 +7,7 @@ import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.CloneUtil;
 
@@ -53,12 +53,12 @@ public class StreetSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return streetStrategy.getList(new DomainObjectExample().setParent("city", parent.getObjectId()));
+        return streetStrategy.getList(new DomainObjectFilter().setParent("city", parent.getObjectId()));
     }
 
     @Override
     public List<? extends DomainObject> getParentObjects() {
-        return cityStrategy.getList(new DomainObjectExample());
+        return cityStrategy.getList(new DomainObjectFilter());
     }
 
     @Override
@@ -85,7 +85,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
         newObject.setParentId(sync.getParentObjectId());
 
         //STREET_TYPE_ID
-        List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(new DomainObjectExample()
+        List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(new DomainObjectFilter()
                 .addAttribute(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName()));
         if (streetTypes.isEmpty()) {
             throw new RuntimeException("StreetType not found: " + sync.getAdditionalName());
@@ -103,7 +103,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
 
         newObject.setStringValue(StreetStrategy.NAME, sync.getName(), locale);
 
-        List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(new DomainObjectExample()
+        List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(new DomainObjectFilter()
                 .addAttribute(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName()));
         if (streetTypes.isEmpty()) {
             throw new RuntimeException("StreetType not found: " + sync.getAdditionalName());

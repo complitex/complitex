@@ -18,7 +18,7 @@
         </collection>
     </resultMap>
 
-    <resultMap id="Locale" type="org.complitex.common.entity.Locale">
+    <resultMap id="Locale" type="org.complitex.common.entity.StringLocale">
         <constructor>
             <idArg column="service_locale_id"     javaType="Long"/>
             <arg   column="service_locale_name"   javaType="String"/>

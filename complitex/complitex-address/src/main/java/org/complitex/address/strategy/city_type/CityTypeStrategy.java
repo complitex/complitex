@@ -5,11 +5,11 @@
 package org.complitex.address.strategy.city_type;
 
 import org.complitex.address.resource.CommonResources;
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -36,7 +36,7 @@ public class CityTypeStrategy extends TemplateStrategy {
     private StringCultureBean stringBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @Override
     public String getEntityTable() {
@@ -64,11 +64,11 @@ public class CityTypeStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!isEmpty(searchTextInput)) {
-            AttributeExample attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
-                attrExample = new AttributeExample(NAME);
+                attrExample = new AttributeFilter(NAME);
                 example.addAttributeExample(attrExample);
             }
             attrExample.setValue(searchTextInput);

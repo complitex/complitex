@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.complitex.common.entity.Sequence">
+<mapper namespace="org.complitex.common.strategy.SequenceBean">
 
     <insert id="create" parameterType="string">
         insert into `sequence` (`sequence_name`, `sequence_value`) VALUES ('${value}', 1)

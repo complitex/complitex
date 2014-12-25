@@ -15,9 +15,9 @@ import org.apache.wicket.model.PropertyModel;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.EntityBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.strategy.EntityBean;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.ShowMode;
@@ -174,7 +174,7 @@ public class AddressCorrectionInputPanel extends Panel {
         }, ShowMode.ACTIVE, true));
 
         //StreetType
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(example);
         Collections.sort(streetTypes, new Comparator<DomainObject>() {
             @Override

@@ -16,7 +16,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.apache.wicket.util.template.TextTemplate;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.odlabs.wiquery.core.javascript.JsStatement;
@@ -37,7 +37,7 @@ public class ServiceDialog extends FormComponentPanel<Service> {
             new PackageTextTemplate(ServicePicker.class, "CenterDialog.js");
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private ServiceBean serviceBean;
@@ -83,7 +83,7 @@ public class ServiceDialog extends FormComponentPanel<Service> {
                 if (!showData) {
                     return Collections.emptyList();
                 }
-                filterWrapper.setLocale(localeBean.convert(getLocale()));
+                filterWrapper.setStringLocale(stringLocaleBean.convert(getLocale()));
                 filterWrapper.setFirst(first);
                 filterWrapper.setCount(count);
                 filterWrapper.setSortProperty("service_name");
@@ -95,7 +95,7 @@ public class ServiceDialog extends FormComponentPanel<Service> {
                 if (!showData) {
                     return 0L;
                 }
-                filterWrapper.setLocale(localeBean.convert(getLocale()));
+                filterWrapper.setStringLocale(stringLocaleBean.convert(getLocale()));
                 return serviceBean.getCount(filterWrapper);
             }
         };
@@ -104,12 +104,12 @@ public class ServiceDialog extends FormComponentPanel<Service> {
 
             @Override
             public String getObject() {
-                return filterWrapper.getObject().getName(localeBean.convert(getLocale()));
+                return filterWrapper.getObject().getName(stringLocaleBean.convert(getLocale()));
             }
 
             @Override
             public void setObject(String name) {
-                filterWrapper.getObject().addName(localeBean.convert(getLocale()), name);
+                filterWrapper.getObject().addName(stringLocaleBean.convert(getLocale()), name);
             }
         }));
         filterForm.add(new TextField<>("codeFilter", new Model<String>() {
@@ -165,7 +165,7 @@ public class ServiceDialog extends FormComponentPanel<Service> {
                 final Service service = item.getModelObject();
 
                 item.add(new Radio<>("radio", item.getModel(), radioGroup));
-                item.add(new Label("name", service.getName(localeBean.convert(getLocale()))));
+                item.add(new Label("name", service.getName(stringLocaleBean.convert(getLocale()))));
                 item.add(new Label("code", service.getCode()));
             }
         };

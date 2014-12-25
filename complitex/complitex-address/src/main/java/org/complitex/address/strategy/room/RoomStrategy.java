@@ -13,10 +13,10 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.resource.CommonResources;
 import org.complitex.address.strategy.room.web.edit.RoomEdit;
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.search.ISearchCallback;
@@ -84,15 +84,15 @@ public class RoomStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         configureExampleImpl(example, ids, searchTextInput);
     }
 
-    private void configureExampleImpl(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    private void configureExampleImpl(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeExample attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
-                attrExample = new AttributeExample(NAME);
+                attrExample = new AttributeFilter(NAME);
                 example.addAttributeExample(attrExample);
             }
             attrExample.setValue(searchTextInput);
@@ -177,7 +177,7 @@ public class RoomStrategy extends TemplateStrategy {
     }
 
     @Override
-    protected void extendOrderBy(DomainObjectExample example) {
+    protected void extendOrderBy(DomainObjectFilter example) {
         if (example.getOrderByAttributeTypeId() != null
                 && example.getOrderByAttributeTypeId().equals(NAME)) {
             example.setOrderByNumber(true);

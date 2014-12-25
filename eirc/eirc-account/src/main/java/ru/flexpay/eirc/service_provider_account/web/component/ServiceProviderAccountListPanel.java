@@ -32,8 +32,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.entity.Locale;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.StringLocale;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.ShowModePanel;
 import org.complitex.common.web.component.datatable.DataProvider;
@@ -64,7 +64,7 @@ public class ServiceProviderAccountListPanel extends Panel {
     private ServiceProviderAccountBean serviceProviderAccountBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private ServiceBean serviceBean;
@@ -99,7 +99,7 @@ public class ServiceProviderAccountListPanel extends Panel {
         final Model<ShowMode> showModeModel = new Model<>(editable ? ACTIVE : ALL);
         container.add(new ShowModePanel("showModelPanel", showModeModel));
 
-        final Locale locale = localeBean.convert(getLocale());
+        final StringLocale stringLocale = stringLocaleBean.convert(getLocale());
 
         ImmutableList.Builder<IColumn<ServiceProviderAccount, String>> builder = ImmutableList.builder();
         if (editable) {
@@ -169,7 +169,7 @@ public class ServiceProviderAccountListPanel extends Panel {
                     public void populateItem(Item<ICellPopulator<ServiceProviderAccount>> components, String s,
                                              IModel<ServiceProviderAccount> serviceProviderAccountIModel) {
                         ServiceProviderAccount serviceProviderAccount = serviceProviderAccountIModel.getObject();
-                        components.add(new Label(s, serviceProviderAccount.getService().getName(locale) + " (" + serviceProviderAccount.getService().getCode() + ")"));
+                        components.add(new Label(s, serviceProviderAccount.getService().getName(stringLocale) + " (" + serviceProviderAccount.getService().getCode() + ")"));
                     }
                 });
         builder.add(
@@ -281,7 +281,7 @@ public class ServiceProviderAccountListPanel extends Panel {
                 filterWrapper.setSortProperty(sortProperty);
                 filterWrapper.setAscending(SortOrder.ASCENDING.equals(order));
                 filterWrapper.getMap().put("address", Boolean.FALSE);
-                filterWrapper.setLocale(locale);
+                filterWrapper.setStringLocale(stringLocale);
 
                 setShowModel(filterWrapper);
 

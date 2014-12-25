@@ -14,7 +14,7 @@ import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.correction.entity.*;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
@@ -40,7 +40,7 @@ public class AddressService extends AbstractBean {
     private AddressCorrectionBean addressCorrectionBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private CityStrategy cityStrategy;

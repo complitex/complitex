@@ -4,7 +4,7 @@
 <mapper namespace="org.complitex.organization.strategy.OrganizationStrategy">
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
-    <select id="selectOrganizations" resultMap="domainObjectResultMap" parameterType="org.complitex.common.entity.example.DomainObjectExample">
+    <select id="selectOrganizations" resultMap="domainObjectResultMap" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT e.* FROM `organization` e WHERE
 
         <include refid="domainObjectStatusFilter"/>
@@ -60,11 +60,11 @@
         </if>
     </sql>
 
-    <select id="selectOrganizationCount" resultType="long" parameterType="DomainObjectExample">
+    <select id="selectOrganizationCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT COUNT(1) FROM `organization` e WHERE
-        <include refid="org.complitex.common.entity.DomainObject.statusFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
-        <include refid="org.complitex.organization.strategy.Organization.filter"/>
+        <include refid="domainObjectStatusFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
+        <include refid="filter"/>
     </select>
 
     <!-- Validation -->

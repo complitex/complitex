@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.payments_communication.entity;
 
-import org.complitex.common.entity.description.ILocalizedType;
+import org.complitex.common.entity.ILocalizedType;
 import org.complitex.common.util.ResourceUtil;
 
 import java.util.Locale;

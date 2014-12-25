@@ -49,7 +49,7 @@ public class ApartmentCardsGridBean extends AbstractBean {
                 apartmentCardStrategy.findByAddress("apartment", filter.getApartmentId(), 0,
                 apartmentCardStrategy.countByAddress("apartment", filter.getApartmentId()))) {
             //apartment card
-            final String apartmentCardNumber = String.valueOf(apartmentCard.getId());
+            final String apartmentCardNumber = String.valueOf(apartmentCard.getObjectId());
 
             //owner full name
             final String owner = personStrategy.displayDomainObject(apartmentCard.getOwner(), filter.getLocale());
@@ -69,7 +69,7 @@ public class ApartmentCardsGridBean extends AbstractBean {
             long organizationId = organizationIds.iterator().next();
             final DomainObject organization = organizationId > 0 ? organizationStrategy.findById(organizationId, true) : null;
 
-            result.add(new ApartmentCardsGridEntity(apartmentCardNumber, apartmentCard.getId(), ownerhipForm,
+            result.add(new ApartmentCardsGridEntity(apartmentCardNumber, apartmentCard.getObjectId(), ownerhipForm,
                     registered, organization, owner));
         }
         return result;

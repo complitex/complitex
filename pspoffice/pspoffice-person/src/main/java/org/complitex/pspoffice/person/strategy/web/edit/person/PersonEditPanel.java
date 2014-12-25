@@ -16,7 +16,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.web.component.scroll.ScrollToElementUtil;
 import org.complitex.pspoffice.person.Module;
@@ -88,7 +88,7 @@ public abstract class PersonEditPanel extends Panel {
             public String getObject() {
                 final String entityName = personStrategy.getEntity().getName(getLocale());
                 return isNew() || !sessionBean.isAdmin() ? entityName
-                        : MessageFormat.format(getString("label_edit"), entityName, newPerson.getId());
+                        : MessageFormat.format(getString("label_edit"), entityName, newPerson.getObjectId());
             }
         });
         label.setOutputMarkupId(true);
@@ -110,7 +110,7 @@ public abstract class PersonEditPanel extends Panel {
 
             @Override
             public void onClick() {
-                setResponsePage(new PersonHistoryPage(newPerson.getId()));
+                setResponsePage(new PersonHistoryPage(newPerson.getObjectId()));
             }
         }.setVisible(!isNew()));
 
@@ -265,7 +265,7 @@ public abstract class PersonEditPanel extends Panel {
         for (Person newChild : newChildren) {
             boolean isAdded = true;
             for (Person oldChild : oldChildren) {
-                if (newChild.getId().equals(oldChild.getId())) {
+                if (newChild.getObjectId().equals(oldChild.getObjectId())) {
                     isAdded = false;
                     break;
                 }
@@ -278,7 +278,7 @@ public abstract class PersonEditPanel extends Panel {
     }
 
     private List<PersonApartmentCardAddress> getPersonApartmentCardAddresses(List<Person> children) {
-        List<PersonApartmentCardAddress> personApartmentCardAddresses = personStrategy.findPersonApartmentCardAddresses(newPerson.getId());
+        List<PersonApartmentCardAddress> personApartmentCardAddresses = personStrategy.findPersonApartmentCardAddresses(newPerson.getObjectId());
         if (personApartmentCardAddresses == null || personApartmentCardAddresses.isEmpty()) {
             return Collections.emptyList();
         }
@@ -286,8 +286,8 @@ public abstract class PersonEditPanel extends Panel {
         Map<Long, List<Long>> childrenRegistrationsMap = newHashMap();
         for (Person child : children) {
             List<PersonApartmentCardAddress> childApartmentCardAddresses =
-                    personStrategy.findPersonApartmentCardAddresses(child.getId());
-            childrenRegistrationsMap.put(child.getId(), transform(childApartmentCardAddresses,
+                    personStrategy.findPersonApartmentCardAddresses(child.getObjectId());
+            childrenRegistrationsMap.put(child.getObjectId(), transform(childApartmentCardAddresses,
                     new Function<PersonApartmentCardAddress, Long>() {
 
                         @Override

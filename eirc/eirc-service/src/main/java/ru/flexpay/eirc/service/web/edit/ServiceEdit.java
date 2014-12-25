@@ -16,8 +16,8 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.entity.Locale;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.StringLocale;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
@@ -38,7 +38,7 @@ public class ServiceEdit extends FormTemplatePage {
     private ServiceBean serviceBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     private Service service;
     private Service parentService;
@@ -66,7 +66,7 @@ public class ServiceEdit extends FormTemplatePage {
             service = new Service();
         }
 
-        final Locale locale = localeBean.convert(getLocale());
+        final StringLocale stringLocale = stringLocaleBean.convert(getLocale());
 
         IModel<String> labelModel = new ResourceModel("label");
 
@@ -107,7 +107,7 @@ public class ServiceEdit extends FormTemplatePage {
         }, services, new IChoiceRenderer<Service>() {
             @Override
             public Object getDisplayValue(Service object) {
-                return object != null? object.getName(locale) : "";
+                return object != null? object.getName(stringLocale) : "";
             }
 
             @Override

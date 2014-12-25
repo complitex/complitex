@@ -7,10 +7,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.EntityAttributeType;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
@@ -62,7 +62,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
 
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private StringCultureBean stringBean;
 
@@ -91,12 +91,12 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
     }
 
     public List<Organization> getAllServicingOrganizations(Locale locale) {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER,
                 ImmutableList.of(KeConnectionOrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE));
         if (locale != null) {
             example.setOrderByAttributeTypeId(NAME);
-            example.setLocaleId(localeBean.convert(locale).getId());
+            example.setLocaleId(stringLocaleBean.convert(locale).getId());
             example.setAsc(true);
         }
         configureExample(example, ImmutableMap.<String, Long>of(), null);
@@ -113,7 +113,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
         return "";
     }
 
-    protected void extendOrderBy(DomainObjectExample example) {
+    protected void extendOrderBy(DomainObjectFilter example) {
         super.extendOrderBy(example);
         if (example.getOrderByAttributeTypeId() != null
                 && example.getOrderByAttributeTypeId().equals(CODE)) {
@@ -127,11 +127,11 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
 
     @Override
     public List<Organization> getAllOuterOrganizations(Locale locale) {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
 
         if (locale != null) {
             example.setOrderByAttributeTypeId(NAME);
-            example.setLocaleId(localeBean.convert(locale).getId());
+            example.setLocaleId(stringLocaleBean.convert(locale).getId());
             example.setAsc(true);
         }
 
@@ -168,7 +168,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
 
 
     @Override
-    public List<Organization> getList(DomainObjectExample example) {
+    public List<Organization> getList(DomainObjectFilter example) {
         if (example.getLocaleId() == null){
             example.setLocaleId(-1L);
         }
@@ -196,7 +196,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
         return organizations;
     }
 
-    private void setupFindOperationParameters(DomainObjectExample example) {
+    private void setupFindOperationParameters(DomainObjectFilter example) {
         //set up attribute type id parameters:
         example.addAdditionalParam("parentAT", USER_ORGANIZATION_PARENT);
         example.addAdditionalParam("organizationShortNameAT", SHORT_NAME);
@@ -204,7 +204,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
 
 
     @Override
-    public Long getCount(DomainObjectExample example) {
+    public Long getCount(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }

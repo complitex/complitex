@@ -22,8 +22,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.entity.Locale;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.StringLocale;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
@@ -66,7 +66,7 @@ public class ServiceProviderAccountList extends TemplatePage {
     private ServiceProviderAccountBean serviceProviderAccountBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private ServiceBean serviceBean;
@@ -105,7 +105,7 @@ public class ServiceProviderAccountList extends TemplatePage {
         container = new WebMarkupContainer("container");
         container.setOutputMarkupPlaceholderTag(true);
 
-        final Locale locale = localeBean.convert(getLocale());
+        final StringLocale stringLocale = stringLocaleBean.convert(getLocale());
 
         //Search
         final List<String> searchFilters = getSearchFilters();
@@ -157,7 +157,7 @@ public class ServiceProviderAccountList extends TemplatePage {
                 filterWrapper.setAscending(getSort().isAscending());
                 filterWrapper.setSortProperty(getSort().getProperty());
                 filterWrapper.getMap().put("address", Boolean.TRUE);
-                filterWrapper.setLocale(locale);
+                filterWrapper.setStringLocale(stringLocale);
 
                 return serviceProviderAccountBean.getServiceProviderAccounts(filterWrapper);
             }
@@ -178,7 +178,7 @@ public class ServiceProviderAccountList extends TemplatePage {
                 final ServiceProviderAccount serviceProviderAccount = item.getModelObject();
 
                 item.add(new Label("accountNumber", serviceProviderAccount.getAccountNumber()));
-                item.add(new Label("service", serviceProviderAccount.getService().getName(locale) + " (" + serviceProviderAccount.getService().getCode() + ")" ));
+                item.add(new Label("service", serviceProviderAccount.getService().getName(stringLocale) + " (" + serviceProviderAccount.getService().getCode() + ")" ));
                 item.add(new Label("serviceProvider", serviceProviderAccount.getOrganizationName()));
                 item.add(new Label("person", serviceProviderAccount.getPerson() != null? serviceProviderAccount.getPerson().toString(): ""));
                 item.add(new Label("address", new AbstractReadOnlyModel<String>() {

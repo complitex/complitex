@@ -20,8 +20,8 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.description.Entity;
-import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.service.IUserProfileBean;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
@@ -142,7 +142,7 @@ final class ApartmentCardHistoryPanel extends Panel {
         IModel<DomainObject> ownershipFormModel = new Model<DomainObject>();
         if (card.getOwnershipForm() != null) {
             for (DomainObject ownershipForm : allOwnershipForms) {
-                if (ownershipForm.getId().equals(card.getOwnershipForm().getId())) {
+                if (ownershipForm.getObjectId().equals(card.getOwnershipForm().getObjectId())) {
                     ownershipFormModel.setObject(ownershipForm);
                     break;
                 }
@@ -168,7 +168,7 @@ final class ApartmentCardHistoryPanel extends Panel {
             protected void populateItem(ListItem<Registration> item) {
                 final Registration registration = item.getModelObject();
                 final RegistrationModification registrationModification =
-                        modification.getRegistrationModification(registration.getId());
+                        modification.getRegistrationModification(registration.getObjectId());
 
                 Set<String> rowCss = newHashSet();
                 rowCss.add(registrationModification.getModificationType().getCssClass());

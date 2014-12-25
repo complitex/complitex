@@ -4,65 +4,25 @@
  */
 package org.complitex.pspoffice.importing.legacy.service;
 
-import java.io.Writer;
-import java.util.Date;
-import org.complitex.common.util.DateUtil;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import org.complitex.pspoffice.importing.legacy.entity.ImportStatus;
-import java.io.IOException;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import javax.annotation.Resource;
-import javax.ejb.Asynchronous;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.transaction.Status;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
+import com.google.common.collect.*;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.exception.AbstractException;
 import org.complitex.common.service.exception.ImportCriticalException;
 import org.complitex.common.service.exception.ImportFileNotFoundException;
 import org.complitex.common.service.exception.ImportFileReadException;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
-import org.complitex.pspoffice.importing.legacy.entity.ApartmentCardCorrection;
-import org.complitex.pspoffice.importing.legacy.entity.BuildingCorrection;
-import org.complitex.pspoffice.importing.legacy.entity.ImportMessage;
-import org.complitex.pspoffice.importing.legacy.entity.PersonCorrection;
-import org.complitex.pspoffice.importing.legacy.entity.ProcessItem;
-import org.complitex.pspoffice.importing.legacy.entity.LegacyDataImportFile;
-import org.complitex.pspoffice.importing.legacy.entity.ReferenceDataCorrection;
-import org.complitex.pspoffice.importing.legacy.entity.StreetCorrection;
+import org.complitex.pspoffice.importing.legacy.entity.*;
 import org.complitex.pspoffice.importing.legacy.service.exception.OpenErrorDescriptionFileException;
 import org.complitex.pspoffice.importing.legacy.service.exception.OpenErrorFileException;
 import org.complitex.pspoffice.importing.legacy.service.exception.TooManyResultsException;
@@ -78,6 +38,15 @@ import org.complitex.pspoffice.person.strategy.entity.Registration;
 import org.complitex.pspoffice.registration_type.strategy.RegistrationTypeStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.annotation.Resource;
+import javax.ejb.*;
+import javax.transaction.Status;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.complitex.pspoffice.importing.legacy.entity.ImportMessage.ImportMessageLevel.*;
 
@@ -125,7 +94,7 @@ public class LegacyDataImportService {
     @EJB
     private RegistrationStrategy registrationStrategy;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     /*
      * Concurrency note: volatile boolean.
      */
@@ -780,7 +749,7 @@ public class LegacyDataImportService {
                                                         buildingCorrectionBean.newBuilding(systemStreetId, dom, korpus,
                                                         organizationMap.get(building.getIdjek()));
                                                 buildingStrategy.insert(systemBuilding, DateUtil.getCurrentDate());
-                                                systemBuildingId = systemBuilding.getId();
+                                                systemBuildingId = systemBuilding.getObjectId();
                                             }
                                             building.setSystemBuildingId(systemBuildingId);
                                         } catch (TooManyResultsException e) {
@@ -967,7 +936,7 @@ public class LegacyDataImportService {
                                     DomainObject systemObject = strategy.newInstance();
                                     Utils.setValue(systemObject.getAttribute(attributeTypeId), correction.getNkod());
                                     strategy.insert(systemObject, DateUtil.getCurrentDate());
-                                    systemObjectId = systemObject.getId();
+                                    systemObjectId = systemObject.getObjectId();
                                 }
                                 correction.setSystemObjectId(systemObjectId);
                             } catch (TooManyResultsException e) {
@@ -1042,12 +1011,12 @@ public class LegacyDataImportService {
                     IStrategy strategy = strategy();
                     if (!e.isDaughterResolved()) {
                         sb.append(strategy.displayDomainObject(
-                                strategy.findById(OwnerRelationshipStrategy.DAUGHTER, true), localeBean.getSystemLocale())).
+                                strategy.findById(OwnerRelationshipStrategy.DAUGHTER, true), stringLocaleBean.getSystemLocale())).
                                 append(", ");
                     }
                     if (!e.isSonResolved()) {
                         sb.append(strategy.displayDomainObject(
-                                strategy.findById(OwnerRelationshipStrategy.SON, true), localeBean.getSystemLocale())).
+                                strategy.findById(OwnerRelationshipStrategy.SON, true), stringLocaleBean.getSystemLocale())).
                                 append(", ");
                     }
                     sb.delete(sb.length() - 2, sb.length());
@@ -1090,7 +1059,7 @@ public class LegacyDataImportService {
                     final String error = getString("reserved_registration_type_not_resolved",
                             strategy.displayDomainObject(
                             strategy.findById(RegistrationTypeStrategy.PERMANENT, true),
-                            localeBean.getSystemLocale()),
+                            stringLocaleBean.getSystemLocale()),
                             jekIds.toString());
 
                     if (errorDescriptionFile == null) {
@@ -1129,13 +1098,13 @@ public class LegacyDataImportService {
                     if (!e.isPassportResolved()) {
                         sb.append(strategy.displayDomainObject(
                                 strategy.findById(DocumentTypeStrategy.PASSPORT, true),
-                                localeBean.getSystemLocale())).
+                                stringLocaleBean.getSystemLocale())).
                                 append(", ");
                     }
                     if (!e.isBirthCertificateResolved()) {
                         sb.append(strategy.displayDomainObject(
                                 strategy.findById(DocumentTypeStrategy.BIRTH_CERTIFICATE, true),
-                                localeBean.getSystemLocale())).
+                                stringLocaleBean.getSystemLocale())).
                                 append(", ");
                     }
                     sb.delete(sb.length() - 2, sb.length());
@@ -1225,7 +1194,7 @@ public class LegacyDataImportService {
                                 try {
                                     Person systemPerson = personCorrectionBean.findSystemPerson(p);
                                     if (systemPerson != null) {
-                                        p.setSystemPersonId(systemPerson.getId());
+                                        p.setSystemPersonId(systemPerson.getObjectId());
                                         p.setKid(systemPerson.isKid());
                                         errorDescription = getString("person_exists", p.getId());
                                     } else {
@@ -1269,7 +1238,7 @@ public class LegacyDataImportService {
                                                 systemPerson = personCorrectionBean.newSystemPerson(p, birthDate, systemDocumentTypeId,
                                                         militaryDity != null ? militaryDity.getSystemObjectId() : null);
                                                 personStrategy.insert(systemPerson, creationDate);
-                                                p.setSystemPersonId(systemPerson.getId());
+                                                p.setSystemPersonId(systemPerson.getObjectId());
                                             }
                                         } else {
                                             errorDescription = getString("invalid_person_data", p.getId(), p.getDatar(),
@@ -1437,7 +1406,7 @@ public class LegacyDataImportService {
                                                                 apartmentCardCorrectionBean.newApartment(systemBuildingId, c.getKv(),
                                                                 organizationMap.get(building.getIdjek()));
                                                         apartmentStrategy.insert(systemApartment, creationDate);
-                                                        systemApartmentId = systemApartment.getId();
+                                                        systemApartmentId = systemApartment.getObjectId();
                                                     } else {
                                                         //system apartment already exists. Do nothing.
                                                     }
@@ -1476,7 +1445,7 @@ public class LegacyDataImportService {
                                                                                 c.getId(), systemApartmentId, owner.getSystemPersonId(),
                                                                                 ownershipForm.getSystemObjectId(), organizationMap.get(building.getIdjek()));
                                                                         apartmentCardStrategy.insert(apartmentCard, creationDate);
-                                                                        c.setSystemApartmentCardId(apartmentCard.getId());
+                                                                        c.setSystemApartmentCardId(apartmentCard.getObjectId());
                                                                     }
                                                                 }
                                                             } else {
@@ -1612,7 +1581,7 @@ public class LegacyDataImportService {
                                     Date departureDate = DateUtil.asDate(p.getVdata(), Utils.DATE_PATTERN);
                                     boolean isFinishedRegistration = departureDate != null;
                                     for (Registration r : systemApartmentCard.getRegistrations()) {
-                                        if (p.getSystemPersonId().equals(r.getPerson().getId())
+                                        if (p.getSystemPersonId().equals(r.getPerson().getObjectId())
                                                 && ((isFinishedRegistration && r.isFinished())
                                                 || (!isFinishedRegistration && !r.isFinished()))) {
                                             exists = true;
@@ -1767,8 +1736,8 @@ public class LegacyDataImportService {
 
                                                             //permanent registration type
                                                             if (systemRegistrationTypeId == RegistrationTypeStrategy.PERMANENT) {
-                                                                String address = personStrategy.findPermanentRegistrationAddress(registration.getPerson().getId(),
-                                                                        localeBean.getSystemLocale());
+                                                                String address = personStrategy.findPermanentRegistrationAddress(registration.getPerson().getObjectId(),
+                                                                        stringLocaleBean.getSystemLocale());
                                                                 if (!Strings.isEmpty(address)) {
                                                                     isValid = false;
                                                                     errorDescriptions.add(getString("registration_permanent_registration_type_validation_error",
@@ -1777,7 +1746,7 @@ public class LegacyDataImportService {
                                                             }
 
                                                             //duplicate person registration check
-                                                            if (!registrationStrategy.validateDuplicatePerson(systemApartmentCard.getId(), registration.getPerson().getId())) {
+                                                            if (!registrationStrategy.validateDuplicatePerson(systemApartmentCard.getObjectId(), registration.getPerson().getObjectId())) {
                                                                 isValid = false;
                                                                 errorDescriptions.add(getString("registration_person_already_registered_validation_error",
                                                                         p.getId()));

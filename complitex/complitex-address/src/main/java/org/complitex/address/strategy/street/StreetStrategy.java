@@ -9,12 +9,12 @@ import org.complitex.address.resource.CommonResources;
 import org.complitex.address.strategy.street.web.edit.StreetTypeComponent;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.BuildingNumberConverter;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.util.StringCultures;
@@ -57,7 +57,7 @@ public class StreetStrategy extends TemplateStrategy {
     private StrategyFactory strategyFactory;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private StreetTypeStrategy streetTypeStrategy;
@@ -77,7 +77,7 @@ public class StreetStrategy extends TemplateStrategy {
     @SuppressWarnings({"unchecked"})
     @Override
 
-    public List<DomainObject> getList(DomainObjectExample example) {
+    public List<DomainObject> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
@@ -96,7 +96,7 @@ public class StreetStrategy extends TemplateStrategy {
 
 
     @Override
-    public Long getCount(DomainObjectExample example) {
+    public Long getCount(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
@@ -134,7 +134,7 @@ public class StreetStrategy extends TemplateStrategy {
     }
 
     public String getStreetTypeShortName(DomainObject domainObject){
-        return getStreetTypeShortName(domainObject, localeBean.getSystemLocale());
+        return getStreetTypeShortName(domainObject, stringLocaleBean.getSystemLocale());
     }
 
     @Override
@@ -142,11 +142,11 @@ public class StreetStrategy extends TemplateStrategy {
         return ImmutableList.of("country", "region", "city");
     }
 
-    private void configureExampleImpl(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    private void configureExampleImpl(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeExample attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
-                attrExample = new AttributeExample(NAME);
+                attrExample = new AttributeFilter(NAME);
                 example.addAttributeExample(attrExample);
             }
             attrExample.setValue(searchTextInput);
@@ -166,7 +166,7 @@ public class StreetStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         configureExampleImpl(example, ids, searchTextInput);
     }
 
@@ -285,7 +285,7 @@ public class StreetStrategy extends TemplateStrategy {
     }
 
     public String getName(DomainObject streetObject){
-        return getName(streetObject, localeBean.getSystemLocale());
+        return getName(streetObject, stringLocaleBean.getSystemLocale());
     }
 
     public String getName(DomainObject street, Locale locale) {

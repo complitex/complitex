@@ -5,10 +5,6 @@
 package org.complitex.pspoffice.person.strategy.service;
 
 import com.google.common.collect.Lists;
-import java.util.List;
-import java.util.Locale;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.pspoffice.ownerrelationship.strategy.OwnerRelationshipStrategy;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
@@ -18,6 +14,11 @@ import org.complitex.pspoffice.person.strategy.entity.grid.RegistrationsGridEnti
 import org.complitex.pspoffice.person.strategy.entity.grid.RegistrationsGridFilter;
 import org.complitex.pspoffice.person.util.PersonDateFormatter;
 import org.complitex.pspoffice.registration_type.strategy.RegistrationTypeStrategy;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -46,7 +47,7 @@ public class RegistrationsGridBean extends AbstractBean {
                 final String personName = personStrategy.displayDomainObject(registration.getPerson(), filter.getLocale());
 
                 //person id
-                final long personId = registration.getPerson().getId();
+                final long personId = registration.getPerson().getObjectId();
 
                 //person birth date
                 final String personBirthDate = registration.getPerson().getBirthDate() != null

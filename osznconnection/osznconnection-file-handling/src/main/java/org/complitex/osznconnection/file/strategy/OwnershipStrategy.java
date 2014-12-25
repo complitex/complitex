@@ -3,10 +3,10 @@ package org.complitex.osznconnection.file.strategy;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -49,11 +49,11 @@ public class OwnershipStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeExample attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
-                attrExample = new AttributeExample(NAME);
+                attrExample = new AttributeFilter(NAME);
                 example.addAttributeExample(attrExample);
             }
             attrExample.setValue(searchTextInput);
@@ -66,7 +66,7 @@ public class OwnershipStrategy extends TemplateStrategy {
     }
 
     public List<DomainObject> getAll() {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         example.setOrderByAttributeTypeId(NAME);
         configureExample(example, ImmutableMap.<String, Long>of(), null);
         return (List<DomainObject>) getList(example);

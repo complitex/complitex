@@ -18,7 +18,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
@@ -48,7 +48,7 @@ public class PersonAccountList extends ScrollListPage {
 
     @EJB
 
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     public PersonAccountList() {
         init();
@@ -85,7 +85,7 @@ public class PersonAccountList extends ScrollListPage {
 
                 filterWrapper.setFirst(first);
                 filterWrapper.setCount(count);
-                filterWrapper.setLocale(localeBean.convert(getLocale()));
+                filterWrapper.setStringLocale(stringLocaleBean.convert(getLocale()));
 
                 return personAccountBean.getPersonAccounts(filterWrapper);
             }

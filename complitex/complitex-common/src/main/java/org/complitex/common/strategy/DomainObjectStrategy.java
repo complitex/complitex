@@ -6,13 +6,12 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.*;
 import org.complitex.common.entity.Log.STATUS;
-import org.complitex.common.entity.description.Entity;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.description.EntityAttributeValueType;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.exception.DeleteException;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
 import org.complitex.common.mysql.MySqlErrors;
-import org.complitex.common.service.*;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.LogBean;
+import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.Numbers;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.util.StringCultures;
@@ -27,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.Locale;
 
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Lists.newArrayList;
@@ -36,11 +34,11 @@ import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.newTreeSet;
 
-public abstract class Strategy extends AbstractBean implements IStrategy {
-    public final static String NS = Strategy.class.getName();
+public abstract class DomainObjectStrategy extends AbstractBean implements IStrategy {
+    public final static String NS = DomainObjectStrategy.class.getName();
 
-    private static final String RESOURCE_BUNDLE = Strategy.class.getName();
-    private final Logger log = LoggerFactory.getLogger(Strategy.class);
+    private static final String RESOURCE_BUNDLE = DomainObjectStrategy.class.getName();
+    private final Logger log = LoggerFactory.getLogger(DomainObjectStrategy.class);
 
     private static final int PERMISSIONS_CHILDREN_BATCH = 500;
     private static final int ACTIVITY_CHILDREN_BATCH = 5000;
@@ -58,7 +56,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     private EntityBean entityBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private SessionBean sessionBean;
@@ -70,7 +68,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     private LogBean logBean;
 
     public Locale getSystemLocale(){
-        return localeBean.getSystemLocale();
+        return stringLocaleBean.getSystemLocale();
     }
 
     @Override
@@ -92,19 +90,19 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     protected String getDisableSuccess() {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, "disable_success", localeBean.getSystemLocale());
+        return ResourceUtil.getString(RESOURCE_BUNDLE, "disable_success", stringLocaleBean.getSystemLocale());
     }
 
     protected String getDisableError() {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, "disable_error", localeBean.getSystemLocale());
+        return ResourceUtil.getString(RESOURCE_BUNDLE, "disable_error", stringLocaleBean.getSystemLocale());
     }
 
     protected String getEnableSuccess() {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, "enable_success", localeBean.getSystemLocale());
+        return ResourceUtil.getString(RESOURCE_BUNDLE, "enable_success", stringLocaleBean.getSystemLocale());
     }
 
     protected String getEnableError() {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, "enable_error", localeBean.getSystemLocale());
+        return ResourceUtil.getString(RESOURCE_BUNDLE, "enable_error", stringLocaleBean.getSystemLocale());
     }
 
     @Override
@@ -252,7 +250,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
             return null;
         }
 
-        DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable());
+        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable());
 
         if (!runAsAdmin) {
             prepareExampleForPermissionCheck(example);
@@ -358,7 +356,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
      * Helper method. Prepares example for permission check.
      * @param example 
      */
-    public void prepareExampleForPermissionCheck(DomainObjectExample example) {
+    public void prepareExampleForPermissionCheck(DomainObjectFilter example) {
         boolean isAdmin = sessionBean.isAdmin();
         example.setAdmin(isAdmin);
         if (!isAdmin) {
@@ -367,7 +365,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     @Override
-    public List<? extends DomainObject> getList(DomainObjectExample example) {
+    public List<? extends DomainObject> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
@@ -386,7 +384,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return objects;
     }
 
-    public List<? extends DomainObject> find(DomainObjectExample example, long first, long count){
+    public List<? extends DomainObject> find(DomainObjectFilter example, long first, long count){
         example.setFirst(first);
         example.setCount(count);
 
@@ -394,7 +392,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     @Override
-    public Long getCount(DomainObjectExample example) {
+    public Long getCount(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
@@ -679,15 +677,15 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     protected String getReplacePermissionsError() {
-        return ResourceUtil.getString(Strategy.class.getName(), "replace_permissions_error", localeBean.getSystemLocale());
+        return ResourceUtil.getString(DomainObjectStrategy.class.getName(), "replace_permissions_error", stringLocaleBean.getSystemLocale());
     }
 
     protected String getReplacePermissionsSuccess() {
-        return ResourceUtil.getString(Strategy.class.getName(), "replace_permissions_success", localeBean.getSystemLocale());
+        return ResourceUtil.getString(DomainObjectStrategy.class.getName(), "replace_permissions_success", stringLocaleBean.getSystemLocale());
     }
 
 
-    protected List<DomainObjectPermissionInfo> findChildrenPermissionInfo(long parentId, String childEntity, int start, int size) {
+    protected List<PermissionInfo> findChildrenPermissionInfo(long parentId, String childEntity, int start, int size) {
         Map<String, Object> params = newHashMap();
 
         params.put("entity", childEntity);
@@ -701,7 +699,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
 
     @Override
-    public void replacePermissions(DomainObjectPermissionInfo objectPermissionInfo, Set<Long> subjectIds) {
+    public void replacePermissions(PermissionInfo objectPermissionInfo, Set<Long> subjectIds) {
         replaceObjectPermissions(objectPermissionInfo, subjectIds);
         replaceChildrenPermissions(objectPermissionInfo.getId(), subjectIds);
     }
@@ -717,7 +715,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
 
-    protected void replaceObjectPermissions(DomainObjectPermissionInfo objectPermissionInfo, Set<Long> subjectIds) {
+    protected void replaceObjectPermissions(PermissionInfo objectPermissionInfo, Set<Long> subjectIds) {
         Set<Long> oldSubjectIds = loadSubjects(objectPermissionInfo.getPermissionId());
         if (isNeedToChangePermission(oldSubjectIds, subjectIds)) {
             long oldPermission = objectPermissionInfo.getPermissionId();
@@ -737,10 +735,10 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         boolean allChildrenLoaded = false;
         while (!allChildrenLoaded) {
 
-            List<DomainObjectPermissionInfo> childrenPermissionInfo = findChildrenPermissionInfo(parentId, childEntity, i, PERMISSIONS_CHILDREN_BATCH);
+            List<PermissionInfo> childrenPermissionInfo = findChildrenPermissionInfo(parentId, childEntity, i, PERMISSIONS_CHILDREN_BATCH);
             if (childrenPermissionInfo.size() > 0) {
                 //process children
-                for (DomainObjectPermissionInfo childPermissionInfo : childrenPermissionInfo) {
+                for (PermissionInfo childPermissionInfo : childrenPermissionInfo) {
                     childStrategy.replacePermissions(childPermissionInfo, subjectIds);
                 }
 
@@ -853,7 +851,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
     }
 
     @Override
@@ -875,7 +873,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     @Override
     public SimpleObjectInfo findParentInSearchComponent(long id, Date date) {
-        DomainObjectExample example = new DomainObjectExample(id, getEntityTable());
+        DomainObjectFilter example = new DomainObjectFilter(id, getEntityTable());
 
         example.setStartDate(date);
         Map<String, Object> result = sqlSession().selectOne(NS + ".selectParentInSearchComponent", example);
@@ -964,7 +962,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     @Override
     public TreeSet<Date> getHistoryDates(long objectId) {
-        DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable());
+        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable());
 
         List<Date> results = sqlSession().selectList(NS + ".historyDates", example);
 
@@ -980,7 +978,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
     @Override
     public DomainObject findHistoryObject(long objectId, Date date) {
-        DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable());
+        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable());
         example.setStartDate(date);
 
         DomainObject object = sqlSession().selectOne(NS + ".selectHistoryObject", example);
@@ -997,7 +995,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
 
     protected List<Attribute> loadHistoryAttributes(long objectId, Date date) {
-        DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable());
+        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable());
         example.setStartDate(date);
 
         return sqlSession().selectList(NS + ".selectHistoryAttributes", example);
@@ -1031,7 +1029,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         return getEntity().getId();
     }
 
-    protected void extendOrderBy(DomainObjectExample example) {
+    protected void extendOrderBy(DomainObjectFilter example) {
     }
 
     /*
@@ -1081,7 +1079,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         Map<String, Object> params = newHashMap();
 
         params.put("entity", getEntityTable());
-        params.put("localeId", localeBean.convert(locale).getId());
+        params.put("localeId", stringLocaleBean.convert(locale).getId());
         params.put("attributeTypeId", attributeTypeId);
         params.put("text", text);
         params.put("parentId", object.getParentId());
@@ -1092,13 +1090,13 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
 
 
     @Override
-    public void changePermissions(DomainObjectPermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
+    public void changePermissions(PermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         changeObjectPermissions(objectPermissionInfo, addSubjectIds, removeSubjectIds);
         changeChildrenPermissions(objectPermissionInfo.getId(), addSubjectIds, removeSubjectIds);
     }
 
 
-    protected void changeObjectPermissions(DomainObjectPermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
+    protected void changeObjectPermissions(PermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         Set<Long> currentSubjectIds = loadSubjects(objectPermissionInfo.getPermissionId());
         Set<Long> newSubjectIds = newHashSet(currentSubjectIds);
 
@@ -1139,7 +1137,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
             public void run() {
                 long start = System.currentTimeMillis();
                 try {
-                    DomainObjectPermissionInfo permissionInfo = new DomainObjectPermissionInfo();
+                    PermissionInfo permissionInfo = new PermissionInfo();
                     permissionInfo.setId(objectId);
                     permissionInfo.setPermissionId(permissionId);
                     changePermissions(permissionInfo, addSubjectIds, removeSubjectIds);
@@ -1155,11 +1153,11 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
     }
 
     protected String getChangePermissionsError() {
-        return ResourceUtil.getString(Strategy.class.getName(), "change_permissions_error", localeBean.getSystemLocale());
+        return ResourceUtil.getString(DomainObjectStrategy.class.getName(), "change_permissions_error", stringLocaleBean.getSystemLocale());
     }
 
     protected String getChangePermissionsSuccess() {
-        return ResourceUtil.getString(Strategy.class.getName(), "change_permissions_success", localeBean.getSystemLocale());
+        return ResourceUtil.getString(DomainObjectStrategy.class.getName(), "change_permissions_success", stringLocaleBean.getSystemLocale());
     }
 
 
@@ -1180,10 +1178,10 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         boolean allChildrenLoaded = false;
         while (!allChildrenLoaded) {
 
-            List<DomainObjectPermissionInfo> childrenPermissionInfo = findChildrenPermissionInfo(parentId, childEntity, i, PERMISSIONS_CHILDREN_BATCH);
+            List<PermissionInfo> childrenPermissionInfo = findChildrenPermissionInfo(parentId, childEntity, i, PERMISSIONS_CHILDREN_BATCH);
             if (childrenPermissionInfo.size() > 0) {
                 //process children
-                for (DomainObjectPermissionInfo childPermissionInfo : childrenPermissionInfo) {
+                for (PermissionInfo childPermissionInfo : childrenPermissionInfo) {
                     childStrategy.changePermissions(childPermissionInfo, addSubjectIds, removeSubjectIds);
                 }
 
@@ -1368,7 +1366,7 @@ public abstract class Strategy extends AbstractBean implements IStrategy {
         sequenceBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         stringBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         entityBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
-        localeBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
+        stringLocaleBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         sessionBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         permissionBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         logBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);

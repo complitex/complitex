@@ -4,7 +4,6 @@
  */
 package org.complitex.pspoffice.person.strategy.web.component.autocomplete;
 
-import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -13,6 +12,8 @@ import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.search.CollapsibleSearchComponent;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
+
+import java.util.List;
 
 /**
  *
@@ -36,13 +37,13 @@ public class EnhancedAddressSearchComponent extends CollapsibleSearchComponent {
         if (entity.equals("apartment")) {
             DomainObject building = getModelObject("building");
             return apartmentComponent = newEnhancedAddressAutocompleteComponent(id, entity,
-                    building != null && building.getId() > 0);
+                    building != null && building.getObjectId() > 0);
         }
         if (entity.equals("room")) {
             DomainObject building = getModelObject("building");
             DomainObject apartment = getModelObject("apartment");
             return roomComponent = newEnhancedAddressAutocompleteComponent(id, entity,
-                    (building != null && building.getId() > 0) || (apartment != null && apartment.getId() > 0));
+                    (building != null && building.getObjectId() > 0) || (apartment != null && apartment.getObjectId() > 0));
         }
 
         return super.newAutocompleteComponent(id, entity);
@@ -59,7 +60,7 @@ public class EnhancedAddressSearchComponent extends CollapsibleSearchComponent {
                     return EnhancedAddressSearchComponent.this.getModelObject("building");
                 } else {
                     DomainObject apartment = EnhancedAddressSearchComponent.this.getModelObject("apartment");
-                    return (apartment != null && apartment.getId() > 0) ? apartment
+                    return (apartment != null && apartment.getObjectId() > 0) ? apartment
                             : EnhancedAddressSearchComponent.this.getModelObject("building");
                 }
             }
@@ -70,7 +71,7 @@ public class EnhancedAddressSearchComponent extends CollapsibleSearchComponent {
                     return "building";
                 } else {
                     DomainObject apartment = EnhancedAddressSearchComponent.this.getModelObject("apartment");
-                    return (apartment != null && apartment.getId() > 0) ? "apartment" : "building";
+                    return (apartment != null && apartment.getObjectId() > 0) ? "apartment" : "building";
                 }
             }
 
@@ -109,16 +110,16 @@ public class EnhancedAddressSearchComponent extends CollapsibleSearchComponent {
         if (entity.equals("building")) {
             DomainObject building = getModelObject("building");
             if (apartmentComponent != null) {
-                apartmentComponent.setCanCreate(building != null && building.getId() > 0, target);
+                apartmentComponent.setCanCreate(building != null && building.getObjectId() > 0, target);
             }
             if (roomComponent != null) {
-                roomComponent.setCanCreate(building != null && building.getId() > 0, target);
+                roomComponent.setCanCreate(building != null && building.getObjectId() > 0, target);
             }
         } else if (entity.equals("apartment")) {
             DomainObject building = getModelObject("building");
             DomainObject apartment = getModelObject("apartment");
             if (roomComponent != null) {
-                roomComponent.setCanCreate((building != null && building.getId() > 0) || (apartment != null && apartment.getId() > 0),
+                roomComponent.setCanCreate((building != null && building.getObjectId() > 0) || (apartment != null && apartment.getObjectId() > 0),
                         target);
             }
         }

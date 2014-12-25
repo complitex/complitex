@@ -21,17 +21,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.converter.*;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.PreferenceKey;
-import org.complitex.common.entity.SimpleTypes;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.*;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.common.web.component.ShowMode;
@@ -65,10 +59,10 @@ public final class DomainObjectListPanel extends Panel {
     @EJB
     private StringCultureBean stringBean;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     private String entity;
     private String strategyName;
-    private DomainObjectExample example;
+    private DomainObjectFilter example;
     private WebMarkupContainer content;
     private DataView<DomainObject> dataView;
     private CollapsibleSearchPanel searchPanel;
@@ -88,7 +82,7 @@ public final class DomainObjectListPanel extends Panel {
         return strategyFactory.getStrategy(strategyName, entity);
     }
 
-    public DomainObjectExample getExample() {
+    public DomainObjectFilter getExample() {
         return example;
     }
 
@@ -119,7 +113,7 @@ public final class DomainObjectListPanel extends Panel {
         example = getSession().getPreferenceObject(page, PreferenceKey.FILTER_OBJECT, null);
 
         if (example == null) {
-            example = new DomainObjectExample();
+            example = new DomainObjectFilter();
             example.setEntityTable(entity);
         }
 
@@ -137,7 +131,7 @@ public final class DomainObjectListPanel extends Panel {
         //Column List
         final List<EntityAttributeType> listAttributeTypes = getStrategy().getListColumns();
         for (EntityAttributeType eat : listAttributeTypes) {
-            example.addAttributeExample(new AttributeExample(eat.getId()));
+            example.addAttributeExample(new AttributeFilter(eat.getId()));
         }
 
         //Configure example from component state session
@@ -178,7 +172,7 @@ public final class DomainObjectListPanel extends Panel {
                 }
 
                 example.setStatus(showModeModel.getObject().name());
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 example.setAsc(getSort().isAscending());
                 example.setFirst(first);
                 example.setCount(count);
@@ -188,7 +182,7 @@ public final class DomainObjectListPanel extends Panel {
             @Override
             public Long getSize() {
                 example.setStatus(showModeModel.getObject().name());
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 return getStrategy().getCount(example);
             }
         };
@@ -313,19 +307,19 @@ public final class DomainObjectListPanel extends Panel {
             @Override
             protected void populateItem(ListItem<EntityAttributeType> item) {
                 EntityAttributeType attributeType = item.getModelObject();
-                final AttributeExample attributeExample = example.getAttributeExample(attributeType.getId());
+                final AttributeFilter attributeFilter = example.getAttributeExample(attributeType.getId());
 
                 final IModel<String> filterModel = new Model<String>() {
 
                     @Override
                     public String getObject() {
-                        return attributeExample.getValue();
+                        return attributeFilter.getValue();
                     }
 
                     @Override
                     public void setObject(String object) {
                         if (!Strings.isEmpty(object)) {
-                            attributeExample.setValue(object);
+                            attributeFilter.setValue(object);
                         }
                     }
                 };
@@ -431,7 +425,7 @@ public final class DomainObjectListPanel extends Panel {
 
                 example.setObjectId(null);
                 for (EntityAttributeType attrType : listAttributeTypes) {
-                    AttributeExample attrExample = example.getAttributeExample(attrType.getId());
+                    AttributeFilter attrExample = example.getAttributeExample(attrType.getId());
                     attrExample.setValue(null);
                 }
                 target.add(content);

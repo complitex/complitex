@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.EjbBeanLocator;
 
 import java.util.ArrayList;

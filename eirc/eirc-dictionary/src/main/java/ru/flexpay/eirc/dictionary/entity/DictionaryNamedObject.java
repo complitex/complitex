@@ -2,7 +2,7 @@ package ru.flexpay.eirc.dictionary.entity;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
-import org.complitex.common.entity.Locale;
+import org.complitex.common.entity.StringLocale;
 
 import java.util.Map;
 
@@ -11,13 +11,13 @@ import java.util.Map;
  */
 public class DictionaryNamedObject extends DictionaryObject {
 
-    private Map<Locale, String> names = Maps.newHashMap();
+    private Map<StringLocale, String> names = Maps.newHashMap();
 
-    public Map<Locale, String> getNames() {
+    public Map<StringLocale, String> getNames() {
         return names;
     }
 
-    public void setNames(Map<Locale, String> names) {
+    public void setNames(Map<StringLocale, String> names) {
         this.names = names;
     }
 
@@ -27,16 +27,16 @@ public class DictionaryNamedObject extends DictionaryObject {
      * @param name Content key and value. key is Locale, value is name.
      */
     public void setName(Map<String, Object> name) {
-        addName((Locale)name.get("key"), (String)name.get("value"));
+        addName((StringLocale)name.get("key"), (String)name.get("value"));
 
     }
 
-    public void addName(Locale locale, String name) {
-        names.put(locale, name);
+    public void addName(StringLocale stringLocale, String name) {
+        names.put(stringLocale, name);
     }
 
-    public String getName(Locale locale) {
-        String name = names.get(locale);
+    public String getName(StringLocale stringLocale) {
+        String name = names.get(stringLocale);
         return StringUtils.isNotEmpty(name)? name : "";
     }
 
@@ -45,18 +45,18 @@ public class DictionaryNamedObject extends DictionaryObject {
     }
 
     public void setNameRu(String name) {
-        addName(Locale.RU, name);
+        addName(StringLocale.RU, name);
     }
 
     public String getNameRu() {
-        return getName(Locale.RU);
+        return getName(StringLocale.RU);
     }
 
     public void setNameUk(String name) {
-        addName(Locale.UK, name);
+        addName(StringLocale.UK, name);
     }
 
     public String getNameUk() {
-        return getName(Locale.UK);
+        return getName(StringLocale.UK);
     }
 }

@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.SessionBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
@@ -41,7 +41,7 @@ public class RegistrationStopCouponBean extends AbstractBean {
     @EJB
     private SessionBean sessionBean;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
 
     public RegistrationStopCoupon get(Registration registration, String addressEntity, long addressId,
@@ -82,7 +82,7 @@ public class RegistrationStopCouponBean extends AbstractBean {
 
 
     public String getPreviousNames(long personId, Locale locale) {
-        final long localeId = localeBean.convert(locale).getId();
+        final long localeId = stringLocaleBean.convert(locale).getId();
         List<Date> results = sqlSession().selectList(MAPPING_NAMESPACE + ".findPreviousNameStartDates",
                 ImmutableMap.of("personId", personId, "localeId", localeId));
         TreeSet<Date> previousNameStartDates = newTreeSet(results);

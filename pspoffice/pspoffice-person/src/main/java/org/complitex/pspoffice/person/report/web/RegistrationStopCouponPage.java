@@ -14,8 +14,8 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.address.service.AddressRendererBean;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.pspoffice.person.report.download.RegistrationStopCouponDownload;
 import org.complitex.pspoffice.person.report.entity.RegistrationStopCoupon;
@@ -52,7 +52,7 @@ public class RegistrationStopCouponPage extends WebPage {
     @EJB
     private PersonStrategy personStrategy;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private AddressRendererBean addressRendererBean;
     @EJB
@@ -86,11 +86,11 @@ public class RegistrationStopCouponPage extends WebPage {
             Registration registration = coupon.getRegistration();
             Person person = registration.getPerson();
 
-            final Locale systemLocale = localeBean.getSystemLocale();
+            final Locale systemLocale = stringLocaleBean.getSystemLocale();
             add(new Label("lastName", person.getLastName(getLocale(), systemLocale)));
             add(new Label("firstName", person.getFirstName(getLocale(), systemLocale)));
             add(new Label("middleName", person.getMiddleName(getLocale(), systemLocale)));
-            add(new Label("previousNames", registrationStopCouponBean.getPreviousNames(person.getId(), getLocale())));
+            add(new Label("previousNames", registrationStopCouponBean.getPreviousNames(person.getObjectId(), getLocale())));
             add(new Label("birthCountry", person.getBirthCountry()));
             add(new Label("birthRegion", person.getBirthRegion()));
             add(new Label("birthDistrict", person.getBirthDistrict()));

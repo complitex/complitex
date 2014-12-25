@@ -25,7 +25,7 @@ import org.apache.wicket.util.time.Duration;
 import org.complitex.address.entity.AddressImportFile;
 import org.complitex.common.entity.IImportFile;
 import org.complitex.common.entity.ImportMessage;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.pspoffice.departure_reason.entity.DepartureReasonImportFile;
 import org.complitex.pspoffice.document_type.entity.DocumentTypeImportFile;
 import org.complitex.pspoffice.housing_rights.entity.HousingRightsImportFile;
@@ -53,7 +53,7 @@ public final class ReferenceDataImportPage extends TemplatePage {
     @EJB
     private ReferenceDataImportService importService;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     private final IModel<List<IImportFile>> addressDataModel;
     private final IModel<List<IImportFile>> referenceDataModel;
     private final IModel<Locale> localeModel;
@@ -102,7 +102,7 @@ public final class ReferenceDataImportPage extends TemplatePage {
 
         form.add(new CheckBoxMultipleChoice<IImportFile>("addressData", addressDataModel, addressDataList, renderer));
 
-        localeModel = new Model<Locale>(localeBean.getSystemLocale());
+        localeModel = new Model<Locale>(stringLocaleBean.getSystemLocale());
         form.add(new LocalePicker("localePicker", localeModel, false));
 
         form.add(new CheckBoxMultipleChoice<IImportFile>("referenceData", referenceDataModel, referenceDataList, renderer));

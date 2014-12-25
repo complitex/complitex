@@ -4,7 +4,7 @@ import org.apache.wicket.model.IModel;
 import org.complitex.common.converter.IConverter;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.StringCulture;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 
 import java.io.Serializable;
@@ -41,7 +41,7 @@ public class SimpleTypeModel<T extends Serializable> implements IModel<T> {
     }
 
     private StringCulture getStringCulture(){
-        return attribute.getStringCulture(EjbBeanLocator.getBean(LocaleBean.class).getSystemLocaleId());
+        return attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId());
     }
 
     @Override

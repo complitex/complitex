@@ -20,12 +20,11 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.ComparisonType;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.wiquery.autocomplete.AbstractAutocompleteComponent;
@@ -95,7 +94,7 @@ public class WiQuerySearchComponent extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     private final List<String> searchFilters;
     private final List<SearchFilterSettings> searchFilterSettings;
     private final ISearchCallback callback;
@@ -295,7 +294,7 @@ public class WiQuerySearchComponent extends Panel {
         final ShowMode currentShowMode = getShowMode(entity);
 
         final List<? extends DomainObject> equalToExample = findByExample(entity, term, previousInfo,
-                ComparisonType.EQUALITY, currentShowMode, AUTO_COMPLETE_SIZE);
+                DomainObjectFilter.ComparisonType.EQUALITY, currentShowMode, AUTO_COMPLETE_SIZE);
         choiceList.addAll(equalToExample);
 
         if (equalToExample.size() < AUTO_COMPLETE_SIZE) {
@@ -305,7 +304,7 @@ public class WiQuerySearchComponent extends Panel {
                 idsSet.add(o.getObjectId());
             }
 
-            final List<? extends DomainObject> likeExample = findByExample(entity, term, previousInfo, ComparisonType.LIKE,
+            final List<? extends DomainObject> likeExample = findByExample(entity, term, previousInfo, DomainObjectFilter.ComparisonType.LIKE,
                     currentShowMode, AUTO_COMPLETE_SIZE);
 
             final Iterator<? extends DomainObject> likeIterator = likeExample.iterator();
@@ -328,7 +327,7 @@ public class WiQuerySearchComponent extends Panel {
 
     protected final boolean isSingleObjectVisible(IStrategy strategy) {
         final Map<String, DomainObject> previousInfo = getState(getIndex(strategy.getEntityTable()) - 1);
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         strategy.configureExample(example, WiQuerySearchComponent.<Long>transformToIds(previousInfo), null);
         example.setStatus(getShowMode(strategy.getEntityTable()).name());
         return strategy.getCount(example) == 1;
@@ -524,16 +523,16 @@ public class WiQuerySearchComponent extends Panel {
     }
 
     protected List<? extends DomainObject> findByExample(String entity, String searchTextInput,
-            Map<String, DomainObject> previousInfo, ComparisonType comparisonType, ShowMode showMode, int size) {
+            Map<String, DomainObject> previousInfo, DomainObjectFilter.ComparisonType comparisonType, ShowMode showMode, int size) {
         IStrategy strategy = strategyFactory.getStrategy(entity);
 
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
 
         strategy.configureExample(example, WiQuerySearchComponent.<Long>transformToIds(previousInfo), searchTextInput);
         example.setOrderByAttributeTypeId(strategy.getDefaultOrderByAttributeId());
         example.setAsc(true);
         example.setCount(size);
-        example.setLocaleId(localeBean.convert(getLocale()).getId());
+        example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
         example.setComparisonType(comparisonType.name());
         example.setStatus(showMode.name());
         example.setUserPermissionString(userPermissionString);

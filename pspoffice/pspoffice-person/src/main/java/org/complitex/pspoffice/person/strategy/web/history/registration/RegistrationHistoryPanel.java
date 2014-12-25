@@ -22,10 +22,10 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.description.Entity;
-import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.service.IUserProfileBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
@@ -137,7 +137,7 @@ final class RegistrationHistoryPanel extends Panel {
             IModel<DomainObject> registrationTypeModel = new Model<DomainObject>();
             if (registration.getRegistrationType() != null) {
                 for (DomainObject regType : allRegistrationTypes) {
-                    if (regType.getId().equals(registration.getRegistrationType().getId())) {
+                    if (regType.getObjectId().equals(registration.getRegistrationType().getObjectId())) {
                         registrationTypeModel.setObject(regType);
                         break;
                     }

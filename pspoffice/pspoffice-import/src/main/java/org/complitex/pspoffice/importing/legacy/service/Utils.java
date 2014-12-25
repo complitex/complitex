@@ -4,14 +4,15 @@
  */
 package org.complitex.pspoffice.importing.legacy.service;
 
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.StringCulture;
+import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.util.EjbBeanLocator;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.StringCulture;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.util.EjbBeanLocator;
 
 /**
  *
@@ -52,7 +53,7 @@ public class Utils {
     }
 
     public static void setSystemLocaleValue(Attribute attribute, String value) {
-        LocaleBean localeBean = EjbBeanLocator.getBean(LocaleBean.class);
-        setValue(attribute, localeBean.getSystemLocaleObject().getId(), value);
+        StringLocaleBean stringLocaleBean = EjbBeanLocator.getBean(StringLocaleBean.class);
+        setValue(attribute, stringLocaleBean.getSystemStringLocale().getId(), value);
     }
 }

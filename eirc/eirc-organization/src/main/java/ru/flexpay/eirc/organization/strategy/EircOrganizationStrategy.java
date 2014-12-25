@@ -3,15 +3,11 @@ package ru.flexpay.eirc.organization.strategy;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StringCulture;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.*;
+import org.complitex.common.exception.DeleteException;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.strategy.DeleteException;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
@@ -99,14 +95,14 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
             build();
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private StringCultureBean stringBean;
 
     @Override
     public IValidator getValidator() {
-        return new EircOrganizationValidator(localeBean.getSystemLocale());
+        return new EircOrganizationValidator(stringLocaleBean.getSystemLocale());
     }
 
     @Override
@@ -138,10 +134,10 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
     @SuppressWarnings("unchecked")
     @Override
     public List<DomainObject> getAllOuterOrganizations(Locale locale) {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         if (locale != null) {
             example.setOrderByAttributeTypeId(NAME);
-            example.setLocaleId(localeBean.convert(locale).getId());
+            example.setLocaleId(stringLocaleBean.convert(locale).getId());
             example.setAsc(true);
         }
 //        example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationType.SERVICE_PROVIDER.getId()));
@@ -158,12 +154,12 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
      */
     @SuppressWarnings("unchecked")
     public List<DomainObject> getAllServiceProviders(Locale locale) {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
 
         example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationType.SERVICE_PROVIDER.getId()));
         if (locale != null) {
             example.setOrderByAttributeTypeId(NAME);
-            example.setLocaleId(localeBean.convert(locale).getId());
+            example.setLocaleId(stringLocaleBean.convert(locale).getId());
             example.setAsc(true);
         }
 
@@ -181,12 +177,12 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
      */
     @SuppressWarnings("unchecked")
     public List<DomainObject> getAllPaymentCollectors(Locale locale) {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
 
         example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationType.PAYMENT_COLLECTOR.getId()));
         if (locale != null) {
             example.setOrderByAttributeTypeId(NAME);
-            example.setLocaleId(localeBean.convert(locale).getId());
+            example.setLocaleId(stringLocaleBean.convert(locale).getId());
             example.setAsc(true);
         }
 
@@ -314,7 +310,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
     @Override
     public void setSqlSessionFactoryBean(SqlSessionFactoryBean sqlSessionFactoryBean) {
         super.setSqlSessionFactoryBean(sqlSessionFactoryBean);
-        localeBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
+        stringLocaleBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         stringBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
     }
 }

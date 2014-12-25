@@ -4,21 +4,11 @@
  */
 package org.complitex.keconnection.heatmeter.service;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import org.apache.ibatis.session.SqlSession;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.oracle.OracleErrors;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.LogBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.keconnection.heatmeter.Module;
 import org.complitex.keconnection.heatmeter.entity.ExternalHeatmeter;
@@ -27,6 +17,13 @@ import org.complitex.keconnection.heatmeter.entity.HeatmeterBindingStatus;
 import org.complitex.keconnection.heatmeter.service.exception.DBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  *
@@ -45,7 +42,7 @@ public class ExternalHeatmeterService {
     @EJB
     private LogBean logBean;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     protected SqlSession sqlSession() {
         return sqlSessionFactoryBean.getSqlSessionManager();
@@ -61,7 +58,7 @@ public class ExternalHeatmeterService {
     }
 
     protected Locale getLocale() {
-        return localeBean.getSystemLocale();
+        return stringLocaleBean.getSystemLocale();
     }
 
     public static class ExternalHeatmetersAndStatus implements Serializable {

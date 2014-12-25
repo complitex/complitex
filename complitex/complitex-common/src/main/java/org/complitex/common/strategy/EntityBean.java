@@ -1,11 +1,11 @@
-package org.complitex.common.service;
+package org.complitex.common.strategy;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import org.complitex.common.entity.description.Entity;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.description.EntityAttributeValueType;
-import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttributeType;
+import org.complitex.common.entity.EntityAttributeValueType;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.common.util.StringCultures;
 
 import javax.ejb.ConcurrencyManagement;

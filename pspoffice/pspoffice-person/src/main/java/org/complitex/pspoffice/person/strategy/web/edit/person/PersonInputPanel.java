@@ -28,9 +28,9 @@ import org.apache.wicket.model.ResourceModel;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.entity.StatusType;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
@@ -113,7 +113,7 @@ public class PersonInputPanel extends Panel {
     }
 
     private boolean isNew() {
-        return person.getId() == null;
+        return person.getObjectId() == null;
     }
 
     private boolean canEdit() {
@@ -312,7 +312,7 @@ public class PersonInputPanel extends Panel {
             militaryServiceRelationAttribute.setAttributeId(1L);
             militaryServiceRelationAttribute.setAttributeTypeId(MILITARY_SERVICE_RELATION);
             militaryServiceRelationAttribute.setValueTypeId(MILITARY_SERVICE_RELATION);
-            militaryServiceRelationAttribute.setValueId(militaryServiceRelation.getId());
+            militaryServiceRelationAttribute.setValueId(militaryServiceRelation.getObjectId());
             person.addAttribute(militaryServiceRelationAttribute);
         }
 
@@ -331,7 +331,7 @@ public class PersonInputPanel extends Panel {
                 childrenAttribute.setAttributeId(attributeId++);
                 childrenAttribute.setAttributeTypeId(CHILDREN);
                 childrenAttribute.setValueTypeId(CHILDREN);
-                childrenAttribute.setValueId(child.getId());
+                childrenAttribute.setValueId(child.getObjectId());
                 person.addAttribute(childrenAttribute);
             }
         }
@@ -388,7 +388,7 @@ public class PersonInputPanel extends Panel {
 
             @Override
             public boolean apply(Person child) {
-                return child != null && child.getId() != null && child.getId() > 0;
+                return child != null && child.getObjectId() != null && child.getObjectId() > 0;
             }
         }));
         if (nonNullChildren.size() != person.getChildren().size()) {
@@ -399,12 +399,12 @@ public class PersonInputPanel extends Panel {
 
             @Override
             public Long apply(Person child) {
-                return child.getId();
+                return child.getObjectId();
             }
         }));
 
         if (!isNew()) {
-            if (childrenIds.contains(person.getId())) {
+            if (childrenIds.contains(person.getObjectId())) {
                 error(getString("references_themselves"));
             }
         }
@@ -523,7 +523,7 @@ public class PersonInputPanel extends Panel {
 
                 @Override
                 public boolean apply(DomainObject documentType) {
-                    return documentType.getId().equals(person.getDocument().getDocumentTypeId());
+                    return documentType.getObjectId().equals(person.getDocument().getDocumentTypeId());
                 }
             }));
         } else {
@@ -545,9 +545,9 @@ public class PersonInputPanel extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 DomainObject newDocumentType = documentTypeModel.getObject();
-                if (newDocumentType != null && newDocumentType.getId() != null) {
+                if (newDocumentType != null && newDocumentType.getObjectId() != null) {
                     documentType.setEnabled(false);
-                    Document document = documentStrategy.newInstance(newDocumentType.getId());
+                    Document document = documentStrategy.newInstance(newDocumentType.getObjectId());
                     if (!documentReplacedFlag) {
                         person.setDocument(document);
                     } else {
@@ -625,10 +625,10 @@ public class PersonInputPanel extends Panel {
             public List<Document> getObject() {
                 if (previousDocuments == null) {
                     previousDocuments = newArrayList();
-                    List<Document> previousDocs = personStrategy.findPreviousDocuments(person.getId());
+                    List<Document> previousDocs = personStrategy.findPreviousDocuments(person.getObjectId());
                     if (previousDocs != null && !previousDocs.isEmpty()) {
                         for (Document previousDoc : previousDocs) {
-                            if (!person.getDocument().getId().equals(previousDoc.getId())) {
+                            if (!person.getDocument().getObjectId().equals(previousDoc.getObjectId())) {
                                 previousDocuments.add(previousDoc);
                             }
                         }
@@ -692,7 +692,7 @@ public class PersonInputPanel extends Panel {
             documentType.setEnabled(false);
             DomainObject newDocumentType = documentTypesModel.getObject().get(0);
             documentTypeModel.setObject(newDocumentType);
-            Document document = documentStrategy.newInstance(newDocumentType.getId());
+            Document document = documentStrategy.newInstance(newDocumentType.getObjectId());
             if (!documentReplacedFlag) {
                 person.setDocument(document);
             } else {
@@ -703,7 +703,7 @@ public class PersonInputPanel extends Panel {
     }
 
     private Component initRegistrationsFieldset() {
-        final int countPersonRegistrations = isNew() ? 0 : personStrategy.countPersonRegistrations(person.getId());
+        final int countPersonRegistrations = isNew() ? 0 : personStrategy.countPersonRegistrations(person.getObjectId());
 
         final WebMarkupContainer content = new WebMarkupContainer("content");
         content.setOutputMarkupPlaceholderTag(true);
@@ -732,7 +732,7 @@ public class PersonInputPanel extends Panel {
             public List<PersonRegistration> getObject() {
                 if (personRegistrations == null) {
                     personRegistrations = countPersonRegistrations == 0 ? new ArrayList<PersonRegistration>()
-                            : personStrategy.findPersonRegistrations(person.getId());
+                            : personStrategy.findPersonRegistrations(person.getObjectId());
                 }
                 return personRegistrations;
             }
@@ -804,7 +804,7 @@ public class PersonInputPanel extends Panel {
         };
         if (person.getMilitaryServiceRelation() != null) {
             for (DomainObject msr : allMilitaryServiceRelations) {
-                if (msr.getId().equals(person.getMilitaryServiceRelation().getId())) {
+                if (msr.getObjectId().equals(person.getMilitaryServiceRelation().getObjectId())) {
                     militaryServiceRelationModel.setObject(msr);
                     break;
                 }

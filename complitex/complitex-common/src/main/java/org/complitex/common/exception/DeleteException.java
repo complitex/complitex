@@ -1,8 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.complitex.common.strategy;
+
+package org.complitex.common.exception;
 
 import javax.ejb.ApplicationException;
 

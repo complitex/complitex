@@ -1,7 +1,7 @@
 package org.complitex.admin.service;
 
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.UserGroup;
-import org.complitex.common.entity.example.AttributeExample;
 import org.complitex.common.service.AbstractFilter;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 public class UserFilter extends AbstractFilter{
     private String login;
     private Long organizationObjectId;
-    private List<AttributeExample> attributeExamples = new ArrayList<AttributeExample>();
+    private List<AttributeFilter> attributeFilters = new ArrayList<AttributeFilter>();
     private Long sortAttributeTypeId;
     private UserGroup.GROUP_NAME groupName;
 
@@ -34,17 +34,17 @@ public class UserFilter extends AbstractFilter{
         this.organizationObjectId = organizationObjectId;
     }
 
-    public List<AttributeExample> getAttributeExamples() {
-        return attributeExamples;
+    public List<AttributeFilter> getAttributeFilters() {
+        return attributeFilters;
     }
 
-    public void setAttributeExamples(List<AttributeExample> attributeExamples) {
-        this.attributeExamples = attributeExamples;
+    public void setAttributeFilters(List<AttributeFilter> attributeFilters) {
+        this.attributeFilters = attributeFilters;
     }
 
     public boolean isFilterAttributes(){
-        for(AttributeExample attributeExample : attributeExamples){
-            if (attributeExample.getValue() != null){
+        for(AttributeFilter attributeFilter : attributeFilters){
+            if (attributeFilter.getValue() != null){
                 return true;
             }
         }

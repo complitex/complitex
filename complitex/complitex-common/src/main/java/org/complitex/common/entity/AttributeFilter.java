@@ -1,4 +1,4 @@
-package org.complitex.common.entity.example;
+package org.complitex.common.entity;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
  *
  * @author Artem
  */
-public class AttributeExample implements Serializable {
+public class AttributeFilter implements Serializable {
     private Long attributeId;
 
     private Long attributeTypeId;
@@ -15,16 +15,16 @@ public class AttributeExample implements Serializable {
 
     private Long valueId;
 
-    public AttributeExample(Long attributeTypeId) {
+    public AttributeFilter(Long attributeTypeId) {
         this.attributeTypeId = attributeTypeId;
     }
 
-    public AttributeExample(Long attributeTypeId, String value) {
+    public AttributeFilter(Long attributeTypeId, String value) {
         this.attributeTypeId = attributeTypeId;
         this.value = value;
     }
 
-    public AttributeExample(Long attributeTypeId, Long valueId) {
+    public AttributeFilter(Long attributeTypeId, Long valueId) {
         this.attributeTypeId = attributeTypeId;
         this.valueId = valueId;
     }

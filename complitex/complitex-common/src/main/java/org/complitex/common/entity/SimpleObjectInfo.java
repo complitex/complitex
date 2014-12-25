@@ -1,4 +1,4 @@
-package org.complitex.common.strategy;
+package org.complitex.common.entity;
 
 /**
 * @author Anatoly Ivanov

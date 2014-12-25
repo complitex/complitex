@@ -14,7 +14,7 @@ import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.CloneUtil;
 import ru.flexpay.eirc.organization.entity.Organization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
@@ -35,7 +35,7 @@ public class ServiceAllowableListPanel extends Panel {
     private ServiceBean serviceBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     private List<Attribute> services;
 
@@ -48,7 +48,7 @@ public class ServiceAllowableListPanel extends Panel {
                 public void populateItem(Item<ICellPopulator<Attribute>> cellItem, String componentId, IModel<Attribute> rowModel) {
 
                     Service service = serviceBean.getService(rowModel.getObject().getValueId());
-                    cellItem.add(new Label(componentId, service.getName(localeBean.convert(getLocale()))));
+                    cellItem.add(new Label(componentId, service.getName(stringLocaleBean.convert(getLocale()))));
                 }
             },
             new AbstractColumn<Attribute, String>(new ResourceModel("action")) {

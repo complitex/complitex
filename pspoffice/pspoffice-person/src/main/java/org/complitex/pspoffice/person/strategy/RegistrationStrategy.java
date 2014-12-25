@@ -10,11 +10,11 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.description.EntityAttributeValueType;
+import org.complitex.common.entity.EntityAttributeType;
+import org.complitex.common.entity.EntityAttributeValueType;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.strategy.Strategy;
+import org.complitex.common.strategy.DomainObjectStrategy;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.pspoffice.ownerrelationship.strategy.OwnerRelationshipStrategy;
@@ -37,7 +37,7 @@ import static com.google.common.collect.Lists.newArrayList;
  * @author Artem
  */
 @Stateless
-public class RegistrationStrategy extends Strategy {
+public class RegistrationStrategy extends DomainObjectStrategy {
 
     private static final String REGISTRATION_MAPPING = RegistrationStrategy.class.getPackage().getName() + ".Registration";
     /**
@@ -186,7 +186,7 @@ public class RegistrationStrategy extends Strategy {
 
         // 2. insert new one
         if (newExplAttribute != null && newExplAttribute.getStartDate() == null) {
-            newExplAttribute.setObjectId(newRegistration.getId());
+            newExplAttribute.setObjectId(newRegistration.getObjectId());
             newExplAttribute.setStartDate(updateDate);
             insertAttribute(newExplAttribute);
         }
@@ -205,7 +205,7 @@ public class RegistrationStrategy extends Strategy {
                             EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
                             attribute.setAttributeTypeId(attributeType.getId());
                             attribute.setValueTypeId(attributeValueType.getId());
-                            attribute.setObjectId(object.getId());
+                            attribute.setObjectId(object.getObjectId());
                             attribute.setAttributeId(1L);
 
                             if (isSimpleAttributeType(attributeType)) {
@@ -213,7 +213,7 @@ public class RegistrationStrategy extends Strategy {
                             }
                             toAdd.add(attribute);
                         } else {
-                            Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(attributeType, object.getId());
+                            Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(attributeType, object.getObjectId());
                             if (manyValueTypesAttribute != null) {
                                 toAdd.add(manyValueTypesAttribute);
                             }
@@ -343,7 +343,7 @@ public class RegistrationStrategy extends Strategy {
             Date previousStartDate) {
         RegistrationModification m = new RegistrationModification();
         Registration previousRegistration = previousStartDate == null ? null
-                : getHistoryRegistration(historyRegistration.getId(), previousStartDate);
+                : getHistoryRegistration(historyRegistration.getObjectId(), previousStartDate);
         if (previousRegistration == null) {
             m.setModificationType(ModificationType.ADD);
             m.setEditedByUserId(historyRegistration.getEditedByUserId());
@@ -425,9 +425,9 @@ public class RegistrationStrategy extends Strategy {
 
     public RegistrationModification getDistinctions(Registration historyRegistration, Date startDate) {
         RegistrationModification m = new RegistrationModification();
-        final Date previousStartDate = getPreviousModificationDate(historyRegistration.getId(), startDate);
+        final Date previousStartDate = getPreviousModificationDate(historyRegistration.getObjectId(), startDate);
         Registration previousRegistration = previousStartDate == null ? null
-                : getHistoryRegistration(historyRegistration.getId(), previousStartDate);
+                : getHistoryRegistration(historyRegistration.getObjectId(), previousStartDate);
         if (previousRegistration == null) {
             for (Attribute current : historyRegistration.getAttributes()) {
                 m.addAttributeModification(current.getAttributeTypeId(), ModificationType.ADD);

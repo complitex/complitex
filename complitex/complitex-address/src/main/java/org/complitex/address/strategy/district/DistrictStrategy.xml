@@ -6,7 +6,8 @@
 
     <!-- permission -->
     
-    <select id="selectChildrenPermissionInfo" parameterType="map" resultMap="org.complitex.common.entity.DomainObject.DomainObjectPermissionInfo">
+    <select id="selectChildrenPermissionInfo" parameterType="map"
+            resultMap="org.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
         SELECT e.`object_id`, e.`permission_id` FROM `street` e
                 JOIN `building_address` addr ON (addr.`parent_id` = e.`object_id` AND addr.`status` IN ('ACTIVE', 'INACTIVE') AND addr.`parent_entity_id` = 300)
                 JOIN `building` b ON (b.`parent_id` = addr.`object_id` AND b.`status` IN ('ACTIVE', 'INACTIVE'))

@@ -26,7 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
@@ -64,7 +64,7 @@ public class EircAccountList extends TemplatePage {
     private EircAccountBean eircAccountBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     private WebMarkupContainer container;
     private DataView<EircAccount> dataView;
@@ -152,7 +152,7 @@ public class EircAccountList extends TemplatePage {
                 FilterWrapper<EircAccount> filterWrapper = FilterWrapper.of(filterObject, first, count);
                 filterWrapper.setAscending(getSort().isAscending());
                 filterWrapper.setSortProperty(getSort().getProperty());
-                filterWrapper.setLocale(localeBean.convert(getLocale()));
+                filterWrapper.setStringLocale(stringLocaleBean.convert(getLocale()));
                 filterWrapper.getMap().put("address", Boolean.TRUE);
 
                 setShowModel(filterWrapper);

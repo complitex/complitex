@@ -4,7 +4,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilt
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.EjbBeanLocator;
 
@@ -14,11 +14,11 @@ import java.util.Iterator;
  * @author inheaven on 005 05.12.14 19:50.
  */
 public class DomainDataProvider extends SortableDataProvider<DomainObject, Long>
-        implements IFilterStateLocator<DomainObjectExample>{
-    private DomainObjectExample example;
+        implements IFilterStateLocator<DomainObjectFilter>{
+    private DomainObjectFilter example;
 
     public DomainDataProvider(String entityTable) {
-        example = new DomainObjectExample();
+        example = new DomainObjectFilter();
         example.setEntityTable(entityTable);
     }
 
@@ -46,12 +46,12 @@ public class DomainDataProvider extends SortableDataProvider<DomainObject, Long>
     }
 
     @Override
-    public DomainObjectExample getFilterState() {
+    public DomainObjectFilter getFilterState() {
         return null;
     }
 
     @Override
-    public void setFilterState(DomainObjectExample state) {
+    public void setFilterState(DomainObjectFilter state) {
 
     }
 }

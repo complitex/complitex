@@ -2,9 +2,9 @@ package org.complitex.osznconnection.file.service.process;
 
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.FacilityReferenceBookBean;
@@ -36,7 +36,7 @@ public class FacilityStreetLoadTaskBean implements ITaskBean {
     private FacilityReferenceBookBean facilityReferenceBookBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @Override
     public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {

@@ -7,8 +7,8 @@ import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.SequenceBean;
+import org.complitex.common.strategy.SequenceBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.DateUtil;
 import ru.flexpay.eirc.eirc_account.service.EircAccountBean;
 import ru.flexpay.eirc.organization.entity.Organization;
@@ -37,7 +37,7 @@ public class ServiceProviderAccountBean extends AbstractBean {
     private SequenceBean sequenceBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private EircOrganizationStrategy eircOrganizationStrategy;
@@ -137,7 +137,7 @@ public class ServiceProviderAccountBean extends AbstractBean {
     public ServiceProviderAccount getServiceProviderAccountByPkId(long pkId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("pkId", pkId);
-        params.put("locale", localeBean.convert(localeBean.getSystemLocale()));
+        params.put("locale", stringLocaleBean.convert(stringLocaleBean.getSystemLocale()));
         List<ServiceProviderAccount> serviceProviderAccounts =  sqlSession().selectList(NS + ".selectServiceProviderAccountByPkId", params);
         return serviceProviderAccounts.size() > 0? serviceProviderAccounts.get(0) : null;
     }
@@ -145,7 +145,7 @@ public class ServiceProviderAccountBean extends AbstractBean {
     public ServiceProviderAccount getServiceProviderAccountByRRContainerId(long registryRecordContainerId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("registryRecordContainerId", registryRecordContainerId);
-        params.put("locale", localeBean.convert(localeBean.getSystemLocale()));
+        params.put("locale", stringLocaleBean.convert(stringLocaleBean.getSystemLocale()));
         List<ServiceProviderAccount> serviceProviderAccounts = sqlSession().selectList(NS + ".selectServiceProviderAccountByRRContainerId", params);
         return serviceProviderAccounts.size() > 0? serviceProviderAccounts.get(0) : null;
     }
@@ -185,7 +185,7 @@ public class ServiceProviderAccountBean extends AbstractBean {
     public void setSqlSessionFactoryBean(SqlSessionFactoryBean sqlSessionFactoryBean) {
         super.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         sequenceBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
-        localeBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
+        stringLocaleBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         eircOrganizationStrategy.setSqlSessionFactoryBean(sqlSessionFactoryBean);
     }
 }

@@ -23,7 +23,7 @@ public class CommunalApartmentService extends AbstractBean {
 
 
     public boolean isCommunalApartmentCard(ApartmentCard apartmentCard) {
-        if (apartmentCard.getId() == null) {
+        if (apartmentCard.getObjectId() == null) {
             return false;
         }
 

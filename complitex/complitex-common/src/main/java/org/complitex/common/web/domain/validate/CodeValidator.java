@@ -6,9 +6,9 @@ package org.complitex.common.web.domain.validate;
 
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.util.StringCultures;
@@ -50,8 +50,8 @@ public abstract class CodeValidator implements IValidator {
                     + " has null lozalized values.");
         }
 
-        LocaleBean localeBean = EjbBeanLocator.getBean(LocaleBean.class);
-        String code = StringCultures.getValue(codeAttribute.getLocalizedValues(), localeBean.getSystemLocale());
+        StringLocaleBean stringLocaleBean = EjbBeanLocator.getBean(StringLocaleBean.class);
+        String code = StringCultures.getValue(codeAttribute.getLocalizedValues(), stringLocaleBean.getSystemLocale());
 
         Long existingId = validateCode(object.getObjectId(), code);
         if (existingId != null) {

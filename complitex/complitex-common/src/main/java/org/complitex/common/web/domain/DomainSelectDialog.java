@@ -7,10 +7,10 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.Filte
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.description.Entity;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.EntityBean;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttributeType;
+import org.complitex.common.strategy.EntityBean;
 import org.complitex.common.web.component.paging.AjaxNavigationToolbar;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 
@@ -37,7 +37,7 @@ public class DomainSelectDialog extends Panel{
 
         DomainDataProvider provider = new DomainDataProvider(entityTable);
 
-        FilterForm<DomainObjectExample> form = new FilterForm<>("form", provider);
+        FilterForm<DomainObjectFilter> form = new FilterForm<>("form", provider);
         add(form);
 
         List<IColumn<DomainObject, Long>> columns = new ArrayList<>();

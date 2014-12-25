@@ -5,10 +5,10 @@
 package org.complitex.pspoffice.military.strategy;
 
 import com.google.common.collect.ImmutableMap;
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -36,7 +36,7 @@ public class MilitaryServiceRelationStrategy extends TemplateStrategy {
     public static final long NAME = 2900;
     public static final long CODE = 2901;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @Override
     public String getEntityTable() {
@@ -54,11 +54,11 @@ public class MilitaryServiceRelationStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!isEmpty(searchTextInput)) {
-            AttributeExample attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
-                attrExample = new AttributeExample(NAME);
+                attrExample = new AttributeFilter(NAME);
                 example.addAttributeExample(attrExample);
             }
             attrExample.setValue(searchTextInput);
@@ -67,9 +67,9 @@ public class MilitaryServiceRelationStrategy extends TemplateStrategy {
 
 
     public List<DomainObject> getAll(Locale sortLocale) {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         if (sortLocale != null) {
-            example.setLocaleId(localeBean.convert(sortLocale).getId());
+            example.setLocaleId(stringLocaleBean.convert(sortLocale).getId());
             example.setAsc(true);
             example.setOrderByAttributeTypeId(NAME);
         }

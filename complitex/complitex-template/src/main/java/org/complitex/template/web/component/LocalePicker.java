@@ -9,7 +9,8 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.StringLocale;
+import org.complitex.common.strategy.StringLocaleBean;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.Locale;
 public class LocalePicker extends Panel {
 
     @EJB(name = "LocaleBean")
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     public LocalePicker(String id){
         this(id, null, true);
@@ -31,12 +32,12 @@ public class LocalePicker extends Panel {
     public LocalePicker(String id, IModel<Locale> model, final boolean update) {
         super(id);
 
-        List<Locale> locales = Lists.newArrayList(Iterables.transform(localeBean.getAllLocales(),
-                new Function<org.complitex.common.entity.Locale, Locale>() {
+        List<Locale> locales = Lists.newArrayList(Iterables.transform(stringLocaleBean.getAllLocales(),
+                new Function<StringLocale, Locale>() {
 
                     @Override
-                    public Locale apply(org.complitex.common.entity.Locale locale) {
-                        return localeBean.convert(locale);
+                    public Locale apply(StringLocale locale) {
+                        return stringLocaleBean.convert(locale);
                     }
                 }));
 

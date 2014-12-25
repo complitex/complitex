@@ -1,11 +1,15 @@
-package org.complitex.common.entity.example;
+package org.complitex.common.entity;
 
 import org.complitex.common.web.component.ShowMode;
 
 import java.io.Serializable;
 import java.util.*;
 
-public class DomainObjectExample implements Serializable {
+public class DomainObjectFilter implements Serializable {
+    public static enum ComparisonType {
+        LIKE, EQUALITY
+    }
+
     private Long objectId;
     private Long parentId;
     private Long localeId;
@@ -27,57 +31,57 @@ public class DomainObjectExample implements Serializable {
     private String userPermissionString;
     private boolean admin;
 
-    private List<AttributeExample> attributeExamples = new ArrayList<AttributeExample>();
+    private List<AttributeFilter> attributeFilters = new ArrayList<AttributeFilter>();
 
     private Map<String, Object> additionalParams = new HashMap<>();
 
-    public DomainObjectExample() {
+    public DomainObjectFilter() {
     }
 
-    public DomainObjectExample(Long objectId) {
+    public DomainObjectFilter(Long objectId) {
         this.objectId = objectId;
     }
 
-    public DomainObjectExample(Long objectId, String entityTable) {
+    public DomainObjectFilter(Long objectId, String entityTable) {
         this.objectId = objectId;
         this.entityTable = entityTable;
     }
 
-    public DomainObjectExample(Long objectId, String entityTable, Date startDate) {
+    public DomainObjectFilter(Long objectId, String entityTable, Date startDate) {
         this.objectId = objectId;
         this.entityTable = entityTable;
         this.startDate = startDate;
     }
 
-    public DomainObjectExample addAttributes(Long... attributeTypeIds){
+    public DomainObjectFilter addAttributes(Long... attributeTypeIds){
         for (Long a : attributeTypeIds){
-            attributeExamples.add(new AttributeExample(a));
+            attributeFilters.add(new AttributeFilter(a));
         }
 
         return this;
     }
 
-    public DomainObjectExample setParent(String parentEntity, Long parentId){
+    public DomainObjectFilter setParent(String parentEntity, Long parentId){
         this.parentEntity = parentEntity;
         this.parentId = parentId;
 
         return this;
     }
 
-    public DomainObjectExample addAttribute(Long attributeTypeId, String value){
-        attributeExamples.add(new AttributeExample(attributeTypeId, value));
+    public DomainObjectFilter addAttribute(Long attributeTypeId, String value){
+        attributeFilters.add(new AttributeFilter(attributeTypeId, value));
 
         return this;
     }
 
-    public DomainObjectExample addAttribute(Long attributeTypeId, Long valueId){
-        attributeExamples.add(new AttributeExample(attributeTypeId, valueId));
+    public DomainObjectFilter addAttribute(Long attributeTypeId, Long valueId){
+        attributeFilters.add(new AttributeFilter(attributeTypeId, valueId));
 
         return this;
     }
 
-    public AttributeExample getAttributeExample(long attributeTypeId) {
-        for (AttributeExample attrExample : attributeExamples) {
+    public AttributeFilter getAttributeExample(long attributeTypeId) {
+        for (AttributeFilter attrExample : attributeFilters) {
             if (attrExample.getAttributeTypeId().equals(attributeTypeId)) {
                 return attrExample;
             }
@@ -85,11 +89,11 @@ public class DomainObjectExample implements Serializable {
         return null;
     }
 
-    public void addAttributeExample(AttributeExample attributeExample) {
-        attributeExamples.add(attributeExample);
+    public void addAttributeExample(AttributeFilter attributeFilter) {
+        attributeFilters.add(attributeFilter);
     }
 
-    public DomainObjectExample addAdditionalParam(String key, Object value) {
+    public DomainObjectFilter addAdditionalParam(String key, Object value) {
         additionalParams.put(key, value);
 
         return this;
@@ -220,12 +224,12 @@ public class DomainObjectExample implements Serializable {
         this.admin = admin;
     }
 
-    public List<AttributeExample> getAttributeExamples() {
-        return attributeExamples;
+    public List<AttributeFilter> getAttributeFilters() {
+        return attributeFilters;
     }
 
-    public void setAttributeExamples(List<AttributeExample> attributeExamples) {
-        this.attributeExamples = attributeExamples;
+    public void setAttributeFilters(List<AttributeFilter> attributeFilters) {
+        this.attributeFilters = attributeFilters;
     }
 
     public Map<String, Object> getAdditionalParams() {
@@ -235,4 +239,6 @@ public class DomainObjectExample implements Serializable {
     public void setAdditionalParams(Map<String, Object> additionalParams) {
         this.additionalParams = additionalParams;
     }
+
+
 }

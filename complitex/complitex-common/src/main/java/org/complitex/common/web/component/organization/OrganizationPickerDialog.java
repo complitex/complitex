@@ -16,9 +16,9 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IModelComparator;
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.datatable.DataProvider;
@@ -63,10 +63,10 @@ public class OrganizationPickerDialog extends Panel {
         final Form form = new Form("filterForm");
         content.add(form);
 
-        final DomainObjectExample example = new DomainObjectExample();
+        final DomainObjectFilter example = new DomainObjectFilter();
 
-        example.addAttributeExample(new AttributeExample(NAME));
-        example.addAttributeExample(new AttributeExample(CODE));
+        example.addAttributeExample(new AttributeFilter(NAME));
+        example.addAttributeExample(new AttributeFilter(CODE));
         example.setLocaleId(Locales.getLocaleId(getLocale()));
 
         if (organizationTypeIds != null && organizationTypeIds.length > 0) {

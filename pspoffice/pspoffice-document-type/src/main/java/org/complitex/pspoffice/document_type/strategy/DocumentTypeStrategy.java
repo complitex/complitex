@@ -8,12 +8,12 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.entity.StringCulture;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.strategy.DeleteException;
+import org.complitex.common.exception.DeleteException;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -46,7 +46,7 @@ public class DocumentTypeStrategy extends TemplateStrategy {
     public static final Set<Long> RESERVED_INSTANCE_IDS = of(PASSPORT, BIRTH_CERTIFICATE);
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @Override
     public String getEntityTable() {
@@ -64,11 +64,11 @@ public class DocumentTypeStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (isEmpty(searchTextInput)) {
-            AttributeExample attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
-                attrExample = new AttributeExample(NAME);
+                attrExample = new AttributeFilter(NAME);
                 example.addAttributeExample(attrExample);
             }
             attrExample.setValue(searchTextInput);
@@ -82,9 +82,9 @@ public class DocumentTypeStrategy extends TemplateStrategy {
 
 
     public List<DomainObject> getAll(Locale sortLocale) {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         if (sortLocale != null) {
-            example.setLocaleId(localeBean.convert(sortLocale).getId());
+            example.setLocaleId(stringLocaleBean.convert(sortLocale).getId());
             example.setOrderByAttributeTypeId(NAME);
             example.setAsc(true);
         }
@@ -98,7 +98,7 @@ public class DocumentTypeStrategy extends TemplateStrategy {
 
             @Override
             public boolean apply(DomainObject documentType) {
-                return isKidDocumentType(documentType.getId());
+                return isKidDocumentType(documentType.getObjectId());
             }
         }));
     }
@@ -109,7 +109,7 @@ public class DocumentTypeStrategy extends TemplateStrategy {
 
             @Override
             public boolean apply(DomainObject documentType) {
-                return isAdultDocumentType(documentType.getId());
+                return isAdultDocumentType(documentType.getObjectId());
             }
         }));
     }

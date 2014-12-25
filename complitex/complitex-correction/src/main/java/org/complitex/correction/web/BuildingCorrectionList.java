@@ -8,9 +8,9 @@ import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.correction.entity.BuildingCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
@@ -37,7 +37,7 @@ public class BuildingCorrectionList extends AddressCorrectionList<BuildingCorrec
     private StreetStrategy streetStrategy;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     public BuildingCorrectionList() {
         super("building");

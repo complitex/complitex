@@ -3,8 +3,8 @@ package org.complitex.keconnection.heatmeter.service;
 import com.google.common.collect.Maps;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.keconnection.heatmeter.entity.BuildingCorrection;
 import org.complitex.keconnection.heatmeter.entity.Correction;
@@ -29,7 +29,7 @@ public class AddressCorrectionBean extends CorrectionBean {
     private final Logger log = LoggerFactory.getLogger(AddressCorrectionBean.class);
     private static final String ADDRESS_BEAN_MAPPING_NAMESPACE = AddressCorrectionBean.class.getName();
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private KeConnectionSessionBean keConnectionSessionBean;
     @EJB
@@ -512,7 +512,7 @@ public class AddressCorrectionBean extends CorrectionBean {
         IStrategy cityStrategy = strategyFactory.getStrategy("city");
         IStrategy streetStrategy = strategyFactory.getStrategy("street");
         IStrategy buildingStrategy = strategyFactory.getStrategy("building");
-        Locale locale = localeBean.convert(localeBean.getLocaleObject(example.getLocaleId()));
+        Locale locale = stringLocaleBean.convert(stringLocaleBean.getLocaleObject(example.getLocaleId()));
 
         for (Correction c : list) {
             try {
@@ -554,7 +554,7 @@ public class AddressCorrectionBean extends CorrectionBean {
 
         IStrategy streetStrategy = strategyFactory.getStrategy("street");
         IStrategy cityStrategy = strategyFactory.getStrategy("city");
-        Locale locale = localeBean.convert(localeBean.getLocaleObject(example.getLocaleId()));
+        Locale locale = stringLocaleBean.convert(stringLocaleBean.getLocaleObject(example.getLocaleId()));
 
         for (Correction c : streets) {
             DomainObject street = streetStrategy.findById(c.getObjectId(), false);
@@ -585,7 +585,7 @@ public class AddressCorrectionBean extends CorrectionBean {
         List<Correction> districts = sqlSession().selectList(ADDRESS_BEAN_MAPPING_NAMESPACE + ".findDistricts", example);
         IStrategy districtStrategy = strategyFactory.getStrategy("district");
         IStrategy cityStrategy = strategyFactory.getStrategy("city");
-        Locale locale = localeBean.convert(localeBean.getLocaleObject(example.getLocaleId()));
+        Locale locale = stringLocaleBean.convert(stringLocaleBean.getLocaleObject(example.getLocaleId()));
 
         for (Correction c : districts) {
             DomainObject district = districtStrategy.findById(c.getObjectId(), false);
@@ -614,7 +614,7 @@ public class AddressCorrectionBean extends CorrectionBean {
 
         List<Correction> streetTypeCorrections = sqlSession().selectList(CORRECTION_BEAN_MAPPING_NAMESPACE + ".find", example);
         if (streetTypeCorrections != null && !streetTypeCorrections.isEmpty()) {
-            Locale locale = localeBean.convert(localeBean.getLocaleObject(example.getLocaleId()));
+            Locale locale = stringLocaleBean.convert(stringLocaleBean.getLocaleObject(example.getLocaleId()));
             for (Correction streetTypeCorrection : streetTypeCorrections) {
                 DomainObject streetTypeObject = streetTypeStrategy.findById(streetTypeCorrection.getObjectId(), false);
                 if (streetTypeObject == null) {

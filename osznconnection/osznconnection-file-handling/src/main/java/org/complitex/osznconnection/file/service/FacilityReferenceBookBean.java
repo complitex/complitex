@@ -8,8 +8,12 @@ import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.Log;
-import org.complitex.common.service.*;
+import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.LogBean;
+import org.complitex.common.service.ModuleBean;
 import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.correction.entity.CityCorrection;
 import org.complitex.correction.entity.StreetCorrection;
@@ -59,7 +63,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
     private LogBean logBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private ModuleBean moduleBean;
@@ -156,7 +160,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
 
     public void updateStreetCorrections(FacilityStreet street, Long userOrganizationId, Long osznId,
             final String streetTypeReferenceFileName) throws ExecuteException {
-        Locale locale = localeBean.getSystemLocale(); //todo locale?
+        Locale locale = stringLocaleBean.getSystemLocale(); //todo locale?
         Long moduleId = moduleBean.getModuleId();
 
         String streetName = street.getStringField(FacilityStreetDBF.KL_NAME);

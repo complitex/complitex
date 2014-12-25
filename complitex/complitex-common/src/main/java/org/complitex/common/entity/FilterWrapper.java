@@ -28,7 +28,7 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
 
     private Map<String, Object> map = new HashMap<>();
 
-    private Locale locale;
+    private StringLocale stringLocale;
 
     private boolean camelToUnderscore = false;
 
@@ -119,12 +119,12 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
         this.ascending = ascending;
     }
 
-    public Locale getLocale() {
-        return locale;
+    public StringLocale getStringLocale() {
+        return stringLocale;
     }
 
-    public void setLocale(Locale locale) {
-        this.locale = locale;
+    public void setStringLocale(StringLocale stringLocale) {
+        this.stringLocale = stringLocale;
     }
 
     public boolean isLike() {

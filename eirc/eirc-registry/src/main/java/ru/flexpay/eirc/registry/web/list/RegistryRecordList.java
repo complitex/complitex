@@ -26,7 +26,7 @@ import org.apache.wicket.util.string.StringValue;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.entity.description.ILocalizedType;
+import org.complitex.common.entity.ILocalizedType;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.web.component.TextLabel;

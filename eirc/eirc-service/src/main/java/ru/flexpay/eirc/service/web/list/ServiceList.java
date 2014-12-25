@@ -18,8 +18,8 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.entity.Locale;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.StringLocale;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
@@ -46,7 +46,7 @@ public class ServiceList extends TemplatePage {
     private ServiceBean serviceBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     private WebMarkupContainer container;
     private DataView<Service> dataView;
@@ -81,7 +81,7 @@ public class ServiceList extends TemplatePage {
         container.setVisible(true);
         add(container);
 
-        final Locale locale = localeBean.convert(getLocale());
+        final StringLocale stringLocale = stringLocaleBean.convert(getLocale());
 
         //Form
         final Form filterForm = new Form("filterForm");
@@ -95,7 +95,7 @@ public class ServiceList extends TemplatePage {
                 FilterWrapper<Service> filterWrapper = FilterWrapper.of(filterObject, first, count);
                 filterWrapper.setAscending(getSort().isAscending());
                 filterWrapper.setSortProperty(getSort().getProperty());
-                filterWrapper.setLocale(localeBean.convert(getLocale()));
+                filterWrapper.setStringLocale(stringLocaleBean.convert(getLocale()));
                 filterWrapper.setLike(true);
 
                 return serviceBean.getServices(filterWrapper);
@@ -117,7 +117,7 @@ public class ServiceList extends TemplatePage {
                 final Service service = item.getModelObject();
 
                 item.add(new Label("code", service.getCode()));
-                item.add(new Label("name", service.getName(locale)));
+                item.add(new Label("name", service.getName(stringLocale)));
 
                 ScrollBookmarkablePageLink<WebPage> detailsLink = new ScrollBookmarkablePageLink<WebPage>("detailsLink",
                         getEditPage(), getEditPageParams(service.getId()),
@@ -144,12 +144,12 @@ public class ServiceList extends TemplatePage {
 
             @Override
             public String getObject() {
-                return filterObject.getName(locale);
+                return filterObject.getName(stringLocale);
             }
 
             @Override
             public void setObject(String name) {
-                filterObject.addName(locale, name);
+                filterObject.addName(stringLocale, name);
             }
         }));
 

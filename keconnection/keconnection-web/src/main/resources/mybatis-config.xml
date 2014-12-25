@@ -6,15 +6,6 @@
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
-    <typeAliases>
-        <typeAlias type="org.complitex.common.entity.Locale" alias="Locale"/>
-        <typeAlias type="org.complitex.common.entity.StringCulture" alias="StringCulture"/>
-        <typeAlias type="org.complitex.common.entity.Parameter" alias="Parameter"/>
-        <typeAlias type="org.complitex.common.entity.DomainObject" alias="DomainObject"/>
-        <typeAlias type="org.complitex.common.entity.Attribute" alias="Attribute"/>
-        <typeAlias type="org.complitex.common.entity.example.DomainObjectExample" alias="DomainObjectExample"/>
-    </typeAliases>
-
     <plugins>
         <!--cursor plugin-->
         <plugin interceptor="org.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>
@@ -22,8 +13,8 @@
         <!--cache plugin-->
         <plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheExecutorPlugin">
             <property name="excludeNamespaces" value="
-            org.complitex.common.entity.Locale,
-            org.complitex.common.entity.description.Entity"/>
+            org.complitex.common.entity.StringLocale,
+            org.complitex.common.entity.Entity"/>
         </plugin>
     </plugins>
 
@@ -37,35 +28,34 @@
     </environments>
 
     <mappers>
-        <mapper resource="org/complitex/common/entity/Locale.xml"/>
-        <mapper resource="org/complitex/common/entity/Sequence.xml"/>
-        <mapper resource="org/complitex/common/strategy/Strategy.xml"/>
+        <mapper resource="org/complitex/common/strategy/SequenceBean.xml"/>
+        <mapper resource="org/complitex/common/strategy/DomainObjectStrategy.xml"/>
+        <mapper resource="org/complitex/common/strategy/EntityBean.xml"/>
+        <mapper resource="org/complitex/common/strategy/PermissionBean.xml"/>
 
-        <mapper resource="org/complitex/common/service/EntityBean.xml"/>
         <mapper resource="org/complitex/common/service/LogBean.xml"/>
         <mapper resource="org/complitex/common/service/SessionBean.xml"/>
         <mapper resource="org/complitex/common/service/PreferenceBean.xml"/>
-        <mapper resource="org/complitex/common/service/PermissionBean.xml"/>
         <mapper resource="org/complitex/common/service/NameBean.xml"/>
         <mapper resource="org/complitex/common/service/ConfigBean.xml"/>
 
-        <mapper resource="org/complitex/address/strategy/building/Building.xml"/>
-        <mapper resource="org/complitex/address/strategy/building_address/BuildingAddress.xml"/>
-        <mapper resource="org/complitex/address/strategy/street/Street.xml"/>
-        <mapper resource="org/complitex/address/strategy/city/City.xml"/>
-        <mapper resource="org/complitex/address/strategy/district/District.xml"/>
+        <mapper resource="org/complitex/address/strategy/building/BuildingStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/building_address/BuildingAddressStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/street/StreetStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/city/CityStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/district/DistrictStrategy.xml"/>
 
         <mapper resource="org/complitex/admin/service/UserBean.xml"/>
         <mapper resource="org/complitex/admin/service/UserProfileBean.xml"/>
         <mapper resource="org/complitex/logging/service/LogListBean.xml"/>
 
-        <mapper resource="org/complitex/organization/strategy/Organization.xml"/>
+        <mapper resource="org/complitex/organization/strategy/OrganizationStrategy.xml"/>
         
         <mapper resource="org/complitex/keconnection/organization/service/OrganizationImportBean.xml"/>
 
         <mapper resource="org/complitex/keconnection/tarif/strategy/TarifGroup.xml"/>
         <mapper resource="org/complitex/keconnection/tarif/strategy/Tarif.xml"/>
-        <mapper resource="org/complitex/keconnection/organization/strategy/Organization.xml"/>
+        <mapper resource="org/complitex/keconnection/organization/strategy/KeConnectionOrganizationStrategy.xml"/>
         
         <mapper resource="org/complitex/keconnection/heatmeter/service/CorrectionBean.xml"/>
         <mapper resource="org/complitex/keconnection/heatmeter/service/AddressCorrectionBean.xml"/>

@@ -4,21 +4,22 @@
  */
 package org.complitex.keconnection.tarif.strategy.web.edit;
 
-import java.util.List;
-import javax.ejb.EJB;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.domain.DomainObjectAccessUtil;
+import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
+import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.domain.DomainObjectAccessUtil;
 import org.complitex.keconnection.tarif.strategy.TarifGroupStrategy;
 import org.complitex.keconnection.tarif.strategy.TarifStrategy;
+
+import javax.ejb.EJB;
+import java.util.List;
 
 /**
  *

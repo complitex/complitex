@@ -1,6 +1,4 @@
-package org.complitex.common.entity.description;
-
-import org.complitex.common.entity.ILongId;
+package org.complitex.common.entity;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

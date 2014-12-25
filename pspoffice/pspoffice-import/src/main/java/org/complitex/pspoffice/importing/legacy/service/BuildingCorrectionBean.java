@@ -7,21 +7,22 @@ package org.complitex.pspoffice.importing.legacy.service;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.pspoffice.importing.legacy.entity.BuildingCorrection;
 import org.complitex.pspoffice.importing.legacy.service.exception.TooManyResultsException;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -34,12 +35,12 @@ public class BuildingCorrectionBean extends AbstractBean {
     @EJB
     private BuildingStrategy buildingStrategy;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     private long SYSTEM_LOCALE_ID;
 
     @PostConstruct
     private void init() {
-        SYSTEM_LOCALE_ID = localeBean.getSystemLocaleObject().getId();
+        SYSTEM_LOCALE_ID = stringLocaleBean.getSystemStringLocale().getId();
     }
 
     public void insert(BuildingCorrection buildingCorrection) {

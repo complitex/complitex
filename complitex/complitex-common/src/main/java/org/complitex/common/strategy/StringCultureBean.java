@@ -1,10 +1,11 @@
-package org.complitex.common.service;
+package org.complitex.common.strategy;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.StringCulture;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
+import org.complitex.common.service.AbstractBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.complitex.common.strategy.Strategy.NS;
+import static org.complitex.common.strategy.DomainObjectStrategy.NS;
 
 @Stateless
 public class StringCultureBean extends AbstractBean {
@@ -20,7 +21,7 @@ public class StringCultureBean extends AbstractBean {
     private SequenceBean sequenceBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     public Long save(List<StringCulture> strings, String entityTable, boolean upperCase) {
         if (strings != null && !strings.isEmpty()) {
@@ -55,7 +56,7 @@ public class StringCultureBean extends AbstractBean {
         //if string should be in upper case:
         if (upperCase) {
             //find given string culture's locale
-            final java.util.Locale locale = localeBean.getLocale(stringCulture.getLocaleId());
+            final java.util.Locale locale = stringLocaleBean.getLocale(stringCulture.getLocaleId());
 
             //upper case string culture's value
             stringCulture.setValue(stringCulture.getValue().toUpperCase(locale));
@@ -96,7 +97,7 @@ public class StringCultureBean extends AbstractBean {
     public void setSqlSessionFactoryBean(SqlSessionFactoryBean sqlSessionFactoryBean) {
         super.setSqlSessionFactoryBean(sqlSessionFactoryBean);
 
-        localeBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
+        stringLocaleBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         sequenceBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
     }
 }

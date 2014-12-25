@@ -4,9 +4,6 @@
 <mapper namespace="org.complitex.address.strategy.city.CityStrategy">
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
-    <!-- Validation -->
-
-    <!-- Default validation -->
     <select id="defaultValidation" resultType="long" parameterType="map">
         SELECT DISTINCT c.`object_id` FROM `city` c
                                     JOIN `city_attribute` a_name ON (c.`object_id` = a_name.`object_id` AND a_name.`status` = 'ACTIVE')
@@ -25,5 +22,4 @@
             </choose>
             AND a_type.`value_id` = #{cityTypeId}
     </select>
-
 </mapper>

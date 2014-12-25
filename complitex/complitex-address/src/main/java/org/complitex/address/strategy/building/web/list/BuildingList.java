@@ -20,10 +20,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.Building;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.web.domain.DomainObjectAccessUtil;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
@@ -31,6 +30,7 @@ import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.common.web.component.search.CollapsibleSearchPanel;
+import org.complitex.common.web.domain.DomainObjectAccessUtil;
 import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.component.toolbar.search.CollapsibleSearchToolbarButton;
@@ -51,8 +51,8 @@ public class BuildingList extends ScrollListPage {
     @EJB
     private StrategyFactory strategyFactory;
     @EJB
-    private LocaleBean localeBean;
-    private DomainObjectExample example;
+    private StringLocaleBean stringLocaleBean;
+    private DomainObjectFilter example;
     private WebMarkupContainer content;
     private DataView<Building> dataView;
     private CollapsibleSearchPanel searchPanel;
@@ -66,7 +66,7 @@ public class BuildingList extends ScrollListPage {
         init();
     }
 
-    public DomainObjectExample getExample() {
+    public DomainObjectFilter getExample() {
         return example;
     }
 
@@ -94,7 +94,7 @@ public class BuildingList extends ScrollListPage {
         content.setOutputMarkupPlaceholderTag(true);
 
         //Example
-        example = (DomainObjectExample) getFilterObject(new DomainObjectExample());
+        example = (DomainObjectFilter) getFilterObject(new DomainObjectFilter());
 
         //Search
         final List<String> searchFilters = getBuildingStrategy().getSearchFilters();
@@ -133,7 +133,7 @@ public class BuildingList extends ScrollListPage {
                     example.setOrderByAttributeTypeId(Long.valueOf(sortProperty));
                 }
                 example.setStatus(showModeModel.getObject().name());
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 example.setAsc(asc);
                 example.setFirst(first);
                 example.setCount(count);
@@ -144,7 +144,7 @@ public class BuildingList extends ScrollListPage {
             @Override
             protected Long getSize() {
                 example.setStatus(showModeModel.getObject().name());
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 return getBuildingStrategy().getCount(example);
             }
         };

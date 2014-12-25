@@ -9,7 +9,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.PermissionBean;
+import org.complitex.common.strategy.PermissionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.DisableAwareListMultipleChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;

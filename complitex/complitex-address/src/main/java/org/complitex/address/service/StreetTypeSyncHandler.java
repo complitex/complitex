@@ -4,7 +4,7 @@ import org.complitex.address.entity.AddressSync;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.CloneUtil;
 
@@ -39,7 +39,7 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return streetTypeStrategy.getList(new DomainObjectExample());
+        return streetTypeStrategy.getList(new DomainObjectFilter());
     }
 
     @Override

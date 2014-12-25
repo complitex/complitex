@@ -14,8 +14,8 @@ import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.SessionBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.pspoffice.person.strategy.entity.grid.BuildingsGridEntity;
 import org.complitex.pspoffice.person.strategy.entity.grid.BuildingsGridFilter;
@@ -48,7 +48,7 @@ public class BuildingsGridBean extends AbstractBean {
     private IOrganizationStrategy organizationStrategy;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     public BuildingsGridFilter newFilter(long cityId, Long streetId, Locale locale) {
         final boolean isAdmin = sessionBean.isAdmin();
@@ -77,7 +77,7 @@ public class BuildingsGridBean extends AbstractBean {
     }
 
     private Map<String, Object> enhanceParams(Map<String, Object> params, Locale locale) {
-        params.put("sortLocaleId", localeBean.convert(locale).getId());
+        params.put("sortLocaleId", stringLocaleBean.convert(locale).getId());
         params.put("buildingAddressCorpAT", BuildingAddressStrategy.CORP);
         params.put("buildingAddressStructureAT", BuildingAddressStrategy.STRUCTURE);
         params.put("streetNameAT", StreetStrategy.NAME);

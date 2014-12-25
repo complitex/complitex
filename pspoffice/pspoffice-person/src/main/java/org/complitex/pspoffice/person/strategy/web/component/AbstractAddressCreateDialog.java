@@ -111,7 +111,7 @@ public abstract class AbstractAddressCreateDialog extends Panel {
 
             @Override
             public String getObject() {
-                return addressRendererBean.displayAddress(parentEntity, parentObject.getId(), getLocale());
+                return addressRendererBean.displayAddress(parentEntity, parentObject.getObjectId(), getLocale());
             }
         }));
 

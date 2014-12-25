@@ -18,11 +18,11 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.description.Entity;
-import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.service.IUserProfileBean;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
@@ -62,7 +62,7 @@ final class PersonHistoryPanel extends Panel {
     @EJB
     private PersonStrategy personStrategy;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private PersonNameBean personNameBean;
     @EJB
@@ -189,7 +189,7 @@ final class PersonHistoryPanel extends Panel {
             IModel<DomainObject> militaryServiceRelationModel = new Model<DomainObject>();
             if (person.getMilitaryServiceRelation() != null) {
                 for (DomainObject msr : allMilitaryServiceRelations) {
-                    if (msr.getId().equals(person.getMilitaryServiceRelation().getId())) {
+                    if (msr.getObjectId().equals(person.getMilitaryServiceRelation().getObjectId())) {
                         militaryServiceRelationModel.setObject(msr);
                         break;
                     }
@@ -298,7 +298,7 @@ final class PersonHistoryPanel extends Panel {
 
                 @Override
                 public boolean apply(DomainObject documentType) {
-                    return documentType.getId().equals(person.getDocument().getDocumentTypeId());
+                    return documentType.getObjectId().equals(person.getDocument().getDocumentTypeId());
                 }
             }));
             documentTypeContainer.add(new DisableAwareDropDownChoice<DomainObject>("documentType",
@@ -327,7 +327,7 @@ final class PersonHistoryPanel extends Panel {
                 final Person child = item.getModelObject();
                 item.add(new Label("label", String.valueOf(item.getIndex() + 1)));
                 Label childComponent = new Label("child", personStrategy.displayDomainObject(child, getLocale()));
-                childComponent.add(new CssAttributeBehavior(modification.getChildModificationType(child.getId()).getCssClass()));
+                childComponent.add(new CssAttributeBehavior(modification.getChildModificationType(child.getObjectId()).getCssClass()));
                 item.add(childComponent);
             }
         });
@@ -377,8 +377,8 @@ final class PersonHistoryPanel extends Panel {
 
     private void populateItem(ListItem<Attribute> item, PersonNameType personNameType, String personNameComponentId) {
         Attribute personNameAttribute = item.getModelObject();
-        Locale locale = localeBean.getLocale(personNameAttribute.getAttributeId());
-        boolean isSystemLocale = localeBean.getLocaleObject(personNameAttribute.getAttributeId()).isSystem();
+        Locale locale = stringLocaleBean.getLocale(personNameAttribute.getAttributeId());
+        boolean isSystemLocale = stringLocaleBean.getLocaleObject(personNameAttribute.getAttributeId()).isSystem();
         final TextField<String> personNameComponent =
                 new TextField<String>(personNameComponentId, newNameModel(personNameType, personNameAttribute));
         personNameComponent.setEnabled(false);

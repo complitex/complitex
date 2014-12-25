@@ -23,9 +23,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
@@ -56,7 +56,7 @@ public final class PersonList extends ScrollListPage {
     @EJB
     private PersonStrategy personStrategy;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private StringCultureBean stringBean;
     private CollapsibleSearchPanel searchPanel;
@@ -110,7 +110,7 @@ public final class PersonList extends ScrollListPage {
         add(content);
 
         //Example
-        final DomainObjectExample example = (DomainObjectExample) getFilterObject(new DomainObjectExample());
+        final DomainObjectFilter example = (DomainObjectFilter) getFilterObject(new DomainObjectFilter());
 
         //Form
         final Form<Void> filterForm = new Form<Void>("filterForm");
@@ -135,7 +135,7 @@ public final class PersonList extends ScrollListPage {
                     example.setOrderByAttributeTypeId(Long.valueOf(sortProperty));
                 }
                 example.setStatus(showModeModel.getObject().name());
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 example.setAsc(asc);
                 example.setFirst(first);
                 example.setCount(count);
@@ -145,7 +145,7 @@ public final class PersonList extends ScrollListPage {
             @Override
             protected Long getSize() {
                 example.setStatus(showModeModel.getObject().name());
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 return personStrategy.getCount(example);
             }
         };
@@ -189,7 +189,7 @@ public final class PersonList extends ScrollListPage {
             }
         }));
 
-        final Locale systemLocale = localeBean.getSystemLocale();
+        final Locale systemLocale = stringLocaleBean.getSystemLocale();
         //Data View
         DataView<Person> dataView = new DataView<Person>("data", dataProvider, 1) {
 
@@ -203,8 +203,8 @@ public final class PersonList extends ScrollListPage {
                 item.add(new Label("middleName", person.getMiddleName(getLocale(), systemLocale)));
 
                 ScrollBookmarkablePageLink<WebPage> detailsLink = new ScrollBookmarkablePageLink<WebPage>("detailsLink",
-                        personStrategy.getEditPage(), personStrategy.getEditPageParams(person.getId(), null, null),
-                        String.valueOf(person.getId()));
+                        personStrategy.getEditPage(), personStrategy.getEditPageParams(person.getObjectId(), null, null),
+                        String.valueOf(person.getObjectId()));
                 detailsLink.add(new Label("editMessage", new AbstractReadOnlyModel<String>() {
 
                     @Override
@@ -234,7 +234,7 @@ public final class PersonList extends ScrollListPage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 filterForm.clearInput();
-                example.setId(null);
+                example.setObjectId(null);
                 example.addAdditionalParam(PersonStrategy.LAST_NAME_FILTER, null);
                 example.addAdditionalParam(PersonStrategy.FIRST_NAME_FILTER, null);
                 example.addAdditionalParam(PersonStrategy.MIDDLE_NAME_FILTER, null);

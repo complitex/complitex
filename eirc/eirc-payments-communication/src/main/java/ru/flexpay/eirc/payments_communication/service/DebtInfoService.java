@@ -5,17 +5,17 @@ import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.room.RoomStrategy;
-import org.complitex.correction.entity.ApartmentCorrection;
-import org.complitex.correction.entity.BuildingCorrection;
-import org.complitex.correction.entity.RoomCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.correction.entity.ApartmentCorrection;
+import org.complitex.correction.entity.BuildingCorrection;
+import org.complitex.correction.entity.RoomCorrection;
+import org.complitex.correction.service.AddressCorrectionBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.dictionary.entity.Address;
@@ -119,7 +119,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
         Attribute attribute = eircModule.getAttribute(ModuleInstanceStrategy.ORGANIZATION);
         final Long eircOrganizationId;
         if (attribute == null ||
-                (eircOrganizationId = Long.parseLong(attribute.getStringCulture(EjbBeanLocator.getBean(LocaleBean.class).getSystemLocaleId()).getValue())) == null) {
+                (eircOrganizationId = Long.parseLong(attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue())) == null) {
             logger.error("Inner error: EIRC module '{}' did not content own organization", eircModuleId);
             return buildResponseContent(ResponseStatus.INTERNAL_ERROR);
         }
@@ -309,7 +309,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
             logger.error("Inner error: Module '{}' did not content organization", moduleId);
             return null;
         }
-        Long organizationId = Long.parseLong(attribute.getStringCulture(EjbBeanLocator.getBean(LocaleBean.class).getSystemLocaleId()).getValue());
+        Long organizationId = Long.parseLong(attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue());
         Organization organization = organizationStrategy.findById(organizationId, true);
         if (organization == null) {
             logger.error("Inner error: organization not found by id {}", organizationId);

@@ -4,7 +4,7 @@
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
     <resultMap id="serviceProviderAccountAttributeResultMap" type="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute"
-               extends="org.complitex.common.strategy.Strategy.attributeResultMap">
+               extends="org.complitex.common.strategy.DomainObjectStrategy.attributeResultMap">
         <id column="pk_id" property="pkId"/>
     </resultMap>
 

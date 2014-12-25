@@ -11,7 +11,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.EntityAttributeType;
 
 import java.util.Locale;
 

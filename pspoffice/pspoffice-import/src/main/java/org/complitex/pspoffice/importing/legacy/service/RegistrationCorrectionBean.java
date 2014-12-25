@@ -4,21 +4,22 @@
  */
 package org.complitex.pspoffice.importing.legacy.service;
 
-import java.util.Date;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.complitex.common.converter.DateConverter;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.pspoffice.importing.legacy.entity.ApartmentCardCorrection;
-import org.complitex.pspoffice.importing.legacy.entity.PersonCorrection;
 import org.complitex.pspoffice.importing.legacy.entity.LegacyDataImportFile;
+import org.complitex.pspoffice.importing.legacy.entity.PersonCorrection;
 import org.complitex.pspoffice.person.strategy.ApartmentCardStrategy;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.RegistrationStrategy;
 import org.complitex.pspoffice.person.strategy.entity.ApartmentCard;
 import org.complitex.pspoffice.person.strategy.entity.Registration;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -108,6 +109,6 @@ public class RegistrationCorrectionBean extends AbstractBean {
 
     public long addRegistration(ApartmentCard apartmentCard, Registration registration, Date createDate) {
         apartmentCardStrategy.addRegistration(apartmentCard, registration, createDate);
-        return registration.getId();
+        return registration.getObjectId();
     }
 }

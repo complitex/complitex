@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.complitex.common.strategy.Strategy">
+<mapper namespace="org.complitex.common.strategy.DomainObjectStrategy">
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
     <resultMap id="domainObjectResultMap" type="org.complitex.common.entity.DomainObject">
@@ -25,6 +25,12 @@
         <result column="value_type_id" property="valueTypeId"/>
     </resultMap>
 
+    <resultMap id="localeResultMap" type="org.complitex.common.entity.StringLocale">
+        <id column="id" property="id"/>
+        <result column="locale" property="locale"/>
+        <result column="system" property="system"/>
+    </resultMap>
+
     <resultMap id="stringCultureResultMap" type="org.complitex.common.entity.StringCulture">
         <constructor>
             <idArg column="locale_id" javaType="Long"/>
@@ -33,7 +39,7 @@
         <id column="id" property="id"/>
     </resultMap>
 
-    <resultMap id="domainObjectPermissionInfoResultMap" type="org.complitex.common.strategy.DomainObjectPermissionInfo">
+    <resultMap id="permissionInfoResultMap" type="org.complitex.common.entity.PermissionInfo">
         <id column="object_id" property="id"/>
         <result column="permission_id" property="permissionId"/>
     </resultMap>
@@ -47,11 +53,11 @@
           (#{id}, #{status}, #{startDate}, #{endDate}, #{parentId}, #{parentEntityId}, #{permissionId}, #{externalId})
     </insert>
 
-    <select id="selectDomainObject" parameterType="org.complitex.common.entity.example.DomainObjectExample"
+    <select id="selectDomainObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="domainObjectResultMap">
         SELECT e.*
         FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
-        <include refid="org.complitex.common.entity.DomainObject.permissionFilter"/>
+        <include refid="domainObjectPermissionFilter"/>
     </select>
 
     <select id="selectDomainObjectId" resultType="long" parameterType="map">
@@ -146,7 +152,7 @@
         </if>
     </sql>
 
-    <select id="selectDomainObjects" parameterType="org.complitex.common.entity.example.DomainObjectExample"
+    <select id="selectDomainObjects" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="domainObjectResultMap" >
         SELECT e.*
         FROM `${entityTable}` e WHERE
@@ -157,7 +163,7 @@
         <include refid="domainObjectLimit"/>
     </select>
 
-    <select id="selectDomainObjectCount" resultType="long" parameterType="DomainObjectExample">
+    <select id="selectDomainObjectCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT COUNT(1) FROM `${entityTable}` e WHERE
         <include refid="domainObjectStatusFilter"/>
         <include refid="domainObjectPermissionFilter"/>
@@ -205,7 +211,7 @@
 
     <!-- history -->
 
-    <select id="historyDates" resultType="date" parameterType="org.complitex.common.entity.example.DomainObjectExample">
+    <select id="historyDates" resultType="date" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT e.`start_date` FROM `${entityTable}` e WHERE e.`object_id`= #{objectId}
         UNION
         SELECT e.`end_date` FROM `${entityTable}` e WHERE e.`object_id`= #{objectId}
@@ -215,13 +221,14 @@
         SELECT aa.`end_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{objectId}
     </select>
 
-    <select id="selectHistoryObject" parameterType="DomainObjectExample" resultMap="domainObjectResultMap">
+    <select id="selectHistoryObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
+            resultMap="domainObjectResultMap">
         SELECT e.* FROM `${entityTable}` e WHERE e.`object_id` = #{objectId} AND e.`start_date` = (
             SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{objectId}
                 AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
     </select>
 
-    <select id="selectChildrenPermissionInfo" parameterType="map" resultMap="domainObjectPermissionInfoResultMap">
+    <select id="selectChildrenPermissionInfo" parameterType="map" resultMap="permissionInfoResultMap">
         SELECT e.`object_id`, e.`permission_id` FROM `${entity}` e WHERE e.`status` IN ('ACTIVE', 'INACTIVE')
         AND e.`parent_id` = #{parentId} AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent
           WHERE ent.`entity_table` = #{parentEntity})
@@ -303,7 +310,7 @@
           ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
     </select>
 
-    <select id="selectHistoryAttributes" parameterType="org.complitex.common.entity.example.DomainObjectExample"
+    <select id="selectHistoryAttributes" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="attributeResultMap">
         SELECT aa.*
         FROM `${entityTable}_attribute` aa
@@ -315,6 +322,12 @@
     <delete id="deleteAttribute" parameterType="map">
         DELETE FROM `${entityTable}_attribute` WHERE `object_id` = #{objectId}
     </delete>
+
+    <!--StringLocale-->
+
+    <select id="loadAllLocales" resultMap="localeResultMap">
+        SELECT l.* FROM `locales` l
+    </select>
 
     <!--StringCulture-->
 

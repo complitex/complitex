@@ -13,7 +13,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.complitex.common.entity.StringCulture;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 public final class StringCulturePanel extends Panel {
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     /**
      * For use in non-ajax environment
@@ -63,11 +63,11 @@ public final class StringCulturePanel extends Panel {
             protected void populateItem(ListItem<StringCulture> item) {
                 StringCulture string = item.getModelObject();
 
-                Label language = new Label("language", localeBean.convert(localeBean.getLocaleObject(string.getLocaleId())).getDisplayLanguage(getLocale()));
+                Label language = new Label("language", stringLocaleBean.convert(stringLocaleBean.getLocaleObject(string.getLocaleId())).getDisplayLanguage(getLocale()));
                 item.add(language);
 
                 boolean isSystemLocale = false;
-                if (localeBean.getLocaleObject(string.getLocaleId()).isSystem()) {
+                if (stringLocaleBean.getLocaleObject(string.getLocaleId()).isSystem()) {
                     isSystemLocale = true;
                 }
 

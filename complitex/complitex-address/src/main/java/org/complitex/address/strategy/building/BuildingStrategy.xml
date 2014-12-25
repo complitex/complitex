@@ -3,10 +3,11 @@
 
 <mapper namespace="org.complitex.address.strategy.building.Building">
     <resultMap id="buildingResultMap" type="org.complitex.address.strategy.building.entity.Building"
-               extends="domainObjectResultMap">
+               extends="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
     </resultMap>
 
-    <select id="selectBuilding" parameterType="org.complitex.common.entity.example.DomainObjectExample" resultMap="buildingResultMap">
+    <select id="selectBuilding" parameterType="org.complitex.common.entity.DomainObjectFilter"
+            resultMap="buildingResultMap">
         SELECT DISTINCT e.`object_id`, e.`start_date`, e.`end_date`, e.`status`, e.`parent_id`, e.`parent_entity_id`,
           e.`permission_id`, e.`external_id`
         FROM `building` e WHERE
@@ -19,7 +20,8 @@
               AND ba.`attribute_type_id` = 501 AND ba.`value_id` = #{additionalParams.buildingAddressId}))
     </select>
 
-    <select id="selectBuildingById" parameterType="org.complitex.common.entity.example.DomainObjectExample" resultMap="buildingResultMap">
+    <select id="selectBuildingById" parameterType="org.complitex.common.entity.DomainObjectFilter"
+            resultMap="buildingResultMap">
         SELECT e.*
         FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
             <include refid="domainObjectPermissionFilter"/>
@@ -69,9 +71,9 @@
             EXISTS(SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = #{buildingId} AND ba.`attribute_type_id` = 501 AND ba.`value_id` = addr.`object_id`)
     </select>
 
-    <select id="selectHistoryObject" parameterType="org.complitex.common.entity.example.DomainObjectExample"
+    <select id="selectHistoryObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="buildingResultMap">
-        <include refid=" org.complitex.common.strategy.Strategy.selectHistoryObject"/>
+        <include refid=" org.complitex.common.strategy.DomainObjectStrategy.selectHistoryObject"/>
     </select>
 
     <!-- disable/enable functionality -->

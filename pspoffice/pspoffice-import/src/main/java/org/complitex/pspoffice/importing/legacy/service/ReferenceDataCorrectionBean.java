@@ -6,10 +6,9 @@ package org.complitex.pspoffice.importing.legacy.service;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.ComparisonType;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
@@ -91,16 +90,16 @@ public class ReferenceDataCorrectionBean extends AbstractBean {
         IStrategy strategy = strategyFactory.getStrategy(entity);
         long nameAttributeTypeId = strategy.getEntity().getId();
 
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         example.setAdmin(true);
-        AttributeExample nameExample = new AttributeExample(nameAttributeTypeId);
+        AttributeFilter nameExample = new AttributeFilter(nameAttributeTypeId);
         nameExample.setValue(nkod);
         example.addAttributeExample(nameExample);
-        example.setComparisonType(ComparisonType.EQUALITY.name());
+        example.setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name());
 
         List<? extends DomainObject> objects = strategy.getList(example);
         if (objects.size() == 1) {
-            return objects.get(0).getId();
+            return objects.get(0).getObjectId();
         } else if (objects.isEmpty()) {
             return null;
         } else {

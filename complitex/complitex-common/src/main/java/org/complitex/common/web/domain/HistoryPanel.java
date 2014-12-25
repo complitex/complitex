@@ -13,9 +13,9 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.History;
-import org.complitex.common.service.StringCultureBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 
 import javax.ejb.EJB;

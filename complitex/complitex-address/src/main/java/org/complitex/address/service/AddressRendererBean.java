@@ -6,8 +6,8 @@ package org.complitex.address.service;
 
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.SimpleObjectInfo;
 import org.complitex.common.strategy.IStrategy;
-import org.complitex.common.strategy.SimpleObjectInfo;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.component.search.SearchComponentState;
 

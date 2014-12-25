@@ -11,7 +11,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import ru.flexpay.eirc.service.entity.Service;
 
 import javax.ejb.EJB;
@@ -23,7 +23,7 @@ import javax.ejb.EJB;
 public class ServicePicker extends FormComponentPanel<Service> {
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @Override
     public void renderHead(IHeaderResponse response) {
@@ -60,7 +60,7 @@ public class ServicePicker extends FormComponentPanel<Service> {
                     public String getObject() {
                         Service service = getModelObject();
                         if (service != null) {
-                            return service.getName(localeBean.convert(getLocale()));
+                            return service.getName(stringLocaleBean.convert(getLocale()));
                         } else {
                             return getString("service_not_selected");
                         }

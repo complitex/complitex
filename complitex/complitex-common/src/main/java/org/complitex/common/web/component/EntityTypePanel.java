@@ -7,11 +7,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -28,7 +28,7 @@ public class EntityTypePanel extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private StringCultureBean stringBean;
     private String entityType;
@@ -103,8 +103,8 @@ public class EntityTypePanel extends Panel {
 
     private List<? extends DomainObject> getEntityTypes() {
         IStrategy strategy = strategyFactory.getStrategy(entityType);
-        DomainObjectExample example = new DomainObjectExample();
-        example.setLocaleId(localeBean.convert(getLocale()).getId());
+        DomainObjectFilter example = new DomainObjectFilter();
+        example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
         example.setOrderByAttributeTypeId(entityTypeDisplayAttributeTypeId);
         example.setAsc(true);
         strategy.configureExample(example, ImmutableMap.<String, Long>of(), null);

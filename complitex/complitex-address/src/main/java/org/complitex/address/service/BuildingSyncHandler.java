@@ -8,7 +8,7 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.util.CloneUtil;
 
 import javax.ejb.EJB;
@@ -51,12 +51,12 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return buildingAddressStrategy.getList(new DomainObjectExample().addAdditionalParam(DISTRICT_ID, parent.getObjectId()));
+        return buildingAddressStrategy.getList(new DomainObjectFilter().addAdditionalParam(DISTRICT_ID, parent.getObjectId()));
     }
 
     @Override
     public List<? extends DomainObject> getParentObjects() {
-        return districtStrategy.getList(new DomainObjectExample());
+        return districtStrategy.getList(new DomainObjectFilter());
     }
 
     @Override

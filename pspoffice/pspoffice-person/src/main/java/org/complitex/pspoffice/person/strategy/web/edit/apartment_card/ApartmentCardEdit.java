@@ -29,14 +29,10 @@ import org.apache.wicket.model.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.Log;
-import org.complitex.common.entity.description.Entity;
-import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.*;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
@@ -264,7 +260,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     }
 
     private void init(final ApartmentCard apartmentCard) {
-        if (apartmentCard.getId() == null) {
+        if (apartmentCard.getObjectId() == null) {
             oldApartmentCard = null;
             newApartmentCard = apartmentCard;
         } else {
@@ -278,7 +274,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
             protected String load() {
                 final String entityName = ENTITY.getName(getLocale());
                 return isNew() || !sessionBean.isAdmin() ? entityName
-                        : MessageFormat.format(getString("label_edit"), entityName, newApartmentCard.getId());
+                        : MessageFormat.format(getString("label_edit"), entityName, newApartmentCard.getObjectId());
             }
         };
         Label title = new Label("title", labelModel);
@@ -308,7 +304,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
                 @Override
                 protected void onSelect(AjaxRequestTarget target, String entity, DomainObject object) {
-                    if (object != null && object.getId() != null && object.getId() > 0) {
+                    if (object != null && object.getObjectId() != null && object.getObjectId() > 0) {
                         permissionContainer.replace(newPermissionPanel(object.getSubjectIds()));
                         target.add(permissionContainer);
                     }
@@ -332,7 +328,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
                 ? new PersonPicker("owner", PersonAgeType.ADULT, new PropertyModel<Person>(newApartmentCard, "owner"),
                 true, ownerLabelModel, true)
                 : new PersonPicker("owner", PersonAgeType.ADULT, new PropertyModel<Person>(newApartmentCard, "owner"),
-                true, ownerLabelModel, true, newApartmentCard.getId());
+                true, ownerLabelModel, true, newApartmentCard.getObjectId());
         ownerContainer.add(owner);
         form.add(ownerContainer);
 
@@ -358,7 +354,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
                 allowRegisterOwner = true;
                 if (!isNew()) {
                     for (Registration registration : newApartmentCard.getRegistrations()) {
-                        if (newApartmentCard.getOwner().getId().equals(registration.getPerson().getId())
+                        if (newApartmentCard.getOwner().getObjectId().equals(registration.getPerson().getObjectId())
                                 && !registration.isFinished()) {
                             allowRegisterOwner = false;
                             break;
@@ -416,7 +412,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         final Map<Long, IModel<Boolean>> selectedMap = newHashMap();
         for (Registration registration : newApartmentCard.getRegistrations()) {
             if (!registration.isFinished()) {
-                selectedMap.put(registration.getId(), new Model<Boolean>(false));
+                selectedMap.put(registration.getObjectId(), new Model<Boolean>(false));
             }
         }
 
@@ -435,11 +431,11 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
                             @Override
                             public boolean apply(Registration registration) {
-                                IModel<Boolean> model = selectedMap.get(registration.getId());
+                                IModel<Boolean> model = selectedMap.get(registration.getObjectId());
                                 return model != null ? model.getObject() : false;
                             }
                         }));
-                removeRegistrationDialog.open(target, newApartmentCard.getId(), registrationsToRemove);
+                removeRegistrationDialog.open(target, newApartmentCard.getObjectId(), registrationsToRemove);
             }
 
             @Override
@@ -469,11 +465,11 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
                             @Override
                             public boolean apply(Registration registration) {
-                                IModel<Boolean> model = selectedMap.get(registration.getId());
+                                IModel<Boolean> model = selectedMap.get(registration.getObjectId());
                                 return model != null ? model.getObject() : false;
                             }
                         }));
-                changeRegistrationTypeDialog.open(target, newApartmentCard.getId(), registrationsToChangeType);
+                changeRegistrationTypeDialog.open(target, newApartmentCard.getObjectId(), registrationsToChangeType);
             }
         };
         changeRegistrationType.add(changeRegistrationTypeButton);
@@ -498,7 +494,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
             protected void populateItem(ListItem<Registration> item) {
                 final Registration registration = item.getModelObject();
 
-                AjaxCheckBox selected = new AjaxCheckBox("selected", selectedMap.get(registration.getId())) {
+                AjaxCheckBox selected = new AjaxCheckBox("selected", selectedMap.get(registration.getObjectId())) {
 
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
@@ -513,8 +509,8 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
                     @Override
                     public void onClick() {
-                        PageParameters params = personStrategy.getEditPageParams(registration.getPerson().getId(), null, null);
-                        BackInfoManager.put(this, PAGE_SESSION_KEY, new ApartmentCardBackInfo(newApartmentCard.getId(), backInfoSessionKey));
+                        PageParameters params = personStrategy.getEditPageParams(registration.getPerson().getObjectId(), null, null);
+                        BackInfoManager.put(this, PAGE_SESSION_KEY, new ApartmentCardBackInfo(newApartmentCard.getObjectId(), backInfoSessionKey));
                         params.set(BACK_INFO_SESSION_KEY, PAGE_SESSION_KEY);
                         setResponsePage(personStrategy.getEditPage(), params);
                     }
@@ -653,7 +649,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
             @Override
             public void onClick() {
-                setResponsePage(new ApartmentCardHistoryPage(newApartmentCard.getId()));
+                setResponsePage(new ApartmentCardHistoryPage(newApartmentCard.getObjectId()));
             }
         }.setVisible(!isNew()));
 
@@ -724,17 +720,17 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         if (isNew()) {
             Attribute addressAttribute = newApartmentCard.getAttribute(ADDRESS);
             if (addressSearchComponentState.get("room") != null
-                    && addressSearchComponentState.get("room").getId() > 0) {
+                    && addressSearchComponentState.get("room").getObjectId() > 0) {
                 addressAttribute.setValueTypeId(ADDRESS_ROOM);
-                addressAttribute.setValueId(addressSearchComponentState.get("room").getId());
+                addressAttribute.setValueId(addressSearchComponentState.get("room").getObjectId());
             } else if (addressSearchComponentState.get("apartment") != null
-                    && addressSearchComponentState.get("apartment").getId() > 0) {
+                    && addressSearchComponentState.get("apartment").getObjectId() > 0) {
                 addressAttribute.setValueTypeId(ADDRESS_APARTMENT);
-                addressAttribute.setValueId(addressSearchComponentState.get("apartment").getId());
+                addressAttribute.setValueId(addressSearchComponentState.get("apartment").getObjectId());
             } else if (addressSearchComponentState.get("building") != null
-                    && addressSearchComponentState.get("building").getId() > 0) {
+                    && addressSearchComponentState.get("building").getObjectId() > 0) {
                 addressAttribute.setValueTypeId(ADDRESS_BUILDING);
-                addressAttribute.setValueId(addressSearchComponentState.get("building").getId());
+                addressAttribute.setValueId(addressSearchComponentState.get("building").getObjectId());
             } else {
                 throw new IllegalStateException("All building, apartment and room parts of address have not been filled in.");
             }
@@ -743,14 +739,14 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         // owner
         Attribute ownerAttribute = newApartmentCard.getAttribute(OWNER);
         DomainObject owner = newApartmentCard.getOwner();
-        Long ownerId = owner != null ? owner.getId() : null;
+        Long ownerId = owner != null ? owner.getObjectId() : null;
         ownerAttribute.setValueId(ownerId);
         ownerAttribute.setValueTypeId(OWNER_TYPE);
 
         // form of ownership
         Attribute formOfOwnershipAttribute = newApartmentCard.getAttribute(FORM_OF_OWNERSHIP);
         DomainObject ownershipForm = newApartmentCard.getOwnershipForm();
-        Long ownershipFormId = ownershipForm != null ? ownershipForm.getId() : null;
+        Long ownershipFormId = ownershipForm != null ? ownershipForm.getObjectId() : null;
         formOfOwnershipAttribute.setValueId(ownershipFormId);
         formOfOwnershipAttribute.setValueTypeId(FORM_OF_OWNERSHIP_TYPE);
     }
@@ -762,31 +758,31 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         if (isNew()) {
             DomainObject building = addressSearchComponentState.get("building");
-            if (building == null || building.getId() <= 0) {
+            if (building == null || building.getObjectId() <= 0) {
                 error(getString("address_failing"));
             } else {
                 DomainObject apartment = addressSearchComponentState.get("apartment");
-                if (apartment == null || apartment.getId() <= 0) {
-                    if (!apartmentCardStrategy.isLeafAddress(building.getId(), "building")) {
+                if (apartment == null || apartment.getObjectId() <= 0) {
+                    if (!apartmentCardStrategy.isLeafAddress(building.getObjectId(), "building")) {
                         error(getString("address_failing"));
                     } else {
-                        addressObjectId = building.getId();
+                        addressObjectId = building.getObjectId();
                         addressTypeId = ADDRESS_BUILDING;
                     }
                 } else {
                     DomainObject room = addressSearchComponentState.get("room");
-                    if (room == null || room.getId() <= 0) {
-                        if (!apartmentCardStrategy.isLeafAddress(apartment.getId(), "apartment")) {
+                    if (room == null || room.getObjectId() <= 0) {
+                        if (!apartmentCardStrategy.isLeafAddress(apartment.getObjectId(), "apartment")) {
                             error(getString("address_failing"));
                         } else {
-                            addressObjectId = apartment.getId();
+                            addressObjectId = apartment.getObjectId();
                             addressTypeId = ADDRESS_APARTMENT;
                         }
                     } else {
-                        if (room.getId() == null || room.getId() <= 0) {
+                        if (room.getObjectId() == null || room.getObjectId() <= 0) {
                             error(getString("address_failing"));
                         } else {
-                            addressObjectId = room.getId();
+                            addressObjectId = room.getObjectId();
                             addressTypeId = ADDRESS_ROOM;
                         }
                     }
@@ -804,9 +800,9 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         }
 
         //check address-owner pair is unique
-        final long ownerId = newApartmentCard.getOwner().getId();
+        final long ownerId = newApartmentCard.getOwner().getObjectId();
         if (addressObjectId != null && addressTypeId != null) {
-            if (!apartmentCardStrategy.validateOwnerAddressUniqueness(addressObjectId, addressTypeId, ownerId, newApartmentCard.getId())) {
+            if (!apartmentCardStrategy.validateOwnerAddressUniqueness(addressObjectId, addressTypeId, ownerId, newApartmentCard.getObjectId())) {
                 error(getString("owner_address_uniqueness_error"));
             }
         }
@@ -844,7 +840,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     private void disable() {
         apartmentCardStrategy.disable(oldApartmentCard, getCurrentDate());
         logBean.logArchivation(Log.STATUS.OK, Module.NAME, ApartmentCardEdit.class, apartmentCardStrategy.getEntityTable(),
-                oldApartmentCard.getId(), getString("disabling_log_message"));
+                oldApartmentCard.getObjectId(), getString("disabling_log_message"));
     }
 
     private void back() {
@@ -887,7 +883,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         };
         if (newApartmentCard.getOwnershipForm() != null) {
             for (DomainObject ownershipForm : allOwnershipForms) {
-                if (ownershipForm.getId().equals(newApartmentCard.getOwnershipForm().getId())) {
+                if (ownershipForm.getObjectId().equals(newApartmentCard.getOwnershipForm().getObjectId())) {
                     formOfOwnershipModel.setObject(ownershipForm);
                     break;
                 }
@@ -934,10 +930,10 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         }
 
         Set<String> modifiedAttributes = newHashSet();
-        if (!oldApartmentCard.getOwner().getId().equals(newApartmentCard.getOwner().getId())) {
+        if (!oldApartmentCard.getOwner().getObjectId().equals(newApartmentCard.getOwner().getObjectId())) {
             modifiedAttributes.add(labelModel(ENTITY.getAttributeType(OWNER).getAttributeNames(), getLocale()).getObject());
         }
-        if (!oldApartmentCard.getOwnershipForm().getId().equals(newApartmentCard.getOwnershipForm().getId())) {
+        if (!oldApartmentCard.getOwnershipForm().getObjectId().equals(newApartmentCard.getOwnershipForm().getObjectId())) {
             modifiedAttributes.add(labelModel(ENTITY.getAttributeType(FORM_OF_OWNERSHIP).getAttributeNames(), getLocale()).getObject());
         }
         if (!Strings.isEqual(oldApartmentCard.getHousingRights(), newApartmentCard.getHousingRights())) {
@@ -998,7 +994,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     protected void onProfileClick(Class<? extends WebPage> profilePageClass) {
         if (oldApartmentCard != null) {
             PageParameters parameters = new PageParameters();
-            BackInfoManager.put(this, PAGE_SESSION_KEY, new ApartmentCardBackInfo(oldApartmentCard.getId(), backInfoSessionKey));
+            BackInfoManager.put(this, PAGE_SESSION_KEY, new ApartmentCardBackInfo(oldApartmentCard.getObjectId(), backInfoSessionKey));
             parameters.set(BACK_INFO_SESSION_KEY, PAGE_SESSION_KEY);
             setResponsePage(profilePageClass, parameters);
         } else {

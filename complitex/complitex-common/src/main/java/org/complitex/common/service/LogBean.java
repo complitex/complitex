@@ -3,8 +3,9 @@ package org.complitex.common.service;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.*;
-import org.complitex.common.entity.description.EntityAttributeType;
 import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.Numbers;
 import org.complitex.common.util.StringUtil;
@@ -33,7 +34,7 @@ public class LogBean extends AbstractBean {
     public static final int MAX_DESCRIPTION_LENGTH = 255;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @Resource
     private SessionContext sessionContext;
@@ -212,7 +213,7 @@ public class LogBean extends AbstractBean {
     }
 
     public List<LogChange> getLogChanges(IStrategy strategy, DomainObject oldDomainObject, DomainObject newDomainObject) {
-        final Locale systemLocale = localeBean.getSystemLocale();
+        final Locale systemLocale = stringLocaleBean.getSystemLocale();
         List<LogChange> logChanges = new ArrayList<LogChange>();
 
         if (oldDomainObject == null) {
@@ -226,7 +227,7 @@ public class LogBean extends AbstractBean {
                             if (!Strings.isEqual(newString.getValue(), null)) {
                                 logChanges.add(new LogChange(na.getAttributeId(), null,
                                         strategy.getAttributeLabel(na, systemLocale), null, newString.getValue(),
-                                        localeBean.getLocaleObject(newString.getLocaleId()).getLanguage()));
+                                        stringLocaleBean.getLocaleObject(newString.getLocaleId()).getLanguage()));
                             }
                         }
                     } else {
@@ -262,7 +263,7 @@ public class LogBean extends AbstractBean {
                                                 logChanges.add(new LogChange(na.getAttributeId(), null,
                                                         strategy.getAttributeLabel(oa, systemLocale),
                                                         oldString.getValue(), newString.getValue(),
-                                                        localeBean.getLocaleObject(oldString.getLocaleId()).getLanguage()));
+                                                        stringLocaleBean.getLocaleObject(oldString.getLocaleId()).getLanguage()));
                                             }
                                         }
                                     }
@@ -296,7 +297,7 @@ public class LogBean extends AbstractBean {
                                     logChanges.add(new LogChange(oa.getAttributeId(), null,
                                             strategy.getAttributeLabel(oa, systemLocale),
                                             oldString.getValue(), null,
-                                            localeBean.getLocaleObject(oldString.getLocaleId()).getLanguage()));
+                                            stringLocaleBean.getLocaleObject(oldString.getLocaleId()).getLanguage()));
                                 }
                             }
                         } else {
@@ -333,7 +334,7 @@ public class LogBean extends AbstractBean {
                                     logChanges.add(new LogChange(na.getAttributeId(), null,
                                             strategy.getAttributeLabel(na, systemLocale),
                                             null, newString.getValue(),
-                                            localeBean.getLocaleObject(newString.getLocaleId()).getLanguage()));
+                                            stringLocaleBean.getLocaleObject(newString.getLocaleId()).getLanguage()));
                                 }
                             }
                         } else {

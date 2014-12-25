@@ -5,11 +5,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.entity.StringCulture;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.strategy.DeleteException;
+import org.complitex.common.exception.DeleteException;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringCultures;
@@ -152,14 +152,14 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
             build();
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private StringCultureBean stringBean;
 
     @Override
     public IValidator getValidator() {
-        return new OsznOrganizationValidator(localeBean.getSystemLocale());
+        return new OsznOrganizationValidator(stringLocaleBean.getSystemLocale());
     }
 
     @Override

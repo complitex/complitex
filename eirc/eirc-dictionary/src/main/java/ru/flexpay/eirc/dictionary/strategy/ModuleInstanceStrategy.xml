@@ -3,7 +3,7 @@
 
 <mapper namespace="ru.flexpay.eirc.dictionary.strategy.ModuleInstanceStrategy">
 
-    <select id="selectDomainObject" resultMap="domainObjectResultMap" parameterType="DomainObjectExample">
+    <select id="selectDomainObject" resultMap="domainObjectResultMap" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT e.* FROM `module_instance` e WHERE
         <include refid="domainObjectStatusFilter"/>
         <include refid="domainObjectPermissionFilter"/>
@@ -44,7 +44,7 @@
         </if>
     </sql>
 
-    <select id="selectDomainObjectCount" resultType="long" parameterType="DomainObjectExample">
+    <select id="selectDomainObjectCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT COUNT(1) FROM `module_instance` e WHERE
         <include refid="domainObjectStatusFilter"/>
         <include refid="domainObjectPermissionFilter"/>

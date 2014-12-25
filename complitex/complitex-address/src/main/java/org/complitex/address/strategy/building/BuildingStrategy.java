@@ -16,19 +16,12 @@ import org.complitex.address.strategy.building.web.edit.BuildingEditComponent;
 import org.complitex.address.strategy.building.web.edit.BuildingValidator;
 import org.complitex.address.strategy.building.web.list.BuildingList;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.Log;
-import org.complitex.common.entity.StatusType;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.description.EntityAttributeValueType;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.*;
+import org.complitex.common.exception.DeleteException;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.service.StringCultureBean;
-import org.complitex.common.strategy.DeleteException;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.BuildingNumberConverter;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.util.StringCultures;
@@ -91,7 +84,7 @@ public class BuildingStrategy extends TemplateStrategy {
     @EJB
     private StringCultureBean stringBean;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private BuildingAddressStrategy buildingAddressStrategy;
     @EJB
@@ -105,7 +98,7 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<Building> getList(DomainObjectExample example) {
+    public List<Building> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
@@ -180,12 +173,12 @@ public class BuildingStrategy extends TemplateStrategy {
         return buildings;
     }
 
-    private DomainObjectExample createAddressExample(DomainObjectExample buildingExample) {
+    private DomainObjectFilter createAddressExample(DomainObjectFilter buildingExample) {
         String number = buildingExample.getAdditionalParam(NUMBER);
         String corp = buildingExample.getAdditionalParam(CORP);
         String structure = buildingExample.getAdditionalParam(STRUCTURE);
 
-        DomainObjectExample addressExample = new DomainObjectExample();
+        DomainObjectFilter addressExample = new DomainObjectFilter();
 
         addressExample.setAsc(buildingExample.isAsc());
         addressExample.setComparisonType(buildingExample.getComparisonType());
@@ -197,9 +190,9 @@ public class BuildingStrategy extends TemplateStrategy {
         addressExample.setAdmin(buildingExample.isAdmin());
         addressExample.setUserPermissionString(sessionBean.getPermissionString("building_address"));
 
-        addressExample.addAttributeExample(new AttributeExample(BuildingAddressStrategy.NUMBER, number));
-        addressExample.addAttributeExample(new AttributeExample(BuildingAddressStrategy.CORP, corp));
-        addressExample.addAttributeExample(new AttributeExample(BuildingAddressStrategy.STRUCTURE, structure));
+        addressExample.addAttributeExample(new AttributeFilter(BuildingAddressStrategy.NUMBER, number));
+        addressExample.addAttributeExample(new AttributeFilter(BuildingAddressStrategy.CORP, corp));
+        addressExample.addAttributeExample(new AttributeFilter(BuildingAddressStrategy.STRUCTURE, structure));
 
         Map<String, Long> ids = Maps.newHashMap();
         Long streetId = buildingExample.getAdditionalParam(STREET);
@@ -214,7 +207,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
     @Override
 
-    public Long getCount(DomainObjectExample example) {
+    public Long getCount(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
@@ -224,7 +217,7 @@ public class BuildingStrategy extends TemplateStrategy {
             Building building = findById(example.getObjectId(), false);
             return building == null ? 0L : 1L;
         } else {
-            DomainObjectExample addressExample = createAddressExample(example);
+            DomainObjectFilter addressExample = createAddressExample(example);
             return buildingAddressStrategy.getCount(addressExample);
         }
     }
@@ -251,7 +244,7 @@ public class BuildingStrategy extends TemplateStrategy {
     @Override
 
     public Building findById(Long id, boolean runAsAdmin) {
-        DomainObjectExample example = new DomainObjectExample(id, getEntityTable());
+        DomainObjectFilter example = new DomainObjectFilter(id, getEntityTable());
 
         if (!runAsAdmin) {
             prepareExampleForPermissionCheck(example);
@@ -312,7 +305,7 @@ public class BuildingStrategy extends TemplateStrategy {
         }
     }
 
-    private void configureExampleImpl(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    private void configureExampleImpl(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
             example.addAdditionalParam("number", searchTextInput);
         }
@@ -331,7 +324,7 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
             example.addAdditionalParam("number", searchTextInput);
         }
@@ -355,7 +348,7 @@ public class BuildingStrategy extends TemplateStrategy {
         public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
             BuildingList list = component.findParent(BuildingList.class);
 
-            DomainObjectExample example = list.getExample();
+            DomainObjectFilter example = list.getExample();
 
             Long streetId = ids.get("street");
             if (streetId != null && streetId > 0) {
@@ -391,7 +384,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
     @Override
     public IValidator getValidator() {
-        return new BuildingValidator(localeBean.getSystemLocale());
+        return new BuildingValidator(stringLocaleBean.getSystemLocale());
     }
 
     @Override
@@ -464,7 +457,7 @@ public class BuildingStrategy extends TemplateStrategy {
         params.put("structure", structure);
         params.put("parentEntityId", parentEntityId);
         params.put("parentId", parentId);
-        params.put("localeId", localeBean.convert(locale).getId());
+        params.put("localeId", stringLocaleBean.convert(locale).getId());
 
         return sqlSession().selectList(BUILDING_NS + ".checkBuildingAddress", params);
     }
@@ -658,7 +651,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
     @Override
     public Building findHistoryObject(long objectId, Date date) {
-        DomainObjectExample example = new DomainObjectExample(objectId, getEntityTable(), date);
+        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable(), date);
 
         Building building = sqlSession().selectOne(BUILDING_NS + ".selectHistoryObject", example);
         if (building == null) {

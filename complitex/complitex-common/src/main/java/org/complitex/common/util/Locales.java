@@ -1,6 +1,7 @@
 package org.complitex.common.util;
 
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.StringLocale;
+import org.complitex.common.strategy.StringLocaleBean;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -19,9 +20,9 @@ public class Locales {
     private static Locales instance = new Locales();
 
     public Locales() {
-        LocaleBean localeBean = EjbBeanLocator.getBean(LocaleBean.class);
+        StringLocaleBean stringLocaleBean = EjbBeanLocator.getBean(StringLocaleBean.class);
 
-        for (org.complitex.common.entity.Locale l : localeBean.getAllLocales()){
+        for (StringLocale l : stringLocaleBean.getAllLocales()){
             map.put(new Locale(l.getLanguage()), l.getId());
 
             if (l.isSystem()){

@@ -13,7 +13,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.web.component.back.BackInfo;
 import org.complitex.common.web.component.back.BackInfoManager;
@@ -109,7 +109,7 @@ public class PersonEdit extends FormTemplatePage {
         }
 
         PageParameters listPageParams = personStrategy.getListPageParams();
-        listPageParams.set(DomainObjectList.SCROLL_PARAMETER, newPerson.getId());
+        listPageParams.set(DomainObjectList.SCROLL_PARAMETER, newPerson.getObjectId());
         setResponsePage(personStrategy.getListPage(), listPageParams);
     }
 

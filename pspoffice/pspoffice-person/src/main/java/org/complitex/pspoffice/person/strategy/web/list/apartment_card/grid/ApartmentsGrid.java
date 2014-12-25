@@ -31,9 +31,9 @@ import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.room.RoomStrategy;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.back.BackInfo;
@@ -88,12 +88,12 @@ public final class ApartmentsGrid extends TemplatePage {
     private AddressRendererBean addressRendererBean;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private SessionBean sessionBean;
 
-    private final Locale systemLocale = localeBean.getSystemLocale();
+    private final Locale systemLocale = stringLocaleBean.getSystemLocale();
     private final long buildingId;
     private final ApartmentCreateDialog apartmentCreateDialog;
     private final RoomCreateDialog roomCreateDialog;
@@ -198,7 +198,7 @@ public final class ApartmentsGrid extends TemplatePage {
                             @Override
                             public void onClick() {
                                 MenuManager.setMenuItem("room" + AddressMenu.ADDRESS_MENU_ITEM_SUFFIX);
-                                PageParameters params = roomStrategy.getEditPageParams(room.getId(), null, null);
+                                PageParameters params = roomStrategy.getEditPageParams(room.getObjectId(), null, null);
                                 BackInfoManager.put(this, PAGE_SESSION_KEY, gridBackInfo(buildingId, backInfoSessionKey));
                                 params.set(BACK_INFO_SESSION_KEY, PAGE_SESSION_KEY);
                                 setResponsePage(roomStrategy.getEditPage(), params);
@@ -226,7 +226,7 @@ public final class ApartmentsGrid extends TemplatePage {
                             @Override
                             public void onClick() {
                                 BackInfoManager.put(this, PAGE_SESSION_KEY, gridBackInfo(buildingId, backInfoSessionKey));
-                                setResponsePage(new ApartmentCardEdit(apartmentCard.getId(), PAGE_SESSION_KEY));
+                                setResponsePage(new ApartmentCardEdit(apartmentCard.getObjectId(), PAGE_SESSION_KEY));
                             }
                         };
                         item.add(apartmentCardLink);
@@ -259,7 +259,7 @@ public final class ApartmentsGrid extends TemplatePage {
                             @Override
                             public void onClick() {
                                 MenuManager.setMenuItem(OrganizationMenu.ORGANIZATION_MENU_ITEM);
-                                PageParameters params = organizationStrategy.getEditPageParams(organization.getId(), null, null);
+                                PageParameters params = organizationStrategy.getEditPageParams(organization.getObjectId(), null, null);
                                 BackInfoManager.put(this, PAGE_SESSION_KEY, gridBackInfo(buildingId, backInfoSessionKey));
                                 params.set(BACK_INFO_SESSION_KEY, PAGE_SESSION_KEY);
                                 setResponsePage(organizationStrategy.getEditPage(), params);

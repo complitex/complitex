@@ -2,8 +2,8 @@ package ru.flexpay.eirc.registry.service.handle.exchange;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.StatusType;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.exception.AbstractException;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.CloneUtil;
 import ru.flexpay.eirc.registry.entity.Container;
 import ru.flexpay.eirc.registry.entity.Registry;
@@ -26,7 +26,7 @@ public abstract class ServiceProviderAccountAttrOperation extends GeneralAccount
     private ServiceProviderAccountStrategy serviceProviderAccountStrategy;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private ObjectChangingBean objectChangingBean;
@@ -45,7 +45,7 @@ public abstract class ServiceProviderAccountAttrOperation extends GeneralAccount
 
         BaseAccountOperationData data = getContainerData(container);
 
-        newObjectAttribute.setStringValue(data.getNewValue(), localeBean.getSystemLocaleObject().getId());
+        newObjectAttribute.setStringValue(data.getNewValue(), stringLocaleBean.getSystemStringLocale().getId());
 
         serviceProviderAccountStrategy.update(oldObject, newObject, data.getChangeApplyingDate());
 

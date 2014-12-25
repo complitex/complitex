@@ -5,7 +5,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.template.web.security.SecurityRole;
 import org.slf4j.Logger;
@@ -130,7 +130,7 @@ public class RestHMACAuthorizationFilter implements ContainerRequestFilter {
             return false;
         }
 
-        String secretKey = attribute.getStringCulture(EjbBeanLocator.getBean(LocaleBean.class).getSystemLocaleId()).getValue();
+        String secretKey = attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue();
         if (StringUtils.isEmpty(secretKey)) {
             log.warn("Module '{}' have empty private key");
             return false;

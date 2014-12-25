@@ -18,9 +18,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.AttributeFilter;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
@@ -52,8 +52,8 @@ import static org.complitex.common.strategy.organization.IOrganizationStrategy.S
 @AuthorizeInstantiation(SecurityRole.ADDRESS_MODULE_VIEW)
 public class OrganizationList extends ScrollListPage {
     @EJB
-    private LocaleBean localeBean;
-    private DomainObjectExample example;
+    private StringLocaleBean stringLocaleBean;
+    private DomainObjectFilter example;
     private WebMarkupContainer content;
     private DataView<Organization> dataView;
     private CollapsibleSearchPanel searchPanel;
@@ -70,7 +70,7 @@ public class OrganizationList extends ScrollListPage {
         init();
     }
 
-    public DomainObjectExample getExample() {
+    public DomainObjectFilter getExample() {
         return example;
     }
 
@@ -82,11 +82,11 @@ public class OrganizationList extends ScrollListPage {
         }
     }
 
-    private DomainObjectExample newExample() {
-        DomainObjectExample e = new DomainObjectExample();
-        e.addAttributeExample(new AttributeExample(NAME));
-        e.addAttributeExample(new AttributeExample(KeConnectionOrganizationStrategy.CODE));
-        e.addAttributeExample(new AttributeExample(SHORT_NAME));
+    private DomainObjectFilter newExample() {
+        DomainObjectFilter e = new DomainObjectFilter();
+        e.addAttributeExample(new AttributeFilter(NAME));
+        e.addAttributeExample(new AttributeFilter(KeConnectionOrganizationStrategy.CODE));
+        e.addAttributeExample(new AttributeFilter(SHORT_NAME));
         return e;
     }
 
@@ -106,7 +106,7 @@ public class OrganizationList extends ScrollListPage {
         content.setOutputMarkupPlaceholderTag(true);
 
         //Example
-        example = (DomainObjectExample) getFilterObject(newExample());
+        example = (DomainObjectFilter) getFilterObject(newExample());
 
         //Search
         final List<String> searchFilters = organizationStrategy.getSearchFilters();
@@ -145,7 +145,7 @@ public class OrganizationList extends ScrollListPage {
                     example.setOrderByAttributeTypeId(Long.valueOf(sortProperty));
                 }
                 example.setStatus(showModeModel.getObject().name());
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 example.setAsc(asc);
                 example.setFirst(first);
                 example.setCount(count);
@@ -155,7 +155,7 @@ public class OrganizationList extends ScrollListPage {
             @Override
             protected Long getSize() {
                 example.setStatus(showModeModel.getObject().name());
-                example.setLocaleId(localeBean.convert(getLocale()).getId());
+                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 return organizationStrategy.getCount(example);
             }
         };

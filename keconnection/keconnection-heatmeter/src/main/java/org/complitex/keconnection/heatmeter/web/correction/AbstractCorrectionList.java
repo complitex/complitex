@@ -30,7 +30,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
@@ -62,7 +62,7 @@ public abstract class AbstractCorrectionList extends ScrollListPage {
     @EJB
     private CorrectionBean correctionBean;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private KeConnectionOrganizationStrategy organizationStrategy;
     private String entity;
@@ -149,7 +149,7 @@ public abstract class AbstractCorrectionList extends ScrollListPage {
                 }
                 exampleObject.setStart(first);
                 exampleObject.setSize(count);
-                exampleObject.setLocaleId(localeBean.convert(getLocale()).getId());
+                exampleObject.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 return find(exampleObject);
             }
 

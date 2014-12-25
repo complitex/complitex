@@ -3,7 +3,8 @@
 
 <mapper namespace="org.complitex.pspoffice.address.street.Street">
 
-    <select id="find" resultMap="org.complitex.common.entity.DomainObject.DomainObject" parameterType="DomainObjectExample">
+    <select id="selectStreets" resultMap="domainObjectResultMap"
+            parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT e.* FROM `street` e WHERE
         <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
         <include refid="org.complitex.pspoffice.address.street.Street.pspStreetFilter"/>
@@ -21,7 +22,7 @@
         </if>
     </sql>
 
-    <select id="count" resultType="long" parameterType="DomainObjectExample">
+    <select id="selectStreetCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT COUNT(1) FROM `street` e WHERE
         <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
         <include refid="org.complitex.pspoffice.address.street.Street.pspStreetFilter"/>

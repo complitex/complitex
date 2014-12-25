@@ -126,7 +126,7 @@ public class LegacyDataImportPage extends TemplatePage {
                     public Long getObject() {
                         int index = getCurrentIndex(fakeContainer);
                         DomainObject organization = selectedOrganizations.get(index);
-                        return organization != null ? organization.getId() : null;
+                        return organization != null ? organization.getObjectId() : null;
                     }
 
                     @Override
@@ -138,14 +138,14 @@ public class LegacyDataImportPage extends TemplatePage {
 
                                 @Override
                                 public boolean apply(DomainObject input) {
-                                    return organizationId.equals(input.getId());
+                                    return organizationId.equals(input.getObjectId());
                                 }
                             });
                         }
                         selectedOrganizations.set(index, organization);
                     }
                 };
-                organizationModel.setObject(item.getModelObject() != null ? item.getModelObject().getId() : null);
+                organizationModel.setObject(item.getModelObject() != null ? item.getModelObject().getObjectId() : null);
                 item.add(new UserOrganizationPicker("organizationPicker", organizationModel, true));
 
                 addRemoveLink("removeOrganization", item, null, organizationsContainer);
@@ -246,7 +246,7 @@ public class LegacyDataImportPage extends TemplatePage {
                 if (!importService.isProcessing()) {
                     if (LegacyDataImportPage.this.validate()) {
                         Map<String, Long> organizationMap = getSelectedOrganizations();
-                        long cityId = citySearchComponentState.get("city").getId();
+                        long cityId = citySearchComponentState.get("city").getObjectId();
 
                         messagesModel.getObject().clear();
                         importService.startImport(cityId, organizationMap, importDirectoryModel.getObject(),
@@ -304,8 +304,8 @@ public class LegacyDataImportPage extends TemplatePage {
     private Map<String, Long> getSelectedOrganizations() {
         Map<String, Long> organizationMap = Maps.newHashMap();
         for (DomainObject o : selectedOrganizations) {
-            if (o != null && o.getId() != null && o.getId() > 0) {
-                organizationMap.put(organizationStrategy.getCode(o), o.getId());
+            if (o != null && o.getObjectId() != null && o.getObjectId() > 0) {
+                organizationMap.put(organizationStrategy.getCode(o), o.getObjectId());
             }
         }
         return organizationMap;
@@ -376,7 +376,7 @@ public class LegacyDataImportPage extends TemplatePage {
         valid = validateFiles();
 
         DomainObject city = citySearchComponentState.get("city");
-        if (city == null || city.getId() == null || city.getId() <= 0) {
+        if (city == null || city.getObjectId() == null || city.getObjectId() <= 0) {
             error(getString("unselected_city"));
             valid = false;
         }
@@ -386,8 +386,8 @@ public class LegacyDataImportPage extends TemplatePage {
             valid = false;
         } else {
             for (DomainObject selectedOrganization : selectedOrganizations) {
-                if (selectedOrganization == null || selectedOrganization.getId() == null
-                        || selectedOrganization.getId() <= 0) {
+                if (selectedOrganization == null || selectedOrganization.getObjectId() == null
+                        || selectedOrganization.getObjectId() <= 0) {
                     error(getString("unselected_organization"));
                     valid = false;
                     break;

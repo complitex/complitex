@@ -1,10 +1,11 @@
-package org.complitex.common.service;
+package org.complitex.common.strategy;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.common.entity.Permission;
 import org.complitex.common.entity.Subject;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
+import org.complitex.common.service.AbstractBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -18,7 +19,7 @@ import java.util.Set;
  *         Date: 26.01.11 16:11
  */
 @Stateless
-public class PermissionBean extends AbstractBean{
+public class PermissionBean extends AbstractBean {
     private static final String MAPPING_NAMESPACE = PermissionBean.class.getName();
     private static final String ENTITY_TABLE = "permission";
 

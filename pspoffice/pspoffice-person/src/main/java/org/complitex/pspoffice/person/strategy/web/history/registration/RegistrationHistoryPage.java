@@ -32,7 +32,7 @@ public class RegistrationHistoryPage extends AbstractHistoryPage {
     private final Registration registration;
 
     public RegistrationHistoryPage(ApartmentCard apartmentCard, Registration registration) {
-        super(registration.getId(), new StringResourceModel("title", null, registration.getId()),
+        super(registration.getObjectId(), new StringResourceModel("title", null, registration.getObjectId()),
                 new ResourceModel("object_link_message"));
         this.apartmentCard = apartmentCard;
         this.registration = registration;

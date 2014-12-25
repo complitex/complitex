@@ -7,13 +7,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StringCulture;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.*;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.search.ISearchCallback;
@@ -80,11 +75,11 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
         return new SearchCallback();
     }
 
-    private void configureExampleImpl(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    private void configureExampleImpl(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeExample attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
-                attrExample = new AttributeExample(NAME);
+                attrExample = new AttributeFilter(NAME);
                 example.addAttributeExample(attrExample);
             }
             attrExample.setValue(searchTextInput);
@@ -92,7 +87,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         configureExampleImpl(example, ids, searchTextInput);
     }
 
@@ -132,7 +127,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     }
 
     @Override
-    protected void extendOrderBy(DomainObjectExample example) {
+    protected void extendOrderBy(DomainObjectFilter example) {
         if (example.getOrderByAttributeTypeId() != null
                 && example.getOrderByAttributeTypeId().equals(NAME)) {
             example.setOrderByNumber(true);
@@ -151,7 +146,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<? extends DomainObject> getList(DomainObjectExample example) {
+    public List<? extends DomainObject> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }

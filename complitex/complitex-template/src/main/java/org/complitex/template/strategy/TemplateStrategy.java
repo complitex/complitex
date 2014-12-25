@@ -3,7 +3,7 @@ package org.complitex.template.strategy;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.strategy.Strategy;
+import org.complitex.common.strategy.DomainObjectStrategy;
 import org.complitex.common.web.domain.validate.DefaultValidator;
 import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.template.web.pages.DomainObjectEdit;
@@ -16,7 +16,7 @@ import org.complitex.template.web.security.SecurityRole;
  *
  * @author Artem
  */
-public abstract class TemplateStrategy extends Strategy {
+public abstract class TemplateStrategy extends DomainObjectStrategy {
 
     public static final String ENTITY = "entity";
     public static final String STRATEGY = "strategy";

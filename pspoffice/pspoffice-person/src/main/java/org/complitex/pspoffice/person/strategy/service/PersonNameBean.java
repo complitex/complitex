@@ -6,7 +6,7 @@ package org.complitex.pspoffice.person.strategy.service;
 
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.pspoffice.person.strategy.entity.PersonName;
 import org.complitex.pspoffice.person.strategy.entity.PersonName.PersonNameType;
 
@@ -26,7 +26,7 @@ public class PersonNameBean extends AbstractBean {
 
     private final static String MAPPING_NAMESPACE = PersonNameBean.class.getName();
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     public PersonName findById(PersonNameType personNameType, Long id) {
         if (id == null) {
@@ -39,7 +39,7 @@ public class PersonNameBean extends AbstractBean {
     }
 
     public List<PersonName> find(PersonNameType personNameType, String filter, Locale locale, int size) {
-        Long localeId = localeBean.convert(locale).getId();
+        Long localeId = stringLocaleBean.convert(locale).getId();
         List<PersonName> personNames = sqlSession().selectList(MAPPING_NAMESPACE + ".find", of("personNameType", personNameType.name().toLowerCase(),
                 "filter", filter, "localeId", localeId, "size", size));
         for (PersonName personName : personNames) {
@@ -53,7 +53,7 @@ public class PersonNameBean extends AbstractBean {
         if (Strings.isEmpty(name)) {
             throw new IllegalArgumentException("Name must be not null");
         }
-        Long localeId = localeBean.convert(locale).getId();
+        Long localeId = stringLocaleBean.convert(locale).getId();
         PersonName personName = (PersonName) sqlSession().selectOne(MAPPING_NAMESPACE + ".findByName",
                 of("personNameType", personNameType.name().toLowerCase(), "name", name, "localeId", localeId));
         if (personName != null) {
@@ -67,14 +67,14 @@ public class PersonNameBean extends AbstractBean {
     }
 
     public PersonName saveIfNotExists(PersonNameType personNameType, String name, long localeId) {
-        return findOrSave(personNameType, name, localeBean.getLocale(localeId), true);
+        return findOrSave(personNameType, name, stringLocaleBean.getLocale(localeId), true);
     }
 
 
     public PersonName save(PersonNameType personNameType, String name, Locale locale) {
         PersonName personName = new PersonName();
         personName.setName(normalizeName(name));
-        personName.setLocaleId(localeBean.convert(locale).getId());
+        personName.setLocaleId(stringLocaleBean.convert(locale).getId());
         sqlSession().insert(MAPPING_NAMESPACE + ".save", of("personNameType", personNameType.name().toLowerCase(),
                 "personName", personName));
         return personName;

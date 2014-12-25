@@ -1,13 +1,8 @@
 package ru.flexpay.eirc.service_provider_account.strategy;
 
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.SimpleTypes;
-import org.complitex.common.entity.StringCulture;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.entity.*;
+import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.Numbers;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.util.StringUtil;
@@ -53,7 +48,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<? extends DomainObject> getList(DomainObjectExample example) {
+    public List<? extends DomainObject> getList(DomainObjectFilter example) {
         throw new UnsupportedOperationException("Use findById");
     }
 
@@ -70,7 +65,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     }
 
     @Override
-    public Long getCount(DomainObjectExample example) {
+    public Long getCount(DomainObjectFilter example) {
         throw new UnsupportedOperationException();
     }
 

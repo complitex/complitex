@@ -1,6 +1,5 @@
-package org.complitex.common.entity.description;
+package org.complitex.common.entity;
 
-import org.complitex.common.entity.StringCulture;
 import org.complitex.common.util.StringCultures;
 
 import java.io.Serializable;

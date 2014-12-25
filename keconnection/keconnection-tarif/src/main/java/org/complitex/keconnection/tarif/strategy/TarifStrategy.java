@@ -7,9 +7,9 @@ package org.complitex.keconnection.tarif.strategy;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.domain.validate.IValidator;
@@ -55,11 +55,11 @@ public class TarifStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeExample attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
-                attrExample = new AttributeExample(NAME);
+                attrExample = new AttributeFilter(NAME);
                 example.addAttributeExample(attrExample);
             }
             attrExample.setValue(searchTextInput);
@@ -72,8 +72,8 @@ public class TarifStrategy extends TemplateStrategy {
     }
 
     public DomainObject getObjectByCode(int code) {
-        DomainObjectExample example = new DomainObjectExample();
-        AttributeExample codeExample = new AttributeExample(CODE);
+        DomainObjectFilter example = new DomainObjectFilter();
+        AttributeFilter codeExample = new AttributeFilter(CODE);
         codeExample.setValue(String.valueOf(code));
         example.addAttributeExample(codeExample);
         configureExample(example, ImmutableMap.<String, Long>of(), null);
@@ -115,7 +115,7 @@ public class TarifStrategy extends TemplateStrategy {
     }
 
     @Override
-    protected void extendOrderBy(DomainObjectExample example) {
+    protected void extendOrderBy(DomainObjectFilter example) {
         if (example.getOrderByAttributeTypeId() != null
                 && example.getOrderByAttributeTypeId().equals(CODE)) {
             example.setOrderByNumber(true);

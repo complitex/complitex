@@ -4,23 +4,24 @@
  */
 package org.complitex.pspoffice.person.strategy.web.history.person;
 
-import static com.google.common.collect.Lists.*;
-import java.util.List;
-
-import org.complitex.common.web.component.DomainObjectComponentUtil;
-import org.complitex.common.web.component.css.CssAttributeBehavior;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import javax.ejb.EJB;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.description.EntityAttributeType;
+import org.complitex.common.entity.EntityAttributeType;
+import org.complitex.common.web.component.DomainObjectComponentUtil;
+import org.complitex.common.web.component.css.CssAttributeBehavior;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.person.strategy.entity.DocumentModification;
+
+import javax.ejb.EJB;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  *

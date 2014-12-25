@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.entity.Locale;
+import org.complitex.common.entity.StringLocale;
 import org.complitex.common.service.AbstractBean;
 import ru.flexpay.eirc.service.entity.Service;
 
@@ -79,7 +79,7 @@ public class ServiceBean extends AbstractBean {
 
     private void insert(Service service) {
         sqlSession().insert(NS + ".insertService", service);
-        for (Map.Entry<Locale, String> entry : service.getNames().entrySet()) {
+        for (Map.Entry<StringLocale, String> entry : service.getNames().entrySet()) {
             saveName(service, entry.getKey(), entry.getValue());
         }
     }
@@ -93,8 +93,8 @@ public class ServiceBean extends AbstractBean {
         sqlSession().update(NS + ".updateService", service);
 
         // update service`s name
-        Map<Locale, String> oldNames = oldObject.getNames();
-        for (Map.Entry<Locale, String> entry : service.getNames().entrySet()) {
+        Map<StringLocale, String> oldNames = oldObject.getNames();
+        for (Map.Entry<StringLocale, String> entry : service.getNames().entrySet()) {
             if (oldNames.containsKey(entry.getKey())) {
                 updateName(service, entry.getKey(), entry.getValue(), oldNames.get(entry.getKey()));
             } else {
@@ -103,32 +103,32 @@ public class ServiceBean extends AbstractBean {
         }
     }
 
-    private void saveName(Service service, Locale locale, String value) {
+    private void saveName(Service service, StringLocale stringLocale, String value) {
         if (StringUtils.isNotEmpty(value)) {
             sqlSession().insert(NS + ".insertServiceName",
                 ImmutableMap.<String, Object>of(
                         "serviceId", service.getId(),
-                        "localeId",  locale.getId(),
+                        "localeId",  stringLocale.getId(),
                         "value",     value));
         }
     }
 
-    private void updateName(Service service, Locale locale, String newValue, String oldValue) {
+    private void updateName(Service service, StringLocale stringLocale, String newValue, String oldValue) {
         if (StringUtils.isEmpty(newValue)) {
-            deleteName(service, locale);
+            deleteName(service, stringLocale);
         } else if (!StringUtils.equals(newValue, oldValue)) {
             sqlSession().update(NS + ".updateServiceName",
                     ImmutableMap.<String, Object>of(
                             "serviceId", service.getId(),
-                            "localeId",  locale.getId(),
+                            "localeId",  stringLocale.getId(),
                             "value",     newValue));
         }
     }
 
-    private void deleteName(Service service, Locale locale) {
+    private void deleteName(Service service, StringLocale stringLocale) {
         sqlSession().delete(NS + ".deleteServiceName", ImmutableMap.<String, Object>of(
                 "serviceId", service.getId(),
-                "localeId",  locale.getId()));
+                "localeId",  stringLocale.getId()));
     }
 
 }

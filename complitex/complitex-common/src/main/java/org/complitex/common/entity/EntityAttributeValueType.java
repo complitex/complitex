@@ -1,8 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.complitex.common.entity.description;
+package org.complitex.common.entity;
 
 import java.io.Serializable;
 

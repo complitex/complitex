@@ -9,22 +9,17 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.converter.DateConverter;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StatusType;
-import org.complitex.common.entity.StringCulture;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.description.EntityAttributeValueType;
-import org.complitex.common.entity.example.DomainObjectExample;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.entity.*;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.service.StringCultureBean;
+import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.*;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
 import org.complitex.pspoffice.military.strategy.MilitaryServiceRelationStrategy;
 import org.complitex.pspoffice.person.strategy.entity.*;
+import org.complitex.pspoffice.person.strategy.entity.Person;
 import org.complitex.pspoffice.person.strategy.entity.PersonName.PersonNameType;
 import org.complitex.pspoffice.person.strategy.service.PersonNameBean;
 import org.complitex.pspoffice.person.strategy.web.edit.person.PersonEdit;
@@ -50,7 +45,7 @@ import static com.google.common.collect.Lists.newArrayList;
 @Stateless
 public class PersonStrategy extends TemplateStrategy {
 
-    private static final String PERSON_MAPPING = PersonStrategy.class.getPackage().getName() + ".Person";
+    private static final String PERSON_NS = PersonStrategy.class.getPackage().getName() + ".Person";
     public static final String RESOURCE_BUNDLE = PersonStrategy.class.getName();
     /**
      * Person kid-adult age threshold
@@ -119,7 +114,7 @@ public class PersonStrategy extends TemplateStrategy {
     private MilitaryServiceRelationStrategy militaryServiceRelationStrategy;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private RegistrationStrategy registrationStrategy;
@@ -178,7 +173,7 @@ public class PersonStrategy extends TemplateStrategy {
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
         Person person = (Person) object;
-        Locale systemLocale = localeBean.getSystemLocale();
+        Locale systemLocale = stringLocaleBean.getSystemLocale();
         return displayPerson(person.getFirstName(locale, systemLocale), person.getMiddleName(locale, systemLocale),
                 person.getLastName(locale, systemLocale));
     }
@@ -190,8 +185,8 @@ public class PersonStrategy extends TemplateStrategy {
 
 
     @Override
-    public List<Person> getList(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+    public List<Person> getList(DomainObjectFilter example) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
 
@@ -200,7 +195,7 @@ public class PersonStrategy extends TemplateStrategy {
             prepareExampleForPermissionCheck(example);
         }
 
-        List<Person> persons = sqlSession().selectList(PERSON_MAPPING + "." + FIND_OPERATION, example);
+        List<Person> persons = sqlSession().selectList(PERSON_NS + ".selectPersons", example);
         for (Person person : persons) {
             loadAttributes(person);
             loadName(person);
@@ -212,14 +207,14 @@ public class PersonStrategy extends TemplateStrategy {
 
 
     @Override
-    public Long getCount(DomainObjectExample example) {
-        if (example.getId() != null && example.getId() <= 0) {
+    public Long getCount(DomainObjectFilter example) {
+        if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
 
         example.setEntityTable(getEntityTable());
         prepareExampleForPermissionCheck(example);
-        return sqlSession().selectOne(PERSON_MAPPING + "." + COUNT_OPERATION, example);
+        return sqlSession().selectOne(PERSON_NS + ".selectPersonCount", example);
     }
 
     @Override
@@ -267,7 +262,7 @@ public class PersonStrategy extends TemplateStrategy {
         for (Attribute firstNameAttribute : person.getAttributes(FIRST_NAME)) {
             Long nameId = firstNameAttribute.getValueId();
             if (nameId != null) {
-                person.addFirstName(localeBean.getLocale(firstNameAttribute.getAttributeId()),
+                person.addFirstName(stringLocaleBean.getLocale(firstNameAttribute.getAttributeId()),
                         personNameBean.findById(PersonNameType.FIRST_NAME, nameId).getName());
             }
         }
@@ -276,7 +271,7 @@ public class PersonStrategy extends TemplateStrategy {
         for (Attribute lastNameAttribute : person.getAttributes(LAST_NAME)) {
             Long nameId = lastNameAttribute.getValueId();
             if (nameId != null) {
-                person.addLastName(localeBean.getLocale(lastNameAttribute.getAttributeId()),
+                person.addLastName(stringLocaleBean.getLocale(lastNameAttribute.getAttributeId()),
                         personNameBean.findById(PersonNameType.LAST_NAME, nameId).getName());
             }
         }
@@ -285,7 +280,7 @@ public class PersonStrategy extends TemplateStrategy {
         for (Attribute middleNameAttribute : person.getAttributes(MIDDLE_NAME)) {
             Long nameId = middleNameAttribute.getValueId();
             if (nameId != null) {
-                person.addMiddleName(localeBean.getLocale(middleNameAttribute.getAttributeId()),
+                person.addMiddleName(stringLocaleBean.getLocale(middleNameAttribute.getAttributeId()),
                         personNameBean.findById(PersonNameType.MIDDLE_NAME, nameId).getName());
             }
         }
@@ -305,7 +300,7 @@ public class PersonStrategy extends TemplateStrategy {
         if (personId == null) {
             return null;
         }
-        List<Attribute> previousDocumentAttributes = sqlSession().selectList(PERSON_MAPPING + ".findPreviousDocumentAttributes",
+        List<Attribute> previousDocumentAttributes = sqlSession().selectList(PERSON_NS + ".findPreviousDocumentAttributes",
                 ImmutableMap.of("personId", personId, "personDocumentAT", DOCUMENT));
         List<Document> previousDocuments = newArrayList();
         for (Attribute previousDocumentAttribute : previousDocumentAttributes) {
@@ -324,7 +319,7 @@ public class PersonStrategy extends TemplateStrategy {
         if (childrenAttributes != null && !childrenAttributes.isEmpty() && person.getChildren().isEmpty()) {
             for (Attribute childAttribute : childrenAttributes) {
                 Long childId = childAttribute.getValueId();
-                DomainObjectExample example = new DomainObjectExample(childId);
+                DomainObjectFilter example = new DomainObjectFilter(childId);
                 example.setAdmin(true);
                 List<Person> children = getList(example);
                 if (children != null && children.size() == 1) {
@@ -364,7 +359,7 @@ public class PersonStrategy extends TemplateStrategy {
                         EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
                         attribute.setAttributeTypeId(attributeType.getId());
                         attribute.setValueTypeId(attributeValueType.getId());
-                        attribute.setObjectId(object.getId());
+                        attribute.setObjectId(object.getObjectId());
                         attribute.setAttributeId(1L);
 
                         if (isSimpleAttributeType(attributeType)) {
@@ -399,10 +394,10 @@ public class PersonStrategy extends TemplateStrategy {
     private void updateNameAttributeForNewLocales(DomainObject person, final long nameAttributeTypeId) {
         List<Attribute> nameAttributes = person.getAttributes(nameAttributeTypeId);
         person.removeAttribute(nameAttributeTypeId);
-        for (final org.complitex.common.entity.Locale locale : localeBean.getAllLocales()) {
+        for (final StringLocale stringLocale : stringLocaleBean.getAllLocales()) {
             boolean found = false;
             for (Attribute nameAttribute : nameAttributes) {
-                if (nameAttribute.getAttributeId().equals(locale.getId())) {
+                if (nameAttribute.getAttributeId().equals(stringLocale.getId())) {
                     found = true;
                     break;
                 }
@@ -411,12 +406,12 @@ public class PersonStrategy extends TemplateStrategy {
                 Attribute attribute = new Attribute();
                 attribute.setAttributeTypeId(nameAttributeTypeId);
                 attribute.setValueTypeId(nameAttributeTypeId);
-                attribute.setObjectId(person.getId());
-                attribute.setAttributeId(locale.getId());
+                attribute.setObjectId(person.getObjectId());
+                attribute.setAttributeId(stringLocale.getId());
                 nameAttributes.add(attribute);
             }
         }
-        final long systemLocaleId = localeBean.getSystemLocaleObject().getId();
+        final long systemLocaleId = stringLocaleBean.getSystemStringLocale().getId();
         Collections.sort(nameAttributes, new Comparator<Attribute>() {
 
             @Override
@@ -459,10 +454,10 @@ public class PersonStrategy extends TemplateStrategy {
         if (Strings.isEmpty(lastName)) {
             throw new IllegalArgumentException("Last name is null or empty.");
         }
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         example.setStatus(StatusType.ACTIVE.name());
         example.addAdditionalParam("last_name", lastName);
-        example.setLocaleId(localeBean.convert(locale).getId());
+        example.setLocaleId(stringLocaleBean.convert(locale).getId());
 
         firstName = firstName != null ? firstName.trim() : null;
         if (Strings.isEmpty(firstName)) {
@@ -479,7 +474,7 @@ public class PersonStrategy extends TemplateStrategy {
         prepareExampleForPermissionCheck(example);
 
         List<Person> results = newArrayList();
-        List<Person> persons = sqlSession().selectList(PERSON_MAPPING + ".findByName", example);
+        List<Person> persons = sqlSession().selectList(PERSON_NS + ".findByName", example);
         for (Person person : persons) {
             loadAttributes(person);
             boolean eligiblePerson = (personAgeType == PersonAgeType.ANY)
@@ -515,7 +510,7 @@ public class PersonStrategy extends TemplateStrategy {
         List<Attribute> nameAttributes = person.getAttributes(nameAttributeTypeId);
         person.removeAttribute(nameAttributeTypeId);
         for (Attribute nameAttribute : nameAttributes) {
-            if (localeBean.getSystemLocaleObject().getId().equals(nameAttribute.getAttributeId())
+            if (stringLocaleBean.getSystemStringLocale().getId().equals(nameAttribute.getAttributeId())
                     || nameAttribute.getValueId() != null) {
                 person.addAttribute(nameAttribute);
             }
@@ -587,7 +582,7 @@ public class PersonStrategy extends TemplateStrategy {
 
         // if person was a kid but birth date has changed or time gone then it is need to update parent
         if (oldPerson.isKid() && !newPerson.isKid()) {
-            removeKidFromParent(newPerson.getId(), updateDate);
+            removeKidFromParent(newPerson.getObjectId(), updateDate);
         }
 
         prepareForSaveNameAttributes(oldPerson);
@@ -598,7 +593,7 @@ public class PersonStrategy extends TemplateStrategy {
         //handle explanation attribute: 
         // 2. insert new one
         if (newExplAttribute != null && newExplAttribute.getStartDate() == null) {
-            newExplAttribute.setObjectId(newPerson.getId());
+            newExplAttribute.setObjectId(newPerson.getObjectId());
             newExplAttribute.setStartDate(updateDate);
             insertAttribute(newExplAttribute);
         }
@@ -607,7 +602,7 @@ public class PersonStrategy extends TemplateStrategy {
 
     private void removeKidFromParent(final long childId, Date updateDate) {
         Map<String, Long> params = of("childId", childId, "personChildrenAT", CHILDREN);
-        List<Long> parentIds = sqlSession().selectList(PERSON_MAPPING + ".findParents", params);
+        List<Long> parentIds = sqlSession().selectList(PERSON_NS + ".findParents", params);
         for (long parentId : parentIds) {
             Person oldParent = findById(parentId, true);
             Person newParent = CloneUtil.cloneObject(oldParent);
@@ -628,10 +623,10 @@ public class PersonStrategy extends TemplateStrategy {
     private void updateDocumentAttribute(Person oldPerson, Person newPerson) {
         Long documentId = null;
         if (oldPerson == null) {
-            documentId = newPerson.getDocument().getId();
+            documentId = newPerson.getDocument().getObjectId();
         } else {
-            documentId = newPerson.getReplacedDocument() != null ? newPerson.getReplacedDocument().getId()
-                    : newPerson.getDocument().getId();
+            documentId = newPerson.getReplacedDocument() != null ? newPerson.getReplacedDocument().getObjectId()
+                    : newPerson.getDocument().getObjectId();
         }
         newPerson.getAttribute(DOCUMENT).setValueId(documentId);
     }
@@ -687,12 +682,12 @@ public class PersonStrategy extends TemplateStrategy {
 
 
     public int countPersonRegistrations(long personId) {
-        return (Integer) sqlSession().selectOne(PERSON_MAPPING + ".countPersonRegistrations",
+        return (Integer) sqlSession().selectOne(PERSON_NS + ".countPersonRegistrations",
                 newFindPersonRegistrationParameters(personId));
     }
 
     public List<PersonRegistration> findPersonRegistrations(long personId) {
-        List<PersonRegistration> personRegistrations = sqlSession().selectList(PERSON_MAPPING + ".findPersonRegistrations",
+        List<PersonRegistration> personRegistrations = sqlSession().selectList(PERSON_NS + ".findPersonRegistrations",
                 newFindPersonRegistrationParameters(personId));
         for (PersonRegistration personRegistration : personRegistrations) {
             personRegistration.setRegistration(
@@ -751,7 +746,7 @@ public class PersonStrategy extends TemplateStrategy {
 
 
     public List<PersonApartmentCardAddress> findPersonApartmentCardAddresses(long personId) {
-        List<PersonApartmentCardAddress> personApartmentCardAddresses = sqlSession().selectList(PERSON_MAPPING
+        List<PersonApartmentCardAddress> personApartmentCardAddresses = sqlSession().selectList(PERSON_NS
                 + ".findPersonApartmentCardAddresses", newFindPersonRegistrationParameters(personId));
         for (PersonApartmentCardAddress personApartmentCardAddress : personApartmentCardAddresses) {
             personApartmentCardAddress.setAddressEntity(apartmentCardStrategy.getAddressEntity(personApartmentCardAddress.getAddressTypeId()));
@@ -766,7 +761,7 @@ public class PersonStrategy extends TemplateStrategy {
                 put("permanentRegistrationTypeId", RegistrationTypeStrategy.PERMANENT).
                 build();
         List<PersonRegistration> personRegistrations = sqlSession().selectList(
-                PERSON_MAPPING + ".findPermanentRegistrationAddress", params);
+                PERSON_NS + ".findPermanentRegistrationAddress", params);
         if (!personRegistrations.isEmpty()) {
             return addressRendererBean.displayAddress(
                     apartmentCardStrategy.getAddressEntity(personRegistrations.get(0).getAddressTypeId()),
@@ -795,7 +790,7 @@ public class PersonStrategy extends TemplateStrategy {
             }
         }
 
-        removeKidFromParent(person.getId(), updateDate);
+        removeKidFromParent(person.getObjectId(), updateDate);
 
         Person newPerson = CloneUtil.cloneObject(person);
         StringCultures.getSystemStringCulture(newPerson.getAttribute(PersonStrategy.DEATH_DATE).getLocalizedValues()).
@@ -823,7 +818,7 @@ public class PersonStrategy extends TemplateStrategy {
         if (date == null) {
             date = DateUtil.getCurrentDate();
         }
-        return (Date) sqlSession().selectOne(PERSON_MAPPING + ".getPreviousModificationDate",
+        return (Date) sqlSession().selectOne(PERSON_NS + ".getPreviousModificationDate",
                 newModificationDateParams(personId, date));
     }
 
@@ -831,7 +826,7 @@ public class PersonStrategy extends TemplateStrategy {
         if (date == null) {
             return null;
         }
-        return (Date) sqlSession().selectOne(PERSON_MAPPING + ".getNextModificationDate",
+        return (Date) sqlSession().selectOne(PERSON_NS + ".getNextModificationDate",
                 newModificationDateParams(personId, date));
     }
 
@@ -863,9 +858,9 @@ public class PersonStrategy extends TemplateStrategy {
 
     public PersonModification getDistinctions(Person historyPerson, Date startDate) {
         PersonModification m = new PersonModification();
-        final Date previousStartDate = getPreviousModificationDate(historyPerson.getId(), startDate);
+        final Date previousStartDate = getPreviousModificationDate(historyPerson.getObjectId(), startDate);
         Person previousPerson = previousStartDate == null ? null
-                : getHistoryPerson(historyPerson.getId(), previousStartDate);
+                : getHistoryPerson(historyPerson.getObjectId(), previousStartDate);
         if (previousPerson == null) {
             for (Attribute current : historyPerson.getAttributes()) {
                 if (!current.getAttributeTypeId().equals(CHILDREN)) {
@@ -873,7 +868,7 @@ public class PersonStrategy extends TemplateStrategy {
                 }
             }
             for (Person child : historyPerson.getChildren()) {
-                m.addChildModificationType(child.getId(), ModificationType.ADD);
+                m.addChildModificationType(child.getObjectId(), ModificationType.ADD);
             }
             m.setDocumentModification(getDocumentDistinctions(historyPerson.getDocument(), previousStartDate));
         } else {
@@ -932,19 +927,19 @@ public class PersonStrategy extends TemplateStrategy {
             for (Person current : historyPerson.getChildren()) {
                 boolean added = true;
                 for (Person prev : previousPerson.getChildren()) {
-                    if (current.getId().equals(prev.getId())) {
+                    if (current.getObjectId().equals(prev.getObjectId())) {
                         added = false;
-                        m.addChildModificationType(current.getId(), ModificationType.NONE);
+                        m.addChildModificationType(current.getObjectId(), ModificationType.NONE);
                     }
                 }
                 if (added) {
-                    m.addChildModificationType(current.getId(), ModificationType.ADD);
+                    m.addChildModificationType(current.getObjectId(), ModificationType.ADD);
                 }
             }
             for (Person prev : previousPerson.getChildren()) {
                 boolean removed = true;
                 for (Person current : historyPerson.getChildren()) {
-                    if (prev.getId().equals(current.getId())) {
+                    if (prev.getObjectId().equals(current.getObjectId())) {
                         removed = false;
                         break;
                     }
@@ -1009,7 +1004,7 @@ public class PersonStrategy extends TemplateStrategy {
     private DocumentModification getDocumentDistinctions(Document historyDocument, Date previousStartDate) {
         DocumentModification m = new DocumentModification();
         Document previousDocument = previousStartDate == null ? null
-                : documentStrategy.getHistoryDocument(historyDocument.getId(), previousStartDate);
+                : documentStrategy.getHistoryDocument(historyDocument.getObjectId(), previousStartDate);
         if (previousDocument == null) {
             m = new DocumentModification(true);
             for (Attribute current : historyDocument.getAttributes()) {

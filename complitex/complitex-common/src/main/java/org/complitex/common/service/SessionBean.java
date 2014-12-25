@@ -8,6 +8,7 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.UserGroup.GROUP_NAME;
 import org.complitex.common.service.exception.WrongCurrentPasswordException;
 import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.PermissionBean;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.DictionaryFwSession;

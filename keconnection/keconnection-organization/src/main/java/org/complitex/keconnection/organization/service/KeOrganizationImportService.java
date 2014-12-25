@@ -12,9 +12,9 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.mybatis.caches.EhcacheCache;
 import org.complitex.common.service.AbstractImportService;
 import org.complitex.common.service.IImportListener;
-import org.complitex.common.service.LocaleBean;
 import org.complitex.common.service.exception.ImportFileNotFoundException;
 import org.complitex.common.service.exception.ImportFileReadException;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.keconnection.organization.entity.OrganizationImport;
 import org.complitex.keconnection.organization.service.exception.RootOrganizationNotFound;
@@ -49,7 +49,7 @@ public class KeOrganizationImportService extends AbstractImportService {
     private KeConnectionOrganizationStrategy organizationStrategy;
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     /**
      * ID CODE SHORT_NAME NAME HLEVEL
@@ -87,7 +87,7 @@ public class KeOrganizationImportService extends AbstractImportService {
             }
         }
 
-        final long systemLocaleId = localeBean.getSystemLocaleObject().getId();
+        final long systemLocaleId = stringLocaleBean.getSystemStringLocale().getId();
         recordIndex = 0;
 
         final Queue<String> workQueue = new LinkedList<>();

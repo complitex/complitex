@@ -20,7 +20,7 @@ import org.complitex.address.entity.AddressImportFile;
 import org.complitex.address.service.ImportService;
 import org.complitex.common.entity.IImportFile;
 import org.complitex.common.entity.ImportMessage;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.organization.entity.OrganizationImportFile;
 import org.complitex.template.web.component.LocalePicker;
 import org.complitex.template.web.security.SecurityRole;
@@ -42,7 +42,7 @@ public class ImportPage extends TemplatePage {
     @EJB
     private ImportService importService;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     private int stopTimer = 0;
     private final IModel<List<IImportFile>> dictionaryModel;
     private final IModel<Locale> localeModel;
@@ -79,7 +79,7 @@ public class ImportPage extends TemplatePage {
                     }
                 }));
 
-        localeModel = new Model<>(localeBean.getSystemLocale());
+        localeModel = new Model<>(stringLocaleBean.getSystemLocale());
         form.add(new LocalePicker("localePicker", localeModel, false));
 
         //Кнопка импортировать

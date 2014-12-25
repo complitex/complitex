@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.SequenceBean;
+import org.complitex.common.strategy.SequenceBean;
 import org.complitex.common.util.DateUtil;
 import ru.complitex.salelog.order.entity.Order;
 import ru.complitex.salelog.order.entity.ProductSale;

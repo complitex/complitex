@@ -41,9 +41,9 @@ import org.apache.wicket.util.value.IValueMap;
 import org.complitex.address.strategy.region.RegionStrategy;
 import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.Person;
-import org.complitex.common.entity.example.DomainObjectExample;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.template.web.template.TemplateWebApplication;
 import org.odlabs.wiquery.ui.dialog.Dialog;
@@ -307,7 +307,7 @@ public class OrderEditPanel extends Panel {
 
                     @Override
                     public void setObject(DomainObject region) {
-                        order.setRegionId(region.getId());
+                        order.setRegionId(region.getObjectId());
                     }
 
                     @Override
@@ -315,7 +315,7 @@ public class OrderEditPanel extends Panel {
 
                     }
                 },
-                regionStrategy.getList(new DomainObjectExample()),
+                regionStrategy.getList(new DomainObjectFilter()),
                 new IChoiceRenderer<DomainObject>() {
                     @Override
                     public Object getDisplayValue(DomainObject region) {
@@ -324,7 +324,7 @@ public class OrderEditPanel extends Panel {
 
                     @Override
                     public String getIdValue(DomainObject region, int i) {
-                        return region !=null? region.getId().toString() : "-1";
+                        return region !=null? region.getObjectId().toString() : "-1";
                     }
                 }
         ).setRequired(true));

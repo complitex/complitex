@@ -16,7 +16,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.pspoffice.military.strategy.MilitaryServiceRelationStrategy;
 import org.complitex.pspoffice.person.report.download.RegistrationCardDownload;
 import org.complitex.pspoffice.person.report.entity.RegistrationCard;
@@ -54,7 +54,7 @@ public class RegistrationCardPage extends WebPage {
     @EJB
     private PersonStrategy personStrategy;
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     @EJB
     private RegistrationTypeStrategy registrationTypeStrategy;
     @EJB
@@ -90,7 +90,7 @@ public class RegistrationCardPage extends WebPage {
             add(new Label("label", new StringResourceModel("label", null,
                     new Object[]{personStrategy.displayDomainObject(person, getLocale())})));
 
-            final Locale systemLocale = localeBean.getSystemLocale();
+            final Locale systemLocale = stringLocaleBean.getSystemLocale();
             add(new Label("lastName", person.getLastName(getLocale(), systemLocale)));
             add(new Label("firstName", person.getFirstName(getLocale(), systemLocale)));
             add(new Label("middleName", person.getMiddleName(getLocale(), systemLocale)));

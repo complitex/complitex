@@ -14,7 +14,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
@@ -37,7 +37,7 @@ public class DistrictSelectPanel extends Panel {
     public DistrictSelectPanel(String id, IModel<List<DomainObject>> districtModel) {
         super(id);
 
-        final DomainObjectExample example = new DomainObjectExample().addAttributes(NAME, CODE);
+        final DomainObjectFilter example = new DomainObjectFilter().addAttributes(NAME, CODE);
 
         final Form form = new Form("form");
         form.setOutputMarkupId(true);

@@ -21,7 +21,7 @@ import org.apache.wicket.util.time.Duration;
 import org.complitex.address.entity.AddressImportFile;
 import org.complitex.common.entity.IImportFile;
 import org.complitex.common.entity.ImportMessage;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.dateinput.MaskedDateInput;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterImportFile;
@@ -53,7 +53,7 @@ public final class ImportPage extends TemplatePage {
     private HeatmeterImportService heatmeterImportService;
     @EJB
 
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
     private final IModel<List<IImportFile>> addressDataModel;
     private final IModel<List<IImportFile>> organizationDataModel;
     private final IModel<List<IImportFile>> heatmeterDataModel;
@@ -89,7 +89,7 @@ public final class ImportPage extends TemplatePage {
         Form<Void> form = new Form<>("form");
         container.add(form);
 
-        localeModel = new Model<>(localeBean.getSystemLocale());
+        localeModel = new Model<>(stringLocaleBean.getSystemLocale());
         form.add(new LocalePicker("localePicker", localeModel, false));
 
         final IModel<Date> beginOmModel = new Model<>(getFirstDayOfCurrentMonth());

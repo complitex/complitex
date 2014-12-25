@@ -3,12 +3,8 @@ package org.complitex.common.strategy;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.History;
-import org.complitex.common.entity.description.Entity;
-import org.complitex.common.entity.description.EntityAttributeType;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.*;
+import org.complitex.common.exception.DeleteException;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
@@ -28,11 +24,11 @@ public interface IStrategy {
     
     void archiveAttributes(Collection<Long> attributeTypeIds, Date endDate);
 
-    void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput);
+    void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput);
     
-    Long getCount(DomainObjectExample example);
+    Long getCount(DomainObjectFilter example);
 
-    List<? extends DomainObject> getList(DomainObjectExample example);
+    List<? extends DomainObject> getList(DomainObjectFilter example);
 
     void disable(DomainObject object);
 
@@ -126,7 +122,7 @@ public interface IStrategy {
     
     void updateAndPropagate(DomainObject oldObject, DomainObject newObject, Date updateDate);
     
-    void replacePermissions(DomainObjectPermissionInfo objectPermissionInfo, Set<Long> subjectIds);
+    void replacePermissions(PermissionInfo objectPermissionInfo, Set<Long> subjectIds);
 
     boolean isNeedToChangePermission(Set<Long> oldSubjectIds, Set<Long> newSubjectIds);
 
@@ -134,7 +130,7 @@ public interface IStrategy {
 
     String[] getEditRoles();
     
-    void changePermissions(DomainObjectPermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds);
+    void changePermissions(PermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds);
 
     void changePermissionsInDistinctThread(long objectId, long permissionId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds);
     

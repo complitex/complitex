@@ -3,19 +3,10 @@ package org.complitex.organization.strategy;
 import com.google.common.collect.*;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StatusType;
-import org.complitex.common.entity.example.AttributeExample;
-import org.complitex.common.entity.example.DomainObjectExample;
+import org.complitex.common.entity.*;
+import org.complitex.common.exception.DeleteException;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
-import org.complitex.common.service.LocaleBean;
-import org.complitex.common.service.PermissionBean;
-import org.complitex.common.service.SequenceBean;
-import org.complitex.common.strategy.DeleteException;
-import org.complitex.common.strategy.DomainObjectPermissionInfo;
-import org.complitex.common.strategy.IStrategy;
-import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.*;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.Numbers;
@@ -42,7 +33,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     private static final String RESOURCE_BUNDLE = OrganizationStrategy.class.getName();
 
     @EJB
-    private LocaleBean localeBean;
+    private StringLocaleBean stringLocaleBean;
 
     @EJB
     private PermissionBean permissionBean;
@@ -69,11 +60,11 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public void configureExample(DomainObjectExample example, Map<String, Long> ids, String searchTextInput) {
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeExample attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
-                attrExample = new AttributeExample(NAME);
+                attrExample = new AttributeFilter(NAME);
                 example.addAttributeExample(attrExample);
             }
             attrExample.setValue(searchTextInput);
@@ -184,7 +175,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
     @Override
     public void replaceChildrenPermissions(long parentId, Set<Long> subjectIds) {
-        for (DomainObjectPermissionInfo childPermissionInfo : getTreeChildrenPermissionInfo(parentId)) {
+        for (PermissionInfo childPermissionInfo : getTreeChildrenPermissionInfo(parentId)) {
 
             Set<Long> childSubjectIds = Sets.newHashSet(subjectIds);
             if (!childSubjectIds.contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
@@ -195,11 +186,11 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
         }
     }
 
-    protected List<DomainObjectPermissionInfo> getTreeChildrenPermissionInfo(long parentId) {
-        List<DomainObjectPermissionInfo> childrenPermissionInfo = sqlSession().selectList(ORGANIZATION_NS
+    protected List<PermissionInfo> getTreeChildrenPermissionInfo(long parentId) {
+        List<PermissionInfo> childrenPermissionInfo = sqlSession().selectList(ORGANIZATION_NS
                 + ".findOrganizationChildrenPermissionInfo", parentId);
-        List<DomainObjectPermissionInfo> treeChildrenPermissionInfo = Lists.newArrayList(childrenPermissionInfo);
-        for (DomainObjectPermissionInfo childPermissionInfo : childrenPermissionInfo) {
+        List<PermissionInfo> treeChildrenPermissionInfo = Lists.newArrayList(childrenPermissionInfo);
+        for (PermissionInfo childPermissionInfo : childrenPermissionInfo) {
             treeChildrenPermissionInfo.addAll(getTreeChildrenPermissionInfo(childPermissionInfo.getId()));
         }
         return treeChildrenPermissionInfo;
@@ -211,13 +202,13 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public void changePermissions(DomainObjectPermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
+    public void changePermissions(PermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public IValidator getValidator() {
-        return new OrganizationValidator(localeBean.getSystemLocale());
+        return new OrganizationValidator(stringLocaleBean.getSystemLocale());
     }
 
     @Override
@@ -226,7 +217,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public List<T> getList(DomainObjectExample example) {
+    public List<T> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
@@ -249,7 +240,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public Long getCount(DomainObjectExample example) {
+    public Long getCount(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
@@ -274,7 +265,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     public Long validateName(Long id, String name, Locale locale) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("name", name);
-        params.put("localeId", localeBean.convert(locale).getId());
+        params.put("localeId", stringLocaleBean.convert(locale).getId());
         List<Long> results = sqlSession().selectList(ORGANIZATION_NS + ".validateName", params);
         for (Long result : results) {
             if (!result.equals(id)) {
@@ -286,11 +277,11 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
     @Override
     public List<T> getUserOrganizations(Locale locale, Long... excludeOrganizationsId) {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
         example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
         if (locale != null) {
             example.setOrderByAttributeTypeId(NAME);
-            example.setLocaleId(localeBean.convert(locale).getId());
+            example.setLocaleId(stringLocaleBean.convert(locale).getId());
             example.setAsc(true);
         }
         configureExample(example, ImmutableMap.<String, Long>of(), null);
@@ -394,11 +385,11 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
     @Override
     public List<T> getOrganizations(List<Long> types, Locale locale) {
-        DomainObjectExample example = new DomainObjectExample();
+        DomainObjectFilter example = new DomainObjectFilter();
 
         if (locale != null) {
             example.setOrderByAttributeTypeId(NAME);
-            example.setLocaleId(localeBean.convert(locale).getId());
+            example.setLocaleId(stringLocaleBean.convert(locale).getId());
             example.setAsc(true);
         }
 
@@ -429,7 +420,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     @Override
     public void setSqlSessionFactoryBean(SqlSessionFactoryBean sqlSessionFactoryBean) {
         super.setSqlSessionFactoryBean(sqlSessionFactoryBean);
-        localeBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
+        stringLocaleBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         permissionBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         sequenceBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
     }

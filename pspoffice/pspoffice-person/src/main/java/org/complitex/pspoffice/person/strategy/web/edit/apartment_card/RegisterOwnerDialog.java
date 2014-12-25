@@ -5,14 +5,7 @@
 package org.complitex.pspoffice.person.strategy.web.edit.apartment_card;
 
 import com.google.common.base.Function;
-import static com.google.common.collect.ImmutableList.*;
 import com.google.common.collect.Iterables;
-import java.text.MessageFormat;
-import java.util.Collections;
-import java.util.Date;
-import static com.google.common.collect.Lists.*;
-import java.util.List;
-import javax.ejb.EJB;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -46,6 +39,15 @@ import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ejb.EJB;
+import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import static com.google.common.collect.ImmutableList.of;
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  *
@@ -137,7 +139,7 @@ final class RegisterOwnerDialog extends Panel {
                 try {
                     if (RegisterOwnerDialog.this.validate()) {
                         register();
-                        setResponsePage(new ApartmentCardEdit(apartmentCard.getId(), null));
+                        setResponsePage(new ApartmentCardEdit(apartmentCard.getObjectId(), null));
                     } else {
                         target.add(messages);
                         scrollToMessages(target);
@@ -165,7 +167,7 @@ final class RegisterOwnerDialog extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                setResponsePage(new ApartmentCardEdit(apartmentCard.getId(), null));
+                setResponsePage(new ApartmentCardEdit(apartmentCard.getObjectId(), null));
             }
         };
         form.add(cancel);
@@ -222,10 +224,10 @@ final class RegisterOwnerDialog extends Panel {
         }
 
         //permanent registration type
-        if (card.getRegistrationType().getId().equals(RegistrationTypeStrategy.PERMANENT)) {
+        if (card.getRegistrationType().getObjectId().equals(RegistrationTypeStrategy.PERMANENT)) {
             if (!card.isRegisterChildren()) {
                 Person owner = apartmentCard.getOwner();
-                String address = personStrategy.findPermanentRegistrationAddress(owner.getId(), getLocale());
+                String address = personStrategy.findPermanentRegistrationAddress(owner.getObjectId(), getLocale());
                 if (!Strings.isEmpty(address)) {
                     String personName = personStrategy.displayDomainObject(owner, getLocale());
                     error(MessageFormat.format(getString("permanent_registration_error"), personName, address));
@@ -236,7 +238,7 @@ final class RegisterOwnerDialog extends Panel {
                 allPersons.add(apartmentCard.getOwner());
                 allPersons.addAll(children);
                 for (Person person : allPersons) {
-                    String address = personStrategy.findPermanentRegistrationAddress(person.getId(), getLocale());
+                    String address = personStrategy.findPermanentRegistrationAddress(person.getObjectId(), getLocale());
                     if (!Strings.isEmpty(address)) {
                         String personName = personStrategy.displayDomainObject(person, getLocale());
                         error(MessageFormat.format(getString("permanent_registration_error"), personName, address));

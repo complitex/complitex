@@ -10,7 +10,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.PermissionBean;
+import org.complitex.common.strategy.PermissionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
@@ -30,7 +30,7 @@ public final class PermissionPanel extends Panel {
     private static final DomainObject VISIBLE_BY_ALL = new DomainObject();
 
     static {
-        VISIBLE_BY_ALL.setId(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID);
+        VISIBLE_BY_ALL.setObjectId(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID);
     }
 
     /**
@@ -151,7 +151,7 @@ public final class PermissionPanel extends Panel {
             public void setObject(DomainObject userOrganization) {
                 super.setObject(userOrganization);
                 subjectIds.clear();
-                subjectIds.add(userOrganization.getId());
+                subjectIds.add(userOrganization.getObjectId());
             }
         };
     }
@@ -161,7 +161,7 @@ public final class PermissionPanel extends Panel {
 
             @Override
             public String getDisplayValue(DomainObject object) {
-                if (object.getId().equals(VISIBLE_BY_ALL.getId())) {
+                if (object.getObjectId().equals(VISIBLE_BY_ALL.getObjectId())) {
                     return getString("visible_by_all");
                 } else {
                     return organizationStrategy.displayDomainObject(object, getLocale());

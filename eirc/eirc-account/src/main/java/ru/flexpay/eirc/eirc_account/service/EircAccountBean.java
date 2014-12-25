@@ -8,7 +8,7 @@ import org.apache.commons.validator.routines.checkdigit.CheckDigitException;
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.SequenceBean;
+import org.complitex.common.strategy.SequenceBean;
 import ru.flexpay.eirc.dictionary.entity.Address;
 import ru.flexpay.eirc.eirc_account.entity.EircAccount;
 import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccount;

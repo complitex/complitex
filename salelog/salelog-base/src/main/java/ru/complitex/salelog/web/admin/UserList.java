@@ -22,11 +22,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.admin.service.UserBean;
 import org.complitex.admin.service.UserFilter;
 import org.complitex.admin.strategy.UserInfoStrategy;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.User;
-import org.complitex.common.entity.UserGroup;
-import org.complitex.common.entity.UserOrganization;
-import org.complitex.common.entity.example.AttributeExample;
+import org.complitex.common.entity.*;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.AttributeColumnsPanel;
@@ -95,8 +91,8 @@ public class UserList extends ScrollListPage {
                 userFilter.setLogin(null);
                 userFilter.setGroupName(null);
                 userFilter.setOrganizationObjectId(null);
-                for (AttributeExample attributeExample : userFilter.getAttributeExamples()) {
-                    attributeExample.setValue(null);
+                for (AttributeFilter attributeFilter : userFilter.getAttributeFilters()) {
+                    attributeFilter.setValue(null);
                 }
                 target.add(content);
             }
@@ -114,7 +110,7 @@ public class UserList extends ScrollListPage {
         });
 
         filterForm.add(new TextField<String>("login", new PropertyModel<String>(filterModel, "login")));
-        filterForm.add(new AttributeFiltersPanel("user_info", filter.getAttributeExamples()));
+        filterForm.add(new AttributeFiltersPanel("user_info", filter.getAttributeFilters()));
         filterForm.add(new DropDownChoice<UserGroup.GROUP_NAME>("usergroups",
                 new PropertyModel<UserGroup.GROUP_NAME>(filterModel, "groupName"),
                 new ListModel<>(Arrays.asList(UserGroup.GROUP_NAME.values())),

@@ -1,14 +1,8 @@
 package org.complitex.pspoffice.person.report.download;
 
-import java.util.Locale;
-import org.complitex.pspoffice.report.entity.IReportField;
-import org.complitex.pspoffice.report.entity.RegistrationCardField;
-import org.complitex.pspoffice.report.web.AbstractReportDownload;
-
-import java.util.Map;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.LocaleBean;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.pspoffice.military.strategy.MilitaryServiceRelationStrategy;
@@ -17,9 +11,15 @@ import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
 import org.complitex.pspoffice.person.strategy.entity.Registration;
 import org.complitex.pspoffice.registration_type.strategy.RegistrationTypeStrategy;
-import static org.complitex.pspoffice.report.util.ReportDateFormatter.format;
+import org.complitex.pspoffice.report.entity.IReportField;
+import org.complitex.pspoffice.report.entity.RegistrationCardField;
+import org.complitex.pspoffice.report.web.AbstractReportDownload;
+
+import java.util.Locale;
+import java.util.Map;
 
 import static org.complitex.pspoffice.report.entity.RegistrationCardField.*;
+import static org.complitex.pspoffice.report.util.ReportDateFormatter.format;
 
 public class RegistrationCardDownload extends AbstractReportDownload<RegistrationCard> {
 
@@ -38,7 +38,7 @@ public class RegistrationCardDownload extends AbstractReportDownload<Registratio
         AddressRendererBean addressRendererBean = EjbBeanLocator.getBean(AddressRendererBean.class);
         RegistrationTypeStrategy registrationTypeStrategy = EjbBeanLocator.getBean(RegistrationTypeStrategy.class);
         MilitaryServiceRelationStrategy militaryServiceRelationStrategy = EjbBeanLocator.getBean(MilitaryServiceRelationStrategy.class);
-        final Locale systemLocale = EjbBeanLocator.getBean(LocaleBean.class).getSystemLocale();
+        final Locale systemLocale = EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocale();
 
         Registration registration = report.getRegistration();
         Person person = registration.getPerson();

@@ -18,7 +18,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.PermissionBean;
+import org.complitex.common.strategy.PermissionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.fieldset.CollapsibleFieldset;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
