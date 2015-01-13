@@ -53,6 +53,7 @@ import static org.complitex.common.strategy.organization.IOrganizationStrategy.S
 public class OrganizationList extends ScrollListPage {
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     private DomainObjectFilter example;
     private WebMarkupContainer content;
     private DataView<Organization> dataView;

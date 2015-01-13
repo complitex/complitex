@@ -52,13 +52,15 @@ import java.util.Locale;
  */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public final class PersonList extends ScrollListPage {
-
     @EJB
     private PersonStrategy personStrategy;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB
     private StringCultureBean stringBean;
+
     private CollapsibleSearchPanel searchPanel;
 
     private class ColumnLabelModel extends AbstractReadOnlyModel<String> {

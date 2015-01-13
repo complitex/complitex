@@ -45,16 +45,20 @@ import static org.complitex.pspoffice.report.util.ReportDateFormatter.format;
  */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class RegistrationStopCouponPage extends WebPage {
-
     private final Logger log = LoggerFactory.getLogger(RegistrationStopCouponPage.class);
+
     @EJB
     private RegistrationStopCouponBean registrationStopCouponBean;
+
     @EJB
     private PersonStrategy personStrategy;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB
     private AddressRendererBean addressRendererBean;
+
     @EJB
     private StrategyFactory strategyFactory;
 

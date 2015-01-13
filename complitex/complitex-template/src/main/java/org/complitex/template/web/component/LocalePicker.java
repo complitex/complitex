@@ -21,8 +21,7 @@ import java.util.Locale;
  * @author Artem
  */
 public class LocalePicker extends Panel {
-
-    @EJB(name = "LocaleBean")
+    @EJB
     private StringLocaleBean stringLocaleBean;
 
     public LocalePicker(String id){

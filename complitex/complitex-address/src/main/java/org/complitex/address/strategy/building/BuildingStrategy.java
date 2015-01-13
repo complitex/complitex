@@ -44,8 +44,7 @@ import static org.complitex.common.util.StringUtil.toCyrillic;
 @Stateless
 public class BuildingStrategy extends TemplateStrategy {
     public static final String BUILDING_NS = BuildingStrategy.class.getName();
-
-    private static final String RESOURCE_BUNDLE = BuildingStrategy.class.getPackage().getName() + ".Building";
+    private static final String RESOURCE_BUNDLE = BuildingStrategy.class.getName();
 
     /**
      * Attribute ids
@@ -83,12 +82,16 @@ public class BuildingStrategy extends TemplateStrategy {
     public static final long PARENT_ENTITY_ID = 1500L;
     @EJB
     private StringCultureBean stringBean;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB
     private BuildingAddressStrategy buildingAddressStrategy;
+
     @EJB
     private SessionBean sessionBean;
+
     @EJB
     private LogBean logBean;
 
@@ -421,10 +424,12 @@ public class BuildingStrategy extends TemplateStrategy {
     @Override
     protected void insertDomainObject(DomainObject object, Date insertDate) {
         Building building = (Building) object;
+
         for (DomainObject buildingAddress : building.getAllAddresses()) {
             buildingAddress.setSubjectIds(building.getSubjectIds());
             buildingAddressStrategy.insert(buildingAddress, insertDate);
         }
+
         building.enhanceAlternativeAddressAttributes();
         building.setParentId(building.getPrimaryAddress().getObjectId());
         building.setParentEntityId(PARENT_ENTITY_ID);

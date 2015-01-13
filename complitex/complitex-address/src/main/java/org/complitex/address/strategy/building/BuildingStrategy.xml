@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.complitex.address.strategy.building.Building">
+<mapper namespace="org.complitex.address.strategy.building.BuildingStrategy">
     <resultMap id="buildingResultMap" type="org.complitex.address.strategy.building.entity.Building"
                extends="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
     </resultMap>
@@ -22,8 +22,7 @@
 
     <select id="selectBuildingById" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="buildingResultMap">
-        SELECT e.*
-        FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
+        SELECT e.* FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
             <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
     </select>
 

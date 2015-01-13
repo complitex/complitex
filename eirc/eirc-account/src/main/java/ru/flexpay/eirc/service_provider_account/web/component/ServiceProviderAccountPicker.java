@@ -46,6 +46,7 @@ public class ServiceProviderAccountPicker extends FormComponentPanel<ServiceProv
 
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     private boolean showData;
     private final FilterWrapper<ServiceProviderAccount> filterWrapper;
 

@@ -53,13 +53,15 @@ import java.util.Map;
  * @author Artem
  */
 public final class DomainObjectListPanel extends Panel {
-
     @EJB
     private StrategyFactory strategyFactory;
+
     @EJB
     private StringCultureBean stringBean;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     private String entity;
     private String strategyName;
     private DomainObjectFilter example;

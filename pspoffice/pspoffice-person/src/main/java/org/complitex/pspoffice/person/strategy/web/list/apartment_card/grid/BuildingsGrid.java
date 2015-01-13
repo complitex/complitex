@@ -85,11 +85,12 @@ public final class BuildingsGrid extends TemplatePage {
     private final Long streetId;
     
     private static class BuildingsGridFilterSearchComponent extends FilterSearchComponent {
-        
         @EJB
         private StrategyFactory strategyFactory;
+
         @EJB
         private StringLocaleBean stringLocaleBean;
+
         private final String entity;
         private final long cityId;
         

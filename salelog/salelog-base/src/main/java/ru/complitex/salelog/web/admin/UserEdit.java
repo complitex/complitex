@@ -45,15 +45,18 @@ import static org.complitex.common.web.DictionaryFwSession.*;
  */
 @AuthorizeInstantiation(SecurityRole.ADMIN_MODULE_EDIT)
 public class UserEdit extends FormTemplatePage {
-
     @EJB
     private UserBean userBean;
+
     @EJB
     private UserInfoStrategy userInfoStrategy;
+
     @EJB
     private LogBean logBean;
+
     @EJB
     private PreferenceBean preferenceBean;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
 

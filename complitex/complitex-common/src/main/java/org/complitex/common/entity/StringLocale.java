@@ -9,9 +9,12 @@ public class StringLocale implements Serializable {
 
     private Long id;
     private String language;
-    private boolean system;
+    private Boolean system;
 
-    public StringLocale(Long id, String language, boolean system) {
+    public StringLocale() {
+    }
+
+    public StringLocale(Long id, String language, Boolean system) {
         this.id = id;
         this.language = language;
         this.system = system;
@@ -33,11 +36,11 @@ public class StringLocale implements Serializable {
         this.language = language;
     }
 
-    public boolean isSystem() {
+    public Boolean isSystem() {
         return system;
     }
 
-    public void setSystem(boolean system) {
+    public void setSystem(Boolean system) {
         this.system = system;
     }
 }

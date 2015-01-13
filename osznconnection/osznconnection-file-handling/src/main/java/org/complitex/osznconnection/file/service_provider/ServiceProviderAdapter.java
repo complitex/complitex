@@ -48,16 +48,22 @@ public class ServiceProviderAdapter extends AbstractBean {
 
     @EJB
     private OwnershipCorrectionBean ownershipCorrectionBean;
+
     @EJB
     private SubsidyTarifBean subsidyTarifBean;
+
     @EJB
     private PrivilegeCorrectionBean privilegeCorrectionBean;
+
     @EJB
     private LogBean logBean;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB
     private RequestWarningBean warningBean;
+
     @EJB
     private WebWarningRenderer webWarningRenderer;
 

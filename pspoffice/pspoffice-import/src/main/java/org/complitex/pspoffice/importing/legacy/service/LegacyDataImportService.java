@@ -67,32 +67,46 @@ public class LegacyDataImportService {
     private static final String ERROR_FILE_SUFFIX = "_errors.csv";
     private static final String ERROR_DESCRIPTION_FILE_SUFFIX = "_errors_description.txt";
     private static final int PROCESSING_BATCH = 500;
+
     @EJB
     private StrategyFactory strategyFactory;
+
     @Resource
     private UserTransaction userTransaction;
+
     @EJB
     private StreetCorrectionBean streetCorrectionBean;
+
     @EJB
     private BuildingCorrectionBean buildingCorrectionBean;
+
     @EJB
     private BuildingStrategy buildingStrategy;
+
     @EJB
     private PersonStrategy personStrategy;
+
     @EJB
     private ReferenceDataCorrectionBean referenceDataCorrectionBean;
+
     @EJB
     private PersonCorrectionBean personCorrectionBean;
+
     @EJB
     private ApartmentCardCorrectionBean apartmentCardCorrectionBean;
+
     @EJB
     private ApartmentStrategy apartmentStrategy;
+
     @EJB
     private ApartmentCardStrategy apartmentCardStrategy;
+
     @EJB
     private RegistrationCorrectionBean registrationCorrectionBean;
+
     @EJB
     private RegistrationStrategy registrationStrategy;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
     /*

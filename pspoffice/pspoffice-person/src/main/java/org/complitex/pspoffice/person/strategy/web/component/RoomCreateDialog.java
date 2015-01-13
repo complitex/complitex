@@ -24,11 +24,12 @@ import java.util.List;
  * @author Artem
  */
 public abstract class RoomCreateDialog extends AbstractAddressCreateDialog {
-
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB
     private LogBean logBean;
+
     @EJB
     private RoomStrategy roomStrategy;
 

@@ -28,10 +28,13 @@ public class AddressCorrectionBean extends CorrectionBean {
 
     private final Logger log = LoggerFactory.getLogger(AddressCorrectionBean.class);
     private static final String ADDRESS_BEAN_MAPPING_NAMESPACE = AddressCorrectionBean.class.getName();
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB
     private KeConnectionSessionBean keConnectionSessionBean;
+
     @EJB
     private StreetTypeStrategy streetTypeStrategy;
 

@@ -7,9 +7,9 @@ import org.complitex.common.util.Locales;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.Locale;
 
 public class DomainObject implements Serializable {
+    private Long pkId;
     private String entityTable;
     private Long objectId;
     private StatusType status = StatusType.ACTIVE;
@@ -96,6 +96,15 @@ public class DomainObject implements Serializable {
 
     public void setLongValue(Long attributeTypeId, Long value){
         getAttribute(attributeTypeId).setValueId(value);
+    }
+
+
+    public Long getPkId() {
+        return pkId;
+    }
+
+    public void setPkId(Long pkId) {
+        this.pkId = pkId;
     }
 
     public String getEntityTable() {

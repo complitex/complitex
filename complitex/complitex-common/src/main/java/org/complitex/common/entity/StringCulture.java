@@ -5,22 +5,29 @@ import org.complitex.common.util.Locales;
 import java.io.Serializable;
 
 public class StringCulture implements Serializable {
+    private Long pkId;
     private String entityTable;
     private Long id;
     private Long localeId;
     private String value;
 
+    public StringCulture() {
+    }
+
     public StringCulture(Long localeId) {
         this.localeId = localeId;
     }
 
-    public StringCulture(Long localeId, String value) {
-        this.localeId = localeId;
-        this.value = value;
-    }
-
     public boolean isSystemLocale(){
         return Locales.getSystemLocaleId().equals(localeId);
+    }
+
+    public Long getPkId() {
+        return pkId;
+    }
+
+    public void setPkId(Long pkId) {
+        this.pkId = pkId;
     }
 
     public String getEntityTable() {

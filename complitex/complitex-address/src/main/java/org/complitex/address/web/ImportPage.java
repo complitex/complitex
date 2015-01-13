@@ -41,8 +41,10 @@ public class ImportPage extends TemplatePage {
 
     @EJB
     private ImportService importService;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     private int stopTimer = 0;
     private final IModel<List<IImportFile>> dictionaryModel;
     private final IModel<Locale> localeModel;

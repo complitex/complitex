@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Attribute implements Serializable {
+    private Long pkId;
     private String entityTable;
     private Long attributeId;
     private Long objectId;
@@ -21,7 +22,8 @@ public class Attribute implements Serializable {
 
     private List<StringCulture> localizedValues;
 
-
+    public Attribute() {
+    }
 
     public StringCulture getStringCulture(Long localeId){
         if (localizedValues != null){
@@ -36,7 +38,7 @@ public class Attribute implements Serializable {
     }
 
     public void setStringValue(String value, long localeId){
-        for (StringCulture string : getLocalizedValues()) {
+        for (StringCulture string : localizedValues) {
             if (string.getLocaleId().equals(localeId) || (string.isSystemLocale() && string.getValue() == null)) {
                 string.setValue(value);
             }
@@ -44,11 +46,22 @@ public class Attribute implements Serializable {
     }
 
     public String getStringValue(){
-        return getStringCulture(Locales.getSystemLocaleId()).getValue();
+        StringCulture stringCulture = getStringCulture(Locales.getSystemLocaleId());
+
+        return stringCulture != null ? stringCulture.getValue() : null;
     }
 
     public String getStringValue(java.util.Locale locale){
         return StringCultures.getValue(localizedValues, locale);
+    }
+
+
+    public Long getPkId() {
+        return pkId;
+    }
+
+    public void setPkId(Long pkId) {
+        this.pkId = pkId;
     }
 
     public String getEntityTable() {

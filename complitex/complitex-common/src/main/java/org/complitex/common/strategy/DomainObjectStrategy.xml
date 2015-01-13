@@ -4,8 +4,9 @@
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
     <resultMap id="domainObjectResultMap" type="org.complitex.common.entity.DomainObject">
-        <id column="object_id" property="objectId"/>
-        <id column="start_date" property="startDate"/>
+        <id column="pk_id" property="pkId"/>
+        <result column="object_id" property="objectId"/>
+        <result column="start_date" property="startDate"/>
         <result column="end_date" property="endDate"/>
         <result column="status" property="status"/>
         <result column="parent_id" property="parentId"/>
@@ -15,28 +16,30 @@
     </resultMap>
 
     <resultMap id="attributeResultMap" type="org.complitex.common.entity.Attribute">
-        <id column="attribute_id" property="attributeId"/>
-        <id column="object_id" property="objectId"/>
-        <id column="attribute_type_id" property="attributeTypeId"/>
-        <id column="start_date" property="startDate"/>
+        <id column="pk_id" property="pkId"/>
+        <result column="value_id" property="valueId"/>
+        <result column="attribute_id" property="attributeId"/>
+        <result column="object_id" property="objectId"/>
+        <result column="attribute_type_id" property="attributeTypeId"/>
+        <result column="start_date" property="startDate"/>
         <result column="status" property="status"/>
         <result column="end_date" property="endDate"/>
-        <result column="value_id" property="valueId"/>
         <result column="value_type_id" property="valueTypeId"/>
     </resultMap>
 
     <resultMap id="localeResultMap" type="org.complitex.common.entity.StringLocale">
-        <id column="id" property="id"/>
-        <result column="locale" property="locale"/>
-        <result column="system" property="system"/>
+        <constructor>
+            <idArg column="id" javaType="Long"/>
+            <arg column="locale" javaType="String"/>
+            <arg column="system" javaType="Boolean"/>
+        </constructor>
     </resultMap>
 
     <resultMap id="stringCultureResultMap" type="org.complitex.common.entity.StringCulture">
-        <constructor>
-            <idArg column="locale_id" javaType="Long"/>
-            <arg column="value" javaType="String"/>
-        </constructor>
-        <id column="id" property="id"/>
+        <id column="pk_id" property="pkId"/>
+        <result column="id" property="id"/>
+        <result column="locale_id" property="localeId"/>
+        <result column="value" property="value"/>
     </resultMap>
 
     <resultMap id="permissionInfoResultMap" type="org.complitex.common.entity.PermissionInfo">
@@ -50,7 +53,7 @@
         INSERT INTO `${entityTable}` (`object_id`, `status`, `start_date`, `end_date`, `parent_id`, `parent_entity_id`,
           `permission_id`, `external_id`)
         VALUES
-          (#{id}, #{status}, #{startDate}, #{endDate}, #{parentId}, #{parentEntityId}, #{permissionId}, #{externalId})
+          (#{objectId}, #{status}, #{startDate}, #{endDate}, #{parentId}, #{parentEntityId}, #{permissionId}, #{externalId})
     </insert>
 
     <select id="selectDomainObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
@@ -117,26 +120,26 @@
         <if test="objectId != null">
             AND e.`object_id` = #{objectId}
         </if>
-        <foreach item="attrExample" collection="attributeExamples">
-            <if test="attrExample.value != null">
+        <foreach item="attributeFilter" collection="attributeFilters">
+            <if test="attributeFilter.value != null">
                 AND EXISTS(SELECT 1 FROM `${entityTable}_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attrExample.attributeTypeId}
+                AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
                 AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityTable}_string_culture` sc WHERE sc.`value`
                 <choose>
                     <when test="comparisonType == 'LIKE'">
-                        LIKE CONCAT('%', #{attrExample.value}, '%')
+                        LIKE CONCAT('%', #{attributeFilter.value}, '%')
                     </when>
                     <when test="comparisonType == 'EQUALITY'">
-                        = #{attrExample.value}
+                        = #{attributeFilter.value}
                     </when>
                 </choose>
                 )
                 )
             </if>
 
-            <if test="attrExample.valueId != null">
+            <if test="attributeFilter.valueId != null">
                 AND EXISTS(SELECT 1 FROM `${entityTable}_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attrExample.attributeTypeId}
+                AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
                 AND attr.`value_id` = #{valueId}
                 )
             </if>
@@ -172,7 +175,7 @@
 
     <update id="updateDomainObject" parameterType="org.complitex.common.entity.DomainObject">
         UPDATE `${entityTable}` SET `end_date` = #{endDate}, `status` = #{status}
-          WHERE `object_id` = #{id} AND `start_date` = #{startDate}
+          WHERE `object_id` = #{objectId} AND `start_date` = #{startDate}
     </update>
 
     <!-- Validation -->
@@ -223,8 +226,8 @@
 
     <sql id="sqlSelectHistoryObject">
         SELECT e.*
-        FROM `${table}` e WHERE e.`object_id` = #{id} AND e.`start_date` = (
-        SELECT MAX(e1.`start_date`) FROM `${table}` e1 WHERE e1.`object_id` = #{id} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+        FROM `${table}` e WHERE e.`object_id` = #{objectId} AND e.`start_date` = (
+        SELECT MAX(e1.`start_date`) FROM `${table}` e1 WHERE e1.`object_id` = #{objectId} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
     </sql>
 
     <select id="selectHistoryObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
@@ -309,9 +312,10 @@
         `object_id` = #{objectId} AND `status` IN ('ACTIVE', 'INACTIVE')
     </update>
 
-    <select id="selectAttribute" parameterType="map" resultMap="attributeResultMap">
-        SELECT aa.* FROM `${entityTable}_attribute` aa WHERE  aa.`object_id` = #{id} AND aa.`status` = 'ACTIVE'
-          ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
+    <select id="selectAttributes" parameterType="map" resultMap="attributeResultMap">
+        SELECT a.* FROM `${entityTable}_attribute` a
+          WHERE  a.`object_id` = #{id} AND a.`status` = 'ACTIVE'
+          ORDER BY a.`attribute_type_id`, a.`attribute_id`
     </select>
 
     <select id="selectHistoryAttributes" parameterType="org.complitex.common.entity.DomainObjectFilter"
@@ -337,7 +341,7 @@
 
     <insert id="insertStringCulture" parameterType="org.complitex.common.entity.StringCulture">
         insert into `${entityTable}_string_culture`(`id`, `locale_id`, `value`)
-          values (#{object.id}, #{object.localeId}, #{object.value})
+          values (#{id}, #{localeId}, #{value})
     </insert>
 
     <select id="selectStringCulture" parameterType="map" resultMap="stringCultureResultMap">

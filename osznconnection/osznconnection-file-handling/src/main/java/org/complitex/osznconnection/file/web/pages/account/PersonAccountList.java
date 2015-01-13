@@ -47,7 +47,6 @@ public class PersonAccountList extends ScrollListPage {
     private OsznOrganizationStrategy organizationStrategy;
 
     @EJB
-
     private StringLocaleBean stringLocaleBean;
 
     public PersonAccountList() {

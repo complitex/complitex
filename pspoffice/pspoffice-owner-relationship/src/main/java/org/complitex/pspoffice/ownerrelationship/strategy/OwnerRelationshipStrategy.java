@@ -42,6 +42,7 @@ public class OwnerRelationshipStrategy extends TemplateStrategy {
     public static final long SON = 1;
     public static final long DAUGHTER = 2;
     private static final Set<Long> RESERVED_INSTANCE_IDS = of(SON, DAUGHTER);
+
     @EJB
     private StringLocaleBean stringLocaleBean;
 

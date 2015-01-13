@@ -50,6 +50,7 @@ public class ModuleInstancePicker extends FormComponentPanel<DomainObject> {
 
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     private boolean showData = false; //todo RadioGroup bug on showData = true
     private DomainObjectFilter example;
 

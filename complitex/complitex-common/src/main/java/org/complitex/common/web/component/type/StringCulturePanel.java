@@ -23,7 +23,6 @@ import java.util.List;
  * @author Artem
  */
 public final class StringCulturePanel extends Panel {
-
     @EJB
     private StringLocaleBean stringLocaleBean;
 

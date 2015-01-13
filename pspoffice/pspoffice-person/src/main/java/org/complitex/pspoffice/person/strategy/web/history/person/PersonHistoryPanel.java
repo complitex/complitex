@@ -57,24 +57,32 @@ import static org.complitex.pspoffice.person.strategy.PersonStrategy.*;
  * @author Artem
  */
 final class PersonHistoryPanel extends Panel {
-
     private final Logger log = LoggerFactory.getLogger(PersonHistoryPanel.class);
+
     @EJB
     private PersonStrategy personStrategy;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB
     private PersonNameBean personNameBean;
+
     @EJB
     private StringCultureBean stringBean;
+
     @EJB
     private DocumentStrategy documentStrategy;
+
     @EJB
     private DocumentTypeStrategy documentTypeStrategy;
+
     @EJB
     private MilitaryServiceRelationStrategy militaryServiceRelationStrategy;
+
     @EJB(name = "UserProfileBean")
     private IUserProfileBean userProfileBean;
+
     private final Entity ENTITY = personStrategy.getEntity();
 
     @Override

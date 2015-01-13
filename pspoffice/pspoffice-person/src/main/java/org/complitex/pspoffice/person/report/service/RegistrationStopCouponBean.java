@@ -32,14 +32,17 @@ import static org.complitex.pspoffice.report.util.ReportDateFormatter.format;
  */
 @Stateless
 public class RegistrationStopCouponBean extends AbstractBean {
-
     private static final String MAPPING_NAMESPACE = RegistrationStopCouponBean.class.getName();
+
     @EJB
     private PersonStrategy personStrategy;
+
     @EJB
     private PersonNameBean personNameBean;
+
     @EJB
     private SessionBean sessionBean;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
 

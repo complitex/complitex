@@ -47,11 +47,12 @@ import java.util.List;
  */
 @AuthorizeInstantiation(SecurityRole.ADDRESS_MODULE_VIEW)
 public class BuildingList extends ScrollListPage {
-
     @EJB
     private StrategyFactory strategyFactory;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     private DomainObjectFilter example;
     private WebMarkupContainer content;
     private DataView<Building> dataView;

@@ -91,10 +91,13 @@ public class WiQuerySearchComponent extends Panel {
     }
     @EJB
     private StringCultureBean stringBean;
+
     @EJB
     private StrategyFactory strategyFactory;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     private final List<String> searchFilters;
     private final List<SearchFilterSettings> searchFilterSettings;
     private final ISearchCallback callback;

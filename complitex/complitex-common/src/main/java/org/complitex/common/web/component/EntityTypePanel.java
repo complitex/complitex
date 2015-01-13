@@ -24,13 +24,15 @@ import static com.google.common.collect.Iterables.find;
  * @author Artem
  */
 public class EntityTypePanel extends Panel {
-
     @EJB
     private StrategyFactory strategyFactory;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB
     private StringCultureBean stringBean;
+
     private String entityType;
     private long entityTypeDisplayAttributeTypeId;
     private IModel<Long> entityTypeObjectIdModel;

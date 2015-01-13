@@ -52,8 +52,10 @@ public final class ReferenceDataImportPage extends TemplatePage {
 
     @EJB
     private ReferenceDataImportService importService;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     private final IModel<List<IImportFile>> addressDataModel;
     private final IModel<List<IImportFile>> referenceDataModel;
     private final IModel<Locale> localeModel;

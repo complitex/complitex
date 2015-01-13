@@ -49,6 +49,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
 
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     private boolean showData;
     private final DomainObjectFilter example;
 

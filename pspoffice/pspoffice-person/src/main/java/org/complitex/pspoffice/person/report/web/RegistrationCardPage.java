@@ -47,18 +47,23 @@ import static org.complitex.pspoffice.report.util.ReportDateFormatter.format;
  */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class RegistrationCardPage extends WebPage {
-
     private final Logger log = LoggerFactory.getLogger(RegistrationCardPage.class);
+
     @EJB
     private RegistrationCardBean registrationCardBean;
+
     @EJB
     private PersonStrategy personStrategy;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB
     private RegistrationTypeStrategy registrationTypeStrategy;
+
     @EJB
     private MilitaryServiceRelationStrategy militaryServiceRelationStrategy;
+
     @EJB
     private AddressRendererBean addressRendererBean;
 

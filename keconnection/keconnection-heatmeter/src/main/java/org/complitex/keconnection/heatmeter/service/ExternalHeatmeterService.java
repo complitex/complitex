@@ -37,10 +37,13 @@ public class ExternalHeatmeterService {
     private static final String MAPPING_NAMESPACE = ExternalHeatmeterService.class.getName();
     private static final String RESOURCE_BUNDLE = ExternalHeatmeterService.class.getName();
     private static final String FETCH_EXTERNAL_HEATMETER_STORED_PROCEDURE = "Z$RUNTIME_PROV_UTL.GETHEATMETERS";
+
     @EJB
     private RemoteSqlSessionFactoryBean sqlSessionFactoryBean;
+
     @EJB
     private LogBean logBean;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
 

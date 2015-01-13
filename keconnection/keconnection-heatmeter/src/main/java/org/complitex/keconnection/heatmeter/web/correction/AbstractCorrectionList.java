@@ -61,10 +61,13 @@ public abstract class AbstractCorrectionList extends ScrollListPage {
 
     @EJB
     private CorrectionBean correctionBean;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private KeConnectionOrganizationStrategy organizationStrategy;
+
     private String entity;
     private IModel<CorrectionExample> example;
 

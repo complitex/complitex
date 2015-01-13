@@ -32,10 +32,13 @@ import java.util.Set;
 public class BuildingCorrectionBean extends AbstractBean {
 
     private static final String MAPPING_NAMESPACE = BuildingCorrectionBean.class.getName();
+
     @EJB
     private BuildingStrategy buildingStrategy;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     private long SYSTEM_LOCALE_ID;
 
     @PostConstruct

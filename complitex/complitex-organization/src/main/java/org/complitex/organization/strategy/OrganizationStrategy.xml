@@ -16,27 +16,27 @@
     </select>
 
     <sql id="sqlFilter">
-        <if test="id != null">
+        <if test="objectId != null">
             AND e.`object_id` = #{objectId}
         </if>
-        <foreach item="attrExample" collection="attributeExamples">
+        <foreach item="attributeFilter" collection="attributeFilters">
             <choose>
-                <when test="attrExample.attributeTypeId == 903 and attrExample.value != null">
+                <when test="attributeFilter.attributeTypeId == 903 and attributeFilter.value != null">
                     AND EXISTS(SELECT 1 FROM `organization_attribute` parent_attr WHERE parent_attr.`object_id` = e.`object_id`
-                            AND parent_attr.`status` = 'ACTIVE' AND parent_attr.`attribute_type_id` = #{attrExample.attributeTypeId}
-                            AND parent_attr.`value_id` = #{attrExample.value})
+                            AND parent_attr.`status` = 'ACTIVE' AND parent_attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
+                            AND parent_attr.`value_id` = #{attributeFilter.value})
                 </when>
                 <otherwise>
-                    <if test="attrExample.value != null">
+                    <if test="attributeFilter.value != null">
                         AND EXISTS(SELECT 1 FROM `organization_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                            AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attrExample.attributeTypeId}
+                            AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
                             AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityTable}_string_culture` sc WHERE sc.`value`
                                 <choose>
                                     <when test="comparisonType == 'LIKE'">
-                                        LIKE CONCAT('%', #{attrExample.value}, '%')
+                                        LIKE CONCAT('%', #{attributeFilter.value}, '%')
                                     </when>
                                     <when test="comparisonType == 'EQUALITY'">
-                                        = #{attrExample.value}
+                                        = #{attributeFilter.value}
                                     </when>
                                 </choose>
                             )

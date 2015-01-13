@@ -46,6 +46,7 @@ public class ProfilePage extends FormTemplatePage {
 
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB
     private SessionBean sessionBean;
 

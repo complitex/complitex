@@ -51,14 +51,19 @@ import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.
 @AuthorizeInstantiation(SecurityRole.ADMIN_MODULE_EDIT)
 public class UserEdit extends FormTemplatePage {
     private static final List<String> SEARCH_FILTERS = Arrays.asList("country", "region", "city", "street");
+
     @EJB
     private UserBean userBean;
+
     @EJB
     private UserInfoStrategy userInfoStrategy;
+
     @EJB
     private LogBean logBean;
+
     @EJB
     private PreferenceBean preferenceBean;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
 

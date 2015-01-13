@@ -23,8 +23,8 @@ import static com.google.common.collect.ImmutableMap.of;
  */
 @Stateless
 public class PersonNameBean extends AbstractBean {
-
     private final static String MAPPING_NAMESPACE = PersonNameBean.class.getName();
+
     @EJB
     private StringLocaleBean stringLocaleBean;
 

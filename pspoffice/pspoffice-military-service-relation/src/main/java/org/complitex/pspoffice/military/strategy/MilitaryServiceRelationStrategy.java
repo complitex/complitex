@@ -35,6 +35,7 @@ public class MilitaryServiceRelationStrategy extends TemplateStrategy {
      */
     public static final long NAME = 2900;
     public static final long CODE = 2901;
+
     @EJB
     private StringLocaleBean stringLocaleBean;
 

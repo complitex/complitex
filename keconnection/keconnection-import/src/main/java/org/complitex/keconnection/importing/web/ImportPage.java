@@ -47,13 +47,16 @@ public final class ImportPage extends TemplatePage {
 
     @EJB
     private KeImportService importService;
+
     @EJB
     private TablegramImportService tablegramImportService;
+
     @EJB
     private HeatmeterImportService heatmeterImportService;
-    @EJB
 
+    @EJB
     private StringLocaleBean stringLocaleBean;
+
     private final IModel<List<IImportFile>> addressDataModel;
     private final IModel<List<IImportFile>> organizationDataModel;
     private final IModel<List<IImportFile>> heatmeterDataModel;

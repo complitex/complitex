@@ -198,24 +198,20 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     protected void loadAttributes(String dataSource, DomainObject object) {
-        Map<String, Object> params = ImmutableMap.<String, Object>builder().
-                put("entityTable", getEntityTable()).
-                put("objectId", object.getObjectId()).
-                build();
+        Map<String, Object> params = ImmutableMap.<String, Object>builder()
+                .put("entityTable", getEntityTable())
+                .put("objectId", object.getObjectId())
+                .build();
 
         List<Attribute> attributes = (dataSource == null ? sqlSession() : sqlSession(dataSource)).selectList(getLoadAttributesStatement(), params);
 
-        if (dataSource != null) {
-            loadStringCultures(dataSource, attributes);
-        }else{
-            loadStringCultures(attributes);
-        }
+        loadStringCultures(dataSource, attributes);
 
         object.setAttributes(attributes);
     }
 
     protected String getLoadAttributesStatement() {
-        return NS + ".selectAttribute";
+        return NS + ".selectAttributes";
     }
 
     protected void loadStringCultures(List<Attribute> attributes) {
@@ -420,6 +416,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     @Override
     public DomainObject newInstance() {
         DomainObject object = new DomainObject();
+
         fillAttributes(object);
 
         //set up subject ids to visible-by-all subject
@@ -431,11 +428,11 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void insertAttribute(Attribute attribute) {
         final List<StringCulture> strings = attribute.getLocalizedValues();
-        if (strings == null) {
-            //reference attribute
-        } else {
+        if (strings != null) {
             final Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), strings);
             attribute.setValueId(generatedStringId);
+        } else {
+            //reference attribute
         }
 
         if (attribute.getValueId() != null || getEntity().getAttributeType(attribute.getAttributeTypeId()).isMandatory()) {
@@ -460,6 +457,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         object.setObjectId(sequenceBean.nextId(getEntityTable()));
         object.setPermissionId(getNewPermissionId(object.getSubjectIds()));
         insertDomainObject(object, insertDate);
+
         for (Attribute attribute : object.getAttributes()) {
             attribute.setObjectId(object.getObjectId());
             attribute.setStartDate(insertDate);

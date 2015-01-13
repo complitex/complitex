@@ -159,7 +159,7 @@ public class KeOrganizationImportService extends AbstractImportService {
             addOrganizationTypes(newObject);
 
             //Readiness to close operating month. Only for servicing organizations.
-            addReadyCloseOperatingMonthFlag(newObject, systemLocaleId);
+            //addReadyCloseOperatingMonthFlag(newObject, systemLocaleId); todo fix save attribute
 
             if (oldObject == null) {
                 organizationStrategy.insert(newObject, beginDate);

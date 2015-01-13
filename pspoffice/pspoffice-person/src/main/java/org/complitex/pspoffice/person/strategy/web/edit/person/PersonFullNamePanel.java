@@ -28,9 +28,9 @@ import java.util.Locale;
  * @author Artem
  */
 class PersonFullNamePanel extends Panel {
-
     @EJB
     private StringLocaleBean stringLocaleBean;
+
     @EJB
     private PersonStrategy personStrategy;
 
