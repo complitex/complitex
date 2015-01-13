@@ -30,46 +30,46 @@
     <select id="selectBuildingPermissionInfoByParent" parameterType="long"
             resultMap="org.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
         SELECT e.`object_id`, e.`permission_id`
-        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByParent"/>
+        <include refid="selectByParent"/>
     </select>
 
     <select id="selectBuildingPermissionInfoByReference" parameterType="long"
             resultMap="org.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
          SELECT DISTINCT e.`object_id`, e.`permission_id`
-         <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByReference"/>
+         <include refid="selectByReference"/>
     </select>
 
     <select id="selectReferenceAddressPermissionInfo" parameterType="long"
             resultMap="org.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
         SELECT DISTINCT e.`object_id`, e.`permission_id`
-        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectReferenceAddress"/>
+        <include refid="selectReferenceAddress"/>
     </select>
 
     <select id="selectParentAddressPermissionInfo" parameterType="long"
             resultMap="org.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
         SELECT DISTINCT e.`object_id`, e.`permission_id`
-        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectParentAddress"/>
+        <include refid="selectParentAddress"/>
     </select>
 
     <!-- disable/enable -->
     <select id="selectBuildingActivityInfoByParent" parameterType="long" resultType="long">
         SELECT e.`object_id`
-        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByParent"/>
+        <include refid="selectByParent"/>
     </select>
 
     <select id="selectBuildingActivityInfoByReference" parameterType="long" resultType="long">
          SELECT e.`object_id`
-        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectByReference"/>
+        <include refid="selectByReference"/>
     </select>
 
     <select id="selectReferenceAddressActivityInfo" parameterType="long" resultType="long">
         SELECT e.`object_id`
-        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectReferenceAddress"/>
+        <include refid="selectReferenceAddress"/>
     </select>
 
     <select id="selectParentAddressActivityInfo" parameterType="long" resultType="long">
         SELECT e.`object_id`
-        <include refid="org.complitex.address.strategy.building_address.BuildingAddress.selectParentAddress"/>
+        <include refid="selectParentAddress"/>
     </select>
 
     <update id="updateBuildingAddressActivity" parameterType="map">
@@ -134,7 +134,7 @@
     </sql>
 
     <select id="selectBuildingAddresses" parameterType="org.complitex.common.entity.DomainObjectFilter"
-            resultMap="domainObjectResultMap" >
+            resultMap="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap" >
         SELECT e.*
         FROM `building_address` e
         <if test="additionalParams.districtId != null">
@@ -146,16 +146,16 @@
 
         WHERE
 
-        <include refid="domainObjectStatusFilter"/>
-        <include refid="domainObjectPermissionFilter"/>
-        <include refid="domainObjectFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlFilter"/>
 
         <if test="additionalParams.districtId != null">
             and ba.`value_id` = e.`object_id` and d.`value_id` = #{additionalParams.districtId}
         </if>
 
         <include refid="orderBy"/>
-        <include refid="domainObjectLimit"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlLimit"/>
     </select>
 
 </mapper>

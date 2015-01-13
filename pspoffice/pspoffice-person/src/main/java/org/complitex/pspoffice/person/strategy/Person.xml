@@ -68,19 +68,19 @@
         SELECT e.* FROM `person` e
             <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
         WHERE
-        <include refid="domainObjectStatusFilter"/>
-        <include refid="domainObjectPermissionFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
         <include refid="org.complitex.pspoffice.person.strategy.Person.filter"/>
         <include refid="org.complitex.pspoffice.person.strategy.Person.orderBy"/>
-        <include refid="domainObjectLimit"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlLimit"/>
     </select>
 
     <select id="count" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT COUNT(1) FROM `person` e
             <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
         WHERE
-        <include refid="domainObjectStatusFilter"/>
-        <include refid="domainObjectPermissionFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
         <include refid="filter"/>
     </select>
 

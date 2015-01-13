@@ -57,31 +57,31 @@
             resultMap="domainObjectResultMap">
         SELECT e.*
         FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
-        <include refid="domainObjectPermissionFilter"/>
+        <include refid="sqlPermissionFilter"/>
     </select>
 
     <select id="selectDomainObjectId" resultType="long" parameterType="map">
         SELECT e.`object_id` FROM `${entityTable}` e WHERE e.`external_id` = #{externalId}
     </select>
 
-    <sql id="domainObjectOrderByAttributeTypeId">
+    <sql id="sqlOrderByAttributeTypeId">
         SELECT sc.`value` FROM `${entityTable}_string_culture` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
         (SELECT orderByAttr.`value_id` FROM `${entityTable}_attribute` orderByAttr WHERE orderByAttr.`object_id` = e.`object_id`
         AND orderByAttr.`status` = 'ACTIVE' AND orderByAttr.`attribute_type_id` = #{orderByAttributeTypeId}
         )
     </sql>
 
-    <sql id="domainObjectOrderBy">
+    <sql id="sqlOrderBy">
         <if test="orderByAttributeTypeId != null">
             ORDER BY
             <choose>
                 <when test="orderByNumber">
                     LPAD(
-                    (<include refid="domainObjectOrderByAttributeTypeId"/>),
+                    (<include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlOrderByAttributeTypeId"/>),
                     15, ' ')
                 </when>
                 <otherwise>
-                    (<include refid="domainObjectOrderByAttributeTypeId"/>)
+                    (<include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlOrderByAttributeTypeId"/>)
                 </otherwise>
             </choose>
 
@@ -96,13 +96,13 @@
         </if>
     </sql>
 
-    <sql id="domainObjectPermissionFilter">
+    <sql id="sqlPermissionFilter">
         <if test="not admin">
             AND (e.`permission_id` IN ${userPermissionString})
         </if>
     </sql>
 
-    <sql id="domainObjectStatusFilter">
+    <sql id="sqlStatusFilter">
         <choose>
             <when test="status == 'ALL'">
                 (e.`status` IN ('ACTIVE', 'INACTIVE'))
@@ -113,7 +113,7 @@
         </choose>
     </sql>
 
-    <sql id="domainObjectFilter">
+    <sql id="sqlFilter">
         <if test="objectId != null">
             AND e.`object_id` = #{objectId}
         </if>
@@ -146,7 +146,7 @@
         </if>
     </sql>
 
-    <sql id="domainObjectLimit">
+    <sql id="sqlLimit">
         <if test="count > 0">
             limit ${first},${count}
         </if>
@@ -156,18 +156,18 @@
             resultMap="domainObjectResultMap" >
         SELECT e.*
         FROM `${entityTable}` e WHERE
-        <include refid="domainObjectStatusFilter"/>
-        <include refid="domainObjectPermissionFilter"/>
-        <include refid="domainObjectFilter"/>
-        <include refid="domainObjectOrderBy"/>
-        <include refid="domainObjectLimit"/>
+        <include refid="sqlStatusFilter"/>
+        <include refid="sqlPermissionFilter"/>
+        <include refid="sqlFilter"/>
+        <include refid="sqlOrderBy"/>
+        <include refid="sqlLimit"/>
     </select>
 
     <select id="selectDomainObjectCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT COUNT(1) FROM `${entityTable}` e WHERE
-        <include refid="domainObjectStatusFilter"/>
-        <include refid="domainObjectPermissionFilter"/>
-        <include refid="domainObjectFilter"/>
+        <include refid="sqlStatusFilter"/>
+        <include refid="sqlPermissionFilter"/>
+        <include refid="sqlFilter"/>
     </select>
 
     <update id="updateDomainObject" parameterType="org.complitex.common.entity.DomainObject">
@@ -221,11 +221,15 @@
         SELECT aa.`end_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{objectId}
     </select>
 
+    <sql id="sqlSelectHistoryObject">
+        SELECT e.*
+        FROM `${table}` e WHERE e.`object_id` = #{id} AND e.`start_date` = (
+        SELECT MAX(e1.`start_date`) FROM `${table}` e1 WHERE e1.`object_id` = #{id} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+    </sql>
+
     <select id="selectHistoryObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="domainObjectResultMap">
-        SELECT e.* FROM `${entityTable}` e WHERE e.`object_id` = #{objectId} AND e.`start_date` = (
-            SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{objectId}
-                AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+        <include refid="sqlSelectHistoryObject"/>
     </select>
 
     <select id="selectChildrenPermissionInfo" parameterType="map" resultMap="permissionInfoResultMap">
@@ -233,7 +237,7 @@
         AND e.`parent_id` = #{parentId} AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent
           WHERE ent.`entity_table` = #{parentEntity})
           ORDER BY e.`object_id`
-        <include refid="domainObjectLimit"/>
+        <include refid="sqlLimit"/>
     </select>
 
     <update id="updatePermissionId" parameterType="map">
@@ -245,7 +249,7 @@
         SELECT e.`object_id` FROM `${entity}` e WHERE e.`parent_id` = #{parentId} AND
         e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity_table` = #{parentEntity})
         ORDER BY e.`object_id`
-        <include refid="domainObjectLimit"/>
+        <include refid="sqlLimit"/>
     </select>
 
     <update id="updateChildrenActivity" parameterType="map">

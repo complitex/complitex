@@ -12,8 +12,8 @@
           e.`permission_id`, e.`external_id`
         FROM `building` e WHERE
 
-        <include refid="domainObjectStatusFilter"/>
-        <include refid="domainObjectPermissionFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
 
         AND (e.`parent_id` = #{additionalParams.buildingAddressId} OR EXISTS
             (SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = e.`object_id` AND ba.`status` = 'ACTIVE'
@@ -24,7 +24,7 @@
             resultMap="buildingResultMap">
         SELECT e.*
         FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
-            <include refid="domainObjectPermissionFilter"/>
+            <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
     </select>
 
     <select id="checkBuildingAddress" parameterType="map" resultType="long">
@@ -73,7 +73,7 @@
 
     <select id="selectHistoryObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="buildingResultMap">
-        <include refid=" org.complitex.common.strategy.DomainObjectStrategy.selectHistoryObject"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlSelectHistoryObject"/>
     </select>
 
     <!-- disable/enable functionality -->

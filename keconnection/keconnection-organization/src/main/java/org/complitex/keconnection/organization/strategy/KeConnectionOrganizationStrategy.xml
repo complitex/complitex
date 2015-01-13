@@ -7,7 +7,7 @@
            <result column="parent_short_name" property="parentShortName"/>
     </resultMap>
     
-    <sql id="join">
+    <sql id="sqlJoin">
         LEFT JOIN `organization_attribute` pa ON (pa.`object_id` = e.`object_id` 
             AND pa.`attribute_type_id` = ${additionalParams.parentAT} AND pa.`status` = 'ACTIVE')
         LEFT JOIN `organization` p ON (p.`object_id` = pa.`value_id` AND p.`status` IN ('ACTIVE', 'INACTIVE'))
@@ -18,8 +18,8 @@
             AND pn_sys.`locale_id` = (SELECT `id` FROM `locales` WHERE `system` = 1))
     </sql>
     
-    <sql id="filter">
-        <include refid="org.complitex.organization.strategy.Organization.filter"/>
+    <sql id="sqlFilter">
+        <include refid="org.complitex.organization.strategy.OrganizationStrategy.sqlFilter"/>
         <if test="additionalParams['parentShortName'] != null">
             AND (pn.`value` LIKE CONCAT('%', #{additionalParams.parentShortName}, '%') OR 
                  pn_sys.`value` LIKE CONCAT('%', #{additionalParams.parentShortName}, '%'))
@@ -28,21 +28,21 @@
     
     <select id="selectOrganizations" resultMap="organizationResultMap" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT e.*, IFNULL(pn.`value`, pn_sys.`value`) `parent_short_name` 
-        FROM `organization` e <include refid="join"/>
+        FROM `organization` e <include refid="sqlJoin"/>
         WHERE
-        <include refid="domainObjectStatusFilter"/>
-        <include refid="domainObjectPermissionFilter"/>
-        <include refid="filter"/>
-        <include refid="domainObjectOrderBy"/>
-        <include refid="domainObjectLimit"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
+        <include refid="sqlFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlOrderBy"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlLimit"/>
     </select>
     
     <select id="selectOrganizationCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
-        SELECT COUNT(1) FROM `organization` e <include refid="join"/>
+        SELECT COUNT(1) FROM `organization` e <include refid="sqlJoin"/>
         WHERE
-        <include refid="domainObjectStatusFilter"/>
-        <include refid="domainObjectPermissionFilter"/>
-        <include refid="filter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
+        <include refid="sqlFilter"/>
     </select>
     
     <select id="findOperatingMonthDate" parameterType="long" resultType="date">
