@@ -125,7 +125,7 @@ public class StreetStrategy extends TemplateStrategy {
         Long streetTypeId = getStreetType(domainObject);
 
         if (streetTypeId != null) {
-            DomainObject streetType = streetTypeStrategy.findById(streetTypeId, true);
+            DomainObject streetType = streetTypeStrategy.getDomainObject(streetTypeId, true);
 
             return streetTypeStrategy.getShortName(streetType, locale);
         }
@@ -279,7 +279,7 @@ public class StreetStrategy extends TemplateStrategy {
     }
 
     public String getName(Long streetId) {
-        DomainObject streetObject = findById(streetId, true);
+        DomainObject streetObject = getDomainObject(streetId, true);
 
         return streetObject != null ? getName(streetObject) : null;
     }

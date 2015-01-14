@@ -35,7 +35,7 @@ public class KeConnectionOrganizationPermissionPanel extends KeConnectionDomainO
     protected List<DomainObject> initializeSelectedSubjects(Set<Long> selectedSubjectIds) {
         final List<DomainObject> superSelectedSubjects = super.initializeSelectedSubjects(selectedSubjectIds);
 
-        DomainObject itself = organizationStrategy.findById(organizationId, true);
+        DomainObject itself = organizationStrategy.getDomainObject(organizationId, true);
         if (itself != null && organizationStrategy.isUserOrganization(itself)) {
             if (organizationId != null && organizationId > 0) {
                 List<DomainObject> selectedSubjects = new ArrayList<>();

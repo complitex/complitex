@@ -226,12 +226,12 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
     }
 
     @Override
-    public Organization findById(Long id, boolean runAsAdmin) {
-        return findById(null, id, runAsAdmin);
+    public Organization getDomainObject(Long id, boolean runAsAdmin) {
+        return getDomainObject(null, id, runAsAdmin);
     }
 
     @Override
-    public Organization findById(String dataSource, Long id, boolean runAsAdmin) {
+    public Organization getDomainObject(String dataSource, Long id, boolean runAsAdmin) {
         /*if (log.isDebugEnabled()) {
             log.debug("Session manager: id={}",
                     getSqlSessionManager().getConfiguration().getEnvironment().getId());
@@ -242,7 +242,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
                 //
             }
         }*/
-        DomainObject object = super.findById(dataSource, id, runAsAdmin);
+        DomainObject object = super.getDomainObject(dataSource, id, runAsAdmin);
         if (object == null) {
             return null;
         }

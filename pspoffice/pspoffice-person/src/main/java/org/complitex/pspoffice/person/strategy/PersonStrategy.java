@@ -229,14 +229,14 @@ public class PersonStrategy extends TemplateStrategy {
 
 
     @Override
-    public Person findById(Long id, boolean runAsAdmin) {
+    public Person getDomainObject(Long id, boolean runAsAdmin) {
         return findById(id, runAsAdmin, true, true, true, true);
     }
 
 
     public Person findById(long id, boolean runAsAdmin, boolean loadName, boolean loadChildren,
             boolean loadDocument, boolean loadMilitaryServiceRelation) {
-        DomainObject personObject = super.findById(id, runAsAdmin);
+        DomainObject personObject = super.getDomainObject(id, runAsAdmin);
         if (personObject == null) {
             return null;
         }
@@ -306,7 +306,7 @@ public class PersonStrategy extends TemplateStrategy {
         for (Attribute previousDocumentAttribute : previousDocumentAttributes) {
             Document previousDocument = documentStrategy.findById(previousDocumentAttribute.getValueId());
             long documentTypeId = previousDocument.getDocumentTypeId();
-            DomainObject documentType = documentTypeStrategy.findById(documentTypeId, true);
+            DomainObject documentType = documentTypeStrategy.getDomainObject(documentTypeId, true);
             previousDocument.setDocumentType(documentType);
             previousDocuments.add(previousDocument);
         }
@@ -339,7 +339,7 @@ public class PersonStrategy extends TemplateStrategy {
             if (militaryServiceRelationAttribute != null) {
                 final Long militaryServiceRelationId = militaryServiceRelationAttribute.getValueId();
                 if (militaryServiceRelationId != null) {
-                    person.setMilitaryServiceRelation(militaryServiceRelationStrategy.findById(militaryServiceRelationId, true));
+                    person.setMilitaryServiceRelation(militaryServiceRelationStrategy.getDomainObject(militaryServiceRelationId, true));
                 }
             }
         }
@@ -604,7 +604,7 @@ public class PersonStrategy extends TemplateStrategy {
         Map<String, Long> params = of("childId", childId, "personChildrenAT", CHILDREN);
         List<Long> parentIds = sqlSession().selectList(PERSON_NS + ".findParents", params);
         for (long parentId : parentIds) {
-            Person oldParent = findById(parentId, true);
+            Person oldParent = getDomainObject(parentId, true);
             Person newParent = CloneUtil.cloneObject(oldParent);
             List<Attribute> children = newParent.getAttributes(CHILDREN);
             newParent.removeAttribute(CHILDREN);

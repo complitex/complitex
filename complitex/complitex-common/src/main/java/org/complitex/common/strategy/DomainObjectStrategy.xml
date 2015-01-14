@@ -314,7 +314,7 @@
 
     <select id="selectAttributes" parameterType="map" resultMap="attributeResultMap">
         SELECT a.* FROM `${entityTable}_attribute` a
-          WHERE  a.`object_id` = #{id} AND a.`status` = 'ACTIVE'
+          WHERE  a.`object_id` = #{objectId} AND a.`status` = 'ACTIVE'
           ORDER BY a.`attribute_type_id`, a.`attribute_id`
     </select>
 
@@ -344,7 +344,7 @@
           values (#{id}, #{localeId}, #{value})
     </insert>
 
-    <select id="selectStringCulture" parameterType="map" resultMap="stringCultureResultMap">
+    <select id="selectStringCultures" parameterType="map" resultMap="stringCultureResultMap">
         SELECT sc.* FROM `${entityTable}_string_culture` sc WHERE sc.`id` = #{id}
     </select>
 

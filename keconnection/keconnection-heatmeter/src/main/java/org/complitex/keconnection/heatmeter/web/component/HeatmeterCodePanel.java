@@ -65,15 +65,15 @@ public class HeatmeterCodePanel extends Panel {
                 final SearchComponentState searchComponentState = new SearchComponentState();
 
                 if (heatmeterConnection.getBuildingId() != null) {
-                    Building building = buildingStrategy.findById(heatmeterConnection.getBuildingId(), true);
+                    Building building = buildingStrategy.getDomainObject(heatmeterConnection.getBuildingId(), true);
                     searchComponentState.put("building", building);
 
                     if (building != null && building.getPrimaryStreetId() != null) {
-                        DomainObject street = streetStrategy.findById(building.getPrimaryStreetId(), true);
+                        DomainObject street = streetStrategy.getDomainObject(building.getPrimaryStreetId(), true);
                         searchComponentState.put("street", street);
 
                         if (street != null && street.getParentId() != null) {
-                            DomainObject city = cityStrategy.findById(street.getParentId(), true);
+                            DomainObject city = cityStrategy.getDomainObject(street.getParentId(), true);
                             searchComponentState.put("city", city);
                         }
                     }
@@ -91,7 +91,7 @@ public class HeatmeterCodePanel extends Panel {
                 };
 
                 if (heatmeterConnection.getOrganizationId() != null) {
-                    DomainObject organization = organizationStrategy.findById(heatmeterConnection.getOrganizationId(), true);
+                    DomainObject organization = organizationStrategy.getDomainObject(heatmeterConnection.getOrganizationId(), true);
 
                     if (organization != null){
                         organizationModel.setObject(organization);
@@ -110,11 +110,11 @@ public class HeatmeterCodePanel extends Panel {
                                 DomainObject b = searchComponentState.get("building");
 
                                 if (b != null) {
-                                    Building building = buildingStrategy.findById(b.getObjectId(), true);
+                                    Building building = buildingStrategy.getDomainObject(b.getObjectId(), true);
 
                                     if (building != null && building.getBuildingCodes() != null){
                                         for (BuildingCode buildingCode : building.getBuildingCodes()){
-                                            list.add(organizationStrategy.findById(buildingCode.getOrganizationId(), true));
+                                            list.add(organizationStrategy.getDomainObject(buildingCode.getOrganizationId(), true));
                                         }
                                     }
                                 }

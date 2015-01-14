@@ -21,7 +21,7 @@ public class OrganizationIdPicker extends Panel{
         add(new OrganizationPicker("picker", new IModel<DomainObject>() {
             @Override
             public DomainObject getObject() {
-                return organizationStrategy.findById(model.getObject(), true);
+                return organizationStrategy.getDomainObject(model.getObject(), true);
             }
 
             @Override

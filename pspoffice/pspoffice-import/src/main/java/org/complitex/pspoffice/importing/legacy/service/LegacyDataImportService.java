@@ -1025,12 +1025,12 @@ public class LegacyDataImportService {
                     IStrategy strategy = strategy();
                     if (!e.isDaughterResolved()) {
                         sb.append(strategy.displayDomainObject(
-                                strategy.findById(OwnerRelationshipStrategy.DAUGHTER, true), stringLocaleBean.getSystemLocale())).
+                                strategy.getDomainObject(OwnerRelationshipStrategy.DAUGHTER, true), stringLocaleBean.getSystemLocale())).
                                 append(", ");
                     }
                     if (!e.isSonResolved()) {
                         sb.append(strategy.displayDomainObject(
-                                strategy.findById(OwnerRelationshipStrategy.SON, true), stringLocaleBean.getSystemLocale())).
+                                strategy.getDomainObject(OwnerRelationshipStrategy.SON, true), stringLocaleBean.getSystemLocale())).
                                 append(", ");
                     }
                     sb.delete(sb.length() - 2, sb.length());
@@ -1072,7 +1072,7 @@ public class LegacyDataImportService {
                     IStrategy strategy = strategy();
                     final String error = getString("reserved_registration_type_not_resolved",
                             strategy.displayDomainObject(
-                            strategy.findById(RegistrationTypeStrategy.PERMANENT, true),
+                            strategy.getDomainObject(RegistrationTypeStrategy.PERMANENT, true),
                             stringLocaleBean.getSystemLocale()),
                             jekIds.toString());
 
@@ -1111,13 +1111,13 @@ public class LegacyDataImportService {
                     IStrategy strategy = strategy();
                     if (!e.isPassportResolved()) {
                         sb.append(strategy.displayDomainObject(
-                                strategy.findById(DocumentTypeStrategy.PASSPORT, true),
+                                strategy.getDomainObject(DocumentTypeStrategy.PASSPORT, true),
                                 stringLocaleBean.getSystemLocale())).
                                 append(", ");
                     }
                     if (!e.isBirthCertificateResolved()) {
                         sb.append(strategy.displayDomainObject(
-                                strategy.findById(DocumentTypeStrategy.BIRTH_CERTIFICATE, true),
+                                strategy.getDomainObject(DocumentTypeStrategy.BIRTH_CERTIFICATE, true),
                                 stringLocaleBean.getSystemLocale())).
                                 append(", ");
                     }

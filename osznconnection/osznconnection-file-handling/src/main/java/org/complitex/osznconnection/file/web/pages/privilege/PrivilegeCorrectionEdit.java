@@ -11,13 +11,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
 import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
+import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
 import org.complitex.osznconnection.file.entity.PrivilegeCorrection;
 import org.complitex.osznconnection.file.service.PrivilegeCorrectionBean;
 import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
@@ -107,7 +107,7 @@ public final class PrivilegeCorrectionEdit extends FormTemplatePage {
             }
 
             private DomainObject findPrivilege(long privilegeId) {
-                return privilegeStrategy.findById(privilegeId, true);
+                return privilegeStrategy.getDomainObject(privilegeId, true);
             }
 
             @Override

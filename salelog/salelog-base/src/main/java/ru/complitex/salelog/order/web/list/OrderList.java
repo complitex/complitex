@@ -128,7 +128,7 @@ public class OrderList extends TemplatePage {
             @Override
             protected void populateItem(Item<Order> item) {
                 final Order order = item.getModelObject();
-                DomainObject region = order.getRegionId() != null? regionStrategy.findById(order.getRegionId(), false) : null;
+                DomainObject region = order.getRegionId() != null? regionStrategy.getDomainObject(order.getRegionId(), false) : null;
 
                 item.add(new Label("id", order.getId().toString()));
                 item.add(new Label("createDate", order.getCreateDate() != null ? CREATE_DATE_FORMAT.format(order.getCreateDate()) : ""));
@@ -255,7 +255,7 @@ public class OrderList extends TemplatePage {
                     @Override
                     public DomainObject getObject() {
                         Order filterObject = filterModel.getObject();
-                        return filterObject.getRegionId() != null ? regionStrategy.findById(filterObject.getRegionId(), false) : null;
+                        return filterObject.getRegionId() != null ? regionStrategy.getDomainObject(filterObject.getRegionId(), false) : null;
                     }
 
                     @Override

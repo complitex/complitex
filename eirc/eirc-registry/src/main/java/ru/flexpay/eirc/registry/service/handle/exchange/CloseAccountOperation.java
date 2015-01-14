@@ -55,7 +55,7 @@ public class CloseAccountOperation extends GeneralAccountOperation {
         List<SaldoOut> saldoOuts = saldoOutBean.getFinancialAttributes(FilterWrapper.of(new SaldoOut(serviceProviderAccount)), true);
         // Сальдо на счету должно быть нулевым, если нет, то устанавливаем атрибут "На закрытие" с идом контейнера
         if (saldoOuts.size() > 0 && saldoOuts.get(0).getAmount() != null && saldoOuts.get(0).getAmount().doubleValue() != 0.) {
-            DomainObject newObject = serviceProviderAccountStrategy.findById(serviceProviderAccount.getId(), true);
+            DomainObject newObject = serviceProviderAccountStrategy.getDomainObject(serviceProviderAccount.getId(), true);
             DomainObject oldObject = CloneUtil.cloneObject(newObject);
 
             ServiceProviderAccountAttribute newObjectAttribute = (ServiceProviderAccountAttribute)newObject.getAttribute(ServiceProviderAccountStrategy.TO_CLOSE);

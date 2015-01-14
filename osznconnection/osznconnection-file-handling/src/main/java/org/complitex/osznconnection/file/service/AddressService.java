@@ -185,7 +185,7 @@ public class AddressService extends AbstractBean {
                     Long streetObjectId = streetIds.get(0);
                     request.setStreetObjectId(streetObjectId);
 
-                    DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
+                    DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
                     request.setStreetTypeObjectId(streetStrategy.getStreetType(streetObject));
 
                     //перейти к обработке дома
@@ -199,7 +199,7 @@ public class AddressService extends AbstractBean {
                         request.setStreetObjectId(streetObjectId);
 
 
-                        DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
+                        DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
                         request.setStreetTypeObjectId(streetStrategy.getStreetType(streetObject));
 
                         //перейти к обработке дома
@@ -212,7 +212,7 @@ public class AddressService extends AbstractBean {
                             Long streetObjectId = streetIds.get(0);
                             request.setStreetObjectId(streetObjectId);
 
-                            DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
+                            DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
                             request.setStreetTypeObjectId(streetStrategy.getStreetType(streetObject));
 
                             //проставить дом для payment и выйти
@@ -248,7 +248,7 @@ public class AddressService extends AbstractBean {
                 Long streetId = streetIds.get(0);
                 request.setStreetObjectId(streetId);
 
-                DomainObject streetObject = streetStrategy.findById(streetId, true);
+                DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
                 request.setStreetTypeObjectId(streetStrategy.getStreetType(streetObject));
 
                 // перейти к обработке дома
@@ -260,7 +260,7 @@ public class AddressService extends AbstractBean {
                     Long streetId = streetIds.get(0);
                     request.setStreetObjectId(streetId);
 
-                    DomainObject streetObject = streetStrategy.findById(streetId, true);
+                    DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
                     request.setStreetTypeObjectId(streetStrategy.getStreetType(streetObject));
                     // перейти к обработке дома
                 } else {
@@ -346,7 +346,7 @@ public class AddressService extends AbstractBean {
                 null, calcId, userOrganizationId);
 
         if (cityCorrections.isEmpty()){
-            DomainObject city = cityStrategy.findById(request.getCityObjectId(), true);
+            DomainObject city = cityStrategy.getDomainObject(request.getCityObjectId(), true);
 
             if (city != null){
                 request.setOutgoingCity(cityStrategy.getName(city, locale));
@@ -368,10 +368,10 @@ public class AddressService extends AbstractBean {
                 null,null, null, calcId, userOrganizationId);
 
         if (districtCorrections.isEmpty()){
-            DomainObject organization = organizationStrategy.findById(request.getOrganizationId(), true);
+            DomainObject organization = organizationStrategy.getDomainObject(request.getOrganizationId(), true);
 
             Long districtId = organization.getAttribute(IOrganizationStrategy.DISTRICT).getValueId();
-            DomainObject district = districtStrategy.findById(districtId, true);
+            DomainObject district = districtStrategy.getDomainObject(districtId, true);
 
             if (district != null){
                 request.setOutgoingDistrict(districtStrategy.displayDomainObject(district, locale));
@@ -395,7 +395,7 @@ public class AddressService extends AbstractBean {
                     request.getStreetTypeObjectId(), null, calcId, userOrganizationId);
 
             if (streetTypeCorrections.isEmpty()){
-                DomainObject streetType = streetTypeStrategy.findById(request.getStreetTypeObjectId(), true);
+                DomainObject streetType = streetTypeStrategy.getDomainObject(request.getStreetTypeObjectId(), true);
 
                 if (streetType != null){
                     request.setOutgoingStreetType(streetTypeStrategy.getShortName(streetType, locale));
@@ -418,7 +418,7 @@ public class AddressService extends AbstractBean {
                 request.getStreetObjectId(), null, null, null, calcId, userOrganizationId);
 
         if (streetCorrections.isEmpty()){
-            DomainObject street = streetStrategy.findById(request.getStreetObjectId(), true);
+            DomainObject street = streetStrategy.getDomainObject(request.getStreetObjectId(), true);
 
             if (street != null){
                 request.setOutgoingStreet(streetStrategy.getName(street, locale));
@@ -447,7 +447,7 @@ public class AddressService extends AbstractBean {
                 request.getBuildingObjectId(), null, null, calculationContext.getCalculationCenterId(), null);
 
         if (buildingCorrections.isEmpty()){
-            Building building = buildingStrategy.findById(request.getBuildingObjectId(), true);
+            Building building = buildingStrategy.getDomainObject(request.getBuildingObjectId(), true);
 
             if (building != null){
                 request.setOutgoingBuildingNumber(building.getAccompaniedNumber(locale));
@@ -625,7 +625,7 @@ public class AddressService extends AbstractBean {
     }
 
     public String resolveOutgoingDistrict(Long organizationId, Long userOrganizationId) {
-        DomainObject organization = organizationStrategy.findById(organizationId, true);
+        DomainObject organization = organizationStrategy.getDomainObject(organizationId, true);
         Long districtId = organization.getAttribute(IOrganizationStrategy.DISTRICT).getValueId();
 
         String districtName = districtStrategy.displayDomainObject(districtId, stringLocaleBean.getSystemLocale());

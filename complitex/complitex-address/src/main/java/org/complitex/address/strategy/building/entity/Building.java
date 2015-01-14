@@ -6,8 +6,6 @@ import com.google.common.collect.Lists;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.strategy.StringCultureBean;
-import org.complitex.common.util.EjbBeanLocator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,15 +74,16 @@ public class Building extends DomainObject {
 
     public Long getPrimaryStreetId() {
         Long parentEntityId = primaryAddress.getParentEntityId();
+
         return parentEntityId.equals(300L) ? primaryAddress.getParentId() : null;
     }
 
     public String getAccompaniedNumber(Locale locale) {
-        return getStringValue(NUMBER, locale);
+        return accompaniedAddress.getStringValue(NUMBER, locale);
     }
 
     public String getAccompaniedCorp(Locale locale) {
-        return getStringValue(CORP, locale);
+        return accompaniedAddress.getStringValue(CORP, locale);
     }
 
     public String getAccompaniedStructure(Locale locale) {
@@ -93,6 +92,7 @@ public class Building extends DomainObject {
 
     public Long getAccompaniedStreetId() {
         long parentEntityId = accompaniedAddress.getParentEntityId();
+
         return parentEntityId == 300 ? accompaniedAddress.getParentId() : null;
     }
 
@@ -135,9 +135,5 @@ public class Building extends DomainObject {
         buildingAddressAttr.setValueTypeId(BuildingStrategy.BUILDING_ADDRESS);
         buildingAddressAttr.setValueId(valueId);
         addAttribute(buildingAddressAttr);
-    }
-
-    private StringCultureBean getStringBean() {
-        return EjbBeanLocator.getBean(StringCultureBean.class);
     }
 }

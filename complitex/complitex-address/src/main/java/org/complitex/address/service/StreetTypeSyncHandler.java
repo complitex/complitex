@@ -76,7 +76,7 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
 
     @Override
     public void update(AddressSync sync, Locale locale) {
-        DomainObject oldObject = streetTypeStrategy.findById(sync.getObjectId(), true);
+        DomainObject oldObject = streetTypeStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
         //name
@@ -91,7 +91,7 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
 
     @Override
     public void archive(AddressSync sync) {
-        streetTypeStrategy.archive(streetTypeStrategy.findById(sync.getObjectId(), true), sync.getDate());
+        streetTypeStrategy.archive(streetTypeStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
         addressSyncBean.delete(sync.getId());
     }
 }

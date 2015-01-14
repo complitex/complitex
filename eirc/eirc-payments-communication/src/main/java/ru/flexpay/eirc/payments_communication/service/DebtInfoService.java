@@ -110,7 +110,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
             return buildResponseContent(ResponseStatus.INTERNAL_ERROR);
         }
 
-        DomainObject eircModule = moduleInstanceStrategy.findById(eircModuleId.longValue(), true);
+        DomainObject eircModule = moduleInstanceStrategy.getDomainObject(eircModuleId.longValue(), true);
         if (eircModule == null) {
             logger.error("Inner error: EIRC module instance not found by id '{}'", eircModuleId);
             return buildResponseContent(ResponseStatus.INTERNAL_ERROR);
@@ -160,7 +160,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
 
                     @Override
                     protected Address getAddress(Long id) {
-                        DomainObject domainObject = buildingAddressStrategy.findById(id, true);
+                        DomainObject domainObject = buildingAddressStrategy.getDomainObject(id, true);
                         if (domainObject == null) {
                             return null;
                         }
@@ -176,7 +176,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
 
                     @Override
                     protected Address getAddress(Long id) {
-                        DomainObject domainObject = apartmentStrategy.findById(id, true);
+                        DomainObject domainObject = apartmentStrategy.getDomainObject(id, true);
                         if (domainObject == null) {
                             return null;
                         }
@@ -192,7 +192,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
 
                     @Override
                     protected Address getAddress(Long id) {
-                        DomainObject domainObject = roomStrategy.findById(id, true);
+                        DomainObject domainObject = roomStrategy.getDomainObject(id, true);
                         if (domainObject == null) {
                             return null;
                         }
@@ -303,14 +303,14 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
     }
 
     private Long getOrganizationId(Long moduleId) {
-        DomainObject module = moduleInstanceStrategy.findById(moduleId, true);
+        DomainObject module = moduleInstanceStrategy.getDomainObject(moduleId, true);
         Attribute attribute = module.getAttribute(ModuleInstanceStrategy.ORGANIZATION);
         if (attribute == null) {
             logger.error("Inner error: Module '{}' did not content organization", moduleId);
             return null;
         }
         Long organizationId = Long.parseLong(attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue());
-        Organization organization = organizationStrategy.findById(organizationId, true);
+        Organization organization = organizationStrategy.getDomainObject(organizationId, true);
         if (organization == null) {
             logger.error("Inner error: organization not found by id {}", organizationId);
             return null;

@@ -49,9 +49,9 @@ public class StreetTypeCorrectionList extends AbstractCorrectionList<StreetTypeC
 
         if (streetTypeCorrections != null && !streetTypeCorrections.isEmpty()) {
             for (Correction streetTypeCorrection : streetTypeCorrections) {
-                DomainObject streetTypeObject = streetTypeStrategy.findById(streetTypeCorrection.getObjectId(), false);
+                DomainObject streetTypeObject = streetTypeStrategy.getDomainObject(streetTypeCorrection.getObjectId(), false);
                 if (streetTypeObject == null) {
-                    streetTypeObject = streetTypeStrategy.findById(streetTypeCorrection.getObjectId(), true);
+                    streetTypeObject = streetTypeStrategy.getDomainObject(streetTypeCorrection.getObjectId(), true);
                     streetTypeCorrection.setEditable(false);
                 }
                 streetTypeCorrection.setDisplayObject(streetTypeStrategy.displayFullName(streetTypeObject, locale));

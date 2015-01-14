@@ -49,7 +49,7 @@ public class CityTypeStrategy extends TemplateStrategy {
     }
 
     public String getShortName(Long objectId){
-        DomainObject object = findById(objectId, true);
+        DomainObject object = getDomainObject(objectId, true);
 
         if (object != null){
             return object.getStringValue(SHORT_NAME);

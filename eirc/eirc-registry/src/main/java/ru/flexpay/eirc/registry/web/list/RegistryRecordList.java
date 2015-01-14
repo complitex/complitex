@@ -198,7 +198,7 @@ public class RegistryRecordList extends TemplatePage {
             log().error("Can not get {} from config: {}", EircConfig.MODULE_ID, e.toString());
         }
 
-        DomainObject module = moduleInstanceStrategy.findById(moduleId, true);
+        DomainObject module = moduleInstanceStrategy.getDomainObject(moduleId, true);
 
         final Integer userOrganizationId = AttributeUtil.getIntegerValue(module, ModuleInstanceStrategy.ORGANIZATION);
 

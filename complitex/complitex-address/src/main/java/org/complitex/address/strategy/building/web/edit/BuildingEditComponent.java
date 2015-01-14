@@ -25,8 +25,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.domain.DomainObjectAccessUtil;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.DomainObjectInputPanel;
@@ -35,6 +33,8 @@ import org.complitex.common.web.component.list.AjaxRemovableListView;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.search.CollapsibleInputSearchComponent;
 import org.complitex.common.web.component.search.SearchComponentState;
+import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.domain.DomainObjectAccessUtil;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 
 import javax.ejb.EJB;
@@ -119,7 +119,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
         if (districtAttribute != null) {
             final Long districtId = districtAttribute.getValueId();
             if (districtId != null) {
-                DomainObject district = districtStrategy.findById(districtId, true);
+                DomainObject district = districtStrategy.getDomainObject(districtId, true);
                 districtSearchComponentState.put("district", district);
             }
         }

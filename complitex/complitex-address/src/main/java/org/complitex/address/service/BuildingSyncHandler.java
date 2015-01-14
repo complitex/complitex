@@ -61,7 +61,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public boolean isEqualNames(AddressSync sync, DomainObject object) {
-        DomainObject streetObject = streetStrategy.findById(object.getParentId(), true);
+        DomainObject streetObject = streetStrategy.getDomainObject(object.getParentId(), true);
 
         return sync.getName().equals(object.getStringValue(NUMBER))
                 && Objects.equals(sync.getAdditionalName(), object.getStringValue(CORP))
@@ -73,7 +73,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
         Long objectId = streetStrategy.getObjectId(sync.getAdditionalExternalId());
 
         if (objectId != null){
-            DomainObject streetObject = streetStrategy.findById(objectId, true);
+            DomainObject streetObject = streetStrategy.getDomainObject(objectId, true);
 
             if (streetObject != null){
                 return streetObject.getObjectId();
@@ -107,7 +107,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public void update(AddressSync sync, Locale locale) {
-        DomainObject oldObject = buildingAddressStrategy.findById(sync.getObjectId(), true);
+        DomainObject oldObject = buildingAddressStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
         //building number
@@ -124,7 +124,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public void archive(AddressSync sync) {
-        buildingStrategy.archive(buildingStrategy.findById(sync.getObjectId(), true), sync.getDate());
+        buildingStrategy.archive(buildingStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
         addressSyncBean.delete(sync.getId());
     }
 }

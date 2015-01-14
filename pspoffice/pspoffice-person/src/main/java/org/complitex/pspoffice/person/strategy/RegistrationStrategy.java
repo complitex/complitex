@@ -88,14 +88,14 @@ public class RegistrationStrategy extends DomainObjectStrategy {
 
 
     @Override
-    public Registration findById(Long id, boolean runAsAdmin) {
+    public Registration getDomainObject(Long id, boolean runAsAdmin) {
         return findById(id, runAsAdmin, true, true, true);
     }
 
 
     public Registration findById(long id, boolean runAsAdmin, boolean loadPerson, boolean loadOwnerRelationship,
             boolean loadRegistrationType) {
-        DomainObject registrationObject = super.findById(id, runAsAdmin);
+        DomainObject registrationObject = super.getDomainObject(id, runAsAdmin);
         if (registrationObject == null) {
             return null;
         }
@@ -125,7 +125,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
         if (ownerRelationshipAttribute != null) {
             Long ownerRelationshipId = ownerRelationshipAttribute.getValueId();
             if (ownerRelationshipId != null) {
-                DomainObject ownerRelationship = ownerRelationshipStrategy.findById(ownerRelationshipId, true);
+                DomainObject ownerRelationship = ownerRelationshipStrategy.getDomainObject(ownerRelationshipId, true);
                 registration.setOwnerRelationship(ownerRelationship);
             }
         }
@@ -134,7 +134,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
 
     private void loadRegistrationType(Registration registration) {
         long registrationTypeId = registration.getAttribute(REGISTRATION_TYPE).getValueId();
-        DomainObject registrationType = registrationTypeStrategy.findById(registrationTypeId, true);
+        DomainObject registrationType = registrationTypeStrategy.getDomainObject(registrationTypeId, true);
         registration.setRegistrationType(registrationType);
     }
 

@@ -455,7 +455,7 @@ public class RegistryParser implements Serializable {
     }
 
     private boolean validatePaymentCollector(Registry registry, LocLogger processLog) {
-        Organization paymentCollector = organizationStrategy.findById(registry.getSenderOrganizationId(), false);
+        Organization paymentCollector = organizationStrategy.getDomainObject(registry.getSenderOrganizationId(), false);
         if (registry.getType().isPayments() && !paymentCollector.isPaymentCollector()) {
             processLog.error(Parsing.ORGANIZATION_NOT_PAYMENT_COLLECTOR, paymentCollector.getObjectId(), registry.getRegistryNumber());
             return false;
@@ -468,7 +468,7 @@ public class RegistryParser implements Serializable {
 
         Long providerId = registry.getType().isPayments() ? registry.getRecipientOrganizationId() : registry.getSenderOrganizationId();
 
-        return organizationStrategy.findById(providerId, false);
+        return organizationStrategy.getDomainObject(providerId, false);
     }
 
     private Organization getSender(Registry registry, Logger processLog) {
@@ -476,7 +476,7 @@ public class RegistryParser implements Serializable {
         processLog.debug("Fetching sender via code={}", registry.getSenderOrganizationId());
         Organization sender = findOrgByRegistryCorrections(registry, registry.getSenderOrganizationId(), processLog);
         if (sender == null) {
-            sender = organizationStrategy.findById(registry.getSenderOrganizationId(), false);
+            sender = organizationStrategy.getDomainObject(registry.getSenderOrganizationId(), false);
         }
         return sender;
     }
@@ -487,7 +487,7 @@ public class RegistryParser implements Serializable {
 
         try {
             Long moduleId = configBean.getInteger(EircConfig.MODULE_ID, true).longValue();
-            DomainObject module = moduleInstanceStrategy.findById(moduleId, true);
+            DomainObject module = moduleInstanceStrategy.getDomainObject(moduleId, true);
             eircOrganizationId = AttributeUtil.getIntegerValue(module, ModuleInstanceStrategy.ORGANIZATION);
         } catch (Exception e) {
             //
@@ -501,7 +501,7 @@ public class RegistryParser implements Serializable {
         if (registry.getRecipientOrganizationId() == null || registry.getRecipientOrganizationId() == 0) {
             processLog.debug("Recipient is EIRC, code=0");
             configBean.getConfigs();
-            return organizationStrategy.findById(eircOrganizationId.longValue(), false);
+            return organizationStrategy.getDomainObject(eircOrganizationId.longValue(), false);
         }
 
         if (!registry.getType().isPayments() && !registry.getRecipientOrganizationId().equals(eircOrganizationId.longValue())) {
@@ -512,7 +512,7 @@ public class RegistryParser implements Serializable {
         processLog.debug("Fetching recipient via code={}", registry.getRecipientOrganizationId());
         Organization recipient = findOrgByRegistryCorrections(registry, registry.getRecipientOrganizationId(), processLog);
         if (recipient == null) {
-            recipient = organizationStrategy.findById(registry.getRecipientOrganizationId(), false);
+            recipient = organizationStrategy.getDomainObject(registry.getRecipientOrganizationId(), false);
         }
         return recipient;
     }

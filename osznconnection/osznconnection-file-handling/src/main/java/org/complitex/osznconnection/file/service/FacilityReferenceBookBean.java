@@ -264,9 +264,9 @@ public class FacilityReferenceBookBean extends AbstractBean {
 
                 addressCorrectionBean.save(streetCorrection);
             } else {
-                final DomainObject internalCity = cityStrategy.findById(cityId, true);
+                final DomainObject internalCity = cityStrategy.getDomainObject(cityId, true);
                 final String internalCityName = cityStrategy.displayDomainObject(internalCity, locale);
-                final DomainObject internalStreetType = streetTypeStrategy.findById(streetTypeId, true);
+                final DomainObject internalStreetType = streetTypeStrategy.getDomainObject(streetTypeId, true);
                 final String internalStreetTypeName = streetTypeStrategy.displayDomainObject(internalStreetType, locale);
 
                 if (streetIds.size() > 1) {

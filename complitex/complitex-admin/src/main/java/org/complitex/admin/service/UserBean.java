@@ -49,7 +49,7 @@ public class UserBean extends AbstractBean {
         User user = (User) sqlSession().selectOne(STATEMENT_PREFIX + ".selectUser", id);
 
         if (user.getUserInfoObjectId() != null) {
-            user.setUserInfo(userInfoStrategy.findById(user.getUserInfoObjectId(), false));
+            user.setUserInfo(userInfoStrategy.getDomainObject(user.getUserInfoObjectId(), false));
         } else if (createUserInfo) {
             user.setUserInfo(userInfoStrategy.newInstance());
         }
@@ -195,7 +195,7 @@ public class UserBean extends AbstractBean {
             //сохранение информации о пользователе
             if (user.getUserInfoObjectId() != null) {
                 DomainObject userInfo = user.getUserInfo();
-                userInfoStrategy.update(userInfoStrategy.findById(userInfo.getObjectId(), false), userInfo, DateUtil.getCurrentDate());
+                userInfoStrategy.update(userInfoStrategy.getDomainObject(userInfo.getObjectId(), false), userInfo, DateUtil.getCurrentDate());
             } else {
                 userInfoStrategy.insert(user.getUserInfo(), DateUtil.getCurrentDate());
                 user.setUserInfoObjectId(user.getUserInfo().getObjectId());
@@ -209,7 +209,7 @@ public class UserBean extends AbstractBean {
         List<User> users = sqlSession().selectList(STATEMENT_PREFIX + ".selectUsers", filter);
         for (User user : users) {
             if (user.getUserInfoObjectId() != null) {
-                user.setUserInfo(userInfoStrategy.findById(user.getUserInfoObjectId(), false));
+                user.setUserInfo(userInfoStrategy.getDomainObject(user.getUserInfoObjectId(), false));
             }
         }
 

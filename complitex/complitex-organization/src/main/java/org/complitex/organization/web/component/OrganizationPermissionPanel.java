@@ -32,7 +32,7 @@ public class OrganizationPermissionPanel extends DomainObjectPermissionPanel {
         final List<DomainObject> superSelectedSubjects = super.initializeSelectedSubjects(selectedSubjectIds);
 
         if (organizationId != null) {
-            DomainObject itself = organizationStrategy.findById(organizationId, true);
+            DomainObject itself = organizationStrategy.getDomainObject(organizationId, true);
 
             if (organizationStrategy.isUserOrganization(itself)) {
                 if (organizationId > 0) {

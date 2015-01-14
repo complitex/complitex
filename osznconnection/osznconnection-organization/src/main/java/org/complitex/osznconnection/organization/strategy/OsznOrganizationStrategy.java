@@ -234,8 +234,8 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
     }
 
     @Override
-    public OsznOrganization findById(Long id, boolean runAsAdmin) {
-        DomainObject object = super.findById(id, runAsAdmin);
+    public OsznOrganization getDomainObject(Long id, boolean runAsAdmin) {
+        DomainObject object = super.getDomainObject(id, runAsAdmin);
         if (object == null) {
             return null;
         }
@@ -405,7 +405,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
      * @return Calculation center's data source
      */
     public String getDataSource(long calculationCenterId) {
-        DomainObject calculationCenter = findById(calculationCenterId, true);
+        DomainObject calculationCenter = getDomainObject(calculationCenterId, true);
         return AttributeUtil.getStringValue(calculationCenter, DATA_SOURCE);
     }
 
@@ -416,7 +416,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
      * @return Relative path to request files storage.
      */
     public String getRelativeRequestFilesPath(long osznId, long fileTypeAttributeTypeId) {
-        DomainObject oszn = findById(osznId, true);
+        DomainObject oszn = getDomainObject(osznId, true);
         return AttributeUtil.getStringValue(oszn, fileTypeAttributeTypeId);
     }
 
@@ -426,12 +426,12 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
      * @return Root directory to request files storage.
      */
     public String getRootRequestFilesStoragePath(long userOrganizationId) {
-        DomainObject userOrganization = findById(userOrganizationId, true);
+        DomainObject userOrganization = getDomainObject(userOrganizationId, true);
         return AttributeUtil.getStringValue(userOrganization, ROOT_REQUEST_FILE_DIRECTORY);
     }
 
     public String getRootExportStoragePath(long userOrganizationId) {
-        DomainObject userOrganization = findById(userOrganizationId, true);
+        DomainObject userOrganization = getDomainObject(userOrganizationId, true);
         return AttributeUtil.getStringValue(userOrganization, ROOT_EXPORT_DIRECTORY);
     }
 
@@ -471,7 +471,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
     }
 
     public DomainObject getBalanceHolder(Long organizationId){
-        DomainObject organization = findById(organizationId, true);
+        DomainObject organization = getDomainObject(organizationId, true);
 
         Attribute parent = organization.getAttribute(USER_ORGANIZATION_PARENT);
 

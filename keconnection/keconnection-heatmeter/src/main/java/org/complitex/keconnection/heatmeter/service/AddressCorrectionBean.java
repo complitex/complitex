@@ -519,10 +519,10 @@ public class AddressCorrectionBean extends CorrectionBean {
 
         for (Correction c : list) {
             try {
-                DomainObject building = buildingStrategy.findById(c.getObjectId(), false);
+                DomainObject building = buildingStrategy.getDomainObject(c.getObjectId(), false);
 
                 if (building == null) {
-                    building = buildingStrategy.findById(c.getObjectId(), true);
+                    building = buildingStrategy.getDomainObject(c.getObjectId(), true);
                     c.setEditable(false);
                 }
                 SearchComponentState state = buildingStrategy.getSearchComponentStateForParent(building.getParentId(), "building_address", null);
@@ -560,17 +560,17 @@ public class AddressCorrectionBean extends CorrectionBean {
         Locale locale = stringLocaleBean.convert(stringLocaleBean.getLocaleObject(example.getLocaleId()));
 
         for (Correction c : streets) {
-            DomainObject street = streetStrategy.findById(c.getObjectId(), false);
+            DomainObject street = streetStrategy.getDomainObject(c.getObjectId(), false);
             if (street == null) {
-                street = streetStrategy.findById(c.getObjectId(), true);
+                street = streetStrategy.getDomainObject(c.getObjectId(), true);
                 c.setEditable(false);
             }
             DomainObject city = null;
             if (c.isEditable()) {
-                city = cityStrategy.findById(street.getParentId(), false);
+                city = cityStrategy.getDomainObject(street.getParentId(), false);
             }
             if (city == null) {
-                city = cityStrategy.findById(street.getParentId(), true);
+                city = cityStrategy.getDomainObject(street.getParentId(), true);
                 c.setEditable(false);
             }
             String displayCity = cityStrategy.displayDomainObject(city, locale);
@@ -591,17 +591,17 @@ public class AddressCorrectionBean extends CorrectionBean {
         Locale locale = stringLocaleBean.convert(stringLocaleBean.getLocaleObject(example.getLocaleId()));
 
         for (Correction c : districts) {
-            DomainObject district = districtStrategy.findById(c.getObjectId(), false);
+            DomainObject district = districtStrategy.getDomainObject(c.getObjectId(), false);
             if (district == null) {
-                district = districtStrategy.findById(c.getObjectId(), true);
+                district = districtStrategy.getDomainObject(c.getObjectId(), true);
                 c.setEditable(false);
             }
             DomainObject city = null;
             if (c.isEditable()) {
-                city = cityStrategy.findById(district.getParentId(), false);
+                city = cityStrategy.getDomainObject(district.getParentId(), false);
             }
             if (city == null) {
-                city = cityStrategy.findById(district.getParentId(), true);
+                city = cityStrategy.getDomainObject(district.getParentId(), true);
                 c.setEditable(false);
             }
             String displayCity = cityStrategy.displayDomainObject(city, locale);
@@ -619,9 +619,9 @@ public class AddressCorrectionBean extends CorrectionBean {
         if (streetTypeCorrections != null && !streetTypeCorrections.isEmpty()) {
             Locale locale = stringLocaleBean.convert(stringLocaleBean.getLocaleObject(example.getLocaleId()));
             for (Correction streetTypeCorrection : streetTypeCorrections) {
-                DomainObject streetTypeObject = streetTypeStrategy.findById(streetTypeCorrection.getObjectId(), false);
+                DomainObject streetTypeObject = streetTypeStrategy.getDomainObject(streetTypeCorrection.getObjectId(), false);
                 if (streetTypeObject == null) {
-                    streetTypeObject = streetTypeStrategy.findById(streetTypeCorrection.getObjectId(), true);
+                    streetTypeObject = streetTypeStrategy.getDomainObject(streetTypeCorrection.getObjectId(), true);
                     streetTypeCorrection.setEditable(false);
                 }
                 streetTypeCorrection.setDisplayObject(streetTypeStrategy.displayFullName(streetTypeObject, locale));

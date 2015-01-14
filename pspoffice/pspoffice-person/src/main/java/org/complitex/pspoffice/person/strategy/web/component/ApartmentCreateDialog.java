@@ -75,7 +75,7 @@ public abstract class ApartmentCreateDialog extends AbstractAddressCreateDialog 
         logBean.log(Log.STATUS.OK, Module.NAME, ApartmentCreateDialog.class,
                 Log.EVENT.CREATE, apartmentStrategy, null, object, null);
 
-        return apartmentStrategy.findById(object.getObjectId(), true);
+        return apartmentStrategy.getDomainObject(object.getObjectId(), true);
     }
 
     @Override

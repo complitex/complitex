@@ -9,12 +9,12 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.util.AddressRenderer;
-import org.complitex.correction.entity.BuildingCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
-import org.complitex.correction.web.BuildingCorrectionList;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
+import org.complitex.correction.entity.BuildingCorrection;
+import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.web.BuildingCorrectionList;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -53,7 +53,7 @@ public class BuildingCorrectionEditPanel extends AddressCorrectionEditPanel<Buil
     protected String displayCorrection() {
         BuildingCorrection correction = getCorrection();
 
-        DomainObject streetDomainObject = streetStrategy.findById(correction.getStreetObjectId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(correction.getStreetObjectId(), true);
         String street = streetStrategy.displayDomainObject(streetDomainObject, getLocale());
 
         String city = cityStrategy.displayDomainObject(streetDomainObject.getObjectId(), getLocale());

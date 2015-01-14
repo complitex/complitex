@@ -81,7 +81,7 @@ public class StringCultureBean extends AbstractBean {
                 put("id", id).
                 build();
 
-        return (dataSource == null? sqlSession() : sqlSession(dataSource)).selectList(NS + ".selectStringCulture", params);
+        return (dataSource == null ? sqlSession() : sqlSession(dataSource)).selectList(NS + ".selectStringCultures", params);
     }
 
     public void delete(String entityTable, long objectId, Set<Long> localizedValueTypeIds) {

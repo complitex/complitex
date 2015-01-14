@@ -51,17 +51,17 @@ public class DistrictCorrectionList extends AddressCorrectionList<DistrictCorrec
         Locale locale = getLocale();
 
         for (Correction c : districts) {
-            DomainObject district = districtStrategy.findById(c.getObjectId(), false);
+            DomainObject district = districtStrategy.getDomainObject(c.getObjectId(), false);
             if (district == null) {
-                district = districtStrategy.findById(c.getObjectId(), true);
+                district = districtStrategy.getDomainObject(c.getObjectId(), true);
                 c.setEditable(false);
             }
             DomainObject city = null;
             if (c.isEditable()) {
-                city = cityStrategy.findById(district.getParentId(), false);
+                city = cityStrategy.getDomainObject(district.getParentId(), false);
             }
             if (city == null) {
-                city = cityStrategy.findById(district.getParentId(), true);
+                city = cityStrategy.getDomainObject(district.getParentId(), true);
                 c.setEditable(false);
             }
             String displayCity = cityStrategy.displayDomainObject(city, locale);
@@ -83,7 +83,7 @@ public class DistrictCorrectionList extends AddressCorrectionList<DistrictCorrec
 
     @Override
     protected String displayCorrection(DistrictCorrection correction) {
-        String city = cityStrategy.displayDomainObject(cityStrategy.findById(correction.getCityObjectId(), true), getLocale());
+        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityObjectId(), true), getLocale());
 
         return AddressRenderer.displayAddress(null, city, correction.getCorrection(), getLocale());
     }

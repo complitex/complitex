@@ -70,7 +70,7 @@ public class OrganizationCorrectionList extends AbstractCorrectionList<Organizat
 
     @Override
     protected String displayInternalObject(Correction correction) {
-        return organizationStrategy.displayShortNameAndCode(organizationStrategy.findById(correction.getObjectId(), true),
+        return organizationStrategy.displayShortNameAndCode(organizationStrategy.getDomainObject(correction.getObjectId(), true),
                 getLocale());
     }
 

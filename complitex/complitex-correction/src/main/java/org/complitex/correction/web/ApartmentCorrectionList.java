@@ -54,17 +54,17 @@ public class ApartmentCorrectionList extends AddressCorrectionList<ApartmentCorr
         Locale locale = getLocale();
 
         for (Correction c : apartments) {
-            DomainObject apartment = apartmentStrategy.findById(c.getObjectId(), false);
+            DomainObject apartment = apartmentStrategy.getDomainObject(c.getObjectId(), false);
             if (apartment == null) {
-                apartment = apartmentStrategy.findById(c.getObjectId(), true);
+                apartment = apartmentStrategy.getDomainObject(c.getObjectId(), true);
                 c.setEditable(false);
             }
             DomainObject building = null;
             if (c.isEditable()) {
-                building = buildingStrategy.findById(apartment.getParentId(), false);
+                building = buildingStrategy.getDomainObject(apartment.getParentId(), false);
             }
             if (building == null) {
-                building = buildingStrategy.findById(apartment.getParentId(), true);
+                building = buildingStrategy.getDomainObject(apartment.getParentId(), true);
                 c.setEditable(false);
             }
             SearchComponentState state = buildingStrategy.getSearchComponentStateForParent(building.getParentId(), "building_address", null);
@@ -95,13 +95,13 @@ public class ApartmentCorrectionList extends AddressCorrectionList<ApartmentCorr
         IStrategy streetStrategy = strategyFactory.getStrategy("street");
         IStrategy cityStrategy = strategyFactory.getStrategy("city");
 
-        Building buildingDomainObject = (Building)buildingStrategy.findById(correction.getBuildingObjectId(), true);
+        Building buildingDomainObject = (Building)buildingStrategy.getDomainObject(correction.getBuildingObjectId(), true);
         String building = buildingStrategy.displayDomainObject(buildingDomainObject, getLocale());
 
-        DomainObject streetDomainObject = streetStrategy.findById(buildingDomainObject.getPrimaryStreetId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getPrimaryStreetId(), true);
         String street = streetStrategy.displayDomainObject(streetDomainObject, getLocale());
 
-        DomainObject cityDomainObject = cityStrategy.findById(streetDomainObject.getParentId(), true);
+        DomainObject cityDomainObject = cityStrategy.getDomainObject(streetDomainObject.getParentId(), true);
         String city = cityStrategy.displayDomainObject(cityDomainObject, getLocale());
 
         return AddressRenderer.displayAddress(null, city, null, street, building, null, correction.getCorrection(), getLocale());

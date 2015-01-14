@@ -53,7 +53,7 @@ public class DocumentStrategy extends TemplateStrategy {
 
 
     public Document findById(long id) {
-        DomainObject object = super.findById(id, true);
+        DomainObject object = super.getDomainObject(id, true);
         if (object != null) {
             Document doc = new Document(object);
             return doc;

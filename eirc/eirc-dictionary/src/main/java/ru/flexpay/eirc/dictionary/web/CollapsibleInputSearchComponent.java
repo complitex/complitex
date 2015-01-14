@@ -90,6 +90,6 @@ public abstract class CollapsibleInputSearchComponent extends org.complitex.comm
 
     private DomainObject findObject(Long objectId, String entity) {
         IStrategy strategy = strategyFactory.getStrategy(entity);
-        return strategy.findById(objectId, true);
+        return strategy.getDomainObject(objectId, true);
     }
 }

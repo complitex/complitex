@@ -28,7 +28,7 @@ public class KeConnectionUserOrganizationPicker extends Panel {
             public DomainObject getObject() {
                 Long id = organizationIdModel.getObject();
                 if (id != null) {
-                    return organizationStrategy.findById(id, true);
+                    return organizationStrategy.getDomainObject(id, true);
                 }
                 return null;
             }

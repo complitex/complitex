@@ -44,7 +44,7 @@ public class ServiceProviderTypeStrategy extends TemplateStrategy {
     private void init() {
         if (reservedServiceProviderTypeMap.isEmpty()) {
             for (long serviceProviderTypeId : RESERVED_SERVICE_PROVIDER_TYPES) {
-                DomainObject serviceProviderType = findById(serviceProviderTypeId, true);
+                DomainObject serviceProviderType = getDomainObject(serviceProviderTypeId, true);
                 if (serviceProviderType != null) {
                     reservedServiceProviderTypeMap.put(serviceProviderTypeId, serviceProviderType);
                 } else {
@@ -92,14 +92,14 @@ public class ServiceProviderTypeStrategy extends TemplateStrategy {
 
 
     @Override
-    public DomainObject findById(Long id, boolean runAsAdmin) {
+    public DomainObject getDomainObject(Long id, boolean runAsAdmin) {
         if (runAsAdmin) {
             final DomainObject object = reservedServiceProviderTypeMap.get(id);
             if (object != null) {
                 return object;
             }
         }
-        return super.findById(id, runAsAdmin);
+        return super.getDomainObject(id, runAsAdmin);
     }
 
     @Override

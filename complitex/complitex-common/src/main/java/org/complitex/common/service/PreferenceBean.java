@@ -72,7 +72,7 @@ public class PreferenceBean extends AbstractBean{
                 Long domainObjectId = Long.valueOf(p.getValue());
 
                 if (!domainObjectId.equals(SearchComponentState.NOT_SPECIFIED_ID)) {
-                    return strategyFactory.getStrategy(p.getKey()).findById(domainObjectId, true);
+                    return strategyFactory.getStrategy(p.getKey()).getDomainObject(domainObjectId, true);
                 }
             } catch (Exception e) {
                 //wtf

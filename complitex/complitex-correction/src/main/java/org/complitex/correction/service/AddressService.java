@@ -175,7 +175,7 @@ public class AddressService extends AbstractBean {
                     Long streetObjectId = streetIds.get(0);
                     data.setStreetId(streetObjectId);
 
-                    DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
+                    DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
                     data.setStreetTypeId(streetStrategy.getStreetType(streetObject));
 
                     //перейти к обработке дома
@@ -189,7 +189,7 @@ public class AddressService extends AbstractBean {
                         data.setStreetId(streetObjectId);
 
 
-                        DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
+                        DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
                         data.setStreetTypeId(streetStrategy.getStreetType(streetObject));
 
                         //перейти к обработке дома
@@ -202,7 +202,7 @@ public class AddressService extends AbstractBean {
                             Long streetObjectId = streetIds.get(0);
                             data.setStreetId(streetObjectId);
 
-                            DomainObject streetObject = streetStrategy.findById(streetObjectId, true);
+                            DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
                             data.setStreetTypeId(streetStrategy.getStreetType(streetObject));
 
                             //проставить дом для payment и выйти
@@ -238,7 +238,7 @@ public class AddressService extends AbstractBean {
                 Long streetId = streetIds.get(0);
                 data.setStreetId(streetId);
 
-                DomainObject streetObject = streetStrategy.findById(streetId, true);
+                DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
                 data.setStreetTypeId(streetStrategy.getStreetType(streetObject));
 
                 // перейти к обработке дома
@@ -250,7 +250,7 @@ public class AddressService extends AbstractBean {
                     Long streetId = streetIds.get(0);
                     data.setStreetId(streetId);
 
-                    DomainObject streetObject = streetStrategy.findById(streetId, true);
+                    DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
                     data.setStreetTypeId(streetStrategy.getStreetType(streetObject));
                     // перейти к обработке дома
                 } else {

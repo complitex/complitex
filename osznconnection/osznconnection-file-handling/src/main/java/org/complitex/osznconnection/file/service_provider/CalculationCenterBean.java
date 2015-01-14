@@ -43,7 +43,7 @@ public class CalculationCenterBean {
     }
 
     private DomainObject checkUserOrganization(long userOrganizationId) {
-        DomainObject userOrganization = organizationStrategy.findById(userOrganizationId, true);
+        DomainObject userOrganization = organizationStrategy.getDomainObject(userOrganizationId, true);
         if (userOrganization == null || userOrganization.getObjectId() == null || userOrganization.getObjectId() <= 0) {
             throw new IllegalArgumentException("User organization was not found.");
         }

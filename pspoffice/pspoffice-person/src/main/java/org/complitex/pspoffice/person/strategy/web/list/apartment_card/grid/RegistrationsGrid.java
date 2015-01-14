@@ -69,7 +69,7 @@ public final class RegistrationsGrid extends TemplatePage {
     }
 
     public RegistrationsGrid(final long apartmentCardId, final String backInfoSessionKey) {
-        final ApartmentCard apartmentCard = apartmentCardStrategy.findById(apartmentCardId, true);
+        final ApartmentCard apartmentCard = apartmentCardStrategy.getDomainObject(apartmentCardId, true);
 
         IModel<String> labelModel = new StringResourceModel("label", null,
                 new Object[]{addressRendererBean.displayAddress(apartmentCardStrategy.getAddressEntity(apartmentCard),

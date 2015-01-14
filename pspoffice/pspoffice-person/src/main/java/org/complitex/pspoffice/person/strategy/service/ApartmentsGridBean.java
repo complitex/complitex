@@ -95,9 +95,9 @@ public class ApartmentsGridBean extends AbstractBean {
 
                 DomainObject object = null;
                 if (entity.equals("apartment")) {
-                    object = apartmentStrategy.findById(objectId, true);
+                    object = apartmentStrategy.getDomainObject(objectId, true);
                 } else {
-                    object = roomStrategy.findById(objectId, true);
+                    object = roomStrategy.getDomainObject(objectId, true);
                 }
 
                 //apartment
@@ -128,7 +128,7 @@ public class ApartmentsGridBean extends AbstractBean {
                 final Set<Long> organizationIds = object.getSubjectIds();
                 for (long organizationId : organizationIds) {
                     if (organizationId > 0) {
-                        final DomainObject organization = organizationStrategy.findById(organizationId, true);
+                        final DomainObject organization = organizationStrategy.getDomainObject(organizationId, true);
                         organizations.add(organization);
                     }
                 }

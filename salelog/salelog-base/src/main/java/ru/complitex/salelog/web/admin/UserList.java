@@ -179,7 +179,7 @@ public class UserList extends ScrollListPage {
                 String separator = "";
                 for (UserOrganization userOrganization : user.getUserOrganizations()) {
                     organizations += separator + (organizationStrategy.displayDomainObject(
-                            organizationStrategy.findById(userOrganization.getOrganizationObjectId(), true), getLocale()));
+                            organizationStrategy.getDomainObject(userOrganization.getOrganizationObjectId(), true), getLocale()));
 
                     separator = ", ";
                 }

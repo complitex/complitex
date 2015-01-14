@@ -246,7 +246,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
     public ApartmentCardEdit(long apartmentCardId, String backInfoSessionKey) {
         this.backInfoSessionKey = backInfoSessionKey;
-        init(apartmentCardStrategy.findById(apartmentCardId, true));
+        init(apartmentCardStrategy.getDomainObject(apartmentCardId, true));
     }
 
     @Override

@@ -112,7 +112,7 @@ public class OrganizationImportService extends AbstractImportService {
 
             final Long objectId = organizationStrategy.getObjectId(externalOrganizationId);
             if (objectId != null) {
-                oldObject = organizationStrategy.findById(objectId, true);
+                oldObject = organizationStrategy.getDomainObject(objectId, true);
                 if (oldObject != null) { // нашли
                     newObject = CloneUtil.cloneObject(oldObject);
                 }

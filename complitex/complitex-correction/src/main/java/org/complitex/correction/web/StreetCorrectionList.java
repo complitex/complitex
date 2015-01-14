@@ -61,17 +61,17 @@ public class StreetCorrectionList extends AddressCorrectionList<StreetCorrection
         Locale locale = getLocale();
 
         for (Correction c : streets) {
-            DomainObject street = streetStrategy.findById(c.getObjectId(), false);
+            DomainObject street = streetStrategy.getDomainObject(c.getObjectId(), false);
             if (street == null) {
-                street = streetStrategy.findById(c.getObjectId(), true);
+                street = streetStrategy.getDomainObject(c.getObjectId(), true);
                 c.setEditable(false);
             }
             DomainObject city = null;
             if (c.isEditable()) {
-                city = cityStrategy.findById(street.getParentId(), false);
+                city = cityStrategy.getDomainObject(street.getParentId(), false);
             }
             if (city == null) {
-                city = cityStrategy.findById(street.getParentId(), true);
+                city = cityStrategy.getDomainObject(street.getParentId(), true);
                 c.setEditable(false);
             }
             String displayCity = cityStrategy.displayDomainObject(city, locale);
@@ -89,11 +89,11 @@ public class StreetCorrectionList extends AddressCorrectionList<StreetCorrection
 
     @Override
     protected String displayCorrection(StreetCorrection streetCorrection) {
-        String city = cityStrategy.displayDomainObject(cityStrategy.findById(streetCorrection.getCityObjectId(), true),
+        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(streetCorrection.getCityObjectId(), true),
                 getLocale());
 
         String streetType = streetTypeStrategy.displayDomainObject(
-                streetTypeStrategy.findById(streetCorrection.getStreetTypeObjectId(), true), getLocale());
+                streetTypeStrategy.getDomainObject(streetCorrection.getStreetTypeObjectId(), true), getLocale());
 
         return AddressRenderer.displayAddress(null, city, streetType, streetCorrection.getCorrection(), null, null, null, getLocale());
     }

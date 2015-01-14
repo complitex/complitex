@@ -11,17 +11,17 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.ModuleBean;
-import org.complitex.common.web.component.organization.OrganizationPickerDialog;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
-import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.ajax.AjaxLinkPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.organization.OrganizationPicker;
+import org.complitex.common.web.component.organization.OrganizationPickerDialog;
+import org.complitex.correction.entity.OrganizationCorrection;
+import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.SubsidyService;
@@ -124,7 +124,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
                         Long organizationId = subsidyService.getServicingOrganizationId(rf);
 
                         if (organizationId != null){
-                            return organizationStrategy.displayShortNameAndCode(organizationStrategy.findById(organizationId, true),
+                            return organizationStrategy.displayShortNameAndCode(organizationStrategy.getDomainObject(organizationId, true),
                                     getLocale());
                         }else {
                             return code;

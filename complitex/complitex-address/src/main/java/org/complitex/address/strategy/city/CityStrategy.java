@@ -63,7 +63,7 @@ public class CityStrategy extends TemplateStrategy {
         Long cityTypeId = object.getAttribute(CITY_TYPE).getValueId();
         if (cityTypeId != null) {
             IStrategy cityTypeStrategy = strategyFactory.getStrategy("city_type");
-            DomainObject cityType = cityTypeStrategy.findById(cityTypeId, true);
+            DomainObject cityType = cityTypeStrategy.getDomainObject(cityTypeId, true);
             String cityTypeName = cityTypeStrategy.displayDomainObject(cityType, locale);
             return cityTypeName + " " + cityName;
         }

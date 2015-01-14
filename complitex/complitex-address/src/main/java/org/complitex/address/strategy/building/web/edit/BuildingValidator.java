@@ -151,7 +151,7 @@ public class BuildingValidator implements IValidator {
             Long streetId = address.getParentId();
             if (streetId != null && streetId > 0) {
                 IStrategy streetStrategy = getStrategyFactory().getStrategy("street");
-                DomainObject streetObject = streetStrategy.findById(streetId, true);
+                DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
                 return streetObject.getParentId();
             }
         }
@@ -235,7 +235,7 @@ public class BuildingValidator implements IValidator {
             Locale locale, DomainObjectEditPanel editPanel) {
         String parentEntity = parentEntityId == null ? null : (parentEntityId == 300 ? "street" : (parentEntityId == 400 ? "city" : null));
         IStrategy strategy = getStrategyFactory().getStrategy(parentEntity);
-        DomainObject parentObject = strategy.findById(parentId, true);
+        DomainObject parentObject = strategy.getDomainObject(parentId, true);
         String parentTitle = strategy.displayDomainObject(parentObject, editPanel.getLocale());
 
         IModel<?> model = Model.ofMap(ImmutableMap.builder().

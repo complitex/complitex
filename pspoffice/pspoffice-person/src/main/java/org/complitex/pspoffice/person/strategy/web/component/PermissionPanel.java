@@ -70,7 +70,7 @@ public final class PermissionPanel extends Panel {
                 if (existingSubjectId == PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID) {
                     list.add(VISIBLE_BY_ALL);
                 } else {
-                    list.add(organizationStrategy.findById(existingSubjectId, true));
+                    list.add(organizationStrategy.getDomainObject(existingSubjectId, true));
                 }
                 return list;
             }
@@ -108,7 +108,7 @@ public final class PermissionPanel extends Panel {
                 List<DomainObject> list = Lists.newArrayList();
                 for (long userOrganizationId : userOrganizationIds) {
                     if (inheritedObjectVisibleByAll || inheritedSubjectIds.contains(userOrganizationId)) {
-                        list.add(organizationStrategy.findById(userOrganizationId, true));
+                        list.add(organizationStrategy.getDomainObject(userOrganizationId, true));
                     }
                 }
                 if (list.isEmpty()) {
@@ -116,7 +116,7 @@ public final class PermissionPanel extends Panel {
                         list.add(VISIBLE_BY_ALL);
                     } else {
                         for (long organizationId : inheritedSubjectIds) {
-                            list.add(organizationStrategy.findById(organizationId, true));
+                            list.add(organizationStrategy.getDomainObject(organizationId, true));
                         }
                     }
                 }

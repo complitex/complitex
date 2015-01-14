@@ -166,13 +166,13 @@ public class ApartmentCardStrategy extends TemplateStrategy {
 
 
     @Override
-    public ApartmentCard findById(Long id, boolean runAsAdmin) {
+    public ApartmentCard getDomainObject(Long id, boolean runAsAdmin) {
         return findById(id, runAsAdmin, true, true, true);
     }
 
     public ApartmentCard findById(long id, boolean runAsAdmin, boolean loadOwner, boolean loadRegistrations,
             boolean loadOwnershipForm) {
-        DomainObject apartmentCardObject = super.findById(id, runAsAdmin);
+        DomainObject apartmentCardObject = super.getDomainObject(id, runAsAdmin);
         if (apartmentCardObject == null) {
             return null;
         }
@@ -192,7 +192,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
 
     private void loadOwnershipForm(ApartmentCard apartmentCard) {
         long ownershipFormId = apartmentCard.getAttribute(FORM_OF_OWNERSHIP).getValueId();
-        DomainObject ownershipForm = ownershipFormStrategy.findById(ownershipFormId, true);
+        DomainObject ownershipForm = ownershipFormStrategy.getDomainObject(ownershipFormId, true);
         apartmentCard.setOwnershipForm(ownershipForm);
     }
 
@@ -393,7 +393,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         String addressEntity = getAddressEntity(apartmentCard);
         long addressId = apartmentCard.getAddressId();
         if (addressEntity.equals("room")) {
-            DomainObject room = strategyFactory.getStrategy("room").findById(addressId, true);
+            DomainObject room = strategyFactory.getStrategy("room").getDomainObject(addressId, true);
             if (room.getParentEntityId().equals(100L)) { //parent is apartment
                 apartmentId = room.getParentId();
             }
@@ -632,7 +632,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     public SearchComponentState initAddressSearchComponentState(String addressEntity, long addressId) {
         SearchComponentState searchComponentState = new SearchComponentState();
         IStrategy addressStrategy = strategyFactory.getStrategy(addressEntity);
-        DomainObject addressObject = addressStrategy.findById(addressId, true);
+        DomainObject addressObject = addressStrategy.getDomainObject(addressId, true);
         SimpleObjectInfo info = addressStrategy.findParentInSearchComponent(addressId, null);
         if (info != null) {
             searchComponentState = addressStrategy.getSearchComponentStateForParent(info.getId(), info.getEntityTable(), null);

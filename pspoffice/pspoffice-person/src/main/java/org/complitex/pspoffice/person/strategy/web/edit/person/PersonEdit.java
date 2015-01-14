@@ -59,7 +59,7 @@ public class PersonEdit extends FormTemplatePage {
 
         } else {
             //edit existing entity
-            newPerson = personStrategy.findById(objectId, false);
+            newPerson = personStrategy.getDomainObject(objectId, false);
             if (newPerson == null) {
                 throw new RestartResponseException(personStrategy.getObjectNotFoundPage());
             }

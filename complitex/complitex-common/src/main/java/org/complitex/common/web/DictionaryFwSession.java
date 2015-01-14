@@ -248,7 +248,7 @@ public class DictionaryFwSession extends WebSession {
                 Long domainObjectId = Long.valueOf(p.getValue());
                 if (domainObjectId != null && domainObjectId > 0) {
                     final StrategyFactory strategyFactory = EjbBeanLocator.getBean(StrategyFactory.class);
-                    return strategyFactory.getStrategy(p.getKey()).findById(domainObjectId, true);
+                    return strategyFactory.getStrategy(p.getKey()).getDomainObject(domainObjectId, true);
                 }
             } catch (Exception e) {
                 //wtf

@@ -12,11 +12,11 @@ import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.util.AddressRenderer;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.correction.entity.RoomCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.correction.web.RoomCorrectionList;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.FilterWrapper;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -105,19 +105,19 @@ public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel<RoomCorr
         String apartment = null;
         Building buildingDomainObject;
         if (correction.getApartmentObjectId() == null) {
-            buildingDomainObject = buildingStrategy.findById(correction.getBuildingObjectId(), true);
+            buildingDomainObject = buildingStrategy.getDomainObject(correction.getBuildingObjectId(), true);
         } else {
-            DomainObject apartmentDomainObject = apartmentStrategy.findById(correction.getApartmentObjectId(), true);
+            DomainObject apartmentDomainObject = apartmentStrategy.getDomainObject(correction.getApartmentObjectId(), true);
             apartment = apartmentStrategy.displayDomainObject(apartmentDomainObject, getLocale());
 
-            buildingDomainObject = buildingStrategy.findById(apartmentDomainObject.getParentId(), true);
+            buildingDomainObject = buildingStrategy.getDomainObject(apartmentDomainObject.getParentId(), true);
         }
         String building = buildingStrategy.displayDomainObject(buildingDomainObject, getLocale());
 
-        DomainObject streetDomainObject = streetStrategy.findById(buildingDomainObject.getPrimaryStreetId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getPrimaryStreetId(), true);
         String street = streetStrategy.displayDomainObject(streetDomainObject, getLocale());
 
-        DomainObject cityDomainObject = cityStrategy.findById(streetDomainObject.getParentId(), true);
+        DomainObject cityDomainObject = cityStrategy.getDomainObject(streetDomainObject.getParentId(), true);
         String city = cityStrategy.displayDomainObject(cityDomainObject, getLocale());
 
         return AddressRenderer.displayAddress(null, city, null, street, building, null, apartment, correction.getCorrection(), getLocale());

@@ -46,7 +46,7 @@ public class StreetTypeColumn<T> extends AbstractColumn<T, String> implements IF
         if (objectId != null){
             StreetTypeStrategy strategy = EjbBeanLocator.getBean(StreetTypeStrategy.class);
 
-            DomainObject object = strategy.findById(objectId, true);
+            DomainObject object = strategy.getDomainObject(objectId, true);
 
             name = object!= null
                     ? strategy.getName(object, locale) + " (" + strategy.getShortName(object, locale) + ")"

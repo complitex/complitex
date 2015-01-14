@@ -71,7 +71,7 @@ public abstract class RoomCreateDialog extends AbstractAddressCreateDialog {
         logBean.log(Log.STATUS.OK, Module.NAME, RoomCreateDialog.class,
                 Log.EVENT.CREATE, roomStrategy, null, object, null);
 
-        return roomStrategy.findById(object.getObjectId(), true);
+        return roomStrategy.getDomainObject(object.getObjectId(), true);
     }
 
     @Override

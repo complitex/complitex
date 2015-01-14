@@ -12,13 +12,7 @@ import org.complitex.common.web.domain.validate.IValidator;
 
 import java.util.*;
 
-/**
- *
- * @author Artem
- */
 public interface IStrategy {
-
-
     
     void archive(DomainObject object, Date endDate);
     
@@ -40,9 +34,9 @@ public interface IStrategy {
 
     void enable(DomainObject object);
     
-    DomainObject findById(Long id, boolean runAsAdmin);
+    DomainObject getDomainObject(Long id, boolean runAsAdmin);
     
-    DomainObject findById(String dataSource, Long id, boolean runAsAdmin);
+    DomainObject getDomainObject(String dataSource, Long id, boolean runAsAdmin);
 
     public Long getObjectId(String externalId);
     

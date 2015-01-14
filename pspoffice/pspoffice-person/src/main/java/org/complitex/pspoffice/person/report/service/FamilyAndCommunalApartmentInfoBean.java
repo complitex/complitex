@@ -38,7 +38,7 @@ public class FamilyAndCommunalApartmentInfoBean extends AbstractBean {
         info.setOwner(apartmentCard.getOwner());
 
         Long apartmentId = apartmentCardStrategy.getApartmentId(apartmentCard);
-        DomainObject apartment = apartmentId != null ? strategyFactory.getStrategy("apartment").findById(apartmentId, true) : null;
+        DomainObject apartment = apartmentId != null ? strategyFactory.getStrategy("apartment").getDomainObject(apartmentId, true) : null;
         //neighbors
         List<ApartmentCard> allApartmentCards = new ArrayList<ApartmentCard>();
         allApartmentCards.add(apartmentCard);

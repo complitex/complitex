@@ -95,7 +95,7 @@ public class DomainObjectEditPanel extends Panel {
             newObject = getStrategy().newInstance();
         } else {
             //edit existing entity
-            newObject = getStrategy().findById(objectId, false);
+            newObject = getStrategy().getDomainObject(objectId, false);
             if (newObject == null) {
                 throw new RestartResponseException(getStrategy().getObjectNotFoundPage());
             }

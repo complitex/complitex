@@ -57,7 +57,7 @@ public class SaldoOutOperation extends BaseFinancialOperation<SaldoOut> {
     }
 
     private Long requestCloseFromContainer(ServiceProviderAccount serviceProviderAccount) {
-        DomainObject domainObject = serviceProviderAccountStrategy.findById(serviceProviderAccount.getId(), true);
+        DomainObject domainObject = serviceProviderAccountStrategy.getDomainObject(serviceProviderAccount.getId(), true);
         ServiceProviderAccountAttribute toClose = (ServiceProviderAccountAttribute)domainObject.getAttribute(ServiceProviderAccountStrategy.TO_CLOSE);
         return toClose != null? toClose.getValueId() : null;
     }

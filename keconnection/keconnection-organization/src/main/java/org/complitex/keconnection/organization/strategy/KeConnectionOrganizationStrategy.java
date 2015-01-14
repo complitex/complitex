@@ -104,7 +104,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
     }
 
     public String displayShortName(Long organizationId, Locale locale) {
-        DomainObject domainObject = findById(organizationId, true);
+        DomainObject domainObject = getDomainObject(organizationId, true);
 
         if (domainObject != null) {
             return domainObject.getStringValue(SHORT_NAME, locale);
@@ -122,7 +122,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
     }
 
     public DomainObject getItselfOrganization() {
-        return findById(ITSELF_ORGANIZATION_OBJECT_ID, true);
+        return getDomainObject(ITSELF_ORGANIZATION_OBJECT_ID, true);
     }
 
     @Override
@@ -154,8 +154,8 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public Organization findById(Long id, boolean runAsAdmin) {
-        DomainObject object = super.findById(id, runAsAdmin);
+    public Organization getDomainObject(Long id, boolean runAsAdmin) {
+        DomainObject object = super.getDomainObject(id, runAsAdmin);
         if (object == null) {
             return null;
         }
@@ -278,13 +278,13 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
 
     public void setReadyCloseOperatingMonthFlag(Organization organization) {
         organization.setStringValue(READY_CLOSE_OPER_MONTH, new BooleanConverter().toString(Boolean.TRUE));
-        update(findById(organization.getObjectId(), true), organization, getCurrentDate());
+        update(getDomainObject(organization.getObjectId(), true), organization, getCurrentDate());
     }
 
 
     public void closeOperatingMonth(Organization organization) {
         organization.setStringValue(READY_CLOSE_OPER_MONTH, new BooleanConverter().toString(Boolean.FALSE));
-        update(findById(organization.getObjectId(), true), organization, getCurrentDate());
+        update(getDomainObject(organization.getObjectId(), true), organization, getCurrentDate());
 
         sqlSession().insert(NS + ".insertOperatingMonth",
                 ImmutableMap.of("organizationId", organization.getObjectId(),

@@ -67,10 +67,10 @@ public class BuildingCorrectionList extends AddressCorrectionList<BuildingCorrec
 
         for (Correction c : list) {
             try {
-                DomainObject building = buildingStrategy.findById(c.getObjectId(), false);
+                DomainObject building = buildingStrategy.getDomainObject(c.getObjectId(), false);
 
                 if (building == null) {
-                    building = buildingStrategy.findById(c.getObjectId(), true);
+                    building = buildingStrategy.getDomainObject(c.getObjectId(), true);
                     c.setEditable(false);
                 }
                 SearchComponentState state = buildingStrategy.getSearchComponentStateForParent(building.getParentId(), "building_address", null);
@@ -97,8 +97,8 @@ public class BuildingCorrectionList extends AddressCorrectionList<BuildingCorrec
 
     @Override
     protected String displayCorrection(BuildingCorrection correction) {
-        DomainObject streetDomainObject = streetStrategy.findById(correction.getStreetObjectId(), true);
-        DomainObject cityDomainObject = cityStrategy.findById(streetDomainObject.getParentId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(correction.getStreetObjectId(), true);
+        DomainObject cityDomainObject = cityStrategy.getDomainObject(streetDomainObject.getParentId(), true);
 
         String city = cityStrategy.displayDomainObject(cityDomainObject, getLocale());
 

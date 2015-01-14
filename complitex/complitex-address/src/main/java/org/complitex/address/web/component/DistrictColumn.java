@@ -46,7 +46,7 @@ public class DistrictColumn<T> extends AbstractColumn<T, String> implements IFil
         if (districtObjectId != null){
             DistrictStrategy districtStrategy = EjbBeanLocator.getBean(DistrictStrategy.class);
 
-            DomainObject object = districtStrategy.findById(districtObjectId, true);
+            DomainObject object = districtStrategy.getDomainObject(districtObjectId, true);
 
             name = object!= null ? districtStrategy.displayDomainObject(districtObjectId, locale) : "Не найден";
         }

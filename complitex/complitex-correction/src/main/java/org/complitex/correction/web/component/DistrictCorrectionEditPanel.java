@@ -8,10 +8,10 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.util.AddressRenderer;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.correction.entity.DistrictCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.correction.web.DistrictCorrectionList;
-import org.complitex.common.entity.FilterWrapper;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -88,7 +88,7 @@ public class DistrictCorrectionEditPanel extends AddressCorrectionEditPanel<Dist
     protected String displayCorrection() {
         DistrictCorrection correction = getCorrection();
 
-        String city = cityStrategy.displayDomainObject(cityStrategy.findById(correction.getCityObjectId(), true), getLocale());
+        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityObjectId(), true), getLocale());
 
         return AddressRenderer.displayAddress(null, city, correction.getCorrection(), getLocale());
     }

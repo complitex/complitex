@@ -267,14 +267,14 @@ public class EircPaymentsRegistryConverter {
                 return;
             }
 
-            Organization serviceProvider = eircOrganizationStrategy.findById(getDataSource(), registry.getRecipientOrganizationId(), true);
+            Organization serviceProvider = eircOrganizationStrategy.getDomainObject(getDataSource(), registry.getRecipientOrganizationId(), true);
             if (serviceProvider == null) {
                 fileMessenger.addMessageError("eirc_payments_recipient_not_found", registry.getRecipientOrganizationId());
                 log.error("Service provider {} not found", registry.getRecipientOrganizationId());
                 return;
             }
 
-            Organization sender = eircOrganizationStrategy.findById(getDataSource(), registry.getSenderOrganizationId(), true);
+            Organization sender = eircOrganizationStrategy.getDomainObject(getDataSource(), registry.getSenderOrganizationId(), true);
             if (sender == null) {
                 fileMessenger.addMessageError("eirc_payments_sender_not_found", registry.getSenderOrganizationId());
                 log.error("Sender {} not found", registry.getSenderOrganizationId());

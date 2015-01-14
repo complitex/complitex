@@ -67,7 +67,7 @@ public class OpenAccountOperation extends GeneralAccountOperation {
         }
         EircAccount eircAccount = eircAccountBean.getEircAccount(address);
         if (eircAccount == null) {
-            DomainObject city = cityStrategy.findById(cityId, true);
+            DomainObject city = cityStrategy.getDomainObject(cityId, true);
             String cityPrefix = AttributeUtil.getStringValue(city, 402L);
             if (cityPrefix == null) {
                 throw new DataNotFoundException("Not found EIRC prefix for city {0}", cityId);

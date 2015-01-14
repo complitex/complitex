@@ -103,7 +103,7 @@ public class ServiceProviderAccountBean extends AbstractBean {
     public void validate(ServiceProviderAccount serviceProviderAccount) throws ServiceNotAllowableException {
         if (serviceProviderAccount.getService() != null && serviceProviderAccount.getService().getId() != null) {
             // check allowable services
-            Organization organization = eircOrganizationStrategy.findById(serviceProviderAccount.getOrganizationId(), true);
+            Organization organization = eircOrganizationStrategy.getDomainObject(serviceProviderAccount.getOrganizationId(), true);
             List<Attribute> allowableServices = organization.getAttributes(EircOrganizationStrategy.SERVICE);
             boolean check = false;
             for (Attribute allowableService : allowableServices) {

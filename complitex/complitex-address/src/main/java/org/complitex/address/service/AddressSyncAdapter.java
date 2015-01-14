@@ -1,6 +1,7 @@
 package org.complitex.address.service;
 
-import org.complitex.address.entity.*;
+import org.complitex.address.entity.AddressEntity;
+import org.complitex.address.entity.AddressSync;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DictionaryConfig;
 import org.complitex.common.entity.DomainObject;
@@ -37,7 +38,7 @@ public class AddressSyncAdapter extends AbstractBean {
     public String getDataSource(){
         Long organizationId = configBean.getLong(DictionaryConfig.SYNC_DATA_SOURCE, true);
 
-        DomainObject organization = organizationStrategy.findById(organizationId, true);
+        DomainObject organization = organizationStrategy.getDomainObject(organizationId, true);
 
         return organization.getStringValue(IOrganizationStrategy.DATA_SOURCE);
     }

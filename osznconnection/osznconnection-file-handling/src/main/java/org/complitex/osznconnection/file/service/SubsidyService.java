@@ -1,12 +1,10 @@
 package org.complitex.osznconnection.file.service;
 
-import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.DateUtil;
+import org.complitex.correction.entity.OrganizationCorrection;
+import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.process.SubsidyBindTaskBean;
 import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
@@ -47,7 +45,7 @@ public class SubsidyService {
     private SubsidyBindTaskBean subsidyBindTaskBean;
 
     public SubsidySum getSubsidySum(AbstractRequest request){
-        OsznOrganization organization = organizationStrategy.findById(request.getUserOrganizationId(), true);
+        OsznOrganization organization = organizationStrategy.getDomainObject(request.getUserOrganizationId(), true);
 
         BigDecimal nSum = new BigDecimal(0);
         BigDecimal sbSum = new BigDecimal(0);
@@ -119,7 +117,7 @@ public class SubsidyService {
         Long organizationId = getServicingOrganizationId(subsidyRequestFile);
 
         if (organizationId != null){
-            return organizationStrategy.displayShortNameAndCode(organizationStrategy.findById(organizationId, true), locale);
+            return organizationStrategy.displayShortNameAndCode(organizationStrategy.getDomainObject(organizationId, true), locale);
         }else {
             return subsidyRequestFile.getName().substring(0, subsidyRequestFile.getName().length() - 8);
         }

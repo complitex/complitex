@@ -145,7 +145,7 @@ public class DocumentTypeStrategy extends TemplateStrategy {
         final Collection<StringCulture> reservedNames = newArrayList();
 
         for (long id : RESERVED_INSTANCE_IDS) {
-            final DomainObject o = findById(id, true);
+            final DomainObject o = getDomainObject(id, true);
             if (o != null) {
                 reservedNames.addAll(ImmutableList.copyOf(o.getAttribute(NAME).getLocalizedValues()));
             }

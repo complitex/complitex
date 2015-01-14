@@ -99,7 +99,7 @@ public class BuildingsGridBean extends AbstractBean {
             for (Map<String, Long> item : data) {
                 //building
                 final long buildingId = item.get("buildingId");
-                final Building buildingObject = buildingStrategy.findById(buildingId, true);
+                final Building buildingObject = buildingStrategy.getDomainObject(buildingId, true);
                 String building = null;
 
                 //find appropriate address
@@ -130,7 +130,7 @@ public class BuildingsGridBean extends AbstractBean {
                 }
                 String street = null;
                 if (streetId != null) {
-                    DomainObject streetObject = streetStrategy.findById(streetId, true);
+                    DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
                     street = streetStrategy.displayDomainObject(streetObject, filter.getLocale());
                 }
 
@@ -138,7 +138,7 @@ public class BuildingsGridBean extends AbstractBean {
                 final Long districtId = buildingStrategy.getDistrictId(buildingObject);
                 String district = null;
                 if (districtId != null) {
-                    DomainObject districtObject = districtStrategy.findById(districtId, true);
+                    DomainObject districtObject = districtStrategy.getDomainObject(districtId, true);
                     district = districtStrategy.displayDomainObject(districtObject, filter.getLocale());
                 }
 
@@ -148,7 +148,7 @@ public class BuildingsGridBean extends AbstractBean {
                 final Set<Long> organizationIds = buildingObject.getSubjectIds();
                 for (long organizationId : organizationIds) {
                     if (organizationId > 0) {
-                        final DomainObject organization = organizationStrategy.findById(organizationId, true);
+                        final DomainObject organization = organizationStrategy.getDomainObject(organizationId, true);
                         organizations.add(organization);
                     }
                 }

@@ -118,7 +118,7 @@ public class RestHMACAuthorizationFilter implements ContainerRequestFilter {
             return false;
         }
 
-        DomainObject module = EjbBeanLocator.getBean(ModuleInstanceStrategy.class).findById(moduleId, true);
+        DomainObject module = EjbBeanLocator.getBean(ModuleInstanceStrategy.class).getDomainObject(moduleId, true);
         if (module == null) {
             log.error("Module not found by id {}", moduleId);
             return false;

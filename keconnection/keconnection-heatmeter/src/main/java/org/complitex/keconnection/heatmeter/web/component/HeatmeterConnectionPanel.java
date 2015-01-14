@@ -79,7 +79,7 @@ public class HeatmeterConnectionPanel extends AbstractHeatmeterEditPanel {
                         String s = getString("organization_not_found");
 
                         if (connection.getOrganizationId() != null) {
-                            DomainObject domainObject = organizationStrategy.findById(connection.getOrganizationId(), true);
+                            DomainObject domainObject = organizationStrategy.getDomainObject(connection.getOrganizationId(), true);
                             s = organizationStrategy.displayDomainObject(domainObject, getLocale());
                         }
 

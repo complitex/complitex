@@ -226,8 +226,8 @@ public class RegistryList extends TemplatePage {
                 selected.put(registry, select);
                 item.add(select);
 
-                Organization senderOrganization = organizationStrategy.findById(registry.getSenderOrganizationId(), false);
-                Organization recipientOrganization = organizationStrategy.findById(registry.getRecipientOrganizationId(), false);
+                Organization senderOrganization = organizationStrategy.getDomainObject(registry.getSenderOrganizationId(), false);
+                Organization recipientOrganization = organizationStrategy.getDomainObject(registry.getRecipientOrganizationId(), false);
 
                 item.add(new Label("creationDate", registry.getCreationDate() != null ? CREATE_DATE_FORMAT.format(registry.getCreationDate()) : ""));
                 item.add(new Label("sender", senderOrganization == null ? "" : organizationStrategy.displayDomainObject(senderOrganization, getLocale())));

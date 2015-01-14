@@ -100,7 +100,7 @@ public class RegistryLinker {
 
         try {
             Long moduleId = configBean.getInteger(EircConfig.MODULE_ID, true).longValue();
-            DomainObject module = moduleInstanceStrategy.findById(moduleId, true);
+            DomainObject module = moduleInstanceStrategy.getDomainObject(moduleId, true);
             userOrganizationId.set(AttributeUtil.getIntegerValue(module, ModuleInstanceStrategy.ORGANIZATION).longValue());
         } catch (Exception e) {
             final LocLogger logger = getProcessLogger(null, imessenger);

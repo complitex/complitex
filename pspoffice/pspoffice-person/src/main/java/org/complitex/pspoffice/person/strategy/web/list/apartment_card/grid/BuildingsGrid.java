@@ -211,7 +211,7 @@ public final class BuildingsGrid extends TemplatePage {
                 new BuildingsGridFilterSearchComponent("streetFilter", "street", cityId, streetFilterModel);
         filterForm.add(streetFilter);
         if (streetEnabled) {
-            streetFilterModel.setObject(streetStrategy.findById(streetId, true));
+            streetFilterModel.setObject(streetStrategy.getDomainObject(streetId, true));
             streetFilter.setEnabled(false);
         }
 

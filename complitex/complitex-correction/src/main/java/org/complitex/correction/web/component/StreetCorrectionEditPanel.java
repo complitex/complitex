@@ -8,11 +8,11 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.util.AddressRenderer;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.SessionBean;
 import org.complitex.correction.entity.StreetCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.correction.web.StreetCorrectionList;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.SessionBean;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -48,7 +48,7 @@ public class StreetCorrectionEditPanel extends AddressCorrectionEditPanel<Street
     protected String displayCorrection() {
         StreetCorrection correction = getCorrection();
 
-        String city = cityStrategy.displayDomainObject(cityStrategy.findById(correction.getCityObjectId(), true), getLocale());
+        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityObjectId(), true), getLocale());
 
         String streetType = null;
         if (correction.getStreetTypeCorrection() != null) {

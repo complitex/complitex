@@ -80,7 +80,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
     }
 
     public void update(AddressSync sync, Locale locale){
-        DomainObject oldObject = districtStrategy.findById(sync.getObjectId(), true);
+        DomainObject oldObject = districtStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
         newObject.setExternalId(sync.getExternalId());
@@ -92,7 +92,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
     }
 
     public void archive(AddressSync sync){
-        districtStrategy.archive(districtStrategy.findById(sync.getObjectId(), true), sync.getDate());
+        districtStrategy.archive(districtStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
 
         addressSyncBean.delete(sync.getId());
     }

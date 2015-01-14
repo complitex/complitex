@@ -37,7 +37,7 @@ public abstract class ServiceProviderAccountAttrOperation extends GeneralAccount
 
         ServiceProviderAccount serviceProviderAccount = getServiceProviderAccount(registry, registryRecord);
 
-        DomainObject newObject = serviceProviderAccountStrategy.findById(serviceProviderAccount.getId(), true);
+        DomainObject newObject = serviceProviderAccountStrategy.getDomainObject(serviceProviderAccount.getId(), true);
         DomainObject oldObject = CloneUtil.cloneObject(newObject);
 
         ServiceProviderAccountAttribute newObjectAttribute = (ServiceProviderAccountAttribute)newObject.getAttribute(getAttributeId());

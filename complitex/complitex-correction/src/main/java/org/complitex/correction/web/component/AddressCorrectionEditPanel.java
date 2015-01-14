@@ -91,7 +91,7 @@ public abstract class AddressCorrectionEditPanel<T extends Correction> extends A
     }
 
     protected DomainObject findObject(long objectId, String entity) {
-        return getStrategy(entity).findById(objectId, true);
+        return getStrategy(entity).getDomainObject(objectId, true);
     }
 
     protected abstract List<String> getSearchFilters();

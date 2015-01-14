@@ -302,7 +302,7 @@ public class OrderEditPanel extends Panel {
                 new IModel<DomainObject>() {
                     @Override
                     public DomainObject getObject() {
-                        return order.getRegionId() != null? regionStrategy.findById(order.getRegionId(), false) : null;
+                        return order.getRegionId() != null? regionStrategy.getDomainObject(order.getRegionId(), false) : null;
                     }
 
                     @Override
@@ -649,7 +649,7 @@ public class OrderEditPanel extends Panel {
             protected void populateItem(Item<Order> item) {
                 final Order order = item.getModelObject();
                 Set<String> changedFields = changed.get(order);
-                DomainObject region = order.getRegionId() != null? regionStrategy.findById(order.getRegionId(), false) : null;
+                DomainObject region = order.getRegionId() != null? regionStrategy.getDomainObject(order.getRegionId(), false) : null;
 
                 item.add(new Label("beginDate", order.getBeginDate() != null ? DATE_FORMAT.format(order.getBeginDate()) : ""));
                 item.add(new LabelHistory("callGirl", order.getCallGirl() != null? order.getCallGirl().getCode(): "", changedFields));

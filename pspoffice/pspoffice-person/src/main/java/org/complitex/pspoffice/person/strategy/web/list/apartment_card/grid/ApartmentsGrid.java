@@ -368,7 +368,7 @@ public final class ApartmentsGrid extends TemplatePage {
 
     @Override
     protected List<? extends ToolbarButton> getToolbarButtons(String id) {
-        final DomainObject building = buildingStrategy.findById(buildingId, true);
+        final DomainObject building = buildingStrategy.getDomainObject(buildingId, true);
 
         class AddApartmentRoomButton extends ToolbarButton {
 

@@ -53,7 +53,7 @@ public class HousingRightsImportService extends AbstractImportService {
                 // Ищем по externalId в базе.
                 final Long objectId = strategy.getObjectId(externalId);
                 if (objectId != null) {
-                    DomainObject oldObject = strategy.findById(objectId, true);
+                    DomainObject oldObject = strategy.getDomainObject(objectId, true);
                     if (oldObject != null) {
                         // нашли, обновляем (или дополняем) значения атрибутов и сохраняем.
                         DomainObject newObject = CloneUtil.cloneObject(oldObject);

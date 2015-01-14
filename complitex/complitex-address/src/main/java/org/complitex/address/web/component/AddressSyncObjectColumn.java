@@ -48,7 +48,7 @@ public class AddressSyncObjectColumn extends FilteredColumn<AddressSync>
             if (addressSync.getType().equals(AddressEntity.STREET_TYPE)){
                 StreetTypeStrategy strategy = EjbBeanLocator.getBean(StreetTypeStrategy.class);
 
-                DomainObject domainObject = strategy.findById(addressSync.getObjectId(), true);
+                DomainObject domainObject = strategy.getDomainObject(addressSync.getObjectId(), true);
                 objectName = strategy.getName(domainObject) + " (" + strategy.getShortName(domainObject) + ")";
             }else {
                 IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(addressSync.getType().getTable());

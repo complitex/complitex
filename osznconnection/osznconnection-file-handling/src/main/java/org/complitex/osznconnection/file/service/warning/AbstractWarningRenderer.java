@@ -4,10 +4,6 @@
  */
 package org.complitex.osznconnection.file.service.warning;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
@@ -17,6 +13,11 @@ import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.entity.RequestWarning;
 import org.complitex.osznconnection.file.entity.RequestWarningParameter;
 import org.complitex.osznconnection.file.entity.RequestWarningStatus;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -99,7 +100,7 @@ public abstract class AbstractWarningRenderer implements IWarningRenderer {
 
     protected String displayObject(String entity, long objectId, Locale locale) {
         IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(entity);
-        DomainObject object = strategy.findById(objectId, false);
+        DomainObject object = strategy.getDomainObject(objectId, false);
         if (object != null) {
             return strategy.displayDomainObject(object, locale);
         }

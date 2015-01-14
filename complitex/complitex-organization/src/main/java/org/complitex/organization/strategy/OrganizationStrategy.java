@@ -127,7 +127,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
             if (districtId != null) {
                 IStrategy districtStrategy = strategyFactory.getStrategy("district");
 
-                DomainObject districtObject = districtStrategy.findById(districtId, false);
+                DomainObject districtObject = districtStrategy.getDomainObject(districtId, false);
                 if (districtObject != null) {
                     Set<Long> addSubjectIds = Sets.newHashSet(newOrganization.getObjectId());
                     districtStrategy.changePermissionsInDistinctThread(districtId, districtObject.getPermissionId(), addSubjectIds, null);
@@ -155,12 +155,12 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
                 //district reference has changed
                 if (oldDistrictId != null) {
-                    long oldDistrictPermissionId = districtStrategy.findById(oldDistrictId, true).getPermissionId();
+                    long oldDistrictPermissionId = districtStrategy.getDomainObject(oldDistrictId, true).getPermissionId();
                     districtStrategy.changePermissionsInDistinctThread(oldDistrictId, oldDistrictPermissionId, null, subjectIds);
                 }
 
                 if (newDistrictId != null) {
-                    long newDistrictPermissionId = districtStrategy.findById(newDistrictId, true).getPermissionId();
+                    long newDistrictPermissionId = districtStrategy.getDomainObject(newDistrictId, true).getPermissionId();
                     districtStrategy.changePermissionsInDistinctThread(newDistrictId, newDistrictPermissionId, subjectIds, null);
                 }
             }
@@ -365,7 +365,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
     @Override
     public String getCode(long organizationId) {
-        DomainObject organization = findById(organizationId, true);
+        DomainObject organization = getDomainObject(organizationId, true);
         return organization != null ? getCode(organization) : null;
     }
 
@@ -414,7 +414,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
             return "";
         }
 
-        return displayShortNameAndCode(findById(organizationId, true), locale);
+        return displayShortNameAndCode(getDomainObject(organizationId, true), locale);
     }
 
     @Override

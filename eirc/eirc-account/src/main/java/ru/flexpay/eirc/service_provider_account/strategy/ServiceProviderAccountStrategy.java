@@ -53,7 +53,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     }
 
     @Override
-    public DomainObject findById(Long id, boolean runAsAdmin) {
+    public DomainObject getDomainObject(Long id, boolean runAsAdmin) {
 
         DomainObject object = new DomainObject(id);
 

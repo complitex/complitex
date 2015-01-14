@@ -113,7 +113,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
         if (example.getObjectId() != null) {
             boolean buildingFound = false;
-            Building building = findById(example.getObjectId(), false);
+            Building building = getDomainObject(example.getObjectId(), false);
 
             if (building != null) {
                 buildingFound = true;
@@ -217,7 +217,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
         prepareExampleForPermissionCheck(example);
         if (example.getObjectId() != null) {
-            Building building = findById(example.getObjectId(), false);
+            Building building = getDomainObject(example.getObjectId(), false);
             return building == null ? 0L : 1L;
         } else {
             DomainObjectFilter addressExample = createAddressExample(example);
@@ -227,7 +227,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
     private DomainObject findBuildingAddress(long id, Date date) {
         if (date == null) {
-            return buildingAddressStrategy.findById(id, true);
+            return buildingAddressStrategy.getDomainObject(id, true);
         } else {
             return buildingAddressStrategy.findHistoryObject(id, date);
         }
@@ -246,7 +246,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
     @Override
 
-    public Building findById(Long id, boolean runAsAdmin) {
+    public Building getDomainObject(Long id, boolean runAsAdmin) {
         DomainObjectFilter example = new DomainObjectFilter(id, getEntityTable());
 
         if (!runAsAdmin) {

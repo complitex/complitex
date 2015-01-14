@@ -205,7 +205,7 @@ public class SessionBean extends AbstractBean {
         IStrategy strategy = strategyFactory.getStrategy(ORGANIZATION_ENTITY);
         Long oId = getMainUserOrganizationObjectId();
 
-        return oId != null ? strategy.findById(oId, true) : null;
+        return oId != null ? strategy.getDomainObject(oId, true) : null;
     }
 
 

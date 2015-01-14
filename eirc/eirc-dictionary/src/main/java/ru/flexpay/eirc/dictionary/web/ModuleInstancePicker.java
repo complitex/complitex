@@ -312,7 +312,7 @@ public class ModuleInstancePicker extends FormComponentPanel<DomainObject> {
 
         @Override
         public DomainObject getObject() {
-            return model.getObject() == null? null : moduleInstanceStrategy.findById(Long.valueOf(model.getObject()), true);
+            return model.getObject() == null? null : moduleInstanceStrategy.getDomainObject(Long.valueOf(model.getObject()), true);
         }
 
         @Override

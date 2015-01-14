@@ -59,7 +59,7 @@ public class TestCache {
             Service service;
             final Long organizationId = 1L;
 
-            Organization organization = eircOrganizationStrategy.findById(organizationId, true);
+            Organization organization = eircOrganizationStrategy.getDomainObject(organizationId, true);
             List<Attribute> services = organization.getAttributes(EircOrganizationStrategy.SERVICE);
             if (services.get(0).getValueId() == null) {
 

@@ -190,7 +190,7 @@ public class DomainObjectPermissionPanel extends AbstractDomainObjectPermissionP
         List<DomainObject> selectedSubjects = new ArrayList<>();
         for (long selecetSubjectId : selectedSubjectIds) {
             if (selecetSubjectId > 0) {
-                DomainObject o = organizationStrategy.findById(selecetSubjectId, false);
+                DomainObject o = organizationStrategy.getDomainObject(selecetSubjectId, false);
                 if (o != null) {
                     selectedSubjects.add(o);
                 }

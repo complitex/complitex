@@ -73,7 +73,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public String displayDomainObject(Long objectId, Locale locale) {
-        return displayDomainObject(findById(objectId, true), locale);
+        return displayDomainObject(getDomainObject(objectId, true), locale);
     }
 
     @Override
@@ -235,13 +235,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     protected void loadStringCultures(String dataSource, Attribute attribute) {
-        List<StringCulture> strings = stringBean.getStringCultures(dataSource, attribute.getValueId(), getEntityTable());
-        attribute.setLocalizedValues(strings);
+        attribute.setLocalizedValues(stringBean.getStringCultures(dataSource, attribute.getValueId(), getEntityTable()));
     }
 
 
     @Override
-    public DomainObject findById(String dataSource, Long objectId, boolean runAsAdmin) {
+    public DomainObject getDomainObject(String dataSource, Long objectId, boolean runAsAdmin) {
         if (objectId == null){
             return null;
         }
@@ -270,8 +269,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     @Override
-    public DomainObject findById(Long objectId, boolean runAsAdmin) {
-        return findById(null, objectId, runAsAdmin);
+    public DomainObject getDomainObject(Long objectId, boolean runAsAdmin) {
+        return getDomainObject(null, objectId, runAsAdmin);
     }
 
     @Override
@@ -909,7 +908,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                     IStrategy searchFilterStrategy = strategyFactory.getStrategy(searchFilter);
                     if (id != null) {
                         if (date == null) {
-                            DomainObject objectFromDb = searchFilterStrategy.findById(id, true);
+                            DomainObject objectFromDb = searchFilterStrategy.getDomainObject(id, true);
                             if (objectFromDb != null) {
                                 object = objectFromDb;
                             }

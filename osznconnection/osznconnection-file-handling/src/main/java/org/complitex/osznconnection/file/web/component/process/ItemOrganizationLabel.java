@@ -21,7 +21,7 @@ public class ItemOrganizationLabel extends Label {
 
         String value = "";
         if (organizationId != null && organizationId > 0) {
-            DomainObject organization = organizationStrategy.findById(organizationId, true);
+            DomainObject organization = organizationStrategy.getDomainObject(organizationId, true);
             if (organization != null) {
                 value = organizationStrategy.displayDomainObject(organization, getLocale());
             }

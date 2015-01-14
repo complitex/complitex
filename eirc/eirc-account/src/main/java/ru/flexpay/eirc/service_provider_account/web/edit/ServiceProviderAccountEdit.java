@@ -176,7 +176,7 @@ public class ServiceProviderAccountEdit extends FormTemplatePage {
                 List<Long> allowableServices;
                 if (domainObject != null) {
                     serviceProviderAccount.setOrganizationId(domainObject.getObjectId());
-                    organization = organizationStrategy.findById(domainObject.getObjectId(), false);
+                    organization = organizationStrategy.getDomainObject(domainObject.getObjectId(), false);
                     allowableServices = getAllowableServices();
                 } else {
                     serviceProviderAccount.setOrganizationId(null);

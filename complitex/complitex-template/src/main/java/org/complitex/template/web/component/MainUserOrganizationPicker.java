@@ -97,7 +97,7 @@ public class MainUserOrganizationPicker extends Panel implements IMainUserOrgani
         List<Long> ids = sessionBean.getUserOrganizationObjectIds();
         if (!ids.isEmpty()) {
             for (long id : ids) {
-                results.add(organizationStrategy.findById(id, true));
+                results.add(organizationStrategy.getDomainObject(id, true));
             }
         }
 

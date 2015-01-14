@@ -17,7 +17,10 @@ import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.*;
 import org.complitex.common.mybatis.caches.EhcacheCache;
-import org.complitex.common.service.*;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.IImportListener;
+import org.complitex.common.service.LogBean;
 import org.complitex.common.service.exception.*;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.*;
@@ -31,7 +34,6 @@ import javax.transaction.UserTransaction;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.Locale;
 
 import static org.complitex.address.entity.AddressImportFile.*;
 
@@ -241,7 +243,7 @@ public class AddressImportService extends AbstractImportService {
                 // Ищем по externalId в базе.
                 Long objectId = countryStrategy.getObjectId(externalId);
                 if (objectId != null) {
-                    oldObject = countryStrategy.findById(objectId, true);
+                    oldObject = countryStrategy.getDomainObject(objectId, true);
                     if (oldObject != null) {
                         newObject = CloneUtil.cloneObject(oldObject);
                     }
@@ -303,7 +305,7 @@ public class AddressImportService extends AbstractImportService {
                 // Ищем по externalId в базе.
                 Long objectId = regionStrategy.getObjectId(externalId);
                 if (objectId != null) {
-                    oldObject = regionStrategy.findById(objectId, true);
+                    oldObject = regionStrategy.getDomainObject(objectId, true);
                     if (oldObject != null) {
                         newObject = CloneUtil.cloneObject(oldObject);
                     }
@@ -372,7 +374,7 @@ public class AddressImportService extends AbstractImportService {
                 // Ищем по externalId в базе.
                 Long objectId = cityTypeStrategy.getObjectId(externalId);
                 if (objectId != null) {
-                    oldObject = cityTypeStrategy.findById(objectId, true);
+                    oldObject = cityTypeStrategy.getDomainObject(objectId, true);
                     if (oldObject != null) {
                         newObject = CloneUtil.cloneObject(oldObject);
                     }
@@ -436,7 +438,7 @@ public class AddressImportService extends AbstractImportService {
                 // Ищем по externalId в базе.
                 Long objectId = cityStrategy.getObjectId(externalId);
                 if (objectId != null) {
-                    oldObject = cityStrategy.findById(objectId, true);
+                    oldObject = cityStrategy.getDomainObject(objectId, true);
                     if (oldObject != null) {
                         newObject = CloneUtil.cloneObject(oldObject);
                     }
@@ -512,7 +514,7 @@ public class AddressImportService extends AbstractImportService {
                 // Ищем по externalId в базе.
                 Long objectId = districtStrategy.getObjectId(externalId);
                 if (objectId != null) {
-                    oldObject = districtStrategy.findById(objectId, true);
+                    oldObject = districtStrategy.getDomainObject(objectId, true);
                     if (oldObject != null) {
                         newObject = CloneUtil.cloneObject(oldObject);
                     }
@@ -584,7 +586,7 @@ public class AddressImportService extends AbstractImportService {
                 // Ищем по externalId в базе.
                 Long objectId = streetTypeStrategy.getObjectId(externalId);
                 if (objectId != null) {
-                    oldObject = streetTypeStrategy.findById(objectId, true);
+                    oldObject = streetTypeStrategy.getDomainObject(objectId, true);
                     if (oldObject != null) {
                         newObject = CloneUtil.cloneObject(oldObject);
                     }
@@ -648,7 +650,7 @@ public class AddressImportService extends AbstractImportService {
                 // Ищем по externalId в базе.
                 Long objectId = streetStrategy.getObjectId(externalId);
                 if (objectId != null) {
-                    oldObject = streetStrategy.findById(objectId, true);
+                    oldObject = streetStrategy.getDomainObject(objectId, true);
                     if (oldObject != null) {
                         newObject = CloneUtil.cloneObject(oldObject);
                     }
@@ -679,7 +681,7 @@ public class AddressImportService extends AbstractImportService {
                 // сначала ищем улицу в системе с таким названием, типом и родителем(городом)
                 final Long existingStreetId = streetStrategy.performDefaultValidation(newObject, Locales.getSystemLocale());
                 if (existingStreetId != null) {  // нашли дубликат
-                    DomainObject existingStreet = streetStrategy.findById(existingStreetId, true);
+                    DomainObject existingStreet = streetStrategy.getDomainObject(existingStreetId, true);
                     String existingStreetExternalId = existingStreet.getExternalId();
                     listener.warn(STREET, ResourceUtil.getFormatString(RESOURCE_BUNDLE, "street_duplicate_warn",
                             locale,
@@ -768,7 +770,7 @@ public class AddressImportService extends AbstractImportService {
                     building.getAttribute(BuildingStrategy.DISTRICT).setValueId(districtObjectId);
                     buildingAddress = building.getPrimaryAddress();
                 }else {
-                    oldBuilding = buildingStrategy.findById(buildingId, true);
+                    oldBuilding = buildingStrategy.getDomainObject(buildingId, true);
 
                     //district check
                     Long buildingDistrictObjectId = oldBuilding.getAttribute(BuildingStrategy.DISTRICT).getValueId();
@@ -777,7 +779,7 @@ public class AddressImportService extends AbstractImportService {
                                 locale,
                                 districtStrategy.displayDomainObject(districtObjectId, locale),
                                 districtStrategy.displayDomainObject(buildingDistrictObjectId, locale),
-                                streetStrategy.displayDomainObject(streetStrategy.findById(streetObjectId, true), locale),
+                                streetStrategy.displayDomainObject(streetStrategy.getDomainObject(streetObjectId, true), locale),
                                 buildingStrategy.displayDomainObject(oldBuilding, locale),
                                 BUILDING.getFileName(), recordIndex));
                         continue;

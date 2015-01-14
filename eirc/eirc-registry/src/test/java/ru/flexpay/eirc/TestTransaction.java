@@ -57,7 +57,7 @@ public class TestTransaction {
                                         EircOrganizationStrategy organizationStrategy = EjbTestBeanLocator.getBean(context, EircOrganizationStrategy.BEAN_NAME);
                                         assertNotNull("Can not find EircOrganizationStrategy", organizationStrategy);
                                         try {
-                                            organizationStrategy.findById(idx, false);
+                                            organizationStrategy.getDomainObject(idx, false);
                                         } catch (Exception e) {
                                             exceptionInfos.add(new ExceptionInfo(new Date(), idx));
                                             return null;

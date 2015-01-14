@@ -40,7 +40,7 @@ public class AddressRendererBean {
         if (info != null) {
             addressComponentState = strategy.getSearchComponentStateForParent(info.getId(), info.getEntityTable(), null);
         }
-        DomainObject addressObject = strategy.findById(addressId, true);
+        DomainObject addressObject = strategy.getDomainObject(addressId, true);
         if (addressObject != null) {
             addressComponentState.put(addressEntity, addressObject);
         }

@@ -90,10 +90,10 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
         if (corrections != null && !corrections.isEmpty()) {
             IStrategy strategy = strategyFactory.getStrategy(entity);
             for (Correction correction : corrections) {
-                DomainObject object = strategy.findById(correction.getObjectId(), false);
+                DomainObject object = strategy.getDomainObject(correction.getObjectId(), false);
 
                 if (object == null) { //объект доступен только для просмотра
-                    object = strategy.findById(correction.getObjectId(), true);
+                    object = strategy.getDomainObject(correction.getObjectId(), true);
                     correction.setEditable(false);
                 }
 

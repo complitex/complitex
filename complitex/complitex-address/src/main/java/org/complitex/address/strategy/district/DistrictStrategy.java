@@ -69,7 +69,7 @@ public class DistrictStrategy extends TemplateStrategy {
             return null;
         }
 
-        DomainObject object = findById(objectId, true);
+        DomainObject object = getDomainObject(objectId, true);
 
         return object.getStringValue(NAME, locale);
     }
@@ -157,7 +157,7 @@ public class DistrictStrategy extends TemplateStrategy {
     }
 
     public String getDistrictCode(long districtId) {
-        return findById(districtId, true).getStringValue(CODE);
+        return getDomainObject(districtId, true).getStringValue(CODE);
     }
 
 

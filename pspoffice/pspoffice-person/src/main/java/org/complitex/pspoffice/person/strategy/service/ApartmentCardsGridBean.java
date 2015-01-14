@@ -67,7 +67,7 @@ public class ApartmentCardsGridBean extends AbstractBean {
                 throw new IllegalStateException("Apartment card cannot belong to more one organizations.");
             }
             long organizationId = organizationIds.iterator().next();
-            final DomainObject organization = organizationId > 0 ? organizationStrategy.findById(organizationId, true) : null;
+            final DomainObject organization = organizationId > 0 ? organizationStrategy.getDomainObject(organizationId, true) : null;
 
             result.add(new ApartmentCardsGridEntity(apartmentCardNumber, apartmentCard.getObjectId(), ownerhipForm,
                     registered, organization, owner));

@@ -56,7 +56,7 @@ public class UserOrganizationPicker extends Panel {
                     }
                     if (!found) {
                         userOrganizatons = ImmutableList.<DomainObject>builder().addAll(userOrganizatons).
-                                add(organizationStrategy.findById(currentOrganizationId, true)).build();
+                                add(organizationStrategy.getDomainObject(currentOrganizationId, true)).build();
                     }
                 }
                 return userOrganizatons;
