@@ -1,17 +1,14 @@
 <?xml version="1.0"?>
 <template>
     <web-components>
-        <main-user-organization-picker-component>
-            org.complitex.keconnection.web.template.KeConnectionMainUserOrganizationPicker
-        </main-user-organization-picker-component>
         <domain-object-permission-panel>
-            org.complitex.keconnection.organization.web.component.KeConnectionDomainObjectPermissionPanel
+            org.complitex.organization.web.component.DomainObjectPermissionPanel
         </domain-object-permission-panel>
         <organization-permission-panel>
-            org.complitex.keconnection.organization.web.component.KeConnectionOrganizationPermissionPanel
+            org.complitex.organization.web.component.OrganizationPermissionPanel
         </organization-permission-panel>
         <user-organization-picker>
-            org.complitex.keconnection.organization.web.component.KeConnectionUserOrganizationPicker
+            org.complitex.organization.web.component.UserOrganizationPicker
         </user-organization-picker>
     </web-components>
     <sidebar>

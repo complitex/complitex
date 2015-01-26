@@ -85,7 +85,7 @@ public class UserEdit extends FormTemplatePage {
 
         //Модель данных
         User user = userId != null ? userBean.getUser(userId) : userBean.newUser();
-        final IModel<User> userModel = new Model<User>(user);
+        final IModel<User> userModel = new Model<>(user);
 
         final SearchComponentState searchComponentState = new SearchComponentState();
         Locale userLocale = null;
@@ -99,7 +99,7 @@ public class UserEdit extends FormTemplatePage {
             Preference localePreference = preferenceBean.getPreference(userId, GLOBAL_PAGE, LOCALE_KEY);
             userLocale = localePreference != null ? new Locale(localePreference.getValue()) : null;
         }
-        final IModel<Locale> localeModel = new Model<Locale>(userLocale != null ? userLocale : stringLocaleBean.getSystemLocale());
+        final IModel<Locale> localeModel = new Model<>(userLocale != null ? userLocale : stringLocaleBean.getSystemLocale());
 
         Boolean copyUseDefaultAddressFlag = null;
         //Копирование
@@ -134,11 +134,11 @@ public class UserEdit extends FormTemplatePage {
         final User oldUser = (userId != null) ? CloneUtil.cloneObject(userModel.getObject()) : null;
 
         //Форма
-        Form<User> form = new Form<User>("form");
+        Form<User> form = new Form<>("form");
         add(form);
 
         //Логин
-        RequiredTextField<String> login = new RequiredTextField<String>("login", new PropertyModel<String>(userModel, "login"));
+        RequiredTextField<String> login = new RequiredTextField<>("login", new PropertyModel<String>(userModel, "login"));
         login.setEnabled(userId == null);
         form.add(login);
 
@@ -157,12 +157,12 @@ public class UserEdit extends FormTemplatePage {
         form.add(new LocalePicker("locale", localeModel, false));
 
         //Группы привилегий
-        CheckGroup<UserGroup> usergroups = new CheckGroup<UserGroup>("usergroups",
+        CheckGroup<UserGroup> usergroups = new CheckGroup<>("usergroups",
                 new PropertyModel<Collection<UserGroup>>(userModel, "userGroups"));
 
-        usergroups.add(new Check<UserGroup>("ADMINISTRATORS", getUserGroup(userModel.getObject(), ADMINISTRATORS)));
-        usergroups.add(new Check<UserGroup>("EMPLOYEES", getUserGroup(userModel.getObject(), EMPLOYEES)));
-        usergroups.add(new Check<UserGroup>("EMPLOYEES_CHILD_VIEW", getUserGroup(userModel.getObject(), EMPLOYEES_CHILD_VIEW)));
+        usergroups.add(new Check<>("ADMINISTRATORS", getUserGroup(userModel.getObject(), ADMINISTRATORS)));
+        usergroups.add(new Check<>("EMPLOYEES", getUserGroup(userModel.getObject(), EMPLOYEES)));
+        usergroups.add(new Check<>("EMPLOYEES_CHILD_VIEW", getUserGroup(userModel.getObject(), EMPLOYEES_CHILD_VIEW)));
 
         form.add(usergroups);
 
@@ -171,7 +171,7 @@ public class UserEdit extends FormTemplatePage {
         organizationContainer.setOutputMarkupId(true);
         form.add(organizationContainer);
 
-        final RadioGroup<Integer> organizationGroup = new RadioGroup<Integer>("organizationGroup", new Model<Integer>() {
+        final RadioGroup<Integer> organizationGroup = new RadioGroup<>("organizationGroup", new Model<Integer>() {
 
             @Override
             public void setObject(Integer index) {
@@ -245,14 +245,14 @@ public class UserEdit extends FormTemplatePage {
         form.add(addressContainer);
         addressContainer.setVisible(usingAddress);
 
-        Boolean useDefaultAddressFlag = null;
+        Boolean useDefaultAddressFlag;
         if (!copyUser) {
             Preference useDefaultAddressPreference = preferenceBean.getOrCreatePreference(userId, GLOBAL_PAGE, IS_USE_DEFAULT_STATE_KEY);
             useDefaultAddressFlag = Boolean.valueOf(useDefaultAddressPreference.getValue());
         } else {
             useDefaultAddressFlag = copyUseDefaultAddressFlag;
         }
-        final Model<Boolean> useDefaultAddressModel = new Model<Boolean>(useDefaultAddressFlag);
+        final Model<Boolean> useDefaultAddressModel = new Model<>(useDefaultAddressFlag);
         addressContainer.add(new CheckBox("use_default_address", useDefaultAddressModel));
 
         addressContainer.add(usingAddress ?
@@ -312,7 +312,7 @@ public class UserEdit extends FormTemplatePage {
         form.add(save);
 
         //Отмена
-        AjaxLink<Void> cancel = new AjaxLink<Void>("cancel") {
+        AjaxLink cancel = new AjaxLink("cancel") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -362,18 +362,18 @@ public class UserEdit extends FormTemplatePage {
         if (!user.getUserGroups().isEmpty()) {
             for (UserGroup userGroup : user.getUserGroups()) {
                 if (userGroup.getGroupName().equals(group_name)) {
-                    return new Model<UserGroup>(userGroup);
+                    return new Model<>(userGroup);
                 }
             }
         }
 
         UserGroup userGroup = new UserGroup();
         userGroup.setGroupName(group_name);
-        return new Model<UserGroup>(userGroup);
+        return new Model<>(userGroup);
     }
 
     private List<LogChange> getLogChanges(User oldUser, User newUser) {
-        List<LogChange> logChanges = new ArrayList<LogChange>();
+        List<LogChange> logChanges = new ArrayList<>();
 
         //логин
         if (newUser.getId() == null) {
