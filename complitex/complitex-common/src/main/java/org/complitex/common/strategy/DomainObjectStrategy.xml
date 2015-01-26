@@ -226,8 +226,8 @@
 
     <sql id="sqlSelectHistoryObject">
         SELECT e.*
-        FROM `${table}` e WHERE e.`object_id` = #{objectId} AND e.`start_date` = (
-        SELECT MAX(e1.`start_date`) FROM `${table}` e1 WHERE e1.`object_id` = #{objectId} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+        FROM `${entityTable}` e WHERE e.`object_id` = #{objectId} AND e.`start_date` = (
+        SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{objectId} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
     </sql>
 
     <select id="selectHistoryObject" parameterType="org.complitex.common.entity.DomainObjectFilter"

@@ -107,7 +107,7 @@ public class OrganizationList extends ScrollListPage {
         content.setOutputMarkupPlaceholderTag(true);
 
         //Example
-        example = (DomainObjectFilter) getFilterObject(newExample());
+        example = getFilterObject(newExample());
 
         //Search
         final List<String> searchFilters = organizationStrategy.getSearchFilters();
@@ -150,6 +150,7 @@ public class OrganizationList extends ScrollListPage {
                 example.setAsc(asc);
                 example.setFirst(first);
                 example.setCount(count);
+
                 return organizationStrategy.getList(example);
             }
 
@@ -163,7 +164,7 @@ public class OrganizationList extends ScrollListPage {
         dataProvider.setSort(String.valueOf(organizationStrategy.getDefaultSortAttributeTypeId()), SortOrder.ASCENDING);
 
         //Filters
-        filterForm.add(new TextField<String>("nameFilter", new Model<String>() {
+        filterForm.add(new TextField<>("nameFilter", new Model<String>() {
 
             @Override
             public String getObject() {
@@ -175,7 +176,7 @@ public class OrganizationList extends ScrollListPage {
                 example.getAttributeExample(NAME).setValue(name);
             }
         }));
-        filterForm.add(new TextField<String>("codeFilter", new Model<String>() {
+        filterForm.add(new TextField<>("codeFilter", new Model<String>() {
 
             @Override
             public String getObject() {
@@ -187,7 +188,7 @@ public class OrganizationList extends ScrollListPage {
                 example.getAttributeExample(KeConnectionOrganizationStrategy.CODE).setValue(code);
             }
         }));
-        filterForm.add(new TextField<String>("shortNameFilter", new Model<String>() {
+        filterForm.add(new TextField<>("shortNameFilter", new Model<String>() {
 
             @Override
             public String getObject() {
@@ -199,7 +200,7 @@ public class OrganizationList extends ScrollListPage {
                 example.getAttributeExample(SHORT_NAME).setValue(shortName);
             }
         }));
-        filterForm.add(new TextField<String>("parentShortNameFilter", new Model<String>() {
+        filterForm.add(new TextField<>("parentShortNameFilter", new Model<String>() {
 
             @Override
             public String getObject() {

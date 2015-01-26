@@ -156,6 +156,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
     @Override
     public Organization getDomainObject(Long id, boolean runAsAdmin) {
         DomainObject object = super.getDomainObject(id, runAsAdmin);
+
         if (object == null) {
             return null;
         }
@@ -233,6 +234,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
         if (CUSTOM_ATTRIBUTE_TYPES.contains(entityAttributeType.getId())) {
             return false;
         }
+
         return super.isSimpleAttributeType(entityAttributeType);
     }
 
@@ -264,8 +266,8 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
 
 
     @Override
-    public DomainObject findHistoryObject(long objectId, Date date) {
-        DomainObject object = super.findHistoryObject(objectId, date);
+    public DomainObject getHistoryObject(long objectId, Date date) {
+        DomainObject object = super.getHistoryObject(objectId, date);
         if (object == null) {
             return null;
         }

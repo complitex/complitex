@@ -188,7 +188,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
     protected List<PermissionInfo> getTreeChildrenPermissionInfo(long parentId) {
         List<PermissionInfo> childrenPermissionInfo = sqlSession().selectList(ORGANIZATION_NS
-                + ".findOrganizationChildrenPermissionInfo", parentId);
+                + ".selectOrganizationChildrenPermissionInfo", parentId);
         List<PermissionInfo> treeChildrenPermissionInfo = Lists.newArrayList(childrenPermissionInfo);
         for (PermissionInfo childPermissionInfo : childrenPermissionInfo) {
             treeChildrenPermissionInfo.addAll(getTreeChildrenPermissionInfo(childPermissionInfo.getId()));
@@ -306,7 +306,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
     @Override
     public Set<Long> getTreeChildrenOrganizationIds(long parentOrganizationId) {
-        List<Long> results = sqlSession().selectList(ORGANIZATION_NS + ".findOrganizationChildrenObjectIds",
+        List<Long> results = sqlSession().selectList(ORGANIZATION_NS + ".selectOrganizationChildrenObjectIds",
                 parentOrganizationId);
         Set<Long> childrenIds = Sets.newHashSet(results);
         Set<Long> treeChildrenIds = Sets.newHashSet(childrenIds);

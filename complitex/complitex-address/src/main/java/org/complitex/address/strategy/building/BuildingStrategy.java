@@ -225,18 +225,18 @@ public class BuildingStrategy extends TemplateStrategy {
         }
     }
 
-    private DomainObject findBuildingAddress(long id, Date date) {
+    private DomainObject getBuildingAddress(long id, Date date) {
         if (date == null) {
             return buildingAddressStrategy.getDomainObject(id, true);
         } else {
-            return buildingAddressStrategy.findHistoryObject(id, date);
+            return buildingAddressStrategy.getHistoryObject(id, date);
         }
     }
 
     private void setAlternativeAddresses(Building building, Date date) {
         for (Attribute attr : building.getAttributes()) {
             if (attr.getAttributeTypeId().equals(BUILDING_ADDRESS)) {
-                DomainObject alternativeAddress = findBuildingAddress(attr.getValueId(), date);
+                DomainObject alternativeAddress = getBuildingAddress(attr.getValueId(), date);
                 if (alternativeAddress != null) {
                     building.addAlternativeAddress(alternativeAddress);
                 }
@@ -259,7 +259,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
         if (building != null) {
             loadAttributes(building);
-            DomainObject primaryAddress = findBuildingAddress(building.getParentId(), null);
+            DomainObject primaryAddress = getBuildingAddress(building.getParentId(), null);
             building.setPrimaryAddress(primaryAddress);
             building.setAccompaniedAddress(primaryAddress);
             setAlternativeAddresses(building, null);
@@ -639,7 +639,7 @@ public class BuildingStrategy extends TemplateStrategy {
     @Override
     public TreeSet<Date> getHistoryDates(long objectId) {
         TreeSet<Date> historyDates = super.getHistoryDates(objectId);
-        Set<Long> addressIds = findBuildingAddresses(objectId);
+        Set<Long> addressIds = getBuildingAddresses(objectId);
         for (Long addressId : addressIds) {
             TreeSet<Date> addressHistoryDates = buildingAddressStrategy.getHistoryDates(addressId);
             historyDates.addAll(addressHistoryDates);
@@ -648,14 +648,14 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
 
-    private Set<Long> findBuildingAddresses(long buildingId) {
-        List<Long> results = sqlSession().selectList(BUILDING_NS + ".findBuildingAddresses", buildingId);
+    private Set<Long> getBuildingAddresses(long buildingId) {
+        List<Long> results = sqlSession().selectList(BUILDING_NS + ".selectBuildingAddresses", buildingId);
         return Sets.newHashSet(results);
     }
 
 
     @Override
-    public Building findHistoryObject(long objectId, Date date) {
+    public Building getHistoryObject(long objectId, Date date) {
         DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable(), date);
 
         Building building = sqlSession().selectOne(BUILDING_NS + ".selectHistoryObject", example);
@@ -666,7 +666,7 @@ public class BuildingStrategy extends TemplateStrategy {
         List<Attribute> historyAttributes = loadHistoryAttributes(objectId, date);
         loadStringCultures(historyAttributes);
         building.setAttributes(historyAttributes);
-        DomainObject primaryAddress = findBuildingAddress(building.getParentId(), date);
+        DomainObject primaryAddress = getBuildingAddress(building.getParentId(), date);
         building.setPrimaryAddress(primaryAddress);
         building.setAccompaniedAddress(primaryAddress);
         setAlternativeAddresses(building, date);
@@ -717,7 +717,7 @@ public class BuildingStrategy extends TemplateStrategy {
         sqlSession().delete(BUILDING_NS + ".deleteBuildingCodes", ImmutableMap.of("objectId", objectId,
                 "buildingCodesAT", BUILDING_CODE));
 
-        Set<Long> addressIds = findBuildingAddresses(objectId);
+        Set<Long> addressIds = getBuildingAddresses(objectId);
 
         deleteStrings(objectId);
         deleteAttribute(objectId);

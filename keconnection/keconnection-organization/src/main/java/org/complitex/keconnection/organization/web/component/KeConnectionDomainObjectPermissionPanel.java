@@ -26,6 +26,8 @@ import org.complitex.common.strategy.PermissionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.fieldset.CollapsibleFieldset;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
+import org.complitex.common.web.component.organization.*;
+import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.permission.AbstractDomainObjectPermissionPanel;
 import org.complitex.common.web.component.permission.DomainObjectPermissionParameters;
 import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
@@ -151,9 +153,10 @@ public class KeConnectionDomainObjectPermissionPanel extends AbstractDomainObjec
                 
                 boolean allowModifyOrganization = isAllowModifyOrganization(getCurrentIndex(fakeContainer),
                         organization != null ? organization.getObjectId() : null);
-                OrganizationPicker organizationPicker = new OrganizationPicker("organizationPicker",
-                        organizationModel, false, null, parameters.isEnabled() && allowModifyOrganization,
-                        OrganizationTypeStrategy.USER_ORGANIZATION_TYPE);
+                OrganizationPicker organizationPicker = new OrganizationPicker
+                        ("organizationPicker",
+                        organizationModel,
+                        OrganizationTypeStrategy.USER_ORGANIZATION_TYPE); //todo enabled parameters.isEnabled() && allowModifyOrganization
                 item.add(organizationPicker);
                 
                 addRemoveLink("removeOrganization", item, null, organizationsContainer).

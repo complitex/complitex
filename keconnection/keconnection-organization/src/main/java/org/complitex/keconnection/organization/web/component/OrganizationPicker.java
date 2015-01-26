@@ -42,6 +42,7 @@ import static org.complitex.common.strategy.organization.IOrganizationStrategy.N
  *
  * @author Artem
  */
+@Deprecated
 public class OrganizationPicker extends FormComponentPanel<DomainObject> {
 
     private static final TextTemplate CENTER_DIALOG_JS =

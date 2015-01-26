@@ -6,7 +6,7 @@
                extends="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
     </resultMap>
 
-    <select id="selectBuilding" parameterType="org.complitex.common.entity.DomainObjectFilter"
+    <select id="selectBuildings" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="buildingResultMap">
         SELECT DISTINCT e.`object_id`, e.`start_date`, e.`end_date`, e.`status`, e.`parent_id`, e.`parent_entity_id`,
           e.`permission_id`, e.`external_id`

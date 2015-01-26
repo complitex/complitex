@@ -40,7 +40,7 @@ public interface IStrategy {
 
     public Long getObjectId(String externalId);
     
-    DomainObject findHistoryObject(long objectId, Date date);
+    DomainObject getHistoryObject(long objectId, Date date);
 
     SimpleObjectInfo findParentInSearchComponent(long id, Date date);
 

@@ -14,6 +14,7 @@ import javax.ejb.EJB;
  *
  * @author Artem
  */
+@Deprecated
 public class KeConnectionUserOrganizationPicker extends Panel {
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)

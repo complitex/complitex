@@ -256,8 +256,8 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
     }
 
     @Override
-    public Organization findHistoryObject(long objectId, Date date) {
-        DomainObject object = super.findHistoryObject(objectId, date);
+    public Organization getHistoryObject(long objectId, Date date) {
+        DomainObject object = super.getHistoryObject(objectId, date);
         if (object == null) {
             return null;
         }

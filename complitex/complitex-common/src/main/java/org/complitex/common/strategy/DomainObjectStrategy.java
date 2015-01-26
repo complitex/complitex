@@ -205,7 +205,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
         List<Attribute> attributes = (dataSource == null ? sqlSession() : sqlSession(dataSource)).selectList(getLoadAttributesStatement(), params);
 
-        loadStringCultures(dataSource, attributes);
+        //protected override
+        if (dataSource == null) {
+            loadStringCultures(attributes);
+        }else{
+            loadStringCultures(dataSource, attributes);
+        }
 
         object.setAttributes(attributes);
     }
@@ -222,7 +227,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         for (Attribute attribute : attributes) {
             if (isSimpleAttribute(attribute)) {
                 if (attribute.getValueId() != null) {
-                    loadStringCultures(dataSource, attribute);
+                    //protected override
+                    if (dataSource == null) {
+                        loadStringCultures(attribute);
+                    }else{
+                        loadStringCultures(dataSource, attribute);
+                    }
                 } else {
                     attribute.setLocalizedValues(StringCultures.newStringCultures());
                 }
@@ -913,7 +923,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                                 object = objectFromDb;
                             }
                         } else {
-                            DomainObject historyObject = searchFilterStrategy.findHistoryObject(ids.get(searchFilter), date);
+                            DomainObject historyObject = searchFilterStrategy.getHistoryObject(ids.get(searchFilter), date);
                             if (historyObject != null) {
                                 object = historyObject;
                             }
@@ -948,11 +958,13 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         List<History> historyList = newArrayList();
 
         TreeSet<Date> historyDates = getHistoryDates(objectId);
+
         for (final Date date : historyDates) {
-            DomainObject historyObject = findHistoryObject(objectId, date);
+            DomainObject historyObject = getHistoryObject(objectId, date);
             History history = new History(date, historyObject);
             historyList.add(history);
         }
+
         return historyList;
     }
 
@@ -974,7 +986,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     @Override
-    public DomainObject findHistoryObject(long objectId, Date date) {
+    public DomainObject getHistoryObject(long objectId, Date date) {
         DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable());
         example.setStartDate(date);
 
