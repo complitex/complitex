@@ -7,9 +7,7 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.room.RoomStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.AbstractBean;
 import org.complitex.correction.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,16 +15,11 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.Stateless;
 import java.util.List;
 
-/**
- * Класс для работы с коррекциями адресов.
- * @author Artem
- */
 @Stateless
-public class AddressCorrectionBean extends AbstractBean {
+public class AddressCorrectionBean extends CorrectionBean {
     private final Logger log = LoggerFactory.getLogger(AddressCorrectionBean.class);
 
-    private static final String NS = AddressCorrectionBean.class.getName();
-    private static final String NS_CORRECTION = Correction.class.getName();
+    public static final String NS = AddressCorrectionBean.class.getName();
 
     //todo add locale
     private List<Long> getObjectIds(String entity, String correction, Long attributeTypeId){
@@ -54,22 +47,14 @@ public class AddressCorrectionBean extends AbstractBean {
 
 
     public boolean save(CityCorrection cityCorrection) {
-        if (cityCorrection.getId() == null) {
-            if (!isCityObjectExists(cityCorrection.getCorrection(), cityCorrection.getObjectId())){
-                sqlSession().insert(NS_CORRECTION + ".insertCorrection", cityCorrection);
-            }else {
-                return false;
-            }
-        }else {
-            sqlSession().update(NS_CORRECTION + ".updateCorrection", cityCorrection);
+        if (cityCorrection.getId() == null
+                && isCityObjectExists(cityCorrection.getCorrection(), cityCorrection.getObjectId())){
+            return false;
         }
 
+        super.save(cityCorrection);
+
         return true;
-    }
-
-
-    public void delete(CityCorrection cityCorrection){
-        sqlSession().delete(NS_CORRECTION + ".deleteCorrection", cityCorrection);
     }
 
     public List<Long> getCityObjectIds(String city) {
@@ -115,10 +100,6 @@ public class AddressCorrectionBean extends AbstractBean {
         return true;
     }
 
-    public void delete(DistrictCorrection districtCorrection){
-        sqlSession().delete(NS_CORRECTION + ".deleteCorrection", districtCorrection);
-    }
-
     public List<Long> getDistrictObjectIds(String district) {
         return getObjectIds("district", district, DistrictStrategy.NAME);
     }
@@ -147,21 +128,14 @@ public class AddressCorrectionBean extends AbstractBean {
     }
 
     public boolean save(StreetTypeCorrection streetTypeCorrection) {
-        if (streetTypeCorrection.getId() == null) {
-            if (!isStreetTypeObjectExists(streetTypeCorrection.getCorrection(), streetTypeCorrection.getObjectId())) {
-                sqlSession().insert(NS_CORRECTION + ".insertCorrection", streetTypeCorrection);
-            }else {
-                return false;
-            }
-        }else {
-            sqlSession().update(NS_CORRECTION + ".updateCorrection", streetTypeCorrection);
+        if (streetTypeCorrection.getId() == null
+                && isStreetTypeObjectExists(streetTypeCorrection.getCorrection(), streetTypeCorrection.getObjectId())) {
+            return false;
         }
 
-        return true;
-    }
+        super.save(streetTypeCorrection);
 
-    public void delete(StreetTypeCorrection streetTypeCorrection){
-        sqlSession().delete(NS_CORRECTION + ".deleteCorrection", streetTypeCorrection);
+        return true;
     }
 
     public List<Long> getStreetTypeObjectIds(String streetType) {
@@ -206,10 +180,6 @@ public class AddressCorrectionBean extends AbstractBean {
         }
 
         return true;
-    }
-
-    public void delete(StreetCorrection streetCorrection){
-        sqlSession().delete(NS_CORRECTION + ".deleteCorrection", streetCorrection);
     }
 
     public List<StreetCorrection> getStreetCorrectionsByBuilding(Long internalStreetId, Long internalBuildingId,
@@ -263,12 +233,6 @@ public class AddressCorrectionBean extends AbstractBean {
         return true;
     }
 
-    public void delete(BuildingCorrection buildingCorrection){
-        sqlSession().delete(NS_CORRECTION + ".deleteCorrection", buildingCorrection);
-    }
-
-
-
     public boolean isBuildingObjectExists(String buildingNumber, String buildingCorp, Long objectId){
         return sqlSession().selectOne(NS + ".selectBuildingObjectExists",
                 ImmutableMap.of("buildingNumber", buildingNumber, "buildingCorp", buildingCorp, "objectId", objectId));
@@ -296,22 +260,14 @@ public class AddressCorrectionBean extends AbstractBean {
 
 
     public boolean save(ApartmentCorrection apartmentCorrection){
-        if (apartmentCorrection.getId() == null) {
-            if (!isApartmentObjectExists(apartmentCorrection.getCorrection(), apartmentCorrection.getObjectId())) {
-                sqlSession().insert(NS + ".insertApartmentCorrection", apartmentCorrection);
-            }else {
-                return false;
-            }
-        } else{
-            sqlSession().update(NS_CORRECTION + ".updateCorrection", apartmentCorrection);
+        if (apartmentCorrection.getId() == null
+                && isApartmentObjectExists(apartmentCorrection.getCorrection(), apartmentCorrection.getObjectId())) {
+            return false;
         }
 
+        super.save(apartmentCorrection);
+
         return true;
-    }
-
-
-    public void delete(ApartmentCorrection apartmentCorrection){
-        sqlSession().delete(NS_CORRECTION + ".deleteCorrection", apartmentCorrection);
     }
 
     public List<Long> getApartmentObjectIds(String apartment) {
@@ -345,22 +301,14 @@ public class AddressCorrectionBean extends AbstractBean {
 
 
     public boolean save(RoomCorrection roomCorrection) {
-        if (roomCorrection.getId() == null) {
-            if (!isRoomObjectExists(roomCorrection.getCorrection(), roomCorrection.getObjectId())) {
-                sqlSession().insert(NS + ".insertRoomCorrection", roomCorrection);
-            } else {
-                return false;
-            }
-        } else {
-            sqlSession().update(NS_CORRECTION + ".updateCorrection", roomCorrection);
+        if (roomCorrection.getId() == null
+                && isRoomObjectExists(roomCorrection.getCorrection(), roomCorrection.getObjectId())) {
+            return false;
         }
 
+        super.save(roomCorrection);
+
         return true;
-    }
-
-
-    public void delete(RoomCorrection roomCorrection) {
-        sqlSession().delete(NS_CORRECTION + ".deleteCorrection", roomCorrection);
     }
 
     public List<Long> getRoomObjectIds(String room) {

@@ -797,7 +797,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     }
 
     public ApartmentCard getHistoryApartmentCard(long apartmentCardId, Date date) {
-        DomainObject historyObject = super.findHistoryObject(apartmentCardId, date);
+        DomainObject historyObject = super.getHistoryObject(apartmentCardId, date);
         if (historyObject == null) {
             return null;
         }

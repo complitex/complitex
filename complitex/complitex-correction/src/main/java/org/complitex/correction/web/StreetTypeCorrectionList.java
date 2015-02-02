@@ -5,10 +5,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
+import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.StreetTypeCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 

@@ -320,7 +320,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
     }
 
     public Registration getHistoryRegistration(long registrationId, Date date) {
-        DomainObject historyObject = super.findHistoryObject(registrationId, date);
+        DomainObject historyObject = super.getHistoryObject(registrationId, date);
         if (historyObject == null) {
             return null;
         }

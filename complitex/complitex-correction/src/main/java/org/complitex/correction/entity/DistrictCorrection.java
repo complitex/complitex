@@ -1,7 +1,6 @@
 package org.complitex.correction.entity;
 
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.common.entity.Correction;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

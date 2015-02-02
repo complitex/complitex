@@ -119,7 +119,7 @@ public class DocumentStrategy extends TemplateStrategy {
     }
 
     public Document getHistoryDocument(long documentId, Date date) {
-        DomainObject historyObject = super.findHistoryObject(documentId, date);
+        DomainObject historyObject = super.getHistoryObject(documentId, date);
         if (historyObject == null) {
             return null;
         }

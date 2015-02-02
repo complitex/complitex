@@ -21,6 +21,10 @@
             <artifactId>complitex-template</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.complitex</groupId>
+            <artifactId>complitex-correction</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.complitex.keconnection</groupId>
             <artifactId>keconnection-organization</artifactId>
         </dependency>

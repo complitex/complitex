@@ -85,6 +85,11 @@
                 <artifactId>complitex-images</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.complitex</groupId>
+                <artifactId>complitex-correction</artifactId>
+                <version>${complitex.version}</version>
+            </dependency>
 
             <!--Keconnection Modules-->
             <dependency>

@@ -3,7 +3,6 @@ package org.complitex.correction.web.component;
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -18,17 +17,15 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.Correction;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.common.web.component.organization.OrganizationPicker;
+import org.complitex.correction.entity.Correction;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.template.web.template.TemplateSession;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import java.util.List;
 import java.util.Locale;
 
 /**

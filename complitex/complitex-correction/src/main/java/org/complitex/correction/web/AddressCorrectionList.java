@@ -4,7 +4,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.Correction;
+import org.complitex.correction.entity.Correction;
 
 /**
  * Страница для списка коррекций элементов адреса(город, улица).

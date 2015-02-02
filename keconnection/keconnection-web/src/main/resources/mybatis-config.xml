@@ -45,6 +45,9 @@
         <mapper resource="org/complitex/address/strategy/city/CityStrategy.xml"/>
         <mapper resource="org/complitex/address/strategy/district/DistrictStrategy.xml"/>
 
+        <mapper resource="org/complitex/correction/service/CorrectionBean.xml"/>
+        <mapper resource="org/complitex/correction/service/AddressCorrectionBean.xml"/>
+
         <mapper resource="org/complitex/admin/service/UserBean.xml"/>
         <mapper resource="org/complitex/admin/service/UserProfileBean.xml"/>
         <mapper resource="org/complitex/logging/service/LogListBean.xml"/>
@@ -56,8 +59,5 @@
         <mapper resource="org/complitex/keconnection/tarif/strategy/TarifGroup.xml"/>
         <mapper resource="org/complitex/keconnection/tarif/strategy/Tarif.xml"/>
         <mapper resource="org/complitex/keconnection/organization/strategy/KeConnectionOrganizationStrategy.xml"/>
-        
-        <mapper resource="org/complitex/keconnection/heatmeter/service/CorrectionBean.xml"/>
-        <mapper resource="org/complitex/keconnection/heatmeter/service/AddressCorrectionBean.xml"/>
     </mappers>
 </configuration>

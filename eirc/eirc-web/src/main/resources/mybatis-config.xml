@@ -47,7 +47,7 @@
         <mapper resource="org/complitex/organization/strategy/Organization.xml"/>
         <mapper resource="org/complitex/organization/service/OrganizationImportBean.xml"/>
 
-        <mapper resource="org/complitex/common/entity/Correction.xml"/>
+        <mapper resource="org/complitex/correction/service/CorrectionBean.xml"/>
         <mapper resource="org/complitex/correction/service/AddressCorrectionBean.xml"/>
         <mapper resource="org/complitex/correction/service/OrganizationCorrectionBean.xml"/>
         <mapper resource="ru/flexpay/eirc/service/correction/service/ServiceCorrectionBean.xml"/>

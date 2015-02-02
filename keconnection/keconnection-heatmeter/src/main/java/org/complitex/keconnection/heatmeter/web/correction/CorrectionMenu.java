@@ -1,21 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.heatmeter.web.correction;
 
 import com.google.common.collect.Lists;
-import java.util.List;
-import java.util.Locale;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.correction.web.*;
 import org.complitex.template.web.template.ITemplateLink;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
-/**
- *
- * @author Artem
- */
+import java.util.List;
+import java.util.Locale;
+
 public class CorrectionMenu extends ResourceTemplateMenu {
 
     @Override

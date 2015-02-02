@@ -1,8 +1,8 @@
 package org.complitex.correction.service;
 
-import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
+import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.OrganizationCorrection;
 
 import javax.ejb.Stateless;

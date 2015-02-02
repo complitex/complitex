@@ -1,4 +1,4 @@
-package org.complitex.common.entity;
+package org.complitex.correction.entity;
 
 import org.complitex.common.util.DateUtil;
 

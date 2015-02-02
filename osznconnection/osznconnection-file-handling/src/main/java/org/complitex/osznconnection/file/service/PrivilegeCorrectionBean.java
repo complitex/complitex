@@ -1,9 +1,9 @@
 package org.complitex.osznconnection.file.service;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
+import org.complitex.correction.entity.Correction;
 import org.complitex.osznconnection.file.entity.PrivilegeCorrection;
 
 import javax.ejb.Stateless;

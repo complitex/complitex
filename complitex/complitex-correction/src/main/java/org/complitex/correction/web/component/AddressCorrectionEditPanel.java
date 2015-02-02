@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.Correction;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.SimpleObjectInfo;
 import org.complitex.common.strategy.IStrategy;
@@ -15,6 +14,7 @@ import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
+import org.complitex.correction.entity.Correction;
 import org.complitex.correction.service.AddressCorrectionBean;
 
 import javax.ejb.EJB;

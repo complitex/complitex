@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.complitex.common.entity.Correction">
+<mapper namespace="org.complitex.correction.service.CorrectionBean">
     <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
 
-    <resultMap id="correction" type="org.complitex.common.entity.Correction">
+    <resultMap id="correctionResultMap" type="org.complitex.correction.entity.Correction">
         <id column="id" property="id"/>
         <result column="external_id" property="externalId"/>
         <result column="object_id" property="objectId"/>
@@ -23,7 +23,7 @@
                      column="user_organization_id"/>
     </resultMap>
 
-    <insert id="insertCorrection" parameterType="org.complitex.common.entity.Correction"
+    <insert id="insertCorrection" parameterType="org.complitex.correction.entity.Correction"
             keyProperty="id" useGeneratedKeys="true">
         insert into `${entity}_correction` (`external_id`, `object_id`, `correction`,
           `begin_date`, `end_date`, `organization_id`, `user_organization_id`, `module_id`, `status`)
@@ -31,14 +31,14 @@
               #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status})
     </insert>
 
-    <update id="updateCorrection" parameterType="org.complitex.common.entity.Correction">
+    <update id="updateCorrection" parameterType="org.complitex.correction.entity.Correction">
         update `${entity}_correction` set `organization_id` = #{organizationId}, `correction` = #{correction},
             `object_id` = #{objectId}, `external_id` = #{externalId}, `user_organization_id` = #{userOrganizationId},
             `begin_date` = #{beginDate}, `end_date` = #{endDate}, `status` = #{status}
         where `id` = #{id}
     </update>
 
-    <delete id="deleteCorrection" parameterType="org.complitex.common.entity.Correction">
+    <delete id="deleteCorrection" parameterType="org.complitex.correction.entity.Correction">
         delete from `${entity}_correction` where `id` = #{id}
     </delete>
 
@@ -66,8 +66,8 @@
 
     <sql id="selectCorrectionWhere">
         <where>
-            <include refid="org.complitex.common.entity.Correction.selectCorrectionWhereIf"/>
+            <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionWhereIf"/>
         </where>
-        <include refid="org.complitex.common.entity.Correction.selectCorrectionOrderLimit"/>
+        <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionOrderLimit"/>
     </sql>
 </mapper>

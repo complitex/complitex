@@ -831,7 +831,7 @@ public class PersonStrategy extends TemplateStrategy {
     }
 
     public Person getHistoryPerson(long personId, Date date) {
-        DomainObject historyObject = super.findHistoryObject(personId, date);
+        DomainObject historyObject = super.getHistoryObject(personId, date);
         if (historyObject == null) {
             return null;
         }

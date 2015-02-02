@@ -1,7 +1,6 @@
 package org.complitex.correction.entity;
 
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.common.entity.Correction;
 
 public class StreetCorrection extends Correction {
     private Long cityObjectId;

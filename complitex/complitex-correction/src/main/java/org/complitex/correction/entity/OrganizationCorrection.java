@@ -1,7 +1,5 @@
 package org.complitex.correction.entity;
 
-import org.complitex.common.entity.Correction;
-
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 28.11.13 15:41

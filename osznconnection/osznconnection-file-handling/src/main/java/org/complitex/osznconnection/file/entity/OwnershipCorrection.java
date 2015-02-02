@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.entity;
 
-import org.complitex.common.entity.Correction;
+import org.complitex.correction.entity.Correction;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
