@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.heatmeter.service;
 
 import com.google.common.collect.Maps;
@@ -78,7 +74,6 @@ public class CorrectionBean extends AbstractBean {
             }
         }
     }
-
 
     public Long getCount(CorrectionExample example) {
         keConnectionSessionBean.prepareExampleForPermissionCheck(example);

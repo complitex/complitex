@@ -115,7 +115,6 @@ public class AddressCorrectionBean extends AbstractBean {
         return true;
     }
 
-
     public void delete(DistrictCorrection districtCorrection){
         sqlSession().delete(NS_CORRECTION + ".deleteCorrection", districtCorrection);
     }
@@ -147,7 +146,6 @@ public class AddressCorrectionBean extends AbstractBean {
         return sqlSession().selectOne(NS + ".selectStreetTypeCorrectionsCount", filterWrapper);
     }
 
-
     public boolean save(StreetTypeCorrection streetTypeCorrection) {
         if (streetTypeCorrection.getId() == null) {
             if (!isStreetTypeObjectExists(streetTypeCorrection.getCorrection(), streetTypeCorrection.getObjectId())) {
@@ -161,7 +159,6 @@ public class AddressCorrectionBean extends AbstractBean {
 
         return true;
     }
-
 
     public void delete(StreetTypeCorrection streetTypeCorrection){
         sqlSession().delete(NS_CORRECTION + ".deleteCorrection", streetTypeCorrection);
