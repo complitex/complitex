@@ -6,7 +6,6 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -48,8 +47,6 @@ import java.util.Set;
 
 import static org.complitex.common.util.CloneUtil.cloneObject;
 import static org.complitex.common.util.DateUtil.getCurrentDate;
-import static org.complitex.common.web.component.scroll.ScrollToElementUtil.scrollTo;
-import static org.complitex.resources.WebCommonResourceInitializer.SCROLL_JS;
 
 /**
  *
@@ -106,7 +103,7 @@ public class DomainObjectEditPanel extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.render(JavaScriptHeaderItem.forReference(SCROLL_JS));
+        //response.render(JavaScriptHeaderItem.forReference(SCROLL_JS));
     }
 
     protected IStrategy getStrategy() {
@@ -237,7 +234,7 @@ public class DomainObjectEditPanel extends Panel {
             }
 
             private void scrollToMessages(AjaxRequestTarget target) {
-                target.appendJavaScript(scrollTo(label.getMarkupId()));
+                //target.appendJavaScript(scrollTo(label.getMarkupId()));
             }
         };
         submit.setVisible(DomainObjectAccessUtil.canEdit(strategyName, entity, newObject));

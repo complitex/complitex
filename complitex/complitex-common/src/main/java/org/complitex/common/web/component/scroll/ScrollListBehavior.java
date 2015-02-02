@@ -3,10 +3,6 @@ package org.complitex.common.web.component.scroll;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.complitex.resources.WebCommonResourceInitializer;
-
-import java.text.MessageFormat;
 
 /**
  *
@@ -32,8 +28,8 @@ public class ScrollListBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         //response.renderJavaScriptReference(CoreJavaScriptResourceReference.get()); //todo check correct js
-        response.render(JavaScriptHeaderItem.forReference(WebCommonResourceInitializer.SCROLL_JS));
-        response.render(JavaScriptHeaderItem.forScript(MessageFormat.format(SCROLL_TO_JAVASCRIPT, markupId), "scroll_to_" + markupId));
+        //response.render(JavaScriptHeaderItem.forReference(WebCommonResourceInitializer.SCROLL_JS));
+        //response.render(JavaScriptHeaderItem.forScript(MessageFormat.format(SCROLL_TO_JAVASCRIPT, markupId), "scroll_to_" + markupId));
     }
 
     @Override
