@@ -11,6 +11,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -33,7 +36,6 @@ import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.common.web.component.search.CollapsibleSearchPanel;
 import org.complitex.common.web.component.type.BooleanPanel;
 import org.complitex.common.web.component.type.DatePanel;
@@ -69,6 +71,9 @@ public final class DomainObjectListPanel extends Panel {
     private DataView<DomainObject> dataView;
     private CollapsibleSearchPanel searchPanel;
     private final String page;
+
+    private boolean editAction = true;
+    private boolean radioSelect = false;
 
     public DomainObjectListPanel(String id, String entity, String strategyName) {
         super(id);
@@ -191,11 +196,16 @@ public final class DomainObjectListPanel extends Panel {
         dataProvider.setSort(String.valueOf(getStrategy().getDefaultSortAttributeTypeId()), SortOrder.ASCENDING);
 
         //Data View
+        RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup");
+        filterForm.add(radioGroup);
+
         dataView = new DataView<DomainObject>("data", dataProvider, 1) {
 
             @Override
             protected void populateItem(Item<DomainObject> item) {
                 DomainObject object = item.getModelObject();
+
+                item.add(new Radio<>("radio", item.getModel()));
 
                 item.add(new Label("order", Model.of(object.getObjectId())));
 
@@ -262,9 +272,8 @@ public final class DomainObjectListPanel extends Panel {
                 };
                 item.add(dataColumns);
 
-                ScrollBookmarkablePageLink<WebPage> detailsLink = new ScrollBookmarkablePageLink<WebPage>("detailsLink",
-                        getStrategy().getEditPage(), getStrategy().getEditPageParams(object.getObjectId(), null, null),
-                        String.valueOf(object.getObjectId()));
+                BookmarkablePageLink<WebPage> detailsLink = new BookmarkablePageLink<WebPage>("detailsLink",
+                        getStrategy().getEditPage(), getStrategy().getEditPageParams(object.getObjectId(), null, null));
                 detailsLink.add(new Label("editMessage", new AbstractReadOnlyModel<String>() {
 
                     @Override
@@ -276,10 +285,10 @@ public final class DomainObjectListPanel extends Panel {
                         }
                     }
                 }));
-                item.add(detailsLink);
+                item.add(detailsLink.setVisible(editAction));
             }
         };
-        filterForm.add(dataView);
+        radioGroup.add(dataView);
 
         //Filter Form Columns
         ListView<EntityAttributeType> columns = new ListView<EntityAttributeType>("columns", listAttributeTypes) {
@@ -460,5 +469,21 @@ public final class DomainObjectListPanel extends Panel {
     @Override
     public DictionaryFwSession getSession() {
         return (DictionaryFwSession) super.getSession();
+    }
+
+    public boolean isEditAction() {
+        return editAction;
+    }
+
+    public void setEditAction(boolean editAction) {
+        this.editAction = editAction;
+    }
+
+    public boolean isRadioSelect() {
+        return radioSelect;
+    }
+
+    public void setRadioSelect(boolean radioSelect) {
+        this.radioSelect = radioSelect;
     }
 }
