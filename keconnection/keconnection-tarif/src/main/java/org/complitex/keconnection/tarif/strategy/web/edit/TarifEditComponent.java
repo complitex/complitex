@@ -13,8 +13,8 @@ import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.domain.DomainObjectAccessUtil;
+import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
 import org.complitex.keconnection.tarif.strategy.TarifGroupStrategy;
 import org.complitex.keconnection.tarif.strategy.TarifStrategy;
 

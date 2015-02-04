@@ -1,4 +1,4 @@
-package org.complitex.common.web.domain;
+package org.complitex.common.web.component.domain;
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilterStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;

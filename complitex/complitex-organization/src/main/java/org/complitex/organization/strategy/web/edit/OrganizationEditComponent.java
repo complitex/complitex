@@ -23,11 +23,11 @@ import org.complitex.common.web.component.DisableAwareListMultipleChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.UserOrganizationPicker;
+import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
+import org.complitex.common.web.component.domain.DomainObjectEditPanel;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.domain.DomainObjectAccessUtil;
-import org.complitex.common.web.domain.DomainObjectEditPanel;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 
 import javax.ejb.EJB;

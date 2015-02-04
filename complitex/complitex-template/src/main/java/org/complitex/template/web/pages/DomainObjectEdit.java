@@ -1,21 +1,21 @@
 package org.complitex.template.web.pages;
 
+import com.google.common.collect.ImmutableList;
+import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import com.google.common.collect.ImmutableList;
-import org.complitex.common.web.domain.DomainObjectAccessUtil;
-import org.complitex.common.web.domain.DomainObjectEditPanel;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
+import org.complitex.common.web.component.domain.DomainObjectEditPanel;
+import org.complitex.template.web.component.toolbar.DeleteItemButton;
 import org.complitex.template.web.component.toolbar.DisableItemButton;
 import org.complitex.template.web.component.toolbar.EnableItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
+import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
 
-import java.util.List;
 import javax.ejb.EJB;
-import org.apache.wicket.authorization.UnauthorizedInstantiationException;
-import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.template.web.component.toolbar.DeleteItemButton;
-import org.complitex.template.web.security.SecurityRole;
+import java.util.List;
 
 import static org.complitex.template.strategy.TemplateStrategy.*;
 

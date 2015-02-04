@@ -88,7 +88,7 @@ import static com.google.common.collect.Sets.newHashSet;
 import static org.complitex.common.util.DateUtil.getCurrentDate;
 import static org.complitex.common.web.component.DomainObjectComponentUtil.labelModel;
 import static org.complitex.common.web.component.DomainObjectComponentUtil.newInputComponent;
-import static org.complitex.common.web.domain.DomainObjectAccessUtil.canEdit;
+import static org.complitex.common.web.component.domain.DomainObjectAccessUtil.canEdit;
 import static org.complitex.pspoffice.person.strategy.ApartmentCardStrategy.*;
 
 /**

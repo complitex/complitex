@@ -16,10 +16,10 @@ import org.complitex.common.util.Numbers;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.util.StringUtil;
+import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.domain.validate.IValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

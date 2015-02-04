@@ -1,4 +1,4 @@
-package org.complitex.common.web.domain.validate;
+package org.complitex.common.web.component.domain.validate;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
@@ -6,7 +6,7 @@ import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.Locales;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.web.domain.DomainObjectEditPanel;
+import org.complitex.common.web.component.domain.DomainObjectEditPanel;
 
 /**
  *

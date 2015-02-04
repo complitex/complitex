@@ -1,4 +1,4 @@
-package org.complitex.common.web.domain;
+package org.complitex.common.web.component.domain;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authorization.strategies.role.IRoleCheckingStrategy;

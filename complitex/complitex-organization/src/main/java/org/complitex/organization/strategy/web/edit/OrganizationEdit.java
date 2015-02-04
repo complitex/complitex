@@ -1,8 +1,8 @@
 package org.complitex.organization.strategy.web.edit;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.web.domain.DomainObjectAccessUtil;
-import org.complitex.common.web.domain.DomainObjectEditPanel;
+import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
+import org.complitex.common.web.component.domain.DomainObjectEditPanel;
 import org.complitex.common.web.component.permission.AbstractDomainObjectPermissionPanel;
 import org.complitex.common.web.component.permission.DomainObjectPermissionParameters;
 import org.complitex.common.web.component.permission.organization.OrganizationPermissionPanelFactory;

@@ -55,8 +55,14 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div wicket:id="navigator"></div>
+
+                    <div wicket:id="actionContainer" style="margin-top: 30px;">
+                        <input type="button" wicket:message="value:select" wicket:id="select" class="btnMiddle"/>
+                        <input type="button" wicket:message="value:cancel" wicket:id="cancel" class="btnMiddle"/>
+                    </div>
+
                 </form>
-                <div wicket:id="navigator"></div>
             </div>
         </wicket:panel>
     </body>

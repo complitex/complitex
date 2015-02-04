@@ -5,8 +5,8 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.common.web.domain.DomainObjectEditPanel;
-import org.complitex.common.web.domain.validate.IValidator;
+import org.complitex.common.web.component.domain.DomainObjectEditPanel;
+import org.complitex.common.web.component.domain.validate.IValidator;
 
 import java.text.MessageFormat;
 import java.util.Locale;

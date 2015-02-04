@@ -15,9 +15,9 @@ import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
+import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.component.domain.DomainObjectListPanel;
 import org.complitex.common.web.component.search.ISearchCallback;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.domain.DomainObjectListPanel;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 

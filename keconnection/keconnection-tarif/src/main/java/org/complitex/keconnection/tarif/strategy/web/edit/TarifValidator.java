@@ -5,11 +5,11 @@
 package org.complitex.keconnection.tarif.strategy.web.edit;
 
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.web.domain.DomainObjectEditPanel;
-import org.complitex.common.web.domain.validate.CodeValidator;
-import org.complitex.common.web.domain.validate.DefaultValidator;
-import org.complitex.common.web.domain.validate.IValidator;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.common.web.component.domain.DomainObjectEditPanel;
+import org.complitex.common.web.component.domain.validate.CodeValidator;
+import org.complitex.common.web.component.domain.validate.DefaultValidator;
+import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.keconnection.tarif.strategy.TarifStrategy;
 
 /**

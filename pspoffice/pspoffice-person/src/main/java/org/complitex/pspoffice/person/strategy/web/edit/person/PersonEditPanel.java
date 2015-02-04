@@ -38,7 +38,7 @@ import static com.google.common.collect.Lists.transform;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.complitex.common.web.component.DomainObjectComponentUtil.labelModel;
-import static org.complitex.common.web.domain.DomainObjectAccessUtil.canEdit;
+import static org.complitex.common.web.component.domain.DomainObjectAccessUtil.canEdit;
 import static org.complitex.pspoffice.person.strategy.PersonStrategy.*;
 
 /**

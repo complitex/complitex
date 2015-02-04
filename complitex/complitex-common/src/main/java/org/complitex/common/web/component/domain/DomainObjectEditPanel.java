@@ -1,4 +1,4 @@
-package org.complitex.common.web.domain;
+package org.complitex.common.web.component.domain;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
@@ -31,12 +31,12 @@ import org.complitex.common.web.component.ChildrenContainer;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.back.BackInfo;
 import org.complitex.common.web.component.back.BackInfoManager;
+import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.common.web.component.permission.AbstractDomainObjectPermissionPanel;
 import org.complitex.common.web.component.permission.DomainObjectPermissionPanelFactory;
 import org.complitex.common.web.component.permission.DomainObjectPermissionParameters;
 import org.complitex.common.web.component.permission.PermissionPropagationDialogPanel;
 import org.complitex.common.web.component.search.SearchComponentState;
-import org.complitex.common.web.domain.validate.IValidator;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;

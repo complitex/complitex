@@ -1,4 +1,4 @@
-package org.complitex.common.web.domain;
+package org.complitex.common.web.component.domain;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -6,6 +6,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -72,15 +73,16 @@ public final class DomainObjectListPanel extends Panel {
     private CollapsibleSearchPanel searchPanel;
     private final String page;
 
-    private boolean editAction = true;
-    private boolean radioSelect = false;
+    private boolean radioSelect;
 
-    public DomainObjectListPanel(String id, String entity, String strategyName) {
+    public DomainObjectListPanel(String id, String entity, String strategyName, boolean radioSelect) {
         super(id);
 
         this.entity = entity;
         this.strategyName = strategyName;
         this.page = getClass().getName() + "#" + entity;
+
+        this.radioSelect = radioSelect;
 
         init();
     }
@@ -155,7 +157,7 @@ public final class DomainObjectListPanel extends Panel {
         }
 
         //Form
-        final Form<Void> filterForm = new Form<Void>("filterForm");
+        final Form filterForm = new Form("filterForm");
         content.add(filterForm);
 
         //Data Provider
@@ -196,7 +198,7 @@ public final class DomainObjectListPanel extends Panel {
         dataProvider.setSort(String.valueOf(getStrategy().getDefaultSortAttributeTypeId()), SortOrder.ASCENDING);
 
         //Data View
-        RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup");
+        RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup", new Model<DomainObject>());
         filterForm.add(radioGroup);
 
         dataView = new DataView<DomainObject>("data", dataProvider, 1) {
@@ -285,7 +287,7 @@ public final class DomainObjectListPanel extends Panel {
                         }
                     }
                 }));
-                item.add(detailsLink.setVisible(editAction));
+                item.add(detailsLink.setVisible(!radioSelect));
             }
         };
         radioGroup.add(dataView);
@@ -459,7 +461,31 @@ public final class DomainObjectListPanel extends Panel {
         filterForm.add(submit);
 
         //Navigator
-        content.add(new PagingNavigator("navigator", dataView, getClass().getName() + "#" + entity, content));
+        filterForm.add(new PagingNavigator("navigator", dataView, getClass().getName() + "#" + entity, content));
+
+        WebMarkupContainer actionContainer = new WebMarkupContainer("actionContainer");
+        actionContainer.setVisible(radioSelect);
+        filterForm.add(actionContainer);
+
+        actionContainer.add(new AjaxSubmitLink("select") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                onSelect(target);
+            }
+        });
+
+        actionContainer.add(new AjaxLink("cancel") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onCancel(target);
+            }
+        });
+    }
+
+    protected void onSelect(AjaxRequestTarget target){
+    }
+
+    protected void onCancel(AjaxRequestTarget target){
     }
 
     public final CollapsibleSearchPanel getSearchPanel() {
@@ -469,21 +495,5 @@ public final class DomainObjectListPanel extends Panel {
     @Override
     public DictionaryFwSession getSession() {
         return (DictionaryFwSession) super.getSession();
-    }
-
-    public boolean isEditAction() {
-        return editAction;
-    }
-
-    public void setEditAction(boolean editAction) {
-        this.editAction = editAction;
-    }
-
-    public boolean isRadioSelect() {
-        return radioSelect;
-    }
-
-    public void setRadioSelect(boolean radioSelect) {
-        this.radioSelect = radioSelect;
     }
 }

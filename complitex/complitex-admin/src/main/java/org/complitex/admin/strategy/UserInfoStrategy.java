@@ -4,8 +4,8 @@ import org.complitex.admin.web.UserInfoComplexAttributesPanel;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.NameBean;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.util.StringUtil;
+import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 

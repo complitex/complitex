@@ -13,7 +13,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.exception.DeleteException;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.web.domain.validate.IValidator;
+import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.keconnection.tarif.strategy.web.edit.TarifGroupValidator;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;

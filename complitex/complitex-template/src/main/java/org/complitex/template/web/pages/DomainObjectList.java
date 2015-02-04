@@ -9,9 +9,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.web.domain.DomainObjectAccessUtil;
-import org.complitex.common.web.domain.DomainObjectListPanel;
 import org.complitex.common.web.DictionaryFwSession;
+import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
+import org.complitex.common.web.component.domain.DomainObjectListPanel;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
@@ -46,7 +46,7 @@ public final class DomainObjectList extends ScrollListPage {
             throw new UnauthorizedInstantiationException(getClass());
         }
 
-        add(listPanel = new DomainObjectListPanel("listPanel", entity, strategyName));
+        add(listPanel = new DomainObjectListPanel("listPanel", entity, strategyName, false));
     }
 
     @Override

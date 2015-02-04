@@ -1,4 +1,4 @@
-package org.complitex.common.web.domain;
+package org.complitex.common.web.component.domain;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;

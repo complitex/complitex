@@ -4,15 +4,16 @@
  */
 package org.complitex.template.web.pages;
 
-import javax.ejb.EJB;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.web.domain.EntityDescriptionPanel;
+import org.complitex.common.web.component.domain.EntityDescriptionPanel;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
+
+import javax.ejb.EJB;
 
 /**
  *

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static org.complitex.common.util.EjbBeanLocator.getBean;
-import static org.complitex.common.web.domain.DomainObjectAccessUtil.canEdit;
+import static org.complitex.common.web.component.domain.DomainObjectAccessUtil.canEdit;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

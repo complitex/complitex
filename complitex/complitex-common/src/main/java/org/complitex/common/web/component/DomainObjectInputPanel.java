@@ -13,11 +13,11 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.complitex.common.entity.*;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.component.domain.DomainObjectEditPanel;
 import org.complitex.common.web.component.search.CollapsibleInputSearchComponent;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.domain.DomainObjectEditPanel;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
@@ -27,7 +27,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newLinkedHashMap;
-import static org.complitex.common.web.domain.DomainObjectAccessUtil.canEdit;
+import static org.complitex.common.web.component.domain.DomainObjectAccessUtil.canEdit;
 
 /**
  *

@@ -7,12 +7,12 @@ package org.complitex.address.strategy.street.web.edit;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.common.web.domain.AbstractComplexAttributesPanel;
-import org.complitex.common.web.component.EntityTypePanel;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.web.domain.DomainObjectAccessUtil;
+import org.complitex.common.web.component.EntityTypePanel;
+import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
 
 /**
  *
