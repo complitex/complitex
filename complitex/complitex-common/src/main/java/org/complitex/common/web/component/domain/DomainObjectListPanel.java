@@ -51,11 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author Artem
- */
-public final class DomainObjectListPanel extends Panel {
+public class DomainObjectListPanel extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
 
@@ -198,7 +194,7 @@ public final class DomainObjectListPanel extends Panel {
         dataProvider.setSort(String.valueOf(getStrategy().getDefaultSortAttributeTypeId()), SortOrder.ASCENDING);
 
         //Data View
-        RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup", new Model<DomainObject>());
+        final RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup", new Model<DomainObject>());
         filterForm.add(radioGroup);
 
         dataView = new DataView<DomainObject>("data", dataProvider, 1) {
@@ -470,7 +466,7 @@ public final class DomainObjectListPanel extends Panel {
         actionContainer.add(new AjaxSubmitLink("select") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                onSelect(target);
+                onSelect(target, radioGroup.getModelObject());
             }
         });
 
@@ -482,7 +478,7 @@ public final class DomainObjectListPanel extends Panel {
         });
     }
 
-    protected void onSelect(AjaxRequestTarget target){
+    protected void onSelect(AjaxRequestTarget target, DomainObject domainObject){
     }
 
     protected void onCancel(AjaxRequestTarget target){

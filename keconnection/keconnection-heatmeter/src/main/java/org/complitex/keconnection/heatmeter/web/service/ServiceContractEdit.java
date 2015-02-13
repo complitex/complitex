@@ -7,15 +7,16 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.web.component.LabelDateField;
+import org.complitex.common.web.component.domain.DomainMultiselectPanel;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.keconnection.heatmeter.entity.ServiceContract;
 import org.complitex.keconnection.heatmeter.service.ServiceContractBean;
+import org.complitex.keconnection.heatmeter.strategy.ServiceStrategy;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import java.util.Date;
+import java.util.List;
 
 import static org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER;
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE;
@@ -37,6 +39,9 @@ public class ServiceContractEdit extends FormTemplatePage {
 
     @EJB
     private ServiceContractBean serviceContractBean;
+
+    @EJB
+    private ServiceStrategy serviceStrategy;
 
     public ServiceContractEdit(PageParameters pageParameters) {
         Long id = pageParameters.get("id").toOptionalLong();
@@ -58,6 +63,13 @@ public class ServiceContractEdit extends FormTemplatePage {
         form.add(new RequiredTextField<>("number"));
         form.add(new OrganizationIdPicker("organizationId", new PropertyModel<Long>(model, "organizationId"), SERVICE_PROVIDER));
         form.add(new OrganizationIdPicker("servicingOrganizationId", new PropertyModel<Long>(model, "servicingOrganizationId"), SERVICING_ORGANIZATION_TYPE));
+
+        form.add(new DomainMultiselectPanel("services", "service", new LoadableDetachableModel<List<DomainObject>>() {
+            @Override
+            protected List<DomainObject> load() {
+                return (List<DomainObject>) serviceStrategy.getList(new DomainObjectFilter());
+            }
+        }));
 
         form.add(new Button("save"){
             @Override
