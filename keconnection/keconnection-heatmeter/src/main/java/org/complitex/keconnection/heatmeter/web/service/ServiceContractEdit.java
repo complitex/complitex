@@ -7,10 +7,12 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.*;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.web.component.LabelDateField;
 import org.complitex.common.web.component.domain.DomainMultiselectPanel;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
@@ -64,12 +66,8 @@ public class ServiceContractEdit extends FormTemplatePage {
         form.add(new OrganizationIdPicker("organizationId", new PropertyModel<Long>(model, "organizationId"), SERVICE_PROVIDER));
         form.add(new OrganizationIdPicker("servicingOrganizationId", new PropertyModel<Long>(model, "servicingOrganizationId"), SERVICING_ORGANIZATION_TYPE));
 
-        form.add(new DomainMultiselectPanel("services", "service", new LoadableDetachableModel<List<DomainObject>>() {
-            @Override
-            protected List<DomainObject> load() {
-                return (List<DomainObject>) serviceStrategy.getList(new DomainObjectFilter());
-            }
-        }));
+        form.add(new DomainMultiselectPanel("services", "service", new PropertyModel<List<DomainObject>>(model, "services"),
+                new ResourceModel("services")));
 
         form.add(new Button("save"){
             @Override

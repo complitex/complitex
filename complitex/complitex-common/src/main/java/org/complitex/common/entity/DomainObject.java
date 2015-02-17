@@ -5,10 +5,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.complitex.common.util.Locales;
 
-import java.io.Serializable;
 import java.util.*;
 
-public class DomainObject implements Serializable {
+public class DomainObject implements ILongId {
     private Long pkId;
     private String entityTable;
     private Long objectId;
@@ -98,6 +97,11 @@ public class DomainObject implements Serializable {
         getAttribute(attributeTypeId).setValueId(value);
     }
 
+
+    @Override
+    public Long getId() {
+        return objectId;
+    }
 
     public Long getPkId() {
         return pkId;

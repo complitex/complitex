@@ -1,9 +1,10 @@
 package org.complitex.address.strategy.building.entity;
 
-import java.io.Serializable;
+import org.complitex.common.entity.ILongId;
+
 import java.util.Objects;
 
-public class BuildingCode implements Serializable {
+public class BuildingCode implements ILongId {
 
     private Long id;
     private Long organizationId;

@@ -17,7 +17,7 @@ public class IdListUtil {
      * @return Элементы из list1, которые не содержатся в list2 (list1 - list2)
      */
     public static <T extends ILongId> List<T> getDiff(List<T> list1, List<T> list2){
-        List<T> list = new ArrayList<T>();
+        List<T> list = new ArrayList<>();
 
         for (T o1 : list1){
             boolean found = false;
@@ -58,5 +58,28 @@ public class IdListUtil {
         }
 
         return list;
+    }
+
+    public static <T extends ILongId> void iterateDiff(List<T> newList, List<T> oldList, IDiffFunction<T> function){
+        //delete
+        for (T oldObject : oldList){
+            boolean has = false;
+
+            for (T newObject : newList){
+                if (newObject.getId().equals(oldObject.getId())){
+                    has = true;
+                    break;
+                }
+            }
+
+            if (!has){
+                function.onDelete(oldObject);
+            }
+        }
+
+        //save
+        for (T newObject : newList){
+            function.onSave(newObject);
+        }
     }
 }

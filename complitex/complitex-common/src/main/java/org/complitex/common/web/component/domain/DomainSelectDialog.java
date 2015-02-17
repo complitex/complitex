@@ -14,11 +14,12 @@ public class DomainSelectDialog extends Panel{
 
     private IModel<DomainObject> model;
 
-    public DomainSelectDialog(String id, String entityTable) {
+    public DomainSelectDialog(String id, String entityTable, IModel<String> titleModel) {
         super(id);
 
         dialog = new Dialog("dialog");
         dialog.setWidth(632);
+        dialog.setTitle(titleModel);
         add(dialog);
 
         DomainObjectListPanel objects = new DomainObjectListPanel("objects", entityTable, null, true){

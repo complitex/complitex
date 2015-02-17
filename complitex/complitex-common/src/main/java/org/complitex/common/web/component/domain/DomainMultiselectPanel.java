@@ -22,14 +22,14 @@ public class DomainMultiselectPanel extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
 
-    public DomainMultiselectPanel(String id, final String entityTable, final IModel<List<DomainObject>> model) {
+    public DomainMultiselectPanel(String id, final String entityTable, final IModel<List<DomainObject>> model, IModel<String> titleModel) {
         super(id);
 
         final WebMarkupContainer container = new WebMarkupContainer("container");
         container.setOutputMarkupId(true);
         add(container);
 
-        final DomainSelectDialog domainSelectDialog = new DomainSelectDialog("domainSelectDialog", "service"){
+        final DomainSelectDialog domainSelectDialog = new DomainSelectDialog("domainSelectDialog", "service", titleModel){
             @Override
             protected void onSelect(AjaxRequestTarget target) {
                 target.add(container);
@@ -50,7 +50,7 @@ public class DomainMultiselectPanel extends Panel {
                 item.add(new AjaxLink("select") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        domainSelectDialog.open(target, Model.of(domainObject));
+                        domainSelectDialog.open(target, item.getModel());
                     }
                 });
                 item.add(new AjaxLink("delete") {
