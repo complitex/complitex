@@ -92,7 +92,7 @@ public class DocumentStrategy extends TemplateStrategy {
                 attribute.setAttributeId(1L);
 
                 if (isSimpleAttributeType(attributeType)) {
-                    attribute.setLocalizedValues(StringCultures.newStringCultures());
+                    attribute.setStringCultures(StringCultures.newStringCultures());
                 }
                 toAdd.add(attribute);
             }

@@ -44,14 +44,14 @@ public abstract class CodeValidator implements IValidator {
             throw new IllegalStateException("Domain object(entity = " + entity + ", id = " + object.getObjectId()
                     + ") has no attribute with attribute type id = " + codeAttributeTypeId + "!");
         }
-        if (codeAttribute.getLocalizedValues() == null) {
+        if (codeAttribute.getStringCultures() == null) {
             throw new IllegalStateException("Attribute of domain object(entity = " + entity + ", id = " + object.getObjectId()
                     + ") with attribute type id = " + codeAttribute + " and attribute id = " + codeAttribute.getAttributeId()
                     + " has null lozalized values.");
         }
 
         StringLocaleBean stringLocaleBean = EjbBeanLocator.getBean(StringLocaleBean.class);
-        String code = StringCultures.getValue(codeAttribute.getLocalizedValues(), stringLocaleBean.getSystemLocale());
+        String code = StringCultures.getValue(codeAttribute.getStringCultures(), stringLocaleBean.getSystemLocale());
 
         Long existingId = validateCode(object.getObjectId(), code);
         if (existingId != null) {

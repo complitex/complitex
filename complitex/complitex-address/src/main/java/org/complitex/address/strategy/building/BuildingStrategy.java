@@ -496,7 +496,7 @@ public class BuildingStrategy extends TemplateStrategy {
                         attribute.setAttributeId(1L);
 
                         if (isSimpleAttributeType(attributeType)) {
-                            attribute.setLocalizedValues(StringCultures.newStringCultures());
+                            attribute.setStringCultures(StringCultures.newStringCultures());
                         }
                         toAdd.add(attribute);
                     }

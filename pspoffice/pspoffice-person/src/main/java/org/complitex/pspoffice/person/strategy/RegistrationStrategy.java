@@ -155,7 +155,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
 
     private void setEditedByUserId(DomainObject registration) {
         long userId = sessionBean.getCurrentUserId();
-        StringCultures.getSystemStringCulture(registration.getAttribute(EDITED_BY_USER_ID).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(EDITED_BY_USER_ID).getStringCultures()).
                 setValue(String.valueOf(userId));
     }
 
@@ -209,7 +209,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
                             attribute.setAttributeId(1L);
 
                             if (isSimpleAttributeType(attributeType)) {
-                                attribute.setLocalizedValues(StringCultures.newStringCultures());
+                                attribute.setStringCultures(StringCultures.newStringCultures());
                             }
                             toAdd.add(attribute);
                         } else {
@@ -231,8 +231,8 @@ public class RegistrationStrategy extends DomainObjectStrategy {
         registration.removeAttribute(EXPLANATION);
 
         Attribute explAttribute = new Attribute();
-        explAttribute.setLocalizedValues(StringCultures.newStringCultures());
-        StringCultures.getSystemStringCulture(explAttribute.getLocalizedValues()).setValue(explanation);
+        explAttribute.setStringCultures(StringCultures.newStringCultures());
+        StringCultures.getSystemStringCulture(explAttribute.getStringCultures()).setValue(explanation);
         explAttribute.setAttributeTypeId(EXPLANATION);
         explAttribute.setValueTypeId(EXPLANATION);
         explAttribute.setAttributeId(1L);

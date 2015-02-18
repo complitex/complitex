@@ -104,8 +104,8 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
                             switch (simpleType) {
                                 case STRING_CULTURE: {
                                     boolean valueChanged = false;
-                                    for (StringCulture oldString : oldAttr.getLocalizedValues()) {
-                                        for (StringCulture newString : newAttr.getLocalizedValues()) {
+                                    for (StringCulture oldString : oldAttr.getStringCultures()) {
+                                        for (StringCulture newString : newAttr.getStringCultures()) {
                                             //compare strings
                                             if (oldString.getLocaleId().equals(newString.getLocaleId())) {
                                                 if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
@@ -129,8 +129,8 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
                                 case MASKED_DATE:
                                 case DOUBLE:
                                 case INTEGER: {
-                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
-                                    String newString = StringCultures.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
+                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getStringCultures()).getValue();
+                                    String newString = StringCultures.getSystemStringCulture(newAttr.getStringCultures()).getValue();
                                     if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }
@@ -139,8 +139,8 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
 
                                 case BIG_STRING:
                                 case STRING: {
-                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
-                                    String newString = StringCultures.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
+                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getStringCultures()).getValue();
+                                    String newString = StringCultures.getSystemStringCulture(newAttr.getStringCultures()).getValue();
                                     if (!Strings.isEqual(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }

@@ -243,8 +243,8 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
         super.fillAttributes(object);
 
         for (long attributeTypeId : CUSTOM_ATTRIBUTE_TYPES) {
-            if (object.getAttribute(attributeTypeId).getLocalizedValues() == null) {
-                object.getAttribute(attributeTypeId).setLocalizedValues(StringCultures.newStringCultures());
+            if (object.getAttribute(attributeTypeId).getStringCultures() == null) {
+                object.getAttribute(attributeTypeId).setStringCultures(StringCultures.newStringCultures());
             }
         }
     }
@@ -258,7 +258,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
                 if (attribute.getValueId() != null) {
                     loadStringCultures(attribute);
                 } else {
-                    attribute.setLocalizedValues(StringCultures.newStringCultures());
+                    attribute.setStringCultures(StringCultures.newStringCultures());
                 }
             }
         }

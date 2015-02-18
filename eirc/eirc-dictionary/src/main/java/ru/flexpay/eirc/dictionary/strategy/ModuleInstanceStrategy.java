@@ -179,8 +179,8 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
         super.fillAttributes(dataSource, object);
 
         for (long attributeTypeId : CUSTOM_ATTRIBUTES) {
-            if (object.getAttribute(attributeTypeId).getLocalizedValues() == null) {
-                object.getAttribute(attributeTypeId).setLocalizedValues(StringCultures.newStringCultures());
+            if (object.getAttribute(attributeTypeId).getStringCultures() == null) {
+                object.getAttribute(attributeTypeId).setStringCultures(StringCultures.newStringCultures());
             }
         }
     }
@@ -194,7 +194,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
                 if (attribute.getValueId() != null) {
                     loadStringCultures(attribute);
                 } else {
-                    attribute.setLocalizedValues(StringCultures.newStringCultures());
+                    attribute.setStringCultures(StringCultures.newStringCultures());
                 }
             }
         }

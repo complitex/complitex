@@ -50,7 +50,7 @@ public abstract class RoomCreateDialog extends AbstractAddressCreateDialog {
     @Override
     protected DomainObject initObject(List<StringCulture> number) {
         DomainObject room = roomStrategy.newInstance();
-        room.getAttribute(RoomStrategy.NAME).setLocalizedValues(number);
+        room.getAttribute(RoomStrategy.NAME).setStringCultures(number);
         room.setParentEntityId("apartment".equals(getParentEntity()) ? 100L : 500L);
         room.setParentId(getParentObject().getObjectId());
         return room;

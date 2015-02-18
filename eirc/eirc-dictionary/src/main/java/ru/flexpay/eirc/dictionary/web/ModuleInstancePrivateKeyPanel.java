@@ -145,7 +145,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
             attribute.setAttributeTypeId(attributeTypeId);
             attribute.setObjectId(moduleInstance.getObjectId());
             attribute.setAttributeId(1L);
-            attribute.setLocalizedValues(StringCultures.newStringCultures());
+            attribute.setStringCultures(StringCultures.newStringCultures());
         }
         final AttributeStringModel attributeModel = new AttributeStringModel(attribute);
         final EntityAttributeType attributeType =

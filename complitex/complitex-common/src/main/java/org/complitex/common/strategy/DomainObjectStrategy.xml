@@ -13,6 +13,8 @@
         <result column="parent_entity_id" property="parentEntityId"/>
         <result column="permission_id" property="permissionId"/>
         <result column="external_id" property="externalId"/>
+
+        <collection property="attributes" resultMap="attributeResultMap" columnPrefix="attr__"/>
     </resultMap>
 
     <resultMap id="attributeResultMap" type="org.complitex.common.entity.Attribute">
@@ -25,6 +27,15 @@
         <result column="status" property="status"/>
         <result column="end_date" property="endDate"/>
         <result column="value_type_id" property="valueTypeId"/>
+
+        <collection property="stringCultures" resultMap="stringCultureResultMap" columnPrefix="str__"/>
+    </resultMap>
+
+    <resultMap id="stringCultureResultMap" type="org.complitex.common.entity.StringCulture">
+        <id column="pk_id" property="pkId"/>
+        <result column="id" property="id"/>
+        <result column="locale_id" property="localeId"/>
+        <result column="value" property="value"/>
     </resultMap>
 
     <resultMap id="localeResultMap" type="org.complitex.common.entity.StringLocale">
@@ -33,13 +44,6 @@
             <arg column="locale" javaType="String"/>
             <arg column="system" javaType="Boolean"/>
         </constructor>
-    </resultMap>
-
-    <resultMap id="stringCultureResultMap" type="org.complitex.common.entity.StringCulture">
-        <id column="pk_id" property="pkId"/>
-        <result column="id" property="id"/>
-        <result column="locale_id" property="localeId"/>
-        <result column="value" property="value"/>
     </resultMap>
 
     <resultMap id="permissionInfoResultMap" type="org.complitex.common.entity.PermissionInfo">
@@ -61,6 +65,22 @@
         SELECT e.*
         FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
         <include refid="sqlPermissionFilter"/>
+    </select>
+
+    <select id="selectDomainObjectTree" parameterType="org.complitex.common.entity.DomainObjectFilter" resultMap="domainObjectResultMap">
+        select obj.*,
+
+            attr.pk_id as attr__pk_id, attr.value_id as attr__value_id, attr.attribute_id as attr__attribute_id,
+            attr.object_id as attr__object_id, attr.attribute_type_id as attr__attribute_type_id,
+            attr.start_date as attr__start_date, attr.status as attr__status, attr.end_date as attr__end_date,
+            attr.value_type_id as attr__value_type_id,
+
+            str.pk_id as str__pk_id, str.id as str__id, str.locale_id as str__locale_id, str.value as str__value
+        from ${entityTable} obj
+        left join ${entityTable}_attribute attr on (obj.object_id = attr.object_id and attr.end_date is null)
+        left join entity_attribute_value_type val on val.id = attr.value_type_id
+        left join ${entityTable}_string_culture str on (str.id = attr.value_id and val.attribute_value_type = 'STRING_CULTURE')
+        where obj.end_date is null and obj.object_id = ${objectId}
     </select>
 
     <select id="selectDomainObjectId" resultType="long" parameterType="map">

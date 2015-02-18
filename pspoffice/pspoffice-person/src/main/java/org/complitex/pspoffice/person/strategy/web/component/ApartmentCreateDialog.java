@@ -54,7 +54,7 @@ public abstract class ApartmentCreateDialog extends AbstractAddressCreateDialog 
     @Override
     protected DomainObject initObject(List<StringCulture> number) {
         DomainObject apartment = apartmentStrategy.newInstance();
-        apartment.getAttribute(ApartmentStrategy.NAME).setLocalizedValues(number);
+        apartment.getAttribute(ApartmentStrategy.NAME).setStringCultures(number);
         apartment.setParentEntityId(ApartmentStrategy.PARENT_ENTITY_ID);
         apartment.setParentId(getParentObject().getObjectId());
         return apartment;

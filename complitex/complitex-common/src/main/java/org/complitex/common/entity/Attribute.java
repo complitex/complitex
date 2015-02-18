@@ -20,14 +20,14 @@ public class Attribute implements Serializable {
 
     private StatusType status = StatusType.ACTIVE;
 
-    private List<StringCulture> localizedValues;
+    private List<StringCulture> stringCultures;
 
     public Attribute() {
     }
 
     public StringCulture getStringCulture(Long localeId){
-        if (localizedValues != null){
-            for (StringCulture sc: localizedValues){
+        if (stringCultures != null){
+            for (StringCulture sc: stringCultures){
                 if (sc.getLocaleId().equals(localeId)){
                     return sc;
                 }
@@ -38,7 +38,7 @@ public class Attribute implements Serializable {
     }
 
     public void setStringValue(String value, long localeId){
-        for (StringCulture string : localizedValues) {
+        for (StringCulture string : stringCultures) {
             if (string.getLocaleId().equals(localeId) || (string.isSystemLocale() && string.getValue() == null)) {
                 string.setValue(value);
             }
@@ -52,7 +52,7 @@ public class Attribute implements Serializable {
     }
 
     public String getStringValue(java.util.Locale locale){
-        return StringCultures.getValue(localizedValues, locale);
+        return StringCultures.getValue(stringCultures, locale);
     }
 
 
@@ -128,12 +128,12 @@ public class Attribute implements Serializable {
         this.valueId = valueId;
     }
 
-    public List<StringCulture> getLocalizedValues() {
-        return localizedValues;
+    public List<StringCulture> getStringCultures() {
+        return stringCultures;
     }
 
-    public void setLocalizedValues(List<StringCulture> localizedValues) {
-        this.localizedValues = localizedValues;
+    public void setStringCultures(List<StringCulture> stringCultures) {
+        this.stringCultures = stringCultures;
     }
 
     public Long getValueTypeId() {

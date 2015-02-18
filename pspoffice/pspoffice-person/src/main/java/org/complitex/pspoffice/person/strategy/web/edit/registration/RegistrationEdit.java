@@ -185,7 +185,7 @@ public class RegistrationEdit extends FormTemplatePage {
             initSystemAttributeInput(form, "registrationDate", REGISTRATION_DATE, true);
             if (!isInactive()) {
                 if (newRegistration.getRegistrationDate() == null) {
-                    StringCultures.getSystemStringCulture(newRegistration.getAttribute(REGISTRATION_DATE).getLocalizedValues()).
+                    StringCultures.getSystemStringCulture(newRegistration.getAttribute(REGISTRATION_DATE).getStringCultures()).
                             setValue(new DateConverter().toString(DateUtil.getCurrentDate()));
                 }
                 if (!isNew()) {
@@ -465,7 +465,7 @@ public class RegistrationEdit extends FormTemplatePage {
         Attribute attribute = newRegistration.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setLocalizedValues(StringCultures.newStringCultures());
+            attribute.setStringCultures(StringCultures.newStringCultures());
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }

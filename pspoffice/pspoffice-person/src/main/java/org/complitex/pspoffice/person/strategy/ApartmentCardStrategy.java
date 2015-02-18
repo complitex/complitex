@@ -238,7 +238,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
                             attribute.setAttributeId(1L);
 
                             if (isSimpleAttributeType(attributeType)) {
-                                attribute.setLocalizedValues(StringCultures.newStringCultures());
+                                attribute.setStringCultures(StringCultures.newStringCultures());
                             }
                             toAdd.add(attribute);
                         } else {
@@ -273,7 +273,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
 
     private void setEditedByUserId(DomainObject apartmentCard) {
         long userId = sessionBean.getCurrentUserId();
-        StringCultures.getSystemStringCulture(apartmentCard.getAttribute(EDITED_BY_USER_ID).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(apartmentCard.getAttribute(EDITED_BY_USER_ID).getStringCultures()).
                 setValue(String.valueOf(userId));
     }
 
@@ -471,27 +471,27 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         for (Registration registration : removeRegistrations) {
             Registration newRegistration = CloneUtil.cloneObject(registration);
             //departure reason
-            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_REASON).getLocalizedValues()).
+            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_REASON).getStringCultures()).
                     setValue(removeRegistrationCard.getReason());
             //departure date
-            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_DATE).getLocalizedValues()).
+            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_DATE).getStringCultures()).
                     setValue(new DateConverter().toString(removeRegistrationCard.getDate()));
             //departure address
-            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_COUNTRY).getLocalizedValues()).
+            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_COUNTRY).getStringCultures()).
                     setValue(removeRegistrationCard.getCountry());
-            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_REGION).getLocalizedValues()).
+            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_REGION).getStringCultures()).
                     setValue(removeRegistrationCard.getRegion());
-            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_DISTRICT).getLocalizedValues()).
+            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_DISTRICT).getStringCultures()).
                     setValue(removeRegistrationCard.getDistrict());
-            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_CITY).getLocalizedValues()).
+            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_CITY).getStringCultures()).
                     setValue(removeRegistrationCard.getCity());
-            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_STREET).getLocalizedValues()).
+            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_STREET).getStringCultures()).
                     setValue(removeRegistrationCard.getStreet());
-            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_BUILDING_NUMBER).getLocalizedValues()).
+            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_BUILDING_NUMBER).getStringCultures()).
                     setValue(removeRegistrationCard.getBuildingNumber());
-            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_BUILDING_CORP).getLocalizedValues()).
+            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_BUILDING_CORP).getStringCultures()).
                     setValue(removeRegistrationCard.getBuildingCorp());
-            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_APARTMENT).getLocalizedValues()).
+            StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_APARTMENT).getStringCultures()).
                     setValue(removeRegistrationCard.getApartment());
             //explanation
             registrationStrategy.setExplanation(newRegistration, removeRegistrationCard.getExplanation());
@@ -566,26 +566,26 @@ public class ApartmentCardStrategy extends TemplateStrategy {
             registration.getAttribute(RegistrationStrategy.OWNER_RELATIONSHIP).setValueId(ownerRelationshipId);
         }
 
-        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.REGISTRATION_DATE).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.REGISTRATION_DATE).getStringCultures()).
                 setValue(new DateConverter().toString(registerOwnerCard.getRegistrationDate()));
         registration.getAttribute(RegistrationStrategy.REGISTRATION_TYPE).setValueId(registerOwnerCard.getRegistrationType().getObjectId());
-        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_COUNTRY).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_COUNTRY).getStringCultures()).
                 setValue(new StringConverter().toString(registerOwnerCard.getCountry()));
-        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_REGION).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_REGION).getStringCultures()).
                 setValue(new StringConverter().toString(registerOwnerCard.getRegion()));
-        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_DISTRICT).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_DISTRICT).getStringCultures()).
                 setValue(new StringConverter().toString(registerOwnerCard.getDistrict()));
-        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_CITY).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_CITY).getStringCultures()).
                 setValue(new StringConverter().toString(registerOwnerCard.getCity()));
-        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_STREET).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_STREET).getStringCultures()).
                 setValue(new StringConverter().toString(registerOwnerCard.getStreet()));
-        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_BUILDING_NUMBER).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_BUILDING_NUMBER).getStringCultures()).
                 setValue(new StringConverter().toString(registerOwnerCard.getBuildingNumber()));
-        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_BUILDING_CORP).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_BUILDING_CORP).getStringCultures()).
                 setValue(new StringConverter().toString(registerOwnerCard.getBuildingCorp()));
-        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_APARTMENT).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_APARTMENT).getStringCultures()).
                 setValue(new StringConverter().toString(registerOwnerCard.getApartment()));
-        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_DATE).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.ARRIVAL_DATE).getStringCultures()).
                 setValue(new DateConverter().toString(registerOwnerCard.getArrivalDate()));
         return registration;
     }
@@ -617,7 +617,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         registration.getAttribute(RegistrationStrategy.PERSON).setValueId(child.getObjectId());
         registration.getAttribute(RegistrationStrategy.OWNER_RELATIONSHIP).setValueId(
                 child.getGender() == Gender.MALE ? OwnerRelationshipStrategy.SON : OwnerRelationshipStrategy.DAUGHTER);
-        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.REGISTRATION_DATE).getLocalizedValues()).
+        StringCultures.getSystemStringCulture(registration.getAttribute(RegistrationStrategy.REGISTRATION_DATE).getStringCultures()).
                 setValue(new DateConverter().toString(registerChildrenCard.getRegistrationDate()));
         registration.getAttribute(RegistrationStrategy.REGISTRATION_TYPE).setValueId(registerChildrenCard.getRegistrationType().getObjectId());
         return registration;
@@ -657,8 +657,8 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         apartmentCard.removeAttribute(EXPLANATION);
 
         Attribute explAttribute = new Attribute();
-        explAttribute.setLocalizedValues(StringCultures.newStringCultures());
-        StringCultures.getSystemStringCulture(explAttribute.getLocalizedValues()).setValue(explanation);
+        explAttribute.setStringCultures(StringCultures.newStringCultures());
+        StringCultures.getSystemStringCulture(explAttribute.getStringCultures()).setValue(explanation);
         explAttribute.setAttributeTypeId(EXPLANATION);
         explAttribute.setValueTypeId(EXPLANATION_TYPE);
         explAttribute.setAttributeId(1L);

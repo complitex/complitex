@@ -61,14 +61,14 @@ public class PrivilegeImportService extends AbstractImportService{
 
                 //Код
                 Attribute code = domainObject.getAttribute(PrivilegeStrategy.CODE);
-                StringCultures.getSystemStringCulture(code.getLocalizedValues()).setValue(line[1].trim());
+                StringCultures.getSystemStringCulture(code.getStringCultures()).setValue(line[1].trim());
 
                 //Короткое наименование
                 //todo implement in future release
 
                 //Название привилегии
                 Attribute name = domainObject.getAttribute(PrivilegeStrategy.NAME);
-                StringCultures.getSystemStringCulture(name.getLocalizedValues()).setValue(line[3].trim());
+                StringCultures.getSystemStringCulture(name.getStringCultures()).setValue(line[3].trim());
 
                 privilegeStrategy.insert(domainObject, DateUtil.getCurrentDate());
 

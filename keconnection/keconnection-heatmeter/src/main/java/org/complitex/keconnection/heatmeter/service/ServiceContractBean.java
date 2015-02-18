@@ -14,7 +14,6 @@ import org.complitex.keconnection.heatmeter.strategy.ServiceStrategy;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,28 +37,11 @@ public class ServiceContractBean extends AbstractBean {
     }
 
     public ServiceContract getServiceContract(Long id){
-        ServiceContract serviceContract =  sqlSession().selectOne("selectServiceContract", id);
-
-        loadServices(serviceContract);
-
-        return serviceContract;
+        return sqlSession().selectOne("selectServiceContract", id);
     }
 
     public List<ServiceContract> getServiceContracts(FilterWrapper<ServiceContract> filterWrapper){
         return sqlSession().selectList("selectServiceContractList", filterWrapper);
-    }
-
-    public void loadServices(ServiceContract serviceContract){
-        List<DomainObject> services = new ArrayList<>();
-
-        List<ServiceContractService> serviceContractServices = getServiceContractServices(FilterWrapper.of(
-                new ServiceContractService(null, serviceContract.getId())));
-
-        for (ServiceContractService serviceContractService : serviceContractServices){
-            services.add(serviceStrategy.getDomainObject(serviceContractService.getServiceObjectId(), true));
-        }
-
-        serviceContract.setServices(services);
     }
 
     public Long getServiceContractsCount(FilterWrapper<ServiceContract> filterWrapper){
@@ -88,10 +70,6 @@ public class ServiceContractBean extends AbstractBean {
                 delete(new ServiceContractBuilding(object.getId(), serviceContract.getId()));
             }
         });
-    }
-
-    public List<ServiceContractService> getServiceContractServices(FilterWrapper<ServiceContractService> filterWrapper){
-        return sqlSession().selectList("selectServiceContractServiceList", filterWrapper);
     }
 
     public void save(ServiceContractService serviceContractService){

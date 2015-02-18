@@ -61,7 +61,7 @@ public class OwnershipImportService extends AbstractImportService{
                 domainObject.setExternalId(line[0].trim());
 
                 //Название формы собственности
-                StringCultures.getSystemStringCulture(name.getLocalizedValues()).setValue(line[1].trim());
+                StringCultures.getSystemStringCulture(name.getStringCultures()).setValue(line[1].trim());
 
                 ownershipStrategy.insert(domainObject, DateUtil.getCurrentDate());
 

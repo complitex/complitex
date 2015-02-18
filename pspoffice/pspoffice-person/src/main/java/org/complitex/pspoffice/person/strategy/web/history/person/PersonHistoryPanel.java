@@ -369,7 +369,7 @@ final class PersonHistoryPanel extends Panel {
         Attribute attribute = person.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setLocalizedValues(StringCultures.newStringCultures());
+            attribute.setStringCultures(StringCultures.newStringCultures());
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }

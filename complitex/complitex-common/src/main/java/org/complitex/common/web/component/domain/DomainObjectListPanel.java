@@ -228,11 +228,11 @@ public class DomainObjectListPanel extends Panel {
                             String valueType = attrType.getEntityAttributeValueTypes().get(0).getValueType().toUpperCase();
 
                             if (SimpleTypes.isSimpleType(valueType)) {
-                                String systemLocaleValue = StringCultures.getSystemStringCulture(attr.getLocalizedValues()).getValue();
+                                String systemLocaleValue = StringCultures.getSystemStringCulture(attr.getStringCultures()).getValue();
 
                                 switch (SimpleTypes.valueOf(valueType)) {
                                     case STRING_CULTURE:
-                                        attributeValue = StringCultures.getValue(attr.getLocalizedValues(), getLocale());
+                                        attributeValue = StringCultures.getValue(attr.getStringCultures(), getLocale());
                                         break;
                                     case STRING:
                                         attributeValue = systemLocaleValue;

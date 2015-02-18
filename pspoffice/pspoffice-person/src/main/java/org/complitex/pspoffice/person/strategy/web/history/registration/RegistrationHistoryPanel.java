@@ -293,7 +293,7 @@ final class RegistrationHistoryPanel extends Panel {
         Attribute attribute = registration.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setLocalizedValues(StringCultures.newStringCultures());
+            attribute.setStringCultures(StringCultures.newStringCultures());
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }

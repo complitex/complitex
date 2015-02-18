@@ -234,7 +234,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                         loadStringCultures(dataSource, attribute);
                     }
                 } else {
-                    attribute.setLocalizedValues(StringCultures.newStringCultures());
+                    attribute.setStringCultures(StringCultures.newStringCultures());
                 }
             }
         }
@@ -245,7 +245,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     protected void loadStringCultures(String dataSource, Attribute attribute) {
-        attribute.setLocalizedValues(stringBean.getStringCultures(dataSource, attribute.getValueId(), getEntityTable()));
+        attribute.setStringCultures(stringBean.getStringCultures(dataSource, attribute.getValueId(), getEntityTable()));
     }
 
 
@@ -277,6 +277,9 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return object;
     }
 
+    public DomainObject getDomainObjectTree(Long objectId){
+        return sqlSession().selectOne(NS + ".selectDomainObjectTree", new DomainObjectFilter(objectId, getEntityTable()));
+    }
 
     @Override
     public DomainObject getDomainObject(Long objectId, boolean runAsAdmin) {
@@ -305,7 +308,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void updateStringsForNewLocales(DomainObject object) {
         for (Attribute attribute : object.getAttributes()) {
-            List<StringCulture> strings = attribute.getLocalizedValues();
+            List<StringCulture> strings = attribute.getStringCultures();
 
             if (strings != null) {
                 StringCultures.updateForNewLocales(strings);
@@ -332,7 +335,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                         attribute.setAttributeId(1L);
 
                         if (isSimpleAttributeType(attributeType)) {
-                            attribute.setLocalizedValues(StringCultures.newStringCultures());
+                            attribute.setStringCultures(StringCultures.newStringCultures());
                         }
                         toAdd.add(attribute);
                     } else {
@@ -436,7 +439,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected void insertAttribute(Attribute attribute) {
-        final List<StringCulture> strings = attribute.getLocalizedValues();
+        final List<StringCulture> strings = attribute.getStringCultures();
         if (strings != null) {
             final Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), strings);
             attribute.setValueId(generatedStringId);
@@ -543,8 +546,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                             switch (simpleType) {
                                 case STRING_CULTURE: {
                                     boolean valueChanged = false;
-                                    for (StringCulture oldString : oldAttr.getLocalizedValues()) {
-                                        for (StringCulture newString : newAttr.getLocalizedValues()) {
+                                    for (StringCulture oldString : oldAttr.getStringCultures()) {
+                                        for (StringCulture newString : newAttr.getStringCultures()) {
                                             //compare strings
                                             if (oldString.getLocaleId().equals(newString.getLocaleId())) {
                                                 if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
@@ -568,8 +571,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                                 case MASKED_DATE:
                                 case DOUBLE:
                                 case INTEGER: {
-                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
-                                    String newString = StringCultures.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
+                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getStringCultures()).getValue();
+                                    String newString = StringCultures.getSystemStringCulture(newAttr.getStringCultures()).getValue();
                                     if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }
@@ -578,8 +581,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
                                 case BIG_STRING:
                                 case STRING: {
-                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getLocalizedValues()).getValue();
-                                    String newString = StringCultures.getSystemStringCulture(newAttr.getLocalizedValues()).getValue();
+                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getStringCultures()).getValue();
+                                    String newString = StringCultures.getSystemStringCulture(newAttr.getStringCultures()).getValue();
                                     if (!Strings.isEqual(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }
@@ -1078,12 +1081,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             throw new IllegalStateException("Domain object(entity = " + getEntityTable() + ", id = " + object.getObjectId()
                     + ") has no attribute with attribute type id = " + attributeTypeId + "!");
         }
-        if (attribute.getLocalizedValues() == null) {
+        if (attribute.getStringCultures() == null) {
             throw new IllegalStateException("Attribute of domain object(entity = " + getEntityTable() + ", id = " + object.getObjectId()
                     + ") with attribute type id = " + attributeTypeId + " and attribute id = " + attribute.getAttributeId()
                     + " has null lozalized values.");
         }
-        String text = StringCultures.getValue(attribute.getLocalizedValues(), locale);
+        String text = StringCultures.getValue(attribute.getStringCultures(), locale);
 
         Map<String, Object> params = newHashMap();
 
@@ -1238,7 +1241,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
      //todo add display simple types
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
-        return StringCultures.getValue(attribute.getLocalizedValues(), locale);
+        return StringCultures.getValue(attribute.getStringCultures(), locale);
     }
 
 

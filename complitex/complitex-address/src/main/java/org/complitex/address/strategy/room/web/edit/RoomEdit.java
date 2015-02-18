@@ -103,7 +103,7 @@ public class RoomEdit extends DomainObjectEdit {
                         boolean bulkOperationSuccess = true;
                         for (List<StringCulture> number : numbers) {
                             final DomainObject currentObject = CloneUtil.cloneObject(getNewObject());
-                            currentObject.getAttribute(RoomStrategy.NAME).setLocalizedValues(number);
+                            currentObject.getAttribute(RoomStrategy.NAME).setStringCultures(number);
                             if (performDefaultValidation(currentObject)) {
                                 try {
                                     getStrategy().insert(currentObject, DateUtil.getCurrentDate());
@@ -123,7 +123,7 @@ public class RoomEdit extends DomainObjectEdit {
                     } else {
                         onInsert();
                         final DomainObject object = getNewObject();
-                        object.getAttribute(RoomStrategy.NAME).setLocalizedValues(numbers.get(0));
+                        object.getAttribute(RoomStrategy.NAME).setStringCultures(numbers.get(0));
                         getStrategy().insert(getNewObject(), DateUtil.getCurrentDate());
                     }
 

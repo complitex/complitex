@@ -65,7 +65,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
                 attribute.setAttributeTypeId(attributeTypeId);
                 attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
-                attribute.setLocalizedValues(StringCultures.newStringCultures());
+                attribute.setStringCultures(StringCultures.newStringCultures());
             }
             final EntityAttributeType attributeType =
                     organizationStrategy.getEntity().getAttributeType(attributeTypeId);

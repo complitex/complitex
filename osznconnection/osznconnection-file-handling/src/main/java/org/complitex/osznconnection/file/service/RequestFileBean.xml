@@ -79,7 +79,7 @@
             <if test="type != null">and `type` = #{type}</if>
             <if test="status != null">and `status` = #{status}</if>
             <if test="servicingOrganization != null">
-                and `name` like concat('${servicingOrganization.getAttribute(901).localizedValues[0].value}', '%')
+                and `name` like concat('${servicingOrganization.getAttribute(901).stringCultures[0].value}', '%')
             </if>
             <include refid="permissionFilter"/>
         </where>

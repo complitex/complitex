@@ -223,7 +223,7 @@ public class LogBean extends AbstractBean {
 
                 if (SimpleTypes.isSimpleType(attributeValueType)) {
                     if (SimpleTypes.STRING_CULTURE.name().equals(attributeValueType.toUpperCase())) {
-                        for (StringCulture newString : na.getLocalizedValues()) {
+                        for (StringCulture newString : na.getStringCultures()) {
                             if (!Strings.isEqual(newString.getValue(), null)) {
                                 logChanges.add(new LogChange(na.getAttributeId(), null,
                                         strategy.getAttributeLabel(na, systemLocale), null, newString.getValue(),
@@ -255,8 +255,8 @@ public class LogBean extends AbstractBean {
                         if (SimpleTypes.isSimpleType(newAttributeValueType) && SimpleTypes.isSimpleType(oldAttributeValueType)) {
                             if (SimpleTypes.STRING_CULTURE.name().equals(newAttributeValueType.toUpperCase())
                                     || SimpleTypes.STRING_CULTURE.name().equals(oldAttributeValueType.toUpperCase())) {
-                                for (StringCulture oldString : oa.getLocalizedValues()) {
-                                    for (StringCulture newString : na.getLocalizedValues()) {
+                                for (StringCulture oldString : oa.getStringCultures()) {
+                                    for (StringCulture newString : na.getStringCultures()) {
                                         if (oldString.getLocaleId().equals(newString.getLocaleId())) {
                                             //compare strings
                                             if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
@@ -292,7 +292,7 @@ public class LogBean extends AbstractBean {
                 if (removed) {
                     if (SimpleTypes.isSimpleType(oldAttributeValueType)) {
                         if (SimpleTypes.STRING_CULTURE.name().equals(oldAttributeValueType.toUpperCase())) {
-                            for (StringCulture oldString : oa.getLocalizedValues()) {
+                            for (StringCulture oldString : oa.getStringCultures()) {
                                 if (!Strings.isEqual(oldString.getValue(), null)) {
                                     logChanges.add(new LogChange(oa.getAttributeId(), null,
                                             strategy.getAttributeLabel(oa, systemLocale),
@@ -329,7 +329,7 @@ public class LogBean extends AbstractBean {
                 if (added) {
                     if (SimpleTypes.isSimpleType(newAttributeValueType)) {
                         if (SimpleTypes.STRING_CULTURE.name().equals(newAttributeValueType.toUpperCase())) {
-                            for (StringCulture newString : na.getLocalizedValues()) {
+                            for (StringCulture newString : na.getStringCultures()) {
                                 if (!Strings.isEqual(newString.getValue(), null)) {
                                     logChanges.add(new LogChange(na.getAttributeId(), null,
                                             strategy.getAttributeLabel(na, systemLocale),

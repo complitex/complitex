@@ -43,11 +43,11 @@ public class Utils {
     }
 
     public static void setValue(Attribute attribute, long localeId, String value) {
-        setValue(attribute.getLocalizedValues(), localeId, value);
+        setValue(attribute.getStringCultures(), localeId, value);
     }
 
     public static void setValue(Attribute attribute, String value) {
-        for (StringCulture culture : attribute.getLocalizedValues()) {
+        for (StringCulture culture : attribute.getStringCultures()) {
             culture.setValue(value);
         }
     }

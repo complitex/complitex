@@ -9,18 +9,11 @@
         <result column="organization_id" property="organizationId"/>
         <result column="servicing_organization_id" property="servicingOrganizationId"/>
 
-        <collection property="buildingCodes" ofType="org.complitex.address.strategy.building.entity.BuildingCode"
-                    select="selectBuildingCodeList" column="id"/>
-    </resultMap>
-
-    <resultMap id="serviceContractServiceResultMap" type="org.complitex.keconnection.heatmeter.entity.ServiceContractService">
-        <id column="id" property="id"/>
-        <result column="service_object_id" property="serviceObjectId"/>
-        <result column="service_contract_od" property="serviceContractId"/>
+        <collection property="buildingCodes" select="selectBuildingCodeList" column="id"/>
+        <collection property="services" select="selectServiceList" column="id"/>
     </resultMap>
 
     <!-- Service Contract -->
-
     <insert id="insertServiceContract" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContract"
             useGeneratedKeys="true" keyProperty="id">
         insert into service_contract (begin_date, end_date, number, organization_id, servicing_organization_id)
@@ -67,14 +60,7 @@
     </insert>
 
     <delete id="deleteServiceContractBuilding" parameterType="long">
-        delete from service_contract_building
-        <where>
-            <choose>
-                <when test="id != null">and id = #{id}</when>
-                <otherwise>and building_code_id = #{buildingCodeId} and service_contract_id = #{serviceContractId}</otherwise>
-            </choose>
-        </where>
-
+        delete from service_contract_building where id = #{id}
     </delete>
 
     <select id="selectServiceContractBuildingList" parameterType="org.complitex.common.entity.FilterWrapper">
@@ -83,15 +69,7 @@
             <if test="object.buildingCodeId != null">and building_code_id = #{buildingCodeId}</if>
             <if test="object.serviceContractId != null">and service_contract_id = #{serviceContractId}</if>
         </where>
-    </select>
-
-    <!-- Building Code -->
-
-    <select id="selectBuildingCodeList" parameterType="long" resultType="org.complitex.address.strategy.building.entity.BuildingCode">
-        select bc.id id, bc.organization_id organizationId, bc.code buildingCode, bc.building_id buildingId
-          from building_code bc left join service_contract_building scb on (bc.id = scb.building_code_id)
-            where scb.service_contract_id = #{serviceContractId}
-    </select>
+    </select> 
 
     <!-- Service Contract Service -->
     <insert id="insertServiceContractService" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContractService"
@@ -101,23 +79,8 @@
     </insert>
 
     <delete id="deleteServiceContractService" parameterType="long">
-        delete from service_contract_service
-        <where>
-            <choose>
-                <when test="id != null">and id = #{id}</when>
-                <otherwise>and service_object_id = #{serviceObjectId} and service_contract_id = #{serviceContractId}</otherwise>
-            </choose>
-        </where>
+        delete from service_contract_service where id = #{id}
     </delete>
-
-    <select id="selectServiceContractServiceList" parameterType="org.complitex.common.entity.FilterWrapper"
-            resultMap="serviceContractServiceResultMap">
-        select * from service_contract_service
-        <where>
-            <if test="object.serviceObjectId != null">and service_object_id = #{object.serviceObjectId}</if>
-            <if test="object.serviceContractId != null">and service_contract_id = #{object.serviceContractId}</if>
-        </where>
-    </select>
 
 </mapper>
         

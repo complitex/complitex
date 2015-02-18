@@ -103,7 +103,7 @@ public final class ApartmentEdit extends DomainObjectEdit {
                         boolean bulkOperationSuccess = true;
                         for (List<StringCulture> number : numbers) {
                             final DomainObject currentObject = CloneUtil.cloneObject(getNewObject());
-                            currentObject.getAttribute(ApartmentStrategy.NAME).setLocalizedValues(number);
+                            currentObject.getAttribute(ApartmentStrategy.NAME).setStringCultures(number);
                             if (performDefaultValidation(currentObject)) {
                                 try {
                                     getStrategy().insert(currentObject, DateUtil.getCurrentDate());
@@ -123,7 +123,7 @@ public final class ApartmentEdit extends DomainObjectEdit {
                     } else {
                         onInsert();
                         final DomainObject object = getNewObject();
-                        object.getAttribute(ApartmentStrategy.NAME).setLocalizedValues(numbers.get(0));
+                        object.getAttribute(ApartmentStrategy.NAME).setStringCultures(numbers.get(0));
                         getStrategy().insert(getNewObject(), DateUtil.getCurrentDate());
                     }
 

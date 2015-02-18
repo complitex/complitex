@@ -295,7 +295,7 @@ public class StreetStrategy extends TemplateStrategy {
             public boolean apply(Attribute attr) {
                 return attr.getAttributeTypeId().equals(NAME);
             }
-        }).getLocalizedValues(), locale);
+        }).getStringCultures(), locale);
     }
 
     @Override
