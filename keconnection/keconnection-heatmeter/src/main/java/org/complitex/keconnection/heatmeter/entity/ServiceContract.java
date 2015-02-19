@@ -1,8 +1,6 @@
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.address.strategy.building.entity.BuildingCode;
 import org.complitex.common.entity.AbstractEntity;
-import org.complitex.common.entity.DomainObject;
 
 import java.util.Date;
 import java.util.List;
@@ -17,8 +15,8 @@ public class ServiceContract extends AbstractEntity{
     private Long organizationId;
     private Long servicingOrganizationId;
 
-    private List<BuildingCode> buildingCodes;
-    private List<DomainObject> services;
+    private List<ServiceContractService> serviceContractServices;
+    private List<ServiceContractBuilding> serviceContractBuildings;
 
     public Date getBeginDate() {
         return beginDate;
@@ -60,19 +58,19 @@ public class ServiceContract extends AbstractEntity{
         this.servicingOrganizationId = servicingOrganizationId;
     }
 
-    public List<BuildingCode> getBuildingCodes() {
-        return buildingCodes;
+    public List<ServiceContractService> getServiceContractServices() {
+        return serviceContractServices;
     }
 
-    public void setBuildingCodes(List<BuildingCode> buildingCodes) {
-        this.buildingCodes = buildingCodes;
+    public void setServiceContractServices(List<ServiceContractService> serviceContractServices) {
+        this.serviceContractServices = serviceContractServices;
     }
 
-    public List<DomainObject> getServices() {
-        return services;
+    public List<ServiceContractBuilding> getServiceContractBuildings() {
+        return serviceContractBuildings;
     }
 
-    public void setServices(List<DomainObject> services) {
-        this.services = services;
+    public void setServiceContractBuildings(List<ServiceContractBuilding> serviceContractBuildings) {
+        this.serviceContractBuildings = serviceContractBuildings;
     }
 }

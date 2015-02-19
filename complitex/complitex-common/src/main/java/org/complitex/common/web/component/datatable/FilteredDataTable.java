@@ -40,11 +40,15 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
             if (column == null){
                 Field f = FieldUtils.getField(objectClass, field, true);
 
-                if (f.getType().isEnum()){
-                    //noinspection unchecked
-                    column = new EnumColumn(new ResourceModel(field), field, f.getType(), getLocale());
-                }else {
-                    column = new TextFilteredPropertyColumn<T, FilterWrapper<T>, String>(new ResourceModel(field), field, field);
+                column = getColumn(field, f);
+
+                if (column == null){
+                    if (f.getType().isEnum()){
+                        //noinspection unchecked
+                        column = new EnumColumn(new ResourceModel(field), field, f.getType(), getLocale());
+                    }else {
+                        column = new TextFilteredPropertyColumn<T, FilterWrapper<T>, String>(new ResourceModel(field), field, field);
+                    }
                 }
             }
 
@@ -67,5 +71,9 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
 
     public FilteredDataTable(String id, Class<T> objectClass, String... fields){
         this(id, objectClass, null, null, fields);
+    }
+
+    protected IColumn<T, String> getColumn(String field, Field f){
+        return null;
     }
 }

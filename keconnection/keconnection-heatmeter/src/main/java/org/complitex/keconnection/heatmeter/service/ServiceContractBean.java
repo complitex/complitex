@@ -1,7 +1,5 @@
 package org.complitex.keconnection.heatmeter.service;
 
-import org.complitex.address.strategy.building.entity.BuildingCode;
-import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.mybatis.XmlMapper;
 import org.complitex.common.service.AbstractBean;
@@ -48,51 +46,65 @@ public class ServiceContractBean extends AbstractBean {
         return sqlSession().selectOne("selectServiceContractListCount", filterWrapper);
     }
 
-    public void save(ServiceContractBuilding serviceContractBuilding){
-        sqlSession().insert("insertServiceContractBuilding", serviceContractBuilding);
+    public void updateServices(final ServiceContract serviceContract){
+        ServiceContract db = getServiceContract(serviceContract.getId());
+
+        IdListUtil.iterateDiff(serviceContract.getServiceContractServices(), db.getServiceContractServices(),
+                new IDiffFunction<ServiceContractService>() {
+                    @Override
+                    public void onSave(ServiceContractService object) {
+                        object.setServiceContractId(serviceContract.getId());
+
+                        save(object);
+                    }
+
+                    @Override
+                    public void onDelete(ServiceContractService object) {
+                        delete(object);
+                    }
+                });
     }
 
-    public void delete(ServiceContractBuilding serviceContractBuilding){
-        sqlSession().delete("deleteServiceContractBuilding", serviceContractBuilding);
+    public void save(ServiceContractService serviceContractService){
+        if (serviceContractService.getId() == null) {
+            sqlSession().insert("insertServiceContractService", serviceContractService);
+        }else{
+            sqlSession().update("updateServiceContractService", serviceContractService);
+        }
+    }
+
+    public void delete(ServiceContractService serviceContractService){
+        sqlSession().delete("deleteServiceContractService", serviceContractService.getId());
     }
 
     public void updateBuilding(final ServiceContract serviceContract){
         ServiceContract db = getServiceContract(serviceContract.getId());
 
-        IdListUtil.iterateDiff(serviceContract.getBuildingCodes(), db.getBuildingCodes(), new IDiffFunction<BuildingCode>() {
+        IdListUtil.iterateDiff(serviceContract.getServiceContractBuildings(), db.getServiceContractBuildings(),
+                new IDiffFunction<ServiceContractBuilding>() {
             @Override
-            public void onSave(BuildingCode object) {
-                save(new ServiceContractBuilding(object.getId(), serviceContract.getId()));
+            public void onSave(ServiceContractBuilding object) {
+                object.setServiceContractId(serviceContract.getId());
+
+                save(object);
             }
 
             @Override
-            public void onDelete(BuildingCode object) {
-                delete(new ServiceContractBuilding(object.getId(), serviceContract.getId()));
-            }
-        });
-    }
-
-    public void save(ServiceContractService serviceContractService){
-        sqlSession().insert("insertServiceContractService", serviceContractService);
-    }
-
-    public void delete(ServiceContractService serviceContractService){
-        sqlSession().delete("deleteServiceContractService", serviceContractService);
-    }
-
-    public void updateServices(final ServiceContract serviceContract){
-        ServiceContract db = getServiceContract(serviceContract.getId());
-
-        IdListUtil.iterateDiff(serviceContract.getServices(), db.getServices(), new IDiffFunction<DomainObject>() {
-            @Override
-            public void onSave(DomainObject object) {
-                save(new ServiceContractService(object.getObjectId(), serviceContract.getId()));
-            }
-
-            @Override
-            public void onDelete(DomainObject object) {
-                delete(new ServiceContractService(object.getObjectId(), serviceContract.getId()));
+            public void onDelete(ServiceContractBuilding object) {
+                delete(object);
             }
         });
+    }
+
+    public void save(ServiceContractBuilding serviceContractBuilding){
+        if (serviceContractBuilding.getId() == null) {
+            sqlSession().insert("insertServiceContractBuilding", serviceContractBuilding);
+        }else{
+            sqlSession().update("updateServiceContractBuilding", serviceContractBuilding);
+        }
+    }
+
+    public void delete(ServiceContractBuilding serviceContractBuilding){
+        sqlSession().delete("deleteServiceContractBuilding", serviceContractBuilding.getId());
     }
 }

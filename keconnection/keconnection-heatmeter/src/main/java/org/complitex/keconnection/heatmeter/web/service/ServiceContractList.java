@@ -2,6 +2,7 @@ package org.complitex.keconnection.heatmeter.web.service;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
@@ -10,6 +11,7 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.Action;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
+import org.complitex.common.web.component.domain.DomainObjectFilteredColumn;
 import org.complitex.keconnection.heatmeter.entity.ServiceContract;
 import org.complitex.keconnection.heatmeter.service.ServiceContractBean;
 import org.complitex.template.web.component.toolbar.AddItemButton;
@@ -20,9 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * inheaven on 13.11.2014 20:48.
@@ -52,7 +52,13 @@ public class ServiceContractList extends TemplatePage {
             }
         });
 
-        add(new FilteredDataTable<ServiceContract>("dataTable", ServiceContract.class, null, actions, FIELDS) {
+        Map<String, IColumn<ServiceContract, String>> columnMap = new HashMap<>();
+        columnMap.put("organizationId", new DomainObjectFilteredColumn<ServiceContract>(
+                "organization", "organizationId", getLocale()));
+        columnMap.put("servicingOrganizationId", new DomainObjectFilteredColumn<ServiceContract>(
+                "organization", "servicingOrganizationId", getLocale()));
+
+        add(new FilteredDataTable<ServiceContract>("dataTable", ServiceContract.class, columnMap, actions, FIELDS) {
             @Override
             public List<ServiceContract> getList(FilterWrapper<ServiceContract> filterWrapper) {
                 filterWrapper.setCamelToUnderscore(true);

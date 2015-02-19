@@ -12,11 +12,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.DomainObject;
 import org.complitex.common.web.component.LabelDateField;
 import org.complitex.common.web.component.domain.DomainMultiselectPanel;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.keconnection.heatmeter.entity.ServiceContract;
+import org.complitex.keconnection.heatmeter.entity.ServiceContractService;
 import org.complitex.keconnection.heatmeter.service.ServiceContractBean;
 import org.complitex.keconnection.heatmeter.strategy.ServiceStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -66,8 +66,13 @@ public class ServiceContractEdit extends FormTemplatePage {
         form.add(new OrganizationIdPicker("organizationId", new PropertyModel<Long>(model, "organizationId"), SERVICE_PROVIDER));
         form.add(new OrganizationIdPicker("servicingOrganizationId", new PropertyModel<Long>(model, "servicingOrganizationId"), SERVICING_ORGANIZATION_TYPE));
 
-        form.add(new DomainMultiselectPanel("services", "service", new PropertyModel<List<DomainObject>>(model, "services"),
-                new ResourceModel("services")));
+        form.add(new DomainMultiselectPanel<ServiceContractService>("services", "service",
+                new PropertyModel<List<ServiceContractService>>(model, "serviceContractServices"), "serviceObjectId") {
+            @Override
+            protected ServiceContractService newModelObject() {
+                return new ServiceContractService(model.getObject().getId());
+            }
+        });
 
         form.add(new Button("save"){
             @Override

@@ -12,7 +12,7 @@ import org.odlabs.wiquery.ui.dialog.Dialog;
 public class DomainSelectDialog extends Panel{
     private Dialog dialog;
 
-    private IModel<DomainObject> model;
+    private IModel<Long> model;
 
     public DomainSelectDialog(String id, String entityTable, IModel<String> titleModel) {
         super(id);
@@ -25,7 +25,7 @@ public class DomainSelectDialog extends Panel{
         DomainObjectListPanel objects = new DomainObjectListPanel("objects", entityTable, null, true){
             @Override
             protected void onSelect(AjaxRequestTarget target, DomainObject domainObject) {
-                model.setObject(domainObject);
+                model.setObject(domainObject.getObjectId());
                 dialog.close(target);
 
                 DomainSelectDialog.this.onSelect(target);
@@ -39,7 +39,7 @@ public class DomainSelectDialog extends Panel{
         dialog.add(objects);
     }
 
-    public void open(AjaxRequestTarget target, IModel<DomainObject> model){
+    public void open(AjaxRequestTarget target, IModel<Long> model){
         this.model = model;
 
         dialog.open(target);

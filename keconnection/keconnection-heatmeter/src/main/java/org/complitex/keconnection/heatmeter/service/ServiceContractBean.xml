@@ -9,11 +9,25 @@
         <result column="organization_id" property="organizationId"/>
         <result column="servicing_organization_id" property="servicingOrganizationId"/>
 
-        <collection property="buildingCodes" select="selectBuildingCodeList" column="id"/>
-        <collection property="services" select="selectServiceList" column="id"/>
+        <collection property="serviceContractServices" resultMap="serviceContractServicesResultMap" columnPrefix="se__"/>
+        <collection property="serviceContractBuildings" resultMap="serviceContractBuildingResultMap" columnPrefix="bu__"/>
     </resultMap>
 
+    <resultMap id="serviceContractServicesResultMap" type="org.complitex.keconnection.heatmeter.entity.ServiceContractService">
+        <id column="id" property="id"/>
+        <result column="service_object_id" property="serviceObjectId"/>
+        <result column="service_contract_id" property="serviceContractId"/>
+    </resultMap>
+
+    <resultMap id="serviceContractBuildingResultMap" type="org.complitex.keconnection.heatmeter.entity.ServiceContractBuilding">
+        <id column="id" property="id"/>
+        <result column="building_code_id" property="buildingCodeId"/>
+        <result column="service_contract_id" property="serviceContractId"/>
+    </resultMap>
+
+
     <!-- Service Contract -->
+
     <insert id="insertServiceContract" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContract"
             useGeneratedKeys="true" keyProperty="id">
         insert into service_contract (begin_date, end_date, number, organization_id, servicing_organization_id)
@@ -26,7 +40,13 @@
     </update>
 
     <select id="selectServiceContract" parameterType="long" resultMap="serviceContractResultMap">
-        select * from service_contract where id = #{id}
+        select s.*,
+            se.id as se__id, se.service_object_id as se__service_object_id, se.service_contract_id as se__service_contract_id,
+            bu.id as bu__id, bu.building_code_id as bu__building_code_id, bu.service_contract_id as bu__service_contract_id
+        from service_contract s
+            left join service_contract_service se on s.id = se.service_contract_id
+            left join service_contract_building bu on s.id = bu.service_contract_id
+        where s.id = #{id}
     </select>
 
     <sql id="selectServiceWhere">
@@ -52,12 +72,33 @@
         delete from service_contract where id = #{id}
     </delete>
 
+
+    <!-- Service Contract Service -->
+
+    <insert id="insertServiceContractService" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContractService"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into service_contract_service (service_object_id, service_contract_id) value (#{serviceObjectId}, #{serviceContractId})
+    </insert>
+
+    <update id="updateServiceContractService" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContractService">
+        update service_contract_service set service_object_id = #{serviceObjectId} where id = #{id}
+    </update>
+
+    <delete id="deleteServiceContractService" parameterType="long">
+        delete from service_contract_service where id = #{id}
+    </delete>
+
+
     <!-- Service Contract Building -->
+
     <insert id="insertServiceContractBuilding" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContractBuilding"
             useGeneratedKeys="true" keyProperty="id">
-        insert into service_contract_building (building_code_id, service_contract_id)
-                value (#{buildingCodeId}, #{serviceContractId})
+        insert into service_contract_building (building_code_id, service_contract_id) value (#{buildingCodeId}, #{serviceContractId})
     </insert>
+
+    <update id="updateServiceContractBuilding" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContractBuilding">
+        update service_contract_building set building_code_id = #{buildingCodeId} where id = #{id}
+    </update>
 
     <delete id="deleteServiceContractBuilding" parameterType="long">
         delete from service_contract_building where id = #{id}
@@ -69,19 +110,7 @@
             <if test="object.buildingCodeId != null">and building_code_id = #{buildingCodeId}</if>
             <if test="object.serviceContractId != null">and service_contract_id = #{serviceContractId}</if>
         </where>
-    </select> 
-
-    <!-- Service Contract Service -->
-    <insert id="insertServiceContractService" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContractService"
-            useGeneratedKeys="true" keyProperty="id">
-        insert into service_contract_service (service_object_id, service_contract_id)
-              value (#{serviceObjectId}, #{serviceContractId})
-    </insert>
-
-    <delete id="deleteServiceContractService" parameterType="long">
-        delete from service_contract_service where id = #{id}
-    </delete>
-
+    </select>
 </mapper>
         
         

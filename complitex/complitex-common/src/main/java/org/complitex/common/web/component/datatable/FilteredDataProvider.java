@@ -13,8 +13,7 @@ import java.util.Iterator;
  * @author Anatoly Ivanov
  *         Date: 001 01.07.14 19:26
  */
-public class FilteredDataProvider<T extends Serializable> extends SortableDataProvider<T, String>
-        implements IFilterStateLocator<T> {
+public class FilteredDataProvider<T extends Serializable> extends SortableDataProvider<T, String> implements IFilterStateLocator<T> {
     private FilterWrapper<T> filterWrapper;
     private IFilterBean<T> filterBean;
 

@@ -1,30 +1,19 @@
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.common.entity.ILongId;
+import org.complitex.common.entity.AbstractEntity;
 
 /**
  * @author inheaven on 017 17.02.15 20:21
  */
-public class ServiceContractService implements ILongId {
-    private Long id;
+public class ServiceContractService extends AbstractEntity {
     private Long serviceObjectId;
     private Long serviceContractId;
 
     public ServiceContractService() {
     }
 
-    public ServiceContractService(Long serviceObjectId, Long serviceContractId) {
-        this.serviceObjectId = serviceObjectId;
+    public ServiceContractService(Long serviceContractId) {
         this.serviceContractId = serviceContractId;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getServiceObjectId() {
