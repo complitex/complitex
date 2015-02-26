@@ -23,7 +23,7 @@ public class ServiceStrategy extends TemplateStrategy{
     }
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "service";
     }
 

@@ -14,7 +14,7 @@ public class DomainObjectFilter implements Serializable {
     private Long parentId;
     private Long localeId;
 
-    private String entityTable;
+    private String entityName;
     private String parentEntity;
 
     private long first;
@@ -38,22 +38,22 @@ public class DomainObjectFilter implements Serializable {
     public DomainObjectFilter() {
     }
 
-    public DomainObjectFilter(String entityTable) {
-        this.entityTable = entityTable;
+    public DomainObjectFilter(String entityName) {
+        this.entityName = entityName;
     }
 
     public DomainObjectFilter(Long objectId) {
         this.objectId = objectId;
     }
 
-    public DomainObjectFilter(Long objectId, String entityTable) {
+    public DomainObjectFilter(Long objectId, String entityName) {
         this.objectId = objectId;
-        this.entityTable = entityTable;
+        this.entityName = entityName;
     }
 
-    public DomainObjectFilter(Long objectId, String entityTable, Date startDate) {
+    public DomainObjectFilter(Long objectId, String entityName, Date startDate) {
         this.objectId = objectId;
-        this.entityTable = entityTable;
+        this.entityName = entityName;
         this.startDate = startDate;
     }
 
@@ -133,12 +133,12 @@ public class DomainObjectFilter implements Serializable {
         this.localeId = localeId;
     }
 
-    public String getEntityTable() {
-        return entityTable;
+    public String getEntityName() {
+        return entityName;
     }
 
-    public void setEntityTable(String entityTable) {
-        this.entityTable = entityTable;
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public String getParentEntity() {

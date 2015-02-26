@@ -8,14 +8,13 @@ import org.complitex.common.entity.Entity;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.util.StringCultures;
 
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
+import javax.annotation.PostConstruct;
+import javax.ejb.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
+@Startup
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class EntityBean extends AbstractBean {
     private static final String NS = EntityBean.class.getName();
@@ -26,18 +25,27 @@ public class EntityBean extends AbstractBean {
     @EJB
     private StrategyFactory strategyFactory;
 
-    private final Map<String, Entity> cache = new ConcurrentHashMap<>();
+    private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
+
+    @PostConstruct
+    public void init(){
+        List<String> entities = getEntityNames();
+
+        for (String entityName : entities){
+            entityMap.put(entityName, loadFromDb(null, entityName));
+        }
+    }
 
     public Entity getEntity(String dataSource, String entity) {
         return loadFromDb(dataSource, entity);
     }
 
     public Entity getEntity(String entity) {
-        Entity e = cache.get(entity);
+        Entity e = entityMap.get(entity);
 
         if (e == null) {
             Entity dbEntity = loadFromDb(null, entity);
-            cache.put(entity, dbEntity);
+            entityMap.put(entity, dbEntity);
             e = dbEntity;
         }
 
@@ -45,15 +53,16 @@ public class EntityBean extends AbstractBean {
     }
 
     private Entity loadFromDb(String dataSource, String entity) {
-        return (Entity) (dataSource == null? sqlSession() : sqlSession(dataSource)).selectOne(NS + ".load", ImmutableMap.of("entity", entity));
+        return (Entity) (dataSource == null ? sqlSession() : sqlSession(dataSource))
+                .selectOne(NS + ".load", ImmutableMap.of("entity", entity));
     }
 
     private void updateCache(String entity) {
-        cache.put(entity, loadFromDb(null, entity));
+        entityMap.put(entity, loadFromDb(null, entity));
     }
 
-    public String getAttributeLabel(String entityTable, long attributeTypeId, Locale locale) {
-        return getEntity(entityTable).getAttributeType(attributeTypeId).getAttributeName(locale);
+    public String getAttributeLabel(String entityName, long attributeTypeId, Locale locale) {
+        return getEntity(entityName).getAttributeType(attributeTypeId).getAttributeName(locale);
     }
 
     public AttributeType newAttributeType() {
@@ -86,7 +95,7 @@ public class EntityBean extends AbstractBean {
                 toDeleteAttributeIds.add(oldAttributeType.getId());
             }
         }
-        removeAttributeTypes(oldEntity.getTable(), toDeleteAttributeIds, updateDate);
+        removeAttributeTypes(oldEntity.getEntityName(), toDeleteAttributeIds, updateDate);
 
         for (AttributeType attributeType : newEntity.getAttributeTypes()) {
             if (attributeType.getId() == null) {
@@ -96,7 +105,7 @@ public class EntityBean extends AbstractBean {
         }
 
         if (changed) {
-            updateCache(oldEntity.getTable());
+            updateCache(oldEntity.getEntityName());
         }
     }
 
@@ -116,7 +125,7 @@ public class EntityBean extends AbstractBean {
         sqlSession().insert(NS + ".insertValueType", valueType);
     }
 
-    private void removeAttributeTypes(String entityTable, Collection<Long> attributeTypeIds, Date endDate) {
+    private void removeAttributeTypes(String entityName, Collection<Long> attributeTypeIds, Date endDate) {
         if (attributeTypeIds != null && !attributeTypeIds.isEmpty()) {
             Map<String, Object> params = ImmutableMap.<String, Object>builder().
                     put("endDate", endDate).
@@ -124,11 +133,11 @@ public class EntityBean extends AbstractBean {
                     build();
             sqlSession().update(NS + ".removeAttributeTypes", params);
 
-            strategyFactory.getStrategy(entityTable).archiveAttributes(attributeTypeIds, endDate);
+            strategyFactory.getStrategy(entityName).archiveAttributes(attributeTypeIds, endDate);
         }
     }
 
-    public Collection<String> getAllEntities() {
+    public List<String> getEntityNames() {
         return sqlSession().selectList(NS + ".allEntities");
     }
 }

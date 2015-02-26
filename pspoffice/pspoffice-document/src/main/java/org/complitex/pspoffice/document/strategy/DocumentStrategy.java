@@ -109,7 +109,7 @@ public class DocumentStrategy extends TemplateStrategy {
     }
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "document";
     }
 

@@ -21,14 +21,14 @@ import java.util.Locale;
  * @author inheaven on 019 19.02.15 19:17
  */
 public class DomainObjectFilteredColumn<T> extends AbstractColumn<T, String> implements IFilteredColumn<T, String> {
-    private String entityTable;
+    private String entityName;
     private String propertyExpression;
     private Locale locale;
 
-    public DomainObjectFilteredColumn(String entityTable, String propertyExpression, Locale locale) {
+    public DomainObjectFilteredColumn(String entityName, String propertyExpression, Locale locale) {
         super(new ResourceModel(propertyExpression));
 
-        this.entityTable = entityTable;
+        this.entityName = entityName;
         this.propertyExpression = propertyExpression;
         this.locale = locale;
     }
@@ -45,7 +45,7 @@ public class DomainObjectFilteredColumn<T> extends AbstractColumn<T, String> imp
         Long objectId = new PropertyModel<Long>(rowModel, propertyExpression).getObject();
 
         if (objectId != null){
-            name = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(entityTable).displayDomainObject(objectId, locale);
+            name = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(entityName).displayDomainObject(objectId, locale);
         }
 
         cellItem.add(new Label(componentId, Model.of(name)));

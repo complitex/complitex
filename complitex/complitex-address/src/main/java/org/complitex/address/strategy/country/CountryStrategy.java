@@ -38,7 +38,7 @@ public class CountryStrategy extends TemplateStrategy {
     }
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "country";
     }
 
@@ -65,7 +65,7 @@ public class CountryStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(CommonResources.class.getName(), getEntityTable(), locale);
+        return ResourceUtil.getString(CommonResources.class.getName(), getEntityName(), locale);
     }
 
     @Override

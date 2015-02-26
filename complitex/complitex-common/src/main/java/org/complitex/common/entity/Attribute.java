@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Attribute implements Serializable {
     private Long pkId;
-    private String entityTable;
+    private String entityName;
     private Long attributeId;
     private Long objectId;
     private Long attributeTypeId;
@@ -64,12 +64,12 @@ public class Attribute implements Serializable {
         this.pkId = pkId;
     }
 
-    public String getEntityTable() {
-        return entityTable;
+    public String getEntityName() {
+        return entityName;
     }
 
-    public void setEntityTable(String entityTable) {
-        this.entityTable = entityTable;
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public Long getAttributeId() {

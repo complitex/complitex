@@ -38,7 +38,7 @@ public class StreetTypeStrategy extends TemplateStrategy {
     public static final long NAME = 1401;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "street_type";
     }
 
@@ -87,7 +87,7 @@ public class StreetTypeStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(CommonResources.class.getName(), getEntityTable(), locale);
+        return ResourceUtil.getString(CommonResources.class.getName(), getEntityName(), locale);
     }
 
     @Override

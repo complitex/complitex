@@ -32,7 +32,7 @@ public abstract class TemplateStrategy extends DomainObjectStrategy {
     @Override
     public PageParameters getListPageParams() {
         PageParameters params = new PageParameters();
-        params.set(ENTITY, getEntityTable());
+        params.set(ENTITY, getEntityName());
         return params;
     }
 
@@ -44,7 +44,7 @@ public abstract class TemplateStrategy extends DomainObjectStrategy {
     @Override
     public PageParameters getEditPageParams(Long objectId, Long parentId, String parentEntity) {
         PageParameters params = new PageParameters();
-        params.set(ENTITY, getEntityTable());
+        params.set(ENTITY, getEntityName());
         params.set(OBJECT_ID, objectId);
         params.set(PARENT_ID, parentId);
         params.set(PARENT_ENTITY, parentEntity);
@@ -59,14 +59,14 @@ public abstract class TemplateStrategy extends DomainObjectStrategy {
     @Override
     public PageParameters getHistoryPageParams(long objectId) {
         PageParameters params = new PageParameters();
-        params.set(ENTITY, getEntityTable());
+        params.set(ENTITY, getEntityName());
         params.set(OBJECT_ID, objectId);
         return params;
     }
 
     @Override
     public IValidator getValidator() {
-        return new DefaultValidator(getEntityTable());
+        return new DefaultValidator(getEntityName());
     }
 
     @Override

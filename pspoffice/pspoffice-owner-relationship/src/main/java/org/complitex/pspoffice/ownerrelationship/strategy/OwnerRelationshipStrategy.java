@@ -47,7 +47,7 @@ public class OwnerRelationshipStrategy extends TemplateStrategy {
     private StringLocaleBean stringLocaleBean;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "owner_relationship";
     }
 
@@ -75,7 +75,7 @@ public class OwnerRelationshipStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
 

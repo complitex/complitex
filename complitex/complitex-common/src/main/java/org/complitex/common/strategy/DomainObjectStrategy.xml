@@ -54,7 +54,7 @@
     <!--DomainObject-->
 
     <insert id="insertDomainObject" parameterType="org.complitex.common.entity.DomainObject">
-        INSERT INTO `${entityTable}` (`object_id`, `status`, `start_date`, `end_date`, `parent_id`, `parent_entity_id`,
+        INSERT INTO `${entityName}` (`object_id`, `status`, `start_date`, `end_date`, `parent_id`, `parent_entity_id`,
           `permission_id`, `external_id`)
         VALUES
           (#{objectId}, #{status}, #{startDate}, #{endDate}, #{parentId}, #{parentEntityId}, #{permissionId}, #{externalId})
@@ -63,7 +63,7 @@
     <select id="selectDomainObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="domainObjectResultMap">
         SELECT e.*
-        FROM `${entityTable}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
+        FROM `${entityName}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
         <include refid="sqlPermissionFilter"/>
     </select>
 
@@ -76,20 +76,20 @@
             attr.value_type_id as attr__value_type_id,
 
             str.pk_id as str__pk_id, str.id as str__id, str.locale_id as str__locale_id, str.value as str__value
-        from ${entityTable} obj
-        left join ${entityTable}_attribute attr on (obj.object_id = attr.object_id and attr.end_date is null)
+        from ${entityName} obj
+        left join ${entityName}_attribute attr on (obj.object_id = attr.object_id and attr.end_date is null)
         left join entity_attribute_value_type val on val.id = attr.value_type_id
-        left join ${entityTable}_string_culture str on (str.id = attr.value_id and val.attribute_value_type = 'STRING_CULTURE')
+        left join ${entityName}_string_culture str on (str.id = attr.value_id and val.attribute_value_type = 'STRING_CULTURE')
         where obj.end_date is null and obj.object_id = ${objectId}
     </select>
 
     <select id="selectDomainObjectId" resultType="long" parameterType="map">
-        SELECT e.`object_id` FROM `${entityTable}` e WHERE e.`external_id` = #{externalId}
+        SELECT e.`object_id` FROM `${entityName}` e WHERE e.`external_id` = #{externalId}
     </select>
 
     <sql id="sqlOrderByAttributeTypeId">
-        SELECT sc.`value` FROM `${entityTable}_string_culture` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
-        (SELECT orderByAttr.`value_id` FROM `${entityTable}_attribute` orderByAttr WHERE orderByAttr.`object_id` = e.`object_id`
+        SELECT sc.`value` FROM `${entityName}_string_culture` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
+        (SELECT orderByAttr.`value_id` FROM `${entityName}_attribute` orderByAttr WHERE orderByAttr.`object_id` = e.`object_id`
         AND orderByAttr.`status` = 'ACTIVE' AND orderByAttr.`attribute_type_id` = #{orderByAttributeTypeId}
         )
     </sql>
@@ -142,9 +142,9 @@
         </if>
         <foreach item="attributeFilter" collection="attributeFilters">
             <if test="attributeFilter.value != null">
-                AND EXISTS(SELECT 1 FROM `${entityTable}_attribute` attr WHERE attr.`object_id` = e.`object_id`
+                AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
                 AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
-                AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityTable}_string_culture` sc WHERE sc.`value`
+                AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_culture` sc WHERE sc.`value`
                 <choose>
                     <when test="comparisonType == 'LIKE'">
                         LIKE CONCAT('%', #{attributeFilter.value}, '%')
@@ -158,7 +158,7 @@
             </if>
 
             <if test="attributeFilter.valueId != null">
-                AND EXISTS(SELECT 1 FROM `${entityTable}_attribute` attr WHERE attr.`object_id` = e.`object_id`
+                AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
                 AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
                 AND attr.`value_id` = #{valueId}
                 )
@@ -178,7 +178,7 @@
     <select id="selectDomainObjects" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="domainObjectResultMap" >
         SELECT e.*
-        FROM `${entityTable}` e WHERE
+        FROM `${entityName}` e WHERE
         <include refid="sqlStatusFilter"/>
         <include refid="sqlPermissionFilter"/>
         <include refid="sqlFilter"/>
@@ -187,14 +187,14 @@
     </select>
 
     <select id="selectDomainObjectCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
-        SELECT COUNT(1) FROM `${entityTable}` e WHERE
+        SELECT COUNT(1) FROM `${entityName}` e WHERE
         <include refid="sqlStatusFilter"/>
         <include refid="sqlPermissionFilter"/>
         <include refid="sqlFilter"/>
     </select>
 
     <update id="updateDomainObject" parameterType="org.complitex.common.entity.DomainObject">
-        UPDATE `${entityTable}` SET `end_date` = #{endDate}, `status` = #{status}
+        UPDATE `${entityName}` SET `end_date` = #{endDate}, `status` = #{status}
           WHERE `object_id` = #{objectId} AND `start_date` = #{startDate}
     </update>
 
@@ -220,11 +220,11 @@
 
     <select id="selectParentInSearchComponent" parameterType="map" resultType="map">
         SELECT (SELECT ent.`entity_table` FROM `entity` ent WHERE ent.`id` = e.`parent_entity_id`) parentEntity,
-        e.`parent_id` parentId FROM `${entityTable}` e WHERE e.`object_id` = #{objectId}
+        e.`parent_id` parentId FROM `${entityName}` e WHERE e.`object_id` = #{objectId}
         <choose>
             <when test="startDate != null">
                 AND e.`start_date` =
-                (SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{objectId} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+                (SELECT MAX(e1.`start_date`) FROM `${entityName}` e1 WHERE e1.`object_id` = #{objectId} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
             </when>
             <otherwise>
                 AND (e.`status` IN ('ACTIVE', 'INACTIVE'))
@@ -235,19 +235,19 @@
     <!-- history -->
 
     <select id="historyDates" resultType="date" parameterType="org.complitex.common.entity.DomainObjectFilter">
-        SELECT e.`start_date` FROM `${entityTable}` e WHERE e.`object_id`= #{objectId}
+        SELECT e.`start_date` FROM `${entityName}` e WHERE e.`object_id`= #{objectId}
         UNION
-        SELECT e.`end_date` FROM `${entityTable}` e WHERE e.`object_id`= #{objectId}
+        SELECT e.`end_date` FROM `${entityName}` e WHERE e.`object_id`= #{objectId}
         UNION
-        SELECT aa.`start_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{objectId}
+        SELECT aa.`start_date` FROM `${entityName}_attribute` aa WHERE aa.`object_id`= #{objectId}
         UNION
-        SELECT aa.`end_date` FROM `${entityTable}_attribute` aa WHERE aa.`object_id`= #{objectId}
+        SELECT aa.`end_date` FROM `${entityName}_attribute` aa WHERE aa.`object_id`= #{objectId}
     </select>
 
     <sql id="sqlSelectHistoryObject">
         SELECT e.*
-        FROM `${entityTable}` e WHERE e.`object_id` = #{objectId} AND e.`start_date` = (
-        SELECT MAX(e1.`start_date`) FROM `${entityTable}` e1 WHERE e1.`object_id` = #{objectId} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
+        FROM `${entityName}` e WHERE e.`object_id` = #{objectId} AND e.`start_date` = (
+        SELECT MAX(e1.`start_date`) FROM `${entityName}` e1 WHERE e1.`object_id` = #{objectId} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
     </sql>
 
     <select id="selectHistoryObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
@@ -290,7 +290,7 @@
     </update>
 
     <delete id="deleteDomainObject" parameterType="map">
-        DELETE FROM `${entityTable}` WHERE `object_id` = #{objectId}
+        DELETE FROM `${entityName}` WHERE `object_id` = #{objectId}
     </delete>
 
     <select id="childrenExistCheck" parameterType="map" resultType="int">
@@ -306,20 +306,20 @@
     <!--Attribute-->
 
     <insert id="insertAttribute" parameterType="org.complitex.common.entity.Attribute">
-        INSERT INTO `${entityTable}_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `status`,
+        INSERT INTO `${entityName}_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `status`,
           `start_date`, `end_date`, `value_id`, `value_type_id`)
         VALUES (#{attributeId}, #{objectId}, #{attributeTypeId}, #{status}, #{startDate}, #{endDate}, #{valueId},
           #{valueTypeId})
     </insert>
 
     <update id="updateAttribute" parameterType="org.complitex.common.entity.Attribute">
-        UPDATE `${entityTable}_attribute` SET `end_date` = #{endDate}, `status` = #{status}
+        UPDATE `${entityName}_attribute` SET `end_date` = #{endDate}, `status` = #{status}
         WHERE `attribute_id` = #{attributeId} AND `object_id` = #{objectId} AND `attribute_type_id` = #{attributeTypeId}
           AND `start_date` = #{startDate}
     </update>
 
     <update id="archiveAttributes" parameterType="map">
-        UPDATE `${entityTable}_attribute` SET `end_date` = #{endDate}, `status` = 'ARCHIVE' WHERE
+        UPDATE `${entityName}_attribute` SET `end_date` = #{endDate}, `status` = 'ARCHIVE' WHERE
         `status` IN ('ACTIVE', 'INACTIVE') AND
         `attribute_type_id` IN
         <foreach item="id" collection="attributeTypeIds" open="(" separator="," close=")">
@@ -328,12 +328,12 @@
     </update>
 
     <update id="archiveObjectAttributes" parameterType="map">
-        UPDATE `${entityTable}_attribute` SET `end_date` = #{endDate}, `status` = 'ARCHIVE' WHERE
+        UPDATE `${entityName}_attribute` SET `end_date` = #{endDate}, `status` = 'ARCHIVE' WHERE
         `object_id` = #{objectId} AND `status` IN ('ACTIVE', 'INACTIVE')
     </update>
 
     <select id="selectAttributes" parameterType="map" resultMap="attributeResultMap">
-        SELECT a.* FROM `${entityTable}_attribute` a
+        SELECT a.* FROM `${entityName}_attribute` a
           WHERE  a.`object_id` = #{objectId} AND a.`status` = 'ACTIVE'
           ORDER BY a.`attribute_type_id`, a.`attribute_id`
     </select>
@@ -341,14 +341,14 @@
     <select id="selectHistoryAttributes" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="attributeResultMap">
         SELECT aa.*
-        FROM `${entityTable}_attribute` aa
+        FROM `${entityName}_attribute` aa
         WHERE aa.`object_id` = #{objectId}
         AND aa.`start_date` <![CDATA[ <= ]]> #{startDate} AND ((aa.`end_date` IS NULL) OR (aa.`end_date` <![CDATA[ > ]]> #{startDate}))
         ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
     </select>
 
     <delete id="deleteAttribute" parameterType="map">
-        DELETE FROM `${entityTable}_attribute` WHERE `object_id` = #{objectId}
+        DELETE FROM `${entityName}_attribute` WHERE `object_id` = #{objectId}
     </delete>
 
     <!--StringLocale-->
@@ -360,12 +360,12 @@
     <!--StringCulture-->
 
     <insert id="insertStringCulture" parameterType="org.complitex.common.entity.StringCulture">
-        insert into `${entityTable}_string_culture`(`id`, `locale_id`, `value`)
+        insert into `${entityName}_string_culture`(`id`, `locale_id`, `value`)
           values (#{id}, #{localeId}, #{value})
     </insert>
 
     <select id="selectStringCultures" parameterType="map" resultMap="stringCultureResultMap">
-        SELECT sc.* FROM `${entityTable}_string_culture` sc WHERE sc.`id` = #{id}
+        SELECT sc.* FROM `${entityName}_string_culture` sc WHERE sc.`id` = #{id}
     </select>
 
     <insert id="insertDescriptionData" parameterType="org.complitex.common.entity.StringCulture">
@@ -373,8 +373,8 @@
     </insert>
 
     <delete id="deleteStringCulture" parameterType="map">
-        DELETE FROM `${entityTable}_string_culture` WHERE `id` IN
-        (SELECT a.`value_id` FROM `${entityTable}_attribute` a WHERE a.`object_id` = #{objectId}
+        DELETE FROM `${entityName}_string_culture` WHERE `id` IN
+        (SELECT a.`value_id` FROM `${entityName}_attribute` a WHERE a.`object_id` = #{objectId}
         AND a.`value_type_id` IN
         <foreach open="(" separator="," close=")" collection="localizedValueTypeIds" item="id">
             #{id}

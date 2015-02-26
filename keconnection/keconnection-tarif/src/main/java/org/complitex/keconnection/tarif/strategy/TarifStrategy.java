@@ -40,7 +40,7 @@ public class TarifStrategy extends TemplateStrategy {
     public static final long TARIF_GROUP = 3302;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "tarif";
     }
 
@@ -68,7 +68,7 @@ public class TarifStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
     public DomainObject getObjectByCode(int code) {

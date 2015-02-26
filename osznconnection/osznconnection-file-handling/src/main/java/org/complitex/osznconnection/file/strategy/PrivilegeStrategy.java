@@ -33,7 +33,7 @@ public class PrivilegeStrategy extends TemplateStrategy {
     private StringCultureBean stringBean;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "privilege";
     }
 
@@ -66,7 +66,7 @@ public class PrivilegeStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
     @Override

@@ -96,7 +96,7 @@ public class BuildingStrategy extends TemplateStrategy {
     private LogBean logBean;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "building";
     }
 
@@ -106,7 +106,7 @@ public class BuildingStrategy extends TemplateStrategy {
             return Collections.emptyList();
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
 
         List<Building> buildings = Lists.newArrayList();
@@ -248,7 +248,7 @@ public class BuildingStrategy extends TemplateStrategy {
     @Override
 
     public Building getDomainObject(Long id, boolean runAsAdmin) {
-        DomainObjectFilter example = new DomainObjectFilter(id, getEntityTable());
+        DomainObjectFilter example = new DomainObjectFilter(id, getEntityName());
 
         if (!runAsAdmin) {
             prepareExampleForPermissionCheck(example);
@@ -383,7 +383,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(CommonResources.class.getName(), getEntityTable(), locale);
+        return ResourceUtil.getString(CommonResources.class.getName(), getEntityName(), locale);
     }
 
     @Override
@@ -657,7 +657,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
     @Override
     public Building getHistoryObject(long objectId, Date date) {
-        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable(), date);
+        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityName(), date);
 
         Building building = sqlSession().selectOne(BUILDING_NS + ".selectHistoryObject", example);
         if (building == null) {

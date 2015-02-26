@@ -149,7 +149,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
     }
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "registration";
     }
 

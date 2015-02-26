@@ -179,7 +179,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
             return Collections.emptyList();
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         if (!example.isAdmin()) {
             prepareExampleForPermissionCheck(example);
         }
@@ -210,7 +210,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
         setupFindOperationParameters(example);
 

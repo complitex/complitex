@@ -7,7 +7,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.SimpleObjectInfo;
+import org.complitex.common.entity.EntityObjectInfo;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.component.ShowMode;
@@ -70,9 +70,9 @@ public abstract class AddressCorrectionEditPanel<T extends Correction> extends A
         SearchComponentState componentState = new SearchComponentState();
         if (!isNew()) {
             long objectId = correction.getObjectId();
-            SimpleObjectInfo info = getStrategy(entity).findParentInSearchComponent(objectId, null);
+            EntityObjectInfo info = getStrategy(entity).findParentInSearchComponent(objectId, null);
             if (info != null) {
-                componentState = getStrategy(entity).getSearchComponentStateForParent(info.getId(), info.getEntityTable(), null);
+                componentState = getStrategy(entity).getSearchComponentStateForParent(info.getId(), info.getEntityName(), null);
                 componentState.put(entity, findObject(objectId, entity));
             }
         }

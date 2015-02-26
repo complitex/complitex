@@ -294,7 +294,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
          * or root directory for loading and saving request files
          * then string value should be inserted as is and not upper cased. */
         return ALL_ATTRIBUTE_TYPES.contains(attributeTypeId)
-                ? stringBean.save(strings, getEntityTable(), false)
+                ? stringBean.save(strings, getEntityName(), false)
                 : super.insertStrings(attributeTypeId, strings);
     }
 

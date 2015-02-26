@@ -41,7 +41,7 @@ public class ModuleInstanceTypeStrategy extends TemplateStrategy {
     public static final long PAYMENTS_TYPE = 2;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "module_instance_type";
     }
 
@@ -69,7 +69,7 @@ public class ModuleInstanceTypeStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
     public List<? extends DomainObject> getAll() {

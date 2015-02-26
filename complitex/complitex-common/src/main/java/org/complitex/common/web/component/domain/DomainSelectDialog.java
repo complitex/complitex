@@ -14,7 +14,7 @@ public class DomainSelectDialog extends Panel{
 
     private IModel<Long> model;
 
-    public DomainSelectDialog(String id, String entityTable, IModel<String> titleModel) {
+    public DomainSelectDialog(String id, String entityName, IModel<String> titleModel) {
         super(id);
 
         dialog = new Dialog("dialog");
@@ -22,7 +22,7 @@ public class DomainSelectDialog extends Panel{
         dialog.setTitle(titleModel);
         add(dialog);
 
-        DomainObjectListPanel objects = new DomainObjectListPanel("objects", entityTable, null, true){
+        DomainObjectListPanel objects = new DomainObjectListPanel("objects", entityName, null, true){
             @Override
             protected void onSelect(AjaxRequestTarget target, DomainObject domainObject) {
                 model.setObject(domainObject.getObjectId());

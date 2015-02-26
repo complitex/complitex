@@ -49,7 +49,7 @@ public class TarifGroupStrategy extends TemplateStrategy {
             ORGANIZATION_TARIF_GROUP_ID, OTHER_TARIF_GROUP_ID);
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "tarif_group";
     }
 
@@ -77,7 +77,7 @@ public class TarifGroupStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
     public List<DomainObject> getAll() {

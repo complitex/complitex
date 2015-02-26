@@ -2,10 +2,6 @@ package org.complitex.common.entity;
 
 import java.io.Serializable;
 
-/**
- *
- * @author Artem
- */
 public class AttributeFilter implements Serializable {
     private Long attributeId;
 

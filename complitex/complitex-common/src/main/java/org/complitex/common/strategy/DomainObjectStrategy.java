@@ -113,13 +113,13 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                 long start = System.currentTimeMillis();
                 try {
                     changeActivity(object, false);
-                    log.info("The process of disabling of {} tree has been successful.", getEntityTable());
-                    logBean.logChangeActivity(STATUS.OK, getEntityTable(), object.getObjectId(), false, getDisableSuccess());
+                    log.info("The process of disabling of {} tree has been successful.", getEntityName());
+                    logBean.logChangeActivity(STATUS.OK, getEntityName(), object.getObjectId(), false, getDisableSuccess());
                 } catch (Exception e) {
-                    log.error("The process of disabling of " + getEntityTable() + " tree has been failed.", e);
-                    logBean.logChangeActivity(STATUS.ERROR, getEntityTable(), object.getObjectId(), false, getDisableError());
+                    log.error("The process of disabling of " + getEntityName() + " tree has been failed.", e);
+                    logBean.logChangeActivity(STATUS.ERROR, getEntityName(), object.getObjectId(), false, getDisableError());
                 }
-                log.info("The process of disabling of {} tree took {} sec.", getEntityTable(), (System.currentTimeMillis() - start) / 1000);
+                log.info("The process of disabling of {} tree took {} sec.", getEntityName(), (System.currentTimeMillis() - start) / 1000);
             }
         }).start();
     }
@@ -127,7 +127,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void changeActivity(DomainObject object, boolean enable) {
         object.setStatus(enable ? StatusType.ACTIVE : StatusType.INACTIVE);
-        object.setEntityTable(getEntityTable());
+        object.setEntityName(getEntityName());
 
         sqlSession().update(NS + ".updateDomainObject", object);
 
@@ -143,13 +143,13 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                 long start = System.currentTimeMillis();
                 try {
                     changeActivity(object, true);
-                    log.info("The process of enabling of {} tree has been successful.", getEntityTable());
-                    logBean.logChangeActivity(STATUS.OK, getEntityTable(), object.getObjectId(), true, getEnableSuccess());
+                    log.info("The process of enabling of {} tree has been successful.", getEntityName());
+                    logBean.logChangeActivity(STATUS.OK, getEntityName(), object.getObjectId(), true, getEnableSuccess());
                 } catch (Exception e) {
-                    log.error("The process of enabling of " + getEntityTable() + " tree has been failed.", e);
-                    logBean.logChangeActivity(STATUS.ERROR, getEntityTable(), object.getObjectId(), true, getEnableError());
+                    log.error("The process of enabling of " + getEntityName() + " tree has been failed.", e);
+                    logBean.logChangeActivity(STATUS.ERROR, getEntityName(), object.getObjectId(), true, getEnableError());
                 }
-                log.info("The process of enabling of {} tree took {} sec.", getEntityTable(), (System.currentTimeMillis() - start) / 1000);
+                log.info("The process of enabling of {} tree took {} sec.", getEntityName(), (System.currentTimeMillis() - start) / 1000);
             }
         }).start();
     }
@@ -198,7 +198,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void loadAttributes(String dataSource, DomainObject object) {
         Map<String, Object> params = ImmutableMap.<String, Object>builder()
-                .put("entityTable", getEntityTable())
+                .put("entityName", getEntityName())
                 .put("objectId", object.getObjectId())
                 .build();
 
@@ -244,7 +244,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     protected void loadStringCultures(String dataSource, Attribute attribute) {
-        attribute.setStringCultures(stringBean.getStringCultures(dataSource, attribute.getValueId(), getEntityTable()));
+        attribute.setStringCultures(stringBean.getStringCultures(dataSource, attribute.getValueId(), getEntityName()));
     }
 
 
@@ -254,7 +254,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             return null;
         }
 
-        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable());
+        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityName());
 
         if (!runAsAdmin) {
             prepareExampleForPermissionCheck(example);
@@ -277,7 +277,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     public DomainObject getDomainObjectTree(Long objectId){
-        return sqlSession().selectOne(NS + ".selectDomainObjectTree", new DomainObjectFilter(objectId, getEntityTable()));
+        return sqlSession().selectOne(NS + ".selectDomainObjectTree", new DomainObjectFilter(objectId, getEntityName()));
     }
 
     @Override
@@ -287,7 +287,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public Long getObjectId(String externalId) {
-        return (Long) sqlSession().selectOne(NS + ".selectDomainObjectId", ImmutableMap.of("entityTable", getEntityTable(),
+        return (Long) sqlSession().selectOne(NS + ".selectDomainObjectId", ImmutableMap.of("entityName", getEntityName(),
                 "externalId", externalId));
     }
 
@@ -367,7 +367,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         boolean isAdmin = sessionBean.isAdmin();
         example.setAdmin(isAdmin);
         if (!isAdmin) {
-            example.setUserPermissionString(sessionBean.getPermissionString(getEntityTable()));
+            example.setUserPermissionString(sessionBean.getPermissionString(getEntityName()));
         }
     }
 
@@ -377,7 +377,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             return Collections.emptyList();
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
         extendOrderBy(example);
 
@@ -404,7 +404,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             return 0L;
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
 
         return (Long) sqlSession().selectOne(NS + ".selectDomainObjectCount", example);
@@ -416,12 +416,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
      */
     @Override
     public Entity getEntity(String dataSource) {
-        return entityBean.getEntity(dataSource, getEntityTable());
+        return entityBean.getEntity(dataSource, getEntityName());
     }
 
     @Override
     public Entity getEntity() {
-        return entityBean.getEntity(getEntityTable());
+        return entityBean.getEntity(getEntityName());
     }
 
     @Override
@@ -447,7 +447,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         }
 
         if (attribute.getValueId() != null || getEntity().getAttributeType(attribute.getAttributeTypeId()).isMandatory()) {
-            attribute.setEntityTable(getEntityTable());
+            attribute.setEntityName(getEntityName());
 
             sqlSession().insert(getInsertAttributeStatement(), attribute);
         }
@@ -459,13 +459,13 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected Long insertStrings(long attributeTypeId, List<StringCulture> strings) {
-        return stringBean.save(strings, getEntityTable());
+        return stringBean.save(strings, getEntityName());
     }
 
 
     @Override
     public void insert(DomainObject object, Date insertDate) {
-        object.setObjectId(sequenceBean.nextId(getEntityTable()));
+        object.setObjectId(sequenceBean.nextId(getEntityName()));
         object.setPermissionId(getNewPermissionId(object.getSubjectIds()));
         insertDomainObject(object, insertDate);
 
@@ -485,14 +485,14 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             for (Long subjectId : newSubjectIds) {
                 subjects.add(new Subject("organization", subjectId));
             }
-            return permissionBean.getPermission(getEntityTable(), subjects);
+            return permissionBean.getPermission(getEntityName(), subjects);
         }
     }
 
 
     protected void insertDomainObject(DomainObject object, Date insertDate) {
         object.setStartDate(insertDate);
-        object.setEntityTable(getEntityTable());
+        object.setEntityName(getEntityName());
 
         sqlSession().insert(NS + ".insertDomainObject", object);
     }
@@ -502,7 +502,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     public void archiveAttributes(Collection<Long> attributeTypeIds, Date endDate) {
         if (attributeTypeIds != null && !attributeTypeIds.isEmpty()) {
             Map<String, Object> params = ImmutableMap.<String, Object>builder().
-                    put("entityTable", getEntityTable()).
+                    put("entityName", getEntityName()).
                     put("endDate", endDate).
                     put("attributeTypeIds", attributeTypeIds).
                     build();
@@ -633,7 +633,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                 || (!Objects.equals(oldObject.getExternalId(), newObject.getExternalId()))) {
             oldObject.setStatus(StatusType.ARCHIVE);
             oldObject.setEndDate(updateDate);
-            oldObject.setEntityTable(getEntityTable());
+            oldObject.setEntityName(getEntityName());
 
             sqlSession().update(NS + ".updateDomainObject", oldObject);
             insertUpdatedDomainObject(newObject, updateDate);
@@ -644,7 +644,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected void archiveAttribute(Attribute attribute, Date archiveDate) {
         attribute.setEndDate(archiveDate);
         attribute.setStatus(StatusType.ARCHIVE);
-        attribute.setEntityTable(getEntityTable());
+        attribute.setEntityName(getEntityName());
 
         sqlSession().update(NS + ".updateAttribute", attribute);
     }
@@ -658,7 +658,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     @Override
     public void updateAndPropagate(DomainObject oldObject, final DomainObject newObject, Date updateDate) {
         if (!canPropagatePermissions(newObject)) {
-            throw new RuntimeException("Illegal call of updateAndPropagate() as `" + getEntityTable() + "` entity is not able to has children.");
+            throw new RuntimeException("Illegal call of updateAndPropagate() as `" + getEntityName() + "` entity is not able to has children.");
         }
         update(oldObject, newObject, updateDate);
 
@@ -669,13 +669,13 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                 long start = System.currentTimeMillis();
                 try {
                     propagatePermissions(newObject);
-                    log.info("The process of permissions replacement for {} tree has been successful.", getEntityTable());
-                    logBean.logReplacePermissions(STATUS.OK, getEntityTable(), newObject.getObjectId(), getReplacePermissionsSuccess());
+                    log.info("The process of permissions replacement for {} tree has been successful.", getEntityName());
+                    logBean.logReplacePermissions(STATUS.OK, getEntityName(), newObject.getObjectId(), getReplacePermissionsSuccess());
                 } catch (Exception e) {
-                    log.error("The process of permissions replacement for " + getEntityTable() + " tree has been failed.", e);
-                    logBean.logReplacePermissions(STATUS.ERROR, getEntityTable(), newObject.getObjectId(), getReplacePermissionsError());
+                    log.error("The process of permissions replacement for " + getEntityName() + " tree has been failed.", e);
+                    logBean.logReplacePermissions(STATUS.ERROR, getEntityName(), newObject.getObjectId(), getReplacePermissionsError());
                 }
-                log.info("The process of permissions replacement for {} tree took {} sec.", getEntityTable(),
+                log.info("The process of permissions replacement for {} tree took {} sec.", getEntityName(),
                         (System.currentTimeMillis() - start) / 1000);
             }
         }).start();
@@ -699,7 +699,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
         params.put("entity", childEntity);
         params.put("parentId", parentId);
-        params.put("parentEntity", getEntityTable());
+        params.put("parentEntity", getEntityName());
         params.put("start", start);
         params.put("size", size);
 
@@ -766,7 +766,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected void updatePermissionId(long objectId, long permissionId) {
         Map<String, Object> params = new HashMap<>();
 
-        params.put("entity", getEntityTable());
+        params.put("entity", getEntityName());
         params.put("objectId", objectId);
         params.put("permissionId", permissionId);
 
@@ -782,12 +782,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     public void archive(DomainObject object, Date endDate) {
         object.setStatus(StatusType.ARCHIVE);
         object.setEndDate(endDate);
-        object.setEntityTable(getEntityTable());
+        object.setEntityName(getEntityName());
 
         sqlSession().update(NS + ".updateDomainObject", object);
 
         Map<String, Object> params = ImmutableMap.<String, Object>builder().
-                put("entityTable", getEntityTable()).
+                put("entityName", getEntityName()).
                 put("endDate", endDate).
                 put("objectId", object.getObjectId()).build();
 
@@ -836,7 +836,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
      *  Используется для отображения в пользовательском интерфейсе
      * @return Сортированный список метамодели (описания) атрибутов
      */
-    public List<AttributeType> getListColumns() {
+    public List<AttributeType> getListColumns() { //todo move to entity bean
         Entity entity = getEntity();
 
         List<AttributeType> list = new ArrayList<>();
@@ -880,8 +880,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     @SuppressWarnings({"unchecked"})
 
     @Override
-    public SimpleObjectInfo findParentInSearchComponent(long id, Date date) {
-        DomainObjectFilter example = new DomainObjectFilter(id, getEntityTable());
+    public EntityObjectInfo findParentInSearchComponent(long id, Date date) {
+        DomainObjectFilter example = new DomainObjectFilter(id, getEntityName());
 
         example.setStartDate(date);
         Map<String, Object> result = sqlSession().selectOne(NS + ".selectParentInSearchComponent", example);
@@ -889,7 +889,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             Long parentId = (Long) result.get("parentId");
             String parentEntity = (String) result.get("parentEntity");
             if (parentId != null && !Strings.isEmpty(parentEntity)) {
-                return new SimpleObjectInfo(parentEntity, parentId);
+                return new EntityObjectInfo(parentEntity, parentId);
             }
         }
         return null;
@@ -904,9 +904,9 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             SearchComponentState componentState = new SearchComponentState();
             Map<String, Long> ids = new HashMap<>();
 
-            SimpleObjectInfo parentData = new SimpleObjectInfo(parentEntity, parentId);
+            EntityObjectInfo parentData = new EntityObjectInfo(parentEntity, parentId);
             while (parentData != null) {
-                String currentParentEntity = parentData.getEntityTable();
+                String currentParentEntity = parentData.getEntityName();
                 Long currentParentId = parentData.getId();
                 ids.put(currentParentEntity, currentParentId);
                 parentData = strategyFactory.getStrategy(currentParentEntity).findParentInSearchComponent(currentParentId, date);
@@ -972,7 +972,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public TreeSet<Date> getHistoryDates(long objectId) {
-        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable());
+        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityName());
 
         List<Date> results = sqlSession().selectList(NS + ".historyDates", example);
 
@@ -988,7 +988,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public DomainObject getHistoryObject(long objectId, Date date) {
-        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable());
+        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityName());
         example.setStartDate(date);
 
         DomainObject object = sqlSession().selectOne(NS + ".selectHistoryObject", example);
@@ -1005,7 +1005,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected List<Attribute> loadHistoryAttributes(long objectId, Date date) {
-        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityTable());
+        DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityName());
         example.setStartDate(date);
 
         return sqlSession().selectList(NS + ".selectHistoryAttributes", example);
@@ -1031,7 +1031,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public String getAttributeLabel(Attribute attribute, Locale locale) {
-        return entityBean.getAttributeLabel(getEntityTable(), attribute.getAttributeTypeId(), locale);
+        return entityBean.getAttributeLabel(getEntityName(), attribute.getAttributeTypeId(), locale);
     }
 
     @Override
@@ -1076,11 +1076,11 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         }
 
         if (attribute == null) {
-            throw new IllegalStateException("Domain object(entity = " + getEntityTable() + ", id = " + object.getObjectId()
+            throw new IllegalStateException("Domain object(entity = " + getEntityName() + ", id = " + object.getObjectId()
                     + ") has no attribute with attribute type id = " + attributeTypeId + "!");
         }
         if (attribute.getStringCultures() == null) {
-            throw new IllegalStateException("Attribute of domain object(entity = " + getEntityTable() + ", id = " + object.getObjectId()
+            throw new IllegalStateException("Attribute of domain object(entity = " + getEntityName() + ", id = " + object.getObjectId()
                     + ") with attribute type id = " + attributeTypeId + " and attribute id = " + attribute.getAttributeId()
                     + " has null lozalized values.");
         }
@@ -1088,7 +1088,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
         Map<String, Object> params = new HashMap<>();
 
-        params.put("entity", getEntityTable());
+        params.put("entity", getEntityName());
         params.put("localeId", stringLocaleBean.convert(locale).getId());
         params.put("attributeTypeId", attributeTypeId);
         params.put("text", text);
@@ -1151,13 +1151,13 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                     permissionInfo.setId(objectId);
                     permissionInfo.setPermissionId(permissionId);
                     changePermissions(permissionInfo, addSubjectIds, removeSubjectIds);
-                    log.info("The process of permissions change for {} tree has been successful.", getEntityTable());
-                    logBean.logChangePermissions(STATUS.OK, getEntityTable(), objectId, getChangePermissionsSuccess());
+                    log.info("The process of permissions change for {} tree has been successful.", getEntityName());
+                    logBean.logChangePermissions(STATUS.OK, getEntityName(), objectId, getChangePermissionsSuccess());
                 } catch (Exception e) {
-                    log.error("The process of permissions change for " + getEntityTable() + " tree has been failed.", e);
-                    logBean.logChangePermissions(STATUS.ERROR, getEntityTable(), objectId, getChangePermissionsError());
+                    log.error("The process of permissions change for " + getEntityName() + " tree has been failed.", e);
+                    logBean.logChangePermissions(STATUS.ERROR, getEntityName(), objectId, getChangePermissionsError());
                 }
-                log.info("The process of permissions change for {} tree took {} sec.", getEntityTable(), (System.currentTimeMillis() - start) / 1000);
+                log.info("The process of permissions change for {} tree took {} sec.", getEntityName(), (System.currentTimeMillis() - start) / 1000);
             }
         }).start();
     }
@@ -1211,7 +1211,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         Map<String, Object> params = new HashMap<>();
         params.put("entity", childEntity);
         params.put("parentId", parentId);
-        params.put("parentEntity", getEntityTable());
+        params.put("parentEntity", getEntityName());
         params.put("start", start);
         params.put("size", size);
 
@@ -1226,7 +1226,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
         params.put("entity", childEntity);
         params.put("parentId", parentId);
-        params.put("parentEntity", getEntityTable());
+        params.put("parentEntity", getEntityName());
         params.put("enabled", enabled);
         params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
 
@@ -1240,7 +1240,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
-        Entity entity = entityBean.getEntity(getEntityTable());
+        Entity entity = entityBean.getEntity(getEntityName());
 
         switch (entity.getAttributeType(attribute.getAttributeTypeId()).getAttributeValueTypes().get(0)
                 .getValueType().toUpperCase()) {
@@ -1283,14 +1283,14 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected void deleteStrings(long objectId) {
         Set<Long> localizedValueTypeIds = getLocalizedValueTypeIds();
         if (localizedValueTypeIds != null && !localizedValueTypeIds.isEmpty()) {
-            stringBean.delete(getEntityTable(), objectId, localizedValueTypeIds);
+            stringBean.delete(getEntityName(), objectId, localizedValueTypeIds);
         }
     }
 
 
     protected void deleteAttribute(long objectId) {
         Map<String, Object> params = new HashMap<>();
-        params.put("entityTable", getEntityTable()); //todo filter
+        params.put("entityName", getEntityName()); //todo filter
         params.put("objectId", objectId);
 
         sqlSession().delete(NS + ".deleteAttribute", params);
@@ -1299,7 +1299,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void deleteDomainObject(long objectId, Locale locale) throws DeleteException {
         Map<String, Object> params = new HashMap<>(); //todo filter
-        params.put("entityTable", getEntityTable());
+        params.put("entityName", getEntityName());
         params.put("objectId", objectId);
 
         try {
@@ -1364,12 +1364,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected void referenceExistCheck(long objectId, Locale locale) throws DeleteException {
-        for (String entityTable : entityBean.getAllEntities()) {
-            Entity entity = entityBean.getEntity(entityTable);
+        for (String entityName : entityBean.getEntityNames()) {
+            Entity entity = entityBean.getEntity(entityName);
             for (AttributeType attributeType : entity.getAttributeTypes()) {
                 for (AttributeValueType attributeValueType : attributeType.getAttributeValueTypes()) {
-                    if (getEntityTable().equals(attributeValueType.getValueType())) {
-                        String referenceEntity = entity.getTable();
+                    if (getEntityName().equals(attributeValueType.getValueType())) {
+                        String referenceEntity = entity.getEntityName();
                         long attributeTypeId = attributeType.getId();
 
                         Map<String, Object> params = new HashMap<>();

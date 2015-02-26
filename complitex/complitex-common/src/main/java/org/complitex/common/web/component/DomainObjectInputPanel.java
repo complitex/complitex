@@ -240,9 +240,9 @@ public class DomainObjectInputPanel extends Panel {
                 }
             }
         } else {
-            SimpleObjectInfo info = getStrategy().findParentInSearchComponent(object.getObjectId(), isHistory() ? date : null);
+            EntityObjectInfo info = getStrategy().findParentInSearchComponent(object.getObjectId(), isHistory() ? date : null);
             if (info != null) {
-                componentState = getStrategy().getSearchComponentStateForParent(info.getId(), info.getEntityTable(), date);
+                componentState = getStrategy().getSearchComponentStateForParent(info.getId(), info.getEntityName(), date);
             }
         }
         return componentState;

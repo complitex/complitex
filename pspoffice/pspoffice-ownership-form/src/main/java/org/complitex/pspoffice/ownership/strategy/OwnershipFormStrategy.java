@@ -29,7 +29,7 @@ public class OwnershipFormStrategy extends TemplateStrategy {
     public static final long NAME = 2500;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "ownership_form";
     }
 
@@ -57,7 +57,7 @@ public class OwnershipFormStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
     public List<DomainObject> getAll() {

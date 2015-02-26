@@ -41,7 +41,7 @@ public class OrganizationTypeStrategy extends TemplateStrategy {
     public static final long SERVICING_ORGANIZATION_TYPE = 4;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "organization_type";
     }
 
@@ -69,7 +69,7 @@ public class OrganizationTypeStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
 

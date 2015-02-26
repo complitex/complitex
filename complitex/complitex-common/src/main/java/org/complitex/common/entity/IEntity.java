@@ -5,5 +5,5 @@ package org.complitex.common.entity;
  *         Date: 16.07.13 17:22
  */
 public interface IEntity extends ILongId{
-    String getTable();
+    String getEntityName();
 }

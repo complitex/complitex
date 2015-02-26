@@ -13,15 +13,17 @@
         <collection property="attributeTypes" ofType="org.complitex.common.entity.AttributeType">
             <id column="attribute_type_id" property="id"/>
 
-            <result column="mandatory" property="mandatory" javaType="_boolean" jdbcType="TINYINT"/>
+            <result column="mandatory" property="mandatory"/>
             <result column="attr_start_date" property="startDate"/>
             <result column="attr_end_date" property="endDate"/>
-            <result column="system" property="system" javaType="_boolean" jdbcType="TINYINT"/>
-            <collection property="attributeNames" ofType="StringCulture" column="attribute_type_name_id" select="findNames"/>
-                <collection property="attributeValueTypes" ofType="org.complitex.common.entity.AttributeValueType">
-                    <id column="attribute_value_type_id" property="id"/>
-                    <result column="attribute_value_type" property="valueType"/>
-                </collection>
+            <result column="system" property="system"/>
+
+            <collection property="attributeNames" column="attribute_type_name_id" select="findNames"/>
+
+            <collection property="attributeValueTypes" ofType="org.complitex.common.entity.AttributeValueType">
+                <id column="attribute_value_type_id" property="id"/>
+                <result column="attribute_value_type" property="valueType"/>
+            </collection>
         </collection>
     </resultMap>
 

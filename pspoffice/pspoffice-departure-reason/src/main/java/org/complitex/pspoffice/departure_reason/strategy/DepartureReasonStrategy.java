@@ -34,7 +34,7 @@ public class DepartureReasonStrategy extends TemplateStrategy {
     public static final long CODE = 3001;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "departure_reason";
     }
 
@@ -62,7 +62,7 @@ public class DepartureReasonStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
     @Override

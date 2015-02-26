@@ -13,11 +13,11 @@ public enum AddressEntity implements IEntity, IFixedIdType{
     CITY_TYPE(1300L, "city_type"), STREET_TYPE(1400L, "street_type"), BUILDING_ADDRESS(1500L, "building_address");
 
     private Long id;
-    private String entityTable;
+    private String entityName;
 
-    private AddressEntity(Long id, String entityTable) {
+    private AddressEntity(Long id, String entityName) {
         this.id = id;
-        this.entityTable = entityTable;
+        this.entityName = entityName;
     }
 
     @Override
@@ -25,7 +25,7 @@ public enum AddressEntity implements IEntity, IFixedIdType{
         return id;
     }
 
-    public String getTable() {
-        return entityTable;
+    public String getEntityName() {
+        return entityName;
     }
 }

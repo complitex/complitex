@@ -3,7 +3,7 @@
 <mapper namespace="org.complitex.osznconnection.file.service.FacilityReferenceBookBean">
 
     <insert id="insertFacilityReferences" parameterType="map">
-        INSERT INTO `${entityTable}`
+        INSERT INTO `${entityName}`
         (
         <trim suffixOverrides=",">
             `request_file_id`, `status`,
@@ -32,7 +32,7 @@
     </select>
 
     <delete id="deleteFacilityReferences" parameterType="map">
-        DELETE FROM `${entityTable}` WHERE `request_file_id` = #{requestFileId}
+        DELETE FROM `${entityName}` WHERE `request_file_id` = #{requestFileId}
     </delete>
 
     <!--FacilityStreetType-->

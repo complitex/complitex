@@ -16,35 +16,35 @@ import static org.apache.wicket.util.string.Strings.isEmpty;
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class StrategyFactory {
 
-    public IStrategy getStrategy(String entityTable) {
-        return getStrategy(entityTable, false);
+    public IStrategy getStrategy(String entityName) {
+        return getStrategy(entityName, false);
     }
 
-    public IStrategy getStrategy(String entityTable, boolean suppressException) {
-        String strategyName = getStrategyName(entityTable);
+    public IStrategy getStrategy(String entityName, boolean suppressException) {
+        String strategyName = getStrategyName(entityName);
 
         return EjbBeanLocator.getBean(strategyName, suppressException);
     }
 
-    public IStrategy getStrategy(String strategyName, String entityTable) {
+    public IStrategy getStrategy(String strategyName, String entityName) {
         if (isEmpty(strategyName)) {
-            return getStrategy(entityTable);
+            return getStrategy(entityName);
         }
 
         IStrategy strategy = EjbBeanLocator.getBean(strategyName);
 
-        if (!strategy.getEntityTable().equals(entityTable)) {
+        if (!strategy.getEntityName().equals(entityName)) {
             throw new IllegalArgumentException("Strategy with class " + strategy.getClass() + " has entity table "
-                    + strategy.getEntityTable() + " that one is not equal to requested entity table - " + entityTable);
+                    + strategy.getEntityName() + " that one is not equal to requested entity table - " + entityName);
         }
         return strategy;
     }
 
-    private String getStrategyName(String entityTable) {
-        if (entityTable == null || isEmpty(entityTable)) {
+    private String getStrategyName(String entityName) {
+        if (entityName == null || isEmpty(entityName)) {
             throw new IllegalStateException("Entity table is null or empty.");
         }
-        char[] chars = entityTable.toCharArray();
+        char[] chars = entityName.toCharArray();
         StringBuilder strategyNameBuilder = new StringBuilder();
         strategyNameBuilder.append(Character.toUpperCase(chars[0]));
         int i = 1;

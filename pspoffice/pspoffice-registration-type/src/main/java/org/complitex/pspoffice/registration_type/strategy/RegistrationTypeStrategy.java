@@ -39,7 +39,7 @@ public class RegistrationTypeStrategy extends TemplateStrategy {
     private static final Set<Long> RESERVED_INSTANCE_IDS = of(PERMANENT);
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "registration_type";
     }
 
@@ -67,7 +67,7 @@ public class RegistrationTypeStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
     @SuppressWarnings("unchecked")

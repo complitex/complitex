@@ -130,7 +130,7 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private boolean canEdit() {
-        return DomainObjectAccessUtil.canEdit(null, registrationStrategy.getEntityTable(), newRegistration);
+        return DomainObjectAccessUtil.canEdit(null, registrationStrategy.getEntityName(), newRegistration);
     }
 
     private boolean isInactive() {
@@ -469,7 +469,7 @@ public class RegistrationEdit extends FormTemplatePage {
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }
-        parent.add(newInputComponent(registrationStrategy.getEntityTable(), null, newRegistration, attribute,
+        parent.add(newInputComponent(registrationStrategy.getEntityName(), null, newRegistration, attribute,
                 getLocale(), isInactive()));
     }
 

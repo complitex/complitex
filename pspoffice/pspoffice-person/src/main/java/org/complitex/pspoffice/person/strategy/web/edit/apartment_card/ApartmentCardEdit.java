@@ -350,7 +350,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         form.add(registerOwnerContainer);
         {
             boolean allowRegisterOwner = false;
-            if (canEdit(null, apartmentCardStrategy.getEntityTable(), newApartmentCard)) {
+            if (canEdit(null, apartmentCardStrategy.getEntityName(), newApartmentCard)) {
                 allowRegisterOwner = true;
                 if (!isNew()) {
                     for (Registration registration : newApartmentCard.getRegistrations()) {
@@ -561,7 +561,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
                         getAddressEntity(), getAddressId(), registrationStrategy.newInstance()));
             }
         };
-        addRegistration.setVisible(canEdit(null, apartmentCardStrategy.getEntityTable(), newApartmentCard));
+        addRegistration.setVisible(canEdit(null, apartmentCardStrategy.getEntityName(), newApartmentCard));
         form.add(addRegistration);
 
         //housing rights
@@ -661,7 +661,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
                 back();
             }
         };
-        submit.setVisible(canEdit(null, apartmentCardStrategy.getEntityTable(), newApartmentCard));
+        submit.setVisible(canEdit(null, apartmentCardStrategy.getEntityName(), newApartmentCard));
         form.add(submit);
         Link<Void> cancel = new Link<Void>("cancel") {
 
@@ -670,7 +670,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
                 back();
             }
         };
-        cancel.setVisible(canEdit(null, apartmentCardStrategy.getEntityTable(), newApartmentCard));
+        cancel.setVisible(canEdit(null, apartmentCardStrategy.getEntityName(), newApartmentCard));
         form.add(cancel);
         Link<Void> back = new Link<Void>("back") {
 
@@ -679,7 +679,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
                 back();
             }
         };
-        back.setVisible(!canEdit(null, apartmentCardStrategy.getEntityTable(), newApartmentCard));
+        back.setVisible(!canEdit(null, apartmentCardStrategy.getEntityName(), newApartmentCard));
         form.add(back);
         add(form);
 
@@ -712,7 +712,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         //input component
         Attribute attribute = newApartmentCard.getAttribute(attributeTypeId);
-        parent.add(newInputComponent(apartmentCardStrategy.getEntityTable(), null, newApartmentCard, attribute, getLocale(), false));
+        parent.add(newInputComponent(apartmentCardStrategy.getEntityName(), null, newApartmentCard, attribute, getLocale(), false));
     }
 
     private void beforePersist() {
@@ -839,7 +839,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
     private void disable() {
         apartmentCardStrategy.disable(oldApartmentCard, getCurrentDate());
-        logBean.logArchivation(Log.STATUS.OK, Module.NAME, ApartmentCardEdit.class, apartmentCardStrategy.getEntityTable(),
+        logBean.logArchivation(Log.STATUS.OK, Module.NAME, ApartmentCardEdit.class, apartmentCardStrategy.getEntityName(),
                 oldApartmentCard.getObjectId(), getString("disabling_log_message"));
     }
 
@@ -900,7 +900,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         });
         formOfOwnership.setRequired(formOfOwnershipAttributeType.isMandatory());
         formOfOwnership.setLabel(labelModel);
-        formOfOwnership.setEnabled(canEdit(null, apartmentCardStrategy.getEntityTable(), newApartmentCard));
+        formOfOwnership.setEnabled(canEdit(null, apartmentCardStrategy.getEntityName(), newApartmentCard));
         formOfOwnershipContainer.add(formOfOwnership);
         return formOfOwnershipContainer;
     }

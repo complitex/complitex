@@ -23,7 +23,7 @@ public class BuildingCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return AddressEntity.BUILDING.getTable();
+        return AddressEntity.BUILDING.getEntityName();
     }
 
     public Long getStreetObjectId() {

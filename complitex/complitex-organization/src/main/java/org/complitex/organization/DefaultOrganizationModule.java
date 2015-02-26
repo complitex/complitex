@@ -35,7 +35,7 @@ public class DefaultOrganizationModule implements IOrganizationModule {
             organizationModule = this;
         }
 
-        LogManager.get().registerLink(DomainObject.class.getName(), organizationStrategy.getEntityTable(),
+        LogManager.get().registerLink(DomainObject.class.getName(), organizationStrategy.getEntityName(),
                 organizationModule.getEditPage(),
                 organizationModule.getEditPageParams(),
                 TemplateStrategy.OBJECT_ID);
@@ -48,6 +48,6 @@ public class DefaultOrganizationModule implements IOrganizationModule {
 
     @Override
     public PageParameters getEditPageParams() {
-        return new PageParameters().set(TemplateStrategy.ENTITY, organizationStrategy.getEntityTable());
+        return new PageParameters().set(TemplateStrategy.ENTITY, organizationStrategy.getEntityName());
     }
 }

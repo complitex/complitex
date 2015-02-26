@@ -20,7 +20,7 @@ public class ApartmentCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return AddressEntity.APARTMENT.getTable();
+        return AddressEntity.APARTMENT.getEntityName();
     }
 
     public Long getBuildingObjectId() {

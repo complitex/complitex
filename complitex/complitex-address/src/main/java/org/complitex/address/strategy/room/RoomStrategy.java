@@ -48,7 +48,7 @@ public class RoomStrategy extends TemplateStrategy {
     public static final Long NAME = 200L;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "room";
     }
 
@@ -143,7 +143,7 @@ public class RoomStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(CommonResources.class.getName(), getEntityTable(), locale);
+        return ResourceUtil.getString(CommonResources.class.getName(), getEntityName(), locale);
     }
 
     @Override

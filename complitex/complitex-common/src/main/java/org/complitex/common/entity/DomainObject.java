@@ -9,7 +9,7 @@ import java.util.*;
 
 public class DomainObject implements ILongId {
     private Long pkId;
-    private String entityTable;
+    private String entityName;
     private Long objectId;
     private StatusType status = StatusType.ACTIVE;
     private Date startDate;
@@ -111,12 +111,12 @@ public class DomainObject implements ILongId {
         this.pkId = pkId;
     }
 
-    public String getEntityTable() {
-        return entityTable;
+    public String getEntityName() {
+        return entityName;
     }
 
-    public void setEntityTable(String entityTable) {
-        this.entityTable = entityTable;
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public Long getObjectId() {

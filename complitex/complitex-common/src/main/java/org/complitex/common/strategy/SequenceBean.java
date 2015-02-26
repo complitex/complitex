@@ -12,44 +12,44 @@ import javax.ejb.Stateless;
 public class SequenceBean extends AbstractBean {
     public static final String NS = SequenceBean.class.getName();
 
-    public long nextStringId(String entityTable) {
+    public long nextStringId(String entityName) {
         long nextStringId;
 
-        if (Strings.isEmpty(entityTable)) {
+        if (Strings.isEmpty(entityName)) {
             nextStringId = sqlSession().selectOne(NS + ".nextStringIdForDescriptionData");
             sqlSession().update(NS + ".incrementStringIdForDescriptionData");
         } else {
-            nextStringId = sqlSession().selectOne(NS + ".nextStringId", entityTable);
-            sqlSession().update(NS + ".incrementStringId", entityTable);
+            nextStringId = sqlSession().selectOne(NS + ".nextStringId", entityName);
+            sqlSession().update(NS + ".incrementStringId", entityName);
         }
 
         return nextStringId;
     }
 
 
-    public long nextId(String entityTable) {
-        long nextId = sqlSession().selectOne(NS + ".nextId", entityTable);
-        sqlSession().update(NS + ".incrementId", entityTable);
+    public long nextId(String entityName) {
+        long nextId = sqlSession().selectOne(NS + ".nextId", entityName);
+        sqlSession().update(NS + ".incrementId", entityName);
 
         return nextId;
     }
 
 
-    public long nextIdOrInit(String entityTable) {
+    public long nextIdOrInit(String entityName) {
         try {
-            return nextId(entityTable);
+            return nextId(entityName);
         } catch (Throwable th) {
-            if (!create(entityTable)) {
+            if (!create(entityName)) {
                 throw th;
             }
 
-            return nextId(entityTable);
+            return nextId(entityName);
         }
     }
 
-    private boolean create(String entityTable) {
-        if (sqlSession().selectOne(NS + ".exists", entityTable) == null) {
-            sqlSession().insert(NS + ".create", entityTable);
+    private boolean create(String entityName) {
+        if (sqlSession().selectOne(NS + ".exists", entityName) == null) {
+            sqlSession().insert(NS + ".create", entityName);
             return true;
         }
 

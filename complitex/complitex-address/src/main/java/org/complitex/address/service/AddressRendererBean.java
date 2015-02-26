@@ -6,7 +6,7 @@ package org.complitex.address.service;
 
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.SimpleObjectInfo;
+import org.complitex.common.entity.EntityObjectInfo;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.component.search.SearchComponentState;
@@ -35,10 +35,10 @@ public class AddressRendererBean {
         }
 
         IStrategy strategy = strategyFactory.getStrategy(addressEntity);
-        SimpleObjectInfo info = strategy.findParentInSearchComponent(addressId, null);
+        EntityObjectInfo info = strategy.findParentInSearchComponent(addressId, null);
         SearchComponentState addressComponentState = new SearchComponentState();
         if (info != null) {
-            addressComponentState = strategy.getSearchComponentStateForParent(info.getId(), info.getEntityTable(), null);
+            addressComponentState = strategy.getSearchComponentStateForParent(info.getId(), info.getEntityName(), null);
         }
         DomainObject addressObject = strategy.getDomainObject(addressId, true);
         if (addressObject != null) {

@@ -129,7 +129,7 @@ public class PersonStrategy extends TemplateStrategy {
     private ApartmentCardStrategy apartmentCardStrategy;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "person";
     }
 
@@ -190,7 +190,7 @@ public class PersonStrategy extends TemplateStrategy {
             return Collections.emptyList();
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         if (!example.isAdmin()) {
             prepareExampleForPermissionCheck(example);
         }
@@ -212,14 +212,14 @@ public class PersonStrategy extends TemplateStrategy {
             return 0L;
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
         return sqlSession().selectOne(PERSON_NS + ".selectPersonCount", example);
     }
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(PersonStrategy.class.getName(), getEntityTable(), locale);
+        return ResourceUtil.getString(PersonStrategy.class.getName(), getEntityName(), locale);
     }
 
     @Override

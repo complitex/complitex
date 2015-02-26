@@ -373,7 +373,7 @@ final class PersonHistoryPanel extends Panel {
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }
-        Component inputComponent = newInputComponent(personStrategy.getEntityTable(), null, person, attribute,
+        Component inputComponent = newInputComponent(personStrategy.getEntityName(), null, person, attribute,
                 getLocale(), true);
         ModificationType modificationType = modification.getModificationType(attributeTypeId);
         if (modificationType == null) {

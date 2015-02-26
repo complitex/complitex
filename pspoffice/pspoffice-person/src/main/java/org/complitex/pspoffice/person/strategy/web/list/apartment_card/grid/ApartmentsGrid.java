@@ -176,7 +176,7 @@ public final class ApartmentsGrid extends TemplatePage {
                     public void onClick() {
                         IStrategy strategy = "apartment".equals(apartmentsGridEntity.getEntity()) ? apartmentStrategy
                                 : roomStrategy;
-                        MenuManager.setMenuItem(strategy.getEntityTable() + AddressMenu.ADDRESS_MENU_ITEM_SUFFIX);
+                        MenuManager.setMenuItem(strategy.getEntityName() + AddressMenu.ADDRESS_MENU_ITEM_SUFFIX);
                         PageParameters params = strategy.getEditPageParams(apartmentsGridEntity.getObjectId(), null, null);
                         BackInfoManager.put(this, PAGE_SESSION_KEY, gridBackInfo(buildingId, backInfoSessionKey));
                         params.set(BACK_INFO_SESSION_KEY, PAGE_SESSION_KEY);

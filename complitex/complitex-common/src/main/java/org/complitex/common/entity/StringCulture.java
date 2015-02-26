@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class StringCulture implements Serializable {
     private Long pkId;
-    private String entityTable;
+    private String entityName;
     private Long id;
     private Long localeId;
     private String value;
@@ -30,12 +30,12 @@ public class StringCulture implements Serializable {
         this.pkId = pkId;
     }
 
-    public String getEntityTable() {
-        return entityTable;
+    public String getEntityName() {
+        return entityName;
     }
 
-    public void setEntityTable(String entityTable) {
-        this.entityTable = entityTable;
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public Long getId() {

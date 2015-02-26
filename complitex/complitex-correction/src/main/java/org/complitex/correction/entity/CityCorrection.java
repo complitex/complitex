@@ -17,6 +17,6 @@ public class CityCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return AddressEntity.CITY.getTable();
+        return AddressEntity.CITY.getEntityName();
     }
 }

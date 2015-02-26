@@ -194,7 +194,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     }
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "service_provider_account";
     }
 
@@ -219,19 +219,19 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     }
 
     public void deleteAttribute(ServiceProviderAccountAttribute attribute) {
-        attribute.setEntityTable(getEntityTable());
+        attribute.setEntityName(getEntityName());
 
         sqlSession().delete(SPA_NS + ".deleteServiceProviderAccountAttribute", attribute);
     }
 
     public void updateAttribute(ServiceProviderAccountAttribute attribute) {
-        attribute.setEntityTable(getEntityTable());
+        attribute.setEntityName(getEntityName());
         sqlSession().update(NS + ".updateServiceProviderAccountAttribute", attribute);
     }
 
     public ServiceProviderAccountAttribute findByPkId(Long pkId) {
         ServiceProviderAccountAttribute attribute =  new ServiceProviderAccountAttribute(pkId);
-        attribute.setEntityTable(getEntityTable());
+        attribute.setEntityName(getEntityName());
 
         return sqlSession().selectOne(SPA_NS + ".selectServiceProviderAccountAttributeByPkId", attribute);
     }

@@ -27,7 +27,7 @@ public class UserInfoStrategy extends TemplateStrategy {
     private NameBean nameBean;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "user_info";
     }
 

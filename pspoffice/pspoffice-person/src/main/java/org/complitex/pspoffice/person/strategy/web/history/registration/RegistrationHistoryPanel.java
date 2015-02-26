@@ -297,7 +297,7 @@ final class RegistrationHistoryPanel extends Panel {
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }
-        Component inputComponent = newInputComponent(registrationStrategy.getEntityTable(), null, registration,
+        Component inputComponent = newInputComponent(registrationStrategy.getEntityName(), null, registration,
                 attribute, getLocale(), true);
         ModificationType modificationType = modification.getAttributeModificationType(attributeTypeId);
         if (modificationType == null) {

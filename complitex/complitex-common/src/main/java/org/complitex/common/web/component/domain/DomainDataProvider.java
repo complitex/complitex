@@ -17,9 +17,9 @@ public class DomainDataProvider extends SortableDataProvider<DomainObject, Long>
         implements IFilterStateLocator<DomainObjectFilter>{
     private DomainObjectFilter example;
 
-    public DomainDataProvider(String entityTable) {
+    public DomainDataProvider(String entityName) {
         example = new DomainObjectFilter();
-        example.setEntityTable(entityTable);
+        example.setEntityName(entityName);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class DomainDataProvider extends SortableDataProvider<DomainObject, Long>
             example.setAsc(getSort().isAscending());
         }
 
-        return EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(example.getEntityTable()).getList(example).iterator();
+        return EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(example.getEntityName()).getList(example).iterator();
     }
 
     @Override

@@ -39,7 +39,7 @@ public class CityTypeStrategy extends TemplateStrategy {
     private StringLocaleBean stringLocaleBean;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "city_type";
     }
 
@@ -77,7 +77,7 @@ public class CityTypeStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(CommonResources.class.getName(), getEntityTable(), locale);
+        return ResourceUtil.getString(CommonResources.class.getName(), getEntityName(), locale);
     }
 
     @Override

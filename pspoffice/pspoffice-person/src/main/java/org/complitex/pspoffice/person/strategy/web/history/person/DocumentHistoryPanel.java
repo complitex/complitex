@@ -54,7 +54,7 @@ final class DocumentHistoryPanel extends Panel {
                 item.add(required);
                 required.setVisible(attributeType.isMandatory());
 
-                Component input = DomainObjectComponentUtil.newInputComponent(documentStrategy.getEntityTable(), null, document, attr, getLocale(), true);
+                Component input = DomainObjectComponentUtil.newInputComponent(documentStrategy.getEntityName(), null, document, attr, getLocale(), true);
                 input.add(new CssAttributeBehavior(modification.getAttributeModificationType(attr.getAttributeTypeId()).getCssClass()));
                 item.add(input);
             }

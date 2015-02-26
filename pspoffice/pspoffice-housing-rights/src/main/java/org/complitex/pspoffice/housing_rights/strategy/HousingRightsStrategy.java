@@ -34,7 +34,7 @@ public class HousingRightsStrategy extends TemplateStrategy {
     public static final long CODE = 3101;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "housing_rights";
     }
 
@@ -62,7 +62,7 @@ public class HousingRightsStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
     @Override

@@ -201,13 +201,13 @@ public class WiQuerySearchComponent extends Panel {
 
             @Override
             protected void populateItem(ListItem<String> item) {
-                final String entityTable = item.getModelObject();
+                final String entityName = item.getModelObject();
 
                 IModel<String> entityLabelModel = new AbstractReadOnlyModel<String>() {
 
                     @Override
                     public String getObject() {
-                        return StringCultures.getValue(strategyFactory.getStrategy(entityTable).getEntity().
+                        return StringCultures.getValue(strategyFactory.getStrategy(entityName).getEntity().
                                 getNames(), getLocale());
                     }
                 };
@@ -215,7 +215,7 @@ public class WiQuerySearchComponent extends Panel {
                 Label column = new Label("column", entityLabelModel);
 
                 if (showColumns) {
-                    setVisibility(entityTable, column);
+                    setVisibility(entityName, column);
                 }else {
                     column.setVisible(false);
                 }
@@ -329,10 +329,10 @@ public class WiQuerySearchComponent extends Panel {
     }
 
     protected final boolean isSingleObjectVisible(IStrategy strategy) {
-        final Map<String, DomainObject> previousInfo = getState(getIndex(strategy.getEntityTable()) - 1);
+        final Map<String, DomainObject> previousInfo = getState(getIndex(strategy.getEntityName()) - 1);
         DomainObjectFilter example = new DomainObjectFilter();
         strategy.configureExample(example, WiQuerySearchComponent.<Long>transformToIds(previousInfo), null);
-        example.setStatus(getShowMode(strategy.getEntityTable()).name());
+        example.setStatus(getShowMode(strategy.getEntityName()).name());
         return strategy.getCount(example) == 1;
     }
 

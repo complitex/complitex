@@ -40,7 +40,7 @@ public class StreetStrategyDelegate extends StreetStrategy {
             return Collections.emptyList();
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
         prepareExampleForBuildingCheck(example);
 
@@ -60,7 +60,7 @@ public class StreetStrategyDelegate extends StreetStrategy {
             return 0L;
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
         prepareExampleForBuildingCheck(example);
 
@@ -70,7 +70,7 @@ public class StreetStrategyDelegate extends StreetStrategy {
     private void prepareExampleForBuildingCheck(DomainObjectFilter example) {
         if (!example.isAdmin()) {
             example.addAdditionalParam("building_address_permission_string",
-                    sessionBean.getPermissionString(buildingAddressStrategy.getEntityTable()));
+                    sessionBean.getPermissionString(buildingAddressStrategy.getEntityName()));
         }
     }
 }

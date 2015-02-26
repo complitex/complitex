@@ -42,7 +42,7 @@ public interface IStrategy {
     
     DomainObject getHistoryObject(long objectId, Date date);
 
-    SimpleObjectInfo findParentInSearchComponent(long id, Date date);
+    EntityObjectInfo findParentInSearchComponent(long id, Date date);
 
     String getAttributeLabel(Attribute attribute, Locale locale);
 
@@ -64,7 +64,7 @@ public interface IStrategy {
 
     Entity getEntity();
 
-    String getEntityTable();
+    String getEntityName();
     
     List<History> getHistory(long objectId);
     

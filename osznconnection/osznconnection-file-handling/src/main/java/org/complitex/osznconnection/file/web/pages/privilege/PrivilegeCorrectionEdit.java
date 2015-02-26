@@ -56,7 +56,7 @@ public final class PrivilegeCorrectionEdit extends FormTemplatePage {
 
         @Override
         public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
-            Long id = ids.get(privilegeStrategy.getEntityTable());
+            Long id = ids.get(privilegeStrategy.getEntityName());
             if (id != null && id > 0) {
                 correction.setObjectId(id);
             }
@@ -89,10 +89,10 @@ public final class PrivilegeCorrectionEdit extends FormTemplatePage {
                 SearchComponentState componentState = new SearchComponentState();
                 Correction correction = getCorrection();
                 if (!isNew()) {
-                    componentState.put(privilegeStrategy.getEntityTable(), findPrivilege(correction.getObjectId()));
+                    componentState.put(privilegeStrategy.getEntityName(), findPrivilege(correction.getObjectId()));
                 }
 
-                return new WiQuerySearchComponent(id, componentState, ImmutableList.of(privilegeStrategy.getEntityTable()),
+                return new WiQuerySearchComponent(id, componentState, ImmutableList.of(privilegeStrategy.getEntityName()),
                         new PrivilegeCallback(correction), ShowMode.ACTIVE, true);
             }
 

@@ -23,7 +23,7 @@ public abstract class DomainMultiselectPanel<T> extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
 
-    public DomainMultiselectPanel(String id, final String entityTable, final IModel<List<T>> model,
+    public DomainMultiselectPanel(String id, final String entityName, final IModel<List<T>> model,
                                   final String objectIdExpression) {
         super(id);
 
@@ -45,7 +45,7 @@ public abstract class DomainMultiselectPanel<T> extends Panel {
                 final IModel<Long> objectIdModel = new PropertyModel<>(item.getModel(), objectIdExpression);
 
                 String name = objectIdModel.getObject() != null
-                        ? strategyFactory.getStrategy(entityTable).displayDomainObject(objectIdModel.getObject(), getLocale())
+                        ? strategyFactory.getStrategy(entityName).displayDomainObject(objectIdModel.getObject(), getLocale())
                         : getString("not_selected");
 
                 item.add(new Label("name", Model.of(name)));

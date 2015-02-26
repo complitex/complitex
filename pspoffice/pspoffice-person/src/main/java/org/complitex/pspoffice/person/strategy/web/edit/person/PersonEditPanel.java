@@ -201,7 +201,7 @@ public abstract class PersonEditPanel extends Panel {
                 target.appendJavaScript(ScrollToElementUtil.scrollTo(label.getMarkupId()));
             }
         };
-        submit.setVisible(canEdit(null, personStrategy.getEntityTable(), newPerson));
+        submit.setVisible(canEdit(null, personStrategy.getEntityName(), newPerson));
         form.add(submit);
 
         AjaxLink<Void> cancel = new AjaxLink<Void>("cancel") {
@@ -211,7 +211,7 @@ public abstract class PersonEditPanel extends Panel {
                 onCalcel(target);
             }
         };
-        cancel.setVisible(canEdit(null, personStrategy.getEntityTable(), newPerson));
+        cancel.setVisible(canEdit(null, personStrategy.getEntityName(), newPerson));
         form.add(cancel);
 
         AjaxLink<Void> back = new AjaxLink<Void>("back") {
@@ -221,7 +221,7 @@ public abstract class PersonEditPanel extends Panel {
                 onBack(target);
             }
         };
-        back.setVisible(!canEdit(null, personStrategy.getEntityTable(), newPerson));
+        back.setVisible(!canEdit(null, personStrategy.getEntityName(), newPerson));
         form.add(back);
         add(form);
     }

@@ -282,7 +282,7 @@ final class ApartmentCardHistoryPanel extends Panel {
 
         //input component
         Attribute attribute = card.getAttribute(attributeTypeId);
-        Component inputComponent = newInputComponent(apartmentCardStrategy.getEntityTable(), null, card, attribute,
+        Component inputComponent = newInputComponent(apartmentCardStrategy.getEntityName(), null, card, attribute,
                 getLocale(), true);
         inputComponent.add(new CssAttributeBehavior(modification.getModificationType(attributeTypeId).getCssClass()));
         parent.add(inputComponent);

@@ -28,7 +28,7 @@ public class Entity implements IEntity {
         return StringCultures.getValue(getAttributeType(attributeTypeId).getAttributeNames(), locale);
     }
 
-    public String getTable() {
+    public String getEntityName() {
         return table;
     }
 

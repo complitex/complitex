@@ -855,7 +855,7 @@ public class LegacyDataImportService {
         private static final String MANY_SYSTEM_OBJECTS_KEY_SUFFIX = "_system_many_objects";
         private static final String FAIL_PROCESSING_KEY_SUFFIX = "_fail_finish_processing";
         private static final String SUCCESS_PROCESSING_KEY_SUFFIX = "_success_finish_processing";
-        private final String entityTable;
+        private final String entityName;
         private final long attributeTypeId;
         private final String correctionTable;
         private final ProcessItem item;
@@ -867,9 +867,9 @@ public class LegacyDataImportService {
         private BufferedWriter errorFile;
         protected BufferedWriter errorDescriptionFile;
 
-        ReferenceDataProcessor(String entityTable, long attributeTypeId, String correctionTable,
+        ReferenceDataProcessor(String entityName, long attributeTypeId, String correctionTable,
                 ProcessItem item, LegacyDataImportFile importFile) {
-            this.entityTable = entityTable;
+            this.entityName = entityName;
             this.attributeTypeId = attributeTypeId;
             this.correctionTable = correctionTable;
             this.item = item;
@@ -880,13 +880,13 @@ public class LegacyDataImportService {
             this.successProcessingMessageKey = correctionTable + SUCCESS_PROCESSING_KEY_SUFFIX;
         }
 
-        ReferenceDataProcessor(String entityTable, long attributeTypeId, ProcessItem item,
+        ReferenceDataProcessor(String entityName, long attributeTypeId, ProcessItem item,
                 LegacyDataImportFile importFile) {
-            this(entityTable, attributeTypeId, entityTable, item, importFile);
+            this(entityName, attributeTypeId, entityName, item, importFile);
         }
 
         protected final IStrategy strategy() {
-            return strategyFactory.getStrategy(entityTable);
+            return strategyFactory.getStrategy(entityName);
         }
 
         @Override
@@ -944,7 +944,7 @@ public class LegacyDataImportService {
                         } else {
                             try {
                                 Long systemObjectId =
-                                        referenceDataCorrectionBean.findSystemObject(entityTable, correction.getNkod());
+                                        referenceDataCorrectionBean.findSystemObject(entityName, correction.getNkod());
                                 if (systemObjectId == null) {
                                     IStrategy strategy = strategy();
                                     DomainObject systemObject = strategy.newInstance();

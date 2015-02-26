@@ -42,7 +42,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     private BuildingStrategy buildingStrategy;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "building_address";
     }
 
@@ -84,7 +84,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
             return Collections.emptyList();
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
 
         List<DomainObject> objects = sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectBuildingAddresses", example);
@@ -136,7 +136,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(CommonResources.class.getName(), getEntityTable(), locale);
+        return ResourceUtil.getString(CommonResources.class.getName(), getEntityName(), locale);
     }
 
     @Override

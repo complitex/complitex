@@ -70,7 +70,7 @@ public class StreetStrategy extends TemplateStrategy {
     public static final long PARENT_ENTITY_ID = 400L;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "street";
     }
 
@@ -82,7 +82,7 @@ public class StreetStrategy extends TemplateStrategy {
             return Collections.emptyList();
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
 
         List<DomainObject> objects = sqlSession().selectList(STREET_NS + ".selectDomainObjects", example);
@@ -101,7 +101,7 @@ public class StreetStrategy extends TemplateStrategy {
             return 0L;
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
 
         return sqlSession().selectOne(STREET_NS + ".selectDomainObjectCount", example);
@@ -211,7 +211,7 @@ public class StreetStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(CommonResources.class.getName(), getEntityTable(), locale);
+        return ResourceUtil.getString(CommonResources.class.getName(), getEntityName(), locale);
     }
 
     @Override

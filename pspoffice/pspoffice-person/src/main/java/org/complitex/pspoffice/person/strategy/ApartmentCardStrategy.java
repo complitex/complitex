@@ -148,7 +148,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     }
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "apartment_card";
     }
 
@@ -342,7 +342,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         params.put("apartmentCardBuildingVT", ApartmentCardStrategy.ADDRESS_BUILDING);
         params.put("addressId", addressId);
         if (!sessionBean.isAdmin()) {
-            params.put("userPermissionString", sessionBean.getPermissionString(getEntityTable()));
+            params.put("userPermissionString", sessionBean.getPermissionString(getEntityName()));
         }
         return params;
     }
@@ -633,9 +633,9 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         SearchComponentState searchComponentState = new SearchComponentState();
         IStrategy addressStrategy = strategyFactory.getStrategy(addressEntity);
         DomainObject addressObject = addressStrategy.getDomainObject(addressId, true);
-        SimpleObjectInfo info = addressStrategy.findParentInSearchComponent(addressId, null);
+        EntityObjectInfo info = addressStrategy.findParentInSearchComponent(addressId, null);
         if (info != null) {
-            searchComponentState = addressStrategy.getSearchComponentStateForParent(info.getId(), info.getEntityTable(), null);
+            searchComponentState = addressStrategy.getSearchComponentStateForParent(info.getId(), info.getEntityName(), null);
             searchComponentState.put(addressEntity, addressObject);
         }
         if (addressEntity.equals("apartment")) {

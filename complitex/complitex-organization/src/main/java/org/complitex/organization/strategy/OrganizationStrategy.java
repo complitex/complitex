@@ -45,7 +45,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     private StrategyFactory strategyFactory;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "organization";
     }
 
@@ -73,7 +73,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
     @Override
@@ -103,7 +103,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
     @Override
     public void insert(DomainObject object, Date insertDate) {
-        object.setObjectId(sequenceBean.nextId(getEntityTable()));
+        object.setObjectId(sequenceBean.nextId(getEntityName()));
 
         if (!object.getSubjectIds().contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
             object.getSubjectIds().add(object.getObjectId());
@@ -222,7 +222,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
             return Collections.emptyList();
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         if (!example.isAdmin()) {
             prepareExampleForPermissionCheck(example);
         }
@@ -244,7 +244,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return 0L;
         }
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
 
         return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationCount", example);
@@ -347,7 +347,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
     @Override
     protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
-        if (permissionBean.isOrganizationPermissionExists(getEntityTable(), objectId)) {
+        if (permissionBean.isOrganizationPermissionExists(getEntityName(), objectId)) {
             throw new DeleteException();
         }
         super.deleteChecks(objectId, locale);

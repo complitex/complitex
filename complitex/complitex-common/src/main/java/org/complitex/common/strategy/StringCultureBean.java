@@ -23,7 +23,7 @@ public class StringCultureBean extends AbstractBean {
     @EJB
     private StringLocaleBean stringLocaleBean;
 
-    public Long save(List<StringCulture> strings, String entityTable, boolean upperCase) {
+    public Long save(List<StringCulture> strings, String entityName, boolean upperCase) {
         if (strings != null && !strings.isEmpty()) {
             boolean allValuesAreEmpty = true;
             for (StringCulture string : strings) {
@@ -36,11 +36,11 @@ public class StringCultureBean extends AbstractBean {
                 return null;
             }
 
-            long stringId = sequenceBean.nextStringId(entityTable);
+            long stringId = sequenceBean.nextStringId(entityName);
             for (StringCulture string : strings) {
                 if (!Strings.isEmpty(string.getValue())) {
                     string.setId(stringId);
-                    save(string, entityTable, upperCase);
+                    save(string, entityName, upperCase);
                 }
             }
             return stringId;
@@ -48,11 +48,11 @@ public class StringCultureBean extends AbstractBean {
         return null;
     }
 
-    public Long save(List<StringCulture> strings, String entityTable) {
-        return save(strings, entityTable, true);
+    public Long save(List<StringCulture> strings, String entityName) {
+        return save(strings, entityName, true);
     }
 
-    protected void save(StringCulture stringCulture, String entityTable, boolean upperCase) {
+    protected void save(StringCulture stringCulture, String entityName, boolean upperCase) {
         //if string should be in upper case:
         if (upperCase) {
             //find given string culture's locale
@@ -62,31 +62,31 @@ public class StringCultureBean extends AbstractBean {
             stringCulture.setValue(stringCulture.getValue().toUpperCase(locale));
         }
 
-        if (Strings.isEmpty(entityTable)) {
+        if (Strings.isEmpty(entityName)) {
             sqlSession().insert(NS + ".insertDescriptionData", stringCulture);
         } else {
-            stringCulture.setEntityTable(entityTable);
+            stringCulture.setEntityName(entityName);
 
             sqlSession().insert(NS + ".insertStringCulture", stringCulture);
         }
     }
 
-    public List<StringCulture> getStringCultures(long id, String entityTable) {
-        return getStringCultures(null, id, entityTable);
+    public List<StringCulture> getStringCultures(long id, String entityName) {
+        return getStringCultures(null, id, entityName);
     }
 
-    public List<StringCulture> getStringCultures(String dataSource, long id, String entityTable) {
+    public List<StringCulture> getStringCultures(String dataSource, long id, String entityName) {
         Map<String, Object> params = ImmutableMap.<String, Object>builder().
-                put("entityTable", entityTable).
+                put("entityName", entityName).
                 put("id", id).
                 build();
 
         return (dataSource == null ? sqlSession() : sqlSession(dataSource)).selectList(NS + ".selectStringCultures", params);
     }
 
-    public void delete(String entityTable, long objectId, Set<Long> localizedValueTypeIds) {
+    public void delete(String entityName, long objectId, Set<Long> localizedValueTypeIds) {
         Map<String, Object> params = Maps.newHashMap();
-        params.put("entityTable", entityTable);
+        params.put("entityName", entityName);
         params.put("objectId", objectId);
         params.put("localizedValueTypeIds", localizedValueTypeIds);
 

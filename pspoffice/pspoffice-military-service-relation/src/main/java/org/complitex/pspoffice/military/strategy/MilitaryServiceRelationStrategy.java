@@ -40,7 +40,7 @@ public class MilitaryServiceRelationStrategy extends TemplateStrategy {
     private StringLocaleBean stringLocaleBean;
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "military_service_relation";
     }
 
@@ -80,7 +80,7 @@ public class MilitaryServiceRelationStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
     @Override

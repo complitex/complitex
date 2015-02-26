@@ -43,7 +43,7 @@ public class HeatmeterTypeStrategy extends TemplateStrategy {
     private static final Set<Long> RESERVED_HEATMETER_TYPE_IDS = ImmutableSet.of(HEATING, HEATING_AND_WATER);
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "heatmeter_type";
     }
 
@@ -71,7 +71,7 @@ public class HeatmeterTypeStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityTable(), locale);
+        return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
     public List<DomainObject> getAll() {

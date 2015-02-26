@@ -117,7 +117,7 @@ public class PersonInputPanel extends Panel {
     }
 
     private boolean canEdit() {
-        return DomainObjectAccessUtil.canEdit(null, personStrategy.getEntityTable(), person);
+        return DomainObjectAccessUtil.canEdit(null, personStrategy.getEntityName(), person);
     }
 
     private boolean isInactive() {
@@ -300,7 +300,7 @@ public class PersonInputPanel extends Panel {
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }
-        parent.add(newInputComponent(personStrategy.getEntityTable(), null, person, attribute, getLocale(), isInactive()));
+        parent.add(newInputComponent(personStrategy.getEntityName(), null, person, attribute, getLocale(), isInactive()));
     }
 
     public void beforePersist() {
@@ -645,7 +645,7 @@ public class PersonInputPanel extends Panel {
                 Document previousDocument = item.getModelObject();
                 item.add(new Label("previousDocumentLabel",
                         documentTypeStrategy.displayDomainObject(previousDocument.getDocumentType(), getLocale())));
-                item.add(new DomainObjectInputPanel("previousDocument", previousDocument, documentStrategy.getEntityTable(),
+                item.add(new DomainObjectInputPanel("previousDocument", previousDocument, documentStrategy.getEntityName(),
                         null, null, null, previousDocument.getStartDate()));
             }
         };
@@ -665,7 +665,7 @@ public class PersonInputPanel extends Panel {
     }
 
     private DomainObjectInputPanel newDocumentInputPanel(Document document) {
-        return new DomainObjectInputPanel("documentInputPanel", document, documentStrategy.getEntityTable(), null, null, null);
+        return new DomainObjectInputPanel("documentInputPanel", document, documentStrategy.getEntityName(), null, null, null);
     }
 
     private void initDocumentTypesModel() {

@@ -61,7 +61,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     }
 
     @Override
-    public String getEntityTable() {
+    public String getEntityName() {
         return "module_instance";
     }
 
@@ -108,7 +108,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
 
     @Override
     public String getPluralEntityLabel(Locale locale) {
-        return ResourceUtil.getString(EircResources.class.getName(), getEntityTable(), locale);
+        return ResourceUtil.getString(EircResources.class.getName(), getEntityName(), locale);
     }
 
     @Override
@@ -151,7 +151,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
             return Collections.emptyList();
         }
 
-        example.setEntityTable(getEntityTable());
+        example.setEntityName(getEntityName());
         if (!example.isAdmin()) {
             prepareExampleForPermissionCheck(example);
         }
@@ -206,7 +206,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
          * or root directory for loading and saving request files
          * then string value should be inserted as is and not upper cased. */
         return CUSTOM_ATTRIBUTES.contains(attributeTypeId)
-                ? stringBean.save(strings, getEntityTable(), false)
+                ? stringBean.save(strings, getEntityName(), false)
                 : super.insertStrings(attributeTypeId, strings);
     }
 
