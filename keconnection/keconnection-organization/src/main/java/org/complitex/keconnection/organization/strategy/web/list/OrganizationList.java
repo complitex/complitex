@@ -85,9 +85,9 @@ public class OrganizationList extends ScrollListPage {
 
     private DomainObjectFilter newExample() {
         DomainObjectFilter e = new DomainObjectFilter();
-        e.addAttributeExample(new AttributeFilter(NAME));
-        e.addAttributeExample(new AttributeFilter(KeConnectionOrganizationStrategy.CODE));
-        e.addAttributeExample(new AttributeFilter(SHORT_NAME));
+        e.addAttributeFilter(new AttributeFilter(NAME));
+        e.addAttributeFilter(new AttributeFilter(KeConnectionOrganizationStrategy.CODE));
+        e.addAttributeFilter(new AttributeFilter(SHORT_NAME));
         return e;
     }
 

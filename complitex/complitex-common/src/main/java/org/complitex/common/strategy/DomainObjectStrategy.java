@@ -2,8 +2,12 @@ package org.complitex.common.strategy;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.common.converter.DateConverter;
+import org.complitex.common.converter.GenderConverter;
 import org.complitex.common.entity.*;
 import org.complitex.common.entity.Log.STATUS;
 import org.complitex.common.exception.DeleteException;
@@ -25,14 +29,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static com.google.common.collect.Iterables.filter;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Lists.transform;
-import static com.google.common.collect.Maps.newHashMap;
-import static com.google.common.collect.Sets.newHashSet;
-import static com.google.common.collect.Sets.newTreeSet;
 
 public abstract class DomainObjectStrategy extends AbstractBean implements IStrategy {
     public final static String NS = DomainObjectStrategy.class.getName();
@@ -77,16 +76,16 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     @Override
-    public boolean isSimpleAttributeType(EntityAttributeType entityAttributeType) {
-        return entityAttributeType.getEntityAttributeValueTypes().size() == 1
-                && SimpleTypes.isSimpleType(entityAttributeType.getEntityAttributeValueTypes().get(0).getValueType());
+    public boolean isSimpleAttributeType(AttributeType attributeType) {
+        return attributeType.getAttributeValueTypes().size() == 1
+                && SimpleTypes.isSimpleType(attributeType.getAttributeValueTypes().get(0).getValueType());
     }
 
     @Override
     public boolean isSimpleAttribute(final Attribute attribute) {
-        EntityAttributeType entityAttributeType = getEntity().getAttributeType(attribute.getAttributeTypeId());
+        AttributeType attributeType = getEntity().getAttributeType(attribute.getAttributeTypeId());
 
-        return entityAttributeType != null && isSimpleAttributeType(entityAttributeType);
+        return attributeType != null && isSimpleAttributeType(attributeType);
     }
 
     protected String getDisableSuccess() {
@@ -295,7 +294,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected Set<Long> loadSubjects(String dataSource, long permissionId) {
         if (permissionId == PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID) {
-            return newHashSet(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID);
+            return new HashSet<>(Arrays.asList(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID));
         } else {
             return permissionBean.findSubjectIds(dataSource, permissionId);
         }
@@ -321,14 +320,14 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     protected void fillAttributes(String dataSource, DomainObject object) {
-        List<Attribute> toAdd = newArrayList();
+        List<Attribute> toAdd = new ArrayList<>();
 
-        for (EntityAttributeType attributeType : getEntity(dataSource).getEntityAttributeTypes()) {
+        for (AttributeType attributeType : getEntity(dataSource).getAttributeTypes()) {
             if (!attributeType.isObsolete()) {
                 if (object.getAttributes(attributeType.getId()).isEmpty()) {
-                    if (attributeType.getEntityAttributeValueTypes().size() == 1) {
+                    if (attributeType.getAttributeValueTypes().size() == 1) {
                         Attribute attribute = getNewAttributeInstance();
-                        EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
+                        AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
                         attribute.setAttributeTypeId(attributeType.getId());
                         attribute.setValueTypeId(attributeValueType.getId());
                         attribute.setObjectId(object.getObjectId());
@@ -356,7 +355,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return new Attribute();
     }
 
-    protected Attribute fillManyValueTypesAttribute(EntityAttributeType attributeType, Long objectId) {
+    protected Attribute fillManyValueTypesAttribute(AttributeType attributeType, Long objectId) {
         return null;
     }
 
@@ -432,7 +431,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         fillAttributes(object);
 
         //set up subject ids to visible-by-all subject
-        object.setSubjectIds(newHashSet(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID));
+        object.setSubjectIds(new HashSet<>(Arrays.asList(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)));
 
         return object;
     }
@@ -482,7 +481,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         if (newSubjectIds.size() == 1 && newSubjectIds.contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
             return PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID;
         } else {
-            List<Subject> subjects = newArrayList();
+            List<Subject> subjects = new ArrayList<>();
             for (Long subjectId : newSubjectIds) {
                 subjects.add(new Subject("organization", subjectId));
             }
@@ -532,7 +531,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                     removed = false;
                     boolean needToUpdateAttribute = false;
 
-                    EntityAttributeType attributeType = getEntity().getAttributeType(oldAttr.getAttributeTypeId());
+                    AttributeType attributeType = getEntity().getAttributeType(oldAttr.getAttributeTypeId());
 
                     Long oldValueTypeId = oldAttr.getValueTypeId();
                     Long newValueTypeId = newAttr.getValueTypeId();
@@ -696,7 +695,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected List<PermissionInfo> findChildrenPermissionInfo(long parentId, String childEntity, int start, int size) {
-        Map<String, Object> params = newHashMap();
+        Map<String, Object> params = new HashMap<>();
 
         params.put("entity", childEntity);
         params.put("parentId", parentId);
@@ -765,7 +764,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected void updatePermissionId(long objectId, long permissionId) {
-        Map<String, Object> params = newHashMap();
+        Map<String, Object> params = new HashMap<>();
 
         params.put("entity", getEntityTable());
         params.put("objectId", objectId);
@@ -812,27 +811,10 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
      * List page related functionality.
      */
     /**
-     *  Используется для отображения в пользовательском интерфейсе
-     * @return Сортированный список метамодели (описания) атрибутов
-     */
-    @Override
-    public List<EntityAttributeType> getListColumns() {
-        Entity entity = getEntity();
-
-        List<EntityAttributeType> list = new ArrayList<>();
-
-        for (Long typeId : getListAttributeTypes()){
-            list.add(entity.getAttributeType(typeId));
-        }
-
-        return list;
-    }
-
-    /**
      * Determines column in list page by that list page's data will be sorted by default when there is no sorting column in preferences.
      */
     @Override
-    public long getDefaultSortAttributeTypeId() {
+    public Long getDefaultSortAttributeTypeId() {
         return Collections.min(getListAttributeTypes());
     }
 
@@ -840,14 +822,30 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
      *
      * @return Сортированный список идентификаторов атрибутов, которые должны выводиться в качестве колонок на странице записей.
      */
-    protected List<Long> getListAttributeTypes() {
-        return newArrayList(transform(getEntity().getEntityAttributeTypes(), new Function<EntityAttributeType, Long>() {
+    public List<Long> getListAttributeTypes() {
+        return Lists.transform(getEntity().getAttributeTypes(), new Function<AttributeType, Long>() {
 
             @Override
-            public Long apply(EntityAttributeType attributeType) {
+            public Long apply(AttributeType attributeType) {
                 return attributeType.getId();
             }
-        }));
+        });
+    }
+
+    /**
+     *  Используется для отображения в пользовательском интерфейсе
+     * @return Сортированный список метамодели (описания) атрибутов
+     */
+    public List<AttributeType> getListColumns() {
+        Entity entity = getEntity();
+
+        List<AttributeType> list = new ArrayList<>();
+
+        for (Long typeId : getListAttributeTypes()){
+            list.add(entity.getAttributeType(typeId));
+        }
+
+        return list;
     }
 
     @Override
@@ -904,7 +902,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     public SearchComponentState getSearchComponentStateForParent(Long parentId, String parentEntity, Date date) {
         if (parentId != null && parentEntity != null) {
             SearchComponentState componentState = new SearchComponentState();
-            Map<String, Long> ids = newHashMap();
+            Map<String, Long> ids = new HashMap<>();
 
             SimpleObjectInfo parentData = new SimpleObjectInfo(parentEntity, parentId);
             while (parentData != null) {
@@ -958,7 +956,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public List<History> getHistory(long objectId) {
-        List<History> historyList = newArrayList();
+        List<History> historyList = new ArrayList<>();
 
         TreeSet<Date> historyDates = getHistoryDates(objectId);
 
@@ -978,7 +976,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
         List<Date> results = sqlSession().selectList(NS + ".historyDates", example);
 
-        return newTreeSet(filter(results, new Predicate<Date>() {
+        return new TreeSet<>(Collections2.filter(results, new Predicate<Date>() {
 
             @Override
             public boolean apply(Date input) {
@@ -1088,7 +1086,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         }
         String text = StringCultures.getValue(attribute.getStringCultures(), locale);
 
-        Map<String, Object> params = newHashMap();
+        Map<String, Object> params = new HashMap<>();
 
         params.put("entity", getEntityTable());
         params.put("localeId", stringLocaleBean.convert(locale).getId());
@@ -1110,7 +1108,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void changeObjectPermissions(PermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         Set<Long> currentSubjectIds = loadSubjects(objectPermissionInfo.getPermissionId());
-        Set<Long> newSubjectIds = newHashSet(currentSubjectIds);
+        Set<Long> newSubjectIds = new HashSet<>(currentSubjectIds);
 
         if (addSubjectIds != null) {
             if (addSubjectIds.contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
@@ -1210,20 +1208,22 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected Set<Long> findChildrenActivityInfo(long parentId, String childEntity, int start, int size) {
-        Map<String, Object> params = newHashMap();
+        Map<String, Object> params = new HashMap<>();
         params.put("entity", childEntity);
         params.put("parentId", parentId);
         params.put("parentEntity", getEntityTable());
         params.put("start", start);
         params.put("size", size);
+
         List<Long> results = sqlSession().selectList(NS + ".selectChildrenActivityInfo", params);
 
-        return newHashSet(results);
+        return new HashSet<>(results);
     }
 
 
     protected void updateChildrenActivity(long parentId, String childEntity, boolean enabled) {
-        Map<String, Object> params = newHashMap();
+        Map<String, Object> params = new HashMap<>();
+
         params.put("entity", childEntity);
         params.put("parentId", parentId);
         params.put("parentEntity", getEntityTable());
@@ -1238,9 +1238,29 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return getLogicalChildren() != null && getLogicalChildren().length > 0;
     }
 
-     //todo add display simple types
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
+        Entity entity = entityBean.getEntity(getEntityTable());
+
+        switch (entity.getAttributeType(attribute.getAttributeTypeId()).getAttributeValueTypes().get(0)
+                .getValueType().toUpperCase()) {
+            case "STRING_CULTURE":
+                return attribute.getStringValue(locale);
+            case "STRING":
+            case "DOUBLE":
+            case "INTEGER":
+                return attribute.getStringValue();
+            case "BOOLEAN":
+                return Boolean.valueOf(attribute.getStringValue()) ? "Да" : "Нет"; //todo resource
+            case "DATE":
+            case "DATE2":
+            case "MASKED_DATE":
+                DateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy", locale);
+                return dateFormatter.format(new DateConverter().toObject(attribute.getStringValue()));
+            case "GENDER":
+                return new GenderConverter().toObject(attribute.getStringValue()).equals(Gender.MALE) ? "Муж." : "Жен."; //todo resource
+        }
+
         return StringCultures.getValue(attribute.getStringCultures(), locale);
     }
 
@@ -1269,8 +1289,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected void deleteAttribute(long objectId) {
-        Map<String, Object> params = newHashMap();
-        params.put("entityTable", getEntityTable());
+        Map<String, Object> params = new HashMap<>();
+        params.put("entityTable", getEntityTable()); //todo filter
         params.put("objectId", objectId);
 
         sqlSession().delete(NS + ".deleteAttribute", params);
@@ -1278,7 +1298,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected void deleteDomainObject(long objectId, Locale locale) throws DeleteException {
-        Map<String, Object> params = newHashMap();
+        Map<String, Object> params = new HashMap<>(); //todo filter
         params.put("entityTable", getEntityTable());
         params.put("objectId", objectId);
 
@@ -1320,7 +1340,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected boolean childrenExistCheck(String childEntity, long objectId) {
-        Map<String, Object> params = newHashMap();
+        Map<String, Object> params = new HashMap<>();
         params.put("childEntity", childEntity);
         params.put("objectId", objectId);
         params.put("entityId", getEntity().getId());
@@ -1330,9 +1350,10 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected Set<Long> getLocalizedValueTypeIds() {
-        Set<Long> localizedValueTypeIds = newHashSet();
-        for (EntityAttributeType attributeType : getEntity().getEntityAttributeTypes()) {
-            for (EntityAttributeValueType valueType : attributeType.getEntityAttributeValueTypes()) {
+        Set<Long> localizedValueTypeIds = new HashSet<>();
+
+        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
+            for (AttributeValueType valueType : attributeType.getAttributeValueTypes()) {
                 if (SimpleTypes.isSimpleType(valueType.getValueType())) {
                     localizedValueTypeIds.add(valueType.getId());
                 }
@@ -1345,13 +1366,13 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected void referenceExistCheck(long objectId, Locale locale) throws DeleteException {
         for (String entityTable : entityBean.getAllEntities()) {
             Entity entity = entityBean.getEntity(entityTable);
-            for (EntityAttributeType attributeType : entity.getEntityAttributeTypes()) {
-                for (EntityAttributeValueType attributeValueType : attributeType.getEntityAttributeValueTypes()) {
+            for (AttributeType attributeType : entity.getAttributeTypes()) {
+                for (AttributeValueType attributeValueType : attributeType.getAttributeValueTypes()) {
                     if (getEntityTable().equals(attributeValueType.getValueType())) {
                         String referenceEntity = entity.getTable();
                         long attributeTypeId = attributeType.getId();
 
-                        Map<String, Object> params = newHashMap();
+                        Map<String, Object> params = new HashMap<>();
                         params.put("referenceEntity", referenceEntity);
                         params.put("objectId", objectId);
                         params.put("attributeTypeId", attributeTypeId);

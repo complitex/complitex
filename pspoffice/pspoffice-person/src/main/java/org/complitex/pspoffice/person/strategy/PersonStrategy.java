@@ -166,7 +166,7 @@ public class PersonStrategy extends TemplateStrategy {
     }
 
     @Override
-    public long getDefaultSortAttributeTypeId() {
+    public Long getDefaultSortAttributeTypeId() {
         return OrderBy.LAST_NAME.getOrderByAttributeId();
     }
 
@@ -348,15 +348,15 @@ public class PersonStrategy extends TemplateStrategy {
     @Override
     protected void fillAttributes(DomainObject object) {
         List<Attribute> toAdd = newArrayList();
-        for (EntityAttributeType attributeType : getEntity().getEntityAttributeTypes()) {
+        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
             if (!attributeType.isObsolete()) {
                 if (object.getAttributes(attributeType.getId()).isEmpty()) {
-                    if ((attributeType.getEntityAttributeValueTypes().size() == 1)
+                    if ((attributeType.getAttributeValueTypes().size() == 1)
                             && !attributeType.getId().equals(CHILDREN)
                             && !attributeType.getId().equals(EXPLANATION)
                             && !NAME_ATTRIBUTE_IDS.contains(attributeType.getId())) {
                         Attribute attribute = new Attribute();
-                        EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
+                        AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
                         attribute.setAttributeTypeId(attributeType.getId());
                         attribute.setValueTypeId(attributeValueType.getId());
                         attribute.setObjectId(object.getObjectId());

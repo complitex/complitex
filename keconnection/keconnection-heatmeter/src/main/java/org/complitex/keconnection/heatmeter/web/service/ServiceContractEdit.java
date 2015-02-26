@@ -90,6 +90,13 @@ public class ServiceContractEdit extends FormTemplatePage {
                     return;
                 }
 
+                for (ServiceContractService s : serviceContract.getServiceContractServices()){
+                    if (s.getServiceObjectId() == null){
+                        error(getString("error_service"));
+                        return;
+                    }
+                }
+
                 serviceContractBean.save(serviceContract);
 
                 info(getStringFormat("info_added"));

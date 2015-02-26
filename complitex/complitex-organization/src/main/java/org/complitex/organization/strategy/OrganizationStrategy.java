@@ -50,7 +50,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    protected List<Long> getListAttributeTypes() {
+    public List<Long> getListAttributeTypes() {
         return Lists.newArrayList(NAME, CODE, USER_ORGANIZATION_PARENT);
     }
 
@@ -65,7 +65,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
             AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
                 attrExample = new AttributeFilter(NAME);
-                example.addAttributeExample(attrExample);
+                example.addAttributeFilter(attrExample);
             }
             attrExample.setValue(searchTextInput);
         }

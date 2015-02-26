@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.EntityAttributeType;
+import org.complitex.common.entity.AttributeType;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.css.CssAttributeBehavior;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
@@ -48,7 +48,7 @@ final class DocumentHistoryPanel extends Panel {
             @Override
             protected void populateItem(ListItem<Attribute> item) {
                 Attribute attr = item.getModelObject();
-                final EntityAttributeType attributeType = documentStrategy.getEntity().getAttributeType(attr.getAttributeTypeId());
+                final AttributeType attributeType = documentStrategy.getEntity().getAttributeType(attr.getAttributeTypeId());
                 item.add(new Label("label", DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
                 WebMarkupContainer required = new WebMarkupContainer("required");
                 item.add(required);

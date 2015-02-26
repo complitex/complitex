@@ -27,8 +27,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.entity.StatusType;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.DateUtil;
@@ -235,18 +235,18 @@ public class PersonInputPanel extends Panel {
     }
 
     private Component initUserAttributes() {
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getEntityAttributeTypes(),
-                new Predicate<EntityAttributeType>() {
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getAttributeTypes(),
+                new Predicate<AttributeType>() {
 
                     @Override
-                    public boolean apply(EntityAttributeType attributeType) {
+                    public boolean apply(AttributeType attributeType) {
                         return !attributeType.isSystem();
                     }
                 }),
-                new Function<EntityAttributeType, Long>() {
+                new Function<AttributeType, Long>() {
 
                     @Override
-                    public Long apply(EntityAttributeType attributeType) {
+                    public Long apply(AttributeType attributeType) {
                         return attributeType.getId();
                     }
                 }));
@@ -282,7 +282,7 @@ public class PersonInputPanel extends Panel {
     }
 
     private void initAttributeInput(MarkupContainer parent, long attributeTypeId, boolean showIfMissing) {
-        final EntityAttributeType attributeType = personStrategy.getEntity().getAttributeType(attributeTypeId);
+        final AttributeType attributeType = personStrategy.getEntity().getAttributeType(attributeTypeId);
 
         //label
         parent.add(new Label("label", labelModel(attributeType.getAttributeNames(), getLocale())));
@@ -508,7 +508,7 @@ public class PersonInputPanel extends Panel {
         documentInputPanelWrapper.add(documentInputPanelContainer);
 
         //document type
-        final EntityAttributeType documentTypeAttributeType =
+        final AttributeType documentTypeAttributeType =
                 documentStrategy.getEntity().getAttributeType(DocumentStrategy.DOCUMENT_TYPE);
         //label
         IModel<String> labelModel = labelModel(documentTypeAttributeType.getAttributeNames(), getLocale());
@@ -774,7 +774,7 @@ public class PersonInputPanel extends Panel {
         militaryServiceRelationHead.setOutputMarkupPlaceholderTag(true);
         militaryServiceRelationContainer.add(militaryServiceRelationHead);
 
-        EntityAttributeType militaryAttruibuteType = personStrategy.getEntity().getAttributeType(MILITARY_SERVICE_RELATION);
+        AttributeType militaryAttruibuteType = personStrategy.getEntity().getAttributeType(MILITARY_SERVICE_RELATION);
         //label
         final IModel<String> labelModel = labelModel(militaryAttruibuteType.getAttributeNames(), getLocale());
         militaryServiceRelationHead.add(new Label("label", labelModel));

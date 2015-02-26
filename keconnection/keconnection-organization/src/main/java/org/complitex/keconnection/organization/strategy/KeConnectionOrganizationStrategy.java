@@ -6,9 +6,9 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
@@ -230,12 +230,12 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public boolean isSimpleAttributeType(EntityAttributeType entityAttributeType) {
-        if (CUSTOM_ATTRIBUTE_TYPES.contains(entityAttributeType.getId())) {
+    public boolean isSimpleAttributeType(AttributeType attributeType) {
+        if (CUSTOM_ATTRIBUTE_TYPES.contains(attributeType.getId())) {
             return false;
         }
 
-        return super.isSimpleAttributeType(entityAttributeType);
+        return super.isSimpleAttributeType(attributeType);
     }
 
     @Override

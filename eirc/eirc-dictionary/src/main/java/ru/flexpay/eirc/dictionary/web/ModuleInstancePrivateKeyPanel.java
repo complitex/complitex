@@ -11,8 +11,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.Model;
 import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
@@ -79,7 +79,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
 
         Attribute attribute = moduleInstance.getAttribute(ModuleInstanceStrategy.ORGANIZATION);
 
-        final EntityAttributeType attributeType =
+        final AttributeType attributeType =
                 moduleInstanceStrategy.getEntity().getAttributeType(ModuleInstanceStrategy.ORGANIZATION);
 
         OrganizationIdPicker picker = new OrganizationIdPicker("organization",
@@ -127,7 +127,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
             )
         );
 
-        final EntityAttributeType attributeType =
+        final AttributeType attributeType =
                 moduleInstanceStrategy.getEntity().getAttributeType(ModuleInstanceStrategy.MODULE_INSTANCE_TYPE);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
@@ -148,7 +148,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
             attribute.setStringCultures(StringCultures.newStringCultures());
         }
         final AttributeStringModel attributeModel = new AttributeStringModel(attribute);
-        final EntityAttributeType attributeType =
+        final AttributeType attributeType =
                 moduleInstanceStrategy.getEntity().getAttributeType(attributeTypeId);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));

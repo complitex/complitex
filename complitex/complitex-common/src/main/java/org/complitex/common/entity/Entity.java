@@ -9,10 +9,10 @@ public class Entity implements IEntity {
     private Long id;
     private String table;
     private List<StringCulture> names;
-    private List<EntityAttributeType> entityAttributeTypes;
+    private List<AttributeType> attributeTypes;
 
-    public EntityAttributeType getAttributeType(Long attributeTypeId) {
-        for (EntityAttributeType attributeType : getEntityAttributeTypes()) {
+    public AttributeType getAttributeType(Long attributeTypeId) {
+        for (AttributeType attributeType : getAttributeTypes()) {
             if (attributeType.getId().equals(attributeTypeId)) {
                 return attributeType;
             }
@@ -44,12 +44,12 @@ public class Entity implements IEntity {
         this.id = id;
     }
 
-    public List<EntityAttributeType> getEntityAttributeTypes() {
-        return entityAttributeTypes;
+    public List<AttributeType> getAttributeTypes() {
+        return attributeTypes;
     }
 
-    public void setEntityAttributeType(List<EntityAttributeType> entityAttributeTypes) {
-        this.entityAttributeTypes = entityAttributeTypes;
+    public void setAttributeType(List<AttributeType> attributeTypes) {
+        this.attributeTypes = attributeTypes;
     }
 
     public List<StringCulture> getNames() {

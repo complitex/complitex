@@ -192,11 +192,11 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
     }
 
     @Override
-    public boolean isSimpleAttributeType(EntityAttributeType entityAttributeType) {
-        if (ALL_ATTRIBUTE_TYPES.contains(entityAttributeType.getId())) {
+    public boolean isSimpleAttributeType(AttributeType attributeType) {
+        if (ALL_ATTRIBUTE_TYPES.contains(attributeType.getId())) {
             return false;
         }
-        return super.isSimpleAttributeType(entityAttributeType);
+        return super.isSimpleAttributeType(attributeType);
     }
 
     @Override

@@ -108,7 +108,7 @@ public class ServiceProviderTypeStrategy extends TemplateStrategy {
             AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
                 attrExample = new AttributeFilter(NAME);
-                example.addAttributeExample(attrExample);
+                example.addAttributeFilter(attrExample);
             }
             attrExample.setValue(searchTextInput);
         }

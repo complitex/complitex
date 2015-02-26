@@ -10,8 +10,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.EntityAttributeType;
 
 import java.util.Locale;
 
@@ -20,13 +20,13 @@ import java.util.Locale;
  */
 public class DomainFilteredColumn extends AbstractColumn<DomainObject, Long> implements IFilteredColumn<DomainObject, Long> {
     private String entityTable;
-    private EntityAttributeType entityAttributeType;
+    private AttributeType attributeType;
 
-    public DomainFilteredColumn(String entityTable, EntityAttributeType entityAttributeType, Locale locale) {
+    public DomainFilteredColumn(String entityTable, AttributeType attributeType, Locale locale) {
         super(Model.of("Hello!"));
 
         this.entityTable = entityTable;
-        this.entityAttributeType = entityAttributeType;
+        this.attributeType = attributeType;
     }
 
     @Override

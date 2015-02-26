@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class EntityAttributeType implements Serializable {
+public class AttributeType implements Serializable {
     private Long id;
     private Long entityId;
     private boolean mandatory;
@@ -17,12 +17,12 @@ public class EntityAttributeType implements Serializable {
 
     private List<StringCulture> attributeNames;
 
-    private List<EntityAttributeValueType> entityAttributeValueTypes;
+    private List<AttributeValueType> attributeValueTypes;
 
     private boolean system;
 
-    public EntityAttributeValueType getAttributeValueType(long attributeValueTypeId){
-        for(EntityAttributeValueType valueType : getEntityAttributeValueTypes()){
+    public AttributeValueType getAttributeValueType(long attributeValueTypeId){
+        for(AttributeValueType valueType : getAttributeValueTypes()){
             if(valueType.getId().equals(attributeValueTypeId)){
                 return valueType;
             }
@@ -42,12 +42,12 @@ public class EntityAttributeType implements Serializable {
         this.attributeNames = attributeNames;
     }
 
-    public List<EntityAttributeValueType> getEntityAttributeValueTypes() {
-        return entityAttributeValueTypes;
+    public List<AttributeValueType> getAttributeValueTypes() {
+        return attributeValueTypes;
     }
 
-    public void setEntityAttributeValueTypes(List<EntityAttributeValueType> entityAttributeValueTypes) {
-        this.entityAttributeValueTypes = entityAttributeValueTypes;
+    public void setAttributeValueTypes(List<AttributeValueType> attributeValueTypes) {
+        this.attributeValueTypes = attributeValueTypes;
     }
 
     public Long getId() {

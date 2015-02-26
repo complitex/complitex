@@ -173,6 +173,7 @@ public class BuildingStrategy extends TemplateStrategy {
                 }
             }
         }
+
         return buildings;
     }
 
@@ -193,9 +194,9 @@ public class BuildingStrategy extends TemplateStrategy {
         addressExample.setAdmin(buildingExample.isAdmin());
         addressExample.setUserPermissionString(sessionBean.getPermissionString("building_address"));
 
-        addressExample.addAttributeExample(new AttributeFilter(BuildingAddressStrategy.NUMBER, number));
-        addressExample.addAttributeExample(new AttributeFilter(BuildingAddressStrategy.CORP, corp));
-        addressExample.addAttributeExample(new AttributeFilter(BuildingAddressStrategy.STRUCTURE, structure));
+        addressExample.addAttributeFilter(new AttributeFilter(BuildingAddressStrategy.NUMBER, number));
+        addressExample.addAttributeFilter(new AttributeFilter(BuildingAddressStrategy.CORP, corp));
+        addressExample.addAttributeFilter(new AttributeFilter(BuildingAddressStrategy.STRUCTURE, structure));
 
         Map<String, Long> ids = Maps.newHashMap();
         Long streetId = buildingExample.getAdditionalParam(STREET);
@@ -484,12 +485,12 @@ public class BuildingStrategy extends TemplateStrategy {
     protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = Lists.newArrayList();
 
-        for (EntityAttributeType attributeType : getEntity().getEntityAttributeTypes()) {
+        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
             if (!attributeType.isObsolete()) {
                 if (object.getAttributes(attributeType.getId()).isEmpty()) {
-                    if ((attributeType.getEntityAttributeValueTypes().size() == 1) && !attributeType.getId().equals(BUILDING_ADDRESS)) {
+                    if ((attributeType.getAttributeValueTypes().size() == 1) && !attributeType.getId().equals(BUILDING_ADDRESS)) {
                         Attribute attribute = new Attribute();
-                        EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
+                        AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
                         attribute.setAttributeTypeId(attributeType.getId());
                         attribute.setValueTypeId(attributeValueType.getId());
                         attribute.setObjectId(object.getObjectId());
@@ -745,7 +746,7 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     @Override
-    public long getDefaultSortAttributeTypeId() {
+    public Long getDefaultSortAttributeTypeId() {
         return OrderBy.NUMBER.getOrderByAttributeId();
     }
 

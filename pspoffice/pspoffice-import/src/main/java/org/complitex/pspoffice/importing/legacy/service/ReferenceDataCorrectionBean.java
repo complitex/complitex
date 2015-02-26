@@ -94,7 +94,7 @@ public class ReferenceDataCorrectionBean extends AbstractBean {
         example.setAdmin(true);
         AttributeFilter nameExample = new AttributeFilter(nameAttributeTypeId);
         nameExample.setValue(nkod);
-        example.addAttributeExample(nameExample);
+        example.addAttributeFilter(nameExample);
         example.setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name());
 
         List<? extends DomainObject> objects = strategy.getList(example);

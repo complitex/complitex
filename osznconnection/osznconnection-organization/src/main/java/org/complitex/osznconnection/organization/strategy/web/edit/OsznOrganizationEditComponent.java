@@ -15,8 +15,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.common.converter.StringConverter;
 import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.AttributeUtil;
@@ -307,7 +307,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 @Override
                 protected void populateItem(ListItem<Long> item) {
                     final long attributeTypeId = item.getModelObject();
-                    final EntityAttributeType attributeType =
+                    final AttributeType attributeType =
                             osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
                     item.add(new Label("label",
                             DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
@@ -345,7 +345,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setAttributeId(1L);
                 attribute.setStringCultures(StringCultures.newStringCultures());
             }
-            final EntityAttributeType attributeType =
+            final AttributeType attributeType =
                     osznOrganizationStrategy.getEntity().getAttributeType(OsznOrganizationStrategy.EDRPOU);
             edrpouContainer.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
@@ -373,7 +373,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setAttributeId(1L);
                 attribute.setStringCultures(StringCultures.newStringCultures());
             }
-            final EntityAttributeType attributeType =
+            final AttributeType attributeType =
                     osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
             rootDirectoryContainer.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
@@ -401,7 +401,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setAttributeId(1L);
                 attribute.setStringCultures(StringCultures.newStringCultures());
             }
-            final EntityAttributeType attributeType =
+            final AttributeType attributeType =
                     osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
             rootExportDirectoryContainer.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));

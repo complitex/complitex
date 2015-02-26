@@ -22,10 +22,6 @@ import javax.ejb.Stateless;
 import java.io.Serializable;
 import java.util.*;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 public class BuildingAddressStrategy extends TemplateStrategy {
     private static final String BUILDING_ADDRESS_NS = BuildingAddressStrategy.class.getName();
@@ -61,7 +57,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
             AttributeFilter number = example.getAttributeExample(NUMBER);
             if (number == null) {
                 number = new AttributeFilter(NUMBER);
-                example.addAttributeExample(number);
+                example.addAttributeFilter(number);
             }
             number.setValue(searchTextInput);
         }
@@ -116,19 +112,23 @@ public class BuildingAddressStrategy extends TemplateStrategy {
         @Override
         public void found(Component component, final Map<String, Long> ids, final AjaxRequestTarget target) {
             DomainObjectInputPanel inputPanel = component.findParent(DomainObjectInputPanel.class);
+
+            assert inputPanel != null;
+            DomainObject domainObject = inputPanel.getObject();
+
             Long streetId = ids.get("street");
 
             if (streetId != null && streetId > 0) {
-                inputPanel.getObject().setParentId(streetId);
-                inputPanel.getObject().setParentEntityId(PARENT_STREET_ENTITY_ID);
+                domainObject.setParentId(streetId);
+                domainObject.setParentEntityId(PARENT_STREET_ENTITY_ID);
             } else {
                 Long cityId = ids.get("city");
                 if (cityId != null && cityId > 0) {
-                    inputPanel.getObject().setParentId(cityId);
-                    inputPanel.getObject().setParentEntityId(400L);
+                    domainObject.setParentId(cityId);
+                    domainObject.setParentEntityId(400L);
                 } else {
-                    inputPanel.getObject().setParentId(null);
-                    inputPanel.getObject().setParentEntityId(null);
+                    domainObject.setParentId(null);
+                    domainObject.setParentEntityId(null);
                 }
             }
         }

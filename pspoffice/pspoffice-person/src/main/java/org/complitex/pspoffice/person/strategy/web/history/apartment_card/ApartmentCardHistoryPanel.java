@@ -19,9 +19,9 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Entity;
-import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.service.IUserProfileBean;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
@@ -111,7 +111,7 @@ final class ApartmentCardHistoryPanel extends Panel {
 
         //address
         WebMarkupContainer addressContainer = new WebMarkupContainer("addressContainer");
-        final EntityAttributeType addressAttributeType = ENTITY.getAttributeType(ADDRESS);
+        final AttributeType addressAttributeType = ENTITY.getAttributeType(ADDRESS);
         addressContainer.add(new Label("label", labelModel(addressAttributeType.getAttributeNames(), getLocale())));
         addressContainer.add(new WebMarkupContainer("required").setVisible(addressAttributeType.isMandatory()));
         final Component address = new CollapsibleSearchComponent("address",
@@ -123,7 +123,7 @@ final class ApartmentCardHistoryPanel extends Panel {
 
         //owner
         WebMarkupContainer ownerContainer = new WebMarkupContainer("ownerContainer");
-        final EntityAttributeType ownerAttributeType = ENTITY.getAttributeType(OWNER);
+        final AttributeType ownerAttributeType = ENTITY.getAttributeType(OWNER);
         IModel<String> ownerLabelModel = labelModel(ownerAttributeType.getAttributeNames(), getLocale());
         ownerContainer.add(new Label("label", ownerLabelModel));
         ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerAttributeType.isMandatory()));
@@ -133,7 +133,7 @@ final class ApartmentCardHistoryPanel extends Panel {
         add(ownerContainer);
 
         //form of ownership
-        final EntityAttributeType formOfOwnershipAttributeType = apartmentCardStrategy.getEntity().getAttributeType(FORM_OF_OWNERSHIP);
+        final AttributeType formOfOwnershipAttributeType = apartmentCardStrategy.getEntity().getAttributeType(FORM_OF_OWNERSHIP);
         WebMarkupContainer formOfOwnershipContainer = new WebMarkupContainer("formOfOwnershipContainer");
         IModel<String> labelModel = labelModel(formOfOwnershipAttributeType.getAttributeNames(), getLocale());
         formOfOwnershipContainer.add(new Label("label", labelModel));
@@ -221,18 +221,18 @@ final class ApartmentCardHistoryPanel extends Panel {
         add(registrations);
 
         //user attributes and housing rights:
-        List<Long> restAttributeTypeIds = newArrayList(transform(filter(ENTITY.getEntityAttributeTypes(),
-                new Predicate<EntityAttributeType>() {
+        List<Long> restAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributeTypes(),
+                new Predicate<AttributeType>() {
 
                     @Override
-                    public boolean apply(EntityAttributeType attributeType) {
+                    public boolean apply(AttributeType attributeType) {
                         return !attributeType.isSystem() || attributeType.getId().equals(HOUSING_RIGHTS);
                     }
                 }),
-                new Function<EntityAttributeType, Long>() {
+                new Function<AttributeType, Long>() {
 
                     @Override
-                    public Long apply(EntityAttributeType attributeType) {
+                    public Long apply(AttributeType attributeType) {
                         return attributeType.getId();
                     }
                 }));
@@ -270,7 +270,7 @@ final class ApartmentCardHistoryPanel extends Panel {
 
     private void initAttributeInput(ApartmentCard card, ApartmentCardModification modification, MarkupContainer parent,
             long attributeTypeId) {
-        final EntityAttributeType attributeType = ENTITY.getAttributeType(attributeTypeId);
+        final AttributeType attributeType = ENTITY.getAttributeType(attributeTypeId);
 
         //label
         parent.add(new Label("label", labelModel(attributeType.getAttributeNames(), getLocale())));

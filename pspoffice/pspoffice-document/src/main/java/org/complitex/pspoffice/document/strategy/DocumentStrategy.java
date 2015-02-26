@@ -5,9 +5,9 @@
 package org.complitex.pspoffice.document.strategy;
 
 import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.AttributeType;
+import org.complitex.common.entity.AttributeValueType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.EntityAttributeType;
-import org.complitex.common.entity.EntityAttributeValueType;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.StringCultures;
 import org.complitex.pspoffice.document.strategy.entity.Document;
@@ -79,13 +79,13 @@ public class DocumentStrategy extends TemplateStrategy {
     protected void fillAttributes(DomainObject document) {
         List<Attribute> toAdd = newArrayList();
 
-        for (EntityAttributeType attributeType : getEntity().getEntityAttributeTypes()) {
+        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
             if (document.getAttributes(attributeType.getId()).isEmpty()
-                    && (attributeType.getEntityAttributeValueTypes().size() == 1)
+                    && (attributeType.getAttributeValueTypes().size() == 1)
                     && !attributeType.isObsolete()
                     && !attributeType.getId().equals(DOCUMENT_TYPE)) {
                 Attribute attribute = new Attribute();
-                EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
+                AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
                 attribute.setAttributeTypeId(attributeType.getId());
                 attribute.setValueTypeId(attributeValueType.getId());
                 attribute.setObjectId(document.getObjectId());

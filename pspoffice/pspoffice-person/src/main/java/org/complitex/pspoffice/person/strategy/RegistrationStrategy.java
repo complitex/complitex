@@ -9,9 +9,9 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.AttributeType;
+import org.complitex.common.entity.AttributeValueType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.EntityAttributeType;
-import org.complitex.common.entity.EntityAttributeValueType;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.DomainObjectStrategy;
 import org.complitex.common.strategy.StringCultureBean;
@@ -196,13 +196,13 @@ public class RegistrationStrategy extends DomainObjectStrategy {
     protected void fillAttributes(DomainObject object) {
         List<Attribute> toAdd = newArrayList();
 
-        for (EntityAttributeType attributeType : getEntity().getEntityAttributeTypes()) {
+        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
             if (!attributeType.isObsolete()) {
                 if (object.getAttributes(attributeType.getId()).isEmpty()) {
                     if (!attributeType.getId().equals(EXPLANATION)) {
-                        if (attributeType.getEntityAttributeValueTypes().size() == 1) {
+                        if (attributeType.getAttributeValueTypes().size() == 1) {
                             Attribute attribute = new Attribute();
-                            EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
+                            AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
                             attribute.setAttributeTypeId(attributeType.getId());
                             attribute.setValueTypeId(attributeValueType.getId());
                             attribute.setObjectId(object.getObjectId());

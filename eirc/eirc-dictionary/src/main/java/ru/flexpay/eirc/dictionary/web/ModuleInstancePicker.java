@@ -283,8 +283,8 @@ public class ModuleInstancePicker extends FormComponentPanel<DomainObject> {
 
     private DomainObjectFilter newExample(List<Long> types) {
         DomainObjectFilter e = new DomainObjectFilter();
-        e.addAttributeExample(new AttributeFilter(NAME));
-        e.addAttributeExample(new AttributeFilter(UNIQUE_INDEX));
+        e.addAttributeFilter(new AttributeFilter(NAME));
+        e.addAttributeFilter(new AttributeFilter(UNIQUE_INDEX));
 
         if (types != null && !types.isEmpty()) {
             e.addAdditionalParam(MODULE_INSTANCE_TYPE_PARAMETER, types);

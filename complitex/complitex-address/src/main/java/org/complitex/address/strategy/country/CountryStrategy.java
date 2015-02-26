@@ -33,7 +33,7 @@ public class CountryStrategy extends TemplateStrategy {
     public static final long NAME = 800L;
 
     @Override
-    protected List<Long> getListAttributeTypes() {
+    public List<Long> getListAttributeTypes() {
         return Lists.newArrayList(NAME);
     }
 
@@ -57,7 +57,7 @@ public class CountryStrategy extends TemplateStrategy {
             AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
                 attrExample = new AttributeFilter(NAME);
-                example.addAttributeExample(attrExample);
+                example.addAttributeFilter(attrExample);
             }
             attrExample.setValue(searchTextInput);
         }

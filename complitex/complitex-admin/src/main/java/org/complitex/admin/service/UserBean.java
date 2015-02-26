@@ -224,8 +224,8 @@ public class UserBean extends AbstractBean {
     public UserFilter newUserFilter() {
         UserFilter userFilter = new UserFilter();
 
-        for (EntityAttributeType entityAttributeType : userInfoStrategy.getListColumns()) {
-            userFilter.getAttributeFilters().add(new AttributeFilter(entityAttributeType.getId()));
+        for (AttributeType attributeType : userInfoStrategy.getListColumns()) {
+            userFilter.getAttributeFilters().add(new AttributeFilter(attributeType.getId()));
         }
 
         return userFilter;
@@ -236,12 +236,12 @@ public class UserBean extends AbstractBean {
             return userInfoStrategy.newInstance().getAttributes();
         }
 
-        List<EntityAttributeType> entityAttributeTypes = userInfoStrategy.getListColumns();
-        List<Attribute> attributeColumns = new ArrayList<Attribute>(entityAttributeTypes.size());
+        List<AttributeType> attributeTypes = userInfoStrategy.getListColumns();
+        List<Attribute> attributeColumns = new ArrayList<Attribute>(attributeTypes.size());
 
-        for (EntityAttributeType entityAttributeType : entityAttributeTypes) {
+        for (AttributeType attributeType : attributeTypes) {
             for (Attribute attribute : object.getAttributes()) {
-                if (attribute.getAttributeTypeId().equals(entityAttributeType.getId())) {
+                if (attribute.getAttributeTypeId().equals(attributeType.getId())) {
                     attributeColumns.add(attribute);
                 }
             }

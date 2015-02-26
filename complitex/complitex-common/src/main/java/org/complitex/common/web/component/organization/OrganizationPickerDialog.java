@@ -65,8 +65,8 @@ public class OrganizationPickerDialog extends Panel {
 
         final DomainObjectFilter example = new DomainObjectFilter();
 
-        example.addAttributeExample(new AttributeFilter(NAME));
-        example.addAttributeExample(new AttributeFilter(CODE));
+        example.addAttributeFilter(new AttributeFilter(NAME));
+        example.addAttributeFilter(new AttributeFilter(CODE));
         example.setLocaleId(Locales.getLocaleId(getLocale()));
 
         if (organizationTypeIds != null && organizationTypeIds.length > 0) {

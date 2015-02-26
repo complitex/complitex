@@ -224,14 +224,14 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     @Override
     protected void fillAttributes(DomainObject object) {
         List<Attribute> toAdd = newArrayList();
-        for (EntityAttributeType attributeType : getEntity().getEntityAttributeTypes()) {
+        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
             if (!attributeType.isObsolete()) {
                 if (object.getAttributes(attributeType.getId()).isEmpty()) {
                     if (!attributeType.getId().equals(REGISTRATIONS)
                             && !attributeType.getId().equals(EXPLANATION)) {
-                        if (attributeType.getEntityAttributeValueTypes().size() == 1) {
+                        if (attributeType.getAttributeValueTypes().size() == 1) {
                             Attribute attribute = new Attribute();
-                            EntityAttributeValueType attributeValueType = attributeType.getEntityAttributeValueTypes().get(0);
+                            AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
                             attribute.setAttributeTypeId(attributeType.getId());
                             attribute.setValueTypeId(attributeValueType.getId());
                             attribute.setObjectId(object.getObjectId());
@@ -257,7 +257,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     }
 
     @Override
-    protected Attribute fillManyValueTypesAttribute(EntityAttributeType attributeType, Long objectId) {
+    protected Attribute fillManyValueTypesAttribute(AttributeType attributeType, Long objectId) {
         Attribute attribute = new Attribute();
         attribute.setAttributeTypeId(attributeType.getId());
         attribute.setObjectId(objectId);

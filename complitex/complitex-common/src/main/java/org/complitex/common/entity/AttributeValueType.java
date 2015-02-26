@@ -2,11 +2,7 @@ package org.complitex.common.entity;
 
 import java.io.Serializable;
 
-/**
- *
- * @author Artem
- */
-public class EntityAttributeValueType implements Serializable {
+public class AttributeValueType implements Serializable {
 
     private Long id;
 

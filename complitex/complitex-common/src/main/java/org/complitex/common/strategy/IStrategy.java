@@ -74,9 +74,11 @@ public interface IStrategy {
 
     PageParameters getHistoryPageParams(long objectId);
 
-    List<EntityAttributeType> getListColumns();
+    List<Long> getListAttributeTypes();
+
+    List<AttributeType> getListColumns();
     
-    long getDefaultSortAttributeTypeId();
+    Long getDefaultSortAttributeTypeId();
 
     Class<? extends WebPage> getListPage();
 
@@ -106,7 +108,7 @@ public interface IStrategy {
 
     boolean isSimpleAttribute(final Attribute attribute);
 
-    boolean isSimpleAttributeType(EntityAttributeType entityAttributeType);
+    boolean isSimpleAttributeType(AttributeType attributeType);
 
     DomainObject newInstance();
     

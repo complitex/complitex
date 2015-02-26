@@ -45,7 +45,7 @@ public class TarifStrategy extends TemplateStrategy {
     }
 
     @Override
-    protected List<Long> getListAttributeTypes() {
+    public List<Long> getListAttributeTypes() {
         return Lists.newArrayList(NAME, CODE);
     }
 
@@ -60,7 +60,7 @@ public class TarifStrategy extends TemplateStrategy {
             AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
                 attrExample = new AttributeFilter(NAME);
-                example.addAttributeExample(attrExample);
+                example.addAttributeFilter(attrExample);
             }
             attrExample.setValue(searchTextInput);
         }
@@ -75,7 +75,7 @@ public class TarifStrategy extends TemplateStrategy {
         DomainObjectFilter example = new DomainObjectFilter();
         AttributeFilter codeExample = new AttributeFilter(CODE);
         codeExample.setValue(String.valueOf(code));
-        example.addAttributeExample(codeExample);
+        example.addAttributeFilter(codeExample);
         configureExample(example, ImmutableMap.<String, Long>of(), null);
         List<? extends DomainObject> results = getList(example);
         if (results == null || results.isEmpty()) {

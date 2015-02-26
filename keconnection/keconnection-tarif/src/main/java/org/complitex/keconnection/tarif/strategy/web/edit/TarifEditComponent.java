@@ -8,8 +8,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
@@ -41,7 +41,7 @@ public final class TarifEditComponent extends AbstractComplexAttributesPanel {
         final DomainObject tarif = getDomainObject();
         final boolean enabled = !isDisabled() && DomainObjectAccessUtil.canEdit(null, "tarif", tarif);
 
-        final EntityAttributeType tarifGroupAttributeType =
+        final AttributeType tarifGroupAttributeType =
                 tarifStrategy.getEntity().getAttributeType(TarifStrategy.TARIF_GROUP);
         final IModel<String> tarifGroupLabelModel =
                 DomainObjectComponentUtil.labelModel(tarifGroupAttributeType.getAttributeNames(), getLocale());

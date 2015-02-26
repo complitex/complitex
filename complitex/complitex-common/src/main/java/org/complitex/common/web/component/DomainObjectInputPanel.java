@@ -177,9 +177,9 @@ public class DomainObjectInputPanel extends Panel {
     protected ListView<Attribute> newSimpleAttributeListView(String id) {
         final List<Attribute> simpleAttributes = getSimpleAttributes(object.getAttributes());
 
-        final Map<Attribute, EntityAttributeType> attrToTypeMap = newLinkedHashMap();
+        final Map<Attribute, AttributeType> attrToTypeMap = newLinkedHashMap();
         for (Attribute attr : simpleAttributes) {
-            EntityAttributeType attrType = description.getAttributeType(attr.getAttributeTypeId());
+            AttributeType attrType = description.getAttributeType(attr.getAttributeTypeId());
             attrToTypeMap.put(attr, attrType);
         }
 
@@ -188,7 +188,7 @@ public class DomainObjectInputPanel extends Panel {
             @Override
             protected void populateItem(ListItem<Attribute> item) {
                 Attribute attr = item.getModelObject();
-                final EntityAttributeType attributeType = attrToTypeMap.get(attr);
+                final AttributeType attributeType = attrToTypeMap.get(attr);
                 item.add(new Label("label", DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
                 WebMarkupContainer required = new WebMarkupContainer("required");
                 item.add(required);
@@ -203,7 +203,7 @@ public class DomainObjectInputPanel extends Panel {
     protected List<Attribute> getSimpleAttributes(List<Attribute> allAttributes) {
         final List<Attribute> attributes = newArrayList();
         for (Attribute attribute : allAttributes) {
-            EntityAttributeType attrType = description.getAttributeType(attribute.getAttributeTypeId());
+            AttributeType attrType = description.getAttributeType(attribute.getAttributeTypeId());
             if (getStrategy().isSimpleAttributeType(attrType)) {
                 attributes.add(attribute);
             }

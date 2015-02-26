@@ -41,7 +41,7 @@ public class RegionStrategy extends TemplateStrategy {
     public static final long PARENT_ENTITY_ID = 800L;
 
     @Override
-    protected List<Long> getListAttributeTypes() {
+    public List<Long> getListAttributeTypes() {
         return Lists.newArrayList(NAME);
     }
 
@@ -80,7 +80,7 @@ public class RegionStrategy extends TemplateStrategy {
             AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
                 attrExample = new AttributeFilter(NAME);
-                example.addAttributeExample(attrExample);
+                example.addAttributeFilter(attrExample);
             }
             attrExample.setValue(searchTextInput);
         }

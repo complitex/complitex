@@ -38,6 +38,10 @@ public class DomainObjectFilter implements Serializable {
     public DomainObjectFilter() {
     }
 
+    public DomainObjectFilter(String entityTable) {
+        this.entityTable = entityTable;
+    }
+
     public DomainObjectFilter(Long objectId) {
         this.objectId = objectId;
     }
@@ -86,10 +90,11 @@ public class DomainObjectFilter implements Serializable {
                 return attrExample;
             }
         }
+
         return null;
     }
 
-    public void addAttributeExample(AttributeFilter attributeFilter) {
+    public void addAttributeFilter(AttributeFilter attributeFilter) {
         attributeFilters.add(attributeFilter);
     }
 

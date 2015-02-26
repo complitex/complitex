@@ -46,6 +46,7 @@ import java.util.List;
  * @author Artem
  */
 @AuthorizeInstantiation(SecurityRole.ADDRESS_MODULE_VIEW)
+@Deprecated
 public class BuildingList extends ScrollListPage {
     @EJB
     private StrategyFactory strategyFactory;

@@ -56,7 +56,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     private static final String MODULE_INSTANCE_NS = ModuleInstanceStrategy.class.getName();
 
     @Override
-    protected List<Long> getListAttributeTypes() {
+    public List<Long> getListAttributeTypes() {
         return Lists.newArrayList(NAME, UNIQUE_INDEX);
     }
 
@@ -80,7 +80,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
             AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
                 attrExample = new AttributeFilter(NAME);
-                example.addAttributeExample(attrExample);
+                example.addAttributeFilter(attrExample);
             }
             attrExample.setValue(searchTextInput);
         }
@@ -169,9 +169,9 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     }
 
     @Override
-    public boolean isSimpleAttributeType(EntityAttributeType entityAttributeType) {
-        return !CUSTOM_ATTRIBUTES.contains(entityAttributeType.getId()) && entityAttributeType.getId() != MODULE_INSTANCE_TYPE &&
-                super.isSimpleAttributeType(entityAttributeType);
+    public boolean isSimpleAttributeType(AttributeType attributeType) {
+        return !CUSTOM_ATTRIBUTES.contains(attributeType.getId()) && attributeType.getId() != MODULE_INSTANCE_TYPE &&
+                super.isSimpleAttributeType(attributeType);
     }
 
     @Override

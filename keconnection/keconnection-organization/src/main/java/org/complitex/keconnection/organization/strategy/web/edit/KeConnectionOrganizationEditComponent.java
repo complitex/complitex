@@ -8,8 +8,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringCultures;
@@ -67,7 +67,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
                 attribute.setAttributeId(1L);
                 attribute.setStringCultures(StringCultures.newStringCultures());
             }
-            final EntityAttributeType attributeType =
+            final AttributeType attributeType =
                     organizationStrategy.getEntity().getAttributeType(attributeTypeId);
             readyCloseOmSection.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));

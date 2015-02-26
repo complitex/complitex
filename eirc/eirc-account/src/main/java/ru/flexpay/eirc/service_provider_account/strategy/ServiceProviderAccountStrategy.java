@@ -90,7 +90,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
                     removed = false;
                     boolean needToUpdateAttribute = false;
 
-                    EntityAttributeType attributeType = getEntity().getAttributeType(oldAttr.getAttributeTypeId());
+                    AttributeType attributeType = getEntity().getAttributeType(oldAttr.getAttributeTypeId());
 
                     Long oldValueTypeId = oldAttr.getValueTypeId();
                     Long newValueTypeId = newAttr.getValueTypeId();

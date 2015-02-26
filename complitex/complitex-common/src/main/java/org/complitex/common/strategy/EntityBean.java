@@ -2,9 +2,9 @@ package org.complitex.common.strategy;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+import org.complitex.common.entity.AttributeType;
+import org.complitex.common.entity.AttributeValueType;
 import org.complitex.common.entity.Entity;
-import org.complitex.common.entity.EntityAttributeType;
-import org.complitex.common.entity.EntityAttributeValueType;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.util.StringCultures;
 
@@ -56,11 +56,11 @@ public class EntityBean extends AbstractBean {
         return getEntity(entityTable).getAttributeType(attributeTypeId).getAttributeName(locale);
     }
 
-    public EntityAttributeType newAttributeType() {
-        EntityAttributeType attributeType = new EntityAttributeType();
+    public AttributeType newAttributeType() {
+        AttributeType attributeType = new AttributeType();
 
         attributeType.setAttributeNames(StringCultures.newStringCultures());
-        attributeType.setEntityAttributeValueTypes(new ArrayList<EntityAttributeValueType>());
+        attributeType.setAttributeValueTypes(new ArrayList<AttributeValueType>());
 
         return attributeType;
     }
@@ -73,9 +73,9 @@ public class EntityBean extends AbstractBean {
         //attributes
         Set<Long> toDeleteAttributeIds = Sets.newHashSet();
 
-        for (EntityAttributeType oldAttributeType : oldEntity.getEntityAttributeTypes()) {
+        for (AttributeType oldAttributeType : oldEntity.getAttributeTypes()) {
             boolean removed = true;
-            for (EntityAttributeType newAttributeType : newEntity.getEntityAttributeTypes()) {
+            for (AttributeType newAttributeType : newEntity.getAttributeTypes()) {
                 if (oldAttributeType.getId().equals(newAttributeType.getId())) {
                     removed = false;
                     break;
@@ -88,7 +88,7 @@ public class EntityBean extends AbstractBean {
         }
         removeAttributeTypes(oldEntity.getTable(), toDeleteAttributeIds, updateDate);
 
-        for (EntityAttributeType attributeType : newEntity.getEntityAttributeTypes()) {
+        for (AttributeType attributeType : newEntity.getAttributeTypes()) {
             if (attributeType.getId() == null) {
                 changed = true;
                 insertAttributeType(attributeType, newEntity.getId(), updateDate);
@@ -100,7 +100,7 @@ public class EntityBean extends AbstractBean {
         }
     }
 
-    private void insertAttributeType(EntityAttributeType attributeType, long entityId, Date startDate) {
+    private void insertAttributeType(AttributeType attributeType, long entityId, Date startDate) {
         attributeType.setStartDate(startDate);
         attributeType.setEntityId(entityId);
 
@@ -110,7 +110,7 @@ public class EntityBean extends AbstractBean {
 
         sqlSession().insert(NS + ".insertAttributeType", attributeType);
 
-        EntityAttributeValueType valueType = attributeType.getEntityAttributeValueTypes().get(0);
+        AttributeValueType valueType = attributeType.getAttributeValueTypes().get(0);
         valueType.setAttributeTypeId(attributeType.getId());
 
         sqlSession().insert(NS + ".insertValueType", valueType);

@@ -292,7 +292,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         //address
         WebMarkupContainer addressContainer = new WebMarkupContainer("addressContainer");
-        final EntityAttributeType addressAttributeType = ENTITY.getAttributeType(ADDRESS);
+        final AttributeType addressAttributeType = ENTITY.getAttributeType(ADDRESS);
         addressContainer.add(new Label("label", labelModel(addressAttributeType.getAttributeNames(), getLocale())));
         addressContainer.add(new WebMarkupContainer("required").setVisible(addressAttributeType.isMandatory()));
 
@@ -319,7 +319,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         //owner
         WebMarkupContainer ownerContainer = new WebMarkupContainer("ownerContainer");
-        final EntityAttributeType ownerAttributeType = ENTITY.getAttributeType(OWNER);
+        final AttributeType ownerAttributeType = ENTITY.getAttributeType(OWNER);
         IModel<String> ownerLabelModel = labelModel(ownerAttributeType.getAttributeNames(), getLocale());
         ownerContainer.add(new Label("label", ownerLabelModel));
         ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerAttributeType.isMandatory()));
@@ -568,18 +568,18 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         initSystemAttributeInput(form, "housingRights", HOUSING_RIGHTS);
 
         //user attributes:
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getEntityAttributeTypes(),
-                new Predicate<EntityAttributeType>() {
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributeTypes(),
+                new Predicate<AttributeType>() {
 
                     @Override
-                    public boolean apply(EntityAttributeType attributeType) {
+                    public boolean apply(AttributeType attributeType) {
                         return !attributeType.isSystem();
                     }
                 }),
-                new Function<EntityAttributeType, Long>() {
+                new Function<AttributeType, Long>() {
 
                     @Override
-                    public Long apply(EntityAttributeType attributeType) {
+                    public Long apply(AttributeType attributeType) {
                         return attributeType.getId();
                     }
                 }));
@@ -700,7 +700,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     }
 
     private void initAttributeInput(MarkupContainer parent, long attributeTypeId) {
-        final EntityAttributeType attributeType = apartmentCardStrategy.getEntity().getAttributeType(attributeTypeId);
+        final AttributeType attributeType = apartmentCardStrategy.getEntity().getAttributeType(attributeTypeId);
 
         //label
         parent.add(new Label("label", labelModel(attributeType.getAttributeNames(), getLocale())));
@@ -856,7 +856,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     }
 
     private Component initFormOfOwnership() {
-        final EntityAttributeType formOfOwnershipAttributeType = apartmentCardStrategy.getEntity().getAttributeType(FORM_OF_OWNERSHIP);
+        final AttributeType formOfOwnershipAttributeType = apartmentCardStrategy.getEntity().getAttributeType(FORM_OF_OWNERSHIP);
 
         WebMarkupContainer formOfOwnershipContainer = new WebMarkupContainer("formOfOwnershipContainer");
 

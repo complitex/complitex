@@ -59,10 +59,10 @@ CREATE TABLE `tarif_group_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_tarif_group_attribute__tarif_group` FOREIGN KEY (`object_id`) REFERENCES `tarif_group`(`object_id`),
-  CONSTRAINT `fk_tarif_group_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-  REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_tarif_group_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_tarif_group_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+  REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_tarif_group_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+  REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта тарифная группа';
 
 DROP TABLE IF EXISTS `tarif_group_string_culture`;
@@ -130,10 +130,10 @@ CREATE TABLE `tarif_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_tarif_attribute__tarif` FOREIGN KEY (`object_id`) REFERENCES `tarif`(`object_id`),
-  CONSTRAINT `fk_tarif_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-  REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_tarif_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_tarif_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+  REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_tarif_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+  REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта тариф';
 
 DROP TABLE IF EXISTS `tarif_string_culture`;
@@ -201,10 +201,10 @@ CREATE TABLE `heatmeter_type_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_heatmeter_type_attribute__heatmeter_type` FOREIGN KEY (`object_id`) REFERENCES `heatmeter_type`(`object_id`),
-  CONSTRAINT `fk_heatmeter_type_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-  REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_heatmeter_type_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_heatmeter_type_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+  REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_heatmeter_type_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+  REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа теплосчетчика';
 
 DROP TABLE IF EXISTS `heatmeter_type_string_culture`;
@@ -272,10 +272,10 @@ CREATE TABLE `heatmeter_period_type_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_heatmeter_period_type_attribute__heatmeter_period_type` FOREIGN KEY (`object_id`) REFERENCES `heatmeter_period_type`(`object_id`),
-  CONSTRAINT `fk_heatmeter_period_type_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-  REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_heatmeter_period_type_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_heatmeter_period_type_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+  REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_heatmeter_period_type_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+  REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа периода теплосчетчика';
 
 DROP TABLE IF EXISTS `heatmeter_period_type_string_culture`;
@@ -520,10 +520,10 @@ CREATE TABLE `service_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_service_attribute__service` FOREIGN KEY (`object_id`) REFERENCES `service`(`object_id`),
-  CONSTRAINT `fk_service_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-  REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_service_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_service_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+  REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_service_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+  REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты услуги';
 
 DROP TABLE IF EXISTS `service_string_culture`;

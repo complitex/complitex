@@ -24,7 +24,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.converter.*;
+import org.complitex.common.converter.BooleanConverter;
+import org.complitex.common.converter.DateConverter;
 import org.complitex.common.entity.*;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
@@ -40,12 +41,9 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.search.CollapsibleSearchPanel;
 import org.complitex.common.web.component.type.BooleanPanel;
 import org.complitex.common.web.component.type.DatePanel;
-import org.complitex.common.web.component.type.GenderPanel;
 import org.complitex.common.web.component.type.StringPanel;
 
 import javax.ejb.EJB;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -115,12 +113,7 @@ public class DomainObjectListPanel extends Panel {
         content.setOutputMarkupPlaceholderTag(true);
 
         //Example
-        example = getSession().getPreferenceObject(page, PreferenceKey.FILTER_OBJECT, null);
-
-        if (example == null) {
-            example = new DomainObjectFilter();
-            example.setEntityTable(entity);
-        }
+        example = getSession().getPreferenceObject(page, PreferenceKey.FILTER_OBJECT, new DomainObjectFilter(entity));
 
         //Search
         final List<String> searchFilters = getStrategy().getSearchFilters();
@@ -134,9 +127,10 @@ public class DomainObjectListPanel extends Panel {
         searchPanel.initialize();
 
         //Column List
-        final List<EntityAttributeType> listAttributeTypes = getStrategy().getListColumns();
-        for (EntityAttributeType eat : listAttributeTypes) {
-            example.addAttributeExample(new AttributeFilter(eat.getId()));
+        final List<AttributeType> listAttributeTypes = getStrategy().getListColumns();
+
+        for (AttributeType eat : listAttributeTypes) {
+            example.addAttributeFilter(new AttributeFilter(eat.getId()));
         }
 
         //Configure example from component state session
@@ -172,8 +166,7 @@ public class DomainObjectListPanel extends Panel {
                 getSession().storeGlobalSearchComponentState();
 
                 if (!Strings.isEmpty(getSort().getProperty())) {
-                    Long sortProperty = Long.valueOf(getSort().getProperty());
-                    example.setOrderByAttributeTypeId(sortProperty);
+                    example.setOrderByAttributeTypeId(Long.valueOf(getSort().getProperty()));
                 }
 
                 example.setStatus(showModeModel.getObject().name());
@@ -181,6 +174,7 @@ public class DomainObjectListPanel extends Panel {
                 example.setAsc(getSort().isAscending());
                 example.setFirst(first);
                 example.setCount(count);
+
                 return getStrategy().getList(example);
             }
 
@@ -188,6 +182,7 @@ public class DomainObjectListPanel extends Panel {
             public Long getSize() {
                 example.setStatus(showModeModel.getObject().name());
                 example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
+
                 return getStrategy().getCount(example);
             }
         };
@@ -203,12 +198,12 @@ public class DomainObjectListPanel extends Panel {
             protected void populateItem(Item<DomainObject> item) {
                 DomainObject object = item.getModelObject();
 
-                item.add(new Radio<>("radio", item.getModel()));
+                item.add(new Radio<>("radio", item.getModel()).setVisible(radioSelect));
 
                 item.add(new Label("order", Model.of(object.getObjectId())));
 
-                final Map<Attribute, EntityAttributeType> attrToTypeMap = Maps.newLinkedHashMap();
-                for (EntityAttributeType attrType : listAttributeTypes) {
+                final Map<Attribute, AttributeType> attrToTypeMap = Maps.newLinkedHashMap();
+                for (AttributeType attrType : listAttributeTypes) {
                     Attribute attr = object.getAttribute(attrType.getId());
                     if (attr == null) {
                         attr = new Attribute();
@@ -221,51 +216,7 @@ public class DomainObjectListPanel extends Panel {
 
                     @Override
                     protected void populateItem(ListItem<Attribute> item) {
-                        final Attribute attr = item.getModelObject();
-                        String attributeValue = "";
-                        if (!attr.getAttributeTypeId().equals(-1L)) {
-                            EntityAttributeType attrType = attrToTypeMap.get(attr);
-                            String valueType = attrType.getEntityAttributeValueTypes().get(0).getValueType().toUpperCase();
-
-                            if (SimpleTypes.isSimpleType(valueType)) {
-                                String systemLocaleValue = StringCultures.getSystemStringCulture(attr.getStringCultures()).getValue();
-
-                                switch (SimpleTypes.valueOf(valueType)) {
-                                    case STRING_CULTURE:
-                                        attributeValue = StringCultures.getValue(attr.getStringCultures(), getLocale());
-                                        break;
-                                    case STRING:
-                                        attributeValue = systemLocaleValue;
-                                        break;
-                                    case BIG_STRING:
-                                        if (!Strings.isEmpty(systemLocaleValue)) {
-                                            attributeValue = systemLocaleValue.substring(0, SimpleTypes.BIG_STRING_VIEW_LENGTH);
-                                        }
-                                        break;
-                                    case DOUBLE:
-                                        attributeValue = new DoubleConverter().toObject(systemLocaleValue).toString();
-                                        break;
-                                    case INTEGER:
-                                        attributeValue = new IntegerConverter().toObject(systemLocaleValue).toString();
-                                        break;
-                                    case BOOLEAN:
-                                        attributeValue = BooleanPanel.display(new BooleanConverter().toObject(systemLocaleValue), getLocale());
-                                        break;
-                                    case DATE:
-                                    case DATE2:
-                                    case MASKED_DATE:
-                                        DateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy", getLocale());
-                                        attributeValue = dateFormatter.format(new DateConverter().toObject(systemLocaleValue));
-                                        break;
-                                    case GENDER:
-                                        attributeValue = GenderPanel.display(new GenderConverter().toObject(systemLocaleValue), getLocale());
-                                        break;
-                                }
-                            }else{
-                                attributeValue = getStrategy().displayAttribute(attr, getLocale());
-                            }
-                        }
-                        item.add(new Label("dataColumn", attributeValue));
+                        item.add(new Label("dataColumn", getStrategy().displayAttribute(item.getModelObject(), getLocale())));
                     }
                 };
                 item.add(dataColumns);
@@ -289,11 +240,11 @@ public class DomainObjectListPanel extends Panel {
         radioGroup.add(dataView);
 
         //Filter Form Columns
-        ListView<EntityAttributeType> columns = new ListView<EntityAttributeType>("columns", listAttributeTypes) {
+        ListView<AttributeType> columns = new ListView<AttributeType>("columns", listAttributeTypes) {
 
             @Override
-            protected void populateItem(ListItem<EntityAttributeType> item) {
-                final EntityAttributeType attributeType = item.getModelObject();
+            protected void populateItem(ListItem<AttributeType> item) {
+                final AttributeType attributeType = item.getModelObject();
                 ArrowOrderByBorder column = new ArrowOrderByBorder("column", String.valueOf(attributeType.getId()),
                         dataProvider, dataView, content);
                 column.add(new Label("columnName", new AbstractReadOnlyModel<String>() {
@@ -311,11 +262,11 @@ public class DomainObjectListPanel extends Panel {
         filterForm.add(columns);
 
         //Filters
-        ListView<EntityAttributeType> filters = new ListView<EntityAttributeType>("filters", listAttributeTypes) {
+        ListView<AttributeType> filters = new ListView<AttributeType>("filters", listAttributeTypes) {
 
             @Override
-            protected void populateItem(ListItem<EntityAttributeType> item) {
-                EntityAttributeType attributeType = item.getModelObject();
+            protected void populateItem(ListItem<AttributeType> item) {
+                AttributeType attributeType = item.getModelObject();
                 final AttributeFilter attributeFilter = example.getAttributeExample(attributeType.getId());
 
                 final IModel<String> filterModel = new Model<String>() {
@@ -335,7 +286,7 @@ public class DomainObjectListPanel extends Panel {
 
                 Component filter = new StringPanel("filter", Model.of(""), false, null, true);
 
-                String name = attributeType.getEntityAttributeValueTypes().get(0).getValueType().toUpperCase();
+                String name = attributeType.getAttributeValueTypes().get(0).getValueType().toUpperCase();
 
                 if (SimpleTypes.isSimpleType(name)) {
                     switch (SimpleTypes.valueOf(name)) {
@@ -426,17 +377,18 @@ public class DomainObjectListPanel extends Panel {
         filterForm.add(filters);
 
         //Reset Action
-        AjaxLink<Void> reset = new AjaxLink<Void>("reset") {
+        AjaxLink reset = new AjaxLink("reset") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 filterForm.clearInput();
 
                 example.setObjectId(null);
-                for (EntityAttributeType attrType : listAttributeTypes) {
+                for (AttributeType attrType : listAttributeTypes) {
                     AttributeFilter attrExample = example.getAttributeExample(attrType.getId());
                     attrExample.setValue(null);
                 }
+
                 target.add(content);
             }
         };

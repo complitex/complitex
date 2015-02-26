@@ -92,12 +92,12 @@ public class EntityDescriptionPanel extends Panel {
             }
         }));
 
-        ListView<EntityAttributeType> attributes = new AjaxRemovableListView<EntityAttributeType>("attributes", description.getEntityAttributeTypes()) {
+        ListView<AttributeType> attributes = new AjaxRemovableListView<AttributeType>("attributes", description.getAttributeTypes()) {
 
             @Override
-            protected void populateItem(ListItem<EntityAttributeType> item) {
-                final EntityAttributeType attributeType = item.getModelObject();
-                final List<EntityAttributeValueType> valueTypes = attributeType.getEntityAttributeValueTypes();
+            protected void populateItem(ListItem<AttributeType> item) {
+                final AttributeType attributeType = item.getModelObject();
+                final List<AttributeValueType> valueTypes = attributeType.getAttributeValueTypes();
 
                 WebMarkupContainer valueTypesContainer = new WebMarkupContainer("valueTypesContainer");
                 item.add(valueTypesContainer);
@@ -113,7 +113,7 @@ public class EntityDescriptionPanel extends Panel {
                 item.add(valueType);
 
                 DropDownChoice<String> valueTypeSelect = new DropDownChoice<String>("valueTypeSelect",
-                        new PropertyModel<String>(attributeType.getEntityAttributeValueTypes().get(0), "valueType"), supportedValueTypes);
+                        new PropertyModel<String>(attributeType.getAttributeValueTypes().get(0), "valueType"), supportedValueTypes);
                 valueTypeSelect.setRequired(true);
                 valueTypeSelect.setLabel(new ResourceModel("attribute_value_type"));
                 valueTypeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -176,7 +176,7 @@ public class EntityDescriptionPanel extends Panel {
                         valueTypesContainer.setVisible(false);
                     } else {
                         valueType.setVisible(false);
-                        for (final EntityAttributeValueType currentValueType : valueTypes) {
+                        for (final AttributeValueType currentValueType : valueTypes) {
                             valueTypeItem.add(new Label(String.valueOf(currentValueType.getId()), new AbstractReadOnlyModel<String>() {
 
                                 @Override
@@ -208,9 +208,9 @@ public class EntityDescriptionPanel extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                EntityAttributeType attributeType = entityBean.newAttributeType();
-                attributeType.getEntityAttributeValueTypes().add(new EntityAttributeValueType());
-                description.getEntityAttributeTypes().add(attributeType);
+                AttributeType attributeType = entityBean.newAttributeType();
+                attributeType.getAttributeValueTypes().add(new AttributeValueType());
+                description.getAttributeTypes().add(attributeType);
                 target.add(attributesContainer);
             }
         };

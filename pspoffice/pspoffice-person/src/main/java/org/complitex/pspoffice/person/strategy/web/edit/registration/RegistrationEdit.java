@@ -172,7 +172,7 @@ public class RegistrationEdit extends FormTemplatePage {
 
         //person
         WebMarkupContainer personContainer = new WebMarkupContainer("personContainer");
-        final EntityAttributeType personAttributeType = ENTITY.getAttributeType(PERSON);
+        final AttributeType personAttributeType = ENTITY.getAttributeType(PERSON);
         personContainer.add(new WebMarkupContainer("required").setVisible(personAttributeType.isMandatory()));
 
         PersonPicker person = new PersonPicker("person", PersonAgeType.ANY, new PropertyModel<Person>(newRegistration, "person"),
@@ -229,18 +229,18 @@ public class RegistrationEdit extends FormTemplatePage {
         form.add(initOwnerRelationship());
 
         //user attributes:
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getEntityAttributeTypes(),
-                new Predicate<EntityAttributeType>() {
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributeTypes(),
+                new Predicate<AttributeType>() {
 
                     @Override
-                    public boolean apply(EntityAttributeType attributeType) {
+                    public boolean apply(AttributeType attributeType) {
                         return !attributeType.isSystem();
                     }
                 }),
-                new Function<EntityAttributeType, Long>() {
+                new Function<AttributeType, Long>() {
 
                     @Override
-                    public Long apply(EntityAttributeType attributeType) {
+                    public Long apply(AttributeType attributeType) {
                         return attributeType.getId();
                     }
                 }));
@@ -344,7 +344,7 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private Component initOwnerRelationship() {
-        final EntityAttributeType ownerRelationshipAttributeType = registrationStrategy.getEntity().getAttributeType(OWNER_RELATIONSHIP);
+        final AttributeType ownerRelationshipAttributeType = registrationStrategy.getEntity().getAttributeType(OWNER_RELATIONSHIP);
 
         WebMarkupContainer ownerRelationshipContainer = new WebMarkupContainer("ownerRelationshipContainer");
 
@@ -395,7 +395,7 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private Component initRegistrationType() {
-        final EntityAttributeType registrationTypeAttributeType = registrationStrategy.getEntity().getAttributeType(REGISTRATION_TYPE);
+        final AttributeType registrationTypeAttributeType = registrationStrategy.getEntity().getAttributeType(REGISTRATION_TYPE);
 
         WebMarkupContainer registrationTypeContainer = new WebMarkupContainer("registrationTypeContainer");
 
@@ -451,7 +451,7 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private void initAttributeInput(MarkupContainer parent, long attributeTypeId, boolean showIfMissing) {
-        final EntityAttributeType attributeType = registrationStrategy.getEntity().getAttributeType(attributeTypeId);
+        final AttributeType attributeType = registrationStrategy.getEntity().getAttributeType(attributeTypeId);
 
         //label
         parent.add(new Label("label", labelModel(attributeType.getAttributeNames(), getLocale())));

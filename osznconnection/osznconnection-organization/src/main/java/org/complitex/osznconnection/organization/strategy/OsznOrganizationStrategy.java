@@ -4,8 +4,8 @@ import com.google.common.collect.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.EntityAttributeType;
 import org.complitex.common.entity.StringCulture;
 import org.complitex.common.exception.DeleteException;
 import org.complitex.common.strategy.StringCultureBean;
@@ -202,9 +202,9 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
     }
 
     @Override
-    public boolean isSimpleAttributeType(EntityAttributeType entityAttributeType) {
-        return !CUSTOM_ATTRIBUTE_TYPES.contains(entityAttributeType.getId())
-                && super.isSimpleAttributeType(entityAttributeType);
+    public boolean isSimpleAttributeType(AttributeType attributeType) {
+        return !CUSTOM_ATTRIBUTE_TYPES.contains(attributeType.getId())
+                && super.isSimpleAttributeType(attributeType);
     }
 
     @Override

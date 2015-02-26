@@ -58,10 +58,10 @@ CREATE TABLE `ownership_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_ownership_attribute__ownership` FOREIGN KEY (`object_id`) REFERENCES `ownership`(`object_id`),
-  CONSTRAINT `fk_ownership_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_ownership_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_ownership_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_ownership_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта формы собственности';
 
 DROP TABLE IF EXISTS `ownership_string_culture`;
@@ -129,10 +129,10 @@ CREATE TABLE `privilege_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_privilege_attribute__privilege` FOREIGN KEY (`object_id`) REFERENCES `privilege`(`object_id`),
-  CONSTRAINT `fk_privilege_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_privilege_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_privilege_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_privilege_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта привилегии';
 
 DROP TABLE IF EXISTS `privilege_string_culture`;
@@ -1107,10 +1107,10 @@ CREATE TABLE `service_provider_type_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_service_provider_type_attribute__privilege` FOREIGN KEY (`object_id`) REFERENCES `privilege`(`object_id`),
-  CONSTRAINT `fk_service_provider_type_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_service_provider_type_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_service_provider_type_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_service_provider_type_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта типа поставщика услуг';
 
 DROP TABLE IF EXISTS `service_provider_type_string_culture`;

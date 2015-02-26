@@ -275,8 +275,8 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
 
     private DomainObjectFilter newExample(long organizationTypeId) {
         DomainObjectFilter e = new DomainObjectFilter();
-        e.addAttributeExample(new AttributeFilter(NAME));
-        e.addAttributeExample(new AttributeFilter(KeConnectionOrganizationStrategy.CODE));
+        e.addAttributeFilter(new AttributeFilter(NAME));
+        e.addAttributeFilter(new AttributeFilter(KeConnectionOrganizationStrategy.CODE));
         e.addAdditionalParam(KeConnectionOrganizationStrategy.ORGANIZATION_TYPE_PARAMETER,
                 ImmutableList.of(organizationTypeId));
         return e;

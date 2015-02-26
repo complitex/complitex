@@ -33,9 +33,9 @@ CREATE TABLE `entity` (
   CONSTRAINT `fk_entity__string_culture` FOREIGN KEY (`entity_name_id`) REFERENCES `string_culture` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Сущность';
 
-DROP TABLE IF EXISTS `entity_attribute_type`;
+DROP TABLE IF EXISTS `attribute_type`;
 
-CREATE TABLE `entity_attribute_type` (
+CREATE TABLE `attribute_type` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор типа атрибута',
   `entity_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор сущности',
   `mandatory` TINYINT(1) default 0 NOT NULL COMMENT 'Является ли атрибут обязательным',
@@ -46,19 +46,19 @@ CREATE TABLE `entity_attribute_type` (
   PRIMARY KEY (`id`),
   KEY `key_entity_id` (`entity_id`),
   KEY `key_attribute_type_name_id` (`attribute_type_name_id`),
-  CONSTRAINT `fk_entity_attribute_type__entity` FOREIGN KEY (`entity_id`) REFERENCES `entity` (`id`),
-  CONSTRAINT `fk_entity_attribute_type__string_culture` FOREIGN KEY (`attribute_type_name_id`) REFERENCES `string_culture` (`id`)
+  CONSTRAINT `fk_attribute_type__entity` FOREIGN KEY (`entity_id`) REFERENCES `entity` (`id`),
+  CONSTRAINT `fk_attribute_type__string_culture` FOREIGN KEY (`attribute_type_name_id`) REFERENCES `string_culture` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Тип атрибута сущности';
 
-DROP TABLE IF EXISTS `entity_attribute_value_type`;
+DROP TABLE IF EXISTS `attribute_value_type`;
 
-CREATE TABLE `entity_attribute_value_type` (
+CREATE TABLE `attribute_value_type` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор типа значения атрибута',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута',
   `attribute_value_type` VARCHAR(100) NOT NULL COMMENT 'Тип значения атрибута',
   PRIMARY KEY  (`id`),
   KEY `key_attribute_type_id` (`attribute_type_id`),
-  CONSTRAINT `fk_entity_attribute_value_type` FOREIGN KEY (`attribute_type_id`) REFERENCES `entity_attribute_type` (`id`)
+  CONSTRAINT `fk_attribute_value_type` FOREIGN KEY (`attribute_type_id`) REFERENCES `attribute_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Тип значения атрибута';
 
 /* Entities */
@@ -114,10 +114,10 @@ CREATE TABLE `apartment_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_apartment_attribute__apartment` FOREIGN KEY (`object_id`) REFERENCES `apartment`(`object_id`),
-  CONSTRAINT `fk_apartment_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_apartment_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_apartment_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_apartment_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты квартиры';
 
 DROP TABLE IF EXISTS `apartment_string_culture`;
@@ -185,10 +185,10 @@ CREATE TABLE `room_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_room_attribute__room` FOREIGN KEY (`object_id`) REFERENCES `room`(`object_id`),
-  CONSTRAINT `fk_room_attribute__entity_attribute_type`
-    FOREIGN KEY (`attribute_type_id`) REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_room_attribute__entity_attribute_value_type`
-    FOREIGN KEY (`value_type_id`) REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_room_attribute__attribute_type`
+    FOREIGN KEY (`attribute_type_id`) REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_room_attribute__attribute_value_type`
+    FOREIGN KEY (`value_type_id`) REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты комнаты';
 
 DROP TABLE IF EXISTS `room_string_culture`;
@@ -256,10 +256,10 @@ CREATE TABLE `street_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_street_attribute__street` FOREIGN KEY (`object_id`) REFERENCES `street`(`object_id`),
-  CONSTRAINT `fk_street_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_street_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_street_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_street_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты улицы';
 
 DROP TABLE IF EXISTS `street_string_culture`;
@@ -328,10 +328,10 @@ CREATE TABLE `street_type_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_street_type_attribute__street_type` FOREIGN KEY (`object_id`) REFERENCES `street_type`(`object_id`),
-  CONSTRAINT `fk_street_type_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_street_type_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_street_type_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_street_type_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа улицы';
 
 DROP TABLE IF EXISTS `street_type_string_culture`;
@@ -399,10 +399,10 @@ CREATE TABLE `city_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_city_attribute__city` FOREIGN KEY (`object_id`) REFERENCES `city`(`object_id`),
-  CONSTRAINT `fk_city_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_city_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_city_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_city_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты населенного пункта';
 
 DROP TABLE IF EXISTS `city_string_culture`;
@@ -471,10 +471,10 @@ CREATE TABLE `city_type_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_city_type_attribute__city_type` FOREIGN KEY (`object_id`) REFERENCES `city_type`(`object_id`),
-  CONSTRAINT `fk_city_type_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_city_type_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_city_type_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_city_type_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа населенного пункта';
 
 DROP TABLE IF EXISTS `city_type_string_culture`;
@@ -542,10 +542,10 @@ CREATE TABLE `building_address_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_building_address_attribute__building_address` FOREIGN KEY (`object_id`) REFERENCES `building_address`(`object_id`),
-  CONSTRAINT `fk_building_address_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_building_address_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_building_address_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_building_address_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты адреса дома';
 
 DROP TABLE IF EXISTS `building_address_string_culture`;
@@ -613,10 +613,10 @@ CREATE TABLE `building_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_building_attribute__building` FOREIGN KEY (`object_id`) REFERENCES `building`(`object_id`),
-  CONSTRAINT `fk_building_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_building_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_building_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_building_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты дома';
 
 DROP TABLE IF EXISTS `building_string_culture`;
@@ -684,10 +684,10 @@ CREATE TABLE `district_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_district_attribute__district` FOREIGN KEY (`object_id`) REFERENCES `district`(`object_id`),
-  CONSTRAINT `fk_district_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_district_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_district_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_district_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты района';
 
 DROP TABLE IF EXISTS `district_string_culture`;
@@ -755,10 +755,10 @@ CREATE TABLE `region_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_region_attribute__region` FOREIGN KEY (`object_id`) REFERENCES `region`(`object_id`),
-  CONSTRAINT `fk_region_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_region_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_region_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_region_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты региона';
 
 DROP TABLE IF EXISTS `region_string_culture`;
@@ -826,10 +826,10 @@ CREATE TABLE `country_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_country_attribute__country` FOREIGN KEY (`object_id`) REFERENCES `country`(`object_id`),
-  CONSTRAINT `fk_country_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_country_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_country_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_country_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты страны';
 
 DROP TABLE IF EXISTS `country_string_culture`;
@@ -897,10 +897,10 @@ CREATE TABLE `organization_type_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_organization_type_attribute__organization` FOREIGN KEY (`object_id`) REFERENCES `organization_type`(`object_id`),
-  CONSTRAINT `fk_organization_type_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_organization_type_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_organization_type_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_organization_type_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа организации';
 
 DROP TABLE IF EXISTS `organization_type_string_culture`;
@@ -968,10 +968,10 @@ CREATE TABLE `organization_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_organization_attribute__organization` FOREIGN KEY (`object_id`) REFERENCES `organization`(`object_id`),
-  CONSTRAINT `fk_organization_attribute__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_organization_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_organization_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_organization_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты организации';
 
 DROP TABLE IF EXISTS `organization_string_culture`;
@@ -1040,10 +1040,10 @@ CREATE TABLE `user_info_attribute` (
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_user_info__user_info` FOREIGN KEY (`object_id`) REFERENCES `user_info`(`object_id`),
-  CONSTRAINT `fk_user_info__entity_attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `entity_attribute_type` (`id`),
-  CONSTRAINT `fk_user_info__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_attribute_value_type` (`id`)
+  CONSTRAINT `fk_user_info__attribute_type` FOREIGN KEY (`attribute_type_id`)
+    REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_user_info__attribute_value_type` FOREIGN KEY (`value_type_id`)
+    REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты информации о пользователе';
 
 DROP TABLE IF EXISTS `user_info_string_culture`;
