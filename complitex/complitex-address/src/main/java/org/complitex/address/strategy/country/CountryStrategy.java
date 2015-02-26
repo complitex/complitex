@@ -33,7 +33,7 @@ public class CountryStrategy extends TemplateStrategy {
     public static final long NAME = 800L;
 
     @Override
-    public List<Long> getListAttributeTypes() {
+    public List<Long> getColumnAttributeTypeIds() {
         return Lists.newArrayList(NAME);
     }
 

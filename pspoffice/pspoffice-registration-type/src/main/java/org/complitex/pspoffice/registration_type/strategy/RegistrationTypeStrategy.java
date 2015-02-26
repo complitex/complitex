@@ -44,7 +44,7 @@ public class RegistrationTypeStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<Long> getListAttributeTypes() {
+    public List<Long> getColumnAttributeTypeIds() {
         return newArrayList(NAME);
     }
 

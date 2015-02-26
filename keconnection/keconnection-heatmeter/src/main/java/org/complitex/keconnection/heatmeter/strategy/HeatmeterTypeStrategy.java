@@ -48,7 +48,7 @@ public class HeatmeterTypeStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<Long> getListAttributeTypes() {
+    public List<Long> getColumnAttributeTypeIds() {
         return Lists.newArrayList(NAME);
     }
 

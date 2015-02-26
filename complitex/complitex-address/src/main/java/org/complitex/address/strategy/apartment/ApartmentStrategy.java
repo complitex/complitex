@@ -46,7 +46,7 @@ public class ApartmentStrategy extends TemplateStrategy {
 
 
     @Override
-    public List<Long> getListAttributeTypes() {
+    public List<Long> getColumnAttributeTypeIds() {
         return Lists.newArrayList(NAME);
     }
 

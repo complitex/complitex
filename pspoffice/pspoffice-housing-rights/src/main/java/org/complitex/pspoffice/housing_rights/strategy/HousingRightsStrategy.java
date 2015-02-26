@@ -39,7 +39,7 @@ public class HousingRightsStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<Long> getListAttributeTypes() {
+    public List<Long> getColumnAttributeTypeIds() {
         return newArrayList(NAME, CODE);
     }
 

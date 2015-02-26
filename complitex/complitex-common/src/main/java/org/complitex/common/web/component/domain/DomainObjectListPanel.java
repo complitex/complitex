@@ -1,7 +1,5 @@
 package org.complitex.common.web.component.domain;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -127,9 +125,9 @@ public class DomainObjectListPanel extends Panel {
         searchPanel.initialize();
 
         //Column List
-        final List<AttributeType> listAttributeTypes = entityBean.getEntity(getStrategy().getEntityName()).getAttributeTypes();
+        final List<AttributeType> columnAttributeTypes = entityBean.getAttributeTypes(getStrategy().getColumnAttributeTypeIds());
 
-        for (AttributeType eat : listAttributeTypes) {
+        for (AttributeType eat : columnAttributeTypes) {
             example.addAttributeFilter(new AttributeFilter(eat.getId()));
         }
 
@@ -189,7 +187,7 @@ public class DomainObjectListPanel extends Panel {
         dataProvider.setSort(String.valueOf(getStrategy().getDefaultSortAttributeTypeId()), SortOrder.ASCENDING);
 
         //Data View
-        final RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup", new Model<DomainObject>());
+        final RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup", new Model<>());
         filterForm.add(radioGroup);
 
         dataView = new DataView<DomainObject>("data", dataProvider, 1) {
@@ -199,24 +197,13 @@ public class DomainObjectListPanel extends Panel {
                 DomainObject object = item.getModelObject();
 
                 item.add(new Radio<>("radio", item.getModel()).setVisible(radioSelect));
-
                 item.add(new Label("order", Model.of(object.getObjectId())));
 
-                final Map<Attribute, AttributeType> attrToTypeMap = Maps.newLinkedHashMap();
-                for (AttributeType attrType : listAttributeTypes) {
-                    Attribute attr = object.getAttribute(attrType.getId());
-                    if (attr == null) {
-                        attr = new Attribute();
-                        attr.setAttributeTypeId(-1L);
-                    }
-                    attrToTypeMap.put(attr, attrType);
-                }
-
-                ListView<Attribute> dataColumns = new ListView<Attribute>("dataColumns", Lists.newArrayList(attrToTypeMap.keySet())) {
-
+                ListView<AttributeType> dataColumns = new ListView<AttributeType>("dataColumns", columnAttributeTypes) {
                     @Override
-                    protected void populateItem(ListItem<Attribute> item) {
-                        item.add(new Label("dataColumn", getStrategy().displayAttribute(item.getModelObject(), getLocale())));
+                    protected void populateItem(ListItem<AttributeType> item) {
+                        item.add(new Label("dataColumn", getStrategy().displayAttribute(
+                                object.getAttribute(item.getModelObject().getId()), getLocale())));
                     }
                 };
                 item.add(dataColumns);
@@ -240,7 +227,7 @@ public class DomainObjectListPanel extends Panel {
         radioGroup.add(dataView);
 
         //Filter Form Columns
-        ListView<AttributeType> columns = new ListView<AttributeType>("columns", listAttributeTypes) {
+        ListView<AttributeType> columns = new ListView<AttributeType>("columns", columnAttributeTypes) {
 
             @Override
             protected void populateItem(ListItem<AttributeType> item) {
@@ -262,7 +249,7 @@ public class DomainObjectListPanel extends Panel {
         filterForm.add(columns);
 
         //Filters
-        ListView<AttributeType> filters = new ListView<AttributeType>("filters", listAttributeTypes) {
+        ListView<AttributeType> filters = new ListView<AttributeType>("filters", columnAttributeTypes) {
 
             @Override
             protected void populateItem(ListItem<AttributeType> item) {
@@ -384,7 +371,7 @@ public class DomainObjectListPanel extends Panel {
                 filterForm.clearInput();
 
                 example.setObjectId(null);
-                for (AttributeType attrType : listAttributeTypes) {
+                for (AttributeType attrType : columnAttributeTypes) {
                     AttributeFilter attrExample = example.getAttributeExample(attrType.getId());
                     attrExample.setValue(null);
                 }

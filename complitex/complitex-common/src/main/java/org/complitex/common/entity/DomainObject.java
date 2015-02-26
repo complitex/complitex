@@ -43,7 +43,9 @@ public class DomainObject implements ILongId {
     }
 
     public void addAttribute(Attribute attribute) {
-        attributes.add(attribute);
+        if (attribute != null) {
+            attributes.add(attribute);
+        }
     }
 
     public Attribute getAttribute(Long attributeTypeId) {

@@ -56,7 +56,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     private static final String MODULE_INSTANCE_NS = ModuleInstanceStrategy.class.getName();
 
     @Override
-    public List<Long> getListAttributeTypes() {
+    public List<Long> getColumnAttributeTypeIds() {
         return Lists.newArrayList(NAME, UNIQUE_INDEX);
     }
 

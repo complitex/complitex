@@ -5,7 +5,6 @@ import com.google.common.collect.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.Module;
 import org.complitex.address.resource.CommonResources;
@@ -14,7 +13,6 @@ import org.complitex.address.strategy.building.entity.BuildingCode;
 import org.complitex.address.strategy.building.web.edit.BuildingEdit;
 import org.complitex.address.strategy.building.web.edit.BuildingEditComponent;
 import org.complitex.address.strategy.building.web.edit.BuildingValidator;
-import org.complitex.address.strategy.building.web.list.BuildingList;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.common.entity.*;
 import org.complitex.common.exception.DeleteException;
@@ -27,6 +25,7 @@ import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.DomainObjectEditPanel;
+import org.complitex.common.web.component.domain.DomainObjectListPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.template.strategy.TemplateStrategy;
@@ -37,6 +36,7 @@ import javax.ejb.Stateless;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.complitex.common.util.StringUtil.removeWhiteSpaces;
 import static org.complitex.common.util.StringUtil.toCyrillic;
@@ -101,6 +101,11 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     @Override
+    public List<Long> getColumnAttributeTypeIds() {
+        return Arrays.asList(BuildingAddressStrategy.NUMBER, BuildingAddressStrategy.CORP, BuildingAddressStrategy.STRUCTURE);
+    }
+
+    @Override
     public List<Building> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
@@ -148,10 +153,17 @@ public class BuildingStrategy extends TemplateStrategy {
 
                 if (result.size() == 1) {
                     Building building = result.get(0);
-                    building.setAccompaniedAddress(address);
+
                     loadAttributes(building);
-                    //load subject ids
+
+                    //link address
+                    building.setAccompaniedAddress(address);
+                    building.addAttribute(address.getAttribute(BuildingAddressStrategy.NUMBER));
+                    building.addAttribute(address.getAttribute(BuildingAddressStrategy.CORP));
+                    building.addAttribute(address.getAttribute(BuildingAddressStrategy.STRUCTURE));
+
                     building.setSubjectIds(loadSubjects(building.getPermissionId()));
+
                     buildings.add(building);
                 } else {
                     if (result.isEmpty()) {
@@ -246,7 +258,6 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     @Override
-
     public Building getDomainObject(Long id, boolean runAsAdmin) {
         DomainObjectFilter example = new DomainObjectFilter(id, getEntityName());
 
@@ -309,24 +320,6 @@ public class BuildingStrategy extends TemplateStrategy {
         }
     }
 
-    private void configureExampleImpl(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
-        if (!Strings.isEmpty(searchTextInput)) {
-            example.addAdditionalParam("number", searchTextInput);
-        }
-        Long streetId = ids.get("street");
-        if (streetId != null && streetId > 0) {
-            example.addAdditionalParam(STREET, streetId);
-        } else {
-            example.addAdditionalParam(STREET, null);
-            Long cityId = ids.get("city");
-            if (cityId != null && cityId > 0) {
-                example.addAdditionalParam(CITY, cityId);
-            } else {
-                example.addAdditionalParam(CITY, null);
-            }
-        }
-    }
-
     @Override
     public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
@@ -350,8 +343,9 @@ public class BuildingStrategy extends TemplateStrategy {
 
         @Override
         public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
-            BuildingList list = component.findParent(BuildingList.class);
+            DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
 
+            assert list != null;
             DomainObjectFilter example = list.getExample();
 
             Long streetId = ids.get("street");
@@ -394,16 +388,6 @@ public class BuildingStrategy extends TemplateStrategy {
     @Override
     public Class<? extends AbstractComplexAttributesPanel> getComplexAttributesPanelAfterClass() {
         return BuildingEditComponent.class;
-    }
-
-    @Override
-    public Class<? extends WebPage> getListPage() {
-        return BuildingList.class;
-    }
-
-    @Override
-    public PageParameters getListPageParams() {
-        return new PageParameters();
     }
 
     @Override
@@ -680,7 +664,6 @@ public class BuildingStrategy extends TemplateStrategy {
         return building;
     }
 
-
     @Override
     protected void changeActivity(DomainObject object, boolean enable) {
         super.changeActivity(object, enable);
@@ -771,9 +754,7 @@ public class BuildingStrategy extends TemplateStrategy {
     public List<BuildingCode> loadBuildingCodes(Building building) {
         List<Attribute> buildingCodeAttributes = building.getAttributes(BUILDING_CODE);
         Set<Long> buildingCodeIds = Sets.newHashSet();
-        for (Attribute associationAttribute : buildingCodeAttributes) {
-            buildingCodeIds.add(associationAttribute.getValueId());
-        }
+        buildingCodeIds.addAll(buildingCodeAttributes.stream().map(Attribute::getValueId).collect(Collectors.toList()));
 
         List<BuildingCode> buildingCodes = new ArrayList<>();
         if (!buildingCodeIds.isEmpty()) {
@@ -834,7 +815,6 @@ public class BuildingStrategy extends TemplateStrategy {
 
         return a;
     }
-
 
     private void saveBuildingCode(BuildingCode buildingCode) {
         sqlSession().insert(BUILDING_NS + ".insertBuildingCode", buildingCode);

@@ -81,7 +81,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     @Override
-    public boolean isSimpleAttribute(final Attribute attribute) {
+    public boolean isSimpleAttribute(Attribute attribute) {
         AttributeType attributeType = getEntity().getAttributeType(attribute.getAttributeTypeId());
 
         return attributeType != null && isSimpleAttributeType(attributeType);
@@ -814,14 +814,14 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
      */
     @Override
     public Long getDefaultSortAttributeTypeId() {
-        return Collections.min(getListAttributeTypes());
+        return Collections.min(getColumnAttributeTypeIds());
     }
 
     /**
      *
      * @return Сортированный список идентификаторов атрибутов, которые должны выводиться в качестве колонок на странице записей.
      */
-    public List<Long> getListAttributeTypes() {
+    public List<Long> getColumnAttributeTypeIds() {
         return getEntity().getAttributeTypes().stream().map(AttributeType::getId).collect(Collectors.toList());
     }
 
@@ -1217,10 +1217,13 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
-        Entity entity = entityBean.getEntity(getEntityName());
+        if (attribute == null){
+            return "";
+        }
 
-        switch (entity.getAttributeType(attribute.getAttributeTypeId()).getAttributeValueTypes().get(0)
-                .getValueType().toUpperCase()) {
+        AttributeType attributeType = entityBean.getAttributeType(attribute.getAttributeTypeId());
+
+        switch (attributeType.getAttributeValueTypes().get(0).getValueType().toUpperCase()) {
             case "STRING_CULTURE":
                 return attribute.getStringValue(locale);
             case "STRING":

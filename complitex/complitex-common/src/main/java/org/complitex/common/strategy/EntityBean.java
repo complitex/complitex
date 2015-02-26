@@ -60,6 +60,10 @@ public class EntityBean extends AbstractBean {
         return attributeTypes;
     }
 
+    public AttributeType getAttributeType(Long attributeTypeId){
+        return attributeTypeMap.get(attributeTypeId);
+    }
+
     private Entity loadFromDb(String dataSource, String entity) {
         return (Entity) (dataSource == null ? sqlSession() : sqlSession(dataSource))
                 .selectOne(NS + ".load", ImmutableMap.of("entity", entity));

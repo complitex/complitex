@@ -41,7 +41,7 @@ public class RegionStrategy extends TemplateStrategy {
     public static final long PARENT_ENTITY_ID = 800L;
 
     @Override
-    public List<Long> getListAttributeTypes() {
+    public List<Long> getColumnAttributeTypeIds() {
         return Lists.newArrayList(NAME);
     }
 

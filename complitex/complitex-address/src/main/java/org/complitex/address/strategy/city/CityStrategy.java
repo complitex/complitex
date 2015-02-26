@@ -47,7 +47,7 @@ public class CityStrategy extends TemplateStrategy {
     public static final long PARENT_ENTITY_ID = 700L;
 
     @Override
-    public List<Long> getListAttributeTypes() {
+    public List<Long> getColumnAttributeTypeIds() {
         return Lists.newArrayList(NAME);
     }
 

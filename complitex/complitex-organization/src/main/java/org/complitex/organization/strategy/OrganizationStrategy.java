@@ -50,7 +50,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public List<Long> getListAttributeTypes() {
+    public List<Long> getColumnAttributeTypeIds() {
         return Lists.newArrayList(NAME, CODE, USER_ORGANIZATION_PARENT);
     }
 
