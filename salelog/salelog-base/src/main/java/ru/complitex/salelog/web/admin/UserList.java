@@ -23,6 +23,7 @@ import org.complitex.admin.service.UserBean;
 import org.complitex.admin.service.UserFilter;
 import org.complitex.admin.strategy.UserInfoStrategy;
 import org.complitex.common.entity.*;
+import org.complitex.common.strategy.EntityBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.AttributeColumnsPanel;
@@ -55,6 +56,9 @@ public class UserList extends ScrollListPage {
 
     @EJB
     private UserInfoStrategy userInfoStrategy;
+
+    @EJB
+    private EntityBean entityBean;
 
     @EJB
     private UserBean userBean;
@@ -198,7 +202,7 @@ public class UserList extends ScrollListPage {
         filterForm.add(dataView);
 
         filterForm.add(new ArrowOrderByBorder("header.login", "login", dataProvider, dataView, content));
-        filterForm.add(new AttributeHeadersPanel("header.user_info", userInfoStrategy.getListColumns(),
+        filterForm.add(new AttributeHeadersPanel("header.user_info", entityBean.getEntity(userInfoStrategy.getEntityName()).getAttributeTypes(),
                 dataProvider, dataView, content));
 
         content.add(new PagingNavigator("navigator", dataView, getPreferencesPage(), content));

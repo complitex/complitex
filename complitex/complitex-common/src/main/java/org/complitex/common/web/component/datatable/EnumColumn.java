@@ -19,7 +19,7 @@ public class EnumColumn<T, Y extends Enum<Y>> extends ChoiceFilteredPropertyColu
     private EnumChoiceRenderer<Y> enumChoiceRenderer;
 
     public EnumColumn(IModel<String> displayModel, String propertyExpression, Class<? extends Y> enumClass, Locale locale) {
-        super(displayModel, propertyExpression, new WildcardListModel<>(Arrays.asList(enumClass.getEnumConstants())));
+        super(displayModel, propertyExpression, new WildcardListModel<Y>(Arrays.asList(enumClass.getEnumConstants())));
 
         enumChoiceRenderer = new EnumChoiceRenderer<>(locale);
     }

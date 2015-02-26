@@ -27,10 +27,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.converter.DateConverter;
 import org.complitex.common.entity.*;
-import org.complitex.common.strategy.IStrategy;
-import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.StringCultureBean;
-import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.strategy.*;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.common.web.component.ShowMode;
@@ -58,6 +55,9 @@ public class DomainObjectListPanel extends Panel {
 
     @EJB
     private StringLocaleBean stringLocaleBean;
+
+    @EJB
+    private EntityBean entityBean;
 
     private String entity;
     private String strategyName;
@@ -127,7 +127,7 @@ public class DomainObjectListPanel extends Panel {
         searchPanel.initialize();
 
         //Column List
-        final List<AttributeType> listAttributeTypes = getStrategy().getListColumns();
+        final List<AttributeType> listAttributeTypes = entityBean.getEntity(getStrategy().getEntityName()).getAttributeTypes();
 
         for (AttributeType eat : listAttributeTypes) {
             example.addAttributeFilter(new AttributeFilter(eat.getId()));

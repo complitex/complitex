@@ -76,8 +76,6 @@ public interface IStrategy {
 
     List<Long> getListAttributeTypes();
 
-    List<AttributeType> getListColumns();
-    
     Long getDefaultSortAttributeTypeId();
 
     Class<? extends WebPage> getListPage();

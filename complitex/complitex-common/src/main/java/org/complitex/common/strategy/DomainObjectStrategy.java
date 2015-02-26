@@ -1,10 +1,8 @@
 package org.complitex.common.strategy;
 
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.converter.DateConverter;
 import org.complitex.common.converter.GenderConverter;
@@ -32,6 +30,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class DomainObjectStrategy extends AbstractBean implements IStrategy {
     public final static String NS = DomainObjectStrategy.class.getName();
@@ -823,29 +822,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
      * @return Сортированный список идентификаторов атрибутов, которые должны выводиться в качестве колонок на странице записей.
      */
     public List<Long> getListAttributeTypes() {
-        return Lists.transform(getEntity().getAttributeTypes(), new Function<AttributeType, Long>() {
-
-            @Override
-            public Long apply(AttributeType attributeType) {
-                return attributeType.getId();
-            }
-        });
-    }
-
-    /**
-     *  Используется для отображения в пользовательском интерфейсе
-     * @return Сортированный список метамодели (описания) атрибутов
-     */
-    public List<AttributeType> getListColumns() { //todo move to entity bean
-        Entity entity = getEntity();
-
-        List<AttributeType> list = new ArrayList<>();
-
-        for (Long typeId : getListAttributeTypes()){
-            list.add(entity.getAttributeType(typeId));
-        }
-
-        return list;
+        return getEntity().getAttributeTypes().stream().map(AttributeType::getId).collect(Collectors.toList());
     }
 
     @Override

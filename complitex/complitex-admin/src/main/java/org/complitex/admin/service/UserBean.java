@@ -4,6 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.complitex.admin.strategy.UserInfoStrategy;
 import org.complitex.common.entity.*;
 import org.complitex.common.service.AbstractBean;
+import org.complitex.common.strategy.EntityBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.web.DictionaryFwSession;
 
@@ -20,10 +21,13 @@ import java.util.Map;
  */
 @Stateless
 public class UserBean extends AbstractBean {
-
     public static final String STATEMENT_PREFIX = UserBean.class.getCanonicalName();
+
     @EJB
     private UserInfoStrategy userInfoStrategy;
+
+    @EJB
+    private EntityBean entityBean;
 
     public User newUser() {
         User user = new User();
@@ -224,7 +228,7 @@ public class UserBean extends AbstractBean {
     public UserFilter newUserFilter() {
         UserFilter userFilter = new UserFilter();
 
-        for (AttributeType attributeType : userInfoStrategy.getListColumns()) {
+        for (AttributeType attributeType : entityBean.getEntity(userInfoStrategy.getEntityName()).getAttributeTypes()) {
             userFilter.getAttributeFilters().add(new AttributeFilter(attributeType.getId()));
         }
 
@@ -236,8 +240,8 @@ public class UserBean extends AbstractBean {
             return userInfoStrategy.newInstance().getAttributes();
         }
 
-        List<AttributeType> attributeTypes = userInfoStrategy.getListColumns();
-        List<Attribute> attributeColumns = new ArrayList<Attribute>(attributeTypes.size());
+        List<AttributeType> attributeTypes = entityBean.getEntity(userInfoStrategy.getEntityName()).getAttributeTypes();
+        List<Attribute> attributeColumns = new ArrayList<>(attributeTypes.size());
 
         for (AttributeType attributeType : attributeTypes) {
             for (Attribute attribute : object.getAttributes()) {

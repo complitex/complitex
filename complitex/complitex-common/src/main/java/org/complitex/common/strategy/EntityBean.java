@@ -25,14 +25,20 @@ public class EntityBean extends AbstractBean {
     @EJB
     private StrategyFactory strategyFactory;
 
-    private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
+    private Map<String, Entity> entityMap = new ConcurrentHashMap<>();
+    private Map<Long, AttributeType> attributeTypeMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init(){
         List<String> entities = getEntityNames();
 
         for (String entityName : entities){
-            entityMap.put(entityName, loadFromDb(null, entityName));
+            Entity entity = loadFromDb(null, entityName);
+            entityMap.put(entityName, entity);
+
+            for (AttributeType attributeType : entity.getAttributeTypes()){
+                attributeTypeMap.put(attributeType.getId(), attributeType);
+            }
         }
     }
 
@@ -40,16 +46,18 @@ public class EntityBean extends AbstractBean {
         return loadFromDb(dataSource, entity);
     }
 
-    public Entity getEntity(String entity) {
-        Entity e = entityMap.get(entity);
+    public Entity getEntity(String entityName) {
+        return entityMap.get(entityName);
+    }
 
-        if (e == null) {
-            Entity dbEntity = loadFromDb(null, entity);
-            entityMap.put(entity, dbEntity);
-            e = dbEntity;
+    public List<AttributeType> getAttributeTypes(List<Long> attributeTypeIds){
+        List<AttributeType> attributeTypes = new ArrayList<>(attributeTypeIds.size());
+
+        for (Long attributeTypeId : attributeTypeIds){
+            attributeTypes.add(attributeTypeMap.get(attributeTypeId));
         }
 
-        return e;
+        return attributeTypes;
     }
 
     private Entity loadFromDb(String dataSource, String entity) {
