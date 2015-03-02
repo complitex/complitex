@@ -12,10 +12,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.address.strategy.building.BuildingStrategy;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.web.component.LabelDateField;
 import org.complitex.common.web.component.domain.DomainMultiselectPanel;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.keconnection.heatmeter.entity.ServiceContract;
+import org.complitex.keconnection.heatmeter.entity.ServiceContractBuilding;
 import org.complitex.keconnection.heatmeter.entity.ServiceContractService;
 import org.complitex.keconnection.heatmeter.service.ServiceContractBean;
 import org.complitex.keconnection.heatmeter.strategy.ServiceStrategy;
@@ -25,8 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import java.util.Date;
-import java.util.List;
 
 import static org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER;
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE;
@@ -60,17 +61,32 @@ public class ServiceContractEdit extends FormTemplatePage {
         Form<ServiceContract> form = new Form<>("form", model);
         add(form);
 
-        form.add(new LabelDateField("beginDate", new PropertyModel<Date>(model, "beginDate"), true));
-        form.add(new LabelDateField("endDate", new PropertyModel<Date>(model, "endDate"), true));
+        form.add(new LabelDateField("beginDate", new PropertyModel<>(model, "beginDate"), true));
+        form.add(new LabelDateField("endDate", new PropertyModel<>(model, "endDate"), true));
         form.add(new RequiredTextField<>("number"));
-        form.add(new OrganizationIdPicker("organizationId", new PropertyModel<Long>(model, "organizationId"), SERVICE_PROVIDER));
-        form.add(new OrganizationIdPicker("servicingOrganizationId", new PropertyModel<Long>(model, "servicingOrganizationId"), SERVICING_ORGANIZATION_TYPE));
+        form.add(new OrganizationIdPicker("organizationId", new PropertyModel<>(model, "organizationId"), SERVICE_PROVIDER));
+        form.add(new OrganizationIdPicker("servicingOrganizationId", new PropertyModel<>(model, "servicingOrganizationId"),
+                SERVICING_ORGANIZATION_TYPE));
 
         form.add(new DomainMultiselectPanel<ServiceContractService>("services", "service",
-                new PropertyModel<List<ServiceContractService>>(model, "serviceContractServices"), "serviceObjectId") {
+                new PropertyModel<>(model, "serviceContractServices"), "serviceObjectId") {
             @Override
             protected ServiceContractService newModelObject() {
                 return new ServiceContractService(model.getObject().getId());
+            }
+        });
+
+        form.add(new DomainMultiselectPanel<ServiceContractBuilding>("buildings", "building",
+                new PropertyModel<>(model, "serviceContractBuildings"), "buildingObjectId") {
+            @Override
+            protected ServiceContractBuilding newModelObject() {
+                return new ServiceContractBuilding(model.getObject().getId());
+            }
+
+            @Override
+            protected void filter(DomainObjectFilter filter) {
+                filter.addAdditionalParam(BuildingStrategy.P_SERVICING_ORGANIZATION_ID,
+                        model.getObject().getServicingOrganizationId());
             }
         });
 

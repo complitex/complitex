@@ -73,11 +73,12 @@ public class BuildingStrategy extends TemplateStrategy {
     /**
      * Filter constants
      */
-    public static final String NUMBER = "number";
-    public static final String CORP = "corp";
-    public static final String STRUCTURE = "structure";
-    public static final String STREET = "street";
-    private static final String CITY = "city";
+    public static final String P_NUMBER = "number";
+    public static final String P_CORP = "corp";
+    public static final String P_STRUCTURE = "structure";
+    public static final String P_STREET = "street";
+    public static final String P_CITY = "city";
+    public static final String P_SERVICING_ORGANIZATION_ID = "servicingOrganizationId";
 
     public static final long PARENT_ENTITY_ID = 1500L;
     @EJB
@@ -122,7 +123,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
             if (building != null) {
                 buildingFound = true;
-                Long streetId = example.getAdditionalParam(STREET);
+                Long streetId = example.getAdditionalParam(P_STREET);
                 if (streetId != null && streetId > 0) {
                     DomainObject address = building.getAddress(streetId);
                     if (address == null) {
@@ -132,7 +133,7 @@ public class BuildingStrategy extends TemplateStrategy {
                     }
                 } else {
                     DomainObject primaryAddress = building.getPrimaryAddress();
-                    Long cityId = example.getAdditionalParam(CITY);
+                    Long cityId = example.getAdditionalParam(P_CITY);
                     if (cityId == null || cityId <= 0 || !(cityId.equals(primaryAddress.getParentId())
                             && Long.valueOf(400L).equals(primaryAddress.getParentEntityId()))) {
                         buildingFound = false;
@@ -190,9 +191,9 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     private DomainObjectFilter createAddressExample(DomainObjectFilter buildingExample) {
-        String number = buildingExample.getAdditionalParam(NUMBER);
-        String corp = buildingExample.getAdditionalParam(CORP);
-        String structure = buildingExample.getAdditionalParam(STRUCTURE);
+        String number = buildingExample.getAdditionalParam(P_NUMBER);
+        String corp = buildingExample.getAdditionalParam(P_CORP);
+        String structure = buildingExample.getAdditionalParam(P_STRUCTURE);
 
         DomainObjectFilter addressExample = new DomainObjectFilter();
 
@@ -211,9 +212,9 @@ public class BuildingStrategy extends TemplateStrategy {
         addressExample.addAttributeFilter(new AttributeFilter(BuildingAddressStrategy.STRUCTURE, structure));
 
         Map<String, Long> ids = Maps.newHashMap();
-        Long streetId = buildingExample.getAdditionalParam(STREET);
+        Long streetId = buildingExample.getAdditionalParam(P_STREET);
         ids.put("street", streetId);
-        Long cityId = buildingExample.getAdditionalParam(CITY);
+        Long cityId = buildingExample.getAdditionalParam(P_CITY);
         ids.put("city", cityId);
 
         buildingAddressStrategy.configureExample(addressExample, ids, null);
@@ -327,14 +328,14 @@ public class BuildingStrategy extends TemplateStrategy {
         }
         Long streetId = ids.get("street");
         if (streetId != null && streetId > 0) {
-            example.addAdditionalParam(STREET, streetId);
+            example.addAdditionalParam(P_STREET, streetId);
         } else {
-            example.addAdditionalParam(STREET, null);
+            example.addAdditionalParam(P_STREET, null);
             Long cityId = ids.get("city");
             if (cityId != null && cityId > 0) {
-                example.addAdditionalParam(CITY, cityId);
+                example.addAdditionalParam(P_CITY, cityId);
             } else {
-                example.addAdditionalParam(CITY, null);
+                example.addAdditionalParam(P_CITY, null);
             }
         }
     }
@@ -346,18 +347,18 @@ public class BuildingStrategy extends TemplateStrategy {
             DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
 
             assert list != null;
-            DomainObjectFilter example = list.getExample();
+            DomainObjectFilter example = list.getFilter();
 
             Long streetId = ids.get("street");
             if (streetId != null && streetId > 0) {
-                example.addAdditionalParam(STREET, streetId);
+                example.addAdditionalParam(P_STREET, streetId);
             } else {
-                example.addAdditionalParam(STREET, null);
+                example.addAdditionalParam(P_STREET, null);
                 Long cityId = ids.get("city");
                 if (cityId != null && cityId > 0) {
-                    example.addAdditionalParam(CITY, cityId);
+                    example.addAdditionalParam(P_CITY, cityId);
                 } else {
-                    example.addAdditionalParam(CITY, null);
+                    example.addAdditionalParam(P_CITY, null);
                 }
             }
 

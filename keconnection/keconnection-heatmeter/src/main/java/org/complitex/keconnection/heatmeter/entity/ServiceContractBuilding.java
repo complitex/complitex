@@ -12,8 +12,7 @@ public class ServiceContractBuilding extends AbstractEntity {
     public ServiceContractBuilding() {
     }
 
-    public ServiceContractBuilding(Long buildingCodeId, Long serviceContractId) {
-        this.buildingCodeId = buildingCodeId;
+    public ServiceContractBuilding(Long serviceContractId) {
         this.serviceContractId = serviceContractId;
     }
 

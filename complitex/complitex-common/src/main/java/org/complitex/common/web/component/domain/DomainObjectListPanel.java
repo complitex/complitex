@@ -59,7 +59,7 @@ public class DomainObjectListPanel extends Panel {
 
     private String entity;
     private String strategyName;
-    private DomainObjectFilter example;
+    private DomainObjectFilter filter;
     private WebMarkupContainer content;
     private DataView<DomainObject> dataView;
     private CollapsibleSearchPanel searchPanel;
@@ -83,8 +83,8 @@ public class DomainObjectListPanel extends Panel {
         return strategyFactory.getStrategy(strategyName, entity);
     }
 
-    public DomainObjectFilter getExample() {
-        return example;
+    public DomainObjectFilter getFilter() {
+        return filter;
     }
 
     public void refreshContent(AjaxRequestTarget target) {
@@ -104,14 +104,13 @@ public class DomainObjectListPanel extends Panel {
             }
         };
 
-        add(new Label("title", labelModel));
         add(new Label("label", labelModel));
 
         content = new WebMarkupContainer("content");
         content.setOutputMarkupPlaceholderTag(true);
 
         //Example
-        example = getSession().getPreferenceObject(page, PreferenceKey.FILTER_OBJECT, new DomainObjectFilter(entity));
+        filter = getSession().getPreferenceObject(page, PreferenceKey.FILTER_OBJECT, new DomainObjectFilter(entity));
 
         //Search
         final List<String> searchFilters = getStrategy().getSearchFilters();
@@ -128,10 +127,10 @@ public class DomainObjectListPanel extends Panel {
         final List<AttributeType> columnAttributeTypes = entityBean.getAttributeTypes(getStrategy().getColumnAttributeTypeIds());
 
         for (AttributeType eat : columnAttributeTypes) {
-            example.addAttributeFilter(new AttributeFilter(eat.getId()));
+            filter.addAttributeFilter(new AttributeFilter(eat.getId()));
         }
 
-        //Configure example from component state session
+        //Configure filter from component state session
         if (searchFilters != null) {
             Map<String, Long> ids = new HashMap<String, Long>();
 
@@ -141,7 +140,7 @@ public class DomainObjectListPanel extends Panel {
                     ids.put(filterEntity, domainObject.getObjectId());
                 }
             }
-            getStrategy().configureExample(example, ids, null);
+            getStrategy().configureExample(filter, ids, null);
         }
 
         //Form
@@ -155,33 +154,33 @@ public class DomainObjectListPanel extends Panel {
             protected Iterable<? extends DomainObject> getData(long first, long count) {
                 //store preference, but before clear data order related properties.
                 {
-                    example.setAsc(false);
-                    example.setOrderByAttributeTypeId(null);
-                    getSession().putPreferenceObject(page, PreferenceKey.FILTER_OBJECT, example);
+                    filter.setAsc(false);
+                    filter.setOrderByAttributeTypeId(null);
+                    getSession().putPreferenceObject(page, PreferenceKey.FILTER_OBJECT, filter);
                 }
 
                 //store state
                 getSession().storeGlobalSearchComponentState();
 
                 if (!Strings.isEmpty(getSort().getProperty())) {
-                    example.setOrderByAttributeTypeId(Long.valueOf(getSort().getProperty()));
+                    filter.setOrderByAttributeTypeId(Long.valueOf(getSort().getProperty()));
                 }
 
-                example.setStatus(showModeModel.getObject().name());
-                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
-                example.setAsc(getSort().isAscending());
-                example.setFirst(first);
-                example.setCount(count);
+                filter.setStatus(showModeModel.getObject().name());
+                filter.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
+                filter.setAsc(getSort().isAscending());
+                filter.setFirst(first);
+                filter.setCount(count);
 
-                return getStrategy().getList(example);
+                return getStrategy().getList(filter);
             }
 
             @Override
             public Long getSize() {
-                example.setStatus(showModeModel.getObject().name());
-                example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
+                filter.setStatus(showModeModel.getObject().name());
+                filter.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
 
-                return getStrategy().getCount(example);
+                return getStrategy().getCount(filter);
             }
         };
         dataProvider.setSort(String.valueOf(getStrategy().getDefaultSortAttributeTypeId()), SortOrder.ASCENDING);
@@ -254,7 +253,7 @@ public class DomainObjectListPanel extends Panel {
             @Override
             protected void populateItem(ListItem<AttributeType> item) {
                 AttributeType attributeType = item.getModelObject();
-                final AttributeFilter attributeFilter = example.getAttributeExample(attributeType.getId());
+                final AttributeFilter attributeFilter = filter.getAttributeExample(attributeType.getId());
 
                 final IModel<String> filterModel = new Model<String>() {
 
@@ -370,9 +369,9 @@ public class DomainObjectListPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 filterForm.clearInput();
 
-                example.setObjectId(null);
+                filter.setObjectId(null);
                 for (AttributeType attrType : columnAttributeTypes) {
-                    AttributeFilter attrExample = example.getAttributeExample(attrType.getId());
+                    AttributeFilter attrExample = filter.getAttributeExample(attrType.getId());
                     attrExample.setValue(null);
                 }
 

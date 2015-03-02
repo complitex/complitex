@@ -66,7 +66,7 @@ public class ApartmentStrategy extends TemplateStrategy {
             @Override
             public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
                 DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
-                configureExampleImpl(list.getExample(), ids, null);
+                configureExampleImpl(list.getFilter(), ids, null);
                 list.refreshContent(target);
             }
         };

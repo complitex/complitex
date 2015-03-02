@@ -179,7 +179,7 @@ public class StreetStrategy extends TemplateStrategy {
                 DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
 
                 if (list != null) {
-                    configureExampleImpl(list.getExample(), ids, null);
+                    configureExampleImpl(list.getFilter(), ids, null);
                     list.refreshContent(target);
                 }
             }

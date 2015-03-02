@@ -4,6 +4,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 
 /**
@@ -14,6 +15,8 @@ public class DomainSelectDialog extends Panel{
 
     private IModel<Long> model;
 
+    private DomainObjectListPanel objects;
+
     public DomainSelectDialog(String id, String entityName, IModel<String> titleModel) {
         super(id);
 
@@ -22,7 +25,7 @@ public class DomainSelectDialog extends Panel{
         dialog.setTitle(titleModel);
         add(dialog);
 
-        DomainObjectListPanel objects = new DomainObjectListPanel("objects", entityName, null, true){
+        objects = new DomainObjectListPanel("objects", entityName, null, true){
             @Override
             protected void onSelect(AjaxRequestTarget target, DomainObject domainObject) {
                 model.setObject(domainObject.getObjectId());
@@ -46,5 +49,9 @@ public class DomainSelectDialog extends Panel{
     }
 
     protected void onSelect(AjaxRequestTarget target){
+    }
+
+    public DomainObjectFilter getFilter(){
+        return objects.getFilter();
     }
 }

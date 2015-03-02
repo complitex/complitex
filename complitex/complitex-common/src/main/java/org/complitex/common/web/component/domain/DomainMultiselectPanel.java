@@ -11,6 +11,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.StrategyFactory;
 
 import javax.ejb.EJB;
@@ -31,7 +32,8 @@ public abstract class DomainMultiselectPanel<T> extends Panel {
         container.setOutputMarkupId(true);
         add(container);
 
-        final DomainSelectDialog domainSelectDialog = new DomainSelectDialog("domainSelectDialog", "service", new ResourceModel(id)){
+        final DomainSelectDialog domainSelectDialog = new DomainSelectDialog("domainSelectDialog", entityName,
+                new ResourceModel(id)){
             @Override
             protected void onSelect(AjaxRequestTarget target) {
                 target.add(container);
@@ -52,6 +54,8 @@ public abstract class DomainMultiselectPanel<T> extends Panel {
                 item.add(new AjaxLink("select") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
+                        filter(domainSelectDialog.getFilter());
+
                         domainSelectDialog.open(target, objectIdModel);
                     }
                 });
@@ -78,4 +82,7 @@ public abstract class DomainMultiselectPanel<T> extends Panel {
     }
 
     protected abstract T newModelObject();
+
+    protected void filter(DomainObjectFilter filter){
+    }
 }

@@ -2,6 +2,7 @@ package org.complitex.keconnection.heatmeter.entity;
 
 import org.complitex.common.entity.AbstractEntity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,8 +16,8 @@ public class ServiceContract extends AbstractEntity{
     private Long organizationId;
     private Long servicingOrganizationId;
 
-    private List<ServiceContractService> serviceContractServices;
-    private List<ServiceContractBuilding> serviceContractBuildings;
+    private List<ServiceContractService> serviceContractServices = new ArrayList<>();
+    private List<ServiceContractBuilding> serviceContractBuildings = new ArrayList<>();
 
     public Date getBeginDate() {
         return beginDate;
