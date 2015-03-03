@@ -21,7 +21,7 @@ public class DomainSelectDialog extends Panel{
         super(id);
 
         dialog = new Dialog("dialog");
-        dialog.setWidth(745);
+        dialog.setWidth(800);
         dialog.setTitle(titleModel);
         add(dialog);
 

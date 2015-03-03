@@ -24,9 +24,13 @@ public abstract class DomainMultiselectPanel<T> extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
 
+    private String entityName;
+
     public DomainMultiselectPanel(String id, final String entityName, final IModel<List<T>> model,
                                   final String objectIdExpression) {
         super(id);
+
+        this.entityName = entityName;
 
         final WebMarkupContainer container = new WebMarkupContainer("container");
         container.setOutputMarkupId(true);
@@ -46,11 +50,7 @@ public abstract class DomainMultiselectPanel<T> extends Panel {
             protected void populateItem(final ListItem<T> item) {
                 final IModel<Long> objectIdModel = new PropertyModel<>(item.getModel(), objectIdExpression);
 
-                String name = objectIdModel.getObject() != null
-                        ? strategyFactory.getStrategy(entityName).displayDomainObject(objectIdModel.getObject(), getLocale())
-                        : getNotSelectedString();
-
-                item.add(new Label("name", Model.of(name)));
+                item.add(new Label("name", Model.of(displayDomainObject(objectIdModel.getObject()))));
                 item.add(new AjaxLink("select") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -86,7 +86,9 @@ public abstract class DomainMultiselectPanel<T> extends Panel {
     protected void filter(DomainObjectFilter filter){
     }
 
-    protected String getNotSelectedString(){
-        return getString("not_selected");
+    protected String displayDomainObject(Long domainObjectId){
+        return domainObjectId != null
+                ? strategyFactory.getStrategy(entityName).displayDomainObject(domainObjectId, getLocale())
+                : getString("not_selected");
     }
 }

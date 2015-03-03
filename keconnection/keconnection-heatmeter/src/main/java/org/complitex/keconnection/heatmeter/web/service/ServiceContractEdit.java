@@ -12,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.address.service.AddressRendererBean;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.web.component.LabelDateField;
@@ -49,6 +50,9 @@ public class ServiceContractEdit extends FormTemplatePage {
     @EJB
     private BuildingStrategy buildingStrategy;
 
+    @EJB
+    private AddressRendererBean addressRendererBean;
+
     public ServiceContractEdit(PageParameters pageParameters) {
         Long id = pageParameters.get("id").toOptionalLong();
 
@@ -58,6 +62,10 @@ public class ServiceContractEdit extends FormTemplatePage {
         ServiceContract serviceContract = id != null
                 ? serviceContractBean.getServiceContract(id)
                 : new ServiceContract();
+
+        //load buildingId
+        serviceContract.getServiceContractBuildings()
+                .forEach(b -> b.setBuildingObjectId(buildingStrategy.getBuildingCodeById(b.getBuildingCodeId()).getBuildingId()));
 
         final IModel<ServiceContract> model = new CompoundPropertyModel<>(serviceContract);
 
@@ -79,8 +87,10 @@ public class ServiceContractEdit extends FormTemplatePage {
             }
 
             @Override
-            protected String getNotSelectedString() {
-                return getString("service_not_selected");
+            protected String displayDomainObject(Long domainObjectId) {
+                return domainObjectId != null
+                        ? super.displayDomainObject(domainObjectId)
+                        : getString("service_not_selected");
             }
         });
 
@@ -98,8 +108,11 @@ public class ServiceContractEdit extends FormTemplatePage {
             }
 
             @Override
-            protected String getNotSelectedString() {
-                return getString("building_not_selected");
+            protected String displayDomainObject(Long domainObjectId) {
+
+                return domainObjectId != null
+                        ? addressRendererBean.displayBuildingSimple(domainObjectId, getLocale())
+                        : getString("building_not_selected");
             }
         });
 

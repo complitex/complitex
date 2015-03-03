@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.address.service;
 
 import org.apache.wicket.util.string.Strings;
@@ -15,10 +11,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Locale;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 public class AddressRendererBean {
 
