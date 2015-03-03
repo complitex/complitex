@@ -62,7 +62,7 @@ public class DomainObjectComponentUtil {
             }
             break;
             case STRING_CULTURE: {
-                IModel<List<StringCulture>> model = new PropertyModel<>(attribute, "localizedValues");
+                IModel<List<StringCulture>> model = new PropertyModel<>(attribute, "stringCultures");
                 input = new StringCulturePanel(INPUT_COMPONENT_ID, model, attributeType.isMandatory(), labelModel,
                         !isHistory && canEdit(strategyName, entityName, object));
             }

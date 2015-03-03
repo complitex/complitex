@@ -9,6 +9,8 @@ public class ServiceContractBuilding extends AbstractEntity {
     private Long buildingCodeId;
     private Long serviceContractId;
 
+    private Long buildingObjectId;
+
     public ServiceContractBuilding() {
     }
 
@@ -30,5 +32,13 @@ public class ServiceContractBuilding extends AbstractEntity {
 
     public void setServiceContractId(Long serviceContractId) {
         this.serviceContractId = serviceContractId;
+    }
+
+    public Long getBuildingObjectId() {
+        return buildingObjectId;
+    }
+
+    public void setBuildingObjectId(Long buildingObjectId) {
+        this.buildingObjectId = buildingObjectId;
     }
 }

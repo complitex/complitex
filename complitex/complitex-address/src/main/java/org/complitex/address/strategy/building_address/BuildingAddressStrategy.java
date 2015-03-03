@@ -79,15 +79,15 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     }
 
     @Override
-    public List<? extends DomainObject> getList(DomainObjectFilter example) {
-        if (example.getObjectId() != null && example.getObjectId() <= 0) {
+    public List<? extends DomainObject> getList(DomainObjectFilter filter) {
+        if (filter.getObjectId() != null && filter.getObjectId() <= 0) {
             return Collections.emptyList();
         }
 
-        example.setEntityName(getEntityName());
-        prepareExampleForPermissionCheck(example);
+        filter.setEntityName(getEntityName());
+        prepareExampleForPermissionCheck(filter);
 
-        List<DomainObject> objects = sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectBuildingAddresses", example);
+        List<DomainObject> objects = sqlSession().selectList(BUILDING_ADDRESS_NS + ".selectBuildingAddresses", filter);
 
         for (DomainObject object : objects) {
             loadAttributes(object);

@@ -46,6 +46,9 @@ public class ServiceContractEdit extends FormTemplatePage {
     @EJB
     private ServiceStrategy serviceStrategy;
 
+    @EJB
+    private BuildingStrategy buildingStrategy;
+
     public ServiceContractEdit(PageParameters pageParameters) {
         Long id = pageParameters.get("id").toOptionalLong();
 
@@ -64,8 +67,8 @@ public class ServiceContractEdit extends FormTemplatePage {
         form.add(new LabelDateField("beginDate", new PropertyModel<>(model, "beginDate"), true));
         form.add(new LabelDateField("endDate", new PropertyModel<>(model, "endDate"), true));
         form.add(new RequiredTextField<>("number"));
-        form.add(new OrganizationIdPicker("organizationId", new PropertyModel<>(model, "organizationId"), SERVICE_PROVIDER));
-        form.add(new OrganizationIdPicker("servicingOrganizationId", new PropertyModel<>(model, "servicingOrganizationId"),
+        form.add(new OrganizationIdPicker("serviceProviderId", new PropertyModel<>(model, "serviceProviderId"), SERVICE_PROVIDER));
+        form.add(new OrganizationIdPicker("organizationId", new PropertyModel<>(model, "organizationId"),
                 SERVICING_ORGANIZATION_TYPE));
 
         form.add(new DomainMultiselectPanel<ServiceContractService>("services", "service",
@@ -73,6 +76,11 @@ public class ServiceContractEdit extends FormTemplatePage {
             @Override
             protected ServiceContractService newModelObject() {
                 return new ServiceContractService(model.getObject().getId());
+            }
+
+            @Override
+            protected String getNotSelectedString() {
+                return getString("service_not_selected");
             }
         });
 
@@ -86,37 +94,54 @@ public class ServiceContractEdit extends FormTemplatePage {
             @Override
             protected void filter(DomainObjectFilter filter) {
                 filter.addAdditionalParam(BuildingStrategy.P_SERVICING_ORGANIZATION_ID,
-                        model.getObject().getServicingOrganizationId());
+                        model.getObject().getOrganizationId());
+            }
+
+            @Override
+            protected String getNotSelectedString() {
+                return getString("building_not_selected");
             }
         });
 
-        form.add(new Button("save"){
+        form.add(new Button("save") {
             @Override
             public void onSubmit() {
                 ServiceContract serviceContract = model.getObject();
 
-                if (serviceContract.getOrganizationId() == null){
+                if (serviceContract.getServiceProviderId() == null) {
+                    error(getString("error_serviceProviderId"));
+                } else if (serviceContract.getOrganizationId() == null) {
                     error(getString("error_organizationId"));
-                    return;
-                }else if (serviceContract.getServicingOrganizationId() == null){
-                    error(getString("error_servicingOrganizationId"));
-                    return;
-                }else if (serviceContract.getBeginDate() == null){
+                } else if (serviceContract.getBeginDate() == null) {
                     error(getString("error_beginDate"));
-                    return;
                 }
 
-                for (ServiceContractService s : serviceContract.getServiceContractServices()){
-                    if (s.getServiceObjectId() == null){
-                        error(getString("error_service"));
-                        return;
-                    }
+                serviceContract.getServiceContractServices().stream()
+                        .filter(s -> s.getServiceObjectId() == null)
+                        .findAny()
+                        .ifPresent(s -> error(getString("error_service")));
+
+                //building code
+                serviceContract.getServiceContractBuildings().stream()
+                        .filter(b -> b.getBuildingCodeId() == null)
+                        .findAny()
+                        .ifPresent(b -> {
+                            if (b.getBuildingObjectId() != null){
+                                b.setBuildingCodeId(buildingStrategy.getBuildingCodeId(
+                                        serviceContract.getOrganizationId(), b.getBuildingObjectId()));
+                            }
+
+                            if (b.getBuildingCodeId() == null) {
+                                error(getString("error_buildingCodeId"));
+                            }
+                        });
+
+                if (!hasErrorMessage()) {
+                    serviceContractBean.save(serviceContract);
+
+                    info(getStringFormat("info_added"));
+                    setResponsePage(ServiceContractList.class);
                 }
-
-                serviceContractBean.save(serviceContract);
-
-                info(getStringFormat("info_added"));
-                setResponsePage(ServiceContractList.class);
             }
         });
 

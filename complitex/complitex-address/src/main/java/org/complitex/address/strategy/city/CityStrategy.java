@@ -64,8 +64,10 @@ public class CityStrategy extends TemplateStrategy {
         if (cityTypeId != null) {
             IStrategy cityTypeStrategy = strategyFactory.getStrategy("city_type");
             DomainObject cityType = cityTypeStrategy.getDomainObject(cityTypeId, true);
-            String cityTypeName = cityTypeStrategy.displayDomainObject(cityType, locale);
-            return cityTypeName + " " + cityName;
+
+            if (cityType != null) {
+                return cityTypeStrategy.displayDomainObject(cityType, locale) + " " + cityName;
+            }
         }
         return cityName;
     }

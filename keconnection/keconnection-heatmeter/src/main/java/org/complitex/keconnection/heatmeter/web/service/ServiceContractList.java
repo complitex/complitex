@@ -53,10 +53,11 @@ public class ServiceContractList extends TemplatePage {
         });
 
         Map<String, IColumn<ServiceContract, String>> columnMap = new HashMap<>();
-        columnMap.put("organizationId", new DomainObjectFilteredColumn<ServiceContract>(
+
+        columnMap.put("servicingOrganizationId", new DomainObjectFilteredColumn<>(
+                "organization", "serviceProviderId", getLocale()));
+        columnMap.put("organizationId", new DomainObjectFilteredColumn<>(
                 "organization", "organizationId", getLocale()));
-        columnMap.put("servicingOrganizationId", new DomainObjectFilteredColumn<ServiceContract>(
-                "organization", "servicingOrganizationId", getLocale()));
 
         add(new FilteredDataTable<ServiceContract>("dataTable", ServiceContract.class, columnMap, actions, FIELDS) {
             @Override

@@ -144,6 +144,7 @@
             left join `building_attribute` d on (d.`status` = 'ACTIVE' and d.`attribute_type_id` = 500)
         </if>
 
+
         WHERE
 
         <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>

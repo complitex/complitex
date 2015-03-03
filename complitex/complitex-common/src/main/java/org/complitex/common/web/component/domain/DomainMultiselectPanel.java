@@ -48,7 +48,7 @@ public abstract class DomainMultiselectPanel<T> extends Panel {
 
                 String name = objectIdModel.getObject() != null
                         ? strategyFactory.getStrategy(entityName).displayDomainObject(objectIdModel.getObject(), getLocale())
-                        : getString("not_selected");
+                        : getNotSelectedString();
 
                 item.add(new Label("name", Model.of(name)));
                 item.add(new AjaxLink("select") {
@@ -84,5 +84,9 @@ public abstract class DomainMultiselectPanel<T> extends Panel {
     protected abstract T newModelObject();
 
     protected void filter(DomainObjectFilter filter){
+    }
+
+    protected String getNotSelectedString(){
+        return getString("not_selected");
     }
 }

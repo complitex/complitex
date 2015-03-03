@@ -117,7 +117,7 @@ public class DomainObjectListPanel extends Panel {
         content.setVisible(searchFilters == null || searchFilters.isEmpty());
         add(content);
 
-        final IModel<ShowMode> showModeModel = new Model<ShowMode>(ShowMode.ACTIVE);
+        final IModel<ShowMode> showModeModel = new Model<>(ShowMode.ACTIVE);
         searchPanel = new CollapsibleSearchPanel("searchPanel", getSession().getGlobalSearchComponentState(),
                 searchFilters, getStrategy().getSearchCallback(), ShowMode.ALL, true, showModeModel);
         add(searchPanel);
@@ -166,7 +166,10 @@ public class DomainObjectListPanel extends Panel {
                     filter.setOrderByAttributeTypeId(Long.valueOf(getSort().getProperty()));
                 }
 
-                filter.setStatus(showModeModel.getObject().name());
+                if (showModeModel.getObject() != null) {
+                    filter.setStatus(showModeModel.getObject().name());
+                }
+
                 filter.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
                 filter.setAsc(getSort().isAscending());
                 filter.setFirst(first);
@@ -177,7 +180,10 @@ public class DomainObjectListPanel extends Panel {
 
             @Override
             public Long getSize() {
-                filter.setStatus(showModeModel.getObject().name());
+                if (showModeModel.getObject() != null) {
+                    filter.setStatus(showModeModel.getObject().name());
+                }
+
                 filter.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
 
                 return getStrategy().getCount(filter);

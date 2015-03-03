@@ -127,7 +127,9 @@ public class StreetStrategy extends TemplateStrategy {
         if (streetTypeId != null) {
             DomainObject streetType = streetTypeStrategy.getDomainObject(streetTypeId, true);
 
-            return streetTypeStrategy.getShortName(streetType, locale);
+            if (streetType != null) {
+                return streetTypeStrategy.getShortName(streetType, locale);
+            }
         }
 
         return null;

@@ -29,10 +29,6 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newLinkedHashMap;
 import static org.complitex.common.web.component.domain.DomainObjectAccessUtil.canEdit;
 
-/**
- *
- * @author Artem
- */
 public class DomainObjectInputPanel extends Panel {
 
     @EJB

@@ -549,14 +549,14 @@ CREATE TABLE `service_contract`(
   `begin_date` DATE NOT NULL COMMENT  'Дата начала',
   `end_date` DATE COMMENT  'Дата окончания',
   `number` VARCHAR(64) NOT NULL COMMENT 'Номер',
-  `organization_id` BIGINT(20) NOT NULL COMMENT 'Поставщик услуг',
-  `servicing_organization_id` BIGINT(20) NOT NULL COMMENT 'Обслуживающая организация',
+  `service_provider_id` BIGINT(20) NOT NULL COMMENT 'Поставщик услуг',
+  `organization_id` BIGINT(20) NOT NULL COMMENT 'Обслуживающая организация',
 
   PRIMARY KEY (`id`),
+  KEY `key_service_provider_id` (`service_provider_id`),
+  CONSTRAINT `fk_service_contract__service_provider` FOREIGN KEY (`service_provider_id`) REFERENCES `organization` (`object_id`),
   KEY `key_organization_id` (`organization_id`),
-  CONSTRAINT `fk_service_contract__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
-  KEY `key_servicing_organization_id` (`servicing_organization_id`),
-  CONSTRAINT `fk_service_contract__servicing_organization` FOREIGN KEY (`servicing_organization_id`) REFERENCES `organization` (`object_id`)
+  CONSTRAINT `fk_service_contract__servicing_organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Договор на поставку услуги';
 
 DROP TABLE IF EXISTS `service_contract_building`;

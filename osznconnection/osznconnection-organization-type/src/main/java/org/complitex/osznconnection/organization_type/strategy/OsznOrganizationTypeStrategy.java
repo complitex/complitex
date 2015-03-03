@@ -7,10 +7,6 @@ import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import javax.ejb.Stateless;
 import java.util.Collection;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 public class OsznOrganizationTypeStrategy extends OrganizationTypeStrategy {
 
