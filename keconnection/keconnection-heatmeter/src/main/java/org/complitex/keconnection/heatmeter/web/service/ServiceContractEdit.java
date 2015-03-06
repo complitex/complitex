@@ -130,7 +130,7 @@ public class ServiceContractEdit extends FormTemplatePage {
                 }
 
                 serviceContract.getServiceContractServices().stream()
-                        .filter(s -> s.getServiceObjectId() == null)
+                        .filter(s -> s.getServiceId() == null)
                         .findAny()
                         .ifPresent(s -> error(getString("error_service")));
 

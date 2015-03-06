@@ -6,7 +6,7 @@ import org.complitex.common.entity.AbstractEntity;
  * @author inheaven on 017 17.02.15 20:21
  */
 public class ServiceContractService extends AbstractEntity {
-    private Long serviceObjectId;
+    private Long serviceId;
     private Long serviceContractId;
 
     public ServiceContractService() {
@@ -16,12 +16,12 @@ public class ServiceContractService extends AbstractEntity {
         this.serviceContractId = serviceContractId;
     }
 
-    public Long getServiceObjectId() {
-        return serviceObjectId;
+    public Long getServiceId() {
+        return serviceId;
     }
 
-    public void setServiceObjectId(Long serviceObjectId) {
-        this.serviceObjectId = serviceObjectId;
+    public void setServiceId(Long serviceId) {
+        this.serviceId = serviceId;
     }
 
     public Long getServiceContractId() {

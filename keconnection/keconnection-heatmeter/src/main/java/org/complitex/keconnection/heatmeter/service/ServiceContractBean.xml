@@ -15,7 +15,7 @@
 
     <resultMap id="serviceContractServicesResultMap" type="org.complitex.keconnection.heatmeter.entity.ServiceContractService">
         <id column="id" property="id"/>
-        <result column="service_object_id" property="serviceObjectId"/>
+        <result column="service_id" property="serviceId"/>
         <result column="service_contract_id" property="serviceContractId"/>
     </resultMap>
 
@@ -77,11 +77,11 @@
 
     <insert id="insertServiceContractService" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContractService"
             useGeneratedKeys="true" keyProperty="id">
-        insert into service_contract_service (service_object_id, service_contract_id) value (#{serviceObjectId}, #{serviceContractId})
+        insert into service_contract_service (service_id, service_contract_id) value (#{serviceId}, #{serviceContractId})
     </insert>
 
     <update id="updateServiceContractService" parameterType="org.complitex.keconnection.heatmeter.entity.ServiceContractService">
-        update service_contract_service set service_object_id = #{serviceObjectId} where id = #{id}
+        update service_contract_service set service_id = #{serviceId} where id = #{id}
     </update>
 
     <delete id="deleteServiceContractService" parameterType="long">

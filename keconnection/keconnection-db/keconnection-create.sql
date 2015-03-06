@@ -440,7 +440,7 @@ CREATE TABLE `heatmeter_correction` (
     `external_heatmeter_id` VARCHAR(50) COMMENT 'Внешний идентификатор счетчика',
     `heatmeter_number` VARCHAR(50) COMMENT 'Номер счетчика во внешней системе',
     `binding_date` DATETIME NOT NULL COMMENT 'Время связывания',
-    `binding_status` INTEGER NOT NULL COMMENT 'Статус связывания',
+    `binding_status` INT NOT NULL COMMENT 'Статус связывания',
     `history` TINYINT (1) DEFAULT 0 NOT NULL COMMENT '', 
     PRIMARY KEY (`id`),
     KEY `key_system_heatmeter_id` (`system_heatmeter_id`),
@@ -575,15 +575,69 @@ CREATE TABLE `service_contract_building`(
 DROP TABLE IF EXISTS `service_contract_service`;
 CREATE TABLE `service_contract_service`(
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
-  `service_object_id` BIGINT(20) NOT NULL COMMENT 'Услуга',
+  `service_id` BIGINT(20) NOT NULL COMMENT 'Услуга',
   `service_contract_id` BIGINT(20) NOT NULL COMMENT 'Договор на поставку услуги',
 
   PRIMARY KEY (`id`),
-  KEY `key_service_object_id` (`service_object_id`),
-  CONSTRAINT `fk_service_contract_service__service` FOREIGN KEY (`service_object_id`) REFERENCES `service` (`object_id`),
+  KEY `key_service_object_id` (`service_id`),
+  CONSTRAINT `fk_service_contract_service__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`object_id`),
   KEY `key_service_contract_id` (`service_contract_id`),
   CONSTRAINT `fk_service_contract_building__service_contract2` FOREIGN KEY (`service_contract_id`) REFERENCES `service_contract` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Список услуг договора поставки услуг';
+
+-- ------------------------------
+-- Consumption File
+-- ------------------------------
+
+DROP TABLE IF EXISTS `consumption_file`;
+CREATE TABLE `consumption_file`(
+  `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
+  `name` VARCHAR(64) NOT NULL COMMENT 'Название файла',
+  `begin_date` DATE NOT NULL COMMENT 'Дата начала начислений',
+  `end_date` DATE NOT NULL COMMENT 'Дата окончания начислений',
+  `uploaded` DATETIME NOT NULL COMMENT 'Дата загрузки',
+  `organization_id` BIGINT COMMENT 'Обслуживающая организация',
+  `user_organization_id` BIGINT NOT NULL COMMENT 'Организация пользователей',
+  `type` INT NOT NULL COMMENT 'Тип файла',
+  `status` INT NOT NULL COMMENT 'Статус файла',
+  `check_sum` VARCHAR(32) COMMENT 'Контрольная сумма',
+
+  PRIMARY KEY (`id`),
+  KEY `key_organization_id` (`organization_id`),
+  CONSTRAINT `fk_consumption_file__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
+  KEY `key_organization_id` (`organization_id`),
+  CONSTRAINT `fk_consumption_file__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `user_organization` (`id`)
+) CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Файлы начислений';
+
+-- ------------------------------
+-- Central Heating Consumption
+-- ------------------------------
+DROP TABLE IF EXISTS `central_heating_consumption`;
+CREATE TABLE `central_heating_consumption`(
+  `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '',
+  `number` VARCHAR(100) COMMENT 'Номер по порядку',
+  `district_code` VARCHAR(100) COMMENT 'Название района тепловых сетей',
+  `organization_code` VARCHAR(100) COMMENT 'Код ЖЭКа ГИВЦ',
+  `building_code` VARCHAR(100) COMMENT 'Код дома ГИВЦ',
+  `account_numner` VARCHAR(100) COMMENT 'ГПУ',
+  `street` VARCHAR(100) COMMENT 'Адрес дома',
+  `building_number` VARCHAR(100) COMMENT 'Номер дома',
+  `common_volume` VARCHAR(100) COMMENT 'Информация ПУ в расходе по коллективному счетчику отопления',
+  `appartment_range` VARCHAR(100) COMMENT 'Дипазон квартир, потребляющих услугу с этого счетчика',
+  `begin_date` VARCHAR(100) COMMENT 'Дата установки счетчика',
+  `end_date` VARCHAR(100) COMMENT 'Дата отключения счетчика',
+  `common_area` VARCHAR(100) COMMENT 'Отапливаемая площадь квартир, потребляемых услугу с данного коллективного счетчика',
+  `meter_volume` VARCHAR(100) COMMENT 'Объем услуги потребленный по инливидуальным счетчикам',
+  `meter_area` VARCHAR(100) COMMENT 'Отапливаемая площадь квартир с индивидуальными счетчиками',
+  `common_rent_area` VARCHAR(100) COMMENT 'Отапливаемая площадь арендованных помещений, потребляющих услугу с данного коллективного счетчика',
+  `meter_rent_volume` VARCHAR(100) COMMENT 'Объем услуги потребленный арендуемым помещениями по индивидуальным счетчикам',
+  `meter_rent_area` VARCHAR(100) COMMENT 'Отапливаемая площадь арендованных помещений с индивидуальными счетчиками',
+  `no_meter_area` VARCHAR(100) COMMENT 'Отапливаемая площадь без индивидуальных счетчиков',
+  `no_meter_rate` VARCHAR(100) COMMENT 'Кол-во Гкал на 1 м2 площади без индивидуальных счетчиков',
+  `rate` VARCHAR(100) COMMENT 'Расчетный тариф отопления на 1 м2 для населения',
+  `no_meter_volume` VARCHAR(100) COMMENT 'Согласованный объем услуги для квартир без индивидуальных счетчиков'
+) CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Записи начислений центрального отопления';
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
