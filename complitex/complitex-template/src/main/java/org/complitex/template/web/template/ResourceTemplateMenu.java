@@ -1,5 +1,6 @@
 package org.complitex.template.web.template;
 
+import com.google.common.base.CaseFormat;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
@@ -65,6 +66,12 @@ public abstract class ResourceTemplateMenu implements ITemplateMenu {
     @Override
     public List<ITemplateLink> getTemplateLinks(Locale locale) {
         return templateLinks;
+    }
+
+    protected void add(Class<? extends Page> page){
+        String key = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, page.getSimpleName());
+
+        templateLinks.add(new ResourceTemplateLink(key, this, page));
     }
 
     protected void add(String key, Class<? extends Page> page){

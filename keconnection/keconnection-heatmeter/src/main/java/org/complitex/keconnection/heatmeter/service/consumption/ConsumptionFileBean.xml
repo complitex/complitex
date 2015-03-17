@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.complitex.keconnection.heatmeter.service.consumption.ConsumptionFileBean">
+    <resultMap id="consumptionFileResultMap"
+               type="org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile">
+        <id property="id"/>
+        <result property="name"/>
+        <result property="om"/>
+        <result property="serviceProviderId"/>
+        <result property="userOrganizationId"/>
+        <result property="type"/>
+        <result property="status"/>
+        <result property="loaded"/>
+        <result property="checkSum"/>
+    </resultMap>
+
+    <insert id="insertConsumptionFile" parameterType="org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into consumption_file (name, om, service_provider_id, user_organization_id, type, status, loaded, check_sum)
+                value (#{name}, #{om}, #{serviceProviderId}, #{userOrganizationId}, #{type}, #{status}, #{loaded}, #{checkSum})
+    </insert>
+
+    <update id="updateConsumptionFile" parameterType="org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile">
+        update consumption_file set status = #{status} where id = #{id}
+    </update>
+
+    <delete id="deleteConsumptionFile" parameterType="long">
+        delete from consumption_file where id = #{id}
+    </delete>
+</mapper>

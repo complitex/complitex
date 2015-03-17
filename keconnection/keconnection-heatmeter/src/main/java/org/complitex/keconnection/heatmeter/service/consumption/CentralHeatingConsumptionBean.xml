@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.complitex.keconnection.heatmeter.service.consumption.CentralHeatingConsumptionBean">
+    <resultMap id="centralHeatingConsumptionResultMap"
+               type="org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption">
+        <id property="id"/>
+        <result property="number"/>
+        <result property="districtCode"/>
+        <result property="organizationCode"/>
+        <result property="buildingCode"/>
+        <result property="accountNumber"/>
+        <result property="buildingNumber"/>
+        <result property="commonVolume"/>
+        <result property="apartmentRange"/>
+        <result property="beginDate"/>
+        <result property="endDate"/>
+        <result property="commonArea"/>
+        <result property="meterVolume"/>
+        <result property="meterArea"/>
+        <result property="commonRentArea"/>
+        <result property="meterRentVolume"/>
+        <result property="meterRentArea"/>
+        <result property="noMeterArea"/>
+        <result property="noMeterRate"/>
+        <result property="rate"/>
+        <result property="noMeterVolume"/>
+    </resultMap>
+
+    <insert id="insertCentralHeatingConsumption" parameterType="org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption">
+        insert into central_heating_consumption (number, district_code, organization_code, building_code, account_numner,
+            street, building_number, common_volume, appartment_range, begin_date, end_date, common_area, meter_volume,
+            meter_area, common_rent_area, meter_rent_volume, meter_rent_area, no_meter_area, no_meter_rate, rate, no_meter_volume)
+        values (#{number}, #{districtCode}, #{organizationCode}, #{buildingCode}, #{accountNumber}, #{street},
+            #{buildingNumber}, #{commonVolume}, #{apartmentRange}, #{beginDate}, #{endDate}, #{commonArea}, #{meterVolume},
+            #{meterArea}, #{commonRentArea}, #{meterRentVolume}, #{meterRentArea}, #{noMeterArea}, #{noMeterRate},
+            #{rate}, #{noMeterVolume})
+    </insert>
+
+    <update id="updateCentralHeatingConsumption" parameterType="org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption">
+        <!--update column data if require-->
+    </update>
+
+    <delete id="deleteCentralHeatingConsumption" parameterType="long">
+        delete from central_heating_consumption where id = #{id}
+    </delete>
+
+</mapper>

@@ -593,21 +593,20 @@ DROP TABLE IF EXISTS `consumption_file`;
 CREATE TABLE `consumption_file`(
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
   `name` VARCHAR(64) NOT NULL COMMENT 'Название файла',
-  `begin_date` DATE NOT NULL COMMENT 'Дата начала начислений',
-  `end_date` DATE NOT NULL COMMENT 'Дата окончания начислений',
-  `uploaded` DATETIME NOT NULL COMMENT 'Дата загрузки',
-  `organization_id` BIGINT COMMENT 'Обслуживающая организация',
+  `om` DATE NOT NULL COMMENT 'Операционный месяц',
+  `service_provider_id` BIGINT COMMENT 'Поставщик услуг',
   `user_organization_id` BIGINT NOT NULL COMMENT 'Организация пользователей',
   `type` INT NOT NULL COMMENT 'Тип файла',
   `status` INT NOT NULL COMMENT 'Статус файла',
+  `loaded` DATETIME NOT NULL COMMENT 'Дата загрузки',
   `check_sum` VARCHAR(32) COMMENT 'Контрольная сумма',
 
   PRIMARY KEY (`id`),
-  KEY `key_organization_id` (`organization_id`),
-  CONSTRAINT `fk_consumption_file__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
-  KEY `key_organization_id` (`organization_id`),
+  KEY `key_service_provider_id` (`service_provider_id`),
+  CONSTRAINT `fk_consumption_file__organization` FOREIGN KEY (`service_provider_id`) REFERENCES `organization` (`object_id`),
+  KEY `key_user_organization_id` (`user_organization_id`),
   CONSTRAINT `fk_consumption_file__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `user_organization` (`id`)
-) CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Файлы начислений';
+) CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Файлы потреблений';
 
 -- ------------------------------
 -- Central Heating Consumption
@@ -635,7 +634,9 @@ CREATE TABLE `central_heating_consumption`(
   `no_meter_area` VARCHAR(100) COMMENT 'Отапливаемая площадь без индивидуальных счетчиков',
   `no_meter_rate` VARCHAR(100) COMMENT 'Кол-во Гкал на 1 м2 площади без индивидуальных счетчиков',
   `rate` VARCHAR(100) COMMENT 'Расчетный тариф отопления на 1 м2 для населения',
-  `no_meter_volume` VARCHAR(100) COMMENT 'Согласованный объем услуги для квартир без индивидуальных счетчиков'
+  `no_meter_volume` VARCHAR(100) COMMENT 'Согласованный объем услуги для квартир без индивидуальных счетчиков',
+
+  PRIMARY KEY (`id`)
 ) CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Записи начислений центрального отопления';
 
 
