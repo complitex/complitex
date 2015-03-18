@@ -7,6 +7,6 @@ import org.complitex.template.web.template.ResourceTemplateMenu;
  */
 public class ConsumptionMenu extends ResourceTemplateMenu{
     public ConsumptionMenu() {
-        add(CentralHeatingConsumptionList.class);
+        add(CentralHeatingConsumptionFileList.class);
     }
 }

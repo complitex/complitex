@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+    <div wicket:id="dialog" style="display: none">
+        <form wicket:id="form">
+            <table class="tbForm">
+                <tr>
+                    <th><wicket:message key="om"/></th>
+                    <td><select wicket:id="month"></select><select wicket:id="year"></select></td>
+                </tr>
+                <tr>
+                    <th><wicket:message key="serviceProvider"/></th>
+                    <td><span wicket:id="serviceProvider"></span></td>
+                </tr>
+                <tr>
+                    <th><wicket:message key="service"/></th>
+                    <td><span wicket:id="service"></span></td>
+                </tr>
+                <tr>
+                    <th><wicket:message key="fileUploadField"/></th>
+                    <td><span wicket:id="fileUploadField"></span></td>
+                </tr>
+            </table>
+            <div>
+                <input type="button" wicket:id="upload" class="btnMiddle" wicket:message="value:upload"/>
+            </div>
+        </form>
+    </div>
+</wicket:panel>

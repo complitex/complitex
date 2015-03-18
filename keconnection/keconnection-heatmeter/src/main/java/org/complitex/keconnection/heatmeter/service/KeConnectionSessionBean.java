@@ -5,7 +5,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.DictionaryFwSession;
-import org.complitex.keconnection.heatmeter.entity.example.CorrectionExample;
 import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
 
 import javax.annotation.Resource;
@@ -83,14 +82,6 @@ public class KeConnectionSessionBean {
                 && mainUserOrganization.getObjectId() > 0 ? mainUserOrganization.getObjectId() : null;
     }
 
-    public void prepareExampleForPermissionCheck(CorrectionExample example) {
-        boolean isAdmin = sessionBean.isAdmin();
-        example.setAdmin(isAdmin);
-        if (!isAdmin) {
-            example.setOuterOrganizationsString(getAllOuterOrganizationsString());
-            example.setUserOrganizationsString(getCurrentUserOrganizationsString());
-        }
-    }
 
     public String getMainUserOrganizationForSearchCorrections(Long userOrganizationId) {
         if (sessionBean.isAdmin()) {

@@ -3,16 +3,38 @@
 <mapper namespace="org.complitex.keconnection.heatmeter.service.consumption.ConsumptionFileBean">
     <resultMap id="consumptionFileResultMap"
                type="org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile">
-        <id property="id"/>
-        <result property="name"/>
-        <result property="om"/>
-        <result property="serviceProviderId"/>
-        <result property="userOrganizationId"/>
-        <result property="type"/>
-        <result property="status"/>
-        <result property="loaded"/>
-        <result property="checkSum"/>
+        <id column="id"/>
+        <result column="name"/>
+        <result column="om"/>
+        <result column="service_provider_id"/>
+        <result column="user_organization_id"/>
+        <result column="type"/>
+        <result column="status"/>
+        <result column="loaded"/>
+        <result column="check_sum"/>
     </resultMap>
+
+    <sql id="sqlWhere">
+        <where>
+            <if test="object.name != null">and `name` like concat('%',#{object.name},'%')</if>
+            <if test="object.om != null">and `om` = #{object.om}</if>
+            <if test="object.serviceProviderId != null">and `service_provider_id` = #{object.serviceProviderId}</if>
+            <if test="object.userOrganizationId != null">and `user_organization_id` = #{object.userOrganizationId}</if>
+            <if test="object.type != null">and `type` = #{object.type}</if>
+            <if test="object.status != null">and `status` = #{object.status}</if>
+            <if test="object.checkSum != null">and `check_sum` = #{object.checkSum}</if>
+        </where>
+    </sql>
+
+    <select id="selectConsumptionFiles" parameterType="org.complitex.common.entity.FilterWrapper"
+            resultMap="consumptionFileResultMap">
+        select * from consumption_file <include refid="sqlWhere"/>
+        order by ${sortProperty} ${asc} limit #{first}, #{count}
+    </select>
+
+    <select id="selectConsumptionFilesCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
+        select count(1) from consumption_file <include refid="sqlWhere"/>
+    </select>
 
     <insert id="insertConsumptionFile" parameterType="org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile"
             useGeneratedKeys="true" keyProperty="id">

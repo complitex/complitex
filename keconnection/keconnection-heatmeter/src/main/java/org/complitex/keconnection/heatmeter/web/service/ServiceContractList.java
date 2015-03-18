@@ -31,7 +31,7 @@ import java.util.*;
 public class ServiceContractList extends TemplatePage {
     private Logger log = LoggerFactory.getLogger(ServiceContractList.class);
 
-    private final String[] FIELDS = {"id", "beginDate", "endDate", "number", "organizationId", "servicingOrganizationId"};
+    private final String[] FIELDS = {"id", "beginDate", "endDate", "number", "serviceProviderId", "organizationId"};
 
     @EJB
     private ServiceContractBean serviceContractBean;
@@ -54,7 +54,7 @@ public class ServiceContractList extends TemplatePage {
 
         Map<String, IColumn<ServiceContract, String>> columnMap = new HashMap<>();
 
-        columnMap.put("servicingOrganizationId", new DomainObjectFilteredColumn<>(
+        columnMap.put("serviceProviderId", new DomainObjectFilteredColumn<>(
                 "organization", "serviceProviderId", getLocale()));
         columnMap.put("organizationId", new DomainObjectFilteredColumn<>(
                 "organization", "organizationId", getLocale()));
