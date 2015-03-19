@@ -27,6 +27,8 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
                              List<Action<T>> actions, String... fields) {
         super(id);
 
+        setOutputMarkupId(true);
+
         FilteredDataProvider<T> provider = new FilteredDataProvider<>(this, objectClass);
 
         FilterForm<T> form = new FilterForm<>("form", provider);

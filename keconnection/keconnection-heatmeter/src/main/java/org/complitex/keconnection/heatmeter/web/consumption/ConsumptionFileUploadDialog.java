@@ -64,13 +64,13 @@ public abstract class ConsumptionFileUploadDialog extends Panel {
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 dialog.close(target);
 
-                onUpload(DateUtil.newDate(year.getModelObject(), month.getModelObject()),
+                onUpload(target, DateUtil.newDate(year.getModelObject(), month.getModelObject()),
                         serviceProviderIdModel.getObject(), serviceIdModel.getObject(), fileUploadField);
             }
         });
     }
 
-    protected abstract void onUpload(Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField);
+    protected abstract void onUpload(AjaxRequestTarget target, Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField);
 
     public void open(AjaxRequestTarget target){
         dialog.open(target);

@@ -49,11 +49,16 @@ public class CentralHeatingConsumptionFileList extends AbstractConsumptionFileLi
     }
 
     @Override
-    protected void onUpload(Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField) {
+    protected void onUpload(AjaxRequestTarget target, Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField) {
         fileUploadField.getFileUploads().forEach(f ->{
             try {
                 centralHeatingConsumptionService.load(om, serviceProviderId, serviceId, f.getClientFileName(),
                         Hex.encodeHexString(f.getMD5()), f.getInputStream());
+
+                info(getStringFormat("info_loaded", f.getClientFileName()));
+
+                target.add(getFilteredDataTable());
+                target.add(getMessages());
             } catch (IOException e) {
                 log.error("file {} upload error", f.getClientFileName(), e);
             }

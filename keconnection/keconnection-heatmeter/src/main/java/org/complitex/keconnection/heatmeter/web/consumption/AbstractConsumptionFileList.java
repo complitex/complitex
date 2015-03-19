@@ -26,11 +26,15 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
 
     private ConsumptionFileUploadDialog consumptionFileUploadDialog;
 
+    private FilteredDataTable filteredDataTable;
+
+    private AjaxFeedbackPanel messages;
+
     public AbstractConsumptionFileList() {
         add(new Label("title", new ResourceModel("title")));
 
         //Feedback Panel
-        final AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");
+        messages = new AjaxFeedbackPanel("messages");
         add(messages);
 
         List<Action<ConsumptionFile>> actions = new ArrayList<>();
@@ -47,7 +51,7 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
                 "organization", "serviceProviderId", getLocale()));
         //todo user organization panel
 
-        add(new FilteredDataTable<ConsumptionFile>("dataTable", ConsumptionFile.class, columnMap, actions, FIELDS) {
+        add(filteredDataTable = new FilteredDataTable<ConsumptionFile>("dataTable", ConsumptionFile.class, columnMap, actions, FIELDS) {
             @Override
             public List<ConsumptionFile> getList(FilterWrapper<ConsumptionFile> filterWrapper) {
                 return AbstractConsumptionFileList.this.getList(filterWrapper);
@@ -61,8 +65,8 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
 
         add(consumptionFileUploadDialog = new ConsumptionFileUploadDialog("consumptionFileUploadDialog"){
             @Override
-            protected void onUpload(Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField) {
-                AbstractConsumptionFileList.this.onUpload(om, serviceProviderId, serviceId, fileUploadField);
+            protected void onUpload(AjaxRequestTarget target,Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField) {
+                AbstractConsumptionFileList.this.onUpload(target, om, serviceProviderId, serviceId, fileUploadField);
             }
         });
     }
@@ -79,11 +83,19 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
                 });
     }
 
+    public FilteredDataTable getFilteredDataTable() {
+        return filteredDataTable;
+    }
+
+    public AjaxFeedbackPanel getMessages() {
+        return messages;
+    }
+
     protected abstract void onView(AjaxRequestTarget target, IModel<ConsumptionFile> model);
 
     protected abstract List<ConsumptionFile> getList(FilterWrapper<ConsumptionFile> filterWrapper);
 
     protected abstract Long getCount(FilterWrapper<ConsumptionFile> filterWrapper);
 
-    protected abstract void onUpload(Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField);
+    protected abstract void onUpload(AjaxRequestTarget target, Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField);
 }
