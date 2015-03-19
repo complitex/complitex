@@ -6,6 +6,8 @@ import org.complitex.common.entity.AbstractEntity;
  * @author inheaven on 016 16.03.15 19:02
  */
 public class CentralHeatingConsumption extends AbstractEntity {
+    private Long consumptionFileId;
+
     private String number;
     private String districtCode;
     private String organizationCode;
@@ -27,6 +29,23 @@ public class CentralHeatingConsumption extends AbstractEntity {
     private String noMeterRate;
     private String rate;
     private String noMeterVolume;
+
+    private ConsumptionStatus status;
+
+    public CentralHeatingConsumption() {
+    }
+
+    public CentralHeatingConsumption(Long consumptionFileId) {
+        this.consumptionFileId = consumptionFileId;
+    }
+
+    public Long getConsumptionFileId() {
+        return consumptionFileId;
+    }
+
+    public void setConsumptionFileId(Long consumptionFileId) {
+        this.consumptionFileId = consumptionFileId;
+    }
 
     public String getNumber() {
         return number;
@@ -194,5 +213,13 @@ public class CentralHeatingConsumption extends AbstractEntity {
 
     public void setNoMeterVolume(String noMeterVolume) {
         this.noMeterVolume = noMeterVolume;
+    }
+
+    public ConsumptionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ConsumptionStatus status) {
+        this.status = status;
     }
 }

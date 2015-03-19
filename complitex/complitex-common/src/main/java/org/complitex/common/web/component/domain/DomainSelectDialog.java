@@ -28,7 +28,7 @@ public class DomainSelectDialog extends Panel{
         objects = new DomainObjectListPanel("objects", entityName, null, true){
             @Override
             protected void onSelect(AjaxRequestTarget target, DomainObject domainObject) {
-                model.setObject(domainObject.getObjectId());
+                model.setObject(domainObject != null ? domainObject.getObjectId() : null);
                 dialog.close(target);
 
                 DomainSelectDialog.this.onSelect(target);

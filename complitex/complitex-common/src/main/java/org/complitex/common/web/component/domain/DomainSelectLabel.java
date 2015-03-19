@@ -5,6 +5,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.common.entity.DomainObjectFilter;
@@ -26,7 +27,12 @@ public class DomainSelectLabel extends Panel {
 
         this.entityName = entityName;
 
-        final Label name = new Label("name", Model.of(displayDomainObject(objectIdModel.getObject())));
+        final Label name = new Label("name", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return displayDomainObject(objectIdModel.getObject());
+            }
+        });
         name.setOutputMarkupId(true);
         add(name);
 
@@ -50,7 +56,7 @@ public class DomainSelectLabel extends Panel {
     }
 
     protected String displayDomainObject(Long domainObjectId){
-        return domainObjectId != null
+        return domainObjectId != null && domainObjectId > 0
                 ? strategyFactory.getStrategy(entityName).displayDomainObject(domainObjectId, getLocale())
                 : getString("not_selected");
     }

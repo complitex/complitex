@@ -11,6 +11,7 @@ public class ConsumptionFile extends AbstractEntity{
     private String name;
     private Date om;
     private Long serviceProviderId;
+    private Long serviceId;
     private Long userOrganizationId;
     private Long type = 0L;
     private ConsumptionFileStatus status;
@@ -39,6 +40,14 @@ public class ConsumptionFile extends AbstractEntity{
 
     public void setServiceProviderId(Long serviceProviderId) {
         this.serviceProviderId = serviceProviderId;
+    }
+
+    public Long getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(Long serviceId) {
+        this.serviceId = serviceId;
     }
 
     public Long getUserOrganizationId() {

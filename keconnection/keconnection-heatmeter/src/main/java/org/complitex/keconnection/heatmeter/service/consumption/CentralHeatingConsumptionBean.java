@@ -21,4 +21,8 @@ public class CentralHeatingConsumptionBean extends AbstractBean{
     public Long getCentralHeatingConsumptionsCount(FilterWrapper<CentralHeatingConsumption> filterWrapper){
         return sqlSession().selectOne(NS +".selectCentralHeatingConsumptionsCount", filterWrapper);
     }
+
+    public void save(CentralHeatingConsumption centralHeatingConsumption){
+        sqlSession().insert(NS + ".insertCentralHeatingConsumption", centralHeatingConsumption);
+    }
 }

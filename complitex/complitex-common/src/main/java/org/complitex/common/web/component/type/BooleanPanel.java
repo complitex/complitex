@@ -5,6 +5,9 @@
 package org.complitex.common.web.component.type;
 
 import java.util.Locale;
+
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -23,6 +26,13 @@ public class BooleanPanel extends Panel {
         CheckBox checkBox = new CheckBox("checkbox", model);
         checkBox.setEnabled(enabled);
         checkBox.setLabel(labelModel);
+        checkBox.add(new OnChangeAjaxBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+
+            }
+        });
+
         add(checkBox);
     }
 

@@ -2,6 +2,7 @@ package org.complitex.common.web.component.domain;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -193,6 +194,11 @@ public class DomainObjectListPanel extends Panel {
 
         //Data View
         final RadioGroup<DomainObject> radioGroup = new RadioGroup<>("radioGroup", new Model<>());
+        radioGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+            }
+        });
         filterForm.add(radioGroup);
 
         dataView = new DataView<DomainObject>("data", dataProvider, 1) {
@@ -386,16 +392,12 @@ public class DomainObjectListPanel extends Panel {
         };
         filterForm.add(reset);
 
-        //Submit Action
-        AjaxButton submit = new AjaxButton("submit", filterForm) {
+        //Filter Action
+        AjaxLink submit = new AjaxLink("submit") {
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onClick(AjaxRequestTarget target) {
                 target.add(content);
-            }
-
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
             }
         };
         filterForm.add(submit);
@@ -407,9 +409,10 @@ public class DomainObjectListPanel extends Panel {
         actionContainer.setVisible(radioSelect);
         filterForm.add(actionContainer);
 
-        actionContainer.add(new AjaxSubmitLink("select") {
+        //Actions
+        actionContainer.add(new AjaxLink("select") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onClick(AjaxRequestTarget target) {
                 onSelect(target, radioGroup.getModelObject());
             }
         });

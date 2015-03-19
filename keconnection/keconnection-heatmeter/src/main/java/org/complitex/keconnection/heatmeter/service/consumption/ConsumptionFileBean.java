@@ -21,4 +21,8 @@ public class ConsumptionFileBean extends AbstractBean{
     public Long getConsumptionFilesCount(FilterWrapper<ConsumptionFile> filterWrapper){
         return sqlSession().selectOne(NS + ".selectConsumptionFilesCount", filterWrapper);
     }
+
+    public void save(ConsumptionFile consumptionFile){
+        sqlSession().insert(NS + ".insertConsumptionFile", consumptionFile);
+    }
 }

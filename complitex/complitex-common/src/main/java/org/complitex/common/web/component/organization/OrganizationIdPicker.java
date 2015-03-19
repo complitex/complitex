@@ -1,5 +1,6 @@
 package org.complitex.common.web.component.organization;
 
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.DomainObject;
@@ -15,7 +16,7 @@ public class OrganizationIdPicker extends Panel{
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     protected IOrganizationStrategy organizationStrategy;
 
-    public OrganizationIdPicker(String id, final IModel<Long> model, Long... organizationTypeIds) {
+    public OrganizationIdPicker(String id, final IModel<Long> model,  Long... organizationTypeIds) {
         super(id, model);
 
         add(new OrganizationPicker("picker", new IModel<DomainObject>() {
@@ -26,7 +27,9 @@ public class OrganizationIdPicker extends Panel{
 
             @Override
             public void setObject(DomainObject object) {
-                model.setObject(object != null ? object.getObjectId() : null);
+                if (object != null) { //todo fix nested form submit
+                    model.setObject(object.getObjectId());
+                }
             }
 
             @Override

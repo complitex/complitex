@@ -3,15 +3,15 @@
 <mapper namespace="org.complitex.keconnection.heatmeter.service.consumption.ConsumptionFileBean">
     <resultMap id="consumptionFileResultMap"
                type="org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile">
-        <id column="id"/>
-        <result column="name"/>
-        <result column="om"/>
-        <result column="service_provider_id"/>
-        <result column="user_organization_id"/>
-        <result column="type"/>
-        <result column="status"/>
-        <result column="loaded"/>
-        <result column="check_sum"/>
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="om" property="om"/>
+        <result column="service_provider_id" property="serviceProviderId"/>
+        <result column="user_organization_id" property="userOrganizationId"/>
+        <result column="type" property="type"/>
+        <result column="loaded" property="loaded"/>
+        <result column="check_sum" property="checkSum"/>
+        <result column="status" property="status"/>
     </resultMap>
 
     <sql id="sqlWhere">

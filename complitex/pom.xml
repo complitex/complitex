@@ -384,7 +384,6 @@
             </dependency>
 
             <!--Bootstrap-->
-
             <dependency>
                 <groupId>de.agilecoders.wicket</groupId>
                 <artifactId>wicket-bootstrap-core</artifactId>
@@ -399,6 +398,13 @@
                 <groupId>de.agilecoders.wicket</groupId>
                 <artifactId>wicket-bootstrap-themes</artifactId>
                 <version>0.9.7</version>
+            </dependency>
+
+            <!--Apache POI-->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>3.12-beta1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

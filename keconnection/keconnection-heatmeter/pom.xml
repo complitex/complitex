@@ -37,6 +37,11 @@
             <groupId>net.sf.opencsv</groupId>
             <artifactId>opencsv</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+        </dependency>
         
         <!-- Test dependencies -->
         <dependency>
@@ -68,5 +73,7 @@
             <artifactId>orai18n</artifactId>
             <scope>test</scope>
         </dependency>
+
+
     </dependencies>
 </project>

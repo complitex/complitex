@@ -4,6 +4,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -47,18 +48,18 @@ public class InputPanel<T> extends Panel {
         if (size != null && size > 0) {
             textField.add(new AttributeModifier("size", String.valueOf(size)));
         }
-        if (toUpdate != null) {
-            textField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    //update own model
+        textField.add(new OnChangeAjaxBehavior() {
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                if (toUpdate != null) {
                     for (MarkupContainer updateComponent : toUpdate) {
                         target.add(updateComponent);
                     }
                 }
-            });
-        }
+            }
+        });
         add(textField);
     }
 }

@@ -2,6 +2,9 @@ package org.complitex.common.web.component.organization;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -57,10 +60,10 @@ public class OrganizationPickerDialog extends Panel {
 
         content = new WebMarkupContainer("content");
         content.setOutputMarkupPlaceholderTag(true);
-        content.setVisible(false);
         dialog.add(content);
 
-        final Form form = new Form("filterForm");
+        Form form = new Form("filterForm");
+
         content.add(form);
 
         final DomainObjectFilter example = new DomainObjectFilter();
@@ -88,23 +91,34 @@ public class OrganizationPickerDialog extends Panel {
             }
         };
 
-        form.add(new TextField<>("nameFilter", new AttributeExampleModel(example, NAME)));
+        form.add(new TextField<>("nameFilter", new AttributeExampleModel(example, NAME))
+                .add(new OnChangeAjaxBehavior() {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                    }
+                }));
 
-        form.add(new TextField<>("codeFilter", new AttributeExampleModel(example, CODE)));
+        form.add(new TextField<>("codeFilter", new AttributeExampleModel(example, CODE))
+                .add(new OnChangeAjaxBehavior() {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                    }
+                }));
 
         final RadioGroup<DomainObject> radioGroup = new RadioGroup<DomainObject>("radioGroup", organizationModel){
             @Override
             public IModelComparator getModelComparator() {
-                return new IModelComparator() {
-                    @Override
-                    public boolean compare(Component component, Object newObject) {
-                        return !(component.getDefaultModelObject() == null || newObject == null)
-                                && Objects.equals(((DomainObject) component.getDefaultModelObject()).getObjectId(),
-                                ((DomainObject) newObject).getObjectId());
-                    }
-                };
+                return (component, newObject) -> !(component.getDefaultModelObject() == null || newObject == null)
+                        && Objects.equals(((DomainObject) component.getDefaultModelObject()).getObjectId(),
+                        ((DomainObject) newObject).getObjectId());
             }
         };
+        radioGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+
+            }
+        });
         form.add(radioGroup);
 
         DataView<DomainObject> data = new DataView<DomainObject>("data", dataProvider) {
@@ -123,10 +137,9 @@ public class OrganizationPickerDialog extends Panel {
         PagingNavigator pagingNavigator = new PagingNavigator("navigator", data, content) ;
         content.add(pagingNavigator);
 
-        IndicatingAjaxButton find = new IndicatingAjaxButton("find", form) {
-
+        AjaxLink find = new AjaxLink("find") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onClick(AjaxRequestTarget target) {
                 dialog.center(target);
 
                 target.add(content);
@@ -134,11 +147,10 @@ public class OrganizationPickerDialog extends Panel {
         };
         form.add(find);
 
-        final AjaxSubmitLink select = new AjaxSubmitLink("select", form) {
+        final AjaxLink select = new AjaxLink("select") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onClick(AjaxRequestTarget target) {
                 dialog.close(target);
-                content.setVisible(false);
 
                 onSelect(target);
             }
@@ -146,7 +158,7 @@ public class OrganizationPickerDialog extends Panel {
 
         content.add(select);
 
-        AjaxLink<Void> cancel = new AjaxLink<Void>("cancel") {
+        AjaxLink cancel = new AjaxLink("cancel") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -157,7 +169,6 @@ public class OrganizationPickerDialog extends Panel {
     }
 
     public void open(AjaxRequestTarget target){
-        content.setVisible(true);
         target.add(content);
 
         dialog.open(target);

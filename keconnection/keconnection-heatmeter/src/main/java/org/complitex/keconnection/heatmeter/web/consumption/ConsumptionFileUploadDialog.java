@@ -1,8 +1,11 @@
 package org.complitex.keconnection.heatmeter.web.consumption;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -24,12 +27,16 @@ import static org.complitex.keconnection.organization_type.strategy.KeConnection
 /**
  * @author inheaven on 18.03.2015 2:03.
  */
-public class ConsumptionFileUploadPanel extends Panel {
-    public ConsumptionFileUploadPanel(String id) {
+public abstract class ConsumptionFileUploadDialog extends Panel {
+    private Dialog dialog;
+
+    public ConsumptionFileUploadDialog(String id) {
         super(id);
 
-        Dialog dialog = new Dialog("dialog");
+        dialog = new Dialog("dialog");
         dialog.setTitle(new ResourceModel("title"));
+        dialog.setWidth(450);
+        dialog.setModal(true);
         add(dialog);
 
         Form form = new Form("form");
@@ -58,11 +65,14 @@ public class ConsumptionFileUploadPanel extends Panel {
                 dialog.close(target);
 
                 onUpload(DateUtil.newDate(year.getModelObject(), month.getModelObject()),
-                        serviceProviderIdModel.getObject(), serviceIdModel.getObject(),fileUploadField);
+                        serviceProviderIdModel.getObject(), serviceIdModel.getObject(), fileUploadField);
             }
         });
     }
 
-    protected void onUpload(Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField){
+    protected abstract void onUpload(Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField);
+
+    public void open(AjaxRequestTarget target){
+        dialog.open(target);
     }
 }

@@ -33,6 +33,10 @@ public class DateUtil {
         return DATE_FORMAT.get();
     }
 
+    public static Date now() {
+        return Calendar.getInstance().getTime();
+    }
+
     public static Date getCurrentDate() {
         return Calendar.getInstance().getTime();
     }

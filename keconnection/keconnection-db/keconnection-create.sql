@@ -595,7 +595,8 @@ CREATE TABLE `consumption_file`(
   `name` VARCHAR(64) NOT NULL COMMENT 'Название файла',
   `om` DATE NOT NULL COMMENT 'Операционный месяц',
   `service_provider_id` BIGINT COMMENT 'Поставщик услуг',
-  `user_organization_id` BIGINT NOT NULL COMMENT 'Организация пользователей',
+  `service_id` BIGINT COMMENT 'Услуга',
+  `user_organization_id` BIGINT COMMENT 'Организация пользователей',
   `type` INT NOT NULL COMMENT 'Тип файла',
   `status` INT NOT NULL COMMENT 'Статус файла',
   `loaded` DATETIME NOT NULL COMMENT 'Дата загрузки',
@@ -604,6 +605,8 @@ CREATE TABLE `consumption_file`(
   PRIMARY KEY (`id`),
   KEY `key_service_provider_id` (`service_provider_id`),
   CONSTRAINT `fk_consumption_file__organization` FOREIGN KEY (`service_provider_id`) REFERENCES `organization` (`object_id`),
+  KEY `key_service_id` (`service_id`),
+  CONSTRAINT `fk_consumption_file__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`object_id`),
   KEY `key_user_organization_id` (`user_organization_id`),
   CONSTRAINT `fk_consumption_file__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `user_organization` (`id`)
 ) CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Файлы потреблений';
@@ -614,6 +617,7 @@ CREATE TABLE `consumption_file`(
 DROP TABLE IF EXISTS `central_heating_consumption`;
 CREATE TABLE `central_heating_consumption`(
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '',
+  `consumption_file_id` BIGINT NOT NULL COMMENT 'Файл начислений',
   `number` VARCHAR(100) COMMENT 'Номер по порядку',
   `district_code` VARCHAR(100) COMMENT 'Название района тепловых сетей',
   `organization_code` VARCHAR(100) COMMENT 'Код ЖЭКа ГИВЦ',
@@ -635,10 +639,12 @@ CREATE TABLE `central_heating_consumption`(
   `no_meter_rate` VARCHAR(100) COMMENT 'Кол-во Гкал на 1 м2 площади без индивидуальных счетчиков',
   `rate` VARCHAR(100) COMMENT 'Расчетный тариф отопления на 1 м2 для населения',
   `no_meter_volume` VARCHAR(100) COMMENT 'Согласованный объем услуги для квартир без индивидуальных счетчиков',
+  `status` INT NOT NULL COMMENT 'Статус записи',
 
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `key_consumption_file_id` (`consumption_file_id`),
+  CONSTRAINT `fk_central_heating_consumption__consumption_file` FOREIGN KEY (`consumption_file_id`) REFERENCES `consumption_file` (`id`)
 ) CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Записи начислений центрального отопления';
-
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -3,6 +3,7 @@ package org.complitex.keconnection.heatmeter.web.consumption;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.common.entity.FilterWrapper;
@@ -11,18 +12,19 @@ import org.complitex.common.web.component.datatable.Action;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.complitex.common.web.component.domain.DomainObjectFilteredColumn;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
+import org.complitex.template.web.component.toolbar.ToolbarButton;
+import org.complitex.template.web.component.toolbar.UploadButton;
 import org.complitex.template.web.template.TemplatePage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author inheaven on 17.03.2015 23:16.
  */
 public abstract class AbstractConsumptionFileList extends TemplatePage{
     private final static String[] FIELDS = {"name", "om", "serviceProviderId", "userOrganizationId", "status", "loaded"};
+
+    private ConsumptionFileUploadDialog consumptionFileUploadDialog;
 
     public AbstractConsumptionFileList() {
         add(new Label("title", new ResourceModel("title")));
@@ -56,6 +58,25 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
                 return AbstractConsumptionFileList.this.getCount(filterWrapper);
             }
         });
+
+        add(consumptionFileUploadDialog = new ConsumptionFileUploadDialog("consumptionFileUploadDialog"){
+            @Override
+            protected void onUpload(Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField) {
+                AbstractConsumptionFileList.this.onUpload(om, serviceProviderId, serviceId, fileUploadField);
+            }
+        });
+    }
+
+    @Override
+    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+        return Arrays.asList(
+                new UploadButton(id) {
+
+                    @Override
+                    protected void onClick(AjaxRequestTarget target) {
+                        consumptionFileUploadDialog.open(target);
+                    }
+                });
     }
 
     protected abstract void onView(AjaxRequestTarget target, IModel<ConsumptionFile> model);
@@ -63,4 +84,6 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
     protected abstract List<ConsumptionFile> getList(FilterWrapper<ConsumptionFile> filterWrapper);
 
     protected abstract Long getCount(FilterWrapper<ConsumptionFile> filterWrapper);
+
+    protected abstract void onUpload(Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField);
 }
