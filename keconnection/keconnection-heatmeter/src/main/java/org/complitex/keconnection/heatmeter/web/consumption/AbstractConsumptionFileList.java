@@ -22,7 +22,7 @@ import java.util.*;
  * @author inheaven on 17.03.2015 23:16.
  */
 public abstract class AbstractConsumptionFileList extends TemplatePage{
-    private final static String[] FIELDS = {"name", "om", "serviceProviderId", "userOrganizationId", "status", "loaded"};
+    private final static String[] FIELDS = {"name", "om", "serviceProviderId", "serviceId", "userOrganizationId", "status", "loaded"};
 
     private ConsumptionFileUploadDialog consumptionFileUploadDialog;
 
@@ -47,8 +47,8 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
 
         Map<String, IColumn<ConsumptionFile, String>> columnMap = new HashMap<>();
 
-        columnMap.put("serviceProviderId", new DomainObjectFilteredColumn<>(
-                "organization", "serviceProviderId", getLocale()));
+        columnMap.put("serviceProviderId", new DomainObjectFilteredColumn<>("organization", "serviceProviderId", getLocale()));
+        columnMap.put("serviceId", new DomainObjectFilteredColumn<>("service", "serviceId", getLocale()));
         //todo user organization panel
 
         add(filteredDataTable = new FilteredDataTable<ConsumptionFile>("dataTable", ConsumptionFile.class, columnMap, actions, FIELDS) {

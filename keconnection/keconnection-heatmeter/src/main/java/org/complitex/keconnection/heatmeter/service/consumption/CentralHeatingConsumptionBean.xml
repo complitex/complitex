@@ -30,7 +30,28 @@
 
     <sql id="sqlWhere">
         <where>
-          consumption_file_id = #{object.consumptionFileId}
+            consumption_file_id = #{object.consumptionFileId}
+            <if test="object.number != null">and number = #{number}</if>
+            <if test="object.districtCode != null">and district_code = #{districtCode}</if>
+            <if test="object.organizationCode != null">and organization_code = #{organizationCode}</if>
+            <if test="object.buildingCode != null">and building_code = #{buildingCode}</if>
+            <if test="object.accountNumber != null">and account_number = #{accountNumber}</if>
+            <if test="object.buildingNumber != null">and building_number = #{buildingNumber}</if>
+            <if test="object.commonVolume != null">and common_volume = #{commonVolume}</if>
+            <if test="object.apartmentRange != null">and apartment_range = #{apartmentRange}</if>
+            <if test="object.beginDate != null">and begin_date = #{beginDate}</if>
+            <if test="object.endDate != null">and end_date = #{endDate}</if>
+            <if test="object.commonArea != null">and common_area = #{commonArea}</if>
+            <if test="object.meterVolume != null">and meter_volume = #{meterVolume}</if>
+            <if test="object.meterArea != null">and meter_area = #{meterArea}</if>
+            <if test="object.commonRentArea != null">and common_rent_area = #{commonRentArea}</if>
+            <if test="object.meterRentVolume != null">and meter_rent_volume = #{meterRentVolume}</if>
+            <if test="object.meterRentArea != null">and meter_rent_area = #{meterRentArea}</if>
+            <if test="object.noMeterArea != null">and no_meter_area = #{noMeterArea}</if>
+            <if test="object.noMeterRate != null">and no_meter_rate = #{noMeterRate}</if>
+            <if test="object.rate != null">and rate = #{rate}</if>
+            <if test="object.noMeterRate != null">and no_meter_volume = #{noMeterRate}</if>
+            <if test="object.status != null">and status = #{status}</if>
         </where>
     </sql>
 
