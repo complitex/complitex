@@ -38,8 +38,8 @@
 
     <insert id="insertConsumptionFile" parameterType="org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile"
             useGeneratedKeys="true" keyProperty="id">
-        insert into consumption_file (name, om, service_provider_id, user_organization_id, type, status, loaded, check_sum)
-                value (#{name}, #{om}, #{serviceProviderId}, #{userOrganizationId}, #{type}, #{status}, #{loaded}, #{checkSum})
+        insert into consumption_file (name, om, service_provider_id, service_id, user_organization_id, type, status, loaded, check_sum)
+                value (#{name}, #{om}, #{serviceProviderId}, #{serviceId}, #{userOrganizationId}, #{type}, #{status}, #{loaded}, #{checkSum})
     </insert>
 
     <update id="updateConsumptionFile" parameterType="org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile">
