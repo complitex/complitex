@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.complitex.osznconnection.organization.strategy.entity;
+package org.complitex.organization.entity;
 
 import java.io.Serializable;
 

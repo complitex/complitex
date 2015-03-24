@@ -7,19 +7,30 @@ package org.complitex.keconnection.organization.strategy.web.edit;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
+import org.complitex.common.converter.StringConverter;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringCultures;
+import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
+import org.complitex.common.web.component.IDisableAwareChoiceRenderer;
 import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
 import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy;
+import org.complitex.organization.entity.RemoteDataSource;
+import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
+import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 
 import javax.ejb.EJB;
+import java.util.List;
 
 /**
  *
@@ -34,6 +45,8 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
     private StringCultureBean stringBean;
     private WebMarkupContainer readyCloseOmSection;
     private WebMarkupContainer omSection;
+    private WebMarkupContainer dataSourceContainer;
+    private IModel<RemoteDataSource> dataSourceModel;
 
     public KeConnectionOrganizationEditComponent(String id, boolean disabled) {
         super(id, disabled);
@@ -92,6 +105,60 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
             omSection.setVisibilityAllowed(!isDisabled);
             omSection.setVisible(isServicingOrganization());
         }
+
+        //reference to jdbc data source. Only for calculation centres.
+        {
+            dataSourceContainer = new WebMarkupContainer("dataSourceContainer");
+            dataSourceContainer.setOutputMarkupPlaceholderTag(true);
+            add(dataSourceContainer);
+            final IModel<String> dataSourceLabelModel = new ResourceModel("dataSourceLabel");
+            dataSourceContainer.add(new Label("dataSourceLabel", dataSourceLabelModel));
+            dataSourceModel = new Model<>();
+
+            final String currentDataSource = AttributeUtil.getStringValue(organization, OrganizationStrategy.DATA_SOURCE);
+            final List<RemoteDataSource> allDataSources = organizationStrategy.findRemoteDataSources(currentDataSource);
+
+            for (RemoteDataSource ds : allDataSources) {
+                if (ds.isCurrent()) {
+                    dataSourceModel.setObject(ds);
+                    break;
+                }
+            }
+
+            DisableAwareDropDownChoice<RemoteDataSource> dataSource =
+                    new DisableAwareDropDownChoice<>("dataSource", dataSourceModel, allDataSources,
+                            new IDisableAwareChoiceRenderer<RemoteDataSource>() {
+
+                                @Override
+                                public Object getDisplayValue(RemoteDataSource remoteDataSource) {
+                                    return remoteDataSource.getDataSource();
+                                }
+
+                                @Override
+                                public boolean isDisabled(RemoteDataSource remoteDataSource) {
+                                    return !remoteDataSource.isExist();
+                                }
+
+                                @Override
+                                public String getIdValue(RemoteDataSource remoteDataSource, int index) {
+                                    return remoteDataSource.getDataSource();
+                                }
+                            });
+            dataSource.setRequired(true);
+            dataSource.setLabel(dataSourceLabelModel);
+            dataSource.setEnabled(enabled());
+            dataSourceContainer.add(dataSource);
+            dataSourceContainer.setVisible(isCalculationCenter());
+        }
+    }
+
+    public boolean isCalculationCenter() {
+        for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
+            if (organizationType.getObjectId().equals(KeConnectionOrganizationTypeStrategy.CALCULATION_MODULE)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -149,6 +216,16 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
         if (!isServicingOrganization()) {
             //Readiness to close operating month.
             organization.removeAttribute(KeConnectionOrganizationStrategy.READY_CLOSE_OPER_MONTH);
+        }
+
+        if (!isCalculationCenter()) {
+            //data source
+            getDomainObject().removeAttribute(OrganizationStrategy.DATA_SOURCE);
+        } else {
+            //data source
+            String dataSource = dataSourceModel.getObject().getDataSource();
+            StringCultures.getSystemStringCulture(organization.getAttribute(OrganizationStrategy.DATA_SOURCE).getStringCultures()).
+                    setValue(dataSource);
         }
     }
 }

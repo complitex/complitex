@@ -25,7 +25,7 @@ public class CentralHeatingConsumptionList extends TemplatePage{
     private final static String[] FIELDS = {"id", "number", "districtCode", "organizationCode", "buildingCode", "accountNumber",
             "street", "buildingNumber", "commonVolume", "apartmentRange", "beginDate", "endDate", "commonArea",
             "meterVolume", "meterArea", "commonRentArea", "meterRentVolume", "meterRentArea", "noMeterArea",
-            "noMeterRate", "rate", "noMeterVolume"};
+            "noMeterRate", "rate", "noMeterVolume", "status"};
 
     @EJB
     private CentralHeatingConsumptionBean centralHeatingConsumptionBean;

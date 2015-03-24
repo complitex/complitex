@@ -57,7 +57,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
 
     private static final String NS = KeConnectionOrganizationStrategy.class.getName();
 
-    private static final List<Long> CUSTOM_ATTRIBUTE_TYPES = ImmutableList.of(READY_CLOSE_OPER_MONTH);
+    private static final List<Long> CUSTOM_ATTRIBUTE_TYPES = ImmutableList.of(READY_CLOSE_OPER_MONTH, DATA_SOURCE);
     public static final String PARENT_SHORT_NAME_FILTER = "parentShortName";
 
     @EJB

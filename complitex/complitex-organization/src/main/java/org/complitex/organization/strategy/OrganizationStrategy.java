@@ -1,6 +1,7 @@
 package org.complitex.organization.strategy;
 
 import com.google.common.collect.*;
+import org.apache.ibatis.logging.LogFactory;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.*;
@@ -13,14 +14,19 @@ import org.complitex.common.util.Numbers;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
+import org.complitex.organization.entity.RemoteDataSource;
 import org.complitex.organization.strategy.web.edit.OrganizationEdit;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.organization.strategy.web.edit.OrganizationValidator;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
+import javax.naming.*;
+import javax.sql.DataSource;
 import java.util.*;
 
 /**
@@ -28,6 +34,8 @@ import java.util.*;
  * @author Artem
  */
 public abstract class OrganizationStrategy<T extends DomainObject> extends TemplateStrategy implements IOrganizationStrategy<T> {
+    private Logger log = LoggerFactory.getLogger(OrganizationStrategy.class);
+
     public static final String ORGANIZATION_NS = OrganizationStrategy.class.getName();
 
     private static final String RESOURCE_BUNDLE = OrganizationStrategy.class.getName();
@@ -423,5 +431,77 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
         stringLocaleBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         permissionBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         sequenceBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
+    }
+
+    /**
+     * Finds remote jdbc data sources.
+     * @param currentDataSource Current data source.
+     * @return Remote jdbc data sources.
+     */
+    public List<RemoteDataSource> findRemoteDataSources(String currentDataSource) {
+        final String JDBC_PREFIX = "jdbc";
+        final String GLASSFISH_INTERNAL_SUFFIX = "__pm";
+        final Set<String> PREDEFINED_DATA_SOURCES = ImmutableSet.of("sample", "__TimerPool", "__default");
+
+        Set<RemoteDataSource> remoteDataSources = Sets.newTreeSet(new Comparator<RemoteDataSource>() {
+
+            @Override
+            public int compare(RemoteDataSource o1, RemoteDataSource o2) {
+                return o1.getDataSource().compareTo(o2.getDataSource());
+            }
+        });
+
+        boolean currentDataSourceEnabled = false;
+
+        try {
+            Context context = new InitialContext();
+            final NamingEnumeration<NameClassPair> resources = context.list(JDBC_PREFIX);
+            if (resources != null) {
+                while (resources.hasMore()) {
+                    final NameClassPair nc = resources.next();
+                    if (nc != null) {
+                        final String name = nc.getName();
+                        if (!Strings.isEmpty(name) && !name.endsWith(GLASSFISH_INTERNAL_SUFFIX)
+                                && !PREDEFINED_DATA_SOURCES.contains(name)) {
+                            final String fullDataSource = JDBC_PREFIX + "/" + name;
+                            Object jndiObject = null;
+                            try {
+                                jndiObject = context.lookup(fullDataSource);
+                            } catch (NamingException e) {
+                            }
+
+                            if (jndiObject instanceof DataSource) {
+                                boolean current = false;
+                                if (fullDataSource.equals(currentDataSource)) {
+                                    currentDataSourceEnabled = true;
+                                    current = true;
+                                }
+                                remoteDataSources.add(new RemoteDataSource(fullDataSource, current));
+                            }
+                        }
+
+                    }
+                }
+            }
+        } catch (NamingException e) {
+            log.error("", e);
+        }
+
+        if (!currentDataSourceEnabled && !Strings.isEmpty(currentDataSource)) {
+            remoteDataSources.add(new RemoteDataSource(currentDataSource, true, false));
+        }
+
+        return Lists.newArrayList(remoteDataSources);
+    }
+
+    /**
+     * Figures out data source of calculation center.
+     *
+     * @param calculationCenterId Calculation center's id
+     * @return Calculation center's data source
+     */
+    public String getDataSource(long calculationCenterId) {
+        DomainObject calculationCenter = getDomainObject(calculationCenterId, true);
+        return AttributeUtil.getStringValue(calculationCenter, DATA_SOURCE);
     }
 }

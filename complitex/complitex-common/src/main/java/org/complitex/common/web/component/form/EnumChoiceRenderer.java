@@ -18,7 +18,9 @@ public class EnumChoiceRenderer<T extends Enum<T>> implements IChoiceRenderer<T>
 
     @Override
     public Object getDisplayValue(T object) {
-        return ResourceUtil.getString(object.getClass().getName(), object.name(), locale);
+        return object != null
+                ? ResourceUtil.getString(object.getClass().getName(), object.name(), locale)
+                : "";
     }
 
     @Override

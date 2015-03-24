@@ -29,7 +29,7 @@ import org.complitex.common.web.component.list.AjaxRemovableListView;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.entity.OsznOrganization;
-import org.complitex.osznconnection.organization.strategy.entity.RemoteDataSource;
+import org.complitex.organization.entity.RemoteDataSource;
 import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociation;
 import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociationList;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;

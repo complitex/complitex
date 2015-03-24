@@ -17,7 +17,7 @@ import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.entity.OsznOrganization;
-import org.complitex.osznconnection.organization.strategy.entity.RemoteDataSource;
+import org.complitex.organization.entity.RemoteDataSource;
 import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociation;
 import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociationList;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationEditComponent;
@@ -335,78 +335,6 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
      */
     public ServiceAssociationList getServiceAssociations(DomainObject userOrganization) {
         return loadServiceAssociations(userOrganization);
-    }
-
-    /**
-     * Finds remote jdbc data sources.
-     * @param currentDataSource Current data source.
-     * @return Remote jdbc data sources.
-     */
-    public List<RemoteDataSource> findRemoteDataSources(String currentDataSource) {
-        final String JDBC_PREFIX = "jdbc";
-        final String GLASSFISH_INTERNAL_SUFFIX = "__pm";
-        final Set<String> PREDEFINED_DATA_SOURCES = ImmutableSet.of("sample", "__TimerPool", "__default");
-
-        Set<RemoteDataSource> remoteDataSources = Sets.newTreeSet(new Comparator<RemoteDataSource>() {
-
-            @Override
-            public int compare(RemoteDataSource o1, RemoteDataSource o2) {
-                return o1.getDataSource().compareTo(o2.getDataSource());
-            }
-        });
-
-        boolean currentDataSourceEnabled = false;
-
-        try {
-            Context context = new InitialContext();
-            final NamingEnumeration<NameClassPair> resources = context.list(JDBC_PREFIX);
-            if (resources != null) {
-                while (resources.hasMore()) {
-                    final NameClassPair nc = resources.next();
-                    if (nc != null) {
-                        final String name = nc.getName();
-                        if (!Strings.isEmpty(name) && !name.endsWith(GLASSFISH_INTERNAL_SUFFIX)
-                                && !PREDEFINED_DATA_SOURCES.contains(name)) {
-                            final String fullDataSource = JDBC_PREFIX + "/" + name;
-                            Object jndiObject = null;
-                            try {
-                                jndiObject = context.lookup(fullDataSource);
-                            } catch (NamingException e) {
-                            }
-
-                            if (jndiObject instanceof DataSource) {
-                                boolean current = false;
-                                if (fullDataSource.equals(currentDataSource)) {
-                                    currentDataSourceEnabled = true;
-                                    current = true;
-                                }
-                                remoteDataSources.add(new RemoteDataSource(fullDataSource, current));
-                            }
-                        }
-
-                    }
-                }
-            }
-        } catch (NamingException e) {
-            log.error("", e);
-        }
-
-        if (!currentDataSourceEnabled && !Strings.isEmpty(currentDataSource)) {
-            remoteDataSources.add(new RemoteDataSource(currentDataSource, true, false));
-        }
-
-        return Lists.newArrayList(remoteDataSources);
-    }
-
-    /**
-     * Figures out data source of calculation center.
-     *
-     * @param calculationCenterId Calculation center's id
-     * @return Calculation center's data source
-     */
-    public String getDataSource(long calculationCenterId) {
-        DomainObject calculationCenter = getDomainObject(calculationCenterId, true);
-        return AttributeUtil.getStringValue(calculationCenter, DATA_SOURCE);
     }
 
     /**
