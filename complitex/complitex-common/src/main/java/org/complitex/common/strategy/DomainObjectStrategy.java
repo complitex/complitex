@@ -48,7 +48,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     private SequenceBean sequenceBean;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringCultureBean stringCultureBean;
 
     @EJB
     private EntityBean entityBean;
@@ -243,7 +243,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     protected void loadStringCultures(String dataSource, Attribute attribute) {
-        attribute.setStringCultures(stringBean.getStringCultures(dataSource, attribute.getValueId(), getEntityName()));
+        attribute.setStringCultures(stringCultureBean.getStringCultures(dataSource, attribute.getValueId(), getEntityName()));
     }
 
 
@@ -438,8 +438,9 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void insertAttribute(Attribute attribute) {
         final List<StringCulture> strings = attribute.getStringCultures();
+
         if (strings != null) {
-            final Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), strings);
+            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), strings);
             attribute.setValueId(generatedStringId);
         } else {
             //reference attribute
@@ -458,7 +459,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected Long insertStrings(long attributeTypeId, List<StringCulture> strings) {
-        return stringBean.save(strings, getEntityName());
+        return stringCultureBean.save(strings, getEntityName());
     }
 
 
@@ -569,8 +570,9 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                                 case MASKED_DATE:
                                 case DOUBLE:
                                 case INTEGER: {
-                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getStringCultures()).getValue();
-                                    String newString = StringCultures.getSystemStringCulture(newAttr.getStringCultures()).getValue();
+                                    String oldString = oldAttr.getStringValue();
+                                    String newString = newAttr.getStringValue();
+
                                     if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }
@@ -579,8 +581,9 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
                                 case BIG_STRING:
                                 case STRING: {
-                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getStringCultures()).getValue();
-                                    String newString = StringCultures.getSystemStringCulture(newAttr.getStringCultures()).getValue();
+                                    String oldString = oldAttr.getStringValue();
+                                    String newString = newAttr.getStringValue();
+
                                     if (!Strings.isEqual(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }
@@ -1263,7 +1266,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected void deleteStrings(long objectId) {
         Set<Long> localizedValueTypeIds = getLocalizedValueTypeIds();
         if (localizedValueTypeIds != null && !localizedValueTypeIds.isEmpty()) {
-            stringBean.delete(getEntityName(), objectId, localizedValueTypeIds);
+            stringCultureBean.delete(getEntityName(), objectId, localizedValueTypeIds);
         }
     }
 
@@ -1377,7 +1380,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     public void setSqlSessionFactoryBean(SqlSessionFactoryBean sqlSessionFactoryBean) {
         super.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         sequenceBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
-        stringBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
+        stringCultureBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         entityBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         stringLocaleBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         sessionBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);

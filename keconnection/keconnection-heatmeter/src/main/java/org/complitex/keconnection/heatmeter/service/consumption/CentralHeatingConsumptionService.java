@@ -32,6 +32,10 @@ public class CentralHeatingConsumptionService {
 
     public void load(Date om, Long serviceProviderId, Long serviceId, String fileName, String checkSum, InputStream inputStream){
         try {
+            if (fileName.length() > 255) {
+                fileName = fileName.substring(0, 255);
+            }
+
             HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
 
             HSSFSheet sheet = workbook.getSheetAt(0);

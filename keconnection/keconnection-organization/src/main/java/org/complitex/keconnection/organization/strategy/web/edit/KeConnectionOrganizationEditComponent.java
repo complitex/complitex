@@ -10,13 +10,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.common.converter.StringConverter;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
@@ -27,7 +25,6 @@ import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganiz
 import org.complitex.organization.entity.RemoteDataSource;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
-import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -115,7 +112,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
             dataSourceContainer.add(new Label("dataSourceLabel", dataSourceLabelModel));
             dataSourceModel = new Model<>();
 
-            final String currentDataSource = AttributeUtil.getStringValue(organization, OrganizationStrategy.DATA_SOURCE);
+            final String currentDataSource = organization.getStringValue(OrganizationStrategy.DATA_SOURCE);
             final List<RemoteDataSource> allDataSources = organizationStrategy.findRemoteDataSources(currentDataSource);
 
             for (RemoteDataSource ds : allDataSources) {
@@ -165,25 +162,9 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
     protected void onOrganizationTypeChanged(AjaxRequestTarget target) {
         super.onOrganizationTypeChanged(target);
 
-        //Readiness to close operating month.
-        {
-            boolean wasVisible = readyCloseOmSection.isVisible();
-            readyCloseOmSection.setVisible(isServicingOrganization());
-            boolean visibleNow = readyCloseOmSection.isVisible();
-            if (wasVisible ^ visibleNow) {
-                target.add(readyCloseOmSection);
-            }
-        }
-
-        //Operating month.
-        {
-            boolean wasVisible = omSection.isVisible();
-            omSection.setVisible(isServicingOrganization());
-            boolean visibleNow = omSection.isVisible();
-            if (wasVisible ^ visibleNow) {
-                target.add(omSection);
-            }
-        }
+        target.add(readyCloseOmSection.setVisible(isServicingOrganization()));
+        target.add(omSection.setVisible(isServicingOrganization()));
+        target.add(dataSourceContainer.setVisible(isCalculationCenter()));
     }
 
     @Override
@@ -224,8 +205,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
         } else {
             //data source
             String dataSource = dataSourceModel.getObject().getDataSource();
-            StringCultures.getSystemStringCulture(organization.getAttribute(OrganizationStrategy.DATA_SOURCE).getStringCultures()).
-                    setValue(dataSource);
+            organization.setStringValue(OrganizationStrategy.DATA_SOURCE, dataSource);
         }
     }
 }

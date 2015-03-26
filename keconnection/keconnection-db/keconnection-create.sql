@@ -592,7 +592,7 @@ CREATE TABLE `service_contract_service`(
 DROP TABLE IF EXISTS `consumption_file`;
 CREATE TABLE `consumption_file`(
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
-  `name` VARCHAR(64) NOT NULL COMMENT 'Название файла',
+  `name` VARCHAR(255) NOT NULL COMMENT 'Название файла',
   `om` DATE NOT NULL COMMENT 'Операционный месяц',
   `service_provider_id` BIGINT COMMENT 'Поставщик услуг',
   `service_id` BIGINT COMMENT 'Услуга',

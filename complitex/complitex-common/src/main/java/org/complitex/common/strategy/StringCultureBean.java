@@ -49,7 +49,7 @@ public class StringCultureBean extends AbstractBean {
     }
 
     public Long save(List<StringCulture> strings, String entityName) {
-        return save(strings, entityName, true);
+        return save(strings, entityName, false);
     }
 
     protected void save(StringCulture stringCulture, String entityName, boolean upperCase) {

@@ -1,7 +1,6 @@
 package org.complitex.organization.strategy;
 
 import com.google.common.collect.*;
-import org.apache.ibatis.logging.LogFactory;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.*;
@@ -147,6 +146,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     @Override
     public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
         super.update(oldObject, newObject, updateDate);
+
         changeDistrictPermissions(oldObject, newObject);
     }
 
