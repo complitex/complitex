@@ -23,13 +23,15 @@ import java.util.Map;
  *         Date: 001 01.07.14 17:06
  */
 public abstract class FilteredDataTable<T extends Serializable> extends Panel implements IFilterBean<T>{
+    private FilteredDataProvider<T> provider;
+
     public FilteredDataTable(String id, Class<T> objectClass, Map<String, IColumn<T, String>> columnMap,
                              List<Action<T>> actions, String... fields) {
         super(id);
 
         setOutputMarkupId(true);
 
-        FilteredDataProvider<T> provider = new FilteredDataProvider<>(this, objectClass);
+        provider = new FilteredDataProvider<>(this, objectClass);
 
         FilterForm<T> form = new FilterForm<>("form", provider);
         add(form);
@@ -77,5 +79,9 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
 
     protected IColumn<T, String> getColumn(String field, Field f){
         return null;
+    }
+
+    public FilterWrapper<T> getFilterWrapper(){
+        return provider.getFilterWrapper();
     }
 }

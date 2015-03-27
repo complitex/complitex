@@ -37,7 +37,10 @@ public class CentralHeatingConsumptionList extends TemplatePage{
         final AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");
         add(messages);
 
-        add(new FilteredDataTable<CentralHeatingConsumption>("dataTable", CentralHeatingConsumption.class, FIELDS) {
+        FilteredDataTable<CentralHeatingConsumption> filteredDataTable;
+
+        add(filteredDataTable = new FilteredDataTable<CentralHeatingConsumption>("dataTable",
+                CentralHeatingConsumption.class, FIELDS) {
             @Override
             public List<CentralHeatingConsumption> getList(FilterWrapper<CentralHeatingConsumption> filterWrapper) {
                 filterWrapper.getObject().setConsumptionFileId(pageParameters.get("id").toLongObject());
@@ -52,6 +55,9 @@ public class CentralHeatingConsumptionList extends TemplatePage{
                 return centralHeatingConsumptionBean.getCentralHeatingConsumptionsCount(filterWrapper);
             }
         });
+
+        //ascending order
+        filteredDataTable.getFilterWrapper().setAscending(true);
 
         add(new AjaxLink("back") {
             @Override

@@ -622,7 +622,7 @@ CREATE TABLE `central_heating_consumption`(
   `district_code` VARCHAR(100) COMMENT 'Название района тепловых сетей',
   `organization_code` VARCHAR(100) COMMENT 'Код ЖЭКа ГИВЦ',
   `building_code` VARCHAR(100) COMMENT 'Код дома ГИВЦ',
-  `account_numner` VARCHAR(100) COMMENT 'ГПУ',
+  `account_number` VARCHAR(100) COMMENT 'ГПУ',
   `street` VARCHAR(100) COMMENT 'Адрес дома',
   `building_number` VARCHAR(100) COMMENT 'Номер дома',
   `common_volume` VARCHAR(100) COMMENT 'Информация ПУ в расходе по коллективному счетчику отопления',

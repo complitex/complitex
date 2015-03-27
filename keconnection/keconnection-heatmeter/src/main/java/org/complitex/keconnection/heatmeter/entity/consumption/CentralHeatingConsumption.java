@@ -1,5 +1,6 @@
 package org.complitex.keconnection.heatmeter.entity.consumption;
 
+import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.AbstractEntity;
 
 /**
@@ -221,5 +222,29 @@ public class CentralHeatingConsumption extends AbstractEntity {
 
     public void setStatus(ConsumptionStatus status) {
         this.status = status;
+    }
+
+    public boolean isEmpty(){
+        return Strings.isEmpty(number)
+                && Strings.isEmpty(districtCode)
+                && Strings.isEmpty(organizationCode)
+                && Strings.isEmpty(buildingCode)
+                && Strings.isEmpty(accountNumber)
+                && Strings.isEmpty(street)
+                && Strings.isEmpty(buildingNumber)
+                && Strings.isEmpty(commonVolume)
+                && Strings.isEmpty(apartmentRange)
+                && Strings.isEmpty(beginDate)
+                && Strings.isEmpty(endDate)
+                && Strings.isEmpty(commonArea)
+                && Strings.isEmpty(meterVolume)
+                && Strings.isEmpty(meterArea)
+                && Strings.isEmpty(commonRentArea)
+                && Strings.isEmpty(meterRentVolume)
+                && Strings.isEmpty(meterRentArea)
+                && Strings.isEmpty(noMeterArea)
+                && Strings.isEmpty(noMeterRate)
+                && Strings.isEmpty(rate)
+                && Strings.isEmpty(noMeterVolume);
     }
 }

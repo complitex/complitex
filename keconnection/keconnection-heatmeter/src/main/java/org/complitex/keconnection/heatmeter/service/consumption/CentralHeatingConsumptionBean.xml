@@ -24,7 +24,7 @@
         <result column="no_meter_area" property="noMeterArea"/>
         <result column="no_meter_rate" property="noMeterRate"/>
         <result column="rate" property="rate"/>
-        <result column="no_meter_volume" property="noMeterRate"/>
+        <result column="no_meter_volume" property="noMeterVolume"/>
         <result column="status" property="status"/>
     </resultMap>
 
@@ -67,7 +67,7 @@
     </select>
 
     <insert id="insertCentralHeatingConsumption" parameterType="org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption">
-        insert into central_heating_consumption (consumption_file_id, number, district_code, organization_code, building_code, account_numner,
+        insert into central_heating_consumption (consumption_file_id, number, district_code, organization_code, building_code, account_number,
             street, building_number, common_volume, appartment_range, begin_date, end_date, common_area, meter_volume,
             meter_area, common_rent_area, meter_rent_volume, meter_rent_area, no_meter_area, no_meter_rate, rate, no_meter_volume, status)
         values (#{consumptionFileId}, #{number}, #{districtCode}, #{organizationCode}, #{buildingCode}, #{accountNumber}, #{street},

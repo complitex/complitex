@@ -60,5 +60,7 @@ public class FilteredDataProvider<T extends Serializable> extends SortableDataPr
         filterWrapper.setObject(state);
     }
 
-
+    public FilterWrapper<T> getFilterWrapper(){
+        return filterWrapper;
+    }
 }
