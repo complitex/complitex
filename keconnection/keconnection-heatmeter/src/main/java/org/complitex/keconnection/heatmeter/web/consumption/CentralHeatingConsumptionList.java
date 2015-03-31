@@ -23,9 +23,7 @@ import java.util.List;
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class CentralHeatingConsumptionList extends TemplatePage{
     private final static String[] FIELDS = {"id", "number", "districtCode", "organizationCode", "buildingCode", "accountNumber",
-            "street", "buildingNumber", "commonVolume", "apartmentRange", "beginDate", "endDate", "commonArea",
-            "meterVolume", "meterArea", "commonRentArea", "meterRentVolume", "meterRentArea", "noMeterArea",
-            "noMeterRate", "rate", "noMeterVolume", "status"};
+            "street", "buildingNumber", "commonVolume", "apartmentRange", "beginDate", "endDate", "status"};
 
     @EJB
     private CentralHeatingConsumptionBean centralHeatingConsumptionBean;

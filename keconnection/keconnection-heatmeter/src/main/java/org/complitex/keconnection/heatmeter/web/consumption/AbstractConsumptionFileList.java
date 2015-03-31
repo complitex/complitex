@@ -76,7 +76,7 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
 
     @Override
     protected List<? extends ToolbarButton> getToolbarButtons(String id) {
-        return Arrays.asList(
+        return Collections.singletonList(
                 new UploadButton(id) {
 
                     @Override
