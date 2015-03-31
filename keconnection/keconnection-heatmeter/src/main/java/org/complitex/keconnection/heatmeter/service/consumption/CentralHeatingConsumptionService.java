@@ -69,16 +69,6 @@ public class CentralHeatingConsumptionService {
                     c.setApartmentRange(getStringValue(evaluator, r.getCell(8)));
                     c.setBeginDate(getStringValue(evaluator, r.getCell(9)));
                     c.setEndDate(getStringValue(evaluator, r.getCell(10)));
-                    c.setCommonArea(getStringValue(evaluator, r.getCell(11)));
-                    c.setMeterVolume(getStringValue(evaluator, r.getCell(12)));
-                    c.setMeterArea(getStringValue(evaluator, r.getCell(13)));
-                    c.setCommonRentArea(getStringValue(evaluator, r.getCell(14)));
-                    c.setMeterRentVolume(getStringValue(evaluator, r.getCell(15)));
-                    c.setMeterRentArea(getStringValue(evaluator, r.getCell(16)));
-                    c.setNoMeterArea(getStringValue(evaluator, r.getCell(17)));
-                    c.setNoMeterRate(getStringValue(evaluator, r.getCell(18)));
-                    c.setRate(getStringValue(evaluator, r.getCell(19)));
-                    c.setNoMeterVolume(getStringValue(evaluator, r.getCell(20)));
 
                     c.setStatus(ConsumptionStatus.LOADED); //todo validate
 

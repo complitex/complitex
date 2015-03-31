@@ -6,11 +6,10 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.crypt.Base64;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
-import org.complitex.keconnection.heatmeter.service.consumption.ConsumptionFileBean;
 import org.complitex.keconnection.heatmeter.service.consumption.CentralHeatingConsumptionService;
+import org.complitex.keconnection.heatmeter.service.consumption.ConsumptionFileBean;
 import org.complitex.template.web.security.SecurityRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
