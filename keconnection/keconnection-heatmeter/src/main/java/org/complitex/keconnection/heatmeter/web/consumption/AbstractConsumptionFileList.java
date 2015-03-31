@@ -11,7 +11,9 @@ import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.Action;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.complitex.common.web.component.domain.DomainObjectFilteredColumn;
+import org.complitex.common.web.component.organization.OrganizationFilteredColumn;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
+import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.component.toolbar.UploadButton;
 import org.complitex.template.web.template.TemplatePage;
@@ -47,7 +49,8 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
 
         Map<String, IColumn<ConsumptionFile, String>> columnMap = new HashMap<>();
 
-        columnMap.put("serviceProviderId", new DomainObjectFilteredColumn<>("organization", "serviceProviderId", getLocale()));
+        columnMap.put("serviceProviderId", new OrganizationFilteredColumn<>("organization", "serviceProviderId", getLocale(),
+                KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER));
         columnMap.put("serviceId", new DomainObjectFilteredColumn<>("service", "serviceId", getLocale()));
         //todo user organization panel
 

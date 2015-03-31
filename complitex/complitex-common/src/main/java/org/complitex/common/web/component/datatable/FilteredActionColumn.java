@@ -6,7 +6,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilteredColumn;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
@@ -19,7 +18,7 @@ import java.util.List;
  *         Date: 21.07.2014 22:10
  */
 public class FilteredActionColumn<T> implements IColumn<T, String>, IFilteredColumn<T, String> {
-    private ActionDialogPanel<T> actionDialogPanel;
+    private FilteredActionInput<T> filteredActionInput;
 
     private List<Action<T>> actions;
 
@@ -36,7 +35,7 @@ public class FilteredActionColumn<T> implements IColumn<T, String>, IFilteredCol
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     if (action.isConfirm()){
-                        actionDialogPanel.open(target, action, rowModel);
+                        filteredActionInput.getActionDialogPanel().open(target, action, rowModel);
                     }else {
                         action.onAction(target, rowModel);
                     }
@@ -55,7 +54,12 @@ public class FilteredActionColumn<T> implements IColumn<T, String>, IFilteredCol
 
     @Override
     public Component getHeader(String componentId) {
-        return new EmptyPanel(componentId);
+        return new FilteredActionHeader(componentId){
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                onReset(target);
+            }
+        };
     }
 
     @Override
@@ -74,6 +78,17 @@ public class FilteredActionColumn<T> implements IColumn<T, String>, IFilteredCol
 
     @Override
     public Component getFilter(String componentId, FilterForm<?> form) {
-        return actionDialogPanel = new ActionDialogPanel<>(componentId);
+        return filteredActionInput = new FilteredActionInput<T>(componentId){
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                onFilter(target);
+            }
+        };
+    }
+
+    protected void onReset(AjaxRequestTarget target){
+    }
+
+    protected void onFilter(AjaxRequestTarget target){
     }
 }

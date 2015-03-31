@@ -1,6 +1,7 @@
 package org.complitex.common.web.component.datatable;
 
 import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -59,12 +60,23 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
             columns.add(column);
         }
 
-        if (actions != null && !actions.isEmpty()){
-            columns.add(new FilteredActionColumn<>(actions));
-        }
-
         DataTable<T, String> table = new DataTable<>("table", columns, provider, 10);
         table.setOutputMarkupId(true);
+
+        if (actions != null && !actions.isEmpty()){
+            columns.add(new FilteredActionColumn<T>(actions){
+                @Override
+                protected void onReset(AjaxRequestTarget target) {
+                    provider.init();
+                    target.add(table);
+                }
+
+                @Override
+                protected void onFilter(AjaxRequestTarget target) {
+                    target.add(table);
+                }
+            });
+        }
 
         table.addTopToolbar(new HeadersToolbar<>(table, provider));
         table.addTopToolbar(new FilterToolbar(table, form, provider));

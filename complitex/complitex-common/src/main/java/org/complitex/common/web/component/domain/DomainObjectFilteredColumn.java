@@ -35,7 +35,7 @@ public class DomainObjectFilteredColumn<T> extends AbstractColumn<T, String> imp
 
     @Override
     public Component getFilter(String componentId, FilterForm<?> form) {
-        return new TextFilter<>(componentId, Model.of(""), form);
+        return new TextFilter<>(componentId, new PropertyModel<>(form.getModel(), getPropertyExpression()), form);
     }
 
     @Override
@@ -49,5 +49,9 @@ public class DomainObjectFilteredColumn<T> extends AbstractColumn<T, String> imp
         }
 
         cellItem.add(new Label(componentId, Model.of(name)));
+    }
+
+    public String getPropertyExpression() {
+        return propertyExpression;
     }
 }

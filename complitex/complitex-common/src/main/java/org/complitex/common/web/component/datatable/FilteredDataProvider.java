@@ -16,10 +16,16 @@ import java.util.Iterator;
 public class FilteredDataProvider<T extends Serializable> extends SortableDataProvider<T, String> implements IFilterStateLocator<T> {
     private FilterWrapper<T> filterWrapper;
     private IFilterBean<T> filterBean;
+    private Class<T> objectClass;
 
     public FilteredDataProvider(IFilterBean<T> filterBean, Class<T> objectClass) {
         this.filterBean = filterBean;
+        this.objectClass = objectClass;
 
+        init();
+    }
+
+    public void init(){
         try {
             filterWrapper = FilterWrapper.of(objectClass.newInstance());
         } catch (InstantiationException | IllegalAccessException e) {
