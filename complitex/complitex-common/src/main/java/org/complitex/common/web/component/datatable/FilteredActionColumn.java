@@ -30,7 +30,7 @@ public class FilteredActionColumn<T> implements IColumn<T, String>, IFilteredCol
     public void populateItem(Item<ICellPopulator<T>> cellItem, String componentId, final IModel<T> rowModel) {
         RepeatingView repeatingView = new RepeatingView(componentId);
 
-        for (final Action<T> action : actions){
+        for (Action<T> action : actions){
             repeatingView.add(new AjaxLinkPanel(repeatingView.newChildId(), action.getNameModel()) {
                 @Override
                 public void onClick(AjaxRequestTarget target) {

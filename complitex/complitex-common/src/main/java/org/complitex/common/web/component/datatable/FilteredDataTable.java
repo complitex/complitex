@@ -63,20 +63,18 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         DataTable<T, String> table = new DataTable<>("table", columns, provider, 10);
         table.setOutputMarkupId(true);
 
-        if (actions != null && !actions.isEmpty()){
-            columns.add(new FilteredActionColumn<T>(actions){
-                @Override
-                protected void onReset(AjaxRequestTarget target) {
-                    provider.init();
-                    target.add(table);
-                }
+        columns.add(new FilteredActionColumn<T>(actions != null ? actions : new ArrayList<>()){
+            @Override
+            protected void onReset(AjaxRequestTarget target) {
+                provider.init();
+                target.add(table);
+            }
 
-                @Override
-                protected void onFilter(AjaxRequestTarget target) {
-                    target.add(table);
-                }
-            });
-        }
+            @Override
+            protected void onFilter(AjaxRequestTarget target) {
+                target.add(table);
+            }
+        });
 
         table.addTopToolbar(new HeadersToolbar<>(table, provider));
         table.addTopToolbar(new FilterToolbar(table, form, provider));
