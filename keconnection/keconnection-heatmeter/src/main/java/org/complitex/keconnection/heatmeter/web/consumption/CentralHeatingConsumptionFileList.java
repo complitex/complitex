@@ -79,4 +79,9 @@ public class CentralHeatingConsumptionFileList extends AbstractConsumptionFileLi
             }
         });
     }
+
+    @Override
+    protected void onBind(AjaxRequestTarget target, List<ConsumptionFile> consumptionFiles) {
+        System.out.println(consumptionFiles);
+    }
 }

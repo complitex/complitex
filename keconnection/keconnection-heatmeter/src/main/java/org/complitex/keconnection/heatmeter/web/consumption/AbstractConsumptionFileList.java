@@ -1,6 +1,7 @@
 package org.complitex.keconnection.heatmeter.web.consumption;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -9,6 +10,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.Action;
+import org.complitex.common.web.component.datatable.CheckColumn;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.complitex.common.web.component.domain.DomainObjectFilteredColumn;
 import org.complitex.common.web.component.organization.OrganizationFilteredColumn;
@@ -24,11 +26,12 @@ import java.util.*;
  * @author inheaven on 17.03.2015 23:16.
  */
 public abstract class AbstractConsumptionFileList extends TemplatePage{
-    private final static String[] FIELDS = {"name", "om", "serviceProviderId", "serviceId", "userOrganizationId", "status", "loaded"};
+    private final static String[] FIELDS = {"select", "name", "om", "serviceProviderId", "serviceId", "userOrganizationId",
+            "loaded", "status"};
 
     private ConsumptionFileUploadDialog consumptionFileUploadDialog;
 
-    private FilteredDataTable filteredDataTable;
+    private FilteredDataTable<ConsumptionFile> filteredDataTable;
 
     private AjaxFeedbackPanel messages;
 
@@ -56,6 +59,7 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
 
         Map<String, IColumn<ConsumptionFile, String>> columnMap = new HashMap<>();
 
+        columnMap.put("select", new CheckColumn<>());
         columnMap.put("serviceProviderId", new OrganizationFilteredColumn<>("organization", "serviceProviderId", getLocale(),
                 KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER));
         columnMap.put("serviceId", new DomainObjectFilteredColumn<>("service", "serviceId", getLocale()));
@@ -77,6 +81,13 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
             @Override
             protected void onUpload(AjaxRequestTarget target,Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField) {
                 AbstractConsumptionFileList.this.onUpload(target, om, serviceProviderId, serviceId, fileUploadField);
+            }
+        });
+
+        add(new AjaxLink("bind") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onBind(target, filteredDataTable.getFilterWrapper().getGroup());
             }
         });
     }
@@ -110,4 +121,6 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
     protected abstract Long getCount(FilterWrapper<ConsumptionFile> filterWrapper);
 
     protected abstract void onUpload(AjaxRequestTarget target, Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField);
+
+    protected abstract void onBind(AjaxRequestTarget target, List<ConsumptionFile> consumptionFiles);
 }

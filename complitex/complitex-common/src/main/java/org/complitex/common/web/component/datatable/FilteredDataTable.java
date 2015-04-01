@@ -2,12 +2,14 @@ package org.complitex.common.web.component.datatable;
 
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextFilteredPropertyColumn;
+import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.common.entity.FilterWrapper;
@@ -60,6 +62,14 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
             columns.add(column);
         }
 
+        CheckGroup<T> group = new CheckGroup<>("group", getFilterWrapper().getGroup());
+        group.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+            }
+        });
+        form.add(group);
+
         DataTable<T, String> table = new DataTable<>("table", columns, provider, 10);
         table.setOutputMarkupId(true);
 
@@ -80,7 +90,7 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         table.addTopToolbar(new FilterToolbar(table, form, provider));
         table.addBottomToolbar(new AjaxNavigationToolbar(table));
 
-        form.add(table);
+        group.add(table);
     }
 
     public FilteredDataTable(String id, Class<T> objectClass, String... fields){
