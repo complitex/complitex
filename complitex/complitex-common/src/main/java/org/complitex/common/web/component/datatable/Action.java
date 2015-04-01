@@ -15,12 +15,12 @@ public abstract class Action<T> implements Serializable{
     private IModel<String> messageModel;
     private boolean confirm;
 
-    public Action(String nameKey, String messageKey) {
-        this(new ResourceModel(nameKey), new ResourceModel(messageKey), true);
-    }
-
     public Action(String nameKey) {
         this(new ResourceModel(nameKey), null, false);
+    }
+
+    public Action(String nameKey, String messageKey) {
+        this(new ResourceModel(nameKey), new ResourceModel(messageKey), true);
     }
 
     public Action(IModel<String> nameModel, IModel<String> messageModel, boolean confirm) {

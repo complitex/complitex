@@ -643,7 +643,8 @@ CREATE TABLE `central_heating_consumption`(
 
   PRIMARY KEY (`id`),
   KEY `key_consumption_file_id` (`consumption_file_id`),
-  CONSTRAINT `fk_central_heating_consumption__consumption_file` FOREIGN KEY (`consumption_file_id`) REFERENCES `consumption_file` (`id`)
+  CONSTRAINT `fk_central_heating_consumption__consumption_file` FOREIGN KEY (`consumption_file_id`)
+    REFERENCES `consumption_file` (`id`) ON DELETE CASCADE
 ) CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Записи начислений центрального отопления';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

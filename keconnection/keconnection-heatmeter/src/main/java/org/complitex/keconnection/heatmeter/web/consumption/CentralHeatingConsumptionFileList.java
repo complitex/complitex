@@ -38,6 +38,22 @@ public class CentralHeatingConsumptionFileList extends AbstractConsumptionFileLi
     }
 
     @Override
+    protected void onDelete(AjaxRequestTarget target, IModel<ConsumptionFile> model) {
+        ConsumptionFile consumptionFile = model.getObject();
+
+        try {
+            consumptionFileBean.delete(consumptionFile.getId());
+
+            info(getStringFormat("info_delete", consumptionFile.getName()));
+        } catch (Exception e) {
+            error(getStringFormat("error_delete", consumptionFile.getName()));
+        }
+
+        target.add(getFilteredDataTable());
+        target.add(getMessages());
+    }
+
+    @Override
     protected List<ConsumptionFile> getList(FilterWrapper<ConsumptionFile> filterWrapper) {
         return consumptionFileBean.getConsumptionFiles(filterWrapper);
     }

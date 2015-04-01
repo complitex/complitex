@@ -47,6 +47,13 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
             }
         });
 
+        actions.add(new Action<ConsumptionFile>("delete", "delete_message") {
+            @Override
+            public void onAction(AjaxRequestTarget target, IModel<ConsumptionFile> model) {
+                onDelete(target, model);
+            }
+        });
+
         Map<String, IColumn<ConsumptionFile, String>> columnMap = new HashMap<>();
 
         columnMap.put("serviceProviderId", new OrganizationFilteredColumn<>("organization", "serviceProviderId", getLocale(),
@@ -95,6 +102,8 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
     }
 
     protected abstract void onView(AjaxRequestTarget target, IModel<ConsumptionFile> model);
+
+    protected abstract void onDelete(AjaxRequestTarget target, IModel<ConsumptionFile> model);
 
     protected abstract List<ConsumptionFile> getList(FilterWrapper<ConsumptionFile> filterWrapper);
 
