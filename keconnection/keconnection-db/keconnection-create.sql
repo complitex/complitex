@@ -640,6 +640,7 @@ CREATE TABLE `central_heating_consumption`(
   `rate` VARCHAR(100) COMMENT 'Расчетный тариф отопления на 1 м2 для населения',
   `no_meter_volume` VARCHAR(100) COMMENT 'Согласованный объем услуги для квартир без индивидуальных счетчиков',
   `status` INT NOT NULL COMMENT 'Статус записи',
+  `message` VARCHAR(255) COMMENT 'Сообщение обработки записи',
 
   PRIMARY KEY (`id`),
   KEY `key_consumption_file_id` (`consumption_file_id`),

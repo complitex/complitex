@@ -37,8 +37,12 @@ public class AddressCorrectionBean extends CorrectionBean {
         return sqlSession().selectList(NS + ".selectCityCorrections", filterWrapper);
     }
 
-    public List<CityCorrection> getCityCorrections(Long objectId, String correction, Long osznId, Long userOrganizationId) {
-        return getCityCorrections(FilterWrapper.of(new CityCorrection(null, objectId, correction, osznId, userOrganizationId, null)));
+    public List<CityCorrection> getCityCorrections(Long objectId, String correction, Long organizationId, Long userOrganizationId) {
+        return getCityCorrections(FilterWrapper.of(new CityCorrection(null, objectId, correction, organizationId, userOrganizationId, null)));
+    }
+
+    public List<CityCorrection> getCityCorrections(String correction, Long organizationId, Long userOrganizationId) {
+        return getCityCorrections(null, correction, organizationId, userOrganizationId);
     }
 
     public Long getCityCorrectionsCount(FilterWrapper<CityCorrection> filterWrapper) {
@@ -118,9 +122,13 @@ public class AddressCorrectionBean extends CorrectionBean {
         return sqlSession().selectList(NS + ".selectStreetTypeCorrections", filterWrapper);
     }
 
-    public List<StreetTypeCorrection> getStreetTypeCorrections(Long objectId, String correction, Long osznId, Long userOrganizationId) {
-        return getStreetTypeCorrections(FilterWrapper.of(new StreetTypeCorrection(null, objectId, correction, osznId,
+    public List<StreetTypeCorrection> getStreetTypeCorrections(Long objectId, String correction, Long organizationId, Long userOrganizationId) {
+        return getStreetTypeCorrections(FilterWrapper.of(new StreetTypeCorrection(null, objectId, correction, organizationId,
                 userOrganizationId, null)));
+    }
+
+    public List<StreetTypeCorrection> getStreetTypeCorrections(String correction, Long organizationId, Long userOrganizationId) {
+        return getStreetTypeCorrections(null, correction, organizationId, userOrganizationId);
     }
 
     public Long getStreetTypeCorrectionsCount(FilterWrapper<StreetTypeCorrection> filterWrapper) {
@@ -161,10 +169,10 @@ public class AddressCorrectionBean extends CorrectionBean {
     }
 
     public List<StreetCorrection> getStreetCorrections(Long cityObjectId, Long streetTypeObjectId, String externalId,
-                                                       Long objectId,  String street, Long osznId, Long userOrganizationId) {
+                                                       Long objectId,  String street, Long organizationId, Long userOrganizationId) {
 
         return getStreetCorrections(FilterWrapper.of(new StreetCorrection(cityObjectId, streetTypeObjectId, externalId,
-                objectId, street, osznId, userOrganizationId, null)));
+                objectId, street, organizationId, userOrganizationId, null)));
     }
 
 
@@ -208,9 +216,14 @@ public class AddressCorrectionBean extends CorrectionBean {
     }
 
     public List<BuildingCorrection> getBuildingCorrections(Long streetObjectId, Long objectId, String buildingNumber,
-                                                           String buildingCorp, Long osznId, Long userOrganizationId) {
+                                                           String buildingCorp, Long organizationId, Long userOrganizationId) {
         return getBuildingCorrections(FilterWrapper.of(new BuildingCorrection(streetObjectId, null, objectId,
-                buildingNumber, buildingCorp, osznId, userOrganizationId, null)));
+                buildingNumber, buildingCorp, organizationId, userOrganizationId, null)));
+    }
+
+    public List<BuildingCorrection> getBuildingCorrections(Long streetObjectId, String buildingNumber,
+                                                           String buildingCorp, Long organizationId, Long userOrganizationId) {
+        return getBuildingCorrections(streetObjectId, null, buildingNumber, buildingCorp, organizationId, userOrganizationId);
     }
 
 

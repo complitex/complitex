@@ -84,7 +84,7 @@ public class AddressService extends AbstractBean {
      *
      * Это алгоритм применяется и к поиску домов и с незначительными поправками к поиску улиц.
      */
-    public void resolveAddress(Long userOrganizationId, Long organizationId, AddressLinkData data){
+    public void resolveAddress(AddressLinkData data, Long organizationId, Long userOrganizationId){
 
         //Связывание города
         List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(null, data.getCity(),

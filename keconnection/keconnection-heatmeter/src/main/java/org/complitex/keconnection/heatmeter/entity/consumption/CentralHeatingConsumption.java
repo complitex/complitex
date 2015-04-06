@@ -32,6 +32,7 @@ public class CentralHeatingConsumption extends AbstractEntity {
     private String noMeterVolume;
 
     private ConsumptionStatus status;
+    private String message;
 
     public CentralHeatingConsumption() {
     }
@@ -222,6 +223,14 @@ public class CentralHeatingConsumption extends AbstractEntity {
 
     public void setStatus(ConsumptionStatus status) {
         this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public boolean isEmpty(){

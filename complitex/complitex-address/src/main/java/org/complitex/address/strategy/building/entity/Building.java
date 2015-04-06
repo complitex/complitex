@@ -82,8 +82,16 @@ public class Building extends DomainObject {
         return accompaniedAddress.getStringValue(NUMBER, locale);
     }
 
+    public String getAccompaniedNumber() {
+        return accompaniedAddress.getStringValue(NUMBER);
+    }
+
     public String getAccompaniedCorp(Locale locale) {
         return accompaniedAddress.getStringValue(CORP, locale);
+    }
+
+    public String getAccompaniedCorp() {
+        return accompaniedAddress.getStringValue(CORP);
     }
 
     public String getAccompaniedStructure(Locale locale) {

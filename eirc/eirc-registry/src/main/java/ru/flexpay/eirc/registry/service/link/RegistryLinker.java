@@ -292,7 +292,7 @@ public class RegistryLinker {
             if (registryRecord.getStatus() == RegistryRecordStatus.LOADED ||
                     registryRecord.getImportErrorType() != null &&
                             (registryRecord.getImportErrorType().getId() < 17 || registryRecord.getImportErrorType().getId() > 18)) {
-                addressService.resolveAddress(userOrganizationId, registry.getSenderOrganizationId(), registryRecord);
+                addressService.resolveAddress(registryRecord, registry.getSenderOrganizationId(), userOrganizationId);
                 if (registryRecord.getImportErrorType() != null) {
                     registryWorkflowManager.markLinkingHasError(registry);
                     continue;

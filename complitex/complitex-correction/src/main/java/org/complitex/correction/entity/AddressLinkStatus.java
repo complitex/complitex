@@ -21,7 +21,7 @@ public enum AddressLinkStatus implements LinkStatus {
 
     private Long id;
 
-    private AddressLinkStatus(Long id) {
+    AddressLinkStatus(Long id) {
         this.id = id;
     }
 
