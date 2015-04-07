@@ -61,7 +61,7 @@ DROP TABLE IF EXISTS `district_correction`;
 
 CREATE TABLE `district_correction` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор коррекции',
-  `city_object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта населенного пункта',
+  `city_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта населенного пункта',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта района',
   `external_id` VARCHAR(20) COMMENT 'Внешний идентификатор объекта',
   `correction` VARCHAR(100) NOT NULL COMMENT 'Название типа населенного пункта',
@@ -72,7 +72,7 @@ CREATE TABLE `district_correction` (
   `module_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор модуля',
   `status` INTEGER COMMENT 'Статус',
   PRIMARY KEY (`id`),
-  KEY `key_city_object_id` (`city_object_id`),
+  KEY `key_city_id` (`city_id`),
   KEY `key_object_id` (`object_id`),
   KEY `key_correction` (`correction`),
   KEY `key_begin_date` (`begin_date`),
@@ -81,7 +81,7 @@ CREATE TABLE `district_correction` (
   KEY `key_user_organization_id` (`user_organization_id`),
   KEY `key_module_id` (`module_id`),
   KEY `key_status` (`status`),
-  CONSTRAINT `fk_district_correction__city` FOREIGN KEY (`city_object_id`) REFERENCES `city` (`object_id`),
+  CONSTRAINT `fk_district_correction__city` FOREIGN KEY (`city_id`) REFERENCES `city` (`object_id`),
   CONSTRAINT `fk_district_correction__district` FOREIGN KEY (`object_id`) REFERENCES `district` (`object_id`),
   CONSTRAINT `fk_district_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_district_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`)
@@ -91,8 +91,8 @@ DROP TABLE IF EXISTS `street_correction`;
 
 CREATE TABLE `street_correction` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор коррекции',
-  `city_object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта населенного пункта',
-  `street_type_object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта типа улицы',
+  `city_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта населенного пункта',
+  `street_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта типа улицы',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта улицы',
   `external_id` VARCHAR(20) COMMENT 'Внешний идентификатор объекта',
   `correction` VARCHAR(100) NOT NULL COMMENT 'Название типа населенного пункта',
@@ -103,8 +103,8 @@ CREATE TABLE `street_correction` (
   `module_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор модуля',
   `status` INTEGER COMMENT 'Статус',
   PRIMARY KEY (`id`),
-  KEY `key_city_object_id` (`city_object_id`),
-  KEY `key_street_type_object_id` (`street_type_object_id`),
+  KEY `key_city_id` (`city_id`),
+  KEY `key_street_type_id` (`street_type_id`),
   KEY `key_object_id` (`object_id`),
   KEY `key_correction` (`correction`),
   KEY `key_begin_date` (`begin_date`),
@@ -113,8 +113,8 @@ CREATE TABLE `street_correction` (
   KEY `key_user_organization_id` (`user_organization_id`),
   KEY `key_module_id` (`module_id`),
   KEY `key_status` (`status`),
-  CONSTRAINT `fk_street_correction__city` FOREIGN KEY (`city_object_id`) REFERENCES `city` (`object_id`),
-  CONSTRAINT `fk_street_correction__street_type` FOREIGN KEY (`street_type_object_id`) REFERENCES `street_type` (`object_id`),
+  CONSTRAINT `fk_street_correction__city` FOREIGN KEY (`city_id`) REFERENCES `city` (`object_id`),
+  CONSTRAINT `fk_street_correction__street_type` FOREIGN KEY (`street_type_id`) REFERENCES `street_type` (`object_id`),
   CONSTRAINT `fk_street_correction__street` FOREIGN KEY (`object_id`) REFERENCES `street` (`object_id`),
   CONSTRAINT `fk_street_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_street_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`)
@@ -151,7 +151,7 @@ DROP TABLE IF EXISTS `building_correction`;
 
 CREATE TABLE `building_correction` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор коррекции',
-  `street_object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта улица',
+  `street_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта улица',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта дом',
   `external_id` VARCHAR(20) COMMENT 'Внешний идентификатор объекта',
   `correction` VARCHAR(100) NOT NULL COMMENT 'Номер дома',
@@ -163,7 +163,7 @@ CREATE TABLE `building_correction` (
   `module_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор модуля',
   `status` INTEGER COMMENT 'Статус',
   PRIMARY KEY (`id`),
-  KEY `key_street_object_id` (`street_object_id`),
+  KEY `key_street_id` (`street_id`),
   KEY `key_object_id` (`object_id`),
   KEY `key_correction` (`correction`),
   KEY `key_begin_date` (`begin_date`),
@@ -172,7 +172,7 @@ CREATE TABLE `building_correction` (
   KEY `key_user_organization_id` (`user_organization_id`),
   KEY `key_module_id` (`module_id`),
   KEY `key_status` (`status`),
-  CONSTRAINT `fk_building_correction__street` FOREIGN KEY (`street_object_id`) REFERENCES `street` (`object_id`),
+  CONSTRAINT `fk_building_correction__street` FOREIGN KEY (`street_id`) REFERENCES `street` (`object_id`),
   CONSTRAINT `fk_building_correction__building` FOREIGN KEY (`object_id`) REFERENCES `building` (`object_id`),
   CONSTRAINT `fk_building_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_building_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`)

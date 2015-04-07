@@ -642,10 +642,24 @@ CREATE TABLE `central_heating_consumption`(
   `status` INT NOT NULL COMMENT 'Статус записи',
   `message` VARCHAR(255) COMMENT 'Сообщение обработки записи',
 
+  `city_id` BIGINT COMMENT 'Идентификатор города',
+  `street_type_id` BIGINT COMMENT 'Идентификатор типа улицы',
+  `street_id` BIGINT COMMENT 'Идентификатор улица',
+  `building_id` BIGINT COMMENT 'Идентификатор дома',
+
   PRIMARY KEY (`id`),
   KEY `key_consumption_file_id` (`consumption_file_id`),
+  KEY `key_city_id` (`city_id`),
+  KEY `key_street_type_id` (`street_type_id`),
+  KEY `key_street_id` (`street_id`),
+  KEY `key_building_id` (`building_id`),
+
   CONSTRAINT `fk_central_heating_consumption__consumption_file` FOREIGN KEY (`consumption_file_id`)
-    REFERENCES `consumption_file` (`id`) ON DELETE CASCADE
+    REFERENCES `consumption_file` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_central_heating_consumption__city` FOREIGN KEY (`city_id`) REFERENCES `city` (`object_id`),
+  CONSTRAINT `fk_central_heating_consumption__street_type` FOREIGN KEY (`street_type_id`) REFERENCES `street_type` (`object_id`),
+  CONSTRAINT `fk_central_heating_consumption__street` FOREIGN KEY (`street_id`) REFERENCES `street` (`object_id`),
+  CONSTRAINT `fk_central_heating_consumption__building` FOREIGN KEY (`building_id`) REFERENCES `building` (`object_id`)
 ) CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Записи начислений центрального отопления';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

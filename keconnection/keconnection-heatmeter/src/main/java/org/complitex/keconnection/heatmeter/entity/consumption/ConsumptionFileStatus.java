@@ -8,8 +8,8 @@ import org.complitex.common.mybatis.IFixedIdType;
  */
 @FixedIdTypeHandler
 public enum ConsumptionFileStatus implements IFixedIdType {
-    LOADED(1), LOADING(2), LOAD_ERROR(3),
-    BOUND(11), BINDING(12), BIND_ERROR(13);
+    LOADED(11), LOADING(12), LOAD_ERROR(13),
+    BOUND(31), BINDING(32), BIND_ERROR(33);
 
     private long id;
 

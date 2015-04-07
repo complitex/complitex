@@ -36,6 +36,7 @@ import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.correction.entity.Correction;
+import org.complitex.correction.entity.CorrectionOrderBy;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
@@ -245,11 +246,11 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
         };
         filterForm.add(data);
 
-        filterForm.add(new ArrowOrderByBorder("organizationHeader", Correction.OrderBy.ORGANIZATION.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("correctionHeader", Correction.OrderBy.CORRECTION.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("codeHeader", Correction.OrderBy.EXTERNAL_ID.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("internalObjectHeader", Correction.OrderBy.OBJECT.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("userOrganizationHeader", Correction.OrderBy.USER_ORGANIZATION.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("organizationHeader", CorrectionOrderBy.ORGANIZATION.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("correctionHeader", CorrectionOrderBy.CORRECTION.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("codeHeader", CorrectionOrderBy.EXTERNAL_ID.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("internalObjectHeader", CorrectionOrderBy.OBJECT.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("userOrganizationHeader", CorrectionOrderBy.USER_ORGANIZATION.getOrderBy(), dataProvider, data, content));
 
         content.add(new PagingNavigator("navigator", data, getPreferencesPage() + "#" + entity, content));
     }

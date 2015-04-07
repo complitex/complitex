@@ -90,10 +90,10 @@ public class RoomCorrectionList extends AddressCorrectionList<RoomCorrection> {
 
         String apartment = null;
         Building buildingDomainObject;
-        if (correction.getApartmentObjectId() == null) {
-            buildingDomainObject = (Building)buildingStrategy.getDomainObject(correction.getBuildingObjectId(), true);
+        if (correction.getApartmentId() == null) {
+            buildingDomainObject = (Building)buildingStrategy.getDomainObject(correction.getBuildingId(), true);
         } else {
-            DomainObject apartmentDomainObject = apartmentStrategy.getDomainObject(correction.getApartmentObjectId(), true);
+            DomainObject apartmentDomainObject = apartmentStrategy.getDomainObject(correction.getApartmentId(), true);
             apartment = apartmentStrategy.displayDomainObject(apartmentDomainObject, getLocale());
 
             buildingDomainObject = (Building)buildingStrategy.getDomainObject(apartmentDomainObject.getParentId(), true);

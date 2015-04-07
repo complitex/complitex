@@ -1,5 +1,6 @@
 package org.complitex.keconnection.heatmeter.web.consumption;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -7,19 +8,28 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
+import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
+import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.entity.WebSocketPushMessage;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
-import org.complitex.common.web.component.datatable.Action;
+import org.complitex.common.web.component.datatable.BookmarkablePageLinkColumn;
 import org.complitex.common.web.component.datatable.CheckColumn;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.complitex.common.web.component.domain.DomainObjectFilteredColumn;
 import org.complitex.common.web.component.organization.OrganizationFilteredColumn;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
+import org.complitex.keconnection.heatmeter.service.consumption.CentralHeatingConsumptionService;
+import org.complitex.keconnection.heatmeter.service.consumption.ConsumptionFileBean;
 import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy;
+import org.complitex.template.web.component.toolbar.DeleteItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.component.toolbar.UploadButton;
 import org.complitex.template.web.template.TemplatePage;
 
+import javax.ejb.EJB;
 import java.util.*;
 
 /**
@@ -28,6 +38,9 @@ import java.util.*;
 public abstract class AbstractConsumptionFileList extends TemplatePage{
     private final static String[] FIELDS = {"select", "name", "om", "serviceProviderId", "serviceId", "userOrganizationId",
             "loaded", "status"};
+
+    @EJB
+    private ConsumptionFileBean consumptionFileBean;
 
     private ConsumptionFileUploadDialog consumptionFileUploadDialog;
 
@@ -38,34 +51,25 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
     public AbstractConsumptionFileList() {
         add(new Label("title", new ResourceModel("title")));
 
-        //Feedback Panel
+        //messages
         messages = new AjaxFeedbackPanel("messages");
         add(messages);
-
-        List<Action<ConsumptionFile>> actions = new ArrayList<>();
-        actions.add(new Action<ConsumptionFile>("view") {
-            @Override
-            public void onAction(AjaxRequestTarget target, IModel<ConsumptionFile> model) {
-                onView(target, model);
-            }
-        });
-
-        actions.add(new Action<ConsumptionFile>("delete", "delete_message") {
-            @Override
-            public void onAction(AjaxRequestTarget target, IModel<ConsumptionFile> model) {
-                onDelete(target, model);
-            }
-        });
 
         Map<String, IColumn<ConsumptionFile, String>> columnMap = new HashMap<>();
 
         columnMap.put("select", new CheckColumn<>());
+        columnMap.put("name", new BookmarkablePageLinkColumn<ConsumptionFile>("name", getViewPage()) {
+            @Override
+            protected PageParameters getPageParameters(IModel<ConsumptionFile> rowModel) {
+                return AbstractConsumptionFileList.this.getViewPageParameters(rowModel);
+            }
+        });
         columnMap.put("serviceProviderId", new OrganizationFilteredColumn<>("organization", "serviceProviderId", getLocale(),
                 KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER));
         columnMap.put("serviceId", new DomainObjectFilteredColumn<>("service", "serviceId", getLocale()));
         //todo user organization panel
 
-        add(filteredDataTable = new FilteredDataTable<ConsumptionFile>("dataTable", ConsumptionFile.class, columnMap, actions, FIELDS) {
+        add(filteredDataTable = new FilteredDataTable<ConsumptionFile>("dataTable", ConsumptionFile.class, columnMap, null, FIELDS) {
             @Override
             public List<ConsumptionFile> getList(FilterWrapper<ConsumptionFile> filterWrapper) {
                 return AbstractConsumptionFileList.this.getList(filterWrapper);
@@ -90,16 +94,64 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
                 onBind(target, filteredDataTable.getFilterWrapper().getGroup());
             }
         });
+
+        //broadcast
+        add(new WebSocketBehavior() {
+            @Override
+            protected void onPush(WebSocketRequestHandler handler, IWebSocketPushMessage message) {
+                if (message instanceof WebSocketPushMessage){
+                    WebSocketPushMessage m = (WebSocketPushMessage) message;
+
+                    if (CentralHeatingConsumptionService.class.getName().equals(m.getService())){
+                        if (m.getPayload() instanceof ConsumptionFile){
+                            ConsumptionFile consumptionFile = (ConsumptionFile) m.getPayload();
+
+                            switch (consumptionFile.getStatus()){
+                                case BOUND:
+                                    info(getStringFormat("info_bind", consumptionFile.getName()));
+                                    handler.add(messages);
+                                    handler.add(filteredDataTable);
+                                    break;
+                                case BIND_ERROR:
+                                    error(getStringFormat("error_bind", consumptionFile.getName()));
+                                    handler.add(messages);
+                                    handler.add(filteredDataTable);
+                                    break;
+                            }
+
+                            filteredDataTable.getFilterWrapper().getGroup().remove(consumptionFile);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
     protected List<? extends ToolbarButton> getToolbarButtons(String id) {
-        return Collections.singletonList(
+        return Arrays.asList(
                 new UploadButton(id) {
 
                     @Override
                     protected void onClick(AjaxRequestTarget target) {
                         consumptionFileUploadDialog.open(target);
+                    }
+                },
+                new DeleteItemButton(id){
+                    @Override
+                    protected void onClick(AjaxRequestTarget target) {
+                        filteredDataTable.getFilterWrapper().getGroup().forEach(c -> {
+                            try {
+                                consumptionFileBean.delete(c.getId());
+
+                                info(getStringFormat("info_delete", c.getName()));
+                            } catch (Exception e) {
+                                error(getStringFormat("error_delete", c.getName()));
+                            }
+                        });
+
+                        target.add(getFilteredDataTable());
+                        target.add(getMessages());
                     }
                 });
     }
@@ -112,9 +164,9 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
         return messages;
     }
 
-    protected abstract void onView(AjaxRequestTarget target, IModel<ConsumptionFile> model);
+    protected abstract Class<? extends Page> getViewPage();
 
-    protected abstract void onDelete(AjaxRequestTarget target, IModel<ConsumptionFile> model);
+    protected abstract PageParameters getViewPageParameters(IModel<ConsumptionFile> model);
 
     protected abstract List<ConsumptionFile> getList(FilterWrapper<ConsumptionFile> filterWrapper);
 

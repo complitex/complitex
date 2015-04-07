@@ -1,6 +1,5 @@
 package org.complitex.template.web.template;
 
-import com.google.common.collect.ImmutableList;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -28,7 +27,6 @@ import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.resources.WebCommonResourceInitializer;
 import org.complitex.template.web.component.MainUserOrganizationPickerFactory;
-import org.complitex.template.web.component.toolbar.HelpButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
 import org.slf4j.Logger;
@@ -201,7 +199,7 @@ public abstract class TemplatePage extends WebPage {
     }
 
     private List<? extends ToolbarButton> getCommonButtons(String id) {
-        return ImmutableList.of(new HelpButton(id));
+        return new ArrayList<>();
     }
 
     /**

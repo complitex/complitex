@@ -22,7 +22,11 @@ public final class ResourceUtil {
     }
 
     public static String getString(String bundle, String key, Locale locale) {
-        return getResourceBundle(bundle, locale).getString(key);
+        try {
+            return getResourceBundle(bundle, locale).getString(key);
+        } catch (Exception e) {
+            return key;
+        }
     }
 
     public static String getFormatString(String bundle, String key, Locale locale, Object... parameters) {

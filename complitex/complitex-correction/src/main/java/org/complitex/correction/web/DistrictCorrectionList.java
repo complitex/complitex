@@ -83,7 +83,7 @@ public class DistrictCorrectionList extends AddressCorrectionList<DistrictCorrec
 
     @Override
     protected String displayCorrection(DistrictCorrection correction) {
-        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityObjectId(), true), getLocale());
+        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityId(), true), getLocale());
 
         return AddressRenderer.displayAddress(null, city, correction.getCorrection(), getLocale());
     }

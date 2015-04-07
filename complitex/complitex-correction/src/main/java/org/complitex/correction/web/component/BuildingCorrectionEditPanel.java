@@ -53,7 +53,7 @@ public class BuildingCorrectionEditPanel extends AddressCorrectionEditPanel<Buil
     protected String displayCorrection() {
         BuildingCorrection correction = getCorrection();
 
-        DomainObject streetDomainObject = streetStrategy.getDomainObject(correction.getStreetObjectId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(correction.getStreetId(), true);
         String street = streetStrategy.displayDomainObject(streetDomainObject, getLocale());
 
         String city = cityStrategy.displayDomainObject(streetDomainObject.getObjectId(), getLocale());

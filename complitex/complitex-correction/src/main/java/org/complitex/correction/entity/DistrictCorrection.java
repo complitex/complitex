@@ -7,16 +7,16 @@ import org.complitex.address.entity.AddressEntity;
  *         Date: 16.07.13 16:56
  */
 public class DistrictCorrection extends Correction {
-    private Long cityObjectId;
+    private Long cityId;
 
     public DistrictCorrection() {
     }
 
-    public DistrictCorrection(Long cityObjectId, String externalId, Long objectId, String correction, Long organizationId,
+    public DistrictCorrection(Long cityId, String externalId, Long objectId, String correction, Long organizationId,
                               Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
 
-        this.cityObjectId = cityObjectId;
+        this.cityId = cityId;
     }
 
     @Override
@@ -24,11 +24,11 @@ public class DistrictCorrection extends Correction {
         return AddressEntity.DISTRICT.getEntityName();
     }
 
-    public Long getCityObjectId() {
-        return cityObjectId;
+    public Long getCityId() {
+        return cityId;
     }
 
-    public void setCityObjectId(Long cityObjectId) {
-        this.cityObjectId = cityObjectId;
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
     }
 }

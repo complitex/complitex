@@ -10,6 +10,7 @@
         <result column="organization_code" property="organizationCode"/>
         <result column="building_code" property="buildingCode"/>
         <result column="account_number" property="accountNumber"/>
+        <result column="street" property="street"/>
         <result column="building_number" property="buildingNumber"/>
         <result column="common_volume" property="commonVolume"/>
         <result column="apartment_range" property="apartmentRange"/>
@@ -26,6 +27,13 @@
         <result column="rate" property="rate"/>
         <result column="no_meter_volume" property="noMeterVolume"/>
         <result column="status" property="status"/>
+
+        <association property="localAddress" javaType="org.complitex.address.entity.LocalAddress">
+            <result column="city_id" property="cityId"/>
+            <result column="street_type_id" property="streetTypeId"/>
+            <result column="street_id" property="streetId"/>
+            <result column="building_id" property="buildingId"/>
+        </association>
     </resultMap>
 
     <sql id="sqlWhere">
@@ -36,6 +44,7 @@
             <if test="object.organizationCode != null">and organization_code = #{object.organizationCode}</if>
             <if test="object.buildingCode != null">and building_code = #{object.buildingCode}</if>
             <if test="object.accountNumber != null">and account_number = #{object.accountNumber}</if>
+            <if test="object.street != null">and street = #{object.street}</if>
             <if test="object.buildingNumber != null">and building_number = #{object.buildingNumber}</if>
             <if test="object.commonVolume != null">and common_volume = #{object.commonVolume}</if>
             <if test="object.apartmentRange != null">and apartment_range = #{object.apartmentRange}</if>
@@ -57,8 +66,7 @@
 
     <select id="selectCentralHeatingConsumptions" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="centralHeatingConsumptionResultMap">
-        select * from `central_heating_consumption` <include refid="sqlWhere"/>
-          order by ${sortProperty} ${asc} limit #{first}, #{count}
+        select * from `central_heating_consumption` <include refid="sqlWhere"/> ${orderLimit}
     </select>
 
     <select id="selectCentralHeatingConsumptionsCount" parameterType="org.complitex.common.entity.FilterWrapper"
@@ -77,7 +85,13 @@
     </insert>
 
     <update id="updateCentralHeatingConsumption" parameterType="org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption">
-        <!--update column data if require-->
+        update central_heating_consumption
+        set `city_id` = #{localAddress.cityId},
+            `street_type_id` = #{localAddress.streetTypeId},
+            `street_id` = #{localAddress.streetId},
+            `building_id` = #{localAddress.buildingId},
+            `status` = #{status}
+        where `id` = #{id}
     </update>
 
     <delete id="deleteCentralHeatingConsumption" parameterType="long">

@@ -1,6 +1,7 @@
 package org.complitex.keconnection.heatmeter.entity.consumption;
 
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.entity.LocalAddress;
 import org.complitex.common.entity.AbstractEntity;
 
 /**
@@ -33,6 +34,8 @@ public class CentralHeatingConsumption extends AbstractEntity {
 
     private ConsumptionStatus status;
     private String message;
+
+    private LocalAddress localAddress;
 
     public CentralHeatingConsumption() {
     }
@@ -231,6 +234,14 @@ public class CentralHeatingConsumption extends AbstractEntity {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public LocalAddress getLocalAddress() {
+        return localAddress;
+    }
+
+    public void setLocalAddress(LocalAddress localAddress) {
+        this.localAddress = localAddress;
     }
 
     public boolean isEmpty(){

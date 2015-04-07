@@ -1,6 +1,7 @@
 package org.complitex.keconnection.heatmeter.web.consumption;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -33,24 +34,13 @@ public class CentralHeatingConsumptionFileList extends AbstractConsumptionFileLi
     private CentralHeatingConsumptionService centralHeatingConsumptionService;
 
     @Override
-    protected void onView(AjaxRequestTarget target, IModel<ConsumptionFile> model) {
-        setResponsePage(CentralHeatingConsumptionList.class, new PageParameters().add("id", model.getObject().getId()));
+    protected Class<? extends Page> getViewPage() {
+        return CentralHeatingConsumptionList.class;
     }
 
     @Override
-    protected void onDelete(AjaxRequestTarget target, IModel<ConsumptionFile> model) {
-        ConsumptionFile consumptionFile = model.getObject();
-
-        try {
-            consumptionFileBean.delete(consumptionFile.getId());
-
-            info(getStringFormat("info_delete", consumptionFile.getName()));
-        } catch (Exception e) {
-            error(getStringFormat("error_delete", consumptionFile.getName()));
-        }
-
-        target.add(getFilteredDataTable());
-        target.add(getMessages());
+    protected PageParameters getViewPageParameters(IModel<ConsumptionFile> model) {
+        return new PageParameters().add("id", model.getObject().getId());
     }
 
     @Override
@@ -82,6 +72,6 @@ public class CentralHeatingConsumptionFileList extends AbstractConsumptionFileLi
 
     @Override
     protected void onBind(AjaxRequestTarget target, List<ConsumptionFile> consumptionFiles) {
-        System.out.println(consumptionFiles);
+        consumptionFiles.forEach(centralHeatingConsumptionService::bind);
     }
 }

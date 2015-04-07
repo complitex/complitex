@@ -74,8 +74,8 @@
             and s.`object_id` = a.`object_id` and a.`value_type_id` = 300)
           join `street_string_culture` sc on (sc.`id` = a.`value_id`)
         where s.`status` = 'ACTIVE' and s.`parent_entity_id` = 400
-          <if test="cityObjectId != null">and s.`parent_id` = #{cityObjectId}</if>
-          <if test="streetTypeObjectId != null">and a_st.`value_id` = #{streetTypeObjectId}</if>
+          <if test="cityId != null">and s.`parent_id` = #{cityId}</if>
+          <if test="streetTypeId != null">and a_st.`value_id` = #{streetTypeId}</if>
           <if test="streetName != null">and sc.`value` = #{streetName}</if>
     </select>
 

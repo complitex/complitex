@@ -4,52 +4,52 @@ package org.complitex.address.entity;
  * @author inheaven on 002 02.04.15 16:26
  */
 public class LocalAddress {
-    private Long cityObjectId;
-    private Long streetTypeObjectId;
-    private Long streetObjectId;
-    private Long buildingObjectId;
-    private Long apartmentObjectId;
+    private Long cityId;
+    private Long streetTypeId;
+    private Long streetId;
+    private Long buildingId;
+    private Long apartmentId;
 
     private Long organizationId;
 
-    public Long getCityObjectId() {
-        return cityObjectId;
+    public Long getCityId() {
+        return cityId;
     }
 
-    public void setCityObjectId(Long cityObjectId) {
-        this.cityObjectId = cityObjectId;
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
     }
 
-    public Long getStreetTypeObjectId() {
-        return streetTypeObjectId;
+    public Long getStreetTypeId() {
+        return streetTypeId;
     }
 
-    public void setStreetTypeObjectId(Long streetTypeObjectId) {
-        this.streetTypeObjectId = streetTypeObjectId;
+    public void setStreetTypeId(Long streetTypeId) {
+        this.streetTypeId = streetTypeId;
     }
 
-    public Long getStreetObjectId() {
-        return streetObjectId;
+    public Long getStreetId() {
+        return streetId;
     }
 
-    public void setStreetObjectId(Long streetObjectId) {
-        this.streetObjectId = streetObjectId;
+    public void setStreetId(Long streetId) {
+        this.streetId = streetId;
     }
 
-    public Long getBuildingObjectId() {
-        return buildingObjectId;
+    public Long getBuildingId() {
+        return buildingId;
     }
 
-    public void setBuildingObjectId(Long buildingObjectId) {
-        this.buildingObjectId = buildingObjectId;
+    public void setBuildingId(Long buildingId) {
+        this.buildingId = buildingId;
     }
 
-    public Long getApartmentObjectId() {
-        return apartmentObjectId;
+    public Long getApartmentId() {
+        return apartmentId;
     }
 
-    public void setApartmentObjectId(Long apartmentObjectId) {
-        this.apartmentObjectId = apartmentObjectId;
+    public void setApartmentId(Long apartmentId) {
+        this.apartmentId = apartmentId;
     }
 
     public Long getOrganizationId() {

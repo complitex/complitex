@@ -15,11 +15,11 @@
         <result property="buildingCorp" column="building_corp"/>
         <result property="apartment" column="apartment"/>
 
-        <result property="cityObjectId" column="city_object_id"/>
-        <result property="streetTypeObjectId" column="street_type_object_id"/>
-        <result property="streetObjectId" column="street_object_id"/>
-        <result property="buildingObjectId" column="building_object_id"/>
-        <result property="apartmentObjectId" column="apartment_object_id"/>
+        <result property="cityId" column="city_object_id"/>
+        <result property="streetTypeId" column="street_type_object_id"/>
+        <result property="streetId" column="street_object_id"/>
+        <result property="buildingId" column="building_object_id"/>
+        <result property="apartmentId" column="apartment_object_id"/>
 
         <result property="accountNumber" column="account_number"/>
         <result property="puAccountNumber" column="pu_account_number"/>
@@ -41,7 +41,7 @@
           `account_number`,  `pu_account_number`, `organization_id`, `user_organization_id`, `calc_center_id`)
         values (#{firstName}, #{middleName}, #{lastName},
             #{city}, #{streetType}, #{street}, #{buildingNumber}, #{buildingCorp}, #{apartment},
-            #{cityObjectId}, #{streetTypeObjectId}, #{streetObjectId}, #{buildingObjectId}, #{apartmentObjectId},
+            #{cityId}, #{streetTypeId}, #{streetId}, #{buildingId}, #{apartmentId},
             #{accountNumber}, #{puAccountNumber}, #{organizationId}, #{userOrganizationId}, #{calculationCenterId})
     </insert>
 
@@ -85,10 +85,10 @@
 
             <if test="object.apartment != null">and pa.`apartment` = #{object.apartment}</if>
 
-            <if test="object.cityObjectId != null">and pa.`city_object_id` = #{object.cityObjectId}</if>
-            <if test="object.streetObjectId != null">and pa.`street_object_id` = #{object.streetObjectId}</if>
-            <if test="object.buildingObjectId != null">and pa.`building_object_id` = #{object.buildingObjectId}</if>
-            <if test="object.apartmentObjectId != null">and pa.`apartment_object_id` = #{object.apartmentObjectId}</if>
+            <if test="object.cityId != null">and pa.`city_object_id` = #{object.cityId}</if>
+            <if test="object.streetId != null">and pa.`street_object_id` = #{object.streetId}</if>
+            <if test="object.buildingId != null">and pa.`building_object_id` = #{object.buildingId}</if>
+            <if test="object.apartmentId != null">and pa.`apartment_object_id` = #{object.apartmentId}</if>
 
             <if test="object.accountNumber != null">and pa.`account_number` = #{object.accountNumber}</if>
             <if test="object.puAccountNumber != null">and pa.`pu_account_number` = #{object.puAccountNumber}</if>

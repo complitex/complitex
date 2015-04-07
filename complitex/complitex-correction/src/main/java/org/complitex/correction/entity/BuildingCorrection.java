@@ -7,17 +7,17 @@ import org.complitex.address.entity.AddressEntity;
  * @author Anatoly A. Ivanov java@inheaven.ru
  */
 public class BuildingCorrection extends Correction {
-    private Long streetObjectId;
+    private Long streetId;
     private String correctionCorp;
 
     public BuildingCorrection() {
     }
 
-    public BuildingCorrection(Long streetObjectId, String externalId, Long objectId, String correction, String correctionCorp,
+    public BuildingCorrection(Long streetId, String externalId, Long objectId, String correction, String correctionCorp,
                               Long organizationId, Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
 
-        this.streetObjectId = streetObjectId;
+        this.streetId = streetId;
         this.correctionCorp = correctionCorp;
     }
 
@@ -26,12 +26,12 @@ public class BuildingCorrection extends Correction {
         return AddressEntity.BUILDING.getEntityName();
     }
 
-    public Long getStreetObjectId() {
-        return streetObjectId;
+    public Long getStreetId() {
+        return streetId;
     }
 
-    public void setStreetObjectId(Long streetObjectId) {
-        this.streetObjectId = streetObjectId;
+    public void setStreetId(Long streetId) {
+        this.streetId = streetId;
     }
 
     public String getCorrectionCorp() {

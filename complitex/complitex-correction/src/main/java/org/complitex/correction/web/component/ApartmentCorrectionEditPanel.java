@@ -98,7 +98,7 @@ public class ApartmentCorrectionEditPanel extends AddressCorrectionEditPanel<Apa
     protected String displayCorrection() {
         ApartmentCorrection correction = getCorrection();
 
-        Building buildingDomainObject = buildingStrategy.getDomainObject(correction.getBuildingObjectId(), true);
+        Building buildingDomainObject = buildingStrategy.getDomainObject(correction.getBuildingId(), true);
         String building = buildingStrategy.displayDomainObject(buildingDomainObject, getLocale());
 
         DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getPrimaryStreetId(), true);

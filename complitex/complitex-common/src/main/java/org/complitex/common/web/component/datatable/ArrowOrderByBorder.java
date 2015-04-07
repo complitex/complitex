@@ -11,8 +11,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.complitex.common.web.component.datatable.wicket.EnhancedOrderByBorder;
-import org.complitex.common.web.component.datatable.wicket.EnhancedOrderByLink;
 
 /**
  *

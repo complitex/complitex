@@ -11,30 +11,30 @@
 
     <resultMap id="streetCorrectionResultMap" type="org.complitex.correction.entity.StreetCorrection"
                extends="org.complitex.correction.service.CorrectionBean.correctionResultMap">
-        <result column="city_object_id" property="cityObjectId"/>
-        <result column="street_type_object_id" property="streetTypeObjectId"/>
+        <result column="city_id" property="cityId"/>
+        <result column="street_type_id" property="streetTypeId"/>
     </resultMap>
 
     <resultMap id="districtCorrectionResultMap" type="org.complitex.correction.entity.DistrictCorrection"
                extends="org.complitex.correction.service.CorrectionBean.correctionResultMap">
-        <result column="city_object_id" property="cityObjectId"/>
+        <result column="city_id" property="cityId"/>
     </resultMap>
 
     <resultMap id="buildingCorrectionResultMap" type="org.complitex.correction.entity.BuildingCorrection"
                extends="org.complitex.correction.service.CorrectionBean.correctionResultMap">
-        <result column="street_object_id" property="streetObjectId"/>
+        <result column="street_id" property="streetId"/>
         <result column="correction_corp" property="correctionCorp"/>
     </resultMap>
 
     <resultMap id="apartmentCorrectionResultMap" type="org.complitex.correction.entity.ApartmentCorrection"
                extends="org.complitex.correction.service.CorrectionBean.correctionResultMap">
-        <result column="building_object_id" property="buildingObjectId"/>
+        <result column="building_id" property="buildingId"/>
     </resultMap>
 
     <resultMap id="roomCorrectionResultMap" type="org.complitex.correction.entity.RoomCorrection"
                extends="org.complitex.correction.service.CorrectionBean.correctionResultMap">
-        <result column="building_object_id" property="buildingObjectId"/>
-        <result column="apartment_object_id" property="apartmentObjectId"/>
+        <result column="building_id" property="buildingId"/>
+        <result column="apartment_id" property="apartmentId"/>
     </resultMap>
 
     <select id="selectObjectIds" parameterType="map" resultType="long">
@@ -70,7 +70,7 @@
 
     <sql id="selectDistrictCorrectionsWhere">
         <where>
-            <if test="object.cityObjectId != null">c.`city_object_id` = #{object.cityObjectId}</if>
+            <if test="object.cityId != null">c.`city_id` = #{object.cityId}</if>
             <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionWhereIf"/>
         </where>
     </sql>
@@ -89,14 +89,14 @@
 
     <insert id="insertDistrictCorrection" parameterType="org.complitex.correction.entity.DistrictCorrection"
             keyProperty="id" useGeneratedKeys="true">
-        insert into `district_correction`(`city_object_id`, `object_id`, `external_id`, `correction`, `begin_date`, `end_date`,
+        insert into `district_correction`(`city_id`, `object_id`, `external_id`, `correction`, `begin_date`, `end_date`,
                                           `organization_id`, `user_organization_id`, `module_id`, `status`)
-          values (#{cityObjectId}, #{objectId}, #{externalId}, #{correction}, #{beginDate}, #{endDate},
+          values (#{cityId}, #{objectId}, #{externalId}, #{correction}, #{beginDate}, #{endDate},
                   #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status})
     </insert>
 
     <update id="updateDistrictCorrection" parameterType="org.complitex.correction.entity.DistrictCorrection">
-        update `district_correction` set `city_object_id` = #{cityObjectId}, `object_id` = #{objectId},
+        update `district_correction` set `city_id` = #{cityId}, `object_id` = #{objectId},
             `external_id` = #{externalId}, `correction` = #{correction},
             `begin_date` = #{beginDate}, `end_date` = #{endDate}, `organization_id` = #{organizationId},
             `user_organization_id` = #{userOrganizationId}, `module_id` = #{moduleId}, `status` = #{status}
@@ -129,8 +129,8 @@
 
     <sql id="selectStreetCorrectionsWhere">
         <where>
-            <if test="object.cityObjectId != null">and c.`city_object_id` = #{object.cityObjectId}</if>
-            <if test="object.streetTypeObjectId != null">and c.`street_type_object_id` = #{object.streetTypeObjectId}</if>
+            <if test="object.cityId != null">and c.`city_id` = #{object.cityId}</if>
+            <if test="object.streetTypeId != null">and c.`street_type_id` = #{object.streetTypeId}</if>
             <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionWhereIf"/>
         </where>
     </sql>
@@ -149,16 +149,16 @@
 
     <insert id="insertStreetCorrection" parameterType="org.complitex.correction.entity.StreetCorrection"
             keyProperty="id" useGeneratedKeys="true">
-        INSERT INTO `street_correction`(`city_object_id`, `street_type_object_id`, `object_id`, `external_id`,
+        INSERT INTO `street_correction`(`city_id`, `street_type_id`, `object_id`, `external_id`,
                                         `correction`, `begin_date`, `end_date`, `organization_id`,
                                         `user_organization_id`, `module_id`, `status`)
-            VALUES (#{cityObjectId}, #{streetTypeObjectId}, #{objectId}, #{externalId}, #{correction},
+            VALUES (#{cityId}, #{streetTypeId}, #{objectId}, #{externalId}, #{correction},
                     #{beginDate}, #{endDate}, #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status})
     </insert>
 
 
     <update id="updateStreetCorrection" parameterType="org.complitex.correction.entity.StreetCorrection">
-        UPDATE `street_correction` SET `city_object_id` = #{cityObjectId}, `street_type_object_id` = #{streetTypeObjectId},
+        UPDATE `street_correction` SET `city_id` = #{cityId}, `street_type_id` = #{streetTypeId},
             `object_id` = #{objectId}, `external_id` = #{externalId}, `correction` = #{correction},
             `organization_id` = #{organizationId}, `user_organization_id` = #{userOrganizationId},
             `module_id` = #{moduleId}
@@ -181,7 +181,7 @@
 
     <sql id="selectBuildingCorrectionsWhere">
         <where>
-            <if test="object.streetObjectId != null">and c.`street_object_id` = #{object.streetObjectId}</if>
+            <if test="object.streetId != null">and c.`street_id` = #{object.streetId}</if>
             <if test="object.correctionCorp != null">and c.`correction_corp` = #{object.correctionCorp}</if>
             <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionWhereIf"/>
         </where>
@@ -201,14 +201,14 @@
 
     <insert id="insertBuildingCorrection" parameterType="org.complitex.correction.entity.BuildingCorrection"
             keyProperty="id" useGeneratedKeys="true">
-        insert into `building_correction`(`street_object_id`, `object_id`, `external_id`,  `correction`, `correction_corp`,
+        insert into `building_correction`(`street_id`, `object_id`, `external_id`,  `correction`, `correction_corp`,
           `begin_date`, `end_date`, `organization_id`, `user_organization_id`, `module_id`, `status`)
-        values (#{streetObjectId}, #{objectId}, #{externalId}, #{correction}, #{correctionCorp}, #{beginDate}, #{endDate},
+        values (#{streetId}, #{objectId}, #{externalId}, #{correction}, #{correctionCorp}, #{beginDate}, #{endDate},
            #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status})
     </insert>
 
     <update id="updateBuildingCorrection" parameterType="org.complitex.correction.entity.BuildingCorrection">
-        update `building_correction` set `street_object_id` = #{streetObjectId}, `organization_id` = #{organizationId}, `correction` = #{correction},
+        update `building_correction` set `street_id` = #{streetId}, `organization_id` = #{organizationId}, `correction` = #{correction},
             `correction_corp` = #{correctionCorp}, `object_id` = #{objectId}, `external_id` = #{externalId},
             `module_id` = #{moduleId}, `user_organization_id` = #{userOrganizationId}
         where `id` = #{id}
@@ -341,7 +341,7 @@
 
     <sql id="selectApartmentCorrectionsWhere">
         <where>
-            <if test="object.buildingObjectId != null">c.`building_object_id` = #{object.buildingObjectId}</if>
+            <if test="object.buildingId != null">c.`building_id` = #{object.buildingId}</if>
             <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionWhereIf"/>
         </where>
     </sql>
@@ -360,9 +360,9 @@
 
     <insert id="insertApartmentCorrection" parameterType="org.complitex.correction.entity.ApartmentCorrection"
             keyProperty="id" useGeneratedKeys="true">
-        insert into `apartment_correction`(`building_object_id`, `object_id`, `external_id`, `correction`, `begin_date`, `end_date`,
+        insert into `apartment_correction`(`building_id`, `object_id`, `external_id`, `correction`, `begin_date`, `end_date`,
                                           `organization_id`, `user_organization_id`, `module_id`, `status`)
-          values (#{buildingObjectId}, #{objectId}, #{externalId}, #{correction}, #{beginDate}, #{endDate},
+          values (#{buildingId}, #{objectId}, #{externalId}, #{correction}, #{beginDate}, #{endDate},
                   #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status.id})
     </insert>
 
@@ -375,8 +375,8 @@
     <sql id="selectRoomCorrectionsWhere">
         <where>
             <choose>
-                <when test="object.apartmentObjectId != null">c.`apartment_object_id` = #{object.apartmentObjectId}</when>
-                <when test="object.buildingObjectId != null">c.`building_object_id` = #{object.buildingObjectId}</when>
+                <when test="object.apartmentId != null">c.`apartment_id` = #{object.apartmentId}</when>
+                <when test="object.buildingId != null">c.`building_id` = #{object.buildingId}</when>
             </choose>
             <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionWhereIf"/>
         </where>
@@ -396,9 +396,9 @@
 
     <insert id="insertRoomCorrection" parameterType="org.complitex.correction.entity.RoomCorrection"
             keyProperty="id" useGeneratedKeys="true">
-        insert into `room_correction`(`building_object_id`, `apartment_object_id`, `object_id`, `external_id`, `correction`, `begin_date`, `end_date`,
+        insert into `room_correction`(`building_id`, `apartment_id`, `object_id`, `external_id`, `correction`, `begin_date`, `end_date`,
                                           `organization_id`, `user_organization_id`, `module_id`, `status`)
-          values (#{buildingObjectId}, #{apartmentObjectId}, #{objectId}, #{externalId}, #{correction}, #{beginDate}, #{endDate},
+          values (#{buildingId}, #{apartmentId}, #{objectId}, #{externalId}, #{correction}, #{beginDate}, #{endDate},
                   #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status.id})
     </insert>
     

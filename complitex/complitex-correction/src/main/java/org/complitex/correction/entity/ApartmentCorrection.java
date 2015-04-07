@@ -6,16 +6,16 @@ import org.complitex.address.entity.AddressEntity;
  * @author Pavel Sknar
  */
 public class ApartmentCorrection extends Correction {
-    private Long buildingObjectId;
+    private Long buildingId;
 
     public ApartmentCorrection() {
     }
 
-    public ApartmentCorrection(Long buildingObjectId, String externalId, Long objectId, String correction, Long organizationId,
+    public ApartmentCorrection(Long buildingId, String externalId, Long objectId, String correction, Long organizationId,
                           Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
 
-        this.buildingObjectId = buildingObjectId;
+        this.buildingId = buildingId;
     }
 
     @Override
@@ -23,11 +23,11 @@ public class ApartmentCorrection extends Correction {
         return AddressEntity.APARTMENT.getEntityName();
     }
 
-    public Long getBuildingObjectId() {
-        return buildingObjectId;
+    public Long getBuildingId() {
+        return buildingId;
     }
 
-    public void setBuildingObjectId(Long buildingObjectId) {
-        this.buildingObjectId = buildingObjectId;
+    public void setBuildingId(Long buildingId) {
+        this.buildingId = buildingId;
     }
 }

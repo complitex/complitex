@@ -157,17 +157,17 @@ public class AddressCorrectionInputPanel extends Panel {
                 Long apartmentObjectId = ids.get("apartment");
 
                 if (correction instanceof DistrictCorrection){
-                    ((DistrictCorrection) correction).setCityObjectId(cityObjectId);
+                    ((DistrictCorrection) correction).setCityId(cityObjectId);
                 } else if (correction instanceof StreetCorrection){
-                    ((StreetCorrection) correction).setCityObjectId(cityObjectId);
+                    ((StreetCorrection) correction).setCityId(cityObjectId);
                 } else if (correction instanceof BuildingCorrection){
-                    ((BuildingCorrection) correction).setStreetObjectId(streetObjectId);
+                    ((BuildingCorrection) correction).setStreetId(streetObjectId);
                 } else if (correction instanceof ApartmentCorrection){
-                    ((ApartmentCorrection) correction).setBuildingObjectId(buildingObjectId);
+                    ((ApartmentCorrection) correction).setBuildingId(buildingObjectId);
                 } else if (correction instanceof RoomCorrection && apartmentObjectId != null && apartmentObjectId > 0){
-                    ((RoomCorrection) correction).setApartmentObjectId(apartmentObjectId);
+                    ((RoomCorrection) correction).setApartmentId(apartmentObjectId);
                 } else if (correction instanceof RoomCorrection && buildingObjectId != null && buildingObjectId > 0){
-                    ((RoomCorrection) correction).setBuildingObjectId(buildingObjectId);
+                    ((RoomCorrection) correction).setBuildingId(buildingObjectId);
                 }
             }
         }, ShowMode.ACTIVE, true));
@@ -199,7 +199,7 @@ public class AddressCorrectionInputPanel extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (correction instanceof StreetCorrection){
-                    ((StreetCorrection) correction).setStreetTypeObjectId(streetTypeModel.getObject().getObjectId());
+                    ((StreetCorrection) correction).setStreetTypeId(streetTypeModel.getObject().getObjectId());
                 }
             }
         });

@@ -95,7 +95,7 @@ public class ApartmentCorrectionList extends AddressCorrectionList<ApartmentCorr
         IStrategy streetStrategy = strategyFactory.getStrategy("street");
         IStrategy cityStrategy = strategyFactory.getStrategy("city");
 
-        Building buildingDomainObject = (Building)buildingStrategy.getDomainObject(correction.getBuildingObjectId(), true);
+        Building buildingDomainObject = (Building)buildingStrategy.getDomainObject(correction.getBuildingId(), true);
         String building = buildingStrategy.displayDomainObject(buildingDomainObject, getLocale());
 
         DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getPrimaryStreetId(), true);

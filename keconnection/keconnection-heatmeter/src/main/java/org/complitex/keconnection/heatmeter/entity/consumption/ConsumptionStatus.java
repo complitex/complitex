@@ -8,9 +8,9 @@ import org.complitex.common.mybatis.IFixedIdType;
  */
 @FixedIdTypeHandler
 public enum  ConsumptionStatus implements IFixedIdType{
-    LOADED(1), LOADING(2), LOAD_ERROR(3),
-    VALIDATED(11), VALIDATING(12), VALIDATION_ERROR(13),
-    BOUND(21), BINDING(22), BIND_ERROR(23),
+    LOADED(11), LOADING(12), LOAD_ERROR(13),
+    VALIDATED(21), VALIDATING(22), VALIDATION_ERROR(23),
+    BOUND(31), BINDING(32), BIND_ERROR(33),
 
     VALIDATION_STREET_TYPE_ERROR(101),
     VALIDATION_STREET_ERROR(102),

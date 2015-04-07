@@ -1,4 +1,4 @@
-package org.complitex.common.web.component.datatable.wicket;
+package org.complitex.common.web.component.datatable;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;

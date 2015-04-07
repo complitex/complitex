@@ -3,18 +3,18 @@ package org.complitex.correction.entity;
 import org.complitex.address.entity.AddressEntity;
 
 public class StreetCorrection extends Correction {
-    private Long cityObjectId;
-    private Long streetTypeObjectId;
+    private Long cityId;
+    private Long streetTypeId;
 
     public StreetCorrection() {
     }
 
-    public StreetCorrection(Long cityObjectId, Long streetTypeObjectId, String externalId, Long objectId,
+    public StreetCorrection(Long cityId, Long streetTypeId, String externalId, Long objectId,
                             String correction, Long organizationId, Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
 
-        this.cityObjectId = cityObjectId;
-        this.streetTypeObjectId = streetTypeObjectId;
+        this.cityId = cityId;
+        this.streetTypeId = streetTypeId;
     }
 
     @Override
@@ -27,19 +27,19 @@ public class StreetCorrection extends Correction {
         return null;
     }
 
-    public Long getCityObjectId() {
-        return cityObjectId;
+    public Long getCityId() {
+        return cityId;
     }
 
-    public void setCityObjectId(Long cityObjectId) {
-        this.cityObjectId = cityObjectId;
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
     }
 
-    public Long getStreetTypeObjectId() {
-        return streetTypeObjectId;
+    public Long getStreetTypeId() {
+        return streetTypeId;
     }
 
-    public void setStreetTypeObjectId(Long streetTypeObjectId) {
-        this.streetTypeObjectId = streetTypeObjectId;
+    public void setStreetTypeId(Long streetTypeId) {
+        this.streetTypeId = streetTypeId;
     }
 }

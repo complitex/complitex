@@ -9,6 +9,8 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextFilteredPropertyColumn;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.ResourceModel;
@@ -36,7 +38,16 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
 
         provider = new FilteredDataProvider<>(this, objectClass);
 
-        FilterForm<T> form = new FilterForm<>("form", provider);
+        FilterForm<T> form = new FilterForm<T>("form", provider){
+            @Override
+            public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                try {
+                    super.onComponentTagBody(markupStream, openTag);
+                } catch (Exception e) {
+                    //UrlRequestParametersAdapter.java:48 url npe
+                }
+            }
+        };
         add(form);
 
         List<IColumn<T, String>> columns = new ArrayList<>();
@@ -73,7 +84,7 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         DataTable<T, String> table = new DataTable<>("table", columns, provider, 10);
         table.setOutputMarkupId(true);
 
-        columns.add(new FilteredActionColumn<T>(actions != null ? actions : new ArrayList<>()){
+        columns.add(new FilteredActionColumn<T>(actions != null ? actions : new ArrayList<>()) {
             @Override
             protected void onReset(AjaxRequestTarget target) {
                 provider.init();

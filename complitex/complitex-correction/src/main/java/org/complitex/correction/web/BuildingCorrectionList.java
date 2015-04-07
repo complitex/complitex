@@ -97,7 +97,7 @@ public class BuildingCorrectionList extends AddressCorrectionList<BuildingCorrec
 
     @Override
     protected String displayCorrection(BuildingCorrection correction) {
-        DomainObject streetDomainObject = streetStrategy.getDomainObject(correction.getStreetObjectId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(correction.getStreetId(), true);
         DomainObject cityDomainObject = cityStrategy.getDomainObject(streetDomainObject.getParentId(), true);
 
         String city = cityStrategy.displayDomainObject(cityDomainObject, getLocale());

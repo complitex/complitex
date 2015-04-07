@@ -23,7 +23,11 @@ public class ConsumptionFileBean extends AbstractBean{
     }
 
     public void save(ConsumptionFile consumptionFile){
-        sqlSession().insert(NS + ".insertConsumptionFile", consumptionFile);
+        if (consumptionFile.getId() == null) {
+            sqlSession().insert(NS + ".insertConsumptionFile", consumptionFile);
+        }else{
+            sqlSession().insert(NS + ".updateConsumptionFile", consumptionFile);
+        }
     }
 
     public void delete(Long consumptionFileId){

@@ -159,8 +159,8 @@ public class AddressService extends AbstractBean {
         if (streetCorrections.size() == 1){
             StreetCorrection streetCorrection = streetCorrections.get(0);
 
-            request.setCityObjectId(streetCorrection.getCityObjectId());
-            request.setStreetTypeObjectId(streetCorrection.getStreetTypeObjectId());
+            request.setCityObjectId(streetCorrection.getCityId());
+            request.setStreetTypeObjectId(streetCorrection.getStreetTypeId());
             request.setStreetObjectId(streetCorrection.getObjectId());
         }else if (streetCorrections.size() > 1) {
             //сформируем множество названий

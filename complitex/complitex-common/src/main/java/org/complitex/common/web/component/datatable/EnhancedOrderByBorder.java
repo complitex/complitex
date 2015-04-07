@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.complitex.common.web.component.datatable.wicket;
+package org.complitex.common.web.component.datatable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;

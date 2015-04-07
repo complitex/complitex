@@ -88,7 +88,7 @@ public class DistrictCorrectionEditPanel extends AddressCorrectionEditPanel<Dist
     protected String displayCorrection() {
         DistrictCorrection correction = getCorrection();
 
-        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityObjectId(), true), getLocale());
+        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityId(), true), getLocale());
 
         return AddressRenderer.displayAddress(null, city, correction.getCorrection(), getLocale());
     }

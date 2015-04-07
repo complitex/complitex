@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
@@ -13,6 +14,12 @@ import org.apache.wicket.util.string.Strings;
  *         Date: 15.01.2010 16:43:32
  */
 public class BookmarkablePageLinkPanel<T> extends Panel {
+    public BookmarkablePageLinkPanel(String id, IModel<String> model, Class<? extends Page> page, PageParameters parameters) {
+        super(id);
+        Link link = new BookmarkablePageLink<T>("link", page, parameters);
+        link.add(new Label("label", model));
+        add(link);
+    }
 
     public <C extends Page> BookmarkablePageLinkPanel(String id, String label, Class<C> page, PageParameters parameters) {
         super(id);

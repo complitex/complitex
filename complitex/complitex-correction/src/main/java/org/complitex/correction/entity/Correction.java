@@ -10,24 +10,6 @@ import java.util.Date;
  * @author Anatoly A. Ivanov java@inheaven.ru
  */
 public abstract class Correction implements Serializable {
-    public static enum OrderBy {
-        CORRECTION("correction"),
-        EXTERNAL_ID("external_id"),
-        ORGANIZATION("organization"),
-        MODULE("module"),
-        OBJECT("object"),
-        USER_ORGANIZATION("userOrganization");
-
-        private String orderBy;
-
-        private OrderBy(String orderBy) {
-            this.orderBy = orderBy;
-        }
-
-        public String getOrderBy() {
-            return orderBy;
-        }
-    }
 
     private Long id;
     private String externalId;

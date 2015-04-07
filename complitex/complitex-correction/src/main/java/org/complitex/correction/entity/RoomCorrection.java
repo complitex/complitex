@@ -6,18 +6,18 @@ import org.complitex.address.entity.AddressEntity;
  * @author Pavel Sknar
  */
 public class RoomCorrection extends Correction {
-    private Long buildingObjectId;
-    private Long apartmentObjectId;
+    private Long buildingId;
+    private Long apartmentId;
 
     public RoomCorrection() {
     }
 
-    public RoomCorrection(Long buildingObjectId, Long apartmentObjectId, String externalId, Long objectId, String correction, Long organizationId,
+    public RoomCorrection(Long buildingId, Long apartmentId, String externalId, Long objectId, String correction, Long organizationId,
                           Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
 
-        this.buildingObjectId = buildingObjectId;
-        this.apartmentObjectId = apartmentObjectId;
+        this.buildingId = buildingId;
+        this.apartmentId = apartmentId;
     }
 
     @Override
@@ -25,19 +25,19 @@ public class RoomCorrection extends Correction {
         return AddressEntity.ROOM.getEntityName();
     }
 
-    public Long getBuildingObjectId() {
-        return buildingObjectId;
+    public Long getBuildingId() {
+        return buildingId;
     }
 
-    public void setBuildingObjectId(Long buildingObjectId) {
-        this.buildingObjectId = buildingObjectId;
+    public void setBuildingId(Long buildingId) {
+        this.buildingId = buildingId;
     }
 
-    public Long getApartmentObjectId() {
-        return apartmentObjectId;
+    public Long getApartmentId() {
+        return apartmentId;
     }
 
-    public void setApartmentObjectId(Long apartmentObjectId) {
-        this.apartmentObjectId = apartmentObjectId;
+    public void setApartmentId(Long apartmentId) {
+        this.apartmentId = apartmentId;
     }
 }

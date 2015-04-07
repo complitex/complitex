@@ -48,7 +48,7 @@ public class StreetCorrectionEditPanel extends AddressCorrectionEditPanel<Street
     protected String displayCorrection() {
         StreetCorrection correction = getCorrection();
 
-        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityObjectId(), true), getLocale());
+        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityId(), true), getLocale());
 
         String streetType = null;
         if (correction.getStreetTypeCorrection() != null) {

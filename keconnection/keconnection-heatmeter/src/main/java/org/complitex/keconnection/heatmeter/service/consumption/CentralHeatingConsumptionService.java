@@ -1,5 +1,6 @@
 package org.complitex.keconnection.heatmeter.service.consumption;
 
+import com.google.common.base.Strings;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -24,7 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author inheaven on 20.03.2015 0:57.
@@ -107,7 +109,7 @@ public class CentralHeatingConsumptionService {
             return toString(evaluator.evaluate(cell).getNumberValue());
         }
         
-        return cell.getStringCellValue();
+        return cell.getStringCellValue().trim();
     }
 
     private String toString(double value){
@@ -119,42 +121,78 @@ public class CentralHeatingConsumptionService {
         consumptionFile.setStatus(ConsumptionFileStatus.BINDING);
         consumptionFileBean.save(consumptionFile);
 
+        broadcasterService.broadcast(getClass().getName(), consumptionFile);
+
         List<CentralHeatingConsumption> consumptions = centralHeatingConsumptionBean.getCentralHeatingConsumptions(
                 FilterWrapper.of(new CentralHeatingConsumption(consumptionFile.getId())));
 
         String city = "КИЇВ";
+        Pattern pattern = Pattern.compile("(\\S*[\\.|\\s])(.*)");
 
-        consumptions.forEach(c -> {
-            String streetType = null;
-            String street = null;
-            String building = c.getBuildingNumber() != null ? c.getBuildingNumber().trim() : null;
+        consumptions.parallelStream().forEach(c -> {
+            //validation
 
-            String[] streetSplit = c.getStreet().split("(\\S*[\\.|\\s])(.*)");
-
-            if (streetSplit.length == 2){
-                streetType = streetSplit[0].trim();
-                street = streetSplit[1].trim();
+            if (Strings.isNullOrEmpty(c.getBuildingNumber())) {
+                c.setStatus(ConsumptionStatus.VALIDATION_BUILDING_ERROR);
+                centralHeatingConsumptionBean.save(c);
+                return;
             }
 
-            c.setStatus(ConsumptionStatus.VALIDATING);
+            if (Strings.isNullOrEmpty(c.getStreet())) {
+                c.setStatus(ConsumptionStatus.VALIDATION_STREET_ERROR);
+                centralHeatingConsumptionBean.save(c);
+                return;
+            }
 
-            if (!Optional.ofNullable(streetType).isPresent()){
+            Matcher m = pattern.matcher(c.getStreet());
+
+            if (!m.matches()){
                 c.setStatus(ConsumptionStatus.VALIDATION_STREET_TYPE_ERROR);
+                centralHeatingConsumptionBean.save(c);
+                return;
             }
 
+            String streetType = m.group(1).trim();
 
+            if (Strings.isNullOrEmpty(streetType)) {
+                c.setStatus(ConsumptionStatus.VALIDATION_STREET_TYPE_ERROR);
+                centralHeatingConsumptionBean.save(c);
+                return;
+            }
 
+            String street = m.group(2).trim();
+
+            if (Strings.isNullOrEmpty(street)) {
+                c.setStatus(ConsumptionStatus.VALIDATION_STREET_ERROR);
+                centralHeatingConsumptionBean.save(c);
+                return;
+            }
+
+            //resolve address
 
             try {
                 LocalAddress localAddress = addressCorrectionService.resolveLocalAddress(city, streetType,
                         street, c.getBuildingNumber(), null, consumptionFile.getServiceProviderId(),
                         consumptionFile.getUserOrganizationId());
 
+                c.setLocalAddress(localAddress);
 
+                if (localAddress.getStreetTypeId() == null) {
+                    c.setStatus(ConsumptionStatus.LOCAL_STREET_TYPE_UNRESOLVED);
+                    centralHeatingConsumptionBean.save(c);
+                    return;
+                } else if (localAddress.getStreetId() == null) {
+                    c.setStatus(ConsumptionStatus.LOCAL_STREET_UNRESOLVED);
+                    centralHeatingConsumptionBean.save(c);
+                    return;
+                } else if (localAddress.getBuildingId() == null) {
+                    c.setStatus(ConsumptionStatus.LOCAL_BUILDING_UNRESOLVED);
+                    centralHeatingConsumptionBean.save(c);
+                    return;
+                }
 
-
-
-
+                c.setStatus(ConsumptionStatus.BOUND);
+                centralHeatingConsumptionBean.save(c);
             } catch (ResolveAddressException e) {
                 c.setStatus(ConsumptionStatus.BIND_ERROR);
                 c.setMessage(e.getMessage());
@@ -162,5 +200,15 @@ public class CentralHeatingConsumptionService {
                 log.error("consumption file bind error", e);
             }
         });
+
+        boolean notBound = consumptions.parallelStream()
+                .filter(c -> !c.getStatus().equals(ConsumptionStatus.BOUND))
+                .findAny()
+                .isPresent();
+
+        consumptionFile.setStatus(notBound ? ConsumptionFileStatus.BIND_ERROR : ConsumptionFileStatus.BOUND);
+        consumptionFileBean.save(consumptionFile);
+
+        broadcasterService.broadcast(getClass().getName(), consumptionFile);
     }
 }

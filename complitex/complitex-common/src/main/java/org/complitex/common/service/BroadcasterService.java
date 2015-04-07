@@ -30,9 +30,9 @@ public class BroadcasterService {
     }
 
     @Asynchronous
-    public void broadcast(Object payload){
+    public void broadcast(String service, Object payload){
         try {
-            broadcaster.broadcastAll(application, new WebSocketPushMessage<>(payload));
+            broadcaster.broadcastAll(application, new WebSocketPushMessage(service, payload));
         } catch (Exception e) {
             log.error("broadcast error", e);
         }
