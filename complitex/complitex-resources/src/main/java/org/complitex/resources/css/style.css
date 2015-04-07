@@ -195,6 +195,10 @@ input.btnCenter{
     padding: 0px 0px 0px 0px;
 }
 
+.noWrap{
+    white-space: nowrap;
+}
+
 .blue { color: #007AAE; }
 
 .PageNavigator{
