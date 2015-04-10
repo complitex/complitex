@@ -141,8 +141,8 @@ public final class PaymentList extends TemplatePage {
                 if (!Strings.isEmpty(getSort().getProperty())) {
                     example.getObject().setOrderByClause(getSort().getProperty());
                 }
-                example.getObject().setStart(first);
-                example.getObject().setSize(count);
+                example.getObject().setFirst(first);
+                example.getObject().setCount(count);
                 return paymentBean.find(example.getObject());
             }
 

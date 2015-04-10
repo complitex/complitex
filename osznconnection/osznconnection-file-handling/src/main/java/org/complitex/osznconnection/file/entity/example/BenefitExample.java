@@ -19,8 +19,8 @@ public class BenefitExample extends AbstractRequestExample {
     private String building;
     private String corp;
     private String apartment;
-    private long start;
-    private long size;
+    private long first;
+    private long count;
     private String orderByClause;
     private boolean asc;
     private String account;
@@ -105,20 +105,20 @@ public class BenefitExample extends AbstractRequestExample {
         this.orderByClause = orderByClause;
     }
 
-    public long getSize() {
-        return size;
+    public long getFirst() {
+        return first;
     }
 
-    public void setSize(long size) {
-        this.size = size;
+    public void setFirst(long first) {
+        this.first = first;
     }
 
-    public long getStart() {
-        return start;
+    public long getCount() {
+        return count;
     }
 
-    public void setStart(long start) {
-        this.start = start;
+    public void setCount(long count) {
+        this.count = count;
     }
 
     public String getStreet() {

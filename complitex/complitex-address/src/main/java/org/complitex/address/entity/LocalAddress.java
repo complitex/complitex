@@ -1,9 +1,11 @@
 package org.complitex.address.entity;
 
+import java.io.Serializable;
+
 /**
  * @author inheaven on 002 02.04.15 16:26
  */
-public class LocalAddress {
+public class LocalAddress implements Serializable{
     private Long cityId;
     private Long streetTypeId;
     private Long streetId;

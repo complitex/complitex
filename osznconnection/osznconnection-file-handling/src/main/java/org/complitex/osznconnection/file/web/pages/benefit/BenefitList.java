@@ -137,8 +137,8 @@ public final class BenefitList extends TemplatePage {
                 if (!Strings.isEmpty(getSort().getProperty())) {
                     example.getObject().setOrderByClause(getSort().getProperty());
                 }
-                example.getObject().setStart(first);
-                example.getObject().setSize(count);
+                example.getObject().setFirst(first);
+                example.getObject().setCount(count);
                 return benefitBean.find(example.getObject());
             }
 
