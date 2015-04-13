@@ -34,10 +34,9 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.complitex.correction.web.component.AddressCorrectionPanel;
+import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.SubsidyExample;
-import org.complitex.osznconnection.file.entity.example.SubsidySumFilter;
 import org.complitex.osznconnection.file.service.*;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
 import org.complitex.osznconnection.file.service.status.details.SubsidyExampleConfigurator;
@@ -52,7 +51,6 @@ import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.*;
 
 import static org.complitex.common.util.StringUtil.decimal;
@@ -162,24 +160,24 @@ public final class SubsidyList extends TemplatePage {
         };
         dataProvider.setSort("", SortOrder.ASCENDING);
 
-        filterForm.add(new TextField<>("rashFilter", new PropertyModel<String>(example, "rash")));
-        filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<String>(example, "firstName")));
-        filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<String>(example, "middleName")));
-        filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<String>(example, "lastName")));
-        filterForm.add(new TextField<>("cityFilter", new PropertyModel<String>(example, "city")));
-        filterForm.add(new TextField<>("streetFilter", new PropertyModel<String>(example, "street")));
-        filterForm.add(new TextField<>("buildingFilter", new PropertyModel<String>(example, "building")));
-        filterForm.add(new TextField<>("corpFilter", new PropertyModel<String>(example, "corp")));
-        filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<String>(example, "apartment")));
+        filterForm.add(new TextField<>("rashFilter", new PropertyModel<>(example, "rash")));
+        filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<>(example, "firstName")));
+        filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<>(example, "middleName")));
+        filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<>(example, "lastName")));
+        filterForm.add(new TextField<>("cityFilter", new PropertyModel<>(example, "city")));
+        filterForm.add(new TextField<>("streetFilter", new PropertyModel<>(example, "street")));
+        filterForm.add(new TextField<>("buildingFilter", new PropertyModel<>(example, "building")));
+        filterForm.add(new TextField<>("corpFilter", new PropertyModel<>(example, "corp")));
+        filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<>(example, "apartment")));
 
-        filterForm.add(new TextField<>("DAT1", new PropertyModel<Date>(example, "DAT1")));
-        filterForm.add(new TextField<>("DAT2", new PropertyModel<Date>(example, "DAT2")));
-        filterForm.add(new TextField<>("NUMM", new PropertyModel<Integer>(example, "NUMM")));
-        filterForm.add(new TextField<>("NM_PAY", new PropertyModel<BigDecimal>(example, "NM_PAY")));
-        filterForm.add(new TextField<>("SUMMA", new PropertyModel<BigDecimal>(example, "SUMMA")));
-        filterForm.add(new TextField<>("SUBS", new PropertyModel<BigDecimal>(example, "SUBS")));
+        filterForm.add(new TextField<>("DAT1", new PropertyModel<>(example, "DAT1")));
+        filterForm.add(new TextField<>("DAT2", new PropertyModel<>(example, "DAT2")));
+        filterForm.add(new TextField<>("NUMM", new PropertyModel<>(example, "NUMM")));
+        filterForm.add(new TextField<>("NM_PAY", new PropertyModel<>(example, "NM_PAY")));
+        filterForm.add(new TextField<>("SUMMA", new PropertyModel<>(example, "SUMMA")));
+        filterForm.add(new TextField<>("SUBS", new PropertyModel<>(example, "SUBS")));
 
-        filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<RequestStatus>(example, "status"),
+        filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<>(example, "status"),
                 Arrays.asList(RequestStatus.values()), new StatusRenderer()).setNullValid(true));
 
         AjaxLink reset = new AjaxLink("reset") {
@@ -206,7 +204,7 @@ public final class SubsidyList extends TemplatePage {
         filterForm.add(submit);
 
         //Панель коррекции адреса
-        final AddressCorrectionPanel<Subsidy> addressCorrectionPanel = new AddressCorrectionPanel<Subsidy>("addressCorrectionPanel",
+        final AddressCorrectionDialog<Subsidy> addressCorrectionDialog = new AddressCorrectionDialog<Subsidy>("addressCorrectionPanel",
                 subsidyFile.getUserOrganizationId(), content, statusDetailPanel) {
 
             @Override
@@ -223,7 +221,7 @@ public final class SubsidyList extends TemplatePage {
                 dataRowHoverBehavior.deactivateDataRow(target);
             }
         };
-        add(addressCorrectionPanel);
+        add(addressCorrectionDialog);
 
         //Панель поиска
         final SubsidyLookupPanel lookupPanel = new SubsidyLookupPanel("lookupPanel", subsidyFile.getUserOrganizationId(),
@@ -287,7 +285,7 @@ public final class SubsidyList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        addressCorrectionPanel.open(target, subsidy, subsidy.getFirstName(),
+                        addressCorrectionDialog.open(target, subsidy, subsidy.getFirstName(),
                                 subsidy.getMiddleName(), subsidy.getLastName(),
                                 subsidy.getStringField(SubsidyDBF.NP_NAME,"_CYR"), subsidy.getStringField(SubsidyDBF.CAT_V,"_CYR"),
                                 subsidy.getStringField(SubsidyDBF.NAME_V,"_CYR"), subsidy.getStringField(SubsidyDBF.BLD,"_CYR"),
@@ -382,7 +380,7 @@ public final class SubsidyList extends TemplatePage {
 
         //Фильтр сумм
         final SubsidyFilterDialog filterDialog = new SubsidyFilterDialog("sum_filter_dialog",
-                new PropertyModel<SubsidySumFilter>(example, "sumFilter"), filterForm);
+                new PropertyModel<>(example, "sumFilter"), filterForm);
         add(filterDialog);
 
         filterForm.add(new AjaxLink("sum_filter") {

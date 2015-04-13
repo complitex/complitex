@@ -39,7 +39,7 @@ import org.complitex.correction.service.AddressService;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.complitex.correction.web.component.AddressCorrectionPanel;
+import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
@@ -203,7 +203,7 @@ public class RegistryRecordList extends TemplatePage {
         final Integer userOrganizationId = AttributeUtil.getIntegerValue(module, ModuleInstanceStrategy.ORGANIZATION);
 
         //Панель коррекции адреса
-        final AddressCorrectionPanel<RegistryRecordData> addressCorrectionPanel = new AddressCorrectionPanel<RegistryRecordData>("addressCorrectionPanel",
+        final AddressCorrectionDialog<RegistryRecordData> addressCorrectionDialog = new AddressCorrectionDialog<RegistryRecordData>("addressCorrectionPanel",
                 userOrganizationId != null? userOrganizationId.longValue() : -1 , container) {
 
             @Override
@@ -236,7 +236,7 @@ public class RegistryRecordList extends TemplatePage {
                 super.closeDialog(target);
             }
         };
-        add(addressCorrectionPanel);
+        add(addressCorrectionDialog);
 
 
         final List<AbstractColumn<RegistryRecordData, String>> columns = Lists.newArrayList();
@@ -298,7 +298,7 @@ public class RegistryRecordList extends TemplatePage {
 
                                 @Override
                                 public void onClick(AjaxRequestTarget target) {
-                                    addressCorrectionPanel.open(target, registryRecord, registryRecord.getFirstName(),
+                                    addressCorrectionDialog.open(target, registryRecord, registryRecord.getFirstName(),
                                             registryRecord.getMiddleName(), registryRecord.getLastName(),
                                             registryRecord.getCity(), registryRecord.getStreetType(), registryRecord.getStreet(),
                                             registryRecord.getBuildingNumber(), registryRecord.getBuildingCorp(),

@@ -127,7 +127,7 @@ public class CentralHeatingConsumptionService {
                 FilterWrapper.of(new CentralHeatingConsumption(consumptionFile.getId())));
 
         String city = "КИЇВ";
-        Pattern pattern = Pattern.compile("(\\S*[\\.|\\s])(.*)");
+        Pattern pattern = Pattern.compile("(\\S*([\\.|\\s]))(.*)");
 
         consumptions.parallelStream().forEach(c -> {
             //validation
@@ -152,9 +152,9 @@ public class CentralHeatingConsumptionService {
                 return;
             }
 
-            String streetType = m.group(1).trim();
+            String streetType = m.group(1).replace('.', ' ').trim();
 
-            if (Strings.isNullOrEmpty(streetType)) {
+            if (streetType.isEmpty()) {
                 c.setStatus(ConsumptionStatus.VALIDATION_STREET_TYPE_ERROR);
                 centralHeatingConsumptionBean.save(c);
                 return;
@@ -162,7 +162,7 @@ public class CentralHeatingConsumptionService {
 
             String street = m.group(2).trim();
 
-            if (Strings.isNullOrEmpty(street)) {
+            if (street.isEmpty()) {
                 c.setStatus(ConsumptionStatus.VALIDATION_STREET_ERROR);
                 centralHeatingConsumptionBean.save(c);
                 return;

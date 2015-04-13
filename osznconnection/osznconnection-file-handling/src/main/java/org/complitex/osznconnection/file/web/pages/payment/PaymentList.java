@@ -28,7 +28,7 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.complitex.correction.web.component.AddressCorrectionPanel;
+import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.PaymentExample;
 import org.complitex.osznconnection.file.service.AddressService;
@@ -191,7 +191,7 @@ public final class PaymentList extends TemplatePage {
         filterForm.add(submit);
 
         //Панель коррекции адреса
-        final AddressCorrectionPanel<Payment> addressCorrectionPanel = new AddressCorrectionPanel<Payment>("addressCorrectionPanel",
+        final AddressCorrectionDialog<Payment> addressCorrectionDialog = new AddressCorrectionDialog<Payment>("addressCorrectionPanel",
                 paymentFile.getUserOrganizationId(), content, statusDetailPanel) {
 
             @Override
@@ -208,7 +208,7 @@ public final class PaymentList extends TemplatePage {
                 dataRowHoverBehavior.deactivateDataRow(target);
             }
         };
-        add(addressCorrectionPanel);
+        add(addressCorrectionDialog);
 
         //Панель поиска
         final PaymentLookupPanel lookupPanel = new PaymentLookupPanel("lookupPanel", paymentFile.getUserOrganizationId(),
@@ -244,7 +244,7 @@ public final class PaymentList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        addressCorrectionPanel.open(target, payment, payment.getStringField(PaymentDBF.F_NAM),
+                        addressCorrectionDialog.open(target, payment, payment.getStringField(PaymentDBF.F_NAM),
                                 payment.getStringField(PaymentDBF.M_NAM), payment.getStringField(PaymentDBF.SUR_NAM),
                                 payment.getStringField(PaymentDBF.N_NAME), payment.getStringField(PaymentDBF.VUL_NAME),
                                 payment.getStringField(PaymentDBF.BLD_NUM), payment.getStringField(PaymentDBF.CORP_NUM),

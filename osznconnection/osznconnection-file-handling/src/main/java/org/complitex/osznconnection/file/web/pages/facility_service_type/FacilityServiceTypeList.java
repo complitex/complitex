@@ -32,7 +32,7 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.complitex.correction.web.component.AddressCorrectionPanel;
+import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.FacilityServiceTypeExample;
 import org.complitex.osznconnection.file.service.AddressService;
@@ -199,8 +199,8 @@ public final class FacilityServiceTypeList extends TemplatePage {
         filterForm.add(submit);
 
         //Панель коррекции адреса
-        final AddressCorrectionPanel<FacilityServiceType> addressCorrectionPanel =
-                new AddressCorrectionPanel<FacilityServiceType>("addressCorrectionPanel",
+        final AddressCorrectionDialog<FacilityServiceType> addressCorrectionDialog =
+                new AddressCorrectionDialog<FacilityServiceType>("addressCorrectionPanel",
                 facilityServiceTypeFile.getUserOrganizationId(), content, statusDetailPanel) {
 
                     @Override
@@ -219,7 +219,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
                         dataRowHoverBehavior.deactivateDataRow(target);
                     }
                 };
-        add(addressCorrectionPanel);
+        add(addressCorrectionDialog);
 
         //Панель поиска
         final FacilityServiceTypeLookupPanel lookupPanel =
@@ -266,7 +266,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
                                 : getString("streetTypeNotFound");
 
 
-                        addressCorrectionPanel.open(target, facilityServiceType, facilityServiceType.getFirstName(),
+                        addressCorrectionDialog.open(target, facilityServiceType, facilityServiceType.getFirstName(),
                                 facilityServiceType.getMiddleName(), facilityServiceType.getLastName(),
                                 facilityServiceType.getCity(), streetType, street,
                                 facilityServiceType.getStringField(FacilityServiceTypeDBF.HOUSE),

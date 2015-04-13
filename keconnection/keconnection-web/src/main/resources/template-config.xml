@@ -12,6 +12,8 @@
         </user-organization-picker>
     </web-components>
     <sidebar>
+        <menu class="org.complitex.keconnection.web.admin.AdminMenu"/>
+
         <menu class="org.complitex.keconnection.heatmeter.web.consumption.ConsumptionMenu"/>
         <menu class="org.complitex.keconnection.heatmeter.web.HeatmeterMenu"/>
         <menu class="org.complitex.keconnection.address.menu.KeConnectionAddressMenu"/>
@@ -27,7 +29,5 @@
         <menu class="org.complitex.address.menu.AddressDescriptionMenu"/>
         <menu class="org.complitex.keconnection.tarif.menu.TarifDescriptionMenu"/>
         <menu class="org.complitex.organization.web.OrganizationDescriptionTemplateMenu"/>
-
-        <menu class="org.complitex.keconnection.web.admin.AdminMenu"/>
     </sidebar>
 </template>

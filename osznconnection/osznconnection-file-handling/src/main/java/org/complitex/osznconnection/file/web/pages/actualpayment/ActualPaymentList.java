@@ -33,7 +33,7 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.complitex.correction.web.component.AddressCorrectionPanel;
+import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.ActualPaymentExample;
 import org.complitex.osznconnection.file.service.ActualPaymentBean;
@@ -194,7 +194,7 @@ public final class ActualPaymentList extends TemplatePage {
         filterForm.add(submit);
 
         //Панель коррекции адреса
-        final AddressCorrectionPanel<ActualPayment> addressCorrectionPanel = new AddressCorrectionPanel<ActualPayment>("addressCorrectionPanel",
+        final AddressCorrectionDialog<ActualPayment> addressCorrectionDialog = new AddressCorrectionDialog<ActualPayment>("addressCorrectionPanel",
                 actualPaymentFile.getUserOrganizationId(), content, statusDetailPanel) {
 
             @Override
@@ -214,7 +214,7 @@ public final class ActualPaymentList extends TemplatePage {
                 dataRowHoverBehavior.deactivateDataRow(target);
             }
         };
-        add(addressCorrectionPanel);
+        add(addressCorrectionDialog);
 
         //Панель поиска
         final ActualPaymentLookupPanel lookupPanel = new ActualPaymentLookupPanel("lookupPanel", actualPaymentFile.getUserOrganizationId(),
@@ -251,7 +251,7 @@ public final class ActualPaymentList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        addressCorrectionPanel.open(target, actualPayment, actualPayment.getStringField(ActualPaymentDBF.F_NAM),
+                        addressCorrectionDialog.open(target, actualPayment, actualPayment.getStringField(ActualPaymentDBF.F_NAM),
                                 actualPayment.getStringField(ActualPaymentDBF.M_NAM), actualPayment.getStringField(ActualPaymentDBF.SUR_NAM),
                                 actualPayment.getStringField(ActualPaymentDBF.N_NAME), actualPayment.getStringField(ActualPaymentDBF.VUL_CAT),
                                 actualPayment.getStringField(ActualPaymentDBF.VUL_NAME), actualPayment.getStringField(ActualPaymentDBF.BLD_NUM),

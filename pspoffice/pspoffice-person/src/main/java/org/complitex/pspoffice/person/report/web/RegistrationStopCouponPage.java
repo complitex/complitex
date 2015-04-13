@@ -9,7 +9,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
@@ -61,25 +60,6 @@ public class RegistrationStopCouponPage extends WebPage {
 
     @EJB
     private StrategyFactory strategyFactory;
-
-    private class MessagesFragment extends Fragment {
-
-        private Collection<FeedbackMessage> messages;
-
-        private MessagesFragment(String id, Collection<FeedbackMessage> messages) {
-            super(id, "messages", RegistrationStopCouponPage.this);
-            this.messages = messages;
-            add(new FeedbackPanel("messages"));
-        }
-
-        @Override
-        protected void onBeforeRender() {
-            super.onBeforeRender();
-            for (FeedbackMessage message : messages) {
-                getSession().getFeedbackMessages().add(message);
-            }
-        }
-    }
 
     private class ReportFragment extends Fragment {
 
@@ -148,7 +128,7 @@ public class RegistrationStopCouponPage extends WebPage {
             messages.add(new FeedbackMessage(this, getString("db_error"), ERROR));
             log.error("", e);
         }
-        add(coupon == null ? new MessagesFragment("content", messages) : new ReportFragment("content", coupon));
+        add(coupon == null ? new MessagesFragment(this, "content", messages) : new ReportFragment("content", coupon));
 
         //Загрузка отчетов
         final ReportDownloadPanel saveReportDownload = new ReportDownloadPanel("saveReportDownload", getString("report_download"),

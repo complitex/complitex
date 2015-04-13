@@ -28,7 +28,7 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.complitex.correction.web.component.AddressCorrectionPanel;
+import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample;
 import org.complitex.osznconnection.file.service.AddressService;
@@ -192,8 +192,8 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         filterForm.add(submit);
 
         //Панель коррекции адреса
-        final AddressCorrectionPanel<DwellingCharacteristics> addressCorrectionPanel =
-                new AddressCorrectionPanel<DwellingCharacteristics>("addressCorrectionPanel",
+        final AddressCorrectionDialog<DwellingCharacteristics> addressCorrectionDialog =
+                new AddressCorrectionDialog<DwellingCharacteristics>("addressCorrectionPanel",
                 dwellingCharacteristicsFile.getUserOrganizationId(), content, statusDetailPanel) {
 
                     @Override
@@ -214,7 +214,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                         dataRowHoverBehavior.deactivateDataRow(target);
                     }
                 };
-        add(addressCorrectionPanel);
+        add(addressCorrectionDialog);
 
         //Панель поиска
         final DwellingCharacteristicsLookupPanel lookupPanel =
@@ -259,7 +259,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                                 ? dwellingCharacteristics.getStreetType()
                                 : getString("streetTypeNotFound");
 
-                        addressCorrectionPanel.open(target, dwellingCharacteristics, dwellingCharacteristics.getFirstName(),
+                        addressCorrectionDialog.open(target, dwellingCharacteristics, dwellingCharacteristics.getFirstName(),
                                 dwellingCharacteristics.getMiddleName(), dwellingCharacteristics.getLastName(),
                                 dwellingCharacteristics.getCity(), streetType, street,
                                 dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.HOUSE),

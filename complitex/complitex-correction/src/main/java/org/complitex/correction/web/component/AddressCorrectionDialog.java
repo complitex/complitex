@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.correction.web.component;
 
 import com.google.common.collect.ImmutableList;
@@ -40,14 +36,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-/**
- * Панель для корректировки адреса вручную, когда нет соответствующей коррекции и поиск по локальной адресной базе не дал результатов.
- * @author Artem
- */
-public abstract class AddressCorrectionPanel<T> extends Panel {
+public abstract class AddressCorrectionDialog<T> extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
 
@@ -83,7 +74,7 @@ public abstract class AddressCorrectionPanel<T> extends Panel {
     private T request;
     private IModel<DomainObject> streetTypeModel;
 
-    public AddressCorrectionPanel(String id, final Long userOrganizationId, final Component... toUpdate) {
+    public AddressCorrectionDialog(String id, final Long userOrganizationId, final Component... toUpdate) {
         super(id);
 
         //Диалог
@@ -135,20 +126,15 @@ public abstract class AddressCorrectionPanel<T> extends Panel {
 
         DomainObjectFilter example = new DomainObjectFilter();
         List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(example);
-        Collections.sort(streetTypes, new Comparator<DomainObject>() {
-            @Override
-            public int compare(DomainObject o1, DomainObject o2) {
-                return streetTypeStrategy.displayFullName(o1, getLocale())
-                        .compareTo(streetTypeStrategy.displayFullName(o2, getLocale()));
-            }
-        });
+        Collections.sort(streetTypes, (o1, o2) -> streetTypeStrategy.getName(o1, getLocale())
+                .compareTo(streetTypeStrategy.getName(o2, getLocale())));
 
         streetTypeModel = new Model<>();
         DomainObjectDisableAwareRenderer renderer = new DomainObjectDisableAwareRenderer() {
 
             @Override
             public Object getDisplayValue(DomainObject object) {
-                return streetTypeStrategy.displayFullName(object, getLocale());
+                return streetTypeStrategy.getName(object, getLocale());
             }
         };
         streetTypeSelect = new DisableAwareDropDownChoice<>("streetTypeSelect", streetTypeModel,
