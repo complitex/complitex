@@ -253,11 +253,7 @@ public final class ActualPaymentList extends TemplatePage {
                     public void onClick(AjaxRequestTarget target) {
                         addressCorrectionDialog.open(target, actualPayment, actualPayment.getStringField(ActualPaymentDBF.F_NAM),
                                 actualPayment.getStringField(ActualPaymentDBF.M_NAM), actualPayment.getStringField(ActualPaymentDBF.SUR_NAM),
-                                actualPayment.getStringField(ActualPaymentDBF.N_NAME), actualPayment.getStringField(ActualPaymentDBF.VUL_CAT),
-                                actualPayment.getStringField(ActualPaymentDBF.VUL_NAME), actualPayment.getStringField(ActualPaymentDBF.BLD_NUM),
-                                actualPayment.getStringField(ActualPaymentDBF.CORP_NUM), actualPayment.getStringField(ActualPaymentDBF.FLAT),
-                                actualPayment.getCityObjectId(), actualPayment.getStreetTypeObjectId(), actualPayment.getStreetObjectId(),
-                                actualPayment.getBuildingObjectId(), null);
+                                actualPayment.getExternalAddress(), actualPayment.getLocalAddress());
                     }
                 };
                 addressCorrectionLink.setVisible(actualPayment.getStatus().isAddressCorrectable());
@@ -267,8 +263,8 @@ public final class ActualPaymentList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, actualPayment, actualPayment.getCityObjectId(), actualPayment.getStreetObjectId(),
-                                actualPayment.getBuildingObjectId(), actualPayment.getStringField(ActualPaymentDBF.FLAT),
+                        lookupPanel.open(target, actualPayment, actualPayment.getCityId(), actualPayment.getStreetId(),
+                                actualPayment.getBuildingId(), actualPayment.getStringField(ActualPaymentDBF.FLAT),
                                 actualPayment.getStringField(ActualPaymentDBF.OWN_NUM),
                                 actualPayment.getStatus().isImmediatelySearchByAddress());
                     }

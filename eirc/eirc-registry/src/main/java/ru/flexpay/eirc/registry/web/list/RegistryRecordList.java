@@ -24,6 +24,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.SharedResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.complitex.address.entity.AddressEntity;
+import org.complitex.address.entity.ExternalAddress;
+import org.complitex.address.entity.LocalAddress;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.ILocalizedType;
@@ -298,14 +300,19 @@ public class RegistryRecordList extends TemplatePage {
 
                                 @Override
                                 public void onClick(AjaxRequestTarget target) {
+                                    ExternalAddress externalAddress = new ExternalAddress(registryRecord.getCity(),
+                                            registryRecord.getStreetType(), registryRecord.getStreet(),
+                                            registryRecord.getBuildingNumber(), registryRecord.getBuildingCorp(),
+                                            registryRecord.getApartment(), registryRecord.getRoom());
+
+                                    LocalAddress localAddress = new LocalAddress(registryRecord.getCityId(),
+                                            registryRecord.getStreetTypeId(), registryRecord.getStreetId(),
+                                            registryRecord.getBuildingId(), registryRecord.getApartmentId(),
+                                            registryRecord.getRoomId(), null);
+
                                     addressCorrectionDialog.open(target, registryRecord, registryRecord.getFirstName(),
                                             registryRecord.getMiddleName(), registryRecord.getLastName(),
-                                            registryRecord.getCity(), registryRecord.getStreetType(), registryRecord.getStreet(),
-                                            registryRecord.getBuildingNumber(), registryRecord.getBuildingCorp(),
-                                            registryRecord.getApartment(), registryRecord.getRoom(),
-                                            registryRecord.getCityId(), registryRecord.getStreetTypeId(), registryRecord.getStreetId(),
-                                            registryRecord.getBuildingId(),
-                                            registryRecord.getApartmentId(), registryRecord.getRoomId());
+                                            externalAddress, localAddress);
                                 }
                             };
                             components.add(addressCorrectionLink);

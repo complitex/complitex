@@ -54,11 +54,11 @@ public class PersonAccount implements Serializable {
 
         apartment = request.getApartment();
 
-        cityObjectId = request.getCityObjectId();
-        streetObjectId = request.getStreetObjectId();
-        streetTypeObjectId = request.getStreetTypeObjectId();
-        buildingObjectId = request.getBuildingObjectId();
-        apartmentObjectId = request.getApartmentObjectId();
+        cityObjectId = request.getCityId();
+        streetObjectId = request.getStreetId();
+        streetTypeObjectId = request.getStreetTypeId();
+        buildingObjectId = request.getBuildingId();
+        apartmentObjectId = request.getApartmentId();
 
         this.accountNumber = request.getAccountNumber();
         organizationId = request.getOrganizationId();

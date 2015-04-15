@@ -12,9 +12,12 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.correction.entity.*;
 import org.complitex.correction.exception.ResolveAddressException;
+import org.complitex.correction.service.exception.CorrectionException;
+import org.complitex.correction.service.exception.DuplicateCorrectionException;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -48,13 +51,14 @@ public class AddressCorrectionService {
     @EJB
     private StreetTypeStrategy streetTypeStrategy;
 
-    public LocalAddress resolveLocalAddress(String city, String streetType, String street, String buildingNumber,
-                                            String buildingCorp, Long organizationId, Long userOrganizationId)
-            throws ResolveAddressException {
+    @EJB
+    private ModuleBean moduleBean;
+
+    public LocalAddress resolveLocalAddress(ExternalAddress externalAddress) throws ResolveAddressException {
         LocalAddress localAddress = new LocalAddress();
 
         //Связывание города
-        List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(city, organizationId, userOrganizationId);
+        List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(externalAddress);
 
         if (cityCorrections.size() == 1) {
             CityCorrection cityCorrection = cityCorrections.get(0);
@@ -63,7 +67,7 @@ public class AddressCorrectionService {
 
             throw new ResolveAddressException("MORE_ONE_LOCAL_CITY_CORRECTION");
         } else {
-            List<Long> cityIds = addressCorrectionBean.getCityObjectIds(city);
+            List<Long> cityIds = addressCorrectionBean.getCityIds(externalAddress.getCity());
 
             if (cityIds.size() == 1) {
                 localAddress.setCityId(cityIds.get(0));
@@ -77,9 +81,8 @@ public class AddressCorrectionService {
         }
 
         //Связывание типа улицы
-        if(streetType != null){
-            List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(streetType,
-                    organizationId, userOrganizationId);
+        if(externalAddress.getStreetType() != null){
+            List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(externalAddress);
 
             if (streetTypeCorrections.size() == 1) {
                 localAddress.setStreetTypeId(streetTypeCorrections.get(0).getObjectId());
@@ -87,7 +90,7 @@ public class AddressCorrectionService {
 
                 throw new ResolveAddressException("MORE_ONE_LOCAL_STREET_TYPE_CORRECTION");
             } else {
-                List<Long> streetTypeIds = addressCorrectionBean.getStreetTypeObjectIds(streetType);
+                List<Long> streetTypeIds = addressCorrectionBean.getStreetTypeIds(externalAddress.getStreetType());
 
                 if (streetTypeIds.size() == 1) {
                     localAddress.setStreetTypeId(streetTypeIds.get(0));
@@ -102,8 +105,7 @@ public class AddressCorrectionService {
         }
 
         //Связывание улицы
-        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(localAddress.getCityId(),
-                localAddress.getStreetTypeId(), null, null, street, organizationId, userOrganizationId);
+        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(localAddress, externalAddress);
 
         if (streetCorrections.size() == 1){
             StreetCorrection streetCorrection = streetCorrections.get(0);
@@ -141,7 +143,7 @@ public class AddressCorrectionService {
                 } else if (streetIds.size() > 1) { // нашли больше одной улицы
                     //пытаемся найти по району
                     streetIds = streetStrategy.getStreetObjectIdsByDistrict(localAddress.getCityId(),
-                            street, organizationId);
+                            externalAddress.getStreet(), externalAddress.getOrganizationId());
 
                     if (streetIds.size() == 1) { //нашли ровно одну улицу по району
                         Long streetObjectId = streetIds.get(0);
@@ -155,7 +157,7 @@ public class AddressCorrectionService {
                     } else {
                         // пытаемся искать дополнительно по номеру и корпусу дома
                         streetIds = streetStrategy.getStreetObjectIdsByBuilding(localAddress.getCityId(), streetName,
-                                buildingNumber, buildingCorp);
+                                externalAddress.getBuildingNumber(), externalAddress.getBuildingCorp());
 
                         if (streetIds.size() == 1) { //нашли ровно одну улицу с заданным номером и корпусом дома
                             Long streetObjectId = streetIds.get(0);
@@ -166,7 +168,7 @@ public class AddressCorrectionService {
 
                             //проставить дом для payment и выйти
                             List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(localAddress.getCityId(),
-                                    streetObjectId, buildingNumber, buildingCorp);
+                                    streetObjectId, externalAddress.getBuildingNumber(), externalAddress.getBuildingCorp());
 
                             if (buildingIds.size() == 1) {
                                 localAddress.setBuildingId(buildingIds.get(0));
@@ -185,13 +187,13 @@ public class AddressCorrectionService {
                     throw new ResolveAddressException("Street name `" + streetName + "` was not found.");
                 }
             } else {
-                throw new ResolveAddressException("Street `" + street + "` is mapped to more one internal street objects: "
+                throw new ResolveAddressException("Street `" + externalAddress.getStreet() + "` is mapped to more one internal street objects: "
                         + streetNames);
             }
         } else { // в коррекциях не нашли ни одного соответствия на внутренние объекты улиц
             // ищем по внутреннему справочнику улиц
             List<Long> streetIds = streetStrategy.getStreetObjectIds(localAddress.getCityId(),
-                    localAddress.getStreetTypeId(), street);
+                    localAddress.getStreetTypeId(), externalAddress.getStreet());
 
             if (streetIds.size() == 1) { // нашли ровно одну улицу
                 Long streetId = streetIds.get(0);
@@ -203,7 +205,8 @@ public class AddressCorrectionService {
                 // перейти к обработке дома
             } else if (streetIds.size() > 1) { // нашли более одной улицы
                 //пытаемся найти по району
-                streetIds = streetStrategy.getStreetObjectIdsByDistrict(localAddress.getCityId(), street, organizationId);
+                streetIds = streetStrategy.getStreetObjectIdsByDistrict(localAddress.getCityId(),
+                        externalAddress.getStreet(), externalAddress.getOrganizationId());
 
                 if (streetIds.size() == 1) { //нашли ровно одну улицу по району
                     Long streetId = streetIds.get(0);
@@ -214,15 +217,15 @@ public class AddressCorrectionService {
                     // перейти к обработке дома
                 } else {
                     // пытаемся искать дополнительно по номеру и корпусу дома
-                    streetIds = streetStrategy.getStreetObjectIdsByBuilding(localAddress.getCityId(), street,
-                            buildingNumber, buildingCorp);
+                    streetIds = streetStrategy.getStreetObjectIdsByBuilding(localAddress.getCityId(), externalAddress.getStreet(),
+                            externalAddress.getBuildingNumber(), externalAddress.getBuildingCorp());
 
                     if (streetIds.size() == 1) {
                         Long streetId = streetIds.get(0);
 
                         //проставить дом для payment и выйти
                         List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(localAddress.getCityId(),
-                                streetId, buildingNumber, buildingCorp);
+                                streetId, externalAddress.getBuildingNumber(), externalAddress.getBuildingCorp());
 
                         if (buildingIds.size() == 1) {
                             localAddress.setBuildingId(buildingIds.get(0));
@@ -244,8 +247,7 @@ public class AddressCorrectionService {
         }
 
         //Связывание дома
-        List<BuildingCorrection> buildingCorrections = addressCorrectionBean.getBuildingCorrections(
-                localAddress.getStreetId(), buildingNumber, buildingCorp, organizationId, userOrganizationId);
+        List<BuildingCorrection> buildingCorrections = addressCorrectionBean.getBuildingCorrections(localAddress, externalAddress);
 
         if (buildingCorrections.size() == 1) {
             localAddress.setBuildingId(buildingCorrections.get(0).getObjectId());
@@ -254,7 +256,7 @@ public class AddressCorrectionService {
             throw new ResolveAddressException("MORE_ONE_LOCAL_BUILDING_CORRECTION");
         } else {
             List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(localAddress.getCityId(),
-                    localAddress.getStreetId(), buildingNumber, buildingCorp);
+                    localAddress.getStreetId(), externalAddress.getBuildingNumber(), externalAddress.getBuildingCorp());
 
             if (buildingIds.size() == 1){
                 localAddress.setBuildingId(buildingIds.get(0));
@@ -295,8 +297,8 @@ public class AddressCorrectionService {
         List<DistrictCorrection> districtCorrections = addressCorrectionBean.getDistrictCorrections(
                 localAddress.getCityId(), null, null, null, organizationId, userOrganizationId);
 
-        if (districtCorrections.isEmpty() && localAddress.getOrganizationId() != null){
-            DomainObject organization = organizationStrategy.getDomainObject(localAddress.getOrganizationId(), true);
+        if (districtCorrections.isEmpty() && organizationId != null){
+            DomainObject organization = organizationStrategy.getDomainObject(organizationId, true);
 
             Long districtId = organization.getAttribute(IOrganizationStrategy.DISTRICT).getValueId();
             DomainObject district = districtStrategy.getDomainObject(districtId, true);
@@ -388,5 +390,84 @@ public class AddressCorrectionService {
         }
 
         return externalAddress;
+    }
+
+    public void correctLocalAddress(ExternalAddress externalAddress, LocalAddress localAddress)
+            throws CorrectionException {
+        Long moduleId = moduleBean.getModuleId();
+
+        if (){
+
+        }
+
+        //todo correct entity by local address values
+
+        switch (entity) {
+            case CITY: {
+                List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(null, externalAddress.getCity(),
+                        organizationId, userOrganizationId);
+
+                if (cityCorrections.isEmpty()) {
+                    CityCorrection cityCorrection = new CityCorrection(null, localAddress.getCityId(),
+                            externalAddress.getCity().toUpperCase(), organizationId, userOrganizationId, moduleId);
+                    addressCorrectionBean.save(cityCorrection);
+                } else {
+                    throw new DuplicateCorrectionException();
+                }
+            }
+            break;
+
+            case STREET_TYPE: {
+                List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
+                        null, externalAddress.getStreetType(), organizationId, userOrganizationId);
+
+                if (streetTypeCorrections.isEmpty()) {
+                    StreetTypeCorrection streetTypeCorrection = new StreetTypeCorrection(externalAddress.getStreetTypeCode(),
+                            localAddress.getStreetTypeId(),
+                            externalAddress.getStreetType().toUpperCase(),
+                            organizationId, userOrganizationId, moduleId);
+                    addressCorrectionBean.save(streetTypeCorrection);
+                } else {
+                    throw new DuplicateCorrectionException();
+                }
+            }
+            break;
+
+            case STREET:
+                List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(
+                        localAddress.getCityId(), localAddress.getStreetTypeId(), null, null, externalAddress.getStreet(),
+                        organizationId, userOrganizationId);
+
+                if (streetCorrections.isEmpty()) {
+                    StreetCorrection streetCorrection = new StreetCorrection(localAddress.getCityId(), localAddress.getStreetTypeId(),
+                            externalAddress.getStreetCode(), localAddress.getStreetId(), externalAddress.getStreet().toUpperCase(),
+                            organizationId, userOrganizationId, moduleId);
+
+                    addressCorrectionBean.save(streetCorrection);
+                } else {
+                    throw new DuplicateCorrectionException();
+                }
+
+                break;
+
+            case BUILDING:
+                List<BuildingCorrection> buildingCorrections = addressCorrectionBean.getBuildingCorrections(
+                        localAddress.getStreetId(), null, externalAddress.getBuildingNumber(), externalAddress.getBuildingCorp(),
+                        organizationId, userOrganizationId);
+
+                if (buildingCorrections.isEmpty()) {
+                    BuildingCorrection buildingCorrection = new BuildingCorrection(localAddress.getStreetId(), null,
+                            localAddress.getBuildingId(),
+                            externalAddress.getBuildingNumber().toUpperCase(),
+                            externalAddress.getBuildingCorp() != null ? externalAddress.getBuildingCorp().toUpperCase() : null,
+                            organizationId, userOrganizationId, moduleId);
+
+                    addressCorrectionBean.save(buildingCorrection);
+                } else {
+                    throw new DuplicateCorrectionException();
+                }
+
+                break;
+        }
     }
 }

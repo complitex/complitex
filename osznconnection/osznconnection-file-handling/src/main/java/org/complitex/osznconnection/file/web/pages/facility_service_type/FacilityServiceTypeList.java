@@ -25,10 +25,13 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
+import org.complitex.address.entity.ExternalAddress;
+import org.complitex.address.entity.LocalAddress;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
+import org.complitex.correction.service.exception.CorrectionException;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
@@ -214,6 +217,15 @@ public final class FacilityServiceTypeList extends TemplatePage {
                     }
 
                     @Override
+                    protected void correctAddress(AddressEntity entity, IModel<FacilityServiceType> model,
+                                                  ExternalAddress externalAddress, LocalAddress localAddress)
+                            throws CorrectionException{
+
+
+
+                    }
+
+                    @Override
                     protected void closeDialog(AjaxRequestTarget target) {
                         super.closeDialog(target);
                         dataRowHoverBehavior.deactivateDataRow(target);
@@ -257,26 +269,18 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        String street = facilityServiceType.getStreet() != null
-                                ? facilityServiceType.getStreet()
-                                : getString("streetCodePrefix") + " " + facilityServiceType.getStringField(CDUL);
-
-                        String streetType = facilityServiceType.getStreetType() != null
+                        facilityServiceType.setStreetType(facilityServiceType.getStreetType() != null
                                 ? facilityServiceType.getStreetType()
-                                : getString("streetTypeNotFound");
+                                : getString("streetTypeNotFound"));
+
+                        facilityServiceType.setStreet(facilityServiceType.getStreet() != null
+                                ? facilityServiceType.getStreet()
+                                : getString("streetCodePrefix") + " " + facilityServiceType.getStringField(CDUL));
 
 
                         addressCorrectionDialog.open(target, facilityServiceType, facilityServiceType.getFirstName(),
                                 facilityServiceType.getMiddleName(), facilityServiceType.getLastName(),
-                                facilityServiceType.getCity(), streetType, street,
-                                facilityServiceType.getStringField(FacilityServiceTypeDBF.HOUSE),
-                                facilityServiceType.getStringField(FacilityServiceTypeDBF.BUILD),
-                                facilityServiceType.getStringField(FacilityServiceTypeDBF.APT),
-                                facilityServiceType.getCityObjectId(),
-                                facilityServiceType.getStreetTypeObjectId(),
-                                facilityServiceType.getStreetObjectId(),
-                                facilityServiceType.getBuildingObjectId(),
-                                null);
+                                facilityServiceType.getExternalAddress(), facilityServiceType.getLocalAddress());
                     }
                 };
                 addressCorrectionLink.setVisible(facilityServiceType.getStatus().isAddressCorrectable());
@@ -286,8 +290,8 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, facilityServiceType, facilityServiceType.getCityObjectId(),
-                                facilityServiceType.getStreetObjectId(), facilityServiceType.getBuildingObjectId(),
+                        lookupPanel.open(target, facilityServiceType, facilityServiceType.getCityId(),
+                                facilityServiceType.getStreetId(), facilityServiceType.getBuildingId(),
                                 facilityServiceType.getStringField(FacilityServiceTypeDBF.APT),
                                 facilityServiceType.getStringField(FacilityServiceTypeDBF.IDCODE),
                                 facilityServiceType.getStatus().isImmediatelySearchByAddress());

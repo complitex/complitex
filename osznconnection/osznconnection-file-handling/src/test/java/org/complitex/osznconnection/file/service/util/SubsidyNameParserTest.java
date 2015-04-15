@@ -4,9 +4,10 @@
  */
 package org.complitex.osznconnection.file.service.util;
 
-import org.complitex.osznconnection.file.entity.PersonName;
+import org.complitex.common.entity.PersonalName;
 import org.testng.annotations.Test;
-import static org.testng.Assert.*;
+
+import static org.testng.Assert.assertEquals;
 
 /**
  *
@@ -16,7 +17,7 @@ public class SubsidyNameParserTest {
 
     @Test
     public void parseTest1() {
-        PersonName n;
+        PersonalName n;
         n = SubsidyNameParser.parse("123", "Петров В.В.");
         assertEquals(n.getLastName(), "Петров");
         assertEquals(n.getFirstName(), "В");

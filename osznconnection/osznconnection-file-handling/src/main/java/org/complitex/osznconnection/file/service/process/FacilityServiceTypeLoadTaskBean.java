@@ -2,6 +2,7 @@ package org.complitex.osznconnection.file.service.process;
 
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
+import org.complitex.common.entity.PersonalName;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
@@ -79,10 +80,10 @@ public class FacilityServiceTypeLoadTaskBean implements ITaskBean {
 
     private void parseFio(FacilityServiceType facilityServiceType) {
         String fio = facilityServiceType.getStringField(FacilityServiceTypeDBF.FIO);
-        PersonName personName = FacilityNameParser.parse(fio);
-        facilityServiceType.setFirstName(personName.getFirstName());
-        facilityServiceType.setMiddleName(personName.getMiddleName());
-        facilityServiceType.setLastName(personName.getLastName());
+        PersonalName personalName = FacilityNameParser.parse(fio);
+        facilityServiceType.setFirstName(personalName.getFirstName());
+        facilityServiceType.setMiddleName(personalName.getMiddleName());
+        facilityServiceType.setLastName(personalName.getLastName());
     }
 
     @Override

@@ -1,6 +1,8 @@
 package org.complitex.correction.service;
 
 import com.google.common.collect.ImmutableMap;
+import org.complitex.address.entity.ExternalAddress;
+import org.complitex.address.entity.LocalAddress;
 import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
@@ -45,6 +47,10 @@ public class AddressCorrectionBean extends CorrectionBean {
         return getCityCorrections(null, correction, organizationId, userOrganizationId);
     }
 
+    public List<CityCorrection> getCityCorrections(ExternalAddress address) {
+        return getCityCorrections(address.getCity(), address.getOrganizationId(), address.getUserOrganizationId());
+    }
+
     public Long getCityCorrectionsCount(FilterWrapper<CityCorrection> filterWrapper) {
         return sqlSession().selectOne(NS + ".selectCityCorrectionsCount", filterWrapper);
     }
@@ -61,12 +67,12 @@ public class AddressCorrectionBean extends CorrectionBean {
         return true;
     }
 
-    public List<Long> getCityObjectIds(String city) {
+    public List<Long> getCityIds(String city) {
         return getObjectIds("city", city, CityStrategy.NAME);
     }
 
     public boolean isCityObjectExists(String city, Long objectId){
-        return getCityObjectIds(city).contains(objectId);
+        return getCityIds(city).contains(objectId);
     }
 
      /* DISTRICT */
@@ -131,6 +137,10 @@ public class AddressCorrectionBean extends CorrectionBean {
         return getStreetTypeCorrections(null, correction, organizationId, userOrganizationId);
     }
 
+    public List<StreetTypeCorrection> getStreetTypeCorrections(ExternalAddress address) {
+        return getStreetTypeCorrections(address.getStreetType(), address.getOrganizationId(), address.getUserOrganizationId());
+    }
+
     public Long getStreetTypeCorrectionsCount(FilterWrapper<StreetTypeCorrection> filterWrapper) {
         return sqlSession().selectOne(NS + ".selectStreetTypeCorrectionsCount", filterWrapper);
     }
@@ -146,12 +156,12 @@ public class AddressCorrectionBean extends CorrectionBean {
         return true;
     }
 
-    public List<Long> getStreetTypeObjectIds(String streetType) {
+    public List<Long> getStreetTypeIds(String streetType) {
         return getObjectIds("street_type", streetType, StreetTypeStrategy.SHORT_NAME);
     }
 
     public boolean isStreetTypeObjectExists(String streetType, Long objectId){
-        return getStreetTypeObjectIds(streetType).contains(objectId);
+        return getStreetTypeIds(streetType).contains(objectId);
     }
 
     /* STREET */
@@ -168,13 +178,18 @@ public class AddressCorrectionBean extends CorrectionBean {
         return sqlSession().selectOne(NS + ".selectStreetCorrectionsCount", filterWrapper);
     }
 
-    public List<StreetCorrection> getStreetCorrections(Long cityObjectId, Long streetTypeObjectId, String externalId,
+    public List<StreetCorrection> getStreetCorrections(Long cityId, Long streetTypeId, String externalId,
                                                        Long objectId,  String street, Long organizationId, Long userOrganizationId) {
 
-        return getStreetCorrections(FilterWrapper.of(new StreetCorrection(cityObjectId, streetTypeObjectId, externalId,
+        return getStreetCorrections(FilterWrapper.of(new StreetCorrection(cityId, streetTypeId, externalId,
                 objectId, street, organizationId, userOrganizationId, null)));
     }
 
+    public List<StreetCorrection> getStreetCorrections(LocalAddress localAddress, ExternalAddress externalAddress) {
+
+        return getStreetCorrections(localAddress.getCityId(), localAddress.getStreetTypeId(), null, null,
+                externalAddress.getStreet(), externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
+    }
 
     public boolean save(StreetCorrection streetCorrection) {
         if (streetCorrection.getId() == null) {
@@ -215,15 +230,15 @@ public class AddressCorrectionBean extends CorrectionBean {
         return sqlSession().selectOne(NS + ".selectBuildingCorrectionsCount", filterWrapper);
     }
 
-    public List<BuildingCorrection> getBuildingCorrections(Long streetObjectId, Long objectId, String buildingNumber,
+    public List<BuildingCorrection> getBuildingCorrections(Long streetId, Long objectId, String buildingNumber,
                                                            String buildingCorp, Long organizationId, Long userOrganizationId) {
-        return getBuildingCorrections(FilterWrapper.of(new BuildingCorrection(streetObjectId, null, objectId,
+        return getBuildingCorrections(FilterWrapper.of(new BuildingCorrection(streetId, null, objectId,
                 buildingNumber, buildingCorp, organizationId, userOrganizationId, null)));
     }
 
-    public List<BuildingCorrection> getBuildingCorrections(Long streetObjectId, String buildingNumber,
-                                                           String buildingCorp, Long organizationId, Long userOrganizationId) {
-        return getBuildingCorrections(streetObjectId, null, buildingNumber, buildingCorp, organizationId, userOrganizationId);
+    public List<BuildingCorrection> getBuildingCorrections(LocalAddress localAddress, ExternalAddress externalAddress){
+        return getBuildingCorrections(localAddress.getStreetId(), null, externalAddress.getBuildingNumber(),
+                externalAddress.getBuildingCorp(), externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
     }
 
 
@@ -261,9 +276,9 @@ public class AddressCorrectionBean extends CorrectionBean {
         return sqlSession().selectList(NS + ".selectApartmentCorrections", filterWrapper);
     }
 
-    public List<ApartmentCorrection> getApartmentCorrections(Long buildingObjectId, String externalId, Long objectId, String correction,
+    public List<ApartmentCorrection> getApartmentCorrections(Long buildingId, String externalId, Long objectId, String correction,
                                                            Long organizationId, Long userOrganizationId){
-        return getApartmentCorrections(FilterWrapper.of(new ApartmentCorrection(buildingObjectId, externalId, objectId,
+        return getApartmentCorrections(FilterWrapper.of(new ApartmentCorrection(buildingId, externalId, objectId,
                 correction, organizationId, userOrganizationId, null)));
     }
 
@@ -301,10 +316,10 @@ public class AddressCorrectionBean extends CorrectionBean {
         return sqlSession().selectList(NS + ".selectRoomCorrections", filterWrapper);
     }
 
-    public List<RoomCorrection> getRoomCorrections(Long buildingObjectId, Long apartmentObjectId, String externalId,
+    public List<RoomCorrection> getRoomCorrections(Long buildingId, Long apartmentId, String externalId,
                                                    Long objectId, String correction,
                                                    Long organizationId, Long userOrganizationId){
-        return getRoomCorrections(FilterWrapper.of(new RoomCorrection(buildingObjectId, apartmentObjectId, externalId, objectId,
+        return getRoomCorrections(FilterWrapper.of(new RoomCorrection(buildingId, apartmentId, externalId, objectId,
                 correction, organizationId, userOrganizationId, null)));
     }
 

@@ -39,4 +39,6 @@ public class Payment extends AbstractAccountRequest<PaymentDBF> {
     public String getApartment() {
         return getStringField(PaymentDBF.FLAT);
     }
+
+
 }

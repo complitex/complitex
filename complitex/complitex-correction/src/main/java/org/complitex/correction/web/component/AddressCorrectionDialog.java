@@ -2,7 +2,6 @@ package org.complitex.correction.web.component;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -14,11 +13,14 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.complitex.address.entity.AddressEntity;
+import org.complitex.address.entity.ExternalAddress;
+import org.complitex.address.entity.LocalAddress;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.PersonalName;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
@@ -26,6 +28,7 @@ import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
+import org.complitex.correction.service.exception.CorrectionException;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
@@ -51,30 +54,23 @@ public abstract class AddressCorrectionDialog<T> extends Panel {
     private AddressEntity correctedEntity;
     private Dialog dialog;
     private WiQuerySearchComponent searchComponent;
-    private SearchComponentState componentState;
+    private SearchComponentState state;
     private DisableAwareDropDownChoice<DomainObject> streetTypeSelect;
     private FeedbackPanel messages;
     private WebMarkupContainer container;
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private String city;
-    private String streetType;
-    private String street;
-    private String buildingNumber;
-    private String buildingCorp;
-    private String apartment;
-    private String room;
-    private Long cityId;
-    private Long streetTypeId;
-    private Long streetId;
-    private Long buildingId;
-    private Long apartmentId;
-    private Long roomId;
-    private T request;
+
+    private PersonalName personalName;
+
+    private ExternalAddress externalAddress;
+    private LocalAddress localAddress;
+
+    private boolean ignoreStreetType = false;
+
     private IModel<DomainObject> streetTypeModel;
 
-    public AddressCorrectionDialog(String id, final Long userOrganizationId, final Component... toUpdate) {
+    private IModel<T> model;
+
+    public AddressCorrectionDialog(String id) {
         super(id);
 
         //Диалог
@@ -95,7 +91,7 @@ public abstract class AddressCorrectionDialog<T> extends Panel {
         //Контейнер для ajax
         container = new WebMarkupContainer("container");
         container.setOutputMarkupPlaceholderTag(true);
-        container.setVisible(false);
+
         dialog.add(container);
 
         //Панель обратной связи
@@ -107,7 +103,7 @@ public abstract class AddressCorrectionDialog<T> extends Panel {
 
             @Override
             public String getObject() {
-                return lastName + " " + firstName + " " + middleName;
+                return personalName.toString();
             }
         }));
 
@@ -115,13 +111,13 @@ public abstract class AddressCorrectionDialog<T> extends Panel {
 
             @Override
             public String getObject() {
-                return AddressRenderer.displayAddress(null, city, streetType, street, buildingNumber, buildingCorp, apartment, room, getLocale());
+                return AddressRenderer.displayAddress(externalAddress, getLocale());
             }
         }));
 
-        componentState = new SearchComponentState();
+        state = new SearchComponentState();
         // at start create fake search component
-        searchComponent = new WiQuerySearchComponent("searchComponent", componentState, ImmutableList.of(""), null, ShowMode.ACTIVE, true);
+        searchComponent = new WiQuerySearchComponent("searchComponent", state, ImmutableList.of(""), null, ShowMode.ACTIVE, true);
         container.add(searchComponent);
 
         DomainObjectFilter example = new DomainObjectFilter();
@@ -152,26 +148,24 @@ public abstract class AddressCorrectionDialog<T> extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if (validate(componentState)) {
+                if (validate(state)) {
                     try {
-                        if (correctedEntity != AddressEntity.STREET_TYPE) {
-                            correctAddress(request, correctedEntity, getObjectId(componentState.get("city")),
-                                    getStreetTypeId(componentState.get("street")), getObjectId(componentState.get("street")),
-                                    getObjectId(componentState.get("building")), getObjectId(componentState.get("apartment")),
-                                    getObjectId(componentState.get("room")),
-                                    userOrganizationId);
+                        if (correctedEntity.equals(AddressEntity.STREET_TYPE)) {
+                            LocalAddress localAddress = new LocalAddress(state.getId("city"),
+                                    getStreetTypeId(state.get("street")), state.getId("street"),
+                                    state.getId("building"), state.getId("apartment"), state.getId("room"), null);
+
+                            correctAddress(target, model, correctedEntity, externalAddress, localAddress);
                         } else {
-                            correctAddress(request, correctedEntity, null, getObjectId(streetTypeModel.getObject()),
-                                    null, null, null, null, userOrganizationId);
+                            LocalAddress localAddress = new LocalAddress();
+                            localAddress.setStreetTypeId(streetTypeModel.getObject() != null
+                                    ? streetTypeModel.getObject().getId() : null);
+
+                            correctAddress(target, model, correctedEntity, externalAddress, localAddress);
                         }
 
-                        if (toUpdate != null) {
-                            for (Component component : toUpdate) {
-                                target.add(component);
-                            }
-                        }
-                        closeDialog(target);
-                        return;
+                        target.add(container);
+                        dialog.close(target);
                     } catch (DuplicateCorrectionException e) {
                         error(getString("duplicate_correction_error"));
                     } catch (MoreOneCorrectionException e) {
@@ -202,23 +196,20 @@ public abstract class AddressCorrectionDialog<T> extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                closeDialog(target);
+                target.add(container);
+                dialog.close(target);
             }
         };
         container.add(cancel);
-    }
-
-    private Long getObjectId(DomainObject object) {
-        return object == null ? null : object.getObjectId();
     }
 
     private Long getStreetTypeId(DomainObject streetObject) {
         return streetObject == null ? null : streetStrategy.getStreetType(streetObject);
     }
 
-    protected abstract void correctAddress(T request, AddressEntity entity, Long cityId, Long streetTypeId,
-            Long streetId, Long buildingId, Long apartmentId, Long roomId, Long userOrganizationId)
-            throws DuplicateCorrectionException, MoreOneCorrectionException, NotFoundCorrectionException;
+    public void setIgnoreStreetType(boolean ignoreStreetType) {
+        this.ignoreStreetType = ignoreStreetType;
+    }
 
     protected boolean validate(SearchComponentState componentState) {
         boolean validated = true;
@@ -229,7 +220,7 @@ public abstract class AddressCorrectionDialog<T> extends Panel {
                 validated = roomObject != null && roomObject.getObjectId() != null && roomObject.getObjectId() > 0;
             case APARTMENT:
                 DomainObject apartmentObject = componentState.get("apartment");
-                validated &= StringUtils.isEmpty(apartment) && apartmentObject == null && correctedEntity == AddressEntity.ROOM ||
+                validated &= StringUtils.isEmpty(externalAddress.getApartment()) && apartmentObject == null && correctedEntity == AddressEntity.ROOM ||
                         apartmentObject != null && apartmentObject.getObjectId() != null && apartmentObject.getObjectId() > 0;
             case BUILDING:
                 DomainObject buildingObject = componentState.get("building");
@@ -257,24 +248,24 @@ public abstract class AddressCorrectionDialog<T> extends Panel {
     private void initSearchComponentState(SearchComponentState componentState) {
         componentState.clear();
 
-        if (cityId != null) {
-            componentState.put("city", findObject(cityId, "city"));
+        if (localAddress.getCityId() != null) {
+            componentState.put("city", findObject(localAddress.getCityId() , "city"));
         }
 
-        if (streetId != null) {
-            componentState.put("street", findObject(streetId, "street"));
+        if (localAddress.getStreetId()  != null) {
+            componentState.put("street", findObject(localAddress.getStreetId(), "street"));
         }
 
-        if (buildingId != null) {
-            componentState.put("building", findObject(buildingId, "building"));
+        if (localAddress.getBuildingId() != null) {
+            componentState.put("building", findObject(localAddress.getBuildingId(), "building"));
         }
 
-        if (apartmentId != null) {
-            componentState.put("apartment", findObject(apartmentId, "apartment"));
+        if (localAddress.getApartmentId() != null) {
+            componentState.put("apartment", findObject(localAddress.getApartmentId(), "apartment"));
         }
 
-        if (roomId != null) {
-            componentState.put("room", findObject(roomId, "room"));
+        if (localAddress.getRoomId() != null) {
+            componentState.put("room", findObject(localAddress.getRoomId(), "room"));
         }
     }
 
@@ -299,85 +290,41 @@ public abstract class AddressCorrectionDialog<T> extends Panel {
         return ImmutableList.of("city", "street", "building");
     }
 
-    protected void initCorrectedEntity(boolean ignoreStreetType) {
-        if (cityId == null) {
+    public void open(AjaxRequestTarget target, IModel<T> model, PersonalName personalName,
+                     ExternalAddress externalAddress, LocalAddress localAddress) {
+        this.model = model;
+
+        this.personalName = personalName;
+
+        this.externalAddress = externalAddress;
+        this.localAddress = localAddress;
+
+        if (localAddress.getCityId() == null) {
             correctedEntity = AddressEntity.CITY;
             return;
         }
-        if (streetTypeId == null && !ignoreStreetType) {
+        if (localAddress.getStreetTypeId() == null && !ignoreStreetType) {
             correctedEntity = AddressEntity.STREET_TYPE;
             return;
         }
-        if (streetId == null) {
+        if (localAddress.getStreetId() == null) {
             correctedEntity = AddressEntity.STREET;
             return;
         }
-        if (buildingId == null) {
+        if (localAddress.getBuildingId() == null) {
             correctedEntity = AddressEntity.BUILDING;
             return;
         }
-        if (apartmentId == null && StringUtils.isNotEmpty(apartment)) {
+        if (localAddress.getApartmentId() == null && StringUtils.isNotEmpty(externalAddress.getApartment())) {
             correctedEntity = AddressEntity.APARTMENT;
             return;
         }
         correctedEntity = AddressEntity.ROOM;
-    }
 
-    protected void closeDialog(AjaxRequestTarget target) {
-        //container.setVisible(false); access denied bug
-
-        target.add(container);
-        dialog.close(target);
-    }
-
-    public void open(AjaxRequestTarget target, T request, String firstName, String middleName, String lastName, String city,
-            String street, String buildingNumber, String buildingCorp, String apartment, Long cityId, Long streetId, Long buildingId,
-            Long apartmentId) {
-        open(target, request, firstName, middleName, lastName, city, null, street, buildingNumber, buildingCorp,
-                apartment, null, cityId, null, streetId, buildingId, apartmentId, null, false);
-    }
-
-    public void open(AjaxRequestTarget target, T request, String firstName, String middleName, String lastName, String city,
-            String streetType, String street, String buildingNumber, String buildingCorp, String apartment, Long cityId, Long streetTypeId,
-            Long streetId, Long buildingId, Long apartmentId) {
-        open(target, request, firstName, middleName, lastName, city, streetType, street, buildingNumber, buildingCorp,
-                apartment, null, cityId, streetTypeId, streetId, buildingId, apartmentId, null, true);
-    }
-
-    public void open(AjaxRequestTarget target, T request, String firstName, String middleName, String lastName, String city,
-                     String streetType, String street, String buildingNumber, String buildingCorp, String apartment, String room, Long cityId, Long streetTypeId,
-                     Long streetId, Long buildingId, Long apartmentId, Long roomId) {
-        open(target, request, firstName, middleName, lastName, city, streetType, street, buildingNumber, buildingCorp,
-                apartment, room, cityId, streetTypeId, streetId, buildingId, apartmentId, roomId, true);
-    }
-
-    private void open(AjaxRequestTarget target, T request, String firstName, String middleName, String lastName, String city,
-            String streetType, String street, String buildingNumber, String buildingCorp, String apartment, String room, Long cityId, Long streetTypeId,
-            Long streetId, Long buildingId, Long apartmentId, Long roomId, boolean streetTypeEnabled) {
-        this.request = request;
-
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.city = city;
-        this.streetType = streetType;
-        this.street = street;
-        this.buildingNumber = buildingNumber;
-        this.buildingCorp = buildingCorp;
-        this.apartment = apartment;
-        this.room = room;
-        this.cityId = cityId;
-        this.streetTypeId = streetTypeId;
-        this.streetId = streetId;
-        this.buildingId = buildingId;
-        this.apartmentId = apartmentId;
-        this.roomId = roomId;
-
-        initCorrectedEntity(!streetTypeEnabled);
-        if (correctedEntity != AddressEntity.STREET_TYPE) {
-            initSearchComponentState(componentState);
+        if (!correctedEntity.equals(AddressEntity.STREET_TYPE)) {
+            initSearchComponentState(state);
             WiQuerySearchComponent newSearchComponent = 
-                    new WiQuerySearchComponent("searchComponent", componentState, initFilters(), null, ShowMode.ACTIVE, true);
+                    new WiQuerySearchComponent("searchComponent", state, initFilters(), null, ShowMode.ACTIVE, true);
             searchComponent.replaceWith(newSearchComponent);
             searchComponent = newSearchComponent;
             streetTypeSelect.setVisible(false);
@@ -387,8 +334,11 @@ public abstract class AddressCorrectionDialog<T> extends Panel {
             streetTypeSelect.setVisible(true);
         }
 
-        container.setVisible(true);
         target.add(container);
         dialog.open(target);
     }
+
+    protected abstract void correctAddress(AjaxRequestTarget target, IModel<T> model, AddressEntity entity,
+                                           ExternalAddress externalAddress, LocalAddress localAddress)
+            throws CorrectionException;
 }

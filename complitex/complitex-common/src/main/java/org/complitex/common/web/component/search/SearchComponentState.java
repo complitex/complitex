@@ -1,20 +1,20 @@
 package org.complitex.common.web.component.search;
 
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.util.Numbers;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.complitex.common.util.Numbers;
-
-/**
- *
- * @author Artem
- */
 public class SearchComponentState extends HashMap<String, DomainObject> implements Serializable {
-
     public static final Long NOT_SPECIFIED_ID = -1L;
+
+    public Long getId(String key){
+        DomainObject object = get(key);
+
+        return object == null ? null : object.getObjectId();
+    }
 
     public boolean isEmptyState() {
         boolean empty = true;

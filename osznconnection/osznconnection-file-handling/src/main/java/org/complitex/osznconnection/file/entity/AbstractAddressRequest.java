@@ -1,9 +1,13 @@
 package org.complitex.osznconnection.file.entity;
 
+import org.complitex.address.entity.ExternalAddress;
+import org.complitex.address.entity.LocalAddress;
+
 /**
  * @author Anatoly Ivanov java@inheaven.ru
  *         Date: 15.08.13 19:47
  */
+//todo move to local and external address
 public abstract class AbstractAddressRequest<E extends Enum> extends AbstractRequest<E> {
     private String city;
     private String streetTypeCode;
@@ -14,11 +18,11 @@ public abstract class AbstractAddressRequest<E extends Enum> extends AbstractReq
     private String buildingCorp;
     private String apartment;
 
-    private Long cityObjectId;
-    private Long streetTypeObjectId;
-    private Long streetObjectId;
-    private Long buildingObjectId;
-    private Long apartmentObjectId;
+    private Long cityId;
+    private Long streetTypeId;
+    private Long streetId;
+    private Long buildingId;
+    private Long apartmentId;
 
     private String outgoingCity;
     private String outgoingDistrict;
@@ -28,6 +32,15 @@ public abstract class AbstractAddressRequest<E extends Enum> extends AbstractReq
     private String outgoingBuildingCorp;
     private String outgoingApartment;
 
+    public LocalAddress getLocalAddress(){
+        return new LocalAddress(getCityId(), getStreetTypeId(), getStreetId(), getBuildingId(), getApartmentId(),
+                null, getOrganizationId());
+    }
+
+    public ExternalAddress getExternalAddress(){
+        return new ExternalAddress(getCity(), getStreetType(), getStreet(), getBuildingNumber(), getBuildingCorp(),
+                getApartment(), null);
+    }
 
     public String getCity() {
         return city;
@@ -93,44 +106,44 @@ public abstract class AbstractAddressRequest<E extends Enum> extends AbstractReq
         this.apartment = apartment;
     }
 
-    public Long getCityObjectId() {
-        return cityObjectId;
+    public Long getCityId() {
+        return cityId;
     }
 
-    public void setCityObjectId(Long cityObjectId) {
-        this.cityObjectId = cityObjectId;
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
     }
 
-    public Long getStreetTypeObjectId() {
-        return streetTypeObjectId;
+    public Long getStreetTypeId() {
+        return streetTypeId;
     }
 
-    public void setStreetTypeObjectId(Long streetTypeObjectId) {
-        this.streetTypeObjectId = streetTypeObjectId;
+    public void setStreetTypeId(Long streetTypeId) {
+        this.streetTypeId = streetTypeId;
     }
 
-    public Long getStreetObjectId() {
-        return streetObjectId;
+    public Long getStreetId() {
+        return streetId;
     }
 
-    public void setStreetObjectId(Long streetObjectId) {
-        this.streetObjectId = streetObjectId;
+    public void setStreetId(Long streetId) {
+        this.streetId = streetId;
     }
 
-    public Long getBuildingObjectId() {
-        return buildingObjectId;
+    public Long getBuildingId() {
+        return buildingId;
     }
 
-    public void setBuildingObjectId(Long buildingObjectId) {
-        this.buildingObjectId = buildingObjectId;
+    public void setBuildingId(Long buildingId) {
+        this.buildingId = buildingId;
     }
 
-    public Long getApartmentObjectId() {
-        return apartmentObjectId;
+    public Long getApartmentId() {
+        return apartmentId;
     }
 
-    public void setApartmentObjectId(Long apartmentObjectId) {
-        this.apartmentObjectId = apartmentObjectId;
+    public void setApartmentId(Long apartmentId) {
+        this.apartmentId = apartmentId;
     }
 
     public String getOutgoingCity() {

@@ -3,6 +3,8 @@ package org.complitex.keconnection.heatmeter.entity.consumption;
 import org.complitex.common.mybatis.FixedIdTypeHandler;
 import org.complitex.common.mybatis.IFixedIdType;
 
+import java.util.EnumSet;
+
 /**
  * @author inheaven on 20.03.2015 2:25.
  */
@@ -25,6 +27,12 @@ public enum  ConsumptionStatus implements IFixedIdType{
     EXTERNAL_STREET_TYPE_UNRESOLVED(302),
     EXTERNAL_STREET_UNRESOLVED(303),
     EXTERNAL_BUILDING_UNRESOLVED(304);
+
+    public static final EnumSet<ConsumptionStatus> LOCAL_UNRESOLVED = EnumSet.of(
+            LOCAL_CITY_UNRESOLVED,
+            LOCAL_STREET_TYPE_UNRESOLVED,
+            LOCAL_STREET_UNRESOLVED,
+            LOCAL_BUILDING_UNRESOLVED);
 
     private long id;
 

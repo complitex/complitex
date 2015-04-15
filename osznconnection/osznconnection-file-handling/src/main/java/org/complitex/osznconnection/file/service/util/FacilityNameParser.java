@@ -1,22 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.osznconnection.file.service.util;
 
 import org.apache.wicket.util.string.Strings;
-import org.complitex.osznconnection.file.entity.PersonName;
+import org.complitex.common.entity.PersonalName;
 
-/**
- *
- * @author Artem
- */
 public final class FacilityNameParser {
 
     private FacilityNameParser() {
     }
 
-    public static PersonName parse(String fio) {
+    public static PersonalName parse(String fio) {
         String firstName = "";
         String middleName = "";
         String lastName = "";
@@ -32,6 +24,6 @@ public final class FacilityNameParser {
                 }
             }
         }
-        return new PersonName(firstName, middleName, lastName);
+        return new PersonalName(firstName, middleName, lastName);
     }
 }

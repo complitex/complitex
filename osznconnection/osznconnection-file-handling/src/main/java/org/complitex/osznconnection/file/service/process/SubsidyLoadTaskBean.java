@@ -2,6 +2,7 @@ package org.complitex.osznconnection.file.service.process;
 
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
+import org.complitex.common.entity.PersonalName;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
@@ -90,7 +91,7 @@ public class SubsidyLoadTaskBean implements ITaskBean {
     private void parseFio(Subsidy subsidy) {
         final String rash = subsidy.getStringField(SubsidyDBF.RASH);
         final String fio = subsidy.getStringField(SubsidyDBF.FIO);
-        PersonName personName = SubsidyNameParser.parse(rash, fio);
+        PersonalName personName = SubsidyNameParser.parse(rash, fio);
         subsidy.setFirstName(personName.getFirstName());
         subsidy.setMiddleName(personName.getMiddleName());
         subsidy.setLastName(personName.getLastName());

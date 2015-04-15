@@ -98,7 +98,7 @@ public class AddressService extends AbstractBean {
 
             return;
         } else {
-            List<Long> cityIds = addressCorrectionBean.getCityObjectIds(data.getCity());
+            List<Long> cityIds = addressCorrectionBean.getCityIds(data.getCity());
 
             if (cityIds.size() == 1) {
                 data.setCityId(cityIds.get(0));
@@ -125,7 +125,7 @@ public class AddressService extends AbstractBean {
 
                 return;
             } else {
-                List<Long> streetTypeIds = addressCorrectionBean.getStreetTypeObjectIds(data.getStreetType());
+                List<Long> streetTypeIds = addressCorrectionBean.getStreetTypeIds(data.getStreetType());
 
                 if (streetTypeIds.size() == 1) {
                     data.setStreetTypeId(streetTypeIds.get(0));

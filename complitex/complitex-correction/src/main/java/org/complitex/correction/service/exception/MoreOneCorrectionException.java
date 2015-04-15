@@ -1,14 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.correction.service.exception;
 
-/**
- *
- * @author Artem
- */
-public class MoreOneCorrectionException extends Exception {
+
+public class MoreOneCorrectionException extends CorrectionException {
 
     private String entity;
 

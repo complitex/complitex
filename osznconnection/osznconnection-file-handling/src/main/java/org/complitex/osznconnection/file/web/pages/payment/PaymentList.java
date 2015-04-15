@@ -208,6 +208,7 @@ public final class PaymentList extends TemplatePage {
                 dataRowHoverBehavior.deactivateDataRow(target);
             }
         };
+        addressCorrectionDialog.setIgnoreStreetType(true);
         add(addressCorrectionDialog);
 
         //Панель поиска
@@ -246,10 +247,7 @@ public final class PaymentList extends TemplatePage {
                     public void onClick(AjaxRequestTarget target) {
                         addressCorrectionDialog.open(target, payment, payment.getStringField(PaymentDBF.F_NAM),
                                 payment.getStringField(PaymentDBF.M_NAM), payment.getStringField(PaymentDBF.SUR_NAM),
-                                payment.getStringField(PaymentDBF.N_NAME), payment.getStringField(PaymentDBF.VUL_NAME),
-                                payment.getStringField(PaymentDBF.BLD_NUM), payment.getStringField(PaymentDBF.CORP_NUM),
-                                payment.getStringField(PaymentDBF.FLAT), payment.getCityObjectId(),
-                                payment.getStreetObjectId(), payment.getBuildingObjectId(), null);
+                                payment.getExternalAddress(), payment.getLocalAddress());
                     }
                 };
                 addressCorrectionLink.setVisible(payment.getStatus().isAddressCorrectable());
@@ -259,8 +257,8 @@ public final class PaymentList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, payment, payment.getCityObjectId(), payment.getStreetObjectId(),
-                                payment.getBuildingObjectId(), payment.getStringField(PaymentDBF.FLAT),
+                        lookupPanel.open(target, payment, payment.getCityId(), payment.getStreetId(),
+                                payment.getBuildingId(), payment.getStringField(PaymentDBF.FLAT),
                                 payment.getStringField(PaymentDBF.OWN_NUM_SR),
                                 payment.getStatus().isImmediatelySearchByAddress());
                     }

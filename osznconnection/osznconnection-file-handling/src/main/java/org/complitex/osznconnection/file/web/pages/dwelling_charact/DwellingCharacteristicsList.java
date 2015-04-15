@@ -251,24 +251,17 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        String street = dwellingCharacteristics.getStreet() != null
+                        dwellingCharacteristics.setStreet(dwellingCharacteristics.getStreet() != null
                                 ? dwellingCharacteristics.getStreet()
-                                : getString("streetCodePrefix") + " " + dwellingCharacteristics.getStringField(CDUL);
+                                : getString("streetCodePrefix") + " " + dwellingCharacteristics.getStringField(CDUL));
 
-                        String streetType = dwellingCharacteristics.getStreetType() != null
+                        dwellingCharacteristics.setStreetType(dwellingCharacteristics.getStreetType() != null
                                 ? dwellingCharacteristics.getStreetType()
-                                : getString("streetTypeNotFound");
+                                : getString("streetTypeNotFound"));
 
                         addressCorrectionDialog.open(target, dwellingCharacteristics, dwellingCharacteristics.getFirstName(),
                                 dwellingCharacteristics.getMiddleName(), dwellingCharacteristics.getLastName(),
-                                dwellingCharacteristics.getCity(), streetType, street,
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.HOUSE),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.BUILD),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT),
-                                dwellingCharacteristics.getCityObjectId(),
-                                dwellingCharacteristics.getStreetTypeObjectId(),
-                                dwellingCharacteristics.getStreetObjectId(),
-                                dwellingCharacteristics.getBuildingObjectId(), null);
+                                dwellingCharacteristics.getExternalAddress(), dwellingCharacteristics.getLocalAddress());
                     }
                 };
                 addressCorrectionLink.setVisible(dwellingCharacteristics.getStatus().isAddressCorrectable());
@@ -278,8 +271,8 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, dwellingCharacteristics, dwellingCharacteristics.getCityObjectId(),
-                                dwellingCharacteristics.getStreetObjectId(), dwellingCharacteristics.getBuildingObjectId(),
+                        lookupPanel.open(target, dwellingCharacteristics, dwellingCharacteristics.getCityId(),
+                                dwellingCharacteristics.getStreetId(), dwellingCharacteristics.getBuildingId(),
                                 dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT),
                                 dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDCODE),
                                 dwellingCharacteristics.getStatus().isImmediatelySearchByAddress());
