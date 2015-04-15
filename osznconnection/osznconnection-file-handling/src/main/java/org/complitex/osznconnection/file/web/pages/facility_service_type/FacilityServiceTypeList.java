@@ -25,16 +25,10 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.address.entity.ExternalAddress;
-import org.complitex.address.entity.LocalAddress;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.correction.service.exception.CorrectionException;
-import org.complitex.correction.service.exception.DuplicateCorrectionException;
-import org.complitex.correction.service.exception.MoreOneCorrectionException;
-import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.FacilityServiceTypeExample;
@@ -203,31 +197,13 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
         //Панель коррекции адреса
         final AddressCorrectionDialog<FacilityServiceType> addressCorrectionDialog =
-                new AddressCorrectionDialog<FacilityServiceType>("addressCorrectionPanel",
-                facilityServiceTypeFile.getUserOrganizationId(), content, statusDetailPanel) {
+                new AddressCorrectionDialog<FacilityServiceType>("addressCorrectionPanel") {
 
                     @Override
-                    protected void correctAddress(FacilityServiceType facilityServiceType, AddressEntity entity,
-                            Long cityId, Long streetTypeId, Long streetId, Long buildingId, Long apartmentId, Long roomId,
-                            Long userOrganizationId) throws DuplicateCorrectionException, MoreOneCorrectionException,
-                            NotFoundCorrectionException {
-                        addressService.correctLocalAddress(facilityServiceType, entity, cityId, streetTypeId, streetId,
-                                buildingId, userOrganizationId);
-                        facilityServiceTypeBean.markCorrected(facilityServiceType, entity);
-                    }
+                    protected void onCorrect(AjaxRequestTarget target, IModel<FacilityServiceType> model, AddressEntity addressEntity) {
+                        facilityServiceTypeBean.markCorrected(model.getObject(), addressEntity);
 
-                    @Override
-                    protected void correctAddress(AddressEntity entity, IModel<FacilityServiceType> model,
-                                                  ExternalAddress externalAddress, LocalAddress localAddress)
-                            throws CorrectionException{
-
-
-
-                    }
-
-                    @Override
-                    protected void closeDialog(AjaxRequestTarget target) {
-                        super.closeDialog(target);
+                        target.add(content, statusDetailPanel);
                         dataRowHoverBehavior.deactivateDataRow(target);
                     }
                 };
@@ -278,8 +254,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
                                 : getString("streetCodePrefix") + " " + facilityServiceType.getStringField(CDUL));
 
 
-                        addressCorrectionDialog.open(target, facilityServiceType, facilityServiceType.getFirstName(),
-                                facilityServiceType.getMiddleName(), facilityServiceType.getLastName(),
+                        addressCorrectionDialog.open(target, item.getModel(), facilityServiceType.getPersonalName(),
                                 facilityServiceType.getExternalAddress(), facilityServiceType.getLocalAddress());
                     }
                 };

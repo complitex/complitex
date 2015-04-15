@@ -33,13 +33,12 @@ public abstract class AbstractAddressRequest<E extends Enum> extends AbstractReq
     private String outgoingApartment;
 
     public LocalAddress getLocalAddress(){
-        return new LocalAddress(getCityId(), getStreetTypeId(), getStreetId(), getBuildingId(), getApartmentId(),
-                null, getOrganizationId());
+        return new LocalAddress(getCityId(), getStreetTypeId(), getStreetId(), getBuildingId(), getApartmentId(), null);
     }
 
     public ExternalAddress getExternalAddress(){
         return new ExternalAddress(getCity(), getStreetType(), getStreet(), getBuildingNumber(), getBuildingCorp(),
-                getApartment(), null);
+                getApartment(), null, getOrganizationId(), getUserOrganizationId());
     }
 
     public String getCity() {

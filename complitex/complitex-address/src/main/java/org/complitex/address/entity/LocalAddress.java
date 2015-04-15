@@ -1,5 +1,7 @@
 package org.complitex.address.entity;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.Serializable;
 
 /**
@@ -25,6 +27,34 @@ public class LocalAddress implements Serializable{
         this.buildingId = buildingId;
         this.apartmentId = apartmentId;
         this.roomId = roomId;
+    }
+
+    public AddressEntity getFirstEmptyAddressEntity(){
+        if (cityId == null) {
+            return AddressEntity.CITY;
+        }
+
+        if (streetTypeId == null) {
+            return AddressEntity.STREET_TYPE;
+        }
+
+        if (streetId == null) {
+            return AddressEntity.STREET;
+        }
+
+        if (buildingId == null) {
+            return AddressEntity.BUILDING;
+        }
+
+        if (apartmentId == null) {
+            return AddressEntity.APARTMENT;
+        }
+
+        if (roomId == null){
+            return AddressEntity.ROOM;
+        }
+
+        return null;
     }
 
     public Long getCityId() {

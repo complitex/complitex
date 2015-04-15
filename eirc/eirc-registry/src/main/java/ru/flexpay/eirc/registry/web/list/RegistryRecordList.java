@@ -29,6 +29,7 @@ import org.complitex.address.entity.LocalAddress;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.ILocalizedType;
+import org.complitex.common.entity.PersonalName;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.web.component.TextLabel;
@@ -38,9 +39,6 @@ import org.complitex.common.web.component.ajax.AjaxLinkPanel;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.AjaxNavigationToolbar;
 import org.complitex.correction.service.AddressService;
-import org.complitex.correction.service.exception.DuplicateCorrectionException;
-import org.complitex.correction.service.exception.MoreOneCorrectionException;
-import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
@@ -205,39 +203,17 @@ public class RegistryRecordList extends TemplatePage {
         final Integer userOrganizationId = AttributeUtil.getIntegerValue(module, ModuleInstanceStrategy.ORGANIZATION);
 
         //Панель коррекции адреса
-        final AddressCorrectionDialog<RegistryRecordData> addressCorrectionDialog = new AddressCorrectionDialog<RegistryRecordData>("addressCorrectionPanel",
-                userOrganizationId != null? userOrganizationId.longValue() : -1 , container) {
+        final AddressCorrectionDialog<RegistryRecordData> addressCorrectionDialog =
+                new AddressCorrectionDialog<RegistryRecordData>("addressCorrectionPanel") {
 
-            @Override
-            protected void correctAddress(RegistryRecordData registryRecord, AddressEntity entity, Long cityId, Long streetTypeId, Long streetId,
-                                          Long buildingId, Long apartmentId, Long roomId, Long userOrganizationId)
-                    throws DuplicateCorrectionException, MoreOneCorrectionException, NotFoundCorrectionException {
+                    @Override
+                    protected void onCorrect(AjaxRequestTarget target, IModel<RegistryRecordData> model, AddressEntity addressEntity) {
+                        registryLinker.linkAfterCorrection(model.getObject(), imessenger, finishCallback);
 
-                if (registryWorkflowManager.canLink(registry)) {
-
-                    if (userOrganizationId == null) {
-                        RegistryRecordList.this.container.error("failed_user_organization");
-                        return;
+                        target.add(container);
+                        showIMessages(target);
                     }
-
-                    initTimerBehavior();
-
-                    addressService.correctAddress(registryRecord, entity, cityId, streetTypeId, streetId, buildingId, apartmentId, roomId,
-                            userOrganizationId, registry.getSenderOrganizationId());
-
-                    registryLinker.linkAfterCorrection(registryRecord, imessenger, finishCallback);
-
-                } else {
-                    RegistryRecordList.this.container.error("failed_correction_registry_linking");
-                }
-            }
-
-            @Override
-            protected void closeDialog(AjaxRequestTarget target) {
-                showIMessages(target);
-                super.closeDialog(target);
-            }
-        };
+                };
         add(addressCorrectionDialog);
 
 
@@ -303,16 +279,18 @@ public class RegistryRecordList extends TemplatePage {
                                     ExternalAddress externalAddress = new ExternalAddress(registryRecord.getCity(),
                                             registryRecord.getStreetType(), registryRecord.getStreet(),
                                             registryRecord.getBuildingNumber(), registryRecord.getBuildingCorp(),
-                                            registryRecord.getApartment(), registryRecord.getRoom());
+                                            registryRecord.getApartment(), registryRecord.getRoom(), -1L, -1L);
 
                                     LocalAddress localAddress = new LocalAddress(registryRecord.getCityId(),
                                             registryRecord.getStreetTypeId(), registryRecord.getStreetId(),
                                             registryRecord.getBuildingId(), registryRecord.getApartmentId(),
-                                            registryRecord.getRoomId(), null);
+                                            registryRecord.getRoomId());
 
-                                    addressCorrectionDialog.open(target, registryRecord, registryRecord.getFirstName(),
-                                            registryRecord.getMiddleName(), registryRecord.getLastName(),
-                                            externalAddress, localAddress);
+                                    PersonalName personalName = new PersonalName(registryRecord.getFirstName(),
+                                            registryRecord.getMiddleName(), registryRecord.getLastName());
+
+                                    addressCorrectionDialog.open(target, serviceProviderAccountIModel, personalName,
+                                            localAddress.getFirstEmptyAddressEntity(), externalAddress, localAddress);
                                 }
                             };
                             components.add(addressCorrectionLink);

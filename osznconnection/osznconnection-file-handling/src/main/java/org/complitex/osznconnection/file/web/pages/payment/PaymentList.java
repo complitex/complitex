@@ -21,13 +21,11 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
+import org.complitex.address.entity.LocalAddress;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.correction.service.exception.DuplicateCorrectionException;
-import org.complitex.correction.service.exception.MoreOneCorrectionException;
-import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.PaymentExample;
@@ -155,16 +153,16 @@ public final class PaymentList extends TemplatePage {
         };
         dataProvider.setSort("", SortOrder.ASCENDING);
 
-        filterForm.add(new TextField<>("accountFilter", new PropertyModel<String>(example, "account")));
-        filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<String>(example, "firstName")));
-        filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<String>(example, "middleName")));
-        filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<String>(example, "lastName")));
-        filterForm.add(new TextField<>("cityFilter", new PropertyModel<String>(example, "city")));
-        filterForm.add(new TextField<>("streetFilter", new PropertyModel<String>(example, "street")));
-        filterForm.add(new TextField<>("buildingFilter", new PropertyModel<String>(example, "building")));
-        filterForm.add(new TextField<>("corpFilter", new PropertyModel<String>(example, "corp")));
-        filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<String>(example, "apartment")));
-        filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<RequestStatus>(example, "status"),
+        filterForm.add(new TextField<>("accountFilter", new PropertyModel<>(example, "account")));
+        filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<>(example, "firstName")));
+        filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<>(example, "middleName")));
+        filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<>(example, "lastName")));
+        filterForm.add(new TextField<>("cityFilter", new PropertyModel<>(example, "city")));
+        filterForm.add(new TextField<>("streetFilter", new PropertyModel<>(example, "street")));
+        filterForm.add(new TextField<>("buildingFilter", new PropertyModel<>(example, "building")));
+        filterForm.add(new TextField<>("corpFilter", new PropertyModel<>(example, "corp")));
+        filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<>(example, "apartment")));
+        filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<>(example, "status"),
                 Arrays.asList(RequestStatus.values()), new StatusRenderer()).setNullValid(true));
 
         AjaxLink<Void> reset = new AjaxLink<Void>("reset") {
@@ -191,24 +189,16 @@ public final class PaymentList extends TemplatePage {
         filterForm.add(submit);
 
         //Панель коррекции адреса
-        final AddressCorrectionDialog<Payment> addressCorrectionDialog = new AddressCorrectionDialog<Payment>("addressCorrectionPanel",
-                paymentFile.getUserOrganizationId(), content, statusDetailPanel) {
-
+        final AddressCorrectionDialog<Payment> addressCorrectionDialog = new AddressCorrectionDialog<Payment>("addressCorrectionPanel") {
             @Override
-            protected void correctAddress(Payment payment, AddressEntity entity, Long cityId, Long streetTypeId, Long streetId,
-                    Long buildingId, Long apartmentId, Long roomId, Long userOrganizationId)
-                    throws DuplicateCorrectionException, MoreOneCorrectionException, NotFoundCorrectionException {
-                addressService.correctLocalAddress(payment, entity, cityId, streetTypeId, streetId, buildingId, userOrganizationId);
-                paymentBean.markCorrected(payment, entity);
-            }
+            protected void onCorrect(AjaxRequestTarget target, IModel<Payment> model, AddressEntity addressEntity) {
+                paymentBean.markCorrected(model.getObject(), addressEntity);
 
-            @Override
-            protected void closeDialog(AjaxRequestTarget target) {
-                super.closeDialog(target);
+                target.add(content, statusDetailPanel);
                 dataRowHoverBehavior.deactivateDataRow(target);
             }
         };
-        addressCorrectionDialog.setIgnoreStreetType(true);
+        //todo addressCorrectionDialog.setIgnoreStreetType(true);
         add(addressCorrectionDialog);
 
         //Панель поиска
@@ -245,9 +235,11 @@ public final class PaymentList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        addressCorrectionDialog.open(target, payment, payment.getStringField(PaymentDBF.F_NAM),
-                                payment.getStringField(PaymentDBF.M_NAM), payment.getStringField(PaymentDBF.SUR_NAM),
-                                payment.getExternalAddress(), payment.getLocalAddress());
+                        LocalAddress localAddress = payment.getLocalAddress();
+
+                        addressCorrectionDialog.open(target, item.getModel(), payment.getPersonalName(),
+                                localAddress.getFirstEmptyAddressEntity(),
+                                payment.getExternalAddress(), localAddress);
                     }
                 };
                 addressCorrectionLink.setVisible(payment.getStatus().isAddressCorrectable());

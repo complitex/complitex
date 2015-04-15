@@ -22,8 +22,9 @@ public class ExternalAddress {
     public ExternalAddress() {
     }
 
-    public ExternalAddress(String city, String streetType, String street,
-                           String buildingNumber, String buildingCorp, String apartment, String room) {
+    public ExternalAddress(String city, String streetType, String street, String buildingNumber,
+                           String buildingCorp, String apartment, String room,
+                           Long organizationId, Long userOrganizationId) {
         this.city = city;
         this.streetType = streetType;
         this.street = street;
@@ -31,6 +32,13 @@ public class ExternalAddress {
         this.buildingCorp = buildingCorp;
         this.apartment = apartment;
         this.room = room;
+        this.organizationId = organizationId;
+        this.userOrganizationId = userOrganizationId;
+    }
+
+    public static ExternalAddress of(String city, String streetType, String street, String buildingNumber,
+                                     Long organizationId, Long userOrganizationId){
+        return new ExternalAddress(city, streetType, street, buildingNumber, null, null, null, organizationId, userOrganizationId);
     }
 
     public String getCity() {

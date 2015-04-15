@@ -3,6 +3,7 @@ package org.complitex.correction.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.ExternalAddress;
 import org.complitex.address.entity.LocalAddress;
 import org.complitex.address.strategy.building.BuildingStrategy;
@@ -392,24 +393,26 @@ public class AddressCorrectionService {
         return externalAddress;
     }
 
-    public void correctLocalAddress(ExternalAddress externalAddress, LocalAddress localAddress)
+    public void correctLocalAddress(AddressEntity addressEntity, ExternalAddress externalAddress, LocalAddress localAddress)
             throws CorrectionException {
         Long moduleId = moduleBean.getModuleId();
 
-        if (){
-
+        if (externalAddress.getOrganizationId() == null){
+            throw new CorrectionException("`organizationId` for correct local address required");
         }
 
-        //todo correct entity by local address values
+        if (externalAddress.getUserOrganizationId() == null){
+            throw new CorrectionException("`userOrganizationId` for correct local address required");
+        }
 
-        switch (entity) {
+        switch (addressEntity) {
             case CITY: {
-                List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(null, externalAddress.getCity(),
-                        organizationId, userOrganizationId);
+                List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(externalAddress);
 
                 if (cityCorrections.isEmpty()) {
                     CityCorrection cityCorrection = new CityCorrection(null, localAddress.getCityId(),
-                            externalAddress.getCity().toUpperCase(), organizationId, userOrganizationId, moduleId);
+                            externalAddress.getCity().toUpperCase(), externalAddress.getOrganizationId(),
+                            externalAddress.getUserOrganizationId(), moduleId);
                     addressCorrectionBean.save(cityCorrection);
                 } else {
                     throw new DuplicateCorrectionException();
@@ -418,14 +421,13 @@ public class AddressCorrectionService {
             break;
 
             case STREET_TYPE: {
-                List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
-                        null, externalAddress.getStreetType(), organizationId, userOrganizationId);
+                List<StreetTypeCorrection> streetTypeCorrections =
+                        addressCorrectionBean.getStreetTypeCorrections(externalAddress);
 
                 if (streetTypeCorrections.isEmpty()) {
                     StreetTypeCorrection streetTypeCorrection = new StreetTypeCorrection(externalAddress.getStreetTypeCode(),
-                            localAddress.getStreetTypeId(),
-                            externalAddress.getStreetType().toUpperCase(),
-                            organizationId, userOrganizationId, moduleId);
+                            localAddress.getStreetTypeId(), externalAddress.getStreetType().toUpperCase(),
+                            externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId(), moduleId);
                     addressCorrectionBean.save(streetTypeCorrection);
                 } else {
                     throw new DuplicateCorrectionException();
@@ -434,14 +436,13 @@ public class AddressCorrectionService {
             break;
 
             case STREET:
-                List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(
-                        localAddress.getCityId(), localAddress.getStreetTypeId(), null, null, externalAddress.getStreet(),
-                        organizationId, userOrganizationId);
+                List<StreetCorrection> streetCorrections =
+                        addressCorrectionBean.getStreetCorrections(localAddress, externalAddress);
 
                 if (streetCorrections.isEmpty()) {
                     StreetCorrection streetCorrection = new StreetCorrection(localAddress.getCityId(), localAddress.getStreetTypeId(),
                             externalAddress.getStreetCode(), localAddress.getStreetId(), externalAddress.getStreet().toUpperCase(),
-                            organizationId, userOrganizationId, moduleId);
+                            externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId(), moduleId);
 
                     addressCorrectionBean.save(streetCorrection);
                 } else {
@@ -451,16 +452,15 @@ public class AddressCorrectionService {
                 break;
 
             case BUILDING:
-                List<BuildingCorrection> buildingCorrections = addressCorrectionBean.getBuildingCorrections(
-                        localAddress.getStreetId(), null, externalAddress.getBuildingNumber(), externalAddress.getBuildingCorp(),
-                        organizationId, userOrganizationId);
+                List<BuildingCorrection> buildingCorrections =
+                        addressCorrectionBean.getBuildingCorrections(localAddress, externalAddress);
 
                 if (buildingCorrections.isEmpty()) {
                     BuildingCorrection buildingCorrection = new BuildingCorrection(localAddress.getStreetId(), null,
                             localAddress.getBuildingId(),
                             externalAddress.getBuildingNumber().toUpperCase(),
                             externalAddress.getBuildingCorp() != null ? externalAddress.getBuildingCorp().toUpperCase() : null,
-                            organizationId, userOrganizationId, moduleId);
+                            externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId(), moduleId);
 
                     addressCorrectionBean.save(buildingCorrection);
                 } else {

@@ -25,16 +25,12 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.address.entity.ExternalAddress;
-import org.complitex.address.entity.LocalAddress;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.correction.service.AddressCorrectionService;
-import org.complitex.correction.service.exception.CorrectionException;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.SubsidyExample;
@@ -80,9 +76,6 @@ public final class SubsidyList extends TemplatePage {
 
     @EJB(name = "OsznAddressService")
     private AddressService addressService;
-
-    @EJB
-    private AddressCorrectionService addressCorrectionService;
 
     @EJB
     private SessionBean sessionBean;
@@ -209,12 +202,9 @@ public final class SubsidyList extends TemplatePage {
 
         //Панель коррекции адреса
         AddressCorrectionDialog<Subsidy> addressCorrectionDialog = new AddressCorrectionDialog<Subsidy>("addressCorrectionPanel") {
-
             @Override
-            protected void correctAddress(AjaxRequestTarget target, IModel<Subsidy> model, AddressEntity entity,
-                                          ExternalAddress externalAddress, LocalAddress localAddress) throws CorrectionException {
-                addressCorrectionService.correctLocalAddress(entity, externalAddress, localAddress, subsidyFile.getUserOrganizationId());
-                subsidyBean.markCorrected(model.getObject(), entity);
+            protected void onCorrect(AjaxRequestTarget target, IModel<Subsidy> model, AddressEntity addressEntity) {
+                subsidyBean.markCorrected(model.getObject(), addressEntity);
 
                 dataRowHoverBehavior.deactivateDataRow(target);
                 target.add(content, statusDetailPanel);
@@ -284,9 +274,8 @@ public final class SubsidyList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        addressCorrectionDialog.open(target, item.getModel(), subsidy.getFirstName(),
-                                subsidy.getMiddleName(), subsidy.getLastName(),
-                                subsidy.getExternalAddress(), subsidy.getLocalAddress());
+                        addressCorrectionDialog.open(target, item.getModel(), subsidy.getPersonalName(),
+                                 subsidy.getExternalAddress(), subsidy.getLocalAddress());
 
                         target.add(item.add(AttributeModifier.append("class", "data-row-hover")));
                     }

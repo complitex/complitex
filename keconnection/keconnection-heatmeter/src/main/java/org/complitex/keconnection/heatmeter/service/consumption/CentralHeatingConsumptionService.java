@@ -5,6 +5,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.complitex.address.entity.ExternalAddress;
 import org.complitex.address.entity.LocalAddress;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.BroadcasterService;
@@ -171,27 +172,28 @@ public class CentralHeatingConsumptionService {
             //resolve address
 
             try {
-                LocalAddress localAddress = addressCorrectionService.resolveLocalAddress(city, streetType,
-                        street, c.getBuildingNumber(), null, consumptionFile.getServiceProviderId(),
-                        consumptionFile.getUserOrganizationId());
+                LocalAddress localAddress = addressCorrectionService.resolveLocalAddress(
+                        ExternalAddress.of(city, streetType, street, c.getBuildingNumber(),
+                                consumptionFile.getServiceProviderId(), consumptionFile.getUserOrganizationId())
+                );
 
                 c.setLocalAddress(localAddress);
 
-                if (localAddress.getStreetTypeId() == null) {
-                    c.setStatus(ConsumptionStatus.LOCAL_STREET_TYPE_UNRESOLVED);
-                    centralHeatingConsumptionBean.save(c);
-                    return;
-                } else if (localAddress.getStreetId() == null) {
-                    c.setStatus(ConsumptionStatus.LOCAL_STREET_UNRESOLVED);
-                    centralHeatingConsumptionBean.save(c);
-                    return;
-                } else if (localAddress.getBuildingId() == null) {
-                    c.setStatus(ConsumptionStatus.LOCAL_BUILDING_UNRESOLVED);
-                    centralHeatingConsumptionBean.save(c);
-                    return;
+                switch (localAddress.getFirstEmptyAddressEntity()){
+                    case STREET_TYPE:
+                        c.setStatus(ConsumptionStatus.LOCAL_STREET_TYPE_UNRESOLVED);
+                        break;
+                    case CITY:
+                    case STREET:
+                        c.setStatus(ConsumptionStatus.LOCAL_STREET_UNRESOLVED);
+                        break;
+                    case BUILDING:
+                        c.setStatus(ConsumptionStatus.LOCAL_BUILDING_UNRESOLVED);
+                        break;
+                    default:
+                        c.setStatus(ConsumptionStatus.BOUND);
                 }
 
-                c.setStatus(ConsumptionStatus.BOUND);
                 centralHeatingConsumptionBean.save(c);
             } catch (ResolveAddressException e) {
                 c.setStatus(ConsumptionStatus.BIND_ERROR);
