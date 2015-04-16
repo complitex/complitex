@@ -107,13 +107,18 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
                             ConsumptionFile consumptionFile = (ConsumptionFile) m.getPayload();
 
                             switch (consumptionFile.getStatus()){
+                                case BINDING:
+                                    info(getStringFormat("info_binding", consumptionFile.getName()));
+                                    handler.add(messages);
+                                    handler.add(filteredDataTable);
+                                    break;
                                 case BOUND:
                                     info(getStringFormat("info_bind", consumptionFile.getName()));
                                     handler.add(messages);
                                     handler.add(filteredDataTable);
                                     break;
                                 case BIND_ERROR:
-                                    error(getStringFormat("error_bind", consumptionFile.getName()));
+                                    info(getStringFormat("error_bind", consumptionFile.getName()));
                                     handler.add(messages);
                                     handler.add(filteredDataTable);
                                     break;

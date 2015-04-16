@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author inheaven on 20.03.2015 0:57.
@@ -156,13 +155,13 @@ public class CentralHeatingConsumptionService {
         ExternalAddress externalAddress = c.getExternalAddress();
 
         //street type
-        if (Optional.ofNullable(externalAddress.getStreetType()).isPresent()){
+        if (Strings.isNullOrEmpty(externalAddress.getStreetType())){
             c.setStatus(ConsumptionStatus.VALIDATION_STREET_TYPE_ERROR);
             centralHeatingConsumptionBean.save(c);
             return;
         }
 
-        if (Optional.ofNullable(externalAddress.getStreet()).isPresent()) {
+        if (Strings.isNullOrEmpty(externalAddress.getStreet())) {
             c.setStatus(ConsumptionStatus.VALIDATION_STREET_ERROR);
             centralHeatingConsumptionBean.save(c);
             return;

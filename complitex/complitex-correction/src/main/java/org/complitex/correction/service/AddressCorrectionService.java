@@ -401,10 +401,6 @@ public class AddressCorrectionService {
             throw new CorrectionException("`organizationId` for correct local address required");
         }
 
-        if (externalAddress.getUserOrganizationId() == null){
-            throw new CorrectionException("`userOrganizationId` for correct local address required");
-        }
-
         switch (addressEntity) {
             case CITY: {
                 List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(externalAddress);

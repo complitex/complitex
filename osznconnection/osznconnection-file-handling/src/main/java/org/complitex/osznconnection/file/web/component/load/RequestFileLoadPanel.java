@@ -94,6 +94,7 @@ public abstract class RequestFileLoadPanel extends Panel {
         //user organization
         final WebMarkupContainer userOrganizationContainer = new WebMarkupContainer("userOrganizationContainer");
         form.add(userOrganizationContainer);
+
         final IModel<List<DomainObject>> userOrganizationsModel = new LoadableDetachableModel<List<DomainObject>>() {
 
             @Override
@@ -101,6 +102,7 @@ public abstract class RequestFileLoadPanel extends Panel {
                 return organizationStrategy.getUserOrganizations(getLocale());
             }
         };
+
         final OrganizationModel userOrganizationModel = new OrganizationModel() {
 
             Long userOrganizationId;
@@ -120,6 +122,7 @@ public abstract class RequestFileLoadPanel extends Panel {
                 return userOrganizationsModel.getObject();
             }
         };
+
         DisableAwareDropDownChoice<DomainObject> userOrganization = new DisableAwareDropDownChoice<DomainObject>(
                 "userOrganization", userOrganizationModel, userOrganizationsModel, organizationRenderer);
         userOrganization.setRequired(true);
@@ -127,7 +130,7 @@ public abstract class RequestFileLoadPanel extends Panel {
         Long currentUserOrganizationId = sessionBean.getCurrentUserOrganizationId(getSession());
         userOrganizationContainer.setVisible(currentUserOrganizationId == null);
 
-        final DropDownChoice<Integer> year = new YearDropDownChoice("year", new Model<Integer>());
+        final DropDownChoice<Integer> year = new YearDropDownChoice("year", new Model<>());
         year.setRequired(true);
         form.add(year);
 

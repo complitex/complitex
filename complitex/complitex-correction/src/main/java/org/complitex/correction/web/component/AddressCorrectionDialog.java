@@ -143,7 +143,7 @@ public class AddressCorrectionDialog<T> extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 if (validate(state)) {
                     try {
-                        if (addressEntity.equals(AddressEntity.STREET_TYPE)) {
+                        if (!addressEntity.equals(AddressEntity.STREET_TYPE)) {
                             LocalAddress localAddress = new LocalAddress(state.getId("city"),
                                     getStreetTypeId(state.get("street")), state.getId("street"),
                                     state.getId("building"), state.getId("apartment"), state.getId("room"));
