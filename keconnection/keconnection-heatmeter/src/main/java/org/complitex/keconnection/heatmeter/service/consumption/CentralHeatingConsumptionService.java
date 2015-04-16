@@ -195,6 +195,7 @@ public class CentralHeatingConsumptionService {
         } catch (ResolveAddressException e) {
             c.setStatus(ConsumptionStatus.BIND_ERROR);
             c.setMessage(e.getMessage());
+            centralHeatingConsumptionBean.save(c);
 
             log.error("consumption file bind error", e);
         }

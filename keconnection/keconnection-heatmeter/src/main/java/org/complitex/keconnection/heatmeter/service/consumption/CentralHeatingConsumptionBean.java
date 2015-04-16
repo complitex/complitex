@@ -26,7 +26,7 @@ public class CentralHeatingConsumptionBean extends AbstractBean{
         if (centralHeatingConsumption.getId() == null) {
             sqlSession().insert(NS + ".insertCentralHeatingConsumption", centralHeatingConsumption);
         }else {
-            sqlSession().insert(NS + ".updateCentralHeatingConsumption", centralHeatingConsumption);
+            sqlSession().update(NS + ".updateCentralHeatingConsumption", centralHeatingConsumption);
         }
     }
 }

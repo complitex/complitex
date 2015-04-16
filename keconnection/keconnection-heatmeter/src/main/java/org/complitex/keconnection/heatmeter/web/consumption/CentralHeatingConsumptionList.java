@@ -33,7 +33,7 @@ import java.util.List;
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class CentralHeatingConsumptionList extends TemplatePage{
     private final static String[] FIELDS = {"id", "number", "districtCode", "organizationCode", "buildingCode", "accountNumber",
-            "street", "buildingNumber", "commonVolume", "apartmentRange", "beginDate", "endDate", "status"};
+            "street", "buildingNumber", "commonVolume", "apartmentRange", "beginDate", "endDate", "status", "message"};
 
     @EJB
     private ConsumptionFileBean consumptionFileBean;

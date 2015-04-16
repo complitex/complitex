@@ -5,6 +5,8 @@ import org.complitex.common.service.AbstractBean;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.util.List;
 
 /**
@@ -24,6 +26,7 @@ public class ConsumptionFileBean extends AbstractBean{
         return selectOne("selectConsumptionFilesCount", filterWrapper);
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void save(ConsumptionFile consumptionFile){
         if (consumptionFile.getId() == null) {
             insert("insertConsumptionFile", consumptionFile);
