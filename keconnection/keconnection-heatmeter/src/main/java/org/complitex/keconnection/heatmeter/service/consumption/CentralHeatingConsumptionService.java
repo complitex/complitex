@@ -26,8 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Optional;
 
 /**
  * @author inheaven on 20.03.2015 0:57.
@@ -127,81 +126,7 @@ public class CentralHeatingConsumptionService {
         List<CentralHeatingConsumption> consumptions = centralHeatingConsumptionBean.getCentralHeatingConsumptions(
                 FilterWrapper.of(new CentralHeatingConsumption(consumptionFile.getId())));
 
-        String city = "КИЇВ";
-        Pattern pattern = Pattern.compile("(\\S*([\\.|\\s]))(.*)");
-
-        consumptions.parallelStream().forEach(c -> {
-            //validation
-
-            if (Strings.isNullOrEmpty(c.getBuildingNumber())) {
-                c.setStatus(ConsumptionStatus.VALIDATION_BUILDING_ERROR);
-                centralHeatingConsumptionBean.save(c);
-                return;
-            }
-
-            if (Strings.isNullOrEmpty(c.getStreet())) {
-                c.setStatus(ConsumptionStatus.VALIDATION_STREET_ERROR);
-                centralHeatingConsumptionBean.save(c);
-                return;
-            }
-
-            Matcher m = pattern.matcher(c.getStreet());
-
-            if (!m.matches()){
-                c.setStatus(ConsumptionStatus.VALIDATION_STREET_TYPE_ERROR);
-                centralHeatingConsumptionBean.save(c);
-                return;
-            }
-
-            String streetType = m.group(1).replace('.', ' ').trim();
-
-            if (streetType.isEmpty()) {
-                c.setStatus(ConsumptionStatus.VALIDATION_STREET_TYPE_ERROR);
-                centralHeatingConsumptionBean.save(c);
-                return;
-            }
-
-            String street = m.group(2).trim();
-
-            if (street.isEmpty()) {
-                c.setStatus(ConsumptionStatus.VALIDATION_STREET_ERROR);
-                centralHeatingConsumptionBean.save(c);
-                return;
-            }
-
-            //resolve address
-
-            try {
-                LocalAddress localAddress = addressCorrectionService.resolveLocalAddress(
-                        ExternalAddress.of(city, streetType, street, c.getBuildingNumber(),
-                                consumptionFile.getServiceProviderId(), consumptionFile.getUserOrganizationId())
-                );
-
-                c.setLocalAddress(localAddress);
-
-                switch (localAddress.getFirstEmptyAddressEntity()){
-                    case STREET_TYPE:
-                        c.setStatus(ConsumptionStatus.LOCAL_STREET_TYPE_UNRESOLVED);
-                        break;
-                    case CITY:
-                    case STREET:
-                        c.setStatus(ConsumptionStatus.LOCAL_STREET_UNRESOLVED);
-                        break;
-                    case BUILDING:
-                        c.setStatus(ConsumptionStatus.LOCAL_BUILDING_UNRESOLVED);
-                        break;
-                    default:
-                        c.setStatus(ConsumptionStatus.BOUND);
-                }
-
-                centralHeatingConsumptionBean.save(c);
-            } catch (ResolveAddressException e) {
-                c.setStatus(ConsumptionStatus.BIND_ERROR);
-                c.setMessage(e.getMessage());
-
-                log.error("consumption file bind error", e);
-            }
-        });
+        consumptions.parallelStream().forEach(c -> bind(consumptionFile, c));
 
         boolean notBound = consumptions.parallelStream()
                 .filter(c -> !c.getStatus().equals(ConsumptionStatus.BOUND))
@@ -212,5 +137,67 @@ public class CentralHeatingConsumptionService {
         consumptionFileBean.save(consumptionFile);
 
         broadcasterService.broadcast(getClass().getName(), consumptionFile);
+    }
+
+    public void bind(ConsumptionFile consumptionFile, CentralHeatingConsumption c) {
+        //validation
+        if (Strings.isNullOrEmpty(c.getBuildingNumber())) {
+            c.setStatus(ConsumptionStatus.VALIDATION_BUILDING_ERROR);
+            centralHeatingConsumptionBean.save(c);
+            return;
+        }
+
+        if (Strings.isNullOrEmpty(c.getStreet())) {
+            c.setStatus(ConsumptionStatus.VALIDATION_STREET_ERROR);
+            centralHeatingConsumptionBean.save(c);
+            return;
+        }
+
+        ExternalAddress externalAddress = c.getExternalAddress();
+
+        //street type
+        if (Optional.ofNullable(externalAddress.getStreetType()).isPresent()){
+            c.setStatus(ConsumptionStatus.VALIDATION_STREET_TYPE_ERROR);
+            centralHeatingConsumptionBean.save(c);
+            return;
+        }
+
+        if (Optional.ofNullable(externalAddress.getStreet()).isPresent()) {
+            c.setStatus(ConsumptionStatus.VALIDATION_STREET_ERROR);
+            centralHeatingConsumptionBean.save(c);
+            return;
+        }
+
+        //resolve address
+        try {
+            externalAddress.setOrganizationId(consumptionFile.getServiceProviderId());
+            externalAddress.setUserOrganizationId(consumptionFile.getUserOrganizationId());
+
+            LocalAddress localAddress = addressCorrectionService.resolveLocalAddress(externalAddress);
+
+            c.setLocalAddress(localAddress);
+
+            switch (localAddress.getFirstEmptyAddressEntity()){
+                case STREET_TYPE:
+                    c.setStatus(ConsumptionStatus.LOCAL_STREET_TYPE_UNRESOLVED);
+                    break;
+                case CITY:
+                case STREET:
+                    c.setStatus(ConsumptionStatus.LOCAL_STREET_UNRESOLVED);
+                    break;
+                case BUILDING:
+                    c.setStatus(ConsumptionStatus.LOCAL_BUILDING_UNRESOLVED);
+                    break;
+                default:
+                    c.setStatus(ConsumptionStatus.BOUND);
+            }
+
+            centralHeatingConsumptionBean.save(c);
+        } catch (ResolveAddressException e) {
+            c.setStatus(ConsumptionStatus.BIND_ERROR);
+            c.setMessage(e.getMessage());
+
+            log.error("consumption file bind error", e);
+        }
     }
 }

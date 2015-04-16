@@ -1,9 +1,11 @@
 package org.complitex.address.entity;
 
+import java.io.Serializable;
+
 /**
  * @author inheaven on 002 02.04.15 17:45
  */
-public class ExternalAddress {
+public class ExternalAddress implements Serializable{
     private String city;
     private String district;
     private String streetType;
@@ -34,6 +36,13 @@ public class ExternalAddress {
         this.room = room;
         this.organizationId = organizationId;
         this.userOrganizationId = userOrganizationId;
+    }
+
+    public ExternalAddress(String city, String streetType, String street, String buildingNumber) {
+        this.city = city;
+        this.streetType = streetType;
+        this.street = street;
+        this.buildingNumber = buildingNumber;
     }
 
     public static ExternalAddress of(String city, String streetType, String street, String buildingNumber,

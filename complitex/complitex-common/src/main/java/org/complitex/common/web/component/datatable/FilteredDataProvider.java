@@ -28,9 +28,14 @@ public class FilteredDataProvider<T extends Serializable> extends SortableDataPr
     public void init(){
         try {
             filterWrapper = FilterWrapper.of(objectClass.newInstance());
+
+            onInit(filterWrapper);
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    protected void onInit(FilterWrapper<T> filterWrapper){
     }
 
     @Override

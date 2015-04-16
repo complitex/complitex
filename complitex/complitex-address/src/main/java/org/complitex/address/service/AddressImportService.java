@@ -752,6 +752,7 @@ public class AddressImportService extends AbstractImportService {
 
                 //prepare strings
                 buildingNum = BuildingNumberConverter.convert(buildingNum).toUpperCase();
+                //noinspection ConstantConditions
                 buildingPart = StringUtil.removeWhiteSpaces(StringUtil.toCyrillic(buildingPart)).toUpperCase();
 
                 List<Long> buildingIds = buildingStrategy.getObjectIds(streetObjectId, buildingNum, buildingPart, null,

@@ -36,7 +36,12 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
 
         setOutputMarkupId(true);
 
-        provider = new FilteredDataProvider<>(this, objectClass);
+        provider = new FilteredDataProvider<T>(this, objectClass){
+            @Override
+            protected void onInit(FilterWrapper<T> filterWrapper) {
+                FilteredDataTable.this.onInit(filterWrapper);
+            }
+        };
 
         FilterForm<T> form = new FilterForm<T>("form", provider){
             @Override
@@ -116,5 +121,8 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
 
     public FilterWrapper<T> getFilterWrapper(){
         return provider.getFilterWrapper();
+    }
+
+    protected void onInit(FilterWrapper<T> filterWrapper){
     }
 }

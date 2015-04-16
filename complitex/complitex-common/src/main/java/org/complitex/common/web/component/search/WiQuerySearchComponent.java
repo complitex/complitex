@@ -143,15 +143,16 @@ public class WiQuerySearchComponent extends Panel {
         setOutputMarkupId(true);
         this.searchComponentState = componentState;
         this.searchFilterSettings = searchFilterSettings;
+        this.callback = callback;
 
-        this.searchFilters = newArrayList();
+        searchFilters = newArrayList();
+
         for (SearchFilterSettings searchFilterSetting : searchFilterSettings) {
             searchFilters.add(searchFilterSetting.getSearchFilter());
         }
 
-        this.callback = callback;
-        this.enabled = false;
-        this.showMode = null;
+        enabled = false;
+        showMode = null;
 
         init();
     }
@@ -165,20 +166,20 @@ public class WiQuerySearchComponent extends Panel {
     protected void init() {
         searchContainer.setOutputMarkupId(true);
 
-        ListView<String> columns = newColumnsListView("columns", getSearchFilters());
+        ListView<String> columns = newColumnsListView("columns", searchFilters);
         searchContainer.add(columns);
 
         initFilterModel();
 
-        ListView<String> filters = newFiltersListView("filters", getSearchFilters());
+        ListView<String> filters = newFiltersListView("filters", searchFilters);
         searchContainer.add(filters);
         add(searchContainer);
     }
 
     protected void initFilterModel() {
         filterModels = newArrayList();
-        for (String searchFilter : getSearchFilters()) {
-            IModel<DomainObject> model = new Model<DomainObject>();
+        for (String searchFilter : searchFilters) {
+            IModel<DomainObject> model = new Model<>();
             DomainObject object = getSearchComponentState().get(searchFilter);
             model.setObject(object);
             filterModels.add(model);
@@ -340,11 +341,11 @@ public class WiQuerySearchComponent extends Panel {
         final int index = getIndex(entity);
         final DomainObject modelObject = getModelObject(entity);
 
-        final int size = getSearchFilters().size();
+        final int size = searchFilters.size();
         int lastFilledIndex = index;
         if (index < size && modelObject != null) {
             for (int j = index + 1; j < size; j++) {
-                final String currentEntity = getSearchFilters().get(j);
+                final String currentEntity = searchFilters.get(j);
                 IStrategy currentStrategy = strategyFactory.getStrategy(currentEntity);
                 DomainObject currentObject = null;
                 if (currentStrategy.allowProceedNextSearchFilter()) {
@@ -359,10 +360,10 @@ public class WiQuerySearchComponent extends Panel {
                 }
             }
 
-            setFocus(target, lastFilledIndex + 1 < size ? getSearchFilters().get(lastFilledIndex + 1) : null);
+            setFocus(target, lastFilledIndex + 1 < size ? searchFilters.get(lastFilledIndex + 1) : null);
         }
 
-        onSelect(target, getSearchFilters().get(lastFilledIndex));
+        onSelect(target, searchFilters.get(lastFilledIndex));
 
         updateSearchContainer(target);
         invokeCallback(lastFilledIndex, target);
@@ -432,10 +433,6 @@ public class WiQuerySearchComponent extends Panel {
         return showMode;
     }
 
-    protected final List<String> getSearchFilters() {
-        return searchFilters;
-    }
-
     protected final boolean getEnabledSetting() {
         return enabled;
     }
@@ -456,7 +453,7 @@ public class WiQuerySearchComponent extends Panel {
     }
 
     public void invokeCallback() {
-        invokeCallback(getSearchFilters().size() - 1, null);
+        invokeCallback(searchFilters.size() - 1, null);
     }
 
     protected final void invokeCallback(int index, AjaxRequestTarget target) {
@@ -512,8 +509,8 @@ public class WiQuerySearchComponent extends Panel {
     }
 
     protected final int getIndex(String entity) {
-        for (int i = 0; i < getSearchFilters().size(); i++) {
-            String searchFilter = getSearchFilters().get(i);
+        for (int i = 0; i < searchFilters.size(); i++) {
+            String searchFilter = searchFilters.get(i);
             if (searchFilter.equals(entity)) {
                 return i;
             }
@@ -544,13 +541,13 @@ public class WiQuerySearchComponent extends Panel {
     }
 
     public void reinitialize(AjaxRequestTarget target) {
-        for (int i = 0; i < getSearchFilters().size(); i++) {
-            String filterEntity = getSearchFilters().get(i);
+        for (int i = 0; i < searchFilters.size(); i++) {
+            String filterEntity = searchFilters.get(i);
             DomainObject object = searchComponentState.get(filterEntity);
             setModelObject(i, object);
         }
 
-        invokeCallback(getSearchFilters().size() - 1, target);
+        invokeCallback(searchFilters.size() - 1, target);
     }
 
     public boolean isShowColumns() {
@@ -565,5 +562,9 @@ public class WiQuerySearchComponent extends Panel {
         this.userPermissionString = userPermissionString;
 
         return this;
+    }
+
+    public List<String> getSearchFilters() {
+        return searchFilters;
     }
 }

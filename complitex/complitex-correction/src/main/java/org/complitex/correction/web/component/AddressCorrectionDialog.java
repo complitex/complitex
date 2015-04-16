@@ -7,6 +7,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -33,8 +34,6 @@ import org.complitex.correction.service.exception.CorrectionException;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.odlabs.wiquery.core.javascript.JsStatement;
-import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +56,7 @@ public class AddressCorrectionDialog<T> extends Panel {
 
     private AddressEntity addressEntity;
     private Dialog dialog;
-    private WiQuerySearchComponent searchComponent;
+    private WebMarkupContainer searchComponent;
     private SearchComponentState state;
     private DisableAwareDropDownChoice<DomainObject> streetTypeSelect;
     private FeedbackPanel messages;
@@ -76,18 +75,10 @@ public class AddressCorrectionDialog<T> extends Panel {
         super(id);
 
         //Диалог
-        dialog = new Dialog("dialog") {
-
-            {
+        dialog = new Dialog("dialog") {{
                 getOptions().putLiteral("width", "auto");
-            }
-        };
+            }};
         dialog.setModal(true);
-        dialog.setOpenEvent(JsScopeUiEvent.quickScope(new JsStatement().self().chain("parents", "'.ui-dialog:first'").
-                chain("find", "'.ui-dialog-titlebar-close'").
-                chain("hide").render()));
-        dialog.setCloseOnEscape(false);
-        dialog.setOutputMarkupId(true);
         add(dialog);
 
         //Контейнер для ajax
@@ -105,7 +96,7 @@ public class AddressCorrectionDialog<T> extends Panel {
 
             @Override
             public String getObject() {
-                return personalName.toString();
+                return personalName !=null ? personalName.toString() : "";
             }
         }));
 
@@ -113,13 +104,13 @@ public class AddressCorrectionDialog<T> extends Panel {
 
             @Override
             public String getObject() {
-                return AddressRenderer.displayAddress(externalAddress, getLocale());
+                return externalAddress != null ? AddressRenderer.displayAddress(externalAddress, getLocale()) : "";
             }
         }));
 
         state = new SearchComponentState();
         // at start create fake search component
-        searchComponent = new WiQuerySearchComponent("searchComponent", state, ImmutableList.of(""), null, ShowMode.ACTIVE, true);
+        searchComponent = new EmptyPanel("searchComponent");
         container.add(searchComponent);
 
         DomainObjectFilter example = new DomainObjectFilter();
@@ -318,6 +309,8 @@ public class AddressCorrectionDialog<T> extends Panel {
                      ExternalAddress externalAddress, LocalAddress localAddress) {
         open(target, model, personalName, localAddress.getFirstEmptyAddressEntity(), externalAddress, localAddress);
     }
+
+
 
     protected void correctAddress(AddressEntity addressEntity, ExternalAddress externalAddress, LocalAddress localAddress)
             throws CorrectionException{

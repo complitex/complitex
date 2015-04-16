@@ -7,13 +7,19 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.address.entity.AddressEntity;
+import org.complitex.address.entity.ExternalAddress;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.Action;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
+import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption;
+import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus;
 import org.complitex.keconnection.heatmeter.service.consumption.CentralHeatingConsumptionBean;
+import org.complitex.keconnection.heatmeter.service.consumption.CentralHeatingConsumptionService;
+import org.complitex.keconnection.heatmeter.service.consumption.ConsumptionFileBean;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
@@ -30,31 +36,46 @@ public class CentralHeatingConsumptionList extends TemplatePage{
             "street", "buildingNumber", "commonVolume", "apartmentRange", "beginDate", "endDate", "status"};
 
     @EJB
+    private ConsumptionFileBean consumptionFileBean;
+
+    @EJB
     private CentralHeatingConsumptionBean centralHeatingConsumptionBean;
 
+    @EJB
+    private CentralHeatingConsumptionService centralHeatingConsumptionService;
+
+    private FilteredDataTable<CentralHeatingConsumption> filteredDataTable;
+
     public CentralHeatingConsumptionList(PageParameters pageParameters) {
+        ConsumptionFile consumptionFile = consumptionFileBean.getConsumptionFile(pageParameters.get("id").toLongObject());
+
         add(new Label("title", new ResourceModel("title")));
 
         //Feedback Panel
         AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");
         add(messages);
 
-//        AddressCorrectionDialog addressCorrectionDialog = new AddressCorrectionDialog() {
-//            @Override
-//            protected void correctAddress(Object request, AddressEntity entity, Long cityId, Long streetTypeId,
-//                                          Long streetId, Long buildingId, Long apartmentId, Long roomId,
-//                                          Long userOrganizationId) throws DuplicateCorrectionException,
-//                    MoreOneCorrectionException, NotFoundCorrectionException {
-//
-//            }
-//        }
+        AddressCorrectionDialog<CentralHeatingConsumption> addressCorrectionDialog =
+                new AddressCorrectionDialog<CentralHeatingConsumption>("addressCorrectionDialog") {
+            @Override
+            protected void onCorrect(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model,
+                                     AddressEntity addressEntity) {
+                centralHeatingConsumptionService.bind(consumptionFile, model.getObject());
 
+                target.add(filteredDataTable);
+            }
+        };
+        add(addressCorrectionDialog);
 
         List<Action<CentralHeatingConsumption>> actions = new ArrayList<>();
         actions.add(new Action<CentralHeatingConsumption>("correct") {
             @Override
             public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
-                super.onAction(target, model);
+                ExternalAddress externalAddress = model.getObject().getExternalAddress();
+                externalAddress.setOrganizationId(consumptionFile.getServiceProviderId());
+                externalAddress.setUserOrganizationId(consumptionFile.getUserOrganizationId());
+
+                addressCorrectionDialog.open(target, model, null, externalAddress, model.getObject().getLocalAddress());
             }
 
             @Override
@@ -63,21 +84,20 @@ public class CentralHeatingConsumptionList extends TemplatePage{
             }
         });
 
-        FilteredDataTable<CentralHeatingConsumption> filteredDataTable;
-
         add(filteredDataTable = new FilteredDataTable<CentralHeatingConsumption>("dataTable",
                 CentralHeatingConsumption.class, null, actions, FIELDS) {
             @Override
-            public List<CentralHeatingConsumption> getList(FilterWrapper<CentralHeatingConsumption> filterWrapper) {
-                filterWrapper.getObject().setConsumptionFileId(pageParameters.get("id").toLongObject());
+            protected void onInit(FilterWrapper<CentralHeatingConsumption> filterWrapper) {
+                filterWrapper.getObject().setConsumptionFileId(consumptionFile.getId());
+            }
 
+            @Override
+            public List<CentralHeatingConsumption> getList(FilterWrapper<CentralHeatingConsumption> filterWrapper) {
                 return centralHeatingConsumptionBean.getCentralHeatingConsumptions(filterWrapper);
             }
 
             @Override
             public Long getCount(FilterWrapper<CentralHeatingConsumption> filterWrapper) {
-                filterWrapper.getObject().setConsumptionFileId(pageParameters.get("id").toLongObject());
-
                 return centralHeatingConsumptionBean.getCentralHeatingConsumptionsCount(filterWrapper);
             }
         });

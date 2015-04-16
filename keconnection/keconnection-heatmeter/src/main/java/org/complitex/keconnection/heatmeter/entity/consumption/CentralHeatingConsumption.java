@@ -1,7 +1,9 @@
 package org.complitex.keconnection.heatmeter.entity.consumption;
 
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.entity.ExternalAddress;
 import org.complitex.address.entity.LocalAddress;
+import org.complitex.address.util.AddressParser;
 import org.complitex.common.entity.AbstractEntity;
 
 /**
@@ -42,6 +44,12 @@ public class CentralHeatingConsumption extends AbstractEntity {
 
     public CentralHeatingConsumption(Long consumptionFileId) {
         this.consumptionFileId = consumptionFileId;
+    }
+
+    public ExternalAddress getExternalAddress(){
+        String[] streetArray = AddressParser.parseStreet(street);
+
+        return new ExternalAddress("КИЇВ", streetArray[0], streetArray[1], buildingNumber);
     }
 
     public Long getConsumptionFileId() {

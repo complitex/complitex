@@ -12,25 +12,27 @@ import java.util.List;
  */
 @Stateless
 public class ConsumptionFileBean extends AbstractBean{
-    public static final String NS = ConsumptionFileBean.class.getName();
+    public ConsumptionFile getConsumptionFile(Long id){
+        return selectOne("selectConsumptionFile", id);
+    }
 
     public List<ConsumptionFile> getConsumptionFiles(FilterWrapper<ConsumptionFile> filterWrapper){
-        return sqlSession().selectList(NS + ".selectConsumptionFiles", filterWrapper);
+        return selectList("selectConsumptionFiles", filterWrapper);
     }
 
     public Long getConsumptionFilesCount(FilterWrapper<ConsumptionFile> filterWrapper){
-        return sqlSession().selectOne(NS + ".selectConsumptionFilesCount", filterWrapper);
+        return selectOne("selectConsumptionFilesCount", filterWrapper);
     }
 
     public void save(ConsumptionFile consumptionFile){
         if (consumptionFile.getId() == null) {
-            sqlSession().insert(NS + ".insertConsumptionFile", consumptionFile);
+            insert("insertConsumptionFile", consumptionFile);
         }else{
-            sqlSession().insert(NS + ".updateConsumptionFile", consumptionFile);
+            update("updateConsumptionFile", consumptionFile);
         }
     }
 
     public void delete(Long consumptionFileId){
-        sqlSession().delete(NS + ".deleteConsumptionFile", consumptionFileId);
+        delete("deleteConsumptionFile", consumptionFileId);
     }
 }
