@@ -7,12 +7,53 @@ import java.io.Serializable;
  */
 public class LocalAddress implements Serializable{
     private Long cityId;
+    private Long districtId;
     private Long streetTypeId;
     private Long streetId;
     private Long buildingId;
     private Long apartmentId;
+    private Long roomId;
 
-    private Long organizationId;
+    public LocalAddress() {
+    }
+
+    public LocalAddress(Long cityId, Long streetTypeId, Long streetId, Long buildingId, Long apartmentId,
+                        Long roomId) {
+        this.cityId = cityId;
+        this.streetTypeId = streetTypeId;
+        this.streetId = streetId;
+        this.buildingId = buildingId;
+        this.apartmentId = apartmentId;
+        this.roomId = roomId;
+    }
+
+    public AddressEntity getFirstEmptyAddressEntity(){
+        if (cityId == null) {
+            return AddressEntity.CITY;
+        }
+
+        if (streetTypeId == null) {
+            return AddressEntity.STREET_TYPE;
+        }
+
+        if (streetId == null) {
+            return AddressEntity.STREET;
+        }
+
+        if (buildingId == null) {
+            return AddressEntity.BUILDING;
+        }
+
+        if (apartmentId == null) {
+            return AddressEntity.APARTMENT;
+        }
+
+        if (roomId == null){
+            return AddressEntity.ROOM;
+        }
+
+        return null;
+    }
 
     public Long getCityId() {
         return cityId;
@@ -20,6 +61,14 @@ public class LocalAddress implements Serializable{
 
     public void setCityId(Long cityId) {
         this.cityId = cityId;
+    }
+
+    public Long getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(Long districtId) {
+        this.districtId = districtId;
     }
 
     public Long getStreetTypeId() {
@@ -54,11 +103,11 @@ public class LocalAddress implements Serializable{
         this.apartmentId = apartmentId;
     }
 
-    public Long getOrganizationId() {
-        return organizationId;
+    public Long getRoomId() {
+        return roomId;
     }
 
-    public void setOrganizationId(Long organizationId) {
-        this.organizationId = organizationId;
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
     }
 }

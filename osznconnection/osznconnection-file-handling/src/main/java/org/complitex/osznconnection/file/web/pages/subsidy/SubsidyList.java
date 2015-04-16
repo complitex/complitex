@@ -31,9 +31,6 @@ import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.correction.service.exception.DuplicateCorrectionException;
-import org.complitex.correction.service.exception.MoreOneCorrectionException;
-import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.SubsidyExample;
@@ -204,21 +201,13 @@ public final class SubsidyList extends TemplatePage {
         filterForm.add(submit);
 
         //Панель коррекции адреса
-        final AddressCorrectionDialog<Subsidy> addressCorrectionDialog = new AddressCorrectionDialog<Subsidy>("addressCorrectionPanel",
-                subsidyFile.getUserOrganizationId(), content, statusDetailPanel) {
-
+        AddressCorrectionDialog<Subsidy> addressCorrectionDialog = new AddressCorrectionDialog<Subsidy>("addressCorrectionPanel") {
             @Override
-            protected void correctAddress(Subsidy subsidy, AddressEntity entity, Long cityId, Long streetTypeId, Long streetId,
-                    Long buildingId, Long apartmentId, Long roomId, Long userOrganizationId)
-                    throws DuplicateCorrectionException, MoreOneCorrectionException, NotFoundCorrectionException {
-                addressService.correctLocalAddress(subsidy, entity, cityId, streetTypeId, streetId, buildingId, userOrganizationId);
-                subsidyBean.markCorrected(subsidy, entity);
-            }
+            protected void onCorrect(AjaxRequestTarget target, IModel<Subsidy> model, AddressEntity addressEntity) {
+                subsidyBean.markCorrected(model.getObject(), addressEntity);
 
-            @Override
-            protected void closeDialog(AjaxRequestTarget target) {
-                super.closeDialog(target);
                 dataRowHoverBehavior.deactivateDataRow(target);
+                target.add(content, statusDetailPanel);
             }
         };
         add(addressCorrectionDialog);
@@ -285,13 +274,8 @@ public final class SubsidyList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        addressCorrectionDialog.open(target, subsidy, subsidy.getFirstName(),
-                                subsidy.getMiddleName(), subsidy.getLastName(),
-                                subsidy.getStringField(SubsidyDBF.NP_NAME,"_CYR"), subsidy.getStringField(SubsidyDBF.CAT_V,"_CYR"),
-                                subsidy.getStringField(SubsidyDBF.NAME_V,"_CYR"), subsidy.getStringField(SubsidyDBF.BLD,"_CYR"),
-                                subsidy.getStringField(SubsidyDBF.CORP,"_CYR"), subsidy.getStringField(SubsidyDBF.FLAT,"_CYR"),
-                                subsidy.getCityObjectId(), subsidy.getStreetTypeObjectId(), subsidy.getStreetObjectId(),
-                                subsidy.getBuildingObjectId(), null);
+                        addressCorrectionDialog.open(target, item.getModel(), subsidy.getPersonalName(),
+                                 subsidy.getExternalAddress(), subsidy.getLocalAddress());
 
                         target.add(item.add(AttributeModifier.append("class", "data-row-hover")));
                     }
@@ -311,8 +295,8 @@ public final class SubsidyList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, subsidy, subsidy.getCityObjectId(), subsidy.getStreetObjectId(),
-                                subsidy.getBuildingObjectId(), subsidy.getStringField(SubsidyDBF.FLAT),
+                        lookupPanel.open(target, subsidy, subsidy.getCityId(), subsidy.getStreetId(),
+                                subsidy.getBuildingId(), subsidy.getStringField(SubsidyDBF.FLAT),
                                 subsidy.getStringField(SubsidyDBF.RASH),
                                 subsidy.getStatus().isImmediatelySearchByAddress());
 

@@ -25,9 +25,6 @@ import org.complitex.common.service.SessionBean;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.correction.service.exception.DuplicateCorrectionException;
-import org.complitex.correction.service.exception.MoreOneCorrectionException;
-import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample;
@@ -121,7 +118,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         content.setOutputMarkupId(true);
         add(content);
 
-        final Form<Void> filterForm = new Form<Void>("filterForm");
+        final Form filterForm = new Form("filterForm");
         content.add(filterForm);
         example = new Model<>(newExample());
 
@@ -157,15 +154,15 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         };
         dataProvider.setSort("", SortOrder.ASCENDING);
 
-        filterForm.add(new TextField<>("idCodeFilter", new PropertyModel<String>(example, "idCode")));
-        filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<String>(example, "firstName")));
-        filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<String>(example, "middleName")));
-        filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<String>(example, "lastName")));
-        filterForm.add(new TextField<>("streetReferenceFilter", new PropertyModel<String>(example, "streetReference")));
-        filterForm.add(new TextField<>("buildingFilter", new PropertyModel<String>(example, "building")));
-        filterForm.add(new TextField<>("corpFilter", new PropertyModel<String>(example, "corp")));
-        filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<String>(example, "apartment")));
-        filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<RequestStatus>(example, "status"),
+        filterForm.add(new TextField<>("idCodeFilter", new PropertyModel<>(example, "idCode")));
+        filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<>(example, "firstName")));
+        filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<>(example, "middleName")));
+        filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<>(example, "lastName")));
+        filterForm.add(new TextField<>("streetReferenceFilter", new PropertyModel<>(example, "streetReference")));
+        filterForm.add(new TextField<>("buildingFilter", new PropertyModel<>(example, "building")));
+        filterForm.add(new TextField<>("corpFilter", new PropertyModel<>(example, "corp")));
+        filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<>(example, "apartment")));
+        filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<>(example, "status"),
                 Arrays.asList(RequestStatus.values()), new StatusRenderer()).setNullValid(true));
 
         AjaxLink<Void> reset = new AjaxLink<Void>("reset") {
@@ -193,24 +190,12 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
         //Панель коррекции адреса
         final AddressCorrectionDialog<DwellingCharacteristics> addressCorrectionDialog =
-                new AddressCorrectionDialog<DwellingCharacteristics>("addressCorrectionPanel",
-                dwellingCharacteristicsFile.getUserOrganizationId(), content, statusDetailPanel) {
-
+                new AddressCorrectionDialog<DwellingCharacteristics>("addressCorrectionPanel") {
                     @Override
-                    protected void correctAddress(DwellingCharacteristics dwellingCharacteristics, AddressEntity entity,
-                            Long cityId, Long streetTypeId, Long streetId, Long buildingId, Long apartmentId, Long roomId,
-                            Long userOrganizationId) throws DuplicateCorrectionException, MoreOneCorrectionException,
-                            NotFoundCorrectionException {
+                    protected void onCorrect(AjaxRequestTarget target, IModel<DwellingCharacteristics> model, AddressEntity addressEntity) {
+                        dwellingCharacteristicsBean.markCorrected(model.getObject(), addressEntity);
 
-                        addressService.correctLocalAddress(dwellingCharacteristics, entity, cityId, streetTypeId,
-                                streetId, buildingId, userOrganizationId);
-
-                        dwellingCharacteristicsBean.markCorrected(dwellingCharacteristics, entity);
-                    }
-
-                    @Override
-                    protected void closeDialog(AjaxRequestTarget target) {
-                        super.closeDialog(target);
+                        target.add(content, statusDetailPanel);
                         dataRowHoverBehavior.deactivateDataRow(target);
                     }
                 };
@@ -251,24 +236,16 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        String street = dwellingCharacteristics.getStreet() != null
+                        dwellingCharacteristics.setStreet(dwellingCharacteristics.getStreet() != null
                                 ? dwellingCharacteristics.getStreet()
-                                : getString("streetCodePrefix") + " " + dwellingCharacteristics.getStringField(CDUL);
+                                : getString("streetCodePrefix") + " " + dwellingCharacteristics.getStringField(CDUL));
 
-                        String streetType = dwellingCharacteristics.getStreetType() != null
+                        dwellingCharacteristics.setStreetType(dwellingCharacteristics.getStreetType() != null
                                 ? dwellingCharacteristics.getStreetType()
-                                : getString("streetTypeNotFound");
+                                : getString("streetTypeNotFound"));
 
-                        addressCorrectionDialog.open(target, dwellingCharacteristics, dwellingCharacteristics.getFirstName(),
-                                dwellingCharacteristics.getMiddleName(), dwellingCharacteristics.getLastName(),
-                                dwellingCharacteristics.getCity(), streetType, street,
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.HOUSE),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.BUILD),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT),
-                                dwellingCharacteristics.getCityObjectId(),
-                                dwellingCharacteristics.getStreetTypeObjectId(),
-                                dwellingCharacteristics.getStreetObjectId(),
-                                dwellingCharacteristics.getBuildingObjectId(), null);
+                        addressCorrectionDialog.open(target, item.getModel(), dwellingCharacteristics.getPersonalName(),
+                                dwellingCharacteristics.getExternalAddress(), dwellingCharacteristics.getLocalAddress());
                     }
                 };
                 addressCorrectionLink.setVisible(dwellingCharacteristics.getStatus().isAddressCorrectable());
@@ -278,8 +255,8 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, dwellingCharacteristics, dwellingCharacteristics.getCityObjectId(),
-                                dwellingCharacteristics.getStreetObjectId(), dwellingCharacteristics.getBuildingObjectId(),
+                        lookupPanel.open(target, dwellingCharacteristics, dwellingCharacteristics.getCityId(),
+                                dwellingCharacteristics.getStreetId(), dwellingCharacteristics.getBuildingId(),
                                 dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT),
                                 dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDCODE),
                                 dwellingCharacteristics.getStatus().isImmediatelySearchByAddress());

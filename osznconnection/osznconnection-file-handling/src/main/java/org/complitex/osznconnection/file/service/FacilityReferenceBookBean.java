@@ -211,7 +211,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
                     locale, printStringValue(streetTypeName, locale)));
         } else {
             // искать по внутренней базе типов улиц
-            List<Long> streetTypeIds = addressCorrectionBean.getStreetTypeObjectIds(streetTypeName);
+            List<Long> streetTypeIds = addressCorrectionBean.getStreetTypeIds(streetTypeName);
             if (streetTypeIds.size() == 1) {
                 streetTypeId = streetTypeIds.get(0);
                 streetTypeCorrection = new StreetTypeCorrection(streetTypeCode, streetTypeId, streetTypeName.toUpperCase(),

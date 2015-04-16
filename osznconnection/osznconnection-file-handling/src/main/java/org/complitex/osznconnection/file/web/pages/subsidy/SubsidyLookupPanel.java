@@ -32,18 +32,18 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
     @Override
     protected void initInternalAddress(Subsidy subsidy, Long cityId, Long streetId, Long streetTypeId,
             Long buildingId, String apartment) {
-        subsidy.setCityObjectId(cityId);
-        subsidy.setStreetObjectId(streetId);
-        subsidy.setStreetTypeObjectId(streetTypeId);
-        subsidy.setBuildingObjectId(buildingId);
+        subsidy.setCityId(cityId);
+        subsidy.setStreetId(streetId);
+        subsidy.setStreetTypeId(streetTypeId);
+        subsidy.setBuildingId(buildingId);
         subsidy.setField(SubsidyDBF.FLAT + "_CYR", apartment != null ? apartment : "");
     }
 
     @Override
     protected boolean isInternalAddressCorrect(Subsidy subsidy) {
-        return subsidy.getCityObjectId() != null && subsidy.getCityObjectId() > 0
-                && subsidy.getStreetObjectId() != null && subsidy.getStreetObjectId() > 0
-                && subsidy.getBuildingObjectId() != null && subsidy.getBuildingObjectId() > 0;
+        return subsidy.getCityId() != null && subsidy.getCityId() > 0
+                && subsidy.getStreetId() != null && subsidy.getStreetId() > 0
+                && subsidy.getBuildingId() != null && subsidy.getBuildingId() > 0;
     }
 
     @Override

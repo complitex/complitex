@@ -1,16 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.osznconnection.file.service.util;
 
 import org.apache.wicket.util.string.Strings;
-import org.complitex.osznconnection.file.entity.PersonName;
+import org.complitex.common.entity.PersonalName;
 
-/**
- *
- * @author Artem
- */
 public final class SubsidyNameParser {
 
     private SubsidyNameParser() {
@@ -24,7 +16,7 @@ public final class SubsidyNameParser {
      *   4. "<LastName> <FirstName>"
      *   5. "<LastName>"
      */
-    public static PersonName parse(String rash, String fio) {
+    public static PersonalName parse(String rash, String fio) {
         if (Strings.isEmpty(fio)) {
             throw new IllegalArgumentException("Поле `FIO` пустое, `RASH` записи: " + rash);
         }
@@ -61,6 +53,6 @@ public final class SubsidyNameParser {
             throw new RuntimeException("Поле `FIO` не содержит фамилию. `FIO`: '" + fio + "', `RASH` записи: " + rash);
         }
 
-        return new PersonName(firstName, middleName, lastName);
+        return new PersonalName(firstName, middleName, lastName);
     }
 }

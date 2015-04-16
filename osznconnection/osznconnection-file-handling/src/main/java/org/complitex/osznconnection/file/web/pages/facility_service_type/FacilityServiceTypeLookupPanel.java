@@ -35,18 +35,18 @@ public class FacilityServiceTypeLookupPanel extends AbstractLookupPanel<Facility
     @Override
     protected void initInternalAddress(FacilityServiceType facilityServiceType, Long cityId, Long streetId,
                                        Long streetTypeId, Long buildingId, String apartment) {
-        facilityServiceType.setCityObjectId(cityId);
-        facilityServiceType.setStreetObjectId(streetId);
-        facilityServiceType.setStreetTypeObjectId(streetTypeId);
-        facilityServiceType.setBuildingObjectId(buildingId);
+        facilityServiceType.setCityId(cityId);
+        facilityServiceType.setStreetId(streetId);
+        facilityServiceType.setStreetTypeId(streetTypeId);
+        facilityServiceType.setBuildingId(buildingId);
         facilityServiceType.setField(FacilityServiceTypeDBF.APT, apartment != null ? apartment : "");
     }
 
     @Override
     protected boolean isInternalAddressCorrect(FacilityServiceType facilityServiceType) {
-        return facilityServiceType.getCityObjectId() != null && facilityServiceType.getCityObjectId() > 0
-                && facilityServiceType.getStreetObjectId() != null && facilityServiceType.getStreetObjectId() > 0
-                && facilityServiceType.getBuildingObjectId() != null && facilityServiceType.getBuildingObjectId() > 0;
+        return facilityServiceType.getCityId() != null && facilityServiceType.getCityId() > 0
+                && facilityServiceType.getStreetId() != null && facilityServiceType.getStreetId() > 0
+                && facilityServiceType.getBuildingId() != null && facilityServiceType.getBuildingId() > 0;
     }
 
     @Override

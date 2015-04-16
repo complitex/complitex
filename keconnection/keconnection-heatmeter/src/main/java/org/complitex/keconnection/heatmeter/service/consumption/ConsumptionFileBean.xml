@@ -14,6 +14,10 @@
         <result column="status" property="status"/>
     </resultMap>
 
+    <select id="selectConsumptionFile" parameterType="long" resultMap="consumptionFileResultMap">
+        select * from consumption_file where id = #{id}
+    </select>
+
     <sql id="sqlWhere">
         <where>
             <if test="object.name != null">and `name` like concat('%',#{object.name},'%')</if>

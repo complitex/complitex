@@ -1,6 +1,7 @@
 package org.complitex.address.util;
 
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.entity.ExternalAddress;
 import org.complitex.common.util.StringUtil;
 
 import java.util.Locale;
@@ -94,13 +95,20 @@ public final class AddressRenderer {
         String displayBuilding = displayBuilding(buildingNumber, buildingCorp, locale);
         String displayApartment = displayApartment(apartment, locale);
         String displayRoom = displayRoom(room, locale);
+
         return displayStrings(displayCity, displayStreet, displayBuilding, displayApartment, displayRoom);
     }
 
     public static String displayAddress(String cityType, String city, String district, Locale locale) {
         String displayCity = displayCity(cityType, city, locale);
         String displayDistrict = displayDistrict(district, locale);
+
         return displayStrings(displayCity, displayDistrict);
+    }
+
+    public static String displayAddress(ExternalAddress address, Locale locale){
+        return displayAddress(null, address.getCity(), address.getStreetType(), address.getStreet(),
+                address.getBuildingNumber(), address.getBuildingCorp(), address.getApartment(), address.getRoom(), locale);
     }
 
     private static String displayStrings(String... strings) {

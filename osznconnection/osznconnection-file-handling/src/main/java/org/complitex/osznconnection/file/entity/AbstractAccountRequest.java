@@ -1,5 +1,7 @@
 package org.complitex.osznconnection.file.entity;
 
+import org.complitex.common.entity.PersonalName;
+
 import java.util.Date;
 
 /**
@@ -14,6 +16,10 @@ public abstract class AbstractAccountRequest<E extends Enum> extends AbstractAdd
     private String middleName;
 
     private Date date;
+
+    public PersonalName getPersonalName(){
+        return new PersonalName(firstName, middleName, lastName);
+    }
 
     public String getAccountNumber() {
         return accountNumber;

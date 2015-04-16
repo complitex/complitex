@@ -15,7 +15,7 @@ public enum AddressEntity implements IEntity, IFixedIdType{
     private Long id;
     private String entityName;
 
-    private AddressEntity(Long id, String entityName) {
+    AddressEntity(Long id, String entityName) {
         this.id = id;
         this.entityName = entityName;
     }

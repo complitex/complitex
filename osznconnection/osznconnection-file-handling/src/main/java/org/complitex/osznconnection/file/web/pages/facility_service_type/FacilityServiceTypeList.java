@@ -29,9 +29,6 @@ import org.complitex.common.service.SessionBean;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.correction.service.exception.DuplicateCorrectionException;
-import org.complitex.correction.service.exception.MoreOneCorrectionException;
-import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.FacilityServiceTypeExample;
@@ -200,22 +197,13 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
         //Панель коррекции адреса
         final AddressCorrectionDialog<FacilityServiceType> addressCorrectionDialog =
-                new AddressCorrectionDialog<FacilityServiceType>("addressCorrectionPanel",
-                facilityServiceTypeFile.getUserOrganizationId(), content, statusDetailPanel) {
+                new AddressCorrectionDialog<FacilityServiceType>("addressCorrectionPanel") {
 
                     @Override
-                    protected void correctAddress(FacilityServiceType facilityServiceType, AddressEntity entity,
-                            Long cityId, Long streetTypeId, Long streetId, Long buildingId, Long apartmentId, Long roomId,
-                            Long userOrganizationId) throws DuplicateCorrectionException, MoreOneCorrectionException,
-                            NotFoundCorrectionException {
-                        addressService.correctLocalAddress(facilityServiceType, entity, cityId, streetTypeId, streetId,
-                                buildingId, userOrganizationId);
-                        facilityServiceTypeBean.markCorrected(facilityServiceType, entity);
-                    }
+                    protected void onCorrect(AjaxRequestTarget target, IModel<FacilityServiceType> model, AddressEntity addressEntity) {
+                        facilityServiceTypeBean.markCorrected(model.getObject(), addressEntity);
 
-                    @Override
-                    protected void closeDialog(AjaxRequestTarget target) {
-                        super.closeDialog(target);
+                        target.add(content, statusDetailPanel);
                         dataRowHoverBehavior.deactivateDataRow(target);
                     }
                 };
@@ -257,26 +245,17 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        String street = facilityServiceType.getStreet() != null
-                                ? facilityServiceType.getStreet()
-                                : getString("streetCodePrefix") + " " + facilityServiceType.getStringField(CDUL);
-
-                        String streetType = facilityServiceType.getStreetType() != null
+                        facilityServiceType.setStreetType(facilityServiceType.getStreetType() != null
                                 ? facilityServiceType.getStreetType()
-                                : getString("streetTypeNotFound");
+                                : getString("streetTypeNotFound"));
+
+                        facilityServiceType.setStreet(facilityServiceType.getStreet() != null
+                                ? facilityServiceType.getStreet()
+                                : getString("streetCodePrefix") + " " + facilityServiceType.getStringField(CDUL));
 
 
-                        addressCorrectionDialog.open(target, facilityServiceType, facilityServiceType.getFirstName(),
-                                facilityServiceType.getMiddleName(), facilityServiceType.getLastName(),
-                                facilityServiceType.getCity(), streetType, street,
-                                facilityServiceType.getStringField(FacilityServiceTypeDBF.HOUSE),
-                                facilityServiceType.getStringField(FacilityServiceTypeDBF.BUILD),
-                                facilityServiceType.getStringField(FacilityServiceTypeDBF.APT),
-                                facilityServiceType.getCityObjectId(),
-                                facilityServiceType.getStreetTypeObjectId(),
-                                facilityServiceType.getStreetObjectId(),
-                                facilityServiceType.getBuildingObjectId(),
-                                null);
+                        addressCorrectionDialog.open(target, item.getModel(), facilityServiceType.getPersonalName(),
+                                facilityServiceType.getExternalAddress(), facilityServiceType.getLocalAddress());
                     }
                 };
                 addressCorrectionLink.setVisible(facilityServiceType.getStatus().isAddressCorrectable());
@@ -286,8 +265,8 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, facilityServiceType, facilityServiceType.getCityObjectId(),
-                                facilityServiceType.getStreetObjectId(), facilityServiceType.getBuildingObjectId(),
+                        lookupPanel.open(target, facilityServiceType, facilityServiceType.getCityId(),
+                                facilityServiceType.getStreetId(), facilityServiceType.getBuildingId(),
                                 facilityServiceType.getStringField(FacilityServiceTypeDBF.APT),
                                 facilityServiceType.getStringField(FacilityServiceTypeDBF.IDCODE),
                                 facilityServiceType.getStatus().isImmediatelySearchByAddress());
