@@ -626,7 +626,7 @@ CREATE TABLE `central_heating_consumption`(
   `street` VARCHAR(100) COMMENT 'Адрес дома',
   `building_number` VARCHAR(100) COMMENT 'Номер дома',
   `common_volume` VARCHAR(100) COMMENT 'Информация ПУ в расходе по коллективному счетчику отопления',
-  `appartment_range` VARCHAR(100) COMMENT 'Дипазон квартир, потребляющих услугу с этого счетчика',
+  `apartment_range` VARCHAR(100) COMMENT 'Дипазон квартир, потребляющих услугу с этого счетчика',
   `begin_date` VARCHAR(100) COMMENT 'Дата установки счетчика',
   `end_date` VARCHAR(100) COMMENT 'Дата отключения счетчика',
   `common_area` VARCHAR(100) COMMENT 'Отапливаемая площадь квартир, потребляемых услугу с данного коллективного счетчика',
