@@ -29,6 +29,10 @@ public class BroadcasterService {
         broadcaster = new WebSocketPushBroadcaster(webSocketSettings.getConnectionRegistry());
     }
 
+    public void broadcast(Object service, Object payload){
+        broadcast(service.getClass().getName(), payload);
+    }
+
     @Asynchronous
     public void broadcast(String service, Object payload){
         try {

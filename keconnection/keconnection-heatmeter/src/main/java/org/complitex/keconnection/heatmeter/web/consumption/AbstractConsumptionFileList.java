@@ -105,24 +105,31 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
                     if (CentralHeatingConsumptionService.class.getName().equals(m.getService())){
                         if (m.getPayload() instanceof ConsumptionFile){
                             ConsumptionFile consumptionFile = (ConsumptionFile) m.getPayload();
+                            String name = consumptionFile.getName();
 
                             switch (consumptionFile.getStatus()){
+                                case LOADED:
+                                    info(getStringFormat("info_loaded", name));
+                                    break;
+                                case LOADING:
+                                    info(getStringFormat("info_loading", name));
+                                    break;
+                                case LOAD_ERROR:
+                                    error(getStringFormat("error_load", name));
+                                    break;
                                 case BINDING:
-                                    info(getStringFormat("info_binding", consumptionFile.getName()));
-                                    handler.add(messages);
-                                    handler.add(filteredDataTable);
+                                    info(getStringFormat("info_binding", name));
                                     break;
                                 case BOUND:
-                                    info(getStringFormat("info_bind", consumptionFile.getName()));
-                                    handler.add(messages);
-                                    handler.add(filteredDataTable);
+                                    info(getStringFormat("info_bind", name));
                                     break;
                                 case BIND_ERROR:
-                                    info(getStringFormat("error_bind", consumptionFile.getName()));
-                                    handler.add(messages);
-                                    handler.add(filteredDataTable);
+                                    info(getStringFormat("error_bind", name));
                                     break;
                             }
+
+                            handler.add(messages);
+                            handler.add(filteredDataTable);
 
                             filteredDataTable.getFilterWrapper().getGroup().remove(consumptionFile);
                         }

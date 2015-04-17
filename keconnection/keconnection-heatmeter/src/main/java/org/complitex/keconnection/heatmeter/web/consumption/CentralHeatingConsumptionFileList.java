@@ -1,6 +1,7 @@
 package org.complitex.keconnection.heatmeter.web.consumption;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.poi.util.IOUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -58,12 +60,7 @@ public class CentralHeatingConsumptionFileList extends AbstractConsumptionFileLi
         fileUploadField.getFileUploads().forEach(f ->{
             try {
                 centralHeatingConsumptionService.load(om, serviceProviderId, serviceId, f.getClientFileName(),
-                        Hex.encodeHexString(f.getMD5()), f.getInputStream());
-
-                info(getStringFormat("info_loaded", f.getClientFileName()));
-
-                target.add(getFilteredDataTable());
-                target.add(getMessages());
+                        Hex.encodeHexString(f.getMD5()), new ByteArrayInputStream(IOUtils.toByteArray(f.getInputStream())));
             } catch (IOException e) {
                 log.error("file {} upload error", f.getClientFileName(), e);
             }

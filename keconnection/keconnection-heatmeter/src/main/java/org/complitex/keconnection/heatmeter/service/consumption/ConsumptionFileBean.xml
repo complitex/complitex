@@ -32,8 +32,7 @@
 
     <select id="selectConsumptionFiles" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="consumptionFileResultMap">
-        select * from consumption_file <include refid="sqlWhere"/>
-        order by ${sortProperty} ${asc} limit #{first}, #{count}
+        select * from consumption_file <include refid="sqlWhere"/> ${orderLimit}
     </select>
 
     <select id="selectConsumptionFilesCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">

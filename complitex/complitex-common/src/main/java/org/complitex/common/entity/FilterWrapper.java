@@ -33,7 +33,7 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
 
     private StringLocale stringLocale;
 
-    private boolean camelToUnderscore = false;
+    private boolean camelToUnderscore = true;
 
     public FilterWrapper() {
     }
@@ -67,7 +67,7 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
     }
 
     public String getOrderLimit(){
-        return "order by `" + sortProperty + "` " + getAsc() + (count > 0 ? " limit " + first + ", " + count : "");
+        return "order by `" + getSortProperty() + "` " + getAsc() + (count > 0 ? " limit " + first + ", " + count : "");
     }
 
     public Map<String, Object> getMap() {
