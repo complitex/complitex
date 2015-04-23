@@ -111,6 +111,10 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
     }
 
     public String getSortProperty() {
+        if (sortProperty == null){
+            return "id";
+        }
+
         if (camelToUnderscore){
             return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, sortProperty);
         }
