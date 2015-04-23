@@ -101,4 +101,8 @@
         delete from central_heating_consumption where id = #{id}
     </delete>
 
+    <select id="selectStatusFilters" parameterType="long" resultType="org.complitex.keconnection.heatmeter.entity.ConsumptionStatusFilter">
+        select `status`, `message`, count(1) as `count` from central_heating_consumption
+          where `consumption_file_id` = #{id} group by `status`, `message`
+    </select>
 </mapper>

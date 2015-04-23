@@ -35,7 +35,7 @@ import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.web.component.TextLabel;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.ajax.AjaxFilterToolbar;
-import org.complitex.common.web.component.ajax.AjaxLinkPanel;
+import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.AjaxNavigationToolbar;
 import org.complitex.correction.service.AddressService;
@@ -272,7 +272,7 @@ public class RegistryRecordList extends TemplatePage {
                                 registryRecord.getImportErrorType() != null &&
                                 (registryRecord.getImportErrorType().getId() < 17 || registryRecord.getImportErrorType().getId() > 18) &&
                                 registryWorkflowManager.canLink(registry)) {
-                            AjaxLinkPanel addressCorrectionLink = new AjaxLinkPanel(s, new ResourceModel("correctAddress")) {
+                            AjaxLinkLabel addressCorrectionLink = new AjaxLinkLabel(s, new ResourceModel("correctAddress")) {
 
                                 @Override
                                 public void onClick(AjaxRequestTarget target) {
@@ -296,7 +296,7 @@ public class RegistryRecordList extends TemplatePage {
                             components.add(addressCorrectionLink);
                         } else if (registryRecord.getStatus() == RegistryRecordStatus.PROCESSED &&
                                 registryWorkflowManager.canRollback(registry)) {
-                            AjaxLinkPanel rollbackLink = new AjaxLinkPanel(s, new ResourceModel("rollback")) {
+                            AjaxLinkLabel rollbackLink = new AjaxLinkLabel(s, new ResourceModel("rollback")) {
 
                                 @Override
                                 public void onClick(AjaxRequestTarget target) {

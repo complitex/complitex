@@ -4,16 +4,22 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.ExternalAddress;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
+import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.Action;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
+import org.complitex.keconnection.heatmeter.entity.ConsumptionStatusFilter;
 import org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus;
@@ -26,6 +32,7 @@ import org.complitex.template.web.template.TemplatePage;
 import javax.ejb.EJB;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author inheaven on 17.03.2015 23:36.
@@ -51,9 +58,31 @@ public class CentralHeatingConsumptionList extends TemplatePage{
 
         add(new Label("title", new ResourceModel("title")));
 
-        //Feedback Panel
+        //messages
         AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");
         add(messages);
+
+        //status
+        add(new ListView<ConsumptionStatusFilter>("statusFilter",
+                centralHeatingConsumptionBean.getStatusFilters(consumptionFile.getId())) {
+            @Override
+            protected void populateItem(ListItem<ConsumptionStatusFilter> item) {
+                ConsumptionStatusFilter statusFilter = item.getModelObject();
+
+                String status = ResourceUtil.getString(ConsumptionStatus.class.getName(),
+                        statusFilter.getStatus().name(), getLocale()) + " " +
+                        Optional.ofNullable(statusFilter.getMessage()).orElse("") +
+                        "  (" + statusFilter.getCount() + ") ";
+
+                item.add(new AjaxLinkLabel("linkLabel", Model.of(status)) {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        filteredDataTable.getFilterWrapper().getObject().setStatus(statusFilter.getStatus());
+                        target.add(filteredDataTable);
+                    }
+                });
+            }
+        });
 
         AddressCorrectionDialog<CentralHeatingConsumption> addressCorrectionDialog =
                 new AddressCorrectionDialog<CentralHeatingConsumption>("addressCorrectionDialog") {

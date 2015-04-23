@@ -16,7 +16,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.web.component.ajax.AjaxLinkPanel;
+import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.organization.OrganizationPickerDialog;
@@ -118,7 +118,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
                 final RequestFile rf = item.getModelObject();
                 final String code = rf.getName().substring(0, rf.getName().length() - 8);
 
-                return new AjaxLinkPanel("servicing_organization", new LoadableDetachableModel<String>() {
+                return new AjaxLinkLabel("servicing_organization", new LoadableDetachableModel<String>() {
                     @Override
                     protected String load() {
                         Long organizationId = subsidyService.getServicingOrganizationId(rf);

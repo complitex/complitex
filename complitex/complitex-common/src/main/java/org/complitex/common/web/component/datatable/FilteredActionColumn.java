@@ -9,7 +9,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilt
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
-import org.complitex.common.web.component.ajax.AjaxLinkPanel;
+import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class FilteredActionColumn<T> implements IColumn<T, String>, IFilteredCol
         RepeatingView repeatingView = new RepeatingView(componentId);
 
         for (Action<T> action : actions){
-            repeatingView.add(new AjaxLinkPanel(repeatingView.newChildId(), action.getNameModel()) {
+            repeatingView.add(new AjaxLinkLabel(repeatingView.newChildId(), action.getNameModel()) {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     if (action.isConfirm()){
