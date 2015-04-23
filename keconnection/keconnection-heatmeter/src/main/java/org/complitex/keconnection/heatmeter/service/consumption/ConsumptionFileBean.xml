@@ -27,6 +27,8 @@
             <if test="object.type != null">and `type` = #{object.type}</if>
             <if test="object.status != null">and `status` = #{object.status}</if>
             <if test="object.checkSum != null">and `check_sum` = #{object.checkSum}</if>
+            <if test="object.loaded != null">and `loaded` = #{object.loaded}</if>
+            <if test="object.status != null">and `status` = #{object.status}</if>
         </where>
     </sql>
 

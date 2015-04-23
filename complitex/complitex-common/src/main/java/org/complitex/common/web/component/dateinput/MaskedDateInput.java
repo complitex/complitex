@@ -3,9 +3,11 @@ package org.complitex.common.web.component.dateinput;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.common.web.component.DatePicker;
+import org.odlabs.wiquery.core.javascript.JsQuery;
 import org.odlabs.wiquery.ui.datepicker.DateOption;
 
 import java.util.Date;
@@ -96,11 +98,8 @@ public class MaskedDateInput extends DatePicker<Date> {
         }
 
         response.render(CssHeaderItem.forReference(new PackageResourceReference(MaskedDateInput.class, "jquery.masked_dateinput.css")));
+        response.render(OnDomReadyHeaderItem.forScript(new JsQuery(this).$()
+                .chain("mask_dateinput", options.getOptions().getJavaScriptOptions()).render()));
 
-        //todo fix masked date input
-//        @Override
-//        public JsStatement statement() {
-//            return super.statement().chain("mask_dateinput", options.getOptions().getJavaScriptOptions());
-//        }
     }
 }

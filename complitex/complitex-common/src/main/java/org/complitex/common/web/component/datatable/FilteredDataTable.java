@@ -20,6 +20,7 @@ import org.complitex.common.web.component.paging.AjaxNavigationToolbar;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +67,9 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
                 column = getColumn(field, f);
 
                 if (column == null){
-                    if (f.getType().isEnum()){
+                    if (f.getType().equals(Date.class)){
+                        column = new DateColumn<>(new ResourceModel(field), field, field);
+                    }else if (f.getType().isEnum()){
                         //noinspection unchecked
                         column = new EnumColumn(new ResourceModel(field), field, f.getType(), getLocale());
                     }else {

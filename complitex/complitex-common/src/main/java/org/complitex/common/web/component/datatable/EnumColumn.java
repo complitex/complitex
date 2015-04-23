@@ -50,4 +50,9 @@ public class EnumColumn<T, Y extends Enum<Y>> extends ChoiceFilteredPropertyColu
             }
         };
     }
+
+    @Override
+    protected boolean enableAutoSubmit() {
+        return false;
+    }
 }
