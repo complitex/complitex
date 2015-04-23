@@ -49,7 +49,7 @@
             <choose>
                 <when test="like">and c.`correction` like concat('%', #{object.correction},'%')</when>
                 <when test="regexp">and c.`correction` rlike #{object.correction}</when>
-                <otherwise>and c.`correction` = #{object.correction}</otherwise>
+                <otherwise>and upper(c.`correction`) = upper(#{object.correction})</otherwise>
             </choose>
         </if>
         <if test="object.beginDate != null">and c.`begin_date` = #{object.beginDate}</if>

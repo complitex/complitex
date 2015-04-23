@@ -49,28 +49,11 @@ public class StringUtil {
 
         return dots;
     }
-    private static final Map<Character, Character> TO_CYRILLIC_MAP = ImmutableMap.<Character, Character>builder().
-            put('a', 'а').
-            put('A', 'А').
-            put('T', 'Т').
-            put('x', 'х').
-            put('X', 'Х').
-            put('k', 'к').
-            put('K', 'К').
-            put('M', 'М').
-            put('e', 'е').
-            put('E', 'Е').
-            put('o', 'о').
-            put('O', 'О').
-            put('p', 'р').
-            put('P', 'Р').
-            put('c', 'с').
-            put('C', 'С').
-            put('B', 'В').
-            put('H', 'Н').
-            put('i', 'і').
-            put('I', 'І').
-            build();
+    private static final Map<Character, Character> TO_CYRILLIC_MAP = ImmutableMap.<Character, Character>builder()
+            .put('a', 'а').put('A', 'А').put('T', 'Т').put('x', 'х').put('X', 'Х').put('k', 'к').put('K', 'К')
+            .put('M', 'М').put('e', 'е').put('E', 'Е').put('o', 'о').put('O', 'О').put('p', 'р').put('P', 'Р')
+            .put('c', 'с').put('C', 'С').put('B', 'В').put('i', 'і').put('I', 'І').put('Ї', 'Є').put('Ў', 'І')
+            .put('∙', 'ї').put('°', 'Ї').build();
 
     public static String toCyrillic(String str) {
         if (str == null) {

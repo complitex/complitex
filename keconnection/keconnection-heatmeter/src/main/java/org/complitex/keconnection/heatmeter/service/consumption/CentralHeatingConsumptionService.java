@@ -11,6 +11,7 @@ import org.complitex.address.entity.LocalAddress;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.BroadcasterService;
 import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.StringUtil;
 import org.complitex.correction.exception.ResolveAddressException;
 import org.complitex.correction.service.AddressCorrectionService;
 import org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption;
@@ -26,6 +27,7 @@ import javax.ejb.Stateless;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author inheaven on 20.03.2015 0:57.
@@ -82,8 +84,10 @@ public class CentralHeatingConsumptionService {
                         c.setOrganizationCode(getStringValue(evaluator, r.getCell(2)));
                         c.setBuildingCode(getStringValue(evaluator, r.getCell(3)));
                         c.setAccountNumber(getStringValue(evaluator, r.getCell(4)));
-                        c.setStreet(getStringValue(evaluator, r.getCell(5)));
-                        c.setBuildingNumber(getStringValue(evaluator, r.getCell(6)));
+                        c.setStreet(Optional.ofNullable(getStringValue(evaluator, r.getCell(5)))
+                                .map(String::toUpperCase).orElse(null));
+                        c.setBuildingNumber(Optional.ofNullable(getStringValue(evaluator, r.getCell(6)))
+                                .map(String::toUpperCase).orElse(null));
                         c.setCommonVolume(getStringValue(evaluator, r.getCell(7)));
                         c.setApartmentRange(getStringValue(evaluator, r.getCell(8)));
                         c.setBeginDate(getStringValue(evaluator, r.getCell(9)));
@@ -138,7 +142,7 @@ public class CentralHeatingConsumptionService {
             return toString(cell.getNumericCellValue());
         }
 
-        return Strings.emptyToNull(cell.getStringCellValue().trim());
+        return Strings.emptyToNull(StringUtil.toCyrillic(cell.getStringCellValue().trim()));
     }
 
 
