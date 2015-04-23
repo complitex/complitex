@@ -16,6 +16,11 @@ public class AddressParser {
         if (pos > 0 && pos < street.length() - 1){
             streetArray[0] = street.substring(0, pos).trim();
             streetArray[1] = street.substring(pos + 1).trim();
+
+            pos = streetArray[1].indexOf(',');
+            if (pos > 0){
+                streetArray[1] = streetArray[1].substring(0, pos);
+            }
         }
 
         return streetArray;
