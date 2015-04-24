@@ -2,10 +2,12 @@ package org.complitex.keconnection.heatmeter.entity;
 
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus;
 
+import java.io.Serializable;
+
 /**
  * @author inheaven on 023 23.04.15 19:25
  */
-public class ConsumptionStatusFilter {
+public class ConsumptionStatusFilter implements Serializable{
     private ConsumptionStatus status;
     private String message;
     private Integer count;

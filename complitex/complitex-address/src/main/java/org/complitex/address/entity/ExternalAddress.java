@@ -38,8 +38,7 @@ public class ExternalAddress implements Serializable{
         this.userOrganizationId = userOrganizationId;
     }
 
-    public ExternalAddress(String city, String streetType, String street, String buildingNumber) {
-        this.city = city;
+    public ExternalAddress(String streetType, String street, String buildingNumber) {
         this.streetType = streetType;
         this.street = street;
         this.buildingNumber = buildingNumber;

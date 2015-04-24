@@ -49,7 +49,7 @@ public class CentralHeatingConsumption extends AbstractEntity {
     public ExternalAddress getExternalAddress(){
         String[] streetArray = AddressParser.parseStreet(street);
 
-        return new ExternalAddress("КИЇВ", streetArray[0], streetArray[1], buildingNumber);
+        return new ExternalAddress(streetArray[0], streetArray[1], buildingNumber);
     }
 
     public Long getConsumptionFileId() {

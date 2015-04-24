@@ -1,14 +1,15 @@
 package org.complitex.address.strategy.street;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.resource.CommonResources;
 import org.complitex.address.strategy.street.web.edit.StreetTypeComponent;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
@@ -291,13 +292,8 @@ public class StreetStrategy extends TemplateStrategy {
     }
 
     public String getName(DomainObject street, Locale locale) {
-        return StringCultures.getValue(Iterables.find(street.getAttributes(), new Predicate<Attribute>() {
-
-            @Override
-            public boolean apply(Attribute attr) {
-                return attr.getAttributeTypeId().equals(NAME);
-            }
-        }).getStringCultures(), locale);
+        return StringCultures.getValue(Iterables.find(street.getAttributes(),
+                attr -> attr.getAttributeTypeId().equals(NAME)).getStringCultures(), locale);
     }
 
     @Override
@@ -315,9 +311,13 @@ public class StreetStrategy extends TemplateStrategy {
         return sqlSession().selectList(STREET_NS + ".selectStreetObjectIds", parameter);
     }
 
-    public List<Long> getStreetObjectIdsByDistrict(Long cityObjectId, String street, Long osznId) {
+    public List<Long> getStreetObjectIdsByDistrict(Long cityObjectId, String street, Long organizationId) {
         return sqlSession().selectList(STREET_NS + ".selectStreetObjectIdsByDistrict",
-                ImmutableMap.of("street", toCyrillic(street), "cityId", cityObjectId, "osznId", osznId));
+                new HashMap<String, Object>(){{
+                    put("street", street);
+                    put("cityId", cityObjectId);
+                    put("organizationId", organizationId);
+                }});
     }
 
     public List<Long> getStreetObjectIdsByBuilding(Long cityId, String street, String buildingNumber, String buildingCorp) {

@@ -85,14 +85,15 @@
             and s.`object_id` = street_attr_name.`object_id` and street_attr_name.`attribute_type_id` = 300)
           join `street_string_culture` street_name on (street_name.`id` = street_attr_name.`value_id`)
         where s.`status` = 'ACTIVE' and s.`parent_entity_id` = 400
-          and s.`parent_id` = #{cityId} and street_name.`value` = #{street}
+          <if test="cityId != null"> and s.`parent_id` = #{cityId}</if>
+          and street_name.`value` = #{street}
           and exists(
             select 1 from `building_address` addr
               join `building` b on (b.`status` = 'ACTIVE' and ((b.`parent_id` = addr.`object_id` and b.`parent_entity_id` = 1500)
                 or exists(select 1 from `building_attribute` ba where ba.`object_id` = b.`object_id` and ba.`status` = 'ACTIVE'
                   and ba.`attribute_type_id` = 501 and ba.`value_id` = addr.`object_id`)))
               join `building_attribute` dstr on (dstr.`status` = 'ACTIVE' and dstr.`object_id` = b.`object_id`)
-              join `organization_attribute` oa on (oa.`status` = 'ACTIVE' and oa.`object_id` = #{osznId}
+              join `organization_attribute` oa on (oa.`status` = 'ACTIVE' and oa.`object_id` = #{organizationId}
                 and oa.`attribute_type_id` = 902)
             where addr.`status` = 'ACTIVE' and addr.`parent_id` = s.`object_id` and addr.`parent_entity_id` = 300
               and dstr.`value_id` = oa.`value_id` )
@@ -110,7 +111,9 @@
         JOIN `building_address_string_culture` num ON (num.`id` = num_attr.`value_id` AND num.`value` = #{number})
         LEFT JOIN `building_address_attribute` corp_attr ON (corp_attr.`status` = 'ACTIVE' AND corp_attr.`object_id` = addr.`object_id` AND corp_attr.`attribute_type_id` = 1501)
         LEFT JOIN `building_address_string_culture` corp ON (corp.`id` = corp_attr.`value_id`)
-        WHERE s.`status` = 'ACTIVE' AND s.`parent_id` = #{cityId} AND s.`parent_entity_id` = 400
+        WHERE s.`status` = 'ACTIVE'
+        <if test="cityId != null">AND s.`parent_id` = #{cityId}</if>
+        AND s.`parent_entity_id` = 400
         AND
         <choose>
             <when test="corp == null">

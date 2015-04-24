@@ -67,7 +67,7 @@ public class AddressCorrectionService {
         } else if (cityCorrections.size() > 1) {
 
             throw new ResolveAddressException("MORE_ONE_LOCAL_CITY_CORRECTION");
-        } else {
+        } else if (externalAddress.getCity() != null){
             List<Long> cityIds = addressCorrectionBean.getCityIds(externalAddress.getCity());
 
             if (cityIds.size() == 1) {
@@ -138,6 +138,7 @@ public class AddressCorrectionService {
                     localAddress.setStreetId(streetObjectId);
 
                     DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
+                    localAddress.setCityId(streetObject.getParentId());
                     localAddress.setStreetTypeId(streetStrategy.getStreetType(streetObject));
 
                     //перейти к обработке дома
@@ -150,9 +151,9 @@ public class AddressCorrectionService {
                         Long streetObjectId = streetIds.get(0);
                         localAddress.setStreetId(streetObjectId);
 
-
                         DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
                         localAddress.setStreetTypeId(streetStrategy.getStreetType(streetObject));
+                        localAddress.setCityId(streetObject.getParentId());
 
                         //перейти к обработке дома
                     } else {
@@ -166,6 +167,7 @@ public class AddressCorrectionService {
 
                             DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
                             localAddress.setStreetTypeId(streetStrategy.getStreetType(streetObject));
+                            localAddress.setCityId(streetObject.getParentId());
 
                             //проставить дом для payment и выйти
                             List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(localAddress.getCityId(),
@@ -202,6 +204,7 @@ public class AddressCorrectionService {
 
                 DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
                 localAddress.setStreetTypeId(streetStrategy.getStreetType(streetObject));
+                localAddress.setCityId(streetObject.getParentId());
 
                 // перейти к обработке дома
             } else if (streetIds.size() > 1) { // нашли более одной улицы
@@ -215,6 +218,7 @@ public class AddressCorrectionService {
 
                     DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
                     localAddress.setStreetTypeId(streetStrategy.getStreetType(streetObject));
+                    localAddress.setCityId(streetObject.getParentId());
                     // перейти к обработке дома
                 } else {
                     // пытаемся искать дополнительно по номеру и корпусу дома
