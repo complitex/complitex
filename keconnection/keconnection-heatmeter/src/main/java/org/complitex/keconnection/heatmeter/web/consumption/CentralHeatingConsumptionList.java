@@ -3,15 +3,18 @@ package org.complitex.keconnection.heatmeter.web.consumption;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.ExternalAddress;
+import org.complitex.address.entity.LocalAddress;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
@@ -65,8 +68,16 @@ public class CentralHeatingConsumptionList extends TemplatePage{
         add(messages);
 
         //status
-        add(new ListView<ConsumptionStatusFilter>("statusFilter",
-                centralHeatingConsumptionBean.getStatusFilters(consumptionFile.getId())) {
+        WebMarkupContainer statusContainer = new WebMarkupContainer("statusContainer");
+        statusContainer.setOutputMarkupId(true);
+        add(statusContainer);
+
+        statusContainer.add(new ListView<ConsumptionStatusFilter>("statusFilter",
+                new LoadableDetachableModel<List<? extends ConsumptionStatusFilter>>() {
+                    @Override
+                    protected List<? extends ConsumptionStatusFilter> load() {
+                        return centralHeatingConsumptionBean.getStatusFilters(consumptionFile.getId());
+                    }}) {
             @Override
             protected void populateItem(ListItem<ConsumptionStatusFilter> item) {
                 ConsumptionStatusFilter statusFilter = item.getModelObject();
@@ -91,9 +102,15 @@ public class CentralHeatingConsumptionList extends TemplatePage{
             @Override
             protected void onCorrect(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model,
                                      AddressEntity addressEntity) {
-                centralHeatingConsumptionService.bind(consumptionFile, model.getObject());
+                CentralHeatingConsumption consumption = model.getObject();
 
-                target.add(filteredDataTable);
+                //todo async rebind
+                centralHeatingConsumptionBean.getCentralHeatingConsumptions(FilterWrapper.of(
+                        new CentralHeatingConsumption(consumption.getConsumptionFileId(), consumption.getStatus())))
+                        .parallelStream()
+                        .forEach(c -> centralHeatingConsumptionService.bind(consumptionFile, c));
+
+                target.add(filteredDataTable, statusContainer);
             }
         };
         add(addressCorrectionDialog);
@@ -108,7 +125,15 @@ public class CentralHeatingConsumptionList extends TemplatePage{
                 externalAddress.setOrganizationId(consumptionFile.getServiceProviderId());
                 externalAddress.setUserOrganizationId(consumptionFile.getUserOrganizationId());
 
-                addressCorrectionDialog.open(target, model, null, externalAddress, model.getObject().getLocalAddress());
+                LocalAddress localAddress = model.getObject().getLocalAddress();
+
+                AddressEntity addressEntity = localAddress.getFirstEmptyAddressEntity();
+
+                if (addressEntity.equals(AddressEntity.CITY)){
+                    addressEntity = AddressEntity.STREET;
+                }
+
+                addressCorrectionDialog.open(target, model, null, addressEntity, externalAddress, localAddress);
             }
 
             @Override

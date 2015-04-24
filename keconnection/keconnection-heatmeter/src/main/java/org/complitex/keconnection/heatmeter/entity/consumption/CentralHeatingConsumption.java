@@ -37,13 +37,18 @@ public class CentralHeatingConsumption extends AbstractEntity {
     private ConsumptionStatus status;
     private String message;
 
-    private LocalAddress localAddress;
+    private LocalAddress localAddress = new LocalAddress();
 
     public CentralHeatingConsumption() {
     }
 
     public CentralHeatingConsumption(Long consumptionFileId) {
         this.consumptionFileId = consumptionFileId;
+    }
+
+    public CentralHeatingConsumption(Long consumptionFileId, ConsumptionStatus status) {
+        this.consumptionFileId = consumptionFileId;
+        this.status = status;
     }
 
     public ExternalAddress getExternalAddress(){
