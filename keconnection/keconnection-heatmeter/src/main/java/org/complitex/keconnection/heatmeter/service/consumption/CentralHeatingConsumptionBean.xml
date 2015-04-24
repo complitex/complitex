@@ -88,10 +88,24 @@
 
     <update id="updateCentralHeatingConsumption" parameterType="org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption">
         update central_heating_consumption
-        set `city_id` = #{localAddress.cityId},
+        set
+            `number` = #{number},
+            `district_code` = #{districtCode},
+            `organization_code` = #{organizationCode},
+            `building_code` = #{buildingCode},
+            `account_number` = #{accountNumber},
+            `street` = #{street},
+            `building_number` = #{buildingNumber},
+            `common_volume` = #{commonVolume},
+            `apartment_range` = #{apartmentRange},
+            `begin_date` = #{beginDate},
+            `end_date` = #{endDate},
+
+            `city_id` = #{localAddress.cityId},
             `street_type_id` = #{localAddress.streetTypeId},
             `street_id` = #{localAddress.streetId},
             `building_id` = #{localAddress.buildingId},
+
             `status` = #{status},
             `message` = #{message}
         where `id` = #{id}

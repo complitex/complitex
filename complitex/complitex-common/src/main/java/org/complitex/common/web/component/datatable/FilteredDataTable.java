@@ -8,11 +8,11 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolb
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextFilteredPropertyColumn;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.web.component.paging.AjaxNavigationToolbar;
@@ -73,7 +73,12 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
                         //noinspection unchecked
                         column = new EnumColumn(new ResourceModel(field), field, f.getType(), getLocale());
                     }else {
-                        column = new TextFilteredPropertyColumn<T, FilterWrapper<T>, String>(new ResourceModel(field), field, field);
+                        column = new EditableColumn<T>(field) {
+                            @Override
+                            protected boolean isEdit(String propertyExpression, IModel<T> rowModel) {
+                                return FilteredDataTable.this.isEdit(propertyExpression, rowModel);
+                            }
+                        };
                     }
                 }
             }
@@ -127,5 +132,9 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
     }
 
     protected void onInit(FilterWrapper<T> filterWrapper){
+    }
+
+    protected boolean isEdit(String field, IModel<T> rowModel){
+        return false;
     }
 }

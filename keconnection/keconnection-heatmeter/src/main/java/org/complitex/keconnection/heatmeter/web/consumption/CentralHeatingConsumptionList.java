@@ -40,7 +40,7 @@ import java.util.Optional;
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class CentralHeatingConsumptionList extends TemplatePage{
     private final static String[] FIELDS = {"id", "number", "districtCode", "organizationCode", "buildingCode", "accountNumber",
-            "street", "buildingNumber", "commonVolume", "apartmentRange", "beginDate", "endDate", "status", "message"};
+            "street", "buildingNumber", "apartmentRange", "commonVolume", "beginDate", "endDate", "status", "message"};
 
     @EJB
     private ConsumptionFileBean consumptionFileBean;
@@ -52,6 +52,8 @@ public class CentralHeatingConsumptionList extends TemplatePage{
     private CentralHeatingConsumptionService centralHeatingConsumptionService;
 
     private FilteredDataTable<CentralHeatingConsumption> filteredDataTable;
+
+    private IModel<Long> editRowModel = Model.of(-1L);
 
     public CentralHeatingConsumptionList(PageParameters pageParameters) {
         ConsumptionFile consumptionFile = consumptionFileBean.getConsumptionFile(pageParameters.get("id").toLongObject());
@@ -96,7 +98,9 @@ public class CentralHeatingConsumptionList extends TemplatePage{
         };
         add(addressCorrectionDialog);
 
+        //actions
         List<Action<CentralHeatingConsumption>> actions = new ArrayList<>();
+
         actions.add(new Action<CentralHeatingConsumption>("correct") {
             @Override
             public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
@@ -113,6 +117,50 @@ public class CentralHeatingConsumptionList extends TemplatePage{
             }
         });
 
+        actions.add(new Action<CentralHeatingConsumption>("edit") {
+            @Override
+            public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
+                editRowModel.setObject(model.getObject().getId());
+
+                target.add(filteredDataTable);
+            }
+
+            @Override
+            public boolean isVisible(IModel<CentralHeatingConsumption> model) {
+                return editRowModel.getObject().equals(-1L);
+            }
+        });
+
+        actions.add(new Action<CentralHeatingConsumption>("save") {
+            @Override
+            public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
+                centralHeatingConsumptionBean.save(model.getObject());
+
+                editRowModel.setObject(-1L);
+                target.add(filteredDataTable);
+            }
+
+            @Override
+            public boolean isVisible(IModel<CentralHeatingConsumption> model) {
+                return editRowModel.getObject().equals(model.getObject().getId());
+            }
+        });
+
+
+        actions.add(new Action<CentralHeatingConsumption>("cancel") {
+            @Override
+            public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
+                editRowModel.setObject(-1L);
+                target.add(filteredDataTable);
+            }
+
+            @Override
+            public boolean isVisible(IModel<CentralHeatingConsumption> model) {
+                return editRowModel.getObject().equals(model.getObject().getId());
+            }
+        });
+
+        //table
         add(filteredDataTable = new FilteredDataTable<CentralHeatingConsumption>("dataTable",
                 CentralHeatingConsumption.class, null, actions, FIELDS) {
             @Override
@@ -128,6 +176,15 @@ public class CentralHeatingConsumptionList extends TemplatePage{
             @Override
             public Long getCount(FilterWrapper<CentralHeatingConsumption> filterWrapper) {
                 return centralHeatingConsumptionBean.getCentralHeatingConsumptionsCount(filterWrapper);
+            }
+
+            @Override
+            protected boolean isEdit(String field, IModel<CentralHeatingConsumption> rowModel) {
+                if (field.equals("id")){
+                    return false;
+                }
+
+                return editRowModel.getObject().equals(rowModel.getObject().getId());
             }
         });
 

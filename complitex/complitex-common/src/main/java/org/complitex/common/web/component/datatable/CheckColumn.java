@@ -23,7 +23,7 @@ public class CheckColumn<T> implements IColumn<T, String>, IFilteredColumn<T, St
 
     @Override
     public Component getHeader(String componentId) {
-        return PanelWrapper.of(componentId, new CheckGroupSelector(PanelWrapper.ID), PanelWrapper.TYPE.CHECKBOX);
+        return PanelWrapper.of(componentId, new CheckGroupSelector(PanelWrapper.ID), PanelWrapper.TYPE.INPUT_CHECKBOX);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CheckColumn<T> implements IColumn<T, String>, IFilteredColumn<T, St
 
     @Override
     public void populateItem(Item<ICellPopulator<T>> cellItem, String componentId, IModel<T> rowModel) {
-        cellItem.add(PanelWrapper.of(componentId, new Check<>(PanelWrapper.ID, rowModel), PanelWrapper.TYPE.CHECKBOX));
+        cellItem.add(PanelWrapper.of(componentId, new Check<>(PanelWrapper.ID, rowModel), PanelWrapper.TYPE.INPUT_CHECKBOX));
     }
 
     @Override

@@ -11,13 +11,27 @@ import org.apache.wicket.model.Model;
  *         Date: 21.04.2014 18:15
  */
 public class TextFieldPanel<T> extends Panel {
+    private TextField<T> textField;
+
     public TextFieldPanel(String id, IModel<T> model, Class type, int size) {
         super(id, model);
 
-        add(new TextField<>("text_field", model)
-                .setConvertEmptyInputStringToNull(true)
+        add(textField = new TextField<>("text_field", model));
+        textField.setConvertEmptyInputStringToNull(true)
                 .setType(type)
                 .setLabel(Model.of(id))
-                .add(AttributeModifier.replace("size", size)));
+                .add(AttributeModifier.replace("size", size));
+    }
+
+    public TextFieldPanel(String id, IModel<T> model) {
+        super(id, model);
+
+        add(textField = new TextField<>("text_field", model));
+        textField.setConvertEmptyInputStringToNull(true)
+                .setLabel(Model.of(id));
+    }
+
+    public TextField<T> getTextField() {
+        return textField;
     }
 }

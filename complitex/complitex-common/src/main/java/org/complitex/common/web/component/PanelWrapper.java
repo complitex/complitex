@@ -13,7 +13,7 @@ import org.apache.wicket.util.resource.StringResourceStream;
 public class PanelWrapper extends Panel implements IMarkupResourceStreamProvider {
     public final static String ID = "componentId";
 
-    public enum TYPE{CHECKBOX, TEXT}
+    public enum TYPE{INPUT_CHECKBOX, INPUT_TEXT}
 
     private TYPE type;
 
@@ -34,10 +34,10 @@ public class PanelWrapper extends Panel implements IMarkupResourceStreamProvider
         String markup = "";
 
         switch (type){
-            case CHECKBOX:
+            case INPUT_CHECKBOX:
                 markup = "<wicket:panel><input type=\"checkbox\" wicket:id=\"" + ID + "\"/></wicket:panel>";
                 break;
-            case TEXT:
+            case INPUT_TEXT:
                 markup = "<wicket:panel><input type=\"text\" wicket:id=\"" + ID + "\"/></wicket:panel>";
                 break;
         }
