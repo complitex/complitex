@@ -216,8 +216,6 @@ public class CentralHeatingConsumptionService {
                     c.setStatus(ConsumptionStatus.LOCAL_STREET_TYPE_UNRESOLVED);
                     break;
                 case CITY:
-                    c.setStatus(ConsumptionStatus.LOCAL_CITY_UNRESOLVED);
-                    break;
                 case STREET:
                     c.setStatus(ConsumptionStatus.LOCAL_STREET_UNRESOLVED);
                     break;
