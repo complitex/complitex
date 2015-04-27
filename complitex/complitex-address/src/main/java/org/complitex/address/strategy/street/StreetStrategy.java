@@ -243,11 +243,13 @@ public class StreetStrategy extends TemplateStrategy {
         Long streetTypeId = getStreetType(streetObject);
         params.put("streetTypeId", streetTypeId);
         List<Long> results = sqlSession().selectList(STREET_NS + ".defaultValidation", params);
+
         for (Long result : results) {
             if (!result.equals(streetObject.getObjectId())) {
                 return result;
             }
         }
+
         return null;
     }
 

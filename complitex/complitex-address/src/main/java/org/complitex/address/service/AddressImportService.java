@@ -680,6 +680,7 @@ public class AddressImportService extends AbstractImportService {
 
                 // сначала ищем улицу в системе с таким названием, типом и родителем(городом)
                 final Long existingStreetId = streetStrategy.performDefaultValidation(newObject, Locales.getSystemLocale());
+
                 if (existingStreetId != null) {  // нашли дубликат
                     DomainObject existingStreet = streetStrategy.getDomainObject(existingStreetId, true);
                     String existingStreetExternalId = existingStreet.getExternalId();

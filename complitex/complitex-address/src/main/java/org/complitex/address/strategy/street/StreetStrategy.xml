@@ -2,8 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.complitex.address.strategy.street.StreetStrategy">
-    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
-
     <select id="selectDomainObjects" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
         SELECT e.* FROM `street` e WHERE
