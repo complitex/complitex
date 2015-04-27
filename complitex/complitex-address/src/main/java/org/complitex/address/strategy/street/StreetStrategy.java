@@ -145,7 +145,8 @@ public class StreetStrategy extends TemplateStrategy {
         return ImmutableList.of("country", "region", "city");
     }
 
-    private void configureExampleImpl(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
+    @Override
+    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
             AttributeFilter attrExample = example.getAttributeExample(NAME);
             if (attrExample == null) {
@@ -154,37 +155,29 @@ public class StreetStrategy extends TemplateStrategy {
             }
             attrExample.setValue(searchTextInput);
         }
+
         Long districtId = ids.get("district");
+
         if (districtId != null) {
             example.addAdditionalParam("district", districtId);
         }
+
         Long cityId = ids.get("city");
+
         if (cityId != null && cityId > 0) {
             example.setParentId(cityId);
             example.setParentEntity("city");
-        } else {
-            example.setParentId(-1L);
-            example.setParentEntity("");
         }
-    }
-
-    @Override
-    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
-        configureExampleImpl(example, ids, searchTextInput);
     }
 
     @Override
     public ISearchCallback getSearchCallback() {
-        return new ISearchCallback(){
+        return (component, ids, target) -> {
+            DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
 
-            @Override
-            public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
-                DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
-
-                if (list != null) {
-                    configureExampleImpl(list.getFilter(), ids, null);
-                    list.refreshContent(target);
-                }
+            if (list != null) {
+                configureExample(list.getFilter(), ids, null);
+                list.refreshContent(target);
             }
         };
     }
@@ -301,18 +294,18 @@ public class StreetStrategy extends TemplateStrategy {
         return new String[]{SecurityRole.ADDRESS_MODULE_VIEW};
     }
 
-    public List<Long> getStreetObjectIds(Long cityObjectId, Long streetTypeObjectId, String streetName){
+    public List<Long> getStreetIds(Long cityObjectId, Long streetTypeObjectId, String streetName){
         Map<String, Object> parameter = new HashMap<>();
 
-        parameter.put("cityObjectId", cityObjectId);
-        parameter.put("streetTypeObjectId", streetTypeObjectId);
+        parameter.put("cityId", cityObjectId);
+        parameter.put("streetTypeId", streetTypeObjectId);
         parameter.put("streetName", streetName);
 
-        return sqlSession().selectList(STREET_NS + ".selectStreetObjectIds", parameter);
+        return sqlSession().selectList(STREET_NS + ".selectStreetIds", parameter);
     }
 
-    public List<Long> getStreetObjectIdsByDistrict(Long cityObjectId, String street, Long organizationId) {
-        return sqlSession().selectList(STREET_NS + ".selectStreetObjectIdsByDistrict",
+    public List<Long> getStreetIdsByDistrict(Long cityObjectId, String street, Long organizationId) {
+        return sqlSession().selectList(STREET_NS + ".selectStreetIdsByDistrict",
                 new HashMap<String, Object>(){{
                     put("street", street);
                     put("cityId", cityObjectId);
@@ -329,7 +322,7 @@ public class StreetStrategy extends TemplateStrategy {
         String preparedCorp = removeWhiteSpaces(toCyrillic(buildingCorp));
         params.put("corp", Strings.isEmpty(preparedCorp) ? null : preparedCorp);
 
-        return sqlSession().selectList(STREET_NS + ".selectStreetObjectIdsByBuilding", params);
+        return sqlSession().selectList(STREET_NS + ".selectStreetIdsByBuilding", params);
     }
 
 }

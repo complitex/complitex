@@ -111,8 +111,10 @@ public class AddressCorrectionService {
         if (streetCorrections.size() == 1){
             StreetCorrection streetCorrection = streetCorrections.get(0);
 
-            localAddress.setCityId(streetCorrection.getCityId());
-            localAddress.setStreetTypeId(streetCorrection.getStreetTypeId());
+            DomainObject streetObject = streetStrategy.getDomainObject(streetCorrection.getObjectId(), true);
+
+            localAddress.setCityId(streetObject.getParentId());
+            localAddress.setStreetTypeId(streetStrategy.getStreetType(streetObject));
             localAddress.setStreetId(streetCorrection.getObjectId());
         }else if (streetCorrections.size() > 1) {
             //сформируем множество названий
@@ -130,7 +132,7 @@ public class AddressCorrectionService {
                 String streetName = Lists.newArrayList(streetNames).get(0);
 
                 //находим ids улиц по внутреннему названию
-                List<Long> streetIds = streetStrategy.getStreetObjectIds(localAddress.getCityId(),
+                List<Long> streetIds = streetStrategy.getStreetIds(localAddress.getCityId(),
                         localAddress.getStreetTypeId(), streetName);
 
                 if (streetIds.size() == 1) { //нашли ровно одну улицу
@@ -144,7 +146,7 @@ public class AddressCorrectionService {
                     //перейти к обработке дома
                 } else if (streetIds.size() > 1) { // нашли больше одной улицы
                     //пытаемся найти по району
-                    streetIds = streetStrategy.getStreetObjectIdsByDistrict(localAddress.getCityId(),
+                    streetIds = streetStrategy.getStreetIdsByDistrict(localAddress.getCityId(),
                             externalAddress.getStreet(), externalAddress.getOrganizationId());
 
                     if (streetIds.size() == 1) { //нашли ровно одну улицу по району
@@ -195,7 +197,7 @@ public class AddressCorrectionService {
             }
         } else { // в коррекциях не нашли ни одного соответствия на внутренние объекты улиц
             // ищем по внутреннему справочнику улиц
-            List<Long> streetIds = streetStrategy.getStreetObjectIds(localAddress.getCityId(),
+            List<Long> streetIds = streetStrategy.getStreetIds(localAddress.getCityId(),
                     localAddress.getStreetTypeId(), externalAddress.getStreet());
 
             if (streetIds.size() == 1) { // нашли ровно одну улицу
@@ -209,7 +211,7 @@ public class AddressCorrectionService {
                 // перейти к обработке дома
             } else if (streetIds.size() > 1) { // нашли более одной улицы
                 //пытаемся найти по району
-                streetIds = streetStrategy.getStreetObjectIdsByDistrict(localAddress.getCityId(),
+                streetIds = streetStrategy.getStreetIdsByDistrict(localAddress.getCityId(),
                         externalAddress.getStreet(), externalAddress.getOrganizationId());
 
                 if (streetIds.size() == 1) { //нашли ровно одну улицу по району

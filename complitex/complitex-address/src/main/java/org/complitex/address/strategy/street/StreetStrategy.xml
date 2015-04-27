@@ -66,7 +66,7 @@
             </choose>
     </select>
 
-    <select id="selectStreetObjectIds" parameterType="map" resultType="long">
+    <select id="selectStreetIds" parameterType="map" resultType="long">
         select distinct s.`object_id` from `street` s
           join `street_attribute` a_st on (a_st.`status` = 'ACTIVE'
             and s.`object_id` = a_st.`object_id` and a_st.`value_type_id` = 301)
@@ -79,7 +79,7 @@
           <if test="streetName != null">and sc.`value` = #{streetName}</if>
     </select>
 
-    <select id="selectStreetObjectIdsByDistrict" parameterType="map" resultType="long">
+    <select id="selectStreetIdsByDistrict" parameterType="map" resultType="long">
         select distinct s.`object_id` from `street` s
           join `street_attribute` street_attr_name on (street_attr_name.`status` = 'ACTIVE'
             and s.`object_id` = street_attr_name.`object_id` and street_attr_name.`attribute_type_id` = 300)
@@ -99,7 +99,7 @@
               and dstr.`value_id` = oa.`value_id` )
     </select>
 
-    <select id="selectStreetObjectIdsByBuilding" parameterType="map" resultType="long">
+    <select id="selectStreetIdsByBuilding" parameterType="map" resultType="long">
         SELECT DISTINCT s.`object_id`
         FROM `street` s
         JOIN `street_attribute` street_attr_name ON (street_attr_name.`status` = 'ACTIVE' AND s.`object_id` = street_attr_name.`object_id`

@@ -168,7 +168,7 @@ public class AddressService extends AbstractBean {
                 String streetName = Lists.newArrayList(streetNames).get(0);
 
                 //находим ids улиц по внутреннему названию
-                List<Long> streetIds = streetStrategy.getStreetObjectIds(data.getCityId(),
+                List<Long> streetIds = streetStrategy.getStreetIds(data.getCityId(),
                         data.getStreetTypeId(), streetName);
 
                 if (streetIds.size() == 1) { //нашли ровно одну улицу
@@ -181,7 +181,7 @@ public class AddressService extends AbstractBean {
                     //перейти к обработке дома
                 } else if (streetIds.size() > 1) { // нашли больше одной улицы
                     //пытаемся найти по району
-                    streetIds = streetStrategy.getStreetObjectIdsByDistrict(data.getCityId(),
+                    streetIds = streetStrategy.getStreetIdsByDistrict(data.getCityId(),
                             data.getStreet(), organizationId);
 
                     if (streetIds.size() == 1) { //нашли ровно одну улицу по району
@@ -231,7 +231,7 @@ public class AddressService extends AbstractBean {
             }
         } else { // в коррекциях не нашли ни одного соответствия на внутренние объекты улиц
             // ищем по внутреннему справочнику улиц
-            List<Long> streetIds = streetStrategy.getStreetObjectIds(data.getCityId(),
+            List<Long> streetIds = streetStrategy.getStreetIds(data.getCityId(),
                     data.getStreetTypeId(), data.getStreet());
 
             if (streetIds.size() == 1) { // нашли ровно одну улицу
@@ -244,7 +244,7 @@ public class AddressService extends AbstractBean {
                 // перейти к обработке дома
             } else if (streetIds.size() > 1) { // нашли более одной улицы
                 //пытаемся найти по району
-                streetIds = streetStrategy.getStreetObjectIdsByDistrict(data.getCityId(), data.getStreet(), organizationId);
+                streetIds = streetStrategy.getStreetIdsByDistrict(data.getCityId(), data.getStreet(), organizationId);
 
                 if (streetIds.size() == 1) { //нашли ровно одну улицу по району
                     Long streetId = streetIds.get(0);

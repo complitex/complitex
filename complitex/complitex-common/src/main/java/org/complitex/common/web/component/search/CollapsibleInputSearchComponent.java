@@ -6,14 +6,15 @@ package org.complitex.common.web.component.search;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.web.component.ShowMode;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -34,7 +35,6 @@ public class CollapsibleInputSearchComponent extends WiQuerySearchComponent {
 
         private PartFragment(String id, List<String> searchFilters) {
             super(id, "partFragment", CollapsibleInputSearchComponent.this);
-            add(newColumnsListView("columns", searchFilters));
             add(newFiltersListView("filters", searchFilters));
         }
     }
@@ -81,16 +81,13 @@ public class CollapsibleInputSearchComponent extends WiQuerySearchComponent {
 
     protected final boolean canHide() {
         final Set<String> searchFiltersSet = new HashSet<String>(getSearchFilters());
-        if (searchFiltersSet.equals(ImmutableSet.of("country"))
+        return !(searchFiltersSet.equals(ImmutableSet.of("country"))
                 || searchFiltersSet.equals(ImmutableSet.of("country", "region"))
                 || searchFiltersSet.equals(ImmutableSet.of("country", "city"))
                 || searchFiltersSet.equals(ImmutableSet.of("country", "region", "city"))
                 || searchFiltersSet.equals(ImmutableSet.of("region", "city"))
                 || searchFiltersSet.equals(ImmutableSet.of("region"))
-                || searchFiltersSet.equals(ImmutableSet.of("city"))) {
-            return false;
-        }
-        return true;
+                || searchFiltersSet.equals(ImmutableSet.of("city")));
     }
 
     public final void toggle(AjaxRequestTarget target) {

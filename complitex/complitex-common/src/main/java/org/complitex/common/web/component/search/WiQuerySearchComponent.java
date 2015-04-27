@@ -1,20 +1,17 @@
 package org.complitex.common.web.component.search;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.PackageResourceReference;
@@ -25,7 +22,6 @@ import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
-import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.wiquery.autocomplete.AbstractAutocompleteComponent;
 import org.complitex.common.web.component.wiquery.autocomplete.AutocompleteAjaxComponent;
@@ -42,6 +38,8 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Sets.newHashSet;
+import static org.complitex.common.entity.DomainObjectFilter.ComparisonType.EQUALITY;
+import static org.complitex.common.entity.DomainObjectFilter.ComparisonType.LIKE;
 
 /**
  *
@@ -166,9 +164,6 @@ public class WiQuerySearchComponent extends Panel {
     protected void init() {
         searchContainer.setOutputMarkupId(true);
 
-        ListView<String> columns = newColumnsListView("columns", searchFilters);
-        searchContainer.add(columns);
-
         initFilterModel();
 
         ListView<String> filters = newFiltersListView("filters", searchFilters);
@@ -197,35 +192,6 @@ public class WiQuerySearchComponent extends Panel {
         return strategyFactory.getStrategy(entity).getSearchTextFieldSize();
     }
 
-    protected ListView<String> newColumnsListView(String id, List<String> searchFilters) {
-        return new ListView<String>("columns", searchFilters) {
-
-            @Override
-            protected void populateItem(ListItem<String> item) {
-                final String entityName = item.getModelObject();
-
-                IModel<String> entityLabelModel = new AbstractReadOnlyModel<String>() {
-
-                    @Override
-                    public String getObject() {
-                        return StringCultures.getValue(strategyFactory.getStrategy(entityName).getEntity().
-                                getNames(), getLocale());
-                    }
-                };
-
-                Label column = new Label("column", entityLabelModel);
-
-                if (showColumns) {
-                    setVisibility(entityName, column);
-                }else {
-                    column.setVisible(false);
-                }
-
-                item.add(column);
-            }
-        };
-    }
-
     protected ListView<String> newFiltersListView(String id, List<String> searchFilters) {
         ListView<String> filters = new ListView<String>(id, searchFilters) {
 
@@ -241,9 +207,14 @@ public class WiQuerySearchComponent extends Panel {
 
                 //size
                 int size = getSize(entity);
+
                 if (size > 0) {
                     autocompleteField.add(AttributeModifier.replace("size", String.valueOf(size)));
                 }
+
+                autocompleteField.add(AttributeModifier.append("placeholder", strategyFactory.getStrategy(entity)
+                        .getEntity().getName(getLocale())));
+
                 item.add(filterComponent);
             }
         };
@@ -282,13 +253,7 @@ public class WiQuerySearchComponent extends Panel {
 
     protected ShowMode getShowMode(final String entity) {
         return getSearchFilterSettings() == null ? getShowModeSetting()
-                : find(getSearchFilterSettings(), new Predicate<SearchFilterSettings>() {
-
-            @Override
-            public boolean apply(SearchFilterSettings input) {
-                return entity.equals(input.getSearchFilter());
-            }
-        }).getShowMode();
+                : find(getSearchFilterSettings(), input -> entity.equals(input.getSearchFilter())).getShowMode();
     }
 
     protected List<DomainObject> getValues(String term, String entity) {
@@ -297,8 +262,8 @@ public class WiQuerySearchComponent extends Panel {
         final Map<String, DomainObject> previousInfo = getState(getIndex(entity) - 1);
         final ShowMode currentShowMode = getShowMode(entity);
 
-        final List<? extends DomainObject> equalToExample = findByExample(entity, term, previousInfo,
-                DomainObjectFilter.ComparisonType.EQUALITY, currentShowMode, AUTO_COMPLETE_SIZE);
+        final List<? extends DomainObject> equalToExample = findByExample(entity, term, previousInfo, EQUALITY,
+                currentShowMode, AUTO_COMPLETE_SIZE);
         choiceList.addAll(equalToExample);
 
         if (equalToExample.size() < AUTO_COMPLETE_SIZE) {
@@ -308,7 +273,7 @@ public class WiQuerySearchComponent extends Panel {
                 idsSet.add(o.getObjectId());
             }
 
-            final List<? extends DomainObject> likeExample = findByExample(entity, term, previousInfo, DomainObjectFilter.ComparisonType.LIKE,
+            final List<? extends DomainObject> likeExample = findByExample(entity, term, previousInfo, LIKE,
                     currentShowMode, AUTO_COMPLETE_SIZE);
 
             final Iterator<? extends DomainObject> likeIterator = likeExample.iterator();
@@ -480,13 +445,7 @@ public class WiQuerySearchComponent extends Panel {
 
     protected final void setEnable(final String entityFilter, Component textField) {
         if (getSearchFilterSettings() != null) {
-            boolean isEnabled = find(getSearchFilterSettings(), new Predicate<SearchFilterSettings>() {
-
-                @Override
-                public boolean apply(SearchFilterSettings settings) {
-                    return settings.getSearchFilter().equals(entityFilter);
-                }
-            }).isEnabled();
+            boolean isEnabled = find(getSearchFilterSettings(), settings -> settings.getSearchFilter().equals(entityFilter)).isEnabled();
             textField.setEnabled(isEnabled);
         } else {
             textField.setEnabled(getEnabledSetting());
@@ -495,13 +454,7 @@ public class WiQuerySearchComponent extends Panel {
 
     protected final boolean setVisibility(final String entityFilter, Component component) {
         if (getSearchFilterSettings() != null) {
-            boolean isVisible = find(getSearchFilterSettings(), new Predicate<SearchFilterSettings>() {
-
-                @Override
-                public boolean apply(SearchFilterSettings settings) {
-                    return settings.getSearchFilter().equals(entityFilter);
-                }
-            }).isVisible();
+            boolean isVisible = find(getSearchFilterSettings(), settings -> settings.getSearchFilter().equals(entityFilter)).isVisible();
             component.setVisible(isVisible);
             return isVisible;
         }
@@ -529,6 +482,7 @@ public class WiQuerySearchComponent extends Panel {
         DomainObjectFilter example = new DomainObjectFilter();
 
         strategy.configureExample(example, WiQuerySearchComponent.<Long>transformToIds(previousInfo), searchTextInput);
+
         example.setOrderByAttributeTypeId(strategy.getDefaultOrderByAttributeId());
         example.setAsc(true);
         example.setCount(size);

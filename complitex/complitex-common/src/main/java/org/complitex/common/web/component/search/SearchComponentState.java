@@ -28,18 +28,8 @@ public class SearchComponentState extends HashMap<String, DomainObject> implemen
         return empty;
     }
 
-    private static boolean isEqual(DomainObject o1, DomainObject o2) {
-        if (o1 == null && o2 == null) {
-            //not changed
-            return true;
-        } else {
-            if (o1 == null || o2 == null) {
-                //changed
-                return false;
-            } else {
-                return Numbers.isEqual(o1.getObjectId(), o2.getObjectId());
-            }
-        }
+    private boolean isEqual(DomainObject o1, DomainObject o2) {
+        return o1 == null && o2 == null || !(o1 == null || o2 == null) && Numbers.isEqual(o1.getObjectId(), o2.getObjectId());
     }
 
     public void updateState(Map<String, ? extends DomainObject> state) {

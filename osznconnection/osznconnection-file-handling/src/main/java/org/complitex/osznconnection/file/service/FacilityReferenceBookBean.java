@@ -253,7 +253,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
                             printStringValue(streetName, locale)));
         } else {
             // искать по внутренней базе улиц
-            List<Long> streetIds = streetStrategy.getStreetObjectIds(cityId, streetTypeId, streetName);
+            List<Long> streetIds = streetStrategy.getStreetIds(cityId, streetTypeId, streetName);
 
             if (streetIds.size() == 1) {
                 long streetId = streetIds.get(0); //todo locate and update from address base

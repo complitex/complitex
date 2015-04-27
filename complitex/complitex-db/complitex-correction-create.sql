@@ -61,7 +61,7 @@ DROP TABLE IF EXISTS `district_correction`;
 
 CREATE TABLE `district_correction` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор коррекции',
-  `city_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта населенного пункта',
+  `city_id` BIGINT(20) COMMENT 'Идентификатор объекта населенного пункта',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта района',
   `external_id` VARCHAR(20) COMMENT 'Внешний идентификатор объекта',
   `correction` VARCHAR(100) NOT NULL COMMENT 'Название типа населенного пункта',
@@ -91,8 +91,8 @@ DROP TABLE IF EXISTS `street_correction`;
 
 CREATE TABLE `street_correction` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор коррекции',
-  `city_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта населенного пункта',
-  `street_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта типа улицы',
+  `city_id` BIGINT(20) COMMENT 'Идентификатор объекта населенного пункта',
+  `street_type_id` BIGINT(20) COMMENT 'Идентификатор объекта типа улицы',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта улицы',
   `external_id` VARCHAR(20) COMMENT 'Внешний идентификатор объекта',
   `correction` VARCHAR(100) NOT NULL COMMENT 'Название типа населенного пункта',
@@ -151,7 +151,7 @@ DROP TABLE IF EXISTS `building_correction`;
 
 CREATE TABLE `building_correction` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор коррекции',
-  `street_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта улица',
+  `street_id` BIGINT(20) COMMENT 'Идентификатор объекта улица',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта дом',
   `external_id` VARCHAR(20) COMMENT 'Внешний идентификатор объекта',
   `correction` VARCHAR(100) NOT NULL COMMENT 'Номер дома',

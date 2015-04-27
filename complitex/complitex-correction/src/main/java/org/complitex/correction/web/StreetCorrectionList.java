@@ -89,11 +89,17 @@ public class StreetCorrectionList extends AddressCorrectionList<StreetCorrection
 
     @Override
     protected String displayCorrection(StreetCorrection streetCorrection) {
-        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(streetCorrection.getCityId(), true),
-                getLocale());
+        String city = null;
+        if (streetCorrection.getCityId() != null) {
+            city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(streetCorrection.getCityId(), true),
+                    getLocale());
+        }
 
-        String streetType = streetTypeStrategy.displayDomainObject(
-                streetTypeStrategy.getDomainObject(streetCorrection.getStreetTypeId(), true), getLocale());
+        String streetType = null;
+        if (streetCorrection.getStreetTypeId() != null) {
+            streetType = streetTypeStrategy.displayDomainObject(
+                    streetTypeStrategy.getDomainObject(streetCorrection.getStreetTypeId(), true), getLocale());
+        }
 
         return AddressRenderer.displayAddress(null, city, streetType, streetCorrection.getCorrection(), null, null, null, getLocale());
     }

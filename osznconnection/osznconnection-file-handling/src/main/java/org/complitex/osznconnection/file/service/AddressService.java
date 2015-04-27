@@ -178,7 +178,7 @@ public class AddressService extends AbstractBean {
                 String streetName = Lists.newArrayList(streetNames).get(0);
 
                 //находим ids улиц по внутреннему названию
-                List<Long> streetIds = streetStrategy.getStreetObjectIds(request.getCityId(),
+                List<Long> streetIds = streetStrategy.getStreetIds(request.getCityId(),
                         request.getStreetTypeId(), streetName);
 
                 if (streetIds.size() == 1) { //нашли ровно одну улицу
@@ -191,7 +191,7 @@ public class AddressService extends AbstractBean {
                     //перейти к обработке дома
                 } else if (streetIds.size() > 1) { // нашли больше одной улицы
                     //пытаемся найти по району
-                    streetIds = streetStrategy.getStreetObjectIdsByDistrict(request.getCityId(),
+                    streetIds = streetStrategy.getStreetIdsByDistrict(request.getCityId(),
                             request.getStreet(), osznId);
 
                     if (streetIds.size() == 1) { //нашли ровно одну улицу по району
@@ -241,7 +241,7 @@ public class AddressService extends AbstractBean {
             }
         } else { // в коррекциях не нашли ни одного соответствия на внутренние объекты улиц
             // ищем по внутреннему справочнику улиц
-            List<Long> streetIds = streetStrategy.getStreetObjectIds(request.getCityId(),
+            List<Long> streetIds = streetStrategy.getStreetIds(request.getCityId(),
                     request.getStreetTypeId(), request.getStreet());
 
             if (streetIds.size() == 1) { // нашли ровно одну улицу
@@ -254,7 +254,7 @@ public class AddressService extends AbstractBean {
                 // перейти к обработке дома
             } else if (streetIds.size() > 1) { // нашли более одной улицы
                 //пытаемся найти по району
-                streetIds = streetStrategy.getStreetObjectIdsByDistrict(request.getCityId(), request.getStreet(), osznId);
+                streetIds = streetStrategy.getStreetIdsByDistrict(request.getCityId(), request.getStreet(), osznId);
 
                 if (streetIds.size() == 1) { //нашли ровно одну улицу по району
                     Long streetId = streetIds.get(0);

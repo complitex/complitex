@@ -7,6 +7,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -141,45 +142,48 @@ public class AddressCorrectionDialog<T> extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if (validate(state)) {
-                    try {
-                        if (!addressEntity.equals(AddressEntity.STREET_TYPE)) {
-                            LocalAddress localAddress = new LocalAddress(state.getId("city"),
-                                    getStreetTypeId(state.get("street")), state.getId("street"),
-                                    state.getId("building"), state.getId("apartment"), state.getId("room"));
+                if (!validate()){
+                    target.add(messages);
+                    return;
+                }
 
-                            correctAddress(addressEntity, externalAddress, localAddress);
-                        } else {
-                            LocalAddress localAddress = new LocalAddress();
-                            localAddress.setStreetTypeId(streetTypeModel.getObject() != null
-                                    ? streetTypeModel.getObject().getId() : null);
+                try {
+                    if (!addressEntity.equals(AddressEntity.STREET_TYPE)) {
+                        LocalAddress localAddress = new LocalAddress(state.getId("city"),
+                                getStreetTypeId(state.get("street")), state.getId("street"),
+                                state.getId("building"), state.getId("apartment"), state.getId("room"));
 
-                            correctAddress(addressEntity, externalAddress, localAddress);
-                        }
+                        correctAddress(addressEntity, externalAddress, localAddress);
+                    } else {
+                        LocalAddress localAddress = new LocalAddress();
+                        localAddress.setStreetTypeId(streetTypeModel.getObject() != null
+                                ? streetTypeModel.getObject().getId() : null);
 
-                        onCorrect(target, model, addressEntity);
-
-                        dialog.close(target);
-                    } catch (DuplicateCorrectionException e) {
-                        error(getString("duplicate_correction_error"));
-                    } catch (MoreOneCorrectionException e) {
-                        switch (e.getEntity()) {
-                            case "city":
-                                error(getString("more_one_local_city_correction"));
-                                break;
-                            case "street":
-                                error(getString("more_one_local_street_correction"));
-                                break;
-                            case "street_type":
-                                error(getString("more_one_local_street_type_correction"));
-                                break;
-                        }
-                    } catch (NotFoundCorrectionException e) {
-                        error(getString(e.getEntity() + "_not_found_correction"));
-                    } catch (Exception e) {
-                        error(getString("db_error"));
-                        LoggerFactory.getLogger(getClass()).error("", e);
+                        correctAddress(addressEntity, externalAddress, localAddress);
                     }
+
+                    onCorrect(target, model, addressEntity);
+
+                    dialog.close(target);
+                } catch (DuplicateCorrectionException e) {
+                    error(getString("duplicate_correction_error"));
+                } catch (MoreOneCorrectionException e) {
+                    switch (e.getEntity()) {
+                        case "city":
+                            error(getString("more_one_local_city_correction"));
+                            break;
+                        case "street":
+                            error(getString("more_one_local_street_correction"));
+                            break;
+                        case "street_type":
+                            error(getString("more_one_local_street_type_correction"));
+                            break;
+                    }
+                } catch (NotFoundCorrectionException e) {
+                    error(getString(e.getEntity() + "_not_found_correction"));
+                } catch (Exception e) {
+                    error(getString("db_error"));
+                    LoggerFactory.getLogger(getClass()).error("", e);
                 }
                 target.add(messages);
             }
@@ -201,27 +205,31 @@ public class AddressCorrectionDialog<T> extends Panel {
         return streetObject == null ? null : streetStrategy.getStreetType(streetObject);
     }
 
-    protected boolean validate(SearchComponentState componentState) {
+    protected boolean validate() {
         boolean validated = true;
-        String errorMessageKey = null;
+        String errorMessageKey = "address_mistake";
+
         switch (addressEntity) {
             case ROOM:
-                DomainObject roomObject = componentState.get("room");
+                DomainObject roomObject = state.get("room");
                 validated = roomObject != null && roomObject.getObjectId() != null && roomObject.getObjectId() > 0;
+                break;
             case APARTMENT:
-                DomainObject apartmentObject = componentState.get("apartment");
-                validated &= StringUtils.isEmpty(externalAddress.getApartment()) && apartmentObject == null && addressEntity == AddressEntity.ROOM ||
+                DomainObject apartmentObject = state.get("apartment");
+                validated = StringUtils.isEmpty(externalAddress.getApartment()) && apartmentObject == null && addressEntity == AddressEntity.ROOM ||
                         apartmentObject != null && apartmentObject.getObjectId() != null && apartmentObject.getObjectId() > 0;
+                break;
             case BUILDING:
-                DomainObject buildingObject = componentState.get("building");
-                validated &= buildingObject != null && buildingObject.getObjectId() != null && buildingObject.getObjectId() > 0;
+                DomainObject buildingObject = state.get("building");
+                validated = buildingObject != null && buildingObject.getObjectId() != null && buildingObject.getObjectId() > 0;
+                break;
             case STREET:
-                DomainObject streetObject = componentState.get("street");
-                validated &= streetObject != null && streetObject.getObjectId() != null && streetObject.getObjectId() > 0;
+                DomainObject streetObject = state.get("street");
+                validated = streetObject != null && streetObject.getObjectId() != null && streetObject.getObjectId() > 0;
+                break;
             case CITY:
-                errorMessageKey = "address_mistake";
-                DomainObject cityObject = componentState.get("city");
-                validated &= cityObject != null && cityObject.getObjectId() != null && cityObject.getObjectId() > 0;
+                DomainObject cityObject = state.get("city");
+                validated = cityObject != null && cityObject.getObjectId() != null && cityObject.getObjectId() > 0;
                 break;
             case STREET_TYPE:
                 errorMessageKey = "street_type_required";
@@ -229,9 +237,11 @@ public class AddressCorrectionDialog<T> extends Panel {
                 validated = streetTypeObject != null && streetTypeObject.getObjectId() != null && streetTypeObject.getObjectId() > 0;
                 break;
         }
+
         if (!validated) {
             error(getString(errorMessageKey));
         }
+
         return validated;
     }
 
@@ -264,7 +274,7 @@ public class AddressCorrectionDialog<T> extends Panel {
         return strategy.getDomainObject(objectId, true);
     }
 
-    protected List<String> initFilters() {
+    protected List<String> getFilters(AddressEntity addressEntity) {
         switch (addressEntity) {
             case CITY:
                 return ImmutableList.of("city");
@@ -277,6 +287,7 @@ public class AddressCorrectionDialog<T> extends Panel {
             case ROOM:
                 return ImmutableList.of("city", "street", "building", "apartment", "room");
         }
+
         return ImmutableList.of("city", "street", "building");
     }
 
@@ -290,8 +301,36 @@ public class AddressCorrectionDialog<T> extends Panel {
 
         if (!addressEntity.equals(AddressEntity.STREET_TYPE)) {
             initSearchComponentState(state);
-            WiQuerySearchComponent newSearchComponent = 
-                    new WiQuerySearchComponent("searchComponent", state, initFilters(), null, ShowMode.ACTIVE, true);
+
+            WiQuerySearchComponent newSearchComponent = new WiQuerySearchComponent("searchComponent", state,
+                    getFilters(addressEntity), null, ShowMode.ACTIVE, true){
+                @Override
+                protected IChoiceRenderer<DomainObject> newAutocompleteItemRenderer(String entity) {
+                    if (state.get(AddressEntity.CITY.getEntityName()) == null){
+                        return new IChoiceRenderer<DomainObject>() {
+
+                            @Override
+                            public Object getDisplayValue(DomainObject object) {
+                                if (object.getObjectId().equals(SearchComponentState.NOT_SPECIFIED_ID)) {
+                                    return getString(NOT_SPECIFIED_KEY);
+                                } else {
+                                    return strategyFactory.getStrategy(entity).displayDomainObject(object, getLocale()) +
+                                            " (" + strategyFactory.getStrategy(AddressEntity.CITY.getEntityName())
+                                            .displayDomainObject(object.getParentId(), getLocale()) + ")";
+                                }
+                            }
+
+                            @Override
+                            public String getIdValue(DomainObject object, int index) {
+                                return String.valueOf(object.getObjectId());
+                            }
+                        };
+                    }
+
+                    return super.newAutocompleteItemRenderer(entity);
+                }
+            };
+
             searchComponent.replaceWith(newSearchComponent);
             searchComponent = newSearchComponent;
             streetTypeSelect.setVisible(false);

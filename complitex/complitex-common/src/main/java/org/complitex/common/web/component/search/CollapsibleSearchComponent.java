@@ -31,7 +31,6 @@ public class CollapsibleSearchComponent extends WiQuerySearchComponent {
 
         private RowFragment(String id, List<String> searchFilters) {
             super(id, "rowFragment", CollapsibleSearchComponent.this);
-            add(newColumnsListView("columns", searchFilters));
             add(newFiltersListView("filters", searchFilters));
         }
     }

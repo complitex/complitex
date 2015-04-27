@@ -1,5 +1,6 @@
 package org.complitex.keconnection.heatmeter.web.consumption;
 
+import com.google.common.collect.ImmutableList;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -99,20 +100,34 @@ public class CentralHeatingConsumptionList extends TemplatePage{
 
         AddressCorrectionDialog<CentralHeatingConsumption> addressCorrectionDialog =
                 new AddressCorrectionDialog<CentralHeatingConsumption>("addressCorrectionDialog") {
-            @Override
-            protected void onCorrect(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model,
-                                     AddressEntity addressEntity) {
-                CentralHeatingConsumption consumption = model.getObject();
+                    @Override
+                    protected void onCorrect(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model,
+                                             AddressEntity addressEntity) {
+                        CentralHeatingConsumption consumption = model.getObject();
 
-                //todo async rebind
-                centralHeatingConsumptionBean.getCentralHeatingConsumptions(FilterWrapper.of(
-                        new CentralHeatingConsumption(consumption.getConsumptionFileId(), consumption.getStatus())))
-                        .parallelStream()
-                        .forEach(c -> centralHeatingConsumptionService.bind(consumptionFile, c));
+                        //todo async rebind
+                        centralHeatingConsumptionBean.getCentralHeatingConsumptions(FilterWrapper.of(
+                                new CentralHeatingConsumption(consumption.getConsumptionFileId(), consumption.getStatus())))
+                                .parallelStream()
+                                .forEach(c -> centralHeatingConsumptionService.bind(consumptionFile, c));
 
-                target.add(filteredDataTable, statusContainer);
-            }
-        };
+                        target.add(filteredDataTable, statusContainer);
+                    }
+
+                    @Override
+                    protected List<String> getFilters(AddressEntity addressEntity) {
+                        switch (addressEntity) {
+                            case STREET:
+                                return ImmutableList.of("street");
+                            case BUILDING:
+                                return ImmutableList.of("street", "building");
+                            case APARTMENT:
+                                return ImmutableList.of("street", "building", "apartment");
+                        }
+
+                        return super.getFilters(addressEntity);
+                    }
+                };
         add(addressCorrectionDialog);
 
         //actions
