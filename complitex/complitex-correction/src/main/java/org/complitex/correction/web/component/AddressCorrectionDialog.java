@@ -149,13 +149,28 @@ public class AddressCorrectionDialog<T> extends Panel {
 
                 try {
                     if (!addressEntity.equals(AddressEntity.STREET_TYPE)) {
-                        LocalAddress localAddress = new LocalAddress(state.getId("city"),
-                                getStreetTypeId(state.get("street")), state.getId("street"),
-                                state.getId("building"), state.getId("apartment"), state.getId("room"));
+                        Long id = state.getId(addressEntity.getEntityName());
+
+                        switch (addressEntity){
+                            case APARTMENT:
+                                localAddress.setApartmentId(id);
+                                break;
+                            case ROOM:
+                                localAddress.setRoomId(id);
+                                break;
+                            case STREET:
+                                localAddress.setStreetId(id);
+                                break;
+                            case CITY:
+                                localAddress.setCityId(id);
+                                break;
+                            case BUILDING:
+                                localAddress.setBuildingId(id);
+                                break;
+                        }
 
                         correctAddress(addressEntity, externalAddress, localAddress);
                     } else {
-                        LocalAddress localAddress = new LocalAddress();
                         localAddress.setStreetTypeId(streetTypeModel.getObject() != null
                                 ? streetTypeModel.getObject().getId() : null);
 

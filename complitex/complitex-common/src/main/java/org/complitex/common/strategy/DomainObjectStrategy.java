@@ -293,7 +293,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected Set<Long> loadSubjects(String dataSource, long permissionId) {
         if (permissionId == PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID) {
-            return new HashSet<>(Arrays.asList(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID));
+            return new HashSet<>(Collections.singletonList(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID));
         } else {
             return permissionBean.findSubjectIds(dataSource, permissionId);
         }
