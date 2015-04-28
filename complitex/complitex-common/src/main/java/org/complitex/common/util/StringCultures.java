@@ -3,7 +3,6 @@ package org.complitex.common.util;
 import com.google.common.collect.Lists;
 import org.complitex.common.entity.StringCulture;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -67,7 +66,7 @@ public class StringCultures {
             stringCultures.add(new StringCulture(localeId));
         }
 
-        Collections.sort(stringCultures, stringCultureComparator);
+        //Collections.sort(stringCultures, stringCultureComparator);
 
         return stringCultures;
     }
@@ -88,6 +87,6 @@ public class StringCultures {
             }
         }
 
-        Collections.sort(stringCultures, stringCultureComparator);
+        //Collections.sort(stringCultures, stringCultureComparator);
     }
 }
