@@ -300,7 +300,7 @@ public class AddressCorrectionDialog<T> extends Panel {
         this.localAddress = localAddress;
 
         if (!addressEntity.equals(AddressEntity.STREET_TYPE)) {
-            initSearchComponentState(state);
+            state.clear();
 
             WiQuerySearchComponent newSearchComponent = new WiQuerySearchComponent("searchComponent", state,
                     getFilters(addressEntity), null, ShowMode.ACTIVE, true){
