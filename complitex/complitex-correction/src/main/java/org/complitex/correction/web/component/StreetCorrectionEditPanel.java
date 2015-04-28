@@ -7,6 +7,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.city.CityStrategy;
+import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
@@ -23,6 +24,9 @@ import java.util.List;
 public class StreetCorrectionEditPanel extends AddressCorrectionEditPanel<StreetCorrection> {
     @EJB
     private CityStrategy cityStrategy;
+
+    @EJB
+    private StreetTypeStrategy streetTypeStrategy;
 
     @EJB
     private AddressCorrectionBean addressCorrectionBean;
@@ -48,15 +52,19 @@ public class StreetCorrectionEditPanel extends AddressCorrectionEditPanel<Street
     protected String displayCorrection() {
         StreetCorrection correction = getCorrection();
 
-        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityId(), true), getLocale());
+        String city = null;
+        if (correction.getCityId() != null) {
+            city = cityStrategy.displayDomainObject(correction.getCityId(), getLocale());
+        }
 
         String streetType = null;
-        if (correction.getStreetTypeCorrection() != null) {
-            streetType = correction.getStreetTypeCorrection().getCorrection();
+        if (correction.getStreetTypeId() != null) {
+            streetType = streetTypeStrategy.displayDomainObject(correction.getStreetTypeId(), getLocale());
         }
         if (Strings.isEmpty(streetType)) {
             streetType = null;
         }
+
         return AddressRenderer.displayAddress(null, city, streetType, correction.getCorrection(), null, null, null, getLocale());
     }
 
