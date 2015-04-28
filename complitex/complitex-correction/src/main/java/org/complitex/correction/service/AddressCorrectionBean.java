@@ -191,18 +191,12 @@ public class AddressCorrectionBean extends CorrectionBean {
                 externalAddress.getStreet(), externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
     }
 
-    public boolean save(StreetCorrection streetCorrection) {
+    public void save(StreetCorrection streetCorrection) {
         if (streetCorrection.getId() == null) {
-            if (!isStreetObjectExists(streetCorrection.getCorrection(), streetCorrection.getObjectId())) {
-                sqlSession().insert(NS + ".insertStreetCorrection", streetCorrection);
-            }else {
-                return false;
-            }
+            sqlSession().insert(NS + ".insertStreetCorrection", streetCorrection);
         }else {
             sqlSession().update(NS + ".updateStreetCorrection", streetCorrection);
         }
-
-        return true;
     }
 
     public List<StreetCorrection> getStreetCorrectionsByBuilding(Long internalStreetId, Long internalBuildingId,
