@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.complitex.keconnection.heatmeter.entity;
+package org.complitex.keconnection.heatmeter.entity.cursor;
 
 import java.io.Serializable;
 import java.text.MessageFormat;

@@ -1,19 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.heatmeter.service;
 
-import org.apache.ibatis.session.SqlSession;
+import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.oracle.OracleErrors;
+import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.keconnection.heatmeter.Module;
-import org.complitex.keconnection.heatmeter.entity.ExternalHeatmeter;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterBindingStatus;
+import org.complitex.keconnection.heatmeter.entity.cursor.ComMeter;
+import org.complitex.keconnection.heatmeter.entity.cursor.ExternalHeatmeter;
 import org.complitex.keconnection.heatmeter.service.exception.DBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +23,9 @@ import javax.ejb.TransactionManagementType;
 import java.io.Serializable;
 import java.util.*;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class ExternalHeatmeterService {
+public class ExternalHeatmeterService extends AbstractBean{
 
     private final Logger log = LoggerFactory.getLogger(ExternalHeatmeterService.class);
     private static final String MAPPING_NAMESPACE = ExternalHeatmeterService.class.getName();
@@ -39,17 +33,10 @@ public class ExternalHeatmeterService {
     private static final String FETCH_EXTERNAL_HEATMETER_STORED_PROCEDURE = "Z$RUNTIME_PROV_UTL.GETHEATMETERS";
 
     @EJB
-    private RemoteSqlSessionFactoryBean sqlSessionFactoryBean;
-
-    @EJB
     private LogBean logBean;
 
     @EJB
     private StringLocaleBean stringLocaleBean;
-
-    protected SqlSession sqlSession() {
-        return sqlSessionFactoryBean.getSqlSessionManager();
-    }
 
     protected void logError(long heatmeterId, String key, Object... params) {
         logError(heatmeterId, ResourceUtil.getFormatString(RESOURCE_BUNDLE, key, getLocale(), params));
@@ -83,16 +70,10 @@ public class ExternalHeatmeterService {
         }
     }
 
-    //TODO: remove after testing.
-//    public ExternalHeatmetersAndStatus fetchExternalHeatmetersTest(long heatmeterId, Integer ls,
-//            String organizationCode, int buildingCode, Date date) throws DBException {
-//        return new ExternalHeatmetersAndStatus(ImmutableList.of(new ExternalHeatmeter("1", "#1")),
-//                HeatmeterBindingStatus.BOUND);
-//    }
-    public ExternalHeatmetersAndStatus fetchExternalHeatmeters(long heatmeterId, Integer ls,
+    public ExternalHeatmetersAndStatus fetchExternalHeatmeters(String dataSource, long heatmeterId, Integer ls,
             String organizationCode, int buildingCode, Date date) throws DBException {
         List<ExternalHeatmeter> externalHeatmeters = null;
-        HeatmeterBindingStatus status = null;
+        HeatmeterBindingStatus status;
 
         Map<String, Object> params = new HashMap<>();
         params.put("pDepCode", organizationCode);
@@ -104,7 +85,7 @@ public class ExternalHeatmeterService {
             startTime = System.nanoTime();
         }
         try {
-            sqlSession().selectOne(MAPPING_NAMESPACE + ".fetchExternalHeatmeter", params);
+            sqlSession(dataSource).selectOne(MAPPING_NAMESPACE + ".fetchExternalHeatmeter", params);
         } catch (Exception e) {
             if (!OracleErrors.isCursorClosedError(e)) {
                 throw new DBException(e);
@@ -150,5 +131,20 @@ public class ExternalHeatmeterService {
             }
         }
         return new ExternalHeatmetersAndStatus(externalHeatmeters, status);
+    }
+
+    public Cursor<ComMeter> getComMeterCursor(String dataSource, String organizationCode, String buildingCode, Date om){
+        Map<String, Object> map = new HashMap<String, Object>(){{
+            put("organizationCode", organizationCode);
+            put("buildingCode", buildingCode);
+            put("om", om);
+        }};
+
+        sqlSession(dataSource).selectOne(MAPPING_NAMESPACE + ".getComMeterCursor", map);
+
+        log.info("getComMeterCursor data: {}", map);
+
+        //noinspection unchecked
+        return new Cursor<>((Integer) map.get("resultCode"), (List<ComMeter>) map.get("data"));
     }
 }

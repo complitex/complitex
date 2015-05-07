@@ -1,8 +1,9 @@
 package org.complitex.osznconnection.organization.strategy;
 
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
@@ -17,7 +18,6 @@ import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.entity.OsznOrganization;
-import org.complitex.organization.entity.RemoteDataSource;
 import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociation;
 import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociationList;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationEditComponent;
@@ -27,8 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.naming.*;
-import javax.sql.DataSource;
 import java.util.*;
 
 import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.*;
@@ -408,7 +406,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
 
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
-        if (attribute.getAttributeTypeId().equals(USER_ORGANIZATION_PARENT)){
+        if (attribute != null && attribute.getAttributeTypeId().equals(USER_ORGANIZATION_PARENT)){
             return displayShortNameAndCode(attribute.getValueId(), locale);
         }
 

@@ -9,10 +9,10 @@ import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.BuildingCode;
 import org.complitex.common.service.IProcessListener;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.keconnection.heatmeter.entity.ExternalHeatmeter;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterBindingStatus;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterCorrection;
+import org.complitex.keconnection.heatmeter.entity.cursor.ExternalHeatmeter;
 import org.complitex.keconnection.heatmeter.service.ExternalHeatmeterService.ExternalHeatmetersAndStatus;
 import org.complitex.keconnection.heatmeter.service.exception.CriticalHeatmeterBindException;
 import org.complitex.keconnection.heatmeter.service.exception.DBException;
@@ -220,7 +220,7 @@ public class HeatmeterBindService {
         final int buildingCode = buildingCodeObj.getBuildingCode();
         final String organizationCode = organizationStrategy.getCode(organizationId);
 
-        return externalHeatmeterService.fetchExternalHeatmeters(
+        return externalHeatmeterService.fetchExternalHeatmeters(null,
                 heatmeterId, ls, organizationCode, buildingCode,
                 getDateParameter());
     }

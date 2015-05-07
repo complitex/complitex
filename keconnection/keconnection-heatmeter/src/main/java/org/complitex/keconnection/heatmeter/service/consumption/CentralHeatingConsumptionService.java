@@ -18,6 +18,7 @@ import org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingCon
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFileStatus;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus;
+import org.complitex.keconnection.heatmeter.service.ExternalHeatmeterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +48,9 @@ public class CentralHeatingConsumptionService {
 
     @EJB
     private AddressCorrectionService addressCorrectionService;
+
+    @EJB
+    private ExternalHeatmeterService externalHeatmeterService;
 
     @Asynchronous
     public void load(Date om, Long serviceProviderId, Long serviceId, String fileName, String checkSum, InputStream inputStream){
@@ -225,6 +229,10 @@ public class CentralHeatingConsumptionService {
                 default:
                     c.setStatus(ConsumptionStatus.BOUND);
             }
+
+            //external call
+            //todo get data source
+            //Cursor<ComMeter> cursor = externalHeatmeterService.getComMeterCursor()
 
             centralHeatingConsumptionBean.save(c);
         } catch (ResolveAddressException e) {

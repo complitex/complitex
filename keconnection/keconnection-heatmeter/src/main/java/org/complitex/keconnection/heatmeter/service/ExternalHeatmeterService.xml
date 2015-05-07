@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.keconnection.heatmeter.service.ExternalHeatmeterService">
-    <resultMap id="externalHeatmeter" type="org.complitex.keconnection.heatmeter.entity.ExternalHeatmeter">
+    <resultMap id="externalHeatmeter" type="org.complitex.keconnection.heatmeter.entity.cursor.ExternalHeatmeter">
         <result column="id" property="id"/>
         <result column="c_num" property="number"/>
     </resultMap>
@@ -13,6 +13,26 @@
             #{pHouseCode, mode=IN, javaType=int, jdbcType=INTEGER},
             #{pDate, mode=IN, javaType=date, jdbcType=DATE},
             #{externalInfo, mode=OUT, jdbcType=CURSOR, resultMap=externalHeatmeter})
+        }
+        ]]>
+    </select>
+
+    <!-- ComMeterCursor -->
+
+    <resultMap id="comMeterCursor" type="org.complitex.keconnection.heatmeter.entity.cursor.ComMeter">
+        <id column="m_id" property="mId"/>
+        <result column="m_num" property="m_num"/>
+        <result column="m_date" property="mDate"/>
+        <result column="m_type" property="mType"/>
+    </resultMap>
+
+    <select id="getComMeterCursor" statementType="CALLABLE" parameterType="map">
+        <![CDATA[
+         {#{resultCode, mode=OUT, javaType=int, jdbcType=INTEGER} = call z$runtime_exp_cursors.getComMeterCursor(
+            #{organizationCode, mode=IN, javaType=string, jdbcType=VARCHAR},
+            #{buildingCode, mode=IN, javaType=string, jdbcType=VARCHAR},
+            #{om, mode=IN, javaType=date, jdbcType=DATE},
+            #{data, mode=OUT, jdbcType=CURSOR, resultMap=externalHeatmeter})
         }
         ]]>
     </select>

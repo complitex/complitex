@@ -4,10 +4,6 @@
  */
 package org.complitex.keconnection.heatmeter.web.component.heatmeter.bind;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import javax.ejb.EJB;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -27,12 +23,17 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.complitex.common.util.StringUtil;
-import org.complitex.keconnection.heatmeter.entity.ExternalHeatmeter;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterBindingStatus;
+import org.complitex.keconnection.heatmeter.entity.cursor.ExternalHeatmeter;
 import org.complitex.keconnection.heatmeter.service.HeatmeterBindService;
 import org.complitex.keconnection.heatmeter.service.exception.HeatmeterBindException;
 import org.odlabs.wiquery.ui.dialog.Dialog;
+
+import javax.ejb.EJB;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
