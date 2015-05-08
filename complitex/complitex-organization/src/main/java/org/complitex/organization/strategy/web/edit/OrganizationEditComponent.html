@@ -18,6 +18,7 @@
                     </td>
                 </tr>
             </table>
+
             <table class="tbForm">
                 <tr wicket:id="districtContainer">
                     <th>
@@ -34,6 +35,18 @@
                     </th>
                     <td>
                         <div wicket:id="parent" class="organization_parent_component"></div>
+                    </td>
+                </tr>
+
+                <!-- Reference to jdbc data source. Only for calculation centers. -->
+                <tr wicket:id="dataSourceContainer">
+                    <th>
+                        <span wicket:id="dataSourceLabel"></span><b class="blue">*</b>:
+                    </th>
+                    <td>
+                        <select wicket:id="dataSource">
+                            <option></option>
+                        </select>
                     </td>
                 </tr>
             </table>

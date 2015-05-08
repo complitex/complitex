@@ -277,7 +277,6 @@ public class CentralHeatingConsumptionService {
             cursor = externalHeatmeterService.getComMeterCursor(dataSource, c.getOrganizationCode(),
                     buildingCode.getBuildingCode(), consumptionFile.getOm(), serviceCode);
 
-
             switch (cursor.getResultCode()){
                 case 0:
                     c.setStatus(BIND_ERROR);

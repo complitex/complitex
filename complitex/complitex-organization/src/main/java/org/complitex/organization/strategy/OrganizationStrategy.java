@@ -13,7 +13,6 @@ import org.complitex.common.util.Numbers;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
-import org.complitex.organization.entity.RemoteDataSource;
 import org.complitex.organization.strategy.web.edit.OrganizationEdit;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.organization.strategy.web.edit.OrganizationValidator;

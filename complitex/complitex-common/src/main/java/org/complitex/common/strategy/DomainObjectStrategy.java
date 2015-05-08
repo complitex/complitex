@@ -310,6 +310,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
             if (strings != null) {
                 StringCultures.updateForNewLocales(strings);
+            }else {
+                attribute.setStringCultures(StringCultures.newStringCultures());
             }
         }
     }

@@ -1,15 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.complitex.organization.entity;
+package org.complitex.common.entity;
 
 import java.io.Serializable;
 
-/**
- *
- * @author Artem
- */
 public class RemoteDataSource implements Serializable {
 
     private String dataSource;

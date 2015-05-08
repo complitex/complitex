@@ -15,7 +15,6 @@ public class OsznOrganizationTypeStrategy extends OrganizationTypeStrategy {
      * Organization type ids
      */
     public static final long OSZN_TYPE = 2;
-    public static final long CALCULATION_CENTER_TYPE = 3;
 
     @Override
     protected Collection<Long> getReservedInstanceIds() {

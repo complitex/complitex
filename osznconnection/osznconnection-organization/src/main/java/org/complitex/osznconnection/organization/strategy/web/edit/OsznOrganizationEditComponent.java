@@ -12,24 +12,19 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.ResourceModel;
-import org.complitex.common.converter.StringConverter;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
-import org.complitex.common.web.component.IDisableAwareChoiceRenderer;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.entity.OsznOrganization;
-import org.complitex.organization.entity.RemoteDataSource;
 import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociation;
 import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociationList;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
@@ -54,12 +49,10 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
     private StringCultureBean stringBean;
 
     private WebMarkupContainer serviceAssociationsContainer;
-    private WebMarkupContainer dataSourceContainer;
     private WebMarkupContainer loadSaveDirsContainer;
     private WebMarkupContainer edrpouContainer;
     private WebMarkupContainer rootDirectoryContainer;
     private WebMarkupContainer rootExportDirectoryContainer;
-    private IModel<RemoteDataSource> dataSourceModel;
 
     public OsznOrganizationEditComponent(String id, boolean disabled) {
         super(id, disabled);
@@ -73,9 +66,6 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
     @Override
     protected void init() {
         super.init();
-
-        final boolean isDisabled = isDisabled();
-        final boolean enabled = enabled();
 
         final OsznOrganization organization = getDomainObject();
 
@@ -173,7 +163,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     DisableAwareDropDownChoice<DomainObject> serviceProviderType =
                             new DisableAwareDropDownChoice<DomainObject>("serviceProviderType", serviceProviderTypeModel,
                             selectServiceProviderTypeModel, serviceProviderTypeRenderer);
-                    serviceProviderType.setEnabled(enabled);
+                    serviceProviderType.setEnabled(enabled());
                     serviceProviderType.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 
                         @Override
@@ -218,7 +208,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     final DisableAwareDropDownChoice<DomainObject> calculationCenter =
                             new DisableAwareDropDownChoice<DomainObject>("calculationCenter", calculationCenterModel,
                             allCalculationCentres, calculationCenterRenderer);
-                    calculationCenter.setEnabled(enabled);
+                    calculationCenter.setEnabled(enabled());
                     calculationCenter.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 
                         @Override
@@ -229,7 +219,8 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     item.add(calculationCenter);
 
                     //remove link
-                    addRemoveLink("removeServiceAssociation", item, null, serviceAssociationsUpdateContainer).setVisible(enabled);
+                    addRemoveLink("removeServiceAssociation", item, null, serviceAssociationsUpdateContainer)
+                            .setVisible(enabled());
                 }
 
                 @Override
@@ -246,55 +237,12 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     target.add(serviceAssociationsUpdateContainer);
                 }
             };
-            addServiceAssociation.setVisible(enabled);
+            addServiceAssociation.setVisible(enabled());
             serviceAssociationsContainer.add(addServiceAssociation);
             serviceAssociationsContainer.setVisible(isUserOrganization());
         }
 
-        //reference to jdbc data source. Only for calculation centres.
-        {
-            dataSourceContainer = new WebMarkupContainer("dataSourceContainer");
-            dataSourceContainer.setOutputMarkupPlaceholderTag(true);
-            add(dataSourceContainer);
-            final IModel<String> dataSourceLabelModel = new ResourceModel("dataSourceLabel");
-            dataSourceContainer.add(new Label("dataSourceLabel", dataSourceLabelModel));
-            dataSourceModel = new Model<>();
 
-            final String currentDataSource = AttributeUtil.getStringValue(organization, OsznOrganizationStrategy.DATA_SOURCE);
-            final List<RemoteDataSource> allDataSources = osznOrganizationStrategy.findRemoteDataSources(currentDataSource);
-
-            for (RemoteDataSource ds : allDataSources) {
-                if (ds.isCurrent()) {
-                    dataSourceModel.setObject(ds);
-                    break;
-                }
-            }
-
-            DisableAwareDropDownChoice<RemoteDataSource> dataSource =
-                    new DisableAwareDropDownChoice<RemoteDataSource>("dataSource", dataSourceModel, allDataSources,
-                    new IDisableAwareChoiceRenderer<RemoteDataSource>() {
-
-                        @Override
-                        public Object getDisplayValue(RemoteDataSource remoteDataSource) {
-                            return remoteDataSource.getDataSource();
-                        }
-
-                        @Override
-                        public boolean isDisabled(RemoteDataSource remoteDataSource) {
-                            return !remoteDataSource.isExist();
-                        }
-
-                        @Override
-                        public String getIdValue(RemoteDataSource remoteDataSource, int index) {
-                            return remoteDataSource.getDataSource();
-                        }
-                    });
-            dataSource.setRequired(true);
-            dataSource.setLabel(dataSourceLabelModel);
-            dataSource.setEnabled(enabled);
-            dataSourceContainer.add(dataSource);
-            dataSourceContainer.setVisible(isCalculationCenter());
-        }
 
         //load/save directories for request files. It is oszn only attributes.
         {
@@ -322,7 +270,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                         attribute.setStringCultures(StringCultures.newStringCultures());
                     }
                     item.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(), organization,
-                            attribute, getLocale(), isDisabled));
+                            attribute, getLocale(), isDisabled()));
                 }
             });
 
@@ -352,7 +300,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             edrpouContainer.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
 
             edrpouContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
-                    organization, attribute, getLocale(), isDisabled));
+                    organization, attribute, getLocale(), isDisabled()));
 
             //initial visibility
             edrpouContainer.setVisible(isUserOrganization());
@@ -380,7 +328,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             rootDirectoryContainer.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
 
             rootDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
-                    organization, attribute, getLocale(), isDisabled));
+                    organization, attribute, getLocale(), isDisabled()));
 
             //initial visibility
             rootDirectoryContainer.setVisible(isUserOrganization());
@@ -408,7 +356,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             rootExportDirectoryContainer.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
 
             rootExportDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
-                    organization, attribute, getLocale(), isDisabled));
+                    organization, attribute, getLocale(), isDisabled()));
 
             //initial visibility
             rootExportDirectoryContainer.setVisible(isUserOrganization());
@@ -426,16 +374,6 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             boolean serviceAssociationContainerVisibleNow = serviceAssociationsContainer.isVisible();
             if (serviceAssociationContainerWasVisible ^ serviceAssociationContainerVisibleNow) {
                 target.add(serviceAssociationsContainer);
-            }
-        }
-
-        //data source
-        {
-            boolean dataSourceContainerWasVisible = dataSourceContainer.isVisible();
-            dataSourceContainer.setVisible(isCalculationCenter());
-            boolean dataSourceContainerVisibleNow = dataSourceContainer.isVisible();
-            if (dataSourceContainerWasVisible ^ dataSourceContainerVisibleNow) {
-                target.add(dataSourceContainer);
             }
         }
 
@@ -478,15 +416,6 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 target.add(rootExportDirectoryContainer);
             }
         }
-    }
-
-    public boolean isCalculationCenter() {
-        for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
-            if (organizationType.getObjectId().equals(OsznOrganizationTypeStrategy.CALCULATION_CENTER_TYPE)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean isOszn() {
@@ -562,16 +491,6 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             //root directory
             organization.removeAttribute(OsznOrganizationStrategy.ROOT_REQUEST_FILE_DIRECTORY);
             organization.removeAttribute(OsznOrganizationStrategy.ROOT_EXPORT_DIRECTORY);
-        }
-
-        if (!isCalculationCenter()) {
-            //data source
-            getDomainObject().removeAttribute(OsznOrganizationStrategy.DATA_SOURCE);
-        } else {
-            //data source
-            String dataSource = dataSourceModel.getObject().getDataSource();
-            StringCultures.getSystemStringCulture(organization.getAttribute(OsznOrganizationStrategy.DATA_SOURCE).getStringCultures()).
-                    setValue(new StringConverter().toString(dataSource));
         }
     }
 

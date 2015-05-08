@@ -9,20 +9,16 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.EntityObjectInfo;
-import org.complitex.common.entity.StatusType;
+import org.complitex.common.entity.*;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.web.component.DisableAwareListMultipleChoice;
-import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
-import org.complitex.common.web.component.ShowMode;
-import org.complitex.common.web.component.UserOrganizationPicker;
+import org.complitex.common.web.component.*;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
 import org.complitex.common.web.component.domain.DomainObjectEditPanel;
@@ -35,6 +31,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.DATA_SOURCE;
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.ORGANIZATION_TYPE;
 
 /**
  * 
@@ -55,6 +54,9 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
     private WebMarkupContainer districtContainer;
     private WebMarkupContainer districtRequiredContainer;
     private WebMarkupContainer parentContainer;
+
+    private WebMarkupContainer dataSourceContainer;
+    private IModel<RemoteDataSource> dataSourceModel;
 
     public OrganizationEditComponent(String id, boolean disabled) {
         super(id, disabled);
@@ -91,7 +93,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
             private List<DomainObject> organizationTypes = Lists.newArrayList();
 
             {
-                for (Attribute attribute : organization.getAttributes(IOrganizationStrategy.ORGANIZATION_TYPE)) {
+                for (Attribute attribute : organization.getAttributes(ORGANIZATION_TYPE)) {
                     if (attribute.getValueId() != null) {
                         for (DomainObject organizationType : allOrganizationTypes) {
                             if (organizationType.getObjectId().equals(attribute.getValueId())) {
@@ -231,6 +233,51 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
             parentContainer.add(parent);
         }
         parentContainer.setVisible(isParentVisible());
+
+        //reference to jdbc data source. Only for calculation centres.
+        {
+            dataSourceContainer = new WebMarkupContainer("dataSourceContainer");
+            dataSourceContainer.setOutputMarkupPlaceholderTag(true);
+            add(dataSourceContainer);
+            final IModel<String> dataSourceLabelModel = new ResourceModel("dataSourceLabel");
+            dataSourceContainer.add(new Label("dataSourceLabel", dataSourceLabelModel));
+            dataSourceModel = new Model<>();
+
+            String currentDataSource = organization.getStringValue(IOrganizationStrategy.DATA_SOURCE);
+            List<RemoteDataSource> allDataSources = organizationStrategy.findRemoteDataSources(currentDataSource);
+
+            for (RemoteDataSource ds : allDataSources) {
+                if (ds.isCurrent()) {
+                    dataSourceModel.setObject(ds);
+                    break;
+                }
+            }
+
+            DisableAwareDropDownChoice<RemoteDataSource> dataSource =
+                    new DisableAwareDropDownChoice<RemoteDataSource>("dataSource", dataSourceModel, allDataSources,
+                            new IDisableAwareChoiceRenderer<RemoteDataSource>() {
+
+                                @Override
+                                public Object getDisplayValue(RemoteDataSource remoteDataSource) {
+                                    return remoteDataSource.getDataSource();
+                                }
+
+                                @Override
+                                public boolean isDisabled(RemoteDataSource remoteDataSource) {
+                                    return !remoteDataSource.isExist();
+                                }
+
+                                @Override
+                                public String getIdValue(RemoteDataSource remoteDataSource, int index) {
+                                    return remoteDataSource.getDataSource();
+                                }
+                            });
+            dataSource.setRequired(true);
+            dataSource.setLabel(dataSourceLabelModel);
+            dataSource.setEnabled(enabled());
+            dataSourceContainer.add(dataSource);
+            dataSourceContainer.setVisible(isCalculationCenter());
+        }
     }
 
     protected boolean isOrganizationTypeEnabled() {
@@ -265,6 +312,16 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
                 || (districtRequiredContainerWasVisible ^ districtRequiredContainerVisibleNow)) {
             target.add(districtContainer);
         }
+
+        //data source
+        {
+            boolean dataSourceContainerWasVisible = dataSourceContainer.isVisible();
+            dataSourceContainer.setVisible(isCalculationCenter());
+            boolean dataSourceContainerVisibleNow = dataSourceContainer.isVisible();
+            if (dataSourceContainerWasVisible ^ dataSourceContainerVisibleNow) {
+                target.add(dataSourceContainer);
+            }
+        }
     }
 
     public boolean isDistrictEntered() {
@@ -295,6 +352,15 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
     protected boolean isUserOrganization() {
         for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
             if (organizationType.getObjectId().equals(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isCalculationCenter() {
+        for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
+            if (organizationType.getObjectId().equals(OrganizationTypeStrategy.CALCULATION_CENTER_TYPE)) {
                 return true;
             }
         }
@@ -335,7 +401,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         }
 
         //organization types
-        getDomainObject().removeAttribute(IOrganizationStrategy.ORGANIZATION_TYPE);
+        getDomainObject().removeAttribute(ORGANIZATION_TYPE);
         List<DomainObject> organizationTypes = getOrganizationTypesModel().getObject();
         if (organizationTypes != null && !organizationTypes.isEmpty()) {
             Collections.sort(organizationTypes, new Comparator<DomainObject>() {
@@ -349,11 +415,20 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
             for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
                 Attribute attribute = new Attribute();
                 attribute.setAttributeId(attributeId++);
-                attribute.setAttributeTypeId(IOrganizationStrategy.ORGANIZATION_TYPE);
-                attribute.setValueTypeId(IOrganizationStrategy.ORGANIZATION_TYPE);
+                attribute.setAttributeTypeId(ORGANIZATION_TYPE);
+                attribute.setValueTypeId(ORGANIZATION_TYPE);
                 attribute.setValueId(organizationType.getObjectId());
                 getDomainObject().addAttribute(attribute);
             }
+        }
+
+        if (!isCalculationCenter()) {
+            //data source
+            getDomainObject().removeAttribute(DATA_SOURCE);
+        } else {
+            //data source
+            getDomainObject().setStringValue(DATA_SOURCE, dataSourceModel.getObject().getDataSource());
+
         }
     }
 }

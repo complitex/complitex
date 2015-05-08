@@ -1,6 +1,7 @@
 package org.complitex.common.strategy.organization;
 
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.RemoteDataSource;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
 import org.complitex.common.strategy.IStrategy;
 
@@ -150,4 +151,6 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
     String displayShortNameAndCode(Long organizationId, Locale locale);
 
     void setSqlSessionFactoryBean(SqlSessionFactoryBean sqlSessionFactoryBean);
+
+    List<RemoteDataSource> findRemoteDataSources(String currentDataSource);
 }
