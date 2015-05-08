@@ -321,7 +321,7 @@ public class AddressCorrectionDialog<T> extends Panel {
                     getFilters(addressEntity), null, ShowMode.ACTIVE, true){
                 @Override
                 protected IChoiceRenderer<DomainObject> newAutocompleteItemRenderer(String entity) {
-                    if (state.get(AddressEntity.CITY.getEntityName()) == null){
+                    if (state.get(AddressEntity.CITY.getEntityName()) == null && entity.equals("street")){
                         return new IChoiceRenderer<DomainObject>() {
 
                             @Override
