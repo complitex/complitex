@@ -39,6 +39,8 @@ public class CentralHeatingConsumption extends AbstractEntity {
 
     private LocalAddress localAddress = new LocalAddress();
 
+    private Integer meterId;
+
     public CentralHeatingConsumption() {
     }
 
@@ -255,6 +257,14 @@ public class CentralHeatingConsumption extends AbstractEntity {
 
     public void setLocalAddress(LocalAddress localAddress) {
         this.localAddress = localAddress;
+    }
+
+    public Integer getMeterId() {
+        return meterId;
+    }
+
+    public void setMeterId(Integer meterId) {
+        this.meterId = meterId;
     }
 
     public boolean isEmpty(){

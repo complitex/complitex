@@ -776,14 +776,19 @@ public class BuildingStrategy extends TemplateStrategy {
         return sqlSession().selectList(BUILDING_NS + ".getBuildingCodes", ImmutableMap.of("ids", buildingCodeIds));
     }
 
-    public Long getBuildingCodeId(final Long organizationId, final String buildingCode) {
+    public Long getBuildingCodeId(Long organizationId, String buildingCode) {
         return sqlSession().selectOne(BUILDING_NS + ".selectBuildingCodeIdByCode",
                 ImmutableMap.of("organizationId", organizationId, "buildingCode", buildingCode));
     }
 
-    public Long getBuildingCodeId(final Long organizationId, final Long buildingId) {
+    public Long getBuildingCodeId(Long organizationId, Long buildingId) {
         return sqlSession().selectOne(BUILDING_NS + ".selectBuildingCodeIdByBuilding",
                 ImmutableMap.of("organizationId", organizationId, "buildingId", buildingId));
+    }
+
+    public BuildingCode getBuildingCode(Long buildingId, String organizationCode){
+        return sqlSession().selectOne(BUILDING_NS + ".selectBuildingCodeByOrganizationCode",
+                ImmutableMap.of("buildingId", buildingId, "organizationCode", organizationCode));
     }
 
     public BuildingCode getBuildingCodeById(long buildingCodeId) {

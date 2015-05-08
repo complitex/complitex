@@ -115,10 +115,15 @@
 
     <!--Building Codes-->
 
-    <select id="getBuildingCodes" parameterType="map"
-            resultType="org.complitex.address.strategy.building.entity.BuildingCode">
-        SELECT `id` id, `organization_id` organizationId, `code` buildingCode, `building_id` buildingId
-        FROM `building_code` WHERE `id` IN
+    <resultMap id="buildingCodeResultMap" type="org.complitex.address.strategy.building.entity.BuildingCode">
+        <id column="id" property="id"/>
+        <result column="organization_id" property="organizationId"/>
+        <result column="code" property="buildingCode"/>
+        <result column="building_id" property="buildingId"/>
+    </resultMap>
+
+    <select id="getBuildingCodes" parameterType="map" resultMap="buildingCodeResultMap">
+        SELECT * FROM `building_code` WHERE `id` IN
         <foreach collection="ids" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
@@ -143,6 +148,14 @@
 
     <select id="selectBuildingCodeIdByBuilding" parameterType="map" resultType="long">
         select `id` from `building_code` where `organization_id` = #{organizationId} and `building_id` = #{buildingId}
+    </select>
+
+    <select id="selectBuildingCodeByOrganizationCode" parameterType="map" resultMap="buildingCodeResultMap">
+        select bc.* from building_code bc
+            left join organization_attribute oa on oa.object_id = bc.organization_id
+            left join organization_string_culture osc on osc.id = oa.value_id
+        where bc.building_id = #{buildingId} and oa.attribute_type_id = 901 and oa.end_date is null
+              and osc.value = #{organizationCode}
     </select>
 
 </mapper>

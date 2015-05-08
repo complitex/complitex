@@ -25,7 +25,7 @@ import org.complitex.common.web.component.LabelTextField;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterConnection;
 import org.complitex.keconnection.heatmeter.service.HeatmeterConnectionBean;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 
 import javax.ejb.EJB;
 import java.util.Date;
@@ -37,7 +37,7 @@ import java.util.List;
  */
 public class HeatmeterConnectionPanel extends AbstractHeatmeterEditPanel {
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
     @EJB
     private AddressRendererBean addressRendererBean;

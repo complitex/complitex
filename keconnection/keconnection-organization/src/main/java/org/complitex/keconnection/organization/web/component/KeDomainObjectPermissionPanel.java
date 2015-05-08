@@ -26,11 +26,10 @@ import org.complitex.common.strategy.PermissionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.fieldset.CollapsibleFieldset;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
-import org.complitex.common.web.component.organization.*;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.permission.AbstractDomainObjectPermissionPanel;
 import org.complitex.common.web.component.permission.DomainObjectPermissionParameters;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 
 import javax.ejb.EJB;
@@ -43,23 +42,23 @@ import java.util.Set;
  *
  * @author Artem
  */
-public class KeConnectionDomainObjectPermissionPanel extends AbstractDomainObjectPermissionPanel {
+public class KeDomainObjectPermissionPanel extends AbstractDomainObjectPermissionPanel {
     
     private enum PermissionMode {
         
         ALL, SELECT
     }
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
     
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(CssHeaderItem.forReference(new PackageResourceReference(KeConnectionDomainObjectPermissionPanel.class,
-                KeConnectionDomainObjectPermissionPanel.class.getSimpleName() + ".css")));
+        response.render(CssHeaderItem.forReference(new PackageResourceReference(KeDomainObjectPermissionPanel.class,
+                KeDomainObjectPermissionPanel.class.getSimpleName() + ".css")));
     }
     
-    public KeConnectionDomainObjectPermissionPanel(String id, final DomainObjectPermissionParameters parameters) {
+    public KeDomainObjectPermissionPanel(String id, final DomainObjectPermissionParameters parameters) {
         super(id, parameters);
     }
     

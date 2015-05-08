@@ -58,7 +58,7 @@ import org.complitex.keconnection.heatmeter.web.component.heatmeter.bind.Heatmet
 import org.complitex.keconnection.heatmeter.web.component.heatmeter.list.ActivateHeatmeterDialog;
 import org.complitex.keconnection.heatmeter.web.component.heatmeter.list.DeactivateHeatmeterDialog;
 import org.complitex.keconnection.heatmeter.web.component.heatmeter.list.HeatmeterItemPanel;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.component.toolbar.UploadButton;
@@ -101,7 +101,7 @@ public class HeatmeterList extends TemplatePage {
     private HeatmeterImportService heatmeterImportService;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
     @EJB
     private HeatmeterBindingStatusRenderer heatmeterBindingStatusRenderer;

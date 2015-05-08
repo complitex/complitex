@@ -8,6 +8,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.complitex.address.entity.ExternalAddress;
 import org.complitex.address.entity.LocalAddress;
+import org.complitex.address.strategy.building.BuildingStrategy;
+import org.complitex.address.strategy.building.entity.BuildingCode;
+import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.BroadcasterService;
 import org.complitex.common.util.DateUtil;
@@ -18,7 +21,9 @@ import org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingCon
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFileStatus;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus;
+import org.complitex.keconnection.heatmeter.entity.cursor.ComMeter;
 import org.complitex.keconnection.heatmeter.service.ExternalHeatmeterService;
+import org.complitex.keconnection.heatmeter.strategy.ServiceStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +34,8 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus.*;
 
 /**
  * @author inheaven on 20.03.2015 0:57.
@@ -51,6 +58,12 @@ public class CentralHeatingConsumptionService {
 
     @EJB
     private ExternalHeatmeterService externalHeatmeterService;
+
+    @EJB
+    private BuildingStrategy buildingStrategy;
+
+    @EJB
+    private ServiceStrategy serviceStrategy;
 
     @Asynchronous
     public void load(Date om, Long serviceProviderId, Long serviceId, String fileName, String checkSum, InputStream inputStream){
@@ -217,26 +230,95 @@ public class CentralHeatingConsumptionService {
 
             switch (localAddress.getFirstEmptyAddressEntity()){
                 case STREET_TYPE:
-                    c.setStatus(ConsumptionStatus.LOCAL_STREET_TYPE_UNRESOLVED);
+                    c.setStatus(LOCAL_STREET_TYPE_UNRESOLVED);
                     break;
                 case CITY:
                 case STREET:
-                    c.setStatus(ConsumptionStatus.LOCAL_STREET_UNRESOLVED);
+                    c.setStatus(LOCAL_STREET_UNRESOLVED);
                     break;
                 case BUILDING:
-                    c.setStatus(ConsumptionStatus.LOCAL_BUILDING_UNRESOLVED);
+                    c.setStatus(LOCAL_BUILDING_UNRESOLVED);
                     break;
                 default:
-                    c.setStatus(ConsumptionStatus.BOUND);
+                    c.setStatus(BINDING);
             }
 
-            //external call
-            //todo get data source
-            //Cursor<ComMeter> cursor = externalHeatmeterService.getComMeterCursor()
-
-            centralHeatingConsumptionBean.save(c);
+            if (c.getStatus() != BINDING){
+                centralHeatingConsumptionBean.save(c);
+                return;
+            }
         } catch (ResolveAddressException e) {
-            c.setStatus(ConsumptionStatus.BIND_ERROR);
+            c.setStatus(BIND_ERROR);
+            c.setMessage(e.getMessage());
+            centralHeatingConsumptionBean.save(c);
+
+            log.error("consumption file bind error", e);
+
+            return;
+        }
+
+        //meter cursor
+        BuildingCode buildingCode = buildingStrategy.getBuildingCode(c.getLocalAddress().getBuildingId(),
+                c.getOrganizationCode());
+
+        if (buildingCode == null){
+            c.setStatus(LOCAL_BUILDING_CODE_UNRESOLVED);
+            centralHeatingConsumptionBean.save(c);
+            return;
+        }
+
+        String dataSource = "jdbc/keconnectionRemoteResource"; //todo add service provider link
+        String serviceCode = serviceStrategy.getDomainObject(consumptionFile.getServiceId(), true)
+                .getStringValue(ServiceStrategy.CODE);
+
+        Cursor<ComMeter> cursor;
+
+        try {
+            cursor = externalHeatmeterService.getComMeterCursor(dataSource, c.getOrganizationCode(),
+                    buildingCode.getBuildingCode(), consumptionFile.getOm(), serviceCode);
+
+
+            switch (cursor.getResultCode()){
+                case 0:
+                    c.setStatus(BIND_ERROR);
+                    c.setMessage("METER_NOT_FOUND");
+                    break;
+                case -1:
+                    c.setStatus(BIND_ERROR);
+                    c.setMessage("ORGANIZATION_NOT_FOUND");
+                    break;
+                case -2:
+                    c.setStatus(BIND_ERROR);
+                    c.setMessage("BUILDING_NOT_FOUND");
+                    break;
+                case -3:
+                    c.setStatus(BIND_ERROR);
+                    c.setMessage("NOT_ACTUAL_METER");
+                    break;
+                case -4:
+                    c.setStatus(BIND_ERROR);
+                    c.setMessage("SERVICE_NOT_FOUND");
+                    break;
+            }
+
+            if (cursor.getList().isEmpty()){
+                c.setStatus(BIND_ERROR);
+                c.setMessage("EMPTY_METER_LIST");
+            }else if (cursor.getList().size() > 1){
+                c.setStatus(BIND_ERROR);
+                c.setMessage("MORE_THEN_ONE_METER");
+            }
+
+            if (c.getStatus() != BINDING){
+                centralHeatingConsumptionBean.save(c);
+                return;
+            }
+
+            c.setMeterId(cursor.getList().get(0).getmId());
+            c.setStatus(BOUND);
+            centralHeatingConsumptionBean.save(c);
+        } catch (Exception e) {
+            c.setStatus(BIND_ERROR);
             c.setMessage(e.getMessage());
             centralHeatingConsumptionBean.save(c);
 

@@ -18,7 +18,7 @@ import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.keconnection.organization.entity.OrganizationImport;
 import org.complitex.keconnection.organization.service.exception.RootOrganizationNotFound;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ import java.util.*;
 import static org.complitex.common.strategy.organization.IOrganizationStrategy.CODE;
 import static org.complitex.common.strategy.organization.IOrganizationStrategy.NAME;
 import static org.complitex.keconnection.organization.entity.OrganizationImportFile.ORGANIZATION;
-import static org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy.SHORT_NAME;
+import static org.complitex.keconnection.organization.strategy.KeOrganizationStrategy.SHORT_NAME;
 
 /**
  *
@@ -46,7 +46,7 @@ public class KeOrganizationImportService extends AbstractImportService {
     private KeOrganizationImportBean organizationImportBean;
 
     @EJB
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
     @EJB
     private StringLocaleBean stringLocaleBean;
@@ -151,7 +151,7 @@ public class KeOrganizationImportService extends AbstractImportService {
                 Long parentObjectId = organizationStrategy.getObjectId(parentId.toString());
 
                 if (parentObjectId != null) {
-                    newObject.getAttribute(KeConnectionOrganizationStrategy.USER_ORGANIZATION_PARENT).setValueId(parentObjectId);
+                    newObject.getAttribute(KeOrganizationStrategy.USER_ORGANIZATION_PARENT).setValueId(parentObjectId);
                 }
             }
 
@@ -177,7 +177,7 @@ public class KeOrganizationImportService extends AbstractImportService {
     }
 
     private void addOrganizationTypes(DomainObject organization) {
-        organization.removeAttribute(KeConnectionOrganizationStrategy.ORGANIZATION_TYPE);
+        organization.removeAttribute(KeOrganizationStrategy.ORGANIZATION_TYPE);
         organization.addAttribute(newOrganizationTypeAttribute(1L, KeConnectionOrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE));
         organization.addAttribute(newOrganizationTypeAttribute(2L, KeConnectionOrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
     }
@@ -185,14 +185,14 @@ public class KeOrganizationImportService extends AbstractImportService {
     private Attribute newOrganizationTypeAttribute(long attributeId, long organizationTypeId) {
         Attribute a = new Attribute();
         a.setAttributeId(attributeId);
-        a.setAttributeTypeId(KeConnectionOrganizationStrategy.ORGANIZATION_TYPE);
-        a.setValueTypeId(KeConnectionOrganizationStrategy.ORGANIZATION_TYPE);
+        a.setAttributeTypeId(KeOrganizationStrategy.ORGANIZATION_TYPE);
+        a.setValueTypeId(KeOrganizationStrategy.ORGANIZATION_TYPE);
         a.setValueId(organizationTypeId);
         return a;
     }
 
     private void addReadyCloseOperatingMonthFlag(DomainObject organization, long systemLocaleId) {
-        final Attribute attribute = organization.getAttribute(KeConnectionOrganizationStrategy.READY_CLOSE_OPER_MONTH);
+        final Attribute attribute = organization.getAttribute(KeOrganizationStrategy.READY_CLOSE_OPER_MONTH);
         String value = attribute.getStringValue();
 
         if (Strings.isNullOrEmpty(value)) {

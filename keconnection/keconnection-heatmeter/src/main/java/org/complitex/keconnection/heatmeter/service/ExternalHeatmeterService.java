@@ -133,11 +133,13 @@ public class ExternalHeatmeterService extends AbstractBean{
         return new ExternalHeatmetersAndStatus(externalHeatmeters, status);
     }
 
-    public Cursor<ComMeter> getComMeterCursor(String dataSource, String organizationCode, String buildingCode, Date om){
+    public Cursor<ComMeter> getComMeterCursor(String dataSource, String organizationCode, Integer buildingCode, Date om,
+                                              String serviceCode){
         Map<String, Object> map = new HashMap<String, Object>(){{
             put("organizationCode", organizationCode);
             put("buildingCode", buildingCode);
             put("om", om);
+            put("serviceCode", serviceCode);
         }};
 
         sqlSession(dataSource).selectOne(MAPPING_NAMESPACE + ".getComMeterCursor", map);

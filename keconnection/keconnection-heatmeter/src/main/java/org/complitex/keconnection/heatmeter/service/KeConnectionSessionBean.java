@@ -5,7 +5,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.DictionaryFwSession;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 
 import javax.annotation.Resource;
 import javax.annotation.security.DeclareRoles;
@@ -32,7 +32,7 @@ public class KeConnectionSessionBean {
     protected StrategyFactory strategyFactory;
 
     @EJB
-    protected KeConnectionOrganizationStrategy organizationStrategy;
+    protected KeOrganizationStrategy organizationStrategy;
 
     public boolean isAdmin() {
         return sessionBean.isAdmin();

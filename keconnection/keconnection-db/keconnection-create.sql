@@ -647,8 +647,7 @@ CREATE TABLE `central_heating_consumption`(
   `street_id` BIGINT COMMENT 'Идентификатор улица',
   `building_id` BIGINT COMMENT 'Идентификатор дома',
 
-  `heatmeter_id` BIGINT COMMENT 'Идентификатор теплосчетчика',
-  `heatmeter_ls` INT COMMENT 'Номер л/с теплосчетчика',
+  `meter_id` BIGINT COMMENT 'Идентификатор теплосчетчика',
 
   PRIMARY KEY (`id`),
   KEY `key_consumption_file_id` (`consumption_file_id`),
@@ -662,8 +661,7 @@ CREATE TABLE `central_heating_consumption`(
   CONSTRAINT `fk_central_heating_consumption__city` FOREIGN KEY (`city_id`) REFERENCES `city` (`object_id`),
   CONSTRAINT `fk_central_heating_consumption__street_type` FOREIGN KEY (`street_type_id`) REFERENCES `street_type` (`object_id`),
   CONSTRAINT `fk_central_heating_consumption__street` FOREIGN KEY (`street_id`) REFERENCES `street` (`object_id`),
-  CONSTRAINT `fk_central_heating_consumption__building` FOREIGN KEY (`building_id`) REFERENCES `building` (`object_id`),
-  CONSTRAINT `fk_central_heating_consumption__heatmeter` FOREIGN KEY (`heatmeter_id`) REFERENCES `heatmeter` (`id`)
+  CONSTRAINT `fk_central_heating_consumption__building` FOREIGN KEY (`building_id`) REFERENCES `building` (`object_id`)
 ) CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Записи начислений центрального отопления';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

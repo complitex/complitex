@@ -2,7 +2,7 @@ package org.complitex.keconnection.organization;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.complitex.organization.DefaultOrganizationModule;
 import org.complitex.organization.IOrganizationModule;
 
@@ -15,17 +15,17 @@ import javax.ejb.Startup;
 public class KeConnectionOrganizationModule implements IOrganizationModule {
 
     @EJB
-    private KeConnectionOrganizationStrategy keConnectionOrganizationStrategy;
+    private KeOrganizationStrategy keOrganizationStrategy;
 
     public static final String NAME = "org.complitex.keconnection.organization";
 
     @Override
     public Class<? extends WebPage> getEditPage() {
-        return keConnectionOrganizationStrategy.getEditPage();
+        return keOrganizationStrategy.getEditPage();
     }
 
     @Override
     public PageParameters getEditPageParams() {
-        return keConnectionOrganizationStrategy.getEditPageParams(null, null, null);
+        return keOrganizationStrategy.getEditPageParams(null, null, null);
     }
 }

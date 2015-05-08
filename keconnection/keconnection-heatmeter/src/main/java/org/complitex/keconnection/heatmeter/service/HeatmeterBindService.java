@@ -17,7 +17,7 @@ import org.complitex.keconnection.heatmeter.service.ExternalHeatmeterService.Ext
 import org.complitex.keconnection.heatmeter.service.exception.CriticalHeatmeterBindException;
 import org.complitex.keconnection.heatmeter.service.exception.DBException;
 import org.complitex.keconnection.heatmeter.service.exception.HeatmeterBindException;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,7 @@ public class HeatmeterBindService {
     private UserTransaction userTransaction;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
     @EJB
     private BuildingStrategy buildingStrategy;

@@ -7,7 +7,7 @@ package org.complitex.keconnection.organization.strategy.entity;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.util.AttributeUtil;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 
 import java.util.Date;
 import java.util.Locale;
@@ -54,7 +54,7 @@ public class Organization extends DomainObject {
     }
 
     public Boolean isReadyCloseOperatingMonth() {
-        return AttributeUtil.getAttributeValue(this, KeConnectionOrganizationStrategy.READY_CLOSE_OPER_MONTH,
+        return AttributeUtil.getAttributeValue(this, KeOrganizationStrategy.READY_CLOSE_OPER_MONTH,
                 new BooleanConverter());
     }
 }

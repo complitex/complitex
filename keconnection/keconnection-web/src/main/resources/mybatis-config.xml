@@ -16,13 +16,6 @@
     <plugins>
         <!--cursor plugin-->
         <plugin interceptor="org.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>
-
-        <!--cache plugin-->
-        <plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheExecutorPlugin">
-            <property name="excludeNamespaces" value="
-            org.complitex.common.entity.StringLocale,
-            org.complitex.common.entity.Entity"/>
-        </plugin>
     </plugins>
 
     <environments default="local">
@@ -65,7 +58,7 @@
 
         <mapper resource="org/complitex/keconnection/tarif/strategy/TarifGroup.xml"/>
         <mapper resource="org/complitex/keconnection/tarif/strategy/Tarif.xml"/>
-        <mapper resource="org/complitex/keconnection/organization/strategy/KeConnectionOrganizationStrategy.xml"/>
+        <mapper resource="org/complitex/keconnection/organization/strategy/KeOrganizationStrategy.xml"/>
 
         <mapper resource="org/complitex/keconnection/heatmeter/service/consumption/ConsumptionFileBean.xml"/>
         <mapper resource="org/complitex/keconnection/heatmeter/service/consumption/CentralHeatingConsumptionBean.xml"/>

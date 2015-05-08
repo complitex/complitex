@@ -15,7 +15,7 @@ import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
-import org.complitex.keconnection.organization.strategy.web.edit.KeConnectionOrganizationEditComponent;
+import org.complitex.keconnection.organization.strategy.web.edit.KeOrganizationEditComponent;
 import org.complitex.keconnection.organization.strategy.web.list.OrganizationList;
 import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy;
 import org.complitex.organization.strategy.OrganizationStrategy;
@@ -35,7 +35,7 @@ import static org.complitex.common.util.DateUtil.getCurrentDate;
  * @author Artem
  */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
-public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
+public class KeOrganizationStrategy extends OrganizationStrategy {
     public final static String KECONNECTION_ORGANIZATION_STRATEGY_NAME =  IOrganizationStrategy.BEAN_NAME;
 
     /**
@@ -55,7 +55,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
      */
     public final static long KE_ORGANIZATION_OBJECT_ID = 1;
 
-    private static final String NS = KeConnectionOrganizationStrategy.class.getName();
+    private static final String NS = KeOrganizationStrategy.class.getName();
 
     private static final List<Long> CUSTOM_ATTRIBUTE_TYPES = ImmutableList.of(READY_CLOSE_OPER_MONTH, DATA_SOURCE);
     public static final String PARENT_SHORT_NAME_FILTER = "parentShortName";
@@ -145,7 +145,7 @@ public class KeConnectionOrganizationStrategy extends OrganizationStrategy {
     }
     @Override
     public Class<? extends AbstractComplexAttributesPanel> getComplexAttributesPanelAfterClass() {
-        return KeConnectionOrganizationEditComponent.class;
+        return KeOrganizationEditComponent.class;
     }
 
     @Override

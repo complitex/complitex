@@ -24,7 +24,7 @@ import org.complitex.common.web.component.search.CollapsibleInputSearchComponent
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterConnection;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 
 import javax.ejb.EJB;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class HeatmeterCodePanel extends Panel {
     private CityStrategy cityStrategy;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
     public HeatmeterCodePanel(String id, final IModel<List<HeatmeterConnection>> model) {
         super(id, model);

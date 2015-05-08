@@ -27,7 +27,7 @@ import org.complitex.common.web.component.css.CssAttributeBehavior;
 import org.complitex.keconnection.heatmeter.entity.*;
 import org.complitex.keconnection.heatmeter.service.*;
 import org.complitex.keconnection.heatmeter.web.HeatmeterEdit;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +78,7 @@ public abstract class HeatmeterItemPanel extends Panel {
     private AddressRendererBean addressRendererBean;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
     @EJB
     private HeatmeterBindingStatusRenderer heatmeterBindingStatusRenderer;

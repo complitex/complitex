@@ -3,7 +3,7 @@ package org.complitex.keconnection.organization.web.component;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.permission.organization.OrganizationPermissionParameters;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 
 import javax.ejb.EJB;
 import java.util.ArrayList;
@@ -14,14 +14,14 @@ import java.util.Set;
  *
  * @author Artem
  */
-public class KeConnectionOrganizationPermissionPanel extends KeConnectionDomainObjectPermissionPanel {
+public class KeOrganizationPermissionPanel extends KeDomainObjectPermissionPanel {
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
     private final Long organizationId;
 
-    public KeConnectionOrganizationPermissionPanel(String id,
-            OrganizationPermissionParameters organizationPermissionParameters) {
+    public KeOrganizationPermissionPanel(String id,
+                                         OrganizationPermissionParameters organizationPermissionParameters) {
         super(id, organizationPermissionParameters.getParameters());
         this.organizationId = organizationPermissionParameters.getOrganizationId();
     }

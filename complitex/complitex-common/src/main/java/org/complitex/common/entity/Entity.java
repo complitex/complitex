@@ -17,7 +17,7 @@ public class Entity implements IEntity {
                 return attributeType;
             }
         }
-        return null;
+        throw new IllegalArgumentException("attributeTypeId = " + attributeTypeId + " not found");
     }
 
     public String getName(Locale locale){

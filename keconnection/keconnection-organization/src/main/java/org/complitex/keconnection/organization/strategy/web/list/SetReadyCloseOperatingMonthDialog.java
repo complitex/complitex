@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 
@@ -24,7 +24,7 @@ import java.text.MessageFormat;
  */
 public abstract class SetReadyCloseOperatingMonthDialog extends Panel {
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
     private final Dialog dialog;
     private final Label caption;

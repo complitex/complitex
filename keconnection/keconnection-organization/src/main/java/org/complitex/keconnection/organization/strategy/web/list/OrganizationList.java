@@ -30,7 +30,7 @@ import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.common.web.component.search.CollapsibleSearchPanel;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
 import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
@@ -60,7 +60,7 @@ public class OrganizationList extends ScrollListPage {
     private CollapsibleSearchPanel searchPanel;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
     public OrganizationList() {
         init();
@@ -86,7 +86,7 @@ public class OrganizationList extends ScrollListPage {
     private DomainObjectFilter newExample() {
         DomainObjectFilter e = new DomainObjectFilter();
         e.addAttributeFilter(new AttributeFilter(NAME));
-        e.addAttributeFilter(new AttributeFilter(KeConnectionOrganizationStrategy.CODE));
+        e.addAttributeFilter(new AttributeFilter(KeOrganizationStrategy.CODE));
         e.addAttributeFilter(new AttributeFilter(SHORT_NAME));
         return e;
     }
@@ -180,12 +180,12 @@ public class OrganizationList extends ScrollListPage {
 
             @Override
             public String getObject() {
-                return example.getAttributeExample(KeConnectionOrganizationStrategy.CODE).getValue();
+                return example.getAttributeExample(KeOrganizationStrategy.CODE).getValue();
             }
 
             @Override
             public void setObject(String code) {
-                example.getAttributeExample(KeConnectionOrganizationStrategy.CODE).setValue(code);
+                example.getAttributeExample(KeOrganizationStrategy.CODE).setValue(code);
             }
         }));
         filterForm.add(new TextField<>("shortNameFilter", new Model<String>() {
@@ -204,12 +204,12 @@ public class OrganizationList extends ScrollListPage {
 
             @Override
             public String getObject() {
-                return example.getAdditionalParam(KeConnectionOrganizationStrategy.PARENT_SHORT_NAME_FILTER);
+                return example.getAdditionalParam(KeOrganizationStrategy.PARENT_SHORT_NAME_FILTER);
             }
 
             @Override
             public void setObject(String parentShortName) {
-                example.addAdditionalParam(KeConnectionOrganizationStrategy.PARENT_SHORT_NAME_FILTER, parentShortName);
+                example.addAdditionalParam(KeOrganizationStrategy.PARENT_SHORT_NAME_FILTER, parentShortName);
             }
         }));
 
@@ -289,7 +289,7 @@ public class OrganizationList extends ScrollListPage {
         filterForm.add(new ArrowOrderByBorder("nameHeader",
                 String.valueOf(NAME), dataProvider, dataView, content));
         filterForm.add(new ArrowOrderByBorder("codeHeader",
-                String.valueOf(KeConnectionOrganizationStrategy.CODE), dataProvider, dataView, content));
+                String.valueOf(KeOrganizationStrategy.CODE), dataProvider, dataView, content));
         filterForm.add(new ArrowOrderByBorder("shortNameHeader",
                 String.valueOf(SHORT_NAME), dataProvider, dataView, content));
 
@@ -301,9 +301,9 @@ public class OrganizationList extends ScrollListPage {
                 filterForm.clearInput();
                 example.setObjectId(null);
                 example.getAttributeExample(NAME).setValue(null);
-                example.getAttributeExample(KeConnectionOrganizationStrategy.CODE).setValue(null);
+                example.getAttributeExample(KeOrganizationStrategy.CODE).setValue(null);
                 example.getAttributeExample(SHORT_NAME).setValue(null);
-                example.addAdditionalParam(KeConnectionOrganizationStrategy.PARENT_SHORT_NAME_FILTER, null);
+                example.addAdditionalParam(KeOrganizationStrategy.PARENT_SHORT_NAME_FILTER, null);
                 target.add(content);
             }
         };

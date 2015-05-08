@@ -12,7 +12,7 @@ import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterBindingStatus;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterPeriod;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterType;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -52,7 +52,7 @@ public class HeatmeterBean extends AbstractBean {
     private HeatmeterInputBean inputBean;
 
     @EJB
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
 
     public void save(Heatmeter heatmeter) throws ConcurrentModificationException {

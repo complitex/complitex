@@ -13,7 +13,7 @@ import org.complitex.common.service.exception.ImportFileReadException;
 import org.complitex.common.util.StringUtil;
 import org.complitex.keconnection.heatmeter.entity.*;
 import org.complitex.keconnection.heatmeter.service.exception.*;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ import java.util.List;
 
 import static org.complitex.keconnection.heatmeter.entity.HeatmeterPeriodSubType.OPERATING;
 import static org.complitex.keconnection.heatmeter.entity.HeatmeterType.HEATING_AND_WATER;
-import static org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy.KE_ORGANIZATION_OBJECT_ID;
+import static org.complitex.keconnection.organization.strategy.KeOrganizationStrategy.KE_ORGANIZATION_OBJECT_ID;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -46,7 +46,7 @@ public class HeatmeterImportService extends AbstractImportService {
     private HeatmeterBean heatmeterBean;
 
     @EJB
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
     @EJB
     private BuildingStrategy buildingStrategy;

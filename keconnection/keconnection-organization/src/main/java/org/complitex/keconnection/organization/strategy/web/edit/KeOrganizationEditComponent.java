@@ -19,7 +19,7 @@ import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.IDisableAwareChoiceRenderer;
-import org.complitex.keconnection.organization.strategy.KeConnectionOrganizationStrategy;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.complitex.keconnection.organization.strategy.entity.Organization;
 import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy;
 import org.complitex.organization.entity.RemoteDataSource;
@@ -33,10 +33,10 @@ import java.util.List;
  *
  * @author Artem
  */
-public class KeConnectionOrganizationEditComponent extends OrganizationEditComponent {
+public class KeOrganizationEditComponent extends OrganizationEditComponent {
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private KeConnectionOrganizationStrategy organizationStrategy;
+    private KeOrganizationStrategy organizationStrategy;
 
     @EJB
     private StringCultureBean stringBean;
@@ -45,7 +45,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
     private WebMarkupContainer dataSourceContainer;
     private IModel<RemoteDataSource> dataSourceModel;
 
-    public KeConnectionOrganizationEditComponent(String id, boolean disabled) {
+    public KeOrganizationEditComponent(String id, boolean disabled) {
         super(id, disabled);
     }
 
@@ -68,7 +68,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
             readyCloseOmSection.setOutputMarkupPlaceholderTag(true);
             add(readyCloseOmSection);
 
-            final long attributeTypeId = KeConnectionOrganizationStrategy.READY_CLOSE_OPER_MONTH;
+            final long attributeTypeId = KeOrganizationStrategy.READY_CLOSE_OPER_MONTH;
             Attribute attribute = organization.getAttribute(attributeTypeId);
             if (attribute == null) {
                 attribute = new Attribute();
@@ -169,7 +169,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
 
     @Override
     protected String getStrategyName() {
-        return KeConnectionOrganizationStrategy.KECONNECTION_ORGANIZATION_STRATEGY_NAME;
+        return KeOrganizationStrategy.KECONNECTION_ORGANIZATION_STRATEGY_NAME;
     }
 
     public boolean isServicingOrganization() {
@@ -184,7 +184,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
     @Override
     protected boolean isOrganizationTypeEnabled() {
         Long organizationId = getDomainObject().getObjectId();
-        return !(organizationId != null && (organizationId == KeConnectionOrganizationStrategy.ITSELF_ORGANIZATION_OBJECT_ID))
+        return !(organizationId != null && (organizationId == KeOrganizationStrategy.ITSELF_ORGANIZATION_OBJECT_ID))
                 && super.isOrganizationTypeEnabled();
     }
 
@@ -196,7 +196,7 @@ public class KeConnectionOrganizationEditComponent extends OrganizationEditCompo
 
         if (!isServicingOrganization()) {
             //Readiness to close operating month.
-            organization.removeAttribute(KeConnectionOrganizationStrategy.READY_CLOSE_OPER_MONTH);
+            organization.removeAttribute(KeOrganizationStrategy.READY_CLOSE_OPER_MONTH);
         }
 
         if (!isCalculationCenter()) {
