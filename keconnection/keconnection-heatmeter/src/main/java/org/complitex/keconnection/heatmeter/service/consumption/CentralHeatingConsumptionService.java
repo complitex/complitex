@@ -23,7 +23,7 @@ import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFileSt
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus;
 import org.complitex.keconnection.heatmeter.entity.cursor.ComMeter;
 import org.complitex.keconnection.heatmeter.service.ExternalHeatmeterService;
-import org.complitex.keconnection.heatmeter.strategy.ServiceStrategy;
+import org.complitex.organization.strategy.ServiceStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -279,32 +279,32 @@ public class CentralHeatingConsumptionService {
 
             switch (cursor.getResultCode()){
                 case 0:
-                    c.setStatus(BIND_ERROR);
+                    c.setStatus(METER_NOT_FOUND);
                     c.setMessage("METER_NOT_FOUND");
                     break;
                 case -1:
-                    c.setStatus(BIND_ERROR);
+                    c.setStatus(METER_NOT_FOUND);
                     c.setMessage("ORGANIZATION_NOT_FOUND");
                     break;
                 case -2:
-                    c.setStatus(BIND_ERROR);
+                    c.setStatus(METER_NOT_FOUND);
                     c.setMessage("BUILDING_NOT_FOUND");
                     break;
                 case -3:
-                    c.setStatus(BIND_ERROR);
+                    c.setStatus(METER_NOT_FOUND);
                     c.setMessage("NOT_ACTUAL_METER");
                     break;
                 case -4:
-                    c.setStatus(BIND_ERROR);
+                    c.setStatus(METER_NOT_FOUND);
                     c.setMessage("SERVICE_NOT_FOUND");
                     break;
             }
 
             if (cursor.getList().isEmpty()){
-                c.setStatus(BIND_ERROR);
+                c.setStatus(METER_NOT_FOUND);
                 c.setMessage("EMPTY_METER_LIST");
             }else if (cursor.getList().size() > 1){
-                c.setStatus(BIND_ERROR);
+                c.setStatus(METER_NOT_FOUND);
                 c.setMessage("MORE_THEN_ONE_METER");
             }
 

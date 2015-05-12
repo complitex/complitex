@@ -4,13 +4,13 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.DateUtil;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
+import org.complitex.organization.entity.ServiceBilling;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.process.SubsidyBindTaskBean;
 import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.entity.OsznOrganization;
-import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociation;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -51,10 +51,10 @@ public class SubsidyService {
         BigDecimal sbSum = new BigDecimal(0);
         BigDecimal smSum = new BigDecimal(0);
 
-        for (ServiceAssociation sa : organization.getServiceAssociationList()) {
-            nSum = nSum.add((BigDecimal) request.getField("P" + sa.getServiceProviderTypeId()));
-            sbSum = sbSum.add((BigDecimal) request.getField("SB" + sa.getServiceProviderTypeId()));
-            smSum = smSum.add((BigDecimal) request.getField("SM" + sa.getServiceProviderTypeId()));
+        for (ServiceBilling sa : organization.getServiceAssociationList()) {
+            nSum = nSum.add((BigDecimal) request.getField("P" + sa.getServiceId()));
+            sbSum = sbSum.add((BigDecimal) request.getField("SB" + sa.getServiceId()));
+            smSum = smSum.add((BigDecimal) request.getField("SM" + sa.getServiceId()));
         }
 
         //round Pn

@@ -52,28 +52,28 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeFilter number = example.getAttributeExample(NUMBER);
+            AttributeFilter number = filter.getAttributeExample(NUMBER);
             if (number == null) {
                 number = new AttributeFilter(NUMBER);
-                example.addAttributeFilter(number);
+                filter.addAttributeFilter(number);
             }
             number.setValue(searchTextInput);
         }
 
         Long streetId = ids.get("street");
         if (streetId != null && streetId > 0) {
-            example.setParentId(streetId);
-            example.setParentEntity("street");
+            filter.setParentId(streetId);
+            filter.setParentEntity("street");
         } else {
             Long cityId = ids.get("city");
             if (cityId != null && cityId > 0) {
-                example.setParentId(cityId);
-                example.setParentEntity("city");
+                filter.setParentId(cityId);
+                filter.setParentEntity("city");
             } else {
-                example.setParentId(-1L);
-                example.setParentEntity("");
+                filter.setParentId(-1L);
+                filter.setParentEntity("");
             }
         }
     }

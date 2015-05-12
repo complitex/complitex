@@ -99,7 +99,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
             example.setLocaleId(stringLocaleBean.convert(locale).getId());
             example.setAsc(true);
         }
-        configureExample(example, ImmutableMap.<String, Long>of(), null);
+        configureFilter(example, ImmutableMap.<String, Long>of(), null);
         return getList(example);
     }
 
@@ -139,7 +139,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
                 ImmutableList.of(KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER,
                     KeConnectionOrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE,
                     KeConnectionOrganizationTypeStrategy.CALCULATION_MODULE));
-        configureExample(example, ImmutableMap.<String, Long>of(), null);
+        configureFilter(example, ImmutableMap.<String, Long>of(), null);
 
         return getList(example);
     }

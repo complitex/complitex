@@ -58,12 +58,12 @@ public class HeatmeterPeriodTypeStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeFilter attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = filter.getAttributeExample(NAME);
             if (attrExample == null) {
                 attrExample = new AttributeFilter(NAME);
-                example.addAttributeFilter(attrExample);
+                filter.addAttributeFilter(attrExample);
             }
             attrExample.setValue(searchTextInput);
         }
@@ -76,7 +76,7 @@ public class HeatmeterPeriodTypeStrategy extends TemplateStrategy {
 
     public List<DomainObject> getAll() {
         DomainObjectFilter example = new DomainObjectFilter();
-        configureExample(example, ImmutableMap.<String, Long>of(), null);
+        configureFilter(example, ImmutableMap.<String, Long>of(), null);
         return (List<DomainObject>) getList(example);
     }
 

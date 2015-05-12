@@ -4,8 +4,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -141,7 +139,7 @@ public class DomainObjectListPanel extends Panel {
                     ids.put(filterEntity, domainObject.getObjectId());
                 }
             }
-            getStrategy().configureExample(filter, ids, null);
+            getStrategy().configureFilter(filter, ids, null);
         }
 
         //Form

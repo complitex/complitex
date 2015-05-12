@@ -22,11 +22,11 @@ import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
+import org.complitex.organization.entity.ServiceAssociationList;
+import org.complitex.organization.entity.ServiceBilling;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.entity.OsznOrganization;
-import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociation;
-import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociationList;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.osznconnection.service_provider_type.strategy.ServiceProviderTypeStrategy;
 
@@ -101,22 +101,22 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             serviceAssociationsUpdateContainer.setOutputMarkupId(true);
             serviceAssociationsContainer.add(serviceAssociationsUpdateContainer);
 
-            ListView<ServiceAssociation> serviceAssociations = new AjaxRemovableListView<ServiceAssociation>("serviceAssociations",
+            ListView<ServiceBilling> serviceAssociations = new AjaxRemovableListView<ServiceBilling>("serviceAssociations",
                     serviceAssociationList) {
 
                 @Override
-                protected void populateItem(ListItem<ServiceAssociation> item) {
+                protected void populateItem(ListItem<ServiceBilling> item) {
                     final WebMarkupContainer fakeContainer = new WebMarkupContainer("fakeContainer");
                     item.add(fakeContainer);
 
-                    final ServiceAssociation serviceAssociation = item.getModelObject();
+                    final ServiceBilling serviceBilling = item.getModelObject();
 
                     //service provider type
                     IModel<DomainObject> serviceProviderTypeModel = new Model<DomainObject>() {
 
                         @Override
                         public DomainObject getObject() {
-                            Long serviceProviderTypeId = serviceAssociation.getServiceProviderTypeId();
+                            Long serviceProviderTypeId = serviceBilling.getServiceId();
                             if (serviceProviderTypeId != null) {
                                 for (DomainObject o : allServiceProviderTypes) {
                                     if (serviceProviderTypeId.equals(o.getObjectId())) {
@@ -129,12 +129,12 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
                         @Override
                         public void setObject(DomainObject serviceProviderType) {
-                            serviceAssociation.setServiceProviderTypeId(serviceProviderType != null
+                            serviceBilling.setServiceId(serviceProviderType != null
                                     ? serviceProviderType.getObjectId() : null);
                         }
                     };
                     //initialize model:
-                    Long serviceProviderTypeId = serviceAssociation.getServiceProviderTypeId();
+                    Long serviceProviderTypeId = serviceBilling.getServiceId();
                     if (serviceProviderTypeId != null) {
                         for (DomainObject o : allServiceProviderTypes) {
                             if (serviceProviderTypeId.equals(o.getObjectId())) {
@@ -149,7 +149,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                         public List<DomainObject> getObject() {
                             List<DomainObject> selectList = Lists.newArrayList();
 
-                            Long serviceProviderTypeId = serviceAssociation.getServiceProviderTypeId();
+                            Long serviceProviderTypeId = serviceBilling.getServiceId();
                             for (DomainObject spt : allServiceProviderTypes) {
                                 if (!serviceAssociationList.containsServiceProviderType(spt.getObjectId())
                                         || spt.getObjectId().equals(serviceProviderTypeId)) {
@@ -178,7 +178,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
                         @Override
                         public DomainObject getObject() {
-                            Long calculationCenterId = serviceAssociation.getCalculationCenterId();
+                            Long calculationCenterId = serviceBilling.getCalculationCenterId();
                             if (calculationCenterId != null) {
                                 for (DomainObject o : allCalculationCentres) {
                                     if (calculationCenterId.equals(o.getObjectId())) {
@@ -191,12 +191,12 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
                         @Override
                         public void setObject(DomainObject calculationCenter) {
-                            serviceAssociation.setCalculationCenterId(calculationCenter != null
+                            serviceBilling.setCalculationCenterId(calculationCenter != null
                                     ? calculationCenter.getObjectId() : null);
                         }
                     };
                     //initialize model:
-                    Long calculationCenterId = serviceAssociation.getCalculationCenterId();
+                    Long calculationCenterId = serviceBilling.getCalculationCenterId();
                     if (calculationCenterId != null) {
                         for (DomainObject o : allCalculationCentres) {
                             if (calculationCenterId.equals(o.getObjectId())) {
@@ -224,7 +224,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 }
 
                 @Override
-                protected boolean approveRemoval(ListItem<ServiceAssociation> item) {
+                protected boolean approveRemoval(ListItem<ServiceBilling> item) {
                     return serviceAssociationList.size() > 1;
                 }
             };

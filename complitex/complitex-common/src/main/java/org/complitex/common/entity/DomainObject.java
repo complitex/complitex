@@ -1,11 +1,9 @@
 package org.complitex.common.entity;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import org.complitex.common.util.Locales;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DomainObject implements ILongId {
     private Long pkId;
@@ -58,14 +56,10 @@ public class DomainObject implements ILongId {
         return null;
     }
 
-    public List<Attribute> getAttributes(final Long attributeTypeId) {
-        return Lists.newArrayList(Iterables.filter(attributes, new Predicate<Attribute>() {
-
-            @Override
-            public boolean apply(Attribute attr) {
-                return attr.getAttributeTypeId().equals(attributeTypeId);
-            }
-        }));
+    public List<Attribute> getAttributes(Long attributeTypeId) {
+        return attributes.stream()
+                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .collect(Collectors.toList());
     }
 
     public void removeAttribute(long attributeTypeId) {

@@ -120,7 +120,7 @@ public final class Children extends Panel {
                 } else {
                     example.setStatus(ShowMode.ALL.name());
                 }
-                getChildrenStrategy().configureExample(example, ImmutableMap.of(parentEntity, parentObject.getObjectId()), null);
+                getChildrenStrategy().configureFilter(example, ImmutableMap.of(parentEntity, parentObject.getObjectId()), null);
                 children = getChildrenStrategy().getList(example);
             }
         };

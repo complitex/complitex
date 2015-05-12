@@ -8,7 +8,7 @@ import org.complitex.common.util.IdListUtil;
 import org.complitex.keconnection.heatmeter.entity.ServiceContract;
 import org.complitex.keconnection.heatmeter.entity.ServiceContractBuilding;
 import org.complitex.keconnection.heatmeter.entity.ServiceContractService;
-import org.complitex.keconnection.heatmeter.strategy.ServiceStrategy;
+import org.complitex.organization.strategy.ServiceStrategy;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

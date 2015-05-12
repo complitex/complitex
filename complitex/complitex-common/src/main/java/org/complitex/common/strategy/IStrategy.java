@@ -18,7 +18,7 @@ public interface IStrategy {
     
     void archiveAttributes(Collection<Long> attributeTypeIds, Date endDate);
 
-    void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput);
+    void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput);
     
     Long getCount(DomainObjectFilter example);
 

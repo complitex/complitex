@@ -1,14 +1,11 @@
 package org.complitex.osznconnection.organization.strategy;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.StringCulture;
-import org.complitex.common.exception.DeleteException;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
@@ -16,10 +13,8 @@ import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
+import org.complitex.organization.entity.ServiceBilling;
 import org.complitex.organization.strategy.OrganizationStrategy;
-import org.complitex.osznconnection.organization.strategy.entity.OsznOrganization;
-import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociation;
-import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociationList;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationEditComponent;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationValidator;
 import org.slf4j.Logger;
@@ -27,7 +22,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
 
 import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.*;
 
@@ -37,8 +33,6 @@ import static org.complitex.osznconnection.organization_type.strategy.OsznOrgani
  */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
 public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject> {
-
-
     /**
      * References to associations between service provider types and calculation centres. It is user organization only attribute.
      */
@@ -125,13 +119,12 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
     private final Logger log = LoggerFactory.getLogger(OsznOrganizationStrategy.class);
     public static final String OSZN_ORGANIZATION_STRATEGY_NAME = IOrganizationStrategy.BEAN_NAME;
     private static final String RESOURCE_BUNDLE = OsznOrganizationStrategy.class.getName();
-    private static final String MAPPING_NAMESPACE = OsznOrganizationStrategy.class.getPackage().getName() + ".OsznOrganization";
 
     public static final List<Long> LOAD_SAVE_FILE_DIR_ATTRIBUTES =
             ImmutableList.of(LOAD_PAYMENT_BENEFIT_FILES_DIR, SAVE_PAYMENT_BENEFIT_FILES_DIR,
-            LOAD_ACTUAL_PAYMENT_DIR, SAVE_ACTUAL_PAYMENT_DIR, LOAD_SUBSIDY_DIR, SAVE_SUBSIDY_DIR, 
-            LOAD_DWELLING_CHARACTERISTICS_DIR, SAVE_DWELLING_CHARACTERISTICS_DIR, REFERENCES_DIR,
-            LOAD_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_FORM2_DIR);
+                    LOAD_ACTUAL_PAYMENT_DIR, SAVE_ACTUAL_PAYMENT_DIR, LOAD_SUBSIDY_DIR, SAVE_SUBSIDY_DIR,
+                    LOAD_DWELLING_CHARACTERISTICS_DIR, SAVE_DWELLING_CHARACTERISTICS_DIR, REFERENCES_DIR,
+                    LOAD_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_FORM2_DIR);
 
     private static final List<Long> CUSTOM_ATTRIBUTE_TYPES = ImmutableList.<Long>builder().
             add(DATA_SOURCE).
@@ -143,11 +136,11 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
 
     private static final List<Long> ATTRIBUTE_TYPES_WITH_CUSTOM_STRING_PROCESSING =
             ImmutableList.<Long>builder().
-            add(DATA_SOURCE).
-            addAll(LOAD_SAVE_FILE_DIR_ATTRIBUTES).
-            add(ROOT_REQUEST_FILE_DIRECTORY).
-            add(ROOT_EXPORT_DIRECTORY).
-            build();
+                    add(DATA_SOURCE).
+                    addAll(LOAD_SAVE_FILE_DIR_ATTRIBUTES).
+                    add(ROOT_REQUEST_FILE_DIRECTORY).
+                    add(ROOT_EXPORT_DIRECTORY).
+                    build();
 
     @EJB
     private StringLocaleBean stringLocaleBean;
@@ -188,15 +181,15 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
 
     @Override
     public List<DomainObject> getAllOuterOrganizations(Locale locale) {
-        return getOrganizations(Arrays.asList(OSZN_TYPE, CALCULATION_CENTER_TYPE, SERVICING_ORGANIZATION_TYPE), locale);
+        return getOrganizations(OSZN_TYPE, CALCULATION_CENTER_TYPE, SERVICING_ORGANIZATION_TYPE);
     }
 
     public List<DomainObject> getAllOSZNs(Locale locale) {
-        return getOrganizations(Arrays.asList(OSZN_TYPE), locale);
+        return getOrganizations(OSZN_TYPE);
     }
 
-      public List<DomainObject> getAllCalculationCentres(Locale locale) {
-        return getOrganizations(Arrays.asList(CALCULATION_CENTER_TYPE), locale);
+    public List<DomainObject> getAllCalculationCentres(Locale locale) {
+        return getOrganizations(CALCULATION_CENTER_TYPE);
     }
 
     @Override
@@ -231,109 +224,12 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
         }
     }
 
-    @Override
-    public OsznOrganization getDomainObject(Long id, boolean runAsAdmin) {
-        DomainObject object = super.getDomainObject(id, runAsAdmin);
-        if (object == null) {
-            return null;
-        }
 
-        ServiceAssociationList serviceAssociationList = new ServiceAssociationList();
-
-        if (isUserOrganization(object)) {
-            serviceAssociationList = loadServiceAssociations(object);
-        }
-        return new OsznOrganization(object, serviceAssociationList);
+    private void saveServiceAssociation(ServiceBilling serviceBilling) {
+        sqlSession().insert(MAPPING_NAMESPACE + ".insertServiceAssociation", serviceBilling);
     }
 
-    @Override
-    public OsznOrganization newInstance() {
-        return new OsznOrganization(super.newInstance(), new ServiceAssociationList());
-    }
 
-    @Override
-    public OsznOrganization getHistoryObject(long objectId, Date date) {
-        DomainObject object = super.getHistoryObject(objectId, date);
-        if (object == null) {
-            return null;
-        }
-        ServiceAssociationList serviceAssociationList = new ServiceAssociationList();
-        if (isUserOrganization(object)) {
-            serviceAssociationList = loadServiceAssociations(object);
-        }
-        return new OsznOrganization(object, serviceAssociationList);
-    }
-
-    @Override
-    public void insert(DomainObject object, Date insertDate) {
-        OsznOrganization osznOrganization = (OsznOrganization) object;
-        if (!osznOrganization.getServiceAssociationList().isEmpty()
-                && !osznOrganization.getServiceAssociationList().hasNulls()) {
-            addServiceAssociationAttributes(osznOrganization);
-        }
-
-        super.insert(object, insertDate);
-    }
-
-    private void addServiceAssociationAttributes(OsznOrganization osznOrganization) {
-        osznOrganization.removeAttribute(SERVICE_ASSOCIATIONS);
-
-        long i = 1;
-        for (ServiceAssociation serviceAssociation : osznOrganization.getServiceAssociationList()) {
-            saveServiceAssociation(serviceAssociation);
-
-            Attribute a = new Attribute();
-            a.setAttributeTypeId(SERVICE_ASSOCIATIONS);
-            a.setValueId(serviceAssociation.getId());
-            a.setValueTypeId(SERVICE_ASSOCIATIONS);
-            a.setAttributeId(i++);
-            osznOrganization.addAttribute(a);
-        }
-    }
-
-    @Override
-    public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
-        OsznOrganization newOrganization = (OsznOrganization) newObject;
-        OsznOrganization oldOrganization = (OsznOrganization) oldObject;
-
-        if (!newOrganization.getServiceAssociationList().isEmpty()
-                && !newOrganization.getServiceAssociationList().hasNulls()) {
-            if (!newOrganization.getServiceAssociationList().equals(oldOrganization.getServiceAssociationList())) {
-                addServiceAssociationAttributes(newOrganization);
-            }
-        } else {
-            newOrganization.removeAttribute(SERVICE_ASSOCIATIONS);
-        }
-
-        super.update(oldObject, newObject, updateDate);
-    }
-
-    private void saveServiceAssociation(ServiceAssociation serviceAssociation) {
-        sqlSession().insert(MAPPING_NAMESPACE + ".insertServiceAssociation", serviceAssociation);
-    }
-
-    @Override
-    public void delete(long objectId, Locale locale) throws DeleteException {
-        deleteChecks(objectId, locale);
-
-        sqlSession().delete(MAPPING_NAMESPACE + ".deleteServiceAssociations",
-                ImmutableMap.of("objectId", objectId, "organizationServiceAssociationsAT", SERVICE_ASSOCIATIONS));
-
-        deleteStrings(objectId);
-        deleteAttribute(objectId);
-        deleteDomainObject(objectId, locale);
-    }
-
-    /**
-     * Figures out list of service associations. Each service association is link between service provider type and
-     * caluclation center.
-     *
-     * @param userOrganization User organization.
-     * @return Service associations list.
-     */
-    public ServiceAssociationList getServiceAssociations(DomainObject userOrganization) {
-        return loadServiceAssociations(userOrganization);
-    }
 
     /**
      * Returns relative path to request files storage.
@@ -369,31 +265,6 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
         return ATTRIBUTE_TYPES_WITH_CUSTOM_STRING_PROCESSING.contains(attributeTypeId)
                 ? stringBean.save(strings, getEntityName(), false)
                 : super.insertStrings(attributeTypeId, strings);
-    }
-
-    private ServiceAssociationList loadServiceAssociations(DomainObject userOrganization) {
-        if (!isUserOrganization(userOrganization)) {
-            throw new IllegalArgumentException("DomainObject is not user organization. Organization id: " + userOrganization.getObjectId());
-        }
-
-        List<Attribute> serviceAssociationAttributes = userOrganization.getAttributes(SERVICE_ASSOCIATIONS);
-        Set<Long> serviceAssociationIds = Sets.newHashSet();
-        for (Attribute serviceAssociation : serviceAssociationAttributes) {
-            serviceAssociationIds.add(serviceAssociation.getValueId());
-        }
-
-        final List<ServiceAssociation> serviceAssociations = sqlSession().selectList(
-                MAPPING_NAMESPACE + ".getServiceAssociations", ImmutableMap.of("ids", serviceAssociationIds));
-
-        Collections.sort(serviceAssociations, new Comparator<ServiceAssociation>() {
-
-            @Override
-            public int compare(ServiceAssociation o1, ServiceAssociation o2) {
-                return o1.getId().compareTo(o2.getId());
-            }
-        });
-
-        return new ServiceAssociationList(serviceAssociations);
     }
 
     public DomainObject getBalanceHolder(Long organizationId){

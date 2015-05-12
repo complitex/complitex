@@ -55,12 +55,12 @@ public class TarifStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeFilter attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = filter.getAttributeExample(NAME);
             if (attrExample == null) {
                 attrExample = new AttributeFilter(NAME);
-                example.addAttributeFilter(attrExample);
+                filter.addAttributeFilter(attrExample);
             }
             attrExample.setValue(searchTextInput);
         }
@@ -76,7 +76,7 @@ public class TarifStrategy extends TemplateStrategy {
         AttributeFilter codeExample = new AttributeFilter(CODE);
         codeExample.setValue(String.valueOf(code));
         example.addAttributeFilter(codeExample);
-        configureExample(example, ImmutableMap.<String, Long>of(), null);
+        configureFilter(example, ImmutableMap.<String, Long>of(), null);
         List<? extends DomainObject> results = getList(example);
         if (results == null || results.isEmpty()) {
             return null;

@@ -105,7 +105,7 @@ public final class BuildingsGrid extends TemplatePage {
         protected List<? extends DomainObject> find(DomainObjectFilter.ComparisonType comparisonType, String term, int size) {
             IStrategy strategy = strategy();
             DomainObjectFilter example = new DomainObjectFilter();
-            strategy.configureExample(example, ImmutableMap.of("city", cityId), term);
+            strategy.configureFilter(example, ImmutableMap.of("city", cityId), term);
             example.setOrderByAttributeTypeId(strategy.getDefaultOrderByAttributeId());
             example.setAsc(true);
             example.setCount(size);

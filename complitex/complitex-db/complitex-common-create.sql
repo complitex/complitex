@@ -1200,12 +1200,88 @@ CREATE TABLE `address_sync`(
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Синхронизация адресного элемента';
 
 -- ------------------------------
---  DROP Sync
+-- Service
 -- ------------------------------
 
-DROP TABLE IF EXISTS `district_sync`;
-DROP TABLE IF EXISTS `street_type_sync`;
-DROP TABLE IF EXISTS `street_sync`;
-DROP TABLE IF EXISTS `building_address_sync`;
+DROP TABLE IF EXISTS `service`;
+CREATE TABLE `service` (
+  `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
+  `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
+  `parent_id` BIGINT(20) COMMENT 'Не используется',
+  `parent_entity_id` BIGINT(20) COMMENT 'Не используется',
+  `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров объекта',
+  `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата завершения периода действия параметров объекта',
+  `status` varchar(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус объекта: ACTIVE, INACTIVE или ARCHIVE',
+  `permission_id` BIGINT(20) NOT NULL DEFAULT 0 COMMENT 'Ключ прав доступа к объекту',
+  `external_id` BIGINT(20) COMMENT 'Внешний идентификатор импорта записи',
+  PRIMARY KEY  (`pk_id`),
+  UNIQUE KEY `unique_object_id__start_date` (`object_id`,`start_date`),
+  UNIQUE KEY `unique_external_id` (`external_id`),
+  KEY `key_object_id` (`object_id`),
+  KEY `key_parent_id` (`parent_id`),
+  KEY `key_parent_entity_id` (`parent_entity_id`),
+  KEY `key_start_date` (`start_date`),
+  KEY `key_end_date` (`end_date`),
+  KEY `key_status` (`status`),
+  KEY `key_permission_id` (`permission_id`),
+  CONSTRAINT `fk_service__entity` FOREIGN KEY (`parent_entity_id`) REFERENCES `entity` (`id`),
+  CONSTRAINT `fk_service__permission` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`)
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Услуга';
+
+DROP TABLE IF EXISTS `service_attribute`;
+CREATE TABLE `service_attribute` (
+  `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
+  `attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор атрибута',
+  `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
+  `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: todo',
+  `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: todo',
+  `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров атрибута',
+  `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия параметров атрибута',
+  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
+  PRIMARY KEY  (`pk_id`),
+  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
+  KEY `key_object_id` (`object_id`),
+  KEY `key_attribute_type_id` (`attribute_type_id`),
+  KEY `key_value_id` (`value_id`),
+  KEY `key_value_type_id` (`value_type_id`),
+  KEY `key_start_date` (`start_date`),
+  KEY `key_end_date` (`end_date`),
+  KEY `key_status` (`status`),
+  CONSTRAINT `fk_service_attribute__service` FOREIGN KEY (`object_id`) REFERENCES `service`(`object_id`),
+  CONSTRAINT `fk_service_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
+  REFERENCES `attribute_type` (`id`),
+  CONSTRAINT `fk_service_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
+  REFERENCES `attribute_value_type` (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты услуги';
+
+DROP TABLE IF EXISTS `service_string_culture`;
+CREATE TABLE `service_string_culture` (
+  `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
+  `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор значения',
+  `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
+  `value` VARCHAR(1000) COMMENT 'Текстовое значение',
+  PRIMARY KEY (`pk_id`),
+  UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
+  KEY `key_locale` (`locale_id`),
+  KEY `key_value` (`value`),
+  CONSTRAINT `fk_service_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута услуги';
+
+-- ------------------------------
+-- Service Billing
+-- ------------------------------
+DROP TABLE IF EXISTS `service_billing`;
+
+CREATE TABLE `service_billing` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
+  `service_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта типа поставщика услуги',
+  `billing_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор модуля начислений',
+  PRIMARY KEY (`id`),
+  KEY `key_service_id` (`service_id`),
+  KEY `key_billing_id` (`billing_id`),
+  CONSTRAINT `fk_service_association__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`object_id`),
+  CONSTRAINT `fk_service_association__organization` FOREIGN KEY (`billing_id`) REFERENCES `organization` (`object_id`)
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Услуга - модуль начислений';
 
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

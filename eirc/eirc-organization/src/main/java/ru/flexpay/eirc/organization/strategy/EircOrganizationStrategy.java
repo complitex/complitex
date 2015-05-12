@@ -141,7 +141,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
             example.setAsc(true);
         }
 //        example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationType.SERVICE_PROVIDER.getId()));
-        configureExample(example, ImmutableMap.<String, Long>of(), null);
+        configureFilter(example, ImmutableMap.<String, Long>of(), null);
         return getList(example);
     }
 
@@ -163,7 +163,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
             example.setAsc(true);
         }
 
-        configureExample(example, ImmutableMap.<String, Long>of(), null);
+        configureFilter(example, ImmutableMap.<String, Long>of(), null);
 
         return getList(example);
     }
@@ -186,7 +186,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
             example.setAsc(true);
         }
 
-        configureExample(example, ImmutableMap.<String, Long>of(), null);
+        configureFilter(example, ImmutableMap.<String, Long>of(), null);
 
         return getList(example);
     }

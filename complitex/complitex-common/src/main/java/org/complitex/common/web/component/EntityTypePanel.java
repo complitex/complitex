@@ -109,7 +109,7 @@ public class EntityTypePanel extends Panel {
         example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
         example.setOrderByAttributeTypeId(entityTypeDisplayAttributeTypeId);
         example.setAsc(true);
-        strategy.configureExample(example, ImmutableMap.<String, Long>of(), null);
+        strategy.configureFilter(example, ImmutableMap.<String, Long>of(), null);
         return strategy.getList(example);
     }
 }

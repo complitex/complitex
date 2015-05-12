@@ -217,7 +217,7 @@ public class BuildingStrategy extends TemplateStrategy {
         Long cityId = buildingExample.getAdditionalParam(P_CITY);
         ids.put("city", cityId);
 
-        buildingAddressStrategy.configureExample(addressExample, ids, null);
+        buildingAddressStrategy.configureFilter(addressExample, ids, null);
 
         return addressExample;
     }
@@ -322,20 +322,20 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            example.addAdditionalParam("number", searchTextInput);
+            filter.addAdditionalParam("number", searchTextInput);
         }
         Long streetId = ids.get("street");
         if (streetId != null && streetId > 0) {
-            example.addAdditionalParam(P_STREET, streetId);
+            filter.addAdditionalParam(P_STREET, streetId);
         } else {
-            example.addAdditionalParam(P_STREET, null);
+            filter.addAdditionalParam(P_STREET, null);
             Long cityId = ids.get("city");
             if (cityId != null && cityId > 0) {
-                example.addAdditionalParam(P_CITY, cityId);
+                filter.addAdditionalParam(P_CITY, cityId);
             } else {
-                example.addAdditionalParam(P_CITY, null);
+                filter.addAdditionalParam(P_CITY, null);
             }
         }
     }

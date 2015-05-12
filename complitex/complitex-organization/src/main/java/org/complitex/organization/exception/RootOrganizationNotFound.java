@@ -1,4 +1,4 @@
-package org.complitex.organization.service.exception;
+package org.complitex.organization.exception;
 
 import org.complitex.common.service.exception.AbstractException;
 

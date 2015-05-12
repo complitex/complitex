@@ -64,12 +64,12 @@ public class DocumentTypeStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
         if (isEmpty(searchTextInput)) {
-            AttributeFilter attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = filter.getAttributeExample(NAME);
             if (attrExample == null) {
                 attrExample = new AttributeFilter(NAME);
-                example.addAttributeFilter(attrExample);
+                filter.addAttributeFilter(attrExample);
             }
             attrExample.setValue(searchTextInput);
         }
@@ -88,7 +88,7 @@ public class DocumentTypeStrategy extends TemplateStrategy {
             example.setOrderByAttributeTypeId(NAME);
             example.setAsc(true);
         }
-        configureExample(example, ImmutableMap.<String, Long>of(), null);
+        configureFilter(example, ImmutableMap.<String, Long>of(), null);
         return (List<DomainObject>) getList(example);
     }
 

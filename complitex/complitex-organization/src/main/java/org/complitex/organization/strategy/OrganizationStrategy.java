@@ -13,6 +13,7 @@ import org.complitex.common.util.Numbers;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
+import org.complitex.organization.entity.ServiceBilling;
 import org.complitex.organization.strategy.web.edit.OrganizationEdit;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.organization.strategy.web.edit.OrganizationValidator;
@@ -26,6 +27,7 @@ import javax.ejb.EJB;
 import javax.naming.*;
 import javax.sql.DataSource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -66,12 +68,12 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeFilter attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = filter.getAttributeExample(NAME);
             if (attrExample == null) {
                 attrExample = new AttributeFilter(NAME);
-                example.addAttributeFilter(attrExample);
+                filter.addAttributeFilter(attrExample);
             }
             attrExample.setValue(searchTextInput);
         }
@@ -90,21 +92,13 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
     @Override
     public boolean isUserOrganization(DomainObject organization) {
-        List<Long> organizationTypeIds = getOrganizationTypeIds(organization);
-        return organizationTypeIds != null && organizationTypeIds.contains(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE);
+        return getOrganizationTypeIds(organization).contains(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE);
     }
 
     protected List<Long> getOrganizationTypeIds(DomainObject organization) {
-        List<Long> organizationTypeIds = Lists.newArrayList();
-        List<Attribute> organizationTypeAttributes = organization.getAttributes(ORGANIZATION_TYPE);
-        if (organizationTypeAttributes != null && !organizationTypeAttributes.isEmpty()) {
-            for (Attribute attribute : organizationTypeAttributes) {
-                if (attribute.getValueId() != null) {
-                    organizationTypeIds.add(attribute.getValueId());
-                }
-            }
-        }
-        return organizationTypeIds;
+        return organization.getAttributes(ORGANIZATION_TYPE).stream()
+                .map(Attribute::getValueId)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -224,6 +218,131 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
+    public OsznOrganization getDomainObject(Long id, boolean runAsAdmin) {
+        DomainObject object = super.getDomainObject(id, runAsAdmin);
+        if (object == null) {
+            return null;
+        }
+
+        ServiceAssociationList serviceAssociationList = new ServiceAssociationList();
+
+        if (isUserOrganization(object)) {
+            serviceAssociationList = loadServiceAssociations(object);
+        }
+        return new OsznOrganization(object, serviceAssociationList);
+    }
+
+    @Override
+    public OsznOrganization newInstance() {
+        return new OsznOrganization(super.newInstance(), new ServiceAssociationList());
+    }
+
+    @Override
+    public OsznOrganization getHistoryObject(long objectId, Date date) {
+        DomainObject object = super.getHistoryObject(objectId, date);
+        if (object == null) {
+            return null;
+        }
+        ServiceAssociationList serviceAssociationList = new ServiceAssociationList();
+        if (isUserOrganization(object)) {
+            serviceAssociationList = loadServiceAssociations(object);
+        }
+        return new OsznOrganization(object, serviceAssociationList);
+    }
+
+    @Override
+    public void insert(DomainObject object, Date insertDate) {
+        OsznOrganization osznOrganization = (OsznOrganization) object;
+        if (!osznOrganization.getServiceAssociationList().isEmpty()
+                && !osznOrganization.getServiceAssociationList().hasNulls()) {
+            addServiceAssociationAttributes(osznOrganization);
+        }
+
+        super.insert(object, insertDate);
+    }
+
+    private void addServiceAssociationAttributes(OsznOrganization osznOrganization) {
+        osznOrganization.removeAttribute(SERVICE_ASSOCIATIONS);
+
+        long i = 1;
+        for (ServiceBilling serviceBilling : osznOrganization.getServiceAssociationList()) {
+            saveServiceAssociation(serviceBilling);
+
+            Attribute a = new Attribute();
+            a.setAttributeTypeId(SERVICE_ASSOCIATIONS);
+            a.setValueId(serviceBilling.getId());
+            a.setValueTypeId(SERVICE_ASSOCIATIONS);
+            a.setAttributeId(i++);
+            osznOrganization.addAttribute(a);
+        }
+    }
+
+    @Override
+    public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
+        OsznOrganization newOrganization = (OsznOrganization) newObject;
+        OsznOrganization oldOrganization = (OsznOrganization) oldObject;
+
+        if (!newOrganization.getServiceAssociationList().isEmpty()
+                && !newOrganization.getServiceAssociationList().hasNulls()) {
+            if (!newOrganization.getServiceAssociationList().equals(oldOrganization.getServiceAssociationList())) {
+                addServiceAssociationAttributes(newOrganization);
+            }
+        } else {
+            newOrganization.removeAttribute(SERVICE_ASSOCIATIONS);
+        }
+
+        super.update(oldObject, newObject, updateDate);
+    }
+
+    @Override
+    public void delete(long objectId, Locale locale) throws DeleteException {
+        deleteChecks(objectId, locale);
+
+        sqlSession().delete(MAPPING_NAMESPACE + ".deleteServiceAssociations",
+                ImmutableMap.of("objectId", objectId, "organizationServiceAssociationsAT", SERVICE_ASSOCIATIONS));
+
+        deleteStrings(objectId);
+        deleteAttribute(objectId);
+        deleteDomainObject(objectId, locale);
+    }
+
+    /**
+     * Figures out list of service associations. Each service association is link between service provider type and
+     * caluclation center.
+     *
+     * @param userOrganization User organization.
+     * @return Service associations list.
+     */
+    public ServiceAssociationList getServiceAssociations(DomainObject userOrganization) {
+        return loadServiceAssociations(userOrganization);
+    }
+
+    private ServiceAssociationList loadServiceAssociations(DomainObject userOrganization) {
+        if (!isUserOrganization(userOrganization)) {
+            throw new IllegalArgumentException("DomainObject is not user organization. Organization id: " + userOrganization.getObjectId());
+        }
+
+        List<Attribute> serviceAssociationAttributes = userOrganization.getAttributes(SERVICE_ASSOCIATIONS);
+        Set<Long> serviceAssociationIds = Sets.newHashSet();
+        for (Attribute serviceAssociation : serviceAssociationAttributes) {
+            serviceAssociationIds.add(serviceAssociation.getValueId());
+        }
+
+        final List<ServiceBilling> serviceBillings = sqlSession().selectList(
+                MAPPING_NAMESPACE + ".getServiceAssociations", ImmutableMap.of("ids", serviceAssociationIds));
+
+        Collections.sort(serviceBillings, new Comparator<ServiceBilling>() {
+
+            @Override
+            public int compare(ServiceBilling o1, ServiceBilling o2) {
+                return o1.getId().compareTo(o2.getId());
+            }
+        });
+
+        return new ServiceAssociationList(serviceBillings);
+    }
+
+    @Override
     public List<T> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
@@ -291,7 +410,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
             example.setLocaleId(stringLocaleBean.convert(locale).getId());
             example.setAsc(true);
         }
-        configureExample(example, ImmutableMap.<String, Long>of(), null);
+        configureFilter(example, ImmutableMap.<String, Long>of(), null);
         List<T> userOrganizations = getList(example);
 
         if (excludeOrganizationsId == null) {
@@ -391,20 +510,8 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public List<T> getOrganizations(List<Long> types, Locale locale) {
-        DomainObjectFilter example = new DomainObjectFilter();
-
-        if (locale != null) {
-            example.setOrderByAttributeTypeId(NAME);
-            example.setLocaleId(stringLocaleBean.convert(locale).getId());
-            example.setAsc(true);
-        }
-
-        example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, types);
-
-        configureExample(example, ImmutableMap.<String, Long>of(), null);
-
-        return getList(example);
+    public List<T> getOrganizations(Long... types) {
+        return getList(new DomainObjectFilter().addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, types));
     }
 
     public String displayShortNameAndCode(DomainObject organization, Locale locale) {

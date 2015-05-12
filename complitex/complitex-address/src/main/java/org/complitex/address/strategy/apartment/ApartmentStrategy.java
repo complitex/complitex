@@ -92,8 +92,8 @@ public class ApartmentStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
-        configureExampleImpl(example, ids, searchTextInput);
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
+        configureExampleImpl(filter, ids, searchTextInput);
     }
 
     @Override

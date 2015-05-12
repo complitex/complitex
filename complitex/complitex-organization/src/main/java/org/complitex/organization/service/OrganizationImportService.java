@@ -12,7 +12,7 @@ import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.organization.entity.OrganizationImport;
-import org.complitex.organization.service.exception.RootOrganizationNotFound;
+import org.complitex.organization.exception.RootOrganizationNotFound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

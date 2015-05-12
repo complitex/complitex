@@ -1,8 +1,8 @@
 package org.complitex.keconnection.heatmeter.web;
 
 import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.keconnection.heatmeter.strategy.ServiceStrategy;
 import org.complitex.keconnection.heatmeter.web.service.ServiceContractList;
+import org.complitex.organization.strategy.ServiceStrategy;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
 /**

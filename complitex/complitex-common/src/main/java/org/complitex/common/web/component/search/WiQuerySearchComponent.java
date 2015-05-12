@@ -297,7 +297,7 @@ public class WiQuerySearchComponent extends Panel {
     protected final boolean isSingleObjectVisible(IStrategy strategy) {
         final Map<String, DomainObject> previousInfo = getState(getIndex(strategy.getEntityName()) - 1);
         DomainObjectFilter example = new DomainObjectFilter();
-        strategy.configureExample(example, WiQuerySearchComponent.<Long>transformToIds(previousInfo), null);
+        strategy.configureFilter(example, WiQuerySearchComponent.<Long>transformToIds(previousInfo), null);
         example.setStatus(getShowMode(strategy.getEntityName()).name());
         return strategy.getCount(example) == 1;
     }
@@ -481,7 +481,7 @@ public class WiQuerySearchComponent extends Panel {
 
         DomainObjectFilter example = new DomainObjectFilter();
 
-        strategy.configureExample(example, WiQuerySearchComponent.<Long>transformToIds(previousInfo), searchTextInput);
+        strategy.configureFilter(example, WiQuerySearchComponent.<Long>transformToIds(previousInfo), searchTextInput);
 
         example.setOrderByAttributeTypeId(strategy.getDefaultOrderByAttributeId());
         example.setAsc(true);

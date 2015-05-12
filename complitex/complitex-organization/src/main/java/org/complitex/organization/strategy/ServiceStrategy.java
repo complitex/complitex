@@ -1,4 +1,4 @@
-package org.complitex.keconnection.heatmeter.strategy;
+package org.complitex.organization.strategy;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.template.strategy.TemplateStrategy;

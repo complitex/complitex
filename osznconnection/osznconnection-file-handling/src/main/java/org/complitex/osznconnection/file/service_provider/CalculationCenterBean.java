@@ -5,9 +5,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.SetMultimap;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.organization.entity.ServiceAssociationList;
 import org.complitex.osznconnection.file.entity.CalculationContext;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
-import org.complitex.osznconnection.organization.strategy.entity.ServiceAssociationList;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

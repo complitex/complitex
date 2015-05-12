@@ -146,12 +146,12 @@ public class StreetStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
         if (!Strings.isEmpty(searchTextInput)) {
-            AttributeFilter attrExample = example.getAttributeExample(NAME);
+            AttributeFilter attrExample = filter.getAttributeExample(NAME);
             if (attrExample == null) {
                 attrExample = new AttributeFilter(NAME);
-                example.addAttributeFilter(attrExample);
+                filter.addAttributeFilter(attrExample);
             }
             attrExample.setValue(searchTextInput);
         }
@@ -159,14 +159,14 @@ public class StreetStrategy extends TemplateStrategy {
         Long districtId = ids.get("district");
 
         if (districtId != null) {
-            example.addAdditionalParam("district", districtId);
+            filter.addAdditionalParam("district", districtId);
         }
 
         Long cityId = ids.get("city");
 
         if (cityId != null && cityId > 0) {
-            example.setParentId(cityId);
-            example.setParentEntity("city");
+            filter.setParentId(cityId);
+            filter.setParentEntity("city");
         }
     }
 
@@ -176,7 +176,7 @@ public class StreetStrategy extends TemplateStrategy {
             DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
 
             if (list != null) {
-                configureExample(list.getFilter(), ids, null);
+                configureFilter(list.getFilter(), ids, null);
                 list.refreshContent(target);
             }
         };

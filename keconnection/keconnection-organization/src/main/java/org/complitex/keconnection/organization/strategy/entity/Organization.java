@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.organization.strategy.entity;
 
 import org.complitex.common.converter.BooleanConverter;
@@ -14,10 +10,7 @@ import java.util.Locale;
 
 import static org.complitex.common.util.DateUtil.*;
 
-/**
- *
- * @author Artem
- */
+@Deprecated
 public class Organization extends DomainObject {
 
     private Date operatingMonthDate;

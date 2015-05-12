@@ -97,8 +97,8 @@ public class CityStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void configureExample(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {
-        configureExampleImpl(example, ids, searchTextInput);
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
+        configureExampleImpl(filter, ids, searchTextInput);
     }
 
     private void configureExampleImpl(DomainObjectFilter example, Map<String, Long> ids, String searchTextInput) {

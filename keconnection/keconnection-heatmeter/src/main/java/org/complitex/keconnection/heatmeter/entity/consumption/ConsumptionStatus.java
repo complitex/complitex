@@ -27,7 +27,9 @@ public enum  ConsumptionStatus implements IFixedIdType{
     EXTERNAL_CITY_UNRESOLVED(301),
     EXTERNAL_STREET_TYPE_UNRESOLVED(302),
     EXTERNAL_STREET_UNRESOLVED(303),
-    EXTERNAL_BUILDING_UNRESOLVED(304);
+    EXTERNAL_BUILDING_UNRESOLVED(304),
+
+    METER_NOT_FOUND(401);
 
     public static final EnumSet<ConsumptionStatus> LOCAL_UNRESOLVED = EnumSet.of(
             LOCAL_CITY_UNRESOLVED,

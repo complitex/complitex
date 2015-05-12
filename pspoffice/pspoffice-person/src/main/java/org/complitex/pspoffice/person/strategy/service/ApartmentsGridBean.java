@@ -77,7 +77,7 @@ public class ApartmentsGridBean extends AbstractBean {
 
     private List<? extends DomainObject> findRooms(long apartmentId) {
         DomainObjectFilter example = new DomainObjectFilter();
-        roomStrategy.configureExample(example, ImmutableMap.of("apartment", apartmentId), null);
+        roomStrategy.configureFilter(example, ImmutableMap.of("apartment", apartmentId), null);
         return roomStrategy.getList(example);
     }
 

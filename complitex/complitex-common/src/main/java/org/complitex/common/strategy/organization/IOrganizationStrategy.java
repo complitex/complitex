@@ -144,7 +144,7 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
 
     List<T> getAllOuterOrganizations(Locale locale);
 
-    List<T> getOrganizations(List<Long> types,Locale locale);
+    List<T> getOrganizations(Long... types);
 
     String displayShortNameAndCode(DomainObject organization, Locale locale);
 
