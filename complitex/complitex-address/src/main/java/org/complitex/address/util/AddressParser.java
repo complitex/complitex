@@ -8,9 +8,10 @@ public class AddressParser {
         String[] streetArray = new String[2];
 
         int pos = street.indexOf('.');
+        int pos2 = street.indexOf(' ');
 
-        if (pos == -1){
-            pos = street.indexOf(' ');
+        if (pos == -1 || (pos2 > 0 && pos2 < pos)){
+            pos = pos2;
         }
 
         if (pos > 0 && pos < street.length() - 1){

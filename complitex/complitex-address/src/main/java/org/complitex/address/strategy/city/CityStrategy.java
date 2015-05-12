@@ -58,6 +58,10 @@ public class CityStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
+        if (object == null){
+            return "";
+        }
+
         String cityName = object.getStringValue(NAME, locale);
 
         Long cityTypeId = object.getAttribute(CITY_TYPE).getValueId();
