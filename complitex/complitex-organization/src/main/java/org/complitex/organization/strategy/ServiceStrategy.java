@@ -1,11 +1,13 @@
 package org.complitex.organization.strategy;
 
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.Stateless;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Anatoly Ivanov
@@ -16,6 +18,11 @@ public class ServiceStrategy extends TemplateStrategy{
     public final static long NAME = 3601;
     public final static long SHORT_NAME = 3602;
     public final static long CODE = 3603;
+
+    @Override
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
+
+    }
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {

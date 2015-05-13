@@ -57,7 +57,7 @@ public abstract class TemplateStrategy extends DomainObjectStrategy {
     }
 
     @Override
-    public PageParameters getHistoryPageParams(long objectId) {
+    public PageParameters getHistoryPageParams(Long objectId) {
         PageParameters params = new PageParameters();
         params.set(ENTITY, getEntityName());
         params.set(OBJECT_ID, objectId);

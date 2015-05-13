@@ -13,7 +13,6 @@ import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
-import org.complitex.organization.entity.ServiceBilling;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationEditComponent;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationValidator;
@@ -32,12 +31,7 @@ import static org.complitex.osznconnection.organization_type.strategy.OsznOrgani
  * @author Artem
  */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
-public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject> {
-    /**
-     * References to associations between service provider types and calculation centres. It is user organization only attribute.
-     */
-    public final static long SERVICE_ASSOCIATIONS = 914;
-
+public class OsznOrganizationStrategy extends OrganizationStrategy {
     /**
      * Load payments/benefits directory. It is OSZN only attribute.
      */
@@ -111,11 +105,6 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
     public final static long ROOT_EXPORT_DIRECTORY = 930;
 
 
-    /**
-     * Itself organization instance id.
-     */
-
-
     private final Logger log = LoggerFactory.getLogger(OsznOrganizationStrategy.class);
     public static final String OSZN_ORGANIZATION_STRATEGY_NAME = IOrganizationStrategy.BEAN_NAME;
     private static final String RESOURCE_BUNDLE = OsznOrganizationStrategy.class.getName();
@@ -166,7 +155,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
     }
 
     @Override
-    public PageParameters getHistoryPageParams(long objectId) {
+    public PageParameters getHistoryPageParams(Long objectId) {
         PageParameters pageParameters = super.getHistoryPageParams(objectId);
         pageParameters.set(STRATEGY, OSZN_ORGANIZATION_STRATEGY_NAME);
         return pageParameters;
@@ -223,13 +212,6 @@ public class OsznOrganizationStrategy extends OrganizationStrategy<DomainObject>
             }
         }
     }
-
-
-    private void saveServiceAssociation(ServiceBilling serviceBilling) {
-        sqlSession().insert(MAPPING_NAMESPACE + ".insertServiceAssociation", serviceBilling);
-    }
-
-
 
     /**
      * Returns relative path to request files storage.

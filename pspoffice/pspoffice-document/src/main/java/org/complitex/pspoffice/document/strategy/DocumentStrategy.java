@@ -4,10 +4,7 @@
  */
 package org.complitex.pspoffice.document.strategy;
 
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
-import org.complitex.common.entity.AttributeValueType;
-import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.*;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.StringCultures;
 import org.complitex.pspoffice.document.strategy.entity.Document;
@@ -19,6 +16,7 @@ import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -55,8 +53,7 @@ public class DocumentStrategy extends TemplateStrategy {
     public Document findById(long id) {
         DomainObject object = super.getDomainObject(id, true);
         if (object != null) {
-            Document doc = new Document(object);
-            return doc;
+            return new Document(object);
         } else {
             return null;
         }
@@ -103,6 +100,11 @@ public class DocumentStrategy extends TemplateStrategy {
     }
 
     @Override
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
+
+    }
+
+    @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
         Document document = (Document) object;
         return document.getSeries() + " " + document.getNumber();
@@ -123,7 +125,6 @@ public class DocumentStrategy extends TemplateStrategy {
         if (historyObject == null) {
             return null;
         }
-        Document document = new Document(historyObject);
-        return document;
+        return new Document(historyObject);
     }
 }

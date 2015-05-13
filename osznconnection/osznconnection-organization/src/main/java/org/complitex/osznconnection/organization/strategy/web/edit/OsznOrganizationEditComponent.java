@@ -483,7 +483,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
         if (!isUserOrganization()) {
             //service associations
-            organization.removeAttribute(OsznOrganizationStrategy.SERVICE_ASSOCIATIONS);
+            organization.removeAttribute(OsznOrganizationStrategy.SERVICE_BILLING);
 
             //edrpou
             organization.removeAttribute(OsznOrganizationStrategy.EDRPOU);

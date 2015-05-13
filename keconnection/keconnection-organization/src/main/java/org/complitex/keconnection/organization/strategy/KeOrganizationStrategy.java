@@ -74,7 +74,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public PageParameters getHistoryPageParams(long objectId) {
+    public PageParameters getHistoryPageParams(Long objectId) {
         PageParameters pageParameters = super.getHistoryPageParams(objectId);
         pageParameters.set(STRATEGY, KECONNECTION_ORGANIZATION_STRATEGY_NAME);
         return pageParameters;
@@ -126,7 +126,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public List<Organization> getAllOuterOrganizations(Locale locale) {
+    public List<DomainObject> getAllOuterOrganizations(Locale locale) {
         DomainObjectFilter example = new DomainObjectFilter();
 
         if (locale != null) {
@@ -266,7 +266,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
 
 
     @Override
-    public DomainObject getHistoryObject(long objectId, Date date) {
+    public DomainObject getHistoryObject(Long objectId, Date date) {
         DomainObject object = super.getHistoryObject(objectId, date);
         if (object == null) {
             return null;

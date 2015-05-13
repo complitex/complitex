@@ -3,17 +3,13 @@ package org.complitex.common.strategy.organization;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.RemoteDataSource;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
-import org.complitex.common.strategy.IStrategy;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-/**
- *
- * @author Artem
- */
-public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy {
+
+public interface IOrganizationStrategy {
     String BEAN_NAME = "OrganizationStrategy";
     String BEAN_LOOKUP = "java:module/OrganizationStrategy";
 
@@ -25,7 +21,7 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
     /**
      * Organization's short name.
      */
-    public final static long SHORT_NAME = 906;
+    long SHORT_NAME = 906;
 
     /**
      * Organization's code.
@@ -47,7 +43,12 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
     /**
      * Reference to jdbc data source. It is calculation center only attribute.
      */
-    public final static long DATA_SOURCE = 913;
+    long DATA_SOURCE = 913;
+
+    /**
+     * References to associations between service provider types and calculation centres. It is user organization only attribute.
+     */
+    long SERVICE_BILLING = 914;
     
     /**
      * Filter parameter to filter out organizations by organization types.
@@ -65,7 +66,7 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
      * @return User organizations that current user can see.
      */
 
-    List<T> getUserOrganizations(Locale locale, Long... excludeOrganizationsId);
+    List<? extends DomainObject> getUserOrganizations(Locale locale, Long... excludeOrganizationsId);
 
     /**
      * Returns set of user organization object's ids that descendant of user organization with id of {@code parentOrganizationId}
@@ -75,7 +76,7 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
      * @return Ids of all descendant user organizations.
      */
 
-    Set<Long> getTreeChildrenOrganizationIds(long parentOrganizationId);
+    Set<Long> getTreeChildrenOrganizationIds(Long parentOrganizationId);
 
     /**
      * Calculates whether given {@code organization} play role of user organization, i.e. has user organization type
@@ -125,7 +126,7 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
      * @param organizationId Organization id.
      * @return Organization's code.
      */
-    String getCode(long organizationId);
+    String getCode(Long organizationId);
 
     /**
      * Return object id of organization by code
@@ -142,9 +143,9 @@ public interface IOrganizationStrategy<T extends DomainObject> extends IStrategy
      * @return All outer organizations visible to user.
      */
 
-    List<T> getAllOuterOrganizations(Locale locale);
+    List<DomainObject> getAllOuterOrganizations(Locale locale);
 
-    List<T> getOrganizations(Long... types);
+    List<DomainObject> getOrganizations(Long... types);
 
     String displayShortNameAndCode(DomainObject organization, Locale locale);
 

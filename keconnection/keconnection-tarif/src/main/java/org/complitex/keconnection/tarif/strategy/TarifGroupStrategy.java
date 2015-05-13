@@ -109,7 +109,7 @@ public class TarifGroupStrategy extends TemplateStrategy {
 
 
     @Override
-    protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
+    protected void deleteChecks(Long objectId, Locale locale) throws DeleteException {
         if (RESERVED_TARIF_GROUP_IDS.contains(objectId)) {
             throw new DeleteException(ResourceUtil.getString(RESOURCE_BUNDLE, "delete_reserved_instance_error", locale));
         }

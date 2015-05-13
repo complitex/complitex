@@ -93,7 +93,7 @@ public class OrganizationTypeStrategy extends TemplateStrategy {
 
 
     @Override
-    protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
+    protected void deleteChecks(Long objectId, Locale locale) throws DeleteException {
         if (getReservedInstanceIds().contains(objectId)) {
             throw new DeleteException(ResourceUtil.getString(RESOURCE_BUNDLE, "delete_reserved_instance_error", locale));
         }

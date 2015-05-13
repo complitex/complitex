@@ -31,7 +31,7 @@ import java.util.Map;
  * @author Artem
  */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
-public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject> {
+public class EircOrganizationStrategy extends OrganizationStrategy {
     /**
      * KPP. It is EIRC only attribute.
      */
@@ -118,7 +118,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
     }
 
     @Override
-    public PageParameters getHistoryPageParams(long objectId) {
+    public PageParameters getHistoryPageParams(Long objectId) {
         PageParameters pageParameters = super.getHistoryPageParams(objectId);
         pageParameters.set(STRATEGY, EIRC_ORGANIZATION_STRATEGY_NAME);
         return pageParameters;
@@ -256,7 +256,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
     }
 
     @Override
-    public Organization getHistoryObject(long objectId, Date date) {
+    public Organization getHistoryObject(Long objectId, Date date) {
         DomainObject object = super.getHistoryObject(objectId, date);
         if (object == null) {
             return null;
@@ -280,7 +280,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
     }
 
     @Override
-    public void delete(long objectId, Locale locale) throws DeleteException {
+    public void delete(Long objectId, Locale locale) throws DeleteException {
         deleteChecks(objectId, locale);
 
         deleteStrings(objectId);
@@ -289,7 +289,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy<DomainObject>
     }
 
     @Override
-    protected Long insertStrings(long attributeTypeId, List<StringCulture> strings) {
+    protected Long insertStrings(Long attributeTypeId, List<StringCulture> strings) {
         /* if it's data source or one of load/save request file directory attributes 
          * or root directory for loading and saving request files
          * then string value should be inserted as is and not upper cased. */

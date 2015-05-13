@@ -41,7 +41,7 @@ public class KeConnectionOrganizationTypeStrategy extends OrganizationTypeStrate
     }
 
     @Override
-    public PageParameters getHistoryPageParams(long objectId) {
+    public PageParameters getHistoryPageParams(Long objectId) {
         PageParameters pageParameters = super.getHistoryPageParams(objectId);
         pageParameters.set(STRATEGY, STRATEGY_NAME);
         return pageParameters;

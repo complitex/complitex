@@ -90,7 +90,7 @@ public class RegistrationTypeStrategy extends TemplateStrategy {
 
 
     @Override
-    protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
+    protected void deleteChecks(Long objectId, Locale locale) throws DeleteException {
         if (RESERVED_INSTANCE_IDS.contains(objectId)) {
             throw new DeleteException(getString(RESOURCE_BUNDLE, "delete_reserved_instance_error", locale));
         }

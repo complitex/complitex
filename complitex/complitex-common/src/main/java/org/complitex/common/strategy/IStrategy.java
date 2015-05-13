@@ -33,16 +33,16 @@ public interface IStrategy {
     String displayAttribute(Attribute attribute, Locale locale);
 
     void enable(DomainObject object);
-    
+
     DomainObject getDomainObject(Long id, boolean runAsAdmin);
     
     DomainObject getDomainObject(String dataSource, Long id, boolean runAsAdmin);
 
-    public Long getObjectId(String externalId);
+    Long getObjectId(String externalId);
     
-    DomainObject getHistoryObject(long objectId, Date date);
+    DomainObject getHistoryObject(Long objectId, Date date);
 
-    EntityObjectInfo findParentInSearchComponent(long id, Date date);
+    EntityObjectInfo findParentInSearchComponent(Long id, Date date);
 
     String getAttributeLabel(Attribute attribute, Locale locale);
 
@@ -54,7 +54,7 @@ public interface IStrategy {
 
     Class<? extends AbstractComplexAttributesPanel> getComplexAttributesPanelAfterClass();
 
-    long getDefaultOrderByAttributeId();
+    Long getDefaultOrderByAttributeId();
 
     Class<? extends WebPage> getEditPage();
 
@@ -66,13 +66,13 @@ public interface IStrategy {
 
     String getEntityName();
     
-    List<History> getHistory(long objectId);
+    List<History> getHistory(Long objectId);
     
-    TreeSet<Date> getHistoryDates(long objectId);
+    TreeSet<Date> getHistoryDates(Long objectId);
 
     Class<? extends WebPage> getHistoryPage();
 
-    PageParameters getHistoryPageParams(long objectId);
+    PageParameters getHistoryPageParams(Long objectId);
 
     List<Long> getColumnAttributeTypeIds();
 
@@ -101,7 +101,7 @@ public interface IStrategy {
     boolean allowProceedNextSearchFilter();
 
     IValidator getValidator();
-    
+
     void insert(DomainObject object, Date insertDate);
 
     boolean isSimpleAttribute(final Attribute attribute);
@@ -126,13 +126,13 @@ public interface IStrategy {
     
     void changePermissions(PermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds);
 
-    void changePermissionsInDistinctThread(long objectId, long permissionId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds);
+    void changePermissionsInDistinctThread(Long objectId, Long permissionId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds);
     
-    void changeChildrenActivity(long parentId, boolean enable);
+    void changeChildrenActivity(Long parentId, boolean enable);
 
     boolean canPropagatePermissions(DomainObject object);
     
-    void delete(long objectId, Locale locale) throws DeleteException;
+    void delete(Long objectId, Locale locale) throws DeleteException;
 
     String[] getDescriptionRoles();
 

@@ -13,7 +13,9 @@ import org.complitex.common.util.Numbers;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
+import org.complitex.organization.entity.Organization;
 import org.complitex.organization.entity.ServiceBilling;
+import org.complitex.organization.service.ServiceBillingBean;
 import org.complitex.organization.strategy.web.edit.OrganizationEdit;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.organization.strategy.web.edit.OrganizationValidator;
@@ -29,11 +31,7 @@ import javax.sql.DataSource;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- *
- * @author Artem
- */
-public abstract class OrganizationStrategy<T extends DomainObject> extends TemplateStrategy implements IOrganizationStrategy<T> {
+public abstract class OrganizationStrategy extends TemplateStrategy implements IOrganizationStrategy {
     private Logger log = LoggerFactory.getLogger(OrganizationStrategy.class);
 
     public static final String ORGANIZATION_NS = OrganizationStrategy.class.getName();
@@ -51,6 +49,9 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
 
     @EJB
     private StrategyFactory strategyFactory;
+
+    @EJB
+    private ServiceBillingBean serviceBillingBean;
 
     @Override
     public String getEntityName() {
@@ -101,25 +102,6 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public void insert(DomainObject object, Date insertDate) {
-        object.setObjectId(sequenceBean.nextId(getEntityName()));
-
-        if (!object.getSubjectIds().contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
-            object.getSubjectIds().add(object.getObjectId());
-        }
-
-        object.setPermissionId(getNewPermissionId(object.getSubjectIds()));
-        insertDomainObject(object, insertDate);
-        for (Attribute attribute : object.getAttributes()) {
-            attribute.setObjectId(object.getObjectId());
-            attribute.setStartDate(insertDate);
-            insertAttribute(attribute);
-        }
-
-        changeDistrictPermissions(object);
-    }
-
     protected void changeDistrictPermissions(DomainObject newOrganization) {
         if (isUserOrganization(newOrganization)) {
             Attribute districtAttribute = newOrganization.getAttribute(DISTRICT);
@@ -134,13 +116,6 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
                 }
             }
         }
-    }
-
-    @Override
-    public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
-        super.update(oldObject, newObject, updateDate);
-
-        changeDistrictPermissions(oldObject, newObject);
     }
 
     protected void changeDistrictPermissions(DomainObject oldOrganization, DomainObject newOrganization) {
@@ -174,18 +149,18 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
         changeDistrictPermissions(oldObject, newObject);
     }
 
-    @Override
-    public void replaceChildrenPermissions(long parentId, Set<Long> subjectIds) {
-        for (PermissionInfo childPermissionInfo : getTreeChildrenPermissionInfo(parentId)) {
-
-            Set<Long> childSubjectIds = Sets.newHashSet(subjectIds);
-            if (!childSubjectIds.contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
-                childSubjectIds.add(childPermissionInfo.getId());
-            }
-
-            replaceObjectPermissions(childPermissionInfo, childSubjectIds);
-        }
-    }
+//    @Override
+//    public void replaceChildrenPermissions(Long parentId, Set<Long> subjectIds) {
+//        for (PermissionInfo childPermissionInfo : getTreeChildrenPermissionInfo(parentId)) {
+//
+//            Set<Long> childSubjectIds = Sets.newHashSet(subjectIds);
+//            if (!childSubjectIds.contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
+//                childSubjectIds.add(childPermissionInfo.getId());
+//            }
+//
+//            replaceObjectPermissions(childPermissionInfo, childSubjectIds);
+//        }
+//    }
 
     protected List<PermissionInfo> getTreeChildrenPermissionInfo(long parentId) {
         List<PermissionInfo> childrenPermissionInfo = sqlSession().selectList(ORGANIZATION_NS
@@ -195,16 +170,6 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
             treeChildrenPermissionInfo.addAll(getTreeChildrenPermissionInfo(childPermissionInfo.getId()));
         }
         return treeChildrenPermissionInfo;
-    }
-
-    @Override
-    public void changePermissionsInDistinctThread(long objectId, long permissionId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void changePermissions(PermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -218,132 +183,109 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public OsznOrganization getDomainObject(Long id, boolean runAsAdmin) {
+    public Organization getDomainObject(Long id, boolean runAsAdmin) {
         DomainObject object = super.getDomainObject(id, runAsAdmin);
+
         if (object == null) {
             return null;
         }
 
-        ServiceAssociationList serviceAssociationList = new ServiceAssociationList();
-
-        if (isUserOrganization(object)) {
-            serviceAssociationList = loadServiceAssociations(object);
-        }
-        return new OsznOrganization(object, serviceAssociationList);
+        return new Organization(object, getServiceBillings(object));
     }
 
     @Override
-    public OsznOrganization newInstance() {
-        return new OsznOrganization(super.newInstance(), new ServiceAssociationList());
+    public Organization newInstance() {
+        return new Organization(super.newInstance(), new ArrayList<>());
     }
 
     @Override
-    public OsznOrganization getHistoryObject(long objectId, Date date) {
+    public Organization getHistoryObject(Long objectId, Date date) {
         DomainObject object = super.getHistoryObject(objectId, date);
+
         if (object == null) {
             return null;
         }
-        ServiceAssociationList serviceAssociationList = new ServiceAssociationList();
-        if (isUserOrganization(object)) {
-            serviceAssociationList = loadServiceAssociations(object);
-        }
-        return new OsznOrganization(object, serviceAssociationList);
+
+        return new Organization(object, getServiceBillings(object));
     }
 
     @Override
-    public void insert(DomainObject object, Date insertDate) {
-        OsznOrganization osznOrganization = (OsznOrganization) object;
-        if (!osznOrganization.getServiceAssociationList().isEmpty()
-                && !osznOrganization.getServiceAssociationList().hasNulls()) {
-            addServiceAssociationAttributes(osznOrganization);
+    public void insert(DomainObject organization, Date insertDate) {
+        addServiceBillingAttributes((Organization) organization);
+
+        organization.setObjectId(sequenceBean.nextId(getEntityName()));
+
+        if (!organization.getSubjectIds().contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
+            organization.getSubjectIds().add(organization.getObjectId());
         }
 
-        super.insert(object, insertDate);
+        organization.setPermissionId(getNewPermissionId(organization.getSubjectIds()));
+        insertDomainObject(organization, insertDate);
+        for (Attribute attribute : organization.getAttributes()) {
+            attribute.setObjectId(organization.getObjectId());
+            attribute.setStartDate(insertDate);
+            insertAttribute(attribute);
+        }
+
+        changeDistrictPermissions(organization);
+
+        super.insert(organization, insertDate);
     }
 
-    private void addServiceAssociationAttributes(OsznOrganization osznOrganization) {
-        osznOrganization.removeAttribute(SERVICE_ASSOCIATIONS);
+    private void addServiceBillingAttributes(Organization organization) {
+        organization.removeAttribute(SERVICE_BILLING);
 
         long i = 1;
-        for (ServiceBilling serviceBilling : osznOrganization.getServiceAssociationList()) {
-            saveServiceAssociation(serviceBilling);
+        for (ServiceBilling serviceBilling : organization.getServiceBillings()) {
+            serviceBillingBean.save(serviceBilling);
 
             Attribute a = new Attribute();
-            a.setAttributeTypeId(SERVICE_ASSOCIATIONS);
+            a.setAttributeTypeId(SERVICE_BILLING);
             a.setValueId(serviceBilling.getId());
-            a.setValueTypeId(SERVICE_ASSOCIATIONS);
+            a.setValueTypeId(SERVICE_BILLING);
             a.setAttributeId(i++);
-            osznOrganization.addAttribute(a);
+            organization.addAttribute(a);
         }
     }
 
     @Override
     public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
-        OsznOrganization newOrganization = (OsznOrganization) newObject;
-        OsznOrganization oldOrganization = (OsznOrganization) oldObject;
+        Organization newOrganization = (Organization) newObject;
+        Organization oldOrganization = (Organization) oldObject;
 
-        if (!newOrganization.getServiceAssociationList().isEmpty()
-                && !newOrganization.getServiceAssociationList().hasNulls()) {
-            if (!newOrganization.getServiceAssociationList().equals(oldOrganization.getServiceAssociationList())) {
-                addServiceAssociationAttributes(newOrganization);
+        if (!newOrganization.getServiceBillings().isEmpty()){
+            if (oldOrganization.getServiceBillings().containsAll(newOrganization.getServiceBillings())
+                    && newOrganization.getServiceBillings().containsAll(oldOrganization.getServiceBillings())){
+                addServiceBillingAttributes(newOrganization);
             }
-        } else {
-            newOrganization.removeAttribute(SERVICE_ASSOCIATIONS);
+        }else {
+            newObject.removeAttribute(SERVICE_BILLING);
         }
+
+        changeDistrictPermissions(oldObject, newObject);
 
         super.update(oldObject, newObject, updateDate);
     }
 
     @Override
-    public void delete(long objectId, Locale locale) throws DeleteException {
+    public void delete(Long objectId, Locale locale) throws DeleteException {
         deleteChecks(objectId, locale);
 
-        sqlSession().delete(MAPPING_NAMESPACE + ".deleteServiceAssociations",
-                ImmutableMap.of("objectId", objectId, "organizationServiceAssociationsAT", SERVICE_ASSOCIATIONS));
+       serviceBillingBean.deleteByOrganizationId(objectId);
 
         deleteStrings(objectId);
         deleteAttribute(objectId);
         deleteDomainObject(objectId, locale);
     }
 
-    /**
-     * Figures out list of service associations. Each service association is link between service provider type and
-     * caluclation center.
-     *
-     * @param userOrganization User organization.
-     * @return Service associations list.
-     */
-    public ServiceAssociationList getServiceAssociations(DomainObject userOrganization) {
-        return loadServiceAssociations(userOrganization);
-    }
-
-    private ServiceAssociationList loadServiceAssociations(DomainObject userOrganization) {
-        if (!isUserOrganization(userOrganization)) {
-            throw new IllegalArgumentException("DomainObject is not user organization. Organization id: " + userOrganization.getObjectId());
-        }
-
-        List<Attribute> serviceAssociationAttributes = userOrganization.getAttributes(SERVICE_ASSOCIATIONS);
-        Set<Long> serviceAssociationIds = Sets.newHashSet();
-        for (Attribute serviceAssociation : serviceAssociationAttributes) {
-            serviceAssociationIds.add(serviceAssociation.getValueId());
-        }
-
-        final List<ServiceBilling> serviceBillings = sqlSession().selectList(
-                MAPPING_NAMESPACE + ".getServiceAssociations", ImmutableMap.of("ids", serviceAssociationIds));
-
-        Collections.sort(serviceBillings, new Comparator<ServiceBilling>() {
-
-            @Override
-            public int compare(ServiceBilling o1, ServiceBilling o2) {
-                return o1.getId().compareTo(o2.getId());
-            }
-        });
-
-        return new ServiceAssociationList(serviceBillings);
+    public List<ServiceBilling> getServiceBillings(DomainObject domainObject) {
+        return serviceBillingBean.getServiceBillings(domainObject.getAttributes(SERVICE_BILLING).stream()
+                        .map(Attribute::getValueId)
+                        .collect(Collectors.toList()));
     }
 
     @Override
-    public List<T> getList(DomainObjectFilter example) {
+    public List<DomainObject> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
@@ -354,7 +296,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
         }
         extendOrderBy(example);
 
-        List<T> organizations = sqlSession().selectList(ORGANIZATION_NS + ".selectOrganizations", example);
+        List<DomainObject> organizations = sqlSession().selectList(ORGANIZATION_NS + ".selectOrganizations", example);
 
         for (DomainObject object : organizations) {
             loadAttributes(object);
@@ -402,7 +344,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public List<T> getUserOrganizations(Locale locale, Long... excludeOrganizationsId) {
+    public List<DomainObject> getUserOrganizations(Locale locale, Long... excludeOrganizationsId) {
         DomainObjectFilter example = new DomainObjectFilter();
         example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
         if (locale != null) {
@@ -411,17 +353,17 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
             example.setAsc(true);
         }
         configureFilter(example, ImmutableMap.<String, Long>of(), null);
-        List<T> userOrganizations = getList(example);
+        List<DomainObject> userOrganizations = getList(example);
 
         if (excludeOrganizationsId == null) {
             return userOrganizations;
         }
 
-        List<T> finalUserOrganizations = Lists.newArrayList();
+        List<DomainObject> finalUserOrganizations = Lists.newArrayList();
 
         Set<Long> excludeSet = Sets.newHashSet(excludeOrganizationsId);
 
-        for (T userOrganization : userOrganizations) {
+        for (DomainObject userOrganization : userOrganizations) {
             if (!excludeSet.contains(userOrganization.getObjectId())) {
                 finalUserOrganizations.add(userOrganization);
             }
@@ -431,7 +373,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public Set<Long> getTreeChildrenOrganizationIds(long parentOrganizationId) {
+    public Set<Long> getTreeChildrenOrganizationIds(Long parentOrganizationId) {
         List<Long> results = sqlSession().selectList(ORGANIZATION_NS + ".selectOrganizationChildrenObjectIds",
                 parentOrganizationId);
         Set<Long> childrenIds = Sets.newHashSet(results);
@@ -455,7 +397,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public void changeChildrenActivity(long parentId, boolean enable) {
+    public void changeChildrenActivity(Long parentId, boolean enable) {
         Set<Long> childrenIds = getTreeChildrenOrganizationIds(parentId);
         if (!childrenIds.isEmpty()) {
             updateChildrenActivity(childrenIds, !enable);
@@ -472,7 +414,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
+    protected void deleteChecks(Long objectId, Locale locale) throws DeleteException {
         if (permissionBean.isOrganizationPermissionExists(getEntityName(), objectId)) {
             throw new DeleteException();
         }
@@ -490,7 +432,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public String getCode(long organizationId) {
+    public String getCode(Long organizationId) {
         DomainObject organization = getDomainObject(organizationId, true);
         return organization != null ? getCode(organization) : null;
     }
@@ -505,12 +447,7 @@ public abstract class OrganizationStrategy<T extends DomainObject> extends Templ
     }
 
     @Override
-    public List<T> getAllOuterOrganizations(Locale locale) {
-        return null;
-    }
-
-    @Override
-    public List<T> getOrganizations(Long... types) {
+    public List<DomainObject> getOrganizations(Long... types) {
         return getList(new DomainObjectFilter().addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, types));
     }
 
