@@ -61,6 +61,6 @@ public class DwellingCharacteristicsLookupPanel extends AbstractLookupPanel<Dwel
 
     @Override
     protected void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics, String accountNumber, long userOrganizationId) {
-        personAccountService.updateAccountNumber(dwellingCharacteristics, accountNumber, userOrganizationId);
+        personAccountService.updateAccountNumber(dwellingCharacteristics, accountNumber);
     }
 }

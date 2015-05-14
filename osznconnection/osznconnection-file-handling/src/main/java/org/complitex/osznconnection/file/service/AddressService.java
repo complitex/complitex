@@ -335,15 +335,15 @@ public class AddressService extends AbstractBean {
      * Алгоритм аналогичен для поиска остальных составляющих адреса.
      */
 
-    public void resolveOutgoingAddress(AbstractAddressRequest request, CalculationContext calculationContext) {
-        Long calcId = calculationContext.getCalculationCenterId();
-        Long userOrganizationId = calculationContext.getUserOrganizationId();
+    public void resolveOutgoingAddress(AbstractAddressRequest request) {
+        Long userOrganizationId = request.getUserOrganizationId();
+        Long billingId = organizationStrategy.getBillingId(userOrganizationId);
 
         Locale locale = stringLocaleBean.getSystemLocale();
 
         //город
         List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(request.getCityId(),
-                null, calcId, userOrganizationId);
+                null, billingId, userOrganizationId);
 
         if (cityCorrections.isEmpty()){
             DomainObject city = cityStrategy.getDomainObject(request.getCityId(), true);
@@ -365,7 +365,7 @@ public class AddressService extends AbstractBean {
 
         // район
         List<DistrictCorrection> districtCorrections = addressCorrectionBean.getDistrictCorrections(request.getCityId(),
-                null,null, null, calcId, userOrganizationId);
+                null,null, null, billingId, userOrganizationId);
 
         if (districtCorrections.isEmpty()){
             DomainObject organization = organizationStrategy.getDomainObject(request.getOrganizationId(), true);
@@ -392,7 +392,7 @@ public class AddressService extends AbstractBean {
         //тип улицы
         if (request.getStreetTypeId() != null) {
             List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
-                    request.getStreetTypeId(), null, calcId, userOrganizationId);
+                    request.getStreetTypeId(), null, billingId, userOrganizationId);
 
             if (streetTypeCorrections.isEmpty()){
                 DomainObject streetType = streetTypeStrategy.getDomainObject(request.getStreetTypeId(), true);
@@ -415,7 +415,7 @@ public class AddressService extends AbstractBean {
 
         //улица
         List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null,
-                request.getStreetId(), null, null, null, calcId, userOrganizationId);
+                request.getStreetId(), null, null, null, billingId, userOrganizationId);
 
         if (streetCorrections.isEmpty()){
             DomainObject street = streetStrategy.getDomainObject(request.getStreetId(), true);
@@ -431,7 +431,7 @@ public class AddressService extends AbstractBean {
             request.setOutgoingStreet(streetCorrections.get(0).getCorrection());
         } else {
             streetCorrections = addressCorrectionBean.getStreetCorrectionsByBuilding(request.getStreetId(),
-                    request.getBuildingId(), calcId);
+                    request.getBuildingId(), billingId);
 
             if (streetCorrections.size() == 1) {
                 request.setOutgoingStreet(streetCorrections.get(0).getCorrection());
@@ -444,7 +444,7 @@ public class AddressService extends AbstractBean {
 
         //дом
         List<BuildingCorrection> buildingCorrections = addressCorrectionBean.getBuildingCorrections(null,
-                request.getBuildingId(), null, null, calculationContext.getCalculationCenterId(), null);
+                request.getBuildingId(), null, null, billingId, null);
 
         if (buildingCorrections.isEmpty()){
             Building building = buildingStrategy.getDomainObject(request.getBuildingId(), true);
@@ -477,56 +477,56 @@ public class AddressService extends AbstractBean {
      * разрешить адрес по схеме "ОСЗН адрес -> локальная адресная база -> адрес центра начислений"
      */
 
-    public void resolveAddress(Payment payment, CalculationContext calculationContext) {
+    public void resolveAddress(Payment payment) {
         //разрешить адрес локально
         resolveLocalAddress(payment);
         //если адрес локально разрешен, разрешить адрес для ЦН.
         if (payment.getStatus().isAddressResolvedLocally()) {
-            resolveOutgoingAddress(payment, calculationContext);
+            resolveOutgoingAddress(payment);
         }
     }
 
 
-    public void resolveAddress(ActualPayment actualPayment, CalculationContext calculationContext) {
+    public void resolveAddress(ActualPayment actualPayment) {
         //разрешить адрес локально
         resolveLocalAddress(actualPayment);
 
         //если адрес локально разрешен, разрешить адрес для ЦН.
         if (actualPayment.getStatus().isAddressResolvedLocally()) {
-            resolveOutgoingAddress(actualPayment, calculationContext);
+            resolveOutgoingAddress(actualPayment);
         }
     }
 
 
-    public void resolveAddress(Subsidy subsidy, CalculationContext calculationContext) {
+    public void resolveAddress(Subsidy subsidy) {
         //разрешить адрес локально
         resolveLocalAddress(subsidy);
 
         //если адрес локально разрешен, разрешить адрес для ЦН.
         if (subsidy.getStatus().isAddressResolvedLocally()) {
-            resolveOutgoingAddress(subsidy, calculationContext);
+            resolveOutgoingAddress(subsidy);
         }
     }
 
 
-    public void resolveAddress(DwellingCharacteristics dwellingCharacteristics, CalculationContext calculationContext) {
+    public void resolveAddress(DwellingCharacteristics dwellingCharacteristics) {
         //разрешить адрес локально
         resolveLocalAddress(dwellingCharacteristics);
 
         //если адрес локально разрешен, разрешить адрес для ЦН.
         if (dwellingCharacteristics.getStatus().isAddressResolvedLocally()) {
-            resolveOutgoingAddress(dwellingCharacteristics, calculationContext);
+            resolveOutgoingAddress(dwellingCharacteristics);
         }
     }
 
 
-    public void resolveAddress(FacilityServiceType facilityServiceType, CalculationContext calculationContext) {
+    public void resolveAddress(FacilityServiceType facilityServiceType) {
         //разрешить адрес локально
         resolveLocalAddress(facilityServiceType);
 
         //если адрес локально разрешен, разрешить адрес для ЦН.
         if (facilityServiceType.getStatus().isAddressResolvedLocally()) {
-            resolveOutgoingAddress(facilityServiceType, calculationContext);
+            resolveOutgoingAddress(facilityServiceType);
         }
     }
 

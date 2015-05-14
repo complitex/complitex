@@ -66,6 +66,6 @@ public class FacilityServiceTypeLookupPanel extends AbstractLookupPanel<Facility
     @Override
     protected void updateAccountNumber(FacilityServiceType facilityServiceType, String accountNumber,
                                        long userOrganizationId) {
-        personAccountService.updateAccountNumber(facilityServiceType, accountNumber, userOrganizationId);
+        personAccountService.updateAccountNumber(facilityServiceType, accountNumber);
     }
 }

@@ -11,10 +11,10 @@ import org.complitex.osznconnection.file.service.*;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
-import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,10 +55,10 @@ public class SubsidyFillTaskBean implements ITaskBean{
     private ServiceProviderAdapter serviceProviderAdapter;
 
     @EJB
-    private CalculationCenterBean calculationCenterBean;
+    private SubsidyService subsidyService;
 
     @EJB
-    private SubsidyService subsidyService;
+    private OsznOrganizationStrategy organizationStrategy;
 
     @Override
     public boolean execute(IExecutorObject object, Map commandParameters) throws ExecuteException {
@@ -120,13 +120,11 @@ public class SubsidyFillTaskBean implements ITaskBean{
      к которому относится данная запись мастер-данных.
      */
     private void fill(Subsidy subsidy) throws DBException, UnknownAccountNumberTypeException {
-        //получаем информацию о текущем контексте вычислений
-        CalculationContext calculationContext = calculationCenterBean.getContextWithAnyCalculationCenter(subsidy.getUserOrganizationId());
 
         String districtName = addressService.resolveOutgoingDistrict(subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
 
-        List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(calculationContext,
-                subsidy, districtName, subsidy.getAccountNumber() + "");
+        List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount( subsidy, districtName,
+                subsidy.getAccountNumber() + "");
 
         accountDetails.add(new AccountDetail());
 

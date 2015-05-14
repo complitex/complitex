@@ -11,9 +11,9 @@ import java.util.List;
 /**
  * @author Pavel Sknar
  */
-public class Organization extends org.complitex.organization.entity.Organization {
+public class EircOrganization extends org.complitex.organization.entity.Organization {
 
-    public Organization(DomainObject copy) {
+    public EircOrganization(DomainObject copy) {
         super(copy, null);
     }
 

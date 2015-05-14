@@ -7,14 +7,12 @@ import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.*;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
-import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
@@ -28,8 +26,10 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -49,9 +49,6 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
     private PersonAccountService personAccountService;
 
     @EJB
-    private CalculationCenterBean calculationCenterBean;
-
-    @EJB
     private SubsidyBean subsidyBean;
 
     @EJB
@@ -63,23 +60,23 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
     @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
 
-    public void bind(Subsidy subsidy, CalculationContext calculationContext, boolean updatePuAccount) throws DBException {
+    public void bind(Subsidy subsidy, boolean updatePuAccount) throws DBException {
         //resolve address
-        addressService.resolveAddress(subsidy, calculationContext);
+        addressService.resolveAddress(subsidy);
 
         //resolve account number
         if (subsidy.getStatus().isAddressResolved()){
             personAccountService.resolveAccountNumber(subsidy, subsidy.getStringField(SubsidyDBF.RASH),
                     subsidyService.getServicingOrganizationCode(subsidy.getRequestFileId()),
-                    calculationContext, updatePuAccount);
+                    updatePuAccount);
         }
 
         // обновляем subsidy запись
         subsidyBean.update(subsidy);
     }
 
-    private void bindSubsidyFile(RequestFile subsidyFile, CalculationContext calculationContext,
-            Boolean updatePuAccount) throws BindException, DBException, CanceledByUserException {
+    private void bindSubsidyFile(RequestFile subsidyFile, Boolean updatePuAccount)
+            throws BindException, DBException, CanceledByUserException {
         //извлечь из базы все id подлежащие связыванию для файла subsidy и доставать записи порциями по BATCH_SIZE штук.
         List<Long> notResolvedSubsidyIds = subsidyBean.findIdsForBinding(subsidyFile.getId());
 
@@ -104,7 +101,7 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
                 //связать subsidy запись
                 try {
                     userTransaction.begin();
-                    bind(subsidy, calculationContext, updatePuAccount);
+                    bind(subsidy, updatePuAccount);
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The subsidy item ( id = " + subsidy.getId() + ") was bound with error: ", e);
@@ -136,14 +133,13 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
         requestFile.setStatus(RequestFileStatus.BINDING);
         requestFileBean.save(requestFile);
 
-        //получаем информацию о текущем контексте вычислений 
-        final CalculationContext calculationContext = calculationCenterBean.getContextWithAnyCalculationCenter(requestFile.getUserOrganizationId());
+        Set<Long> serviceIds = new HashSet<>(); //todo get services
 
-        subsidyBean.clearBeforeBinding(requestFile.getId(), calculationContext.getServiceProviderTypeIds());
+        subsidyBean.clearBeforeBinding(requestFile.getId(), serviceIds);
 
         //связывание файла subsidy
         try {
-            bindSubsidyFile(requestFile, calculationContext, updatePuAccount);
+            bindSubsidyFile(requestFile, updatePuAccount);
         } catch (DBException e) {
             throw new RuntimeException(e);
         } catch (CanceledByUserException e) {

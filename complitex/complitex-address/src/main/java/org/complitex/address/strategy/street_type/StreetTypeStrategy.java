@@ -96,7 +96,7 @@ public class StreetTypeStrategy extends TemplateStrategy {
     }
 
     @Override
-    public long getDefaultOrderByAttributeId() {
+    public Long getDefaultOrderByAttributeId() {
         return NAME;
     }
 

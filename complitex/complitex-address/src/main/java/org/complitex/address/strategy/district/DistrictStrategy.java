@@ -162,7 +162,7 @@ public class DistrictStrategy extends TemplateStrategy {
 
 
     @Override
-    protected List<PermissionInfo> findChildrenPermissionInfo(long parentId, String childEntity, int start, int size) {
+    protected List<PermissionInfo> findChildrenPermissionInfo(Long parentId, String childEntity, int start, int size) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("parentId", parentId);
         params.put("start", start);
@@ -193,7 +193,7 @@ public class DistrictStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void changeChildrenActivity(long parentId, boolean enable) {
+    public void changeChildrenActivity(Long parentId, boolean enable) {
         IStrategy streetStrategy = strategyFactory.getStrategy("street");
 
         Set<Long> streetIds = findChildrenActivityInfo(parentId);

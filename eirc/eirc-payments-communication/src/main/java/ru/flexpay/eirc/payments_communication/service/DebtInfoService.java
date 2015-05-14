@@ -23,7 +23,7 @@ import ru.flexpay.eirc.dictionary.entity.EircConfig;
 import ru.flexpay.eirc.dictionary.strategy.ModuleInstanceStrategy;
 import ru.flexpay.eirc.eirc_account.entity.EircAccount;
 import ru.flexpay.eirc.eirc_account.service.EircAccountBean;
-import ru.flexpay.eirc.organization.entity.Organization;
+import ru.flexpay.eirc.organization.entity.EircOrganization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 import ru.flexpay.eirc.payments_communication.entity.DebtInfo;
 import ru.flexpay.eirc.payments_communication.entity.ResponseStatus;
@@ -310,7 +310,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
             return null;
         }
         Long organizationId = Long.parseLong(attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue());
-        Organization organization = organizationStrategy.getDomainObject(organizationId, true);
+        EircOrganization organization = organizationStrategy.getDomainObject(organizationId, true);
         if (organization == null) {
             logger.error("Inner error: organization not found by id {}", organizationId);
             return null;

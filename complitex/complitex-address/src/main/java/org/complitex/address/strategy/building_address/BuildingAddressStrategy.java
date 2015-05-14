@@ -175,7 +175,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
     }
 
     @Override
-    public PageParameters getHistoryPageParams(long objectId) {
+    public PageParameters getHistoryPageParams(Long objectId) {
         return null;
     }
 
@@ -230,7 +230,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
 
 
     @Override
-    protected void replaceChildrenPermissions(long parentId, Set<Long> subjectIds) {
+    protected void replaceChildrenPermissions(Long parentId, Set<Long> subjectIds) {
         long buildingAddressId = parentId;
 
         List<PermissionInfo> buildingPermissionInfoByParent = getBuildingPermissionInfoByParent(buildingAddressId);
@@ -256,7 +256,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
 
 
     @Override
-    protected void changeChildrenPermissions(long parentId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
+    protected void changeChildrenPermissions(Long parentId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         long buildingAddressId = parentId;
 
         List<PermissionInfo> buildingPermissionInfoByParent = getBuildingPermissionInfoByParent(buildingAddressId);
@@ -291,7 +291,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
 
 
     @Override
-    public void changeChildrenActivity(long parentId, boolean enable) {
+    public void changeChildrenActivity(Long parentId, boolean enable) {
         long buildingAddressId = parentId;
 
         Set<Long> buildingActivityInfoByParent = getBuildingActivityInfoByParent(buildingAddressId);

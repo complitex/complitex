@@ -183,7 +183,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     }
 
     @Override
-    public Organization getDomainObject(Long id, boolean runAsAdmin) {
+    public DomainObject getDomainObject(Long id, boolean runAsAdmin) {
         DomainObject object = super.getDomainObject(id, runAsAdmin);
 
         if (object == null) {
@@ -194,12 +194,12 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     }
 
     @Override
-    public Organization newInstance() {
+    public DomainObject newInstance() {
         return new Organization(super.newInstance(), new ArrayList<>());
     }
 
     @Override
-    public Organization getHistoryObject(Long objectId, Date date) {
+    public DomainObject getHistoryObject(Long objectId, Date date) {
         DomainObject object = super.getHistoryObject(objectId, date);
 
         if (object == null) {
@@ -285,7 +285,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     }
 
     @Override
-    public List<DomainObject> getList(DomainObjectFilter example) {
+    public List<? extends Organization> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
@@ -296,7 +296,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         }
         extendOrderBy(example);
 
-        List<DomainObject> organizations = sqlSession().selectList(ORGANIZATION_NS + ".selectOrganizations", example);
+        List<Organization> organizations = sqlSession().selectList(ORGANIZATION_NS + ".selectOrganizations", example);
 
         for (DomainObject object : organizations) {
             loadAttributes(object);
@@ -344,7 +344,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     }
 
     @Override
-    public List<DomainObject> getUserOrganizations(Locale locale, Long... excludeOrganizationsId) {
+    public List<? extends Organization> getUserOrganizations(Locale locale, Long... excludeOrganizationsId) {
         DomainObjectFilter example = new DomainObjectFilter();
         example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
         if (locale != null) {
@@ -353,17 +353,17 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
             example.setAsc(true);
         }
         configureFilter(example, ImmutableMap.<String, Long>of(), null);
-        List<DomainObject> userOrganizations = getList(example);
+        List<? extends Organization> userOrganizations = getList(example);
 
         if (excludeOrganizationsId == null) {
             return userOrganizations;
         }
 
-        List<DomainObject> finalUserOrganizations = Lists.newArrayList();
+        List<Organization> finalUserOrganizations = Lists.newArrayList();
 
         Set<Long> excludeSet = Sets.newHashSet(excludeOrganizationsId);
 
-        for (DomainObject userOrganization : userOrganizations) {
+        for (Organization userOrganization : userOrganizations) {
             if (!excludeSet.contains(userOrganization.getObjectId())) {
                 finalUserOrganizations.add(userOrganization);
             }
@@ -447,7 +447,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     }
 
     @Override
-    public List<DomainObject> getOrganizations(Long... types) {
+    public List<? extends Organization> getOrganizations(Long... types) {
         return getList(new DomainObjectFilter().addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, types));
     }
 
@@ -540,11 +540,24 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     /**
      * Figures out data source of calculation center.
      *
-     * @param calculationCenterId Calculation center's id
+     * @param billingId Calculation center's id
      * @return Calculation center's data source
      */
-    public String getDataSource(long calculationCenterId) {
-        DomainObject calculationCenter = getDomainObject(calculationCenterId, true);
-        return AttributeUtil.getStringValue(calculationCenter, DATA_SOURCE);
+    public String getDataSource(Long billingId) {
+        return getDomainObject(billingId, true).getStringValue(DATA_SOURCE);
+    }
+
+    public Long getBillingId(Long userOrganizationId){
+        List<ServiceBilling> serviceBillings = getServiceBillings(getDomainObject(userOrganizationId, true));
+
+        if (!serviceBillings.isEmpty()){
+            return serviceBillings.get(0).getBillingId();
+        }
+
+        throw new IllegalArgumentException("billing id is not found");
+    }
+
+    public String getDataSourceByUserOrganizationId(Long userOrganizationId){
+        return getDataSource(getBillingId(userOrganizationId));
     }
 }

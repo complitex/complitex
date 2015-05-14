@@ -617,13 +617,13 @@ public class BuildingStrategy extends TemplateStrategy {
     }
 
     @Override
-    public long getDefaultOrderByAttributeId() {
+    public Long getDefaultOrderByAttributeId() {
         return BuildingAddressStrategy.DEFAULT_ORDER_BY_ID;
     }
 
 
     @Override
-    public TreeSet<Date> getHistoryDates(long objectId) {
+    public TreeSet<Date> getHistoryDates(Long objectId) {
         TreeSet<Date> historyDates = super.getHistoryDates(objectId);
         Set<Long> addressIds = getBuildingAddresses(objectId);
         for (Long addressId : addressIds) {
@@ -641,7 +641,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
 
     @Override
-    public Building getHistoryObject(long objectId, Date date) {
+    public Building getHistoryObject(Long objectId, Date date) {
         DomainObjectFilter example = new DomainObjectFilter(objectId, getEntityName(), date);
 
         Building building = sqlSession().selectOne(BUILDING_NS + ".selectHistoryObject", example);
@@ -696,7 +696,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
 
     @Override
-    public void delete(long objectId, Locale locale) throws DeleteException {
+    public void delete(Long objectId, Locale locale) throws DeleteException {
         deleteChecks(objectId, locale);
 
         sqlSession().delete(BUILDING_NS + ".deleteBuildingCodes", ImmutableMap.of("objectId", objectId,

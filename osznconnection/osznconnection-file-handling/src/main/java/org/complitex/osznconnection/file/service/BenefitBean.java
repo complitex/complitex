@@ -4,9 +4,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.BenefitExample;
-import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -26,16 +26,21 @@ public class BenefitBean extends AbstractRequestBean {
     public static final String MAPPING_NAMESPACE = BenefitBean.class.getName();
     @EJB
     private PaymentBean paymentBean;
-    @EJB
-    private CalculationCenterBean calculationCenterBean;
+
     @EJB
     private PrivilegeCorrectionBean privilegeCorrectionBean;
+
     @EJB
     private RequestFileGroupBean requestFileGroupBean;
+
     @EJB
     private RequestFileBean requestFileBean;
+
     @EJB
     private ServiceProviderAdapter adapter;
+
+    @EJB
+    private OsznOrganizationStrategy organizationStrategy;
 
     public enum OrderBy {
 
@@ -264,13 +269,13 @@ public class BenefitBean extends AbstractRequestBean {
     }
 
     public Collection<BenefitData> getBenefitData(Benefit benefit) throws DBException {
-        final long osznId = benefit.getOrganizationId();
-        final RequestFile benefitRequestFile = requestFileBean.findById(benefit.getRequestFileId());
-        final CalculationContext calculationContext =
-                calculationCenterBean.getContextWithAnyCalculationCenter(benefitRequestFile.getUserOrganizationId());
+        Long billingId = organizationStrategy.getBillingId(benefit.getUserOrganizationId());
+        long osznId = benefit.getOrganizationId();
+        RequestFile benefitRequestFile = requestFileBean.findById(benefit.getRequestFileId());
+
         final Date dat1 = paymentBean.findDat1(benefit.getAccountNumber(), benefitRequestFile.getId());
 
-        Collection<BenefitData> benefitData = adapter.getBenefitData(calculationContext, benefit, dat1);
+        Collection<BenefitData> benefitData = adapter.getBenefitData(benefit, dat1);
 
         Collection<BenefitData> notConnectedBenefitData = null;
         if (benefitData != null && !benefitData.isEmpty()) {
@@ -297,15 +302,14 @@ public class BenefitBean extends AbstractRequestBean {
 
                 if (suitable) {
                     String osznBenefitCode = null;
-                    Long internalPrivilege = privilegeCorrectionBean.findInternalPrivilege(benefitDataItem.getCode(),
-                            calculationContext.getCalculationCenterId());
+                    Long internalPrivilege = privilegeCorrectionBean.findInternalPrivilege(benefitDataItem.getCode(), billingId);
                     if (internalPrivilege != null) {
                         osznBenefitCode = privilegeCorrectionBean.findPrivilegeCode(internalPrivilege, osznId,
-                                calculationContext.getUserOrganizationId());
+                                benefit.getUserOrganizationId());
                     }
                     benefitDataItem.setPrivilegeObjectId(internalPrivilege);
                     benefitDataItem.setOsznPrivilegeCode(osznBenefitCode);
-                    benefitDataItem.setCalcCenterId(calculationContext.getCalculationCenterId());
+                    benefitDataItem.setCalcCenterId(billingId);
                     notConnectedBenefitData.add(benefitDataItem);
                 }
             }

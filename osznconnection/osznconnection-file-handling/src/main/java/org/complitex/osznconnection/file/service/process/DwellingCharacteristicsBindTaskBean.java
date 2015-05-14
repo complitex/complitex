@@ -22,7 +22,6 @@ import org.complitex.osznconnection.file.service.exception.AlreadyProcessingExce
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
-import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.slf4j.Logger;
@@ -64,9 +63,6 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
     private PersonAccountService personAccountService;
 
     @EJB
-    private CalculationCenterBean calculationCenterBean;
-
-    @EJB
     private DwellingCharacteristicsBean dwellingCharacteristicsBean;
 
     @EJB
@@ -76,17 +72,16 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
     private ServiceProviderAdapter serviceProviderAdapter;
 
 
-    private boolean resolveAddress(DwellingCharacteristics dwellingCharacteristics, CalculationContext calculationContext) {
-        addressService.resolveAddress(dwellingCharacteristics, calculationContext);
+    private boolean resolveAddress(DwellingCharacteristics dwellingCharacteristics) {
+        addressService.resolveAddress(dwellingCharacteristics);
 
         return dwellingCharacteristics.getStatus().isAddressResolved();
     }
 
-    private void resolveLocalAccount(DwellingCharacteristics dwellingCharacteristics, CalculationContext calculationContext) {
+    private void resolveLocalAccount(DwellingCharacteristics dwellingCharacteristics) {
         try {
             String accountNumber = personAccountService.getAccountNumber(dwellingCharacteristics,
-                    dwellingCharacteristics.getStringField(IDCODE),
-                    calculationContext.getCalculationCenterId());
+                    dwellingCharacteristics.getStringField(IDCODE));
 
             if (!Strings.isEmpty(accountNumber)) {
                 dwellingCharacteristics.setAccountNumber(accountNumber);
@@ -97,9 +92,8 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
         }
     }
 
-    private boolean resolveRemoteAccountNumber(DwellingCharacteristics dwellingCharacteristics,
-            CalculationContext calculationContext) throws DBException {
-        serviceProviderAdapter.acquireFacilityPersonAccount(calculationContext, dwellingCharacteristics,
+    private boolean resolveRemoteAccountNumber(DwellingCharacteristics dwellingCharacteristics) throws DBException {
+        serviceProviderAdapter.acquireFacilityPersonAccount(dwellingCharacteristics,
                 dwellingCharacteristics.getOutgoingDistrict(), dwellingCharacteristics.getOutgoingStreetType(),
                 dwellingCharacteristics.getOutgoingStreet(),
                 dwellingCharacteristics.getOutgoingBuildingNumber(), dwellingCharacteristics.getOutgoingBuildingCorp(),
@@ -109,8 +103,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
 
         if (dwellingCharacteristics.getStatus() == RequestStatus.ACCOUNT_NUMBER_RESOLVED) {
             try {
-                personAccountService.save(dwellingCharacteristics, dwellingCharacteristics.getStringField(IDCODE),
-                        calculationContext.getCalculationCenterId());
+                personAccountService.save(dwellingCharacteristics, dwellingCharacteristics.getStringField(IDCODE));
             } catch (MoreOneAccountException e) {
                 throw new DBException(e);
             }
@@ -119,17 +112,17 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
         return dwellingCharacteristics.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    private void bind(DwellingCharacteristics dwellingCharacteristics, CalculationContext calculationContext)
+    private void bind(DwellingCharacteristics dwellingCharacteristics)
             throws DBException {
         //resolve address
-        resolveAddress(dwellingCharacteristics, calculationContext);
+        resolveAddress(dwellingCharacteristics);
 
         if (dwellingCharacteristics.getStatus().isAddressResolved()){
             //resolve local account.
-            resolveLocalAccount(dwellingCharacteristics, calculationContext);
+            resolveLocalAccount(dwellingCharacteristics);
 
             if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-                resolveRemoteAccountNumber(dwellingCharacteristics, calculationContext);
+                resolveRemoteAccountNumber(dwellingCharacteristics);
             }
         }
 
@@ -137,7 +130,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
         dwellingCharacteristicsBean.update(dwellingCharacteristics);
     }
 
-    private void bindDwellingCharacteristicsFile(RequestFile dwellingCharacteristicsFile, CalculationContext calculationContext)
+    private void bindDwellingCharacteristicsFile(RequestFile dwellingCharacteristicsFile)
             throws BindException, DBException, CanceledByUserException {
         //извлечь из базы все id подлежащие связыванию для файла dwelling characteristics и доставать записи порциями по BATCH_SIZE штук.
         List<Long> notResolvedDwellingCharacteristicsIds = dwellingCharacteristicsBean.findIdsForBinding(dwellingCharacteristicsFile.getId());
@@ -164,7 +157,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
                 try {
                     userTransaction.begin();
 
-                    bind(dwellingCharacteristic, calculationContext);
+                    bind(dwellingCharacteristic);
 
                     userTransaction.commit();
                 } catch (Exception e) {
@@ -197,14 +190,11 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
         requestFile.setStatus(RequestFileStatus.BINDING);
         requestFileBean.save(requestFile);
 
-        //получаем информацию о текущем контексте вычислений 
-        final CalculationContext calculationContext = calculationCenterBean.getContextWithAnyCalculationCenter(requestFile.getUserOrganizationId());
-
-        dwellingCharacteristicsBean.clearBeforeBinding(requestFile.getId(), calculationContext.getServiceProviderTypeIds());
+//        dwellingCharacteristicsBean.clearBeforeBinding(requestFile.getId(), billingContext.getServiceIds()); todo
 
         //связывание файла dwelling characteristics
         try {
-            bindDwellingCharacteristicsFile(requestFile, calculationContext);
+            bindDwellingCharacteristicsFile(requestFile);
         } catch (DBException e) {
             throw new RuntimeException(e);
         } catch (CanceledByUserException e) {

@@ -1,26 +1,25 @@
 package org.complitex.keconnection.organization.strategy.entity;
 
 import org.complitex.common.converter.BooleanConverter;
-import org.complitex.common.entity.DomainObject;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
+import org.complitex.organization.entity.Organization;
 
 import java.util.Date;
 import java.util.Locale;
 
 import static org.complitex.common.util.DateUtil.*;
 
-@Deprecated
-public class Organization extends DomainObject {
+public class KeOrganization extends Organization {
 
     private Date operatingMonthDate;
     private String parentShortName;
 
-    public Organization(DomainObject copy) {
+    public KeOrganization(Organization copy) {
         super(copy);
     }
 
-    public Organization() {
+    public KeOrganization() {
     }
 
     public Date getOperatingMonthDate() {

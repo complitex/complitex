@@ -35,7 +35,7 @@ import ru.flexpay.eirc.dictionary.web.CollapsibleInputSearchComponent;
 import ru.flexpay.eirc.eirc_account.entity.EircAccount;
 import ru.flexpay.eirc.eirc_account.service.EircAccountBean;
 import ru.flexpay.eirc.eirc_account.web.edit.EircAccountEdit;
-import ru.flexpay.eirc.organization.entity.Organization;
+import ru.flexpay.eirc.organization.entity.EircOrganization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 import ru.flexpay.eirc.service.entity.Service;
 import ru.flexpay.eirc.service.service.ServiceBean;
@@ -164,7 +164,7 @@ public class ServiceProviderAccountEdit extends FormTemplatePage {
         // service provider
         IModel<DomainObject> serviceProviderModel = new IModel<DomainObject>() {
 
-            Organization organization = null;
+            EircOrganization organization = null;
 
             @Override
             public DomainObject getObject() {

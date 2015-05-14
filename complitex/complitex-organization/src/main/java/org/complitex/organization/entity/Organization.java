@@ -10,6 +10,9 @@ import java.util.List;
 public class Organization extends DomainObject {
     private List<ServiceBilling> serviceBillings;
 
+    public Organization() {
+    }
+
     public Organization(List<ServiceBilling> serviceBillings) {
         this.serviceBillings = serviceBillings;
     }
@@ -17,6 +20,10 @@ public class Organization extends DomainObject {
     public Organization(DomainObject copy, List<ServiceBilling> serviceBillings) {
         super(copy);
         this.serviceBillings = serviceBillings;
+    }
+
+    public Organization(Organization copy){
+        this(copy, copy.getServiceBillings());
     }
 
     public List<ServiceBilling> getServiceBillings() {

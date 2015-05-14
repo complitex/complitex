@@ -16,7 +16,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.CloneUtil;
-import ru.flexpay.eirc.organization.entity.Organization;
+import ru.flexpay.eirc.organization.entity.EircOrganization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 import ru.flexpay.eirc.organization.web.edit.component.ActionPanel;
 import ru.flexpay.eirc.service.entity.Service;
@@ -66,7 +66,7 @@ public class ServiceAllowableListPanel extends Panel {
             }
     );
 
-    public ServiceAllowableListPanel(String id, Organization organization) {
+    public ServiceAllowableListPanel(String id, EircOrganization organization) {
         super(id);
         services = organization.getAttributes(EircOrganizationStrategy.SERVICE);
 

@@ -53,7 +53,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
     private FeedbackPanel messages;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private IOrganizationStrategy<DomainObject> organizationStrategy;
+    private IOrganizationStrategy organizationStrategy;
 
     public BuildingEditComponent(String id, boolean disabled) {
         super(id, disabled);
@@ -203,7 +203,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
             building.getBuildingCodes().add(new BuildingCode());
         }
 
-        final List<DomainObject> allServicingOrganizations = organizationStrategy.getAllOuterOrganizations(getLocale());
+        final List<? extends DomainObject> allServicingOrganizations = organizationStrategy.getAllOuterOrganizations(getLocale());
 
         final DomainObjectDisableAwareRenderer organizationRenderer = new DomainObjectDisableAwareRenderer() {
 

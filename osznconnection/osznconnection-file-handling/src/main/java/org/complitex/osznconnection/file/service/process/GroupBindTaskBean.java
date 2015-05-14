@@ -14,7 +14,6 @@ import org.complitex.osznconnection.file.service.exception.AlreadyProcessingExce
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
-import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
@@ -58,9 +57,6 @@ public class GroupBindTaskBean implements ITaskBean {
     private BenefitBean benefitBean;
 
     @EJB
-    private CalculationCenterBean calculationCenterBean;
-
-    @EJB
     private RequestFileGroupBean requestFileGroupBean;
 
     @EJB
@@ -86,17 +82,14 @@ public class GroupBindTaskBean implements ITaskBean {
         group.setStatus(RequestFileStatus.BINDING);
         requestFileGroupBean.save(group);
 
-        //получаем информацию о текущем контексте вычислений
-        CalculationContext calculationContext = calculationCenterBean.getContextWithAnyCalculationCenter(group.getUserOrganizationId());
-
         //очищаем колонки которые заполняются во время связывания и обработки для записей в таблицах payment и benefit
-        paymentBean.clearBeforeBinding(group.getPaymentFile().getId(), calculationContext.getServiceProviderTypeIds());
+        //paymentBean.clearBeforeBinding(group.getPaymentFile().getId(), billingContext.getServiceIds());
         benefitBean.clearBeforeBinding(group.getBenefitFile().getId());
 
         //связывание файла payment
         RequestFile paymentFile = group.getPaymentFile();
         try {
-            bindPaymentFile(paymentFile, calculationContext, updatePuAccount);
+            bindPaymentFile(paymentFile, updatePuAccount);
         } catch (DBException e) {
             throw new RuntimeException(e);
         } catch (CanceledByUserException e) {
@@ -151,8 +144,8 @@ public class GroupBindTaskBean implements ITaskBean {
      * @param payment Запись запроса начислений
      * @return Разрешен ли адрес
      */
-    private boolean resolveAddress(Payment payment, CalculationContext calculationContext) {
-        addressService.resolveAddress(payment, calculationContext);
+    private boolean resolveAddress(Payment payment) {
+        addressService.resolveAddress(payment);
 
         return payment.getStatus().isAddressResolved();
     }
@@ -162,10 +155,9 @@ public class GroupBindTaskBean implements ITaskBean {
      * @param payment Запись запроса начислений
      * @return Разрешен ли номер л/с
      */
-    private void resolveLocalAccount(Payment payment, CalculationContext calculationContext) {
+    private void resolveLocalAccount(Payment payment) {
         try {
-            String accountNumber = personAccountService.getAccountNumber(payment, payment.getStringField(OWN_NUM_SR),
-                    calculationContext.getCalculationCenterId());
+            String accountNumber = personAccountService.getAccountNumber(payment, payment.getStringField(OWN_NUM_SR));
 
             if (!Strings.isEmpty(accountNumber)) {
                 payment.setAccountNumber(accountNumber);
@@ -184,14 +176,13 @@ public class GroupBindTaskBean implements ITaskBean {
      * Если не успешно, то попытаться разрешить адрес по схеме "ОСЗН адрес -> локальная адресная база -> адрес центра начислений".
      * Если адрес разрешен, то пытаемся разрешить номер л/c в ЦН.
      */
-    private void bind(Payment payment, CalculationContext calculationContext, Boolean updatePuAccount) throws DBException {
+    private void bind(Payment payment, Boolean updatePuAccount) throws DBException {
         //resolve address
-        addressService.resolveAddress(payment, calculationContext);
+        addressService.resolveAddress(payment);
 
         //resolve account number
         if (payment.getStatus().isAddressResolved()){
-            personAccountService.resolveAccountNumber(payment, payment.getStringField(PaymentDBF.OWN_NUM_SR), null,
-                    calculationContext, updatePuAccount);
+            personAccountService.resolveAccountNumber(payment, payment.getStringField(PaymentDBF.OWN_NUM_SR), null, updatePuAccount);
 
             if (payment.getStatus() == RequestStatus.ACCOUNT_NUMBER_RESOLVED) {
                 benefitBean.updateAccountNumber(payment.getId(), payment.getAccountNumber());
@@ -207,7 +198,7 @@ public class GroupBindTaskBean implements ITaskBean {
      * @param paymentFile Файл запроса начислений
      * @throws BindException Ошибка связывания
      */
-    private void bindPaymentFile(RequestFile paymentFile, CalculationContext calculationContext, Boolean updatePuAccount)
+    private void bindPaymentFile(RequestFile paymentFile, Boolean updatePuAccount)
             throws BindException, DBException, CanceledByUserException {
         //извлечь из базы все id подлежащие связыванию для файла payment и доставать записи порциями по BATCH_SIZE штук.
         List<Long> notResolvedPaymentIds = paymentBean.findIdsForBinding(paymentFile.getId());
@@ -232,7 +223,7 @@ public class GroupBindTaskBean implements ITaskBean {
                 //связать payment запись
                 try {
                     userTransaction.begin();
-                    bind(payment, calculationContext, updatePuAccount);
+                    bind(payment, updatePuAccount);
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The payment item ( id = " + payment.getId() + ") was bound with error: ", e);

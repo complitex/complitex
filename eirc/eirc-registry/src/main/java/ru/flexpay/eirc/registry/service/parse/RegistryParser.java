@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.cal10n.LocLogger;
 import ru.flexpay.eirc.dictionary.entity.EircConfig;
 import ru.flexpay.eirc.dictionary.strategy.ModuleInstanceStrategy;
-import ru.flexpay.eirc.organization.entity.Organization;
+import ru.flexpay.eirc.organization.entity.EircOrganization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 import ru.flexpay.eirc.registry.entity.Container;
 import ru.flexpay.eirc.registry.entity.Registry;
@@ -398,12 +398,12 @@ public class RegistryParser implements Serializable {
                 return null;
             }
 
-            Organization recipient = getRecipient(newRegistry, processLog);
+            EircOrganization recipient = getRecipient(newRegistry, processLog);
             if (recipient == null) {
                 processLog.error(Parsing.RECIPIENT_NOT_FOUND, newRegistry.getRecipientOrganizationId(), newRegistry.getRegistryNumber());
                 return null;
             }
-            Organization sender = getSender(newRegistry, processLog);
+            EircOrganization sender = getSender(newRegistry, processLog);
             if (sender == null) {
                 processLog.error(Parsing.SENDER_NOT_FOUND, newRegistry.getSenderOrganizationId(), newRegistry.getRegistryNumber());
                 return null;
@@ -437,7 +437,7 @@ public class RegistryParser implements Serializable {
     }
 
     private boolean validateServiceProvider(Registry registry, LocLogger processLog) {
-        Organization provider = getProvider(registry);
+        EircOrganization provider = getProvider(registry);
         /*
         if (registry.getType().isPayments()) {
             Stub<Organization> recipient = new Stub<Organization>(registry.getRecipientOrganizationId());
@@ -455,7 +455,7 @@ public class RegistryParser implements Serializable {
     }
 
     private boolean validatePaymentCollector(Registry registry, LocLogger processLog) {
-        Organization paymentCollector = organizationStrategy.getDomainObject(registry.getSenderOrganizationId(), false);
+        EircOrganization paymentCollector = organizationStrategy.getDomainObject(registry.getSenderOrganizationId(), false);
         if (registry.getType().isPayments() && !paymentCollector.isPaymentCollector()) {
             processLog.error(Parsing.ORGANIZATION_NOT_PAYMENT_COLLECTOR, paymentCollector.getObjectId(), registry.getRegistryNumber());
             return false;
@@ -463,7 +463,7 @@ public class RegistryParser implements Serializable {
         return true;
     }
 
-    private Organization getProvider(Registry registry) {
+    private EircOrganization getProvider(Registry registry) {
         // for payments registry assume recipient is a service provider
 
         Long providerId = registry.getType().isPayments() ? registry.getRecipientOrganizationId() : registry.getSenderOrganizationId();
@@ -471,17 +471,17 @@ public class RegistryParser implements Serializable {
         return organizationStrategy.getDomainObject(providerId, false);
     }
 
-    private Organization getSender(Registry registry, Logger processLog) {
+    private EircOrganization getSender(Registry registry, Logger processLog) {
 
         processLog.debug("Fetching sender via code={}", registry.getSenderOrganizationId());
-        Organization sender = findOrgByRegistryCorrections(registry, registry.getSenderOrganizationId(), processLog);
+        EircOrganization sender = findOrgByRegistryCorrections(registry, registry.getSenderOrganizationId(), processLog);
         if (sender == null) {
             sender = organizationStrategy.getDomainObject(registry.getSenderOrganizationId(), false);
         }
         return sender;
     }
 
-    private Organization getRecipient(Registry registry, LocLogger processLog) {
+    private EircOrganization getRecipient(Registry registry, LocLogger processLog) {
 
         Integer eircOrganizationId = null;
 
@@ -510,7 +510,7 @@ public class RegistryParser implements Serializable {
         }
 
         processLog.debug("Fetching recipient via code={}", registry.getRecipientOrganizationId());
-        Organization recipient = findOrgByRegistryCorrections(registry, registry.getRecipientOrganizationId(), processLog);
+        EircOrganization recipient = findOrgByRegistryCorrections(registry, registry.getRecipientOrganizationId(), processLog);
         if (recipient == null) {
             recipient = organizationStrategy.getDomainObject(registry.getRecipientOrganizationId(), false);
         }
@@ -519,7 +519,7 @@ public class RegistryParser implements Serializable {
 
     // TODO Find organization in corrections (maybe it is impossible)
     @SuppressWarnings("unused")
-    private Organization findOrgByRegistryCorrections(Registry registry, Long code, Logger processLog) {
+    private EircOrganization findOrgByRegistryCorrections(Registry registry, Long code, Logger processLog) {
 
         return null;
     }

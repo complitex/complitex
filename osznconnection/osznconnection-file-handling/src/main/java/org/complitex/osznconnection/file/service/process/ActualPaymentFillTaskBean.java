@@ -1,9 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import java.util.Collection;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.ConfigBean;
@@ -16,6 +13,8 @@ import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
+import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
+import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,13 +25,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
-import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
+import java.util.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -43,26 +36,22 @@ import org.complitex.osznconnection.file.service_provider.exception.DBException;
 public class ActualPaymentFillTaskBean implements ITaskBean {
 
     private final Logger log = LoggerFactory.getLogger(ActualPaymentFillTaskBean.class);
+
     @Resource
     private UserTransaction userTransaction;
+
     @EJB
     protected ConfigBean configBean;
-    @EJB
-    private CalculationCenterBean calculationCenterBean;
+
     @EJB
     private ActualPaymentBean actualPaymentBean;
+
     @EJB
     private RequestFileBean requestFileBean;
+
     @EJB
     private ServiceProviderAdapter adapter;
 
-    private Set<Long> getServiceProviderTypeIds(Collection<CalculationContext> calculationContexts) {
-        final Set<Long> serviceProviderTypeIds = Sets.newHashSet();
-        for (CalculationContext context : calculationContexts) {
-            serviceProviderTypeIds.addAll(context.getServiceProviderTypeIds());
-        }
-        return ImmutableSet.copyOf(serviceProviderTypeIds);
-    }
 
     @Override
     public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
@@ -77,14 +66,11 @@ public class ActualPaymentFillTaskBean implements ITaskBean {
         requestFile.setStatus(RequestFileStatus.FILLING);
         requestFileBean.save(requestFile);
 
-        //получаем информацию о текущем контексте вычислений
-        final Collection<CalculationContext> calculationContexts = calculationCenterBean.getContexts(requestFile.getUserOrganizationId());
-
-        actualPaymentBean.clearBeforeProcessing(requestFile.getId(), getServiceProviderTypeIds(calculationContexts));
+//        actualPaymentBean.clearBeforeProcessing(requestFile.getId(), getServiceProviderTypeIds(billingContexts)); todo
 
         //обработка файла actualPayment
         try {
-            processActualPayment(requestFile, calculationContexts);
+            processActualPayment(requestFile);
         } catch (DBException e) {
             throw new RuntimeException(e);
         } catch (CanceledByUserException e) {
@@ -125,42 +111,45 @@ public class ActualPaymentFillTaskBean implements ITaskBean {
         return Log.EVENT.EDIT;
     }
 
-    private void process(ActualPayment actualPayment, Date date, Collection<CalculationContext> calculationContexts) throws DBException {
+    private void process(ActualPayment actualPayment, Date date) throws DBException {
         if (RequestStatus.unboundStatuses().contains(actualPayment.getStatus())) {
             return;
         }
 
-        for (CalculationContext calculationContext : calculationContexts) {
-            long startTime = 0;
-            if (log.isDebugEnabled()) {
-                startTime = System.nanoTime();
-            }
-            adapter.processActualPayment(calculationContext, actualPayment, date);
-            log.debug("Processing actualPayment (id = {}, calculation center id: {}) took {} sec.",
-                    new Object[]{
-                        actualPayment.getId(),
-                        calculationContext.getCalculationCenterId(),
-                        (System.nanoTime() - startTime) / 1000000000F
-                    });
-
-            /* 
-             * если actualPayment обработан некорректно текущим модулем начислений, то прерываем обработку данной записи
-             * оставшимися модулями.
-             */
-            if (actualPayment.getStatus() != RequestStatus.PROCESSED) {
-                break;
-            }
-        }
+//        for (BillingContext billingContext : billingContexts) { todo process payments
+//            long startTime = 0;
+//            if (log.isDebugEnabled()) {
+//                startTime = System.nanoTime();
+//            }
+//            adapter.processActualPayment(billingContext, actualPayment, date);
+//            log.debug("Processing actualPayment (id = {}, calculation center id: {}) took {} sec.",
+//                    new Object[]{
+//                        actualPayment.getId(),
+//                        billingContext.getBillingId(),
+//                        (System.nanoTime() - startTime) / 1000000000F
+//                    });
+//
+//            /*
+//             * если actualPayment обработан некорректно текущим модулем начислений, то прерываем обработку данной записи
+//             * оставшимися модулями.
+//             */
+//            if (actualPayment.getStatus() != RequestStatus.PROCESSED) {
+//                break;
+//            }
+//        }
 
         long startTime = 0;
         if (log.isDebugEnabled()) {
             startTime = System.nanoTime();
         }
-        actualPaymentBean.update(actualPayment, getServiceProviderTypeIds(calculationContexts));
+
+        Set<Long> serviceIds = new HashSet<>(); //todo service ids
+
+        actualPaymentBean.update(actualPayment, serviceIds);
         log.debug("Updating of actualPayment (id = {}) took {} sec.", actualPayment.getId(), (System.nanoTime() - startTime) / 1000000000F);
     }
 
-    private void processActualPayment(RequestFile actualPaymentFile, Collection<CalculationContext> calculationContexts)
+    private void processActualPayment(RequestFile actualPaymentFile)
             throws FillException, DBException, CanceledByUserException {
         //извлечь из базы все id подлежащие обработке для файла actualPayment и доставать записи порциями по BATCH_SIZE штук.
         long startTime = 0;
@@ -189,7 +178,7 @@ public class ActualPaymentFillTaskBean implements ITaskBean {
                 //обработать actualPayment запись
                 try {
                     userTransaction.begin();
-                    process(actualPayment, actualPaymentBean.getFirstDay(actualPayment, actualPaymentFile), calculationContexts);
+                    process(actualPayment, actualPaymentBean.getFirstDay(actualPayment, actualPaymentFile));
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The actual payment item (id = " + actualPayment.getId() + ") was processed with error: ", e);

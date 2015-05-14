@@ -12,7 +12,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
-import org.complitex.keconnection.organization.strategy.entity.Organization;
+import org.complitex.keconnection.organization.strategy.entity.KeOrganization;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 
 import javax.ejb.EJB;
@@ -28,7 +28,7 @@ public abstract class SetReadyCloseOperatingMonthDialog extends Panel {
 
     private final Dialog dialog;
     private final Label caption;
-    private Organization organization;
+    private KeOrganization organization;
 
     public SetReadyCloseOperatingMonthDialog(String id) {
         super(id);
@@ -69,13 +69,13 @@ public abstract class SetReadyCloseOperatingMonthDialog extends Panel {
         dialog.add(readyCloseOperatingMonthFlag);
     }
 
-    protected abstract void onSet(Organization organization, AjaxRequestTarget target);
+    protected abstract void onSet(KeOrganization organization, AjaxRequestTarget target);
 
     private void close(AjaxRequestTarget target) {
         dialog.close(target);
     }
 
-    public void open(AjaxRequestTarget target, Organization organization) {
+    public void open(AjaxRequestTarget target, KeOrganization organization) {
         this.organization = organization;
         target.add(caption);
         dialog.open(target);

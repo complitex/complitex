@@ -201,10 +201,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     }
 
     @Override
-    protected Long insertStrings(long attributeTypeId, List<StringCulture> strings) {
-        /* if it's data source or one of load/save request file directory attributes
-         * or root directory for loading and saving request files
-         * then string value should be inserted as is and not upper cased. */
+    protected Long insertStrings(Long attributeTypeId, List<StringCulture> strings) {
         return CUSTOM_ATTRIBUTES.contains(attributeTypeId)
                 ? stringBean.save(strings, getEntityName(), false)
                 : super.insertStrings(attributeTypeId, strings);

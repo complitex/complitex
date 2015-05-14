@@ -60,7 +60,7 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
 
     @Override
     protected void updateAccountNumber(Subsidy subsidy, String accountNumber, long userOrganizationId) {
-        personAccountService.updateAccountNumber(subsidy, accountNumber, userOrganizationId);
+        personAccountService.updateAccountNumber(subsidy, accountNumber);
     }
 
     @Override

@@ -4,10 +4,10 @@
  */
 package org.complitex.osznconnection.file.service_provider;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
+import org.complitex.osznconnection.file.entity.Benefit;
+import org.complitex.osznconnection.file.entity.BenefitDBF;
+import org.complitex.osznconnection.file.entity.Payment;
+import org.complitex.osznconnection.file.entity.PaymentDBF;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,7 +23,7 @@ public class ProcessPaymentTest extends AbstractTest {
         return new ServiceProviderTestAdapter() {
 
             @Override
-            protected Long findInternalOwnership(String calculationCenterOwnership, long calculationCenterId) {
+            protected Long findInternalOwnership(String calculationCenterOwnership, long billingId) {
                 System.out.println("Original OWN_FRM : " + calculationCenterOwnership);
                 return 1L;
             }
@@ -73,13 +73,13 @@ public class ProcessPaymentTest extends AbstractTest {
         p.setAccountNumber("1000001108");
         p.setOrganizationId(1L);
 
-        try {
-            adapter.processPaymentAndBenefit(new CalculationContext(0L, 3L, 2L, "test", ImmutableSet.of(1L)), p,
-                    Lists.newArrayList(b));
-        } catch (DBException e) {
-            System.out.println("DB error.");
-            throw new RuntimeException(e);
-        }
+//        try {
+//            adapter.processPaymentAndBenefit(new BillingContext(0L, 3L, 2L, "test", ImmutableSet.of(1L)), p,
+//                    Lists.newArrayList(b));
+//        } catch (DBException e) {
+//            System.out.println("DB error.");
+//            throw new RuntimeException(e);
+//        }
         System.out.println("Status : " + p.getStatus() + ", FROG : " + p.getStringField(PaymentDBF.FROG) + ", FL_PAY : " + p.getStringField(PaymentDBF.FL_PAY)
                 + ", NM_PAY : " + p.getStringField(PaymentDBF.NM_PAY) + ", DEBT : " + p.getStringField(PaymentDBF.DEBT) + ", NUMB : " + p.getStringField(PaymentDBF.NUMB)
                 + ", MARK : " + p.getStringField(PaymentDBF.MARK) + ", HOSTEL : " + b.getStringField(BenefitDBF.HOSTEL)

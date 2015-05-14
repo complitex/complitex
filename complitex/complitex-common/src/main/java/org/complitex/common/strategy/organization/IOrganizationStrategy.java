@@ -3,13 +3,14 @@ package org.complitex.common.strategy.organization;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.RemoteDataSource;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
+import org.complitex.common.strategy.IStrategy;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 
-public interface IOrganizationStrategy {
+public interface IOrganizationStrategy extends IStrategy{
     String BEAN_NAME = "OrganizationStrategy";
     String BEAN_LOOKUP = "java:module/OrganizationStrategy";
 
@@ -143,9 +144,9 @@ public interface IOrganizationStrategy {
      * @return All outer organizations visible to user.
      */
 
-    List<DomainObject> getAllOuterOrganizations(Locale locale);
+    List<? extends DomainObject> getAllOuterOrganizations(Locale locale);
 
-    List<DomainObject> getOrganizations(Long... types);
+    List<? extends DomainObject> getOrganizations(Long... types);
 
     String displayShortNameAndCode(DomainObject organization, Locale locale);
 

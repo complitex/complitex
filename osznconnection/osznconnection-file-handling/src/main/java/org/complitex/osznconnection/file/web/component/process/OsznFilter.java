@@ -5,6 +5,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
+import org.complitex.organization.entity.Organization;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
 import javax.ejb.EJB;
@@ -20,10 +21,10 @@ public final class OsznFilter extends DisableAwareDropDownChoice<DomainObject> {
 
     public OsznFilter(String id) {
         super(id);
-        setChoices(new LoadableDetachableModel<List<DomainObject>>() {
+        setChoices(new LoadableDetachableModel<List<? extends Organization>>() {
 
             @Override
-            protected List<DomainObject> load() {
+            protected List<? extends Organization> load() {
                 return organizationStrategy.getAllOSZNs(getLocale());
             }
         });

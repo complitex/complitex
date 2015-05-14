@@ -7,7 +7,7 @@ package org.complitex.keconnection.web.template;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.keconnection.organization.strategy.entity.Organization;
+import org.complitex.keconnection.organization.strategy.entity.KeOrganization;
 import org.complitex.template.web.component.MainUserOrganizationPicker;
 
 import javax.ejb.EJB;
@@ -30,7 +30,7 @@ public class KeConnectionMainUserOrganizationPicker extends MainUserOrganization
 
     @Override
     protected String displayOrganization(DomainObject organization) {
-        Organization o = (Organization) organization;
+        KeOrganization o = (KeOrganization) organization;
 
         final Locale locale = getLocale();
         final String name = organizationStrategy.displayDomainObject(o, locale);

@@ -25,7 +25,8 @@ import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
-import org.complitex.common.web.model.OrganizationModel;
+import org.complitex.organization.entity.Organization;
+import org.complitex.organization.web.model.OrganizationModel;
 import org.complitex.osznconnection.file.entity.PersonAccount;
 import org.complitex.osznconnection.file.service.PersonAccountBean;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -125,15 +126,15 @@ public final class PersonAccountEdit extends FormTemplatePage {
         form.add(new TextField<String>("apartment").setRequired(true).setEnabled(false));
         form.add(new TextField<String>("accountNumber").setRequired(true));
 
-        final IModel<List<DomainObject>> allOsznsModel = new LoadableDetachableModel<List<DomainObject>>() {
+        final IModel<List<? extends Organization>> allOsznsModel = new LoadableDetachableModel<List<? extends Organization>>() {
 
             @Override
-            protected List<DomainObject> load() {
+            protected List<? extends Organization> load() {
                 return organizationStrategy.getAllOSZNs(getLocale());
             }
         };
 
-        final IModel<DomainObject> osznModel = new OrganizationModel() {
+        final IModel<? extends Organization> osznModel = new OrganizationModel() {
 
             @Override
             public Long getOrganizationId() {
@@ -146,7 +147,7 @@ public final class PersonAccountEdit extends FormTemplatePage {
             }
 
             @Override
-            public List<DomainObject> getOrganizations() {
+            public List<? extends Organization> getOrganizations() {
                 return allOsznsModel.getObject();
             }
         };
@@ -157,20 +158,20 @@ public final class PersonAccountEdit extends FormTemplatePage {
                 return organizationStrategy.displayDomainObject(object, getLocale());
             }
         };
-        DisableAwareDropDownChoice<DomainObject> oszn = new DisableAwareDropDownChoice<DomainObject>("oszn", osznModel,
-                allOsznsModel, organizationRenderer);
+        DisableAwareDropDownChoice<? extends Organization> oszn = new DisableAwareDropDownChoice(
+                "oszn", osznModel, allOsznsModel, organizationRenderer);
         oszn.setRequired(true);
         oszn.setEnabled(false);
         form.add(oszn);
 
-        final IModel<List<DomainObject>> allCalculationCentresModel = new LoadableDetachableModel<List<DomainObject>>() {
+        final IModel<List<? extends Organization>> allCalculationCentresModel = new LoadableDetachableModel<List<? extends Organization>>() {
 
             @Override
-            protected List<DomainObject> load() {
+            protected List<? extends Organization> load() {
                 return organizationStrategy.getAllCalculationCentres(getLocale());
             }
         };
-        final IModel<DomainObject> calculationCenterModel = new OrganizationModel() {
+        final IModel<? extends Organization> calculationCenterModel = new OrganizationModel() {
 
             @Override
             public Long getOrganizationId() {
@@ -183,26 +184,26 @@ public final class PersonAccountEdit extends FormTemplatePage {
             }
 
             @Override
-            public List<DomainObject> getOrganizations() {
+            public List<? extends Organization> getOrganizations() {
                 return allCalculationCentresModel.getObject();
             }
         };
-        DisableAwareDropDownChoice<DomainObject> calculationCenter = new DisableAwareDropDownChoice<DomainObject>("calculationCenter",
+        DisableAwareDropDownChoice<? extends Organization> calculationCenter = new DisableAwareDropDownChoice("calculationCenter",
                 calculationCenterModel, allCalculationCentresModel, organizationRenderer);
         calculationCenter.setRequired(true);
         calculationCenter.setEnabled(false);
         form.add(calculationCenter);
 
         //user organization
-        final IModel<List<DomainObject>> allUserOrganizationsModel = new LoadableDetachableModel<List<DomainObject>>() {
+        final IModel<List<? extends Organization>> allUserOrganizationsModel = new LoadableDetachableModel<List<? extends Organization>>() {
 
             @Override
-            protected List<DomainObject> load() {
-                return (List<DomainObject>) organizationStrategy.getUserOrganizations(getLocale());
+            protected List<? extends Organization> load() {
+                return (List<? extends Organization>) organizationStrategy.getUserOrganizations(getLocale());
             }
         };
 
-        final IModel<DomainObject> userOrganizationModel = new OrganizationModel() {
+        final IModel<? extends Organization> userOrganizationModel = new OrganizationModel() {
 
             @Override
             public Long getOrganizationId() {
@@ -215,11 +216,11 @@ public final class PersonAccountEdit extends FormTemplatePage {
             }
 
             @Override
-            public List<DomainObject> getOrganizations() {
+            public List<? extends Organization> getOrganizations() {
                 return allUserOrganizationsModel.getObject();
             }
         };
-        final DisableAwareDropDownChoice<DomainObject> userOrganization = new DisableAwareDropDownChoice<DomainObject>("userOrganization",
+        final DisableAwareDropDownChoice<? extends Organization> userOrganization = new DisableAwareDropDownChoice("userOrganization",
                 userOrganizationModel, allUserOrganizationsModel, organizationRenderer);
         userOrganization.setRequired(true);
         userOrganization.setEnabled(false);

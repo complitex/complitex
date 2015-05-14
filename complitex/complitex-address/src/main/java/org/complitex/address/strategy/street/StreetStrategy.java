@@ -255,19 +255,19 @@ public class StreetStrategy extends TemplateStrategy {
 
 
     @Override
-    public void replaceChildrenPermissions(long parentId, Set<Long> subjectIds) {
+    public void replaceChildrenPermissions(Long parentId, Set<Long> subjectIds) {
         replaceChildrenPermissions("building_address", parentId, subjectIds);
     }
 
 
     @Override
-    protected void changeChildrenPermissions(long parentId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
+    protected void changeChildrenPermissions(Long parentId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
         changeChildrenPermissions("building_address", parentId, addSubjectIds, removeSubjectIds);
     }
 
 
     @Override
-    public void changeChildrenActivity(long parentId, boolean enable) {
+    public void changeChildrenActivity(Long parentId, boolean enable) {
         changeChildrenActivity(parentId, "building_address", enable);
     }
 

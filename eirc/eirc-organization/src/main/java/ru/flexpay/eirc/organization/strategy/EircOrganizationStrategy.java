@@ -12,11 +12,12 @@ import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
+import org.complitex.organization.entity.Organization;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
-import ru.flexpay.eirc.organization.entity.Organization;
+import ru.flexpay.eirc.organization.entity.EircOrganization;
 import ru.flexpay.eirc.organization.web.edit.EircOrganizationEditComponent;
 import ru.flexpay.eirc.organization.web.edit.EircOrganizationValidator;
 
@@ -133,7 +134,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<DomainObject> getAllOuterOrganizations(Locale locale) {
+    public List<? extends Organization> getAllOuterOrganizations(Locale locale) {
         DomainObjectFilter example = new DomainObjectFilter();
         if (locale != null) {
             example.setOrderByAttributeTypeId(NAME);
@@ -142,6 +143,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
         }
 //        example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationType.SERVICE_PROVIDER.getId()));
         configureFilter(example, ImmutableMap.<String, Long>of(), null);
+
         return getList(example);
     }
 
@@ -153,7 +155,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
      * @return All EIRC organizations.
      */
     @SuppressWarnings("unchecked")
-    public List<DomainObject> getAllServiceProviders(Locale locale) {
+    public List<? extends Organization> getAllServiceProviders(Locale locale) {
         DomainObjectFilter example = new DomainObjectFilter();
 
         example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationType.SERVICE_PROVIDER.getId()));
@@ -176,7 +178,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
      * @return All EIRC organizations.
      */
     @SuppressWarnings("unchecked")
-    public List<DomainObject> getAllPaymentCollectors(Locale locale) {
+    public List<? extends Organization> getAllPaymentCollectors(Locale locale) {
         DomainObjectFilter example = new DomainObjectFilter();
 
         example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationType.PAYMENT_COLLECTOR.getId()));
@@ -226,12 +228,12 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public Organization getDomainObject(Long id, boolean runAsAdmin) {
+    public EircOrganization getDomainObject(Long id, boolean runAsAdmin) {
         return getDomainObject(null, id, runAsAdmin);
     }
 
     @Override
-    public Organization getDomainObject(String dataSource, Long id, boolean runAsAdmin) {
+    public EircOrganization getDomainObject(String dataSource, Long id, boolean runAsAdmin) {
         /*if (log.isDebugEnabled()) {
             log.debug("Session manager: id={}",
                     getSqlSessionManager().getConfiguration().getEnvironment().getId());
@@ -247,21 +249,21 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
             return null;
         }
 
-        return new Organization(object);
+        return new EircOrganization(object);
     }
 
     @Override
-    public Organization newInstance() {
-        return new Organization(super.newInstance());
+    public EircOrganization newInstance() {
+        return new EircOrganization(super.newInstance());
     }
 
     @Override
-    public Organization getHistoryObject(Long objectId, Date date) {
+    public EircOrganization getHistoryObject(Long objectId, Date date) {
         DomainObject object = super.getHistoryObject(objectId, date);
         if (object == null) {
             return null;
         }
-        return new Organization(object);
+        return new EircOrganization(object);
     }
 
     @Override

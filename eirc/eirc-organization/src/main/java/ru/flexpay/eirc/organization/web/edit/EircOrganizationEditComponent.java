@@ -12,7 +12,7 @@ import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
-import ru.flexpay.eirc.organization.entity.Organization;
+import ru.flexpay.eirc.organization.entity.EircOrganization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 
 import javax.ejb.EJB;
@@ -40,8 +40,8 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
     }
 
     @Override
-    protected Organization getDomainObject() {
-        return (Organization) super.getDomainObject();
+    protected EircOrganization getDomainObject() {
+        return (EircOrganization) super.getDomainObject();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
 
         final boolean isDisabled = isDisabled();
 
-        final Organization organization = getDomainObject();
+        final EircOrganization organization = getDomainObject();
 
         // General attributes.
         {
@@ -77,7 +77,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
     }
 
     private WebMarkupContainer addAttributeContainer(final long attributeTypeId, boolean disabled,
-                                                     Organization organization, String name) {
+                                                     EircOrganization organization, String name) {
         WebMarkupContainer container = new WebMarkupContainer(name);
         container.setOutputMarkupPlaceholderTag(true);
         add(container);
@@ -102,7 +102,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
         return container;
     }
 
-    private WebMarkupContainer addServiceContainer(Organization organization, String name) {
+    private WebMarkupContainer addServiceContainer(EircOrganization organization, String name) {
         Long attributeTypeId = EircOrganizationStrategy.SERVICE;
 
         WebMarkupContainer container = new WebMarkupContainer(name);

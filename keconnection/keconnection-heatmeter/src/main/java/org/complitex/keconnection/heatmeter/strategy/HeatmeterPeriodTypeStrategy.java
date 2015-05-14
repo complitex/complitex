@@ -11,7 +11,6 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.exception.DeleteException;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -81,13 +80,13 @@ public class HeatmeterPeriodTypeStrategy extends TemplateStrategy {
     }
 
 
-    @Override
-    protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
-        if (RESERVED_HEATMETER_PERIOD_TYPE_IDS.contains(objectId)) {
-            throw new DeleteException(ResourceUtil.getString(RESOURCE_BUNDLE, "delete_reserved_instance_error", locale));
-        }
-        super.deleteChecks(objectId, locale);
-    }
+//    @Override
+//    protected void deleteChecks(long objectId, Locale locale) throws DeleteException {
+//        if (RESERVED_HEATMETER_PERIOD_TYPE_IDS.contains(objectId)) {
+//            throw new DeleteException(ResourceUtil.getString(RESOURCE_BUNDLE, "delete_reserved_instance_error", locale));
+//        }
+//        super.deleteChecks(objectId, locale);
+//    }
 
     @Override
     public String[] getEditRoles() {

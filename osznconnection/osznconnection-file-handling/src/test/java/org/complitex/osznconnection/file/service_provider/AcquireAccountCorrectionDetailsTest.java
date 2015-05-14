@@ -1,11 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.osznconnection.file.service_provider;
 
-import com.google.common.collect.ImmutableSet;
-import org.complitex.osznconnection.file.entity.CalculationContext;
 import org.complitex.osznconnection.file.entity.Payment;
 import org.complitex.osznconnection.file.entity.PaymentDBF;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
@@ -30,24 +24,6 @@ public class AcquireAccountCorrectionDetailsTest extends AbstractTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private void testByAddress(CalculationContext calculationCenterInfo, ServiceProviderAdapter adapter) throws DBException {
-        Payment payment = newPayment();
-        System.out.println(adapter.getAccountDetails(calculationCenterInfo.getDataSource(),
-                payment.getOutgoingDistrict(), payment.getOutgoingStreetType(),
-                payment.getOutgoingStreet(), payment.getOutgoingBuildingNumber(), payment.getOutgoingBuildingCorp(),
-                payment.getOutgoingApartment(), (Date) payment.getField(PaymentDBF.DAT1)));
-    }
-
-    private void testByOsznAccount(CalculationContext calculationCenterInfo, ServiceProviderAdapter adapter) throws DBException, UnknownAccountNumberTypeException {
-        Payment payment = newPayment();
-        System.out.println(adapter.acquireAccountDetailsByAccount(calculationCenterInfo, payment, payment.getOutgoingDistrict(), "1234567"));
-    }
-
-    private void testByMegabankAccount(CalculationContext calculationCenterInfo, ServiceProviderAdapter adapter) throws DBException, UnknownAccountNumberTypeException {
-        Payment payment = newPayment();
-        System.out.println(adapter.acquireAccountDetailsByAccount(calculationCenterInfo, payment, payment.getOutgoingDistrict(), "9876543"));
     }
 
     private static Payment newPayment() {
@@ -76,6 +52,6 @@ public class AcquireAccountCorrectionDetailsTest extends AbstractTest {
 
     @Override
     protected void test(ServiceProviderAdapter adapter) throws Exception {
-        testByAddress(new CalculationContext(2L, 0L, 0L, "test", ImmutableSet.of(1L)), adapter);
+
     }
 }

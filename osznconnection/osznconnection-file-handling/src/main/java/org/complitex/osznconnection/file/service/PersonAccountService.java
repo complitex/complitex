@@ -4,9 +4,9 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
-import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,9 +32,6 @@ public class PersonAccountService extends AbstractBean {
     private PaymentBean paymentBean;
 
     @EJB
-    private CalculationCenterBean calculationCenterBean;
-
-    @EJB
     private RequestFileGroupBean requestFileGroupBean;
 
     @EJB
@@ -58,10 +55,15 @@ public class PersonAccountService extends AbstractBean {
     @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
 
-    public String getAccountNumber(AbstractAccountRequest request, String puPersonAccount, Long calculationCenterId)
+    @EJB
+    private OsznOrganizationStrategy organizationStrategy;
+
+    public String getAccountNumber(AbstractAccountRequest request, String puPersonAccount)
             throws MoreOneAccountException {
+        Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
+
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(new PersonAccount(request,
-                puPersonAccount, calculationCenterId, false)));
+                puPersonAccount, billingId, false)));
 
         if (personAccounts.size() == 1){
             return personAccounts.get(0).getAccountNumber();
@@ -72,12 +74,14 @@ public class PersonAccountService extends AbstractBean {
         return null;
     }
 
-    public void save(AbstractAccountRequest request, String puPersonAccount, Long calculationCenterId)
+    public void save(AbstractAccountRequest request, String puPersonAccount)
             throws MoreOneAccountException {
+        Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
+
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(new PersonAccount(request,
-                puPersonAccount, calculationCenterId, false)));
+                puPersonAccount, billingId, false)));
         if (personAccounts.isEmpty()){
-            personAccountBean.save(new PersonAccount(request, puPersonAccount, calculationCenterId, true));
+            personAccountBean.save(new PersonAccount(request, puPersonAccount, billingId, true));
         }else if (personAccounts.size() == 1){
             PersonAccount personAccount = personAccounts.get(0);
 
@@ -90,11 +94,13 @@ public class PersonAccountService extends AbstractBean {
     }
 
     public void resolveAccountNumber(AbstractAccountRequest request, String puPersonAccount,
-                                     String servicingOrganizationCode, CalculationContext calculationContext,
+                                     String servicingOrganizationCode,
                                      boolean updatePuAccount) throws DBException {
         try {
+            Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
+
             //resolve local account
-            String accountNumber = getAccountNumber(request, puPersonAccount, calculationContext.getCalculationCenterId());
+            String accountNumber = getAccountNumber(request, puPersonAccount);
 
             if (accountNumber != null) {
                 request.setAccountNumber(accountNumber);
@@ -104,7 +110,7 @@ public class PersonAccountService extends AbstractBean {
             }
 
             //resolve remote account
-            AccountDetail accountDetail = serviceProviderAdapter.acquireAccountDetail(calculationContext, request,
+            AccountDetail accountDetail = serviceProviderAdapter.acquireAccountDetail(request,
                     request.getLastName(), puPersonAccount,
                     request.getOutgoingDistrict(), request.getOutgoingStreetType(), request.getOutgoingStreet(),
                     request.getOutgoingBuildingNumber(), request.getOutgoingBuildingCorp(),
@@ -118,7 +124,7 @@ public class PersonAccountService extends AbstractBean {
                     return;
                 }
 
-                save(request, puPersonAccount, calculationContext.getCalculationCenterId());
+                save(request, puPersonAccount);
             }
         } catch (MoreOneAccountException e) {
             request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
@@ -129,7 +135,7 @@ public class PersonAccountService extends AbstractBean {
      * Корректировать account number из UI в случае когда в ЦН больше одного человека соответствуют номеру л/c.
      */
 
-    public void updateAccountNumber(Payment payment, String accountNumber, long userOrganizationId) {
+    public void updateAccountNumber(Payment payment, String accountNumber) {
         payment.setAccountNumber(accountNumber);
         payment.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
         benefitBean.updateAccountNumber(payment.getId(), accountNumber);
@@ -141,17 +147,15 @@ public class PersonAccountService extends AbstractBean {
             requestFileGroupBean.updateStatus(benefitFileId, RequestFileStatus.BOUND);
         }
 
-        final CalculationContext calculationContext = calculationCenterBean.getContextWithAnyCalculationCenter(userOrganizationId);
-
         try {
-            save(payment, payment.getStringField(PaymentDBF.OWN_NUM_SR), calculationContext.getCalculationCenterId());
+            save(payment, payment.getStringField(PaymentDBF.OWN_NUM_SR));
         } catch (MoreOneAccountException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-    public void updateAccountNumber(ActualPayment actualPayment, String accountNumber, long userOrganizationId) {
+    public void updateAccountNumber(ActualPayment actualPayment, String accountNumber) {
         actualPayment.setAccountNumber(accountNumber);
         actualPayment.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
         actualPaymentBean.updateAccountNumber(actualPayment);
@@ -164,17 +168,15 @@ public class PersonAccountService extends AbstractBean {
             requestFileBean.save(actualPaymentFile);
         }
 
-        final CalculationContext calculationContext = calculationCenterBean.getContextWithAnyCalculationCenter(userOrganizationId);
         try {
-            save(actualPayment, actualPayment.getStringField(ActualPaymentDBF.OWN_NUM),
-                    calculationContext.getCalculationCenterId());
+            save(actualPayment, actualPayment.getStringField(ActualPaymentDBF.OWN_NUM));
         } catch (MoreOneAccountException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-    public void updateAccountNumber(Subsidy subsidy, String accountNumber, long userOrganizationId) {
+    public void updateAccountNumber(Subsidy subsidy, String accountNumber) {
         subsidy.setAccountNumber(accountNumber);
         subsidy.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
         subsidyBean.updateAccountNumberForSimilarSubs(subsidy);
@@ -188,15 +190,13 @@ public class PersonAccountService extends AbstractBean {
         }
 
         try {
-            save(subsidy, subsidy.getStringField(SubsidyDBF.RASH), calculationCenterBean.getContextWithAnyCalculationCenter(
-                    userOrganizationId).getCalculationCenterId());
+            save(subsidy, subsidy.getStringField(SubsidyDBF.RASH));
         } catch (MoreOneAccountException e) {
             throw new RuntimeException(e);
         }
     }
 
-
-    public void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics, String accountNumber, long userOrganizationId) {
+    public void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics, String accountNumber) {
         dwellingCharacteristics.setAccountNumber(accountNumber);
         dwellingCharacteristics.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
         dwellingCharacteristicsBean.updateAccountNumber(dwellingCharacteristics);
@@ -209,17 +209,15 @@ public class PersonAccountService extends AbstractBean {
             requestFileBean.save(dwellingCharacteristicsFile);
         }
 
-        final CalculationContext calculationContext = calculationCenterBean.getContextWithAnyCalculationCenter(userOrganizationId);
         try {
-            save(dwellingCharacteristics, dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDCODE),
-                    calculationContext.getCalculationCenterId());
+            save(dwellingCharacteristics, dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDCODE));
         } catch (MoreOneAccountException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-    public void updateAccountNumber(FacilityServiceType facilityServiceType, String accountNumber, long userOrganizationId) {
+    public void updateAccountNumber(FacilityServiceType facilityServiceType, String accountNumber) {
         facilityServiceType.setAccountNumber(accountNumber);
         facilityServiceType.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
         facilityServiceTypeBean.updateAccountNumber(facilityServiceType);
@@ -232,10 +230,8 @@ public class PersonAccountService extends AbstractBean {
             requestFileBean.save(facilityServiceTypeFile);
         }
 
-        final CalculationContext calculationContext = calculationCenterBean.getContextWithAnyCalculationCenter(userOrganizationId);
         try {
-            save(facilityServiceType, facilityServiceType.getStringField(FacilityServiceTypeDBF.IDCODE),
-                    calculationContext.getCalculationCenterId());
+            save(facilityServiceType, facilityServiceType.getStringField(FacilityServiceTypeDBF.IDCODE));
         } catch (MoreOneAccountException e) {
             throw new RuntimeException(e);
         }

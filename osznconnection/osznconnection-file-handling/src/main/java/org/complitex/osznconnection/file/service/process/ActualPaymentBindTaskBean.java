@@ -22,10 +22,10 @@ import org.complitex.osznconnection.file.service.exception.AlreadyProcessingExce
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
-import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,9 +36,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
 import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
@@ -65,9 +63,6 @@ public class ActualPaymentBindTaskBean implements ITaskBean {
     private PersonAccountService personAccountService;
 
     @EJB
-    private CalculationCenterBean calculationCenterBean;
-
-    @EJB
     private ActualPaymentBean actualPaymentBean;
 
     @EJB
@@ -76,17 +71,19 @@ public class ActualPaymentBindTaskBean implements ITaskBean {
     @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
 
-    private boolean resolveAddress(ActualPayment actualPayment, CalculationContext calculationContext) {
-        addressService.resolveAddress(actualPayment, calculationContext);
+    @EJB
+    private OsznOrganizationStrategy organizationStrategy;
+
+    private boolean resolveAddress(ActualPayment actualPayment) {
+        addressService.resolveAddress(actualPayment);
 
         return actualPayment.getStatus().isAddressResolved();
     }
 
-    private void resolveLocalAccount(ActualPayment actualPayment, CalculationContext calculationContext) {
+    private void resolveLocalAccount(ActualPayment actualPayment) {
         try {
             String accountNumber = personAccountService.getAccountNumber(actualPayment,
-                    actualPayment.getStringField(ActualPaymentDBF.OWN_NUM),
-                    calculationContext.getCalculationCenterId());
+                    actualPayment.getStringField(ActualPaymentDBF.OWN_NUM));
 
             if (!Strings.isEmpty(accountNumber)) {
                 actualPayment.setAccountNumber(accountNumber);
@@ -97,10 +94,8 @@ public class ActualPaymentBindTaskBean implements ITaskBean {
         }
     }
 
-    private boolean resolveRemoteAccountNumber(ActualPayment actualPayment, Date date, CalculationContext calculationContext,
-                                               Boolean updatePuAccount) throws DBException {
-
-        serviceProviderAdapter.acquireAccountDetail(calculationContext, actualPayment,
+    private boolean resolveRemoteAccountNumber(ActualPayment actualPayment, Date date, Boolean updatePuAccount) throws DBException {
+        serviceProviderAdapter.acquireAccountDetail(actualPayment,
                 actualPayment.getStringField(ActualPaymentDBF.SUR_NAM),
                 actualPayment.getStringField(ActualPaymentDBF.OWN_NUM), actualPayment.getOutgoingDistrict(),
                 actualPayment.getOutgoingStreetType(), actualPayment.getOutgoingStreet(),
@@ -109,8 +104,7 @@ public class ActualPaymentBindTaskBean implements ITaskBean {
 
         if (actualPayment.getStatus() == ACCOUNT_NUMBER_RESOLVED) {
             try {
-                personAccountService.save(actualPayment, actualPayment.getStringField(ActualPaymentDBF.OWN_NUM),
-                        calculationContext.getCalculationCenterId());
+                personAccountService.save(actualPayment, actualPayment.getStringField(ActualPaymentDBF.OWN_NUM));
             } catch (MoreOneAccountException e) {
                 throw new DBException(e);
             }
@@ -119,17 +113,16 @@ public class ActualPaymentBindTaskBean implements ITaskBean {
         return actualPayment.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    private void bind(ActualPayment actualPayment, Date date, CalculationContext calculationContext, Boolean updatePuAccount)
-            throws DBException {
+    private void bind(ActualPayment actualPayment, Date date, Boolean updatePuAccount) throws DBException {
         //resolve address
-        resolveAddress(actualPayment, calculationContext);
+        resolveAddress(actualPayment);
 
         if (actualPayment.getStatus().isAddressResolved()){
             //resolve local account.
-            resolveLocalAccount(actualPayment, calculationContext);
+            resolveLocalAccount(actualPayment);
 
             if (actualPayment.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-                resolveRemoteAccountNumber(actualPayment, date, calculationContext, updatePuAccount);
+                resolveRemoteAccountNumber(actualPayment, date, updatePuAccount);
             }
         }
 
@@ -137,8 +130,7 @@ public class ActualPaymentBindTaskBean implements ITaskBean {
         actualPaymentBean.update(actualPayment);
     }
 
-    private void bindActualPaymentFile(RequestFile actualPaymentFile, CalculationContext calculationContext,
-                                       Boolean updatePuAccount) throws BindException, DBException, CanceledByUserException {
+    private void bindActualPaymentFile(RequestFile actualPaymentFile, Boolean updatePuAccount) throws BindException, DBException, CanceledByUserException {
         //извлечь из базы все id подлежащие связыванию для файла actualPayment и доставать записи порциями по BATCH_SIZE штук.
         List<Long> notResolvedPaymentIds = actualPaymentBean.findIdsForBinding(actualPaymentFile.getId());
         List<Long> batch = Lists.newArrayList();
@@ -162,8 +154,7 @@ public class ActualPaymentBindTaskBean implements ITaskBean {
                 //связать actualPayment запись
                 try {
                     userTransaction.begin();
-                    bind(actualPayment, actualPaymentBean.getFirstDay(actualPayment, actualPaymentFile),
-                            calculationContext, updatePuAccount);
+                    bind(actualPayment, actualPaymentBean.getFirstDay(actualPayment, actualPaymentFile), updatePuAccount);
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The actual payment item ( id = " + actualPayment.getId() + ") was bound with error: ", e);
@@ -195,14 +186,14 @@ public class ActualPaymentBindTaskBean implements ITaskBean {
         requestFile.setStatus(RequestFileStatus.BINDING);
         requestFileBean.save(requestFile);
 
-        //получаем информацию о текущем контексте вычислений 
-        final CalculationContext calculationContext = calculationCenterBean.getContextWithAnyCalculationCenter(requestFile.getUserOrganizationId());
+        //получаем информацию о текущем контексте вычислений
+        Set<Long> serviceIds = new HashSet<>(); //todo get services by user organization
 
-        actualPaymentBean.clearBeforeBinding(requestFile.getId(), calculationContext.getServiceProviderTypeIds());
+        actualPaymentBean.clearBeforeBinding(requestFile.getId(), serviceIds);
 
         //связывание файла actualPayment
         try {
-            bindActualPaymentFile(requestFile, calculationContext, updatePuAccount);
+            bindActualPaymentFile(requestFile, updatePuAccount);
         } catch (DBException e) {
             throw new RuntimeException(e);
         } catch (CanceledByUserException e) {

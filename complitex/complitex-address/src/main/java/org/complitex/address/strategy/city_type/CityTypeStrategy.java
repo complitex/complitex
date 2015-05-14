@@ -91,7 +91,7 @@ public class CityTypeStrategy extends TemplateStrategy {
     }
 
     @Override
-    public long getDefaultOrderByAttributeId() {
+    public Long getDefaultOrderByAttributeId() {
         return NAME;
     }
 }

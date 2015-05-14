@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class DomainObjectStrategy<T extends DomainObject> extends AbstractBean implements IStrategy {
+public abstract class DomainObjectStrategy extends AbstractBean implements IStrategy {
     public final static String NS = DomainObjectStrategy.class.getName();
 
     private static final String RESOURCE_BUNDLE = DomainObjectStrategy.class.getName();
@@ -362,7 +362,7 @@ public abstract class DomainObjectStrategy<T extends DomainObject> extends Abstr
     }
 
     @Override
-    public List<DomainObject> getList(DomainObjectFilter example) {
+    public List<? extends DomainObject> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
@@ -952,6 +952,7 @@ public abstract class DomainObjectStrategy<T extends DomainObject> extends Abstr
         loadStringCultures(historyAttributes);
         object.setAttributes(historyAttributes);
         updateStringsForNewLocales(object);
+
         return object;
     }
 
@@ -1353,5 +1354,10 @@ public abstract class DomainObjectStrategy<T extends DomainObject> extends Abstr
         sessionBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         permissionBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         logBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
+    }
+
+    @Override
+    public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
+
     }
 }

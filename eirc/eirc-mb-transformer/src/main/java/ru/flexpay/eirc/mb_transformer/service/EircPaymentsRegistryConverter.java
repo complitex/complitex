@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.mb_transformer.entity.MbTransformerConfig;
 import ru.flexpay.eirc.mb_transformer.util.MbParsingConstants;
-import ru.flexpay.eirc.organization.entity.Organization;
+import ru.flexpay.eirc.organization.entity.EircOrganization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 import ru.flexpay.eirc.registry.entity.*;
 import ru.flexpay.eirc.registry.service.AbstractFinishCallback;
@@ -267,14 +267,14 @@ public class EircPaymentsRegistryConverter {
                 return;
             }
 
-            Organization serviceProvider = eircOrganizationStrategy.getDomainObject(getDataSource(), registry.getRecipientOrganizationId(), true);
+            EircOrganization serviceProvider = eircOrganizationStrategy.getDomainObject(getDataSource(), registry.getRecipientOrganizationId(), true);
             if (serviceProvider == null) {
                 fileMessenger.addMessageError("eirc_payments_recipient_not_found", registry.getRecipientOrganizationId());
                 log.error("Service provider {} not found", registry.getRecipientOrganizationId());
                 return;
             }
 
-            Organization sender = eircOrganizationStrategy.getDomainObject(getDataSource(), registry.getSenderOrganizationId(), true);
+            EircOrganization sender = eircOrganizationStrategy.getDomainObject(getDataSource(), registry.getSenderOrganizationId(), true);
             if (sender == null) {
                 fileMessenger.addMessageError("eirc_payments_sender_not_found", registry.getSenderOrganizationId());
                 log.error("Sender {} not found", registry.getSenderOrganizationId());
@@ -301,7 +301,7 @@ public class EircPaymentsRegistryConverter {
      * @param serviceProviderOrganization Service provider organization
      * @throws ExecutionException
      */
-    public void exportToMegaBank(DataSource dataSource, Organization serviceProviderOrganization,
+    public void exportToMegaBank(DataSource dataSource, EircOrganization serviceProviderOrganization,
                                  Long mbOrganizationId, Long eircOrganizationId,
                                  String dir, String mbFileName, long mbFileLength,
                                  AbstractMessenger imessenger)
@@ -411,7 +411,7 @@ public class EircPaymentsRegistryConverter {
         }
     }
 
-    private String getExternalServiceProviderId(Registry registry, Organization serviceProviderOrganization,
+    private String getExternalServiceProviderId(Registry registry, EircOrganization serviceProviderOrganization,
                                                 Long mbOrganizationId, Long eircOrganizationId, String dataSource) throws MbConverterException {
 
         List<OrganizationCorrection> organizationCorrections = organizationCorrectionBean.getOrganizationCorrections(dataSource,

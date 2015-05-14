@@ -22,7 +22,6 @@ import org.complitex.osznconnection.file.service.exception.AlreadyProcessingExce
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
-import org.complitex.osznconnection.file.service_provider.CalculationCenterBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
@@ -65,9 +64,6 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean {
     private PersonAccountService personAccountService;
 
     @EJB
-    private CalculationCenterBean calculationCenterBean;
-
-    @EJB
     private FacilityServiceTypeBean facilityServiceTypeBean;
 
     @EJB
@@ -76,17 +72,16 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean {
     @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
 
-    private boolean resolveAddress(FacilityServiceType facilityServiceType, CalculationContext calculationContext) {
-        addressService.resolveAddress(facilityServiceType, calculationContext);
+    private boolean resolveAddress(FacilityServiceType facilityServiceType) {
+        addressService.resolveAddress(facilityServiceType);
 
         return facilityServiceType.getStatus().isAddressResolved();
     }
 
-    private void resolveLocalAccount(FacilityServiceType facilityServiceType, CalculationContext calculationContext) {
+    private void resolveLocalAccount(FacilityServiceType facilityServiceType) {
         try {
             String accountNumber = personAccountService.getAccountNumber(facilityServiceType,
-                    facilityServiceType.getStringField(IDCODE),
-                    calculationContext.getCalculationCenterId());
+                    facilityServiceType.getStringField(IDCODE));
 
             if (!Strings.isEmpty(accountNumber)) {
                 facilityServiceType.setAccountNumber(accountNumber);
@@ -97,9 +92,8 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean {
         }
     }
 
-    private boolean resolveRemoteAccountNumber(FacilityServiceType facilityServiceType,
-            CalculationContext calculationContext, Boolean updatePuAccount) throws DBException {
-        serviceProviderAdapter.acquireFacilityPersonAccount(calculationContext, facilityServiceType,
+    private boolean resolveRemoteAccountNumber(FacilityServiceType facilityServiceType, Boolean updatePuAccount) throws DBException {
+        serviceProviderAdapter.acquireFacilityPersonAccount(facilityServiceType,
                 facilityServiceType.getOutgoingDistrict(), facilityServiceType.getOutgoingStreetType(),
                 facilityServiceType.getOutgoingStreet(),
                 facilityServiceType.getOutgoingBuildingNumber(), facilityServiceType.getOutgoingBuildingCorp(),
@@ -110,8 +104,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean {
 
         if (facilityServiceType.getStatus() == ACCOUNT_NUMBER_RESOLVED) {
             try {
-                personAccountService.save(facilityServiceType, facilityServiceType.getStringField(IDCODE),
-                        calculationContext.getCalculationCenterId());
+                personAccountService.save(facilityServiceType, facilityServiceType.getStringField(IDCODE));
             } catch (MoreOneAccountException e) {
                 throw new DBException(e);
             }
@@ -120,17 +113,17 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean {
         return facilityServiceType.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    private void bind(FacilityServiceType facilityServiceType, CalculationContext calculationContext, Boolean updatePuAccount)
+    private void bind(FacilityServiceType facilityServiceType, Boolean updatePuAccount)
             throws DBException {
         //resolve address
-        resolveAddress(facilityServiceType, calculationContext);
+        resolveAddress(facilityServiceType);
 
         if (facilityServiceType.getStatus().isAddressResolved()){
             //resolve local account.
-            resolveLocalAccount(facilityServiceType, calculationContext);
+            resolveLocalAccount(facilityServiceType);
 
             if (facilityServiceType.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-                resolveRemoteAccountNumber(facilityServiceType, calculationContext, updatePuAccount);
+                resolveRemoteAccountNumber(facilityServiceType,updatePuAccount);
             }
         }
 
@@ -138,8 +131,8 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean {
         facilityServiceTypeBean.update(facilityServiceType);
     }
 
-    private void bindFacilityServiceTypeFile(RequestFile facilityServiceTypeFile, CalculationContext calculationContext,
-            Boolean updatePuAccount) throws BindException, DBException, CanceledByUserException {
+    private void bindFacilityServiceTypeFile(RequestFile facilityServiceTypeFile, Boolean updatePuAccount)
+            throws BindException, DBException, CanceledByUserException {
         //извлечь из базы все id подлежащие связыванию для файла facility service type и доставать записи порциями по BATCH_SIZE штук.
         List<Long> notResolvedFacilityServiceTypeIds = facilityServiceTypeBean.findIdsForBinding(facilityServiceTypeFile.getId());
         List<Long> batch = Lists.newArrayList();
@@ -164,7 +157,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean {
                 //связать dwelling characteristics запись
                 try {
                     userTransaction.begin();
-                    bind(facilityServiceType, calculationContext, updatePuAccount);
+                    bind(facilityServiceType, updatePuAccount);
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The facility service type item ( id = " + facilityServiceType.getId() + ") was bound with error: ", e);
@@ -196,14 +189,11 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean {
         requestFile.setStatus(RequestFileStatus.BINDING);
         requestFileBean.save(requestFile);
 
-        //получаем информацию о текущем контексте вычислений 
-        final CalculationContext calculationContext = calculationCenterBean.getContextWithAnyCalculationCenter(requestFile.getUserOrganizationId());
-
-        facilityServiceTypeBean.clearBeforeBinding(requestFile.getId(), calculationContext.getServiceProviderTypeIds());
+//        facilityServiceTypeBean.clearBeforeBinding(requestFile.getId(), billingContext.getServiceIds()); todo
 
         //связывание файла facility service type
         try {
-            bindFacilityServiceTypeFile(requestFile, calculationContext, updatePuAccount);
+            bindFacilityServiceTypeFile(requestFile, updatePuAccount);
         } catch (DBException e) {
             throw new RuntimeException(e);
         } catch (CanceledByUserException e) {

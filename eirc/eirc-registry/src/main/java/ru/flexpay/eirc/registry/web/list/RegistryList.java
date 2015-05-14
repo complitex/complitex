@@ -37,7 +37,7 @@ import org.complitex.template.web.component.toolbar.UploadButton;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 import ru.flexpay.eirc.dictionary.web.RangeDatePickerTextField;
-import ru.flexpay.eirc.organization.entity.Organization;
+import ru.flexpay.eirc.organization.entity.EircOrganization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 import ru.flexpay.eirc.registry.entity.Registry;
 import ru.flexpay.eirc.registry.entity.RegistryStatus;
@@ -226,8 +226,8 @@ public class RegistryList extends TemplatePage {
                 selected.put(registry, select);
                 item.add(select);
 
-                Organization senderOrganization = organizationStrategy.getDomainObject(registry.getSenderOrganizationId(), false);
-                Organization recipientOrganization = organizationStrategy.getDomainObject(registry.getRecipientOrganizationId(), false);
+                EircOrganization senderOrganization = organizationStrategy.getDomainObject(registry.getSenderOrganizationId(), false);
+                EircOrganization recipientOrganization = organizationStrategy.getDomainObject(registry.getRecipientOrganizationId(), false);
 
                 item.add(new Label("creationDate", registry.getCreationDate() != null ? CREATE_DATE_FORMAT.format(registry.getCreationDate()) : ""));
                 item.add(new Label("sender", senderOrganization == null ? "" : organizationStrategy.displayDomainObject(senderOrganization, getLocale())));

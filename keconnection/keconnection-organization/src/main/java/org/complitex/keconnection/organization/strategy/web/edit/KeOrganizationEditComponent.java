@@ -15,7 +15,7 @@ import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
-import org.complitex.keconnection.organization.strategy.entity.Organization;
+import org.complitex.keconnection.organization.strategy.entity.KeOrganization;
 import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 
@@ -40,8 +40,8 @@ public class KeOrganizationEditComponent extends OrganizationEditComponent {
     }
 
     @Override
-    protected Organization getDomainObject() {
-        return (Organization) super.getDomainObject();
+    protected KeOrganization getDomainObject() {
+        return (KeOrganization) super.getDomainObject();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class KeOrganizationEditComponent extends OrganizationEditComponent {
 
         final boolean isDisabled = isDisabled();
 
-        final Organization organization = getDomainObject();
+        final KeOrganization organization = getDomainObject();
 
         //Readiness to close operating month. It is servicing organization only attribute.
         {
@@ -136,7 +136,7 @@ public class KeOrganizationEditComponent extends OrganizationEditComponent {
     protected void onPersist() {
         super.onPersist();
 
-        final Organization organization = getDomainObject();
+        final KeOrganization organization = getDomainObject();
 
         if (!isServicingOrganization()) {
             //Readiness to close operating month.

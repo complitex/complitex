@@ -1,26 +1,22 @@
-package org.complitex.common.web.model;
+package org.complitex.organization.web.model;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.apache.wicket.model.Model;
-import org.complitex.common.entity.DomainObject;
+import org.complitex.organization.entity.Organization;
 
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
-public abstract class OrganizationModel extends Model<DomainObject> {
+public abstract class OrganizationModel extends Model<Organization> {
 
     @Override
-    public DomainObject getObject() {
+    public Organization getObject() {
         final Long organizationId = getOrganizationId();
         if (organizationId != null) {
-            return Iterables.find(getOrganizations(), new Predicate<DomainObject>() {
+            return Iterables.find(getOrganizations(), new Predicate<Organization>() {
 
                 @Override
-                public boolean apply(DomainObject object) {
+                public boolean apply(Organization object) {
                     return object.getObjectId().equals(organizationId);
                 }
             });
@@ -29,7 +25,7 @@ public abstract class OrganizationModel extends Model<DomainObject> {
     }
 
     @Override
-    public void setObject(DomainObject object) {
+    public void setObject(Organization object) {
         if (object != null) {
             setOrganizationId(object.getObjectId());
         } else {
@@ -41,5 +37,5 @@ public abstract class OrganizationModel extends Model<DomainObject> {
 
     public abstract void setOrganizationId(Long organizationId);
 
-    public abstract List<DomainObject> getOrganizations();
+    public abstract List<? extends Organization> getOrganizations();
 }

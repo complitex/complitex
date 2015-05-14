@@ -31,7 +31,7 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.common.web.component.search.CollapsibleSearchPanel;
 import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
-import org.complitex.keconnection.organization.strategy.entity.Organization;
+import org.complitex.keconnection.organization.strategy.entity.KeOrganization;
 import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.component.toolbar.search.CollapsibleSearchToolbarButton;
@@ -56,7 +56,7 @@ public class OrganizationList extends ScrollListPage {
 
     private DomainObjectFilter example;
     private WebMarkupContainer content;
-    private DataView<Organization> dataView;
+    private DataView<KeOrganization> dataView;
     private CollapsibleSearchPanel searchPanel;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
@@ -125,10 +125,10 @@ public class OrganizationList extends ScrollListPage {
         content.add(filterForm);
 
         //Data Provider
-        final DataProvider<Organization> dataProvider = new DataProvider<Organization>() {
+        final DataProvider<KeOrganization> dataProvider = new DataProvider<KeOrganization>() {
 
             @Override
-            protected Iterable<? extends Organization> getData(long first, long count) {
+            protected Iterable<? extends KeOrganization> getData(long first, long count) {
                 //store preference, but before clear data order related properties.
                 {
                     example.setAsc(false);
@@ -217,18 +217,18 @@ public class OrganizationList extends ScrollListPage {
                 new SetReadyCloseOperatingMonthDialog("setReadyCloseOperatingMonthDialog") {
 
                     @Override
-                    protected void onSet(Organization organization, AjaxRequestTarget target) {
+                    protected void onSet(KeOrganization organization, AjaxRequestTarget target) {
                         target.add(content);
                     }
                 };
         add(setReadyCloseOperatingMonthDialog);
 
         //Data View
-        dataView = new DataView<Organization>("data", dataProvider) {
+        dataView = new DataView<KeOrganization>("data", dataProvider) {
 
             @Override
-            protected void populateItem(Item<Organization> item) {
-                final Organization organization = item.getModelObject();
+            protected void populateItem(Item<KeOrganization> item) {
+                final KeOrganization organization = item.getModelObject();
 
                 item.add(new Label("order", StringUtil.valueOf(getFirstItemOffset() + item.getIndex() + 1)));
                 item.add(new Label("name", organization.getStringValue(NAME, getLocale())));

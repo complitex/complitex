@@ -14,10 +14,11 @@ import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
-import org.complitex.keconnection.organization.strategy.entity.Organization;
+import org.complitex.keconnection.organization.strategy.entity.KeOrganization;
 import org.complitex.keconnection.organization.strategy.web.edit.KeOrganizationEditComponent;
 import org.complitex.keconnection.organization.strategy.web.list.OrganizationList;
 import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy;
+import org.complitex.organization.entity.Organization;
 import org.complitex.organization.strategy.OrganizationStrategy;
 
 import javax.ejb.EJB;
@@ -90,7 +91,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
         return OrganizationList.class;
     }
 
-    public List<Organization> getAllServicingOrganizations(Locale locale) {
+    public List<KeOrganization> getAllServicingOrganizations(Locale locale) {
         DomainObjectFilter example = new DomainObjectFilter();
         example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER,
                 ImmutableList.of(KeConnectionOrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE));
@@ -126,7 +127,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public List<DomainObject> getAllOuterOrganizations(Locale locale) {
+    public List<KeOrganization> getAllOuterOrganizations(Locale locale) {
         DomainObjectFilter example = new DomainObjectFilter();
 
         if (locale != null) {
@@ -150,18 +151,18 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
 
     @Override
     public DomainObject newInstance() {
-        return new Organization(super.newInstance());
+        return new KeOrganization((Organization) super.newInstance());
     }
 
     @Override
-    public Organization getDomainObject(Long id, boolean runAsAdmin) {
+    public DomainObject getDomainObject(Long id, boolean runAsAdmin) {
         DomainObject object = super.getDomainObject(id, runAsAdmin);
 
         if (object == null) {
             return null;
         }
 
-        Organization organization = new Organization(object);
+        KeOrganization organization = new KeOrganization((Organization) object);
 
         loadOperatingMonthDate(organization);
 
@@ -170,7 +171,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
 
 
     @Override
-    public List<Organization> getList(DomainObjectFilter example) {
+    public List<KeOrganization> getList(DomainObjectFilter example) {
         if (example.getLocaleId() == null){
             example.setLocaleId(-1L);
         }
@@ -186,9 +187,9 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
         extendOrderBy(example);
 
         setupFindOperationParameters(example);
-        List<Organization> organizations = sqlSession().selectList(NS + ".selectOrganizations", example);
+        List<KeOrganization> organizations = sqlSession().selectList(NS + ".selectOrganizations", example);
 
-        for (Organization organization : organizations) {
+        for (KeOrganization organization : organizations) {
             loadAttributes(organization);
             //load subject ids
             organization.setSubjectIds(loadSubjects(organization.getPermissionId()));
@@ -217,7 +218,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
         return sqlSession().selectOne(NS + ".selectOrganizationCount", example);
     }
 
-    private void loadOperatingMonthDate(Organization organization) {
+    private void loadOperatingMonthDate(KeOrganization organization) {
         organization.setOperatingMonthDate(getOperatingMonthDate(organization.getObjectId()));
     }
 
@@ -268,23 +269,25 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
     @Override
     public DomainObject getHistoryObject(Long objectId, Date date) {
         DomainObject object = super.getHistoryObject(objectId, date);
+
         if (object == null) {
             return null;
         }
 
-        Organization organization = new Organization(object);
+        KeOrganization organization = new KeOrganization((Organization) object);
         loadOperatingMonthDate(organization);
+
         return organization;
     }
 
 
-    public void setReadyCloseOperatingMonthFlag(Organization organization) {
+    public void setReadyCloseOperatingMonthFlag(KeOrganization organization) {
         organization.setStringValue(READY_CLOSE_OPER_MONTH, new BooleanConverter().toString(Boolean.TRUE));
         update(getDomainObject(organization.getObjectId(), true), organization, getCurrentDate());
     }
 
 
-    public void closeOperatingMonth(Organization organization) {
+    public void closeOperatingMonth(KeOrganization organization) {
         organization.setStringValue(READY_CLOSE_OPER_MONTH, new BooleanConverter().toString(Boolean.FALSE));
         update(getDomainObject(organization.getObjectId(), true), organization, getCurrentDate());
 

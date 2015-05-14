@@ -4,13 +4,8 @@
  */
 package org.complitex.osznconnection.file.service_provider;
 
-import com.google.common.collect.ImmutableSet;
 import org.complitex.osznconnection.file.entity.ActualPayment;
 import org.complitex.osznconnection.file.entity.ActualPaymentDBF;
-import org.complitex.osznconnection.file.entity.CalculationContext;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
-
-import java.util.Date;
 
 /**
  *
@@ -32,12 +27,12 @@ public class ProcessActualPaymentTest extends AbstractTest {
             }
         };
         p.setAccountNumber("1000000000");
-        try {
-            adapter.processActualPayment(new CalculationContext(0L, 3L, 2L, "test", ImmutableSet.of(1L)), p, new Date());
-        } catch (DBException e) {
-            System.out.println("DB error.");
-            throw new RuntimeException(e);
-        }
+//        try {
+//            adapter.processActualPayment(new BillingContext(0L, 3L, 2L, "test", ImmutableSet.of(1L)), p, new Date());
+//        } catch (DBException e) {
+//            System.out.println("DB error.");
+//            throw new RuntimeException(e);
+//        }
         System.out.println("Status : " + p.getStatus()
                 + ", P1 : " + p.getStringField(ActualPaymentDBF.P1) + ", N1 : " + p.getStringField(ActualPaymentDBF.N1)
                 + ", P2 : " + p.getStringField(ActualPaymentDBF.P2) + ", N2 : " + p.getStringField(ActualPaymentDBF.N2));

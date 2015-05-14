@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.dictionary.entity.Address;
 import ru.flexpay.eirc.eirc_account.entity.EircAccount;
 import ru.flexpay.eirc.eirc_account.service.EircAccountBean;
-import ru.flexpay.eirc.organization.entity.Organization;
+import ru.flexpay.eirc.organization.entity.EircOrganization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 import ru.flexpay.eirc.registry.service.AbstractFinishCallback;
 import ru.flexpay.eirc.registry.service.AbstractMessenger;
@@ -59,7 +59,7 @@ public class TestCache {
             Service service;
             final Long organizationId = 1L;
 
-            Organization organization = eircOrganizationStrategy.getDomainObject(organizationId, true);
+            EircOrganization organization = eircOrganizationStrategy.getDomainObject(organizationId, true);
             List<Attribute> services = organization.getAttributes(EircOrganizationStrategy.SERVICE);
             if (services.get(0).getValueId() == null) {
 
@@ -68,7 +68,7 @@ public class TestCache {
                 service.setCode("1");
                 serviceBean.save(service);
 
-                Organization oldOrganization = CloneUtil.cloneObject(organization);
+                EircOrganization oldOrganization = CloneUtil.cloneObject(organization);
                 Attribute serviceAttribute = services.get(0);
                 serviceAttribute.setValueId(service.getId());
                 serviceAttribute.setAttributeTypeId(EircOrganizationStrategy.SERVICE);

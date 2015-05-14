@@ -13,6 +13,7 @@ import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
+import org.complitex.organization.entity.Organization;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationEditComponent;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationValidator;
@@ -169,15 +170,15 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public List<DomainObject> getAllOuterOrganizations(Locale locale) {
+    public List<? extends Organization> getAllOuterOrganizations(Locale locale) {
         return getOrganizations(OSZN_TYPE, CALCULATION_CENTER_TYPE, SERVICING_ORGANIZATION_TYPE);
     }
 
-    public List<DomainObject> getAllOSZNs(Locale locale) {
+    public List<? extends Organization> getAllOSZNs(Locale locale) {
         return getOrganizations(OSZN_TYPE);
     }
 
-    public List<DomainObject> getAllCalculationCentres(Locale locale) {
+    public List<? extends Organization> getAllCalculationCentres(Locale locale) {
         return getOrganizations(CALCULATION_CENTER_TYPE);
     }
 
@@ -240,10 +241,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    protected Long insertStrings(long attributeTypeId, List<StringCulture> strings) {
-        /* if it's data source or one of load/save request file directory attributes 
-         * or root directory for loading and saving request files
-         * then string value should be inserted as is and not upper cased. */
+    protected Long insertStrings(Long attributeTypeId, List<StringCulture> strings) {
         return ATTRIBUTE_TYPES_WITH_CUSTOM_STRING_PROCESSING.contains(attributeTypeId)
                 ? stringBean.save(strings, getEntityName(), false)
                 : super.insertStrings(attributeTypeId, strings);

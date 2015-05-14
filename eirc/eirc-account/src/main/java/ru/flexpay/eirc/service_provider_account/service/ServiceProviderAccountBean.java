@@ -11,7 +11,7 @@ import org.complitex.common.strategy.SequenceBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.DateUtil;
 import ru.flexpay.eirc.eirc_account.service.EircAccountBean;
-import ru.flexpay.eirc.organization.entity.Organization;
+import ru.flexpay.eirc.organization.entity.EircOrganization;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 import ru.flexpay.eirc.service_provider_account.entity.ServiceNotAllowableException;
 import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccount;
@@ -103,7 +103,7 @@ public class ServiceProviderAccountBean extends AbstractBean {
     public void validate(ServiceProviderAccount serviceProviderAccount) throws ServiceNotAllowableException {
         if (serviceProviderAccount.getService() != null && serviceProviderAccount.getService().getId() != null) {
             // check allowable services
-            Organization organization = eircOrganizationStrategy.getDomainObject(serviceProviderAccount.getOrganizationId(), true);
+            EircOrganization organization = eircOrganizationStrategy.getDomainObject(serviceProviderAccount.getOrganizationId(), true);
             List<Attribute> allowableServices = organization.getAttributes(EircOrganizationStrategy.SERVICE);
             boolean check = false;
             for (Attribute allowableService : allowableServices) {

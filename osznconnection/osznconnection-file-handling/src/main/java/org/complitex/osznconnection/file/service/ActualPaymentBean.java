@@ -9,9 +9,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
+import org.complitex.organization.strategy.ServiceStrategy;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.ActualPaymentExample;
-import org.complitex.osznconnection.service_provider_type.strategy.ServiceProviderTypeStrategy;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -29,14 +29,14 @@ public class ActualPaymentBean extends AbstractRequestBean {
     // service provider type id <-> set of actual payment fields that should be updated.
     private static final Map<Long, Set<ActualPaymentDBF>> UPDATE_FIELD_MAP =
             ImmutableMap.<Long, Set<ActualPaymentDBF>>builder().
-            put(ServiceProviderTypeStrategy.APARTMENT_FEE, ImmutableSet.of(ActualPaymentDBF.P1, ActualPaymentDBF.N1)).
-            put(ServiceProviderTypeStrategy.HEATING, ImmutableSet.of(ActualPaymentDBF.P2, ActualPaymentDBF.N2)).
-            put(ServiceProviderTypeStrategy.HOT_WATER_SUPPLY, ImmutableSet.of(ActualPaymentDBF.P3, ActualPaymentDBF.N3)).
-            put(ServiceProviderTypeStrategy.COLD_WATER_SUPPLY, ImmutableSet.of(ActualPaymentDBF.P4, ActualPaymentDBF.N4)).
-            put(ServiceProviderTypeStrategy.GAS_SUPPLY, ImmutableSet.of(ActualPaymentDBF.P5, ActualPaymentDBF.N5)).
-            put(ServiceProviderTypeStrategy.POWER_SUPPLY, ImmutableSet.of(ActualPaymentDBF.P6, ActualPaymentDBF.N6)).
-            put(ServiceProviderTypeStrategy.GARBAGE_DISPOSAL, ImmutableSet.of(ActualPaymentDBF.P7, ActualPaymentDBF.N7)).
-            put(ServiceProviderTypeStrategy.DRAINAGE, ImmutableSet.of(ActualPaymentDBF.P8, ActualPaymentDBF.N8)).
+            put(ServiceStrategy.APARTMENT_FEE, ImmutableSet.of(ActualPaymentDBF.P1, ActualPaymentDBF.N1)).
+            put(ServiceStrategy.HEATING, ImmutableSet.of(ActualPaymentDBF.P2, ActualPaymentDBF.N2)).
+            put(ServiceStrategy.HOT_WATER_SUPPLY, ImmutableSet.of(ActualPaymentDBF.P3, ActualPaymentDBF.N3)).
+            put(ServiceStrategy.COLD_WATER_SUPPLY, ImmutableSet.of(ActualPaymentDBF.P4, ActualPaymentDBF.N4)).
+            put(ServiceStrategy.GAS_SUPPLY, ImmutableSet.of(ActualPaymentDBF.P5, ActualPaymentDBF.N5)).
+            put(ServiceStrategy.POWER_SUPPLY, ImmutableSet.of(ActualPaymentDBF.P6, ActualPaymentDBF.N6)).
+            put(ServiceStrategy.GARBAGE_DISPOSAL, ImmutableSet.of(ActualPaymentDBF.P7, ActualPaymentDBF.N7)).
+            put(ServiceStrategy.DRAINAGE, ImmutableSet.of(ActualPaymentDBF.P8, ActualPaymentDBF.N8)).
             build();
 
     public enum OrderBy {

@@ -33,7 +33,6 @@
         <module>osznconnection-file-handling</module>
         <module>osznconnection-web</module>
         <module>osznconnection-address</module>
-        <module>osznconnection-service-provider-type</module>
 
         <module>../complitex/complitex-common</module>
         <module>../complitex/complitex-template</module>

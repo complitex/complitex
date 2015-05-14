@@ -19,6 +19,15 @@ public class ServiceStrategy extends TemplateStrategy{
     public final static long SHORT_NAME = 3602;
     public final static long CODE = 3603;
 
+    public static final long APARTMENT_FEE = 1;
+    public static final long HEATING = 2;
+    public static final long HOT_WATER_SUPPLY = 3;
+    public static final long COLD_WATER_SUPPLY = 4;
+    public static final long GAS_SUPPLY = 5;
+    public static final long POWER_SUPPLY = 6;
+    public static final long GARBAGE_DISPOSAL = 7;
+    public static final long DRAINAGE = 8;
+
     @Override
     public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
 

@@ -77,6 +77,6 @@ public class ActualPaymentLookupPanel extends AbstractLookupPanel<ActualPayment>
 
     @Override
     protected void updateAccountNumber(ActualPayment actualPayment, String accountNumber, long userOrganizationId) {
-        personAccountService.updateAccountNumber(actualPayment, accountNumber, userOrganizationId);
+        personAccountService.updateAccountNumber(actualPayment, accountNumber);
     }
 }
