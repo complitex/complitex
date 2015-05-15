@@ -133,4 +133,30 @@
         where oa.`object_id` = #{id} and osc.`locale_id` = (select l.id from locales l where l.system is true)
           and oa.`status` = 'ACTIVE'
     </select>
+
+    <!-- Service Billing-->
+
+    <resultMap id="serviceBillingResultMap" type="org.complitex.organization.entity.ServiceBilling">
+        <id column="id" property="id"/>
+        <result column="service_id" property="serviceId"/>
+        <result column="billing_id" property="billingId"/>
+    </resultMap>
+
+    <select id="selectServiceBillings" parameterType="list" resultMap="serviceBillingResultMap">
+        SELECT * FROM `service_billing` WHERE `id` IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insertServiceBilling" parameterType="org.complitex.organization.entity.ServiceBilling"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `service_billing` (`service_id`, `billing_id`) VALUES (#{serviceId}, #{billingId})
+    </insert>
+
+    <delete id="deleteServiceBillings" parameterType="map">
+        DELETE FROM `service_billing` WHERE `id` IN
+        (SELECT a.`value_id` FROM `organization_attribute` a WHERE a.`object_id` = #{objectId}
+        AND a.`attribute_type_id` = #{serviceBillingAT})
+    </delete>
 </mapper>

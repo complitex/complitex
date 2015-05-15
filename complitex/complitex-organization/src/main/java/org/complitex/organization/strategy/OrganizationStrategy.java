@@ -15,7 +15,6 @@ import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.organization.entity.Organization;
 import org.complitex.organization.entity.ServiceBilling;
-import org.complitex.organization.service.ServiceBillingBean;
 import org.complitex.organization.strategy.web.edit.OrganizationEdit;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.organization.strategy.web.edit.OrganizationValidator;
@@ -49,9 +48,6 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
 
     @EJB
     private StrategyFactory strategyFactory;
-
-    @EJB
-    private ServiceBillingBean serviceBillingBean;
 
     @Override
     public String getEntityName() {
@@ -237,7 +233,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
 
         long i = 1;
         for (ServiceBilling serviceBilling : organization.getServiceBillings()) {
-            serviceBillingBean.save(serviceBilling);
+            save(serviceBilling);
 
             Attribute a = new Attribute();
             a.setAttributeTypeId(SERVICE_BILLING);
@@ -271,7 +267,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     public void delete(Long objectId, Locale locale) throws DeleteException {
         deleteChecks(objectId, locale);
 
-       serviceBillingBean.deleteByOrganizationId(objectId);
+        deleteServiceBilling(objectId);
 
         deleteStrings(objectId);
         deleteAttribute(objectId);
@@ -279,9 +275,9 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     }
 
     public List<ServiceBilling> getServiceBillings(DomainObject domainObject) {
-        return serviceBillingBean.getServiceBillings(domainObject.getAttributes(SERVICE_BILLING).stream()
-                        .map(Attribute::getValueId)
-                        .collect(Collectors.toList()));
+        return getServiceBillings(domainObject.getAttributes(SERVICE_BILLING).stream()
+                .map(Attribute::getValueId)
+                .collect(Collectors.toList()));
     }
 
     @Override
@@ -559,5 +555,23 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
 
     public String getDataSourceByUserOrganizationId(Long userOrganizationId){
         return getDataSource(getBillingId(userOrganizationId));
+    }
+
+    public List<ServiceBilling> getServiceBillings(List<Long> ids){
+        if (ids.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        return selectList("selectServiceBillings", ids);
+    }
+
+    public void save(ServiceBilling serviceBilling) {
+        insert("insertServiceAssociation", serviceBilling);
+    }
+
+    public void deleteServiceBilling(Long organizationId){
+        delete("deleteServiceAssociations", ImmutableMap.of("objectId", organizationId,
+                "serviceAssociationsAT", IOrganizationStrategy.SERVICE_BILLING));
+
     }
 }

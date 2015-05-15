@@ -12,10 +12,6 @@ import org.complitex.template.web.pages.HistoryPage;
 import org.complitex.template.web.pages.ObjectNotFoundPage;
 import org.complitex.template.web.security.SecurityRole;
 
-/**
- *
- * @author Artem
- */
 public abstract class TemplateStrategy extends DomainObjectStrategy {
 
     public static final String ENTITY = "entity";
