@@ -310,9 +310,9 @@ INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_t
 
 INSERT INTO `service`(`object_id`) VALUES (1),(2),(3),(4),(5),(6),(7),(8);
 INSERT INTO `service_string_culture`(`id`, `locale_id`, `value`) VALUES
-    (1, 1, UPPER('квартплата / сжиженный газ')), (1, 2,UPPER('квартплата / скраплений газ')),
-    (2, 1, UPPER('отопление / уголь')), (2, 2, UPPER('опалення / вугілля')),
-    (3, 1, UPPER('горячая вода / дрова')), (3, 2, UPPER('гаряча вода/дрова')),
+    (1, 1, UPPER('квартплата')), (1, 2,UPPER('квартплата')),
+    (2, 1, UPPER('отопление')), (2, 2, UPPER('опалення')),
+    (3, 1, UPPER('горячая вода')), (3, 2, UPPER('гаряча вода')),
     (4, 1, UPPER('холодная вода')), (4, 2, UPPER('холодна вода')),
     (5, 1, UPPER('газ')), (5, 2, UPPER('газ')),
     (6, 1, UPPER('электроэнергия')), (6, 2, UPPER('електроенергія')),
