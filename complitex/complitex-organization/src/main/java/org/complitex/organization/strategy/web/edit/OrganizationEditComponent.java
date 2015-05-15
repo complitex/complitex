@@ -54,6 +54,8 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
     private WebMarkupContainer dataSourceContainer;
     private IModel<RemoteDataSource> dataSourceModel;
 
+    private WebMarkupContainer serviceBillingContainer;
+
     public OrganizationEditComponent(String id, boolean disabled) {
         super(id, disabled);
     }
@@ -235,8 +237,8 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
             dataSourceContainer = new WebMarkupContainer("dataSourceContainer");
             dataSourceContainer.setOutputMarkupPlaceholderTag(true);
             add(dataSourceContainer);
-            final IModel<String> dataSourceLabelModel = new ResourceModel("dataSourceLabel");
-            dataSourceContainer.add(new Label("dataSourceLabel", dataSourceLabelModel));
+
+            dataSourceContainer.add(new Label("dataSourceLabel", new ResourceModel("dataSourceLabel")));
             dataSourceModel = new Model<>();
 
             String currentDataSource = organization.getStringValue(IOrganizationStrategy.DATA_SOURCE);
@@ -269,10 +271,20 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
                                 }
                             });
             dataSource.setRequired(true);
-            dataSource.setLabel(dataSourceLabelModel);
             dataSource.setEnabled(enabled());
             dataSourceContainer.add(dataSource);
             dataSourceContainer.setVisible(isCalculationCenter());
+        }
+
+        //service billing
+        {
+            serviceBillingContainer = new WebMarkupContainer("serviceBillingContainer");
+            serviceBillingContainer.setOutputMarkupPlaceholderTag(true);
+            add(serviceBillingContainer);
+
+            //todo service billing component here
+
+
         }
     }
 
