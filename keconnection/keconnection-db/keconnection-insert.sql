@@ -8,33 +8,6 @@ INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES
   ('heatmeter_period_type',1), ('heatmeter_period_type_string_culture',1),
   ('service',1), ('service_string_culture',1);
 
--- --------------------------------
--- Organization type
--- --------------------------------
-
-INSERT INTO `organization_type`(`object_id`) VALUES (2);
-INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
-VALUES (2, 1, UPPER('МОДУЛЬ НАЧИСЛЕНИЙ')), (2, 2, UPPER('МОДУЛЬ НАЧИСЛЕНИЙ'));
-INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
-VALUES (1, 2, 2300, 2, 2300);
-
-INSERT INTO `organization_type`(`object_id`) VALUES (3);
-INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
-VALUES (3, 1, UPPER('БАЛАНСОДЕРЖАТЕЛЬ')), (3, 2, UPPER('БАЛАНСОДЕРЖАТЕЛЬ'));
-INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
-VALUES (1, 3, 2300, 3, 2300);
-
-INSERT INTO `organization_type`(`object_id`) VALUES (5);
-INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
-VALUES (5, 1, UPPER('ПОСТАВЩИК УСЛУГ')), (5, 2, UPPER('ПОСТАВЩИК УСЛУГ'));
-INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
-VALUES (1, 5, 2300, 5, 2300);
-
-INSERT INTO `organization_type`(`object_id`) VALUES (6);
-INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
-VALUES (6, 1, UPPER('ПОДРЯДЧИК')), (6, 2, UPPER('ПОДРЯДЧИК'));
-INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
-VALUES (1, 6, 2300, 6, 2300);
 
 -- --------------------------------
 -- Organization
@@ -157,21 +130,3 @@ INSERT INTO `heatmeter_period_type_attribute`(`attribute_id`, `object_id`, `attr
 
 INSERT INTO `config` (`name`, `value`) VALUES ('IMPORT_HEATMETER_DIR','c:\\storage\\import\\heatmeter');
 INSERT INTO `config` (`name`, `value`) VALUES ('IMPORT_PAYLOAD_DIR','c:\\storage\\import\\payload');
-
--- ------------------------------
--- Service
--- ------------------------------
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (3600, 1, 'Услуга'), (3600, 2, 'Услуга');
-INSERT INTO `entity`(`id`, `entity_table`, `entity_name_id`, `strategy_factory`) VALUES (3600, 'service', 3600, '');
-
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (3601, 1, UPPER('Название')), (3601, 2, UPPER('Название'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (3601, 3600, 1, 3601, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (3601, 3601, 'STRING_CULTURE');
-
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (3602, 1, UPPER('Короткое название')), (3602, 2, UPPER('Короткое название'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (3602, 3600, 1, 3602, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (3602, 3602, 'STRING_CULTURE');
-
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (3603, 1, UPPER('Код')), (3603, 2, UPPER('Код'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (3603, 3600, 1, 3603, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (3603, 3603, 'STRING_CULTURE');

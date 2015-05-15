@@ -15,9 +15,9 @@ import java.util.Map;
  */
 @Stateless
 public class ServiceStrategy extends TemplateStrategy{
-    public final static long NAME = 3601;
-    public final static long SHORT_NAME = 3602;
-    public final static long CODE = 3603;
+    public final static long NAME = 1601;
+    public final static long SHORT_NAME = 1602;
+    public final static long CODE = 1603;
 
     public static final long APARTMENT_FEE = 1;
     public static final long HEATING = 2;

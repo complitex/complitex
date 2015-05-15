@@ -178,7 +178,7 @@ INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_t
 
 
 -- --------------------------------
--- User
+-- User Info
 -- --------------------------------
 
 INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (1000, 1, 'Пользователь'), (1000, 2, 'Користувач');
@@ -225,13 +225,40 @@ INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_nam
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (2300, 2300, UPPER('string_culture'));
 
 INSERT INTO `organization_type`(`object_id`) VALUES (1);
-INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`) VALUES (1, 1, UPPER('Организации пользователей')), (1, 2,UPPER('Организации пользователей'));
-INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES (1,1,2300,1,2300);
+INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
+  VALUES (1, 1, UPPER('Организации пользователей')), (1, 2,UPPER('Организации пользователей'));
+INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
+  VALUES (1,1,2300,1,2300);
 
 INSERT INTO `organization_type`(`object_id`) VALUES (4);
 INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
-VALUES (4, 1, UPPER('ОБСЛУЖИВАЮЩАЯ ОРГАНИЗАЦИЯ')), (4, 2, UPPER('ОБСЛУЖИВАЮЩАЯ ОРГАНИЗАЦИЯ'));
-INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES (1, 4, 2300, 4, 2300);
+  VALUES (4, 1, UPPER('ОБСЛУЖИВАЮЩАЯ ОРГАНИЗАЦИЯ')), (4, 2, UPPER('ОБСЛУЖИВАЮЩАЯ ОРГАНИЗАЦИЯ'));
+INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) 
+  VALUES (1, 4, 2300, 4, 2300);
+
+INSERT INTO `organization_type`(`object_id`) VALUES (2);
+INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
+  VALUES (2, 1, UPPER('МОДУЛЬ НАЧИСЛЕНИЙ')), (2, 2, UPPER('МОДУЛЬ НАЧИСЛЕНИЙ'));
+INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
+  VALUES (1, 2, 2300, 2, 2300);
+
+INSERT INTO `organization_type`(`object_id`) VALUES (3);
+INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
+  VALUES (3, 1, UPPER('БАЛАНСОДЕРЖАТЕЛЬ')), (3, 2, UPPER('БАЛАНСОДЕРЖАТЕЛЬ'));
+INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
+  VALUES (1, 3, 2300, 3, 2300);
+
+INSERT INTO `organization_type`(`object_id`) VALUES (5);
+INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
+  VALUES (5, 1, UPPER('ПОСТАВЩИК УСЛУГ')), (5, 2, UPPER('ПОСТАВЩИК УСЛУГ'));
+INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
+  VALUES (1, 5, 2300, 5, 2300);
+
+INSERT INTO `organization_type`(`object_id`) VALUES (6);
+INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
+  VALUES (6, 1, UPPER('ПОДРЯДЧИК')), (6, 2, UPPER('ПОДРЯДЧИК'));
+INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
+  VALUES (1, 6, 2300, 6, 2300);
 
 -- --------------------------------
 -- Organization
@@ -262,3 +289,36 @@ INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_t
 INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (914, 1, UPPER('Ресурс доступа к МН')), (914, 2, UPPER('Ресурс доступа к МН'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (913, 900, 1, 914, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (913, 913, UPPER('string'));
+
+-- ------------------------------
+-- Service
+-- ------------------------------
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (1600, 1, 'Услуга'), (1600, 2, 'Услуга');
+INSERT INTO `entity`(`id`, `entity_table`, `entity_name_id`, `strategy_factory`) VALUES (1600, 'service', 1600, '');
+
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (1601, 1, UPPER('Название')), (1601, 2, UPPER('Название'));
+INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (1601, 1600, 1, 1601, 1);
+INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (1601, 1601, 'STRING_CULTURE');
+
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (1602, 1, UPPER('Короткое название')), (1602, 2, UPPER('Короткое название'));
+INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (1602, 1600, 1, 1602, 1);
+INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (1602, 1602, 'STRING_CULTURE');
+
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (1603, 1, UPPER('Код')), (1603, 2, UPPER('Код'));
+INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (1603, 1600, 1, 1603, 1);
+INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (1603, 1603, 'STRING_CULTURE');
+
+INSERT INTO `service`(`object_id`) VALUES (1),(2),(3),(4),(5),(6),(7),(8);
+INSERT INTO `service_string_culture`(`id`, `locale_id`, `value`) VALUES
+    (1, 1, UPPER('квартплата / сжиженный газ')), (1, 2,UPPER('квартплата / скраплений газ')),
+    (2, 1, UPPER('отопление / уголь')), (2, 2, UPPER('опалення / вугілля')),
+    (3, 1, UPPER('горячая вода / дрова')), (3, 2, UPPER('гаряча вода/дрова')),
+    (4, 1, UPPER('холодная вода')), (4, 2, UPPER('холодна вода')),
+    (5, 1, UPPER('газ')), (5, 2, UPPER('газ')),
+    (6, 1, UPPER('электроэнергия')), (6, 2, UPPER('електроенергія')),
+    (7, 1, UPPER('вывоз мусора')), (7, 2, UPPER('вивіз сміття')),
+    (8, 1, UPPER('водоотведение')), (8, 2, UPPER('вивіз нечистот'));
+
+INSERT INTO `service_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
+  VALUES (1,1,1601,1,1601),(1,2,1601,2,1601),(1,3,1601,3,1601),(1,4,1601,4,1601),(1,5,1601,5,1601),(1,6,1601,6,1601),
+    (1,7,1601,7,1601),(1,8,1601,8,1601);

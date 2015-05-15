@@ -35,10 +35,6 @@ import java.util.Set;
 import static org.complitex.common.strategy.organization.IOrganizationStrategy.DATA_SOURCE;
 import static org.complitex.common.strategy.organization.IOrganizationStrategy.ORGANIZATION_TYPE;
 
-/**
- * 
- * @author Artem
- */
 public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
 
     @EJB

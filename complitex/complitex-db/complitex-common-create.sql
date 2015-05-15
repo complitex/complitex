@@ -1264,7 +1264,6 @@ CREATE TABLE `service_string_culture` (
   PRIMARY KEY (`pk_id`),
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
-  KEY `key_value` (`value`),
   CONSTRAINT `fk_service_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута услуги';
 
