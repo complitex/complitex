@@ -93,7 +93,6 @@ public class DomainObject implements ILongId {
         getAttribute(attributeTypeId).setValueId(value);
     }
 
-
     @Override
     public Long getId() {
         return objectId;

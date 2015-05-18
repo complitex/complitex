@@ -1,11 +1,12 @@
 package org.complitex.osznconnection.file.service;
 
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.DateUtil;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
-import org.complitex.organization.entity.Organization;
-import org.complitex.organization.entity.ServiceBilling;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.process.SubsidyBindTaskBean;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
@@ -41,16 +42,16 @@ public class SubsidyService {
     private SubsidyBindTaskBean subsidyBindTaskBean;
 
     public SubsidySum getSubsidySum(AbstractRequest request){
-        Organization organization = (Organization) organizationStrategy.getDomainObject(request.getUserOrganizationId(), true);
+        DomainObject organization = organizationStrategy.getDomainObject(request.getUserOrganizationId(), true);
 
         BigDecimal nSum = new BigDecimal(0);
         BigDecimal sbSum = new BigDecimal(0);
         BigDecimal smSum = new BigDecimal(0);
 
-        for (ServiceBilling sa : organization.getServiceBillings()) {
-            nSum = nSum.add((BigDecimal) request.getField("P" + sa.getServiceId()));
-            sbSum = sbSum.add((BigDecimal) request.getField("SB" + sa.getServiceId()));
-            smSum = smSum.add((BigDecimal) request.getField("SM" + sa.getServiceId()));
+        for (Attribute sa : organization.getAttributes(IOrganizationStrategy.SERVICE)) {
+            nSum = nSum.add((BigDecimal) request.getField("P" + sa.getValueId()));
+            sbSum = sbSum.add((BigDecimal) request.getField("SB" + sa.getValueId()));
+            smSum = smSum.add((BigDecimal) request.getField("SM" + sa.getValueId()));
         }
 
         //round Pn

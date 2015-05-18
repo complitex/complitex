@@ -429,7 +429,7 @@ public class PersonStrategy extends TemplateStrategy {
     }
 
     @Override
-    public long getDefaultOrderByAttributeId() {
+    public Long getDefaultOrderByAttributeId() {
         return DEFAULT_ORDER_BY_ID;
     }
 

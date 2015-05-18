@@ -18,7 +18,6 @@ import org.complitex.keconnection.organization.strategy.entity.KeOrganization;
 import org.complitex.keconnection.organization.strategy.web.edit.KeOrganizationEditComponent;
 import org.complitex.keconnection.organization.strategy.web.list.OrganizationList;
 import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy;
-import org.complitex.organization.entity.Organization;
 import org.complitex.organization.strategy.OrganizationStrategy;
 
 import javax.ejb.EJB;
@@ -31,10 +30,6 @@ import java.util.Locale;
 import static org.complitex.common.util.DateUtil.addMonth;
 import static org.complitex.common.util.DateUtil.getCurrentDate;
 
-/**
- *
- * @author Artem
- */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
 public class KeOrganizationStrategy extends OrganizationStrategy {
     public final static String KECONNECTION_ORGANIZATION_STRATEGY_NAME =  IOrganizationStrategy.BEAN_NAME;
@@ -150,11 +145,6 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public DomainObject newInstance() {
-        return new KeOrganization((Organization) super.newInstance());
-    }
-
-    @Override
     public DomainObject getDomainObject(Long id, boolean runAsAdmin) {
         DomainObject object = super.getDomainObject(id, runAsAdmin);
 
@@ -162,7 +152,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
             return null;
         }
 
-        KeOrganization organization = new KeOrganization((Organization) object);
+        KeOrganization organization = new KeOrganization(object);
 
         loadOperatingMonthDate(organization);
 
@@ -274,7 +264,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
             return null;
         }
 
-        KeOrganization organization = new KeOrganization((Organization) object);
+        KeOrganization organization = new KeOrganization(object);
         loadOperatingMonthDate(organization);
 
         return organization;

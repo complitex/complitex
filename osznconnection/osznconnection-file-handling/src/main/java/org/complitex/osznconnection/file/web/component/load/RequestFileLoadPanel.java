@@ -21,7 +21,6 @@ import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.organization.web.model.OrganizationModel;
-import org.complitex.organization.entity.Organization;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.template.web.template.TemplateSession;
 import org.odlabs.wiquery.ui.dialog.Dialog;
@@ -71,10 +70,10 @@ public abstract class RequestFileLoadPanel extends Panel {
         content.add(form);
 
         //ОСЗН
-        final IModel<List<? extends Organization>> osznsModel = new LoadableDetachableModel<List<? extends Organization>>() {
+        final IModel<List<? extends DomainObject>> osznsModel = new LoadableDetachableModel<List<? extends DomainObject>>() {
 
             @Override
-            protected List<? extends Organization> load() {
+            protected List<? extends DomainObject> load() {
                 return organizationStrategy.getAllOSZNs(getLocale());
             }
         };
@@ -96,10 +95,10 @@ public abstract class RequestFileLoadPanel extends Panel {
         final WebMarkupContainer userOrganizationContainer = new WebMarkupContainer("userOrganizationContainer");
         form.add(userOrganizationContainer);
 
-        final IModel<List<? extends Organization>> userOrganizationsModel = new LoadableDetachableModel<List<? extends Organization>>() {
+        final IModel<List<? extends DomainObject>> userOrganizationsModel = new LoadableDetachableModel<List<? extends DomainObject>>() {
 
             @Override
-            protected List<? extends Organization> load() {
+            protected List<? extends DomainObject> load() {
                 return organizationStrategy.getUserOrganizations(getLocale());
             }
         };
@@ -119,12 +118,12 @@ public abstract class RequestFileLoadPanel extends Panel {
             }
 
             @Override
-            public List<? extends Organization> getOrganizations() {
+            public List<? extends DomainObject> getOrganizations() {
                 return userOrganizationsModel.getObject();
             }
         };
 
-        DisableAwareDropDownChoice<Organization> userOrganization = new DisableAwareDropDownChoice<Organization>(
+        DisableAwareDropDownChoice<DomainObject> userOrganization = new DisableAwareDropDownChoice<>(
                 "userOrganization", userOrganizationModel, userOrganizationsModel, organizationRenderer);
         userOrganization.setRequired(true);
         userOrganizationContainer.add(userOrganization);

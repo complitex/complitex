@@ -13,7 +13,6 @@ import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
-import org.complitex.organization.entity.Organization;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationEditComponent;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationValidator;
@@ -170,15 +169,15 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public List<? extends Organization> getAllOuterOrganizations(Locale locale) {
+    public List<? extends DomainObject> getAllOuterOrganizations(Locale locale) {
         return getOrganizations(OSZN_TYPE, CALCULATION_CENTER_TYPE, SERVICING_ORGANIZATION_TYPE);
     }
 
-    public List<? extends Organization> getAllOSZNs(Locale locale) {
+    public List<? extends DomainObject> getAllOSZNs(Locale locale) {
         return getOrganizations(OSZN_TYPE);
     }
 
-    public List<? extends Organization> getAllCalculationCentres(Locale locale) {
+    public List<? extends DomainObject> getAllCalculationCentres(Locale locale) {
         return getOrganizations(CALCULATION_CENTER_TYPE);
     }
 

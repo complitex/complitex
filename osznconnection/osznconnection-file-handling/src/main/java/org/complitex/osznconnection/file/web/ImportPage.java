@@ -23,7 +23,6 @@ import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
-import org.complitex.organization.entity.Organization;
 import org.complitex.organization.entity.OrganizationImportFile;
 import org.complitex.osznconnection.file.entity.CorrectionImportFile;
 import org.complitex.osznconnection.file.entity.OwnershipImportFile;
@@ -104,10 +103,10 @@ public class ImportPage extends TemplatePage {
 
         final DisableAwareDropDownChoice<DomainObject> organization = new DisableAwareDropDownChoice<>("organization",
                 organizationModel,
-                new LoadableDetachableModel<List<? extends Organization>>() {
+                new LoadableDetachableModel<List<? extends DomainObject>>() {
 
                     @Override
-                    protected List<? extends Organization> load() {
+                    protected List<? extends DomainObject> load() {
                         return organizationStrategy.getAllCalculationCentres(getLocale());
                     }
                 }, new DomainObjectDisableAwareRenderer() {

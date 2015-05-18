@@ -11,10 +11,10 @@ import java.util.List;
 /**
  * @author Pavel Sknar
  */
-public class EircOrganization extends org.complitex.organization.entity.Organization {
+public class EircOrganization extends DomainObject {
 
     public EircOrganization(DomainObject copy) {
-        super(copy, null);
+        super(copy);
     }
 
     public List<OrganizationType> getOrganizationTypes() {

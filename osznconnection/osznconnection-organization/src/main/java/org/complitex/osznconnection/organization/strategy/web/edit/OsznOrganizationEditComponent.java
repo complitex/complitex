@@ -12,7 +12,6 @@ import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
-import org.complitex.organization.entity.Organization;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
@@ -35,16 +34,12 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
         super(id, disabled);
     }
 
-    @Override
-    protected Organization getDomainObject() {
-        return (Organization) super.getDomainObject();
-    }
 
     @Override
     protected void init() {
         super.init();
 
-        final Organization organization = getDomainObject();
+        final DomainObject organization = getDomainObject();
 
         //load/save directories for request files. It is oszn only attributes.
         {
@@ -248,9 +243,6 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
         }
 
         if (!isUserOrganization()) {
-            //service associations
-            organization.removeAttribute(OsznOrganizationStrategy.SERVICE_BILLING);
-
             //edrpou
             organization.removeAttribute(OsznOrganizationStrategy.EDRPOU);
 

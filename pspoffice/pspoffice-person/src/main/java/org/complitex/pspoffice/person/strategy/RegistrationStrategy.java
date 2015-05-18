@@ -245,7 +245,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
     }
 
     @Override
-    public PageParameters getHistoryPageParams(long objectId) {
+    public PageParameters getHistoryPageParams(Long objectId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -13,8 +13,6 @@ import org.complitex.common.util.Numbers;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
-import org.complitex.organization.entity.Organization;
-import org.complitex.organization.entity.ServiceBilling;
 import org.complitex.organization.strategy.web.edit.OrganizationEdit;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import org.complitex.organization.strategy.web.edit.OrganizationValidator;
@@ -179,35 +177,8 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     }
 
     @Override
-    public DomainObject getDomainObject(Long id, boolean runAsAdmin) {
-        DomainObject object = super.getDomainObject(id, runAsAdmin);
-
-        if (object == null) {
-            return null;
-        }
-
-        return new Organization(object, getServiceBillings(object));
-    }
-
-    @Override
-    public DomainObject newInstance() {
-        return new Organization(super.newInstance(), new ArrayList<>());
-    }
-
-    @Override
-    public DomainObject getHistoryObject(Long objectId, Date date) {
-        DomainObject object = super.getHistoryObject(objectId, date);
-
-        if (object == null) {
-            return null;
-        }
-
-        return new Organization(object, getServiceBillings(object));
-    }
-
-    @Override
     public void insert(DomainObject organization, Date insertDate) {
-        addServiceBillingAttributes((Organization) organization);
+        //addServiceBillingAttributes((Organization) organization); todo set pair attribute
 
         organization.setObjectId(sequenceBean.nextId(getEntityName()));
 
@@ -228,60 +199,15 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         super.insert(organization, insertDate);
     }
 
-    private void addServiceBillingAttributes(Organization organization) {
-        organization.removeAttribute(SERVICE_BILLING);
-
-        long i = 1;
-        for (ServiceBilling serviceBilling : organization.getServiceBillings()) {
-            save(serviceBilling);
-
-            Attribute a = new Attribute();
-            a.setAttributeTypeId(SERVICE_BILLING);
-            a.setValueId(serviceBilling.getId());
-            a.setValueTypeId(SERVICE_BILLING);
-            a.setAttributeId(i++);
-            organization.addAttribute(a);
-        }
-    }
-
     @Override
     public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
-        Organization newOrganization = (Organization) newObject;
-        Organization oldOrganization = (Organization) oldObject;
-
-        if (!newOrganization.getServiceBillings().isEmpty()){
-            if (oldOrganization.getServiceBillings().containsAll(newOrganization.getServiceBillings())
-                    && newOrganization.getServiceBillings().containsAll(oldOrganization.getServiceBillings())){
-                addServiceBillingAttributes(newOrganization);
-            }
-        }else {
-            newObject.removeAttribute(SERVICE_BILLING);
-        }
-
         changeDistrictPermissions(oldObject, newObject);
 
         super.update(oldObject, newObject, updateDate);
     }
 
     @Override
-    public void delete(Long objectId, Locale locale) throws DeleteException {
-        deleteChecks(objectId, locale);
-
-        deleteServiceBilling(objectId);
-
-        deleteStrings(objectId);
-        deleteAttribute(objectId);
-        deleteDomainObject(objectId, locale);
-    }
-
-    public List<ServiceBilling> getServiceBillings(DomainObject domainObject) {
-        return getServiceBillings(domainObject.getAttributes(SERVICE_BILLING).stream()
-                .map(Attribute::getValueId)
-                .collect(Collectors.toList()));
-    }
-
-    @Override
-    public List<? extends Organization> getList(DomainObjectFilter example) {
+    public List<? extends DomainObject> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
         }
@@ -292,7 +218,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         }
         extendOrderBy(example);
 
-        List<Organization> organizations = sqlSession().selectList(ORGANIZATION_NS + ".selectOrganizations", example);
+        List<DomainObject> organizations = sqlSession().selectList(ORGANIZATION_NS + ".selectOrganizations", example);
 
         for (DomainObject object : organizations) {
             loadAttributes(object);
@@ -340,7 +266,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     }
 
     @Override
-    public List<? extends Organization> getUserOrganizations(Locale locale, Long... excludeOrganizationsId) {
+    public List<? extends DomainObject> getUserOrganizations(Locale locale, Long... excludeOrganizationsId) {
         DomainObjectFilter example = new DomainObjectFilter();
         example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, ImmutableList.of(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
         if (locale != null) {
@@ -349,17 +275,17 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
             example.setAsc(true);
         }
         configureFilter(example, ImmutableMap.<String, Long>of(), null);
-        List<? extends Organization> userOrganizations = getList(example);
+        List<? extends DomainObject> userOrganizations = getList(example);
 
         if (excludeOrganizationsId == null) {
             return userOrganizations;
         }
 
-        List<Organization> finalUserOrganizations = Lists.newArrayList();
+        List<DomainObject> finalUserOrganizations = Lists.newArrayList();
 
         Set<Long> excludeSet = Sets.newHashSet(excludeOrganizationsId);
 
-        for (Organization userOrganization : userOrganizations) {
+        for (DomainObject userOrganization : userOrganizations) {
             if (!excludeSet.contains(userOrganization.getObjectId())) {
                 finalUserOrganizations.add(userOrganization);
             }
@@ -443,7 +369,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     }
 
     @Override
-    public List<? extends Organization> getOrganizations(Long... types) {
+    public List<? extends DomainObject> getOrganizations(Long... types) {
         return getList(new DomainObjectFilter().addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, types));
     }
 
@@ -544,11 +470,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     }
 
     public Long getBillingId(Long userOrganizationId){
-        List<ServiceBilling> serviceBillings = getServiceBillings(getDomainObject(userOrganizationId, true));
 
-        if (!serviceBillings.isEmpty()){
-            return serviceBillings.get(0).getBillingId();
-        }
 
         throw new IllegalArgumentException("billing id is not found");
     }
@@ -557,21 +479,8 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         return getDataSource(getBillingId(userOrganizationId));
     }
 
-    public List<ServiceBilling> getServiceBillings(List<Long> ids){
-        if (ids.isEmpty()){
-            return Collections.emptyList();
-        }
-
-        return selectList("selectServiceBillings", ids);
-    }
-
-    public void save(ServiceBilling serviceBilling) {
-        insert("insertServiceAssociation", serviceBilling);
-    }
-
-    public void deleteServiceBilling(Long organizationId){
-        delete("deleteServiceAssociations", ImmutableMap.of("objectId", organizationId,
-                "serviceAssociationsAT", IOrganizationStrategy.SERVICE_BILLING));
-
+    @Override
+    public List<? extends DomainObject> getAllOuterOrganizations(Locale locale) {
+        return null;
     }
 }

@@ -47,9 +47,15 @@ public interface IOrganizationStrategy extends IStrategy{
     long DATA_SOURCE = 913;
 
     /**
-     * References to associations between service provider types and calculation centres. It is user organization only attribute.
+     * Service reference.
      */
-    long SERVICE_BILLING = 914;
+    long SERVICE = 914;
+
+    /**
+     * Billing reference.
+     */
+    long BILLING = 915;
+
     
     /**
      * Filter parameter to filter out organizations by organization types.

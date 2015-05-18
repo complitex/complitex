@@ -1267,20 +1267,4 @@ CREATE TABLE `service_string_culture` (
   CONSTRAINT `fk_service_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута услуги';
 
--- ------------------------------
--- Service Billing
--- ------------------------------
-DROP TABLE IF EXISTS `service_billing`;
-
-CREATE TABLE `service_billing` (
-  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
-  `service_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта типа поставщика услуги',
-  `billing_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор модуля начислений',
-  PRIMARY KEY (`id`),
-  KEY `key_service_id` (`service_id`),
-  KEY `key_billing_id` (`billing_id`),
-  CONSTRAINT `fk_service_association__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`object_id`),
-  CONSTRAINT `fk_service_association__organization` FOREIGN KEY (`billing_id`) REFERENCES `organization` (`object_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Услуга - модуль начислений';
-
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
