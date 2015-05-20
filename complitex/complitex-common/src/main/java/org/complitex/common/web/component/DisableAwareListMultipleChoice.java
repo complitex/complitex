@@ -1,13 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component;
+
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
+import org.apache.wicket.model.IModel;
 
 import java.util.Collection;
 import java.util.List;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
-import org.apache.wicket.model.IModel;
 
 /**
  *

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.organization.strategy.web.edit;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -21,10 +17,6 @@ import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 
 import javax.ejb.EJB;
 
-/**
- *
- * @author Artem
- */
 public class KeOrganizationEditComponent extends OrganizationEditComponent {
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
