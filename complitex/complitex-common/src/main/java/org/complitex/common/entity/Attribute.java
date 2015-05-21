@@ -25,6 +25,13 @@ public class Attribute implements Serializable {
     public Attribute() {
     }
 
+    public Attribute(Long attributeTypeId, Long attributeId) {
+        this.attributeTypeId = attributeTypeId;
+        this.attributeId = attributeId;
+
+        this.valueTypeId = attributeTypeId;
+    }
+
     public StringCulture getStringCulture(Long localeId){
         if (stringCultures != null){
             for (StringCulture sc: stringCultures){

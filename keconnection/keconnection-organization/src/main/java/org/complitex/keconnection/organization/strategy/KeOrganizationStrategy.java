@@ -132,9 +132,9 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
         }
 
         example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER,
-                ImmutableList.of(KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER,
+                ImmutableList.of(KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER_TYPE,
                     KeConnectionOrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE,
-                    KeConnectionOrganizationTypeStrategy.CALCULATION_MODULE));
+                    KeConnectionOrganizationTypeStrategy.BILLING_TYPE));
         configureFilter(example, ImmutableMap.<String, Long>of(), null);
 
         return getList(example);

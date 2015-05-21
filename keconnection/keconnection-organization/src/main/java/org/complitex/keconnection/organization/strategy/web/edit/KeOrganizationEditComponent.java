@@ -88,7 +88,7 @@ public class KeOrganizationEditComponent extends OrganizationEditComponent {
 
     public boolean isCalculationCenter() {
         for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
-            if (organizationType.getObjectId().equals(KeConnectionOrganizationTypeStrategy.CALCULATION_MODULE)) {
+            if (organizationType.getObjectId().equals(KeConnectionOrganizationTypeStrategy.BILLING_TYPE)) {
                 return true;
             }
         }

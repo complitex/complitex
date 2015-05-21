@@ -19,18 +19,11 @@ import java.util.Collection;
 public class KeConnectionOrganizationTypeStrategy extends OrganizationTypeStrategy {
 
     private static final String STRATEGY_NAME = KeConnectionOrganizationTypeStrategy.class.getSimpleName();
-    /**
-     * Organization type ids
-     */
-    public static final long CALCULATION_MODULE = 2;
-    public static final long BALANCE_OWNER = 3;
-    public static final long SERVICE_PROVIDER = 5;
-    public static final long CONTRACTOR = 6;
 
     @Override
     protected Collection<Long> getReservedInstanceIds() {
-        return ImmutableList.of(USER_ORGANIZATION_TYPE, CALCULATION_MODULE, BALANCE_OWNER,
-                SERVICING_ORGANIZATION_TYPE, SERVICE_PROVIDER, CONTRACTOR);
+        return ImmutableList.of(USER_ORGANIZATION_TYPE, BILLING_TYPE, BALANCE_OWNER,
+                SERVICING_ORGANIZATION_TYPE, SERVICE_PROVIDER_TYPE, CONTRACTOR);
     }
 
     @Override

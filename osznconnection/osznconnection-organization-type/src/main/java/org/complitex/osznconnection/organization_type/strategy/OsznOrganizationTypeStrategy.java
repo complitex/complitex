@@ -11,14 +11,10 @@ import java.util.Collection;
 public class OsznOrganizationTypeStrategy extends OrganizationTypeStrategy {
 
     private static final String STRATEGY_NAME = OsznOrganizationTypeStrategy.class.getSimpleName();
-    /**
-     * Organization type ids
-     */
-    public static final long OSZN_TYPE = 2;
 
     @Override
     protected Collection<Long> getReservedInstanceIds() {
-        return ImmutableList.of(USER_ORGANIZATION_TYPE, OSZN_TYPE, CALCULATION_CENTER_TYPE);
+        return ImmutableList.of(USER_ORGANIZATION_TYPE, SERVICING_ORGANIZATION_TYPE, BILLING_TYPE);
     }
 
     @Override

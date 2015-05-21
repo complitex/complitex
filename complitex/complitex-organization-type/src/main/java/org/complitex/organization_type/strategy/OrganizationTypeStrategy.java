@@ -34,8 +34,11 @@ public class OrganizationTypeStrategy extends TemplateStrategy {
      * Organization type ids
      */
     public static final long USER_ORGANIZATION_TYPE = 1;
-    public static final long CALCULATION_CENTER_TYPE = 3;
+    public static final long BILLING_TYPE = 2;
+    public static final long BALANCE_OWNER = 3;
     public static final long SERVICING_ORGANIZATION_TYPE = 4;
+    public static final long SERVICE_PROVIDER_TYPE = 5;
+    public static final long CONTRACTOR = 6;
 
     @Override
     public String getEntityName() {

@@ -188,6 +188,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
 
         organization.setPermissionId(getNewPermissionId(organization.getSubjectIds()));
         insertDomainObject(organization, insertDate);
+
         for (Attribute attribute : organization.getAttributes()) {
             attribute.setObjectId(organization.getObjectId());
             attribute.setStartDate(insertDate);

@@ -112,7 +112,7 @@ public class PersonAccountList extends ScrollListPage {
                 OsznOrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE));
 
         filterForm.add(new OrganizationPicker("calculationCenterFilter", new PropertyModel<DomainObject>(filterModel, "object.calculationCenterId"),
-                OsznOrganizationTypeStrategy.CALCULATION_CENTER_TYPE));
+                OsznOrganizationTypeStrategy.BILLING_TYPE));
 
         filterForm.add(new OrganizationPicker("userOrganizationFilter", new PropertyModel<DomainObject>(filterModel, "object.userOrganizationId"),
                 OsznOrganizationTypeStrategy.USER_ORGANIZATION_TYPE));

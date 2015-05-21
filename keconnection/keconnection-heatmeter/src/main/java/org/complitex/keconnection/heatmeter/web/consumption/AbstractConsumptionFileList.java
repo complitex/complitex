@@ -65,7 +65,7 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
             }
         });
         columnMap.put("serviceProviderId", new OrganizationFilteredColumn<>("organization", "serviceProviderId", getLocale(),
-                KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER));
+                KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER_TYPE));
         columnMap.put("serviceId", new DomainObjectFilteredColumn<>("service", "serviceId", getLocale()));
         //todo user organization panel
 

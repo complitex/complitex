@@ -24,7 +24,8 @@ import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Locale;
 
-import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.*;
+import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.BILLING_TYPE;
+import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE;
 
 /**
  *
@@ -170,15 +171,15 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
 
     @Override
     public List<? extends DomainObject> getAllOuterOrganizations(Locale locale) {
-        return getOrganizations(OSZN_TYPE, CALCULATION_CENTER_TYPE, SERVICING_ORGANIZATION_TYPE);
+        return getOrganizations(SERVICING_ORGANIZATION_TYPE, BILLING_TYPE, SERVICING_ORGANIZATION_TYPE);
     }
 
     public List<? extends DomainObject> getAllOSZNs(Locale locale) {
-        return getOrganizations(OSZN_TYPE);
+        return getOrganizations(SERVICING_ORGANIZATION_TYPE);
     }
 
     public List<? extends DomainObject> getAllCalculationCentres(Locale locale) {
-        return getOrganizations(CALCULATION_CENTER_TYPE);
+        return getOrganizations(BILLING_TYPE);
     }
 
     @Override

@@ -6,13 +6,14 @@ import com.google.common.collect.Sets;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.*;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.common.entity.*;
 import org.complitex.common.strategy.IStrategy;
@@ -20,6 +21,7 @@ import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.*;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.component.domain.DomainDropDownChoice;
 import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
 import org.complitex.common.web.component.domain.DomainObjectEditPanel;
 import org.complitex.common.web.component.search.SearchComponentState;
@@ -28,12 +30,10 @@ import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 
 import javax.ejb.EJB;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import static org.complitex.common.strategy.organization.IOrganizationStrategy.DATA_SOURCE;
-import static org.complitex.common.strategy.organization.IOrganizationStrategy.ORGANIZATION_TYPE;
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.*;
 
 public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
 
@@ -280,11 +280,48 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         {
             serviceBillingContainer = new WebMarkupContainer("serviceBillingContainer");
             serviceBillingContainer.setOutputMarkupPlaceholderTag(true);
+            serviceBillingContainer.setVisible(isUserOrganization());
             add(serviceBillingContainer);
 
-            //todo service billing component here
+            ListView<Attribute> serviceBillings = new ListView<Attribute>("serviceBillings",
+                    new LoadableDetachableModel<List<? extends Attribute>>() {
+                @Override
+                protected List<? extends Attribute> load() {
+                    return organization.getAttributes(SERVICE);
+                }
+            }) {
+                @Override
+                protected void populateItem(ListItem<Attribute> item) {
+                    Attribute attribute = item.getModelObject();
 
+                    item.add(new DomainDropDownChoice("service", "service", new PropertyModel<>(item.getModel(), "valueId"))
+                            .setRequired(true));
+                    item.add(new DomainDropDownChoice("billing", "organization", new PropertyModel<>(
+                            organization.getAttribute(BILLING, attribute.getAttributeId()), "valueId")){
+                        @Override
+                        protected void onFilter(DomainObjectFilter filter) {
+                            filter.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER,
+                                    Collections.singletonList(OrganizationTypeStrategy.BILLING_TYPE));
+                        }
+                    }.setRequired(true));
+                    item.add(new AjaxLink("remove") {
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            organization.removeAttribute(attribute.getAttributeTypeId(), attribute.getAttributeId());
+                            target.add(serviceBillingContainer);
+                        }
+                    });
+                }
+            };
+            serviceBillingContainer.add(serviceBillings);
 
+            serviceBillingContainer.add(new AjaxLink("add") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    organization.addAttributes(SERVICE, BILLING);
+                    target.add(serviceBillingContainer);
+                }
+            });
         }
     }
 
@@ -323,12 +360,13 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
 
         //data source
         {
-            boolean dataSourceContainerWasVisible = dataSourceContainer.isVisible();
             dataSourceContainer.setVisible(isCalculationCenter());
-            boolean dataSourceContainerVisibleNow = dataSourceContainer.isVisible();
-            if (dataSourceContainerWasVisible ^ dataSourceContainerVisibleNow) {
-                target.add(dataSourceContainer);
-            }
+            target.add(dataSourceContainer);
+        }
+
+        {
+            serviceBillingContainer.setVisible(isUserOrganization());
+            target.add(serviceBillingContainer);
         }
     }
 
@@ -368,7 +406,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
 
     public boolean isCalculationCenter() {
         for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
-            if (organizationType.getObjectId().equals(OrganizationTypeStrategy.CALCULATION_CENTER_TYPE)) {
+            if (organizationType.getObjectId().equals(OrganizationTypeStrategy.BILLING_TYPE)) {
                 return true;
             }
         }
@@ -412,13 +450,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         getDomainObject().removeAttribute(ORGANIZATION_TYPE);
         List<DomainObject> organizationTypes = getOrganizationTypesModel().getObject();
         if (organizationTypes != null && !organizationTypes.isEmpty()) {
-            Collections.sort(organizationTypes, new Comparator<DomainObject>() {
-
-                @Override
-                public int compare(DomainObject o1, DomainObject o2) {
-                    return o1.getObjectId().compareTo(o2.getObjectId());
-                }
-            });
+            Collections.sort(organizationTypes, (o1, o2) -> o1.getObjectId().compareTo(o2.getObjectId()));
             long attributeId = 1;
             for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
                 Attribute attribute = new Attribute();

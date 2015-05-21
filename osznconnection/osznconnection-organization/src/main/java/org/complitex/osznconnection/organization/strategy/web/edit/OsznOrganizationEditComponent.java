@@ -207,7 +207,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
     public boolean isOszn() {
         for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
-            if (organizationType.getObjectId().equals(OsznOrganizationTypeStrategy.OSZN_TYPE)) {
+            if (organizationType.getObjectId().equals(OsznOrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE)) {
                 return true;
             }
         }

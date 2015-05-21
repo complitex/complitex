@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 
-import static org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER;
+import static org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE;
 
 
@@ -75,7 +75,7 @@ public class ServiceContractEdit extends FormTemplatePage {
         form.add(new LabelDateField("beginDate", new PropertyModel<>(model, "beginDate"), true));
         form.add(new LabelDateField("endDate", new PropertyModel<>(model, "endDate"), true));
         form.add(new RequiredTextField<>("number"));
-        form.add(new OrganizationIdPicker("serviceProviderId", new PropertyModel<>(model, "serviceProviderId"), SERVICE_PROVIDER));
+        form.add(new OrganizationIdPicker("serviceProviderId", new PropertyModel<>(model, "serviceProviderId"), SERVICE_PROVIDER_TYPE));
         form.add(new OrganizationIdPicker("organizationId", new PropertyModel<>(model, "organizationId"),
                 SERVICING_ORGANIZATION_TYPE));
 

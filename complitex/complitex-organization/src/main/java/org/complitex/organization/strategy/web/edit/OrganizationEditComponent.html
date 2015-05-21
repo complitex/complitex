@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns:wicket>
+<html xmlns:wicket="http://wicket.apache.org">
     <head>
         <title></title>
     </head>
@@ -38,7 +38,6 @@
                     </td>
                 </tr>
 
-                <!-- Reference to jdbc data source. Only for calculation centers. -->
                 <tr wicket:id="dataSourceContainer">
                     <th>
                         <span wicket:id="dataSourceLabel"></span><b class="blue">*</b>:
@@ -49,6 +48,22 @@
                         </select>
                     </td>
                 </tr>
+
+                <tr wicket:id="serviceBillingContainer">
+                    <th><wicket:message key="service_billing"/></th>
+                    <td>
+                        <table>
+                            <tr wicket:id="serviceBillings">
+                                <td><select wicket:id="service"></select></td>
+                                <td><select wicket:id="billing"></select></td>
+                                <td><a wicket:id="remove"><wicket:message key="remove"/></a></td>
+                            </tr>
+                        </table>
+                        <span><a wicket:id="add"><wicket:message key="add"/></a></span>
+                    </td>
+                </tr>
+
+                <wicket:child/>
             </table>
         </wicket:panel>
     </body>

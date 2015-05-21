@@ -42,6 +42,5 @@ public class DomainDropDownChoice extends DropDownChoice<Long>{
     }
 
     protected void onFilter(DomainObjectFilter filter){
-
     }
 }

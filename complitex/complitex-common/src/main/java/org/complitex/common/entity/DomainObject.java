@@ -46,6 +46,18 @@ public class DomainObject implements ILongId {
         }
     }
 
+    public void addAttributes(Long attributeTypeId1, Long attributeTypeId2){
+        Long attributeId = attributes.stream()
+                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId1))
+                .mapToLong(Attribute::getAttributeId)
+                .max()
+                .orElse(0) + 1;
+
+        attributes.add(new Attribute(attributeTypeId1, attributeId));
+        attributes.add(new Attribute(attributeTypeId2, attributeId));
+
+    }
+
     public Attribute getAttribute(Long attributeTypeId) {
         for (Attribute a : attributes) {
             if (a.getAttributeTypeId().equals(attributeTypeId) && status.equals(StatusType.ACTIVE)) {
@@ -56,16 +68,34 @@ public class DomainObject implements ILongId {
         return null;
     }
 
+    public Attribute getAttribute(Long attributeTypeId, Long attributeId){
+        return attributes.stream()
+                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getAttributeId().equals(attributeId))
+                .findAny()
+                .get();
+    }
+
     public List<Attribute> getAttributes(Long attributeTypeId) {
         return attributes.stream()
                 .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
                 .collect(Collectors.toList());
     }
 
-    public void removeAttribute(long attributeTypeId) {
+    public void removeAttribute(Long attributeTypeId) {
         for (Iterator<Attribute> i = attributes.iterator(); i.hasNext();) {
             Attribute attribute = i.next();
             if (attribute.getAttributeTypeId().equals(attributeTypeId)) {
+                i.remove();
+            }
+        }
+    }
+
+    public void removeAttribute(Long attributeTypeId, Long attributeId){
+        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext();) {
+            Attribute a = i.next();
+
+            if (a.getAttributeTypeId().equals(attributeTypeId) && a.getAttributeId().equals(attributeId)) {
                 i.remove();
             }
         }
