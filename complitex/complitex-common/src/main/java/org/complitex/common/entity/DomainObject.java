@@ -59,26 +59,31 @@ public class DomainObject implements ILongId {
     }
 
     public Attribute getAttribute(Long attributeTypeId) {
-        for (Attribute a : attributes) {
-            if (a.getAttributeTypeId().equals(attributeTypeId) && status.equals(StatusType.ACTIVE)) {
-                return a;
-            }
-        }
-
-        return null;
+        return attributes.stream()
+                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEndDate() == null)
+                .findAny()
+                .orElse(null);
     }
 
     public Attribute getAttribute(Long attributeTypeId, Long attributeId){
         return attributes.stream()
+                .filter(a -> a.getEndDate() == null)
                 .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
                 .filter(a -> a.getAttributeId().equals(attributeId))
                 .findAny()
-                .get();
+                .orElse(null);
     }
+
+    public Attribute getAttribute(Attribute attribute){
+        return getAttribute(attribute.getAttributeTypeId(), attribute.getAttributeId());
+    }
+
 
     public List<Attribute> getAttributes(Long attributeTypeId) {
         return attributes.stream()
                 .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEndDate() == null)
                 .collect(Collectors.toList());
     }
 

@@ -30,8 +30,8 @@ public class DomainDropDownChoice extends DropDownChoice<Long>{
 
         setChoiceRenderer(new IChoiceRenderer<Long>() {
             @Override
-            public Object getDisplayValue(Long object) {
-                return strategy.displayDomainObject(object, getLocale());
+            public Object getDisplayValue(Long objectId) {
+                return strategy.displayDomainObject(objectId, getLocale());
             }
 
             @Override

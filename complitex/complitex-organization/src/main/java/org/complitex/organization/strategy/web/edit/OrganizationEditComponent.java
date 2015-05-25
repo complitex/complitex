@@ -313,6 +313,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
                     });
                 }
             };
+            serviceBillings.setReuseItems(true);
             serviceBillingContainer.add(serviceBillings);
 
             serviceBillingContainer.add(new AjaxLink("add") {

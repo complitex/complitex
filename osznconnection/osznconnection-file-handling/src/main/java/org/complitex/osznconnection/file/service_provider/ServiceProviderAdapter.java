@@ -1014,7 +1014,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                             logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
                                     ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
                                             "GETPRIVS", dataSource));
-                            benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
+                            benefit.setField(BenefitDBF.OZN_ABS, 1);
                         }
                     }
                     break;

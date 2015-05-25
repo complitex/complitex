@@ -274,7 +274,8 @@
         b.`IND_COD`,
         b.`PSP_NUM`,
         b.`ORD_FAM`,
-        b.`PRIV_CAT`
+        b.`PRIV_CAT`,
+	    b.`OZN_ABS`
         FROM `benefit` b
         JOIN `request_file` bf ON b.`request_file_id` = bf.`id`
         WHERE b.`account_number` = #{accountNumber} AND bf.`id` = #{fileId}
@@ -284,7 +285,8 @@
         UPDATE `benefit` SET
         `status` = #{status},
         `ORD_FAM` = #{dbfFields.ORD_FAM},
-        `PRIV_CAT` = #{dbfFields.PRIV_CAT}
+        `PRIV_CAT` = #{dbfFields.PRIV_CAT},
+	    `OZN_ABS` = #{dbfFields.OZN_ABS}
         WHERE
         `id` = #{id}
     </update>
@@ -297,6 +299,7 @@
         `CM_AREA` = NULL,
         `OWN_FRM` = NULL,
         `HOSTEL` = NULL,
+	    `OZN_ABS` = NULL,
         `account_number` = NULL
         WHERE
         `request_file_id` = #{fileId}
@@ -309,6 +312,7 @@
         `CM_AREA` = NULL,
         `OWN_FRM` = NULL,
         `HOSTEL` = NULL,
+	    `OZN_ABS` = NULL,
         `status` = CASE `status`
                         <foreach collection="statuses" item="status">
                             WHEN #{status} THEN #{status}
