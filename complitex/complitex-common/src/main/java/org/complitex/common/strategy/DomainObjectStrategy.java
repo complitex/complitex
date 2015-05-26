@@ -212,19 +212,19 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     protected void loadStringCultures(String dataSource, List<Attribute> attributes) {
-        //protected override
-        attributes.stream().filter(this::isSimpleAttribute).forEach(attribute -> {
-            if (attribute.getValueId() != null) {
-                //protected override
-                if (dataSource == null) {
-                    loadStringCultures(attribute);
-                } else {
-                    loadStringCultures(dataSource, attribute);
-                }
-            } else {
-                attribute.setStringCultures(StringCultures.newStringCultures());
-            }
-        });
+        attributes.stream()
+                .filter(this::isSimpleAttribute)
+                .forEach(attribute -> {
+                    if (attribute.getValueId() != null) {
+                        if (dataSource == null) {
+                            loadStringCultures(attribute);
+                        } else {
+                            loadStringCultures(dataSource, attribute);
+                        }
+                    } else {
+                        attribute.setStringCultures(StringCultures.newStringCultures());
+                    }
+                });
     }
 
     protected void loadStringCultures(Attribute attribute) {
@@ -294,13 +294,10 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     protected void updateStringsForNewLocales(DomainObject object) {
-        for (Attribute attribute : object.getAttributes()) {
-            List<StringCulture> strings = attribute.getStringCultures();
-
-            if (strings != null) {
-                StringCultures.updateForNewLocales(strings);
-            }
-        }
+        object.getAttributes().stream()
+                .filter(a -> a.getStringCultures() != null)
+                .map(Attribute::getStringCultures)
+                .forEach(StringCultures::updateForNewLocales);
     }
 
     protected void fillAttributes(DomainObject object) {
@@ -310,14 +307,15 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = new ArrayList<>();
 
-        for (AttributeType attributeType : getEntity(dataSource).getAttributeTypes()) {
-            if (!attributeType.isObsolete()) {
-                if (object.getAttributes(attributeType.getId()).isEmpty()) {
+        getEntity(dataSource).getAttributeTypes().stream()
+                .filter(attributeType -> !attributeType.isObsolete())
+                .filter(attributeType -> object.getAttributes(attributeType.getId()).isEmpty())
+                .forEach(attributeType -> {
                     if (attributeType.getAttributeValueTypes().size() == 1) {
                         Attribute attribute = getNewAttributeInstance();
-                        AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
+
                         attribute.setAttributeTypeId(attributeType.getId());
-                        attribute.setValueTypeId(attributeValueType.getId());
+                        attribute.setValueTypeId(attributeType.getAttributeValueTypes().get(0).getId());
                         attribute.setObjectId(object.getObjectId());
                         attribute.setAttributeId(1L);
 
@@ -331,9 +329,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                             toAdd.add(manyValueTypesAttribute);
                         }
                     }
-                }
-            }
-        }
+                });
         if (!toAdd.isEmpty()) {
             object.getAttributes().addAll(toAdd);
         }
@@ -509,99 +505,101 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             updatePermissionId(newObject.getObjectId(), newObject.getPermissionId());
         }
 
-        oldObject.getAttributes().forEach(oldAttribute -> {
-            Attribute newAttribute = newObject.getAttribute(oldAttribute);
+        oldObject.getAttributes().stream()
+                .filter(oldAttribute -> oldAttribute.getStartDate() != null)
+                .forEach(oldAttribute -> {
+                    Attribute newAttribute = newObject.getAttribute(oldAttribute);
 
-            if (newAttribute != null){
-                boolean update = false;
+                    if (newAttribute != null) {
+                        boolean update = false;
 
-                String attributeValueType = getEntity().getAttributeType(oldAttribute.getAttributeTypeId())
-                        .getAttributeValueType(oldAttribute.getValueTypeId()).getValueType();
+                        String attributeValueType = getEntity().getAttributeType(oldAttribute.getAttributeTypeId())
+                                .getAttributeValueType(oldAttribute.getValueTypeId()).getValueType();
 
-                Long oldValueTypeId = oldAttribute.getValueTypeId();
-                Long newValueTypeId = newAttribute.getValueTypeId();
+                        Long oldValueTypeId = oldAttribute.getValueTypeId();
+                        Long newValueTypeId = newAttribute.getValueTypeId();
 
-                if (!Numbers.isEqual(oldValueTypeId, newValueTypeId)) {
-                    update = true;
-                } else {
-                    if (SimpleTypes.isSimpleType(attributeValueType)) {
-                        SimpleTypes simpleType = SimpleTypes.valueOf(attributeValueType.toUpperCase());
-                        switch (simpleType) {
-                            case STRING_CULTURE: {
-                                boolean valueChanged = false;
-                                for (StringCulture oldString : oldAttribute.getStringCultures()) {
-                                    for (StringCulture newString : newAttribute.getStringCultures()) {
-                                        //compare strings
-                                        if (oldString.getLocaleId().equals(newString.getLocaleId())) {
-                                            if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
-                                                valueChanged = true;
-                                                break;
+                        if (!Numbers.isEqual(oldValueTypeId, newValueTypeId)) {
+                            update = true;
+                        } else {
+                            if (SimpleTypes.isSimpleType(attributeValueType)) {
+                                SimpleTypes simpleType = SimpleTypes.valueOf(attributeValueType.toUpperCase());
+                                switch (simpleType) {
+                                    case STRING_CULTURE: {
+                                        boolean valueChanged = false;
+                                        for (StringCulture oldString : oldAttribute.getStringCultures()) {
+                                            for (StringCulture newString : newAttribute.getStringCultures()) {
+                                                //compare strings
+                                                if (oldString.getLocaleId().equals(newString.getLocaleId())) {
+                                                    if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
+                                                        valueChanged = true;
+                                                        break;
+                                                    }
+                                                }
                                             }
                                         }
+
+                                        if (valueChanged) {
+                                            update = true;
+                                        }
                                     }
-                                }
+                                    break;
 
-                                if (valueChanged) {
+                                    case GENDER:
+                                    case BOOLEAN:
+                                    case DATE:
+                                    case DATE2:
+                                    case MASKED_DATE:
+                                    case DOUBLE:
+                                    case INTEGER: {
+                                        String oldString = oldAttribute.getStringValue();
+                                        String newString = newAttribute.getStringValue();
+
+                                        if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
+                                            update = true;
+                                        }
+                                    }
+                                    break;
+
+                                    case BIG_STRING:
+                                    case STRING: {
+                                        String oldString = oldAttribute.getStringValue();
+                                        String newString = newAttribute.getStringValue();
+
+                                        if (!Strings.isEqual(oldString, newString)) {
+                                            update = true;
+                                        }
+                                    }
+                                    break;
+                                }
+                            } else {
+                                //reference object ids
+                                Long oldValueId = oldAttribute.getValueId();
+                                Long newValueId = newAttribute.getValueId();
+                                if (!Numbers.isEqual(oldValueId, newValueId)) {
                                     update = true;
                                 }
                             }
-                            break;
-
-                            case GENDER:
-                            case BOOLEAN:
-                            case DATE:
-                            case DATE2:
-                            case MASKED_DATE:
-                            case DOUBLE:
-                            case INTEGER: {
-                                String oldString = oldAttribute.getStringValue();
-                                String newString = newAttribute.getStringValue();
-
-                                if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
-                                    update = true;
-                                }
-                            }
-                            break;
-
-                            case BIG_STRING:
-                            case STRING: {
-                                String oldString = oldAttribute.getStringValue();
-                                String newString = newAttribute.getStringValue();
-
-                                if (!Strings.isEqual(oldString, newString)) {
-                                    update = true;
-                                }
-                            }
-                            break;
                         }
+
+                        if (update) {
+                            archiveAttribute(oldAttribute, updateDate);
+
+                            newAttribute.setStartDate(updateDate);
+                            newAttribute.setObjectId(newObject.getObjectId());
+
+                            insertAttribute(newAttribute);
+                        }
+
                     } else {
-                        //reference object ids
-                        Long oldValueId = oldAttribute.getValueId();
-                        Long newValueId = newAttribute.getValueId();
-                        if (!Numbers.isEqual(oldValueId, newValueId)) {
-                            update = true;
-                        }
+                        archiveAttribute(oldAttribute, updateDate);
                     }
-                }
-
-                if (update) {
-                    archiveAttribute(oldAttribute, updateDate);
-
-                    newAttribute.setStartDate(updateDate);
-                    newAttribute.setObjectId(newObject.getObjectId());
-
-                    insertAttribute(newAttribute);
-                }
-
-            }else {
-                archiveAttribute(oldAttribute, updateDate);
-            }
-        });
+                });
 
         newObject.getAttributes().forEach(newAttribute -> {
             Attribute oldAttribute = oldObject.getAttribute(newAttribute);
 
-            if (oldAttribute == null){
+            if (oldAttribute == null || oldAttribute.getStartDate() == null){
                 newAttribute.setStartDate(updateDate);
                 newAttribute.setObjectId(newObject.getObjectId());
                 insertAttribute(newAttribute);

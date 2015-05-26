@@ -16,22 +16,22 @@ import java.util.stream.Collectors;
  * @author inheaven on 019 19.05.15 16:06
  */
 public class DomainDropDownChoice extends DropDownChoice<Long>{
-    private IStrategy strategy;
+    private String entityName;
 
     public DomainDropDownChoice(String id, String entityName, IModel<Long> model) {
         super(id, model, Collections.emptyList());
 
-        strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(entityName);
+        this.entityName = entityName;
 
         DomainObjectFilter filter = new DomainObjectFilter();
         onFilter(filter);
 
-        setChoices(strategy.getList(filter).stream().map(DomainObject::getId).collect(Collectors.toList()));
+        setChoices(getStrategy().getList(filter).stream().map(DomainObject::getId).collect(Collectors.toList()));
 
         setChoiceRenderer(new IChoiceRenderer<Long>() {
             @Override
             public Object getDisplayValue(Long objectId) {
-                return strategy.displayDomainObject(objectId, getLocale());
+                return getStrategy().displayDomainObject(objectId, getLocale());
             }
 
             @Override
@@ -39,6 +39,10 @@ public class DomainDropDownChoice extends DropDownChoice<Long>{
                 return object.toString();
             }
         });
+    }
+
+    protected IStrategy getStrategy(){
+        return EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(entityName);
     }
 
     protected void onFilter(DomainObjectFilter filter){
