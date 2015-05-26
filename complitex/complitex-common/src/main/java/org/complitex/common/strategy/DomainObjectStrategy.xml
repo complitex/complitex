@@ -363,7 +363,7 @@
     </insert>
 
     <select id="selectStringCultures" parameterType="map" resultMap="stringCultureResultMap">
-        SELECT sc.* FROM `${entityName}_string_culture` sc WHERE sc.`id` = #{id}
+        SELECT sc.* FROM `${entityName}_string_culture` sc WHERE sc.`id` = #{id} order by `locale_id`
     </select>
 
     <insert id="insertDescriptionData" parameterType="org.complitex.common.entity.StringCulture">

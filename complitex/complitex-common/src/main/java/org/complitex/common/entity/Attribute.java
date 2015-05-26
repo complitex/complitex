@@ -44,14 +44,6 @@ public class Attribute implements Serializable {
         return null;
     }
 
-    public void setStringValue(String value, long localeId){
-        for (StringCulture string : stringCultures) {
-            if (string.getLocaleId().equals(localeId) || (string.isSystemLocale() && string.getValue() == null)) {
-                string.setValue(value);
-            }
-        }
-    }
-
     public String getStringValue(){
         StringCulture stringCulture = getStringCulture(Locales.getSystemLocaleId());
 
@@ -59,9 +51,20 @@ public class Attribute implements Serializable {
     }
 
     public String getStringValue(java.util.Locale locale){
-        return StringCultures.getValue(stringCultures, locale);
+        StringCulture stringCulture = getStringCulture(Locales.getLocaleId(locale));
+
+        return stringCulture != null ? stringCulture.getValue() : null;
     }
 
+    public void setStringValue(String value, long localeId){
+        if (stringCultures == null){
+            stringCultures = StringCultures.newStringCultures();
+        }
+
+        stringCultures.stream()
+                .filter(s -> s.getLocaleId().equals(localeId) || (s.isSystemLocale() && s.getValue() == null))
+                .forEach(s -> s.setValue(value));
+    }
 
     public Long getPkId() {
         return pkId;
