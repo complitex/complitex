@@ -20,6 +20,7 @@ import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
+import org.complitex.osznconnection.service_provider_type.strategy.ServiceProviderTypeStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -291,7 +292,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
                     if (accountCorrectionDetails == null || accountCorrectionDetails.isEmpty()) {
                         log.error("acquireAccountDetailsByAccount. Result code is 1 but account details data is null or empty. "
-                                + "Request id: {}, request class: {}, calculation center: {}",
+                                        + "Request id: {}, request class: {}, calculation center: {}",
                                 request.getId(), request.getClass(), dataSource);
                         logBean.error(Module.NAME, getClass(), request.getClass(), request.getId(), EVENT.GETTING_DATA,
                                 ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent",
@@ -408,7 +409,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                         processPaymentAndBenefitData(serviceIds, payment, benefits, data);
                     } else {
                         log.error("processPaymentAndBenefit. Result code is 1 but paymentAndBenefitData is null or empty. Payment id: {},"
-                                + "calculation center: {}",
+                                        + "calculation center: {}",
                                 payment.getId(), dataSource);
                         logBean.error(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.GETTING_DATA,
                                 ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
@@ -470,72 +471,80 @@ public class ServiceProviderAdapter extends AbstractBean {
         BigDecimal errorTarif = null;
 
         //apartment fee
-        if (tarifHandled
-                && services.contains(ServiceStrategy.APARTMENT_FEE)) {
-            if (!handleSubsidyTarif(payment, PaymentDBF.CODE2_1, data.getApartmentFeeTarif())) {
+        if (services.contains(ServiceStrategy.APARTMENT_FEE)) {
+            payment.setField(PaymentDBF.NORM_F_1, data.getReducedArea());
+            if (!handleSubsidyService(payment, PaymentDBF.CODE2_1, data.getApartmentFeeTarif(), 1) ||
+                    !handleSubsidyTarif(payment, PaymentDBF.CODE3_1, data.getApartmentFeeTarif(), 1)) {
                 tarifHandled = false;
                 errorTarif = data.getApartmentFeeTarif();
             }
         }
         //heating
         if (tarifHandled
-                && services.contains(ServiceStrategy.HEATING)) {
+                && services.contains(ServiceProviderTypeStrategy.HEATING)) {
             payment.setField(PaymentDBF.NORM_F_2, data.getHeatingArea());
-            if (!handleSubsidyTarif(payment, PaymentDBF.CODE2_2, data.getHeatingTarif())) {
+            if (!handleSubsidyService(payment, PaymentDBF.CODE2_2, data.getHeatingTarif(), 2) ||
+                    !handleSubsidyTarif(payment, PaymentDBF.CODE3_2, data.getHeatingTarif(), 2)) {
                 tarifHandled = false;
                 errorTarif = data.getHeatingTarif();
             }
         }
         //hot water
         if (tarifHandled
-                && services.contains(ServiceStrategy.HOT_WATER_SUPPLY)) {
+                && services.contains(ServiceProviderTypeStrategy.HOT_WATER_SUPPLY)) {
             payment.setField(PaymentDBF.NORM_F_3, data.getChargeHotWater());
-            if (!handleSubsidyTarif(payment, PaymentDBF.CODE2_3, data.getHotWaterTarif())) {
+            if (!handleSubsidyService(payment, PaymentDBF.CODE2_3, data.getHotWaterTarif(), 3) ||
+                    !handleSubsidyTarif(payment, PaymentDBF.CODE3_3, data.getHotWaterTarif(), 3)) {
                 tarifHandled = false;
                 errorTarif = data.getHotWaterTarif();
             }
         }
         //cold water
         if (tarifHandled
-                && services.contains(ServiceStrategy.COLD_WATER_SUPPLY)) {
+                && services.contains(ServiceProviderTypeStrategy.COLD_WATER_SUPPLY)) {
             payment.setField(PaymentDBF.NORM_F_4, data.getChargeColdWater());
-            if (!handleSubsidyTarif(payment, PaymentDBF.CODE2_4, data.getColdWaterTarif())) {
+            if (!handleSubsidyService(payment, PaymentDBF.CODE2_4, data.getColdWaterTarif(), 4) ||
+                    !handleSubsidyTarif(payment, PaymentDBF.CODE3_4, data.getColdWaterTarif(), 4)) {
                 tarifHandled = false;
                 errorTarif = data.getColdWaterTarif();
             }
         }
         //gas
         if (tarifHandled
-                && services.contains(ServiceStrategy.GAS_SUPPLY)) {
+                && services.contains(ServiceProviderTypeStrategy.GAS_SUPPLY)) {
             payment.setField(PaymentDBF.NORM_F_5, data.getChargeGas());
-            if (!handleSubsidyTarif(payment, PaymentDBF.CODE2_5, data.getGasTarif())) {
+            if (!handleSubsidyService(payment, PaymentDBF.CODE2_5, data.getGasTarif(), 5) ||
+                    !handleSubsidyTarif(payment, PaymentDBF.CODE3_5, data.getGasTarif(), 5)) {
                 tarifHandled = false;
                 errorTarif = data.getGasTarif();
             }
         }
         //power
         if (tarifHandled
-                && services.contains(ServiceStrategy.POWER_SUPPLY)) {
+                && services.contains(ServiceProviderTypeStrategy.POWER_SUPPLY)) {
             payment.setField(PaymentDBF.NORM_F_6, data.getChargePower());
-            if (!handleSubsidyTarif(payment, PaymentDBF.CODE2_6, data.getPowerTarif())) {
+            if (!handleSubsidyService(payment, PaymentDBF.CODE2_6, data.getPowerTarif(), 6) ||
+                    !handleSubsidyTarif(payment, PaymentDBF.CODE3_6, data.getPowerTarif(), 6)) {
                 tarifHandled = false;
                 errorTarif = data.getPowerTarif();
             }
         }
         //garbage disposal
         if (tarifHandled
-                && services.contains(ServiceStrategy.GARBAGE_DISPOSAL)) {
+                && services.contains(ServiceProviderTypeStrategy.GARBAGE_DISPOSAL)) {
             payment.setField(PaymentDBF.NORM_F_7, data.getChargeGarbageDisposal());
-            if (!handleSubsidyTarif(payment, PaymentDBF.CODE2_7, data.getGarbageDisposalTarif())) {
+            if (!handleSubsidyService(payment, PaymentDBF.CODE2_7, data.getGarbageDisposalTarif(), 7) ||
+                    !handleSubsidyTarif(payment, PaymentDBF.CODE3_7, data.getGarbageDisposalTarif(), 7)) {
                 tarifHandled = false;
                 errorTarif = data.getGarbageDisposalTarif();
             }
         }
         //drainage
         if (tarifHandled
-                && services.contains(ServiceStrategy.DRAINAGE)) {
+                && services.contains(ServiceProviderTypeStrategy.DRAINAGE)) {
             payment.setField(PaymentDBF.NORM_F_8, data.getChargeDrainage());
-            if (!handleSubsidyTarif( payment, PaymentDBF.CODE2_8, data.getDrainageTarif())) {
+            if (!handleSubsidyService(payment, PaymentDBF.CODE2_8, data.getDrainageTarif(), 8) ||
+                    !handleSubsidyTarif(payment, PaymentDBF.CODE3_8, data.getDrainageTarif(), 8)) {
                 tarifHandled = false;
                 errorTarif = data.getDrainageTarif();
             }
@@ -547,6 +556,12 @@ public class ServiceProviderAdapter extends AbstractBean {
         if (!tarifHandled) {
             payment.setStatus(RequestStatus.SUBSIDY_TARIF_CODE_NOT_FOUND);
 
+            log.error("Couldn't find subsidy tarif code by calculation center's tarif: '{}', "
+                            + " and user organization id: {}",
+                    new Object[]{
+                            errorTarif,
+                            payment.getUserOrganizationId()
+                    });
 
             RequestWarning warning = new RequestWarning(payment.getId(), RequestFileType.PAYMENT, RequestWarningStatus.SUBSIDY_TARIF_NOT_FOUND);
             warning.addParameter(new RequestWarningParameter(0, errorTarif));
@@ -580,7 +595,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                 String osznOwnershipCode = findOSZNOwnershipCode(internalOwnershipId, osznId, payment.getUserOrganizationId());
                 if (osznOwnershipCode == null) {
                     log.error("Couldn't find in corrections oszn's ownership code by internal ownership object id: {}"
-                            + ", oszn id: {} and user organization id: {}",
+                                    + ", oszn id: {} and user organization id: {}",
                             internalOwnershipId, osznId, payment.getUserOrganizationId());
 
                     for (Benefit benefit : benefits) {
@@ -628,8 +643,19 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
     }
 
-    protected boolean handleSubsidyTarif(Payment payment, PaymentDBF field, BigDecimal rawTarif) {
-        String tarifCode = getSubsidyTarifCode(rawTarif, payment.getOrganizationId(), payment.getUserOrganizationId());
+    protected boolean handleSubsidyService(Payment payment, PaymentDBF field, BigDecimal rawTarif, int service) {
+        String serviceCode = getSubsidyServiceCode(rawTarif, payment.getOrganizationId(), payment.getUserOrganizationId(), service);
+        if (serviceCode == null) {
+            return false;
+        } else {
+            payment.setField(field, serviceCode);
+            payment.setStatus(RequestStatus.PROCESSED);
+            return true;
+        }
+    }
+
+    protected boolean handleSubsidyTarif(Payment payment, PaymentDBF field, BigDecimal rawTarif, int service) {
+        String tarifCode = getSubsidyTarifCode(rawTarif, payment.getOrganizationId(), payment.getUserOrganizationId(), service);
         if (tarifCode == null) {
             return false;
         } else {
@@ -647,8 +673,22 @@ public class ServiceProviderAdapter extends AbstractBean {
         return ownershipCorrectionBean.findOwnershipCode(internalOwnership, osznId, userOrganizationId);
     }
 
-    protected String getSubsidyTarifCode(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId) {
-        return subsidyTarifBean.getCode2(T11_CS_UNI, osznId, userOrganizationId);
+    /**
+     * Получить вид тарифа.
+     * @param T11_CS_UNI
+     * @return
+     */
+    protected String getSubsidyServiceCode(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service) {
+        return subsidyTarifBean.getCode2(T11_CS_UNI, osznId, userOrganizationId, service);
+    }
+
+    /**
+     * Получить тариф.
+     * @param T11_CS_UNI
+     * @return
+     */
+    protected String getSubsidyTarifCode(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service) {
+        return subsidyTarifBean.getCode3(T11_CS_UNI, osznId, userOrganizationId, service);
     }
 
     public Collection<BenefitData> getBenefitData(Benefit benefit, Date dat1) throws DBException {
@@ -702,7 +742,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                         }
                     } else {
                         log.error("getBenefitData. Result code is 1 but benefit data is null or empty. Benefit id: {}, dat1: {}, "
-                                + "calculation center: {}",
+                                        + "calculation center: {}",
                                 benefit.getId(), dat1, dataSource);
                         logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
                                 ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
@@ -861,7 +901,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     protected void logEmptyBenefitData(String dataSource, String method, List<Benefit> benefits, Date dat1) {
         String accountNumber = benefits.get(0).getAccountNumber();
         log.error(method + ". Inn, name and passport of benefit data are null. "
-                + "Account number: {}, dat1: {}, calculation center: {}",
+                        + "Account number: {}, dat1: {}, calculation center: {}",
                 accountNumber, dat1, dataSource);
         for (Benefit benefit : benefits) {
             logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
@@ -1008,7 +1048,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                         }
                     } else {
                         log.error("processBenefit. Result code is 1 but benefit data is null or empty. Account number: {}, dat1: {},"
-                                + " calculation center: {}",
+                                        + " calculation center: {}",
                                 accountNumber, dat1, dataSource);
                         for (Benefit benefit : benefits) {
                             logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
@@ -1298,7 +1338,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                         processActualPaymentData(actualPayment, data, serviceIds);
                     } else {
                         log.error("processActualPayment. Result code is 1 but actualPaymentData is null or empty. ActualPayment id: {}"
-                                + ", calculation center: {}",
+                                        + ", calculation center: {}",
                                 actualPayment.getId(), dataSource);
                         logBean.error(Module.NAME, getClass(), ActualPayment.class, actualPayment.getId(), EVENT.GETTING_DATA,
                                 ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),

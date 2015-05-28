@@ -28,14 +28,14 @@ public class PaymentBean extends AbstractRequestBean {
     // service provider type id <-> set of actual payment fields that should be updated.
     private static final Map<Long, Set<PaymentDBF>> UPDATE_FIELD_MAP =
             ImmutableMap.<Long, Set<PaymentDBF>>builder().
-            put(ServiceStrategy.APARTMENT_FEE, ImmutableSet.of(PaymentDBF.CODE2_1)).
-            put(ServiceStrategy.HEATING, ImmutableSet.of(PaymentDBF.NORM_F_2, PaymentDBF.CODE2_2)).
-            put(ServiceStrategy.HOT_WATER_SUPPLY, ImmutableSet.of(PaymentDBF.NORM_F_3, PaymentDBF.CODE2_3)).
-            put(ServiceStrategy.COLD_WATER_SUPPLY, ImmutableSet.of(PaymentDBF.NORM_F_4, PaymentDBF.CODE2_4)).
-            put(ServiceStrategy.GAS_SUPPLY, ImmutableSet.of(PaymentDBF.NORM_F_5, PaymentDBF.CODE2_5)).
-            put(ServiceStrategy.POWER_SUPPLY, ImmutableSet.of(PaymentDBF.NORM_F_6, PaymentDBF.CODE2_6)).
-            put(ServiceStrategy.GARBAGE_DISPOSAL, ImmutableSet.of(PaymentDBF.NORM_F_7, PaymentDBF.CODE2_7)).
-            put(ServiceStrategy.DRAINAGE, ImmutableSet.of(PaymentDBF.NORM_F_8, PaymentDBF.CODE2_8)).
+            put(ServiceStrategy.APARTMENT_FEE, ImmutableSet.of(PaymentDBF.CODE2_1, PaymentDBF.CODE3_1)).
+            put(ServiceStrategy.HEATING, ImmutableSet.of(PaymentDBF.NORM_F_2, PaymentDBF.CODE2_2, PaymentDBF.CODE3_2)).
+            put(ServiceStrategy.HOT_WATER_SUPPLY, ImmutableSet.of(PaymentDBF.NORM_F_3, PaymentDBF.CODE2_3, PaymentDBF.CODE3_3)).
+            put(ServiceStrategy.COLD_WATER_SUPPLY, ImmutableSet.of(PaymentDBF.NORM_F_4, PaymentDBF.CODE2_4, PaymentDBF.CODE3_4)).
+            put(ServiceStrategy.GAS_SUPPLY, ImmutableSet.of(PaymentDBF.NORM_F_5, PaymentDBF.CODE2_5, PaymentDBF.CODE3_5)).
+            put(ServiceStrategy.POWER_SUPPLY, ImmutableSet.of(PaymentDBF.NORM_F_6, PaymentDBF.CODE2_6, PaymentDBF.CODE3_6)).
+            put(ServiceStrategy.GARBAGE_DISPOSAL, ImmutableSet.of(PaymentDBF.NORM_F_7, PaymentDBF.CODE2_7, PaymentDBF.CODE3_7)).
+            put(ServiceStrategy.DRAINAGE, ImmutableSet.of(PaymentDBF.NORM_F_8, PaymentDBF.CODE2_8, PaymentDBF.CODE3_8)).
             build();
 
     public enum OrderBy {
