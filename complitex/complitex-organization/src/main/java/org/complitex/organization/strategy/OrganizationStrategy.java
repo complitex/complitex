@@ -178,8 +178,6 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
 
     @Override
     public void insert(DomainObject organization, Date insertDate) {
-        //addServiceBillingAttributes((Organization) organization); todo set pair attribute
-
         organization.setObjectId(sequenceBean.nextId(getEntityName()));
 
         if (!organization.getSubjectIds().contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
@@ -196,8 +194,6 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         }
 
         changeDistrictPermissions(organization);
-
-        super.insert(organization, insertDate);
     }
 
     @Override
@@ -362,7 +358,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
 
     @Override
     public Long getObjectId(String externalId) {
-        return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationObjectId", externalId);
+        return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationExternalId", externalId);
     }
 
     public Long getObjectIdByCode(String code) {
@@ -470,14 +466,28 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         return getDomainObject(billingId, true).getStringValue(DATA_SOURCE);
     }
 
-    public Long getBillingId(Long userOrganizationId){
+    public Long getBillingId(Long userOrganizationId, Long serviceId){
+        DomainObject userOrganization = getDomainObject(userOrganizationId);
 
+        if (userOrganization != null){
+            Long serviceAttributeId = serviceId != null ? userOrganization.getAttributes(SERVICE).stream()
+                    .filter(a -> serviceId.equals(a.getValueId()))
+                    .findAny()
+                    .orElseThrow(() -> new IllegalArgumentException("dataSource not found"))
+                    .getAttributeId() : 1L;
 
-        throw new IllegalArgumentException("billing id is not found");
+            return userOrganization.getAttribute(BILLING, serviceAttributeId).getValueId();
+        }else {
+            throw new IllegalArgumentException("userOrganization id is not found");
+        }
+    }
+
+    public String getDataSource(Long userOrganizationId, Long serviceId){
+        return getDataSource(getBillingId(userOrganizationId, serviceId));
     }
 
     public String getDataSourceByUserOrganizationId(Long userOrganizationId){
-        return getDataSource(getBillingId(userOrganizationId));
+        return getDataSource(getBillingId(userOrganizationId, null));
     }
 
     @Override

@@ -9,7 +9,6 @@ import com.google.common.base.Strings;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.mybatis.caches.EhcacheCache;
 import org.complitex.common.service.AbstractImportService;
 import org.complitex.common.service.IImportListener;
 import org.complitex.common.service.exception.ImportFileNotFoundException;
@@ -122,13 +121,16 @@ public class KeOrganizationImportService extends AbstractImportService {
             DomainObject newObject = null;
             DomainObject oldObject = null;
 
-            final Long objectId = organizationStrategy.getObjectId(externalOrganizationId);
+            Long objectId = organizationStrategy.getObjectId(externalOrganizationId);
+
             if (objectId != null) {
                 oldObject = organizationStrategy.getDomainObject(objectId, true);
+
                 if (oldObject != null) { // нашли
                     newObject = CloneUtil.cloneObject(oldObject);
                 }
             }
+
             if (newObject == null) {
                 newObject = organizationStrategy.newInstance();
                 newObject.setExternalId(externalOrganizationId);
@@ -146,8 +148,6 @@ public class KeOrganizationImportService extends AbstractImportService {
             //parent
             Long parentId = organization.getHlevel();
             if (parentId != null) {
-                EhcacheCache.clearAll(); //todo optimize cache clear
-
                 Long parentObjectId = organizationStrategy.getObjectId(parentId.toString());
 
                 if (parentObjectId != null) {

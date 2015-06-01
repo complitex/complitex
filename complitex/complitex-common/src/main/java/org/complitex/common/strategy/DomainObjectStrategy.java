@@ -273,6 +273,10 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return getDomainObject(null, objectId, runAsAdmin);
     }
 
+    public DomainObject getDomainObject(Long objectId) {
+        return getDomainObject(null, objectId, true);
+    }
+
     @Override
     public Long getObjectId(String externalId) {
         return (Long) sqlSession().selectOne(NS + ".selectDomainObjectId", ImmutableMap.of("entityName", getEntityName(),

@@ -116,7 +116,7 @@
                 </choose>
     </update>
 
-    <select id="selectOrganizationObjectId" parameterType="string" resultType="long">
+    <select id="selectOrganizationExternalId" parameterType="string" resultType="long">
         select `object_id` from `organization` where `external_id` = #{externalId}
 
     </select>

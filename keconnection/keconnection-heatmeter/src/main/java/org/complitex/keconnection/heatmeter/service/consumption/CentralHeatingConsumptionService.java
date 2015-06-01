@@ -23,6 +23,7 @@ import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFileSt
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus;
 import org.complitex.keconnection.heatmeter.entity.cursor.ComMeter;
 import org.complitex.keconnection.heatmeter.service.ExternalHeatmeterService;
+import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.complitex.organization.strategy.ServiceStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,9 @@ public class CentralHeatingConsumptionService {
 
     @EJB
     private ServiceStrategy serviceStrategy;
+
+    @EJB
+    private KeOrganizationStrategy organizationStrategy;
 
     @Asynchronous
     public void load(Date om, Long serviceProviderId, Long serviceId, String fileName, String checkSum, InputStream inputStream){
@@ -267,7 +271,8 @@ public class CentralHeatingConsumptionService {
             return;
         }
 
-        String dataSource = "jdbc/keconnectionRemoteResource"; //todo add service provider link
+        String dataSource = organizationStrategy.getDataSource(consumptionFile.getUserOrganizationId(),
+                consumptionFile.getServiceId());
         String serviceCode = serviceStrategy.getDomainObject(consumptionFile.getServiceId(), true)
                 .getStringValue(ServiceStrategy.CODE);
 
