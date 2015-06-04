@@ -13,8 +13,8 @@ import java.util.Locale;
 public class OrganizationFilteredColumn<T> extends DomainObjectFilteredColumn<T> {
     private Long[] types;
 
-    public OrganizationFilteredColumn(String entityName, String propertyExpression, Locale locale, Long... types) {
-        super(entityName, propertyExpression, locale);
+    public OrganizationFilteredColumn(String propertyExpression, Locale locale, Long... types) {
+        super("organization", propertyExpression, locale);
 
         this.types = types;
     }

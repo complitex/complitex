@@ -527,7 +527,7 @@ CREATE TABLE `consumption_file`(
   `om` DATE NOT NULL COMMENT 'Операционный месяц',
   `service_provider_id` BIGINT NOT NULL COMMENT 'Поставщик услуг',
   `service_id` BIGINT NOT NULL COMMENT 'Услуга',
-  `user_organization_id` BIGINT COMMENT 'Организация пользователей',
+  `user_organization_id` BIGINT NOT NULL COMMENT 'Организация пользователей',
   `type` INT NOT NULL COMMENT 'Тип файла',
   `status` INT NOT NULL COMMENT 'Статус файла',
   `loaded` DATETIME NOT NULL COMMENT 'Дата загрузки',
@@ -539,7 +539,7 @@ CREATE TABLE `consumption_file`(
   KEY `key_service_id` (`service_id`),
   CONSTRAINT `fk_consumption_file__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`object_id`),
   KEY `key_user_organization_id` (`user_organization_id`),
-  CONSTRAINT `fk_consumption_file__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `user_organization` (`id`)
+  CONSTRAINT `fk_consumption_file__organization_2` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`)
 ) CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Файлы потреблений';
 
 -- ------------------------------

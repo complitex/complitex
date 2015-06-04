@@ -70,7 +70,8 @@ public class CentralHeatingConsumptionService {
     private KeOrganizationStrategy organizationStrategy;
 
     @Asynchronous
-    public void load(Date om, Long serviceProviderId, Long serviceId, String fileName, String checkSum, InputStream inputStream){
+    public void load(Date om, Long serviceProviderId, Long serviceId, Long userOrganizationId, String fileName,
+                     String checkSum, InputStream inputStream){
         try {
             if (fileName.length() > 255) {
                 fileName = fileName.substring(0, 255);
@@ -86,6 +87,7 @@ public class CentralHeatingConsumptionService {
             consumptionFile.setOm(om);
             consumptionFile.setServiceProviderId(serviceProviderId);
             consumptionFile.setServiceId(serviceId);
+            consumptionFile.setUserOrganizationId(userOrganizationId);
             consumptionFile.setName(fileName);
             consumptionFile.setCheckSum(checkSum);
             consumptionFile.setStatus(ConsumptionFileStatus.LOADING);

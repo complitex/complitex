@@ -23,7 +23,6 @@ import org.complitex.common.web.component.organization.OrganizationFilteredColum
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
 import org.complitex.keconnection.heatmeter.service.consumption.CentralHeatingConsumptionService;
 import org.complitex.keconnection.heatmeter.service.consumption.ConsumptionFileBean;
-import org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.DeleteItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.component.toolbar.UploadButton;
@@ -31,6 +30,9 @@ import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
 import java.util.*;
+
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.USER_ORGANIZATION_TYPE;
 
 /**
  * @author inheaven on 17.03.2015 23:16.
@@ -64,10 +66,9 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
                 return AbstractConsumptionFileList.this.getViewPageParameters(rowModel);
             }
         });
-        columnMap.put("serviceProviderId", new OrganizationFilteredColumn<>("organization", "serviceProviderId", getLocale(),
-                KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER_TYPE));
+        columnMap.put("serviceProviderId", new OrganizationFilteredColumn<>("serviceProviderId", getLocale(), SERVICE_PROVIDER_TYPE));
         columnMap.put("serviceId", new DomainObjectFilteredColumn<>("service", "serviceId", getLocale()));
-        //todo user organization panel
+        columnMap.put("userOrganizationId", new OrganizationFilteredColumn<>("userOrganizationId", getLocale(), USER_ORGANIZATION_TYPE));
 
         add(filteredDataTable = new FilteredDataTable<ConsumptionFile>("dataTable", ConsumptionFile.class, columnMap, null, FIELDS) {
             @Override
@@ -83,8 +84,10 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
 
         add(consumptionFileUploadDialog = new ConsumptionFileUploadDialog("consumptionFileUploadDialog"){
             @Override
-            protected void onUpload(AjaxRequestTarget target,Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField) {
-                AbstractConsumptionFileList.this.onUpload(target, om, serviceProviderId, serviceId, fileUploadField);
+            protected void onUpload(AjaxRequestTarget target,Date om, Long serviceProviderId, Long serviceId,
+                                    Long userOrganizationId, FileUploadField fileUploadField) {
+                AbstractConsumptionFileList.this.onUpload(target, om, serviceProviderId, serviceId,
+                        userOrganizationId, fileUploadField);
             }
         });
 
@@ -184,7 +187,8 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
 
     protected abstract Long getCount(FilterWrapper<ConsumptionFile> filterWrapper);
 
-    protected abstract void onUpload(AjaxRequestTarget target, Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField);
+    protected abstract void onUpload(AjaxRequestTarget target, Date om, Long serviceProviderId, Long serviceId,
+                                     Long userOrganizationId, FileUploadField fileUploadField);
 
     protected abstract void onBind(AjaxRequestTarget target, List<ConsumptionFile> consumptionFiles);
 }

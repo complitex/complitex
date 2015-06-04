@@ -19,6 +19,7 @@ import java.util.Date;
 
 import static org.complitex.common.util.DateUtil.*;
 import static org.complitex.keconnection.organization_type.strategy.KeConnectionOrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.USER_ORGANIZATION_TYPE;
 
 /**
  * @author inheaven on 18.03.2015 2:03.
@@ -52,6 +53,10 @@ public abstract class ConsumptionFileUploadDialog extends Panel {
         DomainSelectLabel service = new DomainSelectLabel("service", "service", serviceIdModel);
         form.add(service);
 
+        IModel<Long> userOrganizationIdModel = Model.of(-1L);
+        OrganizationIdPicker userOrganization = new OrganizationIdPicker("userOrganization", userOrganizationIdModel, USER_ORGANIZATION_TYPE);
+        form.add(userOrganization);
+
         FileUploadField fileUploadField = new FileUploadField("fileUploadField");
         form.add(fileUploadField);
 
@@ -61,12 +66,14 @@ public abstract class ConsumptionFileUploadDialog extends Panel {
                 dialog.close(target);
 
                 onUpload(target, DateUtil.newDate(year.getModelObject(), month.getModelObject()),
-                        serviceProviderIdModel.getObject(), serviceIdModel.getObject(), fileUploadField);
+                        serviceProviderIdModel.getObject(), serviceIdModel.getObject(),
+                        userOrganizationIdModel.getObject(), fileUploadField);
             }
         });
     }
 
-    protected abstract void onUpload(AjaxRequestTarget target, Date om, Long serviceProviderId, Long serviceId, FileUploadField fileUploadField);
+    protected abstract void onUpload(AjaxRequestTarget target, Date om, Long serviceProviderId, Long serviceId,
+                                     Long userOrganizationId, FileUploadField fileUploadField);
 
     public void open(AjaxRequestTarget target){
         dialog.open(target);
