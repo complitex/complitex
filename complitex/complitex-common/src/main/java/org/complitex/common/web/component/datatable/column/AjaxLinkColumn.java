@@ -1,4 +1,4 @@
-package org.complitex.common.web.component.datatable;
+package org.complitex.common.web.component.datatable.column;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;

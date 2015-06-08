@@ -10,7 +10,6 @@ import org.complitex.address.entity.ExternalAddress;
 import org.complitex.address.entity.LocalAddress;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.BuildingCode;
-import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.BroadcasterService;
 import org.complitex.common.util.DateUtil;
@@ -21,7 +20,7 @@ import org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingCon
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFileStatus;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus;
-import org.complitex.keconnection.heatmeter.entity.cursor.ComMeter;
+import org.complitex.keconnection.heatmeter.entity.cursor.ComMeterCursor;
 import org.complitex.keconnection.heatmeter.service.ExternalHeatmeterService;
 import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.complitex.organization.strategy.ServiceStrategy;
@@ -275,14 +274,17 @@ public class CentralHeatingConsumptionService {
 
         String dataSource = organizationStrategy.getDataSource(consumptionFile.getUserOrganizationId(),
                 consumptionFile.getServiceId());
+
+        //todo handle datasource exception
+
         String serviceCode = serviceStrategy.getDomainObject(consumptionFile.getServiceId(), true)
                 .getStringValue(ServiceStrategy.CODE);
 
-        Cursor<ComMeter> cursor;
+        ComMeterCursor cursor = new ComMeterCursor(dataSource, c.getOrganizationCode(), buildingCode.getBuildingCode(),
+                consumptionFile.getOm(), serviceCode);
 
         try {
-            cursor = externalHeatmeterService.getComMeterCursor(dataSource, c.getOrganizationCode(),
-                    buildingCode.getBuildingCode(), consumptionFile.getOm(), serviceCode);
+            externalHeatmeterService.callComMeterCursor(cursor);
 
             switch (cursor.getResultCode()){
                 case 0:
@@ -307,10 +309,10 @@ public class CentralHeatingConsumptionService {
                     break;
             }
 
-            if (cursor.getList().isEmpty()){
+            if (cursor.getData().isEmpty()){
                 c.setStatus(METER_NOT_FOUND);
                 c.setMessage("EMPTY_METER_LIST");
-            }else if (cursor.getList().size() > 1){
+            }else if (cursor.getData().size() > 1){
                 c.setStatus(METER_NOT_FOUND);
                 c.setMessage("MORE_THEN_ONE_METER");
             }
@@ -320,7 +322,7 @@ public class CentralHeatingConsumptionService {
                 return;
             }
 
-            c.setMeterId(cursor.getList().get(0).getmId());
+            c.setMeterId(cursor.getData().get(0).getMId());
             c.setStatus(BOUND);
             centralHeatingConsumptionBean.save(c);
         } catch (Exception e) {

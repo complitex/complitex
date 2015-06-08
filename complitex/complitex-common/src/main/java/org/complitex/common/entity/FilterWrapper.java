@@ -3,9 +3,7 @@ package org.complitex.common.entity;
 import com.google.common.base.CaseFormat;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,7 +27,6 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
     private String outerOrganizationsString;
 
     private Map<String, Object> map = new HashMap<>();
-    private List<T> group = new ArrayList<>();
 
     private StringLocale stringLocale;
 
@@ -76,14 +73,6 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
 
     public void setMap(Map<String, Object> map) {
         this.map = map;
-    }
-
-    public List<T> getGroup() {
-        return group;
-    }
-
-    public void setGroup(List<T> group) {
-        this.group = group;
     }
 
     public T getObject() {

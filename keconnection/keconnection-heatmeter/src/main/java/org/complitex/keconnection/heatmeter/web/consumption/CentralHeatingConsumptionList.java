@@ -130,6 +130,14 @@ public class CentralHeatingConsumptionList extends TemplatePage{
                 };
         add(addressCorrectionDialog);
 
+//        ComMeterDialog comMeterDialog = new ComMeterDialog("comMeterDialog"){
+//            @Override
+//            protected void onSelect(ComMeter comMeter) {
+//                System.out.println(comMeter.getMId());
+//            }
+//        };
+//        add(comMeterDialog);
+
         //actions
         List<Action<CentralHeatingConsumption>> actions = new ArrayList<>();
 
@@ -156,6 +164,13 @@ public class CentralHeatingConsumptionList extends TemplatePage{
                 return ConsumptionStatus.LOCAL_UNRESOLVED.contains(model.getObject().getStatus());
             }
         });
+
+//        actions.add(new Action<CentralHeatingConsumption>("search") {
+//            @Override
+//            public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
+//                comMeterDialog.open(target, new ComMeterCursor());
+//            }
+//        });
 
         actions.add(new Action<CentralHeatingConsumption>("edit") {
             @Override
@@ -220,7 +235,7 @@ public class CentralHeatingConsumptionList extends TemplatePage{
 
             @Override
             protected boolean isEdit(String field, IModel<CentralHeatingConsumption> rowModel) {
-                if (field.equals("id")){
+                if (field.equals("id")) {
                     return false;
                 }
 

@@ -20,7 +20,6 @@ import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
-import org.complitex.osznconnection.service_provider_type.strategy.ServiceProviderTypeStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,7 +137,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             return null;
         }
 
-        for (AccountDetail accountDetail : cursor.getList()) {
+        for (AccountDetail accountDetail : cursor.getData()) {
             if (spAccountNumber.equals(accountDetail.getZheuCode())){
                 request.setAccountNumber(accountDetail.getAccCode());
                 request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
@@ -165,15 +164,15 @@ public class ServiceProviderAdapter extends AbstractBean {
             }
         }
 
-        if (cursor.getList().size() == 1) {
+        if (cursor.getData().size() == 1) {
             // если установлена опция перезаписи номера л/с ПУ номером л/с МН и номер л/с ПУ в файле запроса равен 0
             // и получена только одна запись из МН для данного адреса, то запись считаем связанной
             if (updatePUAccount && 0 == Integer.valueOf(spAccountNumber)) {
 
-                request.setAccountNumber(cursor.getList().get(0).getAccCode());
+                request.setAccountNumber(cursor.getData().get(0).getAccCode());
                 request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
-                return cursor.getList().get(0);
+                return cursor.getData().get(0);
             } else {
                 request.setStatus(RequestStatus.ACCOUNT_NUMBER_MISMATCH);
             }
@@ -193,7 +192,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         Cursor<AccountDetail> accountDetails = getAccountDetails(dataSource,
                 district, streetType, street, buildingNumber, buildingCorp, apartment, date);
 
-        for (AccountDetail accountDetail : accountDetails.getList()) {
+        for (AccountDetail accountDetail : accountDetails.getData()) {
             List<BenefitData> benefitDataList = getBenefitData(dataSource, accountDetail.getAccCode(), date);
 
             for (BenefitData d : benefitDataList){
@@ -481,7 +480,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
         //heating
         if (tarifHandled
-                && services.contains(ServiceProviderTypeStrategy.HEATING)) {
+                && services.contains(ServiceStrategy.HEATING)) {
             payment.setField(PaymentDBF.NORM_F_2, data.getHeatingArea());
             if (!handleSubsidyService(payment, PaymentDBF.CODE2_2, data.getHeatingTarif(), 2) ||
                     !handleSubsidyTarif(payment, PaymentDBF.CODE3_2, data.getHeatingTarif(), 2)) {
@@ -491,7 +490,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
         //hot water
         if (tarifHandled
-                && services.contains(ServiceProviderTypeStrategy.HOT_WATER_SUPPLY)) {
+                && services.contains(ServiceStrategy.HOT_WATER_SUPPLY)) {
             payment.setField(PaymentDBF.NORM_F_3, data.getChargeHotWater());
             if (!handleSubsidyService(payment, PaymentDBF.CODE2_3, data.getHotWaterTarif(), 3) ||
                     !handleSubsidyTarif(payment, PaymentDBF.CODE3_3, data.getHotWaterTarif(), 3)) {
@@ -501,7 +500,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
         //cold water
         if (tarifHandled
-                && services.contains(ServiceProviderTypeStrategy.COLD_WATER_SUPPLY)) {
+                && services.contains(ServiceStrategy.COLD_WATER_SUPPLY)) {
             payment.setField(PaymentDBF.NORM_F_4, data.getChargeColdWater());
             if (!handleSubsidyService(payment, PaymentDBF.CODE2_4, data.getColdWaterTarif(), 4) ||
                     !handleSubsidyTarif(payment, PaymentDBF.CODE3_4, data.getColdWaterTarif(), 4)) {
@@ -511,7 +510,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
         //gas
         if (tarifHandled
-                && services.contains(ServiceProviderTypeStrategy.GAS_SUPPLY)) {
+                && services.contains(ServiceStrategy.GAS_SUPPLY)) {
             payment.setField(PaymentDBF.NORM_F_5, data.getChargeGas());
             if (!handleSubsidyService(payment, PaymentDBF.CODE2_5, data.getGasTarif(), 5) ||
                     !handleSubsidyTarif(payment, PaymentDBF.CODE3_5, data.getGasTarif(), 5)) {
@@ -521,7 +520,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
         //power
         if (tarifHandled
-                && services.contains(ServiceProviderTypeStrategy.POWER_SUPPLY)) {
+                && services.contains(ServiceStrategy.POWER_SUPPLY)) {
             payment.setField(PaymentDBF.NORM_F_6, data.getChargePower());
             if (!handleSubsidyService(payment, PaymentDBF.CODE2_6, data.getPowerTarif(), 6) ||
                     !handleSubsidyTarif(payment, PaymentDBF.CODE3_6, data.getPowerTarif(), 6)) {
@@ -531,7 +530,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
         //garbage disposal
         if (tarifHandled
-                && services.contains(ServiceProviderTypeStrategy.GARBAGE_DISPOSAL)) {
+                && services.contains(ServiceStrategy.GARBAGE_DISPOSAL)) {
             payment.setField(PaymentDBF.NORM_F_7, data.getChargeGarbageDisposal());
             if (!handleSubsidyService(payment, PaymentDBF.CODE2_7, data.getGarbageDisposalTarif(), 7) ||
                     !handleSubsidyTarif(payment, PaymentDBF.CODE3_7, data.getGarbageDisposalTarif(), 7)) {
@@ -541,7 +540,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
         //drainage
         if (tarifHandled
-                && services.contains(ServiceProviderTypeStrategy.DRAINAGE)) {
+                && services.contains(ServiceStrategy.DRAINAGE)) {
             payment.setField(PaymentDBF.NORM_F_8, data.getChargeDrainage());
             if (!handleSubsidyService(payment, PaymentDBF.CODE2_8, data.getDrainageTarif(), 8) ||
                     !handleSubsidyTarif(payment, PaymentDBF.CODE3_8, data.getDrainageTarif(), 8)) {

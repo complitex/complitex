@@ -48,7 +48,7 @@ public class SyncTest extends WebPage {
                 if (districtSyncs != null) {
                     String t = "";
 
-                    for (AddressSync d : districtSyncs.getList()){
+                    for (AddressSync d : districtSyncs.getData()){
                         t += d.getExternalId() + " " + d.getName();
                     }
 
@@ -60,7 +60,7 @@ public class SyncTest extends WebPage {
                 if (streetTypeSyncs != null) {
                     String t = "";
 
-                    for (AddressSync s : streetTypeSyncs.getList()){
+                    for (AddressSync s : streetTypeSyncs.getData()){
                         t += s.getExternalId() + " " +s.getAdditionalName() + " " + s.getName() + "\n";
                     }
 
@@ -72,7 +72,7 @@ public class SyncTest extends WebPage {
                 if (streetSyncs != null){
                     String t = "";
 
-                    for (AddressSync s : streetSyncs.getList()){
+                    for (AddressSync s : streetSyncs.getData()){
                         t += s.getExternalId() + " " + s.getAdditionalName() + " " + s.getName() + "\n";
                     }
 
@@ -85,7 +85,7 @@ public class SyncTest extends WebPage {
                 if (streetSyncs != null){
                     String t = "";
 
-                    for (AddressSync s : buildingAddressSyncs.getList()){
+                    for (AddressSync s : buildingAddressSyncs.getData()){
                         t +=  s.getExternalId() + " " + s.getName() + " "
                                 + StringUtil.emptyOnNull(s.getAdditionalName())+"\n";
                     }

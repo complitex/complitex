@@ -121,13 +121,13 @@ public class AddressSyncService {
 
         listener.onBegin(parent, type, cursor);
 
-        if (cursor.getList() == null) {
+        if (cursor.getData() == null) {
             return;
         }
 
         List<? extends DomainObject> objects = handler.getObjects(parent);
 
-        for (AddressSync sync : cursor.getList()) {
+        for (AddressSync sync : cursor.getData()) {
             Long parentId = handler.getParentId(sync, parent);
 
             if (NOT_FOUND_ID.equals(parentId)){
@@ -193,7 +193,7 @@ public class AddressSyncService {
 
             boolean archive = true;
 
-            for (AddressSync sync : cursor.getList()) {
+            for (AddressSync sync : cursor.getData()) {
                 if (sync.getExternalId().equals(object.getExternalId()) || handler.isEqualNames(sync, object)) {
 
                     archive = false;

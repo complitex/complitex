@@ -17,7 +17,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.common.web.component.datatable.FilteredColumn;
+import org.complitex.common.web.component.datatable.column.FilteredColumn;
 
 /**
  * @author Anatoly Ivanov

@@ -482,6 +482,10 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         }
     }
 
+    public Long getBillingId(Long userOrganizationId){
+        return getBillingId(userOrganizationId, null);
+    }
+
     public String getDataSource(Long userOrganizationId, Long serviceId){
         return getDataSource(getBillingId(userOrganizationId, serviceId));
     }

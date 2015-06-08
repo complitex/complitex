@@ -180,9 +180,9 @@ public abstract class AbstractLookupPanel<T extends AbstractRequest> extends Pan
                                             break;
                                     }
                                 } else {
-                                    accountDetailsModel.setObject(accountDetails.getList());
-                                    if (accountDetails.getList().size() == 1) {
-                                        accountDetailModel.setObject(accountDetails.getList().get(0));
+                                    accountDetailsModel.setObject(accountDetails.getData());
+                                    if (accountDetails.getData().size() == 1) {
+                                        accountDetailModel.setObject(accountDetails.getData().get(0));
                                     }
                                 }
                             } catch (DBException e) {

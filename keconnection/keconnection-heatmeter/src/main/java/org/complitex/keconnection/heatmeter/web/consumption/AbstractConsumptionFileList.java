@@ -16,7 +16,7 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.WebSocketPushMessage;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.BookmarkablePageLinkColumn;
-import org.complitex.common.web.component.datatable.CheckColumn;
+import org.complitex.common.web.component.datatable.column.CheckColumn;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.complitex.common.web.component.domain.DomainObjectFilteredColumn;
 import org.complitex.common.web.component.organization.OrganizationFilteredColumn;
@@ -94,7 +94,7 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
         add(new AjaxLink("bind") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                onBind(target, filteredDataTable.getFilterWrapper().getGroup());
+                onBind(target, filteredDataTable.getCheckGroupModel().getObject());
             }
         });
 
@@ -134,7 +134,7 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
                             handler.add(messages);
                             handler.add(filteredDataTable);
 
-                            filteredDataTable.getFilterWrapper().getGroup().remove(consumptionFile);
+                            filteredDataTable.getCheckGroupModel().getObject().remove(consumptionFile);
                         }
                     }
                 }
@@ -155,7 +155,7 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
                 new DeleteItemButton(id){
                     @Override
                     protected void onClick(AjaxRequestTarget target) {
-                        filteredDataTable.getFilterWrapper().getGroup().forEach(c -> {
+                        filteredDataTable.getCheckGroupModel().getObject().forEach(c -> {
                             try {
                                 consumptionFileBean.delete(c.getId());
 

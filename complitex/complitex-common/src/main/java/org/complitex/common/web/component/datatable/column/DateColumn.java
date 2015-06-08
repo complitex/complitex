@@ -1,4 +1,4 @@
-package org.complitex.common.web.component.datatable;
+package org.complitex.common.web.component.datatable.column;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;

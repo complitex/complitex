@@ -1,4 +1,4 @@
-package org.complitex.common.web.component.datatable;
+package org.complitex.common.web.component.datatable.column;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -10,6 +10,9 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.web.component.ajax.AjaxLinkLabel;
+import org.complitex.common.web.component.datatable.Action;
+import org.complitex.common.web.component.datatable.FilteredActionHeader;
+import org.complitex.common.web.component.datatable.FilteredActionInput;
 
 import java.util.List;
 

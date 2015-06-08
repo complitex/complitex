@@ -1,6 +1,5 @@
 package org.complitex.keconnection.heatmeter.service;
 
-import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.oracle.OracleErrors;
 import org.complitex.common.service.AbstractBean;
@@ -10,7 +9,7 @@ import org.complitex.common.util.ResourceUtil;
 import org.complitex.keconnection.heatmeter.Module;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterBindingStatus;
-import org.complitex.keconnection.heatmeter.entity.cursor.ComMeter;
+import org.complitex.keconnection.heatmeter.entity.cursor.ComMeterCursor;
 import org.complitex.keconnection.heatmeter.entity.cursor.ExternalHeatmeter;
 import org.complitex.keconnection.heatmeter.service.exception.DBException;
 import org.slf4j.Logger;
@@ -92,7 +91,7 @@ public class ExternalHeatmeterService extends AbstractBean{
             }
         } finally {
             log.info("{}. Heatmeter id: {}, ls: {}, parameters : {}",
-                    new Object[]{FETCH_EXTERNAL_HEATMETER_STORED_PROCEDURE, heatmeterId, ls, params});
+                    FETCH_EXTERNAL_HEATMETER_STORED_PROCEDURE, heatmeterId, ls, params);
             if (log.isDebugEnabled()) {
                 log.debug("{}. Time of operation: {} sec.", new Object[]{FETCH_EXTERNAL_HEATMETER_STORED_PROCEDURE,
                             (System.nanoTime() - startTime) / 1000000000F});
@@ -102,12 +101,13 @@ public class ExternalHeatmeterService extends AbstractBean{
         Integer resultCode = (Integer) params.get("resultCode");
         if (resultCode == null) {
             log.error("{}. Result code is null. Heatmeter id: {}, ls: {}",
-                    new Object[]{FETCH_EXTERNAL_HEATMETER_STORED_PROCEDURE, heatmeterId, ls});
+                    FETCH_EXTERNAL_HEATMETER_STORED_PROCEDURE, heatmeterId, ls);
             logError(heatmeterId, "result_code_unexpected", FETCH_EXTERNAL_HEATMETER_STORED_PROCEDURE, "null");
             status = HeatmeterBindingStatus.BINDING_ERROR;
         } else {
             switch (resultCode) {
                 case 1:
+                    //noinspection unchecked
                     externalHeatmeters = (List<ExternalHeatmeter>) params.get("externalInfo");
                     if (externalHeatmeters == null || externalHeatmeters.isEmpty()) {
                         status = HeatmeterBindingStatus.NO_EXTERNAL_HEATMETERS;
@@ -125,7 +125,7 @@ public class ExternalHeatmeterService extends AbstractBean{
                     break;
                 default:
                     log.error("{}. Unexpected result code: {}. Heatmeter id: {}, ls: {}",
-                            new Object[]{FETCH_EXTERNAL_HEATMETER_STORED_PROCEDURE, resultCode, heatmeterId, ls});
+                            FETCH_EXTERNAL_HEATMETER_STORED_PROCEDURE, resultCode, heatmeterId, ls);
                     logError(heatmeterId, "result_code_unexpected", FETCH_EXTERNAL_HEATMETER_STORED_PROCEDURE, resultCode);
                     status = HeatmeterBindingStatus.BINDING_ERROR;
             }
@@ -133,20 +133,9 @@ public class ExternalHeatmeterService extends AbstractBean{
         return new ExternalHeatmetersAndStatus(externalHeatmeters, status);
     }
 
-    public Cursor<ComMeter> getComMeterCursor(String dataSource, String organizationCode, Integer buildingCode, Date om,
-                                              String serviceCode){
-        Map<String, Object> map = new HashMap<String, Object>(){{
-            put("organizationCode", organizationCode);
-            put("buildingCode", buildingCode);
-            put("om", om);
-            put("serviceCode", serviceCode);
-        }};
+    public void callComMeterCursor(ComMeterCursor comMeterCursor){
+        sqlSession(comMeterCursor.getDataSource()).selectOne(MAPPING_NAMESPACE + ".getComMeterCursor", comMeterCursor);
 
-        sqlSession(dataSource).selectOne(MAPPING_NAMESPACE + ".getComMeterCursor", map);
-
-        log.info("getComMeterCursor data: {}", map);
-
-        //noinspection unchecked
-        return new Cursor<>((Integer) map.get("resultCode"), (List<ComMeter>) map.get("data"));
+        log.info("getComMeterCursor data: {}", comMeterCursor);
     }
 }

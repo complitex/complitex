@@ -1,45 +1,46 @@
 package org.complitex.keconnection.heatmeter.entity.cursor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author inheaven on 006 30.04.15 15:39
  */
-public class ComMeter {
+public class ComMeter implements Serializable{
     private Integer mId;
     private Integer mNum;
     private Date mDate;
     private Integer mType;
 
-    public Integer getmId() {
+    public Integer getMId() {
         return mId;
     }
 
-    public void setmId(Integer mId) {
+    public void setMId(Integer mId) {
         this.mId = mId;
     }
 
-    public Integer getmNum() {
+    public Integer getMNum() {
         return mNum;
     }
 
-    public void setmNum(Integer mNum) {
+    public void setMNum(Integer mNum) {
         this.mNum = mNum;
     }
 
-    public Date getmDate() {
+    public Date getMDate() {
         return mDate;
     }
 
-    public void setmDate(Date mDate) {
+    public void setMDate(Date mDate) {
         this.mDate = mDate;
     }
 
-    public Integer getmType() {
+    public Integer getMType() {
         return mType;
     }
 
-    public void setmType(Integer mType) {
+    public void setMType(Integer mType) {
         this.mType = mType;
     }
 }

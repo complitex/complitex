@@ -11,10 +11,17 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.Filte
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.form.CheckGroup;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.util.ListModel;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.web.component.datatable.column.DateColumn;
+import org.complitex.common.web.component.datatable.column.EditableColumn;
+import org.complitex.common.web.component.datatable.column.EnumColumn;
+import org.complitex.common.web.component.datatable.column.FilteredActionColumn;
 import org.complitex.common.web.component.paging.AjaxNavigationToolbar;
 
 import java.io.Serializable;
@@ -30,6 +37,8 @@ import java.util.Map;
  */
 public abstract class FilteredDataTable<T extends Serializable> extends Panel implements IFilterBean<T>{
     private FilteredDataProvider<T> provider;
+    private IModel<List<T>> checkGroupModel = new ListModel<>(new ArrayList<>());
+    private IModel<T> radioGroupModel = Model.of();
 
     public FilteredDataTable(String id, Class<T> objectClass, Map<String, IColumn<T, String>> columnMap,
                              List<Action<T>> actions, String... fields) {
@@ -62,37 +71,45 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
             IColumn<T, String> column = columnMap != null ? columnMap.get(field) : null;
 
             if (column == null){
+                column = onColumn(field);
+            }
+
+            if (column == null){
                 Field f = FieldUtils.getField(objectClass, field, true);
 
-                column = getColumn(field, f);
-
-                if (column == null){
-                    if (f.getType().equals(Date.class)){
-                        column = new DateColumn<>(new ResourceModel(field), field, field);
-                    }else if (f.getType().isEnum()){
-                        //noinspection unchecked
-                        column = new EnumColumn(new ResourceModel(field), field, f.getType(), getLocale());
-                    }else {
-                        column = new EditableColumn<T>(field) {
-                            @Override
-                            protected boolean isEdit(String propertyExpression, IModel<T> rowModel) {
-                                return FilteredDataTable.this.isEdit(propertyExpression, rowModel);
-                            }
-                        };
-                    }
+                if (f.getType().equals(Date.class)){
+                    column = new DateColumn<>(new ResourceModel(field), field, field);
+                }else if (f.getType().isEnum()){
+                    //noinspection unchecked
+                    column = new EnumColumn(new ResourceModel(field), field, f.getType(), getLocale());
+                }else {
+                    column = new EditableColumn<T>(field) {
+                        @Override
+                        protected boolean isEdit(String propertyExpression, IModel<T> rowModel) {
+                            return FilteredDataTable.this.isEdit(propertyExpression, rowModel);
+                        }
+                    };
                 }
             }
 
             columns.add(column);
         }
 
-        CheckGroup<T> group = new CheckGroup<>("group", getFilterWrapper().getGroup());
-        group.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+        RadioGroup<T> radioGroup = new RadioGroup<>("radioGroup", radioGroupModel);
+        radioGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
             }
         });
-        form.add(group);
+        form.add(radioGroup);
+
+        CheckGroup<T> checkGroup = new CheckGroup<>("checkGroup", checkGroupModel);
+        checkGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+            }
+        });
+        radioGroup.add(checkGroup);
 
         DataTable<T, String> table = new DataTable<>("table", columns, provider, 10);
         table.setOutputMarkupId(true);
@@ -116,19 +133,27 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
 
         table.setTableBodyCss("noWrap");
 
-        group.add(table);
+        checkGroup.add(table);
     }
 
     public FilteredDataTable(String id, Class<T> objectClass, String... fields){
         this(id, objectClass, null, null, fields);
     }
 
-    protected IColumn<T, String> getColumn(String field, Field f){
+    protected IColumn<T, String> onColumn(String field){
         return null;
     }
 
     public FilterWrapper<T> getFilterWrapper(){
         return provider.getFilterWrapper();
+    }
+
+    public IModel<List<T>> getCheckGroupModel() {
+        return checkGroupModel;
+    }
+
+    public IModel<T> getRadioGroupModel() {
+        return radioGroupModel;
     }
 
     protected void onInit(FilterWrapper<T> filterWrapper){

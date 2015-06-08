@@ -26,7 +26,7 @@
         <result column="m_type" property="mType"/>
     </resultMap>
 
-    <select id="getComMeterCursor" statementType="CALLABLE" parameterType="map">
+    <select id="getComMeterCursor" statementType="CALLABLE" parameterType="org.complitex.keconnection.heatmeter.entity.cursor.ComMeterCursor">
         <![CDATA[
          {#{resultCode, mode=OUT, javaType=int, jdbcType=INTEGER} = call z$runtime_exp_cursors.getComMeterCursor(
             #{organizationCode, mode=IN, javaType=string, jdbcType=VARCHAR},

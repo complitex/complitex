@@ -14,7 +14,7 @@ import org.complitex.address.entity.AddressSync;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.common.web.component.datatable.FilteredColumn;
+import org.complitex.common.web.component.datatable.column.FilteredColumn;
 
 /**
  * @author Anatoly Ivanov

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+    <div wicket:id="dialog" style="display: none">
+        <div wicket:id="container">
+            <form wicket:id="form">
+                <input type="text" wicket:id="organizationCode" wicket:message="placeholder:organizationCode"/>
+                <input type="text" wicket:id="buildingCode" wicket:message="placeholder:buildingCode"/>
+                <input type="text" wicket:id="om" wicket:message="placeholder:om"/>
+                <input type="text" wicket:id="serviceCode" wicket:message="placeholder:serviceCode"/>
+                <input type="button" wicket:id="search" class="btnMiddle" wicket:message="value:search"/>
+
+                <div wicket:id="dataTable"></div>
+
+                <div>
+                    <input type="button" wicket:id="select" class="btnBig" wicket:message="value:select"/>
+                    <input type="button" wicket:id="cancel" class="btnMiddle" wicket:message="value:cancel"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</wicket:panel>

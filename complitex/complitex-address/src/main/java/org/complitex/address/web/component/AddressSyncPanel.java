@@ -24,7 +24,7 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.datatable.Action;
-import org.complitex.common.web.component.datatable.EnumColumn;
+import org.complitex.common.web.component.datatable.column.EnumColumn;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -188,7 +188,7 @@ public class AddressSyncPanel extends Panel {
                         ThreadContext.restore(threadContext);
 
                         String name = "";
-                        int count = cursor.getList() != null ? cursor.getList().size() : 0;
+                        int count = cursor.getData() != null ? cursor.getData().size() : 0;
 
                         if (parent != null){
                             if (type.equals(AddressEntity.DISTRICT) || type.equals(AddressEntity.STREET)){

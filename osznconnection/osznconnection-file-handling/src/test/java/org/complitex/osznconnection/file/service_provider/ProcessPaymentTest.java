@@ -33,7 +33,6 @@ public class ProcessPaymentTest extends AbstractTest {
                 return "12";
             }
 
-            @Override
             protected String getSubsidyTarifCode(BigDecimal T11_CS_UNI, long organizationId, long userOrganizationId) {
                 System.out.println("T11_CS_UNI : " + T11_CS_UNI);
                 return "0";
