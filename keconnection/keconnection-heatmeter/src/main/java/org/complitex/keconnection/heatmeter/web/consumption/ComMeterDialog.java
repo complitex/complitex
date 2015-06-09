@@ -41,6 +41,7 @@ public class ComMeterDialog extends Panel {
         model = new CompoundPropertyModel<>(new ComMeterCursor());
 
         dialog = new Dialog("dialog");
+        dialog.setWidth(900);
         add(dialog);
 
         container = new WebMarkupContainer("container");
@@ -55,7 +56,7 @@ public class ComMeterDialog extends Panel {
         form.add(new MaskedDateInput("om"));
         form.add(new TextField<>("serviceCode"));
 
-        form.add(new AjaxButton("search") {
+        form.add(new AjaxButton("search", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 externalHeatmeterService.callComMeterCursor(model.getObject());
@@ -64,7 +65,7 @@ public class ComMeterDialog extends Panel {
             }
         });
 
-        dataTable = new FilteredDataTable<ComMeter>("dataTable", ComMeter.class, "radio", "mId", "mNum", "mDate", "mType") {
+        dataTable = new FilteredDataTable<ComMeter>("dataTable", ComMeter.class, false, "mId", "mNum", "mDate", "mType") {
             @Override
             public List<ComMeter> getList(FilterWrapper<ComMeter> filterWrapper) {
                 return model.getObject().getData();
@@ -106,6 +107,8 @@ public class ComMeterDialog extends Panel {
         model.setObject(comMeterCursor);
 
         target.add(container);
+
+        dialog.open(target);
     }
 
     protected void onSelect(ComMeter comMeter){

@@ -27,6 +27,8 @@ import org.complitex.keconnection.heatmeter.entity.ConsumptionStatusFilter;
 import org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus;
+import org.complitex.keconnection.heatmeter.entity.cursor.ComMeter;
+import org.complitex.keconnection.heatmeter.entity.cursor.ComMeterCursor;
 import org.complitex.keconnection.heatmeter.service.consumption.CentralHeatingConsumptionBean;
 import org.complitex.keconnection.heatmeter.service.consumption.CentralHeatingConsumptionService;
 import org.complitex.keconnection.heatmeter.service.consumption.ConsumptionFileBean;
@@ -130,13 +132,13 @@ public class CentralHeatingConsumptionList extends TemplatePage{
                 };
         add(addressCorrectionDialog);
 
-//        ComMeterDialog comMeterDialog = new ComMeterDialog("comMeterDialog"){
-//            @Override
-//            protected void onSelect(ComMeter comMeter) {
-//                System.out.println(comMeter.getMId());
-//            }
-//        };
-//        add(comMeterDialog);
+        ComMeterDialog comMeterDialog = new ComMeterDialog("comMeterDialog"){
+            @Override
+            protected void onSelect(ComMeter comMeter) {
+                System.out.println(comMeter.getMId());
+            }
+        };
+        add(comMeterDialog);
 
         //actions
         List<Action<CentralHeatingConsumption>> actions = new ArrayList<>();
@@ -165,12 +167,12 @@ public class CentralHeatingConsumptionList extends TemplatePage{
             }
         });
 
-//        actions.add(new Action<CentralHeatingConsumption>("search") {
-//            @Override
-//            public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
-//                comMeterDialog.open(target, new ComMeterCursor());
-//            }
-//        });
+        actions.add(new Action<CentralHeatingConsumption>("search") {
+            @Override
+            public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
+                comMeterDialog.open(target, new ComMeterCursor());
+            }
+        });
 
         actions.add(new Action<CentralHeatingConsumption>("edit") {
             @Override

@@ -1,5 +1,6 @@
 package org.complitex.common.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * @author Anatoly Ivanov
  *         Date: 10.06.14 18:41
  */
-public class Cursor<T> {
+public class Cursor<T> implements Serializable{
     private String dataSource;
     private Integer resultCode;
     private List<T> data = new ArrayList<>();

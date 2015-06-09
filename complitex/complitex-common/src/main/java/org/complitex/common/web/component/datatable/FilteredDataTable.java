@@ -41,7 +41,7 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
     private IModel<T> radioGroupModel = Model.of();
 
     public FilteredDataTable(String id, Class<T> objectClass, Map<String, IColumn<T, String>> columnMap,
-                             List<Action<T>> actions, String... fields) {
+                             List<Action<T>> actions, boolean filter, String... fields) {
         super(id);
 
         setOutputMarkupId(true);
@@ -114,26 +114,41 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         DataTable<T, String> table = new DataTable<>("table", columns, provider, 10);
         table.setOutputMarkupId(true);
 
-        columns.add(new FilteredActionColumn<T>(actions != null ? actions : new ArrayList<>()) {
-            @Override
-            protected void onReset(AjaxRequestTarget target) {
-                provider.init();
-                target.add(table);
-            }
+        if (filter) {
+            columns.add(new FilteredActionColumn<T>(actions != null ? actions : new ArrayList<>()) {
+                @Override
+                protected void onReset(AjaxRequestTarget target) {
+                    provider.init();
+                    target.add(table);
+                }
 
-            @Override
-            protected void onFilter(AjaxRequestTarget target) {
-                target.add(table);
-            }
-        });
+                @Override
+                protected void onFilter(AjaxRequestTarget target) {
+                    target.add(table);
+                }
+            });
+        }
 
         table.addTopToolbar(new HeadersToolbar<>(table, provider));
-        table.addTopToolbar(new FilterToolbar(table, form, provider));
+
+        if (filter) {
+            table.addTopToolbar(new FilterToolbar(table, form, provider));
+        }
+
         table.addBottomToolbar(new AjaxNavigationToolbar(table));
 
         table.setTableBodyCss("noWrap");
 
         checkGroup.add(table);
+    }
+
+    public FilteredDataTable(String id, Class<T> objectClass, Map<String, IColumn<T, String>> columnMap,
+                             List<Action<T>> actions, String... fields){
+        this(id, objectClass, columnMap, actions, true, fields);
+    }
+
+    public FilteredDataTable(String id, Class<T> objectClass, boolean filter, String... fields){
+        this(id, objectClass, null, null, filter, fields);
     }
 
     public FilteredDataTable(String id, Class<T> objectClass, String... fields){
