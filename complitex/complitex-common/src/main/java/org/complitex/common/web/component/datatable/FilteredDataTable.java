@@ -10,6 +10,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.Filte
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -18,10 +19,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.web.component.datatable.column.DateColumn;
-import org.complitex.common.web.component.datatable.column.EditableColumn;
-import org.complitex.common.web.component.datatable.column.EnumColumn;
-import org.complitex.common.web.component.datatable.column.FilteredActionColumn;
+import org.complitex.common.web.component.datatable.column.*;
 import org.complitex.common.web.component.paging.AjaxNavigationToolbar;
 
 import java.io.Serializable;
@@ -95,20 +93,30 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
             columns.add(column);
         }
 
-        RadioGroup<T> radioGroup = new RadioGroup<>("radioGroup", radioGroupModel);
-        radioGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-            }
-        });
+        WebMarkupContainer radioGroup;
+        if (columns.stream().filter(c -> c.getClass().equals(RadioColumn.class)).findAny().isPresent()) {
+            radioGroup = new RadioGroup<>("radioGroup", radioGroupModel);
+            radioGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                }
+            });
+        }else{
+            radioGroup = new WebMarkupContainer("radioGroup");
+        }
         form.add(radioGroup);
 
-        CheckGroup<T> checkGroup = new CheckGroup<>("checkGroup", checkGroupModel);
-        checkGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-            }
-        });
+        WebMarkupContainer checkGroup;
+        if (columns.stream().filter(c -> c.getClass().equals(CheckColumn.class)).findAny().isPresent()){
+            checkGroup = new CheckGroup<>("checkGroup", checkGroupModel);
+            checkGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                }
+            });
+        }else {
+            checkGroup = new WebMarkupContainer("checkGroup");
+        }
         radioGroup.add(checkGroup);
 
         DataTable<T, String> table = new DataTable<>("table", columns, provider, 10);

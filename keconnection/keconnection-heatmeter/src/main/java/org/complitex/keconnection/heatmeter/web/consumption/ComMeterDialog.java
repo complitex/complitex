@@ -14,10 +14,11 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.complitex.common.web.component.datatable.column.RadioColumn;
 import org.complitex.common.web.component.dateinput.MaskedDateInput;
+import org.complitex.common.web.component.wiquery.ExtendedDialog;
+import org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption;
 import org.complitex.keconnection.heatmeter.entity.cursor.ComMeter;
 import org.complitex.keconnection.heatmeter.entity.cursor.ComMeterCursor;
 import org.complitex.keconnection.heatmeter.service.ExternalHeatmeterServiceStub;
-import org.odlabs.wiquery.ui.dialog.Dialog;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -29,18 +30,20 @@ public class ComMeterDialog extends Panel {
     @EJB
     private ExternalHeatmeterServiceStub externalHeatmeterService;
 
-    private Dialog dialog;
+    private ExtendedDialog dialog;
     private WebMarkupContainer container;
     private FilteredDataTable<ComMeter> dataTable;
 
     private IModel<ComMeterCursor> model;
+
+    private CentralHeatingConsumption consumption;
 
     public ComMeterDialog(String id) {
         super(id);
 
         model = new CompoundPropertyModel<>(new ComMeterCursor());
 
-        dialog = new Dialog("dialog");
+        dialog = new ExtendedDialog("dialog");
         dialog.setWidth(900);
         add(dialog);
 
@@ -62,10 +65,11 @@ public class ComMeterDialog extends Panel {
                 externalHeatmeterService.callComMeterCursor(model.getObject());
 
                 target.add(container);
+                dialog.center(target);
             }
         });
 
-        dataTable = new FilteredDataTable<ComMeter>("dataTable", ComMeter.class, false, "mId", "mNum", "mDate", "mType") {
+        dataTable = new FilteredDataTable<ComMeter>("dataTable", ComMeter.class, false, "radio", "mId", "mNum", "mDate", "mType") {
             @Override
             public List<ComMeter> getList(FilterWrapper<ComMeter> filterWrapper) {
                 return model.getObject().getData();
@@ -90,7 +94,7 @@ public class ComMeterDialog extends Panel {
         form.add(new AjaxLink("select") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                onSelect(dataTable.getRadioGroupModel().getObject());
+                onSelect(target, consumption, dataTable.getRadioGroupModel().getObject());
 
                 dialog.close(target);
             }
@@ -103,7 +107,8 @@ public class ComMeterDialog extends Panel {
         });
     }
 
-    public void open(AjaxRequestTarget target, ComMeterCursor comMeterCursor){
+    public void open(AjaxRequestTarget target, CentralHeatingConsumption consumption, ComMeterCursor comMeterCursor){
+        this.consumption = consumption;
         model.setObject(comMeterCursor);
 
         target.add(container);
@@ -111,6 +116,6 @@ public class ComMeterDialog extends Panel {
         dialog.open(target);
     }
 
-    protected void onSelect(ComMeter comMeter){
+    protected void onSelect(AjaxRequestTarget target, CentralHeatingConsumption consumption, ComMeter comMeter){
     }
 }

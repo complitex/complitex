@@ -28,6 +28,7 @@
         <result column="no_meter_volume" property="noMeterVolume"/>
         <result column="status" property="status"/>
         <result column="message" property="message"/>
+        <result column="meter_id" property="meterId"/>
 
         <association property="localAddress" javaType="org.complitex.address.entity.LocalAddress">
             <result column="city_id" property="cityId"/>
@@ -62,6 +63,7 @@
             <if test="object.rate != null">and rate = #{object.rate}</if>
             <if test="object.noMeterRate != null">and no_meter_volume = #{object.noMeterRate}</if>
             <if test="object.status != null">and status = #{object.status}</if>
+            <if test="object.meterId != null">and meter_id = #{object.meterId}</if>
         </where>
     </sql>
 
@@ -79,11 +81,11 @@
         insert into central_heating_consumption (consumption_file_id, number, district_code, organization_code, building_code, account_number,
             street, building_number, common_volume, apartment_range, begin_date, end_date, common_area, meter_volume,
             meter_area, common_rent_area, meter_rent_volume, meter_rent_area, no_meter_area, no_meter_rate, rate, no_meter_volume,
-            `status`, `message`)
+            `status`, `message`, meter_id)
         values (#{consumptionFileId}, #{number}, #{districtCode}, #{organizationCode}, #{buildingCode}, #{accountNumber}, #{street},
             #{buildingNumber}, #{commonVolume}, #{apartmentRange}, #{beginDate}, #{endDate}, #{commonArea}, #{meterVolume},
             #{meterArea}, #{commonRentArea}, #{meterRentVolume}, #{meterRentArea}, #{noMeterArea}, #{noMeterRate},
-            #{rate}, #{noMeterVolume}, #{status}, #{message})
+            #{rate}, #{noMeterVolume}, #{status}, #{message}, #{meterId})
     </insert>
 
     <update id="updateCentralHeatingConsumption" parameterType="org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption">
@@ -107,7 +109,9 @@
             `building_id` = #{localAddress.buildingId},
 
             `status` = #{status},
-            `message` = #{message}
+            `message` = #{message},
+
+            `meter_id` = #{meterId}
         where `id` = #{id}
     </update>
 

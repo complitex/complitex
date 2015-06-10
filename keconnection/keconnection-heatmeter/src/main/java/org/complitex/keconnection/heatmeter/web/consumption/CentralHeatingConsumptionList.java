@@ -46,7 +46,7 @@ import java.util.Optional;
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class CentralHeatingConsumptionList extends TemplatePage{
     private final static String[] FIELDS = {"id", "number", "districtCode", "organizationCode", "buildingCode", "accountNumber",
-            "street", "buildingNumber", "apartmentRange", "commonVolume", "beginDate", "endDate", "status", "message"};
+            "street", "buildingNumber", "apartmentRange", "commonVolume", "beginDate", "endDate", "meterId", "status", "message"};
 
     @EJB
     private ConsumptionFileBean consumptionFileBean;
@@ -57,7 +57,7 @@ public class CentralHeatingConsumptionList extends TemplatePage{
     @EJB
     private CentralHeatingConsumptionService centralHeatingConsumptionService;
 
-    private FilteredDataTable<CentralHeatingConsumption> filteredDataTable;
+    private FilteredDataTable<CentralHeatingConsumption> dataTable;
 
     private IModel<Long> editRowModel = Model.of(-1L);
 
@@ -93,8 +93,8 @@ public class CentralHeatingConsumptionList extends TemplatePage{
                 item.add(new AjaxLinkLabel("linkLabel", Model.of(status)) {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        filteredDataTable.getFilterWrapper().getObject().setStatus(statusFilter.getStatus());
-                        target.add(filteredDataTable);
+                        dataTable.getFilterWrapper().getObject().setStatus(statusFilter.getStatus());
+                        target.add(dataTable);
                     }
                 });
             }
@@ -113,7 +113,7 @@ public class CentralHeatingConsumptionList extends TemplatePage{
                                 .parallelStream()
                                 .forEach(c -> centralHeatingConsumptionService.bind(consumptionFile, c));
 
-                        target.add(filteredDataTable, statusContainer);
+                        target.add(dataTable, statusContainer);
                     }
 
                     @Override
@@ -134,8 +134,12 @@ public class CentralHeatingConsumptionList extends TemplatePage{
 
         ComMeterDialog comMeterDialog = new ComMeterDialog("comMeterDialog"){
             @Override
-            protected void onSelect(ComMeter comMeter) {
-                System.out.println(comMeter.getMId());
+            protected void onSelect(AjaxRequestTarget target, CentralHeatingConsumption consumption, ComMeter comMeter) {
+                consumption.setMeterId(comMeter.getMId());
+                consumption.setStatus(ConsumptionStatus.BOUND);
+                centralHeatingConsumptionBean.save(consumption);
+
+                target.add(dataTable);
             }
         };
         add(comMeterDialog);
@@ -170,7 +174,7 @@ public class CentralHeatingConsumptionList extends TemplatePage{
         actions.add(new Action<CentralHeatingConsumption>("search") {
             @Override
             public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
-                comMeterDialog.open(target, new ComMeterCursor());
+                comMeterDialog.open(target, model.getObject(), new ComMeterCursor());
             }
         });
 
@@ -179,7 +183,7 @@ public class CentralHeatingConsumptionList extends TemplatePage{
             public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
                 editRowModel.setObject(model.getObject().getId());
 
-                target.add(filteredDataTable);
+                target.add(dataTable);
             }
 
             @Override
@@ -194,7 +198,7 @@ public class CentralHeatingConsumptionList extends TemplatePage{
                 centralHeatingConsumptionBean.save(model.getObject());
 
                 editRowModel.setObject(-1L);
-                target.add(filteredDataTable);
+                target.add(dataTable);
             }
 
             @Override
@@ -208,7 +212,7 @@ public class CentralHeatingConsumptionList extends TemplatePage{
             @Override
             public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
                 editRowModel.setObject(-1L);
-                target.add(filteredDataTable);
+                target.add(dataTable);
             }
 
             @Override
@@ -218,7 +222,7 @@ public class CentralHeatingConsumptionList extends TemplatePage{
         });
 
         //table
-        add(filteredDataTable = new FilteredDataTable<CentralHeatingConsumption>("dataTable",
+        add(dataTable = new FilteredDataTable<CentralHeatingConsumption>("dataTable",
                 CentralHeatingConsumption.class, null, actions, FIELDS) {
             @Override
             protected void onInit(FilterWrapper<CentralHeatingConsumption> filterWrapper) {
@@ -246,7 +250,7 @@ public class CentralHeatingConsumptionList extends TemplatePage{
         });
 
         //ascending order
-        filteredDataTable.getFilterWrapper().setAscending(true);
+        dataTable.getFilterWrapper().setAscending(true);
 
         add(new AjaxLink("back") {
             @Override
