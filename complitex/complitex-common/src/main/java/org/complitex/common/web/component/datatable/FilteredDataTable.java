@@ -68,18 +68,18 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         for (String field : fields){
             IColumn<T, String> column = columnMap != null ? columnMap.get(field) : null;
 
+            Field f = FieldUtils.getField(objectClass, field, true);
+
             if (column == null){
-                column = onColumn(field);
+                column = getColumn(field, f);
             }
 
             if (column == null){
-                Field f = FieldUtils.getField(objectClass, field, true);
-
                 if (f.getType().equals(Date.class)){
                     column = new DateColumn<>(new ResourceModel(field), field, field);
                 }else if (f.getType().isEnum()){
                     //noinspection unchecked
-                    column = new EnumColumn(new ResourceModel(field), field, f.getType(), getLocale());
+                    column = new EnumColumn(field, f.getType(), getLocale());
                 }else {
                     column = new EditableColumn<T>(field) {
                         @Override
@@ -163,7 +163,7 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         this(id, objectClass, null, null, fields);
     }
 
-    protected IColumn<T, String> onColumn(String field){
+    protected IColumn<T, String> getColumn(String field, Field f){
         return null;
     }
 

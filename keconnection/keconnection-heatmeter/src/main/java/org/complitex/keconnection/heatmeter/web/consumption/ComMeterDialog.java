@@ -7,6 +7,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -18,9 +19,10 @@ import org.complitex.common.web.component.wiquery.ExtendedDialog;
 import org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption;
 import org.complitex.keconnection.heatmeter.entity.cursor.ComMeter;
 import org.complitex.keconnection.heatmeter.entity.cursor.ComMeterCursor;
-import org.complitex.keconnection.heatmeter.service.ExternalHeatmeterServiceStub;
+import org.complitex.keconnection.heatmeter.service.ExternalHeatmeterService;
 
 import javax.ejb.EJB;
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -28,7 +30,7 @@ import java.util.List;
  */
 public class ComMeterDialog extends Panel {
     @EJB
-    private ExternalHeatmeterServiceStub externalHeatmeterService;
+    private ExternalHeatmeterService externalHeatmeterService;
 
     private ExtendedDialog dialog;
     private WebMarkupContainer container;
@@ -51,6 +53,9 @@ public class ComMeterDialog extends Panel {
         container.setOutputMarkupId(true);
         dialog.add(container);
 
+        FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
+        container.add(feedbackPanel);
+
         Form form = new Form<>("form", model);
         container.add(form);
 
@@ -62,7 +67,11 @@ public class ComMeterDialog extends Panel {
         form.add(new AjaxButton("search", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                externalHeatmeterService.callComMeterCursor(model.getObject());
+                try {
+                    externalHeatmeterService.callComMeterCursor(model.getObject());
+                } catch (Exception e) {
+                    error(getString("error_call"));
+                }
 
                 target.add(container);
                 dialog.center(target);
@@ -81,12 +90,12 @@ public class ComMeterDialog extends Panel {
             }
 
             @Override
-            protected IColumn<ComMeter, String> onColumn(String field) {
+            protected IColumn<ComMeter, String> getColumn(String field, Field f) {
                 if (field.equals("radio")){
                     return new RadioColumn<>();
                 }
 
-                return super.onColumn(field);
+                return super.getColumn(field, f);
             }
         };
         form.add(dataTable);

@@ -63,6 +63,7 @@
             <if test="object.rate != null">and rate = #{object.rate}</if>
             <if test="object.noMeterRate != null">and no_meter_volume = #{object.noMeterRate}</if>
             <if test="object.status != null">and status = #{object.status}</if>
+            <if test="object.message != null">and message = #{object.message}</if>
             <if test="object.meterId != null">and meter_id = #{object.meterId}</if>
         </where>
     </sql>

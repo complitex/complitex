@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -22,13 +23,13 @@ import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.Action;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
+import org.complitex.common.web.component.datatable.column.EnumColumn;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.keconnection.heatmeter.entity.ConsumptionStatusFilter;
 import org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus;
 import org.complitex.keconnection.heatmeter.entity.cursor.ComMeter;
-import org.complitex.keconnection.heatmeter.entity.cursor.ComMeterCursor;
 import org.complitex.keconnection.heatmeter.service.consumption.CentralHeatingConsumptionBean;
 import org.complitex.keconnection.heatmeter.service.consumption.CentralHeatingConsumptionService;
 import org.complitex.keconnection.heatmeter.service.consumption.ConsumptionFileBean;
@@ -36,6 +37,7 @@ import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +48,7 @@ import java.util.Optional;
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class CentralHeatingConsumptionList extends TemplatePage{
     private final static String[] FIELDS = {"id", "number", "districtCode", "organizationCode", "buildingCode", "accountNumber",
-            "street", "buildingNumber", "apartmentRange", "commonVolume", "beginDate", "endDate", "meterId", "status", "message"};
+            "street", "buildingNumber", "apartmentRange", "commonVolume", "beginDate", "endDate", "meterId", "status"};
 
     @EJB
     private ConsumptionFileBean consumptionFileBean;
@@ -94,6 +96,7 @@ public class CentralHeatingConsumptionList extends TemplatePage{
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         dataTable.getFilterWrapper().getObject().setStatus(statusFilter.getStatus());
+                        dataTable.getFilterWrapper().getObject().setMessage(statusFilter.getMessage());
                         target.add(dataTable);
                     }
                 });
@@ -171,10 +174,11 @@ public class CentralHeatingConsumptionList extends TemplatePage{
             }
         });
 
-        actions.add(new Action<CentralHeatingConsumption>("search") {
+        actions.add(new Action<CentralHeatingConsumption>("search_meter") {
             @Override
             public void onAction(AjaxRequestTarget target, IModel<CentralHeatingConsumption> model) {
-                comMeterDialog.open(target, model.getObject(), new ComMeterCursor());
+                comMeterDialog.open(target, model.getObject(), centralHeatingConsumptionService
+                        .getComMeterCursor(consumptionFile, model.getObject()));
             }
         });
 
@@ -246,6 +250,16 @@ public class CentralHeatingConsumptionList extends TemplatePage{
                 }
 
                 return editRowModel.getObject().equals(rowModel.getObject().getId());
+            }
+
+            @Override
+            protected IColumn<CentralHeatingConsumption, String> getColumn(String field, Field f) {
+                if (field.equals("status")){
+                    //noinspection unchecked
+                    return new EnumColumn(field, f.getType(), "message", getLocale());
+                }
+
+                return super.getColumn(field, f);
             }
         });
 

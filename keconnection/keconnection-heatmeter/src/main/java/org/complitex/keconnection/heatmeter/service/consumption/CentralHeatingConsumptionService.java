@@ -9,7 +9,6 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.complitex.address.entity.ExternalAddress;
 import org.complitex.address.entity.LocalAddress;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.BuildingCode;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.BroadcasterService;
 import org.complitex.common.util.DateUtil;
@@ -263,25 +262,13 @@ public class CentralHeatingConsumptionService {
         }
 
         //meter cursor
-        BuildingCode buildingCode = buildingStrategy.getBuildingCode(c.getLocalAddress().getBuildingId(),
-                c.getOrganizationCode());
+        ComMeterCursor cursor = getComMeterCursor(consumptionFile, c);
 
-        if (buildingCode == null){
+        if (cursor.getBuildingCode() == null){
             c.setStatus(LOCAL_BUILDING_CODE_UNRESOLVED);
             centralHeatingConsumptionBean.save(c);
             return;
         }
-
-        String dataSource = organizationStrategy.getDataSource(consumptionFile.getUserOrganizationId(),
-                consumptionFile.getServiceId());
-
-        //todo handle datasource exception
-
-        String serviceCode = serviceStrategy.getDomainObject(consumptionFile.getServiceId(), true)
-                .getStringValue(ServiceStrategy.CODE);
-
-        ComMeterCursor cursor = new ComMeterCursor(dataSource, c.getOrganizationCode(), buildingCode.getBuildingCode(),
-                consumptionFile.getOm(), serviceCode);
 
         try {
             externalHeatmeterService.callComMeterCursor(cursor);
@@ -332,5 +319,32 @@ public class CentralHeatingConsumptionService {
 
             log.error("consumption file bind error", e);
         }
+    }
+
+    public ComMeterCursor getComMeterCursor(ConsumptionFile consumptionFile, CentralHeatingConsumption c) {
+        Integer buildingCode = null;
+
+        if (c.getLocalAddress().getBuildingId() != null) {
+            buildingCode = buildingStrategy.getBuildingCode(c.getLocalAddress().getBuildingId(),
+                    c.getOrganizationCode()).getBuildingCode();
+        }
+
+        String dataSource = null;
+        try {
+            dataSource = organizationStrategy.getDataSource(consumptionFile.getUserOrganizationId(),
+                    consumptionFile.getServiceId());
+        } catch (Exception e) {
+            //datasource
+        }
+
+        String serviceCode = null;
+        try {
+            serviceCode = serviceStrategy.getDomainObject(consumptionFile.getServiceId(), true)
+                    .getStringValue(ServiceStrategy.CODE);
+        } catch (Exception e) {
+            //serviceCode
+        }
+
+        return new ComMeterCursor(dataSource, c.getOrganizationCode(), buildingCode, consumptionFile.getOm(), serviceCode);
     }
 }
