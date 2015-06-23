@@ -47,6 +47,7 @@
 
         <mapper resource="org/complitex/correction/service/CorrectionBean.xml"/>
         <mapper resource="org/complitex/correction/service/AddressCorrectionBean.xml"/>
+        <mapper resource="org/complitex/correction/service/ServiceCorrectionBean.xml"/>
 
         <mapper resource="org/complitex/admin/service/UserBean.xml"/>
         <mapper resource="org/complitex/admin/service/UserProfileBean.xml"/>

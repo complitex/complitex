@@ -1,4 +1,4 @@
-package org.complitex.correction.web;
+package org.complitex.correction.web.organization;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebPage;
@@ -10,6 +10,7 @@ import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
+import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;

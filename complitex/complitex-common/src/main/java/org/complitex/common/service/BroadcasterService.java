@@ -8,7 +8,6 @@ import org.complitex.common.entity.WebSocketPushMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.Asynchronous;
 import javax.ejb.Singleton;
 
 /**
@@ -33,7 +32,6 @@ public class BroadcasterService {
         broadcast(service.getClass().getName(), payload);
     }
 
-    @Asynchronous
     public void broadcast(String service, Object payload){
         try {
             broadcaster.broadcastAll(application, new WebSocketPushMessage(service, payload));

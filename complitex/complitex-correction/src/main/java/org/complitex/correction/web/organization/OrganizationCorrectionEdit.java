@@ -1,4 +1,4 @@
-package org.complitex.correction.web;
+package org.complitex.correction.web.organization;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -12,7 +12,6 @@ import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;

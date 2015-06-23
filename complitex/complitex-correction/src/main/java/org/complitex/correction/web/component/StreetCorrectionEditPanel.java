@@ -13,7 +13,7 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
 import org.complitex.correction.entity.StreetCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
-import org.complitex.correction.web.StreetCorrectionList;
+import org.complitex.correction.web.address.StreetCorrectionList;
 
 import javax.ejb.EJB;
 import java.util.List;

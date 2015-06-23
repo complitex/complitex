@@ -1,4 +1,4 @@
-package org.complitex.correction.web;
+package org.complitex.correction.web.address;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;

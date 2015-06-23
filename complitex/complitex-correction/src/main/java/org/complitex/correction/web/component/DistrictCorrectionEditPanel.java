@@ -11,7 +11,7 @@ import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.correction.entity.DistrictCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
-import org.complitex.correction.web.DistrictCorrectionList;
+import org.complitex.correction.web.address.DistrictCorrectionList;
 
 import javax.ejb.EJB;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.complitex.correction.web;
+package org.complitex.correction.web.address;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
@@ -11,6 +11,7 @@ import org.complitex.common.service.SessionBean;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.StreetTypeCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.web.AbstractCorrectionList;
 
 import javax.ejb.EJB;
 import java.util.List;

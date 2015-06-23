@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.complitex.correction.service.ServiceCorrectionBean">
+    <resultMap id="serviceCorrectionResultMap" type="org.complitex.correction.entity.ServiceCorrection"
+               extends="org.complitex.correction.service.CorrectionBean.correctionResultMap">
+    </resultMap>
+
+    <select id="selectServiceCorrection" resultMap="serviceCorrectionResultMap" parameterType="long">
+        select * from `service_correction` where `id` = #{id}
+    </select>
+
+    <select id="selectSeviceCorrections" resultMap="serviceCorrectionResultMap"
+            parameterType="org.complitex.common.entity.FilterWrapper">
+        select * from `service_correction` c
+        <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionWhere"/>
+    </select>
+
+    <select id="selectServiceCorrectionsCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
+        select count(*) from `service_correction` c
+        <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionWhere"/>
+    </select>
+</mapper>

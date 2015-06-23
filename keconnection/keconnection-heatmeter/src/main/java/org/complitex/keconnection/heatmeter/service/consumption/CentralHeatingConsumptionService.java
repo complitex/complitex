@@ -26,9 +26,9 @@ import org.complitex.organization.strategy.ServiceStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.Asynchronous;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.annotation.Resource;
+import javax.ejb.*;
+import javax.transaction.*;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +40,7 @@ import static org.complitex.keconnection.heatmeter.entity.consumption.Consumptio
  * @author inheaven on 20.03.2015 0:57.
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class CentralHeatingConsumptionService {
     private Logger log = LoggerFactory.getLogger(CentralHeatingConsumptionService.class);
 
@@ -67,6 +68,9 @@ public class CentralHeatingConsumptionService {
     @EJB
     private KeOrganizationStrategy organizationStrategy;
 
+    @Resource
+    private UserTransaction userTransaction;
+
     @Asynchronous
     public void load(Date om, Long serviceProviderId, Long serviceId, Long userOrganizationId, String fileName,
                      String checkSum, InputStream inputStream){
@@ -91,9 +95,12 @@ public class CentralHeatingConsumptionService {
             consumptionFile.setStatus(ConsumptionFileStatus.LOADING);
             consumptionFile.setLoaded(DateUtil.now());
 
+            userTransaction.begin();
             consumptionFileBean.save(consumptionFile);
+            userTransaction.commit();
 
             broadcasterService.broadcast(this, consumptionFile);
+
 
             try {
                 sheet.forEach(r -> {
@@ -123,7 +130,9 @@ public class CentralHeatingConsumptionService {
                 });
 
                 consumptionFile.setStatus(ConsumptionFileStatus.LOADED);
+                userTransaction.begin();
                 consumptionFileBean.save(consumptionFile);
+                userTransaction.commit();
 
                 broadcasterService.broadcast(this, consumptionFile);
             } catch (Exception e) {
@@ -173,37 +182,47 @@ public class CentralHeatingConsumptionService {
 
     @Asynchronous
     public void bind(ConsumptionFile consumptionFile){
-        consumptionFile.setStatus(ConsumptionFileStatus.BINDING);
-        consumptionFileBean.save(consumptionFile);
+        try {
+            consumptionFile.setStatus(ConsumptionFileStatus.BINDING);
 
-        broadcasterService.broadcast(this, consumptionFile);
+            userTransaction.begin();
+            consumptionFileBean.save(consumptionFile);
+            userTransaction.commit();
 
-        List<CentralHeatingConsumption> consumptions = centralHeatingConsumptionBean.getCentralHeatingConsumptions(
-                FilterWrapper.of(new CentralHeatingConsumption(consumptionFile.getId())));
+            broadcasterService.broadcast(this, consumptionFile);
 
-        consumptions.parallelStream().forEach(c -> bind(consumptionFile, c));
+            List<CentralHeatingConsumption> consumptions = centralHeatingConsumptionBean.getCentralHeatingConsumptions(
+                    FilterWrapper.of(new CentralHeatingConsumption(consumptionFile.getId())));
 
-        boolean notBound = consumptions.parallelStream()
-                .filter(c -> !c.getStatus().equals(ConsumptionStatus.BOUND))
-                .findAny()
-                .isPresent();
+            consumptions.parallelStream().forEach(c -> bind(consumptionFile, c));
 
-        consumptionFile.setStatus(notBound ? ConsumptionFileStatus.BIND_ERROR : ConsumptionFileStatus.BOUND);
-        consumptionFileBean.save(consumptionFile);
+            boolean notBound = consumptions.parallelStream()
+                    .filter(c -> !c.getStatus().equals(ConsumptionStatus.BOUND))
+                    .findAny()
+                    .isPresent();
 
-        broadcasterService.broadcast(this, consumptionFile);
+            consumptionFile.setStatus(notBound ? ConsumptionFileStatus.BIND_ERROR : ConsumptionFileStatus.BOUND);
+
+            userTransaction.begin();
+            consumptionFileBean.save(consumptionFile);
+            userTransaction.commit();
+
+            broadcasterService.broadcast(this, consumptionFile);
+        }catch (Exception e) {
+            log.error("bind error", e);
+        }
     }
 
     public void bind(ConsumptionFile consumptionFile, CentralHeatingConsumption c) {
         //validation
         if (Strings.isNullOrEmpty(c.getBuildingNumber())) {
-            c.setStatus(ConsumptionStatus.VALIDATION_BUILDING_ERROR);
+            c.setStatus(VALIDATION_BUILDING_ERROR);
             centralHeatingConsumptionBean.save(c);
             return;
         }
 
         if (Strings.isNullOrEmpty(c.getStreet())) {
-            c.setStatus(ConsumptionStatus.VALIDATION_STREET_ERROR);
+            c.setStatus(VALIDATION_STREET_ERROR);
             centralHeatingConsumptionBean.save(c);
             return;
         }
@@ -212,13 +231,20 @@ public class CentralHeatingConsumptionService {
 
         //street type
         if (Strings.isNullOrEmpty(externalAddress.getStreetType())){
-            c.setStatus(ConsumptionStatus.VALIDATION_STREET_TYPE_ERROR);
+            c.setStatus(VALIDATION_STREET_TYPE_ERROR);
             centralHeatingConsumptionBean.save(c);
             return;
         }
 
         if (Strings.isNullOrEmpty(externalAddress.getStreet())) {
-            c.setStatus(ConsumptionStatus.VALIDATION_STREET_ERROR);
+            c.setStatus(VALIDATION_STREET_ERROR);
+            centralHeatingConsumptionBean.save(c);
+            return;
+        }
+
+        //apartment range
+        if (!Strings.isNullOrEmpty(c.getApartmentRange())){
+            c.setStatus(VALIDATION_APARTMENT_ERROR);
             centralHeatingConsumptionBean.save(c);
             return;
         }
@@ -243,8 +269,6 @@ public class CentralHeatingConsumptionService {
                 case BUILDING:
                     c.setStatus(LOCAL_BUILDING_UNRESOLVED);
                     break;
-                default:
-                    c.setStatus(BINDING);
             }
 
             if (c.getStatus() != BINDING){

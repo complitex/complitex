@@ -21,6 +21,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
@@ -119,7 +120,9 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
 
     protected abstract PageParameters getEditPageParams(Long objectCorrectionId);
 
-    protected abstract IModel<String> getTitleModel();
+    protected IModel<String> getTitleModel(){
+        return new ResourceModel("title");
+    }
 
     protected void init() {
         IModel<String> titleModel = getTitleModel();

@@ -14,7 +14,7 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
 import org.complitex.correction.entity.BuildingCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
-import org.complitex.correction.web.BuildingCorrectionList;
+import org.complitex.correction.web.address.BuildingCorrectionList;
 
 import javax.ejb.EJB;
 import java.util.List;

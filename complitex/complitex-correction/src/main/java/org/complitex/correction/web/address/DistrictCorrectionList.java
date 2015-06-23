@@ -1,4 +1,4 @@
-package org.complitex.correction.web;
+package org.complitex.correction.web.address;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
