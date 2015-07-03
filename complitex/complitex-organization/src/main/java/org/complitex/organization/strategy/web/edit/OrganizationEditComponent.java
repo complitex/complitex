@@ -469,7 +469,6 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         } else {
             //data source
             getDomainObject().setStringValue(DATA_SOURCE, dataSourceModel.getObject().getDataSource());
-
         }
     }
 }

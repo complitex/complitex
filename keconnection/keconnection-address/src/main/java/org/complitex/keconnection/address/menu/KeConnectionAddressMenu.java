@@ -10,11 +10,13 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.menu.AddressMenu;
 import org.complitex.address.resource.CommonResources;
+import org.complitex.address.web.AddressSyncPage;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.ITemplateLink;
+import org.complitex.template.web.template.ResourceTemplateLink;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
 import java.util.List;
@@ -67,6 +69,9 @@ public class KeConnectionAddressMenu extends ResourceTemplateMenu {
                 }
             });
         }
+
+        links.add(new ResourceTemplateLink("address_sync_page", this, AddressSyncPage.class));
+
         return links;
     }
 

@@ -3,7 +3,6 @@ package org.complitex.common.entity;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.type.InputPanel;
 
 /**
@@ -40,7 +39,7 @@ public enum DictionaryConfig implements IComponentConfig {
                 public void detach() {
                     model.detach();
                 }
-            }, 3L);
+            }, 2L);
         } else {
             return new InputPanel<>("config", model, String.class, false, null, true, 40);
         }

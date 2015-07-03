@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.service.AddressSyncAdapter;
+import org.complitex.address.service.RemoteCallException;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.util.StringUtil;
 
@@ -43,8 +44,13 @@ public class SyncTest extends WebPage {
                 String dataSource = "jdbc/osznconnectionRemoteResource";
 
                 //districts
-                Cursor<AddressSync> districtSyncs = addressSyncService.getDistrictSyncs(
-                        "Тверь", "г", new Date());
+                Cursor<AddressSync> districtSyncs = null;
+                try {
+                    districtSyncs = addressSyncService.getDistrictSyncs(
+                            "Тверь", "г", new Date());
+                } catch (RemoteCallException e) {
+                    e.printStackTrace();
+                }
                 if (districtSyncs != null) {
                     String t = "";
 
@@ -56,7 +62,12 @@ public class SyncTest extends WebPage {
                 }
 
                 //street types
-                Cursor<AddressSync> streetTypeSyncs = addressSyncService.getStreetTypeSyncs();
+                Cursor<AddressSync> streetTypeSyncs = null;
+                try {
+                    streetTypeSyncs = addressSyncService.getStreetTypeSyncs();
+                } catch (RemoteCallException e) {
+                    e.printStackTrace();
+                }
                 if (streetTypeSyncs != null) {
                     String t = "";
 
@@ -68,7 +79,12 @@ public class SyncTest extends WebPage {
                 }
 
                 //streets
-                Cursor<AddressSync> streetSyncs = addressSyncService.getStreetSyncs("Тверь", "г", new Date());
+                Cursor<AddressSync> streetSyncs = null;
+                try {
+                    streetSyncs = addressSyncService.getStreetSyncs("Тверь", "г", new Date());
+                } catch (RemoteCallException e) {
+                    e.printStackTrace();
+                }
                 if (streetSyncs != null){
                     String t = "";
 
@@ -80,8 +96,13 @@ public class SyncTest extends WebPage {
                 }
 
                 //buildings
-                Cursor<AddressSync> buildingAddressSyncs = addressSyncService.getBuildingSyncs(
-                        "Центральный", "ул", "ФРАНТИШЕКА КРАЛА", new Date());
+                Cursor<AddressSync> buildingAddressSyncs = null;
+                try {
+                    buildingAddressSyncs = addressSyncService.getBuildingSyncs(
+                            "Центральный", "ул", "ФРАНТИШЕКА КРАЛА", new Date());
+                } catch (RemoteCallException e) {
+                    e.printStackTrace();
+                }
                 if (streetSyncs != null){
                     String t = "";
 

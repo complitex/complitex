@@ -4,6 +4,7 @@ import org.complitex.address.entity.AddressSync;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 
+import javax.ejb.Local;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -12,10 +13,11 @@ import java.util.Locale;
  * @author Anatoly Ivanov
  *         Date: 30.07.2014 0:08
  */
+@Local
 public interface IAddressSyncHandler {
     Long NOT_FOUND_ID = -1L;
 
-    Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date);
+    Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) throws RemoteCallException;
 
     List<? extends DomainObject> getObjects(DomainObject parent);
 

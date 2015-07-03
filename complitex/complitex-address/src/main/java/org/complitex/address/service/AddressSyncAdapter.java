@@ -40,7 +40,13 @@ public class AddressSyncAdapter extends AbstractBean {
 
         DomainObject organization = organizationStrategy.getDomainObject(organizationId, true);
 
-        return organization.getStringValue(IOrganizationStrategy.DATA_SOURCE);
+        String dataSource = organization.getStringValue(IOrganizationStrategy.DATA_SOURCE);
+
+        if (dataSource == null){
+            throw new RuntimeException("data source not found");
+        }
+
+        return dataSource;
     }
 
     /**
@@ -56,8 +62,8 @@ public class AddressSyncAdapter extends AbstractBean {
      * возвращаемое значение: 0 - все хорошо, -1 - неизвестный тип нас.пункта, -2 - неизвестный нас.пункт
      */
     @SuppressWarnings("unchecked")
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Cursor<AddressSync> getDistrictSyncs(String cityName, String cityTypeName, Date date){
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Cursor<AddressSync> getDistrictSyncs(String cityName, String cityTypeName, Date date) throws RemoteCallException {
         Map<String, Object> param = new HashMap<>();
 
         param.put("cityName", cityName);
@@ -65,7 +71,11 @@ public class AddressSyncAdapter extends AbstractBean {
         param.put("date", date);
         param.put("okCode", 0);
 
-        sqlSession(getDataSource()).selectOne(NS + ".selectDistrictSyncs", param);
+        try {
+            sqlSession(getDataSource()).selectOne(NS + ".selectDistrictSyncs", param);
+        } catch (Exception e) {
+            throw new RemoteCallException(e);
+        }
 
         log.info("getDistrictSyncs: " + param);
 
@@ -83,12 +93,15 @@ public class AddressSyncAdapter extends AbstractBean {
      * возвращаемое значение: 0 - все хорошо, -1 - ошибка
      */
     @SuppressWarnings("unchecked")
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Cursor<AddressSync> getStreetTypeSyncs(){
+    public Cursor<AddressSync> getStreetTypeSyncs() throws RemoteCallException {
         Map<String, Object> param = new HashMap<>();
         param.put("okCode", 0);
 
-        sqlSession(getDataSource()).selectOne(NS + ".selectStreetTypeSyncs", param);
+        try {
+            sqlSession(getDataSource()).selectOne(NS + ".selectStreetTypeSyncs", param);
+        } catch (Exception e) {
+            throw new RemoteCallException(e);
+        }
 
         log.info("getStreetTypeSyncs: " + param);
 
@@ -109,8 +122,7 @@ public class AddressSyncAdapter extends AbstractBean {
      * возвращаемое значение: 0 - все хорошо, -1 - неизвестный тип нас.пункта, -2 - неизвестный нас.пункт
      */
     @SuppressWarnings("unchecked")
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Cursor<AddressSync> getStreetSyncs(String cityName, String cityTypeName, Date date){
+    public Cursor<AddressSync> getStreetSyncs(String cityName, String cityTypeName, Date date) throws RemoteCallException {
         Map<String, Object> param = new HashMap<>();
 
         param.put("cityName", cityName);
@@ -121,10 +133,8 @@ public class AddressSyncAdapter extends AbstractBean {
         try {
             sqlSession(getDataSource()).selectOne(NS + ".selectStreetSyncs", param);
         } catch (Exception e) {
-            log.error("Ошибка удаленной функции получения списка улиц", e);
+            throw new RemoteCallException(e);
         }
-
-        log.info("getStreetSyncs: " + param);
 
         List<AddressSync> list = (List<AddressSync>) param.get("out");
 
@@ -153,9 +163,8 @@ public class AddressSyncAdapter extends AbstractBean {
      * возвращаемое значение: 0 - все хорошо, -3 - неизвестный район нас.пункта, -4 - неизвестный тип улицы, -5 - неизвестная улица
      */
     @SuppressWarnings("unchecked")
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Cursor<AddressSync> getBuildingSyncs(String districtName, String streetTypeName,
-                                               String streetName, Date date){
+                                               String streetName, Date date) throws RemoteCallException {
         Map<String, Object> param = new HashMap<>();
 
         param.put("districtName", districtName);
@@ -167,10 +176,8 @@ public class AddressSyncAdapter extends AbstractBean {
         try {
             sqlSession(getDataSource()).selectOne(NS + ".selectBuildingSyncs", param);
         } catch (Exception e) {
-            log.error("Ошибка удаленной функции получения списка домов", e);
+            throw new RemoteCallException(e);
         }
-
-        log.info("getBuildingSyncs: " + param);
 
         return new Cursor<>((Integer)param.get("resultCode"), (List<AddressSync>) param.get("out"));
     }

@@ -46,7 +46,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
-    public Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) {
+    public Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) throws RemoteCallException {
         return addressSyncAdapter.getDistrictSyncs(cityStrategy.getName(parent),
                 cityTypeStrategy.getShortName(parent.getAttribute(CityStrategy.CITY_TYPE).getValueId()),
                 date);

@@ -6,7 +6,6 @@ import org.complitex.address.entity.AddressSyncStatus;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.util.DateUtil;
-import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +34,18 @@ public class AddressSyncService {
     @EJB
     private AddressSyncBean addressSyncBean;
 
+    @EJB(beanName = "DistrictSyncHandler")
+    private IAddressSyncHandler districtSyncHandler;
+
+    @EJB(beanName = "StreetTypeSyncHandler")
+    private IAddressSyncHandler streetTypeSyncHandler;
+
+    @EJB(beanName = "StreetSyncHandler")
+    private IAddressSyncHandler streetSyncHandler;
+
+    @EJB(beanName = "BuildingSyncHandler")
+    private IAddressSyncHandler buildingSyncHandler;
+
     private AtomicBoolean lockSync = new AtomicBoolean(false);
 
     private AtomicBoolean cancelSync = new AtomicBoolean(false);
@@ -50,13 +61,13 @@ public class AddressSyncService {
     private IAddressSyncHandler getHandler(AddressEntity type){
         switch (type){
             case DISTRICT:
-                return EjbBeanLocator.getBean(DistrictSyncHandler.class);
+                return districtSyncHandler;
             case STREET_TYPE:
-                return EjbBeanLocator.getBean(StreetTypeSyncHandler.class);
+                return streetTypeSyncHandler;
             case STREET:
-                return EjbBeanLocator.getBean(StreetSyncHandler.class);
+                return streetSyncHandler;
             case BUILDING:
-                return EjbBeanLocator.getBean(BuildingSyncHandler.class);
+                return buildingSyncHandler;
 
             default:
                 throw new IllegalArgumentException();
@@ -75,7 +86,7 @@ public class AddressSyncService {
         getHandler(sync.getType()).archive(sync);
     }
 
-    private void sync(IAddressSyncListener listener, AddressEntity type){
+    public void sync(IAddressSyncListener listener, AddressEntity type){
         if (lockSync.get()){
             return;
         }
@@ -112,7 +123,7 @@ public class AddressSyncService {
         }
     }
 
-    private void sync(DomainObject parent,  AddressEntity type, IAddressSyncListener listener){
+    public void sync(DomainObject parent,  AddressEntity type, IAddressSyncListener listener) throws RemoteCallException {
         IAddressSyncHandler handler = getHandler(type);
 
         Date date = DateUtil.getCurrentDate();

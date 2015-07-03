@@ -45,7 +45,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     private BuildingAddressStrategy buildingAddressStrategy;
 
     @Override
-    public Cursor<AddressSync> getAddressSyncs(final DomainObject parent, Date date) {
+    public Cursor<AddressSync> getAddressSyncs(final DomainObject parent, Date date) throws RemoteCallException {
             return addressSyncAdapter.getBuildingSyncs(districtStrategy.getName(parent), "", "", date);
     }
 

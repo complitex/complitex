@@ -45,7 +45,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
     private AddressSyncBean addressSyncBean;
 
     @Override
-    public Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) {
+    public Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) throws RemoteCallException {
         return addressSyncAdapter.getStreetSyncs(cityStrategy.getName(parent),
                 cityTypeStrategy.getShortName(parent.getAttribute(CityStrategy.CITY_TYPE).getValueId()),
                 date);

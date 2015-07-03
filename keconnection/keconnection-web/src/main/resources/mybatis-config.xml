@@ -11,6 +11,8 @@
                      javaType="org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFileStatus"/>
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
                      javaType="org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
+                     javaType="org.complitex.address.entity.AddressSyncStatus"/>
     </typeHandlers>
 
     <plugins>
@@ -48,6 +50,7 @@
         <mapper resource="org/complitex/correction/service/CorrectionBean.xml"/>
         <mapper resource="org/complitex/correction/service/AddressCorrectionBean.xml"/>
         <mapper resource="org/complitex/correction/service/ServiceCorrectionBean.xml"/>
+        <mapper resource="org/complitex/correction/service/OrganizationCorrectionBean.xml"/>
 
         <mapper resource="org/complitex/admin/service/UserBean.xml"/>
         <mapper resource="org/complitex/admin/service/UserProfileBean.xml"/>
@@ -63,5 +66,8 @@
 
         <mapper resource="org/complitex/keconnection/heatmeter/service/consumption/ConsumptionFileBean.xml"/>
         <mapper resource="org/complitex/keconnection/heatmeter/service/consumption/CentralHeatingConsumptionBean.xml"/>
+
+        <mapper resource="org/complitex/address/service/AddressSyncBean.xml"/>
+        <mapper resource="org/complitex/address/service/AddressSyncAdapter.xml"/>
     </mappers>
 </configuration>

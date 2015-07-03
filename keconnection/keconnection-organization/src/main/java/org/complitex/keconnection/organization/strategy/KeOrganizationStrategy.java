@@ -255,6 +255,15 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
         }
     }
 
+    @Override
+    protected void insertAttribute(Attribute attribute) {
+        if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())){
+            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringCultures());
+            attribute.setValueId(generatedStringId);
+        }
+
+        super.insertAttribute(attribute);
+    }
 
     @Override
     public DomainObject getHistoryObject(Long objectId, Date date) {

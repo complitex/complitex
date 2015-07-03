@@ -33,7 +33,7 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
     private AddressSyncBean addressSyncBean;
 
     @Override
-    public Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) {
+    public Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) throws RemoteCallException {
         return addressSyncAdapter.getStreetTypeSyncs();
     }
 
