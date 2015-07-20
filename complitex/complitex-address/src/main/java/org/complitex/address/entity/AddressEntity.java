@@ -28,4 +28,14 @@ public enum AddressEntity implements IEntity, IFixedIdType{
     public String getEntityName() {
         return entityName;
     }
+
+    public static AddressEntity getValue(String entityName){
+        for (AddressEntity addressEntity : AddressEntity.values()){
+            if (addressEntity.getEntityName().equals(entityName)){
+                return addressEntity;
+            }
+        }
+
+        return null;
+    }
 }

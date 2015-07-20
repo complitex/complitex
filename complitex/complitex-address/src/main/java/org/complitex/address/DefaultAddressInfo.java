@@ -1,10 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.address;
 
 import com.google.common.collect.ImmutableList;
+
 import java.util.List;
 
 /**

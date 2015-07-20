@@ -1,7 +1,6 @@
 package org.complitex.address.web.component;
 
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
@@ -24,8 +23,8 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.datatable.Action;
-import org.complitex.common.web.component.datatable.column.EnumColumn;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
+import org.complitex.common.web.component.datatable.column.EnumColumn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +50,7 @@ public class AddressSyncPanel extends Panel {
     @EJB
     private AddressSyncService addressSyncService;
 
-    public AddressSyncPanel(String id, final Component toUpdate) {
+    public AddressSyncPanel(String id, AddressEntity addressEntity) {
         super(id);
 
         setOutputMarkupId(true);
@@ -72,7 +71,8 @@ public class AddressSyncPanel extends Panel {
                     getSession().error(ExceptionUtil.getCauseMessage(e, true));
                 }
 
-                target.add(AddressSyncPanel.this, toUpdate);
+                target.add(AddressSyncPanel.this);
+                onUpdate(target);
             }
 
             @Override
@@ -88,7 +88,8 @@ public class AddressSyncPanel extends Panel {
 
                 getSession().info(String.format(getString(model.getObject().getType().name() + ".duplicated"),
                         model.getObject().getName()));
-                target.add(AddressSyncPanel.this, toUpdate);
+                target.add(AddressSyncPanel.this);
+                onUpdate(target);
             }
 
             @Override
@@ -104,7 +105,8 @@ public class AddressSyncPanel extends Panel {
 
                 getSession().info(String.format(getString(model.getObject().getType().name() + ".new_named"),
                         model.getObject().getName()));
-                target.add(AddressSyncPanel.this, toUpdate);
+                target.add(AddressSyncPanel.this);
+                onUpdate(target);
             }
 
             @Override
@@ -120,7 +122,8 @@ public class AddressSyncPanel extends Panel {
 
                 getSession().info(String.format(getString(model.getObject().getType().name() + ".archived"),
                         model.getObject().getName()));
-                target.add(AddressSyncPanel.this, toUpdate);
+                target.add(AddressSyncPanel.this);
+                onUpdate(target);
             }
 
             @Override
@@ -136,7 +139,8 @@ public class AddressSyncPanel extends Panel {
 
                 getSession().info(String.format(getString(model.getObject().getType().name() + ".removed"),
                         model.getObject().getName()));
-                target.add(AddressSyncPanel.this, toUpdate);
+                target.add(AddressSyncPanel.this);
+                onUpdate(target);
             }
 
             @Override
@@ -149,8 +153,8 @@ public class AddressSyncPanel extends Panel {
 
         columnMap.put("objectId", new AddressSyncObjectColumn("objectId"));
         columnMap.put("parentObjectId", new AddressSyncParentColumn("parentObjectId"));
-        columnMap.put("type", new EnumColumn<AddressSync, AddressEntity>("type", AddressEntity.class, getLocale()));
-        columnMap.put("status", new EnumColumn<AddressSync, AddressSyncStatus>("status", AddressSyncStatus.class, getLocale()));
+        columnMap.put("type", new EnumColumn<>("type", AddressEntity.class, getLocale()));
+        columnMap.put("status", new EnumColumn<>("status", AddressSyncStatus.class, getLocale()));
 
         add(new FilteredDataTable<AddressSync>("table", AddressSync.class, columnMap, actions, FIELDS) {
             @Override
@@ -161,6 +165,16 @@ public class AddressSyncPanel extends Panel {
             @Override
             public Long getCount(FilterWrapper<AddressSync> filterWrapper) {
                 return addressSyncBean.getCount(filterWrapper);
+            }
+
+            @Override
+            protected void onInit(FilterWrapper<AddressSync> filterWrapper) {
+                filterWrapper.getObject().setType(addressEntity);
+            }
+
+            @Override
+            protected boolean isVisible(String field) {
+                return !(addressEntity != null && field.equals("type")) && super.isVisible(field);
             }
         });
 
@@ -178,7 +192,8 @@ public class AddressSyncPanel extends Panel {
 
                 getSession().info(getString("object.start"));
 
-                target.add(AddressSyncPanel.this, toUpdate);
+                target.add(AddressSyncPanel.this);
+                onUpdate(target);
 
                 addressSyncService.syncAll(new IAddressSyncListener() {
                     private ThreadContext threadContext = ThreadContext.get(true);
@@ -219,7 +234,7 @@ public class AddressSyncPanel extends Panel {
                     @Override
                     public void onDone(AddressEntity type) {
                         ThreadContext.restore(threadContext);
-                        getSession().info(String.format(getString(type.name() + ".onDone")));
+                        getSession().info(getString(type.name() + ".onDone"));
                     }
                 });
 
@@ -230,7 +245,7 @@ public class AddressSyncPanel extends Panel {
                             stop(target);
                         }
 
-                        target.add(toUpdate);
+                        onUpdate(target);
                     }
                 });
             }
@@ -247,5 +262,9 @@ public class AddressSyncPanel extends Panel {
                 addressSyncService.cancelSync();
             }
         });
+    }
+
+    protected void onUpdate(AjaxRequestTarget target){
+
     }
 }

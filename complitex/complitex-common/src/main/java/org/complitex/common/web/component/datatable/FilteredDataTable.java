@@ -66,6 +66,10 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         List<IColumn<T, String>> columns = new ArrayList<>();
 
         for (String field : fields){
+            if (!isVisible(field)){
+                continue;
+            }
+
             IColumn<T, String> column = columnMap != null ? columnMap.get(field) : null;
 
             Field f = FieldUtils.getField(objectClass, field, true);
@@ -185,4 +189,10 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
     protected boolean isEdit(String field, IModel<T> rowModel){
         return false;
     }
+
+    protected boolean isVisible(String field){
+        return true;
+    }
+
+
 }

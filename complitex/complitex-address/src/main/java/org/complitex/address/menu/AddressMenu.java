@@ -9,7 +9,6 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.AddressInfoProvider;
 import org.complitex.address.resource.CommonResources;
-import org.complitex.address.web.AddressSyncPage;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.EjbBeanLocator;
@@ -52,15 +51,13 @@ public class AddressMenu extends ResourceTemplateMenu {
                 }
             });
         }
-
-        add("address_sync_page", AddressSyncPage.class);
     }
 
-    private static IStrategy getStrategy(String entity) {
+    private IStrategy getStrategy(String entity) {
         return EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(entity);
     }
 
-    private static AddressInfoProvider getAddressInfoProvider() {
+    private AddressInfoProvider getAddressInfoProvider() {
         return EjbBeanLocator.getBean(AddressInfoProvider.class);
     }
 

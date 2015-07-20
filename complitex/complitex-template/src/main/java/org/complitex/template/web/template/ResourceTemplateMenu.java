@@ -74,6 +74,12 @@ public abstract class ResourceTemplateMenu implements ITemplateMenu {
         templateLinks.add(new ResourceTemplateLink(key, this, page));
     }
 
+    protected void add(Class<? extends Page> page, PageParameters pageParameters){
+        String key = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, page.getSimpleName());
+
+        templateLinks.add(new ResourceTemplateLink(key, this, page, pageParameters, null));
+    }
+
     protected void add(String key, Class<? extends Page> page){
         templateLinks.add(new ResourceTemplateLink(key, this, page));
     }
