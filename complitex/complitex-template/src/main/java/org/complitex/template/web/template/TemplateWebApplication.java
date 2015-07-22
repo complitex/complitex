@@ -13,7 +13,7 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Preference;
 import org.complitex.common.mybatis.inject.JavaEE6ModuleNamingStrategy;
-import org.complitex.common.service.BroadcasterService;
+import org.complitex.common.service.BroadcastService;
 import org.complitex.common.service.PreferenceBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.EjbBeanLocator;
@@ -91,7 +91,7 @@ public abstract class TemplateWebApplication extends ServletAuthWebApplication
         addResourceReplacement(WiQueryCoreThemeResourceReference.get(), theme);
 
         //broadcaster
-        EjbBeanLocator.getBean(BroadcasterService.class).setApplication(this);
+        EjbBeanLocator.getBean(BroadcastService.class).setApplication(this);
     }
 
     private void initializeTemplateConfig() throws RuntimeException {

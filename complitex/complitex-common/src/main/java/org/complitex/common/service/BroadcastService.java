@@ -5,6 +5,7 @@ import org.apache.wicket.protocol.ws.IWebSocketSettings;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.WebSocketPushBroadcaster;
 import org.complitex.common.entity.WebSocketPushMessage;
+import org.complitex.common.wicket.BroadcastPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +15,8 @@ import javax.ejb.Singleton;
  * @author inheaven on 031 31.03.15 16:55
  */
 @Singleton
-public class BroadcasterService {
-    private Logger log = LoggerFactory.getLogger(BroadcasterService.class);
+public class BroadcastService {
+    private Logger log = LoggerFactory.getLogger(BroadcastService.class);
 
     private Application application;
 
@@ -35,6 +36,14 @@ public class BroadcasterService {
     public void broadcast(String service, Object payload){
         try {
             broadcaster.broadcastAll(application, new WebSocketPushMessage(service, payload));
+        } catch (Exception e) {
+            log.error("broadcast error", e);
+        }
+    }
+
+    public void broadcast(Class producer, String key, Object payload){
+        try {
+            broadcaster.broadcastAll(application, new BroadcastPayload(producer, key, payload));
         } catch (Exception e) {
             log.error("broadcast error", e);
         }

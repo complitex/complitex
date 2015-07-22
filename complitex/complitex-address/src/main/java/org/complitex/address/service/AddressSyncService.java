@@ -3,8 +3,12 @@ package org.complitex.address.service;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.entity.AddressSyncStatus;
+import org.complitex.address.entity.SyncBeginMessage;
+import org.complitex.address.strategy.city.CityStrategy;
+import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.service.BroadcastService;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ExceptionUtil;
 import org.slf4j.Logger;
@@ -46,16 +50,25 @@ public class AddressSyncService {
     @EJB(beanName = "BuildingSyncHandler")
     private IAddressSyncHandler buildingSyncHandler;
 
+    @EJB
+    private BroadcastService broadcastService;
+
+    @EJB
+    private CityStrategy cityStrategy;
+
+    @EJB
+    private DistrictStrategy districtStrategy;
+
     private AtomicBoolean lockSync = new AtomicBoolean(false);
 
     private AtomicBoolean cancelSync = new AtomicBoolean(false);
 
     @Asynchronous
-    public void syncAll(IAddressSyncListener listener){
-        sync(listener, AddressEntity.DISTRICT);
-        sync(listener, AddressEntity.STREET_TYPE);
-        sync(listener, AddressEntity.STREET);
-        sync(listener, AddressEntity.BUILDING);
+    public void syncAll(){
+        sync(AddressEntity.DISTRICT);
+        sync(AddressEntity.STREET_TYPE);
+        sync(AddressEntity.STREET);
+        sync(AddressEntity.BUILDING);
     }
 
     private IAddressSyncHandler getHandler(AddressEntity type){
@@ -86,7 +99,7 @@ public class AddressSyncService {
         getHandler(sync.getType()).archive(sync);
     }
 
-    public void sync(IAddressSyncListener listener, AddressEntity type){
+    public void sync(AddressEntity type){
         if (lockSync.get()){
             return;
         }
@@ -100,37 +113,49 @@ public class AddressSyncService {
 
             if (parents != null){
                 for (DomainObject parent : parents) {
-                    sync(parent, type, listener);
+                    sync(parent, type);
 
                     if (cancelSync.get()){
                         break;
                     }
                 }
             }else{
-                sync(null, type, listener);
+                sync(null, type);
             }
         } catch (Exception e) {
             log.error("Ошибка синхронизации", e);
 
             String message = ExceptionUtil.getCauseMessage(e, true);
 
-            listener.onError(message != null ? message : e.getMessage());
+            broadcastService.broadcast(getClass(), "error", message != null ? message : e.getMessage());
         } finally {
             //unlock sync
             lockSync.set(false);
 
-            listener.onDone(type);
+            broadcastService.broadcast(getClass(), "done", type.getEntityName());
         }
     }
 
-    public void sync(DomainObject parent,  AddressEntity type, IAddressSyncListener listener) throws RemoteCallException {
+    public void sync(DomainObject parent,  AddressEntity type) throws RemoteCallException {
         IAddressSyncHandler handler = getHandler(type);
 
         Date date = DateUtil.getCurrentDate();
 
         Cursor<AddressSync> cursor = handler.getAddressSyncs(parent, date);
 
-        listener.onBegin(parent, type, cursor);
+        SyncBeginMessage begin = new SyncBeginMessage();
+        begin.setType(type.getEntityName());
+        begin.setCount(cursor.getData() != null ? cursor.getData().size() : 0L);
+
+        if (parent != null){
+            if (type.equals(AddressEntity.DISTRICT) || type.equals(AddressEntity.STREET)){
+                begin.setParentName(cityStrategy.getName(parent));
+            }else if (type.equals(AddressEntity.BUILDING)){
+                begin.setParentName(districtStrategy.getName(parent));
+            }
+        }
+
+        broadcastService.broadcast(getClass(), "begin", begin);
 
         if (cursor.getData() == null) {
             return;
@@ -194,7 +219,7 @@ public class AddressSyncService {
                 }
             }
 
-            listener.onProcessed(sync);
+            broadcastService.broadcast(getClass(), "processed", sync);
         }
 
         for (DomainObject object : objects) {
@@ -233,7 +258,7 @@ public class AddressSyncService {
                     addressSyncBean.save(s);
                 }
 
-                listener.onProcessed(s);
+                broadcastService.broadcast(getClass(), "processed", s);
             }
         }
     }

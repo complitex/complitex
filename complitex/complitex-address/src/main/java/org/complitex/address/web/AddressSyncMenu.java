@@ -1,6 +1,7 @@
 package org.complitex.address.web;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.address.web.sync.AddressSyncPage;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
 /**

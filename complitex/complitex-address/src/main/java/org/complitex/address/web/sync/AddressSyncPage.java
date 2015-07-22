@@ -1,4 +1,4 @@
-package org.complitex.address.web;
+package org.complitex.address.web.sync;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -6,7 +6,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.address.web.component.AddressSyncPanel;
+import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
@@ -18,12 +18,15 @@ import org.complitex.template.web.template.TemplatePage;
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class AddressSyncPage extends TemplatePage {
     public AddressSyncPage(PageParameters pageParameters) {
-        add(new Label("title",  new ResourceModel("title")));
+        String entity = pageParameters.get("entity").toOptionalString();
+
+        add(new Label("title",  new ResourceModel("title_" + StringUtil.emptyOnNull(entity))));
+        add(new Label("header",  new ResourceModel("title_" + StringUtil.emptyOnNull(entity))));
 
         AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");
         add(messages);
 
-        add(new AddressSyncPanel("addressSyncPanel", AddressEntity.getValue(pageParameters.get("entity").toOptionalString())){
+        add(new AddressSyncPanel("addressSyncPanel", AddressEntity.getValue(entity)){
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add(messages);

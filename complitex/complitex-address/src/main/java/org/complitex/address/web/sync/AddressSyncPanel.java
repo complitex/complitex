@@ -1,30 +1,24 @@
-package org.complitex.address.web.component;
+package org.complitex.address.web.sync;
 
 
-import org.apache.wicket.ThreadContext;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.time.Duration;
+import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.entity.AddressSyncStatus;
+import org.complitex.address.entity.SyncBeginMessage;
 import org.complitex.address.service.AddressSyncBean;
 import org.complitex.address.service.AddressSyncService;
-import org.complitex.address.service.IAddressSyncListener;
-import org.complitex.address.strategy.city.CityStrategy;
-import org.complitex.address.strategy.district.DistrictStrategy;
-import org.complitex.common.entity.Cursor;
-import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.datatable.Action;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.complitex.common.web.component.datatable.column.EnumColumn;
+import org.complitex.common.wicket.BroadcastBehavior;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,59 +189,31 @@ public class AddressSyncPanel extends Panel {
                 target.add(AddressSyncPanel.this);
                 onUpdate(target);
 
-                addressSyncService.syncAll(new IAddressSyncListener() {
-                    private ThreadContext threadContext = ThreadContext.get(true);
+                if (addressEntity != null){
+                    addressSyncService.sync(addressEntity);
+                }else{
+                    addressSyncService.syncAll();
+                }
+            }
+        });
 
-                    @Override
-                    public void onBegin(DomainObject parent, AddressEntity type, Cursor<AddressSync> cursor) {
-                        ThreadContext.restore(threadContext);
+        add(new BroadcastBehavior(AddressSyncService.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                if ("begin".equals(key)){
+                    SyncBeginMessage begin = (SyncBeginMessage) payload;
 
-                        String name = "";
-                        int count = cursor.getData() != null ? cursor.getData().size() : 0;
+                    getSession().info(String.format(getString(begin.getType() + ".onBegin"), begin.getParentName(),
+                            begin.getCount()));
+                }else if ("processed".equals(key)){
+                    //todo add stats
+                }else if ("done".equals(key)){
+                    getSession().info(getString(payload+ ".onDone"));
+                }else if ("error".equals(key)){
+                    getSession().error(payload.toString());
+                }
 
-                        if (parent != null){
-                            if (type.equals(AddressEntity.DISTRICT) || type.equals(AddressEntity.STREET)){
-                                name = EjbBeanLocator.getBean(CityStrategy.class).displayDomainObject(parent, getLocale());
-                            }else if (type.equals(AddressEntity.BUILDING)){
-                                name = EjbBeanLocator.getBean(DistrictStrategy.class).displayDomainObject(parent, getLocale());
-                            }
-                        }
-
-                        getSession().info(String.format(getString(type.name() + ".onBegin"), name, count));
-                    }
-
-                    @Override
-                    public void onProcessed(AddressSync sync) {
-//                        todo add stats
-//                        ThreadContext.restore(threadContext);
-//                        getSession().info(String.format(getString(sync.getType().name() + ".onProcessed"),
-//                                sync.getName(), ResourceUtil.getString(sync.getStatus().getClass().getName(),
-//                                        sync.getStatus().name(), getLocale())));
-                    }
-
-                    @Override
-                    public void onError(String message) {
-                        ThreadContext.restore(threadContext);
-                        getSession().error(message);
-                    }
-
-                    @Override
-                    public void onDone(AddressEntity type) {
-                        ThreadContext.restore(threadContext);
-                        getSession().info(getString(type.name() + ".onDone"));
-                    }
-                });
-
-                AddressSyncPanel.this.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(1)) {
-                    @Override
-                    protected void onPostProcessTarget(AjaxRequestTarget target) {
-                        if (!addressSyncService.isLockSync()) {
-                            stop(target);
-                        }
-
-                        onUpdate(target);
-                    }
-                });
+                onUpdate(handler);
             }
         });
 
@@ -265,6 +231,5 @@ public class AddressSyncPanel extends Panel {
     }
 
     protected void onUpdate(AjaxRequestTarget target){
-
     }
 }

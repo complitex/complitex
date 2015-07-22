@@ -10,7 +10,7 @@ import org.complitex.address.entity.ExternalAddress;
 import org.complitex.address.entity.LocalAddress;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.BroadcasterService;
+import org.complitex.common.service.BroadcastService;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.correction.exception.ResolveAddressException;
@@ -51,7 +51,7 @@ public class CentralHeatingConsumptionService {
     private CentralHeatingConsumptionBean centralHeatingConsumptionBean;
 
     @EJB
-    private BroadcasterService broadcasterService;
+    private BroadcastService broadcastService;
 
     @EJB
     private AddressCorrectionService addressCorrectionService;
@@ -99,7 +99,7 @@ public class CentralHeatingConsumptionService {
             consumptionFileBean.save(consumptionFile);
             userTransaction.commit();
 
-            broadcasterService.broadcast(this, consumptionFile);
+            broadcastService.broadcast(this, consumptionFile);
 
 
             try {
@@ -134,13 +134,13 @@ public class CentralHeatingConsumptionService {
                 consumptionFileBean.save(consumptionFile);
                 userTransaction.commit();
 
-                broadcasterService.broadcast(this, consumptionFile);
+                broadcastService.broadcast(this, consumptionFile);
             } catch (Exception e) {
                 consumptionFile.setStatus(ConsumptionFileStatus.LOAD_ERROR);
                 consumptionFileBean.save(consumptionFile);
 
                 log.error("central heating consumption load error", e);
-                broadcasterService.broadcast(this, consumptionFile);
+                broadcastService.broadcast(this, consumptionFile);
             }
         } catch (Exception e) {
             log.error("error load central heating consumption xls file", e);
@@ -189,7 +189,7 @@ public class CentralHeatingConsumptionService {
             consumptionFileBean.save(consumptionFile);
             userTransaction.commit();
 
-            broadcasterService.broadcast(this, consumptionFile);
+            broadcastService.broadcast(this, consumptionFile);
 
             List<CentralHeatingConsumption> consumptions = centralHeatingConsumptionBean.getCentralHeatingConsumptions(
                     FilterWrapper.of(new CentralHeatingConsumption(consumptionFile.getId())));
@@ -207,7 +207,7 @@ public class CentralHeatingConsumptionService {
             consumptionFileBean.save(consumptionFile);
             userTransaction.commit();
 
-            broadcasterService.broadcast(this, consumptionFile);
+            broadcastService.broadcast(this, consumptionFile);
         }catch (Exception e) {
             log.error("bind error", e);
         }
