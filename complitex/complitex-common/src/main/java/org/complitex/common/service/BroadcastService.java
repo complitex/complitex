@@ -10,11 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.Singleton;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 
 /**
  * @author inheaven on 031 31.03.15 16:55
  */
 @Singleton
+@TransactionManagement(TransactionManagementType.BEAN)
 public class BroadcastService {
     private Logger log = LoggerFactory.getLogger(BroadcastService.class);
 

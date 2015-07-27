@@ -132,7 +132,7 @@ public class AddressSyncService {
             //unlock sync
             lockSync.set(false);
 
-            broadcastService.broadcast(getClass(), "done", type.getEntityName());
+            broadcastService.broadcast(getClass(), "done", type.name());
         }
     }
 

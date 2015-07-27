@@ -208,7 +208,7 @@ public class AddressSyncPanel extends Panel {
                 }else if ("processed".equals(key)){
                     //todo add stats
                 }else if ("done".equals(key)){
-                    getSession().info(getString(payload+ ".onDone"));
+                    getSession().info(getString(payload + ".onDone"));
                 }else if ("error".equals(key)){
                     getSession().error(payload.toString());
                 }

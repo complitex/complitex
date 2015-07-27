@@ -28,7 +28,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
-import javax.transaction.*;
+import javax.inject.Inject;
+import javax.transaction.UserTransaction;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
@@ -49,10 +50,6 @@ public class CentralHeatingConsumptionService {
 
     @EJB
     private CentralHeatingConsumptionBean centralHeatingConsumptionBean;
-
-    @EJB
-    private BroadcastService broadcastService;
-
     @EJB
     private AddressCorrectionService addressCorrectionService;
 
@@ -70,6 +67,9 @@ public class CentralHeatingConsumptionService {
 
     @Resource
     private UserTransaction userTransaction;
+
+    @Inject
+    private BroadcastService broadcastService;
 
     @Asynchronous
     public void load(Date om, Long serviceProviderId, Long serviceId, Long userOrganizationId, String fileName,
