@@ -26,22 +26,22 @@
     </resultMap>
 
     <select id="selectDistrictSyncs" statementType="CALLABLE" parameterType="map">
-        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call z$runtime_sz_utl.getDistricts(#{cityName}, #{cityTypeName},
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getDistricts(#{cityName}, #{cityTypeName},
           #{date}, #{out, mode=OUT, jdbcType=CURSOR, resultMap=districtSyncCursorResultMap})}
     </select>
 
     <select id="selectStreetTypeSyncs" statementType="CALLABLE" parameterType="map">
-        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call z$runtime_sz_utl.getStreetTypes(
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getStreetTypes(
           #{out, mode=OUT, jdbcType=CURSOR, resultMap=streetTypeSyncCursorResultMap})}
     </select>
 
     <select id="selectStreetSyncs" statementType="CALLABLE" parameterType="map">
-        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call z$runtime_sz_utl.getStreets(#{cityName}, #{cityTypeName},
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getStreets(#{cityName}, #{cityTypeName},
           #{date}, #{out, mode=OUT, jdbcType=CURSOR, resultMap=streetSyncCursorResultMap})}
     </select>
 
     <select id="selectBuildingSyncs" statementType="CALLABLE" parameterType="map">
-        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call z$runtime_sz_utl.getBuildings(#{districtName}, #{streetName},
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getBuildings(#{districtName}, #{streetName},
           #{streetTypeName}, #{date}, #{out, mode=OUT, jdbcType=CURSOR, resultMap=buildingSyncCursorResultMap})}
     </select>
 </mapper>

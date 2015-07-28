@@ -23,10 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Anatoly Ivanov
@@ -203,14 +200,14 @@ public class AddressSyncPanel extends Panel {
                 if ("begin".equals(key)){
                     SyncBeginMessage begin = (SyncBeginMessage) payload;
 
-                    getSession().info(String.format(getString(begin.getType() + ".onBegin"), begin.getParentName(),
-                            begin.getCount()));
+                    getSession().info(String.format(getString(begin.getAddressEntity().name() + ".onBegin"),
+                            begin.getParentName(), begin.getCount()));
                 }else if ("processed".equals(key)){
                     //todo add stats
                 }else if ("done".equals(key)){
                     getSession().info(getString(payload + ".onDone"));
                 }else if ("error".equals(key)){
-                    getSession().error(payload.toString());
+                    getSession().error(Objects.toString(payload));
                 }
 
                 onUpdate(handler);

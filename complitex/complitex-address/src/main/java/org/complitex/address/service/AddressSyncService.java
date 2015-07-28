@@ -144,7 +144,7 @@ public class AddressSyncService {
         Cursor<AddressSync> cursor = handler.getAddressSyncs(parent, date);
 
         SyncBeginMessage begin = new SyncBeginMessage();
-        begin.setType(type.getEntityName());
+        begin.setAddressEntity(type);
         begin.setCount(cursor.getData() != null ? cursor.getData().size() : 0L);
 
         if (parent != null){
@@ -173,7 +173,7 @@ public class AddressSyncService {
             sync.setParentObjectId(parentId);
             sync.setType(type);
 
-            for (DomainObject object : objects) {
+            for (DomainObject object : objects) { //todo check getExternalId null
                 //все норм
                 if (sync.getExternalId().equals(object.getExternalId()) && handler.isEqualNames(sync, object)) {
                     sync.setObjectId(object.getObjectId());
