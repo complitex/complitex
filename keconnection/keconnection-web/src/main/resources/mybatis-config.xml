@@ -13,6 +13,8 @@
                      javaType="org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionStatus"/>
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
                      javaType="org.complitex.address.entity.AddressSyncStatus"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
+                     javaType="org.complitex.address.entity.AddressEntity"/>
     </typeHandlers>
 
     <plugins>
