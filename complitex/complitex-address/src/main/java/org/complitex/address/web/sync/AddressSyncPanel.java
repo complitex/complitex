@@ -4,8 +4,10 @@ package org.complitex.address.web.sync;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
@@ -45,6 +47,10 @@ public class AddressSyncPanel extends Panel {
         super(id);
 
         setOutputMarkupId(true);
+
+        Label processed = new Label("processed", Model.of(""));
+        processed.setOutputMarkupId(true);
+        add(processed);
 
         //actions
         List<Action<AddressSync>> actions = new ArrayList<>();
@@ -201,16 +207,22 @@ public class AddressSyncPanel extends Panel {
                     SyncBeginMessage begin = (SyncBeginMessage) payload;
 
                     getSession().info(String.format(getString(begin.getAddressEntity().name() + ".onBegin"),
-                            begin.getParentName(), begin.getCount()));
-                }else if ("processed".equals(key)){
-                    //todo add stats
+                            Objects.toString(begin.getParentName(), ""), begin.getCount()));
                 }else if ("done".equals(key)){
                     getSession().info(getString(payload + ".onDone"));
                 }else if ("error".equals(key)){
                     getSession().error(Objects.toString(payload));
                 }
 
-                onUpdate(handler);
+                if ("processed".equals(key)) {
+                    //noinspection ConstantConditions
+                    processed.setDefaultModelObject(((AddressSync)payload).getName());
+                    handler.add(processed);
+                }else {
+                    processed.setDefaultModelObject("");
+                    onUpdate(handler);
+                    handler.add(AddressSyncPanel.this);
+                }
             }
         });
 
@@ -223,6 +235,33 @@ public class AddressSyncPanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 addressSyncService.cancelSync();
+            }
+        });
+
+        add(new AjaxLink("add_all") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                AddressSync addressSync = new AddressSync();
+                addressSync.setType(addressEntity);
+
+                addressSyncBean.getList(FilterWrapper.of(addressSync))
+                        .forEach( a ->
+                                {
+                                    try {
+                                        addressSyncService.insert(a, getLocale());
+
+                                        getSession().info(String.format(getString(a.getType().name() + ".added"),a.getName()));
+                                    } catch (Exception e) {
+                                        log.error(e.getMessage(), e);
+
+                                        getSession().error(ExceptionUtil.getCauseMessage(e, true));
+                                    }
+
+                                    target.add(AddressSyncPanel.this);
+                                    onUpdate(target);
+                                }
+                        );
+
             }
         });
     }

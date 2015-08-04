@@ -61,6 +61,8 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
     @Override
     public void insert(AddressSync sync, Locale locale) {
         DomainObject domainObject = streetTypeStrategy.newInstance();
+
+        //external id
         domainObject.setExternalId(sync.getExternalId());
 
         //name
@@ -78,6 +80,9 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
     public void update(AddressSync sync, Locale locale) {
         DomainObject oldObject = streetTypeStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
+
+        //external id
+        newObject.setExternalId(sync.getExternalId());
 
         //name
         newObject.setStringValue(StreetTypeStrategy.NAME, sync.getName(), locale);

@@ -1,5 +1,6 @@
 package org.complitex.keconnection.web;
 
+import org.complitex.address.web.sync.AddressSyncPage;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.keconnection.heatmeter.web.consumption.CentralHeatingConsumptionFileList;
@@ -31,5 +32,6 @@ public class KeWebApplication extends ComplitexWebApplication{
         EjbBeanLocator.getBean(BroadcastService.class).setApplication(this);
 
         mountPage("/central-heating-consumptions", CentralHeatingConsumptionFileList.class);
+        mountPage("/address-sync", AddressSyncPage.class);
     }
 }

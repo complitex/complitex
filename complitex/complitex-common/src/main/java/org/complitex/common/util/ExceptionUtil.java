@@ -7,8 +7,6 @@ package org.complitex.common.util;
 public class ExceptionUtil {
     public static String getCauseMessage(Exception e, boolean initial){
         if (e.getCause() != null){
-            String message =  e.getMessage() + ". Причина: ";
-
             if (initial || e.getCause().getMessage() == null){
                 Throwable t = e;
 
@@ -16,10 +14,10 @@ public class ExceptionUtil {
                     t = t.getCause();
                 }
 
-                return message + t.getMessage();
+                return t.getMessage();
             }
 
-            return message + e.getCause().getMessage();
+            return e.getMessage() + " ->  " + e.getCause().getMessage();
         }
 
         return e.getMessage();
