@@ -107,7 +107,9 @@ public class DomainObject implements ILongId {
     }
 
     public String getStringValue(Long attributeTypeId){
-        return getAttribute(attributeTypeId).getStringValue();
+        Attribute attribute = getAttribute(attributeTypeId);
+
+        return attribute != null? attribute.getStringValue() : null;
     }
 
     public String getStringValue(Long attributeTypeId, Locale locale){

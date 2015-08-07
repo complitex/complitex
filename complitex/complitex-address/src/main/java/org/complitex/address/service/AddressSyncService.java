@@ -8,6 +8,7 @@ import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ExceptionUtil;
@@ -99,6 +100,7 @@ public class AddressSyncService {
         getHandler(sync.getType()).archive(sync);
     }
 
+    @Asynchronous
     public void sync(AddressEntity type){
         if (lockSync.get()){
             return;
@@ -269,5 +271,28 @@ public class AddressSyncService {
 
     public boolean isLockSync(){
         return lockSync.get();
+    }
+
+    @Asynchronous
+    public void addAll(AddressEntity addressEntity, Locale locale){
+        lockSync.set(true);
+        cancelSync.set(false);
+
+        AddressSync addressSync = new AddressSync();
+        addressSync.setType(addressEntity);
+        addressSyncBean.getList(FilterWrapper.of(addressSync))
+                .forEach(a -> {
+                    if (!cancelSync.get()) {
+                        try {
+                            insert(a, locale);
+                            broadcastService.broadcast(getClass(), "add_all", a);
+                        } catch (Exception e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+                });
+        lockSync.set(false);
+
+        broadcastService.broadcast(getClass(), "add_all_complete", addressEntity);
     }
 }

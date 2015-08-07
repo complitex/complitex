@@ -42,13 +42,13 @@ public class AddressSyncAdapter extends AbstractBean {
         DomainObject organization = organizationStrategy.getDomainObject(organizationId, true);
 
         if (organization == null){
-            throw new SyncException("Organization data source not found");
+            throw new SyncException("Не выбран JDBC ресурс синхронизации");
         }
 
         String dataSource = organization.getStringValue(IOrganizationStrategy.DATA_SOURCE);
 
         if (dataSource == null){
-            throw new SyncException("Data source not found");
+            throw new SyncException("JDBC ресурс не найден");
         }
 
         return dataSource;

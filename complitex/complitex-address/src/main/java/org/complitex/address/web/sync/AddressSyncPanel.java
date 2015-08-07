@@ -189,6 +189,8 @@ public class AddressSyncPanel extends Panel {
 
                 getSession().info(getString("object.start"));
 
+                setVisible(false);
+
                 target.add(AddressSyncPanel.this);
                 onUpdate(target);
 
@@ -208,10 +210,15 @@ public class AddressSyncPanel extends Panel {
 
                     getSession().info(String.format(getString(begin.getAddressEntity().name() + ".onBegin"),
                             Objects.toString(begin.getParentName(), ""), begin.getCount()));
+                    onUpdate(handler);
                 }else if ("done".equals(key)){
                     getSession().info(getString(payload + ".onDone"));
+                    onUpdate(handler);
+                    handler.add(AddressSyncPanel.this);
                 }else if ("error".equals(key)){
                     getSession().error(Objects.toString(payload));
+                    onUpdate(handler);
+                    handler.add(AddressSyncPanel.this);
                 }
 
                 if ("processed".equals(key)) {
@@ -220,7 +227,14 @@ public class AddressSyncPanel extends Panel {
                     handler.add(processed);
                 }else {
                     processed.setDefaultModelObject("");
+                }
+
+                if ("add_all".equals(key)){
+                    //noinspection ConstantConditions
+                    AddressSync a = (AddressSync) payload;
+                    getSession().info(String.format(getString(a.getType().name() + ".added"), a.getName()));
                     onUpdate(handler);
+                }else if ("add_all_complete".equals(key)){
                     handler.add(AddressSyncPanel.this);
                 }
             }
@@ -241,27 +255,14 @@ public class AddressSyncPanel extends Panel {
         add(new AjaxLink("add_all") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                AddressSync addressSync = new AddressSync();
-                addressSync.setType(addressEntity);
+                addressSyncService.addAll(addressEntity, getLocale());
 
-                addressSyncBean.getList(FilterWrapper.of(addressSync))
-                        .forEach( a ->
-                                {
-                                    try {
-                                        addressSyncService.insert(a, getLocale());
+                target.add(AddressSyncPanel.this);
+            }
 
-                                        getSession().info(String.format(getString(a.getType().name() + ".added"),a.getName()));
-                                    } catch (Exception e) {
-                                        log.error(e.getMessage(), e);
-
-                                        getSession().error(ExceptionUtil.getCauseMessage(e, true));
-                                    }
-
-                                    target.add(AddressSyncPanel.this);
-                                    onUpdate(target);
-                                }
-                        );
-
+            @Override
+            public boolean isVisible() {
+                return !addressSyncService.isLockSync();
             }
         });
     }

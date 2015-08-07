@@ -5,6 +5,8 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.util.List;
 
 /**
@@ -15,6 +17,7 @@ import java.util.List;
 public class AddressSyncBean extends AbstractBean {
     public final static String NS = AddressSyncBean.class.getName();
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void save(AddressSync addressSync){
         if (addressSync.getId() == null){
             sqlSession().insert("insertAddressSync", addressSync);
@@ -37,6 +40,7 @@ public class AddressSyncBean extends AbstractBean {
         return getCount(FilterWrapper.of(addressSync)) == 0;
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void delete(Long id){
         sqlSession().delete(NS + ".deleteAddressSync", id);
     }
