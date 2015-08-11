@@ -25,6 +25,10 @@ public interface IAddressSyncHandler {
 
     boolean isEqualNames(AddressSync sync, DomainObject object);
 
+    default boolean hasEqualNames(AddressSync sync, DomainObject object){
+        return isEqualNames(sync, object);
+    }
+
     Long getParentId(AddressSync sync, DomainObject parent);
 
     void insert(AddressSync sync, Locale locale);

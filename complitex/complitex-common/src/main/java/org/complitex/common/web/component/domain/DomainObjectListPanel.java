@@ -206,7 +206,8 @@ public class DomainObjectListPanel extends Panel {
                 DomainObject object = item.getModelObject();
 
                 item.add(new Radio<>("radio", item.getModel()).setVisible(radioSelect));
-                item.add(new Label("order", Model.of(object.getObjectId())));
+                item.add(new Label("object_id", Model.of(object.getObjectId())));
+                item.add(new Label("external_id", Model.of(object.getExternalId())));
 
                 ListView<AttributeType> dataColumns = new ListView<AttributeType>("dataColumns", columnAttributeTypes) {
                     @Override

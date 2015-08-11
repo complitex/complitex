@@ -63,9 +63,10 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     public boolean isEqualNames(AddressSync sync, DomainObject object) {
         DomainObject streetObject = streetStrategy.getDomainObject(object.getParentId(), true);
 
-        return sync.getName().equals(object.getStringValue(NUMBER))
-                && Objects.equals(sync.getAdditionalName(), object.getStringValue(CORP))
-                && streetObject.getExternalId().equals(sync.getAdditionalExternalId());
+        return streetObject != null &&
+                sync.getName().equals(object.getStringValue(NUMBER)) &&
+                Objects.equals(sync.getAdditionalName(), object.getStringValue(CORP)) &&
+                streetObject.getExternalId().equals(sync.getAdditionalExternalId());
     }
 
     @Override

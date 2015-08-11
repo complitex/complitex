@@ -54,6 +54,12 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
+    public boolean hasEqualNames(AddressSync sync, DomainObject object) {
+        return sync.getName().equals(streetTypeStrategy.getName(object))
+                || sync.getAdditionalName().equals(streetTypeStrategy.getShortName(object));
+    }
+
+    @Override
     public Long getParentId(AddressSync sync, DomainObject parent) {
         return null;
     }

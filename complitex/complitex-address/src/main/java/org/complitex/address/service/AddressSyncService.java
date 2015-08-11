@@ -175,7 +175,12 @@ public class AddressSyncService {
             sync.setParentObjectId(parentId);
             sync.setType(type);
 
-            for (DomainObject object : objects) { //todo check getExternalId null
+            if (sync.getExternalId() == null){
+                broadcastService.broadcast(getClass(), "error", "Пустой вненший код: " + sync.toString());
+                continue;
+            }
+
+            for (DomainObject object : objects) {
                 //все норм
                 if (sync.getExternalId().equals(object.getExternalId()) && handler.isEqualNames(sync, object)) {
                     sync.setObjectId(object.getObjectId());
@@ -198,7 +203,7 @@ public class AddressSyncService {
                 }
 
                 //дубликат
-                if (handler.isEqualNames(sync, object)) {
+                if (handler.hasEqualNames(sync, object)) {
                     sync.setObjectId(object.getObjectId());
                     sync.setStatus(AddressSyncStatus.DUPLICATE);
 

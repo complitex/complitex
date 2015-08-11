@@ -232,10 +232,15 @@ public class AddressSyncPanel extends Panel {
                 if ("add_all".equals(key)){
                     //noinspection ConstantConditions
                     AddressSync a = (AddressSync) payload;
-                    getSession().info(String.format(getString(a.getType().name() + ".added"), a.getName()));
-                    onUpdate(handler);
+                    String message = String.format(getString(a.getType().name() + ".added"), a.getName());
+                    processed.setDefaultModelObject(message);
+                    handler.add(processed);
+
+                    getSession().info(message);
                 }else if ("add_all_complete".equals(key)){
+                    processed.setDefaultModelObject("");
                     handler.add(AddressSyncPanel.this);
+                    onUpdate(handler);
                 }
             }
         });

@@ -10,11 +10,12 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th>ID</th>
+                    <th>Идентификатор объекта</th>
+                    <th>Внешний код</th>
                     <th wicket:id="columns">
-                                    <span wicket:id="column">
-                                        <span wicket:id="columnName"></span>
-                                    </span>
+                        <span wicket:id="column">
+                            <span wicket:id="columnName"></span>
+                        </span>
                     </th>
                     <th style="width:110px">
                         <input wicket:id="reset" type="button" wicket:message="value:reset" class="btnSmall"/>
@@ -22,7 +23,8 @@
                 </tr>
                 <tr>
                     <td class="filter-td"></td>
-                    <td class="filter-td" style="width:30px"></td>
+                    <td class="filter-td"><input type="text" style="width: 100%"/></td>
+                    <td class="filter-td"><input type="text" style="width: 100%"/></td>
                     <wicket:container wicket:id="filters">
                         <td class="filter-td">
                             <span wicket:id="filter"></span>
@@ -36,7 +38,8 @@
                 <tbody wicket:id="radioGroup">
                 <tr wicket:id="data">
                     <td><input type="radio" wicket:id="radio"/></td>
-                    <td><span wicket:id="order"></span></td>
+                    <td><span wicket:id="object_id"></span></td>
+                    <td><span wicket:id="external_id"></span></td>
                     <td wicket:id="dataColumns">
                         <span wicket:id="dataColumn"></span>
                     </td>
