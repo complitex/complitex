@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+    <style>
+        .ui-autocomplete{
+            z-index: 1000 !important;
+        }
+    </style>
+</wicket:head>
+<wicket:panel  xmlns:wicket="http://wicket.apache.org">
+    <div wicket:id="dialog" style="z-index: 1">
+        <div wicket:id="search"></div>
+
+        <div style="margin-top: 20px">
+            <input type="button" class="btnMiddle" wicket:id="add" wicket:message="value:d_add_all"/>
+            <input type="button" class="btnMiddle" wicket:id="cancel" wicket:message="value:cancel"/>
+        </div>
+    </div>
+</wicket:panel>
+

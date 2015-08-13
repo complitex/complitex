@@ -7,7 +7,6 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -20,6 +19,7 @@ import org.complitex.address.entity.LocalAddress;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.address.util.AddressRenderer;
+import org.complitex.address.web.component.AddressSearchComponent;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.entity.PersonalName;
@@ -317,34 +317,8 @@ public class AddressCorrectionDialog<T> extends Panel {
         if (!addressEntity.equals(AddressEntity.STREET_TYPE)) {
             state.clear();
 
-            WiQuerySearchComponent newSearchComponent = new WiQuerySearchComponent("searchComponent", state,
-                    getFilters(addressEntity), null, ShowMode.ACTIVE, true){
-                @Override
-                protected IChoiceRenderer<DomainObject> newAutocompleteItemRenderer(String entity) {
-                    if (state.get(AddressEntity.CITY.getEntityName()) == null && entity.equals("street")){
-                        return new IChoiceRenderer<DomainObject>() {
-
-                            @Override
-                            public Object getDisplayValue(DomainObject object) {
-                                if (object.getObjectId().equals(SearchComponentState.NOT_SPECIFIED_ID)) {
-                                    return getString(NOT_SPECIFIED_KEY);
-                                } else {
-                                    return strategyFactory.getStrategy(entity).displayDomainObject(object, getLocale()) +
-                                            " (" + strategyFactory.getStrategy(AddressEntity.CITY.getEntityName())
-                                            .displayDomainObject(object.getParentId(), getLocale()) + ")";
-                                }
-                            }
-
-                            @Override
-                            public String getIdValue(DomainObject object, int index) {
-                                return String.valueOf(object.getObjectId());
-                            }
-                        };
-                    }
-
-                    return super.newAutocompleteItemRenderer(entity);
-                }
-            };
+            WiQuerySearchComponent newSearchComponent = new AddressSearchComponent("searchComponent", state,
+                    getFilters(addressEntity), null, ShowMode.ACTIVE, true);
 
             searchComponent.replaceWith(newSearchComponent);
             searchComponent = newSearchComponent;

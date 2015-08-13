@@ -20,6 +20,7 @@ import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.datatable.Action;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.complitex.common.web.component.datatable.column.EnumColumn;
+import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.wicket.BroadcastBehavior;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -203,6 +204,8 @@ public class AddressSyncPanel extends Panel {
         });
 
         add(new BroadcastBehavior(AddressSyncService.class) {
+            private Long lastProcessed = System.currentTimeMillis();
+
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
                 if ("begin".equals(key)){
@@ -221,12 +224,15 @@ public class AddressSyncPanel extends Panel {
                     handler.add(AddressSyncPanel.this);
                 }
 
-                if ("processed".equals(key)) {
+                if ("processed".equals(key) && System.currentTimeMillis() - lastProcessed > 100) {
                     //noinspection ConstantConditions
                     processed.setDefaultModelObject(((AddressSync)payload).getName());
                     handler.add(processed);
+
+                    lastProcessed = System.currentTimeMillis();
                 }else {
                     processed.setDefaultModelObject("");
+                    handler.add(processed);
                 }
 
                 if ("add_all".equals(key)){
@@ -257,12 +263,29 @@ public class AddressSyncPanel extends Panel {
             }
         });
 
+        AddressSyncDialog addressSyncDialog = new AddressSyncDialog("dialog", addressEntity){
+            @Override
+            public void onAdd(AjaxRequestTarget target, SearchComponentState state) {
+                switch (addressEntity){
+                    case STREET:
+                        addressSyncService.addAll(state.getId("city"), addressEntity, getLocale());
+                        break;
+                    case BUILDING:
+                        addressSyncService.addAll(state.getId("street"), addressEntity, getLocale());
+                        break;
+                    default:
+                        addressSyncService.addAll(null, addressEntity, getLocale());
+                }
+
+                target.add(AddressSyncPanel.this);
+            }
+        };
+        add(addressSyncDialog);
+
         add(new AjaxLink("add_all") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                addressSyncService.addAll(addressEntity, getLocale());
-
-                target.add(AddressSyncPanel.this);
+                addressSyncDialog.open(target);
             }
 
             @Override

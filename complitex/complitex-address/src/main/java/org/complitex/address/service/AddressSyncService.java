@@ -19,10 +19,9 @@ import javax.ejb.Asynchronous;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static javax.ejb.ConcurrencyManagementType.BEAN;
 import static org.complitex.address.service.IAddressSyncHandler.NOT_FOUND_ID;
@@ -163,12 +162,18 @@ public class AddressSyncService {
             return;
         }
 
-        List<? extends DomainObject> objects = handler.getObjects(parent);
+        @SuppressWarnings("unchecked")
+        List<DomainObject> objects = (List<DomainObject>) handler.getObjects(parent);
+
+        Map<String, DomainObject> objectMap = objects.parallelStream()
+                .filter(o -> o.getExternalId() != null)
+                .collect(Collectors.toMap(DomainObject::getExternalId, o -> o));
 
         for (AddressSync sync : cursor.getData()) {
             Long parentId = handler.getParentId(sync, parent);
 
             if (NOT_FOUND_ID.equals(parentId)){
+                broadcastService.broadcast(getClass(), "error", "Родительский объект не найден: " + sync.toString());
                 continue;
             }
 
@@ -180,41 +185,39 @@ public class AddressSyncService {
                 continue;
             }
 
-            for (DomainObject object : objects) {
+            DomainObject object = objectMap.get(sync.getExternalId());
+
+            if (object != null){
                 //все норм
                 if (sync.getExternalId().equals(object.getExternalId()) && handler.isEqualNames(sync, object)) {
                     sync.setObjectId(object.getObjectId());
                     sync.setStatus(AddressSyncStatus.LOCAL);
+                }else
+                    //новое название
+                    if (sync.getExternalId().equals(object.getExternalId())) {
+                        sync.setObjectId(object.getObjectId());
+                        sync.setStatus(AddressSyncStatus.NEW_NAME);
 
-                    break;
-                }
-
-                //новое название
-                if (sync.getExternalId().equals(object.getExternalId())) {
-                    sync.setObjectId(object.getObjectId());
-                    sync.setStatus(AddressSyncStatus.NEW_NAME);
-
-                    if (addressSyncBean.isExist(sync)) {
-                        sync.setDate(date);
-                        addressSyncBean.save(sync);
+                        if (addressSyncBean.isExist(sync)) {
+                            sync.setDate(date);
+                            addressSyncBean.save(sync);
+                        }
                     }
-
-                    break;
-                }
-
-                //дубликат
-                if (handler.hasEqualNames(sync, object)) {
-                    sync.setObjectId(object.getObjectId());
-                    sync.setStatus(AddressSyncStatus.DUPLICATE);
-
-                    if (addressSyncBean.isExist(sync)) {
-                        sync.setDate(date);
-                        addressSyncBean.save(sync);
-                    }
-
-                    break;
-                }
             }
+
+            objects.parallelStream()
+                    .filter(o -> !Objects.equals(sync.getExternalId(), o.getExternalId()))
+                    .filter(o -> handler.hasEqualNames(sync, o))
+                    .findAny()
+                    .ifPresent(o -> {
+                        sync.setObjectId(o.getObjectId());
+                        sync.setStatus(AddressSyncStatus.DUPLICATE);
+
+                        if (addressSyncBean.isExist(sync)) {
+                            sync.setDate(date);
+                            addressSyncBean.save(sync);
+                        }
+                    });
 
             //новый
             if (sync.getStatus() == null) {
@@ -279,13 +282,14 @@ public class AddressSyncService {
     }
 
     @Asynchronous
-    public void addAll(AddressEntity addressEntity, Locale locale){
+    public void addAll(Long parentObjectId, AddressEntity addressEntity, Locale locale){
         lockSync.set(true);
         cancelSync.set(false);
 
         AddressSync addressSync = new AddressSync();
         addressSync.setType(addressEntity);
-        addressSyncBean.getList(FilterWrapper.of(addressSync))
+        addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
+                .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentObjectId()))
                 .forEach(a -> {
                     if (!cancelSync.get()) {
                         try {
