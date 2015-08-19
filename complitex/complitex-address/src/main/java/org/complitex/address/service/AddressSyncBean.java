@@ -1,6 +1,8 @@
 package org.complitex.address.service;
 
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
+import org.complitex.address.entity.AddressSyncFilter;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 
@@ -43,5 +45,9 @@ public class AddressSyncBean extends AbstractBean {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void delete(Long id){
         sqlSession().delete(NS + ".deleteAddressSync", id);
+    }
+
+    public List<AddressSyncFilter> getAddressSyncFilters(AddressEntity addressEntity){
+        return sqlSession().selectList("selectAddressSyncFilters", addressEntity);
     }
 }

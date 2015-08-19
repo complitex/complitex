@@ -5,18 +5,20 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
-import org.complitex.address.entity.AddressEntity;
-import org.complitex.address.entity.AddressSync;
-import org.complitex.address.entity.AddressSyncStatus;
-import org.complitex.address.entity.SyncBeginMessage;
+import org.complitex.address.entity.*;
 import org.complitex.address.service.AddressSyncBean;
 import org.complitex.address.service.AddressSyncService;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.ExceptionUtil;
+import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.Action;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.complitex.common.web.component.datatable.column.EnumColumn;
@@ -154,7 +156,9 @@ public class AddressSyncPanel extends Panel {
         columnMap.put("type", new EnumColumn<>("type", AddressEntity.class, getLocale()));
         columnMap.put("status", new EnumColumn<>("status", AddressSyncStatus.class, getLocale()));
 
-        add(new FilteredDataTable<AddressSync>("table", AddressSync.class, columnMap, actions, FIELDS) {
+        FilteredDataTable<AddressSync> table;
+
+        add(table = new FilteredDataTable<AddressSync>("table", AddressSync.class, columnMap, actions, FIELDS) {
             @Override
             public List<AddressSync> getList(FilterWrapper<AddressSync> filterWrapper) {
                 return addressSyncBean.getList(filterWrapper);
@@ -173,6 +177,27 @@ public class AddressSyncPanel extends Panel {
             @Override
             protected boolean isVisible(String field) {
                 return !(addressEntity != null && field.equals("type")) && super.isVisible(field);
+            }
+        });
+
+        add(new ListView<AddressSyncFilter>("filters", new LoadableDetachableModel<List<? extends AddressSyncFilter>>() {
+            @Override
+            protected List<? extends AddressSyncFilter> load() {
+                return addressSyncBean.getAddressSyncFilters(addressEntity);
+            }
+        }) {
+            @Override
+            protected void populateItem(ListItem<AddressSyncFilter> item) {
+                AddressSyncFilter filter = item.getModelObject();
+                String status = ResourceUtil.getString(AddressSyncStatus.class, filter.getStatus().name(), getLocale());
+
+                item.add(new AjaxLinkLabel("filter", Model.of(status + " (" + filter.getCount() +")")) {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        table.getFilterWrapper().getObject().setStatus(filter.getStatus());
+                        target.add(table);
+                    }
+                });
             }
         });
 
