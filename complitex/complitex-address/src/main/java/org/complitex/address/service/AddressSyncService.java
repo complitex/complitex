@@ -290,11 +290,67 @@ public class AddressSyncService {
         addressSync.setType(addressEntity);
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
                 .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentObjectId()))
+                .filter(s -> s.getStatus().equals(AddressSyncStatus.NEW))
                 .forEach(a -> {
                     if (!cancelSync.get()) {
                         try {
                             insert(a, locale);
                             broadcastService.broadcast(getClass(), "add_all", a);
+                        } catch (Exception e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+                });
+        lockSync.set(false);
+
+        broadcastService.broadcast(getClass(), "add_all_complete", addressEntity);
+    }
+
+    @Asynchronous
+    public void updateAll(Long parentObjectId, AddressEntity addressEntity, Locale locale){
+        lockSync.set(true);
+        cancelSync.set(false);
+
+        AddressSync addressSync = new AddressSync();
+        addressSync.setType(addressEntity);
+        addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
+                .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentObjectId()))
+                .filter(s -> s.getStatus().equals(AddressSyncStatus.NEW_NAME) ||
+                        s.getStatus().equals(AddressSyncStatus.DUPLICATE))
+                .forEach(a -> {
+                    if (!cancelSync.get()) {
+                        try {
+                            update(a, locale);
+
+                            String key = a.getStatus().equals(AddressSyncStatus.NEW_NAME)
+                                    ? "update_new_name_all"
+                                    : "update_duplicate_all";
+
+                            broadcastService.broadcast(getClass(), key, a);
+                        } catch (Exception e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+                });
+        lockSync.set(false);
+
+        broadcastService.broadcast(getClass(), "add_all_complete", addressEntity);
+    }
+
+    @Asynchronous
+    public void deleteAll(Long parentObjectId, AddressEntity addressEntity){
+        lockSync.set(true);
+        cancelSync.set(false);
+
+        AddressSync addressSync = new AddressSync();
+        addressSync.setType(addressEntity);
+        addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
+                .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentObjectId()))
+                .forEach(a -> {
+                    if (!cancelSync.get()) {
+                        try {
+                            addressSyncBean.delete(a.getId());
+                            broadcastService.broadcast(getClass(), "delete_all", a);
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
                         }

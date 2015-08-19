@@ -268,6 +268,30 @@ public class AddressSyncPanel extends Panel {
                     handler.add(processed);
 
                     getSession().info(message);
+                }if ("update_new_name_all".equals(key)){
+                    //noinspection ConstantConditions
+                    AddressSync a = (AddressSync) payload;
+                    String message = String.format(getString(a.getType().name() + ".new_named"), a.getName());
+                    processed.setDefaultModelObject(message);
+                    handler.add(processed);
+
+                    getSession().info(message);
+                }if ("update_duplicate_all".equals(key)){
+                    //noinspection ConstantConditions
+                    AddressSync a = (AddressSync) payload;
+                    String message = String.format(getString(a.getType().name() + ".duplicated"), a.getName());
+                    processed.setDefaultModelObject(message);
+                    handler.add(processed);
+
+                    getSession().info(message);
+                }if ("delete_all".equals(key)){
+                    //noinspection ConstantConditions
+                    AddressSync a = (AddressSync) payload;
+                    String message = String.format(getString(a.getType().name() + ".removed"), a.getName());
+                    processed.setDefaultModelObject(message);
+                    handler.add(processed);
+
+                    getSession().info(message);
                 }else if ("add_all_complete".equals(key)){
                     processed.setDefaultModelObject("");
                     handler.add(AddressSyncPanel.this);
@@ -300,6 +324,38 @@ public class AddressSyncPanel extends Panel {
                         break;
                     default:
                         addressSyncService.addAll(null, addressEntity, getLocale());
+                }
+
+                target.add(AddressSyncPanel.this);
+            }
+
+            @Override
+            public void onUpdate(AjaxRequestTarget target, SearchComponentState state) {
+                switch (addressEntity){
+                    case STREET:
+                        addressSyncService.updateAll(state.getId("city"), addressEntity, getLocale());
+                        break;
+                    case BUILDING:
+                        addressSyncService.updateAll(state.getId("street"), addressEntity, getLocale());
+                        break;
+                    default:
+                        addressSyncService.updateAll(null, addressEntity, getLocale());
+                }
+
+                target.add(AddressSyncPanel.this);
+            }
+
+            @Override
+            public void onDelete(AjaxRequestTarget target, SearchComponentState state) {
+                switch (addressEntity){
+                    case STREET:
+                        addressSyncService.deleteAll(state.getId("city"), addressEntity);
+                        break;
+                    case BUILDING:
+                        addressSyncService.deleteAll(state.getId("street"), addressEntity);
+                        break;
+                    default:
+                        addressSyncService.deleteAll(null, addressEntity);
                 }
 
                 target.add(AddressSyncPanel.this);

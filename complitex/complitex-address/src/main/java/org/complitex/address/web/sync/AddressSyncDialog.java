@@ -42,6 +42,22 @@ public class AddressSyncDialog extends Panel{
             }
         });
 
+        dialog.add(new AjaxLink("update") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onUpdate(target, state);
+                dialog.close(target);
+            }
+        });
+
+        dialog.add(new AjaxLink("delete") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onDelete(target, state);
+                dialog.close(target);
+            }
+        });
+
         dialog.add(new AjaxLink("cancel") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -55,6 +71,12 @@ public class AddressSyncDialog extends Panel{
     }
 
     public void onAdd(AjaxRequestTarget target, SearchComponentState state){
+    }
+
+    public void onUpdate(AjaxRequestTarget target, SearchComponentState state){
+    }
+
+    public void onDelete(AjaxRequestTarget target, SearchComponentState state){
     }
 
     protected List<String> getFilters(AddressEntity addressEntity) {
