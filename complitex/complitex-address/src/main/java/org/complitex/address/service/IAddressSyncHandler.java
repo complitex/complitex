@@ -31,6 +31,8 @@ public interface IAddressSyncHandler {
 
     Long getParentId(AddressSync sync, DomainObject parent);
 
+    default Long getAdditionalParentId(AddressSync sync, DomainObject parent) { return null; }
+
     void insert(AddressSync sync, Locale locale);
 
     void update(AddressSync sync, Locale locale);

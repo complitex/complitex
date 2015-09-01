@@ -16,7 +16,7 @@ CREATE TABLE `address_sync`(
   `date` DATETIME NOT NULL COMMENT 'Дата актуальности',
   PRIMARY KEY (`id`),
   KEY `key_object_id` (`object_id`),
-  KEY `key_parent_object_id` (`parent_object_id`),
+  KEY `key_parent_object_id` (parent_id),
   KEY `key_external_id` (`external_id`),
   KEY `key_additional_external_id` (`additional_external_id`),
   KEY `key_name` (`name`),

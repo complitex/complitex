@@ -85,14 +85,20 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
+    public Long getAdditionalParentId(AddressSync sync, DomainObject parent) {
+        return parent.getObjectId();
+    }
+
+    @Override
     public void insert(AddressSync sync, Locale locale) {
         Building building = buildingStrategy.newInstance();
+        building.setDistrict(districtStrategy.getDomainObject(sync.getAdditionalParentId()));
 
         DomainObject buildingAddress = building.getPrimaryAddress();
 
         buildingAddress.setExternalId(sync.getExternalId());
         buildingAddress.setParentEntityId(BuildingAddressStrategy.PARENT_STREET_ENTITY_ID);
-        buildingAddress.setParentId(sync.getParentObjectId());
+        buildingAddress.setParentId(sync.getParentId());
 
         //building number
         buildingAddress.setStringValue(NUMBER, sync.getName(), locale);

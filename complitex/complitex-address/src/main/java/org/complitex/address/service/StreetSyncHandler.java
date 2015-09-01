@@ -82,7 +82,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
 
         //CITY_ID
         newObject.setParentEntityId(StreetStrategy.PARENT_ENTITY_ID);
-        newObject.setParentId(sync.getParentObjectId());
+        newObject.setParentId(sync.getParentId());
 
         //STREET_TYPE_ID
         List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(new DomainObjectFilter()

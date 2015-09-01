@@ -177,7 +177,8 @@ public class AddressSyncService {
                 continue;
             }
 
-            sync.setParentObjectId(parentId);
+            sync.setParentId(parentId);
+            sync.setAdditionalParentId(handler.getAdditionalParentId(sync, parent));
             sync.setType(type);
             sync.setDate(date);
 
@@ -251,7 +252,7 @@ public class AddressSyncService {
                 AddressSync s = new AddressSync();
 
                 if (parent != null){
-                    s.setParentObjectId(parent.getObjectId());
+                    s.setParentId(parent.getObjectId());
                 }
 
                 s.setObjectId(object.getObjectId());
@@ -285,9 +286,9 @@ public class AddressSyncService {
 
         AddressSync addressSync = new AddressSync();
         addressSync.setType(addressEntity);
+        addressSync.setStatus(AddressSyncStatus.NEW);
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
-                .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentObjectId()))
-                .filter(s -> s.getStatus().equals(AddressSyncStatus.NEW))
+                .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))
                 .forEach(a -> {
                     if (!cancelSync.get()) {
                         try {
@@ -311,7 +312,7 @@ public class AddressSyncService {
         AddressSync addressSync = new AddressSync();
         addressSync.setType(addressEntity);
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
-                .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentObjectId()))
+                .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))
                 .filter(s -> s.getStatus().equals(AddressSyncStatus.NEW_NAME) ||
                         s.getStatus().equals(AddressSyncStatus.DUPLICATE))
                 .forEach(a -> {
@@ -342,7 +343,7 @@ public class AddressSyncService {
         AddressSync addressSync = new AddressSync();
         addressSync.setType(addressEntity);
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
-                .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentObjectId()))
+                .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))
                 .forEach(a -> {
                     if (!cancelSync.get()) {
                         try {

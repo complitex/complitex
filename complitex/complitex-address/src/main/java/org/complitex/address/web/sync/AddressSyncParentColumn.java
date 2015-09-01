@@ -41,13 +41,13 @@ public class AddressSyncParentColumn extends FilteredColumn<AddressSync>{
 
         String objectName = "";
 
-        if (addressSync.getParentObjectId() != null){
+        if (addressSync.getParentId() != null){
             if (addressSync.getType().equals(AddressEntity.DISTRICT) || addressSync.getType().equals(AddressEntity.STREET)){
-                objectName = EjbBeanLocator.getBean(CityStrategy.class).displayDomainObject(addressSync.getParentObjectId(), cellItem.getLocale());
+                objectName = EjbBeanLocator.getBean(CityStrategy.class).displayDomainObject(addressSync.getParentId(), cellItem.getLocale());
             }else if (addressSync.getType().equals(AddressEntity.BUILDING) ){
-                objectName = EjbBeanLocator.getBean(StreetStrategy.class).displayDomainObject(addressSync.getParentObjectId(), cellItem.getLocale());
+                objectName = EjbBeanLocator.getBean(StreetStrategy.class).displayDomainObject(addressSync.getParentId(), cellItem.getLocale());
             }else {
-                objectName = addressSync.getParentObjectId() + "";
+                objectName = addressSync.getParentId() + "";
             }
         }
 

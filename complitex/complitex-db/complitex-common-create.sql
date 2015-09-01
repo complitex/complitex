@@ -1179,7 +1179,8 @@ DROP TABLE IF EXISTS `address_sync`;
 CREATE TABLE `address_sync`(
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор адресного элемента синхронизации',
   `object_id` BIGINT(20) COMMENT 'Идентификатор адресного объекта',
-  `parent_object_id` BIGINT(20) COMMENT 'Идентификатор родительского адресного объекта',
+  `parent_id` BIGINT(20) COMMENT 'Идентификатор родительского адресного объекта',
+  `additional_parent_id` BIGINT(20) COMMENT 'Идентификатор дополнительного родительского адресного объекта',
   `external_id` VARCHAR(20) NOT NULL COMMENT 'Код адресного объекта (ID)',
   `additional_external_id` VARCHAR(20) COMMENT 'Код адресного объекта (ID)',
   `name` VARCHAR(100) NOT NULL COMMENT 'Название адресного элемента',
@@ -1189,7 +1190,7 @@ CREATE TABLE `address_sync`(
   `date` DATETIME NOT NULL COMMENT 'Дата актуальности',
   PRIMARY KEY (`id`),
   KEY `key_object_id` (`object_id`),
-  KEY `key_parent_object_id` (`parent_object_id`),
+  KEY `key_parent_id` (`parent_id`),
   KEY `key_external_id` (`external_id`),
   KEY `key_additional_external_id` (`additional_external_id`),
   KEY `key_name` (`name`),

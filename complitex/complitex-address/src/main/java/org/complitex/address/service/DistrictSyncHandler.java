@@ -71,7 +71,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
         DomainObject domainObject = districtStrategy.newInstance();
 
         domainObject.setExternalId(sync.getExternalId());
-        domainObject.setParentId(sync.getParentObjectId());
+        domainObject.setParentId(sync.getParentId());
         domainObject.setStringValue(DistrictStrategy.NAME, sync.getName(), locale);
         domainObject.setStringValue(DistrictStrategy.CODE, sync.getExternalId());
 

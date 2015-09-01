@@ -12,7 +12,8 @@ import java.util.Date;
 public class AddressSync implements ILongId {
     private Long id;
     private Long objectId;
-    private Long parentObjectId;
+    private Long parentId;
+    private Long additionalParentId;
     private String externalId;
     private String additionalExternalId;
     private String name;
@@ -37,12 +38,20 @@ public class AddressSync implements ILongId {
         this.objectId = objectId;
     }
 
-    public Long getParentObjectId() {
-        return parentObjectId;
+    public Long getParentId() {
+        return parentId;
     }
 
-    public void setParentObjectId(Long parentObjectId) {
-        this.parentObjectId = parentObjectId;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public Long getAdditionalParentId() {
+        return additionalParentId;
+    }
+
+    public void setAdditionalParentId(Long additionalParentId) {
+        this.additionalParentId = additionalParentId;
     }
 
     public String getExternalId() {
@@ -106,7 +115,7 @@ public class AddressSync implements ILongId {
         return Objects.toStringHelper(this).omitNullValues()
                 .add("id", id)
                 .add("objectId", objectId)
-                .add("parentObjectId", parentObjectId)
+                .add("parentId", parentId)
                 .add("externalId", externalId)
                 .add("additionalExternalId", additionalExternalId)
                 .add("name", name)

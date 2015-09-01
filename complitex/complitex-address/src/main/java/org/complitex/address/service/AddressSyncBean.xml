@@ -4,7 +4,8 @@
     <resultMap id="addressSyncResultMap" type="org.complitex.address.entity.AddressSync">
         <id column="id" property="id"/>
         <result column="object_id" property="objectId"/>
-        <result column="parent_object_id" property="parentObjectId"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="additional_parent_id" property="additionalParentId"/>
         <result column="external_id" property="externalId"/>
         <result column="additional_external_id" property="additionalExternalId"/>
         <result column="name" property="name"/>
@@ -16,10 +17,10 @@
 
     <insert id="insertAddressSync" parameterType="org.complitex.address.entity.AddressSync"
             useGeneratedKeys="true" keyProperty="id">
-        insert into `address_sync` (`object_id`, `parent_object_id`, `external_id`, `additional_external_id`, `name`, `additional_name`, `type`,
-          `status`, `date`)
-        values (#{objectId}, #{parentObjectId}, #{externalId}, #{additionalExternalId},  #{name}, #{additionalName},
-          #{type}, #{status}, #{date})
+        insert into `address_sync` (`object_id`, `parent_id`, `additional_parent_id`, `external_id`,
+                                    `additional_external_id`, `name`, `additional_name`, `type`, `status`, `date`)
+        values (#{objectId}, #{parentId}, #{additionalParentId}, #{externalId}, #{additionalExternalId},
+                #{name}, #{additionalName}, #{type}, #{status}, #{date})
     </insert>
 
     <delete id="deleteAddressSync" parameterType="long">
@@ -33,14 +34,15 @@
     <sql id="selectDistrictSyncWhere">
         <where>
             <if test="object.objectId != null">and `object_id` = #{object.objectId}</if>
-            <if test="object.parentObjectId != null">and `parent_object_id` = #{object.parentObjectId}</if>
+            <if test="object.parentId != null">and `parent_id` = #{object.parentId}</if>
+            <if test="object.additionalParentId != null">and `additional_parent_id` = #{object.additionalParentId}</if>
             <if test="object.externalId != null">and `external_id` = #{object.externalId}</if>
             <if test="object.additionalExternalId != null">and `additional_external_id` = #{object.additionalExternalId}</if>
             <if test="object.name != null">and `name` = #{object.name}</if>
             <if test="object.additionalName != null">and `additional_name` = #{object.additionalName}</if>
             <if test="object.type != null">and `type` = #{object.type}</if>
             <if test="object.status != null">and `status` = #{object.status}</if>
-            <if test="object.date != null">and `date` = #{object.date}</if>
+            <!--<if test="object.date != null">and `date` = #{object.date}</if>-->
         </where>
     </sql>
 
