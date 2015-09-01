@@ -110,18 +110,20 @@ public class AddressSyncService {
             lockSync.set(true);
             cancelSync.set(false);
 
+            Date date = DateUtil.getCurrentDate();
+
             List<? extends DomainObject> parents = getHandler(type).getParentObjects();
 
             if (parents != null){
                 for (DomainObject parent : parents) {
-                    sync(parent, type);
+                    sync(parent, type, date);
 
                     if (cancelSync.get()){
                         break;
                     }
                 }
             }else{
-                sync(null, type);
+                sync(null, type, date);
             }
         } catch (Exception e) {
             log.error("Ошибка синхронизации", e);
@@ -137,10 +139,8 @@ public class AddressSyncService {
         }
     }
 
-    public void sync(DomainObject parent,  AddressEntity type) throws RemoteCallException {
+    public void sync(DomainObject parent,  AddressEntity type, Date date) throws RemoteCallException {
         IAddressSyncHandler handler = getHandler(type);
-
-        Date date = DateUtil.getCurrentDate();
 
         Cursor<AddressSync> cursor = handler.getAddressSyncs(parent, date);
 
@@ -179,6 +179,7 @@ public class AddressSyncService {
 
             sync.setParentObjectId(parentId);
             sync.setType(type);
+            sync.setDate(date);
 
             if (sync.getExternalId() == null){
                 broadcastService.broadcast(getClass(), "error", "Пустой вненший код: " + sync.toString());
@@ -198,8 +199,7 @@ public class AddressSyncService {
                         sync.setObjectId(object.getObjectId());
                         sync.setStatus(AddressSyncStatus.NEW_NAME);
 
-                        if (addressSyncBean.isExist(sync)) {
-                            sync.setDate(date);
+                        if (!addressSyncBean.isExist(sync)) {
                             addressSyncBean.save(sync);
                         }
                     }
@@ -213,8 +213,7 @@ public class AddressSyncService {
                         sync.setObjectId(o.getObjectId());
                         sync.setStatus(AddressSyncStatus.DUPLICATE);
 
-                        if (addressSyncBean.isExist(sync)) {
-                            sync.setDate(date);
+                        if (!addressSyncBean.isExist(sync)) {
                             addressSyncBean.save(sync);
                         }
                     });
@@ -223,8 +222,7 @@ public class AddressSyncService {
             if (sync.getStatus() == null) {
                 sync.setStatus(AddressSyncStatus.NEW);
 
-                if (addressSyncBean.isExist(sync)) {
-                    sync.setDate(date);
+                if (!addressSyncBean.isExist(sync)) {
                     addressSyncBean.save(sync);
                 }
             }
@@ -261,10 +259,9 @@ public class AddressSyncService {
                 s.setName("");
                 s.setType(type);
                 s.setStatus(AddressSyncStatus.ARCHIVAL);
+                s.setDate(date);
 
-                if (addressSyncBean.isExist(s)) {
-                    s.setDate(date);
-
+                if (!addressSyncBean.isExist(s)) {
                     addressSyncBean.save(s);
                 }
 

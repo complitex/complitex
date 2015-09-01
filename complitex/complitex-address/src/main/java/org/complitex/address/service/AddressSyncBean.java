@@ -30,16 +30,19 @@ public class AddressSyncBean extends AbstractBean {
         return sqlSession().selectOne(NS + ".selectAddressSync", id);
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<AddressSync> getList(FilterWrapper<AddressSync> filterWrapper){
         return sqlSession().selectList(NS + ".selectAddressSyncList", filterWrapper);
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Long getCount(FilterWrapper<AddressSync> filterWrapper){
         return sqlSession().selectOne(NS + ".selectAddressSyncCount", filterWrapper);
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public boolean isExist(AddressSync addressSync){
-        return getCount(FilterWrapper.of(addressSync)) == 0;
+        return getCount(FilterWrapper.of(addressSync)) > 0;
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
