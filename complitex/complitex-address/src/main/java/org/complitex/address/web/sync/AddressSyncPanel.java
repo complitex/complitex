@@ -231,6 +231,7 @@ public class AddressSyncPanel extends Panel {
         add(new BroadcastBehavior(AddressSyncService.class) {
             private Long lastProcessed = System.currentTimeMillis();
 
+            @SuppressWarnings("Duplicates")
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
                 if ("begin".equals(key)){
@@ -249,12 +250,14 @@ public class AddressSyncPanel extends Panel {
                     handler.add(AddressSyncPanel.this);
                 }
 
-                if ("processed".equals(key) && System.currentTimeMillis() - lastProcessed > 100) {
+                if ("processed".equals(key)) {
                     //noinspection ConstantConditions
-                    processed.setDefaultModelObject(((AddressSync)payload).getName());
-                    handler.add(processed);
+                    if (System.currentTimeMillis() - lastProcessed > 100) {
+                        processed.setDefaultModelObject(((AddressSync)payload).getName());
+                        handler.add(processed);
 
-                    lastProcessed = System.currentTimeMillis();
+                        lastProcessed = System.currentTimeMillis();
+                    }
                 }else {
                     processed.setDefaultModelObject("");
                     handler.add(processed);
