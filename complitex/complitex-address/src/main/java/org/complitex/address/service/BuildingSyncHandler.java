@@ -6,6 +6,7 @@ import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
+import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
@@ -39,6 +40,9 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     private StreetStrategy streetStrategy;
 
     @EJB
+    private StreetTypeStrategy streetTypeStrategy;
+
+    @EJB
     private BuildingStrategy buildingStrategy;
 
     @EJB
@@ -66,7 +70,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
         return streetObject != null &&
                 sync.getName().equals(object.getStringValue(NUMBER)) &&
                 Objects.equals(sync.getAdditionalName(), object.getStringValue(CORP)) &&
-                streetObject.getExternalId().equals(sync.getAdditionalExternalId());
+                Objects.equals(streetObject.getExternalId(), sync.getAdditionalExternalId());
     }
 
     @Override

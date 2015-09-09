@@ -282,6 +282,12 @@ public class StreetStrategy extends TemplateStrategy {
         return streetObject != null ? getName(streetObject) : null;
     }
 
+    public String getFullName(Long streetId) {
+        DomainObject streetObject = getDomainObject(streetId, true);
+
+        return streetObject != null ? getStreetTypeShortName(streetObject) + " " +getName(streetObject) : null;
+    }
+
     public String getName(DomainObject streetObject){
         return getName(streetObject, stringLocaleBean.getSystemLocale());
     }

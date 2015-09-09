@@ -15,6 +15,7 @@ import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.complitex.address.entity.*;
 import org.complitex.address.service.AddressSyncBean;
 import org.complitex.address.service.AddressSyncService;
+import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.ResourceUtil;
@@ -45,6 +46,9 @@ public class AddressSyncPanel extends Panel {
 
     @EJB
     private AddressSyncService addressSyncService;
+
+    @EJB
+    private StreetStrategy streetStrategy;
 
     public AddressSyncPanel(String id, AddressEntity addressEntity) {
         super(id);
@@ -250,55 +254,72 @@ public class AddressSyncPanel extends Panel {
                     handler.add(AddressSyncPanel.this);
                 }
 
-                if ("processed".equals(key)) {
-                    //noinspection ConstantConditions
-                    if (System.currentTimeMillis() - lastProcessed > 100) {
-                        processed.setDefaultModelObject(((AddressSync)payload).getName());
+                if (payload instanceof AddressSync) {
+                    AddressSync addressSync = (AddressSync) payload;
+
+                    String name;
+
+                    if (addressEntity.equals(AddressEntity.BUILDING)){
+                        name = Objects.toString(streetStrategy.getFullName(addressSync.getParentId()), "") + " " +
+                                addressSync.getName();
+                    }else {
+                        name = addressSync.getName();
+                    }
+
+
+                    if ("processed".equals(key)) {
+                        //noinspection ConstantConditions
+                        if (System.currentTimeMillis() - lastProcessed > 100) {
+                            processed.setDefaultModelObject(name);
+                            handler.add(processed);
+
+                            lastProcessed = System.currentTimeMillis();
+                        }
+                    }else {
+                        processed.setDefaultModelObject("");
+                        handler.add(processed);
+                    }
+
+                    if ("add_all".equals(key)){
+                        //noinspection ConstantConditions
+                        AddressSync a = (AddressSync) payload;
+                        String message = String.format(getString(a.getType().name() + ".added"), name);
+                        processed.setDefaultModelObject(message);
                         handler.add(processed);
 
-                        lastProcessed = System.currentTimeMillis();
+                        getSession().info(message);
                     }
-                }else {
-                    processed.setDefaultModelObject("");
-                    handler.add(processed);
-                }
+                    if ("update_new_name_all".equals(key)){
+                        //noinspection ConstantConditions
+                        AddressSync a = (AddressSync) payload;
+                        String message = String.format(getString(a.getType().name() + ".new_named"), name);
+                        processed.setDefaultModelObject(message);
+                        handler.add(processed);
 
-                if ("add_all".equals(key)){
-                    //noinspection ConstantConditions
-                    AddressSync a = (AddressSync) payload;
-                    String message = String.format(getString(a.getType().name() + ".added"), a.getName());
-                    processed.setDefaultModelObject(message);
-                    handler.add(processed);
+                        getSession().info(message);
+                    }
+                    if ("update_duplicate_all".equals(key)){
+                        //noinspection ConstantConditions
+                        AddressSync a = (AddressSync) payload;
+                        String message = String.format(getString(a.getType().name() + ".duplicated"), name);
+                        processed.setDefaultModelObject(message);
+                        handler.add(processed);
 
-                    getSession().info(message);
-                }if ("update_new_name_all".equals(key)){
-                    //noinspection ConstantConditions
-                    AddressSync a = (AddressSync) payload;
-                    String message = String.format(getString(a.getType().name() + ".new_named"), a.getName());
-                    processed.setDefaultModelObject(message);
-                    handler.add(processed);
+                        getSession().info(message);
+                    }
+                    if ("delete_all".equals(key)){
+                        //noinspection ConstantConditions
+                        AddressSync a = (AddressSync) payload;
+                        String message = String.format(getString(a.getType().name() + ".removed"), name);
+                        processed.setDefaultModelObject(message);
+                        handler.add(processed);
 
-                    getSession().info(message);
-                }if ("update_duplicate_all".equals(key)){
-                    //noinspection ConstantConditions
-                    AddressSync a = (AddressSync) payload;
-                    String message = String.format(getString(a.getType().name() + ".duplicated"), a.getName());
-                    processed.setDefaultModelObject(message);
-                    handler.add(processed);
-
-                    getSession().info(message);
-                }if ("delete_all".equals(key)){
-                    //noinspection ConstantConditions
-                    AddressSync a = (AddressSync) payload;
-                    String message = String.format(getString(a.getType().name() + ".removed"), a.getName());
-                    processed.setDefaultModelObject(message);
-                    handler.add(processed);
-
-                    getSession().info(message);
-                }else if ("add_all_complete".equals(key)){
-                    processed.setDefaultModelObject("");
-                    handler.add(AddressSyncPanel.this);
-                    onUpdate(handler);
+                        getSession().info(message);
+                    }else if ("add_all_complete".equals(key)){
+                        processed.setDefaultModelObject("");
+                        handler.add(AddressSyncPanel.this);
+                        onUpdate(handler);
+                    }
                 }
             }
         });
