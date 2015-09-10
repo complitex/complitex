@@ -27,11 +27,11 @@
         delete from `address_sync` where `id` = #{id}
     </delete>
 
-    <select id="selectDistrictSync" parameterType="long" resultMap="addressSyncResultMap">
+    <select id="selectAddressSync" parameterType="long" resultMap="addressSyncResultMap">
         select * from `address_sync` where `id` = #{id}
     </select>
 
-    <sql id="selectDistrictSyncWhere">
+    <sql id="selectAddressSyncWhere">
         <where>
             <if test="object.objectId != null">and `object_id` = #{object.objectId}</if>
             <if test="object.parentId != null">and `parent_id` = #{object.parentId}</if>
@@ -48,16 +48,16 @@
 
     <select id="selectAddressSyncList" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="addressSyncResultMap">
-        select * from `address_sync` <include refid="selectDistrictSyncWhere"/> ${orderLimit}
+        select * from `address_sync` <include refid="selectAddressSyncWhere"/> ${orderLimit}
     </select>
 
     <select id="selectAddressSyncCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
-        select count(1) from `address_sync` <include refid="selectDistrictSyncWhere"/>
+        select count(*) from `address_sync` <include refid="selectAddressSyncWhere"/>
     </select>
 
     <select id="selectAddressSyncFilters" parameterType="org.complitex.address.entity.AddressEntity"
             resultType="org.complitex.address.entity.AddressSyncFilter">
-        select `status`, count(1) as `count` from address_sync where type = #{addressEntity} group by `status`
+        select `status`, count(*) as `count` from address_sync where type = #{addressEntity} group by `status`
     </select>
 </mapper>
 

@@ -1356,4 +1356,11 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
 
     }
+
+    public String getExternalId(Long objectId){
+        return sqlSession().selectOne(NS +".selectExternalId", new HashMap<String, Object>(){{
+            put("entityName", getEntityName());
+            put("objectId", objectId);
+        }});
+    }
 }

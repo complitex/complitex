@@ -169,83 +169,78 @@ public class AddressSyncService {
                 .filter(o -> o.getExternalId() != null)
                 .collect(Collectors.toMap(DomainObject::getExternalId, o -> o));
 
-        for (AddressSync sync : cursor.getData()) {
-            Long parentId = handler.getParentId(sync, parent);
+        cursor.getData().parallelStream().forEach(sync -> {
+                    Long parentId = handler.getParentId(sync, parent);
 
-            if (NOT_FOUND_ID.equals(parentId)){
-                broadcastService.broadcast(getClass(), "error", "Родительский объект не найден: " + sync.toString());
-                continue;
-            }
+                    if (NOT_FOUND_ID.equals(parentId)){
+                        broadcastService.broadcast(getClass(), "error", "Родительский объект не найден: " + sync.toString());
+                        return;
+                    }
 
-            sync.setParentId(parentId);
-            sync.setAdditionalParentId(handler.getAdditionalParentId(sync, parent));
-            sync.setType(type);
-            sync.setDate(date);
+                    sync.setParentId(parentId);
+                    sync.setAdditionalParentId(handler.getAdditionalParentId(sync, parent));
+                    sync.setType(type);
+                    sync.setDate(date);
 
-            if (sync.getExternalId() == null){
-                broadcastService.broadcast(getClass(), "error", "Пустой вненший код: " + sync.toString());
-                continue;
-            }
+                    if (sync.getExternalId() == null){
+                        broadcastService.broadcast(getClass(), "error", "Пустой вненший код: " + sync.toString());
+                        return;
+                    }
 
-            DomainObject object = objectMap.get(sync.getExternalId());
+                    DomainObject object = objectMap.get(sync.getExternalId());
 
-            if (object != null){
-                //все норм
-                if (sync.getExternalId().equals(object.getExternalId()) && handler.isEqualNames(sync, object)) {
-                    sync.setObjectId(object.getObjectId());
-                    sync.setStatus(AddressSyncStatus.LOCAL);
-                }else
-                    //новое название
-                    if (sync.getExternalId().equals(object.getExternalId())) {
-                        sync.setObjectId(object.getObjectId());
-                        sync.setStatus(AddressSyncStatus.NEW_NAME);
+                    if (object != null){
+                        //все норм
+                        if (sync.getExternalId().equals(object.getExternalId()) && handler.isEqualNames(sync, object)) {
+                            sync.setObjectId(object.getObjectId());
+                            sync.setStatus(AddressSyncStatus.LOCAL);
+                        }else
+                            //новое название
+                            if (sync.getExternalId().equals(object.getExternalId())) {
+                                sync.setObjectId(object.getObjectId());
+                                sync.setStatus(AddressSyncStatus.NEW_NAME);
+
+                                if (!addressSyncBean.isExist(sync)) {
+                                    addressSyncBean.save(sync);
+                                }
+                            }
+                    }
+
+                    objects.parallelStream()
+                            .filter(o -> !Objects.equals(sync.getExternalId(), o.getExternalId()))
+                            .filter(o -> handler.hasEqualNames(sync, o))
+                            .findAny()
+                            .ifPresent(o -> {
+                                sync.setObjectId(o.getObjectId());
+                                sync.setStatus(AddressSyncStatus.DUPLICATE);
+
+                                if (!addressSyncBean.isExist(sync)) {
+                                    addressSyncBean.save(sync);
+                                }
+                            });
+
+                    //новый
+                    if (sync.getStatus() == null) {
+                        sync.setStatus(AddressSyncStatus.NEW);
 
                         if (!addressSyncBean.isExist(sync)) {
                             addressSyncBean.save(sync);
                         }
                     }
-            }
 
-            objects.parallelStream()
-                    .filter(o -> !Objects.equals(sync.getExternalId(), o.getExternalId()))
-                    .filter(o -> handler.hasEqualNames(sync, o))
-                    .findAny()
-                    .ifPresent(o -> {
-                        sync.setObjectId(o.getObjectId());
-                        sync.setStatus(AddressSyncStatus.DUPLICATE);
-
-                        if (!addressSyncBean.isExist(sync)) {
-                            addressSyncBean.save(sync);
-                        }
-                    });
-
-            //новый
-            if (sync.getStatus() == null) {
-                sync.setStatus(AddressSyncStatus.NEW);
-
-                if (!addressSyncBean.isExist(sync)) {
-                    addressSyncBean.save(sync);
+                    broadcastService.broadcast(getClass(), "processed", sync);
                 }
-            }
+        );
 
-            broadcastService.broadcast(getClass(), "processed", sync);
-        }
-
-        for (DomainObject object : objects) {
+        objects.parallelStream().forEach(object -> {
             if (object.getExternalId() == null) {
-                continue;
+                return;
             }
 
-            boolean archive = true;
-
-            for (AddressSync sync : cursor.getData()) {
-                if (sync.getExternalId().equals(object.getExternalId()) || handler.isEqualNames(sync, object)) {
-
-                    archive = false;
-
-                    break;
-                }
-            }
+            boolean archive = !cursor.getData().parallelStream().filter(sync ->
+                    sync.getExternalId().equals(object.getExternalId()) || handler.isEqualNames(sync, object))
+                    .findAny()
+                    .isPresent();
 
             //архив
             if (archive) {
@@ -268,7 +263,7 @@ public class AddressSyncService {
 
                 broadcastService.broadcast(getClass(), "processed", s);
             }
-        }
+        });
     }
 
     public void cancelSync(){
@@ -287,7 +282,7 @@ public class AddressSyncService {
         AddressSync addressSync = new AddressSync();
         addressSync.setType(addressEntity);
         addressSync.setStatus(AddressSyncStatus.NEW);
-        addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
+        addressSyncBean.getList(FilterWrapper.of(addressSync)).stream() //todo parallel mysql lock
                 .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))
                 .forEach(a -> {
                     if (!cancelSync.get()) {
@@ -296,6 +291,7 @@ public class AddressSyncService {
                             broadcastService.broadcast(getClass(), "add_all", a);
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
+                            broadcastService.broadcast(getClass(), "error", e.getMessage());
                         }
                     }
                 });
@@ -327,6 +323,7 @@ public class AddressSyncService {
                             broadcastService.broadcast(getClass(), key, a);
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
+                            broadcastService.broadcast(getClass(), "error", e.getMessage());
                         }
                     }
                 });
@@ -351,6 +348,7 @@ public class AddressSyncService {
                             broadcastService.broadcast(getClass(), "delete_all", a);
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
+                            broadcastService.broadcast(getClass(), "error", e.getMessage());
                         }
                     }
                 });

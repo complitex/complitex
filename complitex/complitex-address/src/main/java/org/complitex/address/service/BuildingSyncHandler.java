@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.*;
+import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.CORP;
+import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.NUMBER;
 
 /**
  * @author Anatoly Ivanov
@@ -55,7 +56,8 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return buildingAddressStrategy.getList(new DomainObjectFilter().addAdditionalParam(DISTRICT_ID, parent.getObjectId()));
+        //.addAdditionalParam(DISTRICT_ID, parent.getObjectId())
+        return buildingAddressStrategy.getList(new DomainObjectFilter());
     }
 
     @Override
@@ -65,27 +67,19 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public boolean isEqualNames(AddressSync sync, DomainObject object) {
-        DomainObject streetObject = streetStrategy.getDomainObject(object.getParentId(), true);
+        String  streetExternalId = streetStrategy.getExternalId(object.getParentId());
 
-        return streetObject != null &&
+        return streetExternalId != null &&
                 sync.getName().equals(object.getStringValue(NUMBER)) &&
                 Objects.equals(sync.getAdditionalName(), object.getStringValue(CORP)) &&
-                Objects.equals(streetObject.getExternalId(), sync.getAdditionalExternalId());
+                Objects.equals(streetExternalId, sync.getAdditionalExternalId());
     }
 
     @Override
     public Long getParentId(AddressSync sync, DomainObject parent) {
         Long objectId = streetStrategy.getObjectId(sync.getAdditionalExternalId());
 
-        if (objectId != null){
-            DomainObject streetObject = streetStrategy.getDomainObject(objectId, true);
-
-            if (streetObject != null){
-                return streetObject.getObjectId();
-            }
-        }
-
-        return NOT_FOUND_ID;
+        return objectId != null ? objectId : NOT_FOUND_ID;
     }
 
     @Override
@@ -96,7 +90,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     @Override
     public void insert(AddressSync sync, Locale locale) {
         Building building = buildingStrategy.newInstance();
-        building.setDistrict(districtStrategy.getDomainObject(sync.getAdditionalParentId()));
+        building.setLongValue(BuildingStrategy.DISTRICT, sync.getAdditionalParentId());
 
         DomainObject buildingAddress = building.getPrimaryAddress();
 
