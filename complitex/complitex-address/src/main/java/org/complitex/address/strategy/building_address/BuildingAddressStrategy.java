@@ -11,6 +11,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.address.resource.CommonResources;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.common.entity.*;
+import org.complitex.common.util.Locales;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.search.ISearchCallback;
@@ -20,6 +21,7 @@ import org.complitex.template.web.security.SecurityRole;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.*;
 
 @Stateless
@@ -48,7 +50,31 @@ public class BuildingAddressStrategy extends TemplateStrategy {
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return null;
+        return displayBuildingAddress(object.getStringValue(NUMBER), object.getStringValue(CORP),
+                object.getStringValue(STRUCTURE), locale);
+    }
+
+    public String getName(DomainObject object){
+        return displayDomainObject(object, Locales.getSystemLocale());
+    }
+
+    private String displayBuildingAddress(String number, String corp, String structure, Locale locale) {
+        if (Strings.isEmpty(corp)) {
+            if (Strings.isEmpty(structure)) {
+                return number;
+            } else {
+                return MessageFormat.format(ResourceUtil.getString(BuildingStrategy.class.getName(),
+                        "number_structure", locale), number, structure);
+            }
+        } else {
+            if (Strings.isEmpty(structure)) {
+                return MessageFormat.format(ResourceUtil.getString(BuildingStrategy.class.getName(),
+                        "number_corp", locale), number, corp);
+            } else {
+                return MessageFormat.format(ResourceUtil.getString(BuildingStrategy.class.getName(),
+                        "number_corp_structure", locale), number, corp, structure);
+            }
+        }
     }
 
     @Override

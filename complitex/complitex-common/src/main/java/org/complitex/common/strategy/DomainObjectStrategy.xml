@@ -381,6 +381,6 @@
     </delete>
 
     <select id="selectExternalId" parameterType="map" resultType="string">
-        select external_id from ${entityName} where object_id = #{objectId} and `status` = 'ACTIVE'
+        select external_id from ${entityName} where object_id = #{objectId} and `end_date` is null
     </select>
 </mapper>

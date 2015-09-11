@@ -105,4 +105,9 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
         streetTypeStrategy.archive(streetTypeStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
         addressSyncBean.delete(sync.getId());
     }
+
+    @Override
+    public String getName(DomainObject object) {
+        return streetTypeStrategy.getName(object);
+    }
 }

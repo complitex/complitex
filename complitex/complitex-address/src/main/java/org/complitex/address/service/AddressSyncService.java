@@ -206,9 +206,8 @@ public class AddressSyncService {
                             }
                     }
 
-                    objects.parallelStream()
-                            .filter(o -> !Objects.equals(sync.getExternalId(), o.getExternalId()))
-                            .filter(o -> handler.hasEqualNames(sync, o))
+                    objects.parallelStream().filter(o -> !Objects.equals(sync.getExternalId(), o.getExternalId()) &&
+                            handler.hasEqualNames(sync, o))
                             .findAny()
                             .ifPresent(o -> {
                                 sync.setObjectId(o.getObjectId());
@@ -252,7 +251,7 @@ public class AddressSyncService {
 
                 s.setObjectId(object.getObjectId());
                 s.setExternalId(object.getExternalId());
-                s.setName("");
+                s.setName(handler.getName(object));
                 s.setType(type);
                 s.setStatus(AddressSyncStatus.ARCHIVAL);
                 s.setDate(date);

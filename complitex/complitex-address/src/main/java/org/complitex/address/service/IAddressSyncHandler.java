@@ -38,4 +38,6 @@ public interface IAddressSyncHandler {
     void update(AddressSync sync, Locale locale);
 
     void archive(AddressSync sync);
+
+    String getName(DomainObject object);
 }

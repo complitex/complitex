@@ -96,4 +96,9 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
 
         addressSyncBean.delete(sync.getId());
     }
+
+    @Override
+    public String getName(DomainObject object) {
+        return districtStrategy.getName(object);
+    }
 }

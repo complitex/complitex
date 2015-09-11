@@ -67,7 +67,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public boolean isEqualNames(AddressSync sync, DomainObject object) {
-        String  streetExternalId = streetStrategy.getExternalId(object.getParentId());
+        String streetExternalId = streetStrategy.getExternalId(object.getParentId());
 
         return streetExternalId != null &&
                 sync.getName().equals(object.getStringValue(NUMBER)) &&
@@ -131,5 +131,10 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     public void archive(AddressSync sync) {
         buildingStrategy.archive(buildingStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
         addressSyncBean.delete(sync.getId());
+    }
+
+    @Override
+    public String getName(DomainObject object) {
+        return buildingAddressStrategy.getName(object);
     }
 }

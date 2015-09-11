@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -1357,6 +1359,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     }
 
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public String getExternalId(Long objectId){
         return sqlSession().selectOne(NS +".selectExternalId", new HashMap<String, Object>(){{
             put("entityName", getEntityName());

@@ -268,11 +268,7 @@ public class AddressSyncPanel extends Panel {
                     return;
                 }
 
-                if (payload instanceof AddressSync) {
-                    if (System.currentTimeMillis() - lastProcessed < 100) {
-                        return;
-                    }
-
+                if (payload instanceof AddressSync && System.currentTimeMillis() - lastProcessed > 100) {
                     lastProcessed = System.currentTimeMillis();
 
                     AddressSync addressSync = (AddressSync) payload;

@@ -10,6 +10,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.CloneUtil;
+import org.complitex.common.util.Locales;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -117,7 +118,11 @@ public class StreetSyncHandler implements IAddressSyncHandler {
     @Override
     public void archive(AddressSync sync) {
         streetStrategy.archive(streetStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
-
         addressSyncBean.delete(sync.getId());
+    }
+
+    @Override
+    public String getName(DomainObject object) {
+        return streetStrategy.getName(object, Locales.getSystemLocale());
     }
 }
