@@ -9,6 +9,7 @@ import org.complitex.common.wicket.BroadcastPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.Asynchronous;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -44,6 +45,7 @@ public class BroadcastService {
         }
     }
 
+    @Asynchronous
     public void broadcast(Class producer, String key, Object payload){
         try {
             broadcaster.broadcastAll(application, new BroadcastPayload(producer, key, payload));

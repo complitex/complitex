@@ -6,6 +6,7 @@ import org.complitex.address.entity.AddressSyncFilter;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 
+import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -24,6 +25,11 @@ public class AddressSyncBean extends AbstractBean {
         if (addressSync.getId() == null){
             sqlSession().insert("insertAddressSync", addressSync);
         }
+    }
+
+    @Asynchronous
+    public void saveAsync(AddressSync addressSync){
+        save(addressSync);
     }
 
     public AddressSync getObject(Long id){

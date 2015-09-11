@@ -231,18 +231,15 @@ public class AddressSyncService {
                 }
         );
 
-        objects.parallelStream().forEach(object -> {
-            if (object.getExternalId() == null) {
-                return;
-            }
+        Map<String, AddressSync> syncMap = cursor.getData().parallelStream()
+                .filter(a -> a.getExternalId() != null)
+                .collect(Collectors.toMap(AddressSync::getExternalId, a -> a));
 
-            boolean archive = !cursor.getData().parallelStream().filter(sync ->
-                    sync.getExternalId().equals(object.getExternalId()) || handler.isEqualNames(sync, object))
-                    .findAny()
-                    .isPresent();
+        objects.parallelStream().filter(o -> o.getExternalId() != null).forEach(object -> {
+            AddressSync addressSync = syncMap.get(object.getExternalId());
 
             //архив
-            if (archive) {
+            if (addressSync == null) {
                 AddressSync s = new AddressSync();
 
                 if (parent != null){
