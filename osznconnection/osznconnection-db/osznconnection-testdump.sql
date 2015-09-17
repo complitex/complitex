@@ -15,6 +15,7 @@ insert into organization_string_culture(id, locale_id, value) values
 (14,@system_locale_id,'in\\charact'),(15,@system_locale_id,'out\\charact'),
 (16,@system_locale_id,'in\\service'),(17,@system_locale_id,'out\\service'),
 (18,@system_locale_id,'sprav'), (19,@system_locale_id,'out\\form2');
+
 insert into organization_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
 -- oszn:
 (1,1,900,3,900), (1,1,901,4,901), (1,1,902,3,902), (1,1,904,2,904),
@@ -27,9 +28,9 @@ insert into organization_attribute(attribute_id, object_id, attribute_type_id, v
 (1,2,900,5,900), (1,2,901,6,901), (1,2,904,3,904), (1,2,913,7,913);
 
 -- User organizations
-insert into service_association (pk_id, service_provider_type_id, calculation_center_id) values (1,1,2),
-  (2,2,2),(3,3,2),(4,4,2),(5,5,2),(6,6,2),(7,7,2),(8,8,2),
-  (9,1,2);
+# insert into service_association (pk_id, service_provider_type_id, calculation_center_id) values (1,1,2),
+#   (2,2,2),(3,3,2),(4,4,2),(5,5,2),(6,6,2),(7,7,2),(8,8,2),
+#   (9,1,2);
 
 insert into organization(object_id) values (3), (4);
 insert into organization_string_culture(id, locale_id, value) values (20,@system_locale_id, UPPER('КП "ЖИЛКОМСЕРВИС"')),(21,@system_locale_id, UPPER('12345')),
@@ -41,10 +42,10 @@ insert into organization_string_culture(id, locale_id, value) values (20,@system
 (26,@system_locale_id,'1'),
 (27,@system_locale_id,'2');
 
-insert into organization_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
-(1,3,900,20,900), (1,3,901,21,901), (1,3,904,1,904), (1,3,914,1,914), (1,3,926,26,926), (1,3,927,24,927),
-  (2,3,914,2,914),(3,3,914,3,914),(4,3,914,4,914),(5,3,914,5,914),(6,3,914,6,914),(7,3,914,7,914),(8,3,914,8,914),
-(1,4,900,22,900), (1,4,901,23,901), (1,4,903,3,903), (1,4,904,1,904), (1,4,914,9,914), (1,4,926,27,926), (1,4,927,25,927);
+# insert into organization_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
+# (1,3,900,20,900), (1,3,901,21,901), (1,3,904,1,904), (1,3,914,1,914), (1,3,926,26,926), (1,3,927,24,927),
+#   (2,3,914,2,914),(3,3,914,3,914),(4,3,914,4,914),(5,3,914,5,914),(6,3,914,6,914),(7,3,914,7,914),(8,3,914,8,914),
+# (1,4,900,22,900), (1,4,901,23,901), (1,4,903,3,903), (1,4,904,1,904), (1,4,914,9,914), (1,4,926,27,926), (1,4,927,25,927);
 
 -- Request File Descriptions --
 INSERT INTO `request_file_description` VALUES (1,'ACTUAL_PAYMENT','dd.MM.yyyy');

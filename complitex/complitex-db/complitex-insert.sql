@@ -291,14 +291,14 @@ INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_nam
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (913, 913, UPPER('string'));
 
 -- Service --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (914, 1, UPPER('Услуга')), (914, 2, UPPER('Услуга'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (914, 900, 1, 914, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (914, 914, UPPER('service'));
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (4914, 1, UPPER('Услуга')), (4914, 2, UPPER('Услуга'));
+INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (4914, 900, 1, 4914, 1);
+INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (4914, 4914, UPPER('service'));
 
 -- Billing --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (915, 1, UPPER('Модуль начислений')), (915, 2, UPPER('Модуль начислений'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (915, 900, 1, 915, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (915, 915, UPPER('organization'));
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (4915, 1, UPPER('Модуль начислений')), (4915, 2, UPPER('Модуль начислений'));
+INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (4915, 900, 1, 4915, 1);
+INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (4915, 4915, UPPER('organization'));
 
 -- ------------------------------
 -- Service
