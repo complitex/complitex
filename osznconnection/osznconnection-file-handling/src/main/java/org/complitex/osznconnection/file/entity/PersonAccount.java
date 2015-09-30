@@ -19,11 +19,11 @@ public class PersonAccount implements Serializable {
     private String buildingCorp;
     private String apartment;
 
-    private Long cityObjectId;
-    private Long streetTypeObjectId;
-    private Long streetObjectId;
-    private Long buildingObjectId;
-    private Long apartmentObjectId;
+    private Long cityId;
+    private Long streetTypeId;
+    private Long streetId;
+    private Long buildingId;
+    private Long apartmentId;
 
     private Long organizationId;
     private Long userOrganizationId;
@@ -54,11 +54,11 @@ public class PersonAccount implements Serializable {
 
         apartment = request.getApartment();
 
-        cityObjectId = request.getCityId();
-        streetObjectId = request.getStreetId();
-        streetTypeObjectId = request.getStreetTypeId();
-        buildingObjectId = request.getBuildingId();
-        apartmentObjectId = request.getApartmentId();
+        cityId = request.getCityId();
+        streetId = request.getStreetId();
+        streetTypeId = request.getStreetTypeId();
+        buildingId = request.getBuildingId();
+        apartmentId = request.getApartmentId();
 
         this.accountNumber = request.getAccountNumber();
         organizationId = request.getOrganizationId();
@@ -140,44 +140,44 @@ public class PersonAccount implements Serializable {
         this.buildingCorp = buildingCorp;
     }
 
-    public Long getCityObjectId() {
-        return cityObjectId;
+    public Long getCityId() {
+        return cityId;
     }
 
-    public void setCityObjectId(Long cityObjectId) {
-        this.cityObjectId = cityObjectId;
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
     }
 
-    public Long getStreetObjectId() {
-        return streetObjectId;
+    public Long getStreetId() {
+        return streetId;
     }
 
-    public void setStreetObjectId(Long streetObjectId) {
-        this.streetObjectId = streetObjectId;
+    public void setStreetId(Long streetId) {
+        this.streetId = streetId;
     }
 
-    public Long getStreetTypeObjectId() {
-        return streetTypeObjectId;
+    public Long getStreetTypeId() {
+        return streetTypeId;
     }
 
-    public void setStreetTypeObjectId(Long streetTypeObjectId) {
-        this.streetTypeObjectId = streetTypeObjectId;
+    public void setStreetTypeId(Long streetTypeId) {
+        this.streetTypeId = streetTypeId;
     }
 
-    public Long getBuildingObjectId() {
-        return buildingObjectId;
+    public Long getBuildingId() {
+        return buildingId;
     }
 
-    public void setBuildingObjectId(Long buildingObjectId) {
-        this.buildingObjectId = buildingObjectId;
+    public void setBuildingId(Long buildingId) {
+        this.buildingId = buildingId;
     }
 
-    public Long getApartmentObjectId() {
-        return apartmentObjectId;
+    public Long getApartmentId() {
+        return apartmentId;
     }
 
-    public void setApartmentObjectId(Long apartmentObjectId) {
-        this.apartmentObjectId = apartmentObjectId;
+    public void setApartmentId(Long apartmentId) {
+        this.apartmentId = apartmentId;
     }
 
     public String getApartment() {
