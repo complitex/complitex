@@ -184,8 +184,8 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
 
     @Override
     public boolean isSimpleAttributeType(AttributeType attributeType) {
-        return !CUSTOM_ATTRIBUTE_TYPES.contains(attributeType.getId())
-                && super.isSimpleAttributeType(attributeType);
+        return !CUSTOM_ATTRIBUTE_TYPES.contains(attributeType.getId()) &&
+                super.isSimpleAttributeType(attributeType);
     }
 
     @Override
@@ -212,6 +212,16 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
                 }
             }
         }
+    }
+
+    @Override
+    protected void insertAttribute(Attribute attribute) {
+        if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())){
+            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringCultures());
+            attribute.setValueId(generatedStringId);
+        }
+
+        super.insertAttribute(attribute);
     }
 
     /**

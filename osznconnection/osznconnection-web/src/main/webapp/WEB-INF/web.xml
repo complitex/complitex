@@ -16,7 +16,7 @@
 
         <init-param>
             <param-name>applicationClassName</param-name>
-            <param-value>org.complitex.template.web.ComplitexWebApplication</param-value>
+            <param-value>org.complitex.osznconnection.web.OsznWebApplication</param-value>
         </init-param>
     </filter>
     <filter-mapping>

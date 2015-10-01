@@ -18,6 +18,7 @@
         <menu class="org.complitex.osznconnection.file.web.menu.SubsidyRequestMenu"/>
         <!--<menu class="org.complitex.osznconnection.file.web.menu.FacilityRequestMenu"/>-->
         <menu class="org.complitex.address.menu.AddressMenu"/>
+        <menu class="org.complitex.address.web.AddressSyncMenu"/>
         <menu class="org.complitex.osznconnection.file.web.menu.CorrectionMenu"/>
         <menu class="org.complitex.osznconnection.organization.web.OsznOrganizationTemplateMenu"/>
         <menu class="org.complitex.osznconnection.organization_type.menu.OsznOrganizationTypeMenu"/>

@@ -222,11 +222,9 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
 
     @Override
     public boolean isSimpleAttributeType(AttributeType attributeType) {
-        if (CUSTOM_ATTRIBUTE_TYPES.contains(attributeType.getId())) {
-            return false;
-        }
+        return !CUSTOM_ATTRIBUTE_TYPES.contains(attributeType.getId()) &&
+                super.isSimpleAttributeType(attributeType);
 
-        return super.isSimpleAttributeType(attributeType);
     }
 
     @Override
