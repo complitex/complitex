@@ -94,6 +94,7 @@ public class EntityTypePanel extends Panel {
             public Object getDisplayValue(DomainObject entityTypeObject) {
                 return displayEntityTypeObject(entityTypeObject, getLocale());
             }
+
         };
         DisableAwareDropDownChoice<DomainObject> entityTypeChoice = new DisableAwareDropDownChoice<DomainObject>("entityType",
                 entityTypeModel, entityTypesModel, renderer);

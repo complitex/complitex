@@ -25,6 +25,7 @@ import org.odlabs.wiquery.ui.dialog.Dialog;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public class ReportDownloadPanel extends Panel {
@@ -75,10 +76,10 @@ public class ReportDownloadPanel extends Panel {
                 ? RUSSIAN_REPORT_LOCALE
                 : UKRAIN_REPORT_LOCALE);
 
-        typeContainer.add(new DropDownChoice<String>("type", typeModel,
+        typeContainer.add(new DropDownChoice<>("type", typeModel,
                 Arrays.asList(PDF_REPORT_FORMAT, RTF_REPORT_FORMAT)));
 
-        form.add(new DropDownChoice<String>("locale", localeModel,
+        form.add(new DropDownChoice<>("locale", localeModel,
                 Arrays.asList(RUSSIAN_REPORT_LOCALE, UKRAIN_REPORT_LOCALE),
                 new IChoiceRenderer<String>() {
 
@@ -97,6 +98,11 @@ public class ReportDownloadPanel extends Panel {
                     public String getIdValue(String object, int index) {
                         return object;
                     }
+
+                    @Override
+                    public String getObject(String id, IModel<? extends List<? extends String>> choices) {
+                        return id;
+                    }
                 }));
 
         final WebMarkupContainer printContainer = new WebMarkupContainer("printContainer");
@@ -104,8 +110,8 @@ public class ReportDownloadPanel extends Panel {
         printContainer.setVisible(print);
         add(printContainer);
         final IModel<String> printKeyModel = new Model<String>();
-        printContainer.add(new HiddenField<String>("printKey", printKeyModel).add(AttributeModifier.replace("name", "key")));
-        printContainer.add(new HiddenField<String>("printLocale", localeModel).add(AttributeModifier.replace("name", "locale")));
+        printContainer.add(new HiddenField<>("printKey", printKeyModel).add(AttributeModifier.replace("name", "key")));
+        printContainer.add(new HiddenField<>("printLocale", localeModel).add(AttributeModifier.replace("name", "locale")));
 
         //Загрузить
         AjaxButton download = new AjaxButton("download", form) {

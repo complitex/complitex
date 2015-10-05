@@ -1,7 +1,6 @@
 package org.complitex.common.service;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.protocol.ws.IWebSocketSettings;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.WebSocketPushBroadcaster;
 import org.complitex.common.entity.WebSocketPushMessage;
@@ -29,7 +28,7 @@ public class BroadcastService {
     public void setApplication(Application application){
         this.application = application;
 
-        IWebSocketSettings webSocketSettings = WebSocketSettings.Holder.get(application);
+        WebSocketSettings webSocketSettings = WebSocketSettings.Holder.get(application);
         broadcaster = new WebSocketPushBroadcaster(webSocketSettings.getConnectionRegistry());
     }
 

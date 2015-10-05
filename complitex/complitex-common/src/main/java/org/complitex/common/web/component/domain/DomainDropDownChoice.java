@@ -10,6 +10,7 @@ import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.EjbBeanLocator;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +38,11 @@ public class DomainDropDownChoice extends DropDownChoice<Long>{
             @Override
             public String getIdValue(Long object, int index) {
                 return object.toString();
+            }
+
+            @Override
+            public Long getObject(String id, IModel<? extends List<? extends Long>> choices) {
+                return Long.valueOf(id);
             }
         });
     }

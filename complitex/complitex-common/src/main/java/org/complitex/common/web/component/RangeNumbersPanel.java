@@ -215,7 +215,7 @@ public class RangeNumbersPanel extends Panel {
         }
 
         @Override
-        protected void convertInput() {
+        public void convertInput() {
             final Integer rawFrom = fromField.getConvertedInput();
             final Integer rawTo = toField.getConvertedInput();
             final Range range = getModelObject();

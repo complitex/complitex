@@ -6,6 +6,7 @@ import org.apache.wicket.model.IModel;
 
 import java.text.DateFormatSymbols;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -27,6 +28,11 @@ public class MonthDropDownChoice extends DropDownChoice<Integer> {
             @Override
             public String getIdValue(Integer object, int index) {
                 return object.toString();
+            }
+
+            @Override
+            public Integer getObject(String id, IModel<? extends List<? extends Integer>> choices) {
+                return Integer.valueOf(id);
             }
         });
     }

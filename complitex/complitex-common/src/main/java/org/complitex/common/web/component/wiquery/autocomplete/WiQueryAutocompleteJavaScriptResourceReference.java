@@ -26,6 +26,8 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.odlabs.wiquery.core.resources.JavaScriptHeaderItems;
 import org.odlabs.wiquery.core.util.WiQueryUtil;
 
+import java.util.List;
+
 /**
  * $Id: AutocompleteJavascriptResourceReference.java 457 2010-10-15 07:14:28Z
  * hielke.hoeve@gmail.com $
@@ -63,7 +65,7 @@ public final class WiQueryAutocompleteJavaScriptResourceReference extends JavaSc
 	}
 
 	@Override
-	public Iterable< ? extends HeaderItem> getDependencies()
+	public List<HeaderItem> getDependencies()
 	{
 		return JavaScriptHeaderItems.forReferences(WiQueryUtil.getWicketEventReference(),
 			WiQueryUtil.getWicketAjaxReference(), AutocompleteJavaScriptResourceReference.get());

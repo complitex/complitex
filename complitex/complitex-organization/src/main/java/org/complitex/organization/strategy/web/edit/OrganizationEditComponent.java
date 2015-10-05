@@ -269,6 +269,11 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
                                 public String getIdValue(RemoteDataSource remoteDataSource, int index) {
                                     return remoteDataSource.getDataSource();
                                 }
+
+                                @Override
+                                public RemoteDataSource getObject(String id, IModel<? extends List<? extends RemoteDataSource>> choices) {
+                                    return choices.getObject().stream().filter(c -> id.equals(c.getDataSource())).findAny().get();
+                                }
                             });
             dataSource.setRequired(true);
             dataSource.setEnabled(enabled());
@@ -284,9 +289,9 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
             add(serviceBillingContainer);
 
             ListView<Attribute> serviceBillings = new ListView<Attribute>("serviceBillings",
-                    new LoadableDetachableModel<List<? extends Attribute>>() {
+                    new LoadableDetachableModel<List<Attribute>>() {
                 @Override
-                protected List<? extends Attribute> load() {
+                protected List<Attribute> load() {
                     return organization.getAttributes(SERVICE);
                 }
             }) {

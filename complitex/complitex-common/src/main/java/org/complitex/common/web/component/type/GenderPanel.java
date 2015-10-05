@@ -4,15 +4,16 @@
  */
 package org.complitex.common.web.component.type;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.Gender;
 import org.complitex.common.util.ResourceUtil;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -36,6 +37,11 @@ public final class GenderPanel extends Panel {
             @Override
             public String getIdValue(Gender gender, int index) {
                 return gender.name();
+            }
+
+            @Override
+            public Gender getObject(String id, IModel<? extends List<? extends Gender>> choices) {
+                return null;
             }
         });
         gender.setSuffix("");

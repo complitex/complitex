@@ -103,9 +103,9 @@ public class ReportEdit extends FormTemplatePage {
 
         //Sql list
         ListView reportSqlList = new ListView<ReportSql>("report_sql_list",
-                new LoadableDetachableModel<List<? extends ReportSql>>() {
+                new LoadableDetachableModel<List<ReportSql>>() {
                     @Override
-                    protected List<? extends ReportSql> load() {
+                    protected List<ReportSql> load() {
                         return report.getReportSqlList();
                     }
                 }) {
