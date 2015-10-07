@@ -16,8 +16,8 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.WebSocketPushMessage;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.BookmarkablePageLinkColumn;
-import org.complitex.common.web.component.datatable.column.CheckColumn;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
+import org.complitex.common.web.component.datatable.column.CheckColumn;
 import org.complitex.common.web.component.domain.DomainObjectFilteredColumn;
 import org.complitex.common.web.component.organization.OrganizationFilteredColumn;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;
@@ -143,7 +143,7 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return Arrays.asList(
                 new UploadButton(id) {
 

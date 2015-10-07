@@ -259,7 +259,7 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return ImmutableList.of(new AddItemButton(id) {
 
             @Override

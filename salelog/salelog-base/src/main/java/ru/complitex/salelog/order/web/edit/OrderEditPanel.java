@@ -326,6 +326,11 @@ public class OrderEditPanel extends Panel {
                     public String getIdValue(DomainObject region, int i) {
                         return region !=null? region.getObjectId().toString() : "-1";
                     }
+
+                    @Override
+                    public DomainObject getObject(String id, IModel<? extends List<? extends DomainObject>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(c.getObjectId().toString())).findAny().get();
+                    }
                 }
         ).setRequired(true));
 
@@ -347,7 +352,7 @@ public class OrderEditPanel extends Panel {
 
         }));
 
-        form.add(new DropDownChoice<OrderStatus>("status",
+        form.add(new DropDownChoice<>("status",
                 new IModel<OrderStatus>() {
                     @Override
                     public OrderStatus getObject() {
@@ -374,6 +379,11 @@ public class OrderEditPanel extends Panel {
                     @Override
                     public String getIdValue(OrderStatus status, int i) {
                         return status.getId().toString();
+                    }
+
+                    @Override
+                    public OrderStatus getObject(String id, IModel<? extends List<? extends OrderStatus>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(c.getId().toString())).findAny().get();
                     }
                 }
         ).setRequired(true));

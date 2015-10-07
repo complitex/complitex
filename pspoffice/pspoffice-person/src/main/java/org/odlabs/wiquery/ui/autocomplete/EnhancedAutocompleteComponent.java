@@ -268,7 +268,7 @@ public abstract class EnhancedAutocompleteComponent extends FormComponentPanel<D
     }
 
     @Override
-    protected final void convertInput() {
+    public final void convertInput() {
         String valueId = autocompleteHidden.getConvertedInput();
         String input = autocompleteField.getConvertedInput();
         final DomainObject object = this.getModelObject();

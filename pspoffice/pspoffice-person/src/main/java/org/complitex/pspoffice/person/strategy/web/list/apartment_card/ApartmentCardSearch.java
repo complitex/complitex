@@ -161,7 +161,7 @@ public class ApartmentCardSearch extends FormTemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return of(new CollapsibleSearchToolbarButton(id, searchPanel));
     }
 }

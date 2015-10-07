@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
@@ -72,9 +73,9 @@ public final class RegistrationsGrid extends TemplatePage {
         final ApartmentCard apartmentCard = apartmentCardStrategy.getDomainObject(apartmentCardId, true);
 
         IModel<String> labelModel = new StringResourceModel("label", null,
-                new Object[]{addressRendererBean.displayAddress(apartmentCardStrategy.getAddressEntity(apartmentCard),
-                    apartmentCard.getAddressId(), getLocale()),
-                    apartmentCardId});
+                Model.of(new Object[]{addressRendererBean.displayAddress(apartmentCardStrategy.getAddressEntity(apartmentCard),
+                        apartmentCard.getAddressId(), getLocale()),
+                        apartmentCardId}));
 
         add(new Label("title", labelModel));
         add(new Label("label", labelModel));

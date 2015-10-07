@@ -114,6 +114,11 @@ public class ServiceEdit extends FormTemplatePage {
             public String getIdValue(Service object, int index) {
                 return object != null? object.getId().toString(): "-1";
             }
+
+            @Override
+            public Service getObject(String id, IModel<? extends List<? extends Service>> choices) {
+                return choices.getObject().stream().filter(c -> id.equals(c.getId().toString())).findAny().orElse(null);
+            }
         }).setNullValid(true));
 
         // save button

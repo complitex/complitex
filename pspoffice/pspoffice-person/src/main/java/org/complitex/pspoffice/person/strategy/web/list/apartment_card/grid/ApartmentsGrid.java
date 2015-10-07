@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -123,7 +124,7 @@ public final class ApartmentsGrid extends TemplatePage {
         this.buildingId = buildingId;
 
         IModel<String> labelModel = new StringResourceModel("label", null,
-                new Object[]{addressRendererBean.displayAddress("building", buildingId, getLocale())});
+                Model.of(new Object[]{addressRendererBean.displayAddress("building", buildingId, getLocale())}));
 
         add(new Label("title", labelModel));
         add(new Label("label", labelModel));
@@ -367,7 +368,7 @@ public final class ApartmentsGrid extends TemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         final DomainObject building = buildingStrategy.getDomainObject(buildingId, true);
 
         class AddApartmentRoomButton extends ToolbarButton {

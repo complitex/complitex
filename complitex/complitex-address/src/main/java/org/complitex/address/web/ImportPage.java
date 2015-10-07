@@ -79,6 +79,11 @@ public class ImportPage extends TemplatePage {
                     public String getIdValue(IImportFile object, int index) {
                         return object.name();
                     }
+
+                    @Override
+                    public IImportFile getObject(String id, IModel<? extends List<? extends IImportFile>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().get();
+                    }
                 }));
 
         localeModel = new Model<>(stringLocaleBean.getSystemLocale());

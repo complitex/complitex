@@ -78,9 +78,9 @@ public class CentralHeatingConsumptionList extends TemplatePage{
         add(statusContainer);
 
         statusContainer.add(new ListView<ConsumptionStatusFilter>("statusFilter",
-                new LoadableDetachableModel<List<? extends ConsumptionStatusFilter>>() {
+                new LoadableDetachableModel<List<ConsumptionStatusFilter>>() {
                     @Override
-                    protected List<? extends ConsumptionStatusFilter> load() {
+                    protected List<ConsumptionStatusFilter> load() {
                         return centralHeatingConsumptionBean.getStatusFilters(consumptionFile.getId());
                     }}) {
             @Override

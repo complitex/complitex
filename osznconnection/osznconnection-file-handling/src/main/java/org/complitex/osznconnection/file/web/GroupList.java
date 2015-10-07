@@ -326,7 +326,7 @@ public class GroupList extends ScrollListPage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return groupListPanel.getToolbarButtons(id);
     }
 }

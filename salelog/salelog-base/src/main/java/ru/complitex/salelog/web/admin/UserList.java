@@ -113,10 +113,10 @@ public class UserList extends ScrollListPage {
             }
         });
 
-        filterForm.add(new TextField<String>("login", new PropertyModel<String>(filterModel, "login")));
+        filterForm.add(new TextField<>("login", new PropertyModel<String>(filterModel, "login")));
         filterForm.add(new AttributeFiltersPanel("user_info", filter.getAttributeFilters()));
-        filterForm.add(new DropDownChoice<UserGroup.GROUP_NAME>("usergroups",
-                new PropertyModel<UserGroup.GROUP_NAME>(filterModel, "groupName"),
+        filterForm.add(new DropDownChoice<>("usergroups",
+                new PropertyModel<>(filterModel, "groupName"),
                 new ListModel<>(Arrays.asList(UserGroup.GROUP_NAME.values())),
                 new IChoiceRenderer<UserGroup.GROUP_NAME>() {
 
@@ -128,6 +128,11 @@ public class UserList extends ScrollListPage {
                     @Override
                     public String getIdValue(UserGroup.GROUP_NAME object, int index) {
                         return object.name();
+                    }
+
+                    @Override
+                    public UserGroup.GROUP_NAME getObject(String id, IModel<? extends List<? extends UserGroup.GROUP_NAME>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().get();
                     }
                 }).setNullValid(true));
 

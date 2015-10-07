@@ -2,6 +2,7 @@ package org.complitex.address.web.component;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.model.IModel;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.StrategyFactory;
@@ -58,6 +59,11 @@ public class AddressSearchComponent extends WiQuerySearchComponent {
                 @Override
                 public String getIdValue(DomainObject object, int index) {
                     return String.valueOf(object.getObjectId());
+                }
+
+                @Override
+                public DomainObject getObject(String id, IModel<? extends List<? extends DomainObject>> choices) {
+                    return choices.getObject().stream().filter(c -> id.equals(String.valueOf(c.getObjectId()))).findAny().get();
                 }
             };
         }

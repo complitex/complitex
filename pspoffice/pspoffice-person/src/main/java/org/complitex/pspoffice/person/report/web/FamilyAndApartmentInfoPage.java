@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.service.AddressRendererBean;
@@ -80,7 +81,7 @@ public final class FamilyAndApartmentInfoPage extends WebPage {
             add(new Label("label", new ResourceModel("label")));
             add(new Label("labelDetails", new ResourceModel("labelDetails")));
             add(new Label("addressInfo", new StringResourceModel("addressInfo", null,
-                    new Object[]{addressRendererBean.displayAddress(info.getAddressEntity(), info.getAddressId(), getLocale())})));
+                    Model.of(new Object[]{addressRendererBean.displayAddress(info.getAddressEntity(), info.getAddressId(), getLocale())}))));
             ListView<FamilyMember> familyMembers = new ListView<FamilyMember>("familyMembers", info.getFamilyMembers()) {
 
                 @Override
@@ -97,27 +98,27 @@ public final class FamilyAndApartmentInfoPage extends WebPage {
             };
             add(familyMembers);
 
-            add(new Label("apartmentPartsInfo", new StringResourceModel("apartmentPartsInfo", null, new Object[]{
+            add(new Label("apartmentPartsInfo", new StringResourceModel("apartmentPartsInfo", null, Model.of(new Object[]{
                         valueOf(info.getRooms()), valueOf(info.getRoomsArea()), valueOf(info.getKitchenArea()),
                         valueOf(info.getBathroomArea()), valueOf(info.getToiletArea()), valueOf(info.getHallArea()),
                         valueOf(info.getVerandaArea()), valueOf(info.getEmbeddedArea()), valueOf(info.getBalconyArea()),
                         valueOf(info.getLoggiaArea())
-                    })));
-            add(new Label("fullApartmentArea", new StringResourceModel("fullApartmentArea", null, new Object[]{
+                    }))));
+            add(new Label("fullApartmentArea", new StringResourceModel("fullApartmentArea", null, Model.of(new Object[]{
                         valueOf(info.getFullApartmentArea())
-                    })));
-            add(new Label("apartmentStoreroomInfo", new StringResourceModel("apartmentStoreroomInfo", null, new Object[]{
+                    }))));
+            add(new Label("apartmentStoreroomInfo", new StringResourceModel("apartmentStoreroomInfo", null, Model.of(new Object[]{
                         valueOf(info.getStoreroomArea()), valueOf(info.getBarnArea())
-                    })));
-            add(new Label("anotherBuildingsInfo", new StringResourceModel("anotherBuildingsInfo", null, new Object[]{
+                    }))));
+            add(new Label("anotherBuildingsInfo", new StringResourceModel("anotherBuildingsInfo", null, Model.of(new Object[]{
                         valueOf(info.getAnotherBuildingsInfo())
-                    })));
-            add(new Label("additionalInformation", new StringResourceModel("additionalInformation", null, new Object[]{
+                    }))));
+            add(new Label("additionalInformation", new StringResourceModel("additionalInformation", null, Model.of(new Object[]{
                         valueOf(info.getAdditionalInformation())
-                    })));
-            add(new Label("maintenanceInfo", new StringResourceModel("maintenanceInfo", null, new Object[]{
+                    }))));
+            add(new Label("maintenanceInfo", new StringResourceModel("maintenanceInfo", null, Model.of(new Object[]{
                         valueOf(info.getMaintenanceYear())
-                    })));
+                    }))));
         }
     }
 

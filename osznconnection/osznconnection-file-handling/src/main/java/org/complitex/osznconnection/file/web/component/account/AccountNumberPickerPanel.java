@@ -44,10 +44,10 @@ public class AccountNumberPickerPanel extends Panel {
     }
 
 
-    private IModel<List<? extends AccountDetail>> accountDetailsModel;
+    private IModel<List<AccountDetail>> accountDetailsModel;
     private IModel<AccountDetail> accountDetailModel;
 
-    public AccountNumberPickerPanel(String id, IModel<List<? extends AccountDetail>> accountDetailsModel,
+    public AccountNumberPickerPanel(String id, IModel<List<AccountDetail>> accountDetailsModel,
             IModel<AccountDetail> accountDetailModel) {
         super(id);
         this.accountDetailsModel = accountDetailsModel;

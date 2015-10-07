@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
@@ -93,7 +94,7 @@ public class RegistrationCardPage extends WebPage {
             Registration registration = card.getRegistration();
             Person person = registration.getPerson();
             add(new Label("label", new StringResourceModel("label", null,
-                    new Object[]{personStrategy.displayDomainObject(person, getLocale())})));
+                    Model.of(new Object[]{personStrategy.displayDomainObject(person, getLocale())}))));
 
             final Locale systemLocale = stringLocaleBean.getSystemLocale();
             add(new Label("lastName", person.getLastName(getLocale(), systemLocale)));

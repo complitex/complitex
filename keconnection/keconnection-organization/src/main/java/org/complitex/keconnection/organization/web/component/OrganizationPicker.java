@@ -288,7 +288,7 @@ public class OrganizationPicker extends FormComponentPanel<DomainObject> {
     }
 
     @Override
-    protected void convertInput() {
+    public void convertInput() {
         setConvertedInput(getModelObject());
     }
 }

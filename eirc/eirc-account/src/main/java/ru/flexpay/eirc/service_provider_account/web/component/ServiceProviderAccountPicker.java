@@ -305,7 +305,7 @@ public class ServiceProviderAccountPicker extends FormComponentPanel<ServiceProv
     }
 
     @Override
-    protected void convertInput() {
+    public void convertInput() {
         setConvertedInput(getModelObject());
     }
 }

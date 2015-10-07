@@ -153,8 +153,8 @@ public final class BuildingsGrid extends TemplatePage {
         final boolean streetEnabled = streetId != null && streetId > 0;
         
         IModel<String> labelModel = new StringResourceModel("label", null,
-                new Object[]{addressRendererBean.displayAddress(streetEnabled ? "street" : "city",
-                    streetEnabled ? streetId : cityId, getLocale())});
+                Model.of(new Object[]{addressRendererBean.displayAddress(streetEnabled ? "street" : "city",
+                    streetEnabled ? streetId : cityId, getLocale())}));
         
         add(new Label("title", labelModel));
         add(new Label("label", labelModel));
@@ -358,7 +358,7 @@ public final class BuildingsGrid extends TemplatePage {
     }
     
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         if (hasAnyRole(buildingStrategy.getEditRoles())) {
             class AddBuildingButton extends ToolbarButton {
                 

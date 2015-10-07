@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
@@ -81,7 +82,7 @@ public final class ApartmentCardsGrid extends TemplatePage {
         this.backInfoSessionKey = backInfoSessionKey;
 
         IModel<String> labelModel = new StringResourceModel("label", null,
-                new Object[]{addressRendererBean.displayAddress("apartment", apartmentId, getLocale())});
+                Model.of(new Object[]{addressRendererBean.displayAddress("apartment", apartmentId, getLocale())}));
 
         add(new Label("title", labelModel));
         add(new Label("label", labelModel));
@@ -188,7 +189,7 @@ public final class ApartmentCardsGrid extends TemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return ImmutableList.of(new AddApartmentCardButton(id) {
 
             @Override

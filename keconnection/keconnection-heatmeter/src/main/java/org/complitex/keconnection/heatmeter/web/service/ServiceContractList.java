@@ -75,7 +75,7 @@ public class ServiceContractList extends TemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return Arrays.asList(
                 new AddItemButton(id) {
 

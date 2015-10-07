@@ -217,7 +217,7 @@ public final class PersonPicker extends FormComponentPanel<Person> {
         personsDataContainer.setVisible(false);
         personContainer.add(personsDataContainer);
 
-        final IModel<List<? extends Person>> personsModel = Model.ofList(null);
+        final IModel<List<Person>> personsModel = Model.ofList(null);
         final IModel<Person> personModel = new Model<Person>();
 
         //select
@@ -292,7 +292,7 @@ public final class PersonPicker extends FormComponentPanel<Person> {
             @Override
             protected void populateItem(ListItem<Person> item) {
                 Person person = item.getModelObject();
-                item.add(new Radio<Person>("radio", item.getModel(), radioGroup));
+                item.add(new Radio<>("radio", item.getModel(), radioGroup));
                 item.add(new Label("fullName", personStrategy.displayDomainObject(person, getLocale())));
                 item.add(new Label("birthDate", PersonDateFormatter.format(person.getBirthDate())));
                 item.add(new Label("gender", GenderPanel.display(person.getGender(), getLocale())));
@@ -375,7 +375,7 @@ public final class PersonPicker extends FormComponentPanel<Person> {
         };
     }
 
-    private void clearAndCloseLookupDialog(IModel<Person> personModel, IModel<List<? extends Person>> personsModel,
+    private void clearAndCloseLookupDialog(IModel<Person> personModel, IModel<List<Person>> personsModel,
             AjaxRequestTarget target, Dialog lookupDialog, WebMarkupContainer content,
             WebMarkupContainer personNotFoundContainer, WebMarkupContainer personsDataContainer, Component select) {
         personsModel.setObject(null);
@@ -398,7 +398,7 @@ public final class PersonPicker extends FormComponentPanel<Person> {
     }
 
     private void find(String lastName, String firstName, String middleName, IModel<Person> personModel,
-            IModel<List<? extends Person>> personsModel) {
+            IModel<List<Person>> personsModel) {
         if (Strings.isEmpty(lastName)) {
             personsModel.setObject(null);
         } else {
@@ -408,7 +408,7 @@ public final class PersonPicker extends FormComponentPanel<Person> {
     }
 
     @Override
-    protected void convertInput() {
+    public void convertInput() {
         setConvertedInput(getModelObject());
     }
 }

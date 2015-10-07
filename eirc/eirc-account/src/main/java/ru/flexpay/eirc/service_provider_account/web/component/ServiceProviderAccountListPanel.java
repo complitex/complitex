@@ -354,7 +354,7 @@ public class ServiceProviderAccountListPanel extends Panel {
                 };
             }
         });
-        table.addTopToolbar(new FilterToolbar(table, filterForm, locator));
+        table.addTopToolbar(new FilterToolbar(table, filterForm));
         container.add(filterForm);
         filterForm.add(table);
 

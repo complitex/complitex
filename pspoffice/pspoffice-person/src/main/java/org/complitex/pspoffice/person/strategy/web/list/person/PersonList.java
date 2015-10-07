@@ -263,7 +263,7 @@ public final class PersonList extends ScrollListPage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return ImmutableList.of(new AddItemButton(id) {
 
             @Override

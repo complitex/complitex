@@ -112,6 +112,11 @@ public final class ImportPage extends TemplatePage {
             public String getIdValue(IImportFile importFile, int index) {
                 return importFile.name();
             }
+
+            @Override
+            public IImportFile getObject(String id, IModel<? extends List<? extends IImportFile>> choices) {
+                return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().get();
+            }
         };
 
         form.add(new CheckBoxMultipleChoice<>("organizationData",

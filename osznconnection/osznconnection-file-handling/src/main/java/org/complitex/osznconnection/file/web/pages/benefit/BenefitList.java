@@ -108,7 +108,7 @@ public final class BenefitList extends TemplatePage {
 
         String fileName = requestFile.getName();
         String directory = requestFile.getDirectory();
-        IModel<String> labelModel = new StringResourceModel("label", this, null, new Object[]{fileName, directory});
+        IModel<String> labelModel = new StringResourceModel("label", this, Model.of(new Object[]{fileName, directory}));
         add(new Label("title", labelModel));
         add(new Label("label", labelModel));
 

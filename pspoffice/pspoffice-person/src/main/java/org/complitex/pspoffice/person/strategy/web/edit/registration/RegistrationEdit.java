@@ -154,7 +154,7 @@ public class RegistrationEdit extends FormTemplatePage {
             }
         };
 
-        IModel<String> labelModel = new StringResourceModel("label", null, new Object[]{addressModel.getObject()});
+        IModel<String> labelModel = new StringResourceModel("label", null, Model.of(new Object[]{addressModel.getObject()}));
         Label title = new Label("title", labelModel);
         add(title);
         final Label label = new Label("label", labelModel);
@@ -564,7 +564,7 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return of(new RegistrationStopCouponButton(id) {
 
             @Override

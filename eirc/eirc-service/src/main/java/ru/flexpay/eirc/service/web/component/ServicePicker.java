@@ -84,7 +84,7 @@ public class ServicePicker extends FormComponentPanel<Service> {
     }
 
     @Override
-    protected void convertInput() {
+    public void convertInput() {
         setConvertedInput(getModelObject());
     }
 }

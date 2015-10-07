@@ -39,6 +39,11 @@ public abstract class FilterSearchComponent extends AutocompleteAjaxComponent<Do
             public String getIdValue(DomainObject object, int index) {
                 return String.valueOf(object.getObjectId());
             }
+
+            @Override
+            public DomainObject getObject(String id, IModel<? extends List<? extends DomainObject>> choices) {
+                return choices.getObject().stream().filter(c -> id.equals(String.valueOf(c.getObjectId()))).findAny().get();
+            }
         });
 
         setAutoUpdate(true);

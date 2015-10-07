@@ -5,11 +5,12 @@
 package org.complitex.pspoffice.web;
 
 import com.google.common.collect.ImmutableList;
-import java.util.Collections;
-import java.util.List;
 import org.complitex.pspoffice.person.toolbar.PspSearchButton;
 import org.complitex.template.web.ComplitexWebApplication;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -18,7 +19,7 @@ import org.complitex.template.web.component.toolbar.ToolbarButton;
 public class PspWebApplication extends ComplitexWebApplication {
 
     @Override
-    public List<? extends ToolbarButton> getApplicationToolbarButtons(String id) {
+    public List<ToolbarButton> getApplicationToolbarButtons(String id) {
         return Collections.unmodifiableList(ImmutableList.of(new PspSearchButton(id)));
     }
 }

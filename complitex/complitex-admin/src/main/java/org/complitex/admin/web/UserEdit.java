@@ -202,7 +202,7 @@ public class UserEdit extends FormTemplatePage {
         organizationContainer.add(organizationGroup);
 
         organizationGroup.add(new ListView<UserOrganization>("userOrganizations",
-                new PropertyModel<List<? extends UserOrganization>>(userModel, "userOrganizations")) {
+                new PropertyModel<>(userModel, "userOrganizations")) {
 
             {
                 setReuseItems(true);

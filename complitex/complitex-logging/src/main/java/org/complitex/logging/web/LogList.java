@@ -35,10 +35,7 @@ import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -99,7 +96,7 @@ public class LogList extends TemplatePage {
         filterForm.add(new TextField<String>("login"));
 
         //Module
-        filterForm.add(new DropDownChoice<String>("module", logListBean.getModules(),
+        filterForm.add(new DropDownChoice<>("module", logListBean.getModules(),
                 new IChoiceRenderer<String>() {
 
                     @Override
@@ -110,12 +107,17 @@ public class LogList extends TemplatePage {
                     @Override
                     public String getIdValue(String object, int index) {
                         return object;
+                    }
+
+                    @Override
+                    public String getObject(String id, IModel<? extends List<? extends String>> choices) {
+                        return id;
                     }
                 }));
 
 
         //Controller Class
-        filterForm.add(new DropDownChoice<String>("controller", logListBean.getControllers(),
+        filterForm.add(new DropDownChoice<>("controller", logListBean.getControllers(),
                 new IChoiceRenderer<String>() {
 
                     @Override
@@ -126,11 +128,16 @@ public class LogList extends TemplatePage {
                     @Override
                     public String getIdValue(String object, int index) {
                         return object;
+                    }
+
+                    @Override
+                    public String getObject(String id, IModel<? extends List<? extends String>> choices) {
+                        return id;
                     }
                 }));
 
         //Model Class
-        filterForm.add(new DropDownChoice<String>("model", logListBean.getModels(),
+        filterForm.add(new DropDownChoice<>("model", logListBean.getModels(),
                 new IChoiceRenderer<String>() {
 
                     @Override
@@ -141,6 +148,11 @@ public class LogList extends TemplatePage {
                     @Override
                     public String getIdValue(String object, int index) {
                         return object;
+                    }
+
+                    @Override
+                    public String getObject(String id, IModel<? extends List<? extends String>> choices) {
+                        return id;
                     }
                 }));
 
@@ -148,7 +160,7 @@ public class LogList extends TemplatePage {
         filterForm.add(new TextField<String>("objectId"));
 
         //Event
-        filterForm.add(new DropDownChoice<Log.EVENT>("event", Arrays.asList(Log.EVENT.values()),
+        filterForm.add(new DropDownChoice<>("event", Arrays.asList(Log.EVENT.values()),
                 new IChoiceRenderer<Log.EVENT>() {
 
                     @Override
@@ -160,10 +172,15 @@ public class LogList extends TemplatePage {
                     public String getIdValue(Log.EVENT object, int index) {
                         return String.valueOf(object.ordinal());
                     }
+
+                    @Override
+                    public Log.EVENT getObject(String id, IModel<? extends List<? extends Log.EVENT>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(String.valueOf(c.ordinal()))).findAny().get();
+                    }
                 }));
 
         //Status
-        filterForm.add(new DropDownChoice<Log.STATUS>("status", Arrays.asList(Log.STATUS.values()),
+        filterForm.add(new DropDownChoice<>("status", Arrays.asList(Log.STATUS.values()),
                 new IChoiceRenderer<Log.STATUS>() {
 
                     @Override
@@ -174,6 +191,11 @@ public class LogList extends TemplatePage {
                     @Override
                     public String getIdValue(Log.STATUS object, int index) {
                         return String.valueOf(object.ordinal());
+                    }
+
+                    @Override
+                    public Log.STATUS getObject(String id, IModel<? extends List<? extends Log.STATUS>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(String.valueOf(c.ordinal()))).findAny().get();
                     }
                 }));
 

@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.service.AddressRendererBean;
@@ -83,10 +84,10 @@ public final class FamilyAndCommunalApartmentInfoPage extends WebPage {
             super(id, "report", FamilyAndCommunalApartmentInfoPage.this);
             add(new Label("label", new ResourceModel("label")));
             add(new Label("labelDetails", new StringResourceModel("labelDetails", null,
-                    new Object[]{info.getNeighbourFamilies().size()})));
+                    Model.of(new Object[]{info.getNeighbourFamilies().size()}))));
             add(new Label("addressInfo", new StringResourceModel("addressInfo", null,
-                    new Object[]{addressRendererBean.displayAddress(info.getAddressEntity(), info.getAddressId(), getLocale()),
-                        info.getNeighbourFamilies().size()})));
+                    Model.of(new Object[]{addressRendererBean.displayAddress(info.getAddressEntity(), info.getAddressId(), getLocale()),
+                        info.getNeighbourFamilies().size()}))));
 
             ListView<NeighbourFamily> neighbourFamilies = new ListView<NeighbourFamily>("neighbourFamilies",
                     info.getNeighbourFamilies()) {
@@ -106,19 +107,19 @@ public final class FamilyAndCommunalApartmentInfoPage extends WebPage {
             };
             add(neighbourFamilies);
 
-            add(new Label("apartmentInfo", new StringResourceModel("apartmentInfo", null, new Object[]{
+            add(new Label("apartmentInfo", new StringResourceModel("apartmentInfo", null, Model.of(new Object[]{
                         valueOf(info.getKitchenArea()), valueOf(info.getBathroomArea()), valueOf(info.getToiletArea()),
                         valueOf(info.getHallArea()), valueOf(info.getOtherSpaceInfo())
-                    })));
-            add(new Label("sharedSpaceInfo", new StringResourceModel("sharedSpaceInfo", null, new Object[]{
+                    }))));
+            add(new Label("sharedSpaceInfo", new StringResourceModel("sharedSpaceInfo", null, Model.of(new Object[]{
                         valueOf(info.getSharedArea())
-                    })));
-            add(new Label("floorInfo", new StringResourceModel("floorInfo", null, new Object[]{
+                    }))));
+            add(new Label("floorInfo", new StringResourceModel("floorInfo", null, Model.of(new Object[]{
                         valueOf(info.getFloor()), valueOf(info.getNumberOfStoreys())
-                    })));
-            add(new Label("familyLabel", new StringResourceModel("familyLabel", null, new Object[]{
+                    }))));
+            add(new Label("familyLabel", new StringResourceModel("familyLabel", null, Model.of(new Object[]{
                         valueOf(personStrategy.displayDomainObject(info.getOwner(), getLocale()))
-                    })));
+                    }))));
 
             ListView<FamilyMember> familyMembers = new ListView<FamilyMember>("familyMembers", info.getFamilyMembers()) {
 
@@ -136,12 +137,12 @@ public final class FamilyAndCommunalApartmentInfoPage extends WebPage {
             };
             add(familyMembers);
 
-            add(new Label("apartmentStoreroomInfo", new StringResourceModel("apartmentStoreroomInfo", null, new Object[]{
+            add(new Label("apartmentStoreroomInfo", new StringResourceModel("apartmentStoreroomInfo", null, Model.of(new Object[]{
                         valueOf(info.getStoreroomArea()), valueOf(info.getBarnArea())
-                    })));
-            add(new Label("otherBuildingsInfo", new StringResourceModel("otherBuildingsInfo", null, new Object[]{
+                    }))));
+            add(new Label("otherBuildingsInfo", new StringResourceModel("otherBuildingsInfo", null, Model.of(new Object[]{
                         valueOf(info.getOtherBuildings())
-                    })));
+                    }))));
             add(new Label("maintenanceInfo", new ResourceModel("maintenanceInfo")));
         }
     }
