@@ -46,9 +46,6 @@
         <!-- wicketstuff inject -->
         <wicket-stuff.version>7.0.0</wicket-stuff.version>
 
-        <!-- wiquery version -->
-        <wiquery.version>6.13.0</wiquery.version>
-
         <!--skip test-->
         <maven.test.skip>true</maven.test.skip>
 
@@ -224,7 +221,7 @@
             </dependency>
 
 
-            <!--<dependency>
+           <!-- <dependency>
                 <groupId>org.odlabs.wiquery</groupId>
                 <artifactId>wiquery-core</artifactId>
                 <version>${wiquery.version}</version>
