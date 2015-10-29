@@ -99,7 +99,7 @@ public final class DwellingCharacteristicsFileList extends ScrollListPage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return fileListPanel.getToolbarButtons(id);
     }
 }

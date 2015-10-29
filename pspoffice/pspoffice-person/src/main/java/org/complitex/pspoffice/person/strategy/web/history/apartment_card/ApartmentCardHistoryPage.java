@@ -4,14 +4,16 @@
  */
 package org.complitex.pspoffice.person.strategy.web.history.apartment_card;
 
-import java.util.Date;
-import javax.ejb.EJB;
 import org.apache.wicket.Component;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.pspoffice.person.strategy.ApartmentCardStrategy;
 import org.complitex.pspoffice.person.strategy.web.edit.apartment_card.ApartmentCardEdit;
 import org.complitex.pspoffice.person.strategy.web.history.AbstractHistoryPage;
+
+import javax.ejb.EJB;
+import java.util.Date;
 
 /**
  *
@@ -23,7 +25,7 @@ public final class ApartmentCardHistoryPage extends AbstractHistoryPage {
     private ApartmentCardStrategy apartmentCardStrategy;
 
     public ApartmentCardHistoryPage(long apartmentCardId) {
-        super(apartmentCardId, new StringResourceModel("title", null, new Object[]{apartmentCardId}),
+        super(apartmentCardId, new StringResourceModel("title", null, Model.of(new Object[]{apartmentCardId})),
                 new ResourceModel("object_link_message"));
     }
 

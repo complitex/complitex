@@ -67,8 +67,8 @@ public final class ReferenceDataImportPage extends TemplatePage {
         container.setOutputMarkupPlaceholderTag(true);
         add(container);
 
-        addressDataModel = new ListModel<IImportFile>();
-        referenceDataModel = new ListModel<IImportFile>();
+        addressDataModel = new ListModel<>();
+        referenceDataModel = new ListModel<>();
 
         container.add(new FeedbackPanel("messages"));
 
@@ -100,14 +100,19 @@ public final class ReferenceDataImportPage extends TemplatePage {
             public String getIdValue(IImportFile importFile, int index) {
                 return importFile.name();
             }
+
+            @Override
+            public IImportFile getObject(String id, IModel<? extends List<? extends IImportFile>> choices) {
+                return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().get();
+            }
         };
 
-        form.add(new CheckBoxMultipleChoice<IImportFile>("addressData", addressDataModel, addressDataList, renderer));
+        form.add(new CheckBoxMultipleChoice<>("addressData", addressDataModel, addressDataList, renderer));
 
-        localeModel = new Model<Locale>(stringLocaleBean.getSystemLocale());
+        localeModel = new Model<>(stringLocaleBean.getSystemLocale());
         form.add(new LocalePicker("localePicker", localeModel, false));
 
-        form.add(new CheckBoxMultipleChoice<IImportFile>("referenceData", referenceDataModel, referenceDataList, renderer));
+        form.add(new CheckBoxMultipleChoice<>("referenceData", referenceDataModel, referenceDataList, renderer));
 
         //Кнопка импортировать
         Button process = new Button("process") {

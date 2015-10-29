@@ -153,7 +153,7 @@ public final class OwnershipCorrectionEdit extends FormTemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         List<ToolbarButton> toolbar = Lists.newArrayList();
         toolbar.add(new DeleteItemButton(id) {
 

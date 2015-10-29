@@ -19,7 +19,10 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.StringUtil;
-import org.complitex.common.web.component.*;
+import org.complitex.common.web.component.BookmarkablePageLinkPanel;
+import org.complitex.common.web.component.DatePicker;
+import org.complitex.common.web.component.MonthDropDownChoice;
+import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -304,7 +307,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return Arrays.asList(new LoadButton(id) {
 
             {

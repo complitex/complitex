@@ -144,7 +144,7 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         table.addTopToolbar(new HeadersToolbar<>(table, provider));
 
         if (filter) {
-            table.addTopToolbar(new FilterToolbar(table, form, provider));
+            table.addTopToolbar(new FilterToolbar(table, form));
         }
 
         table.addBottomToolbar(new AjaxNavigationToolbar(table));

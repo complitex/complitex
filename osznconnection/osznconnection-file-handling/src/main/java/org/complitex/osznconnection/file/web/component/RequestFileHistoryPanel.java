@@ -43,9 +43,9 @@ public class RequestFileHistoryPanel extends Panel {
         dialog.add(container);
 
         container.add(new ListView<RequestFileHistory>("list",
-                new LoadableDetachableModel<List<? extends RequestFileHistory>>() {
+                new LoadableDetachableModel<List<RequestFileHistory>>() {
                     @Override
-                    protected List<? extends RequestFileHistory> load() {
+                    protected List<RequestFileHistory> load() {
                         return requestFileHistoryBean.getRequestFileHistories(requestFile.getId());
                     }
                 }) {

@@ -17,7 +17,7 @@ import java.util.List;
 public class MbTransformerWebApplication extends ComplitexWebApplication {
 
     @Override
-    public List<? extends ToolbarButton> getApplicationToolbarButtons(String id) {
+    public List<ToolbarButton> getApplicationToolbarButtons(String id) {
         return Collections.emptyList();//Collections.unmodifiableList(ImmutableList.of(new PspSearchButton(id)));
     }
 }

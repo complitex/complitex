@@ -1,8 +1,10 @@
 package org.complitex.common.web.component.form;
 
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.model.IModel;
 import org.complitex.common.util.ResourceUtil;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -26,5 +28,10 @@ public class EnumChoiceRenderer<T extends Enum<T>> implements IChoiceRenderer<T>
     @Override
     public String getIdValue(T object, int index) {
         return object.ordinal() + "";
+    }
+
+    @Override
+    public T getObject(String id, IModel<? extends List<? extends T>> choices) {
+        return choices.getObject().stream().filter(c -> id.equals(c.ordinal() + "")).findAny().get();
     }
 }

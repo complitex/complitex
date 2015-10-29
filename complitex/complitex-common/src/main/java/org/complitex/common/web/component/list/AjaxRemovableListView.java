@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component.list;
 
 import org.apache.wicket.Component;
@@ -27,12 +23,12 @@ import java.util.List;
  */
 public abstract class AjaxRemovableListView<T extends Serializable> extends ListView<T> {
 
-    public AjaxRemovableListView(String id, List<? extends T> list) {
+    public AjaxRemovableListView(String id, List<T> list) {
         super(id, list);
         init();
     }
 
-    public AjaxRemovableListView(String id, IModel<? extends List<? extends T>> model) {
+    public AjaxRemovableListView(String id, IModel<? extends List<T>> model) {
         super(id, model);
         init();
     }

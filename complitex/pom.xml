@@ -41,13 +41,10 @@
 
     <properties>
         <!-- wicket version -->
-        <wicket.version>6.20.0</wicket.version>
+        <wicket.version>7.0.0</wicket.version>
 
         <!-- wicketstuff inject -->
-        <wicket-stuff.version>6.20.0</wicket-stuff.version>
-
-        <!-- wiquery version -->
-        <wiquery.version>6.13.0</wiquery.version>
+        <wicket-stuff.version>7.0.0</wicket-stuff.version>
 
         <!--skip test-->
         <maven.test.skip>true</maven.test.skip>
@@ -213,11 +210,18 @@
             </dependency>
             <dependency>
                 <groupId>org.wicketstuff</groupId>
-                <artifactId>wicketstuff-tinymce</artifactId>
+                <artifactId>wicketstuff-tinymce3</artifactId>
                 <version>${wicket-stuff.version}</version>
             </dependency>
 
             <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.5.3</version>
+            </dependency>
+
+
+           <!-- <dependency>
                 <groupId>org.odlabs.wiquery</groupId>
                 <artifactId>wiquery-core</artifactId>
                 <version>${wiquery.version}</version>
@@ -227,7 +231,7 @@
                 <groupId>org.odlabs.wiquery</groupId>
                 <artifactId>wiquery-jquery-ui</artifactId>
                 <version>${wiquery.version}</version>
-            </dependency>
+            </dependency>-->
 
             <!-- Java EE API -->
             <dependency>

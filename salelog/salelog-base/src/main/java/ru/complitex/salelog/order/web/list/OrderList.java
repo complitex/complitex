@@ -279,6 +279,11 @@ public class OrderList extends TemplatePage {
                     public String getIdValue(DomainObject region, int i) {
                         return region != null ? region.getObjectId().toString() : "-1";
                     }
+
+                    @Override
+                    public DomainObject getObject(String id, IModel<? extends List<? extends DomainObject>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(c.getObjectId().toString())).findAny().orElse(null);
+                    }
                 }
         ));
 
@@ -286,7 +291,7 @@ public class OrderList extends TemplatePage {
 
         filterForm.add(new TextField<>("comment"));
 
-        filterForm.add(new DropDownChoice<OrderStatus>("status",
+        filterForm.add(new DropDownChoice<>("status",
                 Arrays.asList(OrderStatus.values()),
                 new IChoiceRenderer<OrderStatus>() {
                     @Override
@@ -297,6 +302,11 @@ public class OrderList extends TemplatePage {
                     @Override
                     public String getIdValue(OrderStatus status, int i) {
                         return status.getId().toString();
+                    }
+
+                    @Override
+                    public OrderStatus getObject(String id, IModel<? extends List<? extends OrderStatus>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(c.getId().toString())).findAny().get();
                     }
                 }
         ));
@@ -361,7 +371,7 @@ public class OrderList extends TemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return isOrderEditor() ? ImmutableList.of(new AddItemButton(id, true) {
 
             @Override

@@ -1,7 +1,7 @@
 package org.complitex.address.web.sync;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -28,7 +28,7 @@ public class AddressSyncPage extends TemplatePage {
 
         add(new AddressSyncPanel("addressSyncPanel", AddressEntity.getValue(entity)){
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
+            protected void onUpdate(IPartialPageRequestHandler target) {
                 target.add(messages);
             }
         });

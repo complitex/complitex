@@ -20,8 +20,8 @@ public abstract class AjaxLinkLabel extends Panel{
                 AjaxLinkLabel.this.onClick(target);
             }
         };
-        link.setBeforeDisabledLink("");
-        link.setAfterDisabledLink("");
+//        link.setBeforeDisabledLink("");
+//        link.setAfterDisabledLink("");
 
         add(link);
 

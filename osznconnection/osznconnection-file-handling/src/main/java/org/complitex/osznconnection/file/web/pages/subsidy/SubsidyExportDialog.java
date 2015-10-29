@@ -18,8 +18,8 @@ import org.apache.wicket.util.template.TextTemplate;
 import org.complitex.address.web.component.DistrictSelectPanel;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.web.component.DatePicker;
-import org.complitex.organization.web.component.OrganizationMultiselectPanel;
 import org.complitex.common.web.component.organization.OrganizationPicker;
+import org.complitex.organization.web.component.OrganizationMultiselectPanel;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.ExportType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
@@ -91,6 +91,11 @@ public class SubsidyExportDialog extends Panel {
             public String getIdValue(RequestFileType object, int index) {
                 return object.ordinal() + "";
             }
+
+            @Override
+            public RequestFileType getObject(String id, IModel<? extends List<? extends RequestFileType>> choices) {
+                return choices.getObject().stream().filter(c -> id.equals(c.ordinal() + "")).findAny().get();
+            }
         }).setRequired(true));
 
         structureContainer.add(new DatePicker<>("date")
@@ -115,22 +120,27 @@ public class SubsidyExportDialog extends Panel {
 
         exportTypeContainer.add(new RadioChoice<>("exportType", Arrays.asList(BALANCE_HOLDER, DISTRICT, SERVICING_ORGANIZATION),
                 new IChoiceRenderer<ExportType>() {
-            @Override
-            public Object getDisplayValue(ExportType object) {
-                switch (object){
-                    case BALANCE_HOLDER: return getString("export_type_holder");
-                    case DISTRICT: return getString("export_type_district");
-                    case SERVICING_ORGANIZATION: return getString("export_type_organization");
-                }
+                    @Override
+                    public Object getDisplayValue(ExportType object) {
+                        switch (object){
+                            case BALANCE_HOLDER: return getString("export_type_holder");
+                            case DISTRICT: return getString("export_type_district");
+                            case SERVICING_ORGANIZATION: return getString("export_type_organization");
+                        }
 
-                return null;
-            }
+                        return null;
+                    }
 
-            @Override
-            public String getIdValue(ExportType object, int index) {
-                return object.ordinal() + "";
-            }
-        }).setRequired(true));
+                    @Override
+                    public String getIdValue(ExportType object, int index) {
+                        return object.ordinal() + "";
+                    }
+
+                    @Override
+                    public ExportType getObject(String id, IModel<? extends List<? extends ExportType>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(c.ordinal() + "")).findAny().get();
+                    }
+                }).setRequired(true));
 
         //Выгрузка
         WebMarkupContainer exportContainer = new WebMarkupContainer("export_container"){

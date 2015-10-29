@@ -189,7 +189,12 @@ public class HeatmeterList extends TemplatePage {
 
                     @Override
                     public String getIdValue(HeatmeterBindingStatus object, int index) {
-                        return String.valueOf(object.ordinal());
+                        return object.name();
+                    }
+
+                    @Override
+                    public HeatmeterBindingStatus getObject(String id, IModel<? extends List<? extends HeatmeterBindingStatus>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().get();
                     }
                 }).setNullValid(true));
         filterForm.add(new DropDownChoice<>("object.calculating", Arrays.asList(Boolean.TRUE, Boolean.FALSE),
@@ -203,6 +208,11 @@ public class HeatmeterList extends TemplatePage {
                     @Override
                     public String getIdValue(Boolean object, int index) {
                         return String.valueOf(object);
+                    }
+
+                    @Override
+                    public Boolean getObject(String id, IModel<? extends List<? extends Boolean>> choices) {
+                        return Boolean.valueOf(id);
                     }
                 }).setNullValid(true));
 
@@ -701,7 +711,7 @@ public class HeatmeterList extends TemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return Arrays.asList(
                 new AddItemButton(id) {
 

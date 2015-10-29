@@ -5,6 +5,7 @@
 package org.complitex.pspoffice.person.strategy.web.history.registration;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.pspoffice.person.strategy.ApartmentCardStrategy;
@@ -32,7 +33,7 @@ public class RegistrationHistoryPage extends AbstractHistoryPage {
     private final Registration registration;
 
     public RegistrationHistoryPage(ApartmentCard apartmentCard, Registration registration) {
-        super(registration.getObjectId(), new StringResourceModel("title", null, registration.getObjectId()),
+        super(registration.getObjectId(), new StringResourceModel("title", null, Model.of(registration.getObjectId())),
                 new ResourceModel("object_link_message"));
         this.apartmentCard = apartmentCard;
         this.registration = registration;

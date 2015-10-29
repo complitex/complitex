@@ -478,7 +478,7 @@ public class PersonInputPanel extends Panel {
      * Document UI fields
      */
     private IModel<DomainObject> documentTypeModel;
-    private IModel<List<? extends DomainObject>> documentTypesModel;
+    private IModel<List<DomainObject>> documentTypesModel;
     private DisableAwareDropDownChoice<DomainObject> documentType;
     private WebMarkupContainer documentInputPanelContainer;
 
@@ -515,7 +515,7 @@ public class PersonInputPanel extends Panel {
         documentForm.add(new Label("label", labelModel));
         //required
         documentForm.add(new WebMarkupContainer("required").setVisible(documentTypeAttributeType.isMandatory()));
-        documentTypeModel = new Model<DomainObject>();
+        documentTypeModel = new Model<>();
         documentTypesModel = Model.ofList(null);
         if (!isNew()) {
             documentTypesModel.setObject(documentTypeStrategy.getAll(getLocale()));

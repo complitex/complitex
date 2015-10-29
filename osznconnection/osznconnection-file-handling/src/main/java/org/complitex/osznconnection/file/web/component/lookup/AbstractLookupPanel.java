@@ -62,7 +62,7 @@ public abstract class AbstractLookupPanel<T extends AbstractRequest> extends Pan
     private StreetStrategy streetStrategy;
 
     private IModel<String> apartmentModel;
-    private IModel<List<? extends AccountDetail>> accountDetailsModel;
+    private IModel<List<AccountDetail>> accountDetailsModel;
     private IModel<AccountDetail> accountDetailModel;
     private AccountNumberPickerPanel accountNumberPickerPanel;
     private FeedbackPanel messages;

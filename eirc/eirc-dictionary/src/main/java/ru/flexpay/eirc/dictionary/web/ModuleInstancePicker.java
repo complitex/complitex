@@ -298,7 +298,7 @@ public class ModuleInstancePicker extends FormComponentPanel<DomainObject> {
     }
 
     @Override
-    protected void convertInput() {
+    public void convertInput() {
         setConvertedInput(getModelObject());
     }
 

@@ -101,12 +101,12 @@ public final class Children extends Panel {
         toggleLink.add(toggleStatus);
         add(toggleLink);
 
-        IModel<List<? extends DomainObject>> childrenModel = new AbstractReadOnlyModel<List<? extends DomainObject>>() {
+        IModel<List<DomainObject>> childrenModel = new AbstractReadOnlyModel<List<DomainObject>>() {
 
-            private List<? extends DomainObject> children;
+            private List<DomainObject> children;
 
             @Override
-            public List<? extends DomainObject> getObject() {
+            public List<DomainObject> getObject() {
                 if (children == null) {
                     initChildren();
                 }
@@ -121,7 +121,7 @@ public final class Children extends Panel {
                     example.setStatus(ShowMode.ALL.name());
                 }
                 getChildrenStrategy().configureFilter(example, ImmutableMap.of(parentEntity, parentObject.getObjectId()), null);
-                children = getChildrenStrategy().getList(example);
+                children = (List<DomainObject>) getChildrenStrategy().getList(example);
             }
         };
 

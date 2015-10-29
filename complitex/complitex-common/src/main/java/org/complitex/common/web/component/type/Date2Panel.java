@@ -89,7 +89,7 @@ public final class Date2Panel extends FormComponentPanel<Date> {
     }
 
     @Override
-    protected void convertInput() {
+    public void convertInput() {
         Integer day = dayField.getTextField().getConvertedInput();
         Integer month = monthField.getConvertedInput();
         Integer year = yearField.getTextField().getConvertedInput();
@@ -100,8 +100,8 @@ public final class Date2Panel extends FormComponentPanel<Date> {
             } catch (Exception e) {
                 ValidationError error = new ValidationError();
                 String simpleName = Classes.simpleName(getType());
-                error.addMessageKey("IConverter." + simpleName);
-                error.addMessageKey("IConverter");
+                error.addKey("IConverter." + simpleName);
+                error.addKey("IConverter");
                 error.setVariable("type", simpleName);
                 error((IValidationError) error);
                 setConvertedInput(null);

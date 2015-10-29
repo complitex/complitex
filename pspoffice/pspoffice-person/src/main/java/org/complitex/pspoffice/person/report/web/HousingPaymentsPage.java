@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.service.AddressRendererBean;
@@ -81,11 +82,11 @@ public final class HousingPaymentsPage extends WebPage {
         private ReportFragment(String id, final HousingPayments payments) {
             super(id, "report", HousingPaymentsPage.this);
             add(new Label("label", new ResourceModel("label")));
-            add(new Label("headInfo", new StringResourceModel("headInfo", null, new Object[]{
-                        personStrategy.displayDomainObject(payments.getOwner(), getLocale()),
-                        payments.getPersonalAccount(),
-                        addressRendererBean.displayAddress(payments.getAddressEntity(), payments.getAddressId(), getLocale())
-                    })));
+            add(new Label("headInfo", new StringResourceModel("headInfo", null, Model.of(new Object[]{
+                    personStrategy.displayDomainObject(payments.getOwner(), getLocale()),
+                    payments.getPersonalAccount(),
+                    addressRendererBean.displayAddress(payments.getAddressEntity(), payments.getAddressId(), getLocale())
+            }))));
             ListView<FamilyMember> familyMembers = new ListView<FamilyMember>("familyMembers", payments.getFamilyMembers()) {
 
                 @Override
@@ -101,41 +102,41 @@ public final class HousingPaymentsPage extends WebPage {
                 }
             };
             add(familyMembers);
-            add(new Label("total", new StringResourceModel("total", null, new Object[]{payments.getFamilyMembers().size()})));
+            add(new Label("total", new StringResourceModel("total", null, Model.of(new Object[]{payments.getFamilyMembers().size()}))));
 
-            add(new Label("formOfOwnership", new StringResourceModel("formOfOwnership", null, new Object[]{
+            add(new Label("formOfOwnership", new StringResourceModel("formOfOwnership", null, Model.of(new Object[]{
                         valueOf(ownershipFormStrategy.displayDomainObject(payments.getOwnershipForm(), getLocale()))
-                    })));
-            add(new Label("floorsInfo", new StringResourceModel("floorsInfo", null, new Object[]{
+                    }))));
+            add(new Label("floorsInfo", new StringResourceModel("floorsInfo", null, Model.of(new Object[]{
                         valueOf(payments.getFloors())
-                    })));
-            add(new Label("leftInfo", new StringResourceModel("leftInfo", null, new Object[]{
+                    }))));
+            add(new Label("leftInfo", new StringResourceModel("leftInfo", null, Model.of(new Object[]{
                         valueOf(payments.getLift())
-                    })));
-            add(new Label("hostelInfo", new StringResourceModel("hostelInfo", null, new Object[]{
+                    }))));
+            add(new Label("hostelInfo", new StringResourceModel("hostelInfo", null, Model.of(new Object[]{
                         valueOf(payments.getHostel())
-                    })));
-            add(new Label("roomsInfo", new StringResourceModel("roomsInfo", null, new Object[]{
+                    }))));
+            add(new Label("roomsInfo", new StringResourceModel("roomsInfo", null, Model.of(new Object[]{
                         valueOf(payments.getRooms())
-                    })));
-            add(new Label("floorInfo", new StringResourceModel("floorInfo", null, new Object[]{
+                    }))));
+            add(new Label("floorInfo", new StringResourceModel("floorInfo", null, Model.of(new Object[]{
                         valueOf(payments.getFloor())
-                    })));
-            add(new Label("stoveType", new StringResourceModel("stoveType", null, new Object[]{
+                    }))));
+            add(new Label("stoveType", new StringResourceModel("stoveType", null, Model.of(new Object[]{
                         valueOf(payments.getStoveType())
-                    })));
-            add(new Label("areaInfo", new StringResourceModel("areaInfo", null, new Object[]{
+                    }))));
+            add(new Label("areaInfo", new StringResourceModel("areaInfo", null, Model.of(new Object[]{
                         valueOf(payments.getApartmentArea()), valueOf(payments.getBalconyArea()),
                         valueOf(payments.getNormativeArea())
-                    })));
-            add(new Label("benefits", new StringResourceModel("benefits", null, new Object[]{
+                    }))));
+            add(new Label("benefits", new StringResourceModel("benefits", null, Model.of(new Object[]{
                         valueOf(payments.getBenefits()), valueOf(payments.getBenefitPersons())
-                    })));
+                    }))));
             add(new Label("paymentsAdjustedForBenefits",
-                    new StringResourceModel("paymentsAdjustedForBenefits", null, new Object[]{
+                    new StringResourceModel("paymentsAdjustedForBenefits", null, Model.of(new Object[]{
                         valueOf(payments.getPaymentsAdjustedForBenefits())
-                    })));
-            add(new Label("paymentsInfo", new StringResourceModel("paymentsInfo", null, new Object[]{
+                    }))));
+            add(new Label("paymentsInfo", new StringResourceModel("paymentsInfo", null, Model.of(new Object[]{
                         valueOf(payments.getNormativePayments()),
                         valueOf(payments.getApartmentPayments()), valueOf(payments.getApartmentTariff()),
                         valueOf(payments.getHeatPayments()), valueOf(payments.getHeatTariff()),
@@ -143,10 +144,10 @@ public final class HousingPaymentsPage extends WebPage {
                         valueOf(payments.getColdWaterPayments()), valueOf(payments.getColdWaterTariff()),
                         valueOf(payments.getHotWaterPayments()), valueOf(payments.getHotWaterTariff()),
                         valueOf(payments.getOutletPayments()), valueOf(payments.getOutletTariff())
-                    })));
-            add(new Label("debt", new StringResourceModel("debt", null, new Object[]{
+                    }))));
+            add(new Label("debt", new StringResourceModel("debt", null, Model.of(new Object[]{
                         valueOf(payments.getDebt()), valueOf(payments.getDebtMonth())
-                    })));
+                    }))));
         }
     }
 

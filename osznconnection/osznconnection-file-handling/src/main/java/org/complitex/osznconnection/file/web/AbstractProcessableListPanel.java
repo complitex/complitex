@@ -668,7 +668,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
     protected void showMessages(AjaxRequestTarget target) {
     }
 
-    public List<? extends ToolbarButton> getToolbarButtons(String id) {
+    public List<ToolbarButton> getToolbarButtons(String id) {
         return Arrays.asList(new LoadButton(id) {
 
             {

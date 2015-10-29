@@ -95,10 +95,10 @@ final class RegistrationHistoryPanel extends Panel {
         final RegistrationModification modification = registrationStrategy.getDistinctions(registration, startDate);
 
         add(new Label("label", endDate != null ? new StringResourceModel("label", null,
-                new Object[]{registrationId, HistoryDateFormatter.format(startDate),
-                    HistoryDateFormatter.format(endDate)})
-                : new StringResourceModel("label_current", null, new Object[]{registrationId,
-                    HistoryDateFormatter.format(startDate)})));
+                Model.of(new Object[]{registrationId, HistoryDateFormatter.format(startDate),
+                    HistoryDateFormatter.format(endDate)}))
+                : new StringResourceModel("label_current", null, Model.of(new Object[]{registrationId,
+                    HistoryDateFormatter.format(startDate)}))));
 
         final Long editedByUserId = modification.getEditedByUserId();
         String editedByUserName = null;

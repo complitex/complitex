@@ -126,6 +126,11 @@ abstract class RegisterChildrenDialog extends Panel {
                     public String getIdValue(PersonApartmentCardAddress apartmentCardAddress, int index) {
                         return String.valueOf(apartmentCardAddress.getApartmentCardId());
                     }
+
+                    @Override
+                    public PersonApartmentCardAddress getObject(String id, IModel<? extends List<? extends PersonApartmentCardAddress>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(String.valueOf(c.getApartmentCardId()))).findAny().get();
+                    }
                 };
         personApartmentCardAddressModel = new Model<PersonApartmentCardAddress>() {
 

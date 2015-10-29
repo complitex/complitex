@@ -2,15 +2,12 @@ package ru.flexpay.eirc.mb_transformer.web.component;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.markup.html.tree.Tree;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.ResourceModel;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 import ru.flexpay.eirc.mb_transformer.service.FileService;
 
 import javax.ejb.EJB;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import java.io.File;
 import java.io.Serializable;
@@ -35,15 +32,15 @@ public class SelectFileDialog extends Panel {
         dialog.setWidth(500);
         add(dialog);
 
-        TreeModel treeModel = new DefaultTreeModel(new FolderTreeNode(new File("/")));
-
-        Tree tree = new Tree("files", treeModel) {
-            @Override
-            protected String renderNode(TreeNode node) {
-                return ((FolderTreeNode)node).getFile().getName();
-            }
-        };
-        dialog.add(tree);
+//        TreeModel treeModel = new DefaultTreeModel(new FolderTreeNode(new File("/")));
+//
+//        Tree tree = new Tree("files", treeModel) {
+//            @Override
+//            protected String renderNode(TreeNode node) {
+//                return ((FolderTreeNode)node).getFile().getName();
+//            }
+//        };
+//        dialog.add(tree);
     }
 
     class FolderTreeNode implements TreeNode, Serializable {

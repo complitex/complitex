@@ -245,7 +245,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         this.backPage = backPage;
     }
 
-    protected List<? extends Component> getActionComponents(String id, T object){
+    protected List<Component> getActionComponents(String id, T object){
         return new ArrayList<>();
     }
 }

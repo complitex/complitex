@@ -101,10 +101,10 @@ final class ApartmentCardHistoryPanel extends Panel {
         final ApartmentCardModification modification = apartmentCardStrategy.getDistinctions(card, startDate);
 
         add(new Label("label", endDate != null ? new StringResourceModel("label", null,
-                new Object[]{apartmentCardId, HistoryDateFormatter.format(startDate),
-                    HistoryDateFormatter.format(endDate)})
-                : new StringResourceModel("label_current", null, new Object[]{apartmentCardId,
-                    HistoryDateFormatter.format(startDate)})));
+                Model.of(new Object[]{apartmentCardId, HistoryDateFormatter.format(startDate),
+                    HistoryDateFormatter.format(endDate)}))
+                : new StringResourceModel("label_current", null, Model.of(new Object[]{apartmentCardId,
+                    HistoryDateFormatter.format(startDate)}))));
 
         final String editedByUserName = getEditedByUserName(modification);
         add(new Label("editedByUser", !Strings.isEmpty(editedByUserName) ? editedByUserName : "[N/A]"));

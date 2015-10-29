@@ -16,9 +16,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.common.util.StringUtil;
-import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.DatePicker;
 import org.complitex.common.web.component.YearDropDownChoice;
+import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
@@ -291,7 +291,7 @@ public class SubsidyTarifFileList extends TemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return Arrays.asList(new LoadButton(id) {
 
             {

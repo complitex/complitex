@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
@@ -28,6 +29,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.ejb.EJB;
 import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * @author Pavel Sknar
@@ -122,6 +124,11 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
                         @Override
                         public String getIdValue(DomainObject type, int i) {
                             return type != null && type.getObjectId() != null ? type.getObjectId().toString(): "-1";
+                        }
+
+                        @Override
+                        public DomainObject getObject(String id, IModel<? extends List<? extends DomainObject>> choices) {
+                            return choices.getObject().stream().filter(c -> id.equals(c.getObjectId().toString())).findAny().orElse(null);
                         }
                     }
             )

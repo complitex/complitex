@@ -19,7 +19,7 @@ public class AjaxFilterToolbar extends FilterToolbar {
      * @param stateLocator locator responsible for finding object used to store filter's state. Deprecated! Not used.
      */
     public <T, S, F> AjaxFilterToolbar(DataTable<T, S> table, FilterForm<F> form, IFilterStateLocator<F> stateLocator) {
-        super(table, form, stateLocator);
+        super(table, form);
         setOutputMarkupId(true);
         for (int i = 0 ; i < size(); i++) {
             Component component = get(i);

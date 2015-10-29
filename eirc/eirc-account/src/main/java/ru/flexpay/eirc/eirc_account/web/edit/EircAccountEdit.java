@@ -265,7 +265,7 @@ public class EircAccountEdit extends TemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return ImmutableList.of(new CollapsibleInputSearchToolbarButton(id));
     }
 

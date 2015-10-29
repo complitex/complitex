@@ -3,20 +3,13 @@ package org.complitex;
 import org.apache.wicket.Application;
 import org.apache.wicket.IInitializer;
 import org.apache.wicket.SharedResources;
-import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.util.file.Files;
+import org.apache.wicket.request.resource.PackageResource;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.security.CodeSource;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Arrays;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -108,9 +101,11 @@ public final class WebImageInitializer implements IInitializer {
                     String entryName = ze.getName();
                     if (entryName.contains(".") && entryName.contains("/images")){
                         String p = IMAGES_DIRECTORY_NAME + entryName.substring(entryName.lastIndexOf('/'));
-                        sharedResources.add(p, new PackageResourceReference(WebImageInitializer.class, p).getResource());
+                        sharedResources.add(p, new PackageResource(WebImageInitializer.class, p, null, null, null){});
                     }
                 }
+
+                zip.close();
             }
         } catch (IOException e) {
             e.printStackTrace();

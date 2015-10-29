@@ -323,7 +323,7 @@ public abstract class TemplateWebApplication extends ServletAuthWebApplication
         return new TemplateSession(request, newSessionStorage());
     }
 
-    public List<? extends ToolbarButton> getApplicationToolbarButtons(String id) {
+    public List<ToolbarButton> getApplicationToolbarButtons(String id) {
         return null;
     }
 

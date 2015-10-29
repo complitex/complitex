@@ -23,11 +23,11 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolb
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.util.SingleSortState;
 import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -119,10 +119,8 @@ public class BrowserFilesDialog extends Panel {
     }
 
     @Override
-    public void renderHead(HtmlHeaderContainer container) {
-
-        container.getHeaderResponse().render(CssHeaderItem.forReference(
-                new PackageResourceReference(BrowserFilesDialog.class, "browser.css")));
+    public void renderHead(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(new PackageResourceReference(BrowserFilesDialog.class, "browser.css")));
     }
 
     public File getSelectedFile() {

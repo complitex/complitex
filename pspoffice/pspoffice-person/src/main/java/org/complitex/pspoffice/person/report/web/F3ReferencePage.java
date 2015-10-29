@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.service.AddressRendererBean;
@@ -84,23 +85,23 @@ public final class F3ReferencePage extends WebPage {
             super(id, "report", F3ReferencePage.this);
             add(new Label("label", new ResourceModel("label")));
             add(new Label("name", new StringResourceModel("name", null,
-                    new Object[]{valueOf(personStrategy.displayDomainObject(f3.getPerson(), getLocale()))})));
+                    Model.of(new Object[]{valueOf(personStrategy.displayDomainObject(f3.getPerson(), getLocale()))}))));
             add(new Label("address", new StringResourceModel("address", null,
-                    new Object[]{valueOf(addressRendererBean.displayAddress(f3.getAddressEntity(), f3.getAddressId(), getLocale()))})));
-            add(new Label("livingArea", new StringResourceModel("livingArea", null, new Object[]{valueOf(f3.getLivingArea())})));
-            add(new Label("apartmentArea", new StringResourceModel("apartmentArea", null, new Object[]{valueOf(f3.getApartmentArea())})));
+                    Model.of(new Object[]{valueOf(addressRendererBean.displayAddress(f3.getAddressEntity(), f3.getAddressId(), getLocale()))}))));
+            add(new Label("livingArea", new StringResourceModel("livingArea", null, Model.of(new Object[]{valueOf(f3.getLivingArea())}))));
+            add(new Label("apartmentArea", new StringResourceModel("apartmentArea", null, Model.of(new Object[]{valueOf(f3.getApartmentArea())}))));
             add(new Label("roomsInfo", new StringResourceModel("roomsInfo", null,
-                    new Object[]{valueOf(f3.getTakesRooms()), valueOf(f3.getRooms())})));
+                    Model.of(new Object[]{valueOf(f3.getTakesRooms()), valueOf(f3.getRooms())}))));
             add(new Label("floorInfo", new StringResourceModel("floorInfo", null,
-                    new Object[]{valueOf(f3.getFloor()), valueOf(f3.getFloors())})));
+                    Model.of(new Object[]{valueOf(f3.getFloor()), valueOf(f3.getFloors())}))));
             add(new Label("balance", new ResourceModel("balance")));
             add(new Label("personalAccountOwner", new StringResourceModel("personalAccountOwner", null,
-                    new Object[]{valueOf(personStrategy.displayDomainObject(f3.getPersonalAccountOwner(), getLocale()))})));
+                    Model.of(new Object[]{valueOf(personStrategy.displayDomainObject(f3.getPersonalAccountOwner(), getLocale()))}))));
             add(new Label("formOfOwnership", new StringResourceModel("formOfOwnership", null,
-                    new Object[]{valueOf(ownershipFormStrategy.displayDomainObject(f3.getOwnershipForm(), getLocale()))})));
-            add(new Label("facilities", new StringResourceModel("facilities", null, new Object[]{valueOf(f3.getFacilities())})));
-            add(new Label("technicalState", new StringResourceModel("technicalState", null, new Object[]{valueOf(f3.getTechnicalState())})));
-            add(new Label("familyInfo", new StringResourceModel("familyInfo", null, new Object[]{String.valueOf(f3.getFamilyMembers().size())})));
+                    Model.of(new Object[]{valueOf(ownershipFormStrategy.displayDomainObject(f3.getOwnershipForm(), getLocale()))}))));
+            add(new Label("facilities", new StringResourceModel("facilities", null, Model.of(new Object[]{valueOf(f3.getFacilities())}))));
+            add(new Label("technicalState", new StringResourceModel("technicalState", null, Model.of(new Object[]{valueOf(f3.getTechnicalState())}))));
+            add(new Label("familyInfo", new StringResourceModel("familyInfo", null, Model.of(new Object[]{String.valueOf(f3.getFamilyMembers().size())}))));
             ListView<FamilyMember> familyMembers = new ListView<FamilyMember>("familyMembers", f3.getFamilyMembers()) {
 
                 @Override

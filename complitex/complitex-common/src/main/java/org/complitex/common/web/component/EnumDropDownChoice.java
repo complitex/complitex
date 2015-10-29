@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -45,6 +46,11 @@ public class EnumDropDownChoice<T extends Enum<T>> extends DropDownChoice<T> {
             @Override
             public String getIdValue(T object, int index) {
                 return object.ordinal() + "";
+            }
+
+            @Override
+            public T getObject(String id, IModel<? extends List<? extends T>> choices) {
+                return choices.getObject().stream().filter(c -> id.equals(c.ordinal() + "")).findAny().get();
             }
         });
     }

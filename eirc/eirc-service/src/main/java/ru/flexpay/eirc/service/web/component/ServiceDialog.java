@@ -234,7 +234,7 @@ public class ServiceDialog extends FormComponentPanel<Service> {
     }
 
     @Override
-    protected void convertInput() {
+    public void convertInput() {
         setConvertedInput(getModelObject());
     }
 }

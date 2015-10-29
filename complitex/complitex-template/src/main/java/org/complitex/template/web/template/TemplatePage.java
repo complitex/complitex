@@ -169,7 +169,7 @@ public abstract class TemplatePage extends WebPage {
         toolbar.add(commonPart);
 
         //application-wide toolbar buttons.
-        List<? extends ToolbarButton> applicationButtons = getTemplateWebApplication().
+        List<ToolbarButton> applicationButtons = getTemplateWebApplication().
                 getApplicationToolbarButtons("applicationButton");
         if (applicationButtons == null) {
             applicationButtons = Collections.emptyList();
@@ -184,7 +184,7 @@ public abstract class TemplatePage extends WebPage {
         toolbar.add(applicationPart);
 
         //page-wide toolbar buttons.
-        List<? extends ToolbarButton> pageButtons = getToolbarButtons("pageButton");
+        List<ToolbarButton> pageButtons = getToolbarButtons("pageButton");
         if (pageButtons == null) {
             pageButtons = Collections.emptyList();
         }
@@ -198,7 +198,7 @@ public abstract class TemplatePage extends WebPage {
         toolbar.add(pagePart);
     }
 
-    private List<? extends ToolbarButton> getCommonButtons(String id) {
+    private List<ToolbarButton> getCommonButtons(String id) {
         return new ArrayList<>();
     }
 
@@ -270,7 +270,7 @@ public abstract class TemplatePage extends WebPage {
      * @param id Component id
      * @return List of ToolbarButton to add to Template
      */
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return null;
     }
 

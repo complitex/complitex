@@ -344,6 +344,11 @@ public class RegistryList extends TemplatePage {
                     public String getIdValue(RegistryType type, int i) {
                         return type.getId().toString();
                     }
+
+                    @Override
+                    public RegistryType getObject(String id, IModel<? extends List<? extends RegistryType>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(c.getId().toString())).findAny().get();
+                    }
                 }
         ).setNullValid(true));
 
@@ -360,6 +365,11 @@ public class RegistryList extends TemplatePage {
                     @Override
                     public String getIdValue(RegistryStatus type, int i) {
                         return type.getId().toString();
+                    }
+
+                    @Override
+                    public RegistryStatus getObject(String id, IModel<? extends List<? extends RegistryStatus>> choices) {
+                        return choices.getObject().stream().filter(c -> id.equals(c.getId().toString())).findAny().get();
                     }
                 }
         ).setNullValid(true));
@@ -422,7 +432,7 @@ public class RegistryList extends TemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
 
         return ImmutableList.of(
                 new UploadButton(id, true) {

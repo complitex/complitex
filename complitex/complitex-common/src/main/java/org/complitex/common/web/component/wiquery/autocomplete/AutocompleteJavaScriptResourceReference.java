@@ -26,6 +26,8 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.odlabs.wiquery.core.resources.JavaScriptHeaderItems;
 import org.odlabs.wiquery.ui.menu.MenuJavaScriptResourceReference;
 
+import java.util.List;
+
 /**
  * $Id: AutocompleteJavascriptResourceReference.java 869 2011-05-04 12:26:32Z
  * hielke.hoeve@gmail.com $
@@ -63,7 +65,7 @@ public class AutocompleteJavaScriptResourceReference extends JavaScriptResourceR
 	}
 
 	@Override
-	public Iterable< ? extends HeaderItem> getDependencies()
+	public List<HeaderItem> getDependencies()
 	{
 		return JavaScriptHeaderItems.forReferences(MenuJavaScriptResourceReference.get());
 	}

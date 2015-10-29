@@ -4,10 +4,13 @@
  */
 package org.complitex.osznconnection.file.web.component.process;
 
-import java.util.Arrays;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.model.IModel;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -29,6 +32,11 @@ public class RequestFileStatusFilter extends DropDownChoice<RequestFileStatus> {
             @Override
             public String getIdValue(RequestFileStatus object, int index) {
                 return object.name();
+            }
+
+            @Override
+            public RequestFileStatus getObject(String id, IModel<? extends List<? extends RequestFileStatus>> choices) {
+                return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().get();
             }
         });
         setNullValid(true);

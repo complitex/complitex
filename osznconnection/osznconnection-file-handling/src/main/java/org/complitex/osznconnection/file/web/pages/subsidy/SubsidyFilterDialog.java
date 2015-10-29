@@ -66,9 +66,9 @@ public class SubsidyFilterDialog extends Panel{
         messages.setOutputMarkupId(true);
         form.add(messages);
 
-        form.add(new CheckBox("abs", new PropertyModel<Boolean>(model, "abs")));
+        form.add(new CheckBox("abs", new PropertyModel<>(model, "abs")));
 
-        form.add(new RadioChoice<>("compare", new PropertyModel<Integer>(model, "compare"),
+        form.add(new RadioChoice<>("compare", new PropertyModel<>(model, "compare"),
                 Arrays.asList(-1, 0, 1), new IChoiceRenderer<Integer>() {
             @Override
             public String getDisplayValue(Integer object) {
@@ -78,6 +78,11 @@ public class SubsidyFilterDialog extends Panel{
             @Override
             public String getIdValue(Integer object, int index) {
                 return object + "";
+            }
+
+            @Override
+            public Integer getObject(String id, IModel<? extends List<? extends Integer>> choices) {
+                return Integer.valueOf(id);
             }
         }).setSuffix(""));
 

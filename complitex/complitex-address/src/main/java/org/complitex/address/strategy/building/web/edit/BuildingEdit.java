@@ -15,7 +15,7 @@ public class BuildingEdit extends DomainObjectEdit {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         List<ToolbarButton> toolbarButtons = Lists.newArrayList();
         toolbarButtons.addAll(super.getToolbarButtons(id));
         toolbarButtons.add(new CollapsibleInputSearchToolbarButton(id));

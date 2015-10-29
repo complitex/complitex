@@ -70,7 +70,7 @@ public class EntityDescriptionPanel extends Panel {
                 return description.getName(getLocale());
             }
         };
-        IModel<String> labelModel = new StringResourceModel("label", null, new Object[]{entityLabelModel});
+        IModel<String> labelModel = new StringResourceModel("label", null, entityLabelModel);
         add(new Label("title", labelModel));
         add(new Label("label", labelModel));
 
@@ -270,11 +270,10 @@ public class EntityDescriptionPanel extends Panel {
         } else {
             IStrategy referenceEntityStrategy = strategyFactory.getStrategy(valueType, true);
             if (referenceEntityStrategy == null) {
-                return new StringResourceModel("reference_table", this, null, new Object[]{valueType.toUpperCase()}).getObject();
+                return new StringResourceModel("reference_table", this, Model.of(valueType.toUpperCase())).getObject();
             } else {
-                return new StringResourceModel("reference", this, null, new Object[]{
-                        referenceEntityStrategy.getEntity().getName(getLocale())
-                        }).getObject();
+                return new StringResourceModel("reference", this, Model.of(referenceEntityStrategy.getEntity()
+                        .getName(getLocale()))).getObject();
             }
         }
     }

@@ -1,16 +1,10 @@
 package org.complitex.osznconnection.file;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.protocol.ws.IWebSocketSettings;
-import org.apache.wicket.protocol.ws.WebSocketSettings;
-import org.apache.wicket.protocol.ws.api.WebSocketPushBroadcaster;
-import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.RequestFileGroupBean;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 

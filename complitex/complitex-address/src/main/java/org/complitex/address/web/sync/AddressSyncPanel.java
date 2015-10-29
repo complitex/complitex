@@ -3,6 +3,7 @@ package org.complitex.address.web.sync;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -184,9 +185,9 @@ public class AddressSyncPanel extends Panel {
             }
         });
 
-        add(new ListView<AddressSyncFilter>("filters", new LoadableDetachableModel<List<? extends AddressSyncFilter>>() {
+        add(new ListView<AddressSyncFilter>("filters", new LoadableDetachableModel<List<AddressSyncFilter>>() {
             @Override
-            protected List<? extends AddressSyncFilter> load() {
+            protected List<AddressSyncFilter> load() {
                 return addressSyncBean.getAddressSyncFilters(addressEntity);
             }
         }) {
@@ -384,6 +385,6 @@ public class AddressSyncPanel extends Panel {
         });
     }
 
-    protected void onUpdate(AjaxRequestTarget target){
+    protected void onUpdate(IPartialPageRequestHandler target){
     }
 }

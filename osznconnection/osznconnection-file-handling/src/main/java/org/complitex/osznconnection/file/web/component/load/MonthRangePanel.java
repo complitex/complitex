@@ -57,7 +57,7 @@ public final class MonthRangePanel extends FormComponentPanel<MonthRange> {
     }
 
     @Override
-    protected void convertInput() {
+    public void convertInput() {
         Integer monthFrom = from.getConvertedInput();
         Integer monthTo = to.getConvertedInput();
         if (monthFrom != null && monthTo != null) {

@@ -119,7 +119,7 @@ public class ReportList extends TemplatePage {
     }
 
     @Override
-    protected List<? extends ToolbarButton> getToolbarButtons(String id) {
+    protected List<ToolbarButton> getToolbarButtons(String id) {
         return Arrays.asList(new AddDocumentButton(id){
             @Override
             protected void onClick() {

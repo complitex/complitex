@@ -103,10 +103,10 @@ final class PersonHistoryPanel extends Panel {
         final PersonModification modification = personStrategy.getDistinctions(person, startDate);
 
         add(new Label("label", endDate != null ? new StringResourceModel("label", null,
-                new Object[]{personId, HistoryDateFormatter.format(startDate),
-                    HistoryDateFormatter.format(endDate)})
-                : new StringResourceModel("label_current", null, new Object[]{personId,
-                    HistoryDateFormatter.format(startDate)})));
+                Model.of(new Object[]{personId, HistoryDateFormatter.format(startDate),
+                    HistoryDateFormatter.format(endDate)}))
+                : new StringResourceModel("label_current", null, Model.of(new Object[]{personId,
+                    HistoryDateFormatter.format(startDate)}))));
 
         final Long editedByUserId = modification.getEditedByUserId();
         String editedByUserName = null;

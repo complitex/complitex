@@ -1,5 +1,6 @@
 package org.complitex.common.web;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.util.string.Strings;
@@ -278,9 +279,9 @@ public class DictionaryFwSession extends WebSession {
     }
 
     @Override
-    public void setLocale(Locale locale) {
+    public Session setLocale(Locale locale) {
         putPreference(GLOBAL_PAGE, LOCALE_KEY, locale.getLanguage(), true);
-        super.setLocale(locale);
+        return super.setLocale(locale);
     }
 
     public DomainObject getMainUserOrganization() {
