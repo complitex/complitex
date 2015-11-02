@@ -34,10 +34,6 @@
             <groupId>org.complitex.osznconnection</groupId>
             <artifactId>osznconnection-organization</artifactId>
         </dependency>
-       <dependency>
-            <groupId>org.complitex.osznconnection</groupId>
-            <artifactId>osznconnection-service-provider-type</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>

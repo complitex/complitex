@@ -18,10 +18,6 @@
             <artifactId>osznconnection-organization-type</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.osznconnection</groupId>
-            <artifactId>osznconnection-service-provider-type</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.complitex</groupId>
             <artifactId>complitex-address</artifactId>
         </dependency>

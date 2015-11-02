@@ -62,10 +62,6 @@
             <groupId>org.complitex.osznconnection</groupId>
             <artifactId>osznconnection-address</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.complitex.osznconnection</groupId>
-            <artifactId>osznconnection-service-provider-type</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>

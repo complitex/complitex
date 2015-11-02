@@ -1,5 +1,7 @@
 package org.complitex.template.web;
 
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import org.apache.wicket.markup.html.WebPage;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.util.EjbBeanLocator;
@@ -18,6 +20,11 @@ public class ComplitexWebApplication extends TemplateWebApplication {
 
         //broadcaster
         EjbBeanLocator.getBean(BroadcastService.class).setApplication(this);
+
+        //bootstrap
+        BootstrapSettings settings = new BootstrapSettings();
+
+        Bootstrap.install(this, settings);
     }
 
     @Override

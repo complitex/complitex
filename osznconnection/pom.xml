@@ -138,11 +138,6 @@
                 <artifactId>osznconnection-address</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.complitex.osznconnection</groupId>
-                <artifactId>osznconnection-service-provider-type</artifactId>
-                <version>${project.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
