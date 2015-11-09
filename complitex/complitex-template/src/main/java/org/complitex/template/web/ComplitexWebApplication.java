@@ -21,7 +21,7 @@ public class ComplitexWebApplication extends TemplateWebApplication {
 
         //bootstrap
 //        BootstrapSettings settings = new BootstrapSettings();
-//
+//        settings.setThemeProvider(new SingleThemeProvider(new ComplitexTheme()));
 //        Bootstrap.install(this, settings);
     }
 

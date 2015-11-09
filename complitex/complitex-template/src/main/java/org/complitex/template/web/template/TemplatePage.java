@@ -3,7 +3,6 @@ package org.complitex.template.web.template;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -65,7 +64,7 @@ public abstract class TemplatePage extends WebPage {
 //        response.render(JavaScriptHeaderItem.forReference(CoreUIJavaScriptResourceReference.get()));
 //        response.render(JavaScriptHeaderItem.forReference(WidgetJavaScriptResourceReference.get()));
 
-        response.render(CssHeaderItem.forReference(WebCommonResourceInitializer.STYLE_CSS));
+        //response.render(CssHeaderItem.forReference(WebCommonResourceInitializer.STYLE_CSS));
     }
 
     protected TemplatePage() {
