@@ -1,6 +1,5 @@
 package org.complitex.template.bootstrap;
 
-import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.Theme;
 
 /**
@@ -8,6 +7,6 @@ import de.agilecoders.wicket.core.settings.Theme;
  */
 public class ComplitexTheme extends Theme{
     public ComplitexTheme() {
-        super("complitex", ComplitexThemeCssResourceReference.INSTANCE, Bootstrap.getSettings().getCssResourceReference());
+        super("complitex", ComplitexThemeCssResourceReference.INSTANCE);
     }
 }

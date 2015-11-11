@@ -60,7 +60,6 @@ public abstract class TemplateWebApplication extends ServletAuthWebApplication
 
     private final Logger log = LoggerFactory.getLogger(TemplateWebApplication.class);
     private static final String TEMPLATE_CONFIG_FILE_NAME = "template-config.xml";
-    private static final ThemeResourceReference theme = new ThemeResourceReference();
     private volatile Collection<Class<ITemplateMenu>> menuClasses;
     private IWebComponentResolver webComponentResolver;
 
@@ -87,7 +86,7 @@ public abstract class TemplateWebApplication extends ServletAuthWebApplication
             }
         });
 
-        addResourceReplacement(WiQueryCoreThemeResourceReference.get(), theme);
+        addResourceReplacement(WiQueryCoreThemeResourceReference.get(), new ThemeResourceReference());
     }
 
     private void initializeTemplateConfig() throws RuntimeException {

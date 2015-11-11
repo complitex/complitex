@@ -1,8 +1,12 @@
 package org.complitex.template.web;
 
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
+import de.agilecoders.wicket.core.settings.SingleThemeProvider;
 import org.apache.wicket.markup.html.WebPage;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.template.bootstrap.ComplitexTheme;
 import org.complitex.template.web.pages.HomePageFactory;
 import org.complitex.template.web.template.TemplateWebApplication;
 
@@ -20,9 +24,9 @@ public class ComplitexWebApplication extends TemplateWebApplication {
         EjbBeanLocator.getBean(BroadcastService.class).setApplication(this);
 
         //bootstrap
-//        BootstrapSettings settings = new BootstrapSettings();
-//        settings.setThemeProvider(new SingleThemeProvider(new ComplitexTheme()));
-//        Bootstrap.install(this, settings);
+        BootstrapSettings settings = new BootstrapSettings();
+        settings.setThemeProvider(new SingleThemeProvider(new ComplitexTheme()));
+        Bootstrap.install(this, settings);
     }
 
     @Override

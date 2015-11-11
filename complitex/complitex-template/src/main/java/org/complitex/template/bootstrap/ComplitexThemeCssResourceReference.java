@@ -9,6 +9,6 @@ public class ComplitexThemeCssResourceReference extends CssResourceReference{
     public static final ComplitexThemeCssResourceReference INSTANCE = new ComplitexThemeCssResourceReference();
 
     public ComplitexThemeCssResourceReference() {
-        super(ComplitexThemeCssResourceReference.class, "css/bootstrap.complitex.css");
+        super(ComplitexThemeCssResourceReference.class, "style.css");
     }
 }

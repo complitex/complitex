@@ -10,6 +10,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.resources.WebCommonResourceInitializer;
+import org.complitex.template.bootstrap.ComplitexThemeCssResourceReference;
 
 
 /**
@@ -42,7 +43,7 @@ public final class Login extends WebPage {
         response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(Login.class,
                 Login.class.getSimpleName() + ".js")));
 
-        response.render(CssHeaderItem.forReference(WebCommonResourceInitializer.STYLE_CSS));
+        response.render(CssHeaderItem.forReference(ComplitexThemeCssResourceReference.INSTANCE));
     }
 }
 
