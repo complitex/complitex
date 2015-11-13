@@ -1,82 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org" lang="ru">
-    <head>
-        <title wicket:id="login.title"></title>
-    </head>
-    <body>
-        <table border="0" cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td id="Header">
-                </td>
-            </tr>
-            <tr>
-                <td id="TopPanel">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div align="center">
-                        <table border="0" cellspacing="0" cellpadding="0" class="formFrame"
-                               style="width:300px;">
-                            <tr valign="top">
-                                <td class="ff_l"><wicket:image src="images/formFrame-tl.gif" width="4" height="180" alt=""/>
-                                </td>
-                                <td class="ff_t">
-                                    <h2 style="text-align:center;">
-                                        <span wicket:id="login.header"></span>
-                                    </h2>
-                                    <div wicket:id="errorPanel">
-                                        <ul>
-                                            <li>
-                                                <span style="color:orangered;"><wicket:message key="login.error.unauthorized"/></span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div align="center">
-                                        <form id="formId"  method="POST" action="j_security_check">
-                                            <table style="margin-bottom:20px">
-                                                <tr>
-                                                    <th align="left">
-                                                        <wicket:message key="login.loginLabel"/>:
-                                                    </th>
-                                                    <td>
-                                                        <input name="j_username" type="text" size="30"/>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th align="left">
-                                                        <wicket:message key="login.passwordLabel"/>:
-                                                    </th>
-                                                    <td>
-                                                        <input name="j_password" type="password" size="30"/>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <input type="submit" name="submit" wicket:message="value:login.submit" class="btnBig"/>
-                                        </form>
-                                    </div>
-                                </td>
-                                <td class="ff_r"><wicket:image src="images/formFrame-tr.gif" width="4" height="180" alt=""/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="ff_bl"><wicket:image src="images/formFrame-bl.gif" width="4" height="4" alt=""/>
-                                </td>
-                                <td class="ff_b"><wicket:image src="images/spacer.gif" width="4" height="4" alt=""/>
-                                </td>
-                                <td class="ff_br"><wicket:image src="images/formFrame-br.gif" width="4" height="4" alt=""/>
-                                </td>
-                            </tr>
-                        </table>
+<head>
+    <title wicket:id="login.title"></title>
+</head>
+<body>
+
+<div class="container-fluid">
+    <header>
+        <div id="logo"></div>
+    </header>
+
+    <div class="content">
+        <div class="panel panel-default login center">
+            <div class="panel-heading">
+                <h3 class="panel-title" wicket:id="login.header"></h3>
+            </div>
+
+            <div class="panel-body">
+                <form id="formId"  method="POST" action="j_security_check">
+                    <div class="form-group">
+                        <label for="j_username"><wicket:message key="login.login_label"/></label>
+                        <input id="j_username" name="j_username" type="text" class="form-control"/>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div><wicket:image src="images/spacer.gif" width="800" height="1" alt=""/></div>
-                </td>
-            </tr>
-        </table>
-    </body>
+
+                    <div class="form-group">
+                        <label for="j_password"><wicket:message key="login.password_label"/></label>
+                        <input id="j_password" name="j_password" type="password" class="form-control"/>
+                    </div>
+
+                    <button type="submit" class="btn btn-default" wicket:message="value:login.submit">
+                        <wicket:message key="login.submit"/>
+                    </button>
+                </form>
+            </div>
+
+            <div class="panel-footer" wicket:id="errorPanel">
+                <wicket:message key="login.error.unauthorized"/>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 </html>

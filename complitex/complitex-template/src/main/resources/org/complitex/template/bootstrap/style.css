@@ -5699,22 +5699,22 @@ button.list-group-item-danger.active:focus {
   border-bottom: 1px solid #ddd;
 }
 .panel-default {
-  border-color: #ddd;
+  border-color: #C4CDD4;
 }
 .panel-default > .panel-heading {
-  color: #333333;
-  background-color: #f5f5f5;
-  border-color: #ddd;
+  color: #FFFFFF;
+  background-color: #B0BAC3;
+  border-color: #C4CDD4;
 }
 .panel-default > .panel-heading + .panel-collapse > .panel-body {
-  border-top-color: #ddd;
+  border-top-color: #C4CDD4;
 }
 .panel-default > .panel-heading .badge {
-  color: #f5f5f5;
-  background-color: #333333;
+  color: #B0BAC3;
+  background-color: #FFFFFF;
 }
 .panel-default > .panel-footer + .panel-collapse > .panel-body {
-  border-bottom-color: #ddd;
+  border-bottom-color: #C4CDD4;
 }
 .panel-primary {
   border-color: #337ab7;
@@ -6766,4 +6766,18 @@ button.close {
 }
 body {
   background: url('img/pageBg.jpg') repeat-x #E0E4E9;
+}
+#logo {
+  height: 85px;
+  vertical-align: top;
+  border-bottom: 1px solid #C9D1D9;
+}
+.content {
+  margin: 20px;
+}
+.login {
+  width: 420px;
+}
+.center {
+  margin: auto;
 }
