@@ -4,7 +4,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -17,14 +16,12 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.resources.WebCommonResourceInitializer;
 import org.complitex.template.web.component.MainUserOrganizationPickerFactory;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
@@ -49,7 +46,7 @@ public abstract class TemplatePage extends WebPage {
     @EJB
     private SessionBean sessionBean;
     private String page = getClass().getName();
-    private Set<String> resourceBundle = new HashSet<String>();
+    private Set<String> resourceBundle = new HashSet<>();
 
     protected Logger log(){
         return LoggerFactory.getLogger(getClass());
@@ -57,14 +54,7 @@ public abstract class TemplatePage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.render(JavaScriptHeaderItem.forReference(WebCommonResourceInitializer.COMMON_JS));
-        response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(TemplatePage.class,
-                TemplatePage.class.getSimpleName() + ".js")));
 
-//        response.render(JavaScriptHeaderItem.forReference(CoreUIJavaScriptResourceReference.get()));
-//        response.render(JavaScriptHeaderItem.forReference(WidgetJavaScriptResourceReference.get()));
-
-//        response.render(CssHeaderItem.forReference(WebCommonResourceInitializer.STYLE_CSS));
     }
 
     protected TemplatePage() {
