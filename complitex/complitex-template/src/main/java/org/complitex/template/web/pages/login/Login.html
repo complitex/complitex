@@ -14,24 +14,30 @@
     <div class="content">
         <div class="panel panel-default login center">
             <div class="panel-heading">
-                <h3 class="panel-title" wicket:id="login.header"></h3>
+                <h2 class="panel-title text-center" wicket:id="login.header"></h2>
             </div>
 
             <div class="panel-body">
-                <form id="formId"  method="POST" action="j_security_check">
+                <form id="formId"  method="POST" action="j_security_check" class="form-horizontal">
                     <div class="form-group">
-                        <label for="j_username"><wicket:message key="login.login_label"/></label>
-                        <input id="j_username" name="j_username" type="text" class="form-control"/>
+                        <label for="j_username" class="col-sm-2"><wicket:message key="login.login_label"/></label>
+                        <div class="col-sm-10">
+                            <input id="j_username" name="j_username" type="text" class="form-control"/>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="j_password"><wicket:message key="login.password_label"/></label>
-                        <input id="j_password" name="j_password" type="password" class="form-control"/>
+                        <label for="j_password" class="col-sm-2"><wicket:message key="login.password_label"/></label>
+                        <div class="col-sm-10">
+                            <input id="j_password" name="j_password" type="password" class="form-control"/>
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn btn-default" wicket:message="value:login.submit">
-                        <wicket:message key="login.submit"/>
-                    </button>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" wicket:message="value:login.submit">
+                            <wicket:message key="login.submit"/>
+                        </button>
+                    </div>
                 </form>
             </div>
 
