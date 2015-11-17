@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org" lang="ru">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <body>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
 
-    <div class="container-fluid">
-        <header>
-            <nav class="navbar">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">
-                        Complitex
-                    </a>
-                </div>
+<div class="container-fluid">
+    <div id="header">
+        <nav class="navbar">
+            <div class="navbar-header">
+                <a class="navbar-brand" wicket:id="home">
+                    Complitex
+                </a>
+            </div>
 
-                <ul class="nav navbar-nav navbar-right">
+            <div class="navbar-right">
+                <ul class="nav navbar-nav">
                     <li>
-                        <span wicket:id="mainUserOrganizationPicker" class="navbar-text">HELLO</span>
+                        <span wicket:id="mainUserOrganizationPicker" class="navbar-text"></span>
                     </li>
                     <li>
                         <span wicket:id="current_user_fullname" class="navbar-text"></span>
@@ -35,49 +36,37 @@
                         </a>
                     </li>
                 </ul>
-            </nav>
-        </header>
+            </div>
+        </nav>
     </div>
 
-        <table border="0" cellspacing="0" cellpadding="0" width="100%">
-            <tr>
-                <td id="Header">
-                    <div>
-                        <a href="#" wicket:id="home">
-                            <span style="position:absolute; height: 85px; width:350px;"></span>
-                        </a>
-                    </div>
+    <aside id="menu" >
+        <button wicket:id="infoPanelButton">
+            <wicket:message key="main-sidebar.message"/>
+        </button>
 
-                    <div id="LoginForm">
-                        <table border="0" cellspacing="0" cellpadding="0" >
-                            <tr>
-                                <td>
-                                    <table>
-                                        <tr><td></td></tr>
-                                        <tr>
-                                            <td>
+        <ul wicket:id="infoPanel">
+            <li wicket:id="sidebar" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
+                    <span wicket:id="menu_title"></span>
+                </a>
 
-                                            </td>
-                                        </tr>
-                                        <tr><td></td></tr>
-                                    </table>
-                                </td>
-                                <td>
+                <ul class="dropdown-menu">
+                    <li wicket:id="menu_items">
+                        <a href="#" wicket:id="link"><span wicket:id="label"></span></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+</div>
 
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td id="TopPanel">
-                    <div wicket:id="infoPanelButton" id="ButtonMain" class="expanded">
-                        <div>
-                            <wicket:message key="main-sidebar.message"/>
-                        </div>
-                    </div>
-                    <div wicket:id="toolbar">
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+    <tr>
+        <td id="TopPanel">
+
+            <div wicket:id="toolbar">
                         <span wicket:id="commonPart">
                             <span wicket:id="commonButton"></span>
                         </span>
@@ -87,38 +76,17 @@
                         <span wicket:id="pagePart">
                             <span wicket:id="pageButton"></span>
                         </span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div wicket:id="infoPanel" id="LeftPanel">
-                        <div class="block LeftBlock" wicket:id="sidebar">
-                            <div wicket:id="menu_placeholder">[menu content will go here]</div>
-                            <wicket:fragment wicket:id="menu">
-                                <h2 class="expanded">
-                                    <div>
-                                        <span wicket:id="menu_title">
-                                        </span>
-                                    </div>
-                                </h2>
-                                <div class="bottom">
-                                    <div class="content">
-                                        <ul>
-                                            <li wicket:id="menu_items">
-                                                <a href="#" wicket:id="link"><span wicket:id="label"></span></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </wicket:fragment>
-                        </div>
-                    </div>
-                    <div id="Content" class="ContentCollapsed">
-                        <wicket:child/>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </body>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+
+            <div id="Content" class="ContentCollapsed">
+                <wicket:child/>
+            </div>
+        </td>
+    </tr>
+</table>
+</body>
 </html>

@@ -6767,6 +6767,9 @@ button.close {
 body {
   background: url('img/pageBg.jpg') repeat-x #E0E4E9;
 }
+#header {
+  max-height: 50px;
+}
 .navbar {
   border-bottom: 1px solid #C9D1D9;
 }
@@ -6798,4 +6801,13 @@ body {
   background-image: linear-gradient(to bottom, #1C95C8 0%, #027BAE 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff1c95c8', endColorstr='#ff027bae', GradientType=0);
+}
+#menu {
+  width: 180px;
+  bottom: 0;
+  float: left;
+  left: 15px;
+  position: absolute;
+  top: 62px;
+  transition: all 0.4s ease 0s;
 }

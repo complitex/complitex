@@ -1,6 +1,5 @@
 package org.complitex.template.web.template;
 
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -12,7 +11,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
@@ -82,7 +80,25 @@ public abstract class TemplatePage extends WebPage {
 
             @Override
             protected void populateItem(ListItem<ITemplateMenu> item) {
-                item.add(new TemplateMenu("menu_placeholder", "menu", this, item.getModelObject()));
+                ITemplateMenu menu = item.getModelObject();
+
+                item.add(new Label("menu_title", menu.getTitle(getLocale())));
+                item.add(new ListView<ITemplateLink>("menu_items", menu.getTemplateLinks(getLocale())) {
+
+                    @Override
+                    protected void populateItem(ListItem<ITemplateLink> item) {
+                        ITemplateLink templateLink = item.getModelObject();
+
+                        BookmarkablePageLink link = new BookmarkablePageLink<Class<? extends Page>>("link", templateLink.getPage(),
+                                templateLink.getParameters());
+                        if (!Strings.isEmpty(templateLink.getTagId())) {
+                            link.setMarkupId(templateLink.getTagId());
+                        }
+
+                        link.add(new Label("label", templateLink.getLabel(getLocale())));
+                        item.add(link);
+                    }
+                });
             }
         });
 
@@ -187,37 +203,6 @@ public abstract class TemplatePage extends WebPage {
 
     private List<ToolbarButton> getCommonButtons(String id) {
         return new ArrayList<>();
-    }
-
-    /**
-     * Боковая панель с меню, которое устанавливается в конфигурационном файле.
-     */
-    private class TemplateMenu extends Fragment {
-
-        private TemplateMenu(String id, String markupId, MarkupContainer markupProvider, ITemplateMenu menu) {
-            super(id, markupId, markupProvider);
-
-            if (!Strings.isEmpty(menu.getTagId())) {
-                setMarkupId(menu.getTagId());
-            }
-
-            add(new Label("menu_title", menu.getTitle(getLocale())));
-            add(new ListView<ITemplateLink>("menu_items", menu.getTemplateLinks(getLocale())) {
-
-                @Override
-                protected void populateItem(ListItem<ITemplateLink> item) {
-                    final ITemplateLink templateLink = item.getModelObject();
-                    BookmarkablePageLink link = new BookmarkablePageLink<Class<? extends Page>>("link", templateLink.getPage(),
-                            templateLink.getParameters());
-                    if (!Strings.isEmpty(templateLink.getTagId())) {
-                        link.setMarkupId(templateLink.getTagId());
-                    }
-
-                    link.add(new Label("label", templateLink.getLabel(getLocale())));
-                    item.add(link);
-                }
-            });
-        }
     }
 
     private List<ITemplateMenu> newTemplateMenus() {
