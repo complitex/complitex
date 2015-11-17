@@ -7,7 +7,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -109,10 +108,9 @@ public abstract class TemplatePage extends WebPage {
         //main user organization picker component
         add(MainUserOrganizationPickerFactory.create("mainUserOrganizationPicker", mainUserOrganizationModel));
 
-        add(new Form<Void>("exit") {
-
+        add(new Link("exit") {
             @Override
-            public void onSubmit() {
+            public void onClick() {
                 getTemplateWebApplication().logout();
             }
         }.setVisible(isUserAuthorized));

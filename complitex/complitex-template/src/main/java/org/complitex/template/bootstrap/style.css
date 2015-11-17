@@ -6767,10 +6767,11 @@ button.close {
 body {
   background: url('img/pageBg.jpg') repeat-x #E0E4E9;
 }
-#logo {
-  height: 85px;
-  vertical-align: top;
+.navbar {
   border-bottom: 1px solid #C9D1D9;
+}
+.navbar-right {
+  margin-right: auto;
 }
 .content {
   margin: 20px;

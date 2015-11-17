@@ -2,13 +2,39 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org" lang="ru">
     <head>
-        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
+
     <div class="container-fluid">
         <header>
-            <nav class="navbar navbar-right">
-                <span class="glyphicon glyphicon-log-in"></span>
+            <nav class="navbar">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">
+                        Complitex
+                    </a>
+                </div>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <span wicket:id="mainUserOrganizationPicker" class="navbar-text">HELLO</span>
+                    </li>
+                    <li>
+                        <span wicket:id="current_user_fullname" class="navbar-text"></span>
+                    </li>
+                    <li>
+                        <a wicket:id="profile" wicket:message="title:profile">
+                            <i class="glyphicon glyphicon-user"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a wicket:id="exit" wicket:message="title:exit">
+                            <i class="glyphicon glyphicon-log-out"></i>
+                        </a>
+                    </li>
+                </ul>
             </nav>
         </header>
     </div>
@@ -27,20 +53,17 @@
                             <tr>
                                 <td>
                                     <table>
-                                        <tr><td><span wicket:id="current_user_fullname"></span></td></tr>
+                                        <tr><td></td></tr>
                                         <tr>
                                             <td>
-                                                <div wicket:id="mainUserOrganizationPicker"></div>
+
                                             </td>
                                         </tr>
-                                        <tr><td><a wicket:id="profile"><wicket:message key="profile"/></a></td></tr>
+                                        <tr><td></td></tr>
                                     </table>
                                 </td>
                                 <td>
-                                    <form wicket:id="exit">
-                                        <input type="submit" wicket:message="value:exit" name="" class="buttonLogin"
-                                               tabindex="1000" />
-                                    </form>
+
                                 </td>
                             </tr>
                         </table>
