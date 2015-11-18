@@ -1,5 +1,6 @@
 package org.complitex.template.web.template;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -13,7 +14,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.PreferenceKey;
@@ -91,14 +91,16 @@ public abstract class TemplatePage extends WebPage {
 
                         BookmarkablePageLink link = new BookmarkablePageLink<Class<? extends Page>>("link", templateLink.getPage(),
                                 templateLink.getParameters());
-                        if (!Strings.isEmpty(templateLink.getTagId())) {
-                            link.setMarkupId(templateLink.getTagId());
-                        }
-
                         link.add(new Label("label", templateLink.getLabel(getLocale())));
+
                         item.add(link);
                     }
                 });
+
+                if (menu.getTemplateLinks(getLocale()).stream().filter(tl -> tl.getPage().equals(TemplatePage.this.getClass()))
+                        .findAny().isPresent()){
+                    item.add(AttributeModifier.append("class", "open"));
+                }
             }
         });
 
