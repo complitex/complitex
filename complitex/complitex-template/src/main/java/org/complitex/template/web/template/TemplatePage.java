@@ -3,7 +3,9 @@ package org.complitex.template.web.template;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -14,11 +16,14 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.resource.JQueryResourceReference;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.ResourceUtil;
+import org.complitex.template.metismenu.MetisMenuCssResourceReference;
+import org.complitex.template.metismenu.MetisMenuJavaScriptResourceReference;
 import org.complitex.template.web.component.MainUserOrganizationPickerFactory;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
@@ -51,7 +56,9 @@ public abstract class TemplatePage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-
+        response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
+        response.render(CssHeaderItem.forReference(MetisMenuCssResourceReference.INSTANCE));
+        response.render(JavaScriptHeaderItem.forReference(MetisMenuJavaScriptResourceReference.INSTANCE));
     }
 
     protected TemplatePage() {
@@ -82,8 +89,19 @@ public abstract class TemplatePage extends WebPage {
             protected void populateItem(ListItem<ITemplateMenu> item) {
                 ITemplateMenu menu = item.getModelObject();
 
-                item.add(new Label("menu_title", menu.getTitle(getLocale())));
-                item.add(new ListView<ITemplateLink>("menu_items", menu.getTemplateLinks(getLocale())) {
+                Link link = new Link("menu_link") {
+                    @Override
+                    public void onClick() {
+
+                    }
+                };
+                item.add(link);
+                link.add(new Label("menu_title", menu.getTitle(getLocale())));
+
+                WebMarkupContainer list = new WebMarkupContainer("list");
+                item.add(list);
+
+                list.add(new ListView<ITemplateLink>("menu_items", menu.getTemplateLinks(getLocale())) {
 
                     @Override
                     protected void populateItem(ListItem<ITemplateLink> item) {
@@ -96,10 +114,14 @@ public abstract class TemplatePage extends WebPage {
                         item.add(link);
                     }
                 });
-
-                if (menu.getTemplateLinks(getLocale()).stream().filter(tl -> tl.getPage().equals(TemplatePage.this.getClass()))
+//
+                if (menu.getTemplateLinks(getLocale()).stream()
+                        .filter(tl -> tl.getPage()
+                        .equals(TemplatePage.this.getClass()))
                         .findAny().isPresent()){
-                    item.add(AttributeModifier.append("class", "open"));
+                    item.add(AttributeModifier.append("class", "active"));
+                    list.add(AttributeModifier.replace("aria-expanded", "true"));
+                    link.add(AttributeModifier.replace("aria-expanded", "true"));
                 }
             }
         });

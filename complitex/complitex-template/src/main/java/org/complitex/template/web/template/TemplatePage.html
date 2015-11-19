@@ -7,13 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-
 <div class="container-fluid">
     <div id="header">
         <nav class="navbar">
             <div class="navbar-header">
                 <a class="navbar-brand" wicket:id="home">
-                    Complitex
+                    COMPLITEX
                 </a>
             </div>
 
@@ -40,45 +39,47 @@
         </nav>
     </div>
 
-    <aside id="menu" >
-        <nav class="navbar sidebar">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button wicket:id="infoPanelButton" class="navbar-toggle" data-toggle="collapse" data-target="#sidebar-menu">
-                        <span class="sr-only"><wicket:message key="main-sidebar.message"/></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
+    <aside id="menu">
+        <nav>
+            <div wicket:id="infoPanelButton" style="display: none"></div>
 
-                <div class="collapse navbar-collapse" id="sidebar-menu">
-                    <ul wicket:id="infoPanel" class="nav navbar-nav">
-                        <li wicket:id="sidebar" class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown">
-                                <span wicket:id="menu_title"></span>
-                                <span class="pull-right glyphicon glyphicon-chevron-down"></span>
-                            </a>
+          <!--  <div class="navbar-header">
+                <button wicket:id="infoPanelButton" class="navbar-toggle" data-toggle="collapse" data-target="#sidebar-menu">
+                    <span class="sr-only"><wicket:message key="main-sidebar.message"/></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>-->
 
-                            <ul class="dropdown-menu forAnimate">
-                                <li wicket:id="menu_items">
-                                    <a href="#" wicket:id="link"><span wicket:id="label"></span></a>
-                                </li>
-                            </ul>
+            <ul wicket:id="infoPanel" class="metismenu" id="sidebar-menu">
+                <li wicket:id="sidebar">
+                    <a wicket:id="menu_link">
+                        <span wicket:id="menu_title"></span>
+                        <span class="pull-right glyphicon glyphicon-menu-left"></span>
+                    </a>
+
+                    <ul wicket:id="list">
+                        <li wicket:id="menu_items">
+                            <a href="#" wicket:id="link"><span wicket:id="label"></span></a>
                         </li>
                     </ul>
-                </div>
-            </div>
+                </li>
+            </ul>
+            <script>
+                $(function() {
+                    $("#sidebar-menu").metisMenu({
+                        toggle: false
+                    });
+                });
+            </script>
         </nav>
     </aside>
 </div>
 
-
-<table border="0" cellspacing="0" cellpadding="0" width="100%">
-    <tr>
-        <td id="TopPanel">
-
-            <div wicket:id="toolbar">
+<div id="wrapper" class="container-fluid">
+    <div class="row">
+        <div wicket:id="toolbar">
                         <span wicket:id="commonPart">
                             <span wicket:id="commonButton"></span>
                         </span>
@@ -88,17 +89,12 @@
                         <span wicket:id="pagePart">
                             <span wicket:id="pageButton"></span>
                         </span>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
+        </div>
+        <div class="row">
+            <wicket:child/>
 
-            <div id="Content" class="ContentCollapsed">
-                <wicket:child/>
-            </div>
-        </td>
-    </tr>
-</table>
+        </div>
+    </div>
+</div>
 </body>
 </html>
