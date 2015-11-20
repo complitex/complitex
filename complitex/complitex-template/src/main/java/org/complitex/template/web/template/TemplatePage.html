@@ -43,14 +43,14 @@
         <nav>
             <div wicket:id="infoPanelButton" style="display: none"></div>
 
-          <!--  <div class="navbar-header">
-                <button wicket:id="infoPanelButton" class="navbar-toggle" data-toggle="collapse" data-target="#sidebar-menu">
-                    <span class="sr-only"><wicket:message key="main-sidebar.message"/></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>-->
+            <!--  <div class="navbar-header">
+                  <button wicket:id="infoPanelButton" class="navbar-toggle" data-toggle="collapse" data-target="#sidebar-menu">
+                      <span class="sr-only"><wicket:message key="main-sidebar.message"/></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+              </div>-->
 
             <ul wicket:id="infoPanel" class="metismenu" id="sidebar-menu">
                 <li wicket:id="sidebar">
@@ -78,22 +78,21 @@
 </div>
 
 <div id="wrapper" class="container-fluid">
-    <div class="row">
+    <div id="toolbar">
         <div wicket:id="toolbar">
-                        <span wicket:id="commonPart">
-                            <span wicket:id="commonButton"></span>
-                        </span>
-                        <span wicket:id="applicationPart">
-                            <span wicket:id="applicationButton"></span>
-                        </span>
-                        <span wicket:id="pagePart">
-                            <span wicket:id="pageButton"></span>
-                        </span>
+            <span wicket:id="commonPart">
+                <span wicket:id="commonButton"></span>
+            </span>
+            <span wicket:id="applicationPart">
+                <span wicket:id="applicationButton"></span>
+            </span>
+            <span wicket:id="pagePart">
+                <span wicket:id="pageButton"></span>
+            </span>
         </div>
-        <div class="row">
-            <wicket:child/>
-
-        </div>
+    </div>
+    <div id="content">
+        <wicket:child/>
     </div>
 </div>
 </body>

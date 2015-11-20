@@ -39,6 +39,7 @@ import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -70,17 +71,18 @@ public class UserList extends ScrollListPage {
         init();
     }
 
+    @SuppressWarnings("Duplicates")
     private void init() {
         add(new Label("title", new ResourceModel("title")));
 
-        UserFilter filter = (UserFilter) getFilterObject(userBean.newUserFilter());
-        final IModel<UserFilter> filterModel = new Model<UserFilter>(filter);
+        UserFilter filter = getFilterObject(userBean.newUserFilter());
+        final IModel<UserFilter> filterModel = new Model<>(filter);
 
         final WebMarkupContainer content = new WebMarkupContainer("content");
         content.setOutputMarkupPlaceholderTag(true);
         add(content);
 
-        final Form<Void> filterForm = new Form<Void>("filter_form");
+        final Form<Void> filterForm = new Form<>("filter_form");
         content.add(filterForm);
 
         filterForm.add(new AjaxLink<Void>("reset") {
@@ -110,11 +112,11 @@ public class UserList extends ScrollListPage {
             }
         });
 
-        filterForm.add(new TextField<String>("login", new PropertyModel<String>(filterModel, "login")));
+        filterForm.add(new TextField<>("login", new PropertyModel<>(filterModel, "login")));
         filterForm.add(new AttributeFiltersPanel("user_info", filter.getAttributeFilters()));
-        filterForm.add(new DropDownChoice<UserGroup.GROUP_NAME>("usergroups",
-                new PropertyModel<UserGroup.GROUP_NAME>(filterModel, "groupName"),
-                new ListModel<UserGroup.GROUP_NAME>(Arrays.asList(UserGroup.GROUP_NAME.values())),
+        filterForm.add(new DropDownChoice<>("usergroups",
+                new PropertyModel<>(filterModel, "groupName"),
+                new ListModel<>(Arrays.asList(UserGroup.GROUP_NAME.values())),
                 new IChoiceRenderer<UserGroup.GROUP_NAME>() {
 
                     @Override
@@ -129,11 +131,11 @@ public class UserList extends ScrollListPage {
 
                     @Override
                     public UserGroup.GROUP_NAME getObject(String id, IModel<? extends List<? extends UserGroup.GROUP_NAME>> choices) {
-                        return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().get();
+                        return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().orElse(null);
                     }
                 }).setNullValid(true));
         filterForm.add(new UserOrganizationPicker("organization",
-                new PropertyModel<Long>(filterModel, "organizationObjectId")));
+                new PropertyModel<>(filterModel, "organizationObjectId")));
 
         final DataProvider<User> dataProvider = new DataProvider<User>() {
 
@@ -236,7 +238,7 @@ public class UserList extends ScrollListPage {
 
     @Override
     protected List<ToolbarButton> getToolbarButtons(String id) {
-        return Arrays.asList((ToolbarButton) new AddUserButton(id) {
+        return Collections.singletonList((ToolbarButton) new AddUserButton(id) {
 
             @Override
             protected void onClick() {

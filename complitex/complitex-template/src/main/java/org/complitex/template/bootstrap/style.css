@@ -2546,7 +2546,7 @@ output {
   background-color: #fff;
   background-image: none;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 2px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
@@ -6767,6 +6767,20 @@ button.close {
 body {
   background: url('img/pageBg.jpg') repeat-x #E0E4E9;
 }
+h1 {
+  color: #007AAE;
+  font-size: 20px;
+  font-weight: normal;
+  margin: 0;
+  padding: 0 0 10px 0;
+}
+h2 {
+  color: #273540;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  padding: 5px 0 10px 0;
+}
 #header {
   max-height: 50px;
 }
@@ -6802,13 +6816,26 @@ body {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff1c95c8', endColorstr='#ff027bae', GradientType=0);
 }
+.btn-filter {
+  width: 100px;
+  color: #FFFFFF;
+  font-size: 10px;
+  text-transform: uppercase;
+  border: 1px solid #58646E;
+  border-radius: 0;
+  background-image: -webkit-linear-gradient(top, #AAB5BE 0%, #9AA4AD 100%);
+  background-image: -o-linear-gradient(top, #AAB5BE 0%, #9AA4AD 100%);
+  background-image: linear-gradient(to bottom, #AAB5BE 0%, #9AA4AD 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffaab5be', endColorstr='#ff9aa4ad', GradientType=0);
+}
 #menu {
   width: 200px;
   bottom: 0;
   float: left;
   left: 15px;
   position: absolute;
-  top: 62px;
+  top: 68px;
 }
 #sidebar-menu {
   padding: 0;
@@ -6842,11 +6869,24 @@ body {
   display: block;
 }
 #wrapper {
-  margin: 0 0 0 260px;
-  padding: 0;
-  background: #f1f3f6;
-  border-left: 1px solid #e4e5e7;
+  margin-left: 216px;
   transition: all 0.4s ease 0s;
   position: relative;
   min-height: 100%;
+}
+#toolbar {
+  margin-bottom: 10px;
+}
+.table-filter > thead:first-child > tr:first-child > th {
+  color: #007AAE;
+  border-top: 1px solid #667584;
+  border-bottom: 1px solid #667584;
+  background-color: #CBD2D8;
+  text-align: center;
+  vertical-align: middle;
+}
+.table-filter > thead > tr > td {
+  border-bottom: 1px solid #667584;
+  text-align: center;
+  vertical-align: middle;
 }
