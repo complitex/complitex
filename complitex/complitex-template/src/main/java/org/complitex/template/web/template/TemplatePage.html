@@ -40,8 +40,12 @@
     </div>
 
     <aside id="menu">
-        <nav>
-            <div wicket:id="infoPanelButton" style="display: none"></div>
+        <nav class="panel panel-default">
+            <div class="panel-heading">
+                <h2 wicket:id="infoPanelButton">
+                    <wicket:message key="main_sidebar"/>
+                </h2>
+            </div>
 
             <!--  <div class="navbar-header">
                   <button wicket:id="infoPanelButton" class="navbar-toggle" data-toggle="collapse" data-target="#sidebar-menu">
@@ -52,14 +56,14 @@
                   </button>
               </div>-->
 
-            <ul wicket:id="infoPanel" class="metismenu" id="sidebar-menu">
+            <ul wicket:id="infoPanel" class="metismenu panel-body" id="sidebar-menu">
                 <li wicket:id="sidebar">
                     <a wicket:id="menu_link">
                         <span wicket:id="menu_title"></span>
                         <span class="pull-right glyphicon glyphicon-menu-left"></span>
                     </a>
 
-                    <ul wicket:id="list">
+                    <ul wicket:id="list" class="collapse">
                         <li wicket:id="menu_items">
                             <a href="#" wicket:id="link"><span wicket:id="label"></span></a>
                         </li>

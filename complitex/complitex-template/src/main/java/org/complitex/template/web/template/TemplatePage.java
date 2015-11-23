@@ -121,6 +121,7 @@ public abstract class TemplatePage extends WebPage {
                         .findAny().isPresent()){
                     item.add(AttributeModifier.append("class", "active"));
                     list.add(AttributeModifier.replace("aria-expanded", "true"));
+                    list.add(AttributeModifier.append("class", "in"));
                     link.add(AttributeModifier.replace("aria-expanded", "true"));
                 }
             }

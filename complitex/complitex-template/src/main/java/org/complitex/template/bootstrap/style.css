@@ -6771,15 +6771,11 @@ h1 {
   color: #007AAE;
   font-size: 20px;
   font-weight: normal;
-  margin: 0;
-  padding: 0 0 10px 0;
 }
 h2 {
   color: #273540;
   font-size: 16px;
   font-weight: bold;
-  margin: 0;
-  padding: 5px 0 10px 0;
 }
 #header {
   max-height: 50px;
@@ -6789,6 +6785,13 @@ h2 {
 }
 .navbar-right {
   margin-right: auto;
+}
+.navbar-brand {
+  font-weight: bold;
+  font-size: 25px;
+  width: 230px;
+  text-align: center;
+  color: #273540;
 }
 .content {
   margin: 20px;
@@ -6805,6 +6808,20 @@ h2 {
   background-image: linear-gradient(to bottom, #EAEDEF 0%, #C4CDD4 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffeaedef', endColorstr='#ffc4cdd4', GradientType=0);
+}
+.panel-heading > h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 15px;
+  color: inherit;
+}
+.panel-heading > h2 > a,
+.panel-heading > h2 > small,
+.panel-heading > h2 > .small,
+.panel-heading > h2 > small > a,
+.panel-heading > h2 > .small > a {
+  color: inherit;
 }
 .btn-primary {
   font-size: 12px;
@@ -6830,19 +6847,21 @@ h2 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffaab5be', endColorstr='#ff9aa4ad', GradientType=0);
 }
 #menu {
-  width: 200px;
+  width: 230px;
   bottom: 0;
   float: left;
   left: 15px;
   position: absolute;
   top: 68px;
 }
+#menu > nav {
+  border-right: 1px solid #667584;
+}
 #sidebar-menu {
   padding: 0;
 }
 #sidebar-menu > li {
   display: block;
-  background-color: #D8DEE3;
   border-bottom: 1px solid #C9D1D9;
   cursor: pointer;
 }
@@ -6869,13 +6888,242 @@ h2 {
   display: block;
 }
 #wrapper {
-  margin-left: 216px;
+  margin-left: 246px;
   transition: all 0.4s ease 0s;
   position: relative;
   min-height: 100%;
 }
-#toolbar {
-  margin-bottom: 10px;
+.table-filter {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 18px;
+}
+.table-filter > thead > tr > th,
+.table-filter > tbody > tr > th,
+.table-filter > tfoot > tr > th,
+.table-filter > thead > tr > td,
+.table-filter > tbody > tr > td,
+.table-filter > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+.table-filter > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+}
+.table-filter > caption + thead > tr:first-child > th,
+.table-filter > colgroup + thead > tr:first-child > th,
+.table-filter > thead:first-child > tr:first-child > th,
+.table-filter > caption + thead > tr:first-child > td,
+.table-filter > colgroup + thead > tr:first-child > td,
+.table-filter > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+.table-filter > tbody + tbody {
+  border-top: 2px solid #ddd;
+}
+.table-filter .table {
+  background-color: #f8f8f8;
+}
+.table-filter > tbody > tr:hover {
+  background-color: #f5f5f5;
+}
+.table-filter > thead > tr > th,
+.table-filter > tbody > tr > th,
+.table-filter > tfoot > tr > th,
+.table-filter > thead > tr > td,
+.table-filter > tbody > tr > td,
+.table-filter > tfoot > tr > td {
+  padding: 5px;
+}
+.table-filter > thead input {
+  display: block;
+  width: 100%;
+  height: 32px;
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #555555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+.table-filter > thead input:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.table-filter > thead input::-moz-placeholder {
+  color: #999;
+  opacity: 1;
+}
+.table-filter > thead input:-ms-input-placeholder {
+  color: #999;
+}
+.table-filter > thead input::-webkit-input-placeholder {
+  color: #999;
+}
+.table-filter > thead input[disabled],
+.table-filter > thead input[readonly],
+fieldset[disabled] .table-filter > thead input {
+  background-color: #eeeeee;
+  opacity: 1;
+}
+.table-filter > thead input[disabled],
+fieldset[disabled] .table-filter > thead input {
+  cursor: not-allowed;
+}
+textarea.table-filter > thead input {
+  height: auto;
+}
+select.table-filter > thead input {
+  height: 30px;
+  line-height: 30px;
+}
+textarea.table-filter > thead input,
+select[multiple].table-filter > thead input {
+  height: auto;
+}
+.table-filter > thead select {
+  display: block;
+  width: 100%;
+  height: 32px;
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #555555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+.table-filter > thead select:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.table-filter > thead select::-moz-placeholder {
+  color: #999;
+  opacity: 1;
+}
+.table-filter > thead select:-ms-input-placeholder {
+  color: #999;
+}
+.table-filter > thead select::-webkit-input-placeholder {
+  color: #999;
+}
+.table-filter > thead select[disabled],
+.table-filter > thead select[readonly],
+fieldset[disabled] .table-filter > thead select {
+  background-color: #eeeeee;
+  opacity: 1;
+}
+.table-filter > thead select[disabled],
+fieldset[disabled] .table-filter > thead select {
+  cursor: not-allowed;
+}
+textarea.table-filter > thead select {
+  height: auto;
+}
+select.table-filter > thead select {
+  height: 30px;
+  line-height: 30px;
+}
+textarea.table-filter > thead select,
+select[multiple].table-filter > thead select {
+  height: auto;
+}
+.table-filter > thead button {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 100px;
+  color: #FFFFFF;
+  font-size: 10px;
+  text-transform: uppercase;
+  border: 1px solid #58646E;
+  border-radius: 0;
+  background-image: -webkit-linear-gradient(top, #AAB5BE 0%, #9AA4AD 100%);
+  background-image: -o-linear-gradient(top, #AAB5BE 0%, #9AA4AD 100%);
+  background-image: linear-gradient(to bottom, #AAB5BE 0%, #9AA4AD 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffaab5be', endColorstr='#ff9aa4ad', GradientType=0);
+}
+.table-filter > thead button:focus,
+.table-filter > thead button:active:focus,
+.table-filter > thead button.active:focus,
+.table-filter > thead button.focus,
+.table-filter > thead button:active.focus,
+.table-filter > thead button.active.focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.table-filter > thead button:hover,
+.table-filter > thead button:focus,
+.table-filter > thead button.focus {
+  color: #333;
+  text-decoration: none;
+}
+.table-filter > thead button:active,
+.table-filter > thead button.active {
+  outline: 0;
+  background-image: none;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.table-filter > thead button.disabled,
+.table-filter > thead button[disabled],
+fieldset[disabled] .table-filter > thead button {
+  cursor: not-allowed;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+a.table-filter > thead button.disabled,
+fieldset[disabled] a.table-filter > thead button {
+  pointer-events: none;
 }
 .table-filter > thead:first-child > tr:first-child > th {
   color: #007AAE;
@@ -6889,4 +7137,252 @@ h2 {
   border-bottom: 1px solid #667584;
   text-align: center;
   vertical-align: middle;
+}
+#form-template input {
+  display: block;
+  width: 100%;
+  height: 32px;
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #555555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+#form-template input:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+#form-template input::-moz-placeholder {
+  color: #999;
+  opacity: 1;
+}
+#form-template input:-ms-input-placeholder {
+  color: #999;
+}
+#form-template input::-webkit-input-placeholder {
+  color: #999;
+}
+#form-template input[disabled],
+#form-template input[readonly],
+fieldset[disabled] #form-template input {
+  background-color: #eeeeee;
+  opacity: 1;
+}
+#form-template input[disabled],
+fieldset[disabled] #form-template input {
+  cursor: not-allowed;
+}
+textarea#form-template input {
+  height: auto;
+}
+select#form-template input {
+  height: 30px;
+  line-height: 30px;
+}
+textarea#form-template input,
+select[multiple]#form-template input {
+  height: auto;
+}
+#form-template select {
+  display: block;
+  width: 100%;
+  height: 32px;
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #555555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+#form-template select:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+#form-template select::-moz-placeholder {
+  color: #999;
+  opacity: 1;
+}
+#form-template select:-ms-input-placeholder {
+  color: #999;
+}
+#form-template select::-webkit-input-placeholder {
+  color: #999;
+}
+#form-template select[disabled],
+#form-template select[readonly],
+fieldset[disabled] #form-template select {
+  background-color: #eeeeee;
+  opacity: 1;
+}
+#form-template select[disabled],
+fieldset[disabled] #form-template select {
+  cursor: not-allowed;
+}
+textarea#form-template select {
+  height: auto;
+}
+select#form-template select {
+  height: 30px;
+  line-height: 30px;
+}
+textarea#form-template select,
+select[multiple]#form-template select {
+  height: auto;
+}
+#form-template button {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background-image: -webkit-linear-gradient(top, #1C95C8 0%, #027BAE 100%);
+  background-image: -o-linear-gradient(top, #1C95C8 0%, #027BAE 100%);
+  background-image: linear-gradient(to bottom, #1C95C8 0%, #027BAE 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff1c95c8', endColorstr='#ff027bae', GradientType=0);
+}
+#form-template button:focus,
+#form-template button:active:focus,
+#form-template button.active:focus,
+#form-template button.focus,
+#form-template button:active.focus,
+#form-template button.active.focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+#form-template button:hover,
+#form-template button:focus,
+#form-template button.focus {
+  color: #333;
+  text-decoration: none;
+}
+#form-template button:active,
+#form-template button.active {
+  outline: 0;
+  background-image: none;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+#form-template button.disabled,
+#form-template button[disabled],
+fieldset[disabled] #form-template button {
+  cursor: not-allowed;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+a#form-template button.disabled,
+fieldset[disabled] a#form-template button {
+  pointer-events: none;
+}
+#form-template button:focus,
+#form-template button.focus {
+  color: #fff;
+  background-color: #286090;
+  border-color: #122b40;
+}
+#form-template button:hover {
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74;
+}
+#form-template button:active,
+#form-template button.active,
+.open > .dropdown-toggle#form-template button {
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74;
+}
+#form-template button:active:hover,
+#form-template button.active:hover,
+.open > .dropdown-toggle#form-template button:hover,
+#form-template button:active:focus,
+#form-template button.active:focus,
+.open > .dropdown-toggle#form-template button:focus,
+#form-template button:active.focus,
+#form-template button.active.focus,
+.open > .dropdown-toggle#form-template button.focus {
+  color: #fff;
+  background-color: #204d74;
+  border-color: #122b40;
+}
+#form-template button:active,
+#form-template button.active,
+.open > .dropdown-toggle#form-template button {
+  background-image: none;
+}
+#form-template button.disabled,
+#form-template button[disabled],
+fieldset[disabled] #form-template button,
+#form-template button.disabled:hover,
+#form-template button[disabled]:hover,
+fieldset[disabled] #form-template button:hover,
+#form-template button.disabled:focus,
+#form-template button[disabled]:focus,
+fieldset[disabled] #form-template button:focus,
+#form-template button.disabled.focus,
+#form-template button[disabled].focus,
+fieldset[disabled] #form-template button.focus,
+#form-template button.disabled:active,
+#form-template button[disabled]:active,
+fieldset[disabled] #form-template button:active,
+#form-template button.disabled.active,
+#form-template button[disabled].active,
+fieldset[disabled] #form-template button.active {
+  background-color: #337ab7;
+  border-color: #2e6da4;
+}
+#form-template button .badge {
+  color: #337ab7;
+  background-color: #fff;
 }

@@ -68,12 +68,12 @@ public class UserEdit extends FormTemplatePage {
     private StringLocaleBean stringLocaleBean;
 
     public UserEdit() {
-        super();
+        super(new ResourceModel("title"));
         init(null, false, true);
     }
 
     public UserEdit(PageParameters parameters) {
-        super();
+        super(new ResourceModel("title"));
         init(parameters.get("user_id").toOptionalLong(), "copy".equals(parameters.get("action").toString()), parameters.get("using_address").toBoolean(true));
     }
 
