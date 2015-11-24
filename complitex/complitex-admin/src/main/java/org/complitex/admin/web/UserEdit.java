@@ -36,7 +36,10 @@ import org.complitex.template.web.template.FormTemplatePage;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 import static org.complitex.common.entity.UserGroup.GROUP_NAME.*;
 import static org.complitex.common.web.DictionaryFwSession.*;
@@ -158,7 +161,7 @@ public class UserEdit extends FormTemplatePage {
 
         //Группы привилегий
         CheckGroup<UserGroup> usergroups = new CheckGroup<>("usergroups",
-                new PropertyModel<Collection<UserGroup>>(userModel, "userGroups"));
+                new PropertyModel<>(userModel, "userGroups"));
 
         usergroups.add(new Check<>("ADMINISTRATORS", getUserGroup(userModel.getObject(), ADMINISTRATORS)));
         usergroups.add(new Check<>("EMPLOYEES", getUserGroup(userModel.getObject(), EMPLOYEES)));
