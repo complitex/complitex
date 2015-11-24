@@ -1,34 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns:wicket>
-    <head>
-        <title></title>
-    </head>
-    <body>
-        <wicket:panel>
-            <div wicket:id="complexAttributesBefore"></div>
+<!DOCTYPE html>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+    <div wicket:id="complexAttributesBefore"></div>
 
-            <table class="tbForm">
-                <tr wicket:id="simpleAttributes">
-                    <th nowrap="nowrap">
-                        <wicket:container wicket:id="label"/><wicket:container wicket:id="required"><b class="blue">*</b></wicket:container>:
-                    </th>
-                    <td nowrap="nowrap">
-                        <div wicket:id="input"></div>
-                    </td>
-                </tr>
+    <div wicket:id="simpleAttributes" class="form-group">
+        <label class="col-sm-2 control-label">
+            <wicket:container wicket:id="label"/><wicket:container wicket:id="required"><b class="blue">*</b></wicket:container>
+        </label>
+        <div wicket:id="input" class="col-sm-4"></div>
+    </div>
 
-                <tr wicket:id="parentContainer">
-                    <th nowrap="nowrap">
-                        <wicket:message key="parent"/><b class="blue">*</b>:
-                    </th>
-                    <td nowrap="nowrap">
-                        <span wicket:id="parentSearch"></span>
-                    </td>
-                </tr>
-            </table>
-            
-            <div wicket:id="complexAttributesAfter"></div>
-        </wicket:panel>
-    </body>
-</html>
+    <div wicket:id="parentContainer">
+        <label class="col-sm-2 control-label">
+            <wicket:message key="parent"/><b class="blue">*</b>
+        </label>
+        <div class="col-sm-4">
+            <span wicket:id="parentSearch"></span>
+        </div>
+    </div>
+
+    <div wicket:id="complexAttributesAfter"></div>
+</wicket:panel>

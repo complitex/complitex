@@ -6780,7 +6780,7 @@ h2 {
 .navbar {
   border-bottom: 1px solid #C9D1D9;
 }
-#header > .navbar {
+header > .navbar {
   height: 70px;
 }
 .navbar-right {

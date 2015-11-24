@@ -1,21 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<body>
-<wicket:panel>
-    <table class="tbForm">
-        <tr>
-            <th><wicket:message key="last_name"/><b class="blue">*</b>:</th>
-            <td><div wicket:id="last_name"></div></td>
-        </tr>
-        <tr>
-            <th><wicket:message key="first_name"/><b class="blue">*</b>:</th>
-            <td><div wicket:id="first_name"></div></td>
-        </tr>
-        <tr>
-            <th><wicket:message key="middle_name"/><b class="blue">*</b>:</th>
-            <td><div wicket:id="middle_name"></div></td>
-        </tr>
-    </table>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            <wicket:message key="last_name"/><b class="blue">*</b>
+        </label>
+        <div wicket:id="last_name" class="col-sm-4"></div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            <wicket:message key="first_name"/><b class="blue">*</b>
+        </label>
+        <div wicket:id="first_name" class="col-sm-4"></div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            <wicket:message key="middle_name"/><b class="blue">*</b>
+        </label>
+        <div wicket:id="middle_name" class="col-sm-4"></div>
+    </div>
 </wicket:panel>
-</body>
-</html>
