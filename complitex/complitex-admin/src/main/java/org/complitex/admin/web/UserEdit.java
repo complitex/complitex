@@ -4,8 +4,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
@@ -160,8 +160,7 @@ public class UserEdit extends FormTemplatePage {
         form.add(new LocalePicker("locale", localeModel, false));
 
         //Группы привилегий
-        CheckGroup<UserGroup> usergroups = new CheckGroup<>("usergroups",
-                new PropertyModel<>(userModel, "userGroups"));
+        CheckGroup<UserGroup> usergroups = new CheckGroup<>("usergroups",new PropertyModel<>(userModel, "userGroups"));
 
         usergroups.add(new Check<>("ADMINISTRATORS", getUserGroup(userModel.getObject(), ADMINISTRATORS)));
         usergroups.add(new Check<>("EMPLOYEES", getUserGroup(userModel.getObject(), EMPLOYEES)));
@@ -218,7 +217,7 @@ public class UserEdit extends FormTemplatePage {
 
                 item.add(new Radio<>("radio", new Model<>(item.getIndex())));
                 item.add(new OrganizationIdPicker("organizationObjectId",
-                        new PropertyModel<Long>(userOrganization, "organizationObjectId"), USER_ORGANIZATION_TYPE));
+                        new PropertyModel<>(userOrganization, "organizationObjectId"), USER_ORGANIZATION_TYPE));
                 item.add(new AjaxLink<Void>("delete") {
 
                     @Override
@@ -264,7 +263,7 @@ public class UserEdit extends FormTemplatePage {
         );
 
         //Сохранить
-        IndicatingAjaxButton save = new IndicatingAjaxButton("save") {
+        AjaxButton save = new AjaxButton("save") {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

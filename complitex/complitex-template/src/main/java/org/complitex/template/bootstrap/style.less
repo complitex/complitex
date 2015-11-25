@@ -74,6 +74,7 @@ header > .navbar{
 }
 
 .btn-filter{
+  .btn;
   width: 100px;
   color: #FFFFFF;
   font-size: 10px;
@@ -180,7 +181,12 @@ header > .navbar{
   vertical-align: middle;
 }
 
-#form-template input{
+#form-template input[type="text"]{
+  .form-control;
+  .input-sm;
+}
+
+#form-template input[type="password"]{
   .form-control;
   .input-sm;
 }
@@ -193,6 +199,14 @@ header > .navbar{
 #form-template button{
   .btn;
   .btn-primary;
+}
+
+#form-template li{
+  list-style: none;
+}
+
+#form-template ul{
+  padding-left: 0;
 }
 
 

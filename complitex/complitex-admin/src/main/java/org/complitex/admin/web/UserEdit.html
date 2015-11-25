@@ -35,73 +35,58 @@
 
         <div class="form-group">
             <label class="col-sm-2 control-label"><wicket:message key="usergroup"/></label>
+            <div class="col-sm-10">
+                <div wicket:id="usergroups">
+                    <ul>
+                        <li>
+                            <input type="checkbox" wicket:id="ADMINISTRATORS"/>
+                            <wicket:message key="ADMINISTRATORS"/>
+                        </li>
+                        <li>
+                            <input type="checkbox" wicket:id="EMPLOYEES"/>
+                            <wicket:message key="EMPLOYEES"/>
+                        </li>
+                        <li>
+                            <input type="checkbox" wicket:id="EMPLOYEES_CHILD_VIEW"/>
+                            <wicket:message key="EMPLOYEES_CHILD_VIEW"/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div>
-            <table class="tbForm">
-                <tbody>
-                <tr>
-                    <th>:</th>
-                    <td>
-                        <div wicket:id="usergroups">
-                            <ul>
-                                <li>
-                                    <input type="checkbox" wicket:id="ADMINISTRATORS"/>
-                                    <wicket:message key="ADMINISTRATORS"/>
-                                </li>
-                                <li>
-                                    <input type="checkbox" wicket:id="EMPLOYEES"/>
-                                    <wicket:message key="EMPLOYEES"/>
-                                </li>
-                                <li>
-                                    <input type="checkbox" wicket:id="EMPLOYEES_CHILD_VIEW"/>
-                                    <wicket:message key="EMPLOYEES_CHILD_VIEW"/>
-                                </li>
-                            </ul>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><wicket:message key="organizations"/></label>
+            <div class="col-sm-10">
+                <div wicket:id="organizationContainer">
+                    <div wicket:id="organizationGroup">
+                        <div wicket:id="userOrganizations">
+                            <input type="radio" wicket:id="radio"/>
+                            <span wicket:id="organizationObjectId"></span>
+                            <a wicket:id="delete"><wicket:message key="delete"/></a>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th><wicket:message key="organizations"/>:</th>
-                    <td>
-                        <div wicket:id="organizationContainer">
-                            <div wicket:id="organizationGroup">
-                                <table>
-                                    <tr wicket:id="userOrganizations">
-                                        <td><input type="radio" wicket:id="radio"/></td>
-                                        <td><div wicket:id="organizationObjectId"></div></td>
-                                        <td>&#9;&#9;
-                                            <a wicket:id="delete">
-                                                <wicket:message key="delete"/>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <a wicket:id="addOrganization"><wicket:message key="add"/></a>
-                    </td>
-                </tr>
-                <tr wicket:id="addressContainer">
-                    <th><wicket:message key="default_address"/>:</th>
-                    <td><span wicket:id="searchComponent"></span>
-                        <span>
-                            <input type="checkbox" wicket:id="use_default_address"/>
-                            <wicket:message key="use_default_address"/>
-                        </span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    </div>
+                </div>
+                <a wicket:id="addOrganization"><wicket:message key="add"/></a>
+            </div>
         </div>
 
-        <div style="padding-top: 20px">
-            <input type="submit" class="btnMiddle" wicket:message="value:save" wicket:id="save"/>
-            <input type="button" class="btnMiddle" wicket:message="value:cancel" wicket:id="cancel"/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><wicket:message key="default_address"/></label>
+            <div class="col-sm-10" wicket:id="addressContainer">
+                <span wicket:id="searchComponent"></span>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" wicket:id="use_default_address"/><wicket:message key="use_default_address"/>
+                    </label>
+                </div>
+            </div>
         </div>
 
-
-
+        <div class="col-sm-offset-2 col-sm-10">
+            <button class="btn btn-default" wicket:id="save"><wicket:message key="save"/></button>
+            <button class="btn btn-default" wicket:id="cancel"><wicket:message key="cancel"/></button>
+        </div>
     </form>
 </wicket:extend>
 </body>
