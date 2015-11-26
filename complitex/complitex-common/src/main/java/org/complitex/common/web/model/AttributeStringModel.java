@@ -2,6 +2,7 @@ package org.complitex.common.web.model;
 
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.StringCulture;
 import org.complitex.common.util.Locales;
 
 /**
@@ -17,7 +18,9 @@ public class AttributeStringModel implements IModel<String>{
 
     @Override
     public String getObject() {
-        return attribute.getStringCulture(Locales.getSystemLocaleId()).getValue();
+        StringCulture s = attribute.getStringCulture(Locales.getSystemLocaleId());
+
+        return s != null ? s.getValue() : null;
     }
 
     @Override
