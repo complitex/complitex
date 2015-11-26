@@ -207,18 +207,18 @@ public class AddressCorrectionInputPanel extends Panel {
         streetContainer.add(streetTypeSelect);
 
         //Street
-        streetContainer.add(new TextField<>("street", new PropertyModel<String>(correction, "correction")).setVisible(isStreet));
+        streetContainer.add(new TextField<>("street", new PropertyModel<>(correction, "correction")).setVisible(isStreet));
 
         //Building
-        buildingContainer.add(new TextField<>("building", new PropertyModel<String>(correction, "correction")));
+        buildingContainer.add(new TextField<>("building", new PropertyModel<>(correction, "correction")));
 
         //Building corp
-        buildingCorpContainer.add(new TextField<>("buildingCorp", new PropertyModel<String>(correction, "correctionCorp")));
+        buildingCorpContainer.add(new TextField<>("buildingCorp", new PropertyModel<>(correction, "correctionCorp")));
 
         //Apartment
-        apartmentContainer.add(new TextField<>("apartment", new PropertyModel<String>(correction, "correction")));
+        apartmentContainer.add(new TextField<>("apartment", new PropertyModel<>(correction, "correction")));
     
         //Room
-        roomContainer.add(new TextField<>("room", new PropertyModel<String>(correction, "correction")));
+        roomContainer.add(new TextField<>("room", new PropertyModel<>(correction, "correction")));
     }
 }
