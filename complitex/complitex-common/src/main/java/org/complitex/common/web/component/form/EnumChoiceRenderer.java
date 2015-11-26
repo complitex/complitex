@@ -32,6 +32,6 @@ public class EnumChoiceRenderer<T extends Enum<T>> implements IChoiceRenderer<T>
 
     @Override
     public T getObject(String id, IModel<? extends List<? extends T>> choices) {
-        return choices.getObject().stream().filter(c -> id.equals(c.ordinal() + "")).findAny().get();
+        return choices.getObject().stream().filter(c -> id.equals(c.ordinal() + "")).findAny().orElse(null);
     }
 }

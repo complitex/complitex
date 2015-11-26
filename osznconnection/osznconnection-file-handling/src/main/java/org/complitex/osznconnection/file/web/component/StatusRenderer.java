@@ -32,6 +32,6 @@ public class StatusRenderer implements IChoiceRenderer<RequestStatus> {
 
     @Override
     public RequestStatus getObject(String id, IModel<? extends List<? extends RequestStatus>> choices) {
-        return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().get();
+        return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().orElse(null);
     }
 }

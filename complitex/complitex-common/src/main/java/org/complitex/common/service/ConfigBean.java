@@ -71,7 +71,7 @@ public class ConfigBean extends AbstractBean{
 
         for (IConfig c : getConfigs()){
             if (!map.containsKey(c.getGroupKey())){
-                map.put(c.getGroupKey(), new ArrayList<IConfig>());
+                map.put(c.getGroupKey(), new ArrayList<>());
             }
 
             map.get(c.getGroupKey()).add(c);

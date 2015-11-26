@@ -41,7 +41,7 @@ public final class ResourceUtil {
         return MessageFormat.format(getResourceBundle(bundle, locale).getString(key), parameters);
     }
 
-    private static ResourceBundle getResourceBundle(String bundle, Locale locale) {
+    public static ResourceBundle getResourceBundle(String bundle, Locale locale) {
         try {
             return ResourceBundle.getBundle(bundle, locale);
         } catch (MissingResourceException e) {

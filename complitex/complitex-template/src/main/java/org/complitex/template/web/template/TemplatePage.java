@@ -296,7 +296,7 @@ public abstract class TemplatePage extends WebPage {
 
         for (String bundle : resourceBundle) {
             try {
-                return ResourceUtil.getString(bundle, key, getLocale());
+                return ResourceUtil.getResourceBundle(bundle, getLocale()).getString(key);
             } catch (MissingResourceException e) {
                 //resource is not found
             }

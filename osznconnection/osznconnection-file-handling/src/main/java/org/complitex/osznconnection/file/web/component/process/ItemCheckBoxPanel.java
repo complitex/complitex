@@ -52,7 +52,7 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
             }
         };
 
-        checkBox.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        checkBox.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

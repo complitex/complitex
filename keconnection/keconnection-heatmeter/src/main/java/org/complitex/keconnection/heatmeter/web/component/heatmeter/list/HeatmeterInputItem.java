@@ -43,7 +43,7 @@ public final class HeatmeterInputItem extends Panel {
 
         TextField<BigDecimal> input = new TextField<BigDecimal>("input", inputModel);
         input.setVisible(editable);
-        input.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        input.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

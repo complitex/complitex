@@ -448,7 +448,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
         form.add(optionContainer);
 
         optionContainer.add(new CheckBox("update_pu_account", new Model<Boolean>(
-                getSessionParameter(GlobalOptions.UPDATE_PU_ACCOUNT))).add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                getSessionParameter(GlobalOptions.UPDATE_PU_ACCOUNT))).add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

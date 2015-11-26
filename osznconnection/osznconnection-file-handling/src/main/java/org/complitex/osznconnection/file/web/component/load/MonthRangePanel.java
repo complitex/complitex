@@ -36,7 +36,7 @@ public final class MonthRangePanel extends FormComponentPanel<MonthRange> {
         to.setRequired(true);
         add(to);
 
-        from.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        from.add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 to.setModelObject(from.getModelObject());
