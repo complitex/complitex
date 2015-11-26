@@ -540,7 +540,7 @@ public class PersonInputPanel extends Panel {
         documentType.setOutputMarkupId(true);
         documentType.setLabel(labelModel);
         documentType.setEnabled(isNew() && canEdit());
-        documentType.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        documentType.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

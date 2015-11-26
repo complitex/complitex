@@ -194,7 +194,7 @@ public class AddressCorrectionInputPanel extends Panel {
 
         DisableAwareDropDownChoice streetTypeSelect = new DisableAwareDropDownChoice<>("streetType", streetTypeModel,
                 streetTypes, renderer);
-        streetTypeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        streetTypeSelect.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

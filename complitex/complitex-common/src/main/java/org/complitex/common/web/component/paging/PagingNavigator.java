@@ -252,7 +252,7 @@ public class PagingNavigator extends Panel {
         DropDownChoice<Long> pageSize = new DropDownChoice<>("pageSize", pageSizeModel, SUPPORTED_PAGE_SIZES);
         pageSize.setNullValid(false);
 
-        pageSize.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        pageSize.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

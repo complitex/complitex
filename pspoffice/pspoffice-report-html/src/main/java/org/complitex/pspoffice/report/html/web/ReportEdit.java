@@ -112,7 +112,7 @@ public class ReportEdit extends FormTemplatePage {
             @Override
             protected void populateItem(final ListItem<ReportSql> item) {
                 TextArea sql = new TextArea<>("sql", new PropertyModel<>(item.getModel(), "sql"));
-                sql.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                sql.add(new AjaxFormComponentUpdatingBehavior("change") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         //todo

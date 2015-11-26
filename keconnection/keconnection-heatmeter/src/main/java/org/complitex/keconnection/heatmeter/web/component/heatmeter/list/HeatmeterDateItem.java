@@ -4,7 +4,6 @@
  */
 package org.complitex.keconnection.heatmeter.web.component.heatmeter.list;
 
-import java.util.Date;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -14,6 +13,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.web.component.dateinput.MaskedDateInput;
+
+import java.util.Date;
 
 /**
  *
@@ -38,7 +39,7 @@ public final class HeatmeterDateItem extends Panel {
         inputContainer.setVisible(editable);
         add(inputContainer);
         MaskedDateInput input = new MaskedDateInput("input", model);
-        input.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        input.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

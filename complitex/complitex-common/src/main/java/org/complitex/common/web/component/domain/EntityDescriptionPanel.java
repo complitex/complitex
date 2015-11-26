@@ -116,7 +116,7 @@ public class EntityDescriptionPanel extends Panel {
                         new PropertyModel<String>(attributeType.getAttributeValueTypes().get(0), "valueType"), supportedValueTypes);
                 valueTypeSelect.setRequired(true);
                 valueTypeSelect.setLabel(new ResourceModel("attribute_value_type"));
-                valueTypeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                valueTypeSelect.add(new AjaxFormComponentUpdatingBehavior("change") {
 
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
@@ -129,7 +129,7 @@ public class EntityDescriptionPanel extends Panel {
                 item.add(mandatoryLabel);
 
                 CheckBox mandatoryInput = new CheckBox("mandatoryInput", new PropertyModel<Boolean>(attributeType, "mandatory"));
-                mandatoryInput.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                mandatoryInput.add(new AjaxFormComponentUpdatingBehavior("change") {
 
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {

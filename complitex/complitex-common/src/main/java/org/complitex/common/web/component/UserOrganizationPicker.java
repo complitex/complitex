@@ -97,7 +97,7 @@ public class UserOrganizationPicker extends Panel {
         select.setOutputMarkupId(true);
 
         if (updating) {
-            select.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            select.add(new AjaxFormComponentUpdatingBehavior("change") {
 
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {

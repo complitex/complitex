@@ -77,7 +77,7 @@ public class MainUserOrganizationPicker extends Panel implements IMainUserOrgani
         } else if (userOrganizations.size() == 1) {
             mainUserOrganizationPicker.setEnabled(false);
         } else {
-            mainUserOrganizationPicker.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            mainUserOrganizationPicker.add(new AjaxFormComponentUpdatingBehavior("change") {
 
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {

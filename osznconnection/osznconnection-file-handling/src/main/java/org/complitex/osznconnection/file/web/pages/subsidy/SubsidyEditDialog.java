@@ -117,7 +117,7 @@ public class SubsidyEditDialog extends Panel {
             textField.setOutputMarkupId(true);
 
             if (index > 11){
-                textField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                textField.add(new AjaxFormComponentUpdatingBehavior("change") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         validate(target);

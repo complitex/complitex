@@ -135,7 +135,7 @@ public class HeatmeterConnectionPanel extends AbstractHeatmeterEditPanel {
                         }
                     }
                 });
-                code.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                code.add(new AjaxFormComponentUpdatingBehavior("change") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         target.add(address);
@@ -172,7 +172,7 @@ public class HeatmeterConnectionPanel extends AbstractHeatmeterEditPanel {
                         return s;
                     }
                 });
-                organizationCode.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                organizationCode.add(new AjaxFormComponentUpdatingBehavior("change") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         target.add(organization);
