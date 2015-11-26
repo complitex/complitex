@@ -145,7 +145,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         organizationType.add(AttributeModifier.replace("size", allOrganizationTypes.size() > 8 ? "8"
                 : String.valueOf(allOrganizationTypes.size())));
         if (isOrganizationTypeEnabled()) {
-            organizationType.add(new AjaxFormComponentUpdatingBehavior("onclick") {
+            organizationType.add(new AjaxFormComponentUpdatingBehavior("click") {
 
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
