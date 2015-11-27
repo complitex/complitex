@@ -7,6 +7,7 @@ import org.complitex.common.service.NameBean;
 import org.odlabs.wiquery.ui.autocomplete.AutocompleteAjaxComponent;
 
 import javax.ejb.EJB;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class FullNamePanel extends Panel {
 
         //First Name
         add(new AutocompleteAjaxComponent<String>("first_name",
-                new Model<String>(nameBean.getFirstName(firstNameId.getObject()))) {
+                new Model<>(nameBean.getFirstName(firstNameId.getObject()))) {
             {
                 setRequired(true);
             }
@@ -37,7 +38,7 @@ public class FullNamePanel extends Panel {
 
             @Override
             public List<String> getValues(String term) {
-                return nameBean.getFirstNames(term, AUTOCOMPLETE_SIZE);
+                return term != null ? nameBean.getFirstNames(term, AUTOCOMPLETE_SIZE) : Collections.emptyList();
             }
 
             @Override
@@ -48,7 +49,7 @@ public class FullNamePanel extends Panel {
 
         //Middle Name
         add(new AutocompleteAjaxComponent<String>("middle_name",
-                new Model<String>(nameBean.getMiddleName(middleNameId.getObject()))) {
+                new Model<>(nameBean.getMiddleName(middleNameId.getObject()))) {
             {
                 setRequired(true);
             }
@@ -60,7 +61,7 @@ public class FullNamePanel extends Panel {
 
             @Override
             public List<String> getValues(String term) {
-                return nameBean.getMiddleNames(term, AUTOCOMPLETE_SIZE);
+                return term != null ? nameBean.getMiddleNames(term, AUTOCOMPLETE_SIZE) : Collections.emptyList();
             }
 
             @Override
@@ -71,7 +72,7 @@ public class FullNamePanel extends Panel {
 
         //Last Name
         add(new AutocompleteAjaxComponent<String>("last_name",
-                new Model<String>(nameBean.getLastName(lastNameId.getObject()))) {
+                new Model<>(nameBean.getLastName(lastNameId.getObject()))) {
             {
                 setRequired(true);
             }
@@ -83,7 +84,7 @@ public class FullNamePanel extends Panel {
 
             @Override
             public List<String> getValues(String term) {
-                return nameBean.getLastNames(term, AUTOCOMPLETE_SIZE);
+                return term != null ? nameBean.getLastNames(term, AUTOCOMPLETE_SIZE) : Collections.emptyList();
             }
 
             @Override
