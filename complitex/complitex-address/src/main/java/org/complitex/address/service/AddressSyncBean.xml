@@ -38,7 +38,7 @@
             <if test="object.additionalParentId != null">and `additional_parent_id` = #{object.additionalParentId}</if>
             <if test="object.externalId != null">and `external_id` = #{object.externalId}</if>
             <if test="object.additionalExternalId != null">and `additional_external_id` = #{object.additionalExternalId}</if>
-            <if test="object.name != null">and `name` = #{object.name}</if>
+            <if test="object.name != null">and `name` like concat('%', #{object.name}, '%')</if>
             <if test="object.additionalName != null">and `additional_name` = #{object.additionalName}</if>
             <if test="object.type != null">and `type` = #{object.type}</if>
             <if test="object.status != null">and `status` = #{object.status}</if>
