@@ -2,7 +2,7 @@
 SELECT (@system_locale_id := `id`) FROM `locales` WHERE `system` = 1;
 
 -- City Types
-INSERT INTO `city_type_string_culture`(`id`, `locale_id`, `value`) VALUES (10000,1,'ГОРОД'), (10000,2,'МIСТО'), (10001,1,'ДЕРЕВНЯ'), (10001,2,'СЕЛО');
+INSERT INTO `city_type_string_culture`(`id`, `locale_id`, `value`) VALUES (10000,1,'Г'), (10000,2,'МIСТО'), (10001,1,'ДЕРЕВНЯ'), (10001,2,'СЕЛО');
 INSERT INTO `city_type` (`object_id`) VALUES (10000), (10001);
 INSERT INTO `city_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES (1,10000,1300,10000,1300),
 (1,10001,1300,10001,1300);

@@ -372,7 +372,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         final RegisterOwnerDialog registerOwnerDialog = new RegisterOwnerDialog("registerOwnerDialog");
         add(registerOwnerDialog);
 
-        registerOwnerCheckBox.add(new AjaxFormSubmitBehavior(form, "onclick") {
+        registerOwnerCheckBox.add(new AjaxFormSubmitBehavior(form, "click") {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {

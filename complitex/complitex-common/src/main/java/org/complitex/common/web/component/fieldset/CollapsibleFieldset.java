@@ -61,7 +61,7 @@ public class CollapsibleFieldset extends Border {
 
         if (listener != null) {
             final IModel<Boolean> stateModel = new Model<>(!collapsed);
-            legend.add(new AjaxEventBehavior("onclick") {
+            legend.add(new AjaxEventBehavior("click") {
 
                 @Override
                 protected void onEvent(AjaxRequestTarget target) {

@@ -240,7 +240,7 @@ public final class SubsidyList extends TemplatePage {
                 final Subsidy subsidy = item.getModelObject();
                 item.setOutputMarkupId(true);
 
-                item.add(new AjaxEventBehavior("onclick") {
+                item.add(new AjaxEventBehavior("click") {
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
                         editPanel.open(target, subsidy);

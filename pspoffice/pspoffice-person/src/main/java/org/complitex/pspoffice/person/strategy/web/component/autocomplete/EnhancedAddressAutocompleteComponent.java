@@ -50,7 +50,7 @@ abstract class EnhancedAddressAutocompleteComponent extends EnhancedAutocomplete
 
         final AbstractAddressCreateDialog addressCreateDialog = newAddressCreateDialog("createDialog", userOrganizationIds);
         add(addressCreateDialog);
-        openDialogButton.add(new AjaxEventBehavior("onclick") {
+        openDialogButton.add(new AjaxEventBehavior("click") {
 
             @Override
             protected void onEvent(AjaxRequestTarget target) {

@@ -1,18 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component.dateinput;
 
-import java.util.Locale;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-/**
- *
- * @author Artem
- */
-class MaskedDateInputLanguageResourceReference extends PackageResourceReference {
+import java.util.Locale;
+
+class MaskedDateInputLanguageResourceReference extends JavaScriptResourceReference {
 
     enum MaskedDateInputLanguages {
 

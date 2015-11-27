@@ -254,7 +254,7 @@ public class BrowserFilesDialog extends Panel {
                         target.add(container);
                     }
                 });
-                rowItem.add(new AjaxEventBehavior("onclick") {
+                rowItem.add(new AjaxEventBehavior("click") {
                     @Override
                     protected void onEvent(final AjaxRequestTarget target) {
                         if (selected != null && selected.equals(rowItem)) {
