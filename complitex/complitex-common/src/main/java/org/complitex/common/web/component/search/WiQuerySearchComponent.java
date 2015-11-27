@@ -14,7 +14,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
@@ -157,7 +157,7 @@ public class WiQuerySearchComponent extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(new PackageResourceReference(WiQuerySearchComponent.class,
+        response.render(CssHeaderItem.forReference(new CssResourceReference(WiQuerySearchComponent.class,
                 WiQuerySearchComponent.class.getSimpleName() + ".css")));
     }
 
