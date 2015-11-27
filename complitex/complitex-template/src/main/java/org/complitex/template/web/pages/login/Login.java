@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.resource.JQueryResourceReference;
 import org.complitex.resources.WebCommonResourceInitializer;
 import org.complitex.template.bootstrap.ComplitexThemeCssResourceReference;
 
@@ -39,6 +40,7 @@ public final class Login extends WebPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
+        response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
         response.render(JavaScriptHeaderItem.forReference(WebCommonResourceInitializer.COMMON_JS));
         response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(Login.class,
                 Login.class.getSimpleName() + ".js")));
