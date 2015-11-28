@@ -189,8 +189,8 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    protected void fillAttributes(DomainObject object) {
-        super.fillAttributes(object);
+    protected void fillAttributes(String dataSource, DomainObject object) {
+        super.fillAttributes(null, object);
 
         for (long attributeTypeId : CUSTOM_ATTRIBUTE_TYPES) {
             if (object.getAttribute(attributeTypeId).getStringCultures() == null) {

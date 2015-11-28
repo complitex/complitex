@@ -276,7 +276,7 @@ public class BuildingStrategy extends TemplateStrategy {
             building.setPrimaryAddress(primaryAddress);
             building.setAccompaniedAddress(primaryAddress);
             setAlternativeAddresses(building, null);
-            fillAttributes(building);
+            fillAttributes(null, building);
             updateStringsForNewLocales(building);
 
             //load subject ids

@@ -306,10 +306,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                 .forEach(StringCultures::updateForNewLocales);
     }
 
-    protected void fillAttributes(DomainObject object) {
-        fillAttributes(null, object);
-    }
-
     protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = new ArrayList<>();
 
@@ -418,7 +414,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     public DomainObject newInstance() {
         DomainObject object = new DomainObject();
 
-        fillAttributes(object);
+        fillAttributes(null, object);
 
         //set up subject ids to visible-by-all subject
         object.setSubjectIds(new HashSet<>(Collections.singletonList(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)));
