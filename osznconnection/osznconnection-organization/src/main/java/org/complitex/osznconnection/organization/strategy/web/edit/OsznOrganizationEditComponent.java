@@ -30,6 +30,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
     private WebMarkupContainer edrpouContainer;
     private WebMarkupContainer rootDirectoryContainer;
     private WebMarkupContainer rootExportDirectoryContainer;
+    private WebMarkupContainer referencesDirectoryContainer;
 
     public OsznOrganizationEditComponent(String id, boolean disabled) {
         super(id, disabled);
@@ -190,6 +191,32 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             //initial visibility
             rootExportDirectoryContainer.setVisible(isUserOrganization());
         }
+
+        //referencesDirectoryContainer
+        {
+            referencesDirectoryContainer = new WebMarkupContainer("referencesDirectoryContainer");
+            referencesDirectoryContainer.setOutputMarkupPlaceholderTag(true);
+            add(referencesDirectoryContainer);
+
+            long attributeTypeId = OsznOrganizationStrategy.REFERENCES_DIR;
+            Attribute attribute = organization.getAttribute(attributeTypeId);
+            if (attribute == null) {
+                attribute = new Attribute();
+                attribute.setAttributeTypeId(attributeTypeId);
+                attribute.setObjectId(organization.getObjectId());
+                attribute.setAttributeId(1L);
+                attribute.setStringCultures(StringCultures.newStringCultures());
+            }
+            AttributeType attributeType = osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
+            referencesDirectoryContainer.add(new Label("label", DomainObjectComponentUtil.labelModel(
+                    attributeType.getAttributeNames(), getLocale())));
+            referencesDirectoryContainer.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+
+            referencesDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
+                    organization, attribute, getLocale(), isDisabled()));
+
+            referencesDirectoryContainer.setVisible(isPrivilegesDepartment() || isSubsidyDepartment());
+        }
     }
 
     @Override
@@ -198,52 +225,38 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
         //subsidy
         {
-            boolean loadSaveDirsContainerWasVisible = loadSaveDirsSubsidyContainer.isVisible();
             loadSaveDirsSubsidyContainer.setVisible(isSubsidyDepartment());
-            boolean loadSaveDirsContainerVisibleNow = loadSaveDirsSubsidyContainer.isVisible();
-            if (loadSaveDirsContainerWasVisible ^ loadSaveDirsContainerVisibleNow) {
-                target.add(loadSaveDirsSubsidyContainer);
-            }
+            target.add(loadSaveDirsSubsidyContainer);
         }
 
         //privileges
         {
-            boolean loadSaveDirsContainerWasVisible = loadSaveDirsPrivilegesContainer.isVisible();
             loadSaveDirsPrivilegesContainer.setVisible(isPrivilegesDepartment());
-            boolean loadSaveDirsContainerVisibleNow = loadSaveDirsPrivilegesContainer.isVisible();
-            if (loadSaveDirsContainerWasVisible ^ loadSaveDirsContainerVisibleNow) {
-                target.add(loadSaveDirsPrivilegesContainer);
-            }
+            target.add(loadSaveDirsPrivilegesContainer);
         }
 
         //edrpou.
         {
-            boolean edrpouContainerWasVisible = edrpouContainer.isVisible();
             edrpouContainer.setVisible(isUserOrganization());
-            boolean edrpouContainerVisibleNow = edrpouContainer.isVisible();
-            if (edrpouContainerWasVisible ^ edrpouContainerVisibleNow) {
-                target.add(edrpouContainer);
-            }
+            target.add(edrpouContainer);
         }
 
         //root directory.
         {
-            boolean rootDirectoryContainerWasVisible = rootDirectoryContainer.isVisible();
             rootDirectoryContainer.setVisible(isUserOrganization());
-            boolean rootDirectoryContainerVisibleNow = rootDirectoryContainer.isVisible();
-            if (rootDirectoryContainerWasVisible ^ rootDirectoryContainerVisibleNow) {
-                target.add(rootDirectoryContainer);
-            }
+            target.add(rootDirectoryContainer);
         }
 
         //root export directory.
         {
-            boolean rootExportDirectoryContainerWasVisible = rootDirectoryContainer.isVisible();
             rootExportDirectoryContainer.setVisible(isUserOrganization());
-            boolean rootExportDirectoryContainerVisibleNow = rootDirectoryContainer.isVisible();
-            if (rootExportDirectoryContainerWasVisible ^ rootExportDirectoryContainerVisibleNow) {
-                target.add(rootExportDirectoryContainer);
-            }
+            target.add(rootExportDirectoryContainer);
+        }
+
+        //referencesDirectoryContainer
+        {
+            referencesDirectoryContainer.setVisible(isPrivilegesDepartment() || isSubsidyDepartment());
+            target.add(referencesDirectoryContainer);
         }
     }
 
@@ -298,6 +311,10 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             for (long attributeTypeId : OsznOrganizationStrategy.LOAD_SAVE_FILE_DIR_PRIVILEGES_ATTRIBUTES) {
                 organization.removeAttribute(attributeTypeId);
             }
+        }
+
+        if (!isSubsidyDepartment() && !isPrivilegesDepartment()){
+            organization.removeAttribute(OsznOrganizationStrategy.REFERENCES_DIR);
         }
 
         if (!isUserOrganization()) {

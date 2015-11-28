@@ -371,7 +371,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         }
 
         {
-            serviceBillingContainer.setVisible(isCalculationCenter());
+            serviceBillingContainer.setVisible(isUserOrganization());
             target.add(serviceBillingContainer);
         }
     }
