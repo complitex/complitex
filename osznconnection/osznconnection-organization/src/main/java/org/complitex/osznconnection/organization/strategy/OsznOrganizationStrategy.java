@@ -110,15 +110,18 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     public static final String OSZN_ORGANIZATION_STRATEGY_NAME = IOrganizationStrategy.BEAN_NAME;
     private static final String RESOURCE_BUNDLE = OsznOrganizationStrategy.class.getName();
 
-    public static final List<Long> LOAD_SAVE_FILE_DIR_ATTRIBUTES =
+    public static final List<Long> LOAD_SAVE_FILE_DIR_SUBSIDY_ATTRIBUTES =
             ImmutableList.of(LOAD_PAYMENT_BENEFIT_FILES_DIR, SAVE_PAYMENT_BENEFIT_FILES_DIR,
-                    LOAD_ACTUAL_PAYMENT_DIR, SAVE_ACTUAL_PAYMENT_DIR, LOAD_SUBSIDY_DIR, SAVE_SUBSIDY_DIR,
-                    LOAD_DWELLING_CHARACTERISTICS_DIR, SAVE_DWELLING_CHARACTERISTICS_DIR, REFERENCES_DIR,
+                    LOAD_ACTUAL_PAYMENT_DIR, SAVE_ACTUAL_PAYMENT_DIR, LOAD_SUBSIDY_DIR, SAVE_SUBSIDY_DIR);
+
+    public static final List<Long> LOAD_SAVE_FILE_DIR_PRIVILEGES_ATTRIBUTES =
+            ImmutableList.of(LOAD_DWELLING_CHARACTERISTICS_DIR, SAVE_DWELLING_CHARACTERISTICS_DIR, REFERENCES_DIR,
                     LOAD_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_FORM2_DIR);
 
     private static final List<Long> CUSTOM_ATTRIBUTE_TYPES = ImmutableList.<Long>builder().
             add(DATA_SOURCE).
-            addAll(LOAD_SAVE_FILE_DIR_ATTRIBUTES).
+            addAll(LOAD_SAVE_FILE_DIR_SUBSIDY_ATTRIBUTES).
+            addAll(LOAD_SAVE_FILE_DIR_PRIVILEGES_ATTRIBUTES).
             add(EDRPOU).
             add(ROOT_REQUEST_FILE_DIRECTORY).
             add(ROOT_EXPORT_DIRECTORY).
@@ -127,7 +130,8 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     private static final List<Long> ATTRIBUTE_TYPES_WITH_CUSTOM_STRING_PROCESSING =
             ImmutableList.<Long>builder().
                     add(DATA_SOURCE).
-                    addAll(LOAD_SAVE_FILE_DIR_ATTRIBUTES).
+                    addAll(LOAD_SAVE_FILE_DIR_SUBSIDY_ATTRIBUTES).
+                    addAll(LOAD_SAVE_FILE_DIR_PRIVILEGES_ATTRIBUTES).
                     add(ROOT_REQUEST_FILE_DIRECTORY).
                     add(ROOT_EXPORT_DIRECTORY).
                     build();

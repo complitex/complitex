@@ -1,7 +1,7 @@
 -- --------------------------------
 -- Current database version
 -- --------------------------------
-INSERT INTO `update` (`version`) VALUE ('20140729_1016_0.3.4');
+INSERT INTO `update` (`version`) VALUE ('20151128_0.4.1');
 -- --------------------------------
 
 -- --------------------------------
@@ -47,6 +47,18 @@ INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES
 # INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`) VALUES (2, 1, UPPER('ОСЗН')), (2, 2,UPPER('ОСЗН')),
 # (3, 1, UPPER('Модуль начислений')), (3, 2,UPPER('Центр нарахувань'));
 # INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES (1,2,2300,2,2300),(1,3,2300,3,2300);
+
+INSERT INTO `organization_type`(`object_id`) VALUES (7);
+INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
+VALUES (7, 1, UPPER('Отдел субсидий')), (7, 2, UPPER('Отдел субсидий'));
+INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
+VALUES (1, 7, 2300, 7, 2300);
+
+INSERT INTO `organization_type`(`object_id`) VALUES (8);
+INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
+VALUES (8, 1, UPPER('Отдел льгот')), (8, 2, UPPER('Отдел льгот'));
+INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
+VALUES (1, 8, 2300, 8, 2300);
 
 -- --------------------------------
 -- Organization

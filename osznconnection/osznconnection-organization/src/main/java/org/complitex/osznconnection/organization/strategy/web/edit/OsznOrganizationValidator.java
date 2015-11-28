@@ -15,7 +15,7 @@ public class OsznOrganizationValidator extends OrganizationValidator {
     @Override
     protected boolean checkDistrict(DomainObject object, OrganizationEditComponent editComponent) {
         OsznOrganizationEditComponent editComp = (OsznOrganizationEditComponent) editComponent;
-        if (editComp.isOszn()) {
+        if (editComp.isPrivilegesDepartment() || editComp.isSubsidyDepartment()) {
             boolean validated = editComponent.isDistrictEntered();
             if (!validated) {
                 editComponent.error(editComponent.getString("must_have_district"));

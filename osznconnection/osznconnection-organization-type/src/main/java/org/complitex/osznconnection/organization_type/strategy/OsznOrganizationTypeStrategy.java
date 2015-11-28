@@ -9,8 +9,10 @@ import java.util.Collection;
 
 @Stateless
 public class OsznOrganizationTypeStrategy extends OrganizationTypeStrategy {
-
     private static final String STRATEGY_NAME = OsznOrganizationTypeStrategy.class.getSimpleName();
+
+    public static final long SUBSIDY_DEPARTMENT_TYPE = 7;
+    public static final long PRIVILEGE_DEPARTMENT_TYPE = 8;
 
     @Override
     protected Collection<Long> getReservedInstanceIds() {
