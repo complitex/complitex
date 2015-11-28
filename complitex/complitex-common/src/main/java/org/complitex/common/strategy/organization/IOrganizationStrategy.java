@@ -49,12 +49,12 @@ public interface IOrganizationStrategy extends IStrategy{
     /**
      * Service reference.
      */
-    long SERVICE = 914;
+    long SERVICE = 4914;
 
     /**
      * Billing reference.
      */
-    long BILLING = 915;
+    long BILLING = 4915;
 
     
     /**
