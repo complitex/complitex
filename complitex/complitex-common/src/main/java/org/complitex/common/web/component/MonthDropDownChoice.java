@@ -1,5 +1,6 @@
 package org.complitex.common.web.component;
 
+import com.google.common.base.Strings;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
@@ -32,7 +33,7 @@ public class MonthDropDownChoice extends DropDownChoice<Integer> {
 
             @Override
             public Integer getObject(String id, IModel<? extends List<? extends Integer>> choices) {
-                return Integer.valueOf(id);
+                return Strings.isNullOrEmpty(id) ? 1 : Integer.valueOf(id);
             }
         });
     }

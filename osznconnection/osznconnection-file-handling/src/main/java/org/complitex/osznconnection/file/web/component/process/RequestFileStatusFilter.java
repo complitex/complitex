@@ -36,7 +36,7 @@ public class RequestFileStatusFilter extends DropDownChoice<RequestFileStatus> {
 
             @Override
             public RequestFileStatus getObject(String id, IModel<? extends List<? extends RequestFileStatus>> choices) {
-                return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().get();
+                return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().orElse(null);
             }
         });
         setNullValid(true);

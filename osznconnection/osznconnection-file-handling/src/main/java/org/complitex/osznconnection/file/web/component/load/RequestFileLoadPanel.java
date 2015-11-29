@@ -12,21 +12,18 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.web.component.DisableAwareDropDownChoice;
-import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.YearDropDownChoice;
-import org.complitex.organization.web.model.OrganizationModel;
+import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
+import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.template.TemplateSession;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 
 import javax.ejb.EJB;
-import java.util.List;
 
 public abstract class RequestFileLoadPanel extends Panel {
 
@@ -70,63 +67,24 @@ public abstract class RequestFileLoadPanel extends Panel {
         content.add(form);
 
         //ОСЗН
-        final IModel<List<? extends DomainObject>> osznsModel = new LoadableDetachableModel<List<? extends DomainObject>>() {
 
-            @Override
-            protected List<? extends DomainObject> load() {
-                return organizationStrategy.getAllOSZNs(getLocale());
-            }
-        };
-        final IModel<DomainObject> osznModel = new Model<DomainObject>();
-        final DomainObjectDisableAwareRenderer organizationRenderer = new DomainObjectDisableAwareRenderer() {
-
-            @Override
-            public Object getDisplayValue(DomainObject object) {
-                return organizationStrategy.displayDomainObject(object, getLocale());
-            }
-        };
-
-        DisableAwareDropDownChoice<DomainObject> oszn = new DisableAwareDropDownChoice<DomainObject>("oszn", osznModel,
-                osznsModel, organizationRenderer);
-        oszn.setRequired(true);
-        form.add(oszn);
+        final IModel<DomainObject> osznModel = new Model<>();
+        form.add(new OrganizationPicker("oszn",
+                osznModel,
+                OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
+                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE));
 
         //user organization
         final WebMarkupContainer userOrganizationContainer = new WebMarkupContainer("userOrganizationContainer");
         form.add(userOrganizationContainer);
 
-        final IModel<List<? extends DomainObject>> userOrganizationsModel = new LoadableDetachableModel<List<? extends DomainObject>>() {
+        final IModel<DomainObject> userOrganizationModel = new Model<>();
 
-            @Override
-            protected List<? extends DomainObject> load() {
-                return organizationStrategy.getUserOrganizations(getLocale());
-            }
-        };
+        userOrganizationContainer.add(new OrganizationPicker("userOrganization",
+                userOrganizationModel,
+                OsznOrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
-        final OrganizationModel userOrganizationModel = new OrganizationModel() {
 
-            Long userOrganizationId;
-
-            @Override
-            public Long getOrganizationId() {
-                return userOrganizationId;
-            }
-
-            @Override
-            public void setOrganizationId(Long userOrganizationId) {
-                this.userOrganizationId = userOrganizationId;
-            }
-
-            @Override
-            public List<? extends DomainObject> getOrganizations() {
-                return userOrganizationsModel.getObject();
-            }
-        };
-
-        DisableAwareDropDownChoice<DomainObject> userOrganization = new DisableAwareDropDownChoice<>(
-                "userOrganization", userOrganizationModel, userOrganizationsModel, organizationRenderer);
-        userOrganization.setRequired(true);
-        userOrganizationContainer.add(userOrganization);
         Long currentUserOrganizationId = sessionBean.getCurrentUserOrganizationId(getSession());
         userOrganizationContainer.setVisible(currentUserOrganizationId == null);
 
@@ -179,7 +137,7 @@ public abstract class RequestFileLoadPanel extends Panel {
                 final DomainObject oszn = osznModel.getObject();
                 Long mainUserOrganizationId = sessionBean.getCurrentUserOrganizationId(RequestFileLoadPanel.this.getSession());
                 long currentUserOrganizationId = mainUserOrganizationId != null ? mainUserOrganizationId
-                        : userOrganizationModel.getOrganizationId();
+                        : userOrganizationModel.getObject().getId();
 
                 DateParameter dateParameter;
                 if (monthParameterViewMode == MonthParameterViewMode.HIDDEN) {
