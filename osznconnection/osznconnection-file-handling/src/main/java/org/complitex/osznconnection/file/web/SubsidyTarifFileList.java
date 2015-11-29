@@ -11,15 +11,13 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.*;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.DatePicker;
 import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
+import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
@@ -32,6 +30,7 @@ import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.file.web.component.process.*;
+import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
@@ -142,7 +141,10 @@ public class SubsidyTarifFileList extends TemplatePage {
         form.add(new TextField<String>("name"));
 
         //Осзн
-        form.add(new OsznFilter("organization"));
+        form.add(new OrganizationPicker("organization",
+                new PropertyModel<>(model, "organization"),
+                OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
+                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE));
 
         // Организация пользователя
         form.add(new UserOrganizationFilter("userOrganization"));

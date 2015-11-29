@@ -20,7 +20,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.AbstractFilter;
@@ -45,6 +44,7 @@ import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.file.web.component.process.*;
 import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
+import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.template.TemplateSession;
 import org.odlabs.wiquery.ui.effects.HighlightEffectJavaScriptResourceReference;
@@ -303,11 +303,14 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
         form.add(new DatePicker<Date>("loaded"));
 
         //ОСЗН
-        form.add(new OsznFilter("organization"));
+        form.add(new OrganizationPicker("organization",
+                new PropertyModel<>(model, "organization"),
+                OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
+                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE));
 
         // Организация пользователя
         form.add(new OrganizationPicker("userOrganization",
-                new PropertyModel<DomainObject>(model, "userOrganization"),
+                new PropertyModel<>(model, "userOrganization"),
                 OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
         //Месяц

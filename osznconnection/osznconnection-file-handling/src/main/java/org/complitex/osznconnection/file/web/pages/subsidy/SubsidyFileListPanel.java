@@ -31,6 +31,7 @@ import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.SubsidyFileList;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
+import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -69,7 +70,8 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
         super(id);
 
         add(organizationPickerDialog = new OrganizationPickerDialog("organization_correction_dialog",
-                Model.of(new DomainObject()), SERVICING_ORGANIZATION_TYPE){
+                Model.of(new DomainObject()), OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
+                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE) {
             @Override
             protected void onSelect(AjaxRequestTarget target) {
                 RequestFile requestFile = selectedRequestFileModel.getObject();

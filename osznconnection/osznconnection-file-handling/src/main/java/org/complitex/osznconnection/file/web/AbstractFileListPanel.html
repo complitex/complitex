@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:wicket="http://wicket.apache.org">
     <head>
         <title></title>
     </head>
@@ -42,7 +42,7 @@
                                     </div>
                                 </th>
                                 <th class="center"><input type="text" wicket:id="name" size="8"/></th>
-                                <th class="center"><select wicket:id="organization"></select></th>
+                                <th class="center"><div wicket:id="organization"></div></th>
                                 <th class="center"><div wicket:id="userOrganization"></div></th>
                                 <th class="center"><select wicket:id="month"></select></th>
                                 <th class="center"><select wicket:id="year"></select></th>
@@ -76,10 +76,14 @@
                                     </a>
                                 </td>
                             </tr>
+
+                            <tr>
+                                <td colspan="12">
+                                    <div wicket:id="paging"></div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
-
-                    <div wicket:id="paging"></div>
 
                     <div class="buttons_section">
                         <table width="100%">
