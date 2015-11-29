@@ -13,11 +13,10 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.YearDropDownChoice;
-import org.complitex.common.web.component.organization.OrganizationPicker;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.template.TemplateSession;
@@ -67,9 +66,8 @@ public abstract class RequestFileLoadPanel extends Panel {
         content.add(form);
 
         //ОСЗН
-
-        final IModel<DomainObject> osznModel = new Model<>();
-        form.add(new OrganizationPicker("oszn",
+        final IModel<Long> osznModel = new Model<>();
+        form.add(new OrganizationIdPicker("oszn",
                 osznModel,
                 OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
                 OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE));
@@ -78,12 +76,11 @@ public abstract class RequestFileLoadPanel extends Panel {
         final WebMarkupContainer userOrganizationContainer = new WebMarkupContainer("userOrganizationContainer");
         form.add(userOrganizationContainer);
 
-        final IModel<DomainObject> userOrganizationModel = new Model<>();
+        final IModel<Long> userOrganizationModel = new Model<>();
 
-        userOrganizationContainer.add(new OrganizationPicker("userOrganization",
+        userOrganizationContainer.add(new OrganizationIdPicker("userOrganization",
                 userOrganizationModel,
                 OsznOrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
-
 
         Long currentUserOrganizationId = sessionBean.getCurrentUserOrganizationId(getSession());
         userOrganizationContainer.setVisible(currentUserOrganizationId == null);
@@ -134,10 +131,9 @@ public abstract class RequestFileLoadPanel extends Panel {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                final DomainObject oszn = osznModel.getObject();
                 Long mainUserOrganizationId = sessionBean.getCurrentUserOrganizationId(RequestFileLoadPanel.this.getSession());
                 long currentUserOrganizationId = mainUserOrganizationId != null ? mainUserOrganizationId
-                        : userOrganizationModel.getObject().getId();
+                        : userOrganizationModel.getObject();
 
                 DateParameter dateParameter;
                 if (monthParameterViewMode == MonthParameterViewMode.HIDDEN) {
@@ -148,7 +144,7 @@ public abstract class RequestFileLoadPanel extends Panel {
                             monthRange.getMonthFrom(), monthRange.getMonthTo());
                 }
 
-                load(currentUserOrganizationId, oszn.getObjectId(), dateParameter, target);
+                load(currentUserOrganizationId, osznModel.getObject(), dateParameter, target);
 
                 target.add(messages);
                 dialog.close(target);
