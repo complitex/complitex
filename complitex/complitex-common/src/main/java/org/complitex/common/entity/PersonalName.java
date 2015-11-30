@@ -1,9 +1,11 @@
 package org.complitex.common.entity;
 
+import java.io.Serializable;
+
 /**
  * @author inheaven on 015 15.04.15 16:17
  */
-public class PersonalName {
+public class PersonalName implements Serializable{
     private String firstName;
     private String middleName;
     private String lastName;
