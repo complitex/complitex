@@ -4,7 +4,7 @@
     <resultMap id="accountDetailMap" type="org.complitex.osznconnection.file.entity.AccountDetail">
         <result column="acc_code" property="accCode"/>
         <result column="erc_code" property="ercCode"/>
-        <result column="zheu_code" property="zheuCode"/>
+        <result column="erc_zheu_code" property="zheuCode"/>
         <result column="owner_fio" property="ownerFio"/>
         <result column="owner_inn" property="ownerINN"/>
         <result column="zheu" property="zheu"/>
