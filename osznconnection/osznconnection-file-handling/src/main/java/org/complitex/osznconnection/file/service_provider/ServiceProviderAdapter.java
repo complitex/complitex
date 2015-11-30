@@ -85,97 +85,100 @@ public class ServiceProviderAdapter extends AbstractBean {
      * остальное - номер л/с
      *
      */
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public AccountDetail acquireAccountDetail(AbstractAccountRequest request, String lastName,
                                               String spAccountNumber, String district, String streetType,
                                               String street, String buildingNumber, String buildingCorp, String apartment,
                                               Date date, Boolean updatePUAccount) throws DBException {
-        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
+        try {
+            String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
-        request.setStatus(RequestStatus.ACCOUNT_NUMBER_MISMATCH);
+            request.setStatus(RequestStatus.ACCOUNT_NUMBER_MISMATCH);
 
-        if (Strings.isEmpty(spAccountNumber)) {
-            spAccountNumber = "0";
-        }
-
-        spAccountNumber = spAccountNumber.trim();
-
-        //из номера л/с из записи исключаются лидирующие нули
-        spAccountNumber = spAccountNumber.replaceFirst("^0+(?!$)", "");
-
-        //z$runtime_sz_utl.getAccAttrs()
-        Cursor<AccountDetail> cursor = getAccountDetails(dataSource, district, streetType,
-                street, buildingNumber, buildingCorp, apartment, date);
-
-        if (cursor.isEmpty()) {
-            switch (cursor.getResultCode()){
-                case 0:
-                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
-                    break;
-                case -2:
-                    request.setStatus(RequestStatus.APARTMENT_NOT_FOUND);
-                    break;
-                case -3:
-                    request.setStatus(RequestStatus.BUILDING_CORP_NOT_FOUND);
-                    break;
-                case -4:
-                    request.setStatus(RequestStatus.BUILDING_NOT_FOUND);
-                    break;
-                case -5:
-                    request.setStatus(RequestStatus.STREET_NOT_FOUND);
-                    break;
-                case -6:
-                    request.setStatus(RequestStatus.STREET_TYPE_NOT_FOUND);
-                    break;
-                case -7:
-                    request.setStatus(RequestStatus.DISTRICT_NOT_FOUND);
-                    break;
+            if (Strings.isEmpty(spAccountNumber)) {
+                spAccountNumber = "0";
             }
 
-            return null;
-        }
+            spAccountNumber = spAccountNumber.trim();
 
-        for (AccountDetail accountDetail : cursor.getData()) {
-            if (spAccountNumber.equals(accountDetail.getZheuCode())){
-                request.setAccountNumber(accountDetail.getAccCode());
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+            //из номера л/с из записи исключаются лидирующие нули
+            spAccountNumber = spAccountNumber.replaceFirst("^0+(?!$)", "");
 
-                return accountDetail;
+            //z$runtime_sz_utl.getAccAttrs()
+            Cursor<AccountDetail> cursor = getAccountDetails(dataSource, district, streetType,
+                    street, buildingNumber, buildingCorp, apartment, date);
+
+            if (cursor.isEmpty()) {
+                switch (cursor.getResultCode()){
+                    case 0:
+                        request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
+                        break;
+                    case -2:
+                        request.setStatus(RequestStatus.APARTMENT_NOT_FOUND);
+                        break;
+                    case -3:
+                        request.setStatus(RequestStatus.BUILDING_CORP_NOT_FOUND);
+                        break;
+                    case -4:
+                        request.setStatus(RequestStatus.BUILDING_NOT_FOUND);
+                        break;
+                    case -5:
+                        request.setStatus(RequestStatus.STREET_NOT_FOUND);
+                        break;
+                    case -6:
+                        request.setStatus(RequestStatus.STREET_TYPE_NOT_FOUND);
+                        break;
+                    case -7:
+                        request.setStatus(RequestStatus.DISTRICT_NOT_FOUND);
+                        break;
+                }
+
+                return null;
             }
 
-            if (spAccountNumber.length() > accountDetail.getZheuCode().length()) {
-                int diff = spAccountNumber.length() - accountDetail.getZheuCode().length();
-                String spAccountNumberEnd = spAccountNumber.substring(diff);
-                String spAccountNumberBegin = spAccountNumber.substring(0, diff);
+            for (AccountDetail accountDetail : cursor.getData()) {
+                if (spAccountNumber.equals(accountDetail.getZheuCode())){
+                    request.setAccountNumber(accountDetail.getAccCode());
+                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
-                if (spAccountNumberEnd.equals(accountDetail.getZheuCode())){
-                    if (spAccountNumberBegin.contains(accountDetail.getZheu())
-                            || accountDetail.getOwnerFio().toUpperCase().startsWith(lastName.toUpperCase())
-                            || spAccountNumber.equals(accountDetail.getErcCode())
-                            || spAccountNumber.equals(accountDetail.getAccCode())){
-                        request.setAccountNumber(accountDetail.getAccCode());
-                        request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+                    return accountDetail;
+                }
 
-                        return accountDetail;
+                if (spAccountNumber.length() > accountDetail.getZheuCode().length()) {
+                    int diff = spAccountNumber.length() - accountDetail.getZheuCode().length();
+                    String spAccountNumberEnd = spAccountNumber.substring(diff);
+                    String spAccountNumberBegin = spAccountNumber.substring(0, diff);
+
+                    if (spAccountNumberEnd.equals(accountDetail.getZheuCode())){
+                        if (spAccountNumberBegin.contains(accountDetail.getZheu())
+                                || accountDetail.getOwnerFio().toUpperCase().startsWith(lastName.toUpperCase())
+                                || spAccountNumber.equals(accountDetail.getErcCode())
+                                || spAccountNumber.equals(accountDetail.getAccCode())){
+                            request.setAccountNumber(accountDetail.getAccCode());
+                            request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+
+                            return accountDetail;
+                        }
                     }
                 }
             }
-        }
 
-        if (cursor.getData().size() == 1) {
-            // если установлена опция перезаписи номера л/с ПУ номером л/с МН и номер л/с ПУ в файле запроса равен 0
-            // и получена только одна запись из МН для данного адреса, то запись считаем связанной
-            if (updatePUAccount && 0 == Integer.valueOf(spAccountNumber)) {
+            if (cursor.getData().size() == 1) {
+                // если установлена опция перезаписи номера л/с ПУ номером л/с МН и номер л/с ПУ в файле запроса равен 0
+                // и получена только одна запись из МН для данного адреса, то запись считаем связанной
+                if (updatePUAccount && 0 == Integer.valueOf(spAccountNumber)) {
 
-                request.setAccountNumber(cursor.getData().get(0).getAccCode());
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+                    request.setAccountNumber(cursor.getData().get(0).getAccCode());
+                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
-                return cursor.getData().get(0);
+                    return cursor.getData().get(0);
+                } else {
+                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_MISMATCH);
+                }
             } else {
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_MISMATCH);
+                request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
             }
-        } else {
-            request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
+        } catch (Exception e) {
+            log.error("acquireAccountDetail", e);
         }
 
         return null;
