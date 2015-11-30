@@ -23,10 +23,7 @@ import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrate
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
+import javax.ejb.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
@@ -88,6 +85,7 @@ public class ServiceProviderAdapter extends AbstractBean {
      * остальное - номер л/с
      *
      */
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public AccountDetail acquireAccountDetail(AbstractAccountRequest request, String lastName,
                                               String spAccountNumber, String district, String streetType,
                                               String street, String buildingNumber, String buildingCorp, String apartment,
