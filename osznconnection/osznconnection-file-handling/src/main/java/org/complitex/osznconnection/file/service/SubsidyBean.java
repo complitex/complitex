@@ -172,6 +172,7 @@ public class SubsidyBean extends AbstractRequestBean {
                 break;
             case STREET:
                 params.put("city", subsidy.getCity());
+                params.put("streetType", subsidy.getStreetType());
                 params.put("street", subsidy.getStreet());
                 break;
             case CITY:
