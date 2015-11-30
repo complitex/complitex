@@ -20,10 +20,10 @@ public class ExceptionUtil {
             return e.getMessage() + " ->  " + e.getCause().getMessage();
         }
 
-        return e.getMessage();
+        return e.getMessage() + "";
     }
 
     public static String getCauseMessage(Exception e){
-        return getCauseMessage(e, false);
+        return getCauseMessage(e, false) + "";
     }
 }
