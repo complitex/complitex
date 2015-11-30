@@ -181,16 +181,16 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
 
 
         filterForm.add(new OrganizationIdPicker("object.organizationId",
-                new PropertyModel<Long>(filterWrapper, "object.organizationId"),
+                new PropertyModel<>(filterWrapper, "object.organizationId"),
                 getOrganizationTypeIds()));
 
         filterForm.add(new OrganizationIdPicker("object.userOrganizationId",
-                new PropertyModel<Long>(filterWrapper, "object.userOrganizationId"),
+                new PropertyModel<>(filterWrapper, "object.userOrganizationId"),
                 OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
-        filterForm.add(new TextField<>("correctionFilter", new PropertyModel<String>(filterWrapper, "object.correction")));
-        filterForm.add(new TextField<>("codeFilter", new PropertyModel<String>(filterWrapper, "object.externalId")));
-        filterForm.add(new TextField<>("internalObjectFilter", new PropertyModel<String>(filterWrapper, "object.internalObject")));
+        filterForm.add(new TextField<>("correctionFilter", new PropertyModel<>(filterWrapper, "object.correction")));
+        filterForm.add(new TextField<>("codeFilter", new PropertyModel<>(filterWrapper, "object.externalId")));
+        filterForm.add(new TextField<>("internalObjectFilter", new PropertyModel<>(filterWrapper, "object.internalObject")));
 
         AjaxLink reset = new IndicatingAjaxLink("reset") {
 

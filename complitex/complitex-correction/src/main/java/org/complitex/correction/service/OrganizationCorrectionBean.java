@@ -2,7 +2,6 @@ package org.complitex.correction.service;
 
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.OrganizationCorrection;
 
 import javax.ejb.Stateless;
@@ -15,7 +14,7 @@ import java.util.List;
 @Stateless
 public class OrganizationCorrectionBean extends AbstractBean{
     public final static String NS = OrganizationCorrectionBean.class.getName();
-    private static final String NS_CORRECTION = Correction.class.getName();
+    private static final String NS_CORRECTION = CorrectionBean.class.getName();
 
     public OrganizationCorrection geOrganizationCorrection(Long id){
         return sqlSession().selectOne(NS + ".selectOrganizationCorrection", id);
