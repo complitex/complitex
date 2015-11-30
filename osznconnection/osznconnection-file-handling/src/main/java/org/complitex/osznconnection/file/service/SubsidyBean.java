@@ -167,12 +167,17 @@ public class SubsidyBean extends AbstractRequestBean {
             case BUILDING:
                 params.put("buildingNumber", subsidy.getBuildingNumber());
                 params.put("buildingCorp", subsidy.getBuildingCorp());
+                break;
             case STREET:
+                params.put("city", subsidy.getCity());
                 params.put("street", subsidy.getStreet());
-            case STREET_TYPE:
-                params.put("streetType", subsidy.getStreetType());
+                break;
             case CITY:
                 params.put("city", subsidy.getCity());
+                break;
+            case STREET_TYPE:
+                params.put("streetType", subsidy.getStreetType());
+                break;
         }
 
         sqlSession().update(NS + ".markCorrected", params);

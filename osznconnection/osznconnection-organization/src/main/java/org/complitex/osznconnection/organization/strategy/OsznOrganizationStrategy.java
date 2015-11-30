@@ -132,6 +132,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
                     add(DATA_SOURCE).
                     addAll(LOAD_SAVE_FILE_DIR_SUBSIDY_ATTRIBUTES).
                     addAll(LOAD_SAVE_FILE_DIR_PRIVILEGES_ATTRIBUTES).
+                    add(REFERENCES_DIR).
                     add(ROOT_REQUEST_FILE_DIRECTORY).
                     add(ROOT_EXPORT_DIRECTORY).
                     build();
