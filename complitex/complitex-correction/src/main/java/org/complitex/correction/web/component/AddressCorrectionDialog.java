@@ -320,6 +320,8 @@ public class AddressCorrectionDialog<T> extends Panel {
             WiQuerySearchComponent newSearchComponent = new AddressSearchComponent("searchComponent", state,
                     getFilters(addressEntity), null, ShowMode.ACTIVE, true);
 
+            //todo load state
+
             searchComponent.replaceWith(newSearchComponent);
             searchComponent = newSearchComponent;
             streetTypeSelect.setVisible(false);

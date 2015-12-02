@@ -384,7 +384,7 @@ public final class SubsidyList extends TemplatePage {
                     try {
                         subsidyService.bind(subsidy);
 
-                        if (subsidy.getStatus().isAddressResolved()){
+                        if (subsidy.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
                             info(getStringFormat("info_bound", subsidy.getFio()));
                         }else {
                             error(getStringFormat("error_bound", subsidy.getFio(),
