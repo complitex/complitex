@@ -476,7 +476,13 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
                     .orElseThrow(() -> new IllegalArgumentException("dataSource not found"))
                     .getAttributeId() : 1L;
 
-            return userOrganization.getAttribute(BILLING, serviceAttributeId).getValueId();
+            Long billingId = userOrganization.getAttribute(BILLING, serviceAttributeId).getValueId();
+
+            if(billingId != null){
+                return billingId;
+            }else {
+                throw new IllegalArgumentException("billing id is not found");
+            }
         }else {
             throw new IllegalArgumentException("userOrganization id is not found");
         }

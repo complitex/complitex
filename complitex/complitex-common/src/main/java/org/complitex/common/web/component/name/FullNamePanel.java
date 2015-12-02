@@ -25,7 +25,7 @@ public class FullNamePanel extends Panel {
 
         //First Name
         add(new AutocompleteAjaxComponent<String>("first_name",
-                new Model<String>(nameBean.getFirstName(firstNameId.getObject()))) {
+                new Model<>(nameBean.getFirstName(firstNameId.getObject()))) {
             {
                 setRequired(true);
             }
@@ -48,7 +48,7 @@ public class FullNamePanel extends Panel {
 
         //Middle Name
         add(new AutocompleteAjaxComponent<String>("middle_name",
-                new Model<String>(nameBean.getMiddleName(middleNameId.getObject()))) {
+                new Model<>(nameBean.getMiddleName(middleNameId.getObject()))) {
             {
                 setRequired(true);
             }
@@ -71,7 +71,7 @@ public class FullNamePanel extends Panel {
 
         //Last Name
         add(new AutocompleteAjaxComponent<String>("last_name",
-                new Model<String>(nameBean.getLastName(lastNameId.getObject()))) {
+                new Model<>(nameBean.getLastName(lastNameId.getObject()))) {
             {
                 setRequired(true);
             }

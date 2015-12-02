@@ -33,19 +33,21 @@ insert into organization_attribute(attribute_id, object_id, attribute_type_id, v
 #   (9,1,2);
 
 insert into organization(object_id) values (3), (4);
-insert into organization_string_culture(id, locale_id, value) values (20,@system_locale_id, UPPER('КП "ЖИЛКОМСЕРВИС"')),(21,@system_locale_id, UPPER('12345')),
-(22,@system_locale_id,UPPER('ЛЕНИНСКИЙ ФИЛИАЛ КП "ЖИЛКОМСЕРВИС"')),(23,@system_locale_id, UPPER('123456')),
--- Root request files paths attribute values:
-(24,@system_locale_id,'C:\\storage\\sz_files\\gks'),
-(25,@system_locale_id,'C:\\storage\\sz_files\\gks'),
--- EDRPOU attribute values:
-(26,@system_locale_id,'1'),
-(27,@system_locale_id,'2');
+insert into organization_string_culture(id, locale_id, value) values
+  (20,@system_locale_id, UPPER('КП "ЖИЛКОМСЕРВИС"')),
+  (21,@system_locale_id, UPPER('12345')),
+  (22,@system_locale_id,UPPER('ЛЕНИНСКИЙ ФИЛИАЛ КП "ЖИЛКОМСЕРВИС"')),
+  (23,@system_locale_id, UPPER('123456')),
+  -- Root request files paths attribute values:
+  (24,@system_locale_id,'C:\\storage\\sz_files\\gks'),
+  (25,@system_locale_id,'C:\\storage\\sz_files\\gks'),
+  -- EDRPOU attribute values:
+  (26,@system_locale_id,'1'),
+  (27,@system_locale_id,'2');
 
-# insert into organization_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
-# (1,3,900,20,900), (1,3,901,21,901), (1,3,904,1,904), (1,3,914,1,914), (1,3,926,26,926), (1,3,927,24,927),
-#   (2,3,914,2,914),(3,3,914,3,914),(4,3,914,4,914),(5,3,914,5,914),(6,3,914,6,914),(7,3,914,7,914),(8,3,914,8,914),
-# (1,4,900,22,900), (1,4,901,23,901), (1,4,903,3,903), (1,4,904,1,904), (1,4,914,9,914), (1,4,926,27,926), (1,4,927,25,927);
+insert into organization_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
+(1,3,900,20,900), (1,3,901,21,901), (1,3,904,1,904), (1,3,926,26,926), (1,3,927,24,927),
+(1,4,900,22,900), (1,4,901,23,901), (1,4,903,3,903), (1,4,904,1,904), (1,4,926,27,926), (1,4,927,25,927);
 
 -- Request File Descriptions --
 INSERT INTO `request_file_description` VALUES (1,'ACTUAL_PAYMENT','dd.MM.yyyy');
