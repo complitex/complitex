@@ -1,9 +1,7 @@
 package org.complitex.osznconnection.file.service;
 
-import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.DateUtil;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
@@ -48,10 +46,11 @@ public class SubsidyService {
         BigDecimal sbSum = new BigDecimal(0);
         BigDecimal smSum = new BigDecimal(0);
 
-        for (Attribute sa : organization.getAttributes(IOrganizationStrategy.SERVICE)) {
-            nSum = nSum.add((BigDecimal) request.getField("P" + sa.getValueId()));
-            sbSum = sbSum.add((BigDecimal) request.getField("SB" + sa.getValueId()));
-            smSum = smSum.add((BigDecimal) request.getField("SM" + sa.getValueId()));
+        //for (Attribute sa : organization.getAttributes(IOrganizationStrategy.SERVICE)) { todo
+        for (int i = 1; i < 9; ++i) {
+            nSum = nSum.add((BigDecimal) request.getField("P" + i));
+            sbSum = sbSum.add((BigDecimal) request.getField("SB" + i));
+            smSum = smSum.add((BigDecimal) request.getField("SM" + i));
         }
 
         //round Pn
