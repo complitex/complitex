@@ -193,7 +193,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
     }
 
     @Override
-    protected void fillAttributes(DomainObject object) {
+    protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = newArrayList();
 
         for (AttributeType attributeType : getEntity().getAttributeTypes()) {

@@ -58,7 +58,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
         DomainObject object = new DomainObject(id);
 
         loadAttributes(object);
-        fillAttributes(object);
+        fillAttributes(null, object);
         updateStringsForNewLocales(object);
 
         return object;

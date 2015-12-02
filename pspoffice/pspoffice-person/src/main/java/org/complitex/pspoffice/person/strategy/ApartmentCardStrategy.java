@@ -222,7 +222,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     }
 
     @Override
-    protected void fillAttributes(DomainObject object) {
+    protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = newArrayList();
         for (AttributeType attributeType : getEntity().getAttributeTypes()) {
             if (!attributeType.isObsolete()) {

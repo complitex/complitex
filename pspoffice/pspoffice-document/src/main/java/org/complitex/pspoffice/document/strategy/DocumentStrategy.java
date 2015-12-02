@@ -67,13 +67,13 @@ public class DocumentStrategy extends TemplateStrategy {
         documentTypeAttribute.setValueId(documentTypeId);
         documentTypeAttribute.setValueTypeId(DOCUMENT_TYPE);
         document.addAttribute(documentTypeAttribute);
-        fillAttributes(document);
+        fillAttributes(null, document);
 
         return document;
     }
 
     @Override
-    protected void fillAttributes(DomainObject document) {
+    protected void fillAttributes(String dataSource, DomainObject document) {
         List<Attribute> toAdd = newArrayList();
 
         for (AttributeType attributeType : getEntity().getAttributeTypes()) {
