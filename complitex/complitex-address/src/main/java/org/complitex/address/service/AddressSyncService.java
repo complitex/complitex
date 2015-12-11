@@ -204,24 +204,27 @@ public class AddressSyncService {
                         }else
                             //новое название
                             sync.setStatus(AddressSyncStatus.NEW_NAME);
+                    }else{
+                        //дубликат
+                        objects.parallelStream().filter(o -> !Objects.equals(sync.getExternalId(), o.getExternalId()) &&
+                                handler.hasEqualNames(sync, o))
+                                .findAny()
+                                .ifPresent(o -> {
+                                    sync.setObjectId(o.getObjectId());
+                                    sync.setStatus(AddressSyncStatus.DUPLICATE);
+                                });
+
+                        //внешний дубликат
+                        if (sync.getStatus() == null) {
+                            cursor.getData().parallelStream()
+                                    .filter(s -> s.getStatus() != null &&
+                                            !Objects.equals(sync.getExternalId(), s.getExternalId()) &&
+                                            Objects.equals(sync.getName(), s.getName()) &&
+                                            Objects.equals(sync.getAdditionalName(), s.getAdditionalName()))
+                                    .findAny()
+                                    .ifPresent(s -> sync.setStatus(AddressSyncStatus.EXTERNAL_DUPLICATE));
+                        }
                     }
-
-                    //дубликат
-                    objects.parallelStream().filter(o -> !Objects.equals(sync.getExternalId(), o.getExternalId()) &&
-                            handler.hasEqualNames(sync, o))
-                            .findAny()
-                            .ifPresent(o -> {
-                                sync.setObjectId(o.getObjectId());
-                                sync.setStatus(AddressSyncStatus.DUPLICATE);
-                            });
-
-                    //внешний дубликат
-                    cursor.getData().parallelStream()
-                            .filter(s -> !Objects.equals(sync.getExternalId(), s.getExternalId()) &&
-                                    Objects.equals(sync.getName(), s.getName()) &&
-                                    Objects.equals(sync.getAdditionalName(), s.getAdditionalName()))
-                            .findAny()
-                            .ifPresent(s -> sync.setStatus(AddressSyncStatus.EXTERNAL_DUPLICATE));
 
                     //новый
                     if (sync.getStatus() == null) {

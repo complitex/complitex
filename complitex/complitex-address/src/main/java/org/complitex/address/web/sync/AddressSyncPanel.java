@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import java.util.*;
 
+import static org.complitex.address.entity.AddressSyncStatus.*;
+
 /**
  * @author Anatoly Ivanov
  *         Date: 024 24.06.14 17:57
@@ -99,7 +101,7 @@ public class AddressSyncPanel extends Panel {
 
             @Override
             public boolean isVisible(IModel<AddressSync> model) {
-                return AddressSyncStatus.DUPLICATE.equals(model.getObject().getStatus());
+                return DUPLICATE.equals(model.getObject().getStatus());
             }
         });
 
@@ -116,7 +118,7 @@ public class AddressSyncPanel extends Panel {
 
             @Override
             public boolean isVisible(IModel<AddressSync> model) {
-                return AddressSyncStatus.NEW_NAME.equals(model.getObject().getStatus());
+                return NEW_NAME.equals(model.getObject().getStatus());
             }
         });
 
