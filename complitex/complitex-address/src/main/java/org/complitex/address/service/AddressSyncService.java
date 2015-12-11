@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static javax.ejb.ConcurrencyManagementType.BEAN;
+import static org.complitex.address.entity.AddressSyncStatus.LOCAL;
 import static org.complitex.address.service.IAddressSyncHandler.NOT_FOUND_ID;
 
 /**
@@ -170,6 +171,16 @@ public class AddressSyncService {
                 .collect(Collectors.toMap(DomainObject::getExternalId, o -> o));
 
         cursor.getData().parallelStream().forEach(sync -> {
+                    if (sync.getExternalId() == null){
+                        broadcastService.broadcast(getClass(), "error", "Пустой вненший код: " + sync.toString());
+                        return;
+                    }
+
+                    if (sync.getName() == null){
+                        broadcastService.broadcast(getClass(), "error", "Пустое название: " + sync.toString());
+                        return;
+                    }
+
                     Long parentId = handler.getParentId(sync, parent);
 
                     if (NOT_FOUND_ID.equals(parentId)){
@@ -182,49 +193,44 @@ public class AddressSyncService {
                     sync.setType(type);
                     sync.setDate(date);
 
-                    if (sync.getExternalId() == null){
-                        broadcastService.broadcast(getClass(), "error", "Пустой вненший код: " + sync.toString());
-                        return;
-                    }
-
                     DomainObject object = objectMap.get(sync.getExternalId());
 
                     if (object != null){
+                        sync.setObjectId(object.getObjectId());
+
                         //все норм
-                        if (sync.getExternalId().equals(object.getExternalId()) && handler.isEqualNames(sync, object)) {
-                            sync.setObjectId(object.getObjectId());
-                            sync.setStatus(AddressSyncStatus.LOCAL);
+                        if (handler.isEqualNames(sync, object)) {
+                            sync.setStatus(LOCAL);
                         }else
                             //новое название
-                            if (sync.getExternalId().equals(object.getExternalId())) {
-                                sync.setObjectId(object.getObjectId());
-                                sync.setStatus(AddressSyncStatus.NEW_NAME);
-
-                                if (!addressSyncBean.isExist(sync)) {
-                                    addressSyncBean.save(sync);
-                                }
-                            }
+                            sync.setStatus(AddressSyncStatus.NEW_NAME);
                     }
 
+                    //дубликат
                     objects.parallelStream().filter(o -> !Objects.equals(sync.getExternalId(), o.getExternalId()) &&
                             handler.hasEqualNames(sync, o))
                             .findAny()
                             .ifPresent(o -> {
                                 sync.setObjectId(o.getObjectId());
                                 sync.setStatus(AddressSyncStatus.DUPLICATE);
-
-                                if (!addressSyncBean.isExist(sync)) {
-                                    addressSyncBean.save(sync);
-                                }
                             });
+
+                    //внешний дубликат
+                    cursor.getData().parallelStream()
+                            .filter(s -> !Objects.equals(sync.getExternalId(), s.getExternalId()) &&
+                                    Objects.equals(sync.getName(), s.getName()) &&
+                                    Objects.equals(sync.getAdditionalName(), s.getAdditionalName()))
+                            .findAny()
+                            .ifPresent(s -> sync.setStatus(AddressSyncStatus.EXTERNAL_DUPLICATE));
 
                     //новый
                     if (sync.getStatus() == null) {
                         sync.setStatus(AddressSyncStatus.NEW);
+                    }
 
-                        if (!addressSyncBean.isExist(sync)) {
-                            addressSyncBean.save(sync);
-                        }
+                    //сохранение
+                    if (!sync.getStatus().equals(LOCAL) && !addressSyncBean.isExist(sync)) {
+                        addressSyncBean.save(sync);
                     }
 
                     broadcastService.broadcast(getClass(), "processed", sync);

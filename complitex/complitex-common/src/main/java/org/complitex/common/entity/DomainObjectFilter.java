@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 public class DomainObjectFilter implements Serializable {
-    public static enum ComparisonType {
+    public enum ComparisonType {
         LIKE, EQUALITY
     }
 
@@ -209,8 +209,10 @@ public class DomainObjectFilter implements Serializable {
         return status;
     }
 
-    public void setStatus(String status) {
+    public DomainObjectFilter setStatus(String status) {
         this.status = status;
+
+        return this;
     }
 
     public String getUserPermissionString() {

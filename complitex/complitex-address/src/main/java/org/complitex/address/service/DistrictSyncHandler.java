@@ -9,6 +9,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.CloneUtil;
+import org.complitex.common.web.component.ShowMode;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -42,7 +43,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getParentObjects() {
-        return cityStrategy.getList(new DomainObjectFilter());
+        return cityStrategy.getList(new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name()));
     }
 
     @Override

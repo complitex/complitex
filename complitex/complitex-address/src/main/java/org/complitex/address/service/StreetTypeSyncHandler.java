@@ -7,9 +7,12 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.CloneUtil;
+import org.complitex.common.web.component.ShowMode;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +42,7 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return streetTypeStrategy.getList(new DomainObjectFilter());
+        return streetTypeStrategy.getList(new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name()));
     }
 
     @Override
@@ -83,6 +86,7 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void update(AddressSync sync, Locale locale) {
         DomainObject oldObject = streetTypeStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);

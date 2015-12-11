@@ -11,6 +11,7 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.util.CloneUtil;
+import org.complitex.common.web.component.ShowMode;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -57,7 +58,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
         //.addAdditionalParam(DISTRICT_ID, parent.getObjectId())
-        return buildingAddressStrategy.getList(new DomainObjectFilter());
+        return buildingAddressStrategy.getList(new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name()));
     }
 
     @Override

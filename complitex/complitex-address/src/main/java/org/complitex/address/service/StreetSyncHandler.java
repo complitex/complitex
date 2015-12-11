@@ -11,6 +11,7 @@ import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.Locales;
+import org.complitex.common.web.component.ShowMode;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -54,7 +55,9 @@ public class StreetSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return streetStrategy.getList(new DomainObjectFilter().setParent("city", parent.getObjectId()));
+        return streetStrategy.getList(new DomainObjectFilter()
+                .setParent("city", parent.getObjectId())
+                .setStatus(ShowMode.ACTIVE.name()));
     }
 
     @Override
