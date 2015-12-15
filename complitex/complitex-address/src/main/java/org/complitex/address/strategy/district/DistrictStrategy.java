@@ -27,10 +27,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 public class DistrictStrategy extends TemplateStrategy {
     private static final String DISTRICT_NS = DistrictStrategy.class.getName();
