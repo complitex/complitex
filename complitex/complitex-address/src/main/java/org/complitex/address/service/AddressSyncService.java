@@ -205,8 +205,6 @@ public class AddressSyncService {
                                 //новое название
                                 sync.setStatus(AddressSyncStatus.NEW_NAME);
                         }else{
-
-
                             //дубликат
                             objects.parallelStream().filter(o -> !Objects.equals(uniqueExternalId, o.getExternalId()) &&
                                     handler.hasEqualNames(sync, o))
