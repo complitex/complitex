@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import java.util.*;
 
+import static org.complitex.address.entity.AddressEntity.STREET;
 import static org.complitex.address.entity.AddressSyncStatus.*;
 
 /**
@@ -64,6 +65,7 @@ public class AddressSyncPanel extends Panel {
 
         //actions
         List<Action<AddressSync>> actions = new ArrayList<>();
+
         actions.add(new Action<AddressSync>("add", "object.add") {
             @Override
             public void onAction(AjaxRequestTarget target, IModel<AddressSync> model) {
@@ -84,9 +86,37 @@ public class AddressSyncPanel extends Panel {
 
             @Override
             public boolean isVisible(IModel<AddressSync> model) {
-                return AddressSyncStatus.NEW.equals(model.getObject().getStatus());
+                return NEW.equals(model.getObject().getStatus());
             }
         });
+
+        if (addressEntity.equals(STREET)) {
+            actions.add(new Action<AddressSync>("street_code_add", "object.street_code_add") {
+                @Override
+                public void onAction(AjaxRequestTarget target, IModel<AddressSync> model) {
+                    try {
+                        AddressSync sync = model.getObject();
+
+                        addressSyncService.insert(sync, getLocale());
+
+                        getSession().info(String.format(getString(sync.getType().name() + ".code_added"),
+                                sync.getName(), sync.getExternalId()));
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+
+                        getSession().error(ExceptionUtil.getCauseMessage(e, true));
+                    }
+
+                    target.add(AddressSyncPanel.this);
+                    onUpdate(target);
+                }
+
+                @Override
+                public boolean isVisible(IModel<AddressSync> model) {
+                    return DUPLICATE.equals(model.getObject().getStatus());
+                }
+            });
+        }
 
         actions.add(new Action<AddressSync>("update", "object.duplicate") {
             @Override
@@ -135,7 +165,7 @@ public class AddressSyncPanel extends Panel {
 
             @Override
             public boolean isVisible(IModel<AddressSync> model) {
-                return AddressSyncStatus.ARCHIVAL.equals(model.getObject().getStatus());
+                return ARCHIVAL.equals(model.getObject().getStatus());
             }
         });
 

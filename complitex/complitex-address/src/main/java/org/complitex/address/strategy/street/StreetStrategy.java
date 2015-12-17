@@ -68,6 +68,8 @@ public class StreetStrategy extends TemplateStrategy {
      */
     public static final long NAME = 300L;
     public static final long STREET_TYPE = 301L;
+    public static final long STREET_CODE = 303L;
+
     public static final long PARENT_ENTITY_ID = 400L;
 
     @Override

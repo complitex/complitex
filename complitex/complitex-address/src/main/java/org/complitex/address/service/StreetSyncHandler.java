@@ -1,10 +1,12 @@
 package org.complitex.address.service;
 
 import org.complitex.address.entity.AddressSync;
+import org.complitex.address.entity.AddressSyncStatus;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
+import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
@@ -18,6 +20,8 @@ import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static org.complitex.address.strategy.street.StreetStrategy.STREET_CODE;
 
 /**
  * @author Anatoly Ivanov
@@ -78,26 +82,42 @@ public class StreetSyncHandler implements IAddressSyncHandler {
 
     @Override
     public void insert(AddressSync sync, Locale locale) {
-        DomainObject newObject = streetStrategy.newInstance();
-        newObject.setExternalId(sync.getExternalId());
+        if (sync.getStatus().equals(AddressSyncStatus.DUPLICATE)){
+            DomainObject oldStreet = streetStrategy.getDomainObject(sync.getObjectId());
+            DomainObject street = streetStrategy.getDomainObject(sync.getObjectId());
 
-        //name
-        newObject.setStringValue(StreetStrategy.NAME, sync.getName(), locale);
+            Attribute code = new Attribute();
+            code.setAttributeId((long) street.getAttributes(STREET_CODE).size() + 1); //todo add mass attribute add remove
+            code.setAttributeTypeId(STREET_CODE);
+            code.setValueId(Long.valueOf(sync.getExternalId()));
+            code.setValueTypeId(STREET_CODE);
 
-        //CITY_ID
-        newObject.setParentEntityId(StreetStrategy.PARENT_ENTITY_ID);
-        newObject.setParentId(sync.getParentId());
+            street.addAttribute(code);
 
-        //STREET_TYPE_ID
-        List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(new DomainObjectFilter()
-                .addAttribute(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName()));
-        if (streetTypes.isEmpty()) {
-            throw new RuntimeException("StreetType not found: " + sync.getAdditionalName());
+            streetStrategy.update(oldStreet, street, sync.getDate());
+            addressSyncBean.delete(sync.getId());
+        }else{
+            DomainObject newObject = streetStrategy.newInstance();
+            newObject.setExternalId(sync.getExternalId());
+
+            //name
+            newObject.setStringValue(StreetStrategy.NAME, sync.getName(), locale);
+
+            //CITY_ID
+            newObject.setParentEntityId(StreetStrategy.PARENT_ENTITY_ID);
+            newObject.setParentId(sync.getParentId());
+
+            //STREET_TYPE_ID
+            List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(new DomainObjectFilter()
+                    .addAttribute(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName()));
+            if (streetTypes.isEmpty()) {
+                throw new RuntimeException("StreetType not found: " + sync.getAdditionalName());
+            }
+            newObject.setLongValue(StreetStrategy.STREET_TYPE, streetTypes.get(0).getObjectId());
+
+            streetStrategy.insert(newObject, sync.getDate());
+            addressSyncBean.delete(sync.getId());
         }
-        newObject.setLongValue(StreetStrategy.STREET_TYPE, streetTypes.get(0).getObjectId());
-
-        streetStrategy.insert(newObject, sync.getDate());
-        addressSyncBean.delete(sync.getId());
     }
 
     @Override
