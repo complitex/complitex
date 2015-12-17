@@ -6,6 +6,7 @@ import org.complitex.address.entity.AddressSyncStatus;
 import org.complitex.address.entity.SyncBeginMessage;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
+import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static javax.ejb.ConcurrencyManagementType.BEAN;
+import static org.complitex.address.entity.AddressEntity.STREET;
 import static org.complitex.address.entity.AddressSyncStatus.LOCAL;
 import static org.complitex.address.service.IAddressSyncHandler.NOT_FOUND_ID;
 
@@ -55,7 +57,7 @@ public class AddressSyncService {
     public void syncAll(){
         sync(AddressEntity.DISTRICT);
         sync(AddressEntity.STREET_TYPE);
-        sync(AddressEntity.STREET);
+        sync(STREET);
         sync(AddressEntity.BUILDING);
     }
 
@@ -137,7 +139,7 @@ public class AddressSyncService {
         begin.setCount(cursor.getData() != null ? cursor.getData().size() : 0L);
 
         if (parent != null){
-            if (type.equals(AddressEntity.DISTRICT) || type.equals(AddressEntity.STREET)){
+            if (type.equals(AddressEntity.DISTRICT) || type.equals(STREET)){
                 begin.setParentName(cityStrategy.getName(parent));
             }else if (type.equals(AddressEntity.BUILDING)){
                 begin.setParentName(districtStrategy.getName(parent));
@@ -156,6 +158,13 @@ public class AddressSyncService {
         Map<String, DomainObject> objectMap = objects.parallelStream()
                 .filter(o -> o.getExternalId() != null)
                 .collect(Collectors.toMap(DomainObject::getExternalId, o -> o));
+
+        //коды улиц
+        if (type.equals(STREET)){
+            objects.parallelStream().forEach(o -> o.getAttributes().parallelStream()
+                    .filter(a -> a.getAttributeTypeId() == StreetStrategy.STREET_CODE)
+                    .forEach(a -> objectMap.put(String.valueOf(a.getValueId()), o)));
+        }
 
         cursor.getData().parallelStream().forEach(sync -> {
                     try {
