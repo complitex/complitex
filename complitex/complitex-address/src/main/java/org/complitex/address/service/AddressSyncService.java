@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static javax.ejb.ConcurrencyManagementType.BEAN;
+import static org.complitex.address.entity.AddressEntity.BUILDING;
 import static org.complitex.address.entity.AddressEntity.STREET;
 import static org.complitex.address.entity.AddressSyncStatus.LOCAL;
 import static org.complitex.address.service.IAddressSyncHandler.NOT_FOUND_ID;
@@ -208,7 +209,7 @@ public class AddressSyncService {
 
                             //дубликат
                             objects.parallelStream().filter(o -> !Objects.equals(uniqueExternalId, o.getExternalId()) &&
-                                            handler.hasEqualNames(sync, o))
+                                    handler.hasEqualNames(sync, o))
                                     .findAny()
                                     .ifPresent(o -> {
                                         sync.setObjectId(o.getObjectId());
@@ -248,35 +249,37 @@ public class AddressSyncService {
                 }
         );
 
-        Map<String, AddressSync> syncMap = cursor.getData().parallelStream()
-                .filter(a -> a.getExternalId() != null)
-                .collect(Collectors.toMap(AddressSync::getUniqueExternalId, a -> a));
+        if (!BUILDING.equals(type)) { //todo fix building object list
+            Map<String, AddressSync> syncMap = cursor.getData().parallelStream()
+                    .filter(a -> a.getExternalId() != null)
+                    .collect(Collectors.toMap(AddressSync::getUniqueExternalId, a -> a));
 
-        objects.parallelStream().filter(o -> o.getExternalId() != null).forEach(object -> {
-            AddressSync addressSync = syncMap.get(object.getExternalId());
+            objects.parallelStream().filter(o -> o.getExternalId() != null).forEach(object -> {
+                AddressSync addressSync = syncMap.get(object.getExternalId());
 
-            //архив
-            if (addressSync == null) {
-                AddressSync s = new AddressSync();
+                //архив
+                if (addressSync == null) {
+                    AddressSync s = new AddressSync();
 
-                if (parent != null){
-                    s.setParentId(parent.getObjectId());
+                    if (parent != null){
+                        s.setParentId(parent.getObjectId());
+                    }
+
+                    s.setObjectId(object.getObjectId());
+                    s.setName(handler.getName(object));
+                    s.setType(type);
+                    s.setUniqueExternalId(object.getExternalId());
+                    s.setStatus(AddressSyncStatus.ARCHIVAL);
+                    s.setDate(date);
+
+                    if (!addressSyncBean.isExist(s)) {
+                        addressSyncBean.save(s);
+                    }
+
+                    broadcastService.broadcast(getClass(), "processed", s);
                 }
-
-                s.setObjectId(object.getObjectId());
-                s.setName(handler.getName(object));
-                s.setType(type);
-                s.setUniqueExternalId(object.getExternalId());
-                s.setStatus(AddressSyncStatus.ARCHIVAL);
-                s.setDate(date);
-
-                if (!addressSyncBean.isExist(s)) {
-                    addressSyncBean.save(s);
-                }
-
-                broadcastService.broadcast(getClass(), "processed", s);
-            }
-        });
+            });
+        }
     }
 
     public void cancelSync(){
