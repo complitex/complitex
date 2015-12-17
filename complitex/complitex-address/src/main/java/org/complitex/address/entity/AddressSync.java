@@ -25,14 +25,14 @@ public class AddressSync implements ILongId {
     private Date date;
 
     public String getUniqueExternalId(){
-        return BUILDING.equals(type) ? externalId + '.' + additionalExternalId : externalId;
+        return BUILDING.equals(type) ? additionalExternalId + '.' + externalId  : externalId;
     }
 
     public void setUniqueExternalId(String uniqueExternalId){
         if (BUILDING.equals(type)){
             String[] ids = uniqueExternalId.split("\\.");
-            externalId = ids[0];
-            additionalExternalId = ids[1];
+            additionalExternalId = ids[0];
+            externalId = ids[1];
         }else{
             externalId = uniqueExternalId;
         }

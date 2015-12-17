@@ -264,9 +264,9 @@ public class AddressSyncService {
                 }
 
                 s.setObjectId(object.getObjectId());
-                s.setUniqueExternalId(object.getExternalId());
                 s.setName(handler.getName(object));
                 s.setType(type);
+                s.setUniqueExternalId(object.getExternalId());
                 s.setStatus(AddressSyncStatus.ARCHIVAL);
                 s.setDate(date);
 
@@ -297,11 +297,12 @@ public class AddressSyncService {
         addressSync.setStatus(AddressSyncStatus.NEW);
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream() //todo parallel mysql lock
                 .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))
-                .forEach(a -> {
+                .forEach(s -> {
                     if (!cancelSync.get()) {
                         try {
-                            insert(a, locale);
-                            broadcastService.broadcast(getClass(), "add_all", a);
+                            s.setType(addressEntity);
+                            insert(s, locale);
+                            broadcastService.broadcast(getClass(), "add_all", s);
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
                             broadcastService.broadcast(getClass(), "error", e.getMessage());
