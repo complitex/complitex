@@ -80,6 +80,10 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     public Long getParentId(AddressSync sync, DomainObject parent) {
         Long objectId = streetStrategy.getObjectId(sync.getAdditionalExternalId());
 
+        if (objectId == null){
+            objectId = streetStrategy.getStreetIdByCode(sync.getAdditionalExternalId());
+        }
+
         return objectId != null ? objectId : NOT_FOUND_ID;
     }
 

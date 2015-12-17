@@ -123,4 +123,7 @@
         </choose>
     </select>
 
+    <select id="selectStreetIdByCode" parameterType="string" resultType="long">
+        select value_id from street_attribute where value_id = #{code} and attribute_type_id = 303 and status = 'ACTIVE'
+    </select>
 </mapper>

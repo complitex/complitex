@@ -335,4 +335,8 @@ public class StreetStrategy extends TemplateStrategy {
         return sqlSession().selectList(STREET_NS + ".selectStreetIdsByBuilding", params);
     }
 
+    public Long getStreetIdByCode(String code){
+        return sqlSession().selectOne(STREET_NS + ".selectStreetIdByCode", code);
+    }
+
 }
