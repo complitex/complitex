@@ -99,7 +99,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
         DomainObject buildingAddress = building.getPrimaryAddress();
 
-        buildingAddress.setExternalId(sync.getExternalId());
+        buildingAddress.setExternalId(sync.getUniqueExternalId());
         buildingAddress.setParentEntityId(BuildingAddressStrategy.PARENT_STREET_ENTITY_ID);
         buildingAddress.setParentId(sync.getParentId());
 

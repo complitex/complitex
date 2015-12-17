@@ -190,7 +190,9 @@ public class AddressSyncService {
                         sync.setType(type);
                         sync.setDate(date);
 
-                        DomainObject object = objectMap.get(sync.getExternalId());
+                        String uniqueExternalId = sync.getUniqueExternalId();
+
+                        DomainObject object = objectMap.get(uniqueExternalId);
 
                         if (object != null){
                             sync.setObjectId(object.getObjectId());
@@ -202,9 +204,10 @@ public class AddressSyncService {
                                 //новое название
                                 sync.setStatus(AddressSyncStatus.NEW_NAME);
                         }else{
+
+
                             //дубликат
-                            objects.parallelStream().filter(o ->
-                                    !Objects.equals(sync.getExternalId(), o.getExternalId()) &&
+                            objects.parallelStream().filter(o -> !Objects.equals(uniqueExternalId, o.getExternalId()) &&
                                             handler.hasEqualNames(sync, o))
                                     .findAny()
                                     .ifPresent(o -> {
@@ -247,7 +250,7 @@ public class AddressSyncService {
 
         Map<String, AddressSync> syncMap = cursor.getData().parallelStream()
                 .filter(a -> a.getExternalId() != null)
-                .collect(Collectors.toMap(AddressSync::getExternalId, a -> a));
+                .collect(Collectors.toMap(AddressSync::getUniqueExternalId, a -> a));
 
         objects.parallelStream().filter(o -> o.getExternalId() != null).forEach(object -> {
             AddressSync addressSync = syncMap.get(object.getExternalId());
@@ -261,7 +264,7 @@ public class AddressSyncService {
                 }
 
                 s.setObjectId(object.getObjectId());
-                s.setExternalId(object.getExternalId());
+                s.setUniqueExternalId(object.getExternalId());
                 s.setName(handler.getName(object));
                 s.setType(type);
                 s.setStatus(AddressSyncStatus.ARCHIVAL);

@@ -5,6 +5,8 @@ import org.complitex.common.entity.ILongId;
 
 import java.util.Date;
 
+import static org.complitex.address.entity.AddressEntity.BUILDING;
+
 /**
  * @author Anatoly Ivanov
  *         Date: 29.07.2014 22:35
@@ -21,6 +23,20 @@ public class AddressSync implements ILongId {
     private AddressEntity type;
     private AddressSyncStatus status;
     private Date date;
+
+    public String getUniqueExternalId(){
+        return BUILDING.equals(type) ? externalId + '.' + additionalExternalId : externalId;
+    }
+
+    public void setUniqueExternalId(String uniqueExternalId){
+        if (BUILDING.equals(type)){
+            String[] ids = uniqueExternalId.split("\\.");
+            externalId = ids[0];
+            additionalExternalId = ids[1];
+        }else{
+            externalId = uniqueExternalId;
+        }
+    }
 
     public Long getId() {
         return id;
