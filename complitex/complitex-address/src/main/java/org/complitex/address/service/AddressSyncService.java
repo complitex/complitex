@@ -11,14 +11,12 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.Asynchronous;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
+import javax.ejb.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -33,23 +31,12 @@ import static org.complitex.address.service.IAddressSyncHandler.NOT_FOUND_ID;
  */
 @Singleton
 @ConcurrencyManagement(BEAN)
+@TransactionManagement(TransactionManagementType.BEAN)
 public class AddressSyncService {
     private Logger log = LoggerFactory.getLogger(getClass());
 
     @EJB
     private AddressSyncBean addressSyncBean;
-
-    @EJB(beanName = "DistrictSyncHandler")
-    private IAddressSyncHandler districtSyncHandler;
-
-    @EJB(beanName = "StreetTypeSyncHandler")
-    private IAddressSyncHandler streetTypeSyncHandler;
-
-    @EJB(beanName = "StreetSyncHandler")
-    private IAddressSyncHandler streetSyncHandler;
-
-    @EJB(beanName = "BuildingSyncHandler")
-    private IAddressSyncHandler buildingSyncHandler;
 
     @EJB
     private BroadcastService broadcastService;
@@ -75,13 +62,13 @@ public class AddressSyncService {
     private IAddressSyncHandler getHandler(AddressEntity type){
         switch (type){
             case DISTRICT:
-                return districtSyncHandler;
+                return EjbBeanLocator.getBean(DistrictSyncHandler.class);
             case STREET_TYPE:
-                return streetTypeSyncHandler;
+                return EjbBeanLocator.getBean(StreetTypeSyncHandler.class);
             case STREET:
-                return streetSyncHandler;
+                return EjbBeanLocator.getBean(StreetSyncHandler.class);
             case BUILDING:
-                return buildingSyncHandler;
+                return EjbBeanLocator.getBean(BuildingSyncHandler.class);
 
             default:
                 throw new IllegalArgumentException();
@@ -171,72 +158,81 @@ public class AddressSyncService {
                 .collect(Collectors.toMap(DomainObject::getExternalId, o -> o));
 
         cursor.getData().parallelStream().forEach(sync -> {
-                    if (sync.getExternalId() == null){
-                        broadcastService.broadcast(getClass(), "error", "Пустой вненший код: " + sync.toString());
-                        return;
-                    }
-
-                    if (sync.getName() == null){
-                        broadcastService.broadcast(getClass(), "error", "Пустое название: " + sync.toString());
-                        return;
-                    }
-
-                    Long parentId = handler.getParentId(sync, parent);
-
-                    if (NOT_FOUND_ID.equals(parentId)){
-                        broadcastService.broadcast(getClass(), "error", "Родительский объект не найден: " + sync.toString());
-                        return;
-                    }
-
-                    sync.setParentId(parentId);
-                    sync.setAdditionalParentId(handler.getAdditionalParentId(sync, parent));
-                    sync.setType(type);
-                    sync.setDate(date);
-
-                    DomainObject object = objectMap.get(sync.getExternalId());
-
-                    if (object != null){
-                        sync.setObjectId(object.getObjectId());
-
-                        //все норм
-                        if (handler.isEqualNames(sync, object)) {
-                            sync.setStatus(LOCAL);
-                        }else
-                            //новое название
-                            sync.setStatus(AddressSyncStatus.NEW_NAME);
-                    }else{
-                        //дубликат
-                        objects.parallelStream().filter(o -> !Objects.equals(sync.getExternalId(), o.getExternalId()) &&
-                                handler.hasEqualNames(sync, o))
-                                .findAny()
-                                .ifPresent(o -> {
-                                    sync.setObjectId(o.getObjectId());
-                                    sync.setStatus(AddressSyncStatus.DUPLICATE);
-                                });
-
-                        //внешний дубликат
-                        if (sync.getStatus() == null) {
-                            cursor.getData().parallelStream()
-                                    .filter(s -> s.getStatus() != null &&
-                                            !Objects.equals(sync.getExternalId(), s.getExternalId()) &&
-                                            Objects.equals(sync.getName(), s.getName()) &&
-                                            Objects.equals(sync.getAdditionalName(), s.getAdditionalName()))
-                                    .findAny()
-                                    .ifPresent(s -> sync.setStatus(AddressSyncStatus.EXTERNAL_DUPLICATE));
+                    try {
+                        if (sync.getExternalId() == null){
+                            broadcastService.broadcast(getClass(), "error", "Пустой вненший код: " + sync.toString());
+                            return;
                         }
-                    }
 
-                    //новый
-                    if (sync.getStatus() == null) {
-                        sync.setStatus(AddressSyncStatus.NEW);
-                    }
+                        if (sync.getName() == null){
+                            broadcastService.broadcast(getClass(), "error", "Пустое название: " + sync.toString());
+                            return;
+                        }
 
-                    //сохранение
-                    if (!sync.getStatus().equals(LOCAL) && !addressSyncBean.isExist(sync)) {
-                        addressSyncBean.save(sync);
-                    }
+                        Long parentId = handler.getParentId(sync, parent);
 
-                    broadcastService.broadcast(getClass(), "processed", sync);
+                        if (NOT_FOUND_ID.equals(parentId)){
+                            broadcastService.broadcast(getClass(), "error", "Родительский объект не найден: " + sync.toString());
+                            return;
+                        }
+
+                        sync.setParentId(parentId);
+                        sync.setAdditionalParentId(handler.getAdditionalParentId(sync, parent));
+                        sync.setType(type);
+                        sync.setDate(date);
+
+                        DomainObject object = objectMap.get(sync.getExternalId());
+
+                        if (object != null){
+                            sync.setObjectId(object.getObjectId());
+
+                            //все норм
+                            if (handler.isEqualNames(sync, object)) {
+                                sync.setStatus(LOCAL);
+                            }else
+                                //новое название
+                                sync.setStatus(AddressSyncStatus.NEW_NAME);
+                        }else{
+                            //дубликат
+                            objects.parallelStream().filter(o ->
+                                    !Objects.equals(sync.getExternalId(), o.getExternalId()) &&
+                                            handler.hasEqualNames(sync, o))
+                                    .findAny()
+                                    .ifPresent(o -> {
+                                        sync.setObjectId(o.getObjectId());
+                                        sync.setStatus(AddressSyncStatus.DUPLICATE);
+                                    });
+
+                            //внешний дубликат
+                            if (sync.getStatus() == null) {
+                                cursor.getData().parallelStream()
+                                        .filter(s -> s.getStatus() != null &&
+                                                !Objects.equals(sync.getExternalId(), s.getExternalId()) &&
+                                                Objects.equals(sync.getAdditionalExternalId(), s.getAdditionalExternalId()) &&
+                                                Objects.equals(sync.getName(), s.getName()) &&
+                                                Objects.equals(sync.getAdditionalName(), s.getAdditionalName()))
+                                        .findAny()
+                                        .ifPresent(s -> {
+                                            sync.setStatus(AddressSyncStatus.EXTERNAL_DUPLICATE);
+                                        });
+                            }
+                        }
+
+                        //новый
+                        if (sync.getStatus() == null) {
+                            sync.setStatus(AddressSyncStatus.NEW);
+                        }
+
+                        //сохранение
+                        if (!sync.getStatus().equals(LOCAL) && !addressSyncBean.isExist(sync)) {
+                            addressSyncBean.save(sync);
+                        }
+
+                        broadcastService.broadcast(getClass(), "processed", sync);
+                    } catch (Exception e) {
+                        broadcastService.broadcast(getClass(), "error", "Ошибка синхронизации: " + ExceptionUtil.getCauseMessage(e));
+                        log.error("ошибка синхронизации", e);
+                    }
                 }
         );
 
