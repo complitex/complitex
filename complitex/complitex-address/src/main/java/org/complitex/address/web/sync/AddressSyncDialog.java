@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.ResourceModel;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.web.component.AddressSearchComponent;
 import org.complitex.common.web.component.search.SearchComponentState;
@@ -22,7 +23,7 @@ public class AddressSyncDialog extends Panel{
 
         dialog = new Dialog("dialog");
         dialog.setWidth(600);
-        dialog.setTitle(getString("address_sync_dialog_title"));
+        dialog.setTitle(new ResourceModel("address_sync_dialog_title"));
         add(dialog);
 
         SearchComponentState state = new SearchComponentState();

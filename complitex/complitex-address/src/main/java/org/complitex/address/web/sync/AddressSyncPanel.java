@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import java.util.*;
 
+import static org.complitex.address.entity.AddressEntity.BUILDING;
 import static org.complitex.address.entity.AddressEntity.STREET;
 import static org.complitex.address.entity.AddressSyncStatus.*;
 
@@ -90,7 +91,7 @@ public class AddressSyncPanel extends Panel {
             }
         });
 
-        if (addressEntity.equals(STREET)) {
+        if (STREET.equals(addressEntity)) {
             actions.add(new Action<AddressSync>("street_code_add", "object.street_code_add") {
                 @Override
                 public void onAction(AjaxRequestTarget target, IModel<AddressSync> model) {
@@ -241,7 +242,7 @@ public class AddressSyncPanel extends Panel {
         add(new AjaxLink("sync") {
             @Override
             public boolean isVisible() {
-                return !addressSyncService.isLockSync();
+                return !BUILDING.equals(addressEntity) && !addressSyncService.isLockSync();
             }
 
             @Override
@@ -264,6 +265,39 @@ public class AddressSyncPanel extends Panel {
                 }
             }
         });
+
+        AjaxLink buildingLoadLink = new AjaxLink("building_load") {
+            @Override
+            public boolean isVisible() {
+                return BUILDING.equals(addressEntity) && !addressSyncService.isLockSync();
+            }
+
+            @Override
+            public void onClick(final AjaxRequestTarget target) {
+                ((BuildingLoadDialog)getParent().get("building_load_dialog")).open(target);
+            }
+        };
+        add(buildingLoadLink);
+
+        BuildingLoadDialog buildingLoadDialog = new BuildingLoadDialog("building_load_dialog"){
+            @Override
+            protected void onLoad(AjaxRequestTarget target, SearchComponentState state) {
+                if (addressSyncService.isLockSync()){
+                    return;
+                }
+
+                getSession().info(getString("object.start"));
+
+                buildingLoadLink.setVisible(false);
+
+                target.add(AddressSyncPanel.this);
+                onUpdate(target);
+
+                addressSyncService.sync(addressEntity, state.getId("street"));
+            }
+        };
+        buildingLoadDialog.setVisible(BUILDING.equals(addressEntity));
+        add(buildingLoadDialog);
 
         add(new BroadcastBehavior(AddressSyncService.class) {
             private Long lastProcessed = System.currentTimeMillis();

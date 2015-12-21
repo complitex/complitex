@@ -92,6 +92,11 @@ public class AddressSyncService {
 
     @Asynchronous
     public void sync(AddressEntity type){
+        sync(type, null);
+    }
+
+    @Asynchronous
+    public void sync(AddressEntity type, Long parentId){
         if (lockSync.get()){
             return;
         }
