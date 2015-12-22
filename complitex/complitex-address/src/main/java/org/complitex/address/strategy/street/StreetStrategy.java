@@ -79,7 +79,6 @@ public class StreetStrategy extends TemplateStrategy {
 
     @SuppressWarnings({"unchecked"})
     @Override
-
     public List<DomainObject> getList(DomainObjectFilter example) {
         if (example.getObjectId() != null && example.getObjectId() <= 0) {
             return Collections.emptyList();
@@ -89,11 +88,13 @@ public class StreetStrategy extends TemplateStrategy {
         prepareExampleForPermissionCheck(example);
 
         List<DomainObject> objects = sqlSession().selectList(STREET_NS + ".selectDomainObjects", example);
-        for (DomainObject object : objects) {
-            loadAttributes(object);
-            //load subject ids
-            object.setSubjectIds(loadSubjects(object.getPermissionId()));
-        }
+
+        objects.forEach(o -> {
+            o.setEntityName(getEntityName());
+            loadAttributes(o);
+            o.setSubjectIds(loadSubjects(o.getPermissionId()));
+        });
+
         return objects;
     }
 
@@ -287,7 +288,7 @@ public class StreetStrategy extends TemplateStrategy {
     public String getFullName(Long streetId) {
         DomainObject streetObject = getDomainObject(streetId, true);
 
-        return streetObject != null ? getStreetTypeShortName(streetObject) + " " +getName(streetObject) : null;
+        return streetObject != null ? getStreetTypeShortName(streetObject) + " " + getName(streetObject) : null;
     }
 
     public String getName(DomainObject streetObject){

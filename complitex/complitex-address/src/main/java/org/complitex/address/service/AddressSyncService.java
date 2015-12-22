@@ -96,7 +96,7 @@ public class AddressSyncService {
     }
 
     @Asynchronous
-    public void sync(AddressEntity type, Long parentId){
+    public void sync(AddressEntity type, DomainObject parent){
         if (lockSync.get()){
             return;
         }
@@ -108,11 +108,11 @@ public class AddressSyncService {
 
             Date date = DateUtil.getCurrentDate();
 
-            List<? extends DomainObject> parents = getHandler(type).getParentObjects();
+            List<? extends DomainObject> parents = getHandler(type).getParentObjects(parent);
 
             if (parents != null){
-                for (DomainObject parent : parents) {
-                    sync(parent, type, date);
+                for (DomainObject p : parents) {
+                    sync(p, type, date);
 
                     if (cancelSync.get()){
                         break;

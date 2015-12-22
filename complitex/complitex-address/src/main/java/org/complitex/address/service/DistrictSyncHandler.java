@@ -42,7 +42,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
     private DistrictStrategy districtStrategy;
 
     @Override
-    public List<? extends DomainObject> getParentObjects() {
+    public List<? extends DomainObject> getParentObjects(DomainObject parent) {
         return cityStrategy.getList(new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name()));
     }
 

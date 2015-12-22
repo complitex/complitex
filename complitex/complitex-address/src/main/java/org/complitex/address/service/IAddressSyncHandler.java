@@ -21,7 +21,7 @@ public interface IAddressSyncHandler {
 
     List<? extends DomainObject> getObjects(DomainObject parent);
 
-    List<? extends DomainObject> getParentObjects();
+    List<? extends DomainObject> getParentObjects(DomainObject parent);
 
     boolean isEqualNames(AddressSync sync, DomainObject object);
 

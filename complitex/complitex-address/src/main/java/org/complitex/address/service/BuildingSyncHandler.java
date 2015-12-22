@@ -15,10 +15,7 @@ import org.complitex.common.web.component.ShowMode;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.CORP;
 import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.NUMBER;
@@ -51,8 +48,17 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     private BuildingAddressStrategy buildingAddressStrategy;
 
     @Override
-    public Cursor<AddressSync> getAddressSyncs(final DomainObject parent, Date date) throws RemoteCallException {
-            return addressSyncAdapter.getBuildingSyncs(districtStrategy.getName(parent), "", "", date);
+    public Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) throws RemoteCallException {
+        switch (parent.getEntityName()){
+            case "district":
+                return addressSyncAdapter.getBuildingSyncs(districtStrategy.getName(parent), "", "", date);
+            case "street":
+                return addressSyncAdapter.getBuildingSyncs("",
+                        streetStrategy.getStreetTypeShortName(parent),
+                        streetStrategy.getName(parent), date);
+        }
+
+        throw new IllegalArgumentException("parent entity name not district or street");
     }
 
     @Override
@@ -62,8 +68,10 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects() {
-        return districtStrategy.getList(new DomainObjectFilter());
+    public List<? extends DomainObject> getParentObjects(DomainObject parent) {
+        return parent == null
+                ? districtStrategy.getList(new DomainObjectFilter())
+                : Collections.singletonList(parent);
     }
 
     @Override

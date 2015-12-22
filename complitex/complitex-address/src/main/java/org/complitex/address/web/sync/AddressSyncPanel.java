@@ -293,7 +293,7 @@ public class AddressSyncPanel extends Panel {
                 target.add(AddressSyncPanel.this);
                 onUpdate(target);
 
-                addressSyncService.sync(addressEntity, state.getId("street"));
+                addressSyncService.sync(addressEntity, state.get("street"));
             }
         };
         buildingLoadDialog.setVisible(BUILDING.equals(addressEntity));

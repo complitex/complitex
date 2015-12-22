@@ -286,6 +286,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
 
+    //todo change to void
     protected Set<Long> loadSubjects(String dataSource, Long permissionId) {
         if (Objects.equals(permissionId, PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
             return new HashSet<>(Collections.singletonList(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID));
@@ -369,11 +370,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
         List<DomainObject> objects = sqlSession().selectList(NS + ".selectDomainObjects", example);
 
-        for (DomainObject object : objects) {
-            loadAttributes(object);
-            //load subject ids
-            object.setSubjectIds(loadSubjects(object.getPermissionId()));
-        }
+        objects.forEach(o -> {
+            o.setEntityName(getEntityName());
+            loadAttributes(o);
+            o.setSubjectIds(loadSubjects(o.getPermissionId()));
+        });
+
         return objects;
     }
 

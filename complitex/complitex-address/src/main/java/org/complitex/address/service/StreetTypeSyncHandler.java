@@ -46,7 +46,7 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects() {
+    public List<? extends DomainObject> getParentObjects(DomainObject parent) {
         return null;
     }
 

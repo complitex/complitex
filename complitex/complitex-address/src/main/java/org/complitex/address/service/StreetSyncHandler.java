@@ -65,7 +65,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects() {
+    public List<? extends DomainObject> getParentObjects(DomainObject parent) {
         return cityStrategy.getList(new DomainObjectFilter());
     }
 
