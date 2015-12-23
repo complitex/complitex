@@ -35,7 +35,7 @@ public class OrganizationTypeStrategy extends TemplateStrategy {
      */
     public static final long USER_ORGANIZATION_TYPE = 1;
     public static final long BILLING_TYPE = 2;
-    public static final long BALANCE_OWNER_TYPE = 3;
+    public static final long BALANCE_HOLDER_TYPE = 3;
     public static final long SERVICING_ORGANIZATION_TYPE = 4;
     public static final long SERVICE_PROVIDER_TYPE = 5;
     public static final long CONTRACTOR_TYPE = 6;

@@ -20,6 +20,8 @@ public class AddressSync implements ILongId {
     private String additionalExternalId;
     private String name;
     private String additionalName;
+    private String servicingOrganization;
+    private String balanceHolder;
     private AddressEntity type;
     private AddressSyncStatus status;
     private Date date;
@@ -100,6 +102,22 @@ public class AddressSync implements ILongId {
 
     public void setAdditionalName(String additionalName) {
         this.additionalName = additionalName;
+    }
+
+    public String getServicingOrganization() {
+        return servicingOrganization;
+    }
+
+    public void setServicingOrganization(String servicingOrganization) {
+        this.servicingOrganization = servicingOrganization;
+    }
+
+    public String getBalanceHolder() {
+        return balanceHolder;
+    }
+
+    public void setBalanceHolder(String balanceHolder) {
+        this.balanceHolder = balanceHolder;
     }
 
     public AddressEntity getType() {

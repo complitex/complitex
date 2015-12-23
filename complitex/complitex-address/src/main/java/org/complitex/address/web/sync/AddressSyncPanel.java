@@ -17,6 +17,7 @@ import org.complitex.address.entity.*;
 import org.complitex.address.service.AddressSyncBean;
 import org.complitex.address.service.AddressSyncService;
 import org.complitex.address.strategy.street.StreetStrategy;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.ResourceUtil;
@@ -281,7 +282,7 @@ public class AddressSyncPanel extends Panel {
 
         BuildingLoadDialog buildingLoadDialog = new BuildingLoadDialog("building_load_dialog"){
             @Override
-            protected void onLoad(AjaxRequestTarget target, SearchComponentState state) {
+            protected void onLoad(AjaxRequestTarget target, Map<String, DomainObject> map) {
                 if (addressSyncService.isLockSync()){
                     return;
                 }
@@ -293,7 +294,7 @@ public class AddressSyncPanel extends Panel {
                 target.add(AddressSyncPanel.this);
                 onUpdate(target);
 
-                addressSyncService.sync(addressEntity, state.get("street"));
+                addressSyncService.sync(addressEntity, map);
             }
         };
         buildingLoadDialog.setVisible(BUILDING.equals(addressEntity));

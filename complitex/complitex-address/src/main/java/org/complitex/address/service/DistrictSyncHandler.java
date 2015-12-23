@@ -16,6 +16,7 @@ import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Anatoly Ivanov
@@ -42,7 +43,7 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
     private DistrictStrategy districtStrategy;
 
     @Override
-    public List<? extends DomainObject> getParentObjects(DomainObject parent) {
+    public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
         return cityStrategy.getList(new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name()));
     }
 

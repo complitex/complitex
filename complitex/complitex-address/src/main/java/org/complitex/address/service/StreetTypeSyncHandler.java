@@ -16,6 +16,7 @@ import javax.ejb.TransactionAttributeType;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Anatoly Ivanov
@@ -46,7 +47,7 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects(DomainObject parent) {
+    public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
         return null;
     }
 

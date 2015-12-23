@@ -22,7 +22,7 @@ public class KeConnectionOrganizationTypeStrategy extends OrganizationTypeStrate
 
     @Override
     protected Collection<Long> getReservedInstanceIds() {
-        return ImmutableList.of(USER_ORGANIZATION_TYPE, BILLING_TYPE, BALANCE_OWNER_TYPE,
+        return ImmutableList.of(USER_ORGANIZATION_TYPE, BILLING_TYPE, BALANCE_HOLDER_TYPE,
                 SERVICING_ORGANIZATION_TYPE, SERVICE_PROVIDER_TYPE, CONTRACTOR_TYPE);
     }
 

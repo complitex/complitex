@@ -8,6 +8,7 @@ import javax.ejb.Local;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Anatoly Ivanov
@@ -21,7 +22,7 @@ public interface IAddressSyncHandler {
 
     List<? extends DomainObject> getObjects(DomainObject parent);
 
-    List<? extends DomainObject> getParentObjects(DomainObject parent);
+    List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map);
 
     boolean isEqualNames(AddressSync sync, DomainObject object);
 
@@ -30,8 +31,6 @@ public interface IAddressSyncHandler {
     }
 
     Long getParentId(AddressSync sync, DomainObject parent);
-
-    default Long getAdditionalParentId(AddressSync sync, DomainObject parent) { return null; }
 
     void insert(AddressSync sync, Locale locale);
 

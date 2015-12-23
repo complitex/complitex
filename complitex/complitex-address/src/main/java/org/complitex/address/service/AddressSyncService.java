@@ -50,6 +50,9 @@ public class AddressSyncService {
     @EJB
     private DistrictStrategy districtStrategy;
 
+    @EJB
+    private StreetStrategy streetStrategy;
+
     private AtomicBoolean lockSync = new AtomicBoolean(false);
 
     private AtomicBoolean cancelSync = new AtomicBoolean(false);
@@ -96,7 +99,7 @@ public class AddressSyncService {
     }
 
     @Asynchronous
-    public void sync(AddressEntity type, DomainObject parent){
+    public void sync(AddressEntity type, Map<String, DomainObject> map){
         if (lockSync.get()){
             return;
         }
@@ -108,18 +111,18 @@ public class AddressSyncService {
 
             Date date = DateUtil.getCurrentDate();
 
-            List<? extends DomainObject> parents = getHandler(type).getParentObjects(parent);
+            List<? extends DomainObject> parents = getHandler(type).getParentObjects(map);
 
             if (parents != null){
                 for (DomainObject p : parents) {
-                    sync(p, type, date);
+                    sync(p, type, map, date);
 
                     if (cancelSync.get()){
                         break;
                     }
                 }
             }else{
-                sync(null, type, date);
+                sync(null, type, map, date);
             }
         } catch (Exception e) {
             log.error("Ошибка синхронизации", e);
@@ -135,24 +138,32 @@ public class AddressSyncService {
         }
     }
 
-    public void sync(DomainObject parent,  AddressEntity type, Date date) throws RemoteCallException {
-        IAddressSyncHandler handler = getHandler(type);
+    public void sync(DomainObject parent, AddressEntity addressEntity, Map<String, DomainObject> map, Date date)
+            throws RemoteCallException {
+        IAddressSyncHandler handler = getHandler(addressEntity);
 
         Cursor<AddressSync> cursor = handler.getAddressSyncs(parent, date);
 
-        SyncBeginMessage begin = new SyncBeginMessage();
-        begin.setAddressEntity(type);
-        begin.setCount(cursor.getData() != null ? cursor.getData().size() : 0L);
+        SyncBeginMessage message = new SyncBeginMessage();
+        message.setAddressEntity(addressEntity);
+        message.setCount(cursor.getData() != null ? cursor.getData().size() : 0L);
 
         if (parent != null){
-            if (type.equals(AddressEntity.DISTRICT) || type.equals(STREET)){
-                begin.setParentName(cityStrategy.getName(parent));
-            }else if (type.equals(AddressEntity.BUILDING)){
-                begin.setParentName(districtStrategy.getName(parent));
+            if (addressEntity.equals(AddressEntity.DISTRICT) || addressEntity.equals(STREET)){
+                message.setParentName(cityStrategy.getName(parent));
+            }else if (addressEntity.equals(AddressEntity.BUILDING)){
+                switch (parent.getEntityName()){
+                    case "district":
+                        message.setParentName(districtStrategy.getName(parent));
+                        break;
+                    case "street":
+                        message.setParentName(streetStrategy.getName(parent));
+                        break;
+                }
             }
         }
 
-        broadcastService.broadcast(getClass(), "begin", begin);
+        broadcastService.broadcast(getClass(), "begin", message);
 
         if (cursor.getData() == null) {
             return;
@@ -166,7 +177,7 @@ public class AddressSyncService {
                 .collect(Collectors.toMap(DomainObject::getExternalId, o -> o));
 
         //коды улиц
-        if (type.equals(STREET)){
+        if (addressEntity.equals(STREET)){
             objects.parallelStream().forEach(o -> o.getAttributes().parallelStream()
                     .filter(a -> a.getAttributeTypeId() == StreetStrategy.STREET_CODE)
                     .forEach(a -> objectMap.put(String.valueOf(a.getValueId()), o)));
@@ -192,9 +203,12 @@ public class AddressSyncService {
                         }
 
                         sync.setParentId(parentId);
-                        sync.setAdditionalParentId(handler.getAdditionalParentId(sync, parent));
-                        sync.setType(type);
+                        sync.setType(addressEntity);
                         sync.setDate(date);
+
+                        if (BUILDING.equals(addressEntity) && map.get("district") != null){
+                            sync.setAdditionalParentId(map.get("district").getId());
+                        }
 
                         String uniqueExternalId = sync.getUniqueExternalId();
 
@@ -252,7 +266,7 @@ public class AddressSyncService {
                 }
         );
 
-        if (!BUILDING.equals(type)) { //todo fix building object list
+        if (!BUILDING.equals(addressEntity)) { //todo fix building object list
             Map<String, AddressSync> syncMap = cursor.getData().parallelStream()
                     .filter(a -> a.getExternalId() != null)
                     .collect(Collectors.toMap(AddressSync::getUniqueExternalId, a -> a));
@@ -270,7 +284,7 @@ public class AddressSyncService {
 
                     s.setObjectId(object.getObjectId());
                     s.setName(handler.getName(object));
-                    s.setType(type);
+                    s.setType(addressEntity);
                     s.setUniqueExternalId(object.getExternalId());
                     s.setStatus(AddressSyncStatus.ARCHIVAL);
                     s.setDate(date);

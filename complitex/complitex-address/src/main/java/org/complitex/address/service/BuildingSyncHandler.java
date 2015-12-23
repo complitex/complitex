@@ -63,15 +63,30 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
-        //.addAdditionalParam(DISTRICT_ID, parent.getObjectId())
-        return buildingAddressStrategy.getList(new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name()));
+        DomainObjectFilter filter = new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name());
+
+        switch (parent.getEntityName()){
+            case "district":
+                //.addAdditionalParam(DISTRICT_ID, parent.getObjectId())
+                break;
+            case "street":
+                filter.setParent(parent.getEntityName(), parent.getId());
+                break;
+        }
+
+        return buildingAddressStrategy.getList(filter);
     }
 
+
     @Override
-    public List<? extends DomainObject> getParentObjects(DomainObject parent) {
-        return parent == null
-                ? districtStrategy.getList(new DomainObjectFilter())
-                : Collections.singletonList(parent);
+    public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
+        if (map.containsKey("street") && map.get("street").getId() > 0){
+            return Collections.singletonList(map.get("street"));
+        }else if (map.containsKey("district") && map.get("district").getId() > 0){
+            return Collections.singletonList(map.get("district"));
+        }else {
+            return districtStrategy.getList(new DomainObjectFilter());
+        }
     }
 
     @Override
@@ -93,11 +108,6 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
         }
 
         return objectId != null ? objectId : NOT_FOUND_ID;
-    }
-
-    @Override
-    public Long getAdditionalParentId(AddressSync sync, DomainObject parent) {
-        return parent.getObjectId();
     }
 
     @Override

@@ -20,6 +20,7 @@ import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static org.complitex.address.strategy.street.StreetStrategy.STREET_CODE;
 
@@ -65,7 +66,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects(DomainObject parent) {
+    public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
         return cityStrategy.getList(new DomainObjectFilter());
     }
 
