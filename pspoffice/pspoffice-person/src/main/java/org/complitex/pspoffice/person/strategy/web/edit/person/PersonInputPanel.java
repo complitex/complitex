@@ -188,7 +188,7 @@ public class PersonInputPanel extends Panel {
                 (personAgeType == PersonAgeType.ADULT) || (personAgeType == PersonAgeType.ANY && !person.isKid()));
         add(childrentComponent);
 
-        birthDateComponent.add(new AjaxFormComponentUpdatingBehavior("onblur") {
+        birthDateComponent.add(new AjaxFormComponentUpdatingBehavior("blur") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

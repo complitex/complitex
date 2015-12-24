@@ -3,6 +3,7 @@ package org.complitex.address.service;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.Building;
+import org.complitex.address.strategy.building.entity.BuildingCode;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
@@ -10,8 +11,11 @@ import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.web.component.ShowMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -26,6 +30,8 @@ import static org.complitex.address.strategy.building_address.BuildingAddressStr
  */
 @Stateless
 public class BuildingSyncHandler implements IAddressSyncHandler {
+    private final Logger log = LoggerFactory.getLogger(BuildingSyncHandler.class);
+
     @EJB
     private AddressSyncAdapter addressSyncAdapter;
 
@@ -46,6 +52,9 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @EJB
     private BuildingAddressStrategy buildingAddressStrategy;
+
+    @EJB(lookup = IOrganizationStrategy.BEAN_LOOKUP)
+    private IOrganizationStrategy organizationStrategy;
 
     @Override
     public Cursor<AddressSync> getAddressSyncs(DomainObject parent, Date date) throws RemoteCallException {
@@ -114,6 +123,14 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     public void insert(AddressSync sync, Locale locale) {
         Building building = buildingStrategy.newInstance();
         building.setLongValue(BuildingStrategy.DISTRICT, sync.getAdditionalParentId());
+
+        Long organizationId = organizationStrategy.getObjectIdByCode(sync.getServicingOrganization());
+
+        if (organizationId != null){
+            building.getBuildingCodes().add(new BuildingCode(organizationId, Integer.valueOf(sync.getExternalId())));
+        }else{
+            log.warn("Servicing organization not found by code {}", sync.getServicingOrganization());
+        }
 
         DomainObject buildingAddress = building.getPrimaryAddress();
 

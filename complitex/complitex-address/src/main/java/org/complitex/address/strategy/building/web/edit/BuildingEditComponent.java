@@ -271,7 +271,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
                         IModel<Integer> buildingCodeModel = new PropertyModel<Integer>(association, "buildingCode");
                         TextField<Integer> buildingCode = new TextField<>("buildingCode", buildingCodeModel);
                         buildingCode.setEnabled(enabled);
-                        buildingCode.add(new AjaxFormComponentUpdatingBehavior("onblur") {
+                        buildingCode.add(new AjaxFormComponentUpdatingBehavior("blur") {
 
                             @Override
                             protected void onUpdate(AjaxRequestTarget target) {
