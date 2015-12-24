@@ -102,6 +102,8 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     public boolean isEqualNames(AddressSync sync, DomainObject object) {
         String streetExternalId = streetStrategy.getExternalId(object.getParentId());
 
+        //todo get additional external code
+
         return streetExternalId != null &&
                 sync.getName().equals(object.getStringValue(NUMBER)) &&
                 Objects.equals(sync.getAdditionalName(), object.getStringValue(CORP)) &&

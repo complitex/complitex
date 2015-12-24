@@ -215,7 +215,7 @@ public class AddressSyncPanel extends Panel {
 
             @Override
             protected boolean isVisible(String field) {
-                return !(addressEntity != null && field.equals("type")) && super.isVisible(field);
+                return !(field.equals("type")) && super.isVisible(field);
             }
         });
 

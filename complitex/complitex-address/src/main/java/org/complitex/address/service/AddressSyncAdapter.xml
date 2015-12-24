@@ -19,9 +19,10 @@
     </resultMap>
 
     <resultMap id="buildingSyncCursorResultMap" type="org.complitex.address.entity.AddressSync">
-        <result column="c_code" property="additionalExternalId"/>
         <result column="id" property="externalId"/>
+        <result column="c_code" property="additionalExternalId"/>
         <result column="c_name" property="name"/>
+        <result column="c_part" property="additionalName"/>
         <result column="gek" property="servicingOrganization"/>
         <result column="bd" property="balanceHolder"/>
     </resultMap>
