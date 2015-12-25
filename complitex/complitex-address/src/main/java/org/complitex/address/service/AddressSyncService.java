@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import static javax.ejb.ConcurrencyManagementType.BEAN;
 import static org.complitex.address.entity.AddressEntity.BUILDING;
 import static org.complitex.address.entity.AddressEntity.STREET;
+import static org.complitex.address.entity.AddressSyncStatus.EXTERNAL_DUPLICATE;
 import static org.complitex.address.entity.AddressSyncStatus.LOCAL;
 import static org.complitex.address.service.IAddressSyncHandler.NOT_FOUND_ID;
 
@@ -315,6 +316,7 @@ public class AddressSyncService {
         AddressSync addressSync = new AddressSync();
         addressSync.setType(addressEntity);
         addressSync.setStatus(AddressSyncStatus.NEW);
+
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream() //todo parallel mysql lock
                 .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))
                 .forEach(s -> {
@@ -329,6 +331,11 @@ public class AddressSyncService {
                         }
                     }
                 });
+
+        addressSync.setStatus(AddressSyncStatus.EXTERNAL_DUPLICATE);
+        addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
+                .forEach(s -> addressSyncBean.delete(s.getId()));
+
         lockSync.set(false);
 
         broadcastService.broadcast(getClass(), "add_all_complete", addressEntity);
@@ -341,6 +348,7 @@ public class AddressSyncService {
 
         AddressSync addressSync = new AddressSync();
         addressSync.setType(addressEntity);
+
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
                 .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))
                 .filter(s -> s.getStatus().equals(AddressSyncStatus.NEW_NAME) ||
@@ -361,6 +369,11 @@ public class AddressSyncService {
                         }
                     }
                 });
+
+        addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
+                .filter(s -> s.getStatus().equals(EXTERNAL_DUPLICATE))
+                .forEach(s -> addressSyncBean.delete(s.getId()));
+
         lockSync.set(false);
 
         broadcastService.broadcast(getClass(), "add_all_complete", addressEntity);

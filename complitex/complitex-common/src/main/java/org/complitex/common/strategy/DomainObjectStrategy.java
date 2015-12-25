@@ -1357,7 +1357,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     }
 
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public String getExternalId(Long objectId){
         return sqlSession().selectOne(NS +".selectExternalId", new HashMap<String, Object>(){{
             put("entityName", getEntityName());
