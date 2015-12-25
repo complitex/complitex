@@ -18,14 +18,14 @@ insert into organization_string_culture(id, locale_id, value) values
 
 insert into organization_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
 -- oszn:
-(1,1,900,3,900), (1,1,901,4,901), (1,1,902,3,902), (1,1,904,2,904),
+(1,1,900,3,900), (1,1,901,4,901), (1,1,902,3,902), (1,1,904,7,904), (2,1,904,8,904),
 -- Request files paths attributes:
 (1,1,915,8,915),(1,1,916,9,916),(1,1,917,10,917),(1,1,918,11,918),(1,1,919,12,919),(1,1,920,13,920),
 (1,1,921,14,921),(1,1,922,15,922),
 (1,1,923,16,923),(1,1,924,17,924),
 (1,1,925,18,925), (1,1,928,19,928),
 -- calculation center:
-(1,2,900,5,900), (1,2,901,6,901), (1,2,904,3,904), (1,2,913,7,913);
+(1,2,900,5,900), (1,2,901,6,901), (1,2,904,2,904), (1,2,913,7,913);
 
 -- User organizations
 # insert into service_association (pk_id, service_provider_type_id, calculation_center_id) values (1,1,2),
