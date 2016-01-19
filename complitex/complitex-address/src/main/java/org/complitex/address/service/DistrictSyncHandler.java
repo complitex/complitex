@@ -1,6 +1,7 @@
 package org.complitex.address.service;
 
 import org.complitex.address.entity.AddressSync;
+import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
@@ -9,13 +10,13 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.CloneUtil;
+import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.ShowMode;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -69,24 +70,26 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
         return parent.getObjectId();
     }
 
-    public void insert(AddressSync sync, Locale locale){
+    public void insert(AddressSync sync){
         DomainObject domainObject = districtStrategy.newInstance();
 
         domainObject.setExternalId(sync.getExternalId());
         domainObject.setParentId(sync.getParentId());
-        domainObject.setStringValue(DistrictStrategy.NAME, sync.getName(), locale);
+        domainObject.setStringValue(DistrictStrategy.NAME, sync.getName());
+        domainObject.setStringValue(DistrictStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
         domainObject.setStringValue(DistrictStrategy.CODE, sync.getExternalId());
 
         districtStrategy.insert(domainObject, sync.getDate());
         addressSyncBean.delete(sync.getId());
     }
 
-    public void update(AddressSync sync, Locale locale){
+    public void update(AddressSync sync){
         DomainObject oldObject = districtStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
         newObject.setExternalId(sync.getExternalId());
-        newObject.setStringValue(DistrictStrategy.NAME, sync.getName(), locale);
+        newObject.setStringValue(DistrictStrategy.NAME, sync.getName());
+        newObject.setStringValue(DistrictStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
         newObject.setStringValue(DistrictStrategy.CODE, sync.getExternalId());
 
         districtStrategy.update(oldObject, newObject, sync.getDate());

@@ -1,4 +1,4 @@
-package org.complitex.address.service;
+package org.complitex.address.exception;
 
 /**
  * @author inheaven on 003 03.07.15 19:30

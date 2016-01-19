@@ -1,12 +1,14 @@
 package org.complitex.address.service;
 
 import org.complitex.address.entity.AddressSync;
+import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.CloneUtil;
+import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.ShowMode;
 
 import javax.ejb.EJB;
@@ -15,8 +17,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Anatoly Ivanov
@@ -53,8 +55,10 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
 
     @Override
     public boolean isEqualNames(AddressSync sync, DomainObject object) {
-        return sync.getName().equals(streetTypeStrategy.getName(object))
-                && sync.getAdditionalName().equals(streetTypeStrategy.getShortName(object));
+        return Objects.equals(sync.getName(), streetTypeStrategy.getName(object))
+                && Objects.equals(sync.getAdditionalName(), streetTypeStrategy.getShortName(object))
+                && Objects.equals(sync.getAltName(), streetTypeStrategy.getName(object))
+                && Objects.equals(sync.getAltAdditionalName(), streetTypeStrategy.getShortName(object, Locales.getAlternativeLocale()));
     }
 
     @Override
@@ -69,17 +73,19 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
-    public void insert(AddressSync sync, Locale locale) {
+    public void insert(AddressSync sync) {
         DomainObject domainObject = streetTypeStrategy.newInstance();
 
         //external id
         domainObject.setExternalId(sync.getExternalId());
 
         //name
-        domainObject.setStringValue(StreetTypeStrategy.NAME, sync.getName(), locale);
+        domainObject.setStringValue(StreetTypeStrategy.NAME, sync.getName());
+        domainObject.setStringValue(StreetTypeStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
 
         //short name
-        domainObject.setStringValue(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName(), locale);
+        domainObject.setStringValue(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName());
+        domainObject.setStringValue(StreetTypeStrategy.SHORT_NAME, sync.getAltAdditionalName(), Locales.getAlternativeLocale());
 
 
         streetTypeStrategy.insert(domainObject, sync.getDate());
@@ -88,7 +94,7 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void update(AddressSync sync, Locale locale) {
+    public void update(AddressSync sync) {
         DomainObject oldObject = streetTypeStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
@@ -96,10 +102,12 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
         newObject.setExternalId(sync.getExternalId());
 
         //name
-        newObject.setStringValue(StreetTypeStrategy.NAME, sync.getName(), locale);
+        newObject.setStringValue(StreetTypeStrategy.NAME, sync.getName());
+        newObject.setStringValue(StreetTypeStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
 
         //short name
-        newObject.setStringValue(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName(), locale);
+        newObject.setStringValue(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName());
+        newObject.setStringValue(StreetTypeStrategy.SHORT_NAME, sync.getAltAdditionalName(), Locales.getAlternativeLocale());
 
         streetTypeStrategy.update(oldObject, newObject, sync.getDate());
         addressSyncBean.delete(sync.getId());

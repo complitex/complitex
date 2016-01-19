@@ -12,17 +12,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- *
- * @author Artem
- */
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class StringLocaleBean extends AbstractBean {
-
-    /*
-     * Caches for locales.
-     */
     private ConcurrentHashMap<Long, StringLocale> idTolocaleMap = new ConcurrentHashMap<Long, StringLocale>();
     private ConcurrentHashMap<java.util.Locale, StringLocale> localesMap = new ConcurrentHashMap<java.util.Locale, StringLocale>();
     private StringLocale systemStringLocale;

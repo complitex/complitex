@@ -2,6 +2,7 @@ package org.complitex.address.service;
 
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
+import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.exception.SyncException;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DictionaryConfig;
@@ -14,8 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Map;
  *         Date: 31.10.13 15:59
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class AddressSyncAdapter extends AbstractBean {
     private final static String NS = AddressSyncAdapter.class.getName();
     private final Logger log = LoggerFactory.getLogger(AddressSyncAdapter.class);
@@ -67,7 +69,6 @@ public class AddressSyncAdapter extends AbstractBean {
      * возвращаемое значение: 0 - все хорошо, -1 - неизвестный тип нас.пункта, -2 - неизвестный нас.пункт
      */
     @SuppressWarnings("unchecked")
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Cursor<AddressSync> getDistrictSyncs(String cityName, String cityTypeName, Date date) throws RemoteCallException {
         Map<String, Object> param = new HashMap<>();
 
@@ -98,7 +99,6 @@ public class AddressSyncAdapter extends AbstractBean {
      * возвращаемое значение: 0 - все хорошо, -1 - ошибка
      */
     @SuppressWarnings("unchecked")
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Cursor<AddressSync> getStreetTypeSyncs() throws RemoteCallException {
         Map<String, Object> param = new HashMap<>();
         param.put("okCode", 0);
@@ -128,7 +128,6 @@ public class AddressSyncAdapter extends AbstractBean {
      * возвращаемое значение: 0 - все хорошо, -1 - неизвестный тип нас.пункта, -2 - неизвестный нас.пункт
      */
     @SuppressWarnings("unchecked")
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Cursor<AddressSync> getStreetSyncs(String cityName, String cityTypeName, Date date) throws RemoteCallException {
         Map<String, Object> param = new HashMap<>();
 
@@ -170,7 +169,6 @@ public class AddressSyncAdapter extends AbstractBean {
      * возвращаемое значение: 0 - все хорошо, -3 - неизвестный район нас.пункта, -4 - неизвестный тип улицы, -5 - неизвестная улица
      */
     @SuppressWarnings("unchecked")
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Cursor<AddressSync> getBuildingSyncs(String districtName, String streetTypeName,
                                                String streetName, Date date) throws RemoteCallException {
         Map<String, Object> param = new HashMap<>();
@@ -186,6 +184,24 @@ public class AddressSyncAdapter extends AbstractBean {
         } catch (Exception e) {
             throw new RemoteCallException(e);
         }
+
+        return new Cursor<>((Integer)param.get("resultCode"), (List<AddressSync>) param.get("out"));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Cursor<AddressSync> getOrganizationSyncs(Date date) throws RemoteCallException {
+        Map<String, Object> param = new HashMap<>();
+
+        param.put("date", date);
+        param.put("okCode", 0);
+
+        try {
+            sqlSession(getDataSource()).selectOne(NS + ".selectOrganizationSyncs", param);
+        } catch (Exception e) {
+            throw new RemoteCallException(e);
+        }
+
+        log.info("getOrganizationSyncs: " + param);
 
         return new Cursor<>((Integer)param.get("resultCode"), (List<AddressSync>) param.get("out"));
     }

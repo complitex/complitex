@@ -44,8 +44,8 @@ import static org.complitex.address.entity.AddressSyncStatus.*;
 public class AddressSyncPanel extends Panel {
     private Logger log = LoggerFactory.getLogger(AddressSyncPanel.class);
 
-    private final static String[] FIELDS = {"name", "additionalName", "objectId", "parentObjectId", "externalId",
-            "additionalExternalId", "type", "status", "date"};
+    private final static String[] FIELDS = {"name", "additionalName", "altName", "altAdditionalName",
+            "objectId", "parentObjectId", "externalId", "additionalExternalId", "type", "status", "date"};
 
     @EJB
     private AddressSyncBean addressSyncBean;

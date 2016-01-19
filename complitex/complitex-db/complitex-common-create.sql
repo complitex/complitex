@@ -1185,6 +1185,8 @@ CREATE TABLE `address_sync`(
   `additional_external_id` VARCHAR(20) COMMENT 'Код адресного объекта (ID)',
   `name` VARCHAR(100) NOT NULL COMMENT 'Название адресного элемента',
   `additional_name` VARCHAR(20) COMMENT 'Дополнительное название адресного элемента',
+  `alt_name` VARCHAR(100) COMMENT 'Украинское название адресного элемента',
+  `alt_additional_name` VARCHAR(20) COMMENT 'Украинское дополнительное название адресного элемента',
   `servicing_organization` VARCHAR(16) COMMENT 'Обслуживающая организация',
   `balance_holder` VARCHAR(16) COMMENT 'Балансодержатель',
   `type` INTEGER NOT NULL COMMENT 'Тип адресного элемента синхронизации',

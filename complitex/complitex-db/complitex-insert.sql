@@ -10,8 +10,8 @@ INSERT INTO `config` (`name`,`value`) VALUES ('MODULE_ID','0');
 -- Locale
 -- --------------------------------
 
-INSERT INTO `locales`(`id`, `locale`, `system`) VALUES (1, 'ru', 1);
-INSERT INTO `locales`(`id`, `locale`, `system`) VALUES (2, 'uk', 0);
+INSERT INTO `locales`(`id`, `locale`, `system`, `alternative`) VALUES (1, 'ru', 1, 0);
+INSERT INTO `locales`(`id`, `locale`, `system`, `alternative`) VALUES (2, 'uk', 0, 1);
 
 -- --------------------------------
 -- Sequence

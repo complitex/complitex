@@ -12,7 +12,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
@@ -28,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * Класс слушает создание http сессий и запросов, и сохраняет в сессию информацию об авторизованном пользователе.
  */
-@WebListener
+// @WebListener
 public class SecurityWebListener implements HttpSessionListener, ServletRequestListener, ServletContextListener {
     private final Logger log = LoggerFactory.getLogger(SecurityWebListener.class);
 

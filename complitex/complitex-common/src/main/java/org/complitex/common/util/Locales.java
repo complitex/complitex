@@ -14,9 +14,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Locales {
     private Long systemLocaleId;
-    private Locale systemLocale;
-    private Map<Locale, Long> map = new ConcurrentHashMap<>();
 
+    private Locale systemLocale;
+    private Locale alternativeLocale;
+
+    private Map<Locale, Long> map = new ConcurrentHashMap<>();
     private static Locales instance = new Locales();
 
     public Locales() {
@@ -28,6 +30,10 @@ public class Locales {
             if (l.isSystem()){
                 systemLocaleId = l.getId();
                 systemLocale = new Locale(l.getLanguage());
+            }
+
+            if (l.isAlternative()){
+                alternativeLocale = new Locale(l.getLanguage());
             }
         }
     }
@@ -42,6 +48,10 @@ public class Locales {
 
     public static Long getSystemLocaleId() {
         return get().systemLocaleId;
+    }
+
+    public static Locale getAlternativeLocale() {
+        return get().alternativeLocale;
     }
 
     public static Long getLocaleId(Locale locale){

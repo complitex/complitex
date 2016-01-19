@@ -4,6 +4,7 @@ import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.entity.AddressSyncStatus;
 import org.complitex.address.entity.SyncBeginMessage;
+import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
@@ -83,11 +84,11 @@ public class AddressSyncService {
     }
 
     public void insert(AddressSync sync, Locale locale){
-        getHandler(sync.getType()).insert(sync, locale);
+        getHandler(sync.getType()).insert(sync);
     }
 
     public void update(AddressSync sync, Locale locale){
-        getHandler(sync.getType()).update(sync, locale);
+        getHandler(sync.getType()).update(sync);
     }
 
     public void archive(AddressSync sync){

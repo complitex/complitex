@@ -1,6 +1,7 @@
 package org.complitex.address.service;
 
 import org.complitex.address.entity.AddressSync;
+import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.building.entity.BuildingCode;
@@ -122,7 +123,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
-    public void insert(AddressSync sync, Locale locale) {
+    public void insert(AddressSync sync) {
         Building building = buildingStrategy.newInstance();
         building.setLongValue(BuildingStrategy.DISTRICT, sync.getAdditionalParentId());
 
@@ -141,11 +142,11 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
         buildingAddress.setParentId(sync.getParentId());
 
         //building number
-        buildingAddress.setStringValue(NUMBER, sync.getName(), locale);
+        buildingAddress.setStringValue(NUMBER, sync.getName());
 
         //building part
         if (sync.getAdditionalName() != null) {
-            buildingAddress.setStringValue(CORP, sync.getAdditionalName(), locale);
+            buildingAddress.setStringValue(CORP, sync.getAdditionalName());
         }
 
         buildingStrategy.insert(building, sync.getDate());
@@ -153,16 +154,16 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
-    public void update(AddressSync sync, Locale locale) {
+    public void update(AddressSync sync) {
         DomainObject oldObject = buildingAddressStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
         //building number
-        newObject.setStringValue(NUMBER, sync.getName(), locale);
+        newObject.setStringValue(NUMBER, sync.getName());
 
         //building part
         if (sync.getAdditionalName() != null) {
-            newObject.setStringValue(CORP, sync.getAdditionalName(), locale);
+            newObject.setStringValue(CORP, sync.getAdditionalName());
         }
 
         buildingStrategy.update(oldObject, newObject, sync.getDate());

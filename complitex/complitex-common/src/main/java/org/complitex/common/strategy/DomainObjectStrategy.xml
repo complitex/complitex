@@ -41,6 +41,7 @@
             <idArg column="id" javaType="Long"/>
             <arg column="locale" javaType="String"/>
             <arg column="system" javaType="Boolean"/>
+            <arg column="alternative" javaType="Boolean"/>
         </constructor>
     </resultMap>
 

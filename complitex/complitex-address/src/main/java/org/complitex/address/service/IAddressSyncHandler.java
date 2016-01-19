@@ -1,13 +1,13 @@
 package org.complitex.address.service;
 
 import org.complitex.address.entity.AddressSync;
+import org.complitex.address.exception.RemoteCallException;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 
 import javax.ejb.Local;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -32,9 +32,9 @@ public interface IAddressSyncHandler {
 
     Long getParentId(AddressSync sync, DomainObject parent);
 
-    void insert(AddressSync sync, Locale locale);
+    void insert(AddressSync sync);
 
-    void update(AddressSync sync, Locale locale);
+    void update(AddressSync sync);
 
     void archive(AddressSync sync);
 

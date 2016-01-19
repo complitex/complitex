@@ -1,7 +1,6 @@
 package org.complitex.address.strategy.street;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.wicket.Component;
@@ -141,6 +140,20 @@ public class StreetStrategy extends TemplateStrategy {
 
     public String getStreetTypeShortName(DomainObject domainObject){
         return getStreetTypeShortName(domainObject, stringLocaleBean.getSystemLocale());
+    }
+
+    public String getStreetTypeExternalId(DomainObject domainObject){
+        Long streetTypeId = getStreetType(domainObject);
+
+        if (streetTypeId != null) {
+            DomainObject streetType = streetTypeStrategy.getDomainObject(streetTypeId, true);
+
+            if (streetType != null) {
+                return streetType.getExternalId();
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -296,8 +309,8 @@ public class StreetStrategy extends TemplateStrategy {
     }
 
     public String getName(DomainObject street, Locale locale) {
-        return StringCultures.getValue(Iterables.find(street.getAttributes(),
-                attr -> attr.getAttributeTypeId().equals(NAME)).getStringCultures(), locale);
+        return StringCultures.getValue(street.getAttributes().stream()
+                .filter(attr -> attr.getAttributeTypeId().equals(NAME)).findFirst().get().getStringCultures(), locale);
     }
 
     @Override

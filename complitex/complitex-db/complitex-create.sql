@@ -5,6 +5,7 @@ CREATE TABLE `locales` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор локали',
   `locale` VARCHAR(2) NOT NULL COMMENT 'Код локали',
   `system` TINYINT(1) NOT NULL default 0 COMMENT 'Является ли локаль системной',
+  `alternative` TINYINT(1) NOT NULL default 0 COMMENT 'Является ли локаль альтернативной',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_key_locale` (`locale`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локаль';

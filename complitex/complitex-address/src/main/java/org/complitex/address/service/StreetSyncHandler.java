@@ -2,6 +2,7 @@ package org.complitex.address.service;
 
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.entity.AddressSyncStatus;
+import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
@@ -19,8 +20,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.complitex.address.strategy.street.StreetStrategy.STREET_CODE;
 
@@ -72,8 +73,9 @@ public class StreetSyncHandler implements IAddressSyncHandler {
 
     @Override
     public boolean isEqualNames(AddressSync sync, DomainObject object) {
-        return sync.getName().equals(streetStrategy.getName(object))
-                && sync.getAdditionalName().equals(streetStrategy.getStreetTypeShortName(object));
+        return Objects.equals(sync.getName(), streetStrategy.getName(object))
+                && Objects.equals(sync.getAltName(), streetStrategy.getName(object, Locales.getAlternativeLocale()))
+                && Objects.equals(sync.getAdditionalExternalId(), streetStrategy.getStreetTypeExternalId(object));
     }
 
     @Override
@@ -82,7 +84,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
-    public void insert(AddressSync sync, Locale locale) {
+    public void insert(AddressSync sync) {
         if (sync.getStatus().equals(AddressSyncStatus.DUPLICATE)){
             DomainObject oldStreet = streetStrategy.getDomainObject(sync.getObjectId());
             DomainObject street = streetStrategy.getDomainObject(sync.getObjectId());
@@ -102,7 +104,8 @@ public class StreetSyncHandler implements IAddressSyncHandler {
             newObject.setExternalId(sync.getExternalId());
 
             //name
-            newObject.setStringValue(StreetStrategy.NAME, sync.getName(), locale);
+            newObject.setStringValue(StreetStrategy.NAME, sync.getName());
+            newObject.setStringValue(StreetStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
 
             //CITY_ID
             newObject.setParentEntityId(StreetStrategy.PARENT_ENTITY_ID);
@@ -122,11 +125,12 @@ public class StreetSyncHandler implements IAddressSyncHandler {
     }
 
     @Override
-    public void update(AddressSync sync, Locale locale) {
+    public void update(AddressSync sync) {
         DomainObject oldObject = streetStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
-        newObject.setStringValue(StreetStrategy.NAME, sync.getName(), locale);
+        newObject.setStringValue(StreetStrategy.NAME, sync.getName());
+        newObject.setStringValue(StreetStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
 
         List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(new DomainObjectFilter()
                 .addAttribute(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName()));

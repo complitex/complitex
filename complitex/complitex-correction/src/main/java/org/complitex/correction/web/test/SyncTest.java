@@ -6,8 +6,8 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.complitex.address.entity.AddressSync;
+import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.service.AddressSyncAdapter;
-import org.complitex.address.service.RemoteCallException;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.util.StringUtil;
 

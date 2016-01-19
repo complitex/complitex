@@ -1,6 +1,5 @@
 package org.complitex.address.entity;
 
-import com.google.common.base.Objects;
 import org.complitex.common.entity.ILongId;
 
 import java.util.Date;
@@ -20,6 +19,8 @@ public class AddressSync implements ILongId {
     private String additionalExternalId;
     private String name;
     private String additionalName;
+    private String altName;
+    private String altAdditionalName;
     private String servicingOrganization;
     private String balanceHolder;
     private AddressEntity type;
@@ -104,6 +105,22 @@ public class AddressSync implements ILongId {
         this.additionalName = additionalName;
     }
 
+    public String getAltName() {
+        return altName;
+    }
+
+    public void setAltName(String altName) {
+        this.altName = altName;
+    }
+
+    public String getAltAdditionalName() {
+        return altAdditionalName;
+    }
+
+    public void setAltAdditionalName(String altAdditionalName) {
+        this.altAdditionalName = altAdditionalName;
+    }
+
     public String getServicingOrganization() {
         return servicingOrganization;
     }
@@ -146,17 +163,22 @@ public class AddressSync implements ILongId {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).omitNullValues()
-                .add("id", id)
-                .add("objectId", objectId)
-                .add("parentId", parentId)
-                .add("externalId", externalId)
-                .add("additionalExternalId", additionalExternalId)
-                .add("name", name)
-                .add("additionalName", additionalName)
-                .add("type", type)
-                .add("status", status)
-                .add("date", date)
-                .toString();
+        return "AddressSync{" +
+                "id=" + id +
+                ", objectId=" + objectId +
+                ", parentId=" + parentId +
+                ", additionalParentId=" + additionalParentId +
+                ", externalId='" + externalId + '\'' +
+                ", additionalExternalId='" + additionalExternalId + '\'' +
+                ", name='" + name + '\'' +
+                ", additionalName='" + additionalName + '\'' +
+                ", altName='" + altName + '\'' +
+                ", altAdditionalName='" + altAdditionalName + '\'' +
+                ", servicingOrganization='" + servicingOrganization + '\'' +
+                ", balanceHolder='" + balanceHolder + '\'' +
+                ", type=" + type +
+                ", status=" + status +
+                ", date=" + date +
+                '}';
     }
 }

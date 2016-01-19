@@ -7,24 +7,32 @@
     </resultMap>
 
     <resultMap id="streetTypeSyncCursorResultMap" type="org.complitex.address.entity.AddressSync">
-        <result column="id" property="externalId"/>
-        <result column="c_short_name" property="additionalName"/>
+        <result column="c_code" property="externalId"/>
         <result column="c_name" property="name"/>
+        <result column="c_short_name" property="additionalName"/>
+        <result column="c_alt_name" property="altName"/>
+        <result column="c_alt_short_name" property="altAdditionalName"/>
     </resultMap>
 
     <resultMap id="streetSyncCursorResultMap" type="org.complitex.address.entity.AddressSync">
         <result column="c_code" property="externalId"/>
-        <result column="c_short_name" property="additionalName"/>
+        <result column="c_str_type" property="additionalExternalId"/>
         <result column="c_name" property="name"/>
+        <result column="c_alt_name" property="altName"/>
     </resultMap>
 
     <resultMap id="buildingSyncCursorResultMap" type="org.complitex.address.entity.AddressSync">
-        <result column="id" property="externalId"/>
-        <result column="c_code" property="additionalExternalId"/>
+        <result column="c_code" property="externalId"/>
+        <result column="c_street" property="additionalExternalId"/>
         <result column="c_name" property="name"/>
         <result column="c_part" property="additionalName"/>
-        <result column="gek" property="servicingOrganization"/>
-        <result column="bd" property="balanceHolder"/>
+        <result column="c_gek" property="servicingOrganization"/>
+        <result column="c_bd" property="balanceHolder"/>
+    </resultMap>
+
+    <resultMap id="organizationSyncCursorResultMap" type="org.complitex.address.entity.AddressSync">
+        <result column="c_code" property="externalId"/>
+        <result column="c_name" property="name"/>
     </resultMap>
 
     <select id="selectDistrictSyncs" statementType="CALLABLE" parameterType="map">
@@ -45,5 +53,10 @@
     <select id="selectBuildingSyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getBuildings(#{districtName}, #{streetName},
           #{streetTypeName}, #{date}, #{out, mode=OUT, jdbcType=CURSOR, resultMap=buildingSyncCursorResultMap})}
+    </select>
+
+    <select id="selectOrganizationSyncs" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getCompanies(#{date},
+          #{out, mode=OUT, jdbcType=CURSOR, resultMap=districtSyncCursorResultMap})}
     </select>
 </mapper>
