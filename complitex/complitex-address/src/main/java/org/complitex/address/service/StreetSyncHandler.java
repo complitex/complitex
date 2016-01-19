@@ -112,12 +112,12 @@ public class StreetSyncHandler implements IAddressSyncHandler {
             newObject.setParentId(sync.getParentId());
 
             //STREET_TYPE_ID
-            List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(new DomainObjectFilter()
-                    .addAttribute(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName()));
-            if (streetTypes.isEmpty()) {
-                throw new RuntimeException("StreetType not found: " + sync.getAdditionalName());
+            Long streetTypeId = streetTypeStrategy.getObjectId(sync.getAdditionalExternalId());
+
+            if (streetTypeId == null) {
+                throw new RuntimeException("StreetType not found: " + sync);
             }
-            newObject.setLongValue(StreetStrategy.STREET_TYPE, streetTypes.get(0).getObjectId());
+            newObject.setLongValue(StreetStrategy.STREET_TYPE, streetTypeId);
 
             streetStrategy.insert(newObject, sync.getDate());
             addressSyncBean.delete(sync.getId());
@@ -132,12 +132,12 @@ public class StreetSyncHandler implements IAddressSyncHandler {
         newObject.setStringValue(StreetStrategy.NAME, sync.getName());
         newObject.setStringValue(StreetStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
 
-        List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(new DomainObjectFilter()
-                .addAttribute(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName()));
-        if (streetTypes.isEmpty()) {
-            throw new RuntimeException("StreetType not found: " + sync.getAdditionalName());
+        Long streetTypeId = streetTypeStrategy.getObjectId(sync.getAdditionalExternalId());
+
+        if (streetTypeId == null) {
+            throw new RuntimeException("StreetType not found: " + sync);
         }
-        newObject.getAttribute(StreetStrategy.STREET_TYPE).setValueId(streetTypes.get(0).getObjectId());
+        newObject.setLongValue(StreetStrategy.STREET_TYPE, streetTypeId);
 
         streetStrategy.update(oldObject, newObject, sync.getDate());
         addressSyncBean.delete(sync.getId());
