@@ -130,7 +130,8 @@ public class DomainObjectEditPanel extends Panel {
                 final String entityName = getStrategy().getEntity().getName(getLocale());
 
                 return isNew() || !sessionBean.isAdmin() ? entityName
-                        : MessageFormat.format(getString("label_edit"), entityName, newObject.getObjectId());
+                        : MessageFormat.format(getString("label_edit"), entityName, newObject.getObjectId(),
+                        newObject.getExternalId());
             }
         };
         Label title = new Label("title", labelModel);

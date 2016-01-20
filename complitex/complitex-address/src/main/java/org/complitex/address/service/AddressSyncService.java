@@ -242,10 +242,13 @@ public class AddressSyncService {
                                                 !Objects.equals(sync.getExternalId(), s.getExternalId()) &&
                                                 Objects.equals(sync.getAdditionalExternalId(), s.getAdditionalExternalId()) &&
                                                 Objects.equals(sync.getName(), s.getName()) &&
-                                                Objects.equals(sync.getAdditionalName(), s.getAdditionalName()))
+                                                Objects.equals(sync.getAdditionalName(), s.getAdditionalName()) &&
+                                                Objects.equals(sync.getAltName(), s.getAltName()) &&
+                                                Objects.equals(sync.getAltAdditionalName(), s.getAltAdditionalName()))
                                         .findAny()
                                         .ifPresent(s -> {
                                             sync.setStatus(AddressSyncStatus.EXTERNAL_DUPLICATE);
+                                            log.warn("Внешний дубликат: {} {}", sync, s);
                                         });
                             }
                         }
