@@ -19,9 +19,6 @@ import java.util.List;
 
 import static org.complitex.template.strategy.TemplateStrategy.*;
 
-/**
- * @author Artem
- */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class DomainObjectEdit extends FormTemplatePage {
 

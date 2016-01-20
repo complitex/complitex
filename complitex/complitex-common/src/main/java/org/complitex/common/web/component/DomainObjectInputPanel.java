@@ -198,12 +198,18 @@ public class DomainObjectInputPanel extends Panel {
 
     protected List<Attribute> getSimpleAttributes(List<Attribute> allAttributes) {
         final List<Attribute> attributes = newArrayList();
+
         for (Attribute attribute : allAttributes) {
             AttributeType attrType = description.getAttributeType(attribute.getAttributeTypeId());
+
             if (getStrategy().isSimpleAttributeType(attrType)) {
                 attributes.add(attribute);
             }
         }
+
+        attributes.sort((a1, a2) -> description.getAttributeType(a2.getAttributeTypeId()).getId()
+                .compareTo(description.getAttributeType(a1.getAttributeTypeId()).getId()));
+
         return attributes;
     }
 

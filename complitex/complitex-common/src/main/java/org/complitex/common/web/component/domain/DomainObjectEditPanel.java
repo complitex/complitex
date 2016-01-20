@@ -48,10 +48,6 @@ import java.util.Set;
 import static org.complitex.common.util.CloneUtil.cloneObject;
 import static org.complitex.common.util.DateUtil.getCurrentDate;
 
-/**
- *
- * @author Artem
- */
 public class DomainObjectEditPanel extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
