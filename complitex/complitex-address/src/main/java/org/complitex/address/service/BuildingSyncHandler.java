@@ -101,14 +101,17 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
     @Override
     public boolean isEqualNames(AddressSync sync, DomainObject object) {
-        String streetExternalId = streetStrategy.getExternalId(object.getParentId());
+        DomainObject street = streetStrategy.getDomainObject(object.getParentId());
 
-        //todo get additional external code
-
-        return streetExternalId != null &&
+        return (Objects.equals(street.getExternalId(), sync.getAdditionalExternalId()) ||
+                street.getAttributes(StreetStrategy.STREET_CODE).stream()
+                        .filter(a -> {
+                            return a.getValueId().toString().equals(sync.getAdditionalExternalId());
+                        })
+                        .findAny()
+                        .isPresent()) &&
                 sync.getName().equals(object.getStringValue(NUMBER)) &&
-                Objects.equals(sync.getAdditionalName(), object.getStringValue(CORP)) &&
-                Objects.equals(streetExternalId, sync.getAdditionalExternalId());
+                Objects.equals(sync.getAdditionalName(), object.getStringValue(CORP));
     }
 
     @Override
