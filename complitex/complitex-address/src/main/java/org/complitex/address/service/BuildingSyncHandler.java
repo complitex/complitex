@@ -105,9 +105,8 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
 
         return (Objects.equals(street.getExternalId(), sync.getAdditionalExternalId()) ||
                 street.getAttributes(StreetStrategy.STREET_CODE).stream()
-                        .filter(a -> {
-                            return a.getValueId().toString().equals(sync.getAdditionalExternalId());
-                        })
+                        .filter(a -> a.getValueId() != null)
+                        .filter(a -> a.getValueId().toString().equals(sync.getAdditionalExternalId()))
                         .findAny()
                         .isPresent()) &&
                 sync.getName().equals(object.getStringValue(NUMBER)) &&
