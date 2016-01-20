@@ -57,7 +57,7 @@ public class StreetTypeSyncHandler implements IAddressSyncHandler {
     public boolean isEqualNames(AddressSync sync, DomainObject object) {
         return Objects.equals(sync.getName(), streetTypeStrategy.getName(object))
                 && Objects.equals(sync.getAdditionalName(), streetTypeStrategy.getShortName(object))
-                && Objects.equals(sync.getAltName(), streetTypeStrategy.getName(object))
+                && Objects.equals(sync.getAltName(), streetTypeStrategy.getName(object, Locales.getAlternativeLocale()))
                 && Objects.equals(sync.getAltAdditionalName(), streetTypeStrategy.getShortName(object, Locales.getAlternativeLocale()));
     }
 
