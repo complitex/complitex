@@ -125,6 +125,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
     @Override
     public void insert(AddressSync sync) {
         Building building = buildingStrategy.newInstance();
+        building.setExternalId(sync.getUniqueExternalId());
         building.setLongValue(BuildingStrategy.DISTRICT, sync.getAdditionalParentId());
 
         Long organizationId = organizationStrategy.getObjectIdByCode(sync.getServicingOrganization());
