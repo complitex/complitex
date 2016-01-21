@@ -10,11 +10,13 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ExceptionUtil;
+import org.complitex.common.web.component.ShowMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 import static javax.ejb.ConcurrencyManagementType.BEAN;
 import static org.complitex.address.entity.AddressEntity.BUILDING;
 import static org.complitex.address.entity.AddressEntity.STREET;
+import static org.complitex.address.entity.AddressSyncStatus.DUPLICATE;
 import static org.complitex.address.entity.AddressSyncStatus.EXTERNAL_DUPLICATE;
 import static org.complitex.address.entity.AddressSyncStatus.LOCAL;
 import static org.complitex.address.service.IAddressSyncHandler.NOT_FOUND_ID;
@@ -83,11 +86,11 @@ public class AddressSyncService {
         }
     }
 
-    public void insert(AddressSync sync, Locale locale){
+    public void insert(AddressSync sync){
         getHandler(sync.getType()).insert(sync);
     }
 
-    public void update(AddressSync sync, Locale locale){
+    public void update(AddressSync sync){
         getHandler(sync.getType()).update(sync);
     }
 
@@ -313,7 +316,7 @@ public class AddressSyncService {
     }
 
     @Asynchronous
-    public void addAll(Long parentObjectId, AddressEntity addressEntity, Locale locale){
+    public void addAll(Long parentObjectId, AddressEntity addressEntity){
         lockSync.set(true);
         cancelSync.set(false);
 
@@ -321,13 +324,13 @@ public class AddressSyncService {
         addressSync.setType(addressEntity);
         addressSync.setStatus(AddressSyncStatus.NEW);
 
-        addressSyncBean.getList(FilterWrapper.of(addressSync)).stream() //todo parallel mysql lock
+        addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
                 .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))
                 .forEach(s -> {
                     if (!cancelSync.get()) {
                         try {
                             s.setType(addressEntity);
-                            insert(s, locale);
+                            insert(s);
                             broadcastService.broadcast(getClass(), "add_all", s);
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
@@ -337,8 +340,28 @@ public class AddressSyncService {
                 });
 
         addressSync.setStatus(AddressSyncStatus.EXTERNAL_DUPLICATE);
-        addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
-                .forEach(s -> addressSyncBean.delete(s.getId()));
+        List<AddressSync> externalDuplicate = addressSyncBean.getList(FilterWrapper.of(addressSync));
+
+        //street code duplicate
+        if (addressEntity.equals(STREET)){
+            externalDuplicate.stream().forEach(s -> {
+                DomainObjectFilter filter = new DomainObjectFilter();
+                filter.setParent("city", s.getParentId());
+                filter.addAttribute(StreetStrategy.NAME, s.getName());
+                filter.setStatus(ShowMode.ACTIVE.name());
+
+                streetStrategy.getList(filter).stream()
+                        .filter(o -> getHandler(STREET).hasEqualNames(s, o))
+                        .findAny()
+                        .ifPresent(o -> {
+                            s.setObjectId(o.getObjectId());
+                            s.setStatus(DUPLICATE);
+                            insert(s);
+                        });
+            });
+        }
+
+        externalDuplicate.stream().forEach(s -> addressSyncBean.delete(s.getId()));
 
         lockSync.set(false);
 
@@ -346,7 +369,7 @@ public class AddressSyncService {
     }
 
     @Asynchronous
-    public void updateAll(Long parentObjectId, AddressEntity addressEntity, Locale locale){
+    public void updateAll(Long parentObjectId, AddressEntity addressEntity){
         lockSync.set(true);
         cancelSync.set(false);
 
@@ -360,7 +383,7 @@ public class AddressSyncService {
                 .forEach(a -> {
                     if (!cancelSync.get()) {
                         try {
-                            update(a, locale);
+                            update(a);
 
                             String key = a.getStatus().equals(AddressSyncStatus.NEW_NAME)
                                     ? "update_new_name_all"

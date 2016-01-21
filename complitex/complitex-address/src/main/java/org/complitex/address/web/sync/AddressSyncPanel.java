@@ -72,7 +72,7 @@ public class AddressSyncPanel extends Panel {
             @Override
             public void onAction(AjaxRequestTarget target, IModel<AddressSync> model) {
                 try {
-                    addressSyncService.insert(model.getObject(), getLocale());
+                    addressSyncService.insert(model.getObject());
 
                     getSession().info(String.format(getString(model.getObject().getType().name() + ".added"),
                             model.getObject().getName()));
@@ -99,7 +99,7 @@ public class AddressSyncPanel extends Panel {
                     try {
                         AddressSync sync = model.getObject();
 
-                        addressSyncService.insert(sync, getLocale());
+                        addressSyncService.insert(sync);
 
                         getSession().info(String.format(getString(sync.getType().name() + ".code_added"),
                                 sync.getName(), sync.getExternalId()));
@@ -123,7 +123,7 @@ public class AddressSyncPanel extends Panel {
         actions.add(new Action<AddressSync>("update", "object.duplicate") {
             @Override
             public void onAction(AjaxRequestTarget target, IModel<AddressSync> model) {
-                addressSyncService.update(model.getObject(), getLocale());
+                addressSyncService.update(model.getObject());
 
                 getSession().info(String.format(getString(model.getObject().getType().name() + ".duplicated"),
                         model.getObject().getName()));
@@ -140,7 +140,7 @@ public class AddressSyncPanel extends Panel {
         actions.add(new Action<AddressSync>("update", "object.new_name") {
             @Override
             public void onAction(AjaxRequestTarget target, IModel<AddressSync> model) {
-                addressSyncService.update(model.getObject(), getLocale());
+                addressSyncService.update(model.getObject());
 
                 getSession().info(String.format(getString(model.getObject().getType().name() + ".new_named"),
                         model.getObject().getName()));
@@ -393,13 +393,13 @@ public class AddressSyncPanel extends Panel {
             public void onAdd(AjaxRequestTarget target, SearchComponentState state) {
                 switch (addressEntity){
                     case STREET:
-                        addressSyncService.addAll(state.getId("city"), addressEntity, getLocale());
+                        addressSyncService.addAll(state.getId("city"), addressEntity);
                         break;
                     case BUILDING:
-                        addressSyncService.addAll(state.getId("street"), addressEntity, getLocale());
+                        addressSyncService.addAll(state.getId("street"), addressEntity);
                         break;
                     default:
-                        addressSyncService.addAll(null, addressEntity, getLocale());
+                        addressSyncService.addAll(null, addressEntity);
                 }
 
                 target.add(AddressSyncPanel.this);
@@ -409,13 +409,13 @@ public class AddressSyncPanel extends Panel {
             public void onUpdate(AjaxRequestTarget target, SearchComponentState state) {
                 switch (addressEntity){
                     case STREET:
-                        addressSyncService.updateAll(state.getId("city"), addressEntity, getLocale());
+                        addressSyncService.updateAll(state.getId("city"), addressEntity);
                         break;
                     case BUILDING:
-                        addressSyncService.updateAll(state.getId("street"), addressEntity, getLocale());
+                        addressSyncService.updateAll(state.getId("street"), addressEntity);
                         break;
                     default:
-                        addressSyncService.updateAll(null, addressEntity, getLocale());
+                        addressSyncService.updateAll(null, addressEntity);
                 }
 
                 target.add(AddressSyncPanel.this);
