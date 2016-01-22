@@ -69,8 +69,8 @@ public class ExternalHeatmeterService extends AbstractBean{
         }
     }
 
-    public ExternalHeatmetersAndStatus fetchExternalHeatmeters(String dataSource, long heatmeterId, Integer ls,
-            String organizationCode, int buildingCode, Date date) throws DBException {
+    public ExternalHeatmetersAndStatus fetchExternalHeatmeters(String dataSource, Long heatmeterId, Integer ls,
+            String organizationCode, Long buildingCode, Date date) throws DBException {
         List<ExternalHeatmeter> externalHeatmeters = null;
         HeatmeterBindingStatus status;
 

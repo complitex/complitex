@@ -8,13 +8,13 @@ public class BuildingCode implements ILongId {
 
     private Long id;
     private Long organizationId;
-    private Integer buildingCode;
+    private Long buildingCode;
     private Long buildingId;
 
     public BuildingCode() {
     }
 
-    public BuildingCode(Long organizationId, Integer buildingCode) {
+    public BuildingCode(Long organizationId, Long buildingCode) {
         this.organizationId = organizationId;
         this.buildingCode = buildingCode;
     }
@@ -27,11 +27,11 @@ public class BuildingCode implements ILongId {
         this.id = id;
     }
 
-    public Integer getBuildingCode() {
+    public Long getBuildingCode() {
         return buildingCode;
     }
 
-    public void setBuildingCode(Integer buildingCode) {
+    public void setBuildingCode(Long buildingCode) {
         this.buildingCode = buildingCode;
     }
 

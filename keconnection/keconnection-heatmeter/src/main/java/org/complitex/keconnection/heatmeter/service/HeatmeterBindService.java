@@ -215,10 +215,10 @@ public class HeatmeterBindService {
 
     private ExternalHeatmetersAndStatus fetchExternalHeatmeters(long buildingCodeId, long heatmeterId, int ls)
             throws DBException {
-        final BuildingCode buildingCodeObj = buildingStrategy.getBuildingCodeById(buildingCodeId);
-        final long organizationId = buildingCodeObj.getOrganizationId();
-        final int buildingCode = buildingCodeObj.getBuildingCode();
-        final String organizationCode = organizationStrategy.getCode(organizationId);
+        BuildingCode buildingCodeObj = buildingStrategy.getBuildingCodeById(buildingCodeId);
+        Long organizationId = buildingCodeObj.getOrganizationId();
+        Long buildingCode = buildingCodeObj.getBuildingCode();
+        String organizationCode = organizationStrategy.getCode(organizationId);
 
         return externalHeatmeterService.fetchExternalHeatmeters(null,
                 heatmeterId, ls, organizationCode, buildingCode,

@@ -133,7 +133,7 @@ public class BuildingSyncHandler implements IAddressSyncHandler {
         Long organizationId = organizationStrategy.getObjectIdByCode(sync.getServicingOrganization());
 
         if (organizationId != null){
-            building.getBuildingCodes().add(new BuildingCode(organizationId, Integer.valueOf(sync.getExternalId())));
+            building.getBuildingCodes().add(new BuildingCode(organizationId, Long.valueOf(sync.getExternalId())));
         }else{
             log.warn("Servicing organization not found by code {}", sync.getServicingOrganization());
         }

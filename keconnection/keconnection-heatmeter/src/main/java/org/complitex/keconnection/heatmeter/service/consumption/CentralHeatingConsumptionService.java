@@ -346,7 +346,7 @@ public class CentralHeatingConsumptionService {
     }
 
     public ComMeterCursor getComMeterCursor(ConsumptionFile consumptionFile, CentralHeatingConsumption c) {
-        Integer buildingCode = null;
+        Long buildingCode = null;
 
         if (c.getLocalAddress().getBuildingId() != null) {
             buildingCode = buildingStrategy.getBuildingCode(c.getLocalAddress().getBuildingId(),

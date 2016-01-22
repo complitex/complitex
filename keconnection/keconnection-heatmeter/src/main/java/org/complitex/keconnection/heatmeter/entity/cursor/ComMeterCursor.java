@@ -9,14 +9,14 @@ import java.util.Date;
  */
 public class ComMeterCursor extends Cursor<ComMeter> {
     private String organizationCode;
-    private Integer buildingCode;
+    private Long buildingCode;
     private Date om;
     private String serviceCode;
 
     public ComMeterCursor() {
     }
 
-    public ComMeterCursor(String dataSource, String organizationCode, Integer buildingCode, Date om, String serviceCode) {
+    public ComMeterCursor(String dataSource, String organizationCode, Long buildingCode, Date om, String serviceCode) {
         setDataSource(dataSource);
 
         this.organizationCode = organizationCode;
@@ -33,11 +33,11 @@ public class ComMeterCursor extends Cursor<ComMeter> {
         this.organizationCode = organizationCode;
     }
 
-    public Integer getBuildingCode() {
+    public Long getBuildingCode() {
         return buildingCode;
     }
 
-    public void setBuildingCode(Integer buildingCode) {
+    public void setBuildingCode(Long buildingCode) {
         this.buildingCode = buildingCode;
     }
 

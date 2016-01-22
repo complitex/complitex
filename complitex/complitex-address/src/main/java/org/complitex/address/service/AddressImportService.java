@@ -1,7 +1,7 @@
 package org.complitex.address.service;
 
 import au.com.bytecode.opencsv.CSVReader;
-import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 import org.complitex.address.Module;
 import org.complitex.address.entity.AddressImportFile;
 import org.complitex.address.strategy.building.BuildingStrategy;
@@ -821,7 +821,7 @@ public class AddressImportService extends AbstractImportService {
                         building.getSubjectIds().add(organizationId);
                     }
 
-                    Integer buildingCodeInt = Ints.tryParse(buildingCode);
+                    Long buildingCodeInt = Longs.tryParse(buildingCode);
                     if (buildingCodeInt != null) {
                         boolean exist = false;
 
