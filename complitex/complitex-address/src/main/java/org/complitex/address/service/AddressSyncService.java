@@ -20,7 +20,10 @@ import org.complitex.common.web.component.ShowMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Resource;
 import javax.ejb.*;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -57,6 +60,9 @@ public class AddressSyncService {
 
     @EJB
     private StreetStrategy streetStrategy;
+
+    @Resource
+    private UserTransaction tx;
 
     private AtomicBoolean lockSync = new AtomicBoolean(false);
 
@@ -262,14 +268,22 @@ public class AddressSyncService {
                         }
 
                         //сохранение
+                        tx.begin();
                         if (!sync.getStatus().equals(LOCAL) && !addressSyncBean.isExist(sync)) {
                             addressSyncBean.save(sync);
                         }
+                        tx.commit();
 
                         broadcastService.broadcast(getClass(), "processed", sync);
                     } catch (Exception e) {
                         broadcastService.broadcast(getClass(), "error", "Ошибка синхронизации: " + ExceptionUtil.getCauseMessage(e));
                         log.error("ошибка синхронизации", e);
+
+                        try {
+                            tx.rollback();
+                        } catch (SystemException e1) {
+                            log.error("rollback error", e1);
+                        }
                     }
                 }
         );
