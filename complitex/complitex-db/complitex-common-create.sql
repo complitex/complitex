@@ -1145,7 +1145,7 @@ DROP TABLE IF EXISTS `building_code`;
 CREATE TABLE `building_code` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `organization_id` BIGINT(20) NOT NULL COMMENT 'ID обслуживающей организации',
-  `code` INTEGER NOT NULL COMMENT 'Код дома для данной обслуживающей организации',
+  `code` BIGINT(20) NOT NULL COMMENT 'Код дома для данной обслуживающей организации',
   `building_id` BIGINT(20) NOT NULL COMMENT 'ID дома',
   PRIMARY KEY (`id`),
   KEY `key_organization_id` (`organization_id`),
