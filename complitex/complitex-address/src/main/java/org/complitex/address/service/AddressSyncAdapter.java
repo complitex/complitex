@@ -192,7 +192,6 @@ public class AddressSyncAdapter extends AbstractBean {
     public Cursor<AddressSync> getOrganizationSyncs(Date date) throws RemoteCallException {
         Map<String, Object> param = new HashMap<>();
 
-        param.put("date", date);
         param.put("okCode", 0);
 
         try {

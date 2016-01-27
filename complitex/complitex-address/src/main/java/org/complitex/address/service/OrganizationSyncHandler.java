@@ -3,18 +3,22 @@ package org.complitex.address.service;
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.district.DistrictStrategy;
+import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.web.component.ShowMode;
+import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import static org.complitex.common.strategy.organization.IOrganizationStrategy.ORGANIZATION_TYPE;
 
 /**
  * @author inheaven on 22.01.2016 13:09.
@@ -62,6 +66,13 @@ public class OrganizationSyncHandler implements IAddressSyncHandler{
         domainObject.setExternalId(sync.getExternalId());
         domainObject.setStringValue(IOrganizationStrategy.NAME, sync.getName());
         domainObject.setStringValue(IOrganizationStrategy.CODE, sync.getExternalId());
+
+        Attribute servicingOrganization = new Attribute();
+        servicingOrganization.setAttributeId(1L);
+        servicingOrganization.setAttributeTypeId(ORGANIZATION_TYPE);
+        servicingOrganization.setValueTypeId(ORGANIZATION_TYPE);
+        servicingOrganization.setValueId( OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE);
+        domainObject.addAttribute(servicingOrganization);
 
         organizationStrategy.insert(domainObject, sync.getDate());
         addressSyncBean.delete(sync.getId());

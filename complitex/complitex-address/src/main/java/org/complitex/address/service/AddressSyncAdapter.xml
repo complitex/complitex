@@ -56,7 +56,7 @@
     </select>
 
     <select id="selectOrganizationSyncs" statementType="CALLABLE" parameterType="map">
-        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getCompanies(#{date},
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getCompanies(
           #{out, mode=OUT, jdbcType=CURSOR, resultMap=districtSyncCursorResultMap})}
     </select>
 </mapper>
