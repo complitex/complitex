@@ -159,9 +159,9 @@ public class AddressSyncService {
         message.setCount(cursor.getData() != null ? cursor.getData().size() : 0L);
 
         if (parent != null){
-            if (syncEntity.equals(AddressEntity.DISTRICT) || syncEntity.equals(STREET)){
+            if (syncEntity.equals(DISTRICT) || syncEntity.equals(STREET)){
                 message.setParentName(cityStrategy.getName(parent));
-            }else if (syncEntity.equals(AddressEntity.BUILDING)){
+            }else if (syncEntity.equals(BUILDING)){
                 switch (parent.getEntityName()){
                     case "district":
                         message.setParentName(districtStrategy.getName(parent));
