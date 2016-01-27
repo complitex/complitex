@@ -4,7 +4,7 @@ import org.complitex.common.entity.ILongId;
 
 import java.util.Date;
 
-import static org.complitex.address.entity.AddressEntity.BUILDING;
+import static org.complitex.address.entity.SyncEntity.BUILDING;
 
 /**
  * @author Anatoly Ivanov
@@ -23,7 +23,7 @@ public class AddressSync implements ILongId {
     private String altAdditionalName;
     private String servicingOrganization;
     private String balanceHolder;
-    private AddressEntity type;
+    private SyncEntity type;
     private AddressSyncStatus status;
     private Date date;
 
@@ -137,11 +137,11 @@ public class AddressSync implements ILongId {
         this.balanceHolder = balanceHolder;
     }
 
-    public AddressEntity getType() {
+    public SyncEntity getType() {
         return type;
     }
 
-    public void setType(AddressEntity type) {
+    public void setType(SyncEntity type) {
         this.type = type;
     }
 

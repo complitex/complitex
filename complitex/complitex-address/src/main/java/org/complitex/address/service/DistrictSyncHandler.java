@@ -98,7 +98,6 @@ public class DistrictSyncHandler implements IAddressSyncHandler {
 
     public void archive(AddressSync sync){
         districtStrategy.archive(districtStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
-
         addressSyncBean.delete(sync.getId());
     }
 

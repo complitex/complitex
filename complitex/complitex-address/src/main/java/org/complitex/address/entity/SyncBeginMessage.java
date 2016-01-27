@@ -4,16 +4,16 @@ package org.complitex.address.entity;
  * @author inheaven on 15.07.2015 18:40.
  */
 public class SyncBeginMessage {
-    private AddressEntity addressEntity;
+    private SyncEntity syncEntity;
     private String parentName;
     private Long count;
 
-    public AddressEntity getAddressEntity() {
-        return addressEntity;
+    public SyncEntity getSyncEntity() {
+        return syncEntity;
     }
 
-    public void setAddressEntity(AddressEntity addressEntity) {
-        this.addressEntity = addressEntity;
+    public void setSyncEntity(SyncEntity syncEntity) {
+        this.syncEntity = syncEntity;
     }
 
     public String getParentName() {

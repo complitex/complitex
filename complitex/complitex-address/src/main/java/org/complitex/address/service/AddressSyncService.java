@@ -1,9 +1,6 @@
 package org.complitex.address.service;
 
-import org.complitex.address.entity.AddressEntity;
-import org.complitex.address.entity.AddressSync;
-import org.complitex.address.entity.AddressSyncStatus;
-import org.complitex.address.entity.SyncBeginMessage;
+import org.complitex.address.entity.*;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
@@ -24,16 +21,16 @@ import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static javax.ejb.ConcurrencyManagementType.BEAN;
-import static org.complitex.address.entity.AddressEntity.BUILDING;
-import static org.complitex.address.entity.AddressEntity.STREET;
-import static org.complitex.address.entity.AddressSyncStatus.DUPLICATE;
-import static org.complitex.address.entity.AddressSyncStatus.EXTERNAL_DUPLICATE;
-import static org.complitex.address.entity.AddressSyncStatus.LOCAL;
+import static org.complitex.address.entity.SyncEntity.*;
+import static org.complitex.address.entity.AddressSyncStatus.*;
 import static org.complitex.address.service.IAddressSyncHandler.NOT_FOUND_ID;
 
 /**
@@ -70,13 +67,13 @@ public class AddressSyncService {
 
     @Asynchronous
     public void syncAll(){
-        sync(AddressEntity.DISTRICT);
-        sync(AddressEntity.STREET_TYPE);
+        sync(DISTRICT);
+        sync(STREET_TYPE);
         sync(STREET);
-        sync(AddressEntity.BUILDING);
+        sync(BUILDING);
     }
 
-    private IAddressSyncHandler getHandler(AddressEntity type){
+    private IAddressSyncHandler getHandler(SyncEntity type){
         switch (type){
             case DISTRICT:
                 return EjbBeanLocator.getBean(DistrictSyncHandler.class);
@@ -86,6 +83,8 @@ public class AddressSyncService {
                 return EjbBeanLocator.getBean(StreetSyncHandler.class);
             case BUILDING:
                 return EjbBeanLocator.getBean(BuildingSyncHandler.class);
+            case ORGANIZATION:
+                return EjbBeanLocator.getBean(OrganizationSyncHandler.class);
 
             default:
                 throw new IllegalArgumentException();
@@ -105,12 +104,12 @@ public class AddressSyncService {
     }
 
     @Asynchronous
-    public void sync(AddressEntity type){
+    public void sync(SyncEntity type){
         sync(type, null);
     }
 
     @Asynchronous
-    public void sync(AddressEntity type, Map<String, DomainObject> map){
+    public void sync(SyncEntity type, Map<String, DomainObject> map){
         if (lockSync.get()){
             return;
         }
@@ -149,20 +148,20 @@ public class AddressSyncService {
         }
     }
 
-    public void sync(DomainObject parent, AddressEntity addressEntity, Map<String, DomainObject> map, Date date)
+    public void sync(DomainObject parent, SyncEntity syncEntity, Map<String, DomainObject> map, Date date)
             throws RemoteCallException {
-        IAddressSyncHandler handler = getHandler(addressEntity);
+        IAddressSyncHandler handler = getHandler(syncEntity);
 
         Cursor<AddressSync> cursor = handler.getAddressSyncs(parent, date);
 
         SyncBeginMessage message = new SyncBeginMessage();
-        message.setAddressEntity(addressEntity);
+        message.setSyncEntity(syncEntity);
         message.setCount(cursor.getData() != null ? cursor.getData().size() : 0L);
 
         if (parent != null){
-            if (addressEntity.equals(AddressEntity.DISTRICT) || addressEntity.equals(STREET)){
+            if (syncEntity.equals(AddressEntity.DISTRICT) || syncEntity.equals(STREET)){
                 message.setParentName(cityStrategy.getName(parent));
-            }else if (addressEntity.equals(AddressEntity.BUILDING)){
+            }else if (syncEntity.equals(AddressEntity.BUILDING)){
                 switch (parent.getEntityName()){
                     case "district":
                         message.setParentName(districtStrategy.getName(parent));
@@ -188,7 +187,7 @@ public class AddressSyncService {
                 .collect(Collectors.toMap(DomainObject::getExternalId, o -> o));
 
         //коды улиц
-        if (addressEntity.equals(STREET)){
+        if (syncEntity.equals(STREET)){
             objects.parallelStream().forEach(o -> o.getAttributes().parallelStream()
                     .filter(a -> a.getAttributeTypeId() == StreetStrategy.STREET_CODE)
                     .forEach(a -> objectMap.put(String.valueOf(a.getValueId()), o)));
@@ -213,11 +212,28 @@ public class AddressSyncService {
                             return;
                         }
 
+                        //uppercase
+                        if (sync.getName() != null){
+                            sync.setName(sync.getName().toUpperCase());
+                        }
+
+                        if (sync.getAdditionalName() != null){
+                            sync.setAdditionalName(sync.getAdditionalName().toUpperCase());
+                        }
+
+                        if (sync.getAltName() != null){
+                            sync.setAltName(sync.getAltName().toUpperCase());
+                        }
+
+                        if (sync.getAltAdditionalName() != null){
+                            sync.setAltAdditionalName(sync.getAltAdditionalName().toUpperCase());
+                        }
+
                         sync.setParentId(parentId);
-                        sync.setType(addressEntity);
+                        sync.setType(syncEntity);
                         sync.setDate(date);
 
-                        if (BUILDING.equals(addressEntity) && map.get("district") != null){
+                        if (BUILDING.equals(syncEntity) && map.get("district") != null){
                             sync.setAdditionalParentId(map.get("district").getId());
                         }
 
@@ -288,7 +304,7 @@ public class AddressSyncService {
                 }
         );
 
-        if (!BUILDING.equals(addressEntity)) { //todo fix building object list
+        if (!BUILDING.equals(syncEntity)) { //todo fix building object list
             Map<String, AddressSync> syncMap = cursor.getData().parallelStream()
                     .filter(a -> a.getExternalId() != null)
                     .collect(Collectors.toMap(AddressSync::getUniqueExternalId, a -> a));
@@ -306,7 +322,7 @@ public class AddressSyncService {
 
                     s.setObjectId(object.getObjectId());
                     s.setName(handler.getName(object));
-                    s.setType(addressEntity);
+                    s.setType(syncEntity);
                     s.setUniqueExternalId(object.getExternalId());
                     s.setStatus(AddressSyncStatus.ARCHIVAL);
                     s.setDate(date);
@@ -330,12 +346,12 @@ public class AddressSyncService {
     }
 
     @Asynchronous
-    public void addAll(Long parentObjectId, AddressEntity addressEntity){
+    public void addAll(Long parentObjectId, SyncEntity syncEntity){
         lockSync.set(true);
         cancelSync.set(false);
 
         AddressSync addressSync = new AddressSync();
-        addressSync.setType(addressEntity);
+        addressSync.setType(syncEntity);
         addressSync.setStatus(AddressSyncStatus.NEW);
 
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
@@ -343,7 +359,7 @@ public class AddressSyncService {
                 .forEach(s -> {
                     if (!cancelSync.get()) {
                         try {
-                            s.setType(addressEntity);
+                            s.setType(syncEntity);
                             insert(s);
                             broadcastService.broadcast(getClass(), "add_all", s);
                         } catch (Exception e) {
@@ -357,7 +373,7 @@ public class AddressSyncService {
         List<AddressSync> externalDuplicate = addressSyncBean.getList(FilterWrapper.of(addressSync));
 
         //street code duplicate
-        if (addressEntity.equals(STREET)){
+        if (syncEntity.equals(STREET)){
             externalDuplicate.stream().forEach(s -> {
                 DomainObjectFilter filter = new DomainObjectFilter();
                 filter.setParent("city", s.getParentId());
@@ -379,16 +395,16 @@ public class AddressSyncService {
 
         lockSync.set(false);
 
-        broadcastService.broadcast(getClass(), "add_all_complete", addressEntity);
+        broadcastService.broadcast(getClass(), "add_all_complete", syncEntity);
     }
 
     @Asynchronous
-    public void updateAll(Long parentObjectId, AddressEntity addressEntity){
+    public void updateAll(Long parentObjectId, SyncEntity syncEntity){
         lockSync.set(true);
         cancelSync.set(false);
 
         AddressSync addressSync = new AddressSync();
-        addressSync.setType(addressEntity);
+        addressSync.setType(syncEntity);
 
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
                 .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))
@@ -417,16 +433,16 @@ public class AddressSyncService {
 
         lockSync.set(false);
 
-        broadcastService.broadcast(getClass(), "add_all_complete", addressEntity);
+        broadcastService.broadcast(getClass(), "add_all_complete", syncEntity);
     }
 
     @Asynchronous
-    public void deleteAll(Long parentObjectId, AddressEntity addressEntity){
+    public void deleteAll(Long parentObjectId, SyncEntity syncEntity){
         lockSync.set(true);
         cancelSync.set(false);
 
         AddressSync addressSync = new AddressSync();
-        addressSync.setType(addressEntity);
+        addressSync.setType(syncEntity);
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
                 .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))
                 .forEach(a -> {
@@ -442,6 +458,6 @@ public class AddressSyncService {
                 });
         lockSync.set(false);
 
-        broadcastService.broadcast(getClass(), "add_all_complete", addressEntity);
+        broadcastService.broadcast(getClass(), "add_all_complete", syncEntity);
     }
 }

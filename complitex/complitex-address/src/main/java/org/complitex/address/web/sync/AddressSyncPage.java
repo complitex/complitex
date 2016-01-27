@@ -5,7 +5,7 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.address.entity.AddressEntity;
+import org.complitex.address.entity.SyncEntity;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.template.web.security.SecurityRole;
@@ -26,7 +26,7 @@ public class AddressSyncPage extends TemplatePage {
         AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");
         add(messages);
 
-        add(new AddressSyncPanel("addressSyncPanel", AddressEntity.getValue(entity)){
+        add(new AddressSyncPanel("addressSyncPanel", SyncEntity.getValue(entity)){
             @Override
             protected void onUpdate(IPartialPageRequestHandler target) {
                 target.add(messages);

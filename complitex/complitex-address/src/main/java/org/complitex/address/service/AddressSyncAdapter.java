@@ -1,7 +1,7 @@
 package org.complitex.address.service;
 
-import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
+import org.complitex.address.entity.SyncEntity;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.exception.SyncException;
 import org.complitex.common.entity.Cursor;
@@ -146,7 +146,7 @@ public class AddressSyncAdapter extends AbstractBean {
 
         if (list != null){
             for (AddressSync sync : list){
-                sync.setType(AddressEntity.STREET);
+                sync.setType(SyncEntity.STREET);
             }
         }
 

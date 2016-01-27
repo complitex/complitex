@@ -5,12 +5,15 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.address.entity.AddressEntity;
+import org.complitex.address.entity.SyncEntity;
 import org.complitex.address.web.component.AddressSearchComponent;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 
 import java.util.List;
+
+import static org.complitex.address.entity.SyncEntity.BUILDING;
+import static org.complitex.address.entity.SyncEntity.STREET;
 
 /**
  * @author inheaven on 013 13.08.15 17:19
@@ -18,7 +21,7 @@ import java.util.List;
 public class AddressSyncDialog extends Panel{
     private Dialog dialog;
 
-    public AddressSyncDialog(String id, AddressEntity addressEntity) {
+    public AddressSyncDialog(String id, SyncEntity syncEntity) {
         super(id);
 
         dialog = new Dialog("dialog");
@@ -28,10 +31,10 @@ public class AddressSyncDialog extends Panel{
 
         SearchComponentState state = new SearchComponentState();
 
-        dialog.add(new AddressSearchComponent("search", state, getFilters(addressEntity)){
+        dialog.add(new AddressSearchComponent("search", state, getFilters(syncEntity)){
             @Override
             public boolean isVisible() {
-                return addressEntity.equals(AddressEntity.BUILDING) || addressEntity.equals(AddressEntity.STREET);
+                return syncEntity.equals(BUILDING) || syncEntity.equals(STREET);
             }
         });
 
@@ -80,8 +83,8 @@ public class AddressSyncDialog extends Panel{
     public void onDelete(AjaxRequestTarget target, SearchComponentState state){
     }
 
-    protected List<String> getFilters(AddressEntity addressEntity) {
-        switch (addressEntity) {
+    private List<String> getFilters(SyncEntity syncEntity) {
+        switch (syncEntity) {
             case STREET:
                 return ImmutableList.of("city");
             case BUILDING:

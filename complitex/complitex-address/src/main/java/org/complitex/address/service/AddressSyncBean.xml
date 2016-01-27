@@ -65,9 +65,9 @@
         select count(*) from `address_sync` <include refid="selectAddressSyncWhere"/>
     </select>
 
-    <select id="selectAddressSyncFilters" parameterType="org.complitex.address.entity.AddressEntity"
+    <select id="selectAddressSyncFilters" parameterType="org.complitex.address.entity.SyncEntity"
             resultType="org.complitex.address.entity.AddressSyncFilter">
-        select `status`, count(*) as `count` from address_sync where type = #{addressEntity} group by `status`
+        select `status`, count(*) as `count` from address_sync where type = #{syncEntity} group by `status`
     </select>
 </mapper>
 

@@ -15,6 +15,8 @@
                      javaType="org.complitex.address.entity.AddressSyncStatus"/>
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
                      javaType="org.complitex.address.entity.AddressEntity"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
+                     javaType="org.complitex.address.entity.SyncEntity"/>
     </typeHandlers>
 
     <plugins>

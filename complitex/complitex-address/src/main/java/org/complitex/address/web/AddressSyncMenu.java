@@ -9,6 +9,7 @@ import org.complitex.template.web.template.ResourceTemplateMenu;
  */
 public class AddressSyncMenu extends ResourceTemplateMenu{
     public AddressSyncMenu() {
+        add("organization_sync", AddressSyncPage.class, new PageParameters().add("entity", "organization"));
         add("district_sync", AddressSyncPage.class, new PageParameters().add("entity", "district"));
         add("street_type_sync", AddressSyncPage.class, new PageParameters().add("entity", "street_type"));
         add("street_sync", AddressSyncPage.class, new PageParameters().add("entity", "street"));

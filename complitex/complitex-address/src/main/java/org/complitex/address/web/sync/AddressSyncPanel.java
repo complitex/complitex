@@ -33,8 +33,7 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import java.util.*;
 
-import static org.complitex.address.entity.AddressEntity.BUILDING;
-import static org.complitex.address.entity.AddressEntity.STREET;
+import static org.complitex.address.entity.SyncEntity.*;
 import static org.complitex.address.entity.AddressSyncStatus.*;
 
 /**
@@ -56,7 +55,7 @@ public class AddressSyncPanel extends Panel {
     @EJB
     private StreetStrategy streetStrategy;
 
-    public AddressSyncPanel(String id, AddressEntity addressEntity) {
+    public AddressSyncPanel(String id, SyncEntity syncEntity) {
         super(id);
 
         setOutputMarkupId(true);
@@ -92,7 +91,7 @@ public class AddressSyncPanel extends Panel {
             }
         });
 
-        if (STREET.equals(addressEntity)) {
+        if (STREET.equals(syncEntity)) {
             actions.add(new Action<AddressSync>("street_code_add", "object.street_code_add") {
                 @Override
                 public void onAction(AjaxRequestTarget target, IModel<AddressSync> model) {
@@ -210,7 +209,7 @@ public class AddressSyncPanel extends Panel {
 
             @Override
             protected void onInit(FilterWrapper<AddressSync> filterWrapper) {
-                filterWrapper.getObject().setType(addressEntity);
+                filterWrapper.getObject().setType(syncEntity);
             }
 
             @Override
@@ -222,7 +221,7 @@ public class AddressSyncPanel extends Panel {
         add(new ListView<AddressSyncFilter>("filters", new LoadableDetachableModel<List<AddressSyncFilter>>() {
             @Override
             protected List<AddressSyncFilter> load() {
-                return addressSyncBean.getAddressSyncFilters(addressEntity);
+                return addressSyncBean.getAddressSyncFilters(syncEntity);
             }
         }) {
             @Override
@@ -243,7 +242,7 @@ public class AddressSyncPanel extends Panel {
         add(new AjaxLink("sync") {
             @Override
             public boolean isVisible() {
-                return !BUILDING.equals(addressEntity) && !addressSyncService.isLockSync();
+                return !BUILDING.equals(syncEntity) && !addressSyncService.isLockSync();
             }
 
             @Override
@@ -259,8 +258,8 @@ public class AddressSyncPanel extends Panel {
                 target.add(AddressSyncPanel.this);
                 onUpdate(target);
 
-                if (addressEntity != null){
-                    addressSyncService.sync(addressEntity);
+                if (syncEntity != null){
+                    addressSyncService.sync(syncEntity);
                 }else{
                     addressSyncService.syncAll();
                 }
@@ -270,7 +269,7 @@ public class AddressSyncPanel extends Panel {
         AjaxLink buildingLoadLink = new AjaxLink("building_load") {
             @Override
             public boolean isVisible() {
-                return BUILDING.equals(addressEntity) && !addressSyncService.isLockSync();
+                return BUILDING.equals(syncEntity) && !addressSyncService.isLockSync();
             }
 
             @Override
@@ -294,10 +293,10 @@ public class AddressSyncPanel extends Panel {
                 target.add(AddressSyncPanel.this);
                 onUpdate(target);
 
-                addressSyncService.sync(addressEntity, map);
+                addressSyncService.sync(syncEntity, map);
             }
         };
-        buildingLoadDialog.setVisible(BUILDING.equals(addressEntity));
+        buildingLoadDialog.setVisible(BUILDING.equals(syncEntity));
         add(buildingLoadDialog);
 
         add(new BroadcastBehavior(AddressSyncService.class) {
@@ -309,7 +308,7 @@ public class AddressSyncPanel extends Panel {
                 if ("begin".equals(key)){
                     SyncBeginMessage begin = (SyncBeginMessage) payload;
 
-                    getSession().info(String.format(getString(begin.getAddressEntity().name() + ".onBegin"),
+                    getSession().info(String.format(getString(begin.getSyncEntity().name() + ".onBegin"),
                             Objects.toString(begin.getParentName(), ""), begin.getCount()));
                     onUpdate(handler);
                 }else if ("done".equals(key)){
@@ -343,7 +342,7 @@ public class AddressSyncPanel extends Panel {
 
                     String name;
 
-                    if (addressEntity.equals(AddressEntity.BUILDING)){
+                    if (syncEntity.equals(BUILDING)){
                         name = Objects.toString(streetStrategy.getFullName(addressSync.getParentId()) +", ", "") +
                                 addressSync.getName();
                     }else {
@@ -357,16 +356,16 @@ public class AddressSyncPanel extends Panel {
                             message = name;
                             break;
                         case "add_all":
-                            message = String.format(getString(addressEntity.name() + ".added"), name);
+                            message = String.format(getString(syncEntity.name() + ".added"), name);
                             break;
                         case "update_new_name_all":
-                            message = String.format(getString(addressEntity.name() + ".new_named"), name);
+                            message = String.format(getString(syncEntity.name() + ".new_named"), name);
                             break;
                         case "update_duplicate_all":
-                            message = String.format(getString(addressEntity.name() + ".duplicated"), name);
+                            message = String.format(getString(syncEntity.name() + ".duplicated"), name);
                             break;
                         case "delete_all":
-                            message = String.format(getString(addressEntity.name() + ".removed"), name);
+                            message = String.format(getString(syncEntity.name() + ".removed"), name);
                             break;
                     }
 
@@ -388,18 +387,18 @@ public class AddressSyncPanel extends Panel {
             }
         });
 
-        AddressSyncDialog addressSyncDialog = new AddressSyncDialog("dialog", addressEntity){
+        AddressSyncDialog addressSyncDialog = new AddressSyncDialog("dialog", syncEntity){
             @Override
             public void onAdd(AjaxRequestTarget target, SearchComponentState state) {
-                switch (addressEntity){
+                switch (syncEntity){
                     case STREET:
-                        addressSyncService.addAll(state.getId("city"), addressEntity);
+                        addressSyncService.addAll(state.getId("city"), syncEntity);
                         break;
                     case BUILDING:
-                        addressSyncService.addAll(state.getId("street"), addressEntity);
+                        addressSyncService.addAll(state.getId("street"), syncEntity);
                         break;
                     default:
-                        addressSyncService.addAll(null, addressEntity);
+                        addressSyncService.addAll(null, syncEntity);
                 }
 
                 target.add(AddressSyncPanel.this);
@@ -407,15 +406,15 @@ public class AddressSyncPanel extends Panel {
 
             @Override
             public void onUpdate(AjaxRequestTarget target, SearchComponentState state) {
-                switch (addressEntity){
+                switch (syncEntity){
                     case STREET:
-                        addressSyncService.updateAll(state.getId("city"), addressEntity);
+                        addressSyncService.updateAll(state.getId("city"), syncEntity);
                         break;
                     case BUILDING:
-                        addressSyncService.updateAll(state.getId("street"), addressEntity);
+                        addressSyncService.updateAll(state.getId("street"), syncEntity);
                         break;
                     default:
-                        addressSyncService.updateAll(null, addressEntity);
+                        addressSyncService.updateAll(null, syncEntity);
                 }
 
                 target.add(AddressSyncPanel.this);
@@ -423,15 +422,15 @@ public class AddressSyncPanel extends Panel {
 
             @Override
             public void onDelete(AjaxRequestTarget target, SearchComponentState state) {
-                switch (addressEntity){
+                switch (syncEntity){
                     case STREET:
-                        addressSyncService.deleteAll(state.getId("city"), addressEntity);
+                        addressSyncService.deleteAll(state.getId("city"), syncEntity);
                         break;
                     case BUILDING:
-                        addressSyncService.deleteAll(state.getId("street"), addressEntity);
+                        addressSyncService.deleteAll(state.getId("street"), syncEntity);
                         break;
                     default:
-                        addressSyncService.deleteAll(null, addressEntity);
+                        addressSyncService.deleteAll(null, syncEntity);
                 }
 
                 target.add(AddressSyncPanel.this);
