@@ -48,9 +48,21 @@ public class SubsidyService {
 
         //for (Attribute sa : organization.getAttributes(IOrganizationStrategy.SERVICE)) { todo
         for (int i = 1; i < 9; ++i) {
-            nSum = nSum.add((BigDecimal) request.getField("P" + i));
-            sbSum = sbSum.add((BigDecimal) request.getField("SB" + i));
-            smSum = smSum.add((BigDecimal) request.getField("SM" + i));
+            BigDecimal p = (BigDecimal) request.getField("P" + i);
+            if (p != null) {
+                nSum = nSum.add(p);
+            }
+
+            BigDecimal sb = (BigDecimal) request.getField("SB" + i);
+
+            if (sb != null) {
+                sbSum = sbSum.add(sb);
+            }
+
+            BigDecimal sm = (BigDecimal) request.getField("SM" + i);
+            if (sm != null) {
+                smSum = smSum.add(sm);
+            }
         }
 
         //round Pn
@@ -62,14 +74,14 @@ public class SubsidyService {
     public boolean validateSum(AbstractRequest request){
         SubsidySum subsidySum = getSubsidySum(request);
 
-        int numm = ((Number)request.getField("NUMM")).intValue();
+        int numm = request.getField("NUMM") != null ? ((Number)request.getField("NUMM")).intValue() : 0;
         BigDecimal summa = (BigDecimal) request.getField("SUMMA");
         BigDecimal subs = (BigDecimal) request.getField("SUBS");
         BigDecimal nmPay = (BigDecimal) request.getField("NM_PAY");
 
-        return nmPay.compareTo(subsidySum.getNSum()) == 0
-                && summa.compareTo(subsidySum.getSmSum()) == 0
-                && subs.compareTo(subsidySum.getSbSum()) == 0
+        return nmPay != null && nmPay.compareTo(subsidySum.getNSum()) == 0
+                && summa != null && summa.compareTo(subsidySum.getSmSum()) == 0
+                && subs != null && subs.compareTo(subsidySum.getSbSum()) == 0
                 && (numm <= 0 || summa.compareTo(subs.multiply(new BigDecimal(numm))) == 0);
     }
 

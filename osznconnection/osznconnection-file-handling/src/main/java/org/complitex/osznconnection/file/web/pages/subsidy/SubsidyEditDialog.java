@@ -30,6 +30,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.complitex.osznconnection.file.entity.RequestStatus.SUBSIDY_NM_PAY_ERROR;
 import static org.complitex.osznconnection.file.entity.SubsidyDBF.*;
@@ -171,7 +172,7 @@ public class SubsidyEditDialog extends Panel {
                         SubsidyExample all = new SubsidyExample();
                         all.setRequestFileId(subsidy.getRequestFileId());
 
-                        if (subsidyBean.getCount(loaded) == subsidyBean.getCount(all)) {
+                        if (Objects.equals(subsidyBean.getCount(loaded), subsidyBean.getCount(all))) {
                             requestFile.setStatus(RequestFileStatus.LOADED);
 
                             requestFileBean.save(requestFile);
@@ -272,7 +273,7 @@ public class SubsidyEditDialog extends Panel {
     }
 
     public void open(AjaxRequestTarget target, Subsidy subsidy){
-        subsidyModel.setObject((Subsidy) WicketObjects.cloneObject(subsidy));
+        subsidyModel.setObject(WicketObjects.cloneObject(subsidy));
 
         target.add(form);
         dialog.open(target);
@@ -283,7 +284,8 @@ public class SubsidyEditDialog extends Panel {
 
         SubsidySum subsidySum = subsidyService.getSubsidySum(subsidy);
 
-        int numm = ((Number)subsidy.getField("NUMM")).intValue();
+        int numm = subsidy.getField("NUMM") != null ? ((Number)subsidy.getField("NUMM")).intValue() : 0;
+
         BigDecimal summa = (BigDecimal) subsidy.getField("SUMMA");
         BigDecimal subs = (BigDecimal) subsidy.getField("SUBS");
         BigDecimal nmPay = (BigDecimal) subsidy.getField("NM_PAY");
@@ -295,7 +297,7 @@ public class SubsidyEditDialog extends Panel {
 
         boolean nummCheck =  numm <= 0 || summa.compareTo(subs.multiply(new BigDecimal(numm))) == 0;
 
-        if (nmPay.compareTo(subsidySum.getNSum()) != 0){
+        if (nmPay != null && nmPay.compareTo(subsidySum.getNSum()) != 0){
             nmPayTextField.add(AttributeModifier.replace("style", "background-color: lightpink;"));
             nmPayDiff.setDefaultModelObject("(" + nmPay.subtract(subsidySum.getNSum()) + ")");
         }else{
@@ -303,7 +305,7 @@ public class SubsidyEditDialog extends Panel {
             nmPayDiff.setDefaultModelObject("");
         }
 
-        if (!nummCheck || summa.compareTo(subsidySum.getSmSum()) != 0){
+        if (summa != null && (!nummCheck || summa.compareTo(subsidySum.getSmSum()) != 0)){
             summaTextField.add(AttributeModifier.replace("style", "background-color: lightpink;"));
             summaDiff.setDefaultModelObject("(" + summa.subtract(subsidySum.getSmSum()) + ")");
         }else {
@@ -311,7 +313,7 @@ public class SubsidyEditDialog extends Panel {
             summaDiff.setDefaultModelObject("");
         }
 
-        if (!nummCheck || subs.compareTo(subsidySum.getSbSum()) != 0){
+        if (subs != null && (!nummCheck || subs.compareTo(subsidySum.getSbSum()) != 0)){
             subsTextField.add(AttributeModifier.replace("style", "background-color: lightpink;"));
             subsDiff.setDefaultModelObject("(" + subs.subtract(subsidySum.getSbSum()) + ")");
         }else{

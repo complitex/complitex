@@ -1,6 +1,5 @@
 package org.complitex.common.strategy;
 
-import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.converter.DateConverter;
@@ -930,7 +929,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
         List<Date> results = sqlSession().selectList(NS + ".historyDates", example);
 
-        return new TreeSet<>(Collections2.filter(results, input -> input != null));
+        return new TreeSet<>(results.stream().filter(i -> i != null).collect(Collectors.toList()));
     }
 
 

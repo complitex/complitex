@@ -260,7 +260,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     protected Long insertStrings(Long attributeTypeId, List<StringCulture> strings) {
         return ATTRIBUTE_TYPES_WITH_CUSTOM_STRING_PROCESSING.contains(attributeTypeId)
                 ? stringBean.save(strings, getEntityName(), false)
-                : super.insertStrings(attributeTypeId, strings);
+                : stringBean.save(strings, getEntityName(), true);
     }
 
     public DomainObject getBalanceHolder(Long organizationId){

@@ -2,10 +2,6 @@ package org.complitex.common.entity;
 
 import java.util.Date;
 
-/**
- *
- * @author Artem
- */
 public enum SimpleTypes {
 
     STRING(String.class), STRING_CULTURE(String.class), INTEGER(Integer.class), DOUBLE(Double.class), DATE(Date.class),
