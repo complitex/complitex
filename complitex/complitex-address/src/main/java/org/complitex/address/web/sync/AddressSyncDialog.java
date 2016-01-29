@@ -25,7 +25,7 @@ public class AddressSyncDialog extends Panel{
         super(id);
 
         dialog = new Dialog("dialog");
-        dialog.setWidth(600);
+        dialog.setWidth(350);
         dialog.setTitle(new ResourceModel("address_sync_dialog_title"));
         add(dialog);
 
@@ -38,26 +38,11 @@ public class AddressSyncDialog extends Panel{
             }
         });
 
-        dialog.add(new AjaxLink("add") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                onAdd(target, state);
-                dialog.close(target);
-            }
-        });
-
         dialog.add(new AjaxLink("update") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 onUpdate(target, state);
-                dialog.close(target);
-            }
-        });
 
-        dialog.add(new AjaxLink("delete") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                onDelete(target, state);
                 dialog.close(target);
             }
         });
@@ -74,13 +59,7 @@ public class AddressSyncDialog extends Panel{
         dialog.open(target);
     }
 
-    public void onAdd(AjaxRequestTarget target, SearchComponentState state){
-    }
-
     public void onUpdate(AjaxRequestTarget target, SearchComponentState state){
-    }
-
-    public void onDelete(AjaxRequestTarget target, SearchComponentState state){
     }
 
     private List<String> getFilters(SyncEntity syncEntity) {

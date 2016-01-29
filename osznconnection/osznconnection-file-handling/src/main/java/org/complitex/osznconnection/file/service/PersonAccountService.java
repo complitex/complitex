@@ -97,8 +97,6 @@ public class PersonAccountService extends AbstractBean {
                                      String servicingOrganizationCode,
                                      boolean updatePuAccount) throws DBException {
         try {
-            Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
-
             //resolve local account
             String accountNumber = getAccountNumber(request, puPersonAccount);
 
@@ -225,7 +223,7 @@ public class PersonAccountService extends AbstractBean {
         long facilityServiceTypeFileId = facilityServiceType.getRequestFileId();
         RequestFile facilityServiceTypeFile = requestFileBean.findById(facilityServiceTypeFileId);
 
-        if (dwellingCharacteristicsBean.isDwellingCharacteristicsFileBound(facilityServiceTypeFileId)) {
+        if (facilityServiceTypeBean.isFacilityServiceTypeFileBound(facilityServiceTypeFileId)) {
             facilityServiceTypeFile.setStatus(RequestFileStatus.BOUND);
             requestFileBean.save(facilityServiceTypeFile);
         }

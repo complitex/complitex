@@ -13,7 +13,6 @@ import java.util.List;
 
 /**
  * Класс для работы с локальной таблицей номеров л/c person_account.
- * @author Artem
  */
 @Stateless
 public class PersonAccountBean extends AbstractBean {

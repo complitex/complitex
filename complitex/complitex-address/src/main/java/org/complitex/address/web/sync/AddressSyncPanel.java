@@ -33,8 +33,9 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import java.util.*;
 
-import static org.complitex.address.entity.SyncEntity.*;
 import static org.complitex.address.entity.AddressSyncStatus.*;
+import static org.complitex.address.entity.SyncEntity.BUILDING;
+import static org.complitex.address.entity.SyncEntity.STREET;
 
 /**
  * @author Anatoly Ivanov
@@ -259,6 +260,7 @@ public class AddressSyncPanel extends Panel {
                 onUpdate(target);
 
                 if (syncEntity != null){
+                    addressSyncService.deleteAll(null, syncEntity);
                     addressSyncService.sync(syncEntity);
                 }else{
                     addressSyncService.syncAll();
@@ -388,49 +390,21 @@ public class AddressSyncPanel extends Panel {
         });
 
         AddressSyncDialog addressSyncDialog = new AddressSyncDialog("dialog", syncEntity){
-            @Override
-            public void onAdd(AjaxRequestTarget target, SearchComponentState state) {
-                switch (syncEntity){
-                    case STREET:
-                        addressSyncService.addAll(state.getId("city"), syncEntity);
-                        break;
-                    case BUILDING:
-                        addressSyncService.addAll(state.getId("street"), syncEntity);
-                        break;
-                    default:
-                        addressSyncService.addAll(null, syncEntity);
-                }
 
-                target.add(AddressSyncPanel.this);
-            }
 
             @Override
             public void onUpdate(AjaxRequestTarget target, SearchComponentState state) {
                 switch (syncEntity){
                     case STREET:
+                        addressSyncService.addAll(state.getId("city"), syncEntity);
                         addressSyncService.updateAll(state.getId("city"), syncEntity);
                         break;
                     case BUILDING:
+                        addressSyncService.addAll(state.getId("street"), syncEntity);
                         addressSyncService.updateAll(state.getId("street"), syncEntity);
                         break;
                     default:
                         addressSyncService.updateAll(null, syncEntity);
-                }
-
-                target.add(AddressSyncPanel.this);
-            }
-
-            @Override
-            public void onDelete(AjaxRequestTarget target, SearchComponentState state) {
-                switch (syncEntity){
-                    case STREET:
-                        addressSyncService.deleteAll(state.getId("city"), syncEntity);
-                        break;
-                    case BUILDING:
-                        addressSyncService.deleteAll(state.getId("street"), syncEntity);
-                        break;
-                    default:
-                        addressSyncService.deleteAll(null, syncEntity);
                 }
 
                 target.add(AddressSyncPanel.this);
