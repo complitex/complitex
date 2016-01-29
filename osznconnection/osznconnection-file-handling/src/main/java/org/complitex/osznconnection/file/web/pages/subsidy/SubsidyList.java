@@ -3,7 +3,6 @@ package org.complitex.osznconnection.file.web.pages.subsidy;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.CancelEventIfAjaxListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -284,7 +283,7 @@ public final class SubsidyList extends TemplatePage {
                     protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                         super.updateAjaxAttributes(attributes);
 
-                        attributes.getAjaxCallListeners().add(new CancelEventIfAjaxListener());
+                        attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.STOP);
                     }
 
                 };
@@ -307,7 +306,7 @@ public final class SubsidyList extends TemplatePage {
                     protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                         super.updateAjaxAttributes(attributes);
 
-                        attributes.getAjaxCallListeners().add(new CancelEventIfAjaxListener());
+                        attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.STOP);
                     }
                 };
                 item.add(lookup);
@@ -324,7 +323,7 @@ public final class SubsidyList extends TemplatePage {
                     protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                         super.updateAjaxAttributes(attributes);
 
-                        attributes.getAjaxCallListeners().add(new CancelEventIfAjaxListener());
+                        attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.STOP);
                     }
                 });
             }
