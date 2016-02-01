@@ -260,7 +260,6 @@ public class AddressSyncPanel extends Panel {
                 onUpdate(target);
 
                 if (syncEntity != null){
-                    addressSyncService.deleteAll(null, syncEntity);
                     addressSyncService.sync(syncEntity);
                 }else{
                     addressSyncService.syncAll();

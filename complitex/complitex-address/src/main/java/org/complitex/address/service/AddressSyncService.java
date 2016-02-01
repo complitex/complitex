@@ -1,6 +1,9 @@
 package org.complitex.address.service;
 
-import org.complitex.address.entity.*;
+import org.complitex.address.entity.AddressSync;
+import org.complitex.address.entity.AddressSyncStatus;
+import org.complitex.address.entity.SyncBeginMessage;
+import org.complitex.address.entity.SyncEntity;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
@@ -29,8 +32,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static javax.ejb.ConcurrencyManagementType.BEAN;
-import static org.complitex.address.entity.SyncEntity.*;
 import static org.complitex.address.entity.AddressSyncStatus.*;
+import static org.complitex.address.entity.SyncEntity.*;
 import static org.complitex.address.service.IAddressSyncHandler.NOT_FOUND_ID;
 
 /**
@@ -105,6 +108,7 @@ public class AddressSyncService {
 
     @Asynchronous
     public void sync(SyncEntity type){
+        deleteAll(null, type);
         sync(type, null);
     }
 
@@ -436,28 +440,18 @@ public class AddressSyncService {
         broadcastService.broadcast(getClass(), "add_all_complete", syncEntity);
     }
 
-    @Asynchronous
     public void deleteAll(Long parentObjectId, SyncEntity syncEntity){
-        lockSync.set(true);
-        cancelSync.set(false);
-
         AddressSync addressSync = new AddressSync();
         addressSync.setType(syncEntity);
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
                 .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))
                 .forEach(a -> {
-                    if (!cancelSync.get()) {
-                        try {
-                            addressSyncBean.delete(a.getId());
-                            broadcastService.broadcast(getClass(), "delete_all", a);
-                        } catch (Exception e) {
-                            log.error(e.getMessage(), e);
-                            broadcastService.broadcast(getClass(), "error", e.getMessage());
-                        }
+                    try {
+                        addressSyncBean.delete(a.getId());
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                        broadcastService.broadcast(getClass(), "error", e.getMessage());
                     }
                 });
-        lockSync.set(false);
-
-        broadcastService.broadcast(getClass(), "add_all_complete", syncEntity);
     }
 }
