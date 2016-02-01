@@ -108,7 +108,6 @@ public class AddressSyncService {
 
     @Asynchronous
     public void sync(SyncEntity type){
-        deleteAll(null, type);
         sync(type, null);
     }
 
@@ -122,6 +121,9 @@ public class AddressSyncService {
             //lock sync
             lockSync.set(true);
             cancelSync.set(false);
+
+            //clear
+            deleteAll(null, type);
 
             Date date = DateUtil.getCurrentDate();
 

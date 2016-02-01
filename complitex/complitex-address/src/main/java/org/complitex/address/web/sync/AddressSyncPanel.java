@@ -412,7 +412,14 @@ public class AddressSyncPanel extends Panel {
         add(new AjaxLink("add_all") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                addressSyncDialog.open(target);
+                switch (syncEntity){
+                    case STREET:
+                    case BUILDING:
+                        addressSyncDialog.open(target);
+                        break;
+                    default:
+                        addressSyncService.addAndUpdateAll(null, syncEntity);
+                }
             }
 
             @Override
