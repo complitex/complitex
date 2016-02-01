@@ -395,15 +395,13 @@ public class AddressSyncPanel extends Panel {
             public void onUpdate(AjaxRequestTarget target, SearchComponentState state) {
                 switch (syncEntity){
                     case STREET:
-                        addressSyncService.addAll(state.getId("city"), syncEntity);
-                        addressSyncService.updateAll(state.getId("city"), syncEntity);
+                        addressSyncService.addAndUpdateAll(state.getId("city"), syncEntity);
                         break;
                     case BUILDING:
-                        addressSyncService.addAll(state.getId("street"), syncEntity);
-                        addressSyncService.updateAll(state.getId("street"), syncEntity);
+                        addressSyncService.addAndUpdateAll(state.getId("street"), syncEntity);
                         break;
                     default:
-                        addressSyncService.updateAll(null, syncEntity);
+                        addressSyncService.addAndUpdateAll(null, syncEntity);
                 }
 
                 target.add(AddressSyncPanel.this);

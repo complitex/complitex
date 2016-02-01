@@ -349,11 +349,7 @@ public class AddressSyncService {
         return lockSync.get();
     }
 
-    @Asynchronous
-    public void addAll(Long parentObjectId, SyncEntity syncEntity){
-        lockSync.set(true);
-        cancelSync.set(false);
-
+    protected void addAll(Long parentObjectId, SyncEntity syncEntity){
         AddressSync addressSync = new AddressSync();
         addressSync.setType(syncEntity);
         addressSync.setStatus(AddressSyncStatus.NEW);
@@ -397,16 +393,10 @@ public class AddressSyncService {
 
         externalDuplicate.stream().forEach(s -> addressSyncBean.delete(s.getId()));
 
-        lockSync.set(false);
-
         broadcastService.broadcast(getClass(), "add_all_complete", syncEntity);
     }
 
-    @Asynchronous
-    public void updateAll(Long parentObjectId, SyncEntity syncEntity){
-        lockSync.set(true);
-        cancelSync.set(false);
-
+    private void updateAll(Long parentObjectId, SyncEntity syncEntity){
         AddressSync addressSync = new AddressSync();
         addressSync.setType(syncEntity);
 
@@ -435,12 +425,21 @@ public class AddressSyncService {
                 .filter(s -> s.getStatus().equals(EXTERNAL_DUPLICATE))
                 .forEach(s -> addressSyncBean.delete(s.getId()));
 
-        lockSync.set(false);
-
         broadcastService.broadcast(getClass(), "add_all_complete", syncEntity);
     }
 
-    public void deleteAll(Long parentObjectId, SyncEntity syncEntity){
+    @Asynchronous
+    public void addAndUpdateAll(Long parentObjectId, SyncEntity syncEntity){
+        lockSync.set(true);
+        cancelSync.set(false);
+
+        addAll(parentObjectId, syncEntity);
+        updateAll(parentObjectId, syncEntity);
+
+        lockSync.set(false);
+    }
+
+    private void deleteAll(Long parentObjectId, SyncEntity syncEntity){
         AddressSync addressSync = new AddressSync();
         addressSync.setType(syncEntity);
         addressSyncBean.getList(FilterWrapper.of(addressSync)).stream()
