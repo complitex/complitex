@@ -136,7 +136,9 @@ public class ServiceProviderAdapter extends AbstractBean {
             }
 
             for (AccountDetail accountDetail : cursor.getData()) {
-                if (spAccountNumber.equals(accountDetail.getZheuCode())){
+                if (spAccountNumber.equals(accountDetail.getZheuCode())
+                        || spAccountNumber.equals(accountDetail.getErcCode())
+                        || spAccountNumber.equals(accountDetail.getZheuCode())){
                     request.setAccountNumber(accountDetail.getAccCode());
                     request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 

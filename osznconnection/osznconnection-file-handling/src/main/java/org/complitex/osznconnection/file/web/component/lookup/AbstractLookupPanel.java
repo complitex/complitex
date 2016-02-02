@@ -325,8 +325,7 @@ public abstract class AbstractLookupPanel<T extends AbstractRequest> extends Pan
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if (accountDetailModel.getObject() != null
-                        && !isEmpty(accountDetailModel.getObject().getAccCode())) {
+                if (accountDetailModel.getObject() != null && !isEmpty(accountDetailModel.getObject().getAccCode())) {
                     try {
                         updateAccountNumber(initialRequest, accountDetailModel.getObject().getAccCode(), userOrganizationId);
                         for (Component component : toUpdate) {
