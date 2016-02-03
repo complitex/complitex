@@ -419,6 +419,15 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         return false;
     }
 
+    public boolean isServiceProvider() {
+        for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
+            if (organizationType.getObjectId().equals(OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected boolean isDistrictRequired() {
         return false;
     }

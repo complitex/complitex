@@ -127,6 +127,12 @@
                 AND osc.`value` = #{code};
     </select>
 
+    <select id="selectOrganizationObjectIdByEdrpou" parameterType="string" resultType="long">
+        SELECT oa.`object_id` FROM `organization_attribute` oa LEFT JOIN `organization_string_culture` osc
+        ON (oa.`value_id` = osc.`id`) WHERE oa.`attribute_type_id` = 926 AND oa.`status` = 'ACTIVE'
+        AND osc.`value` = #{code};
+    </select>
+
     <select id="selectOrganizationName" parameterType="long" resultType="string">
         select osc.`value` from `organization_attribute` oa
             left join `organization_string_culture` osc on (oa.`value_id` = osc.`id` and oa.`value_type_id` = 900)

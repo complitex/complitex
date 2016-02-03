@@ -37,7 +37,8 @@ import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
 
-import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE;
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.USER_ORGANIZATION_TYPE;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -70,8 +71,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
         super(id);
 
         add(organizationPickerDialog = new OrganizationPickerDialog("organization_correction_dialog",
-                Model.of(new DomainObject()), OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
-                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE) {
+                Model.of(new DomainObject()), OsznOrganizationTypeStrategy.USER_ORGANIZATION_TYPE) {
             @Override
             protected void onSelect(AjaxRequestTarget target) {
                 RequestFile requestFile = selectedRequestFileModel.getObject();
@@ -104,15 +104,14 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
         addColumn(new Column() {
             @Override
             public Component head(ISortStateLocator stateLocator, DataView<?> dataView, Component refresh) {
-                return new ArrowOrderByBorder("header.servicing_organization", "servicing_organization", stateLocator,
-                        dataView, refresh);
+                return new ArrowOrderByBorder("header.service_provider", "service_provider", stateLocator, dataView, refresh);
             }
 
             @Override
             public Component filter() {
-                return new OrganizationPicker("servicingOrganization",
-                        new PropertyModel<DomainObject>(getModel(), "servicingOrganization"),
-                        SERVICING_ORGANIZATION_TYPE);
+                return new OrganizationPicker("serviceProvider",
+                        new PropertyModel<DomainObject>(getModel(), "serviceProvider"),
+                        SERVICE_PROVIDER_TYPE, USER_ORGANIZATION_TYPE);
             }
 
             @Override
@@ -120,14 +119,14 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
                 final RequestFile rf = item.getModelObject();
                 final String code = rf.getName().substring(0, rf.getName().length() - 8);
 
-                return new AjaxLinkLabel("servicing_organization", new LoadableDetachableModel<String>() {
+                return new AjaxLinkLabel("service_provider", new LoadableDetachableModel<String>() {
                     @Override
                     protected String load() {
-                        Long organizationId = subsidyService.getServicingOrganizationId(rf);
+                        Long organizationId = subsidyService.getServiceProviderId(rf);
 
                         if (organizationId != null){
-                            return organizationStrategy.displayShortNameAndCode(organizationStrategy.getDomainObject(organizationId, true),
-                                    getLocale());
+                            return organizationStrategy.displayShortNameAndCode(
+                                    organizationStrategy.getDomainObject(organizationId, true), getLocale());
                         }else {
                             return code;
                         }
@@ -141,7 +140,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
 
                     @Override
                     public boolean isEnabled() {
-                        return subsidyService.getServicingOrganizationId(rf) == null;
+                        return subsidyService.getServiceProviderId(rf) == null;
                     }
                 };
 

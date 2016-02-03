@@ -92,18 +92,18 @@ public class SubsidyService {
         return dat1.before(dat2) && DateUtil.getMonthDiff(dat1, dat2) <= 6;
     }
 
-    public Long getServicingOrganizationId(Long subsidyRequestFileId){
-        return getServicingOrganizationId(requestFileBean.findById(subsidyRequestFileId));
+    public Long getServiceProviderId(Long subsidyRequestFileId){
+        return getServiceProviderId(requestFileBean.findById(subsidyRequestFileId));
     }
 
-    public Long getServicingOrganizationId(RequestFile subsidyRequestFile){
+    public Long getServiceProviderId(RequestFile subsidyRequestFile){
         String code = subsidyRequestFile.getName().substring(0, subsidyRequestFile.getName().length()-8);
 
         List<OrganizationCorrection> list = organizationCorrectionBean.getOrganizationCorrections(
                 FilterWrapper.of(new OrganizationCorrection(null, null, code, subsidyRequestFile.getOrganizationId(),
                         subsidyRequestFile.getUserOrganizationId(), null)));
 
-        return !list.isEmpty() ?  list.get(0).getObjectId() : organizationStrategy.getObjectIdByCode(code);
+        return !list.isEmpty() ?  list.get(0).getObjectId() : organizationStrategy.getObjectIdByEdrpou(code);
     }
 
     public String getServicingOrganizationCode(Long requestFileId){
@@ -118,11 +118,20 @@ public class SubsidyService {
                 FilterWrapper.of(new OrganizationCorrection(null, null, code, requestFile.getOrganizationId(),
                         requestFile.getUserOrganizationId(), null)));
 
-        return !list.isEmpty() ? organizationStrategy.getCode(list.get(0).getObjectId()) : code;
+        if (!list.isEmpty()){
+            String edrpou =  organizationStrategy.getDomainObject(list.get(0).getObjectId()).getStringValue(OsznOrganizationStrategy.EDRPOU);
+
+            if (edrpou != null){
+                code = edrpou;
+            }
+        }
+
+
+        return code;
     }
 
     public String displayServicingOrganization(RequestFile subsidyRequestFile, Locale locale){
-        Long organizationId = getServicingOrganizationId(subsidyRequestFile);
+        Long organizationId = getServiceProviderId(subsidyRequestFile);
 
         if (organizationId != null){
             return organizationStrategy.displayShortNameAndCode(organizationStrategy.getDomainObject(organizationId, true), locale);

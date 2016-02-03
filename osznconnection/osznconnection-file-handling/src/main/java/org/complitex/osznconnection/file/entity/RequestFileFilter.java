@@ -28,7 +28,7 @@ public class RequestFileFilter extends AbstractFilter {
     private DomainObject organization;
     private RequestFileType type;
     private RequestFileStatus status;
-    private DomainObject servicingOrganization;
+    private DomainObject serviceProvider;
     private BigDecimal sum;
 
     public Long getId() {
@@ -160,12 +160,12 @@ public class RequestFileFilter extends AbstractFilter {
         this.status = status;
     }
 
-    public DomainObject getServicingOrganization() {
-        return servicingOrganization;
+    public DomainObject getServiceProvider() {
+        return serviceProvider;
     }
 
-    public void setServicingOrganization(DomainObject servicingOrganization) {
-        this.servicingOrganization = servicingOrganization;
+    public void setServiceProvider(DomainObject serviceProvider) {
+        this.serviceProvider = serviceProvider;
     }
 
     public BigDecimal getSum() {

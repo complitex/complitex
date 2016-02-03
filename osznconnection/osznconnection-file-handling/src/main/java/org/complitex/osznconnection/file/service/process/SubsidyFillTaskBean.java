@@ -186,7 +186,7 @@ public class SubsidyFillTaskBean implements ITaskBean{
         subsidyMasterData.putField(SubsidyMasterDataDBF.END0, DateUtil.getLastDayOfMonth(date));
 
         //servicing organization
-        Long servicingOrganizationId = subsidyService.getServicingOrganizationId(subsidy.getRequestFileId());
+        Long servicingOrganizationId = subsidyService.getServiceProviderId(subsidy.getRequestFileId());
 
         if (servicingOrganizationId == null){
             throw new RuntimeException("Null servicing organization for requestFileId " + subsidy.getRequestFileId());

@@ -133,7 +133,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     organization, attribute, getLocale(), isDisabled()));
 
             //initial visibility
-            edrpouContainer.setVisible(isUserOrganization());
+            edrpouContainer.setVisible(isUserOrganization() || isServiceProvider());
         }
 
         //Root directory for loading and saving request files. It is user organization only attribute.
@@ -237,7 +237,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
         //edrpou.
         {
-            edrpouContainer.setVisible(isUserOrganization());
+            edrpouContainer.setVisible(isUserOrganization() || isServiceProvider());
             target.add(edrpouContainer);
         }
 
@@ -279,11 +279,6 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
     }
 
     @Override
-    public boolean isUserOrganization() {
-        return super.isUserOrganization();
-    }
-
-    @Override
     protected boolean isDistrictRequired() {
         return isSubsidyDepartment() || isPrivilegesDepartment();
     }
@@ -317,10 +312,12 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             organization.removeAttribute(OsznOrganizationStrategy.REFERENCES_DIR);
         }
 
-        if (!isUserOrganization()) {
+        if (!isUserOrganization() && !isServiceProvider()){
             //edrpou
             organization.removeAttribute(OsznOrganizationStrategy.EDRPOU);
+        }
 
+        if (!isUserOrganization()) {
             //root directory
             organization.removeAttribute(OsznOrganizationStrategy.ROOT_REQUEST_FILE_DIRECTORY);
             organization.removeAttribute(OsznOrganizationStrategy.ROOT_EXPORT_DIRECTORY);

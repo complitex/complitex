@@ -5,10 +5,6 @@ import org.complitex.osznconnection.file.entity.RequestFileStatus;
 
 import java.util.Locale;
 
-/**
- *
- * @author Artem
- */
 public final class RequestFileStatusRenderer {
 
     private RequestFileStatusRenderer() {

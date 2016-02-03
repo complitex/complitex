@@ -76,8 +76,8 @@
             <if test="dbfRecordCount != null">and `dbf_record_count` like concat('%',#{dbfRecordCount},'%')</if>
             <if test="type != null">and `type` = #{type}</if>
             <if test="status != null">and `status` = #{status}</if>
-            <if test="servicingOrganization != null">
-                and `name` like concat('${servicingOrganization.getAttribute(901).stringCultures[0].value}', '%')
+            <if test="serviceProvider != null">
+                and `name` like concat('${serviceProvider.getAttribute(926).stringCultures[0].value}', '%')
             </if>
             <include refid="permissionFilter"/>
         </where>
@@ -171,7 +171,7 @@
     
     <sql id="fromFilterSort">
         FROM `request_file` rf
-            <if test="sortProperty == 'servicing_organization'">
+            <if test="sortProperty == 'service_provider'">
               left join `organization_string_culture` sc on (sc.`value` = SUBSTRING(rf.`name`, 1, LENGTH(rf.`name`)-8))
               left join `organization_attribute` oa on  sc.`id` = oa.`value_id`
               left join `organization_attribute` oa_name on oa_name.`object_id` = oa.`object_id`
@@ -180,8 +180,8 @@
 
             <include refid="org.complitex.osznconnection.file.service.RequestFileBean.requestFilesFilterWhere"/>
 
-            <if test="sortProperty == 'servicing_organization'">
-              and (oa.`value_type_id` = 901 or oa.`value_type_id` is null)
+            <if test="sortProperty == 'service_provider'">
+              and (oa.`value_type_id` = 926 or oa.`value_type_id` is null)
               and (oa_name.`value_type_id` = 900 or oa_name.`value_type_id` is null)
             </if>
 
@@ -203,7 +203,7 @@
                                     <otherwise>DESC</otherwise>
                                 </choose>
                         </when>
-                        <when test="sortProperty == 'servicing_organization'">
+                        <when test="sortProperty == 'service_provider'">
                             order by sc_name.`value`
                             <choose>
                                 <when test="ascending">asc</when>

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.osznconnection.file.web.component.process;
 
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -12,10 +8,6 @@ import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
 public class RequestFileStatusFilter extends DropDownChoice<RequestFileStatus> {
 
     public RequestFileStatusFilter(String id) {

@@ -365,6 +365,10 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationObjectIdByCode", code);
     }
 
+    public Long getObjectIdByEdrpou(String edrpou) {
+        return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationObjectIdByEdrpou", edrpou);
+    }
+
     @Override
     public List<? extends DomainObject> getOrganizations(Long... types) {
         return getList(new DomainObjectFilter().addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, types));
