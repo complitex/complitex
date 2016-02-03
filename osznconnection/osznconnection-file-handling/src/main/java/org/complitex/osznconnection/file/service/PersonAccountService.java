@@ -116,8 +116,7 @@ public class PersonAccountService extends AbstractBean {
 
             if (request.getStatus() == RequestStatus.ACCOUNT_NUMBER_RESOLVED) {
                 //check servicing organization
-                if (accountDetail.getZheu() != null && !accountDetail.getZheu().isEmpty() &&
-                        servicingOrganizationCode != null && !servicingOrganizationCode.equals(accountDetail.getZheu())){
+                if (servicingOrganizationCode != null && !servicingOrganizationCode.equals(accountDetail.getZheu())){
                     request.setStatus(RequestStatus.SERVICING_ORGANIZATION_NOT_FOUND);
 
                     return;
