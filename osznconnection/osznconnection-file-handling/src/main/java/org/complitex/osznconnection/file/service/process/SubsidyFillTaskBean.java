@@ -124,7 +124,7 @@ public class SubsidyFillTaskBean implements ITaskBean{
         String districtName = addressService.resolveOutgoingDistrict(subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
 
         List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount( subsidy, districtName,
-                subsidy.getAccountNumber() + "");
+                subsidy.getAccountNumber() + "", subsidy.getDate());
 
         accountDetails.add(new AccountDetail());
 

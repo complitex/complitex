@@ -52,7 +52,7 @@ public abstract class AutocompleteComponent<T> extends AbstractAutocompleteCompo
 	private static final long serialVersionUID = -3377109382248062940L;
 
 	// Properties
-	private final IModel< ? extends List< ? extends T>> list;
+	private final IModel<List< ? extends T>> list;
 
 	/**
 	 * Constructor
@@ -65,7 +65,7 @@ public abstract class AutocompleteComponent<T> extends AbstractAutocompleteCompo
 	 *            List of possibles values
 	 */
 	public AutocompleteComponent(String id, final IModel<T> model,
-			final IModel< ? extends List< ? extends T>> list)
+			final IModel<List< ? extends T>> list)
 	{
 		super(id, model);
 		this.list = list;
@@ -82,14 +82,15 @@ public abstract class AutocompleteComponent<T> extends AbstractAutocompleteCompo
 	 *            List of possibles values
 	 */
 	public AutocompleteComponent(String id, final IModel<T> model,
-			final IModel< ? extends List< ? extends T>> list,
+			final IModel<List< ? extends T>> list,
 			IChoiceRenderer< ? super T> choiceRenderer)
 	{
 		super(id, model, choiceRenderer);
 		this.list = list;
 	}
 
-	@Override
+	@SuppressWarnings("Duplicates")
+    @Override
 	protected void onBeforeRenderAutocomplete(Autocomplete< ? > autocomplete)
 	{
 		StringWriter sw = new StringWriter();

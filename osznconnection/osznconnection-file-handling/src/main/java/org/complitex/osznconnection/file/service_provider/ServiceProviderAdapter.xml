@@ -47,6 +47,7 @@
         #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
         #{pAccCode, mode=IN, javaType=string, jdbcType=VARCHAR},
         #{pAccCodeType, mode=IN, javaType=int, jdbcType=INTEGER},
+        #{date, mode=IN, javaType=date, jdbcType=DATE},
         #{details, mode=OUT, jdbcType=CURSOR, resultMap=accountDetailResultMap})
         }
         ]]>

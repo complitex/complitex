@@ -2,8 +2,6 @@ package org.complitex.osznconnection.file.entity;
 
 import org.complitex.common.entity.PersonalName;
 
-import java.util.Date;
-
 /**
  * @author Anatoly Ivanov java@inheaven.ru
  *         Date: 15.08.13 21:00
@@ -14,8 +12,6 @@ public abstract class AbstractAccountRequest<E extends Enum> extends AbstractAdd
     private String lastName;
     private String firstName;
     private String middleName;
-
-    private Date date;
 
     public PersonalName getPersonalName(){
         return new PersonalName(firstName, middleName, lastName);
@@ -51,13 +47,5 @@ public abstract class AbstractAccountRequest<E extends Enum> extends AbstractAdd
 
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 }

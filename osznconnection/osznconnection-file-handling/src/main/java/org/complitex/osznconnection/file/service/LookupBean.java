@@ -54,7 +54,7 @@ public class LookupBean extends AbstractBean {
     @TransactionAttribute(TransactionAttributeType.NEVER)
     public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district, String account,
             long userOrganizationId) throws DBException, UnknownAccountNumberTypeException {
-        return adapter.acquireAccountDetailsByAccount(request, district, account);
+        return adapter.acquireAccountDetailsByAccount(request, district, account, request.getDate());
     }
 
     public List<AccountDetail> getAccountDetailsByFio(Long userOrganizationId, String districtName,

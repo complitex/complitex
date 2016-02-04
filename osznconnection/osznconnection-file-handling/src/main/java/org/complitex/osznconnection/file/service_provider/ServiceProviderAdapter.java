@@ -256,7 +256,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     @SuppressWarnings("unchecked")
-    public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district, String account)
+    public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district, String account, Date date)
             throws DBException, UnknownAccountNumberTypeException {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
@@ -267,6 +267,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("pDistrName", district);
         params.put("pAccCode", account);
         params.put("pAccCodeType", accountType);
+        params.put("date", date);
 
         try {
             sqlSession(dataSource).selectOne(NS + ".getAttrsByAccCode", params);

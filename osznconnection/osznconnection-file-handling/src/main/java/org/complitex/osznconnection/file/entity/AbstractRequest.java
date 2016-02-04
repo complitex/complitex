@@ -3,6 +3,7 @@ package org.complitex.osznconnection.file.entity;
 import com.google.common.collect.Lists;
 import org.complitex.common.entity.ILongId;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,8 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
     private Map<String, Object> dbfFields = new HashMap<>();
 
     private Map<String, Object> updateFieldMap;
+
+    private Date date;
 
     public Map<String, Object> getUpdateFieldMap() {
         return updateFieldMap;
@@ -119,5 +122,13 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
 
     public void setWarnings(List<RequestWarning> warnings) {
         this.warnings = warnings;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
