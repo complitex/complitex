@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter">
     <resultMap id="accountDetailMap" type="org.complitex.osznconnection.file.entity.AccountDetail">
-        <result column="acc_code" property="accCode"/>
+        <result column="mn_code" property="accCode"/>
         <result column="erc_code" property="ercCode"/>
-        <result column="erc_zheu_code" property="zheuCode"/>
+        <result column="zheu_code" property="zheuCode"/>
         <result column="owner_fio" property="ownerFio"/>
         <result column="owner_inn" property="ownerINN"/>
         <result column="zheu" property="zheu"/>
@@ -26,7 +26,7 @@
     </select>
 
     <resultMap id="accountDetailResultMap" type="org.complitex.osznconnection.file.entity.AccountDetail">
-        <result column="acc_code" property="accCode" />
+        <result column="mn_code" property="accCode" />
         <result column="erc_code" property="ercCode"/>
         <result column="zheu_code" property="zheuCode"/>
         <result column="street_sort" property="streetType"/>
