@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
-import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.USER_ORGANIZATION_TYPE;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -71,7 +70,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
         super(id);
 
         add(organizationPickerDialog = new OrganizationPickerDialog("organization_correction_dialog",
-                Model.of(new DomainObject()), OsznOrganizationTypeStrategy.USER_ORGANIZATION_TYPE) {
+                Model.of(new DomainObject()), OsznOrganizationTypeStrategy.SERVICE_PROVIDER_TYPE) {
             @Override
             protected void onSelect(AjaxRequestTarget target) {
                 RequestFile requestFile = selectedRequestFileModel.getObject();
@@ -111,7 +110,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
             public Component filter() {
                 return new OrganizationPicker("serviceProvider",
                         new PropertyModel<DomainObject>(getModel(), "serviceProvider"),
-                        SERVICE_PROVIDER_TYPE, USER_ORGANIZATION_TYPE);
+                        SERVICE_PROVIDER_TYPE);
             }
 
             @Override
