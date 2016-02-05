@@ -26,7 +26,7 @@ import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
 import org.complitex.common.web.component.wiquery.ExtendedDialog;
-import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.LookupBean;
@@ -45,7 +45,7 @@ import java.util.List;
 import static org.apache.wicket.util.string.Strings.isEmpty;
 import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 
-public abstract class AbstractLookupPanel<T extends AbstractRequest> extends Panel {
+public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
 
@@ -74,7 +74,11 @@ public abstract class AbstractLookupPanel<T extends AbstractRequest> extends Pan
     private T request;
     private T initialRequest;
     private IModel<String> accountNumberModel;
-    private final long userOrganizationId;
+    private Long userOrganizationId;
+
+    private IModel<String> firstNameModel = Model.of("");
+    private IModel<String> middleNameModel = Model.of("");
+    private IModel<String> lastNameModel = Model.of("");
 
     public AbstractLookupPanel(String id, long userOrganizationId, Component... toUpdate) {
         super(id);
@@ -279,14 +283,9 @@ public abstract class AbstractLookupPanel<T extends AbstractRequest> extends Pan
         accordion.add(lookupByAccount);
 
         //lookup by fio
-        final TextField<String> lastName = new TextField<>("lastName", Model.of(""));
-        accordion.add(lastName);
-
-        final TextField<String> firstName = new TextField<>("firstName", Model.of(""));
-        accordion.add(firstName);
-
-        final TextField<String> middleName = new TextField<>("middleName", Model.of(""));
-        accordion.add(middleName);
+        accordion.add(new TextField<>("lastName", lastNameModel));
+        accordion.add(new TextField<>("firstName", firstNameModel));
+        accordion.add(new TextField<>("middleName", middleNameModel));
 
         accordion.add(new IndicatingAjaxButton("lookupByFio") {
             @Override
@@ -295,8 +294,8 @@ public abstract class AbstractLookupPanel<T extends AbstractRequest> extends Pan
 
                 try {
                     List<AccountDetail> accountDetails = lookupBean.getAccountDetailsByFio(userOrganizationId,
-                            district, getServicingOrganizationCode(request), lastName.getModelObject(),
-                            firstName.getModelObject(), middleName.getModelObject(), (Date)request.getField("DAT1"));
+                            district, getServicingOrganizationCode(request), lastNameModel.getObject(),
+                            firstNameModel.getObject(), middleNameModel.getObject(), (Date)request.getField("DAT1"));
 
                     accountDetailsModel.setObject(accountDetails);
 
@@ -405,6 +404,11 @@ public abstract class AbstractLookupPanel<T extends AbstractRequest> extends Pan
         accountDetailsModel.setObject(null);
         accountNumberPickerPanel.setVisible(false);
         target.add(accountNumberPickerPanel);
+
+        //lookup by owner fio
+        firstNameModel.setObject(request.getFirstName());
+        middleNameModel.setObject(request.getMiddleName());
+        lastNameModel.setObject(request.getLastName());
 
         //lookup by address
         apartmentModel.setObject(apartment);

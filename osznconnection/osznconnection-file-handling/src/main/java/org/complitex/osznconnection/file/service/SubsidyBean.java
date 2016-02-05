@@ -208,16 +208,4 @@ public class SubsidyBean extends AbstractRequestBean {
         return sqlSession().selectList("selectSubsidyMasterDataFiles", ImmutableMap.of("ids", ids, "type", type.name(),
                 "date", date, "userOrganizationString", userOrganizationString));
     }
-
-    public List<String> getFirstNames(String term){
-        return sqlSession().selectList("selectSubsidyFirstNames", term);
-    }
-
-    public List<String> getMiddleNames(String term){
-        return sqlSession().selectList("selectSubsidyMiddleNames", term);
-    }
-
-    public List<String> getLastName(String term){
-        return sqlSession().selectList("selectSubsidyLastNames", term);
-    }
 }
