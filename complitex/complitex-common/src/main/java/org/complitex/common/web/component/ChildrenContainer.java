@@ -1,18 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component;
 
-import java.util.Arrays;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 
 import javax.ejb.EJB;
-import org.complitex.common.strategy.IStrategy;
+import java.util.Arrays;
 
 /**
  *

@@ -1,14 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.template.web.template;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.wicket.Component;
 import org.complitex.common.web.IWebComponentResolver;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *

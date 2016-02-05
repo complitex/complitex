@@ -1,12 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.osznconnection.file.service.warning;
+
+import org.complitex.osznconnection.file.entity.RequestWarning;
 
 import java.util.List;
 import java.util.Locale;
-import org.complitex.osznconnection.file.entity.RequestWarning;
 
 /**
  *

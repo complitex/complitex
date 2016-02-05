@@ -1,14 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.heatmeter.web.correction.component.model;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import java.util.List;
 import org.apache.wicket.model.Model;
 import org.complitex.common.entity.DomainObject;
+
+import java.util.List;
 
 /**
  *

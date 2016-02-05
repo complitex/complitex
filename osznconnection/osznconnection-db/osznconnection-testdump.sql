@@ -1,4 +1,5 @@
 -- Set mysql user-defined variable - system locale id.
+-- Set mysql user-defined variable - system locale id.
 SELECT (@system_locale_id := `id`) FROM `locales` WHERE `system` = 1;
 
 -- Oszns and calculation centers organizations
@@ -103,7 +104,7 @@ INSERT INTO `request_file_field_description` VALUES (35,1,'P7','java.math.BigDec
 INSERT INTO `request_file_field_description` VALUES (36,1,'N7','java.math.BigDecimal',10,4);
 INSERT INTO `request_file_field_description` VALUES (37,1,'P8','java.math.BigDecimal',10,4);
 INSERT INTO `request_file_field_description` VALUES (38,1,'N8','java.math.BigDecimal',10,4);
-INSERT INTO `request_file_field_description` VALUES (39,2,'OWN_NUM','java.lang.String',15,NULL);
+INSERT INTO `request_file_field_description` VALUES (39,2,'OWN_NUM','java.lang.Integer',15,NULL);
 INSERT INTO `request_file_field_description` VALUES (40,2,'REE_NUM','java.lang.Integer',2,NULL);
 INSERT INTO `request_file_field_description` VALUES (41,2,'OPP','java.lang.String',8,NULL);
 INSERT INTO `request_file_field_description` VALUES (42,2,'NUMB','java.lang.Integer',2,NULL);
@@ -160,7 +161,7 @@ INSERT INTO `request_file_field_description` VALUES (92,2,'CODE3_8','java.lang.I
 INSERT INTO `request_file_field_description` VALUES (93,2,'OPP_SERV','java.lang.String',8,NULL);
 INSERT INTO `request_file_field_description` VALUES (94,2,'RESERV1','java.lang.Integer',10,NULL);
 INSERT INTO `request_file_field_description` VALUES (95,2,'RESERV2','java.lang.String',10,NULL);
-INSERT INTO `request_file_field_description` VALUES (96,3,'OWN_NUM','java.lang.String',15,NULL);
+INSERT INTO `request_file_field_description` VALUES (96,3,'OWN_NUM','java.lang.Integer',15,NULL);
 INSERT INTO `request_file_field_description` VALUES (97,3,'REE_NUM','java.lang.Integer',2,NULL);
 INSERT INTO `request_file_field_description` VALUES (98,3,'OWN_NUM_SR','java.lang.String',15,NULL);
 INSERT INTO `request_file_field_description` VALUES (99,3,'FAM_NUM','java.lang.Integer',2,NULL);

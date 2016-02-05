@@ -6,28 +6,28 @@ package org.complitex.correction.entity;
 public enum AddressLinkStatus implements LinkStatus {
 
     /* группа "неразрешимых" статусов, т.е. любой статус из группы указывает на то, что какая-то часть внутреннего адреса у записи не разрешена */
-    CITY_UNRESOLVED(200L), STREET_TYPE_UNRESOLVED(237L), STREET_UNRESOLVED(201L), STREET_AND_BUILDING_UNRESOLVED(231L),
-    BUILDING_UNRESOLVED(202L), APARTMENT_UNRESOLVED(250L), ROOM_UNRESOLVED(260L),
+    CITY_UNRESOLVED(200), STREET_TYPE_UNRESOLVED(237), STREET_UNRESOLVED(201), STREET_AND_BUILDING_UNRESOLVED(231),
+    BUILDING_UNRESOLVED(202), APARTMENT_UNRESOLVED(250), ROOM_UNRESOLVED(260),
 
     /* найдено больше одной записи адреса во внутреннем адресном справочнике */
-    MORE_ONE_CITY(234L), MORE_ONE_STREET_TYPE(238L), MORE_ONE_STREET(235L), MORE_ONE_BUILDING(236L),
-    MORE_ONE_APARTMENT(251L), MORE_ONE_ROOM(261L),
+    MORE_ONE_CITY(234), MORE_ONE_STREET_TYPE(238), MORE_ONE_STREET(235), MORE_ONE_BUILDING(236),
+    MORE_ONE_APARTMENT(251), MORE_ONE_ROOM(261),
 
     /* Найдено более одной записи в коррекциях */
-    MORE_ONE_CITY_CORRECTION(210L), MORE_ONE_STREET_TYPE_CORRECTION(239L), MORE_ONE_STREET_CORRECTION(211L),
-    MORE_ONE_BUILDING_CORRECTION(228L), MORE_ONE_APARTMENT_CORRECTION(252L), MORE_ONE_ROOM_CORRECTION(262L),
+    MORE_ONE_CITY_CORRECTION(210), MORE_ONE_STREET_TYPE_CORRECTION(239), MORE_ONE_STREET_CORRECTION(211),
+    MORE_ONE_BUILDING_CORRECTION(228), MORE_ONE_APARTMENT_CORRECTION(252), MORE_ONE_ROOM_CORRECTION(262),
 
-    ADDRESS_LINKED(299L);
+    ADDRESS_LINKED(299);
 
-    private Long id;
+    private Integer id;
 
-    AddressLinkStatus(Long id) {
+    AddressLinkStatus(Integer id) {
         this.id = id;
     }
 
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 }

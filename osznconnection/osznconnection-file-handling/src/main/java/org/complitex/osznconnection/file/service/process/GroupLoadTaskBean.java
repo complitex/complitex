@@ -45,10 +45,13 @@ public class GroupLoadTaskBean implements ITaskBean {
 
         requestFileGroupBean.save(group);
 
-        final RequestFile benefitFile = group.getBenefitFile();
+        RequestFile benefitFile = group.getBenefitFile();
         benefitFile.setGroupId(group.getId());
-        final RequestFile paymentFile = group.getPaymentFile();
+        benefitFile.setStatus(RequestFileStatus.LOADING);
+
+        RequestFile paymentFile = group.getPaymentFile();
         paymentFile.setGroupId(group.getId());
+        paymentFile.setStatus(RequestFileStatus.LOADING);
 
         //load payment
         boolean noSkip = loadRequestFileBean.load(paymentFile, new LoadRequestFileBean.AbstractLoadRequestFile() {

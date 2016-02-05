@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component.permission.organization;
 
 import com.google.common.collect.Maps;
@@ -14,6 +10,7 @@ import org.complitex.common.web.component.permission.DomainObjectPermissionsPane
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 
 /**
  *

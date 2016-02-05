@@ -1,11 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component.back;
 
-import java.io.Serializable;
 import org.apache.wicket.Component;
+
+import java.io.Serializable;
 
 /**
  *

@@ -7,5 +7,5 @@ import java.io.Serializable;
  *         Date: 14.09.12 16:46
  */
 public interface IFixedIdType extends Serializable{
-    Long getId();
+    Integer getId();
 }

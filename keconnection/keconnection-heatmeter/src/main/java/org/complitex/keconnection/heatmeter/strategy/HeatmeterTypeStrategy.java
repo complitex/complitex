@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.heatmeter.strategy;
 
 import com.google.common.collect.ImmutableMap;
@@ -21,10 +17,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 public class HeatmeterTypeStrategy extends TemplateStrategy {
 
@@ -36,10 +28,10 @@ public class HeatmeterTypeStrategy extends TemplateStrategy {
     /**
      * Predefined heatmeter type ids
      */
-    public static final long HEATING = 1;
-    public static final long HEATING_AND_WATER = 2;
+    public static final int HEATING = 1;
+    public static final int HEATING_AND_WATER = 2;
     /* Reserved heatmeter types */
-    private static final Set<Long> RESERVED_HEATMETER_TYPE_IDS = ImmutableSet.of(HEATING, HEATING_AND_WATER);
+    private static final Set<Integer> RESERVED_HEATMETER_TYPE_IDS = ImmutableSet.of(HEATING, HEATING_AND_WATER);
 
     @Override
     public String getEntityName() {

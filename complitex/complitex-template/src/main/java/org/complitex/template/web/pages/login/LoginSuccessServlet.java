@@ -1,16 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.template.web.pages.login;
+
+import org.apache.commons.codec.binary.Hex;
+import org.complitex.template.web.security.SecurityWebListener;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.codec.binary.Hex;
-import org.complitex.template.web.security.SecurityWebListener;
 
 /**
  *

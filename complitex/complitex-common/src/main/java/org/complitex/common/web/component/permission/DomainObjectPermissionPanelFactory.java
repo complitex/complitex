@@ -1,10 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component.permission;
 
 import org.complitex.common.web.component.factory.WebComponentFactoryUtil;
+import org.complitex.common.web.component.permission.AbstractDomainObjectPermissionPanel;
+import org.complitex.common.web.component.permission.DomainObjectPermissionsPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

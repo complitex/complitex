@@ -1,17 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.osznconnection.file.entity;
 
 import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
 public class RequestWarning implements Serializable {
 
     private Long id;

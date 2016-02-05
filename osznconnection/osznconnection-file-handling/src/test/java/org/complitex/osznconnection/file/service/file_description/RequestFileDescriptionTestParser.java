@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.osznconnection.file.service.file_description;
 
-import java.io.FileInputStream;
-import java.net.URL;
+import org.complitex.osznconnection.file.service.file_description.jaxb.FileDescriptions;
+
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -13,7 +9,8 @@ import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.util.ValidationEventCollector;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import org.complitex.osznconnection.file.service.file_description.jaxb.FileDescriptions;
+import java.io.FileInputStream;
+import java.net.URL;
 
 /**
  *

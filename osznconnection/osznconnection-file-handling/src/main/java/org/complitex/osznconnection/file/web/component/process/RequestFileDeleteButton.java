@@ -1,14 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.osznconnection.file.web.component.process;
 
 import com.google.common.collect.ImmutableList;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import javax.ejb.EJB;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.complitex.common.entity.Log;
@@ -16,6 +8,11 @@ import org.complitex.common.service.LogBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.service.RequestFileBean;
+
+import javax.ejb.EJB;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *

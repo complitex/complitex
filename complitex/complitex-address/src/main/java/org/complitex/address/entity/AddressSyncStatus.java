@@ -1,23 +1,21 @@
 package org.complitex.address.entity;
 
-import org.complitex.common.mybatis.FixedIdTypeHandler;
 import org.complitex.common.mybatis.IFixedIdType;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 25.04.2014 23:47
  */
-@FixedIdTypeHandler
 public enum AddressSyncStatus implements IFixedIdType{
     LOCAL(1), NEW(2), NEW_NAME(3), DUPLICATE(4), ARCHIVAL(5), EXTERNAL_DUPLICATE(6);
 
-    private Long id;
+    private Integer id;
 
-    AddressSyncStatus(long id) {
+    AddressSyncStatus(Integer id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 }

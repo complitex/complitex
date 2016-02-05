@@ -1,12 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component.back;
 
-import javax.servlet.http.HttpSession;
 import org.apache.wicket.Component;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+
+import javax.servlet.http.HttpSession;
 
 /**
  *

@@ -1,24 +1,22 @@
 package org.complitex.common.entity;
 
-import org.complitex.common.mybatis.FixedIdTypeHandler;
 import org.complitex.common.mybatis.IFixedIdType;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 15.10.13 16:39
  */
-@FixedIdTypeHandler
 public enum CorrectionStatus implements IFixedIdType {
-    LOCAL(1L), NEW(2L), NEW_NAME(3L), DUPLICATE(4L);
+    LOCAL(1), NEW(2), NEW_NAME(3), DUPLICATE(4);
 
-    private Long id;
+    private Integer id;
 
-    private CorrectionStatus(Long id) {
+    private CorrectionStatus(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 }

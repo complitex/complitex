@@ -1,12 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.osznconnection.file.service.status.details;
 
-import java.io.Serializable;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.AbstractRequestExample;
+
+import java.io.Serializable;
 
 /**
  *

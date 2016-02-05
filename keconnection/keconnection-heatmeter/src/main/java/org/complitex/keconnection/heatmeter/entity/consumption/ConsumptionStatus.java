@@ -1,6 +1,5 @@
 package org.complitex.keconnection.heatmeter.entity.consumption;
 
-import org.complitex.common.mybatis.FixedIdTypeHandler;
 import org.complitex.common.mybatis.IFixedIdType;
 
 import java.util.EnumSet;
@@ -8,8 +7,7 @@ import java.util.EnumSet;
 /**
  * @author inheaven on 20.03.2015 2:25.
  */
-@FixedIdTypeHandler
-public enum  ConsumptionStatus implements IFixedIdType{
+public enum ConsumptionStatus implements IFixedIdType{
     LOADED(11), LOADING(12), LOAD_ERROR(13),
     VALIDATED(21), VALIDATING(22), VALIDATION_ERROR(23),
     BOUND(31), BINDING(32), BIND_ERROR(33),
@@ -39,14 +37,14 @@ public enum  ConsumptionStatus implements IFixedIdType{
             LOCAL_STREET_UNRESOLVED,
             LOCAL_BUILDING_UNRESOLVED);
 
-    private long id;
+    private Integer id;
 
-    ConsumptionStatus(long id) {
+    ConsumptionStatus(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 }

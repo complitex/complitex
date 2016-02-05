@@ -1,8 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component.permission;
+
+import java.io.Serializable;
 
 import java.io.Serializable;
 import java.util.Set;

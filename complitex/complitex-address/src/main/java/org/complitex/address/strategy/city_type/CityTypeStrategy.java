@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.address.strategy.city_type;
 
 import org.complitex.address.resource.CommonResources;

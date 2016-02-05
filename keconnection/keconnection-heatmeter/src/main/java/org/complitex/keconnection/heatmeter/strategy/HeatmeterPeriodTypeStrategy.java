@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.heatmeter.strategy;
 
 import com.google.common.collect.ImmutableMap;
@@ -36,10 +32,10 @@ public class HeatmeterPeriodTypeStrategy extends TemplateStrategy {
     /**
      * Predefined heatmeter period type ids
      */
-    public static final long OPERATING = 1;
-    public static final long ADJUSTMENT = 2;
+    public static final Integer OPERATING = 1;
+    public static final Integer ADJUSTMENT = 2;
     /* Reserved heatmeter period types */
-    private static final Set<Long> RESERVED_HEATMETER_PERIOD_TYPE_IDS = ImmutableSet.of(OPERATING, ADJUSTMENT);
+    private static final Set<Integer> RESERVED_HEATMETER_PERIOD_TYPE_IDS = ImmutableSet.of(OPERATING, ADJUSTMENT);
 
     @Override
     public String getEntityName() {

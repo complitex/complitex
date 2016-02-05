@@ -1,12 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.tarif.menu;
 
 import com.google.common.collect.ImmutableList;
-import java.util.List;
-import java.util.Locale;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -16,6 +10,9 @@ import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.ITemplateLink;
 import org.complitex.template.web.template.ResourceTemplateMenu;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  *

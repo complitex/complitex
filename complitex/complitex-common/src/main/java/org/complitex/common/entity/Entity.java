@@ -5,7 +5,7 @@ import org.complitex.common.util.StringCultures;
 import java.util.List;
 import java.util.Locale;
 
-public class Entity implements IEntity {
+public class Entity implements ILongId {
     private Long id;
     private String table;
     private List<StringCulture> names;

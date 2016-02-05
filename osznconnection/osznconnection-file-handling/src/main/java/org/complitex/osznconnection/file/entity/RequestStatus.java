@@ -1,18 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.osznconnection.file.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
+import org.complitex.common.mybatis.IFixedIdType;
+
 import java.util.Set;
 
 /**
  * Перечисление статусов для записей файлов payment и benefit.
  * @author Artem
  */
-public enum RequestStatus implements IEnumCode {
+public enum RequestStatus implements IFixedIdType {
 
     /* запись загружена */
     LOADED(240),
@@ -88,11 +86,17 @@ public enum RequestStatus implements IEnumCode {
 
     WRONG_DATES(252);
 
-    private int code;
+    private Integer id;
 
-    private RequestStatus(int code) {
-        this.code = code;
+    private RequestStatus(Integer id) {
+        this.id = id;
     }
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
     private static final Set<RequestStatus> ADDRESS_UNRESOLVED_STATUSES = 
             Sets.immutableEnumSet(ImmutableList.of(ADDRESS_CORRECTED,
             CITY_UNRESOLVED_LOCALLY, STREET_UNRESOLVED_LOCALLY, STREET_AND_BUILDING_UNRESOLVED_LOCALLY, 
@@ -171,11 +175,6 @@ public enum RequestStatus implements IEnumCode {
      */
     public static Set<RequestStatus> unprocessedStatuses() {
         return UNPROCESSED_SET_STATUSES;
-    }
-
-    @Override
-    public int getCode() {
-        return code;
     }
 
     public boolean isNotIn(RequestStatus... statuses){

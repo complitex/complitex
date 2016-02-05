@@ -1,19 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.util;
 
 import com.google.common.collect.Maps;
+import org.testng.annotations.Test;
+
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.Random;
-import org.testng.annotations.Test;
-import static org.testng.Assert.*;
-import static org.complitex.common.util.StringUtil.*;
+
+import static org.complitex.common.util.StringUtil.getToCyrillicMap;
+import static org.complitex.common.util.StringUtil.toCyrillic;
+import static org.testng.Assert.assertEquals;
 
 /**
  *

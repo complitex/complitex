@@ -1,13 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.osznconnection.file.service_provider.util;
 
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAccountNumberInfo;
 import org.complitex.osznconnection.file.service_provider.exception.ServiceProviderAccountNumberParseException;
-import static org.testng.Assert.*;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
 
 /**
  *

@@ -1,11 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component.permission.organization;
 
-import java.io.Serializable;
 import org.complitex.common.web.component.permission.DomainObjectPermissionParameters;
+
+import java.io.Serializable;
 
 /**
  *

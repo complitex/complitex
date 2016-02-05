@@ -1,24 +1,22 @@
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.common.mybatis.FixedIdTypeHandler;
 import org.complitex.common.mybatis.IFixedIdType;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 08.10.12 16:11
  */
-@FixedIdTypeHandler
 public enum TablegramRecordStatus implements IFixedIdType{
-    LOADED(1L), PROCESSED(2L), HEATMETER_NOT_FOUND(3L), ALREADY_HAS_PAYLOAD(4L), ERROR_PAYLOAD_SUM(5L);
+    LOADED(1), PROCESSED(2), HEATMETER_NOT_FOUND(3), ALREADY_HAS_PAYLOAD(4), ERROR_PAYLOAD_SUM(5);
 
-    private Long id;
+    private Integer id;
 
-    private TablegramRecordStatus(Long id) {
+    private TablegramRecordStatus(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 }

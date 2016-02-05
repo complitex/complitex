@@ -45,7 +45,7 @@
 
     <file-description type="PAYMENT">
         <fields>
-            <field length="15" type="java.lang.String" name="OWN_NUM"/>
+            <field length="15" type="java.lang.Integer" name="OWN_NUM"/>
             <field length="2" type="java.lang.Integer" name="REE_NUM"/>
             <field length="8" type="java.lang.String" name="OPP"/>
             <field length="2" type="java.lang.Integer" name="NUMB"/>
@@ -107,7 +107,7 @@
 
     <file-description type="BENEFIT">
         <fields>
-            <field length="15" type="java.lang.String" name="OWN_NUM"/>
+            <field length="15" type="java.lang.Integer" name="OWN_NUM"/>
             <field length="2" type="java.lang.Integer" name="REE_NUM"/>
             <field length="15" type="java.lang.String" name="OWN_NUM_SR"/>
             <field length="2" type="java.lang.Integer" name="FAM_NUM"/>

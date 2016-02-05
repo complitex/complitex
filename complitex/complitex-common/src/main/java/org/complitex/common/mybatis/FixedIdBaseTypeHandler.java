@@ -25,7 +25,7 @@ public class FixedIdBaseTypeHandler<T extends Enum & IFixedIdType> implements Ty
         }
     }
 
-    private T getType(Long id){
+    private T getType(Integer id){
         for (T type : enums){
             if (id.equals(type.getId())){
                 return type;
@@ -38,7 +38,7 @@ public class FixedIdBaseTypeHandler<T extends Enum & IFixedIdType> implements Ty
     @Override
     public void setParameter(PreparedStatement ps, int i, T parameter, JdbcType jdbcType) throws SQLException {
         if (parameter != null) {
-            ps.setLong(i, parameter.getId());
+            ps.setInt(i, parameter.getId());
         }else {
             ps.setNull(i, jdbcType.TYPE_CODE);
         }
@@ -46,22 +46,16 @@ public class FixedIdBaseTypeHandler<T extends Enum & IFixedIdType> implements Ty
 
     @Override
     public T getResult(ResultSet rs, String columnName) throws SQLException {
-        Long l = rs.getLong(columnName);
-
-        return !rs.wasNull() ? getType(l) : null;
+        return !rs.wasNull() ? getType(rs.getInt(columnName)) : null;
     }
 
     @Override
     public T getResult(ResultSet rs, int columnIndex) throws SQLException {
-        Long l = rs.getLong(columnIndex);
-
-        return !rs.wasNull() ? getType(l) : null;
+        return !rs.wasNull() ? getType(rs.getInt(columnIndex)) : null;
     }
 
     @Override
     public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
-        Long l = cs.getLong(columnIndex);
-
-        return !cs.wasNull() ? getType(l) : null;
+        return !cs.wasNull() ? getType(cs.getInt(columnIndex)) : null;
     }
 }

@@ -7,13 +7,13 @@
     </settings>
 
     <typeHandlers>
-        <typeHandler handler="org.complitex.osznconnection.file.mybatis.EnumCodeTypeHandler"
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
                      javaType="org.complitex.osznconnection.file.entity.RequestStatus"/>
-        <typeHandler handler="org.complitex.osznconnection.file.mybatis.EnumCodeTypeHandler"
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
                      javaType="org.complitex.osznconnection.file.entity.RequestFileStatus"/>
-        <typeHandler handler="org.complitex.osznconnection.file.mybatis.EnumCodeTypeHandler"
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
                      javaType="org.complitex.osznconnection.file.entity.RequestFileType"/>
-        <typeHandler handler="org.complitex.osznconnection.file.mybatis.EnumCodeTypeHandler"
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
                      javaType="org.complitex.osznconnection.file.entity.RequestWarningStatus"/>
 
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"

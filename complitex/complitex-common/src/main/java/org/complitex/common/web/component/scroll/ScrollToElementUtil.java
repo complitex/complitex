@@ -1,11 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.web.component.scroll;
 
-import java.text.MessageFormat;
 import org.apache.wicket.util.string.Strings;
+
+import java.text.MessageFormat;
 
 /**
  * Page must import scroll js as following:

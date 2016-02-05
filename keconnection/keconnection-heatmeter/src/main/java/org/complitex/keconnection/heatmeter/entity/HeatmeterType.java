@@ -1,25 +1,23 @@
 package org.complitex.keconnection.heatmeter.entity;
 
 import org.complitex.common.mybatis.IFixedIdType;
-import org.complitex.common.mybatis.FixedIdTypeHandler;
 import org.complitex.keconnection.heatmeter.strategy.HeatmeterTypeStrategy;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 14.09.12 16:46
  */
-@FixedIdTypeHandler
 public enum HeatmeterType implements IFixedIdType {
     HEATING(HeatmeterTypeStrategy.HEATING), HEATING_AND_WATER(HeatmeterTypeStrategy.HEATING_AND_WATER);
 
-    private Long id;
+    private Integer id;
 
-    private HeatmeterType(Long id) {
+    private HeatmeterType(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
     

@@ -1,13 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.heatmeter.web;
 
-import java.util.Locale;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.util.StringUtil;
+
+import java.util.Locale;
 
 /**
  *

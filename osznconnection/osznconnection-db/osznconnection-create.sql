@@ -170,7 +170,7 @@ CREATE TABLE `request_file` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор файла запроса',
     `group_id` BIGINT(20) COMMENT 'Идентификатор группы',
     `loaded` DATETIME NOT NULL COMMENT 'Дата загрузки',
-    `name` VARCHAR(20) NOT NULL COMMENT 'Имя файла',
+    `name` VARCHAR(22) NOT NULL COMMENT 'Имя файла',
     `directory` VARCHAR(255) COMMENT 'Директория файла',
     `organization_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор организации',
     `registry` INTEGER(2) NOT NULL COMMENT 'Номер реестра',

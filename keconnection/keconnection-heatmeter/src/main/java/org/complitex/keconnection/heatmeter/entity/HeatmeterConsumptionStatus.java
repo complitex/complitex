@@ -1,24 +1,22 @@
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.common.mybatis.FixedIdTypeHandler;
 import org.complitex.common.mybatis.IFixedIdType;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 24.10.12 18:37
  */
-@FixedIdTypeHandler
 public enum HeatmeterConsumptionStatus implements IFixedIdType {
-    NOT_LOADED(0L), LOADED(1L);
+    NOT_LOADED(0), LOADED(1);
 
-    private Long id;
+    private Integer id;
 
-    private HeatmeterConsumptionStatus(Long id) {
+    private HeatmeterConsumptionStatus(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 }

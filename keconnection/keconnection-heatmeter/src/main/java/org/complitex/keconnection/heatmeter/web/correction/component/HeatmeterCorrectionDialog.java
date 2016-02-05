@@ -1,13 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.keconnection.heatmeter.web.correction.component;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import javax.ejb.EJB;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -17,7 +9,13 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
 import org.complitex.keconnection.heatmeter.entity.HeatmeterCorrection;
 import org.complitex.keconnection.heatmeter.service.HeatmeterCorrectionBean;
+import org.complitex.keconnection.heatmeter.web.correction.component.HeatmeterItemCorrectionPanel;
 import org.odlabs.wiquery.ui.dialog.Dialog;
+
+import javax.ejb.EJB;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

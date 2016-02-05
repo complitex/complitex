@@ -8,7 +8,6 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.session.SqlSessionManager;
-import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +75,7 @@ public class SqlSessionFactoryBean {
             Reflections reflections = new Reflections("org.complitex", "ru.flexpay");
 
             //FixedIdType
-            addFixedIdTypeHandlers(reflections, configuration.getTypeHandlerRegistry());
+            //addFixedIdTypeHandlers(reflections, configuration.getTypeHandlerRegistry());
 
             //XmlMapper
             addAnnotationMappers(reflections, configuration);
@@ -107,12 +106,13 @@ public class SqlSessionFactoryBean {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private void addFixedIdTypeHandlers(Reflections reflections, TypeHandlerRegistry typeHandlerRegistry){
-        Set<Class<?>> set = reflections.getTypesAnnotatedWith(FixedIdTypeHandler.class);
-
-        for (Class<?> c : set){
-            typeHandlerRegistry.register(c, new FixedIdBaseTypeHandler(c));
-        }
-    }
+//    todo search by interface
+//    @SuppressWarnings("unchecked")
+//    private void addFixedIdTypeHandlers(Reflections reflections, TypeHandlerRegistry typeHandlerRegistry){
+//        Set<Class<?>> set = reflections.getTypesAnnotatedWith(FixedIdTypeHandler.class);
+//
+//        for (Class<?> c : set){
+//            typeHandlerRegistry.register(c, new FixedIdBaseTypeHandler(c));
+//        }
+//    }
 }

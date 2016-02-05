@@ -1,14 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.common.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.util.string.Strings;
+
+import javax.servlet.http.HttpServletRequest;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 /**
  *
