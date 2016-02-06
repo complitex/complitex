@@ -9,8 +9,8 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressSync;
+import org.complitex.address.entity.SyncEntity;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.util.EjbBeanLocator;
@@ -42,9 +42,9 @@ public class AddressSyncParentColumn extends FilteredColumn<AddressSync>{
         String objectName = "";
 
         if (addressSync.getParentId() != null){
-            if (addressSync.getType().equals(AddressEntity.DISTRICT) || addressSync.getType().equals(AddressEntity.STREET)){
+            if (addressSync.getType().equals(SyncEntity.DISTRICT) || addressSync.getType().equals(SyncEntity.STREET)){
                 objectName = EjbBeanLocator.getBean(CityStrategy.class).displayDomainObject(addressSync.getParentId(), cellItem.getLocale());
-            }else if (addressSync.getType().equals(AddressEntity.BUILDING) ){
+            }else if (addressSync.getType().equals(SyncEntity.BUILDING) ){
                 objectName = EjbBeanLocator.getBean(StreetStrategy.class).displayDomainObject(addressSync.getParentId(), cellItem.getLocale());
             }else {
                 objectName = addressSync.getParentId() + "";
