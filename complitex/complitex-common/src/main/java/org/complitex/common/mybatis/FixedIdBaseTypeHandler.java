@@ -46,16 +46,22 @@ public class FixedIdBaseTypeHandler<T extends Enum & IFixedIdType> implements Ty
 
     @Override
     public T getResult(ResultSet rs, String columnName) throws SQLException {
-        return !rs.wasNull() ? getType(rs.getInt(columnName)) : null;
+        Integer i = rs.getInt(columnName);
+
+        return !rs.wasNull() ? getType(i) : null;
     }
 
     @Override
     public T getResult(ResultSet rs, int columnIndex) throws SQLException {
-        return !rs.wasNull() ? getType(rs.getInt(columnIndex)) : null;
+        Integer i = rs.getInt(columnIndex);
+
+        return !rs.wasNull() ? getType(i) : null;
     }
 
     @Override
     public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
-        return !cs.wasNull() ? getType(cs.getInt(columnIndex)) : null;
+        Integer i = cs.getInt(columnIndex);
+
+        return !cs.wasNull() ? getType(i) : null;
     }
 }
