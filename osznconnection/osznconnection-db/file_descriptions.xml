@@ -51,7 +51,7 @@
             <field length="2" type="java.lang.Integer" name="NUMB"/>
             <field length="2" type="java.lang.Integer" name="MARK"/>
             <field length="4" type="java.lang.Integer" name="CODE"/>
-            <field length="10" type="java.lang.Integer" name="ENT_COD"/>
+            <field length="10" type="java.lang.Long" name="ENT_COD"/>
             <field scale="1" length="5" type="java.math.BigDecimal" name="FROG"/>
             <field scale="2" length="9" type="java.math.BigDecimal" name="FL_PAY"/>
             <field scale="2" length="9" type="java.math.BigDecimal" name="NM_PAY"/>
@@ -100,7 +100,7 @@
             <field length="6" type="java.lang.Integer" name="CODE3_7"/>
             <field length="6" type="java.lang.Integer" name="CODE3_8"/>
             <field length="8" type="java.lang.String" name="OPP_SERV"/>
-            <field length="10" type="java.lang.Integer" name="RESERV1"/>
+            <field length="10" type="java.lang.Long" name="RESERV1"/>
             <field length="10" type="java.lang.String" name="RESERV2"/>
         </fields>
     </file-description>

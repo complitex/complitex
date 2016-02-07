@@ -1,7 +1,7 @@
 -- --------------------------------
 -- Current database version
 -- --------------------------------
-INSERT INTO `update` (`version`) VALUE ('20160125_0.4.5');
+INSERT INTO `update` (`version`) VALUE ('20160208_0.4.7');
 -- --------------------------------
 
 -- --------------------------------
@@ -10,7 +10,7 @@ INSERT INTO `update` (`version`) VALUE ('20160125_0.4.5');
 
 INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_FILENAME_PREFIX','A_');
 INSERT INTO `config` (`name`,`value`) VALUES ('BENEFIT_FILENAME_PREFIX','AF');
-INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_BENEFIT_FILENAME_SUFFIX','\\d{4}{MM}\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_BENEFIT_FILENAME_SUFFIX','{\d{8}|\d{10}}{MM}{YY}\d\d\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('ACTUAL_PAYMENT_FILENAME_MASK','.*{MM}{YY}\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('SUBSIDY_FILENAME_MASK','.*{MM}{YY}\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('DWELLING_CHARACTERISTICS_INPUT_FILENAME_MASK','\\d{8}\\.a\\d{2}');
