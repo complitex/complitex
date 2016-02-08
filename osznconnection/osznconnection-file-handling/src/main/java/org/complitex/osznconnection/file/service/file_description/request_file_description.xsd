@@ -71,6 +71,14 @@
                     </xsd:appinfo>
                 </xsd:annotation>
             </xsd:enumeration>
+
+            <xsd:enumeration value="java.lang.Long">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <jxb:typesafeEnumMember name="LONG"/>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:enumeration>
             
             <xsd:enumeration value="java.math.BigDecimal">
                 <xsd:annotation>
