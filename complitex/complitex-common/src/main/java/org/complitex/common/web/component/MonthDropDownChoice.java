@@ -33,7 +33,7 @@ public class MonthDropDownChoice extends DropDownChoice<Integer> {
 
             @Override
             public Integer getObject(String id, IModel<? extends List<? extends Integer>> choices) {
-                return Strings.isNullOrEmpty(id) ? 1 : Integer.valueOf(id);
+                return Strings.isNullOrEmpty(id) ? null : Integer.valueOf(id);
             }
         });
     }
