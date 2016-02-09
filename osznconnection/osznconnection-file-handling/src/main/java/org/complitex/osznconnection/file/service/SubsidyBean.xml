@@ -126,7 +126,7 @@
 
         <if test="city != null">AND TO_CYRILLIC(s.`NP_NAME`) LIKE CONCAT('%', #{city}, '%')</if>
         <if test="street != null">AND TO_CYRILLIC(s.`NAME_V`) LIKE CONCAT('%', #{street}, '%')</if>
-        <if test="building != null">AND TO_CYRILLIC(s.`BLD`) LIKE CONCAT('%', #{building}, '%'</if>
+        <if test="building != null">AND TO_CYRILLIC(s.`BLD`) LIKE CONCAT('%', #{building}, '%')</if>
         <if test="corp != null">AND TO_CYRILLIC(s.`CORP`) LIKE CONCAT('%', #{corp}, '%')</if>
         <if test="apartment != null">AND TO_CYRILLIC(s.`FLAT`) LIKE CONCAT('%', #{apartment}, '%')</if>
 

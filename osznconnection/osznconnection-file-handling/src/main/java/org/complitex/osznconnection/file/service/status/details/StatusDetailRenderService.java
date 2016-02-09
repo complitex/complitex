@@ -19,6 +19,7 @@ public class StatusDetailRenderService {
     public String displayStatusDetail(RequestStatus status, StatusDetail statusDetail,
             IStatusDetailRenderer statusDetailRenderer, Locale locale) {
         String countString = displayCount(statusDetail.getCount());
+
         return statusDetailRenderer.displayStatusDetail(status, statusDetail, locale) + countString;
     }
 

@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetail;
 
 import javax.ejb.EJB;
@@ -34,7 +35,7 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
     private StatusDetailRenderService statusDetailRenderService;
 
     public StatusDetailPanel(String id, final IModel<T> exampleModel, final ExampleConfigurator<T> exampleConfigurator,
-            final IStatusDetailRenderer statusDetailRenderer, final Component... update) {
+                             final IStatusDetailRenderer statusDetailRenderer, final Component... update) {
         super(id);
         setOutputMarkupId(true);
 
@@ -56,11 +57,11 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
 
             @Override
             protected void populateItem(ListItem<StatusDetailInfo> item) {
-                final StatusDetailInfo statusDetailInfo = item.getModelObject();
+                StatusDetailInfo statusDetailInfo = item.getModelObject();
 
                 //Контейнер для ajax обновления вложенного списка
-                final WebMarkupContainer statusDetailsContainer = new WebMarkupContainer("statusDetailsContainer");
-                statusDetailsContainer.setOutputMarkupPlaceholderTag(true);
+                WebMarkupContainer statusDetailsContainer = new WebMarkupContainer("statusDetailsContainer");
+                statusDetailsContainer.setOutputMarkupId(true);
                 item.add(statusDetailsContainer);
 
                 AjaxLink expand = new AjaxLink("expand") {
@@ -96,7 +97,7 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
 
                             @Override
                             public void onClick(AjaxRequestTarget target) {
-                                filterByStatusDetail(statusDetail, exampleModel, exampleConfigurator);
+                                filterByStatusDetail(statusDetail, statusDetailInfo.getStatus(), exampleModel, exampleConfigurator);
 
                                 for (Component component : update) {
                                     target.add(component);
@@ -107,7 +108,7 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
 
                         filter.add(new Label("name",
                                 statusDetailRenderService.displayStatusDetail(statusDetailInfo.getStatus(),
-                                statusDetail, statusDetailRenderer, getLocale())));
+                                        statusDetail, statusDetailRenderer, getLocale())));
                     }
                 };
                 statusDetailsContainer.setVisible(false);
@@ -115,20 +116,22 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
             }
         };
 
+        statusDetailsInfo.setReuseItems(true);
         container.add(statusDetailsInfo);
     }
 
     protected void filterByStatusDetailInfo(StatusDetailInfo statusDetailInfo, Class<T> exampleClass, IModel<T> exampleModel,
-            ExampleConfigurator<T> exampleConfigurator) {
+                                            ExampleConfigurator<T> exampleConfigurator) {
         T example = exampleConfigurator.createExample(exampleClass, statusDetailInfo);
         example.setRequestFileId(exampleModel.getObject().getRequestFileId());
         exampleModel.setObject(example);
     }
 
-    protected void filterByStatusDetail(StatusDetail statusDetail, IModel<T> exampleModel,
-            ExampleConfigurator<T> exampleConfigurator) {
+    protected void filterByStatusDetail(StatusDetail statusDetail, RequestStatus requestStatus, IModel<T> exampleModel,
+                                        ExampleConfigurator<T> exampleConfigurator) {
         T example = exampleConfigurator.createExample(statusDetail);
         example.setRequestFileId(exampleModel.getObject().getRequestFileId());
+        example.setStatus(requestStatus);
         exampleModel.setObject(example);
     }
 
