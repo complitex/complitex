@@ -22,6 +22,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.CloneUtil;
+import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
@@ -302,7 +303,9 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                     accountNumberPickerPanel.setVisible(accountDetailsModel.getObject() != null
                             && !accountDetailsModel.getObject().isEmpty());
                     target.add(accountNumberPickerPanel);
-                } catch (DBException e) {
+                } catch (Exception e) {
+                    error(ExceptionUtil.getCauseMessage(e));
+                    target.add(messages);
                     e.printStackTrace();
                 }
 
