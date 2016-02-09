@@ -62,6 +62,7 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
                 //Контейнер для ajax обновления вложенного списка
                 WebMarkupContainer statusDetailsContainer = new WebMarkupContainer("statusDetailsContainer");
                 statusDetailsContainer.setOutputMarkupId(true);
+                statusDetailsContainer.setOutputMarkupPlaceholderTag(true);
                 item.add(statusDetailsContainer);
 
                 AjaxLink expand = new AjaxLink("expand") {
