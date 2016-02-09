@@ -106,11 +106,9 @@ public class SubsidyService {
         return !list.isEmpty() ?  list.get(0).getObjectId() : organizationStrategy.getObjectIdByEdrpou(code);
     }
 
-    public String getServicingOrganizationCode(Long requestFileId){
-        return getServicingOrganizationCode(requestFileBean.findById(requestFileId));
-    }
+    public String getServiceProviderEdrpou(Long requestFileId){
+        RequestFile requestFile = requestFileBean.findById(requestFileId);
 
-    public String getServicingOrganizationCode(RequestFile requestFile){
         String fileName = requestFile.getName();
         String code = fileName.substring(0, fileName.length()-8);
 
@@ -126,8 +124,12 @@ public class SubsidyService {
             }
         }
 
-
         return code;
+    }
+
+    public String getServiceProviderCode(Long requestFileId){
+        return organizationStrategy.getDomainObject(organizationStrategy.getObjectIdByEdrpou(
+                getServiceProviderEdrpou(requestFileId))).getStringValue(OsznOrganizationStrategy.CODE);
     }
 
     public String displayServicingOrganization(RequestFile subsidyRequestFile, Locale locale){

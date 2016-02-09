@@ -70,6 +70,6 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
 
     @Override
     protected String getServicingOrganizationCode(Subsidy request) {
-        return subsidyService.getServicingOrganizationCode(request.getRequestFileId());
+        return subsidyService.getServiceProviderCode(request.getRequestFileId());
     }
 }

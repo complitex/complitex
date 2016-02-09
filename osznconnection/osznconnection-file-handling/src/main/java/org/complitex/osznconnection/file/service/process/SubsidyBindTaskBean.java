@@ -75,7 +75,7 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
         //resolve account number
         if (subsidy.getStatus().isAddressResolved()){
             personAccountService.resolveAccountNumber(subsidy, subsidy.getStringField(SubsidyDBF.RASH),
-                    subsidyService.getServicingOrganizationCode(subsidy.getRequestFileId()),
+                    subsidyService.getServiceProviderEdrpou(subsidy.getRequestFileId()),
                     updatePuAccount);
         }
 
