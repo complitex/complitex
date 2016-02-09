@@ -128,8 +128,14 @@ public class SubsidyService {
     }
 
     public String getServiceProviderCode(Long requestFileId){
-        return organizationStrategy.getDomainObject(organizationStrategy.getObjectIdByEdrpou(
-                getServiceProviderEdrpou(requestFileId))).getStringValue(OsznOrganizationStrategy.CODE);
+        String edrpou = getServiceProviderEdrpou(requestFileId);
+        Long serviceProviderId = organizationStrategy.getObjectIdByEdrpou(edrpou);
+
+        if (serviceProviderId != null){
+            return organizationStrategy.getDomainObject(serviceProviderId).getStringValue(OsznOrganizationStrategy.CODE);
+        }else {
+            throw new IllegalArgumentException("ПУ не найден по ЕДРПОУ " + edrpou);
+        }
     }
 
     public String displayServicingOrganization(RequestFile subsidyRequestFile, Locale locale){
