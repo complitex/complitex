@@ -19,7 +19,18 @@
         <result column="outgoing_building_corp" property="outgoingBuildingCorp"/>
         <result column="outgoing_apartment" property="outgoingApartment"/>
 
+
         <association property="dbfFields" javaType="map">
+            <result column="SUR_NAM_CYR" property="SUR_NAM_CYR"/>
+            <result column="F_NAM_CYR" property="F_NAM_CYR"/>
+            <result column="M_NAM_CYR" property="M_NAM_CYR"/>
+
+            <result column="N_NAME_CYR" property="N_NAME_CYR"/>
+            <result column="VUL_NAME_CYR" property="VUL_NAME_CYR"/>
+            <result column="BLD_NUM_CYR" property="BLD_NUM_CYR"/>
+            <result column="CORP_NUM_CYR" property="CORP_NUM_CYR"/>
+            <result column="FLAT_CYR" property="FLAT_CYR"/>
+
             <result column="OWN_NUM" property="OWN_NUM"/>
             <result column="REE_NUM" property="REE_NUM"/>
             <result column="OPP" property="OPP"/>
@@ -176,29 +187,29 @@
             AND p.`OWN_NUM_SR` LIKE CONCAT('%',#{account},'%')
         </if>
         <if test="firstName != null">
-            AND p.`F_NAM` LIKE CONCAT('%',#{firstName},'%')
+            AND TO_CYRILLIC(p.`F_NAM`) LIKE CONCAT('%',#{firstName},'%')
         </if>
         <if test="middleName != null">
-            AND p.`M_NAM` LIKE CONCAT('%',#{middleName},'%')
+            AND TO_CYRILLIC(p.`M_NAM`) LIKE CONCAT('%',#{middleName},'%')
         </if>
         <if test="lastName != null">
-            AND p.`SUR_NAM` LIKE CONCAT('%',#{lastName},'%')
+            AND TO_CYRILLIC(p.`SUR_NAM`) LIKE CONCAT('%',#{lastName},'%')
         </if>
 
         <if test="city != null">
-            AND p.`N_NAME` LIKE CONCAT('%', #{city}, '%')
+            AND TO_CYRILLIC(p.`N_NAME`) LIKE CONCAT('%', #{city}, '%')
         </if>
         <if test="street != null">
-            AND p.`VUL_NAME` LIKE CONCAT('%', #{street}, '%')
+            AND TO_CYRILLIC(p.`VUL_NAME`) LIKE CONCAT('%', #{street}, '%')
         </if>
         <if test="building != null">
-            AND p.`BLD_NUM` LIKE CONCAT('%', #{building}, '%')
+            AND TO_CYRILLIC(p.`BLD_NUM`) LIKE CONCAT('%', #{building}, '%')
         </if>
         <if test="corp != null">
-            AND p.`CORP_NUM` LIKE CONCAT('%', #{corp}, '%')
+            AND TO_CYRILLIC(p.`CORP_NUM`) LIKE CONCAT('%', #{corp}, '%')
         </if>
         <if test="apartment != null">
-            AND p.`FLAT` LIKE CONCAT('%', #{apartment}, '%')
+            AND TO_CYRILLIC(p.`FLAT`) LIKE CONCAT('%', #{apartment}, '%')
         </if>
 
         <if test="status != null">
@@ -217,9 +228,19 @@
         w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
         p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
         FROM (
-            SELECT p.`id`, p.`status`, p.`request_file_id`, p.`OWN_NUM_SR`, p.`F_NAM`, p.`M_NAM`, p.`SUR_NAM`,
-                p.`N_NAME`, p.`VUL_NAME`, p.`BLD_NUM`, p.`CORP_NUM`, p.`FLAT`, p.`DAT1`,
-                f.`organization_id`, f.`user_organization_id`,
+            SELECT p.`id`, p.`status`, p.`request_file_id`, p.`OWN_NUM_SR`,
+                TO_CYRILLIC(p.`F_NAM`) F_NAM_CYR,
+                TO_CYRILLIC(p.`M_NAM`) M_NAM_CYR,
+                TO_CYRILLIC(p.`SUR_NAM`) SUR_NAM_CYR,
+                TO_CYRILLIC(p.`N_NAME`) N_NAME_CYR,
+                TO_CYRILLIC(p.`VUL_NAME`) VUL_NAME_CYR,
+                TO_CYRILLIC(p.`BLD_NUM`) BLD_NUM_CYR,
+                TO_CYRILLIC(p.`CORP_NUM`) CORP_NUM_CYR,
+                TO_CYRILLIC(p.`FLAT`) FLAT_CYR,
+
+                p.`F_NAM`, p.`M_NAM`, p.`SUR_NAM`, p.`N_NAME`, p.`VUL_NAME`, p.`BLD_NUM`, p.`CORP_NUM`, p.`FLAT`,
+
+                p.`DAT1`, f.`organization_id`, f.`user_organization_id`,
                 p.`internal_city_id`, p.`internal_street_id`, p.`internal_street_type_id`, p.`internal_building_id`, p.`internal_apartment_id`,
                 p.`outgoing_city`, p.`outgoing_district`, p.`outgoing_street`, p.`outgoing_street_type`, p.`outgoing_building_number`, p.`outgoing_building_corp`,
                 p.`outgoing_apartment`
@@ -290,9 +311,20 @@
     </select>
 
     <select id="findForOperation" parameterType="map" resultMap="paymentResultMap">
-        SELECT r.`id`, r.`status`, r.`request_file_id`, r.`F_NAM`, r.`M_NAM`, r.`SUR_NAM`,
-        r.`N_NAME`, r.`VUL_NAME`, r.`BLD_NUM`, r.`CORP_NUM`, r.`FLAT`, r.`DAT1`, r.`OWN_NUM_SR`,
-        rf.`organization_id`, rf.`user_organization_id`,
+        SELECT r.`id`, r.`status`, r.`request_file_id`,
+
+        TO_CYRILLIC(r.`F_NAM`) F_NAM_CYR,
+        TO_CYRILLIC(r.`M_NAM`) M_NAM_CYR,
+        TO_CYRILLIC(r.`SUR_NAM`) SUR_NAM_CYR,
+        TO_CYRILLIC(r.`N_NAME`) N_NAME_CYR,
+        TO_CYRILLIC(r.`VUL_NAME`) VUL_NAME_CYR,
+        TO_CYRILLIC(r.`BLD_NUM`) BLD_NUM_CYR,
+        TO_CYRILLIC(r.`CORP_NUM`) CORP_NUM_CYR,
+        TO_CYRILLIC(r.`FLAT`) FLAT_CYR,
+
+        r.`F_NAM`, r.`M_NAM`, r.`SUR_NAM`, r.`N_NAME`, r.`VUL_NAME`, r.`BLD_NUM`, r.`CORP_NUM`, r.`FLAT`,
+
+        r.`DAT1`, r.`OWN_NUM_SR`, rf.`organization_id`, rf.`user_organization_id`,
         r.`internal_city_id`, r.`internal_street_id`, r.`internal_street_type_id`, r.`internal_building_id`, r.`internal_apartment_id`,
         r.`outgoing_city`, r.`outgoing_district`, r.`outgoing_street`, r.`outgoing_street_type`, r.`outgoing_building_number`, r.`outgoing_building_corp`,
         r.`outgoing_apartment`, r.`account_number`
@@ -317,16 +349,16 @@
             WHERE
                 `request_file_id` = #{fileId}
                 <if test="city != null">
-                    AND TO_CYRILLIC(`N_NAME`) = TO_CYRILLIC(#{city})
+                    AND TO_CYRILLIC(`N_NAME`) = #{city}
                 </if>
                 <if test="street != null">
-                    AND TO_CYRILLIC(`VUL_NAME`) = TO_CYRILLIC(#{street})
+                    AND TO_CYRILLIC(`VUL_NAME`) = #{street}
                 </if>
                 <if test="buildingNumber != null">
-                    AND TO_CYRILLIC(`BLD_NUM`) = TO_CYRILLIC(#{buildingNumber})
+                    AND TO_CYRILLIC(`BLD_NUM`) = #{buildingNumber}
                 </if>
                 <if test="buildingCorp != null">
-                    AND TO_CYRILLIC(`CORP_NUM`) = TO_CYRILLIC(#{buildingCorp})
+                    AND TO_CYRILLIC(`CORP_NUM`) = #{buildingCorp}
                 </if>
     </update>
 

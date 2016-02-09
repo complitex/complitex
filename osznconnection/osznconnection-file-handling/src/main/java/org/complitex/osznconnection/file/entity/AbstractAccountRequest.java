@@ -14,7 +14,7 @@ public abstract class AbstractAccountRequest<E extends Enum> extends AbstractAdd
     private String middleName;
 
     public PersonalName getPersonalName(){
-        return new PersonalName(firstName, middleName, lastName);
+        return new PersonalName(getFirstName(), getMiddleName(), getLastName());
     }
 
     public String getAccountNumber() {

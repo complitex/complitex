@@ -16,28 +16,43 @@ public class Payment extends AbstractAccountRequest<PaymentDBF> {
     }
 
     @Override
+    public String getLastName() {
+        return getStringField(PaymentDBF.SUR_NAM, "_CYR");
+    }
+
+    @Override
+    public String getFirstName() {
+        return getStringField(PaymentDBF.F_NAM, "_CYR");
+    }
+
+    @Override
+    public String getMiddleName() {
+        return getStringField(PaymentDBF.M_NAM, "_CYR");
+    }
+
+    @Override
     public String getCity() {
-        return getStringField(PaymentDBF.N_NAME);
+        return getStringField(PaymentDBF.N_NAME, "_CYR");
     }
 
     @Override
     public String getStreet() {
-        return getStringField(PaymentDBF.VUL_NAME);
+        return getStringField(PaymentDBF.VUL_NAME, "_CYR");
     }
 
     @Override
     public String getBuildingNumber() {
-        return getStringField(PaymentDBF.BLD_NUM);
+        return getStringField(PaymentDBF.BLD_NUM, "_CYR");
     }
 
     @Override
     public String getBuildingCorp() {
-        return getStringField(PaymentDBF.CORP_NUM);
+        return getStringField(PaymentDBF.CORP_NUM, "_CYR");
     }
 
     @Override
     public String getApartment() {
-        return getStringField(PaymentDBF.FLAT);
+        return getStringField(PaymentDBF.FLAT, "_CYR");
     }
 
 

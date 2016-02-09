@@ -198,7 +198,6 @@ public final class PaymentList extends TemplatePage {
                 dataRowHoverBehavior.deactivateDataRow(target);
             }
         };
-        //todo addressCorrectionDialog.setIgnoreStreetType(true);
         add(addressCorrectionDialog);
 
         //Панель поиска
@@ -238,7 +237,7 @@ public final class PaymentList extends TemplatePage {
                         LocalAddress localAddress = payment.getLocalAddress();
 
                         addressCorrectionDialog.open(target, item.getModel(), payment.getPersonalName(),
-                                localAddress.getFirstEmptyAddressEntity(),
+                                localAddress.getFirstEmptyAddressEntity(false),
                                 payment.getExternalAddress(), localAddress);
                     }
                 };

@@ -27,12 +27,17 @@ public class LocalAddress implements Serializable{
         this.roomId = roomId;
     }
 
+
     public AddressEntity getFirstEmptyAddressEntity(){
+        return getFirstEmptyAddressEntity(true);
+    }
+
+    public AddressEntity getFirstEmptyAddressEntity(boolean streetType){
         if (cityId == null) {
             return AddressEntity.CITY;
         }
 
-        if (streetTypeId == null) {
+        if (streetType && streetTypeId == null) {
             return AddressEntity.STREET_TYPE;
         }
 
