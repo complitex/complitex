@@ -62,15 +62,15 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
 
     public void bind(Subsidy subsidy, boolean updatePuAccount) throws DBException {
         //resolve address
-        String city = subsidy.getStringField(SubsidyDBF.NP_NAME);
+        String city = subsidy.getCity();
 
         if (city == null || city.isEmpty()){
-            subsidy.setField(SubsidyDBF.NP_NAME, configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY));
+            subsidy.setCity(configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY));
         }
 
         addressService.resolveAddress(subsidy);
 
-        subsidy.setField(SubsidyDBF.NP_NAME, city);
+        subsidy.setCity(city);
 
         //resolve account number
         if (subsidy.getStatus().isAddressResolved()){

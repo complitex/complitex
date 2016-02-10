@@ -42,7 +42,7 @@ public class Subsidy extends AbstractAccountRequest<SubsidyDBF> {
 
     @Override
     public String getCity() {
-        return getStringField(SubsidyDBF.NP_NAME, "_CYR");
+        return super.getCity() == null ? getStringField(SubsidyDBF.NP_NAME, "_CYR") : super.getCity();
     }
 
     @Override
