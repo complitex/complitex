@@ -219,14 +219,14 @@ public final class PaymentList extends TemplatePage {
                 final Payment payment = item.getModelObject();
 
                 item.add(new Label("account", payment.getStringField(PaymentDBF.OWN_NUM_SR)));
-                item.add(new Label("firstName", payment.getStringField(PaymentDBF.F_NAM)));
-                item.add(new Label("middleName", payment.getStringField(PaymentDBF.M_NAM)));
-                item.add(new Label("lastName", payment.getStringField(PaymentDBF.SUR_NAM)));
-                item.add(new Label("city", payment.getStringField(PaymentDBF.N_NAME)));
-                item.add(new Label("street", payment.getStringField(PaymentDBF.VUL_NAME)));
-                item.add(new Label("building", payment.getStringField(PaymentDBF.BLD_NUM)));
-                item.add(new Label("corp", payment.getStringField(PaymentDBF.CORP_NUM)));
-                item.add(new Label("apartment", payment.getStringField(PaymentDBF.FLAT)));
+                item.add(new Label("firstName", payment.getFirstName()));
+                item.add(new Label("middleName", payment.getMiddleName()));
+                item.add(new Label("lastName", payment.getLastName()));
+                item.add(new Label("city", payment.getCity()));
+                item.add(new Label("street", payment.getStreet()));
+                item.add(new Label("building", payment.getBuildingNumber()));
+                item.add(new Label("corp", payment.getBuildingCorp()));
+                item.add(new Label("apartment", payment.getApartment()));
                 item.add(new Label("status", statusRenderService.displayStatus(payment.getStatus(), getLocale())));
                 item.add(new Label("statusDetails", webWarningRenderer.display(payment.getWarnings(), getLocale())));
 

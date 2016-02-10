@@ -147,17 +147,17 @@ public final class BenefitList extends TemplatePage {
         };
         dataProvider.setSort("", SortOrder.ASCENDING);
 
-        filterForm.add(new TextField<String>("accountFilter", new PropertyModel<String>(example, "account")));
-        filterForm.add(new TextField<String>("firstNameFilter", new PropertyModel<String>(example, "firstName")));
-        filterForm.add(new TextField<String>("middleNameFilter", new PropertyModel<String>(example, "middleName")));
-        filterForm.add(new TextField<String>("lastNameFilter", new PropertyModel<String>(example, "lastName")));
-        filterForm.add(new TextField<String>("cityFilter", new PropertyModel<String>(example, "city")));
-        filterForm.add(new TextField<String>("streetFilter", new PropertyModel<String>(example, "street")));
-        filterForm.add(new TextField<String>("buildingFilter", new PropertyModel<String>(example, "building")));
-        filterForm.add(new TextField<String>("corpFilter", new PropertyModel<String>(example, "corp")));
-        filterForm.add(new TextField<String>("privFilter", new PropertyModel<String>(example, "privilege")));
-        filterForm.add(new TextField<String>("apartmentFilter", new PropertyModel<String>(example, "apartment")));
-        filterForm.add(new DropDownChoice<RequestStatus>("statusFilter", new PropertyModel<RequestStatus>(example, "status"),
+        filterForm.add(new TextField<>("accountFilter", new PropertyModel<String>(example, "account")));
+        filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<String>(example, "firstName")));
+        filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<String>(example, "middleName")));
+        filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<String>(example, "lastName")));
+        filterForm.add(new TextField<>("cityFilter", new PropertyModel<String>(example, "city")));
+        filterForm.add(new TextField<>("streetFilter", new PropertyModel<String>(example, "street")));
+        filterForm.add(new TextField<>("buildingFilter", new PropertyModel<String>(example, "building")));
+        filterForm.add(new TextField<>("corpFilter", new PropertyModel<String>(example, "corp")));
+        filterForm.add(new TextField<>("privFilter", new PropertyModel<String>(example, "privilege")));
+        filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<String>(example, "apartment")));
+        filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<RequestStatus>(example, "status"),
                 Arrays.asList(RequestStatus.values()), new StatusRenderer()).setNullValid(true));
 
         AjaxLink<Void> reset = new AjaxLink<Void>("reset") {
@@ -201,9 +201,9 @@ public final class BenefitList extends TemplatePage {
                 final Benefit benefit = item.getModelObject();
 
                 item.add(new Label("account", benefit.getStringField(BenefitDBF.OWN_NUM_SR)));
-                item.add(new Label("firstName", benefit.getStringField(BenefitDBF.F_NAM)));
-                item.add(new Label("middleName", benefit.getStringField(BenefitDBF.M_NAM)));
-                item.add(new Label("lastName", benefit.getStringField(BenefitDBF.SUR_NAM)));
+                item.add(new Label("firstName", benefit.getFirstName()));
+                item.add(new Label("middleName", benefit.getMiddleName()));
+                item.add(new Label("lastName", benefit.getLastName()));
                 item.add(new Label("city", benefit.getCity()));
                 item.add(new Label("street", benefit.getStreet()));
                 item.add(new Label("building", benefit.getBuildingNumber()));

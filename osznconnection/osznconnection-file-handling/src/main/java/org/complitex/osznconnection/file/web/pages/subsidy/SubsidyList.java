@@ -253,12 +253,11 @@ public final class SubsidyList extends TemplatePage {
                 item.add(new Label("firstName", subsidy.getFirstName()));
                 item.add(new Label("middleName", subsidy.getMiddleName()));
                 item.add(new Label("lastName", subsidy.getLastName()));
-                item.add(new Label("city", subsidy.getStringField(SubsidyDBF.NP_NAME, "_CYR")));
-                item.add(new Label("street", AddressRenderer.displayStreet(subsidy.getStringField(SubsidyDBF.CAT_V, "_CYR"),
-                        subsidy.getStringField(SubsidyDBF.NAME_V, "_CYR"), getLocale())));
-                item.add(new Label("building", subsidy.getStringField(SubsidyDBF.BLD, "_CYR")));
-                item.add(new Label("corp", subsidy.getStringField(SubsidyDBF.CORP, "_CYR")));
-                item.add(new Label("apartment", subsidy.getStringField(SubsidyDBF.FLAT, "_CYR")));
+                item.add(new Label("city", subsidy.getCity()));
+                item.add(new Label("street", AddressRenderer.displayStreet(subsidy.getStreetType(), subsidy.getStreet(), getLocale())));
+                item.add(new Label("building", subsidy.getBuildingNumber()));
+                item.add(new Label("corp", subsidy.getBuildingCorp()));
+                item.add(new Label("apartment", subsidy.getApartment()));
                 item.add(DateLabel.forShortStyle("DAT1", Model.of((Date)subsidy.getField(SubsidyDBF.DAT1))));
                 item.add(DateLabel.forShortStyle("DAT2", Model.of((Date) subsidy.getField(SubsidyDBF.DAT2))));
                 item.add(new Label("NUMM", subsidy.getStringField(SubsidyDBF.NUMM)));
