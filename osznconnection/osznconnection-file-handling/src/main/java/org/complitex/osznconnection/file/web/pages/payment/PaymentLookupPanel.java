@@ -2,6 +2,7 @@ package org.complitex.osznconnection.file.web.pages.payment;
 
 import org.apache.wicket.Component;
 import org.complitex.common.entity.Cursor;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.entity.Payment;
 import org.complitex.osznconnection.file.entity.PaymentDBF;
@@ -26,7 +27,7 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
     @EJB
     private PersonAccountService personAccountService;
 
-    @EJB
+    @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
 
 
