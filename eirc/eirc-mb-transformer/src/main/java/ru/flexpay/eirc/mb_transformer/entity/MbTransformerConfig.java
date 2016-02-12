@@ -35,9 +35,9 @@ public enum MbTransformerConfig implements IComponentConfig {
     @Override
     public WebMarkupContainer getComponent(String id, IModel<String> model) {
         if (this.equals(EIRC_ORGANIZATION_ID)) {
-            return new OrganizationPicker(id, new LongModel(model), OrganizationType.USER_ORGANIZATION.getId());
+            return new OrganizationPicker(id, new LongModel(model), (long)OrganizationType.USER_ORGANIZATION.getId());
         } if (this.equals(MB_ORGANIZATION_ID)) {
-            return new OrganizationPicker(id, new LongModel(model), OrganizationType.PAYMENT_COLLECTOR.getId());
+            return new OrganizationPicker(id, new LongModel(model), (long)OrganizationType.PAYMENT_COLLECTOR.getId());
         } else {
             return new InputPanel<>("config", model, String.class, false, null, true, 40);
         }

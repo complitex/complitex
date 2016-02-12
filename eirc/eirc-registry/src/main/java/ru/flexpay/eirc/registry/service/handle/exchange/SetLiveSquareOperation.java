@@ -18,6 +18,6 @@ public class SetLiveSquareOperation extends ServiceProviderAccountAttrOperation 
 
     @Override
     public Long getCode() {
-        return ContainerType.SET_LIVE_SQUARE.getId();
+        return Long.valueOf(ContainerType.SET_LIVE_SQUARE.getId());
     }
 }

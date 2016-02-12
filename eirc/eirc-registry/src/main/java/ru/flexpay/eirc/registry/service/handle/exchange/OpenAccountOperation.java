@@ -49,7 +49,7 @@ public class OpenAccountOperation extends GeneralAccountOperation {
 
     @Override
     public Long getCode() {
-        return ContainerType.OPEN_ACCOUNT.getId();
+        return Long.valueOf(ContainerType.OPEN_ACCOUNT.getId());
     }
 
     @Override

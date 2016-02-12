@@ -86,7 +86,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
 
         OrganizationIdPicker picker = new OrganizationIdPicker("organization",
                 new LongModel(new AttributeStringModel(attribute)),
-                OrganizationType.USER_ORGANIZATION.getId());
+                Long.valueOf(OrganizationType.USER_ORGANIZATION.getId()));
         //picker.setRequired(attributeType.isMandatory());
         //picker.setLabel(new Model<>(getString("organization")));
 

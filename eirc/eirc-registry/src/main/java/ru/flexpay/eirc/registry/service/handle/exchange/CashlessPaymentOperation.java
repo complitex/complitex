@@ -24,6 +24,6 @@ public class CashlessPaymentOperation extends BasePaymentOperation<CashlessPayme
 
     @Override
     public Long getCode() {
-        return ContainerType.CASHLESS_PAYMENT.getId();
+        return Long.valueOf(ContainerType.CASHLESS_PAYMENT.getId());
     }
 }

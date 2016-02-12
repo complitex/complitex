@@ -18,6 +18,6 @@ public class SetResponsiblePerson extends ServiceProviderAccountAttrOperation {
 
     @Override
     public Long getCode() {
-        return ContainerType.SET_RESPONSIBLE_PERSON.getId();
+        return Long.valueOf(ContainerType.SET_RESPONSIBLE_PERSON.getId());
     }
 }

@@ -10,40 +10,40 @@ import java.util.Locale;
  * @author Pavel Sknar
  */
 public enum  RegistryStatus implements IFixedIdType, ILocalizedType {
-    LOADING(0L),
-    LOADING_WITH_ERROR(1L),
-    LOADED(2L),
-    LOADING_CANCELED(3L),
-    LOADED_WITH_ERROR(4L),
+    LOADING(0),
+    LOADING_WITH_ERROR(1),
+    LOADED(2),
+    LOADING_CANCELED(3),
+    LOADED_WITH_ERROR(4),
 
-    PROCESSING(5L),
-    PROCESSING_WITH_ERROR(6L),
-    PROCESSED(7L),
-    PROCESSED_WITH_ERROR(8L),
-    PROCESSING_CANCELED(9L),
+    PROCESSING(5),
+    PROCESSING_WITH_ERROR(6),
+    PROCESSED(7),
+    PROCESSED_WITH_ERROR(8),
+    PROCESSING_CANCELED(9),
 
-    ROLLBACKING(10L),
-    ROLLBACKED(11L),
+    ROLLBACKING(10),
+    ROLLBACKED(11),
 
-    PROCESSED_PARTLY(12L),
+    PROCESSED_PARTLY(12),
 
-    LINKING(19L),
-    LINKING_WITH_ERROR(20L),
-    LINKED(21L),
-    LINKED_WITH_ERROR(22L),
-    LINKING_CANCELED(23L);
+    LINKING(19),
+    LINKING_WITH_ERROR(20),
+    LINKED(21),
+    LINKED_WITH_ERROR(22),
+    LINKING_CANCELED(23);
 
     private static final String RESOURCE_BUNDLE = RegistryStatus.class.getName();
     private static final Locale DEFAULT_LOCALE = new Locale("ru");
 
-    private Long id;
+    private Integer id;
 
-    private RegistryStatus(Long id) {
+    private RegistryStatus(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

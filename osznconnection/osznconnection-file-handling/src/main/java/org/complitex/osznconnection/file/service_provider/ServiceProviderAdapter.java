@@ -23,7 +23,10 @@ import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrate
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.*;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
@@ -240,6 +243,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                                                    String street, String buildingNumber, String buildingCorp,
                                                    String apartment, Date date) throws DBException {
         Map<String, Object> params = newHashMap();
+
         params.put("pDistrName", district);
         params.put("pStSortName", streetType);
         params.put("pStreetName", street);

@@ -390,7 +390,7 @@ public final class SubsidyList extends TemplatePage {
 
                         }
                     } catch (Exception e) {
-                        error(ExceptionUtil.getCauseMessage(e));
+                        error(ExceptionUtil.getCauseMessage(e, true));
                     }
                 }
 

@@ -179,7 +179,7 @@ public class ServiceProviderAccountListPanel extends Panel {
                         return new AbstractFilter<Long>(s, components, new PropertyModel<Long>(filterObject, "organizationId")) {
                             @Override
                             protected Component createFilterComponent(String id, IModel<Long> model) {
-                                return new OrganizationIdPicker(id, model, OrganizationType.SERVICE_PROVIDER.getId());
+                                return new OrganizationIdPicker(id, model, Long.valueOf(OrganizationType.SERVICE_PROVIDER.getId()));
                             }
                         };
                     }

@@ -485,10 +485,11 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
             if(billingId != null){
                 return billingId;
             }else {
-                throw new IllegalArgumentException("billing id is not found");
+                throw new IllegalArgumentException("МН не найдет для организации " +
+                        userOrganization.getStringValue(OrganizationStrategy.NAME));
             }
         }else {
-            throw new IllegalArgumentException("userOrganization id is not found");
+            throw new IllegalArgumentException("Организация не найдена по идентификатору " + userOrganizationId);
         }
     }
 

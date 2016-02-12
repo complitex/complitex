@@ -10,30 +10,30 @@ import java.util.Locale;
  * @author Pavel Sknar
  */
 public enum RegistryType implements IFixedIdType, ILocalizedType {
-    UNKNOWN(0L), 
-    SALDO_SIMPLE(1L),
-    INCOME(2L), 
-    MESSAGE(3L), 
-    CLOSED_ACCOUNTS(4L), 
-    INFO(5L), 
-    CORRECTIONS(6L),
-    PAYMENTS(7L),
-    CASHLESS_PAYMENTS(8L), 
-    REPAYMENT(9L), 
-    ERRORS(10L), 
-    QUITTANCE(11L), 
-    BANK_PAYMENTS(12L);
+    UNKNOWN(0),
+    SALDO_SIMPLE(1),
+    INCOME(2),
+    MESSAGE(3),
+    CLOSED_ACCOUNTS(4),
+    INFO(5),
+    CORRECTIONS(6),
+    PAYMENTS(7),
+    CASHLESS_PAYMENTS(8),
+    REPAYMENT(9),
+    ERRORS(10),
+    QUITTANCE(11),
+    BANK_PAYMENTS(12);
 
     private static final String RESOURCE_BUNDLE = RegistryType.class.getName();
 
-    private Long id;
+    private Integer id;
 
-    private RegistryType(Long id) {
+    private RegistryType(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

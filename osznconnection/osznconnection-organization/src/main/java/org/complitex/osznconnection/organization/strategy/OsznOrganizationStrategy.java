@@ -279,4 +279,14 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
 
         return super.displayAttribute(attribute, locale);
     }
+
+    public String getServiceProviderCode(String edrpou){
+        Long serviceProviderId = getObjectIdByEdrpou(edrpou);
+
+        if (serviceProviderId != null){
+            return getDomainObject(serviceProviderId).getStringValue(OsznOrganizationStrategy.CODE);
+        }else {
+            throw new IllegalArgumentException("ПУ не найден по ЕДРПОУ " + edrpou);
+        }
+    }
 }

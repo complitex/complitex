@@ -134,7 +134,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
             return buildResponseContent(ResponseStatus.INTERNAL_ERROR);
         }
 
-        SearchType type = SearchType.getSearchType(searchType);
+        SearchType type = SearchType.getSearchType((int) searchType);
 
         String[] reqMas = searchCriteria.split(":");
         Service service = null;

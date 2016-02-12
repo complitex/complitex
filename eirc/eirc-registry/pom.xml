@@ -69,13 +69,13 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--dependency>
+        <dependency>
             <groupId>org.complitex</groupId>
             <artifactId>complitex-common</artifactId>
             <version>${complitex.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
-        </dependency-->
+        </dependency>
     </dependencies>
 
     <build>

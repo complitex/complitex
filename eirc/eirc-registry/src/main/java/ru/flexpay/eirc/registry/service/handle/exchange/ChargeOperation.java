@@ -24,6 +24,6 @@ public class ChargeOperation extends BaseFinancialOperation<Charge> {
 
     @Override
     public Long getCode() {
-        return ContainerType.CHARGE.getId();
+        return Long.valueOf(ContainerType.CHARGE.getId());
     }
 }

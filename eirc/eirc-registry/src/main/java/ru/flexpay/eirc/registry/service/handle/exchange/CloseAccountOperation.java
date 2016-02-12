@@ -46,7 +46,7 @@ public class CloseAccountOperation extends GeneralAccountOperation {
 
     @Override
     public Long getCode() {
-        return ContainerType.CLOSE_ACCOUNT.getId();
+        return Long.valueOf(ContainerType.CLOSE_ACCOUNT.getId());
     }
 
     @Override

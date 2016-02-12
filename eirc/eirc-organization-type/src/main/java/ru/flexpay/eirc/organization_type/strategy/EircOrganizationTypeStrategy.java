@@ -20,7 +20,7 @@ public class EircOrganizationTypeStrategy extends org.complitex.organization_typ
     protected Collection<Long> getReservedInstanceIds() {
         ImmutableList.Builder<Long> builder = ImmutableList.builder();
         for (OrganizationType organizationType : OrganizationType.values()) {
-            builder.add(organizationType.getId());
+            builder.add(Long.valueOf(organizationType.getId()));
         }
         return builder.build();
     }

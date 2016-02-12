@@ -18,6 +18,6 @@ public class SetTotalSquareOperation extends ServiceProviderAccountAttrOperation
 
     @Override
     public Long getCode() {
-        return ContainerType.SET_WARM_SQUARE.getId();
+        return Long.valueOf(ContainerType.SET_WARM_SQUARE.getId());
     }
 }

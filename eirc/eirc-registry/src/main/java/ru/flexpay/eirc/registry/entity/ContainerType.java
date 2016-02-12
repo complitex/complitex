@@ -14,50 +14,50 @@ import static ru.flexpay.eirc.registry.entity.RegistryType.*;
  * @author Pavel Sknar
  */
 public enum ContainerType implements IFixedIdType {
-    UNDEFINED(0L, null),
-    OPEN_ACCOUNT(1L, INFO, SALDO_SIMPLE),
-    CLOSE_ACCOUNT(2L, CLOSED_ACCOUNTS),
-    SET_RESPONSIBLE_PERSON(3L, INFO, SALDO_SIMPLE),
-    SET_NUMBER_ON_HABITANTS(4L, INFO, SALDO_SIMPLE),
-    SET_TOTAL_SQUARE(5L, INFO),
-    SET_LIVE_SQUARE(6L, INFO),
-    SET_WARM_SQUARE(7L, INFO, SALDO_SIMPLE),
-    SET_PRIVILEGE_TYPE(8L, INFO),
-    SET_PRIVILEGE_OWNER(9L, INFO),
-    SET_PRIVILEGE_PERSON(10L, INFO),
-    SET_PRIVILEGE_APPROVAL_DOCUMENT(11L, INFO),
-    SET_PRIVILEGE_PERSONS_NUMBER(12L, INFO),
-    OPEN_SUBACCOUNT(14L, INFO),
-    EXTERNAL_ORGANIZATION_ACCOUNT(15L, INFO, SALDO_SIMPLE),
+    UNDEFINED(0, null),
+    OPEN_ACCOUNT(1, INFO, SALDO_SIMPLE),
+    CLOSE_ACCOUNT(2, CLOSED_ACCOUNTS),
+    SET_RESPONSIBLE_PERSON(3, INFO, SALDO_SIMPLE),
+    SET_NUMBER_ON_HABITANTS(4, INFO, SALDO_SIMPLE),
+    SET_TOTAL_SQUARE(5, INFO),
+    SET_LIVE_SQUARE(6, INFO),
+    SET_WARM_SQUARE(7, INFO, SALDO_SIMPLE),
+    SET_PRIVILEGE_TYPE(8, INFO),
+    SET_PRIVILEGE_OWNER(9, INFO),
+    SET_PRIVILEGE_PERSON(10, INFO),
+    SET_PRIVILEGE_APPROVAL_DOCUMENT(11, INFO),
+    SET_PRIVILEGE_PERSONS_NUMBER(12, INFO),
+    OPEN_SUBACCOUNT(14, INFO),
+    EXTERNAL_ORGANIZATION_ACCOUNT(15, INFO, SALDO_SIMPLE),
 
-    CASH_PAYMENT(50L, PAYMENTS),
-    CASHLESS_PAYMENT(51L, PAYMENTS),
-    BANK_PAYMENT(52L, BANK_PAYMENTS),
+    CASH_PAYMENT(50, PAYMENTS),
+    CASHLESS_PAYMENT(51, PAYMENTS),
+    BANK_PAYMENT(52, BANK_PAYMENTS),
 
-    BASE(100L, QUITTANCE),
-    CHARGE(101L, SALDO_SIMPLE),
-    SALDO_OUT(102L, SALDO_SIMPLE),
+    BASE(100, QUITTANCE),
+    CHARGE(101, SALDO_SIMPLE),
+    SALDO_OUT(102, SALDO_SIMPLE),
 
-    ADDRESS_CORRECTION(150L, CORRECTIONS),
+    ADDRESS_CORRECTION(150, CORRECTIONS),
 
 
-    SETUP_PAYMENT_POINT(500L, null),
-    REGISTRY_ANNOTATION(501L, null),
-    SYNC_IDENTIFIER(502L, null),
-    OBJECT_IDENTIFIER(503L, null),
-    DETAILS_PAYMENTS_DOCUMENT(504L, PAYMENTS),
+    SETUP_PAYMENT_POINT(500, null),
+    REGISTRY_ANNOTATION(501, null),
+    SYNC_IDENTIFIER(502, null),
+    OBJECT_IDENTIFIER(503, null),
+    DETAILS_PAYMENTS_DOCUMENT(504, PAYMENTS),
 
-    SET_CALCULATION_NUMBER_TENANTS(600L, INFO),
-    SET_CALCULATION_NUMBER_REGISTERED(601L, INFO),
-    SET_CALCULATION_TOTAL_SQUARE(602L, INFO),
-    SET_CALCULATION_LIVE_SQUARE(603L, INFO),
-    SET_CALCULATION_HEATING_SQUARE(604L, INFO)
+    SET_CALCULATION_NUMBER_TENANTS(600, INFO),
+    SET_CALCULATION_NUMBER_REGISTERED(601, INFO),
+    SET_CALCULATION_TOTAL_SQUARE(602, INFO),
+    SET_CALCULATION_LIVE_SQUARE(603, INFO),
+    SET_CALCULATION_HEATING_SQUARE(604, INFO)
     ;
 
-    private static final Map<Long, ContainerType> CONTAINER_TYPE_MAP;
+    private static final Map<Integer, ContainerType> CONTAINER_TYPE_MAP;
 
     static {
-        ImmutableMap.Builder<Long, ContainerType> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<Integer, ContainerType> builder = ImmutableMap.builder();
 
         for (ContainerType containerType : ContainerType.values()) {
             builder.put(containerType.getId(), containerType);
@@ -66,16 +66,16 @@ public enum ContainerType implements IFixedIdType {
         CONTAINER_TYPE_MAP = builder.build();
     }
 
-    private Long id;
+    private Integer id;
     private Set<RegistryType> registryTypes;
 
-    private ContainerType(Long id, RegistryType... registryTypes) {
+    private ContainerType(Integer id, RegistryType... registryTypes) {
         this.id = id;
         this.registryTypes = registryTypes == null? Collections.<RegistryType>emptySet(): Sets.newHashSet(registryTypes);
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

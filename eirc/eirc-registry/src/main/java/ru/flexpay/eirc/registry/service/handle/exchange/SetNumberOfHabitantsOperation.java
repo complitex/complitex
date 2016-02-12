@@ -18,6 +18,6 @@ public class SetNumberOfHabitantsOperation extends ServiceProviderAccountAttrOpe
 
     @Override
     public Long getCode() {
-        return ContainerType.SET_NUMBER_ON_HABITANTS.getId();
+        return Long.valueOf(ContainerType.SET_NUMBER_ON_HABITANTS.getId());
     }
 }

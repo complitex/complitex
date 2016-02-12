@@ -9,6 +9,7 @@ import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
 import javax.ejb.EJB;
 import java.util.Date;
@@ -25,6 +26,8 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
     @EJB
     private PersonAccountService personAccountService;
 
+    @EJB
+    private OsznOrganizationStrategy organizationStrategy;
 
 
     public PaymentLookupPanel(String id, long userOrganizationId, Component... toUpdate) {
@@ -62,5 +65,10 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
         return lookupBean.getAccountDetails(payment.getOutgoingDistrict(), payment.getOutgoingStreetType(),
                 payment.getOutgoingStreet(), payment.getOutgoingBuildingNumber(), payment.getOutgoingBuildingCorp(),
                 payment.getOutgoingApartment(), (Date) payment.getField(PaymentDBF.DAT1), userOrganizationId);
+    }
+
+    @Override
+    protected String getServicingOrganizationCode(Payment request) {
+        return organizationStrategy.getServiceProviderCode(request.getStringField(PaymentDBF.ENT_COD));
     }
 }

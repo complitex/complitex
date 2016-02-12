@@ -19,7 +19,7 @@ public enum OrganizationType implements IFixedIdType {
     }
 
     @Override
-    public Long getId() {
-        return object.getId();
+    public Integer getId() {
+        return object.getId().intValue();
     }
 }

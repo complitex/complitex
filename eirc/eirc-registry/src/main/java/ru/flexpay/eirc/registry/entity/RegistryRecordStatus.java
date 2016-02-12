@@ -1,7 +1,6 @@
 package ru.flexpay.eirc.registry.entity;
 
 import org.complitex.common.entity.ILocalizedType;
-import org.complitex.common.mybatis.FixedIdTypeHandler;
 import org.complitex.common.mybatis.IFixedIdType;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.correction.entity.AddressLinkStatus;
@@ -12,27 +11,26 @@ import java.util.Locale;
 /**
  * @author Pavel Sknar
  */
-@FixedIdTypeHandler
 public enum RegistryRecordStatus implements IFixedIdType, ILocalizedType {
 
-    LOADED_WITH_ERROR(1L),
-    LOADED(2L),
-    LINKED_WITH_ERROR(3L),
-    LINKED(4L),
-    PROCESSED_WITH_ERROR(5L),
-    PROCESSED(6L),
+    LOADED_WITH_ERROR(1),
+    LOADED(2),
+    LINKED_WITH_ERROR(3),
+    LINKED(4),
+    PROCESSED_WITH_ERROR(5),
+    PROCESSED(6),
     ;
 
     private static final String RESOURCE_BUNDLE = RegistryRecordStatus.class.getName();
 
-    private Long id;
+    private Integer id;
 
-    private RegistryRecordStatus(Long id) {
+    private RegistryRecordStatus(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

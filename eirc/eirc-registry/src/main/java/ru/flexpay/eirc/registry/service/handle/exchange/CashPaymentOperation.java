@@ -24,6 +24,6 @@ public class CashPaymentOperation extends BasePaymentOperation<CashPayment> {
 
     @Override
     public Long getCode() {
-        return ContainerType.CASH_PAYMENT.getId();
+        return Long.valueOf(ContainerType.CASH_PAYMENT.getId());
     }
 }

@@ -1,15 +1,14 @@
 package ru.flexpay.eirc.service_provider_account.web.edit;
 
-import com.google.common.collect.ImmutableList;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
@@ -22,7 +21,6 @@ import ru.flexpay.eirc.service_provider_account.web.component.ServiceProviderAcc
 import ru.flexpay.eirc.service_provider_account.web.list.ServiceProviderAccountCorrectionList;
 
 import javax.ejb.EJB;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -42,7 +40,7 @@ public class ServiceProviderAccountCorrectionEdit extends FormTemplatePage {
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private EircOrganizationStrategy organizationStrategy;
 
-    private static final Long[] ORGANIZATION_TYPES = {OrganizationType.PAYMENT_COLLECTOR.getId()};
+    private static final Long[] ORGANIZATION_TYPES = {Long.valueOf(OrganizationType.PAYMENT_COLLECTOR.getId())};
 
     public ServiceProviderAccountCorrectionEdit(PageParameters params) {
         add(new AbstractCorrectionEditPanel<ServiceProviderAccountCorrection>("service_provider_account_edit_panel",

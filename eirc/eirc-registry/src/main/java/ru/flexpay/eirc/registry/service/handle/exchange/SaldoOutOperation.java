@@ -92,6 +92,6 @@ public class SaldoOutOperation extends BaseFinancialOperation<SaldoOut> {
 
     @Override
     public Long getCode() {
-        return ContainerType.SALDO_OUT.getId();
+        return Long.valueOf(ContainerType.SALDO_OUT.getId());
     }
 }

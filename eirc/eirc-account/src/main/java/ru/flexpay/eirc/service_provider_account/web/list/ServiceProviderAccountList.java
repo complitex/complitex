@@ -260,7 +260,7 @@ public class ServiceProviderAccountList extends TemplatePage {
         filterForm.add(new ServicePicker("serviceFilter", new PropertyModel<Service>(filterObject, "service")));
 
         filterForm.add(new OrganizationIdPicker("organizationId", new PropertyModel<Long>(filterObject, "organizationId"),
-                OrganizationType.SERVICE_PROVIDER.getId()));
+                Long.valueOf(OrganizationType.SERVICE_PROVIDER.getId())));
 
         //Reset Action
         AjaxLink reset = new AjaxLink("reset") {

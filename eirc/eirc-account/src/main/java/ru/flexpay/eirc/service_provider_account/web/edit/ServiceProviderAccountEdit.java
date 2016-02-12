@@ -210,7 +210,7 @@ public class ServiceProviderAccountEdit extends FormTemplatePage {
             }
         };
         serviceProviderModel.setObject(new DomainObject(serviceProviderAccount.getOrganizationId()));
-        form.add(new OrganizationPicker("serviceProvider", serviceProviderModel, OrganizationType.SERVICE_PROVIDER.getId()) {
+        form.add(new OrganizationPicker("serviceProvider", serviceProviderModel, Long.valueOf(OrganizationType.SERVICE_PROVIDER.getId())) {
             @Override
             protected void onSelect(AjaxRequestTarget target) {
                 target.add(service);

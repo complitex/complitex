@@ -32,7 +32,7 @@ public class Subsidy extends AbstractAccountRequest<SubsidyDBF> {
     }
 
     public String getFio(){
-        return getStringField(SubsidyDBF.FIO, "_CYR");
+        return getUpStringField(SubsidyDBF.FIO, "_CYR");
     }
 
     @Override
@@ -42,12 +42,12 @@ public class Subsidy extends AbstractAccountRequest<SubsidyDBF> {
 
     @Override
     public String getCity() {
-        return super.getCity() == null ? getStringField(SubsidyDBF.NP_NAME, "_CYR") : super.getCity();
+        return super.getCity() == null ? getUpStringField(SubsidyDBF.NP_NAME, "_CYR") : super.getCity();
     }
 
     @Override
     public String getStreetType() {
-        return getStringField(SubsidyDBF.CAT_V, "_CYR");
+        return getUpStringField(SubsidyDBF.CAT_V, "_CYR");
     }
 
     @Override
@@ -57,21 +57,21 @@ public class Subsidy extends AbstractAccountRequest<SubsidyDBF> {
 
     @Override
     public String getStreet() {
-        return getStringField(SubsidyDBF.NAME_V, "_CYR");
+        return getUpStringField(SubsidyDBF.NAME_V, "_CYR");
     }
 
     @Override
     public String getBuildingNumber() {
-        return getStringField(SubsidyDBF.BLD, "_CYR");
+        return getUpStringField(SubsidyDBF.BLD, "_CYR");
     }
 
     @Override
     public String getBuildingCorp() {
-        return getStringField(SubsidyDBF.CORP, "_CYR");
+        return getUpStringField(SubsidyDBF.CORP, "_CYR");
     }
 
     @Override
     public String getApartment() {
-        return getStringField(SubsidyDBF.FLAT, "_CYR");
+        return getUpStringField(SubsidyDBF.FLAT, "_CYR");
     }
 }
