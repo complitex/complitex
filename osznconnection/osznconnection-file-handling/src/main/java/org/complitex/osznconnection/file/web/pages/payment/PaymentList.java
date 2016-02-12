@@ -5,7 +5,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -32,7 +31,7 @@ import org.complitex.osznconnection.file.entity.example.PaymentExample;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PaymentBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.StatusRenderService;
+import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.status.details.PaymentBenefitStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.PaymentExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -49,10 +48,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public final class PaymentList extends TemplatePage {
 
@@ -63,9 +58,6 @@ public final class PaymentList extends TemplatePage {
 
     @EJB
     private RequestFileBean requestFileBean;
-
-    @EJB
-    private StatusRenderService statusRenderService;
 
     @EJB
     private WebWarningRenderer webWarningRenderer;
@@ -195,6 +187,7 @@ public final class PaymentList extends TemplatePage {
                 paymentBean.markCorrected(model.getObject(), addressEntity);
 
                 target.add(content, statusDetailPanel);
+                statusDetailPanel.rebuild();
                 dataRowHoverBehavior.deactivateDataRow(target);
             }
         };
@@ -227,10 +220,10 @@ public final class PaymentList extends TemplatePage {
                 item.add(new Label("building", payment.getBuildingNumber()));
                 item.add(new Label("corp", payment.getBuildingCorp()));
                 item.add(new Label("apartment", payment.getApartment()));
-                item.add(new Label("status", statusRenderService.displayStatus(payment.getStatus(), getLocale())));
+                item.add(new Label("status", StatusRenderUtil.displayStatus(payment.getStatus(), getLocale())));
                 item.add(new Label("statusDetails", webWarningRenderer.display(payment.getWarnings(), getLocale())));
 
-                AjaxLink addressCorrectionLink = new IndicatingAjaxLink("addressCorrectionLink") {
+                AjaxLink addressCorrectionLink = new AjaxLink("addressCorrectionLink") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -244,7 +237,7 @@ public final class PaymentList extends TemplatePage {
                 addressCorrectionLink.setVisible(payment.getStatus().isAddressCorrectable());
                 item.add(addressCorrectionLink);
 
-                AjaxLink lookup = new IndicatingAjaxLink("lookup") {
+                AjaxLink lookup = new AjaxLink("lookup") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {

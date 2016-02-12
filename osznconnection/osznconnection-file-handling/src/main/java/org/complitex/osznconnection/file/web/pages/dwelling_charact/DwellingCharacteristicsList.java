@@ -31,7 +31,7 @@ import org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsE
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.StatusRenderService;
+import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -62,9 +62,6 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
     @EJB
     private RequestFileBean requestFileBean;
-
-    @EJB
-    private StatusRenderService statusRenderService;
 
     @EJB
     private WebWarningRenderer webWarningRenderer;
@@ -229,7 +226,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 item.add(new Label("building", dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.HOUSE)));
                 item.add(new Label("corp", dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.BUILD)));
                 item.add(new Label("apartment", dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT)));
-                item.add(new Label("status", statusRenderService.displayStatus(dwellingCharacteristics.getStatus(), getLocale())));
+                item.add(new Label("status", StatusRenderUtil.displayStatus(dwellingCharacteristics.getStatus(), getLocale())));
                 item.add(new Label("statusDetails", webWarningRenderer.display(dwellingCharacteristics.getWarnings(), getLocale())));
 
                 AjaxLink addressCorrectionLink = new IndicatingAjaxLink("addressCorrectionLink") {

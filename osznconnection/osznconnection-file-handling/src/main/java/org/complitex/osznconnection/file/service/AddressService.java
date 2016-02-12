@@ -117,6 +117,7 @@ public class AddressService extends AbstractBean {
 
                 return;
             } else {
+                request.setCityId(null);
                 request.setStatus(RequestStatus.CITY_UNRESOLVED_LOCALLY);
 
                 return;
@@ -144,6 +145,7 @@ public class AddressService extends AbstractBean {
 
                     return;
                 } else {
+                    request.setStreetTypeId(null);
                     request.setStatus(RequestStatus.STREET_TYPE_UNRESOLVED_LOCALLY);
 
                     return;
@@ -224,10 +226,14 @@ public class AddressService extends AbstractBean {
                             } else {
                                 throw new IllegalStateException("Building id was not found.");
                             }
+
                             request.setStatus(RequestStatus.CITY_UNRESOLVED);
 
                             return;
                         } else { // по доп. информации, состоящей из номера и корпуса дома, не смогли однозначно определить улицу
+
+                            request.setStreetId(null);
+                            request.setBuildingId(null);
                             request.setStatus(RequestStatus.STREET_AND_BUILDING_UNRESOLVED_LOCALLY);
                             return;
                         }
@@ -285,11 +291,14 @@ public class AddressService extends AbstractBean {
                         request.setStatus(RequestStatus.CITY_UNRESOLVED);
                         return;
                     } else { // по доп. информации, состоящей из номера и корпуса дома, не смогли однозначно определить улицу
+                        request.setStreetId(null);
+                        request.setBuildingId(null);
                         request.setStatus(RequestStatus.STREET_AND_BUILDING_UNRESOLVED_LOCALLY);
                         return;
                     }
                 }
             } else { // не нашли ни одной улицы
+                request.setStreetId(null);
                 request.setStatus(RequestStatus.STREET_UNRESOLVED_LOCALLY);
                 return;
             }
@@ -313,6 +322,7 @@ public class AddressService extends AbstractBean {
             }else if (buildingIds.size() > 1) {
                 request.setStatus(RequestStatus.MORE_ONE_LOCAL_BUILDING);
             } else if (buildingIds.isEmpty()){
+                request.setBuildingId(null);
                 request.setStatus(RequestStatus.BUILDING_UNRESOLVED_LOCALLY);
             }
         }

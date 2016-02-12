@@ -5,7 +5,7 @@ import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service.StatusRenderService;
+import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
 import org.complitex.osznconnection.file.service.warning.IWarningRenderer;
 import org.slf4j.Logger;
@@ -129,7 +129,7 @@ public final class SaveUtil {
     }
 
     private static String getString(String key) {
-        String s = ResourceUtil.getString(StatusRenderService.class.getName(), key, SYSTEM);
+        String s = ResourceUtil.getString(StatusRenderUtil.class.getName(), key, SYSTEM);
         return s != null ? s : key;
     }
 }

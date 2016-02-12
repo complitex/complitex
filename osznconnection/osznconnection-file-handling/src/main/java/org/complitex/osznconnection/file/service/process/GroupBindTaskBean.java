@@ -233,6 +233,8 @@ public class GroupBindTaskBean implements ITaskBean {
                     } catch (SystemException e1) {
                         log.error("Couldn't rollback transaction for binding payment item.", e1);
                     }
+
+                    throw new BindException(e, false, paymentFile);
                 }
             }
         }
