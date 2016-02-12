@@ -6,10 +6,6 @@ import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 
 import javax.ejb.EJB;
 
-/**
- *
- * @author Artem
- */
 public abstract class AbstractRequestBean extends AbstractBean {
 
     @EJB

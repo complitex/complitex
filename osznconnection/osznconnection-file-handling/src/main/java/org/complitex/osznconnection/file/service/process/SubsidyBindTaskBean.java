@@ -119,6 +119,8 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
                     } catch (SystemException e1) {
                         log.error("Couldn't rollback transaction for binding subsidy item.", e1);
                     }
+
+                    throw new BindException(e, false, subsidyFile);
                 }
             }
         }

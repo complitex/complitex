@@ -5,6 +5,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.resource.SharedResourceReference;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.web.component.css.CssAttributeBehavior;

@@ -120,7 +120,7 @@ public class SubsidyService {
             String edrpou =  organizationStrategy.getDomainObject(list.get(0).getObjectId()).getStringValue(OsznOrganizationStrategy.EDRPOU);
 
             if (edrpou != null){
-                code = edrpou;
+                return edrpou;
             }
         }
 
