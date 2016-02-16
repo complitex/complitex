@@ -19,7 +19,7 @@
         <result column="outgoing_building_corp" property="outgoingBuildingCorp"/>
         <result column="outgoing_apartment" property="outgoingApartment"/>
 
-        <result column="DAT1" property="date"/>
+        <result column="begin_date" property="date"/>
 
         <association property="dbfFields" javaType="map">
             <result column="SUR_NAM_CYR" property="SUR_NAM_CYR"/>
@@ -241,7 +241,7 @@
 
                 p.`F_NAM`, p.`M_NAM`, p.`SUR_NAM`, p.`N_NAME`, p.`VUL_NAME`, p.`BLD_NUM`, p.`CORP_NUM`, p.`FLAT`,
 
-                p.`DAT1`, p.`ENT_COD`, f.`organization_id`, f.`user_organization_id`,
+                p.`DAT1`, p.`ENT_COD`, f.`organization_id`, f.`user_organization_id`, f.`begin_date`,
                 p.`internal_city_id`, p.`internal_street_id`, p.`internal_street_type_id`, p.`internal_building_id`, p.`internal_apartment_id`,
                 p.`outgoing_city`, p.`outgoing_district`, p.`outgoing_street`, p.`outgoing_street_type`, p.`outgoing_building_number`, p.`outgoing_building_corp`,
                 p.`outgoing_apartment`
@@ -325,7 +325,7 @@
 
         r.`F_NAM`, r.`M_NAM`, r.`SUR_NAM`, r.`N_NAME`, r.`VUL_NAME`, r.`BLD_NUM`, r.`CORP_NUM`, r.`FLAT`,
 
-        r.`DAT1`, r.`OWN_NUM_SR`, rf.`organization_id`, rf.`user_organization_id`,
+        r.`DAT1`, r.`OWN_NUM_SR`, rf.`organization_id`, rf.`user_organization_id`, rf.`begin_date`,
         r.`internal_city_id`, r.`internal_street_id`, r.`internal_street_type_id`, r.`internal_building_id`, r.`internal_apartment_id`,
         r.`outgoing_city`, r.`outgoing_district`, r.`outgoing_street`, r.`outgoing_street_type`, r.`outgoing_building_number`, r.`outgoing_building_corp`,
         r.`outgoing_apartment`, r.`account_number`
