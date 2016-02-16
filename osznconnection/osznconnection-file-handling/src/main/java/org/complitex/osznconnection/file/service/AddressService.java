@@ -283,8 +283,8 @@ public class AddressService extends AbstractBean {
 
                         if (buildingIds.size() == 1) {
                             request.setBuildingId(buildingIds.get(0));
-
                             request.setStreetId(streetId);
+                            request.setStreetTypeId(streetStrategy.getStreetType(streetStrategy.getDomainObject(streetId)));
                         } else {
                             throw new IllegalStateException("Building id was not found.");
                         }
