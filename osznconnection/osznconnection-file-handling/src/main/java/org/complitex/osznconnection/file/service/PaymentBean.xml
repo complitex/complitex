@@ -19,7 +19,7 @@
         <result column="outgoing_building_corp" property="outgoingBuildingCorp"/>
         <result column="outgoing_apartment" property="outgoingApartment"/>
 
-        <result column="begin_date" property="date"/>
+        <result column="DAT1" property="date"/>
 
         <association property="dbfFields" javaType="map">
             <result column="SUR_NAM_CYR" property="SUR_NAM_CYR"/>
