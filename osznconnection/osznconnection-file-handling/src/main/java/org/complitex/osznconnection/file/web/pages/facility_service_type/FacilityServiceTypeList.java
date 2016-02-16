@@ -32,7 +32,7 @@ import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.FacilityServiceTypeBean.OrderBy;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.StatusRenderService;
+import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -63,9 +63,6 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
     @EJB
     private RequestFileBean requestFileBean;
-
-    @EJB
-    private StatusRenderService statusRenderService;
 
     @EJB
     private WebWarningRenderer webWarningRenderer;
@@ -234,7 +231,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
                 item.add(new Label("building", facilityServiceType.getStringField(FacilityServiceTypeDBF.HOUSE)));
                 item.add(new Label("corp", facilityServiceType.getStringField(FacilityServiceTypeDBF.BUILD)));
                 item.add(new Label("apartment", facilityServiceType.getStringField(FacilityServiceTypeDBF.APT)));
-                item.add(new Label("status", statusRenderService.displayStatus(facilityServiceType.getStatus(), getLocale())));
+                item.add(new Label("status", StatusRenderUtil.displayStatus(facilityServiceType.getStatus(), getLocale())));
                 item.add(new Label("statusDetails", webWarningRenderer.display(facilityServiceType.getWarnings(), getLocale())));
 
                 AjaxLink addressCorrectionLink = new IndicatingAjaxLink("addressCorrectionLink") {

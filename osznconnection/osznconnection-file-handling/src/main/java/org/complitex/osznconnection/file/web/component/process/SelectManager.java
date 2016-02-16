@@ -29,9 +29,8 @@ public class SelectManager implements Serializable {
     }
 
     private static class SelectModelValue implements Serializable {
-
-        boolean selected;
-        int sortId;
+        private volatile boolean selected;
+        private int sortId;
 
         void toggle() {
             selected = !selected;
@@ -39,6 +38,10 @@ public class SelectManager implements Serializable {
 
         void clearSelect() {
             selected = false;
+        }
+
+        public boolean isSelected() {
+            return selected;
         }
     }
 
@@ -59,7 +62,7 @@ public class SelectManager implements Serializable {
         SortedSet<SelectModelValueWithId> selected = new TreeSet<>(new SelectValueComparator());
         for (long objectId : selectModels.keySet()) {
             SelectModelValue selectModelValue = selectModels.get(objectId);
-            if (selectModelValue.selected) {
+            if (selectModelValue.isSelected()) {
                 selected.add(new SelectModelValueWithId(objectId, selectModelValue));
             }
         }
@@ -74,9 +77,7 @@ public class SelectManager implements Serializable {
     }
 
     public void clearSelection() {
-        for (SelectModelValue selectModelValue : selectModels.values()) {
-            selectModelValue.clearSelect();
-        }
+        selectModels.values().forEach(SelectModelValue::clearSelect);
     }
 
     public void initializeSelectModels(List<? extends IExecutorObject> objects) {
@@ -96,7 +97,7 @@ public class SelectManager implements Serializable {
 
             @Override
             public Boolean getObject() {
-                return selectModels.get(objectId).selected;
+                return selectModels.get(objectId).isSelected();
             }
 
             @Override

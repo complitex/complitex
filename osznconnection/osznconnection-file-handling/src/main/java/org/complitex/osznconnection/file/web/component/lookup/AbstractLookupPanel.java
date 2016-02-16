@@ -31,7 +31,7 @@ import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.LookupBean;
-import org.complitex.osznconnection.file.service.StatusRenderService;
+import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.file.web.component.account.AccountNumberPickerPanel;
@@ -49,9 +49,6 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
-
-    @EJB
-    private StatusRenderService statusRenderService;
 
     @EJB
     private LookupBean lookupBean;
@@ -163,25 +160,25 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                                 if (accountDetails.isEmpty()) {
                                     switch (accountDetails.getResultCode()){
                                         case 0:
-                                            error(statusRenderService.displayStatus(ACCOUNT_NUMBER_NOT_FOUND, getLocale()));
+                                            error(StatusRenderUtil.displayStatus(ACCOUNT_NUMBER_NOT_FOUND, getLocale()));
                                             break;
                                         case -2:
-                                            error(statusRenderService.displayStatus(APARTMENT_NOT_FOUND, getLocale()));
+                                            error(StatusRenderUtil.displayStatus(APARTMENT_NOT_FOUND, getLocale()));
                                             break;
                                         case -3:
-                                            error(statusRenderService.displayStatus(BUILDING_CORP_NOT_FOUND, getLocale()));
+                                            error(StatusRenderUtil.displayStatus(BUILDING_CORP_NOT_FOUND, getLocale()));
                                             break;
                                         case -4:
-                                            error(statusRenderService.displayStatus(BUILDING_NOT_FOUND, getLocale()));
+                                            error(StatusRenderUtil.displayStatus(BUILDING_NOT_FOUND, getLocale()));
                                             break;
                                         case -5:
-                                            error(statusRenderService.displayStatus(STREET_NOT_FOUND, getLocale()));
+                                            error(StatusRenderUtil.displayStatus(STREET_NOT_FOUND, getLocale()));
                                             break;
                                         case -6:
-                                            error(statusRenderService.displayStatus(STREET_TYPE_NOT_FOUND, getLocale()));
+                                            error(StatusRenderUtil.displayStatus(STREET_TYPE_NOT_FOUND, getLocale()));
                                             break;
                                         case -7:
-                                            error(statusRenderService.displayStatus(DISTRICT_NOT_FOUND, getLocale()));
+                                            error(StatusRenderUtil.displayStatus(DISTRICT_NOT_FOUND, getLocale()));
                                             break;
                                     }
                                 } else {
@@ -195,7 +192,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                                 LoggerFactory.getLogger(getClass()).error("", e);
                             }
                         } else {
-                            error(statusRenderService.displayStatus(request.getStatus(), getLocale()));
+                            error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));
                         }
                     }
                 } else {
@@ -251,7 +248,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                                     accountNumberModel.getObject(), userOrganizationId);
 
                             if (accountDetails == null || accountDetails.isEmpty()) {
-                                error(statusRenderService.displayStatus(request.getStatus(), getLocale()));
+                                error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));
                             } else {
                                 accountDetailsModel.setObject(accountDetails);
                                 if (accountDetails.size() == 1) {
@@ -265,7 +262,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                             error(getString("unknown_account_number_type"));
                         }
                     } else {
-                        error(statusRenderService.displayStatus(request.getStatus(), getLocale()));
+                        error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));
                     }
                 } else {
                     error(getString("lookup_by_account_required"));

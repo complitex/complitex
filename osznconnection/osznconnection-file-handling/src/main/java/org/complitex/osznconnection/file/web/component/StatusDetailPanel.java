@@ -14,25 +14,20 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetail;
 
-import javax.ejb.EJB;
 import java.util.List;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.AbstractRequestExample;
-import org.complitex.osznconnection.file.service.StatusRenderService;
+import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.status.details.ExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.IStatusDetailRenderer;
-import org.complitex.osznconnection.file.service.status.details.StatusDetailRenderService;
+import org.complitex.osznconnection.file.service.status.details.StatusDetailRenderUtil;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 24.11.10 15:49
  */
 public abstract class StatusDetailPanel<T extends AbstractRequestExample> extends Panel {
-
-    @EJB(name = "StatusRenderService")
-    private StatusRenderService statusRenderService;
-    @EJB(name = "StatusDetailRenderService")
-    private StatusDetailRenderService statusDetailRenderService;
+    private ListView<StatusDetailInfo> statusDetailsInfo;
 
     public StatusDetailPanel(String id, final IModel<T> exampleModel, final ExampleConfigurator<T> exampleConfigurator,
                              final IStatusDetailRenderer statusDetailRenderer, final Component... update) {
@@ -53,7 +48,7 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
             }
         };
 
-        ListView<StatusDetailInfo> statusDetailsInfo = new ListView<StatusDetailInfo>("statusDetailsInfo", model) {
+        statusDetailsInfo = new ListView<StatusDetailInfo>("statusDetailsInfo", model) {
 
             @Override
             protected void populateItem(ListItem<StatusDetailInfo> item) {
@@ -83,8 +78,8 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
                 };
                 item.add(expand);
 
-                String info = statusRenderService.displayStatus(statusDetailInfo.getStatus(), getLocale())
-                        + statusDetailRenderService.displayCount(statusDetailInfo.getCount());
+                String info = StatusRenderUtil.displayStatus(statusDetailInfo.getStatus(), getLocale())
+                        + StatusDetailRenderUtil.displayCount(statusDetailInfo.getCount());
                 expand.add(new Label("info", info));
 
                 ListView<StatusDetail> statusDetails = new ListView<StatusDetail>("statusDetails",
@@ -108,7 +103,7 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
                         item.add(filter);
 
                         filter.add(new Label("name",
-                                statusDetailRenderService.displayStatusDetail(statusDetailInfo.getStatus(),
+                                StatusDetailRenderUtil.displayStatusDetail(statusDetailInfo.getStatus(),
                                         statusDetail, statusDetailRenderer, getLocale())));
                     }
                 };
@@ -137,4 +132,8 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
     }
 
     public abstract List<StatusDetailInfo> loadStatusDetails();
+
+    public void rebuild(){
+        statusDetailsInfo.removeAll();
+    }
 }

@@ -30,7 +30,7 @@ import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.BenefitExample;
 import org.complitex.osznconnection.file.service.BenefitBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.StatusRenderService;
+import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.status.details.BenefitExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.PaymentBenefitStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -60,9 +60,6 @@ public final class BenefitList extends TemplatePage {
 
     @EJB
     private RequestFileBean requestFileBean;
-
-    @EJB
-    private StatusRenderService statusRenderService;
 
     @EJB
     private WebWarningRenderer webWarningRenderer;
@@ -210,7 +207,7 @@ public final class BenefitList extends TemplatePage {
                 item.add(new Label("corp", benefit.getBuildingCorp()));
                 item.add(new Label("apartment", benefit.getApartment()));
                 item.add(new Label("priv", StringUtil.valueOf(benefit.getStringField(BenefitDBF.PRIV_CAT))));
-                item.add(new Label("status", statusRenderService.displayStatus(benefit.getStatus(), getLocale())));
+                item.add(new Label("status", StatusRenderUtil.displayStatus(benefit.getStatus(), getLocale())));
                 item.add(new Label("statusDetails", webWarningRenderer.display(benefit.getWarnings(), getLocale())));
 
                 item.add(new IndicatingAjaxLink("connect") {

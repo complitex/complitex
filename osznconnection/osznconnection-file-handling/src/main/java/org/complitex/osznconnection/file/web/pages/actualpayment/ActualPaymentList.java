@@ -32,7 +32,7 @@ import org.complitex.osznconnection.file.entity.example.ActualPaymentExample;
 import org.complitex.osznconnection.file.service.ActualPaymentBean;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.StatusRenderService;
+import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.status.details.ActualPaymentExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.ActualPaymentStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -62,9 +62,6 @@ public final class ActualPaymentList extends TemplatePage {
 
     @EJB
     private RequestFileBean requestFileBean;
-
-    @EJB
-    private StatusRenderService statusRenderService;
 
     @EJB
     private WebWarningRenderer webWarningRenderer;
@@ -226,7 +223,7 @@ public final class ActualPaymentList extends TemplatePage {
                 item.add(new Label("building", actualPayment.getStringField(ActualPaymentDBF.BLD_NUM)));
                 item.add(new Label("corp", actualPayment.getStringField(ActualPaymentDBF.CORP_NUM)));
                 item.add(new Label("apartment", actualPayment.getStringField(ActualPaymentDBF.FLAT)));
-                item.add(new Label("status", statusRenderService.displayStatus(actualPayment.getStatus(), getLocale())));
+                item.add(new Label("status", StatusRenderUtil.displayStatus(actualPayment.getStatus(), getLocale())));
                 item.add(new Label("statusDetails", webWarningRenderer.display(actualPayment.getWarnings(), getLocale())));
 
                 AjaxLink addressCorrectionLink = new IndicatingAjaxLink("addressCorrectionLink") {

@@ -65,9 +65,6 @@ public final class SubsidyList extends TemplatePage {
     private RequestFileBean requestFileBean;
 
     @EJB
-    private StatusRenderService statusRenderService;
-
-    @EJB
     private WebWarningRenderer webWarningRenderer;
 
     @EJB
@@ -207,6 +204,7 @@ public final class SubsidyList extends TemplatePage {
 
                 dataRowHoverBehavior.deactivateDataRow(target);
                 target.add(content, statusDetailPanel);
+                statusDetailPanel.rebuild();
             }
         };
         add(addressCorrectionDialog);
@@ -265,7 +263,7 @@ public final class SubsidyList extends TemplatePage {
                 item.add(new Label("SUMMA", decimal(subsidy.getStringField(SubsidyDBF.SUMMA))));
                 item.add(new Label("SUBS", decimal(subsidy.getStringField(SubsidyDBF.SUBS))));
 
-                item.add(new Label("status", statusRenderService.displayStatus(subsidy.getStatus(), getLocale())));
+                item.add(new Label("status", StatusRenderUtil.displayStatus(subsidy.getStatus(), getLocale())));
                 item.add(new Label("statusDetails", webWarningRenderer.display(subsidy.getWarnings(), getLocale())));
 
                 AjaxLink addressCorrectionLink = new AjaxLink("addressCorrectionLink") {
@@ -386,7 +384,7 @@ public final class SubsidyList extends TemplatePage {
                             info(getStringFormat("info_bound", subsidy.getFio()));
                         }else {
                             error(getStringFormat("error_bound", subsidy.getFio(),
-                                    statusRenderService.displayStatus(subsidy.getStatus(), getLocale())));
+                                    StatusRenderUtil.displayStatus(subsidy.getStatus(), getLocale())));
 
                         }
                     } catch (Exception e) {

@@ -21,7 +21,7 @@ import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.util.StringUtil;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.BenefitBean;
-import org.complitex.osznconnection.file.service.StatusRenderService;
+import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.odlabs.wiquery.core.javascript.JsStatement;
@@ -33,16 +33,11 @@ import javax.ejb.EJB;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * 
- * @author Artem
- */
 public class BenefitConnectPanel extends Panel {
 
     @EJB
     private BenefitBean benefitBean;
-    @EJB
-    private StatusRenderService statusRenderService;
+
     @EJB
     private WebWarningRenderer webWarningRenderer;
 
@@ -65,7 +60,7 @@ public class BenefitConnectPanel extends Panel {
             switch (benefit.getStatus()) {
                 case ACCOUNT_NUMBER_NOT_FOUND:
                 case PROCESSING_INVALID_FORMAT:
-                    error(statusRenderService.displayStatus(benefit.getStatus(), getLocale()));
+                    error(StatusRenderUtil.displayStatus(benefit.getStatus(), getLocale()));
                     break;
             }
 
@@ -205,10 +200,10 @@ public class BenefitConnectPanel extends Panel {
 
                         switch (benefit.getStatus()) {
                             case ACCOUNT_NUMBER_NOT_FOUND:
-                                error(statusRenderService.displayStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND, getLocale()));
+                                error(StatusRenderUtil.displayStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND, getLocale()));
                                 break;
                             case PROCESSING_INVALID_FORMAT:
-                                error(statusRenderService.displayStatus(RequestStatus.PROCESSING_INVALID_FORMAT, getLocale()));
+                                error(StatusRenderUtil.displayStatus(RequestStatus.PROCESSING_INVALID_FORMAT, getLocale()));
                                 break;
                             default:
                                 if (toUpdate != null) {

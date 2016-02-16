@@ -43,7 +43,8 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_AC
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class ActualPaymentBindTaskBean implements ITaskBean {
+public class
+ActualPaymentBindTaskBean implements ITaskBean {
     private final Logger log = LoggerFactory.getLogger(ActualPaymentBindTaskBean.class);
 
     @Resource
