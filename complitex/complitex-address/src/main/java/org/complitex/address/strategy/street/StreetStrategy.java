@@ -339,11 +339,11 @@ public class StreetStrategy extends TemplateStrategy {
 
     public List<Long> getStreetObjectIdsByBuilding(Long cityId, String street, String buildingNumber, String buildingCorp) {
         Map<String, Object> params = Maps.newHashMap();
-        params.put("street", toCyrillic(street));
+        params.put("street", street);
         params.put("cityId", cityId);
         String preparedNumber = BuildingNumberConverter.convert(buildingNumber);
         params.put("number", preparedNumber == null ? "" : preparedNumber);
-        String preparedCorp = removeWhiteSpaces(toCyrillic(buildingCorp));
+        String preparedCorp = removeWhiteSpaces(buildingCorp);
         params.put("corp", Strings.isEmpty(preparedCorp) ? null : preparedCorp);
 
         return sqlSession().selectList(STREET_NS + ".selectStreetIdsByBuilding", params);
