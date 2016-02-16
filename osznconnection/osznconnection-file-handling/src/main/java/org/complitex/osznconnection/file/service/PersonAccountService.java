@@ -140,10 +140,14 @@ public class PersonAccountService extends AbstractBean {
             if (accountDetails.size() == 1){
                 AccountDetail detail = accountDetails.get(0);
 
-                if (detail.getStreet() != null && detail.getStreet().equalsIgnoreCase(request.getOutgoingStreet()) &&
-                        detail.getBuildingNumber() != null && detail.getBuildingNumber().equalsIgnoreCase(request.getOutgoingBuildingNumber()) &&
-                        detail.getBuildingCorp() != null && detail.getBuildingCorp().equalsIgnoreCase(request.getOutgoingBuildingCorp()) &&
-                        detail.getApartment() != null && detail.getApartment().equalsIgnoreCase(request.getOutgoingApartment())){
+                if (detail.getStreet() != null &&
+                        detail.getBuildingNumber() != null &&
+                        detail.getBuildingCorp() != null &&
+                        detail.getApartment() != null &&
+                        (detail.getStreet().equalsIgnoreCase(request.getOutgoingStreet()) || detail.getStreet().equalsIgnoreCase(request.getStreet())) &&
+                        (detail.getBuildingNumber().equalsIgnoreCase(request.getOutgoingBuildingNumber()) || detail.getBuildingNumber().equalsIgnoreCase(request.getBuildingNumber())) &&
+                        (detail.getBuildingCorp().equalsIgnoreCase(request.getOutgoingBuildingCorp()) || detail.getBuildingCorp().equalsIgnoreCase(request.getBuildingCorp())) &&
+                        (detail.getApartment().equalsIgnoreCase(request.getOutgoingApartment()) || detail.getApartment().equalsIgnoreCase(request.getApartment()))){
 
                     request.setAccountNumber(detail.getAccCode());
                     request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
