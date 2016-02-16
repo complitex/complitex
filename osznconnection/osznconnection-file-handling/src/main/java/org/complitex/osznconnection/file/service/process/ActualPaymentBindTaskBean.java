@@ -79,7 +79,7 @@ ActualPaymentBindTaskBean implements ITaskBean {
 
     private void resolveLocalAccount(ActualPayment actualPayment) {
         try {
-            String accountNumber = personAccountService.getAccountNumber(actualPayment,
+            String accountNumber = personAccountService.getLocalAccountNumber(actualPayment,
                     actualPayment.getStringField(ActualPaymentDBF.OWN_NUM));
 
             if (!Strings.isEmpty(accountNumber)) {

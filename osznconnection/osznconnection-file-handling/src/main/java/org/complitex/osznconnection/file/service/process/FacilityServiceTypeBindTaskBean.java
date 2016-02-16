@@ -76,7 +76,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean {
 
     private void resolveLocalAccount(FacilityServiceType facilityServiceType) {
         try {
-            String accountNumber = personAccountService.getAccountNumber(facilityServiceType,
+            String accountNumber = personAccountService.getLocalAccountNumber(facilityServiceType,
                     facilityServiceType.getStringField(IDCODE));
 
             if (!Strings.isEmpty(accountNumber)) {

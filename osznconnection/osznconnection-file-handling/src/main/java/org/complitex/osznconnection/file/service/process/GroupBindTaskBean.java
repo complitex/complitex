@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.PaymentDBF.OWN_NUM_SR;
+import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS;
+import static org.complitex.osznconnection.file.entity.RequestStatus.STREET_AND_BUILDING_UNRESOLVED_LOCALLY;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -157,7 +159,7 @@ public class GroupBindTaskBean implements ITaskBean {
      */
     private void resolveLocalAccount(Payment payment) {
         try {
-            String accountNumber = personAccountService.getAccountNumber(payment, payment.getStringField(OWN_NUM_SR));
+            String accountNumber = personAccountService.getLocalAccountNumber(payment, payment.getStringField(OWN_NUM_SR));
 
             if (!Strings.isEmpty(accountNumber)) {
                 payment.setAccountNumber(accountNumber);
@@ -180,9 +182,18 @@ public class GroupBindTaskBean implements ITaskBean {
         //resolve address
         addressService.resolveAddress(payment);
 
+        if (STREET_AND_BUILDING_UNRESOLVED_LOCALLY.equals(payment.getStatus())){
+            //todo
+        }
+
         //resolve account number
         if (payment.getStatus().isAddressResolved()){
             personAccountService.resolveAccountNumber(payment, payment.getStringField(PaymentDBF.OWN_NUM_SR), null, updatePuAccount);
+
+            if (MORE_ONE_ACCOUNTS.equals(payment.getStatus())){
+                personAccountService.forceResolveAccountNumber(payment, addressService.resolveOutgoingDistrict(
+                        payment.getOrganizationId(), payment.getUserOrganizationId()), payment.getStringField(PaymentDBF.OWN_NUM_SR));
+            }
 
             if (payment.getStatus() == RequestStatus.ACCOUNT_NUMBER_RESOLVED) {
                 benefitBean.updateAccountNumber(payment.getId(), payment.getAccountNumber());

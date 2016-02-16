@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS;
+
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class SubsidyBindTaskBean extends AbstractTaskBean {
@@ -77,6 +79,11 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
             personAccountService.resolveAccountNumber(subsidy, subsidy.getStringField(SubsidyDBF.RASH),
                     subsidyService.getServiceProviderCode(subsidy.getRequestFileId()),
                     updatePuAccount);
+
+            if (MORE_ONE_ACCOUNTS.equals(subsidy.getStatus())){
+                personAccountService.forceResolveAccountNumber(subsidy, addressService.resolveOutgoingDistrict(
+                        subsidy.getOrganizationId(), subsidy.getUserOrganizationId()), subsidy.getStringField(SubsidyDBF.RASH));
+            }
         }
 
         // обновляем subsidy запись

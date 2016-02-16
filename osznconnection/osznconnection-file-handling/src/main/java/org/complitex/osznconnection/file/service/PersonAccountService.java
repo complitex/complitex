@@ -1,11 +1,13 @@
 package org.complitex.osznconnection.file.service;
 
+import com.google.common.base.Strings;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
+import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,12 +60,12 @@ public class PersonAccountService extends AbstractBean {
     @EJB
     private OsznOrganizationStrategy organizationStrategy;
 
-    public String getAccountNumber(AbstractAccountRequest request, String puPersonAccount)
+    public String getLocalAccountNumber(AbstractAccountRequest request, String accountNumber)
             throws MoreOneAccountException {
         Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
 
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(new PersonAccount(request,
-                puPersonAccount, billingId, false)));
+                accountNumber, billingId, false)));
 
         if (personAccounts.size() == 1){
             return personAccounts.get(0).getAccountNumber();
@@ -74,14 +76,14 @@ public class PersonAccountService extends AbstractBean {
         return null;
     }
 
-    public void save(AbstractAccountRequest request, String puPersonAccount)
+    public void save(AbstractAccountRequest request, String accountNumber)
             throws MoreOneAccountException {
         Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
 
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(new PersonAccount(request,
-                puPersonAccount, billingId, false)));
+                accountNumber, billingId, false)));
         if (personAccounts.isEmpty()){
-            personAccountBean.save(new PersonAccount(request, puPersonAccount, billingId, true));
+            personAccountBean.save(new PersonAccount(request, accountNumber, billingId, true));
         }else if (personAccounts.size() == 1){
             PersonAccount personAccount = personAccounts.get(0);
 
@@ -93,15 +95,15 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
-    public void resolveAccountNumber(AbstractAccountRequest request, String puPersonAccount,
+    public void resolveAccountNumber(AbstractAccountRequest request, String accountNumber,
                                      String servicingOrganizationCode,
                                      boolean updatePuAccount) throws DBException {
         try {
             //resolve local account
-            String accountNumber = getAccountNumber(request, puPersonAccount);
+            String localAccountNumber = getLocalAccountNumber(request, accountNumber);
 
-            if (accountNumber != null) {
-                request.setAccountNumber(accountNumber);
+            if (localAccountNumber != null) {
+                request.setAccountNumber(localAccountNumber);
                 request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
                 return;
@@ -109,7 +111,7 @@ public class PersonAccountService extends AbstractBean {
 
             //resolve remote account
             AccountDetail accountDetail = serviceProviderAdapter.acquireAccountDetail(request,
-                    request.getLastName(), puPersonAccount,
+                    request.getLastName(), accountNumber,
                     request.getOutgoingDistrict(), request.getOutgoingStreetType(), request.getOutgoingStreet(),
                     request.getOutgoingBuildingNumber(), request.getOutgoingBuildingCorp(),
                     request.getOutgoingApartment(), request.getDate(), updatePuAccount);
@@ -123,8 +125,37 @@ public class PersonAccountService extends AbstractBean {
                     return;
                 }
 
-                save(request, puPersonAccount);
+                save(request, accountNumber);
             }
+        } catch (MoreOneAccountException e) {
+            request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
+        }
+    }
+
+    public void forceResolveAccountNumber(AbstractAccountRequest request, String district, String accountNumber) throws DBException{
+        try {
+            List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(request, district,
+                    accountNumber, request.getDate());
+
+            if (accountDetails.size() == 1){
+                AccountDetail detail = accountDetails.get(0);
+
+                if (detail.getStreet() != null && detail.getStreet().equalsIgnoreCase(request.getOutgoingStreet()) &&
+                        detail.getBuildingNumber() != null && detail.getBuildingNumber().equalsIgnoreCase(request.getOutgoingBuildingNumber()) &&
+                        detail.getBuildingCorp() != null && detail.getBuildingCorp().equalsIgnoreCase(request.getOutgoingBuildingCorp()) &&
+                        detail.getApartment() != null && detail.getApartment().equalsIgnoreCase(request.getOutgoingApartment())){
+
+                    request.setAccountNumber(detail.getAccCode());
+                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+                    save(request, accountNumber);
+                }
+            }else if (accountDetails.size() > 1){
+                request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
+            }else if (accountDetails.isEmpty()){
+                request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
+            }
+        } catch (UnknownAccountNumberTypeException e) {
+            log.error("error forceResolveAccountNumber", e);
         } catch (MoreOneAccountException e) {
             request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
         }

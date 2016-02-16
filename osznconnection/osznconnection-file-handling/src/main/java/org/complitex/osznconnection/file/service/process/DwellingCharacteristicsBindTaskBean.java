@@ -76,7 +76,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
 
     private void resolveLocalAccount(DwellingCharacteristics dwellingCharacteristics) {
         try {
-            String accountNumber = personAccountService.getAccountNumber(dwellingCharacteristics,
+            String accountNumber = personAccountService.getLocalAccountNumber(dwellingCharacteristics,
                     dwellingCharacteristics.getStringField(IDCODE));
 
             if (!Strings.isEmpty(accountNumber)) {
