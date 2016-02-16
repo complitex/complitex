@@ -15,7 +15,7 @@ public final class BuildingNumberConverter {
         if (buildingNumber == null) {
             return null;
         }
-        buildingNumber = removeWhiteSpaces(toCyrillic(buildingNumber));
+        buildingNumber = removeWhiteSpaces(buildingNumber);
         char[] chars = buildingNumber.toCharArray();
         chars = convertSlash(chars);
         chars = removeSpecialSymbols(chars);

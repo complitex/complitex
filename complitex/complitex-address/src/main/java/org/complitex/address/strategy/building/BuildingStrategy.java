@@ -743,7 +743,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
         String preparedNumber = BuildingNumberConverter.convert(buildingNumber);
         params.put("number", preparedNumber == null ? "" : preparedNumber);
-        String preparedCorp = removeWhiteSpaces(toCyrillic(buildingCorp));
+        String preparedCorp = removeWhiteSpaces(buildingCorp);
         params.put("corp", Strings.isEmpty(preparedCorp) ? null : preparedCorp);
 
         params.put("parentId", streetId != null ? streetId : cityId);

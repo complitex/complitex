@@ -31,7 +31,6 @@ import java.io.Serializable;
 import java.util.*;
 
 import static org.complitex.common.util.StringUtil.removeWhiteSpaces;
-import static org.complitex.common.util.StringUtil.toCyrillic;
 
 /**
  * Street strategy.
