@@ -201,7 +201,7 @@ public class WiQuerySearchComponent extends Panel {
 
                 FormComponent<DomainObject> filterComponent = newAutocompleteComponent("filter", entity);
                 Component autocompleteField = getAutocompleteField(filterComponent);
-                filterInputFieldMap.put(entity, getAutocompleteField(filterComponent));
+                filterInputFieldMap.put(entity, autocompleteField);
                 //visible/enabled
                 handleVisibility(entity, filterComponent);
 
@@ -341,7 +341,7 @@ public class WiQuerySearchComponent extends Panel {
         target.add(searchContainer);
     }
 
-    protected final void setFocus(AjaxRequestTarget target, String searchFilter) {
+    public final void setFocus(AjaxRequestTarget target, String searchFilter) {
         if (!Strings.isEmpty(searchFilter)) {
             target.focusComponent(filterInputFieldMap.get(searchFilter));
         }

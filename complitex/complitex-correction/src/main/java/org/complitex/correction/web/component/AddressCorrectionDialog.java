@@ -260,27 +260,27 @@ public class AddressCorrectionDialog<T> extends Panel {
         return validated;
     }
 
-    private void initSearchComponentState(SearchComponentState componentState) {
-        componentState.clear();
+    private void initSearchComponentState() {
+        state.clear();
 
         if (localAddress.getCityId() != null) {
-            componentState.put("city", findObject(localAddress.getCityId() , "city"));
+            state.put("city", findObject(localAddress.getCityId() , "city"));
         }
 
         if (localAddress.getStreetId()  != null) {
-            componentState.put("street", findObject(localAddress.getStreetId(), "street"));
+            state.put("street", findObject(localAddress.getStreetId(), "street"));
         }
 
         if (localAddress.getBuildingId() != null) {
-            componentState.put("building", findObject(localAddress.getBuildingId(), "building"));
+            state.put("building", findObject(localAddress.getBuildingId(), "building"));
         }
 
         if (localAddress.getApartmentId() != null) {
-            componentState.put("apartment", findObject(localAddress.getApartmentId(), "apartment"));
+            state.put("apartment", findObject(localAddress.getApartmentId(), "apartment"));
         }
 
         if (localAddress.getRoomId() != null) {
-            componentState.put("room", findObject(localAddress.getRoomId(), "room"));
+            state.put("room", findObject(localAddress.getRoomId(), "room"));
         }
     }
 
@@ -315,12 +315,11 @@ public class AddressCorrectionDialog<T> extends Panel {
         this.localAddress = localAddress;
 
         if (!addressEntity.equals(AddressEntity.STREET_TYPE)) {
-            state.clear();
+            initSearchComponentState();
 
             WiQuerySearchComponent newSearchComponent = new AddressSearchComponent("searchComponent", state,
                     getFilters(addressEntity), null, ShowMode.ACTIVE, true);
-
-            //todo load state
+            newSearchComponent.setFocus(target, localAddress.getFirstEmptyAddressEntity(false).getEntityName());
 
             searchComponent.replaceWith(newSearchComponent);
             searchComponent = newSearchComponent;
