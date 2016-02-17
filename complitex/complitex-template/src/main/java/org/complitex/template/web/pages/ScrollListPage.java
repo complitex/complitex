@@ -18,8 +18,8 @@ public class ScrollListPage extends TemplatePage {
     public ScrollListPage(PageParameters params) {
         String idToScroll = params.get(SCROLL_PARAMETER).toString();
 
-        if (!Strings.isEmpty(idToScroll)) {
-            add(new ScrollListBehavior(idToScroll));
-        }
+//        if (!Strings.isEmpty(idToScroll)) {
+//            add(new ScrollListBehavior(idToScroll));
+//        }
     }
 }
