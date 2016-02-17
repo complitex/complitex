@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.service;
 
-import com.google.common.base.Strings;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.*;
@@ -137,26 +136,26 @@ public class PersonAccountService extends AbstractBean {
             List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(request, district,
                     accountNumber, request.getDate());
 
-            if (accountDetails.size() == 1){
-                AccountDetail detail = accountDetails.get(0);
+            if (accountDetails != null) {
+                if (accountDetails.size() == 1){
+                    AccountDetail detail = accountDetails.get(0);
 
-                if (detail.getStreet() != null &&
-                        detail.getBuildingNumber() != null &&
-                        detail.getBuildingCorp() != null &&
-                        detail.getApartment() != null &&
-                        (detail.getStreet().equalsIgnoreCase(request.getOutgoingStreet()) || detail.getStreet().equalsIgnoreCase(request.getStreet())) &&
-                        (detail.getBuildingNumber().equalsIgnoreCase(request.getOutgoingBuildingNumber()) || detail.getBuildingNumber().equalsIgnoreCase(request.getBuildingNumber())) &&
-                        (detail.getBuildingCorp().equalsIgnoreCase(request.getOutgoingBuildingCorp()) || detail.getBuildingCorp().equalsIgnoreCase(request.getBuildingCorp())) &&
-                        (detail.getApartment().equalsIgnoreCase(request.getOutgoingApartment()) || detail.getApartment().equalsIgnoreCase(request.getApartment()))){
+                    if (detail.getStreet() != null &&
+                            detail.getBuildingNumber() != null &&
+                            detail.getBuildingCorp() != null &&
+                            detail.getApartment() != null &&
+                            (detail.getStreet().equalsIgnoreCase(request.getOutgoingStreet()) || detail.getStreet().equalsIgnoreCase(request.getStreet())) &&
+                            (detail.getBuildingNumber().equalsIgnoreCase(request.getOutgoingBuildingNumber()) || detail.getBuildingNumber().equalsIgnoreCase(request.getBuildingNumber())) &&
+                            (detail.getBuildingCorp().equalsIgnoreCase(request.getOutgoingBuildingCorp()) || detail.getBuildingCorp().equalsIgnoreCase(request.getBuildingCorp())) &&
+                            (detail.getApartment().equalsIgnoreCase(request.getOutgoingApartment()) || detail.getApartment().equalsIgnoreCase(request.getApartment()))){
 
-                    request.setAccountNumber(detail.getAccCode());
-                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
-                    save(request, accountNumber);
+                        request.setAccountNumber(detail.getAccCode());
+                        request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+                        save(request, accountNumber);
+                    }
+                }else if (accountDetails.size() > 1){
+                    request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
                 }
-            }else if (accountDetails.size() > 1){
-                request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
-            }else if (accountDetails.isEmpty()){
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
             }
         } catch (UnknownAccountNumberTypeException e) {
             log.error("error forceResolveAccountNumber", e);

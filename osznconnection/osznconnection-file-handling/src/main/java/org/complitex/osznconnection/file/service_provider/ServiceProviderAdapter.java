@@ -265,7 +265,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
         int accountType = determineAccountType(account);
-        List<AccountDetail> accountCorrectionDetails = null;
+        List<AccountDetail> accountDetails = null;
 
         Map<String, Object> params = newHashMap();
         params.put("pDistrName", district);
@@ -295,9 +295,9 @@ public class ServiceProviderAdapter extends AbstractBean {
         } else {
             switch (resultCode) {
                 case 1:
-                    accountCorrectionDetails = (List<AccountDetail>) params.get("details");
+                    accountDetails = (List<AccountDetail>) params.get("details");
 
-                    if (accountCorrectionDetails == null || accountCorrectionDetails.isEmpty()) {
+                    if (accountDetails == null || accountDetails.isEmpty()) {
                         log.error("acquireAccountDetailsByAccount. Result code is 1 but account details data is null or empty. "
                                         + "Request id: {}, request class: {}, calculation center: {}",
                                 request.getId(), request.getClass(), dataSource);
@@ -332,7 +332,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             }
         }
 
-        return accountCorrectionDetails;
+        return accountDetails;
     }
 
     @SuppressWarnings("unchecked")
