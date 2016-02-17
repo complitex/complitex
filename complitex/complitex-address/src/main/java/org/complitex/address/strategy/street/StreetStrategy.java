@@ -187,12 +187,16 @@ public class StreetStrategy extends TemplateStrategy {
 
     @Override
     public ISearchCallback getSearchCallback() {
-        return (component, ids, target) -> {
-            DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
+        return new ISearchCallback(){ //Serializable
 
-            if (list != null) {
-                configureFilter(list.getFilter(), ids, null);
-                list.refreshContent(target);
+            @Override
+            public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
+                DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
+
+                if (list != null) {
+                    configureFilter(list.getFilter(), ids, null);
+                    list.refreshContent(target);
+                }
             }
         };
     }
