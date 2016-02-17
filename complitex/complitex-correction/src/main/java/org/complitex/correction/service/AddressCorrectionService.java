@@ -442,7 +442,13 @@ public class AddressCorrectionService {
                         addressCorrectionBean.getStreetCorrections(localAddress, externalAddress);
 
                 if (streetCorrections.isEmpty()) {
-                    StreetCorrection streetCorrection = new StreetCorrection(localAddress.getCityId(), localAddress.getStreetTypeId(),
+                    Long streetTypeId = localAddress.getStreetTypeId();
+
+                    if (streetTypeId == null){
+                        streetTypeId = streetStrategy.getStreetType(localAddress.getStreetId());
+                    }
+
+                    StreetCorrection streetCorrection = new StreetCorrection(localAddress.getCityId(), streetTypeId,
                             externalAddress.getStreetCode(), localAddress.getStreetId(), externalAddress.getStreet().toUpperCase(),
                             externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId(), moduleId);
 

@@ -319,7 +319,7 @@ public class AddressCorrectionDialog<T> extends Panel {
 
             WiQuerySearchComponent newSearchComponent = new AddressSearchComponent("searchComponent", state,
                     getFilters(addressEntity), null, ShowMode.ACTIVE, true);
-            newSearchComponent.setFocus(target, localAddress.getFirstEmptyAddressEntity(false).getEntityName());
+            newSearchComponent.setFocus(target, localAddress.getFirstEmptyAddressEntity(false).getEntityName()); //todo focus
 
             searchComponent.replaceWith(newSearchComponent);
             searchComponent = newSearchComponent;

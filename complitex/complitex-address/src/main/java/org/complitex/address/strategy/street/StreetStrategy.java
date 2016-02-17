@@ -253,6 +253,10 @@ public class StreetStrategy extends TemplateStrategy {
         return streetObject.getAttribute(STREET_TYPE).getValueId();
     }
 
+    public Long getStreetType(Long streetId) {
+        return getDomainObject(streetId).getAttribute(STREET_TYPE).getValueId();
+    }
+
     @SuppressWarnings({"unchecked"})
     @Override
     public Long performDefaultValidation(DomainObject streetObject, Locale locale) {
