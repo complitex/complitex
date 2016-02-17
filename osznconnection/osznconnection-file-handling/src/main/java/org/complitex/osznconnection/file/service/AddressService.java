@@ -344,7 +344,6 @@ public class AddressService extends AbstractBean {
      * Квартиры не ищем, а проставляем напрямую, обрезая пробелы.
      * Алгоритм аналогичен для поиска остальных составляющих адреса.
      */
-
     public void resolveOutgoingAddress(AbstractAddressRequest request) {
         Long userOrganizationId = request.getUserOrganizationId();
         Long billingId = organizationStrategy.getBillingId(userOrganizationId);

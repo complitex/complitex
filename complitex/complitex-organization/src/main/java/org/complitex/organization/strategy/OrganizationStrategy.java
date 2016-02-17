@@ -6,6 +6,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.*;
 import org.complitex.common.exception.DeleteException;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
+import org.complitex.common.service.exception.ServiceRuntimeException;
 import org.complitex.common.strategy.*;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.AttributeUtil;
@@ -477,7 +478,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
             Long serviceAttributeId = serviceId != null ? userOrganization.getAttributes(SERVICE).stream()
                     .filter(a -> serviceId.equals(a.getValueId()))
                     .findAny()
-                    .orElseThrow(() -> new IllegalArgumentException("dataSource not found"))
+                    .orElseThrow(() -> new ServiceRuntimeException("dataSource not found"))
                     .getAttributeId() : 1L;
 
             Long billingId = userOrganization.getAttribute(BILLING, serviceAttributeId).getValueId();
@@ -485,11 +486,11 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
             if(billingId != null){
                 return billingId;
             }else {
-                throw new IllegalArgumentException("МН не найдет для организации " +
+                throw new ServiceRuntimeException("МН не найдет для организации {0}",
                         userOrganization.getStringValue(OrganizationStrategy.NAME));
             }
         }else {
-            throw new IllegalArgumentException("Организация не найдена по идентификатору " + userOrganizationId);
+            throw new ServiceRuntimeException("Организация не найдена по идентификатору {0}", userOrganizationId);
         }
     }
 

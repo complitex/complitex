@@ -6,6 +6,7 @@ import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.StringCulture;
+import org.complitex.common.service.exception.ServiceRuntimeException;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
@@ -286,7 +287,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
         if (serviceProviderId != null){
             return getDomainObject(serviceProviderId).getStringValue(OsznOrganizationStrategy.CODE);
         }else {
-            throw new IllegalArgumentException("ПУ не найден по ЕДРПОУ " + edrpou);
+            throw new ServiceRuntimeException("ПУ не найден по ЕДРПОУ {0}", edrpou);
         }
     }
 }

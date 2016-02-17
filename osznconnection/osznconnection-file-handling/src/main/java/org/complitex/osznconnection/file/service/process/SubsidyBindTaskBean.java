@@ -5,6 +5,7 @@ import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.exception.ServiceRuntimeException;
 import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.osznconnection.file.Module;
@@ -118,16 +119,22 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
                     userTransaction.begin();
                     bind(subsidy, updatePuAccount);
                     userTransaction.commit();
-                } catch (Exception e) {
-                    log.error("The subsidy item ( id = " + subsidy.getId() + ") was bound with error: ", e);
-
+                } catch (ServiceRuntimeException e){
                     try {
                         userTransaction.rollback();
                     } catch (SystemException e1) {
                         log.error("Couldn't rollback transaction for binding subsidy item.", e1);
                     }
 
-                    throw new BindException(e, false, subsidyFile);
+                    throw new BindException(e, true, subsidyFile);
+                } catch (Exception e) {
+                    try {
+                        userTransaction.rollback();
+                    } catch (SystemException e1) {
+                        log.error("Couldn't rollback transaction for binding subsidy item.", e1);
+                    }
+
+                    log.error("The subsidy item ( id = " + subsidy.getId() + ") was bound with error: ", e);
                 }
             }
         }

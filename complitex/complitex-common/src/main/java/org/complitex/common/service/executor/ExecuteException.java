@@ -8,6 +8,7 @@ import org.complitex.common.service.exception.AbstractException;
  */
 public class ExecuteException extends AbstractException {
     private boolean warn = false;
+    private boolean skipTrace = false;
 
     public ExecuteException(Throwable cause, String pattern, Object... arguments) {
         super(cause, pattern, arguments);
@@ -29,5 +30,15 @@ public class ExecuteException extends AbstractException {
 
     public boolean isWarn() {
         return warn;
+    }
+
+    public boolean isSkipTrace() {
+        return skipTrace;
+    }
+
+    public ExecuteException setSkipTrace(boolean skipTrace) {
+        this.skipTrace = skipTrace;
+
+        return this;
     }
 }
