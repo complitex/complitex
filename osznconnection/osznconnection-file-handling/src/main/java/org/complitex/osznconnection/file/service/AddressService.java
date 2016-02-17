@@ -179,69 +179,65 @@ public class AddressService extends AbstractBean {
             }
 
             if (streetNames.size() == 1) { //нашли внутренее название улицы
-                String streetName = Lists.newArrayList(streetNames).get(0);
+                for(String streetName : streetNames){
+                    //находим ids улиц по внутреннему названию
+                    List<Long> streetIds = streetStrategy.getStreetIds(request.getCityId(),
+                            request.getStreetTypeId(), streetName);
 
-                //находим ids улиц по внутреннему названию
-                List<Long> streetIds = streetStrategy.getStreetIds(request.getCityId(),
-                        request.getStreetTypeId(), streetName);
-
-                if (streetIds.size() == 1) { //нашли ровно одну улицу
-                    Long streetObjectId = streetIds.get(0);
-                    request.setStreetId(streetObjectId);
-
-                    DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
-                    request.setStreetTypeId(streetStrategy.getStreetType(streetObject));
-
-                    //перейти к обработке дома
-                } else if (streetIds.size() > 1) { // нашли больше одной улицы
-                    //пытаемся найти по району
-                    streetIds = streetStrategy.getStreetIdsByDistrict(request.getCityId(),
-                            request.getStreet(), osznId);
-
-                    if (streetIds.size() == 1) { //нашли ровно одну улицу по району
+                    if (streetIds.size() == 1) { //нашли ровно одну улицу
                         Long streetObjectId = streetIds.get(0);
                         request.setStreetId(streetObjectId);
-
 
                         DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
                         request.setStreetTypeId(streetStrategy.getStreetType(streetObject));
 
                         //перейти к обработке дома
-                    } else {
-                        // пытаемся искать дополнительно по номеру и корпусу дома
-                        streetIds = streetStrategy.getStreetObjectIdsByBuilding(request.getCityId(), streetName,
-                                request.getBuildingNumber(), request.getBuildingCorp());
+                    } else if (streetIds.size() > 1) { // нашли больше одной улицы
+                        //пытаемся найти по району
+                        streetIds = streetStrategy.getStreetIdsByDistrict(request.getCityId(), request.getStreet(), osznId);
 
-                        if (streetIds.size() == 1) { //нашли ровно одну улицу с заданным номером и корпусом дома
+                        if (streetIds.size() == 1) { //нашли ровно одну улицу по району
                             Long streetObjectId = streetIds.get(0);
+
                             request.setStreetId(streetObjectId);
+                            request.setStreetTypeId(streetStrategy.getStreetType(streetObjectId));
 
-                            DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
-                            request.setStreetTypeId(streetStrategy.getStreetType(streetObject));
+                            //перейти к обработке дома
+                        } else {
+                            // пытаемся искать дополнительно по номеру и корпусу дома
+                            streetIds = streetStrategy.getStreetObjectIdsByBuilding(request.getCityId(), streetName,
+                                    request.getBuildingNumber(), request.getBuildingCorp());
 
-                            //проставить дом для payment и выйти
-                            List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(request.getCityId(),
-                                    streetObjectId,request.getBuildingNumber(),request.getBuildingCorp());
+                            if (streetIds.size() == 1) { //нашли ровно одну улицу с заданным номером и корпусом дома
+                                Long streetObjectId = streetIds.get(0);
 
-                            if (buildingIds.size() == 1) {
-                                request.setBuildingId(buildingIds.get(0));
-                            } else {
-                                throw new IllegalStateException("Building id was not found.");
+                                request.setStreetId(streetObjectId);
+                                request.setStreetTypeId(streetStrategy.getStreetType(streetObjectId));
+
+                                //проставить дом для payment и выйти
+                                List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(request.getCityId(),
+                                        streetObjectId,request.getBuildingNumber(),request.getBuildingCorp());
+
+                                if (buildingIds.size() == 1) {
+                                    request.setBuildingId(buildingIds.get(0));
+                                } else {
+                                    throw new IllegalStateException("Building id was not found.");
+                                }
+
+                                request.setStatus(RequestStatus.CITY_UNRESOLVED);
+
+                                return;
+                            } else { // по доп. информации, состоящей из номера и корпуса дома, не смогли однозначно определить улицу
+
+                                request.setStreetId(null);
+                                request.setBuildingId(null);
+                                request.setStatus(RequestStatus.STREET_AND_BUILDING_UNRESOLVED_LOCALLY);
+                                return;
                             }
-
-                            request.setStatus(RequestStatus.CITY_UNRESOLVED);
-
-                            return;
-                        } else { // по доп. информации, состоящей из номера и корпуса дома, не смогли однозначно определить улицу
-
-                            request.setStreetId(null);
-                            request.setBuildingId(null);
-                            request.setStatus(RequestStatus.STREET_AND_BUILDING_UNRESOLVED_LOCALLY);
-                            return;
                         }
+                    } else {
+                        throw new IllegalStateException("Street name `" + streetName + "` was not found.");
                     }
-                } else {
-                    throw new IllegalStateException("Street name `" + streetName + "` was not found.");
                 }
             } else {
                 throw new IllegalStateException("Street `" + request.getStreet() +
