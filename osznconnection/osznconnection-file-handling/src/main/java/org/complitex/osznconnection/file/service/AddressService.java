@@ -161,9 +161,11 @@ public class AddressService extends AbstractBean {
         if (streetCorrections.size() == 1){
             StreetCorrection streetCorrection = streetCorrections.get(0);
 
-            request.setCityId(streetCorrection.getCityId());
-            request.setStreetTypeId(streetCorrection.getStreetTypeId());
+            DomainObject street = streetStrategy.getDomainObject(streetCorrection.getObjectId());
+
             request.setStreetId(streetCorrection.getObjectId());
+            request.setStreetTypeId(streetStrategy.getStreetType(street));
+            request.setCityId(street.getParentId());
         }else if (streetCorrections.size() > 1) {
             //сформируем множество названий
             Set<String> streetNames = Sets.newHashSet();
