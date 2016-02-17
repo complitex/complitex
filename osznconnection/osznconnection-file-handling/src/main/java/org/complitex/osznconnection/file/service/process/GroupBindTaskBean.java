@@ -32,6 +32,7 @@ import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.PaymentDBF.OWN_NUM_SR;
 import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS;
+import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_LOCAL_STREET_CORRECTION;
 import static org.complitex.osznconnection.file.entity.RequestStatus.STREET_AND_BUILDING_UNRESOLVED_LOCALLY;
 
 /**
@@ -197,7 +198,7 @@ public class GroupBindTaskBean implements ITaskBean {
         }
 
         // Соответствие для дома не может быть установлено
-        if (STREET_AND_BUILDING_UNRESOLVED_LOCALLY.equals(payment.getStatus())){
+        if (STREET_AND_BUILDING_UNRESOLVED_LOCALLY.equals(payment.getStatus()) || MORE_ONE_LOCAL_STREET_CORRECTION.equals(payment.getStatus())){
             personAccountService.forceResolveAccountNumber(payment, addressService.resolveOutgoingDistrict(
                     payment.getOrganizationId(), payment.getUserOrganizationId()), payment.getStringField(PaymentDBF.OWN_NUM_SR));
 
