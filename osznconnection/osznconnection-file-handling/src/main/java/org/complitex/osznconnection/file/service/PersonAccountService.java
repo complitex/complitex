@@ -151,7 +151,6 @@ public class PersonAccountService extends AbstractBean {
 
                         request.setAccountNumber(detail.getAccCode());
                         request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
-                        save(request, accountNumber);
                     }
                 }else if (accountDetails.size() > 1){
                     request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
@@ -159,8 +158,6 @@ public class PersonAccountService extends AbstractBean {
             }
         } catch (UnknownAccountNumberTypeException e) {
             log.error("error forceResolveAccountNumber", e);
-        } catch (MoreOneAccountException e) {
-            request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
         }
     }
 
