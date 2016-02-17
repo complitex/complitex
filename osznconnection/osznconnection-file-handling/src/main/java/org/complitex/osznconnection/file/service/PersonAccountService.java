@@ -59,12 +59,16 @@ public class PersonAccountService extends AbstractBean {
     @EJB
     private OsznOrganizationStrategy organizationStrategy;
 
-    public String getLocalAccountNumber(AbstractAccountRequest request, String accountNumber)
+    public String getLocalAccountNumber(AbstractAccountRequest request, String accountNumber) throws MoreOneAccountException {
+        return getLocalAccountNumber(request, accountNumber, false);
+    }
+
+    public String getLocalAccountNumber(AbstractAccountRequest request, String accountNumber, boolean useAddressNames)
             throws MoreOneAccountException {
         Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
 
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(new PersonAccount(request,
-                accountNumber, billingId, false)));
+                accountNumber, billingId, useAddressNames)));
 
         if (personAccounts.size() == 1){
             return personAccounts.get(0).getAccountNumber();
@@ -75,12 +79,12 @@ public class PersonAccountService extends AbstractBean {
         return null;
     }
 
-    public void save(AbstractAccountRequest request, String accountNumber)
-            throws MoreOneAccountException {
+    public void save(AbstractAccountRequest request, String accountNumber) throws MoreOneAccountException {
         Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
 
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(new PersonAccount(request,
                 accountNumber, billingId, false)));
+
         if (personAccounts.isEmpty()){
             personAccountBean.save(new PersonAccount(request, accountNumber, billingId, true));
         }else if (personAccounts.size() == 1){
@@ -133,6 +137,25 @@ public class PersonAccountService extends AbstractBean {
 
     public void forceResolveAccountNumber(AbstractAccountRequest request, String district, String accountNumber) throws DBException{
         try {
+            //resolve local account
+            String localAccountNumber;
+
+            try {
+                localAccountNumber = getLocalAccountNumber(request, accountNumber, true);
+            } catch (MoreOneAccountException e) {
+                request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
+
+                return;
+            }
+
+            if (localAccountNumber != null) {
+                request.setAccountNumber(localAccountNumber);
+                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+
+                return;
+            }
+
+            //resolve remote account
             List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(request, district,
                     accountNumber, request.getDate());
 
