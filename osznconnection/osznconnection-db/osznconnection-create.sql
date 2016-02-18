@@ -224,7 +224,7 @@ CREATE TABLE `payment` (
 
     `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Код статуса. См. таблицу status_description и класс RequestStatus',
 
-    `OWN_NUM` VARCHAR(15) COMMENT 'Номер дела',
+    `OWN_NUM` BIGINT(15) COMMENT 'Номер дела',
     `REE_NUM` INTEGER(2) COMMENT 'Номер реестра',
     `OPP` VARCHAR(8) COMMENT 'Признаки наличия услуг',
 	`NUMB` INTEGER(2) COMMENT 'Общее число зарегистрированных',
@@ -317,7 +317,7 @@ CREATE TABLE `benefit` (
     `account_number` VARCHAR(100) NULL COMMENT 'Номер счета',
     `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Код статуса. См. таблицу status_description и класс RequestStatus',
 
-	`OWN_NUM` VARCHAR(15) COMMENT 'Номер дела',
+	`OWN_NUM` BIGINT(15) COMMENT 'Номер дела',
 	`REE_NUM` INTEGER(2) COMMENT 'Номер реестра',
 	`OWN_NUM_SR` VARCHAR(15) COMMENT 'Лицевой счет в обслуж. организации',
 	`FAM_NUM` INTEGER(2) COMMENT 'Номер члена семьи',
