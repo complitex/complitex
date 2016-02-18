@@ -16,6 +16,7 @@ import org.complitex.osznconnection.file.service.exception.CanceledByUserExcepti
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +27,10 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -57,6 +59,11 @@ public class GroupFillTaskBean implements ITaskBean {
     @EJB
     private ServiceProviderAdapter adapter;
 
+    @EJB
+    private OsznOrganizationStrategy organizationStrategy;
+
+    private Set<Long> allTypes = LongStream.range(1,9).collect(HashSet::new, HashSet::add, HashSet::addAll);
+
     @Override
     public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
         RequestFileGroup group = (RequestFileGroup) executorObject;
@@ -71,7 +78,7 @@ public class GroupFillTaskBean implements ITaskBean {
         requestFileGroupBean.save(group);
 
         //очищаем колонки которые заполняются во время обработки для записей в таблицах payment и benefit
-//        paymentBean.clearBeforeProcessing(group.getPaymentFile().getId(), getServiceProviderTypeIds(billingContexts));
+        paymentBean.clearBeforeProcessing(group.getPaymentFile().getId(), allTypes);
         benefitBean.clearBeforeProcessing(group.getBenefitFile().getId());
 
         //обработка файла payment
@@ -134,22 +141,24 @@ public class GroupFillTaskBean implements ITaskBean {
         }
 
         final List<Benefit> benefits = benefitBean.findByOZN(payment);
+        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(payment.getUserOrganizationId());
 
-//        for (BillingContext billingContext : billingContexts) { todo process payments
-//            adapter.processPaymentAndBenefit(billingContext, payment, benefits);
-//
-//            /* если payment обработан некорректно текущим модулем начислений, то прерываем обработку данной записи
-//             * оставшимися модулями.
-//             */
+
+//        for (BillingContext billingContext : billingContexts) {
+            adapter.processPaymentAndBenefit(dataSource, allTypes, payment, benefits);
+
+            /* если payment обработан некорректно текущим модулем начислений, то прерываем обработку данной записи
+             * оставшимися модулями.
+             */
 //            if (payment.getStatus() != RequestStatus.PROCESSED) {
 //                break;
 //            }
 //        }
-//
-//        paymentBean.update(payment, getServiceProviderTypeIds(billingContexts));
-//        for (Benefit benefit : benefits) {
-//            benefitBean.populateBenefit(benefit);
-//        }
+
+        paymentBean.update(payment, allTypes);
+        for (Benefit benefit : benefits) {
+            benefitBean.populateBenefit(benefit);
+        }
     }
 
     /**
