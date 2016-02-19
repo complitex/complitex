@@ -307,12 +307,6 @@ public class PaymentBean extends AbstractRequestBean {
                     dat1Set.add((Date) p.getField(PaymentDBF.DAT1));
                 } else if (frog instanceof BigDecimal && ((BigDecimal) frog).compareTo(BigDecimal.ZERO) > 0) {
                     dat1Set.add((Date) p.getField(PaymentDBF.DAT1));
-                } else {
-                    throw new IllegalStateException("Value of payment's field `FROG` is not numeric value. "
-                            + "Payment id: " + p.getId() + ", value of field `FROG`: '" + frog.toString()
-                            + "', type of field `FROG`: " + frog.getClass()
-                            + ", payment account number: '" + accountNumber
-                            + "', benefit file id: '" + benefitFileId + "'.");
                 }
             }
         }
