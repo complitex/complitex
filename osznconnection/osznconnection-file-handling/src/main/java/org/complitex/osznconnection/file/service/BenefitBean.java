@@ -171,7 +171,7 @@ public class BenefitBean extends AbstractRequestBean {
      * @return кол-во необработанных записей
      */
     private int unprocessedCount(long fileId) {
-        return countByFile(fileId, RequestStatus.unprocessedStatuses());
+        return countByFile(fileId, RequestStatus.UNPROCESSED_SET_STATUSES);
     }
 
     /**
@@ -218,8 +218,10 @@ public class BenefitBean extends AbstractRequestBean {
     @SuppressWarnings("unchecked")
     public List<Benefit> findByAccountNumber(String accountNumber, long fileId) {
         Map<String, Object> params = Maps.newHashMap();
+
         params.put("fileId", fileId);
         params.put("accountNumber", accountNumber);
+
         return sqlSession().selectList(MAPPING_NAMESPACE + ".findByAccountNumber", params);
     }
 

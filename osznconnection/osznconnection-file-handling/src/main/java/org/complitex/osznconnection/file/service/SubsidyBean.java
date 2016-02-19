@@ -97,7 +97,7 @@ public class SubsidyBean extends AbstractRequestBean {
     }
 
     public boolean isSubsidyFileFilled(Long requestFileId){
-        return countByFile(requestFileId, RequestStatus.unprocessedStatuses()) == 0;
+        return countByFile(requestFileId, RequestStatus.UNPROCESSED_SET_STATUSES) == 0;
     }
 
     private int countByFile(long fileId, Set<RequestStatus> statuses) {

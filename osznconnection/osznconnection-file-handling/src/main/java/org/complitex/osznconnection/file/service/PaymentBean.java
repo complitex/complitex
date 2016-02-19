@@ -187,7 +187,7 @@ public class PaymentBean extends AbstractRequestBean {
      * @return кол-во необработанных записей
      */
     private int unprocessedCount(long fileId) {
-        return countByFile(fileId, RequestStatus.unprocessedStatuses());
+        return countByFile(fileId, RequestStatus.UNPROCESSED_SET_STATUSES);
     }
 
     /**
@@ -196,7 +196,7 @@ public class PaymentBean extends AbstractRequestBean {
      * @param statuses statuses
      * @return кол-во записей со статусами из списка statuses
      */
-    private int countByFile(long fileId, Set<RequestStatus> statuses) {
+    public int countByFile(long fileId, Set<RequestStatus> statuses) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("requestFileId", fileId);
         params.put("statuses", statuses);

@@ -154,7 +154,7 @@ public class ActualPaymentBean extends AbstractRequestBean {
 
     //todo а не проще просчитать записи которые PROCESSED?
     private int unprocessedCount(long fileId) {
-        return countByFile(fileId, RequestStatus.unprocessedStatuses());
+        return countByFile(fileId, RequestStatus.UNPROCESSED_SET_STATUSES);
     }
 
     private int countByFile(long fileId, Set<RequestStatus> statuses) {

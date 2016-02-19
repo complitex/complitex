@@ -31,7 +31,7 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
     private OsznOrganizationStrategy organizationStrategy;
 
 
-    public PaymentLookupPanel(String id, long userOrganizationId, Component... toUpdate) {
+    public PaymentLookupPanel(String id, Long userOrganizationId, Component... toUpdate) {
         super(id, userOrganizationId, toUpdate);
     }
 

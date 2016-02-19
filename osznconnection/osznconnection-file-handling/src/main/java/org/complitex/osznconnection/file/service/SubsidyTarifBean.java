@@ -48,12 +48,14 @@ public class SubsidyTarifBean extends AbstractBean {
      * @return Code
      */
     public String getCode2(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service) {
-        final RequestFileDescription tarifDescription = requestFileDescriptionBean.getFileDescription(SUBSIDY_TARIF);
+        RequestFileDescription tarifDescription = requestFileDescriptionBean.getFileDescription(SUBSIDY_TARIF);
+
         Map<String, Object> params = Maps.newHashMap();
         params.put("T11_CS_UNI", tarifDescription.getTypeConverter().toString(T11_CS_UNI));
         params.put("osznId", osznId);
         params.put("userOrganizationId", userOrganizationId);
         params.put("service", service);
+
         return (String) sqlSession().selectOne(MAPPING_NAMESPACE + ".getCode2", params);
     }
 
@@ -65,12 +67,14 @@ public class SubsidyTarifBean extends AbstractBean {
      * @return Code
      */
     public String getCode3(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service) {
-        final RequestFileDescription tarifDescription = requestFileDescriptionBean.getFileDescription(SUBSIDY_TARIF);
+        RequestFileDescription tarifDescription = requestFileDescriptionBean.getFileDescription(SUBSIDY_TARIF);
+
         Map<String, Object> params = Maps.newHashMap();
         params.put("T11_CS_UNI", tarifDescription.getTypeConverter().toString(T11_CS_UNI));
         params.put("osznId", osznId);
         params.put("userOrganizationId", userOrganizationId);
         params.put("service", service);
+
         return (String) sqlSession().selectOne(MAPPING_NAMESPACE + ".getCode3", params);
     }
 }

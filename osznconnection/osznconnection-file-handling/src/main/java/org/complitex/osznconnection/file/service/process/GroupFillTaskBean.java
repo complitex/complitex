@@ -94,6 +94,15 @@ public class GroupFillTaskBean implements ITaskBean {
             throw new RuntimeException(e);
         }
 
+        //проверить все ли записи в payment файле обработались
+        if (!paymentBean.isPaymentFileProcessed(group.getPaymentFile().getId())) {
+            throw new FillException(true, group.getPaymentFile());
+        }
+
+        if (!benefitBean.isBenefitFileProcessed(group.getBenefitFile().getId())) {
+            throw new FillException(true, group.getBenefitFile());
+        }
+
         group.setStatus(RequestFileStatus.FILLED);
         requestFileGroupBean.save(group);
 
@@ -209,11 +218,6 @@ public class GroupFillTaskBean implements ITaskBean {
                 }
             }
         }
-
-        //проверить все ли записи в payment файле обработались
-        if (!paymentBean.isPaymentFileProcessed(paymentFile.getId())) {
-            throw new FillException(true, paymentFile);
-        }
     }
 
     /**
@@ -235,10 +239,13 @@ public class GroupFillTaskBean implements ITaskBean {
      */
     private void processBenefit(RequestFile benefitFile) throws FillException, DBException {
         List<String> allAccountNumbers = benefitBean.getAllAccountNumbers(benefitFile.getId());
+
         for (String accountNumber : allAccountNumbers) {
             List<Benefit> benefits = benefitBean.findByAccountNumber(accountNumber, benefitFile.getId());
+
             if (benefits != null && !benefits.isEmpty()) {
                 Date dat1 = paymentBean.findDat1(accountNumber, benefitFile.getId());
+
                 if (dat1 != null) {
                     adapter.processBenefit(dat1, benefits);
                 } else {
@@ -256,10 +263,6 @@ public class GroupFillTaskBean implements ITaskBean {
                     }
                 }
             }
-        }
-
-        if (!benefitBean.isBenefitFileProcessed(benefitFile.getId())) {
-            throw new FillException(true, benefitFile);
         }
     }
 }

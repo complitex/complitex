@@ -161,7 +161,7 @@ public enum RequestStatus implements IFixedIdType {
         return UNBOUND_STATUSES;
     }
     
-    private static final Set<RequestStatus> UNPROCESSED_SET_STATUSES = 
+    public static final Set<RequestStatus> UNPROCESSED_SET_STATUSES =
             Sets.immutableEnumSet(ImmutableList.<RequestStatus>builder().addAll(UNBOUND_STATUSES).
             add(ACCOUNT_NUMBER_RESOLVED).
             add(SUBSIDY_TARIF_CODE_NOT_FOUND).
@@ -169,13 +169,6 @@ public enum RequestStatus implements IFixedIdType {
             add(BENEFIT_NOT_FOUND).
             add(PROCESSING_INVALID_FORMAT).build());
 
-    /**
-     * Возвращает список статусов которые могут иметь необработанные записи.
-     * @return
-     */
-    public static Set<RequestStatus> unprocessedStatuses() {
-        return UNPROCESSED_SET_STATUSES;
-    }
 
     public boolean isNotIn(RequestStatus... statuses){
         for (RequestStatus s : statuses){
