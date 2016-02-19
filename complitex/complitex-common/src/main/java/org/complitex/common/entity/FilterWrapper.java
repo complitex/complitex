@@ -84,7 +84,7 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
     }
 
     public long getFirst() {
-        return first;
+        return first > 0 ? first : 0;
     }
 
     public void setFirst(long first) {

@@ -9,7 +9,7 @@
         select * from `service_correction` where `id` = #{id}
     </select>
 
-    <select id="selectSeviceCorrections" resultMap="serviceCorrectionResultMap"
+    <select id="selectServiceCorrections" resultMap="serviceCorrectionResultMap"
             parameterType="org.complitex.common.entity.FilterWrapper">
         select * from `service_correction` c
         <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionWhere"/>

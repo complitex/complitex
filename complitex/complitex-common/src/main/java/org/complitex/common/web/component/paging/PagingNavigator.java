@@ -189,7 +189,7 @@ public class PagingNavigator extends Panel {
 
         //new page form
         newPageForm = new Form<>("newPageForm");
-        IModel<String> newPageNumberModel = new Model<String>("1") {
+        IModel<String> newPageNumberModel = new Model<String>() {
 
             @Override
             public void setObject(String input) {
@@ -218,7 +218,7 @@ public class PagingNavigator extends Panel {
             }
         };
 
-        TextField<String> newPageNumber = new TextField<>("newPageNumber", newPageNumberModel);
+        TextField<String> newPageNumber = new TextField<>("newPageNumber", newPageNumberModel, String.class);
         AjaxButton goToPage = new AjaxButton("goToPage", newPageForm) {
 
             @Override

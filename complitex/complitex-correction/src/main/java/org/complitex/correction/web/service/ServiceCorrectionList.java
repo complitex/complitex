@@ -42,7 +42,7 @@ public class ServiceCorrectionList extends AbstractCorrectionList<ServiceCorrect
 
     @Override
     protected Class<? extends WebPage> getEditPage() {
-        return null;
+        return ServiceCorrectionEdit.class;
     }
 
     @Override
