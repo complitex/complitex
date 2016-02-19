@@ -363,8 +363,13 @@ public class ServiceProviderAdapter extends AbstractBean {
      * закрытый курсор как ошибку и выбрасывает исключение.
      *
      */
-    public void processPaymentAndBenefit(String dataSource, Set<Long> serviceIds, Payment payment,
+    public void processPaymentAndBenefit(Long billingId, Set<Long> serviceIds, Payment payment,
                                          List<Benefit> benefits) throws DBException {
+        if (payment.getAccountNumber() == null){
+            return;
+        }
+
+        String dataSource = organizationStrategy.getDataSource(billingId);
 
         /* Set OPP field */
         char[] opp = new char[8];
@@ -413,7 +418,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                                     ResourceUtil.getFormatString(RESOURCE_BUNDLE, "data_size_more_one", stringLocaleBean.getSystemLocale(),
                                             "GETCHARGEANDPARAMS", dataSource));
                         }
-                        processPaymentAndBenefitData(serviceIds, payment, benefits, data);
+                        processPaymentAndBenefitData(billingId, serviceIds, payment, benefits, data);
                     } else {
                         log.error("processPaymentAndBenefit. Result code is 1 but paymentAndBenefitData is null or empty. Payment id: {},"
                                         + "calculation center: {}",
@@ -452,10 +457,8 @@ public class ServiceProviderAdapter extends AbstractBean {
      * поэтому ситуации с не найденной коррекцией нет.
      *
      */
-    protected void processPaymentAndBenefitData(Set<Long> services, Payment payment,
+    protected void processPaymentAndBenefitData(Long billingId, Set<Long> services, Payment payment,
                                                 List<Benefit> benefits, PaymentAndBenefitData data) {
-        Long billingId = organizationStrategy.getBillingId(payment.getUserOrganizationId());
-
         //payment
         //fields common for all service provider types
         payment.setField(PaymentDBF.FROG, data.getPercent());
@@ -572,7 +575,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
             RequestWarning warning = new RequestWarning(payment.getId(), RequestFileType.PAYMENT, RequestWarningStatus.SUBSIDY_TARIF_NOT_FOUND);
             warning.addParameter(new RequestWarningParameter(0, errorTarif));
-//            warning.addParameter(new RequestWarningParameter(1, "organization", billingContext.getBillingId()));
+            warning.addParameter(new RequestWarningParameter(1, "organization", billingId));
             warningBean.save(warning);
 
             logBean.error(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.EDIT,

@@ -62,8 +62,6 @@ public class GroupFillTaskBean implements ITaskBean {
     @EJB
     private OsznOrganizationStrategy organizationStrategy;
 
-    private Set<Long> allTypes = LongStream.range(1,9).collect(HashSet::new, HashSet::add, HashSet::addAll);
-
     @Override
     public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
         RequestFileGroup group = (RequestFileGroup) executorObject;
@@ -78,7 +76,8 @@ public class GroupFillTaskBean implements ITaskBean {
         requestFileGroupBean.save(group);
 
         //очищаем колонки которые заполняются во время обработки для записей в таблицах payment и benefit
-        paymentBean.clearBeforeProcessing(group.getPaymentFile().getId(), allTypes);
+        paymentBean.clearBeforeProcessing(group.getPaymentFile().getId(),
+                organizationStrategy.getServices(group.getPaymentFile().getUserOrganizationId()));
         benefitBean.clearBeforeProcessing(group.getBenefitFile().getId());
 
         //обработка файла payment
@@ -136,26 +135,26 @@ public class GroupFillTaskBean implements ITaskBean {
      * @param payment Запись запроса начислений
      */
     private void process(Payment payment) throws DBException {
-        if (RequestStatus.unboundStatuses().contains(payment.getStatus())) {
-            return;
-        }
+//        if (RequestStatus.unboundStatuses().contains(payment.getStatus())) {
+//            return;
+//        }
 
-        final List<Benefit> benefits = benefitBean.findByOZN(payment);
-        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(payment.getUserOrganizationId());
+        List<Benefit> benefits = benefitBean.findByOZN(payment);
+        Map<Long, Set<Long>> billingServices = organizationStrategy.getBillingServices(payment.getUserOrganizationId());
 
-
-//        for (BillingContext billingContext : billingContexts) {
-            adapter.processPaymentAndBenefit(dataSource, allTypes, payment, benefits);
+        for (Long billingId : billingServices.keySet()) {
+            adapter.processPaymentAndBenefit(billingId, billingServices.get(billingId), payment, benefits);
 
             /* если payment обработан некорректно текущим модулем начислений, то прерываем обработку данной записи
              * оставшимися модулями.
              */
-//            if (payment.getStatus() != RequestStatus.PROCESSED) {
-//                break;
-//            }
-//        }
+            if (payment.getStatus() != RequestStatus.PROCESSED) {
+                break;
+            }
+        }
 
-        paymentBean.update(payment, allTypes);
+        paymentBean.update(payment, organizationStrategy.getServices(payment.getUserOrganizationId()));
+
         for (Benefit benefit : benefits) {
             benefitBean.populateBenefit(benefit);
         }

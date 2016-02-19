@@ -1,6 +1,7 @@
 package org.complitex.organization.strategy;
 
 import com.google.common.collect.*;
+import org.apache.commons.collections4.map.HashedMap;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.*;
@@ -492,6 +493,34 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         }else {
             throw new ServiceRuntimeException("Организация не найдена по идентификатору {0}", userOrganizationId);
         }
+    }
+
+    public Map<Long, Set<Long>> getBillingServices(Long userOrganizationId){
+        DomainObject userOrganization = getDomainObject(userOrganizationId);
+
+        List<Attribute> services = userOrganization.getAttributes(SERVICE);
+        List<Attribute> billing = userOrganization.getAttributes(BILLING);
+
+        Map<Long, Set<Long>> map = new HashedMap<>();
+
+        for (int i = 0; i < services.size(); ++i){
+            Long billingId = billing.get(i).getValueId();
+
+            Set<Long> serviceIds = map.get(billingId);
+
+            if (serviceIds == null){
+                serviceIds = new HashSet<>();
+                map.put(billingId, serviceIds);
+            }
+
+            serviceIds.add(services.get(i).getValueId());
+        }
+
+        return map;
+    }
+
+    public Set<Long> getServices(Long userOrganizationId){
+        return getDomainObject(userOrganizationId).getValueIds(SERVICE);
     }
 
     public Long getBillingId(Long userOrganizationId){

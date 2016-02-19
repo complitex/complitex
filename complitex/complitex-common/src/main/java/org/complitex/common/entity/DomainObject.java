@@ -87,6 +87,14 @@ public class DomainObject implements ILongId {
                 .collect(Collectors.toList());
     }
 
+    public Set<Long> getValueIds(Long attributeTypeId){
+        return attributes.stream()
+                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEndDate() == null)
+                .map(Attribute::getValueId)
+                .collect(Collectors.toSet());
+    }
+
     public void removeAttribute(Long attributeTypeId) {
         for (Iterator<Attribute> i = attributes.iterator(); i.hasNext();) {
             Attribute attribute = i.next();

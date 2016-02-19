@@ -29,11 +29,11 @@
         <plugin interceptor="org.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>
 
         <!--cache plugin-->
-        <plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheExecutorPlugin">
+        <!--<plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheExecutorPlugin">
             <property name="excludeNamespaces" value="
             org.complitex.common.entity.StringLocale,
             org.complitex.common.entity.Entity"/>
-        </plugin>
+        </plugin>-->
     </plugins>
 
     <environments default="local">
