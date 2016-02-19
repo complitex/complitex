@@ -137,6 +137,8 @@ public final class OwnershipCorrectionEdit extends FormTemplatePage {
 
             @Override
             protected void save() {
+                getCorrection().toUpperCase();
+
                 ownershipCorrectionBean.save(getCorrection());
             }
 
