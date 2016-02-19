@@ -98,19 +98,29 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
+    public void localResolveAccountNumber(AbstractAccountRequest request, String accountNumber){
+        String localAccountNumber;
+
+        try {
+            localAccountNumber = getLocalAccountNumber(request, accountNumber, true);
+        } catch (MoreOneAccountException e) {
+            request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
+
+            return;
+        }
+
+        if (localAccountNumber != null) {
+            request.setAccountNumber(localAccountNumber);
+            request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+        }
+    }
+
     public void resolveAccountNumber(AbstractAccountRequest request, String accountNumber,
                                      String servicingOrganizationCode,
                                      boolean updatePuAccount) throws DBException {
         try {
             //resolve local account
-            String localAccountNumber = getLocalAccountNumber(request, accountNumber);
-
-            if (localAccountNumber != null) {
-                request.setAccountNumber(localAccountNumber);
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
-
-                return;
-            }
+           localResolveAccountNumber(request, accountNumber);
 
             //resolve remote account
             AccountDetail accountDetail = serviceProviderAdapter.acquireAccountDetail(request,
@@ -138,22 +148,7 @@ public class PersonAccountService extends AbstractBean {
     public void forceResolveAccountNumber(AbstractAccountRequest request, String district, String accountNumber) throws DBException{
         try {
             //resolve local account
-            String localAccountNumber;
-
-            try {
-                localAccountNumber = getLocalAccountNumber(request, accountNumber, true);
-            } catch (MoreOneAccountException e) {
-                request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
-
-                return;
-            }
-
-            if (localAccountNumber != null) {
-                request.setAccountNumber(localAccountNumber);
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
-
-                return;
-            }
+            localResolveAccountNumber(request, accountNumber);
 
             //resolve remote account
             List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(request, district,

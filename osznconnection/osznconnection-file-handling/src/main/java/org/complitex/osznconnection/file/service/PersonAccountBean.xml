@@ -77,7 +77,7 @@
             </if>
             <if test="object.lastName != null">and pa.`last_name` = #{object.lastName}</if>
 
-            <if test="object.city != null">and pa.`city` like concat('%', #{object.city}, `%`)</if>
+            <if test="object.city != null">and pa.`city` like concat('%', #{object.city}, '%')</if>
             <if test="object.streetType != null">and pa.`street_type` like concat('%', #{object.streetType}, '%')</if>
             <if test="object.street != null">and pa.`street` like concat('%', #{object.street}, '%')</if>
             <if test="object.buildingNumber != null">and pa.`building_number` like concat('%', #{object.buildingNumber}, '%')</if>

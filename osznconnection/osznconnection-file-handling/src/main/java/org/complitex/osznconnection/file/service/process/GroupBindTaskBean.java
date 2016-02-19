@@ -31,9 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.PaymentDBF.OWN_NUM_SR;
-import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS;
-import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_LOCAL_STREET_CORRECTION;
-import static org.complitex.osznconnection.file.entity.RequestStatus.STREET_AND_BUILDING_UNRESOLVED_LOCALLY;
+import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -164,7 +162,7 @@ public class GroupBindTaskBean implements ITaskBean {
 
             if (!Strings.isEmpty(accountNumber)) {
                 payment.setAccountNumber(accountNumber);
-                payment.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+                payment.setStatus(ACCOUNT_NUMBER_RESOLVED);
                 benefitBean.updateAccountNumber(payment.getId(), accountNumber);
             }
         } catch (MoreOneAccountException e) {
@@ -191,20 +189,16 @@ public class GroupBindTaskBean implements ITaskBean {
                 personAccountService.forceResolveAccountNumber(payment, addressService.resolveOutgoingDistrict(
                         payment.getOrganizationId(), payment.getUserOrganizationId()), payment.getStringField(PaymentDBF.OWN_NUM_SR));
             }
-
-            if (payment.getStatus() == RequestStatus.ACCOUNT_NUMBER_RESOLVED) {
-                benefitBean.updateAccountNumber(payment.getId(), payment.getAccountNumber());
-            }
         }
 
         // Соответствие для дома не может быть установлено
         if (STREET_AND_BUILDING_UNRESOLVED_LOCALLY.equals(payment.getStatus()) || MORE_ONE_LOCAL_STREET_CORRECTION.equals(payment.getStatus())){
             personAccountService.forceResolveAccountNumber(payment, addressService.resolveOutgoingDistrict(
                     payment.getOrganizationId(), payment.getUserOrganizationId()), payment.getStringField(PaymentDBF.OWN_NUM_SR));
+        }
 
-            if (payment.getStatus() == RequestStatus.ACCOUNT_NUMBER_RESOLVED) {
-                benefitBean.updateAccountNumber(payment.getId(), payment.getAccountNumber());
-            }
+        if (ACCOUNT_NUMBER_RESOLVED.equals(payment.getStatus())) {
+            benefitBean.updateAccountNumber(payment.getId(), payment.getAccountNumber());
         }
 
         // обновляем payment запись
