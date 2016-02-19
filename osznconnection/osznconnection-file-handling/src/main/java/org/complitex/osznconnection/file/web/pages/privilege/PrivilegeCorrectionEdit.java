@@ -103,7 +103,7 @@ public final class PrivilegeCorrectionEdit extends FormTemplatePage {
 
             @Override
             protected boolean validateExistence() {
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
+                return false;
             }
 
             private DomainObject findPrivilege(long privilegeId) {
@@ -127,12 +127,10 @@ public final class PrivilegeCorrectionEdit extends FormTemplatePage {
 
             @Override
             protected void save() {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             protected void delete() {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override

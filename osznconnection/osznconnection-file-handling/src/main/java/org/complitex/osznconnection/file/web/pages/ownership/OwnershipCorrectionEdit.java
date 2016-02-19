@@ -142,7 +142,7 @@ public final class OwnershipCorrectionEdit extends FormTemplatePage {
 
             @Override
             protected void delete() {
-                ownershipCorrectionBean.delete(getCorrection().getId());
+                ownershipCorrectionBean.delete(getCorrection());
             }
 
             @Override

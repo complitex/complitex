@@ -22,6 +22,6 @@ public class PrivilegeCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return "privilege_correction";
+        return "privilege";
     }
 }

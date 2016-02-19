@@ -22,6 +22,6 @@ public class OwnershipCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return "ownership_correction";
+        return "ownership";
     }
 }

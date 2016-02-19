@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.osznconnection.file.entity.PrivilegeCorrection;
 
 import javax.ejb.Stateless;
@@ -14,10 +15,9 @@ import java.util.Map;
  * Класс для работы с коррекциями привилегий.
  * @author Artem
  */
-@Stateless(name = "PrivilegeCorrectionBean")
-public class PrivilegeCorrectionBean extends AbstractBean {
+@Stateless
+public class PrivilegeCorrectionBean extends CorrectionBean {
     private static final String NS = PrivilegeCorrectionBean.class.getName();
-    private static final String NS_CORRECTION = Correction.class.getName();
 
     /**
      * Найти id внутреннего объекта системы(привилегии) в таблице коррекций привилегий по коду коррекции(organizationCode) и организации(organizationId)
@@ -50,19 +50,6 @@ public class PrivilegeCorrectionBean extends AbstractBean {
             return codes.get(0);
         }
         return null;
-    }
-
-    
-    public void save(PrivilegeCorrection privilegeCorrection) {
-        if (privilegeCorrection.getId() == null) {
-            sqlSession().insert(NS_CORRECTION + ".insertCorrection", privilegeCorrection);
-        }else {
-            sqlSession().update(NS_CORRECTION + ".updateCorrection", privilegeCorrection);
-        }
-    }
-
-    public void delete(PrivilegeCorrection privilegeCorrection){
-        sqlSession().delete(NS_CORRECTION + ".deleteCorrection", privilegeCorrection);
     }
 
     public PrivilegeCorrection getPrivilegeCorrection(Long id){

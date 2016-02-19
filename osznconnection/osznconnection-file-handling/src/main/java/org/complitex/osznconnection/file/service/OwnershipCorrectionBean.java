@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.osznconnection.file.entity.OwnershipCorrection;
 
 import javax.ejb.Stateless;
@@ -15,9 +16,8 @@ import java.util.Map;
  * @author Artem
  */
 @Stateless
-public class OwnershipCorrectionBean extends AbstractBean {
+public class OwnershipCorrectionBean extends CorrectionBean {
     private static final String NS = OwnershipCorrectionBean.class.getName();
-    private static final String NS_CORRECTION = Correction.class.getName();
 
     /**
      * Найти id внутреннего объекта системы(форму власти) в таблице коррекций форм власти по коррекции(correction) и организации(organizationId)
@@ -54,18 +54,6 @@ public class OwnershipCorrectionBean extends AbstractBean {
 
     public OwnershipCorrection getOwnershipCorrection(Long id){
         return sqlSession().selectOne(NS + ".selectOwnershipCorrection", id);
-    }
-
-    public void save(OwnershipCorrection ownershipCorrection) {
-        if (ownershipCorrection.getId() == null) {
-            sqlSession().insert(NS_CORRECTION + ".insertCorrection", ownershipCorrection);
-        }else {
-            sqlSession().update(NS_CORRECTION + ".updateCorrection", ownershipCorrection);
-        }
-    }
-
-    public void delete(Long id){
-        sqlSession().delete(NS_CORRECTION + ".deleteCorrection", id);
     }
 
     public List<OwnershipCorrection> getOwnershipCorrections(FilterWrapper<OwnershipCorrection> filterWrapper){

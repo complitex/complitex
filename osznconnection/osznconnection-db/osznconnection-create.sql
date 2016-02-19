@@ -962,11 +962,13 @@ CREATE TABLE `ownership_correction` (
     `organization_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор организации',
     `user_organization_id` BIGINT(20),
     `module_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор внутренней организации',
+    `status` INTEGER COMMENT 'Статус',
     PRIMARY KEY (`id`),
     KEY `key_object_id` (`object_id`),
     KEY `key_correction` (`correction`),
     KEY `key_organization_id` (`organization_id`),
     KEY `key_user_organization_id` (`user_organization_id`),
+    KEY `key_status` (`status`),
     CONSTRAINT `fk_ownership_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`),
     CONSTRAINT `fk_ownership_correction` FOREIGN KEY (`object_id`) REFERENCES `ownership` (`object_id`),
     CONSTRAINT `fk_ownership_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`)
