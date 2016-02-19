@@ -86,24 +86,6 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
 
     protected abstract T newCorrection();
 
-    protected void setUpDisplayObject(List<? extends Correction> corrections, String entity) {
-        Long localeId = stringLocaleBean.convert(getLocale()).getId();
-
-        if (corrections != null && !corrections.isEmpty()) {
-            IStrategy strategy = strategyFactory.getStrategy(entity);
-            for (Correction correction : corrections) {
-                DomainObject object = strategy.getDomainObject(correction.getObjectId(), false);
-
-                if (object == null) { //объект доступен только для просмотра
-                    object = strategy.getDomainObject(correction.getObjectId(), true);
-                    correction.setEditable(false);
-                }
-
-                correction.setDisplayObject(strategy.displayDomainObject(object, stringLocaleBean.convert(stringLocaleBean.getLocaleObject(localeId))));
-            }
-        }
-    }
-
     protected abstract List<T> getCorrections(FilterWrapper<T> filterWrapper);
 
     protected abstract Long getCorrectionsCount(FilterWrapper<T> filterWrapper);
@@ -113,6 +95,18 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
     }
 
     protected String displayInternalObject(Correction correction) {
+        if (correction.getDisplayObject() == null){
+            IStrategy strategy = strategyFactory.getStrategy(entity);
+            DomainObject object = strategy.getDomainObject(correction.getObjectId(), false);
+
+            if (object == null) { //объект доступен только для просмотра
+                object = strategy.getDomainObject(correction.getObjectId(), true);
+                correction.setEditable(false);
+            }
+
+            correction.setDisplayObject(strategy.displayDomainObject(object, getLocale()));
+        }
+
         return correction.getDisplayObject();
     }
 
@@ -128,8 +122,6 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
         IModel<String> titleModel = getTitleModel();
         add(new Label("title", titleModel));
         add(new Label("label", titleModel));
-
-
 
         final WebMarkupContainer content = new WebMarkupContainer("content");
         content.setOutputMarkupId(true);

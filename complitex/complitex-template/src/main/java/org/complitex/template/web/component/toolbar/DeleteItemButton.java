@@ -13,7 +13,7 @@ public abstract class DeleteItemButton extends ToolbarButton {
     private static final String TITLE_KEY = "image.title.deleteItem";
 
     public DeleteItemButton(String id) {
-        super(id, new SharedResourceReference(IMAGE_SRC), TITLE_KEY, true);
+        super(id, new SharedResourceReference(IMAGE_SRC), TITLE_KEY, false);
     }
 
     public DeleteItemButton(String id, boolean useAjax) {

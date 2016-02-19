@@ -48,21 +48,20 @@ public final class OwnershipCorrectionEdit extends FormTemplatePage {
         OwnershipCorrectionEditPanel(String id, final Correction ownershipCorrection) {
             super(id);
 
-            final List<DomainObject> allOwnerships = ownershipStrategy.getAll();
+            List<? extends DomainObject> allOwnerships = ownershipStrategy.getAll();
+
             IModel<DomainObject> ownershipModel = new Model<DomainObject>() {
 
                 @Override
                 public DomainObject getObject() {
                     final Long ownershipId = ownershipCorrection.getObjectId();
-                    if (ownershipId != null) {
-                        return Iterables.find(allOwnerships, new Predicate<DomainObject>() {
 
-                            @Override
-                            public boolean apply(DomainObject object) {
-                                return object.getObjectId().equals(ownershipId);
-                            }
-                        });
+                    if (ownershipId != null) {
+                        return allOwnerships.stream()
+                                .filter(object -> object.getObjectId().equals(ownershipId))
+                                .findFirst().get();
                     }
+
                     return null;
                 }
 
@@ -137,9 +136,7 @@ public final class OwnershipCorrectionEdit extends FormTemplatePage {
 
             @Override
             protected void save() {
-                getCorrection().toUpperCase();
-
-                ownershipCorrectionBean.save(getCorrection());
+                ownershipCorrectionBean.save(getCorrection().toUpperCase());
             }
 
             @Override

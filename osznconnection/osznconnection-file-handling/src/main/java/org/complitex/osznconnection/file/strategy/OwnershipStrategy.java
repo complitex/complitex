@@ -65,11 +65,12 @@ public class OwnershipStrategy extends TemplateStrategy {
         return ResourceUtil.getString(RESOURCE_BUNDLE, getEntityName(), locale);
     }
 
-    public List<DomainObject> getAll() {
+    public List<? extends DomainObject> getAll() {
         DomainObjectFilter example = new DomainObjectFilter();
         example.setOrderByAttributeTypeId(NAME);
-        configureFilter(example, ImmutableMap.<String, Long>of(), null);
-        return (List<DomainObject>) getList(example);
+        configureFilter(example, ImmutableMap.of(), null);
+
+        return  getList(example);
     }
 
     @Override

@@ -46,10 +46,12 @@ public abstract class Correction implements Serializable {
         this.moduleId = moduleId;
     }
 
-    public void toUpperCase(){
+    public Correction toUpperCase(){
         if (correction != null) {
             correction = correction.toUpperCase();
         }
+
+        return this;
     }
 
     public Long getId() {

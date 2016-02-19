@@ -127,10 +127,12 @@ public final class PrivilegeCorrectionEdit extends FormTemplatePage {
 
             @Override
             protected void save() {
+                privilegeCorrectionBean.save(getCorrection().toUpperCase());
             }
 
             @Override
             protected void delete() {
+                privilegeCorrectionBean.delete(getCorrection());
             }
 
             @Override

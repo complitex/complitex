@@ -152,7 +152,7 @@ public abstract class AbstractConsumptionFileList extends TemplatePage{
                         consumptionFileUploadDialog.open(target);
                     }
                 },
-                new DeleteItemButton(id){
+                new DeleteItemButton(id, true){
                     @Override
                     protected void onClick(AjaxRequestTarget target) {
                         filteredDataTable.getCheckGroupModel().getObject().forEach(c -> {

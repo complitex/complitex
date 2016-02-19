@@ -189,7 +189,7 @@ public class PagingNavigator extends Panel {
 
         //new page form
         newPageForm = new Form<>("newPageForm");
-        IModel<String> newPageNumberModel = new Model<String>() {
+        IModel<String> newPageNumberModel = new Model<String>("1") {
 
             @Override
             public void setObject(String input) {
@@ -210,11 +210,14 @@ public class PagingNavigator extends Panel {
                             dataView.setCurrentPage(newPageNumber - 1);
                         }
 
-                        getSession().putPreference(page, CURRENT_PAGE, dataView.getCurrentPage(), true);
+                        if (page != null) {
+                            getSession().putPreference(page, CURRENT_PAGE, dataView.getCurrentPage(), true);
+                        }
                     }
                 }
             }
         };
+
         TextField<String> newPageNumber = new TextField<>("newPageNumber", newPageNumberModel);
         AjaxButton goToPage = new AjaxButton("goToPage", newPageForm) {
 
