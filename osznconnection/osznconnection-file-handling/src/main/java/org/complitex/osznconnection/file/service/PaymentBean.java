@@ -319,9 +319,7 @@ public class PaymentBean extends AbstractRequestBean {
 
         if (dat1Set.isEmpty()){
             return null;
-        }
-
-        if (dat1Set.size() == 1) {
+        }else if (dat1Set.size() == 1) {
             return dat1Set.iterator().next();
         } else {
             throw new IllegalStateException("Found more one payment's dat1 values.");
