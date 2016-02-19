@@ -32,7 +32,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
 import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS;
+import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -64,26 +66,33 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
     private ServiceProviderAdapter serviceProviderAdapter;
 
     public void bind(Subsidy subsidy, boolean updatePuAccount) throws DBException {
-        //resolve address
-        String city = subsidy.getCity();
+        String accountNumber = subsidy.getStringField(SubsidyDBF.RASH);
 
-        if (city == null || city.isEmpty()){
-            subsidy.setCity(configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY));
-        }
+        //resolve local account number
+        personAccountService.localResolveAccountNumber(subsidy, accountNumber, true);
 
-        addressService.resolveAddress(subsidy);
+        if (!ACCOUNT_NUMBER_RESOLVED.equals(subsidy.getStatus()) || !MORE_ONE_ACCOUNTS_LOCALLY.equals(subsidy.getStatus())){
+            //resolve address
+            String city = subsidy.getCity();
 
-        subsidy.setCity(city);
+            if (city == null || city.isEmpty()){
+                subsidy.setCity(configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY));
+            }
 
-        //resolve account number
-        if (subsidy.getStatus().isAddressResolved()){
-            personAccountService.resolveAccountNumber(subsidy, subsidy.getStringField(SubsidyDBF.RASH),
-                    subsidyService.getServiceProviderCode(subsidy.getRequestFileId()),
-                    updatePuAccount);
+            addressService.resolveAddress(subsidy);
 
-            if (MORE_ONE_ACCOUNTS.equals(subsidy.getStatus())){
-                personAccountService.forceResolveAccountNumber(subsidy, addressService.resolveOutgoingDistrict(
-                        subsidy.getOrganizationId(), subsidy.getUserOrganizationId()), subsidy.getStringField(SubsidyDBF.RASH));
+            subsidy.setCity(city);
+
+            //resolve account number
+            if (subsidy.getStatus().isAddressResolved()){
+                personAccountService.resolveAccountNumber(subsidy, accountNumber,
+                        subsidyService.getServiceProviderCode(subsidy.getRequestFileId()),
+                        updatePuAccount);
+
+                if (MORE_ONE_ACCOUNTS.equals(subsidy.getStatus())){
+                    personAccountService.forceResolveAccountNumber(subsidy, addressService.resolveOutgoingDistrict(
+                            subsidy.getOrganizationId(), subsidy.getUserOrganizationId()), accountNumber);
+                }
             }
         }
 

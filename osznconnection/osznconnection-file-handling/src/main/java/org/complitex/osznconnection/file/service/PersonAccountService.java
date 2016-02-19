@@ -98,12 +98,25 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
+    public void localResolveAccountNumber(AbstractAccountRequest request, String accountNumber, boolean useAddressNames){
+        try {
+            String localAccountNumber = getLocalAccountNumber(request, accountNumber, useAddressNames);
+
+            if (localAccountNumber != null) {
+                request.setAccountNumber(localAccountNumber);
+                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+            }
+        } catch (MoreOneAccountException e) {
+            request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
+        }
+    }
+
     public void resolveAccountNumber(AbstractAccountRequest request, String accountNumber,
                                      String servicingOrganizationCode,
                                      boolean updatePuAccount) throws DBException {
         try {
             //resolve local account
-            String localAccountNumber = getLocalAccountNumber(request, accountNumber);
+            String localAccountNumber = getLocalAccountNumber(request, accountNumber, false);
 
             if (localAccountNumber != null) {
                 request.setAccountNumber(localAccountNumber);
@@ -138,18 +151,11 @@ public class PersonAccountService extends AbstractBean {
     public void forceResolveAccountNumber(AbstractAccountRequest request, String district, String accountNumber) throws DBException{
         try {
             //resolve local account
-            try {
-                String localAccountNumber = getLocalAccountNumber(request, accountNumber, true);
+            String localAccountNumber = getLocalAccountNumber(request, accountNumber, true);
 
-                if (localAccountNumber != null) {
-                    request.setAccountNumber(localAccountNumber);
-                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
-
-                    return;
-                }
-
-            } catch (MoreOneAccountException e) {
-                request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
+            if (localAccountNumber != null) {
+                request.setAccountNumber(localAccountNumber);
+                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
                 return;
             }
@@ -173,6 +179,8 @@ public class PersonAccountService extends AbstractBean {
 
                         request.setAccountNumber(detail.getAccCode());
                         request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+
+                        save(request, accountNumber);
                     }
                 }else if (accountDetails.size() > 1){
                     request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
@@ -180,6 +188,8 @@ public class PersonAccountService extends AbstractBean {
             }
         } catch (UnknownAccountNumberTypeException e) {
             log.error("error forceResolveAccountNumber", e);
+        } catch (MoreOneAccountException e) {
+            request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
         }
     }
 
