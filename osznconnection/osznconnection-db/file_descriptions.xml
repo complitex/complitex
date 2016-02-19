@@ -302,9 +302,9 @@
 
     <file-description type="SUBSIDY_TARIF">
         <fields>
-            <field length="10" type="java.lang.String" name="T11_DATA_T"/>
-            <field length="10" type="java.lang.String" name="T11_DATA_E"/>
-            <field length="10" type="java.lang.String" name="T11_DATA_R"/>
+            <field length="10" type="java.util.Date" name="T11_DATA_T"/>
+            <field length="10" type="java.util.Date" name="T11_DATA_E"/>
+            <field length="10" type="java.util.Date" name="T11_DATA_R"/>
             <field length="3" type="java.lang.Integer" name="T11_MARK"/>
             <field length="6" type="java.lang.Integer" name="T11_TARN"/>
             <field length="3" type="java.lang.Integer" name="T11_CODE1"/>
