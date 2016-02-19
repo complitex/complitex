@@ -298,12 +298,14 @@ public class PaymentBean extends AbstractRequestBean {
                 ImmutableMap.of("accountNumber", accountNumber, "benefitFileId", benefitFileId));
 
         final Set<Date> dat1Set = Sets.newHashSet();
+
         for (Payment p : payments) {
             Object frog = p.getField(PaymentDBF.FROG);
+
             if (frog != null) {
-                if (frog instanceof Long && (Long) frog >= 0) {
+                if (frog instanceof Long && (Long) frog > 0) {
                     dat1Set.add((Date) p.getField(PaymentDBF.DAT1));
-                } else if (frog instanceof BigDecimal && ((BigDecimal) frog).compareTo(BigDecimal.ZERO) >= 0) {
+                } else if (frog instanceof BigDecimal && ((BigDecimal) frog).compareTo(BigDecimal.ZERO) > 0) {
                     dat1Set.add((Date) p.getField(PaymentDBF.DAT1));
                 } else {
                     throw new IllegalStateException("Value of payment's field `FROG` is not numeric value. "
@@ -313,6 +315,10 @@ public class PaymentBean extends AbstractRequestBean {
                             + "', benefit file id: '" + benefitFileId + "'.");
                 }
             }
+        }
+
+        if (dat1Set.isEmpty()){
+            return null;
         }
 
         if (dat1Set.size() == 1) {
