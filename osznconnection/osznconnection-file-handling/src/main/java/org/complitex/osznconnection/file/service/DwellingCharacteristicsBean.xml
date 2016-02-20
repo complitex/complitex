@@ -60,7 +60,7 @@
             `outgoing_city`, `outgoing_street`, `outgoing_street_type`, `outgoing_building_number`,
             `outgoing_building_corp`, `outgoing_apartment`, `status`, `date`,
             `last_name`, `first_name`, `middle_name`,
-            `city`
+            `city`,
             <foreach collection="list[0].dbfFields.keys" item="key">
                 `${key}`,
             </foreach>

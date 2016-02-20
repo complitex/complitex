@@ -357,7 +357,7 @@ INSERT INTO `request_file_field_description` VALUES (288,7,'T11_NRM_MA','java.ma
 INSERT INTO `request_file_field_description` VALUES (289,7,'T11_K_NADL','java.math.BigDecimal',19,10);
 INSERT INTO `request_file_field_description` VALUES (290,8,'COD','java.lang.Integer',4,NULL);
 INSERT INTO `request_file_field_description` VALUES (291,8,'CDPR','java.lang.Integer',12,NULL);
-INSERT INTO `request_file_field_description` VALUES (292,8,'NCARD','java.lang.Integer',7,NULL);
+INSERT INTO `request_file_field_description` VALUES (292,8,'NCARD','java.lang.Integer',10,NULL);
 INSERT INTO `request_file_field_description` VALUES (293,8,'IDCODE','java.lang.String',10,NULL);
 INSERT INTO `request_file_field_description` VALUES (294,8,'PASP','java.lang.String',14,NULL);
 INSERT INTO `request_file_field_description` VALUES (295,8,'FIO','java.lang.String',50,NULL);

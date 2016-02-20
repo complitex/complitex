@@ -487,6 +487,7 @@ public class AddressService extends AbstractBean {
     public void resolveAddress(Payment payment) {
         //разрешить адрес локально
         resolveLocalAddress(payment);
+
         //если адрес локально разрешен, разрешить адрес для ЦН.
         if (payment.getStatus().isAddressResolvedLocally()) {
             resolveOutgoingAddress(payment);

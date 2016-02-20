@@ -328,7 +328,7 @@
         <fields>
             <field length="4" type="java.lang.Integer" name="COD"/>
             <field length="12" type="java.lang.Integer" name="CDPR"/>
-            <field length="7" type="java.lang.Integer" name="NCARD"/>
+            <field length="10" type="java.lang.Integer" name="NCARD"/>
             <field length="10" type="java.lang.String" name="IDCODE"/>
             <field length="14" type="java.lang.String" name="PASP"/>
             <field length="50" type="java.lang.String" name="FIO"/>
