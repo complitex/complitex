@@ -190,18 +190,15 @@ public class GroupBindTaskBean implements ITaskBean {
             //resolve account number
             if (payment.getStatus().isAddressResolved()){
                 personAccountService.resolveAccountNumber(payment, accountNumber, null, updatePuAccount);
-
-                if (MORE_ONE_ACCOUNTS.equals(payment.getStatus())){
-                    personAccountService.forceResolveAccountNumber(payment, addressService.resolveOutgoingDistrict(
-                            payment.getOrganizationId(), payment.getUserOrganizationId()), accountNumber);
-                }
-            }else{
-                // Соответствие для дома не может быть установлено
-                if (STREET_AND_BUILDING_UNRESOLVED_LOCALLY.equals(payment.getStatus()) || MORE_ONE_LOCAL_STREET_CORRECTION.equals(payment.getStatus())){
-                    personAccountService.forceResolveAccountNumber(payment, addressService.resolveOutgoingDistrict(
-                            payment.getOrganizationId(), payment.getUserOrganizationId()), accountNumber);
-                }
+            }else if (MORE_ONE_LOCAL_STREET.equals(payment.getStatus())){
+                personAccountService.forceResolveAccountNumber(payment, addressService.resolveOutgoingDistrict(
+                        payment.getOrganizationId(), payment.getUserOrganizationId()), accountNumber);
             }
+        }
+
+        if (MORE_ONE_ACCOUNTS.equals(payment.getStatus())){
+            personAccountService.forceResolveAccountNumber(payment, addressService.resolveOutgoingDistrict(
+                    payment.getOrganizationId(), payment.getUserOrganizationId()), accountNumber);
         }
 
         if (ACCOUNT_NUMBER_RESOLVED.equals(payment.getStatus())) {

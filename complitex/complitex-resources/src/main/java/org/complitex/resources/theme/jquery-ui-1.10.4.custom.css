@@ -856,7 +856,7 @@ body .ui-tooltip {
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
 	border: 1px solid #aaaaaa;
-	background: #CBD2D8 url("images/ui-bg_highlight-soft_50_CBD2D8_1x100.png") 50% 50% repeat-x;
+	background: #CBD2D8 url("images/ui-bg_highlight-soft_50_cbd2d8_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
 	color: #007AAE;
 }

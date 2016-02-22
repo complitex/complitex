@@ -32,9 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
-import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS;
-import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
+import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -71,7 +69,7 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
         //resolve local account number
         personAccountService.localResolveAccountNumber(subsidy, accountNumber, true);
 
-        if (!ACCOUNT_NUMBER_RESOLVED.equals(subsidy.getStatus()) || !MORE_ONE_ACCOUNTS_LOCALLY.equals(subsidy.getStatus())){
+        if (!ACCOUNT_NUMBER_RESOLVED.equals(subsidy.getStatus()) && !MORE_ONE_ACCOUNTS_LOCALLY.equals(subsidy.getStatus())){
             //resolve address
             String city = subsidy.getCity();
 
@@ -88,11 +86,14 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
                 personAccountService.resolveAccountNumber(subsidy, accountNumber,
                         subsidyService.getServiceProviderCode(subsidy.getRequestFileId()),
                         updatePuAccount);
+            }else if (MORE_ONE_LOCAL_STREET.equals(subsidy.getStatus())){
+                personAccountService.forceResolveAccountNumber(subsidy, addressService.resolveOutgoingDistrict(
+                        subsidy.getOrganizationId(), subsidy.getUserOrganizationId()), accountNumber);
+            }
 
-                if (MORE_ONE_ACCOUNTS.equals(subsidy.getStatus())){
-                    personAccountService.forceResolveAccountNumber(subsidy, addressService.resolveOutgoingDistrict(
-                            subsidy.getOrganizationId(), subsidy.getUserOrganizationId()), accountNumber);
-                }
+            if (MORE_ONE_ACCOUNTS.equals(subsidy.getStatus())){
+                personAccountService.forceResolveAccountNumber(subsidy, addressService.resolveOutgoingDistrict(
+                        subsidy.getOrganizationId(), subsidy.getUserOrganizationId()), accountNumber);
             }
         }
 

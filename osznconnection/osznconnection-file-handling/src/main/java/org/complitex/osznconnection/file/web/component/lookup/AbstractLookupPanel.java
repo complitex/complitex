@@ -121,7 +121,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         //lookup by address
         addressSearchComponentState = new SearchComponentState();
         apartmentModel = new Model<>();
-        TextField<String> apartment = new TextField<>("apartment", apartmentModel);
+        TextField<String> apartment = new TextField<>("apartment", apartmentModel, String.class);
         apartment.setOutputMarkupId(true);
         apartment.add(new AjaxFormComponentUpdatingBehavior("change") {
 
@@ -218,7 +218,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
 
         //lookup by account number
         accountNumberModel = new Model<>();
-        TextField<String> accountNumber = new TextField<>("accountNumber", accountNumberModel);
+        TextField<String> accountNumber = new TextField<>("accountNumber", accountNumberModel, String.class);
         accountNumber.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
