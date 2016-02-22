@@ -181,6 +181,8 @@ public class PersonAccountService extends AbstractBean {
                         request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
                         save(request, accountNumber);
+                    }else {
+                        request.setStatus(RequestStatus.ACCOUNT_NUMBER_MISMATCH);
                     }
                 }else if (accountDetails.size() > 1){
                     request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
