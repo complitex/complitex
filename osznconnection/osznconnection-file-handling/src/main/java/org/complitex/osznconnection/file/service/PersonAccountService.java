@@ -200,11 +200,13 @@ public class PersonAccountService extends AbstractBean {
     public void updateAccountNumber(Payment payment, String accountNumber) {
         payment.setAccountNumber(accountNumber);
         payment.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+
         benefitBean.updateAccountNumber(payment.getId(), accountNumber);
         paymentBean.updateAccountNumber(payment);
 
         long paymentFileId = payment.getRequestFileId();
         long benefitFileId = requestFileGroupBean.getBenefitFileId(paymentFileId);
+
         if (benefitBean.isBenefitFileBound(benefitFileId) && paymentBean.isPaymentFileBound(paymentFileId)) {
             requestFileGroupBean.updateStatus(benefitFileId, RequestFileStatus.BOUND);
         }
