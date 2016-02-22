@@ -1,11 +1,13 @@
 package org.complitex.common.service.executor;
 
 import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.service.BroadcastService;
 import org.complitex.common.service.LogBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.*;
+import javax.enterprise.inject.spi.ProcessManagedBean;
 import java.util.Map;
 
 /**
@@ -18,7 +20,10 @@ public class AsyncTaskBean {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @EJB
-    protected LogBean logBean;
+    private LogBean logBean;
+
+    @EJB
+    private BroadcastService broadcastService;
 
     @Asynchronous
     public void execute(IExecutorObject object, ITaskBean task, ITaskListener listener, Map commandParameters){
@@ -35,6 +40,8 @@ public class AsyncTaskBean {
 
             listener.done(object, noSkip ? ITaskListener.STATUS.SUCCESS : ITaskListener.STATUS.SKIPPED);
         } catch (ExecuteException e) {
+            broadcastService.broadcast(getClass(), "error", e);
+
             object.setErrorMessage(e.getMessage());
 
             try {

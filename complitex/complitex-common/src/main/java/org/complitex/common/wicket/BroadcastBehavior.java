@@ -8,15 +8,15 @@ import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
  * @author inheaven on 18.06.2015 13:32.
  */
 public abstract class BroadcastBehavior extends WebSocketBehavior {
-    private Class<?> producer;
+    private Class<?>[] producers;
     private String key;
 
-    public BroadcastBehavior(Class producer) {
-        this.producer = producer;
+    public BroadcastBehavior(Class<?>... producers) {
+        this.producers = producers;
     }
 
     public BroadcastBehavior(Class producer, String key) {
-        this.producer = producer;
+        this.producers = new Class<?>[]{producer};
         this.key = key;
     }
 
@@ -25,11 +25,12 @@ public abstract class BroadcastBehavior extends WebSocketBehavior {
         if (message instanceof BroadcastPayload) {
             BroadcastPayload p = (BroadcastPayload) message;
 
-            if (producer.isAssignableFrom(p.getProducer()) && (key == null || key.equals(p.getKey()))) {
-                onBroadcast(handler, p.getKey(), p.getPayload());
+            for (Class<?> producer : producers) {
+                if (producer.isAssignableFrom(p.getProducer()) && (key == null || key.equals(p.getKey()))) {
+                    onBroadcast(handler, p.getKey(), p.getPayload());
+                }
             }
         }
-
     }
 
     protected abstract void onBroadcast(WebSocketRequestHandler handler, String key, Object payload);

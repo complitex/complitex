@@ -3,6 +3,7 @@ package org.complitex.osznconnection.file.service.process;
 import com.google.common.collect.ImmutableMap;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
+import org.complitex.common.service.BroadcastService;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.executor.ExecutorBean;
@@ -59,6 +60,9 @@ public class ProcessManagerBean {
 
     @EJB
     private SubsidyBean subsidyBean;
+
+    @EJB
+    private BroadcastService broadcastService;
 
     private Map<String, Map<ProcessType, Process>> processStatusMap = new ConcurrentHashMap<String, Map<ProcessType, Process>>();
 
@@ -239,7 +243,7 @@ public class ProcessManagerBean {
                     executorBean.executeNext(process);
                 }
             }
-        } catch (StorageNotFoundException e) {
+        } catch (Exception e) {
             process.preprocessError();
 
             log.error("Ошибка процесса загрузки файлов.", e);
@@ -375,10 +379,12 @@ public class ProcessManagerBean {
             }
 
             execute(LOAD_ACTUAL_PAYMENT, ActualPaymentLoadTaskBean.class, list, null, LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
-        } catch (StorageNotFoundException e) {
+        } catch (Exception e) {
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "error", e);
         }
     }
 
@@ -410,10 +416,12 @@ public class ProcessManagerBean {
             }
 
             execute(LOAD_SUBSIDY, SubsidyLoadTaskBean.class, list, null, LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
-        } catch (StorageNotFoundException e) {
+        } catch (Exception e) {
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "error", e);
         }
     }
 
@@ -457,10 +465,12 @@ public class ProcessManagerBean {
             }
 
             execute(LOAD_SUBSIDY_TARIF, SubsidyTarifLoadTaskBean.class, list, null, LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
-        } catch (StorageNotFoundException e) {
+        } catch (Exception e) {
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "error", e);
         }
     }
 
@@ -475,10 +485,12 @@ public class ProcessManagerBean {
 
             execute(LOAD_DWELLING_CHARACTERISTICS, DwellingCharacteristicsLoadTaskBean.class, list, null,
                     LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
-        } catch (StorageNotFoundException e) {
+        } catch (Exception e) {
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "error", e);
         }
     }
 
@@ -505,10 +517,12 @@ public class ProcessManagerBean {
 
             execute(LOAD_FACILITY_SERVICE_TYPE, FacilityServiceTypeLoadTaskBean.class, list, null,
                     LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
-        } catch (StorageNotFoundException e) {
+        } catch (Exception e) {
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "error", e);
         }
     }
 

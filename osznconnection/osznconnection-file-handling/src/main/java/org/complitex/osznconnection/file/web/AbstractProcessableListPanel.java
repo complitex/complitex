@@ -19,11 +19,14 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
+import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.AbstractFilter;
+import org.complitex.common.service.executor.AsyncTaskBean;
 import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.DatePicker;
 import org.complitex.common.web.component.MonthDropDownChoice;
@@ -32,6 +35,7 @@ import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.organization.OrganizationPicker;
+import org.complitex.common.wicket.BroadcastBehavior;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
@@ -73,9 +77,9 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
     private ProcessManagerBean processManagerBean;
     private RequestFileLoadPanel requestFileLoadPanel;
     private RequestFileHistoryPanel requestFileHistoryPanel;
-    private final ModificationManager modificationManager;
-    private final ProcessingManager processingManager;
-    private final MessagesManager messagesManager;
+    private ModificationManager modificationManager;
+    private ProcessingManager processingManager;
+    private MessagesManager messagesManager;
     private Form<F> form;
     private ProcessDataView<M> dataView;
     private DataProvider<M> dataProvider;
@@ -91,32 +95,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
     public AbstractProcessableListPanel(String id) {
         super(id);
 
-        add(new DataRowHoverBehavior());
 
-        this.modificationManager = new ModificationManager(this, hasFieldDescription());
-
-        this.processingManager = new ProcessingManager(getLoadProcessType(), getBindProcessType(),
-                getFillProcessType(),getSaveProcessType());
-
-        this.messagesManager = new MessagesManager(this) {
-
-            @Override
-            public void showMessages(AjaxRequestTarget target) {
-                addMessages("load_process", target, getLoadProcessType(), LOADED, LOAD_ERROR);
-                addMessages("bind_process", target, getBindProcessType(), BOUND, BIND_ERROR);
-                addMessages("fill_process", target, getFillProcessType(), FILLED, FILL_ERROR);
-                addMessages("save_process", target, getSaveProcessType(), SAVED, SAVE_ERROR);
-                addMessages("export_process", target, getExportProcessType(), EXPORTED, EXPORT_ERROR);
-
-                addCompetedMessages("load_process", getLoadProcessType());
-                addCompetedMessages("bind_process", getBindProcessType());
-                addCompetedMessages("fill_process", getFillProcessType());
-                addCompetedMessages("save_process", getSaveProcessType());
-                addCompetedMessages("export_process", getExportProcessType());
-
-                AbstractProcessableListPanel.this.showMessages(target);
-            }
-        };
 
         init();
     }
@@ -256,6 +235,33 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
     }
 
     private void init() {
+        add(new DataRowHoverBehavior());
+
+        modificationManager = new ModificationManager(this, hasFieldDescription());
+
+        processingManager = new ProcessingManager(getLoadProcessType(), getBindProcessType(),
+                getFillProcessType(),getSaveProcessType());
+
+        messagesManager = new MessagesManager(this) {
+
+            @Override
+            public void showMessages(AjaxRequestTarget target) {
+                addMessages("load_process", target, getLoadProcessType(), LOADED, LOAD_ERROR);
+                addMessages("bind_process", target, getBindProcessType(), BOUND, BIND_ERROR);
+                addMessages("fill_process", target, getFillProcessType(), FILLED, FILL_ERROR);
+                addMessages("save_process", target, getSaveProcessType(), SAVED, SAVE_ERROR);
+                addMessages("export_process", target, getExportProcessType(), EXPORTED, EXPORT_ERROR);
+
+                addCompetedMessages("load_process", getLoadProcessType());
+                addCompetedMessages("bind_process", getBindProcessType());
+                addCompetedMessages("fill_process", getFillProcessType());
+                addCompetedMessages("save_process", getSaveProcessType());
+                addCompetedMessages("export_process", getExportProcessType());
+
+                AbstractProcessableListPanel.this.showMessages(target);
+            }
+        };
+
         messages = new AjaxFeedbackPanel("messages");
         add(messages);
 
@@ -647,6 +653,16 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
 
         //Запуск таймера
         timerManager.startTimer();
+
+        add(new BroadcastBehavior(ProcessManagerBean.class, AsyncTaskBean.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                if ("error".equals(key)){
+                    error(ExceptionUtil.getCauseMessage((Exception) payload, true));
+                    handler.add(messages);
+                }
+            }
+        });
     }
 
     private Boolean getSessionParameter(Enum<?> key) {
