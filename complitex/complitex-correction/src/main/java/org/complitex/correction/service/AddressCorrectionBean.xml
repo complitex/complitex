@@ -203,13 +203,13 @@
             keyProperty="id" useGeneratedKeys="true">
         insert into `building_correction`(`street_id`, `object_id`, `external_id`,  `correction`, `correction_corp`,
           `begin_date`, `end_date`, `organization_id`, `user_organization_id`, `module_id`, `status`)
-        values (#{streetId}, #{objectId}, #{externalId}, #{correction}, #{correctionCorp}, #{beginDate}, #{endDate},
+        values (#{streetId}, #{objectId}, #{externalId}, TO_CYRILLIC(#{correction}), TO_CYRILLIC(#{correctionCorp}), #{beginDate}, #{endDate},
            #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status})
     </insert>
 
     <update id="updateBuildingCorrection" parameterType="org.complitex.correction.entity.BuildingCorrection">
-        update `building_correction` set `street_id` = #{streetId}, `organization_id` = #{organizationId}, `correction` = #{correction},
-            `correction_corp` = #{correctionCorp}, `object_id` = #{objectId}, `external_id` = #{externalId},
+        update `building_correction` set `street_id` = #{streetId}, `organization_id` = #{organizationId}, `correction` = TO_CYRILLIC(#{correction}),
+            `correction_corp` = TO_CYRILLIC(#{correctionCorp}), `object_id` = #{objectId}, `external_id` = #{externalId},
             `module_id` = #{moduleId}, `user_organization_id` = #{userOrganizationId}
         where `id` = #{id}
     </update>
