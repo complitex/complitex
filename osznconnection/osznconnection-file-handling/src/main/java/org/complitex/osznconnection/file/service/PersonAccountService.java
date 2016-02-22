@@ -166,11 +166,10 @@ public class PersonAccountService extends AbstractBean {
 
                     if (detail.getStreet() != null &&
                             detail.getBuildingNumber() != null &&
-                            detail.getBuildingCorp() != null &&
                             detail.getApartment() != null &&
                             (detail.getStreet().equalsIgnoreCase(request.getOutgoingStreet()) || streetNames.contains(detail.getStreet().toUpperCase())) &&
                             (detail.getBuildingNumber().equalsIgnoreCase(request.getOutgoingBuildingNumber()) || detail.getBuildingNumber().equalsIgnoreCase(request.getBuildingNumber())) &&
-                            (detail.getBuildingCorp().equalsIgnoreCase(request.getOutgoingBuildingCorp()) || detail.getBuildingCorp().equalsIgnoreCase(request.getBuildingCorp())) &&
+                            (detail.getBuildingCorp() == null || detail.getBuildingCorp().equalsIgnoreCase(request.getOutgoingBuildingCorp()) || detail.getBuildingCorp().equalsIgnoreCase(request.getBuildingCorp())) &&
                             (detail.getApartment().equalsIgnoreCase(request.getOutgoingApartment()) || detail.getApartment().equalsIgnoreCase(request.getApartment()))){
 
                         request.setAccountNumber(detail.getAccCode());
