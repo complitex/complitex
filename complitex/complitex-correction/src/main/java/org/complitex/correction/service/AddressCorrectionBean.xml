@@ -226,14 +226,14 @@
           and corp.`attribute_type_id` = 1501)
         left join `building_address_string_culture` corp_sc on (corp_sc.`id` = corp.`value_id`)
         where b.`status` = 'ACTIVE'
-        and num_sc.`value` = #{buildingNumber}
+        and TO_CYRILLIC(num_sc.`value`) = #{buildingNumber}
         and
         <choose>
             <when test="buildingCorp == null">
                 corp_sc.`value` IS NULL
             </when>
             <otherwise>
-                corp_sc.`value` = #{buildingCorp}
+                TO_CYRILLIC(corp_sc.`value`) = #{buildingCorp}
             </otherwise>
         </choose>
         AND
