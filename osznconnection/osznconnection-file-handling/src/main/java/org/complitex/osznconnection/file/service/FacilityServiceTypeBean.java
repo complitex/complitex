@@ -182,9 +182,11 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
         for (FacilityServiceType f : list){
             FacilityStreet facilityStreet = facilityReferenceBookBean.getFacilityStreet(f.getRequestFileId(), f.getStringField(CDUL));
 
-            f.setStreet(facilityStreet.getStringField(FacilityStreetDBF.KL_NAME));
-            f.setStreetType(facilityStreet.getStreetType());
-            f.setStreetTypeCode(facilityStreet.getStreetTypeCode());
+            if (facilityStreet != null) {
+                f.setStreet(facilityStreet.getStringField(FacilityStreetDBF.KL_NAME));
+                f.setStreetType(facilityStreet.getStreetType());
+                f.setStreetTypeCode(facilityStreet.getStreetTypeCode());
+            }
         }
     }
 }

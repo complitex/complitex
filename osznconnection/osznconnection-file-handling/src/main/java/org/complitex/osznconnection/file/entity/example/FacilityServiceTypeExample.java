@@ -5,7 +5,7 @@ package org.complitex.osznconnection.file.entity.example;
  * @author Artem
  */
 public class FacilityServiceTypeExample extends AbstractRequestExample {
-    private String account;
+    private String accountNumber;
     private String idCode;
     private String firstName;
     private String middleName;
@@ -15,17 +15,17 @@ public class FacilityServiceTypeExample extends AbstractRequestExample {
     private String building;
     private String corp;
     private String apartment;
-    private long start;
-    private long size;
+    private Long first;
+    private Long count;
     private String orderByClause;
     private boolean asc;
 
-    public String getAccount() {
-        return account;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public String getIdCode() {
@@ -100,20 +100,20 @@ public class FacilityServiceTypeExample extends AbstractRequestExample {
         this.apartment = apartment;
     }
 
-    public long getStart() {
-        return start;
+    public Long getFirst() {
+        return first;
     }
 
-    public void setStart(long start) {
-        this.start = start;
+    public void setFirst(Long first) {
+        this.first = first;
     }
 
-    public long getSize() {
-        return size;
+    public Long getCount() {
+        return count;
     }
 
-    public void setSize(long size) {
-        this.size = size;
+    public void setCount(Long count) {
+        this.count = count;
     }
 
     public String getOrderByClause() {

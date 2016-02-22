@@ -68,9 +68,9 @@
             `request_file_id`, `account_number`,
             `internal_city_id`, `internal_street_id`, `internal_street_type_id`, `internal_building_id`,
             `outgoing_city`, `outgoing_street`, `outgoing_street_type`, `outgoing_building_number`, `outgoing_building_corp`, `outgoing_apartment`,
-            `street_correction_id`, `status`, `date`,
+            `status`, `date`,
             `last_name`, `first_name`, `middle_name`,
-            `city`, `street`, `street_type`,
+            `city`,
             <foreach collection="list[0].dbfFields.keys" item="key">
                 `${key}`,
             </foreach>
@@ -84,9 +84,9 @@
                 #{item.cityId}, #{item.streetId}, #{item.streetTypeId}, #{item.buildingId},
                 #{item.outgoingCity}, #{item.outgoingStreet}, #{item.outgoingStreetType}, #{item.outgoingBuildingNumber}, #{item.outgoingBuildingCorp},
                 #{item.outgoingApartment},
-                #{item.streetCorrectionId}, #{item.status}, #{item.date},
+                #{item.status}, #{item.date},
                 #{item.lastName}, #{item.firstName}, #{item.middleName},
-                #{item.city}, #{item.street}, #{item.streetType},
+                #{item.city},
                 <foreach collection="item.dbfFields.keys" item="key">
                     #{item.dbfFields.${key}},
                 </foreach>
@@ -96,13 +96,13 @@
     </insert>
     
     <sql id="filter">
-        <if test="account != null">
-            AND fst.`RAH` LIKE CONCAT('%',#{account},'%')
+        <if test="accountNumber != null">
+            AND fst.`RAH` LIKE CONCAT('%',#{accountNumber},'%')
         </if>
 
-        <if test="idCode != null">
+        <!--<if test="idCode != null">
             AND fst.`IDCODE` LIKE CONCAT('%',#{idCode},'%')
-        </if>
+        </if>-->
         
         <if test="firstName != null">
             AND fst.`first_name` LIKE CONCAT('%',#{firstName},'%')
@@ -116,13 +116,13 @@
             AND fst.`last_name` LIKE CONCAT('%',#{lastName},'%')
         </if>
 
-        <if test="streetCode != null">
+        <!--<if test="streetCode != null">
             AND fst.`CDUL` LIKE CONCAT('%', #{streetCode}, '%')
         </if>
 
         <if test="streetReference != null">
             AND  fsr.`KL_NAME` LIKE CONCAT('%', #{streetReference}, '%')
-        </if>
+        </if>-->
 
         <if test="building != null">
             AND fst.`HOUSE` LIKE CONCAT('%', #{building}, '%')
@@ -159,8 +159,8 @@
                 f.`organization_id`,
                 fst.`internal_city_id`, fst.`internal_street_id`, fst.`internal_street_type_id`, fst.`internal_building_id`,
                 fst.`outgoing_city`, fst.`outgoing_district`, fst.`outgoing_street`, fst.`outgoing_street_type`, fst.`outgoing_building_number`,
-                fst.`outgoing_building_corp`, fst.`outgoing_apartment`, fst.`street_correction_id`,
-                fst.`city`, fst.`street`, fst.`street_type`, fsr.`KL_NAME` as street_reference
+                fst.`outgoing_building_corp`, fst.`outgoing_apartment`,
+                fst.`city`
             FROM `facility_service_type` fst
                 JOIN `request_file` f ON f.`id` = fst.`request_file_id`
                 LEFT JOIN `facility_street_reference` fsr ON fst.`CDUL` = fsr.`KL_CODEUL`
@@ -211,7 +211,6 @@
         `outgoing_street` = #{outgoingStreet}, `outgoing_street_type` = #{outgoingStreetType},
         `outgoing_building_number` = #{outgoingBuildingNumber}, `outgoing_building_corp` = #{outgoingBuildingCorp},
         `outgoing_apartment` = #{outgoingApartment},
-        `street` = #{street}, `street_type` = #{streetType}, `street_correction_id` = #{streetCorrectionId},
         `status` = #{status}
         <if test="updateFieldMap != null">
             <foreach collection="updateFieldMap.entrySet()" item="item" index="key">
@@ -246,7 +245,6 @@
         `internal_city_id` = NULL, `internal_street_id` = NULL, `internal_street_type_id` = NULL, `internal_building_id` = NULL,
         `outgoing_city` = NULL, `outgoing_district` = NULL, `outgoing_street` = NULL, `outgoing_street_type` = NULL,
         `outgoing_building_number` = NULL, `outgoing_building_corp` = NULL, `outgoing_apartment` = NULL,
-        `street` = NULL, `street_type` = NULL, `street_correction_id` = NULL,
         `status` = #{status}
         <if test="updateFieldMap != null">
             <foreach collection="updateFieldMap.entrySet()" item="item" index="key">

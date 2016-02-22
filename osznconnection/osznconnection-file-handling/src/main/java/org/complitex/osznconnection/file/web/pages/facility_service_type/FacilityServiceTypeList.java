@@ -140,8 +140,8 @@ public final class FacilityServiceTypeList extends TemplatePage {
                 if (!Strings.isEmpty(getSort().getProperty())) {
                     example.getObject().setOrderByClause(getSort().getProperty());
                 }
-                example.getObject().setStart(first);
-                example.getObject().setSize(count);
+                example.getObject().setFirst(first);
+                example.getObject().setCount(count);
                 return facilityServiceTypeBean.find(example.getObject());
             }
 
@@ -153,7 +153,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
         };
         dataProvider.setSort("", SortOrder.ASCENDING);
 
-        filterForm.add(new TextField<>("accountFilter", new PropertyModel<String>(example, "account")));
+        filterForm.add(new TextField<>("accountFilter", new PropertyModel<String>(example, "accountNumber")));
         filterForm.add(new TextField<>("idCodeFilter", new PropertyModel<String>(example, "idCode")));
         filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<String>(example, "firstName")));
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<String>(example, "middleName")));
