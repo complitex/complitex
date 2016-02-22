@@ -91,9 +91,6 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
                     personAccountService.forceResolveAccountNumber(subsidy, addressService.resolveOutgoingDistrict(
                             subsidy.getOrganizationId(), subsidy.getUserOrganizationId()), accountNumber);
                 }
-            }else if (MORE_ONE_LOCAL_STREET.equals(subsidy.getStatus())){
-                personAccountService.forceResolveAccountNumber(subsidy, addressService.resolveOutgoingDistrict(
-                        subsidy.getOrganizationId(), subsidy.getUserOrganizationId()), accountNumber);
             }
         }
 
