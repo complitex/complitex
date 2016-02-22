@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Разрешает номер л/c
@@ -58,6 +59,9 @@ public class PersonAccountService extends AbstractBean {
 
     @EJB
     private OsznOrganizationStrategy organizationStrategy;
+
+    @EJB
+    private AddressService addressService;
 
     public String getLocalAccountNumber(AbstractAccountRequest request, String accountNumber) throws MoreOneAccountException {
         return getLocalAccountNumber(request, accountNumber, false);
@@ -158,11 +162,13 @@ public class PersonAccountService extends AbstractBean {
                 if (accountDetails.size() == 1){
                     AccountDetail detail = accountDetails.get(0);
 
+                    Set<String> streetNames = addressService.getStreetNames(request);
+
                     if (detail.getStreet() != null &&
                             detail.getBuildingNumber() != null &&
                             detail.getBuildingCorp() != null &&
                             detail.getApartment() != null &&
-                            (detail.getStreet().equalsIgnoreCase(request.getOutgoingStreet()) || detail.getStreet().equalsIgnoreCase(request.getStreet())) &&
+                            (detail.getStreet().equalsIgnoreCase(request.getOutgoingStreet()) || streetNames.contains(detail.getStreet().toUpperCase())) &&
                             (detail.getBuildingNumber().equalsIgnoreCase(request.getOutgoingBuildingNumber()) || detail.getBuildingNumber().equalsIgnoreCase(request.getBuildingNumber())) &&
                             (detail.getBuildingCorp().equalsIgnoreCase(request.getOutgoingBuildingCorp()) || detail.getBuildingCorp().equalsIgnoreCase(request.getBuildingCorp())) &&
                             (detail.getApartment().equalsIgnoreCase(request.getOutgoingApartment()) || detail.getApartment().equalsIgnoreCase(request.getApartment()))){

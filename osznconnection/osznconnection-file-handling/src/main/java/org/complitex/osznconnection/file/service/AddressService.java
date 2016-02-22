@@ -10,6 +10,7 @@ import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
+import org.complitex.common.entity.DictionaryObject;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.ModuleBean;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -648,5 +650,31 @@ public class AddressService extends AbstractBean {
         }
 
         return null;
+    }
+
+    public Set<String> getStreetNames(AbstractAddressRequest request){
+        Set<String> streetNames = new HashSet<>();
+
+        streetStrategy.getStreetIds(request.getCityId(), request.getStreetTypeId(), request.getStreet())
+                .forEach(id -> streetStrategy.getDomainObject(id)
+                        .getAttribute(StreetStrategy.NAME)
+                        .getStringCultures()
+                        .forEach(s -> streetNames.add(s.getValue().toUpperCase())));
+
+        if (streetNames.isEmpty()){
+            addressCorrectionBean.getStreetCorrections(request.getCityId(),request.getStreetTypeId(), null, null,
+                    request.getStreet(), request.getOrganizationId(), request.getUserOrganizationId())
+                    .forEach(c -> streetStrategy.getStreetIds(request.getCityId(), request.getStreetTypeId(), c.getCorrection())
+                            .forEach(id -> streetStrategy.getDomainObject(id)
+                                    .getAttribute(StreetStrategy.NAME)
+                                    .getStringCultures()
+                                    .forEach(s -> streetNames.add(s.getValue().toUpperCase()))));
+        }
+
+        if (streetNames.isEmpty()){
+            streetNames.add(request.getStreet().toUpperCase());
+        }
+
+        return streetNames;
     }
 }
