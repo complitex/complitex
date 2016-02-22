@@ -278,15 +278,15 @@ public abstract class TemplateWebApplication extends ServletAuthWebApplication
                             if (!hasConstructor) {
                                 String constructor = "(" + String.class.getName() + ", " + IModel.class + ", "
                                         + OrganizationPermissionParameters.class.getName() + ")";
-                                log.warn("Компонент для выбора пользовательской организации не имеет обязательного "
-                                        + "конструктора {}. Будет использован компонент по умолчанию {}",
-                                        constructor, UserOrganizationPicker.class);
+//                                log.warn("Компонент для выбора пользовательской организации не имеет обязательного "
+//                                        + "конструктора {}. Будет использован компонент по умолчанию {}",
+//                                        constructor, UserOrganizationPicker.class);
                                 userOrganizationPickerClass = null;
                             }
                         } catch (ClassNotFoundException e) {
-                            log.warn("Компонент для выбора пользовательской организации не найден: {}. "
-                                    + "Будет использован компонент по умолчанию {}", userOrganizationPickerClassName,
-                                    UserOrganizationPicker.class);
+//                            log.warn("Компонент для выбора пользовательской организации не найден: {}. "
+//                                    + "Будет использован компонент по умолчанию {}", userOrganizationPickerClassName,
+//                                    UserOrganizationPicker.class);
                         }
                     }
                     if (userOrganizationPickerClass == null) {

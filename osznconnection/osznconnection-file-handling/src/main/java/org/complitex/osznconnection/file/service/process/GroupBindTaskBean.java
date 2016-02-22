@@ -183,7 +183,7 @@ public class GroupBindTaskBean implements ITaskBean {
         //resolve local account number
         personAccountService.localResolveAccountNumber(payment, accountNumber, true);
 
-        if (!ACCOUNT_NUMBER_RESOLVED.equals(payment.getStatus()) || !MORE_ONE_ACCOUNTS_LOCALLY.equals(payment.getStatus())){
+        if (!ACCOUNT_NUMBER_RESOLVED.equals(payment.getStatus()) && !MORE_ONE_ACCOUNTS_LOCALLY.equals(payment.getStatus())){
             //resolve address
             addressService.resolveAddress(payment);
 
