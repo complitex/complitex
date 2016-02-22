@@ -150,17 +150,7 @@ public class PersonAccountService extends AbstractBean {
 
     public void forceResolveAccountNumber(AbstractAccountRequest request, String district, String accountNumber) throws DBException{
         try {
-            //resolve local account
-            String localAccountNumber = getLocalAccountNumber(request, accountNumber, true);
-
-            if (localAccountNumber != null) {
-                request.setAccountNumber(localAccountNumber);
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
-
-                return;
-            }
-
-            //resolve remote account
+            //force resolve remote account
             List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(request, district,
                     accountNumber, request.getDate());
 
