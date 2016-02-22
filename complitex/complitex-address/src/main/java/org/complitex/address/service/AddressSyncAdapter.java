@@ -193,6 +193,7 @@ public class AddressSyncAdapter extends AbstractBean {
         Map<String, Object> param = new HashMap<>();
 
         param.put("okCode", 0);
+        param.put("date", date);
 
         try {
             sqlSession(getDataSource()).selectOne(NS + ".selectOrganizationSyncs", param);
