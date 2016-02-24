@@ -255,8 +255,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                         lookupPanel.open(target, dwellingCharacteristics, dwellingCharacteristics.getCityId(),
                                 dwellingCharacteristics.getStreetId(), dwellingCharacteristics.getBuildingId(),
                                 dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDCODE),
-                                dwellingCharacteristics.getStatus().isImmediatelySearchByAddress());
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDCODE));
                     }
                 };
                 item.add(lookup);

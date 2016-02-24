@@ -5,6 +5,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -237,14 +238,13 @@ public final class PaymentList extends TemplatePage {
                 addressCorrectionLink.setVisible(payment.getStatus().isAddressCorrectable());
                 item.add(addressCorrectionLink);
 
-                AjaxLink lookup = new AjaxLink("lookup") {
+                AjaxLink lookup = new IndicatingAjaxLink("lookup") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         lookupPanel.open(target, payment, payment.getCityId(), payment.getStreetId(),
                                 payment.getBuildingId(), payment.getStringField(PaymentDBF.FLAT),
-                                payment.getStringField(PaymentDBF.OWN_NUM_SR),
-                                payment.getStatus().isImmediatelySearchByAddress());
+                                payment.getStringField(PaymentDBF.OWN_NUM_SR));
                     }
                 };
                 item.add(lookup);

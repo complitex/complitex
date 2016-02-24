@@ -117,9 +117,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         Form form = new Form("form");
         dialog.add(form);
 
-        Accordion accordion = new Accordion("accordion")
-                .setHeightStyle(HeightStyleEnum.CONTENT)
-                .setActive(0);
+        Accordion accordion = new Accordion("accordion").setHeightStyle(HeightStyleEnum.CONTENT).setActive(0);
         form.add(accordion);
 
         //lookup by address
@@ -150,76 +148,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                boolean wasVisible = accountNumberPickerPanel.isVisible();
-                accountDetailsModel.setObject(null);
-                accountDetailModel.setObject(null);
-
-                initInternalAddress(request, getObjectId(addressSearchComponentState.get("city")),
-                        getObjectId(addressSearchComponentState.get("street")), getStreetType(addressSearchComponentState.get("street")),
-                        getObjectId(addressSearchComponentState.get("building")), apartmentModel.getObject());
-
-                if (isInternalAddressCorrect(request)) {
-                    boolean outgoingAddressResolved = false;
-                    try {
-                        resolveOutgoingAddress(request, userOrganizationId);
-                        outgoingAddressResolved = true;
-                    } catch (Exception e) {
-                        error(getString("db_error"));
-                        LoggerFactory.getLogger(getClass()).error("", e);
-                    }
-                    if (outgoingAddressResolved) {
-                        if (request.getStatus() == ACCOUNT_NUMBER_NOT_FOUND) {
-                            try {
-                                Cursor<AccountDetail> accountDetails = getAccountDetails(request, userOrganizationId);
-
-                                if (accountDetails.isEmpty()) {
-                                    switch (accountDetails.getResultCode()){
-                                        case 0:
-                                            error(StatusRenderUtil.displayStatus(ACCOUNT_NUMBER_NOT_FOUND, getLocale()));
-                                            break;
-                                        case -2:
-                                            error(StatusRenderUtil.displayStatus(APARTMENT_NOT_FOUND, getLocale()));
-                                            break;
-                                        case -3:
-                                            error(StatusRenderUtil.displayStatus(BUILDING_CORP_NOT_FOUND, getLocale()));
-                                            break;
-                                        case -4:
-                                            error(StatusRenderUtil.displayStatus(BUILDING_NOT_FOUND, getLocale()));
-                                            break;
-                                        case -5:
-                                            error(StatusRenderUtil.displayStatus(STREET_NOT_FOUND, getLocale()));
-                                            break;
-                                        case -6:
-                                            error(StatusRenderUtil.displayStatus(STREET_TYPE_NOT_FOUND, getLocale()));
-                                            break;
-                                        case -7:
-                                            error(StatusRenderUtil.displayStatus(DISTRICT_NOT_FOUND, getLocale()));
-                                            break;
-                                    }
-                                } else {
-                                    accountDetailsModel.setObject(accountDetails.getData());
-                                    if (accountDetails.getData().size() == 1) {
-                                        accountDetailModel.setObject(accountDetails.getData().get(0));
-                                    }
-                                }
-                            } catch (DBException e) {
-                                error(getString("remote_db_error"));
-                                LoggerFactory.getLogger(getClass()).error("", e);
-                            }
-                        } else {
-                            error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));
-                        }
-                    }
-                } else {
-                    error(getString("address_required"));
-                }
-
-                target.add(messages);
-                boolean becameVisible = accountDetailsModel.getObject() != null && !accountDetailsModel.getObject().isEmpty();
-                accountNumberPickerPanel.setVisible(becameVisible);
-                if (wasVisible || becameVisible) {
-                    target.add(accountNumberPickerPanel);
-                }
+                lookupByAddress(target);
             }
         });
 
@@ -240,50 +169,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                boolean wasVisible = accountNumberPickerPanel.isVisible();
-                accountDetailsModel.setObject(null);
-                accountDetailModel.setObject(null);
-
-                if (!isEmpty(accountNumberModel.getObject())) {
-                    String outgoingDistrict = null;
-                    try {
-                        outgoingDistrict = resolveOutgoingDistrict(request, userOrganizationId);
-                    } catch (Exception e) {
-                        LoggerFactory.getLogger(getClass()).error("", e);
-                        error(getString("db_error"));
-                    }
-                    if (!isEmpty(outgoingDistrict)) {
-                        try {
-                            List<AccountDetail> accountDetails = acquireAccountDetailsByAccount(request, outgoingDistrict,
-                                    accountNumberModel.getObject(), userOrganizationId);
-
-                            if (accountDetails == null || accountDetails.isEmpty()) {
-                                error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));
-                            } else {
-                                accountDetailsModel.setObject(accountDetails);
-                                if (accountDetails.size() == 1) {
-                                    accountDetailModel.setObject(accountDetails.get(0));
-                                }
-                            }
-                        } catch (DBException e) {
-                            error(getString("remote_db_error"));
-                            LoggerFactory.getLogger(getClass()).error("", e);
-                        } catch (UnknownAccountNumberTypeException e) {
-                            error(getString("unknown_account_number_type"));
-                        }
-                    } else {
-                        error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));
-                    }
-                } else {
-                    error(getString("lookup_by_account_required"));
-                }
-
-                target.add(messages);
-                boolean becameVisible = accountDetailsModel.getObject() != null && !accountDetailsModel.getObject().isEmpty();
-                accountNumberPickerPanel.setVisible(becameVisible);
-                if (wasVisible || becameVisible) {
-                    target.add(accountNumberPickerPanel);
-                }
+                lookupByAccount(target);
             }
         });
 
@@ -405,7 +291,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     }
 
     public void open(AjaxRequestTarget target, T request, Long cityId, Long streetId, Long buildingId, String apartment,
-            String serviceProviderAccountNumber, boolean immediatelySearchByAddress) {
+            String serviceProviderAccountNumber) {
         this.request = CloneUtil.cloneObject(request);
         this.initialRequest = request;
 
@@ -431,10 +317,12 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
             accountNumberModel.setObject(null);
         }
 
-        //set active accordion item
-//        if (immediatelySearchByAddress) {
-//            target.appendJavaScript("(function(){ $('#lookupByAddress.lookupByAddressButton').click(); })()");
-//        }
+        //immediately search
+        if (request.getStatus().isImmediatelySearchByAddress()){
+            lookupByAddress(target);
+        }else {
+            lookupByAccount(target);
+        }
 
         target.add(accountNumberPickerPanel, addressContainer, accountContainer, fioContainer, messages, header);
 
@@ -459,5 +347,127 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     protected String getServicingOrganizationCode(T request){
         return null;
     }
+
+    private void lookupByAddress(AjaxRequestTarget target) {
+        boolean wasVisible = accountNumberPickerPanel.isVisible();
+        accountDetailsModel.setObject(null);
+        accountDetailModel.setObject(null);
+
+        initInternalAddress(request, getObjectId(addressSearchComponentState.get("city")),
+                getObjectId(addressSearchComponentState.get("street")), getStreetType(addressSearchComponentState.get("street")),
+                getObjectId(addressSearchComponentState.get("building")), apartmentModel.getObject());
+
+        if (isInternalAddressCorrect(request)) {
+            boolean outgoingAddressResolved = false;
+            try {
+                resolveOutgoingAddress(request, userOrganizationId);
+                outgoingAddressResolved = true;
+            } catch (Exception e) {
+                error(getString("db_error"));
+                LoggerFactory.getLogger(getClass()).error("", e);
+            }
+            if (outgoingAddressResolved) {
+                if (request.getStatus() == ACCOUNT_NUMBER_NOT_FOUND) {
+                    try {
+                        Cursor<AccountDetail> accountDetails = getAccountDetails(request, userOrganizationId);
+
+                        if (accountDetails.isEmpty()) {
+                            switch (accountDetails.getResultCode()){
+                                case 0:
+                                    error(StatusRenderUtil.displayStatus(ACCOUNT_NUMBER_NOT_FOUND, getLocale()));
+                                    break;
+                                case -2:
+                                    error(StatusRenderUtil.displayStatus(APARTMENT_NOT_FOUND, getLocale()));
+                                    break;
+                                case -3:
+                                    error(StatusRenderUtil.displayStatus(BUILDING_CORP_NOT_FOUND, getLocale()));
+                                    break;
+                                case -4:
+                                    error(StatusRenderUtil.displayStatus(BUILDING_NOT_FOUND, getLocale()));
+                                    break;
+                                case -5:
+                                    error(StatusRenderUtil.displayStatus(STREET_NOT_FOUND, getLocale()));
+                                    break;
+                                case -6:
+                                    error(StatusRenderUtil.displayStatus(STREET_TYPE_NOT_FOUND, getLocale()));
+                                    break;
+                                case -7:
+                                    error(StatusRenderUtil.displayStatus(DISTRICT_NOT_FOUND, getLocale()));
+                                    break;
+                            }
+                        } else {
+                            accountDetailsModel.setObject(accountDetails.getData());
+                            if (accountDetails.getData().size() == 1) {
+                                accountDetailModel.setObject(accountDetails.getData().get(0));
+                            }
+                        }
+                    } catch (DBException e) {
+                        error(getString("remote_db_error"));
+                        LoggerFactory.getLogger(getClass()).error("", e);
+                    }
+                } else {
+                    error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));
+                }
+            }
+        } else {
+            error(getString("address_required"));
+        }
+
+        target.add(messages);
+        boolean becameVisible = accountDetailsModel.getObject() != null && !accountDetailsModel.getObject().isEmpty();
+        accountNumberPickerPanel.setVisible(becameVisible);
+        if (wasVisible || becameVisible) {
+            target.add(accountNumberPickerPanel);
+        }
+    }
+
+    private void lookupByAccount(AjaxRequestTarget target) {
+        boolean wasVisible = accountNumberPickerPanel.isVisible();
+        accountDetailsModel.setObject(null);
+        accountDetailModel.setObject(null);
+
+        if (!isEmpty(accountNumberModel.getObject())) {
+            String outgoingDistrict = null;
+            try {
+                outgoingDistrict = resolveOutgoingDistrict(request, userOrganizationId);
+            } catch (Exception e) {
+                LoggerFactory.getLogger(getClass()).error("", e);
+                error(getString("db_error"));
+            }
+            if (!isEmpty(outgoingDistrict)) {
+                try {
+                    List<AccountDetail> accountDetails = acquireAccountDetailsByAccount(request, outgoingDistrict,
+                            accountNumberModel.getObject(), userOrganizationId);
+
+                    if (accountDetails == null || accountDetails.isEmpty()) {
+                        error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));
+                    } else {
+                        accountDetailsModel.setObject(accountDetails);
+                        if (accountDetails.size() == 1) {
+                            accountDetailModel.setObject(accountDetails.get(0));
+                        }
+                    }
+                } catch (DBException e) {
+                    error(getString("remote_db_error"));
+                    LoggerFactory.getLogger(getClass()).error("", e);
+                } catch (UnknownAccountNumberTypeException e) {
+                    error(getString("unknown_account_number_type"));
+                }
+            } else {
+                error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));
+            }
+        } else {
+            error(getString("lookup_by_account_required"));
+        }
+
+        target.add(messages);
+        boolean becameVisible = accountDetailsModel.getObject() != null && !accountDetailsModel.getObject().isEmpty();
+        accountNumberPickerPanel.setVisible(becameVisible);
+        if (wasVisible || becameVisible) {
+            target.add(accountNumberPickerPanel);
+        }
+    }
+
+
 }
 

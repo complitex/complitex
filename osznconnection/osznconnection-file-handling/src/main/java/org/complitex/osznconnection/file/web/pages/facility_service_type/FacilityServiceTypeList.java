@@ -261,8 +261,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
                         lookupPanel.open(target, facilityServiceType, facilityServiceType.getCityId(),
                                 facilityServiceType.getStreetId(), facilityServiceType.getBuildingId(),
                                 facilityServiceType.getStringField(FacilityServiceTypeDBF.APT),
-                                facilityServiceType.getStringField(FacilityServiceTypeDBF.IDCODE),
-                                facilityServiceType.getStatus().isImmediatelySearchByAddress());
+                                facilityServiceType.getStringField(FacilityServiceTypeDBF.IDCODE));
                     }
                 };
                 item.add(lookup);

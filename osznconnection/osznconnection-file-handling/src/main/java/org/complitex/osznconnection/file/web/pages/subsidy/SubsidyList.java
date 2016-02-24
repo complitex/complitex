@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -287,14 +288,13 @@ public final class SubsidyList extends TemplatePage {
                 addressCorrectionLink.setVisible(subsidy.getStatus().isAddressCorrectable());
                 item.add(addressCorrectionLink);
 
-                AjaxLink lookup = new AjaxLink("lookup") {
+                AjaxLink lookup = new IndicatingAjaxLink("lookup") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         lookupPanel.open(target, subsidy, subsidy.getCityId(), subsidy.getStreetId(),
                                 subsidy.getBuildingId(), subsidy.getStringField(SubsidyDBF.FLAT),
-                                subsidy.getStringField(SubsidyDBF.RASH),
-                                subsidy.getStatus().isImmediatelySearchByAddress());
+                                subsidy.getStringField(SubsidyDBF.RASH));
 
                         target.add(item.add(AttributeModifier.append("class", "data-row-hover")));
                     }

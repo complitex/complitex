@@ -137,7 +137,10 @@ public enum RequestStatus implements IFixedIdType {
     }
     
     public boolean isImmediatelySearchByAddress(){
-        return this == ACCOUNT_NUMBER_MISMATCH || this == MORE_ONE_ACCOUNTS || this == MORE_ONE_ACCOUNTS_LOCALLY;
+        return this == ACCOUNT_NUMBER_RESOLVED ||
+                this == ACCOUNT_NUMBER_MISMATCH ||
+                this == BINDING_INVALID_FORMAT ||
+                this == SERVICING_ORGANIZATION_NOT_FOUND;
     }
 
     private static final Set<RequestStatus> UNBOUND_STATUSES = 
