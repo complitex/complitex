@@ -142,6 +142,8 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
                     }
 
                     log.error("The subsidy item ( id = " + subsidy.getId() + ") was bound with error: ", e);
+
+                    throw new BindException(e, false, subsidyFile);
                 }
             }
         }
