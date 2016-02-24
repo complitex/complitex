@@ -160,7 +160,6 @@
                 d.`city`
             FROM `dwelling_characteristics` d
               JOIN `request_file` f ON f.`id` = d.`request_file_id`
-              LEFT JOIN `facility_street_reference` s ON d.`CDUL` = s.`KL_CODEUL`
             WHERE d.`request_file_id` = #{requestFileId}
                 <include refid="org.complitex.osznconnection.file.service.DwellingCharacteristicsBean.filter"/>
 
@@ -227,7 +226,7 @@
     </select>
     
     <select id="findForOperation" parameterType="map" resultMap="dwellingCharacteristicsResultMap">
-        SELECT d.*, f.`organization_id`, f.`user_organization_id`, s.`KL_NAME` as street,
+        SELECT d.*, f.`organization_id`, f.`user_organization_id`,
             TO_CYRILLIC(d.`first_name`) first_name,
             TO_CYRILLIC(d.`middle_name`) middle_name,
             TO_CYRILLIC(d.`last_name`) last_name,
@@ -237,7 +236,6 @@
             TO_CYRILLIC(d.`APT`) APT_CYR
         FROM `dwelling_characteristics` d
           JOIN `request_file` f ON d.`request_file_id` = f.`id`
-          LEFT JOIN `facility_street_reference` s ON d.`CDUL` = s.`KL_CODEUL`
         WHERE d.`request_file_id` = #{requestFileId}
             AND d.`id` IN
             <foreach collection="ids" item="id" open="(" close=")" separator=",">

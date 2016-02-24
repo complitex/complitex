@@ -72,6 +72,7 @@
         <id column="id" property="id"/>
         <result column="request_file_id" property="requestFileId"/>
 
+        <result column="street" property="street"/>
         <result column="street_type" property="streetType"/>
         <result column="street_type_code" property="streetTypeCode"/>
 
