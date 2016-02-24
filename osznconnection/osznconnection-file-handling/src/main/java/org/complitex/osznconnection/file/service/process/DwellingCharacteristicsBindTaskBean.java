@@ -104,19 +104,18 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
         return dwellingCharacteristics.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    private void bind(DwellingCharacteristics dwellingCharacteristics)
-            throws DBException {
+    private void bind(DwellingCharacteristics dwellingCharacteristics) throws DBException {
         //resolve address
         resolveAddress(dwellingCharacteristics);
 
-        if (dwellingCharacteristics.getStatus().isAddressResolved()){
-            //resolve local account.
-            resolveLocalAccount(dwellingCharacteristics);
-
-            if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-                resolveRemoteAccountNumber(dwellingCharacteristics);
-            }
-        }
+//        if (dwellingCharacteristics.getStatus().isAddressResolved()){
+//            //resolve local account.
+//            resolveLocalAccount(dwellingCharacteristics);
+//
+//            if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
+//                resolveRemoteAccountNumber(dwellingCharacteristics);
+//            }
+//        }
 
         // обновляем dwelling characteristics запись
         dwellingCharacteristicsBean.update(dwellingCharacteristics);

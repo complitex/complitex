@@ -12,6 +12,7 @@ public class DwellingCharacteristicsExampleConfigurator extends AbstractExampleC
     @Override
     public DwellingCharacteristicsExample createExample(StatusDetail statusDetail) {
         DwellingCharacteristicsExample example = new DwellingCharacteristicsExample();
+
         example.setLastName(statusDetail.getDetail("lastName"));
         example.setFirstName(statusDetail.getDetail("firstName"));
         example.setMiddleName(statusDetail.getDetail("middleName"));
@@ -19,6 +20,7 @@ public class DwellingCharacteristicsExampleConfigurator extends AbstractExampleC
         example.setBuilding(statusDetail.getDetail("building"));
         example.setCorp(statusDetail.getDetail("buildingCorp"));
         example.setApartment(statusDetail.getDetail("apartment"));
+
         return example;
     }
 }

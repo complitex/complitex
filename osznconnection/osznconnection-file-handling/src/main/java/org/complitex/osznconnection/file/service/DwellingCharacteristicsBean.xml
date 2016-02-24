@@ -144,7 +144,7 @@
                 d.`internal_city_id`, d.`internal_street_id`, d.`internal_street_type_id`, d.`internal_building_id`,
                 d.`outgoing_city`, d.`outgoing_district`, d.`outgoing_street`, d.`outgoing_street_type`, d.`outgoing_building_number`,
                 d.`outgoing_building_corp`, d.`outgoing_apartment`,
-                d.`city`, s.`KL_NAME` as street
+                d.`city`
             FROM `dwelling_characteristics` d
               JOIN `request_file` f ON f.`id` = d.`request_file_id`
               LEFT JOIN `facility_street_reference` s ON d.`CDUL` = s.`KL_CODEUL`

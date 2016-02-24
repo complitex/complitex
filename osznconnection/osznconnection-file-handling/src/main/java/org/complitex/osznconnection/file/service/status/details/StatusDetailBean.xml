@@ -358,7 +358,10 @@
             <result column="first_name" property="firstName"/>
             <result column="middle_name" property="middleName"/>
             <result column="last_name" property="lastName"/>
+            <result column="KLKUL_CODE" property="streetTypeCode"/>
+            <result column="KLKUL_NAME" property="streetType"/>
             <result column="CDUL" property="streetCode"/>
+            <result column="KL_NAME" property="street"/>
             <result column="HOUSE" property="building"/>
             <result column="BUILD" property="buildingCorp"/>
             <result column="APT" property="apartment"/>
@@ -375,39 +378,59 @@
         <choose>
             <!--account number -->
             <when test="status == 212 or status == 213">
-                SELECT `FIO` `id`, COUNT(1) `count`, `first_name`, `middle_name`, `last_name`, `FIO` FROM `dwelling_characteristics`
+                SELECT `FIO` `id`, COUNT(1) `count`, `first_name`, `middle_name`, `last_name`, `FIO`
+                FROM `dwelling_characteristics`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
                 GROUP BY 1
             </when>
 
+            <!--street type-->
+            <when test="status == 237 or status == 207 or status == 223">
+                SELECT CONCAT(st.`KLKUL_CODE`) `id`, COUNT(1) `count`, st.`KLKUL_NAME`
+                FROM `dwelling_characteristics` d
+                LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
+                LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
+                WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
+                GROUP BY 1
+            </when>
+
             <!--street-->
-            <when test="status == 201 or status == 237 or status == 208 or status == 207 or status == 223 or status == 224">
-                SELECT CONCAT(`CDUL`) `id`, COUNT(1) `count`, `CDUL` FROM `dwelling_characteristics`
-                WHERE `request_file_id` = #{id} AND `status` = #{status}
+            <when test="status == 201 or status == 208 or status == 207 or status == 224">
+                SELECT CONCAT(`CDUL`) `id`, COUNT(1) `count`, st.`KLKUL_NAME`, s.`KL_NAME`, `CDUL`
+                FROM `dwelling_characteristics` d
+                LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
+                LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
+                WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
                 GROUP BY 1
             </when>
 
             <!--building-->
             <when test="status == 202 or status == 209 or status == 225">
-                SELECT CONCAT(`CDUL`, `HOUSE`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`
-                FROM `dwelling_characteristics`
-                WHERE `request_file_id` = #{id} AND `status` = #{status}
+                SELECT CONCAT(`CDUL`, `HOUSE`) `id`, COUNT(1) `count`, st.`KLKUL_NAME`, s.`KL_NAME`, `CDUL`, `HOUSE`
+                FROM `dwelling_characteristics` d
+                LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
+                LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
+                WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
                 GROUP BY 1
             </when>
 
             <!--building corp-->
             <when test="status == 226">
-                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`, `BUILD` 
-                FROM `dwelling_characteristics`
-                WHERE `request_file_id` = #{id} AND `status` = #{status}
+                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`) `id`, COUNT(1) `count`, st.`KLKUL_NAME`, s.`KL_NAME`, `CDUL`, `HOUSE`, `BUILD`
+                FROM `dwelling_characteristics` d
+                LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
+                LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
+                WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
                 GROUP BY 1
             </when>
 
             <!-- apartment -->
             <when test="status == 227">
-                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`, `APT`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`, `BUILD`, `APT` 
-                FROM `dwelling_characteristics`
-                WHERE `request_file_id` = #{id} AND `status` = #{status}
+                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`, `APT`) `id`, COUNT(1) `count`, st.`KLKUL_NAME`, s.`KL_NAME`, `CDUL`, `HOUSE`, `BUILD`, `APT`
+                FROM `dwelling_characteristics` d
+                LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
+                LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
+                WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
                 GROUP BY 1
             </when>
             <otherwise>
