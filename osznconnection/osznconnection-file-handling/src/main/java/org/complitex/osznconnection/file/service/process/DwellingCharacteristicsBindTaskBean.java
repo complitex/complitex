@@ -181,7 +181,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
         requestFile.setStatus(RequestFileStatus.BINDING);
         requestFileBean.save(requestFile);
 
-//        dwellingCharacteristicsBean.clearBeforeBinding(requestFile.getId(), billingContext.getServiceIds()); todo
+//        dwellingCharacteristicsBean.clearBeforeBinding(requestFile.getId(), null);
 
         //связывание файла dwelling characteristics
         try {

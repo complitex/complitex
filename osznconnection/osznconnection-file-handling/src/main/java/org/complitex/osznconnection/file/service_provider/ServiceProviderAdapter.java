@@ -182,8 +182,8 @@ public class ServiceProviderAdapter extends AbstractBean {
                                              String passport) throws DBException {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
-        Cursor<AccountDetail> cursor = getAccountDetails(dataSource,
-                district, streetType, street, buildingNumber, buildingCorp, apartment, date);
+        Cursor<AccountDetail> cursor = getAccountDetails(dataSource, district, streetType, street, buildingNumber,
+                buildingCorp, apartment, date);
 
         if (cursor.isEmpty()) {
             updateCursorResultCode(request, cursor);
@@ -807,6 +807,8 @@ public class ServiceProviderAdapter extends AbstractBean {
             if (!OracleErrors.isCursorClosedError(e)) {
                 throw new DBException(e);
             }
+        }finally {
+            log.info("getBenefitData: {}", dataSource, params);
         }
 
         return (List<BenefitData>) params.get("benefitData");
