@@ -30,6 +30,11 @@
         <result column="CDUL" property="streetCode"/>
 
         <association property="dbfFields" javaType="map">
+            <result column="FIO_CYR" property="FIO_CYR"/>
+            <result column="HOUSE_CYR" property="HOUSE_CYR"/>
+            <result column="BUILD_CYR" property="BUILD_CYR"/>
+            <result column="APT_CYR" property="APT_CYR"/>
+
             <result column="COD" property="COD"/>
             <result column="CDPR" property="CDPR"/>
             <result column="NCARD" property="NCARD"/>
@@ -138,8 +143,16 @@
             w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
             p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
         FROM (
-            SELECT DISTINCT d.`id`, d.`status`, d.`request_file_id`, d.`IDCODE`, d.`first_name`, d.`middle_name`, d.`last_name`, d.`FIO`,
+            SELECT DISTINCT d.`id`, d.`status`, d.`request_file_id`, d.`IDCODE`, d.`FIO`,
                 d.`CDUL`, d.`HOUSE`, d.`BUILD`, d.`APT`, d.`date`,
+                TO_CYRILLIC(d.`first_name`) first_name,
+                TO_CYRILLIC(d.`middle_name`) middle_name,
+                TO_CYRILLIC(d.`last_name`) last_name,
+                TO_CYRILLIC(d.`FIO`) FIO_CYR,
+                TO_CYRILLIC(d.`HOUSE`) HOUSE_CYR,
+                TO_CYRILLIC(d.`BUILD`) BUILD_CYR,
+                TO_CYRILLIC(d.`APT`) APT_CYR,
+
                 f.`organization_id`, f.`user_organization_id`,
                 d.`internal_city_id`, d.`internal_street_id`, d.`internal_street_type_id`, d.`internal_building_id`,
                 d.`outgoing_city`, d.`outgoing_district`, d.`outgoing_street`, d.`outgoing_street_type`, d.`outgoing_building_number`,
@@ -214,7 +227,14 @@
     </select>
     
     <select id="findForOperation" parameterType="map" resultMap="dwellingCharacteristicsResultMap">
-        SELECT d.*, f.`organization_id`, f.`user_organization_id`, s.`KL_NAME` as street
+        SELECT d.*, f.`organization_id`, f.`user_organization_id`, s.`KL_NAME` as street,
+            TO_CYRILLIC(d.`first_name`) first_name,
+            TO_CYRILLIC(d.`middle_name`) middle_name,
+            TO_CYRILLIC(d.`last_name`) last_name,
+            TO_CYRILLIC(d.`FIO`) FIO_CYR,
+            TO_CYRILLIC(d.`HOUSE`) HOUSE_CYR,
+            TO_CYRILLIC(d.`BUILD`) BUILD_CYR,
+            TO_CYRILLIC(d.`APT`) APT_CYR
         FROM `dwelling_characteristics` d
           JOIN `request_file` f ON d.`request_file_id` = f.`id`
           LEFT JOIN `facility_street_reference` s ON d.`CDUL` = s.`KL_CODEUL`

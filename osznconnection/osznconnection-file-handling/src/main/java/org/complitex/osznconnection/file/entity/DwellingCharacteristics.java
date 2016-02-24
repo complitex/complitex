@@ -23,16 +23,16 @@ public class DwellingCharacteristics extends AbstractAccountRequest<DwellingChar
 
     @Override
     public String getBuildingNumber() {
-        return getStringField(DwellingCharacteristicsDBF.HOUSE);
+        return getUpStringField(DwellingCharacteristicsDBF.HOUSE, "_CYR");
     }
 
     @Override
     public String getBuildingCorp() {
-        return getStringField(DwellingCharacteristicsDBF.BUILD);
+        return getUpStringField(DwellingCharacteristicsDBF.BUILD, "_CYR");
     }
 
     @Override
     public String getApartment() {
-        return getStringField(DwellingCharacteristicsDBF.APT);
+        return getUpStringField(DwellingCharacteristicsDBF.APT, "_CYR");
     }
 }

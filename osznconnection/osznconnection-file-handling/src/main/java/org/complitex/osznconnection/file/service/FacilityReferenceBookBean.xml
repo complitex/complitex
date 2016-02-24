@@ -111,7 +111,7 @@
     </select>
 
     <select id="selectFacilityStreetByRequestFile" parameterType="map" resultMap="facilityStreetResultMap">
-        select s.`KL_NAME`, st.`KLKUL_NAME` as street_type, s.`KL_CODEKUL` as street_type_code
+        select TO_CYRILLIC(s.`KL_NAME`) street, TO_CYRILLIC(st.`KLKUL_NAME`) as street_type, s.`KL_CODEKUL` as street_type_code
         from `request_file` f
             join`facility_street_reference` s
             left join `request_file` s_f ON s.`request_file_id` = s_f.`id`
