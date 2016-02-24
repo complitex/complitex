@@ -108,14 +108,14 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
         //resolve address
         resolveAddress(dwellingCharacteristics);
 
-//        if (dwellingCharacteristics.getStatus().isAddressResolved()){
-//            //resolve local account.
-//            resolveLocalAccount(dwellingCharacteristics);
-//
-//            if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-//                resolveRemoteAccountNumber(dwellingCharacteristics);
-//            }
-//        }
+        if (dwellingCharacteristics.getStatus().isAddressResolved()){
+            //resolve local account.
+            resolveLocalAccount(dwellingCharacteristics);
+
+            if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
+                resolveRemoteAccountNumber(dwellingCharacteristics);
+            }
+        }
 
         // обновляем dwelling characteristics запись
         dwellingCharacteristicsBean.update(dwellingCharacteristics);
