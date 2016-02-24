@@ -7,6 +7,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -65,14 +66,17 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     private AccountNumberPickerPanel accountNumberPickerPanel;
     private FeedbackPanel messages;
     private ExtendedDialog dialog;
-    private Accordion accordion;
     private Label header;
     private SearchComponentState addressSearchComponentState;
     private WiQuerySearchComponent addressSearchComponent;
     private T request;
     private T initialRequest;
-    private IModel<String> accountNumberModel;
+    private IModel<String> accountNumberModel = new Model<>();
     private Long userOrganizationId;
+
+    private WebMarkupContainer addressContainer;
+    private WebMarkupContainer accountContainer;
+    private WebMarkupContainer fioContainer;
 
     private IModel<String> firstNameModel = Model.of("");
     private IModel<String> middleNameModel = Model.of("");
@@ -113,12 +117,16 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         Form form = new Form("form");
         dialog.add(form);
 
-        accordion = new Accordion("accordion")
+        Accordion accordion = new Accordion("accordion")
                 .setHeightStyle(HeightStyleEnum.CONTENT)
                 .setActive(0);
         form.add(accordion);
 
         //lookup by address
+        addressContainer = new WebMarkupContainer("address_container");
+        addressContainer.setOutputMarkupId(true);
+        accordion.add(addressContainer);
+
         addressSearchComponentState = new SearchComponentState();
         apartmentModel = new Model<>();
         TextField<String> apartment = new TextField<>("apartment", apartmentModel, String.class);
@@ -129,9 +137,16 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
             protected void onUpdate(AjaxRequestTarget target) {
             }
         });
-        accordion.add(apartment);
+        addressContainer.add(apartment);
 
-        IndicatingAjaxLink<Void> lookupByAddress = new IndicatingAjaxLink<Void>("lookupByAddress") {
+
+        addressSearchComponent = new WiQuerySearchComponent("addressSearchComponent", addressSearchComponentState,
+                ImmutableList.of("city", "street", "building"), null, ShowMode.ACTIVE, true);
+        addressSearchComponent.setOutputMarkupPlaceholderTag(true);
+        addressSearchComponent.setVisible(false);
+        addressContainer.add(addressSearchComponent);
+
+        addressContainer.add(new IndicatingAjaxLink<Void>("lookupByAddress") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -205,28 +220,23 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                 if (wasVisible || becameVisible) {
                     target.add(accountNumberPickerPanel);
                 }
-
-                dialog.center(target);
             }
-        };
-        accordion.add(lookupByAddress);
-        addressSearchComponent = new WiQuerySearchComponent("addressSearchComponent", addressSearchComponentState,
-                ImmutableList.of("city", "street", "building"), null, ShowMode.ACTIVE, true);
-        addressSearchComponent.setOutputMarkupPlaceholderTag(true);
-        addressSearchComponent.setVisible(false);
-        accordion.add(addressSearchComponent);
+        });
 
         //lookup by account number
-        accountNumberModel = new Model<>();
-        TextField<String> accountNumber = new TextField<>("accountNumber", accountNumberModel, String.class);
-        accountNumber.add(new AjaxFormComponentUpdatingBehavior("change") {
+        accountContainer = new WebMarkupContainer("account_container");
+        accountContainer.setOutputMarkupId(true);
+        accordion.add(accountContainer);
+
+        accountContainer.add(new TextField<>("accountNumber", accountNumberModel, String.class)
+                .add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
             }
-        });
-        accordion.add(accountNumber);
-        IndicatingAjaxLink lookupByAccount = new IndicatingAjaxLink("lookupByAccount") {
+        }));
+
+        accountContainer.add(new IndicatingAjaxLink("lookupByAccount") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -274,18 +284,19 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                 if (wasVisible || becameVisible) {
                     target.add(accountNumberPickerPanel);
                 }
-
-                dialog.center(target);
             }
-        };
-        accordion.add(lookupByAccount);
+        });
 
         //lookup by fio
-        accordion.add(new TextField<>("lastName", lastNameModel));
-        accordion.add(new TextField<>("firstName", firstNameModel));
-        accordion.add(new TextField<>("middleName", middleNameModel));
+        fioContainer = new WebMarkupContainer("fio_container");
+        fioContainer.setOutputMarkupId(true);
+        accordion.add(fioContainer);
 
-        accordion.add(new IndicatingAjaxButton("lookupByFio") {
+        fioContainer.add(new TextField<>("lastName", lastNameModel));
+        fioContainer.add(new TextField<>("firstName", firstNameModel));
+        fioContainer.add(new TextField<>("middleName", middleNameModel));
+
+        fioContainer.add(new IndicatingAjaxButton("lookupByFio") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 String district = resolveOutgoingDistrict(request, userOrganizationId);
@@ -305,8 +316,6 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                     target.add(messages);
                     e.printStackTrace();
                 }
-
-                dialog.center(target);
             }
         });
 
@@ -403,7 +412,6 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         accountDetailModel.setObject(null);
         accountDetailsModel.setObject(null);
         accountNumberPickerPanel.setVisible(false);
-        target.add(accountNumberPickerPanel);
 
         //lookup by owner fio
         firstNameModel.setObject(request.getFirstName());
@@ -424,13 +432,12 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         }
 
         //set active accordion item
-        if (immediatelySearchByAddress) {
-            target.appendJavaScript("(function(){ $('#lookupByAddress.lookupByAddressButton').click(); })()");
-        }
+//        if (immediatelySearchByAddress) {
+//            target.appendJavaScript("(function(){ $('#lookupByAddress.lookupByAddressButton').click(); })()");
+//        }
 
-        target.add(accordion);
-        target.add(messages);
-        target.add(header);
+        target.add(accountNumberPickerPanel, addressContainer, accountContainer, fioContainer, messages, header);
+
         dialog.open(target);
     }
 

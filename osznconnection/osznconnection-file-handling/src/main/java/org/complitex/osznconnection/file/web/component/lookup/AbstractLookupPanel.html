@@ -18,7 +18,7 @@
                     </a>
                 </h3>
                 <div id="lookupByAddress">
-                    <table class="tbForm">
+                    <table class="tbForm" wicket:id="address_container">
                         <tr>
                             <td>
                                 <span wicket:id="addressSearchComponent"></span>
@@ -36,7 +36,7 @@
 
                 <h3><wicket:message key="lookup_by_account"/></h3>
                 <div id="lookupByAccount">
-                    <table class="tbForm">
+                    <table class="tbForm" wicket:id="account_container">
                         <tr>
                             <th>
                                 <wicket:message key="lookup_by_account_label"/>:
@@ -53,7 +53,7 @@
 
                 <h3><wicket:message key="lookup_by_fio"/></h3>
                 <div id="lookupByFio">
-                    <table class="tbForm">
+                    <table class="tbForm" wicket:id="fio_container">
                         <tr>
                             <th>
                                 <wicket:message key="lastName"/>:
