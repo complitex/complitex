@@ -10,10 +10,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.collect.ImmutableMap.of;
 import static org.complitex.osznconnection.file.entity.DwellingCharacteristicsDBF.CDUL;
@@ -143,7 +140,8 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
 
 
     public void clearBeforeBinding(long fileId, Set<Long> serviceProviderTypeIds) {
-        Map<String, String> updateFieldMap = null;
+        Map<String, String> updateFieldMap = new HashMap<>();
+
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
             updateFieldMap = Maps.newHashMap();
             for (DwellingCharacteristicsDBF field : getUpdateableFields(serviceProviderTypeIds)) {
