@@ -133,7 +133,9 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
 
             if (facilityStreet != null) {
                 d.setStreet(facilityStreet.getStringField(FacilityStreetDBF.KL_NAME));
-                d.setStreetType(facilityStreet.getStreetType());
+                if (facilityStreet.getStreetType() != null) {
+                    d.setStreetType(facilityStreet.getStreetType().replace(".", ""));
+                }
                 d.setStreetTypeCode(facilityStreet.getStreetTypeCode());
             }
         }

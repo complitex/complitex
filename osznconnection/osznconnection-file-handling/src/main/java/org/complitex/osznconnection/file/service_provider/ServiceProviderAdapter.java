@@ -110,29 +110,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                 street, buildingNumber, buildingCorp, apartment, date);
 
         if (cursor.isEmpty()) {
-            switch (cursor.getResultCode()){
-                case 0:
-                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
-                    break;
-                case -2:
-                    request.setStatus(RequestStatus.APARTMENT_NOT_FOUND);
-                    break;
-                case -3:
-                    request.setStatus(RequestStatus.BUILDING_CORP_NOT_FOUND);
-                    break;
-                case -4:
-                    request.setStatus(RequestStatus.BUILDING_NOT_FOUND);
-                    break;
-                case -5:
-                    request.setStatus(RequestStatus.STREET_NOT_FOUND);
-                    break;
-                case -6:
-                    request.setStatus(RequestStatus.STREET_TYPE_NOT_FOUND);
-                    break;
-                case -7:
-                    request.setStatus(RequestStatus.DISTRICT_NOT_FOUND);
-                    break;
-            }
+            updateCursorResultCode(request, cursor);
 
             return null;
         }
@@ -204,10 +182,16 @@ public class ServiceProviderAdapter extends AbstractBean {
                                              String passport) throws DBException {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
-        Cursor<AccountDetail> accountDetails = getAccountDetails(dataSource,
+        Cursor<AccountDetail> cursor = getAccountDetails(dataSource,
                 district, streetType, street, buildingNumber, buildingCorp, apartment, date);
 
-        for (AccountDetail accountDetail : accountDetails.getData()) {
+        if (cursor.isEmpty()) {
+            updateCursorResultCode(request, cursor);
+
+            return;
+        }
+
+        for (AccountDetail accountDetail : cursor.getData()) {
             List<BenefitData> benefitDataList = getBenefitData(dataSource, accountDetail.getAccCode(), date);
 
             for (BenefitData d : benefitDataList){
@@ -222,6 +206,32 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
 
         request.setStatus(RequestStatus.ACCOUNT_NUMBER_MISMATCH);
+    }
+
+    private void updateCursorResultCode(AbstractAccountRequest request, Cursor<AccountDetail> cursor) {
+        switch (cursor.getResultCode()){
+            case 0:
+                request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
+                break;
+            case -2:
+                request.setStatus(RequestStatus.APARTMENT_NOT_FOUND);
+                break;
+            case -3:
+                request.setStatus(RequestStatus.BUILDING_CORP_NOT_FOUND);
+                break;
+            case -4:
+                request.setStatus(RequestStatus.BUILDING_NOT_FOUND);
+                break;
+            case -5:
+                request.setStatus(RequestStatus.STREET_NOT_FOUND);
+                break;
+            case -6:
+                request.setStatus(RequestStatus.STREET_TYPE_NOT_FOUND);
+                break;
+            case -7:
+                request.setStatus(RequestStatus.DISTRICT_NOT_FOUND);
+                break;
+        }
     }
 
     /**

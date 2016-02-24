@@ -14,7 +14,6 @@ public class AccountDetail implements Serializable {
     private String ownerFio;
     private String ownerINN;
     private String ercCode;
-    private String serviceProviderAccountNumberInfo;
     private String zheu;
     private String zheuCode;
     private String street;
@@ -88,14 +87,6 @@ public class AccountDetail implements Serializable {
         this.ercCode = ercCode;
     }
 
-    public String getServiceProviderAccountNumberInfo() {
-        return serviceProviderAccountNumberInfo;
-    }
-
-    public void setServiceProviderAccountNumberInfo(String serviceProviderAccountNumberInfo) {
-        this.serviceProviderAccountNumberInfo = serviceProviderAccountNumberInfo;
-    }
-
     public String getZheu() {
         return zheu;
     }
@@ -159,7 +150,6 @@ public class AccountDetail implements Serializable {
                 ", ownerFio='" + ownerFio + '\'' +
                 ", ownerINN='" + ownerINN + '\'' +
                 ", ercCode='" + ercCode + '\'' +
-                ", serviceProviderAccountNumberInfo='" + serviceProviderAccountNumberInfo + '\'' +
                 ", zheu='" + zheu + '\'' +
                 ", zheuCode='" + zheuCode + '\'' +
                 ", street='" + street + '\'' +

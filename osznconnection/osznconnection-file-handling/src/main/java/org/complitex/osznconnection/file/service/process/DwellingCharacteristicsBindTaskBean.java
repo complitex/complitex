@@ -37,10 +37,6 @@ import static org.complitex.osznconnection.file.entity.DwellingCharacteristicsDB
 import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
 import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
@@ -126,10 +122,10 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
         dwellingCharacteristicsBean.update(dwellingCharacteristics);
     }
 
-    private void bindDwellingCharacteristicsFile(RequestFile dwellingCharacteristicsFile)
+    private void bindDwellingCharacteristicsFile(RequestFile requestFile)
             throws BindException, DBException, CanceledByUserException {
         //извлечь из базы все id подлежащие связыванию для файла dwelling characteristics и доставать записи порциями по BATCH_SIZE штук.
-        List<Long> notResolvedDwellingCharacteristicsIds = dwellingCharacteristicsBean.findIdsForBinding(dwellingCharacteristicsFile.getId());
+        List<Long> notResolvedDwellingCharacteristicsIds = dwellingCharacteristicsBean.findIdsForBinding(requestFile.getId());
         List<Long> batch = Lists.newArrayList();
 
         int batchSize = configBean.getInteger(FileHandlingConfig.BIND_BATCH_SIZE, true);
@@ -143,18 +139,16 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
 
             //достать из базы очередную порцию записей
             List<DwellingCharacteristics> dwellingCharacteristics =
-                    dwellingCharacteristicsBean.findForOperation(dwellingCharacteristicsFile.getId(), batch);
+                    dwellingCharacteristicsBean.findForOperation(requestFile.getId(), batch);
             for (DwellingCharacteristics dwellingCharacteristic : dwellingCharacteristics) {
-                if (dwellingCharacteristicsFile.isCanceled()) {
+                if (requestFile.isCanceled()) {
                     throw new CanceledByUserException();
                 }
 
                 //связать dwelling characteristics запись
                 try {
                     userTransaction.begin();
-
                     bind(dwellingCharacteristic);
-
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The dwelling characteristics item ( id = " + dwellingCharacteristic.getId() + ") was bound with error: ", e);
@@ -164,6 +158,8 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean {
                     } catch (SystemException e1) {
                         log.error("Couldn't rollback transaction for binding dwelling characteristics item.", e1);
                     }
+
+                    throw new BindException(e, false, requestFile);
                 }
             }
         }
