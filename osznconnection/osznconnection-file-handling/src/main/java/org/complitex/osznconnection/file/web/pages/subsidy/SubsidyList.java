@@ -211,8 +211,7 @@ public final class SubsidyList extends TemplatePage {
         add(addressCorrectionDialog);
 
         //Панель поиска
-        final SubsidyLookupPanel lookupPanel = new SubsidyLookupPanel("lookupPanel", subsidyFile.getUserOrganizationId(),
-                content, statusDetailPanel) {
+        final SubsidyLookupPanel lookupPanel = new SubsidyLookupPanel("lookupPanel", content, statusDetailPanel) {
 
             @Override
             protected void onClose(AjaxRequestTarget target) {

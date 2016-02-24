@@ -12,10 +12,6 @@ import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPane
 
 import javax.ejb.EJB;
 
-/**
- *
- * @author Artem
- */
 public class DwellingCharacteristicsLookupPanel extends AbstractLookupPanel<DwellingCharacteristics> {
 
     @EJB
@@ -24,8 +20,8 @@ public class DwellingCharacteristicsLookupPanel extends AbstractLookupPanel<Dwel
     @EJB
     private PersonAccountService personAccountService;
 
-    public DwellingCharacteristicsLookupPanel(String id, long userOrganizationId, Component... toUpdate) {
-        super(id, userOrganizationId, toUpdate);
+    public DwellingCharacteristicsLookupPanel(String id, Component... toUpdate) {
+        super(id, toUpdate);
     }
 
     @Override
@@ -46,21 +42,7 @@ public class DwellingCharacteristicsLookupPanel extends AbstractLookupPanel<Dwel
     }
 
     @Override
-    protected void resolveOutgoingAddress(DwellingCharacteristics dwellingCharacteristics, long userOrganizationId) {
-        lookupBean.resolveOutgoingAddress(dwellingCharacteristics, userOrganizationId);
-    }
-
-    @Override
-    protected Cursor<AccountDetail> getAccountDetails(DwellingCharacteristics dwellingCharacteristics,
-                                                      long userOrganizationId) throws DBException {
-        return lookupBean.getAccountDetails(dwellingCharacteristics.getOutgoingDistrict(),
-                dwellingCharacteristics.getOutgoingStreetType(), dwellingCharacteristics.getOutgoingStreet(),
-                dwellingCharacteristics.getOutgoingBuildingNumber(), dwellingCharacteristics.getOutgoingBuildingCorp(),
-                dwellingCharacteristics.getOutgoingApartment(), dwellingCharacteristics.getDate(), userOrganizationId);
-    }
-
-    @Override
-    protected void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics, String accountNumber, long userOrganizationId) {
+    protected void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics, String accountNumber) {
         personAccountService.updateAccountNumber(dwellingCharacteristics, accountNumber);
     }
 }

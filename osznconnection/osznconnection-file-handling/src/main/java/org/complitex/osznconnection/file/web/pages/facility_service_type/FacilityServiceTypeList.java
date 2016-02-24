@@ -204,8 +204,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
         //Панель поиска
         final FacilityServiceTypeLookupPanel lookupPanel =
-                new FacilityServiceTypeLookupPanel("lookupPanel", facilityServiceTypeFile.getUserOrganizationId(),
-                content, statusDetailPanel) {
+                new FacilityServiceTypeLookupPanel("lookupPanel", content, statusDetailPanel) {
 
                     @Override
                     protected void onClose(AjaxRequestTarget target) {

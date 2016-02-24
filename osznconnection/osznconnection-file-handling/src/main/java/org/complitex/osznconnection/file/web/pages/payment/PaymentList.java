@@ -195,8 +195,7 @@ public final class PaymentList extends TemplatePage {
         add(addressCorrectionDialog);
 
         //Панель поиска
-        final PaymentLookupPanel lookupPanel = new PaymentLookupPanel("lookupPanel", paymentFile.getUserOrganizationId(),
-                content, statusDetailPanel) {
+        final PaymentLookupPanel lookupPanel = new PaymentLookupPanel("lookupPanel", content, statusDetailPanel) {
 
             @Override
             protected void onClose(AjaxRequestTarget target) {

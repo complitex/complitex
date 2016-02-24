@@ -72,7 +72,6 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     private T request;
     private T initialRequest;
     private IModel<String> accountNumberModel = new Model<>();
-    private Long userOrganizationId;
 
     private WebMarkupContainer addressContainer;
     private WebMarkupContainer accountContainer;
@@ -82,9 +81,8 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     private IModel<String> middleNameModel = Model.of("");
     private IModel<String> lastNameModel = Model.of("");
 
-    public AbstractLookupPanel(String id, long userOrganizationId, Component... toUpdate) {
+    public AbstractLookupPanel(String id, Component... toUpdate) {
         super(id);
-        this.userOrganizationId = userOrganizationId;
         init(toUpdate);
     }
 
@@ -185,10 +183,10 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         fioContainer.add(new IndicatingAjaxButton("lookupByFio") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                String district = resolveOutgoingDistrict(request, userOrganizationId);
+                String district = resolveOutgoingDistrict(request);
 
                 try {
-                    List<AccountDetail> accountDetails = lookupBean.getAccountDetailsByFio(userOrganizationId,
+                    List<AccountDetail> accountDetails = lookupBean.getAccountDetailsByFio(request.getUserOrganizationId(),
                             district, getServicingOrganizationCode(request), lastNameModel.getObject(),
                             firstNameModel.getObject(), middleNameModel.getObject(), (Date)request.getField("DAT1"));
 
@@ -221,7 +219,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
             public void onClick(AjaxRequestTarget target) {
                 if (accountDetailModel.getObject() != null && !isEmpty(accountDetailModel.getObject().getAccCode())) {
                     try {
-                        updateAccountNumber(initialRequest, accountDetailModel.getObject().getAccCode(), userOrganizationId);
+                        updateAccountNumber(initialRequest, accountDetailModel.getObject().getAccCode());
                         for (Component component : toUpdate) {
                             target.add(component);
                         }
@@ -329,19 +327,26 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         dialog.open(target);
     }
 
-    protected final List<AccountDetail> acquireAccountDetailsByAccount(T request, String district, String account,
-            long userOrganizationId) throws DBException, UnknownAccountNumberTypeException {
-        return lookupBean.acquireAccountDetailsByAccount(request, district, account, userOrganizationId);
+    protected final List<AccountDetail> acquireAccountDetailsByAccount(T request, String district, String account)
+            throws DBException, UnknownAccountNumberTypeException {
+        return lookupBean.acquireAccountDetailsByAccount(request, district, account);
     }
 
-    protected abstract void resolveOutgoingAddress(T request, long userOrganizationId);
+    protected void resolveOutgoingAddress(T request){
+        lookupBean.resolveOutgoingAddress(request);
+    };
 
-    protected abstract Cursor<AccountDetail> getAccountDetails(T request, long userOrganizationId) throws DBException;
+    protected Cursor<AccountDetail> getAccountDetails(T request) throws DBException{
+        return lookupBean.getAccountDetails( request.getOutgoingDistrict(),
+                request.getOutgoingStreetType(), request.getOutgoingStreet(),
+                request.getOutgoingBuildingNumber(), request.getOutgoingBuildingCorp(),
+                request.getOutgoingApartment(), request.getDate(), request.getUserOrganizationId());
+    }
 
-    protected abstract void updateAccountNumber(T request, String accountNumber, long userOrganizationId);
+    protected abstract void updateAccountNumber(T request, String accountNumber);
 
-    protected String resolveOutgoingDistrict(T request, long userOrganizationId) {
-        return addressService.resolveOutgoingDistrict(request.getOrganizationId(), userOrganizationId);
+    protected String resolveOutgoingDistrict(T request) {
+        return addressService.resolveOutgoingDistrict(request.getOrganizationId(), request.getUserOrganizationId());
     }
 
     protected String getServicingOrganizationCode(T request){
@@ -360,7 +365,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         if (isInternalAddressCorrect(request)) {
             boolean outgoingAddressResolved = false;
             try {
-                resolveOutgoingAddress(request, userOrganizationId);
+                resolveOutgoingAddress(request);
                 outgoingAddressResolved = true;
             } catch (Exception e) {
                 error(getString("db_error"));
@@ -369,7 +374,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
             if (outgoingAddressResolved) {
                 if (request.getStatus() == ACCOUNT_NUMBER_NOT_FOUND) {
                     try {
-                        Cursor<AccountDetail> accountDetails = getAccountDetails(request, userOrganizationId);
+                        Cursor<AccountDetail> accountDetails = getAccountDetails(request);
 
                         if (accountDetails.isEmpty()) {
                             switch (accountDetails.getResultCode()){
@@ -429,7 +434,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         if (!isEmpty(accountNumberModel.getObject())) {
             String outgoingDistrict = null;
             try {
-                outgoingDistrict = resolveOutgoingDistrict(request, userOrganizationId);
+                outgoingDistrict = resolveOutgoingDistrict(request);
             } catch (Exception e) {
                 LoggerFactory.getLogger(getClass()).error("", e);
                 error(getString("db_error"));
@@ -437,7 +442,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
             if (!isEmpty(outgoingDistrict)) {
                 try {
                     List<AccountDetail> accountDetails = acquireAccountDetailsByAccount(request, outgoingDistrict,
-                            accountNumberModel.getObject(), userOrganizationId);
+                            accountNumberModel.getObject());
 
                     if (accountDetails == null || accountDetails.isEmpty()) {
                         error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));

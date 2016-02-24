@@ -31,8 +31,8 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
     private OsznOrganizationStrategy organizationStrategy;
 
 
-    public PaymentLookupPanel(String id, Long userOrganizationId, Component... toUpdate) {
-        super(id, userOrganizationId, toUpdate);
+    public PaymentLookupPanel(String id, Component... toUpdate) {
+        super(id, toUpdate);
     }
 
     @Override
@@ -52,20 +52,8 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
     }
 
     @Override
-    protected void updateAccountNumber(Payment payment, String accountNumber, long userOrganizationId) {
+    protected void updateAccountNumber(Payment payment, String accountNumber) {
         personAccountService.updateAccountNumber(payment, accountNumber);
-    }
-
-    @Override
-    protected void resolveOutgoingAddress(Payment payment, long userOrganizationId) {
-        lookupBean.resolveOutgoingAddress(payment, userOrganizationId);
-    }
-
-    @Override
-    protected Cursor<AccountDetail> getAccountDetails(Payment payment, long userOrganizationId) throws DBException {
-        return lookupBean.getAccountDetails(payment.getOutgoingDistrict(), payment.getOutgoingStreetType(),
-                payment.getOutgoingStreet(), payment.getOutgoingBuildingNumber(), payment.getOutgoingBuildingCorp(),
-                payment.getOutgoingApartment(), (Date) payment.getField(PaymentDBF.DAT1), userOrganizationId);
     }
 
     @Override

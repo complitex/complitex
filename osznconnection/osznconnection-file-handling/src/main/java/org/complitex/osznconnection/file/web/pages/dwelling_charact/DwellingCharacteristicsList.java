@@ -200,8 +200,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
         //Панель поиска
         final DwellingCharacteristicsLookupPanel lookupPanel =
-                new DwellingCharacteristicsLookupPanel("lookupPanel", dwellingCharacteristicsFile.getUserOrganizationId(),
-                content, statusDetailPanel) {
+                new DwellingCharacteristicsLookupPanel("lookupPanel", content, statusDetailPanel) {
 
                     @Override
                     protected void onClose(AjaxRequestTarget target) {

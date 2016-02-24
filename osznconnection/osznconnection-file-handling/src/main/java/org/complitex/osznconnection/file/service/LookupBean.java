@@ -34,7 +34,7 @@ public class LookupBean extends AbstractBean {
      * @param request
      */
 
-    public void resolveOutgoingAddress(AbstractAccountRequest request, long userOrganizationId) {
+    public void resolveOutgoingAddress(AbstractAccountRequest request) {
         addressService.resolveOutgoingAddress(request);
     }
 
@@ -52,8 +52,8 @@ public class LookupBean extends AbstractBean {
 
 
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district, String account,
-            long userOrganizationId) throws DBException, UnknownAccountNumberTypeException {
+    public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district, String account)
+            throws DBException, UnknownAccountNumberTypeException {
         return adapter.acquireAccountDetailsByAccount(request, district, account, request.getDate());
     }
 

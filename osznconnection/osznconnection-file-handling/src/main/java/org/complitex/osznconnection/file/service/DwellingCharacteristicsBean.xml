@@ -140,7 +140,7 @@
         FROM (
             SELECT DISTINCT d.`id`, d.`status`, d.`request_file_id`, d.`IDCODE`, d.`first_name`, d.`middle_name`, d.`last_name`, d.`FIO`,
                 d.`CDUL`, d.`HOUSE`, d.`BUILD`, d.`APT`, d.`date`,
-                f.`organization_id`,
+                f.`organization_id`, f.`user_organization_id`,
                 d.`internal_city_id`, d.`internal_street_id`, d.`internal_street_type_id`, d.`internal_building_id`,
                 d.`outgoing_city`, d.`outgoing_district`, d.`outgoing_street`, d.`outgoing_street_type`, d.`outgoing_building_number`,
                 d.`outgoing_building_corp`, d.`outgoing_apartment`,

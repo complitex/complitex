@@ -24,8 +24,8 @@ public class FacilityServiceTypeLookupPanel extends AbstractLookupPanel<Facility
     @EJB
     private PersonAccountService personAccountService;
 
-    public FacilityServiceTypeLookupPanel(String id, long userOrganizationId, Component... toUpdate) {
-        super(id, userOrganizationId, toUpdate);
+    public FacilityServiceTypeLookupPanel(String id, Component... toUpdate) {
+        super(id, toUpdate);
     }
 
     @Override
@@ -45,23 +45,9 @@ public class FacilityServiceTypeLookupPanel extends AbstractLookupPanel<Facility
                 && facilityServiceType.getBuildingId() != null && facilityServiceType.getBuildingId() > 0;
     }
 
-    @Override
-    protected void resolveOutgoingAddress(FacilityServiceType facilityServiceType, long userOrganizationId) {
-        lookupBean.resolveOutgoingAddress(facilityServiceType, userOrganizationId);
-    }
 
     @Override
-    protected Cursor<AccountDetail> getAccountDetails(FacilityServiceType facilityServiceType,
-                                                      long userOrganizationId) throws DBException {
-        return lookupBean.getAccountDetails( facilityServiceType.getOutgoingDistrict(),
-                facilityServiceType.getOutgoingStreetType(), facilityServiceType.getOutgoingStreet(),
-                facilityServiceType.getOutgoingBuildingNumber(), facilityServiceType.getOutgoingBuildingCorp(),
-                facilityServiceType.getOutgoingApartment(), facilityServiceType.getDate(), userOrganizationId);
-    }
-
-    @Override
-    protected void updateAccountNumber(FacilityServiceType facilityServiceType, String accountNumber,
-                                       long userOrganizationId) {
+    protected void updateAccountNumber(FacilityServiceType facilityServiceType, String accountNumber) {
         personAccountService.updateAccountNumber(facilityServiceType, accountNumber);
     }
 }

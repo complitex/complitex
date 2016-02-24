@@ -33,8 +33,8 @@ public class ActualPaymentLookupPanel extends AbstractLookupPanel<ActualPayment>
     @EJB
     private ActualPaymentBean actualPaymentBean;
 
-    public ActualPaymentLookupPanel(String id, long userOrganizationId, Component... toUpdate) {
-        super(id, userOrganizationId, toUpdate);
+    public ActualPaymentLookupPanel(String id, Component... toUpdate) {
+        super(id, toUpdate);
     }
 
     @Override
@@ -54,25 +54,20 @@ public class ActualPaymentLookupPanel extends AbstractLookupPanel<ActualPayment>
                 && actualPayment.getBuildingId() != null && actualPayment.getBuildingId() > 0;
     }
 
-    @Override
-    protected void resolveOutgoingAddress(ActualPayment actualPayment, long userOrganizationId) {
-        lookupBean.resolveOutgoingAddress(actualPayment, userOrganizationId);
-    }
 
     @Override
-    protected Cursor<AccountDetail> getAccountDetails(ActualPayment actualPayment, long userOrganizationId)
-            throws DBException {
+    protected Cursor<AccountDetail> getAccountDetails(ActualPayment actualPayment)throws DBException {
         RequestFile actualPaymentFile = requestFileBean.findById(actualPayment.getRequestFileId());
 
         return lookupBean.getAccountDetails(actualPayment.getOutgoingDistrict(),
                 actualPayment.getOutgoingStreetType(), actualPayment.getOutgoingStreet(),
                 actualPayment.getOutgoingBuildingNumber(), actualPayment.getOutgoingBuildingCorp(),
                 actualPayment.getOutgoingApartment(), actualPaymentBean.getFirstDay(actualPayment, actualPaymentFile),
-                userOrganizationId);
+                actualPayment.getUserOrganizationId());
     }
 
     @Override
-    protected void updateAccountNumber(ActualPayment actualPayment, String accountNumber, long userOrganizationId) {
+    protected void updateAccountNumber(ActualPayment actualPayment, String accountNumber) {
         personAccountService.updateAccountNumber(actualPayment, accountNumber);
     }
 }

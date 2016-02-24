@@ -25,8 +25,8 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
     @EJB
     private SubsidyService subsidyService;
 
-    public SubsidyLookupPanel(String id, long userOrganizationId, Component... toUpdate) {
-        super(id, userOrganizationId, toUpdate);
+    public SubsidyLookupPanel(String id, Component... toUpdate) {
+        super(id, toUpdate);
     }
 
     @Override
@@ -47,19 +47,19 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
     }
 
     @Override
-    protected void resolveOutgoingAddress(Subsidy subsidy, long userOrganizationId) {
-        lookupBean.resolveOutgoingAddress(subsidy, userOrganizationId);
+    protected void resolveOutgoingAddress(Subsidy subsidy) {
+        lookupBean.resolveOutgoingAddress(subsidy);
     }
 
     @Override
-    protected Cursor<AccountDetail> getAccountDetails(Subsidy subsidy, long userOrganizationId) throws DBException {
+    protected Cursor<AccountDetail> getAccountDetails(Subsidy subsidy) throws DBException {
         return lookupBean.getAccountDetails(subsidy.getOutgoingDistrict(), subsidy.getOutgoingStreetType(),
                 subsidy.getOutgoingStreet(), subsidy.getOutgoingBuildingNumber(), subsidy.getOutgoingBuildingCorp(),
-                subsidy.getOutgoingApartment(), (Date) subsidy.getField(SubsidyDBF.DAT1), userOrganizationId);
+                subsidy.getOutgoingApartment(), (Date) subsidy.getField(SubsidyDBF.DAT1), subsidy.getUserOrganizationId());
     }
 
     @Override
-    protected void updateAccountNumber(Subsidy subsidy, String accountNumber, long userOrganizationId) {
+    protected void updateAccountNumber(Subsidy subsidy, String accountNumber) {
         personAccountService.updateAccountNumber(subsidy, accountNumber);
     }
 
