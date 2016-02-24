@@ -194,6 +194,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
                         target.add(content, statusDetailPanel);
                         dataRowHoverBehavior.deactivateDataRow(target);
+                        statusDetailPanel.rebuild();
                     }
                 };
         add(addressCorrectionDialog);
