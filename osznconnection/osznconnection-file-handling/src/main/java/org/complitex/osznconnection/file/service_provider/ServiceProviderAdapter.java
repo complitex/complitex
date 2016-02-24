@@ -155,9 +155,21 @@ public class ServiceProviderAdapter extends AbstractBean {
 
                 if (dot > -1){
                     String zheuAccount = zheuCodeAccount.substring(dot + 1);
+                    String zheuCode = zheuCodeAccount.substring(0, dot);
 
-                    if (spAccountNumber.length() >= zheuAccount.length() &&
-                            spAccountNumber.substring(spAccountNumber.length() - zheuAccount.length()).equals(zheuAccount)){
+                    int sep = -1;
+                    char[] chars = spAccountNumber.toCharArray();
+                    for (int i = 0; i < chars.length; ++i){
+                        if (!Character.isDigit(chars[i])){
+                            sep = i;
+                            break;
+                        }
+                    }
+
+                    String code = sep > -1 ? spAccountNumber.substring(0, sep) : null;
+                    String account = spAccountNumber.substring(sep + 1);
+
+                    if ((code == null || code.equals(zheuCode)) && zheuAccount.equals(account)){
                         request.setAccountNumber(accountDetail.getAccCode());
                         request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
