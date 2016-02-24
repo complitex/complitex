@@ -147,16 +147,16 @@ public class ServiceProviderAdapter extends AbstractBean {
                 return accountDetail;
             }
 
-            if (spAccountNumber.length() > accountDetail.getZheuCode().length()) {
-                int diff = spAccountNumber.length() - accountDetail.getZheuCode().length();
-                String spAccountNumberEnd = spAccountNumber.substring(diff);
-                String spAccountNumberBegin = spAccountNumber.substring(0, diff);
+            //zheu code.account
+            String zheuCodeAccount = accountDetail.getZheuCode();
 
-                if (spAccountNumberEnd.equals(accountDetail.getZheuCode())){
-                    if (spAccountNumberBegin.contains(accountDetail.getZheu())
-                            || accountDetail.getOwnerFio().toUpperCase().startsWith(lastName.toUpperCase())
-                            || spAccountNumber.equals(accountDetail.getErcCode())
-                            || spAccountNumber.equals(accountDetail.getAccCode())){
+            if (zheuCodeAccount!= null && zheuCodeAccount.length() > 1) {
+                int dot = accountDetail.getZheuCode().indexOf('.');
+
+                if (dot > -1){
+                    String zheuAccount = zheuCodeAccount.substring(dot + 1);
+
+                    if (spAccountNumber.equals(zheuAccount)){
                         request.setAccountNumber(accountDetail.getAccCode());
                         request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
