@@ -14,8 +14,8 @@ public class DwellingCharacteristicsExample extends AbstractRequestExample {
     private String building;
     private String corp;
     private String apartment;
-    private long start;
-    private long size;
+    private long first;
+    private long count;
     private String orderByClause;
     private boolean asc;
 
@@ -91,20 +91,20 @@ public class DwellingCharacteristicsExample extends AbstractRequestExample {
         this.apartment = apartment;
     }
 
-    public long getStart() {
-        return start;
+    public long getFirst() {
+        return first;
     }
 
-    public void setStart(long start) {
-        this.start = start;
+    public void setFirst(long first) {
+        this.first = first;
     }
 
-    public long getSize() {
-        return size;
+    public long getCount() {
+        return count;
     }
 
-    public void setSize(long size) {
-        this.size = size;
+    public void setCount(long count) {
+        this.count = count;
     }
 
     public String getOrderByClause() {

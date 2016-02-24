@@ -169,7 +169,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                     String code = sep > -1 ? spAccountNumber.substring(0, sep) : null;
                     String account = spAccountNumber.substring(sep + 1);
 
-                    if ((code == null || code.equals(zheuCode)) && zheuAccount.equals(account)){
+                    if ((code == null || code.equals(zheuCode)) && account.equals(zheuAccount)){
                         request.setAccountNumber(accountDetail.getAccCode());
                         request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
