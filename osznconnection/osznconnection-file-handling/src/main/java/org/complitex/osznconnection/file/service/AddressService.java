@@ -157,7 +157,7 @@ public class AddressService extends AbstractBean {
 
         //Связывание улицы
         List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(request.getCityId(),
-                request.getStreetTypeId(), request.getStreetCode(), null,  request.getStreet(),
+                request.getStreetTypeId(), null, null,  request.getStreet(),
                 osznId, userOrganizationId);
 
         if (streetCorrections.size() == 1){
