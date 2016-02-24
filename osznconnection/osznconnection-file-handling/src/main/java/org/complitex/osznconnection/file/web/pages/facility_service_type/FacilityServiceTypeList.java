@@ -198,6 +198,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
                         target.add(content, statusDetailPanel);
                         dataRowHoverBehavior.deactivateDataRow(target);
+                        statusDetailPanel.rebuild();
                     }
                 };
         add(addressCorrectionDialog);
