@@ -15,9 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class AddressCorrectionBean extends CorrectionBean {
@@ -159,12 +157,12 @@ public class AddressCorrectionBean extends CorrectionBean {
     }
 
     public List<Long> getStreetTypeIds(String streetType) {
-        List<Long> list = new ArrayList<>();
+        Set<Long> set = new HashSet<>();
 
-        list.addAll(getObjectIds("street_type", streetType, StreetTypeStrategy.SHORT_NAME));
-        list.addAll(getObjectIds("street_type", streetType, StreetTypeStrategy.NAME));
+        set.addAll(getObjectIds("street_type", streetType, StreetTypeStrategy.SHORT_NAME));
+        set.addAll(getObjectIds("street_type", streetType, StreetTypeStrategy.NAME));
 
-        return list;
+        return new ArrayList<>(set);
     }
 
     public boolean isStreetTypeObjectExists(String streetType, Long objectId){
