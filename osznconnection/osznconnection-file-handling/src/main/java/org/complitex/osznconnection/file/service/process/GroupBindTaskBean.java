@@ -77,7 +77,7 @@ public class GroupBindTaskBean implements ITaskBean {
         group.setStatus(requestFileGroupBean.getRequestFileStatus(group)); //обновляем статус из базы данных
 
         if (group.isProcessing()) { //проверяем что не обрабатывается в данный момент
-            throw new BindException(new AlreadyProcessingException(group), true, group);
+            throw new BindException(new AlreadyProcessingException(group.getFullName()), true, group);
         }
 
         group.setStatus(RequestFileStatus.BINDING);

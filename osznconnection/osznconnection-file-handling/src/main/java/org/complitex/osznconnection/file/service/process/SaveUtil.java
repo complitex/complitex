@@ -107,7 +107,7 @@ public final class SaveUtil {
         }
     }
 
-    private static void writeErrorStatus(List<AbstractAccountRequest> requests, Writer fileWriter,
+    private static void writeErrorStatus(List<? extends AbstractRequest> requests, Writer fileWriter,
             IWarningRenderer warningRenderer, boolean onlyWarning) throws IOException {
         if (requests != null) {
             for (AbstractRequest request : requests) {

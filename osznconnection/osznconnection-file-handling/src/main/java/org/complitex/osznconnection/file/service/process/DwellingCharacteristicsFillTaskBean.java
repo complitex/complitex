@@ -24,7 +24,7 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()){
-            throw new BindException(new AlreadyProcessingException(requestFile), true, requestFile);
+            throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
         }
 
         requestFile.setStatus(RequestFileStatus.FILLING);

@@ -69,7 +69,7 @@ public class GroupFillTaskBean implements ITaskBean {
         group.setStatus(requestFileGroupBean.getRequestFileStatus(group)); //обновляем статус из базы данных
 
         if (group.isProcessing()) { //проверяем что не обрабатывается в данный момент
-            throw new FillException(new AlreadyProcessingException(group), true, group);
+            throw new FillException(new AlreadyProcessingException(group.getFullName()), true, group);
         }
 
         group.setStatus(RequestFileStatus.FILLING);

@@ -109,7 +109,7 @@ public class BenefitBean extends AbstractRequestBean {
         sqlSession().insert(MAPPING_NAMESPACE + ".insertBenefitList", abstractRequests);
     }
 
-    public List<AbstractAccountRequest> getBenefits(long requestFileId) {
+    public List<Benefit> getBenefits(long requestFileId) {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".selectBenefits", requestFileId);
     }
 

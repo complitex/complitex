@@ -1,6 +1,7 @@
 package org.complitex.osznconnection.file.service.process;
 
 import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.BenefitBean;
 import org.complitex.osznconnection.file.service.PaymentBean;
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class GroupSaveTaskBean extends AbstractSaveTaskBean<RequestFileGroup> {
+public class GroupSaveTaskBean extends AbstractSaveTaskBean implements ITaskBean<RequestFileGroup> {
 
     @EJB
     private PaymentBean paymentBean;
@@ -66,7 +67,7 @@ public class GroupSaveTaskBean extends AbstractSaveTaskBean<RequestFileGroup> {
     }
 
     @Override
-    protected List<? extends AbstractRequest> getAbstractRequests(RequestFile requestFile) {
+    protected List<? extends AbstractAccountRequest> getAbstractRequests(RequestFile requestFile) {
         switch (requestFile.getType()) {
             case BENEFIT:
                 return benefitBean.getBenefits(requestFile.getId());

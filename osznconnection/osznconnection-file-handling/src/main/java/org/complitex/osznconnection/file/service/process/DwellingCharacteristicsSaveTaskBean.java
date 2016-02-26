@@ -16,20 +16,20 @@ import java.util.List;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class DwellingCharacteristicsSaveTaskBean extends AbstractSaveTaskBean implements ITaskBean {
-
+public class DwellingCharacteristicsSaveTaskBean extends AbstractSaveTaskBean implements ITaskBean<RequestFile>{
     @EJB
     private DwellingCharacteristicsBean dwellingCharacteristicsBean;
+
     @EJB
     private ConfigBean configBean;
 
     @Override
-    protected List<AbstractAccountRequest> getAbstractRequests(RequestFile requestFile) {
+    public List<AbstractAccountRequest> getAbstractRequests(RequestFile requestFile) {
         return dwellingCharacteristicsBean.getDwellingCharacteristics(requestFile.getId());
     }
 
     @Override
-    protected String getPuAccountFieldName() {
+    public String getPuAccountFieldName() {
         return DwellingCharacteristicsDBF.IDCODE.name();
     }
 
@@ -39,7 +39,7 @@ public class DwellingCharacteristicsSaveTaskBean extends AbstractSaveTaskBean im
     }
 
     @Override
-    protected RequestFileDirectoryType getSaveDirectoryType() {
+    public RequestFileDirectoryType getSaveDirectoryType() {
         return RequestFileDirectoryType.SAVE_DWELLING_CHARACTERISTICS_DIR;
     }
 

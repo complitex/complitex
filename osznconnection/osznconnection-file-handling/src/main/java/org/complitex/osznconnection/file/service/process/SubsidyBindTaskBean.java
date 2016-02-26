@@ -155,7 +155,7 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
                 ? (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT) : false;
 
         if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) { //проверяем что не обрабатывается в данный момент
-            throw new BindException(new AlreadyProcessingException(requestFile), true, requestFile);
+            throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
         }
 
         requestFile.setStatus(RequestFileStatus.BINDING);

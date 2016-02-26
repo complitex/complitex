@@ -64,7 +64,7 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         //проверяем что не обрабатывается в данный момент
         if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
-            throw new FillException(new AlreadyProcessingException(requestFile), true, requestFile);
+            throw new FillException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
         }
 
         requestFile.setStatus(RequestFileStatus.FILLING);

@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractSaveTaskBean<E extends IExecutorObject> implements ITaskBean<E>{
+public abstract class AbstractSaveTaskBean{
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @EJB
@@ -37,7 +37,7 @@ public abstract class AbstractSaveTaskBean<E extends IExecutorObject> implements
     @EJB
     private RequestFileDescriptionBean requestFileDescriptionBean;
 
-    protected boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException{
+    public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException{
         // получаем значение опции и параметров комманды
         // опция перезаписи номера л/с поставщика услуг номером л/с модуля начислений при выгрузке файла запроса
         final boolean updatePuAccount = (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT);
@@ -85,7 +85,7 @@ public abstract class AbstractSaveTaskBean<E extends IExecutorObject> implements
         return field;
     }
 
-    protected abstract List<AbstractRequest> getAbstractRequests(RequestFile requestFile);
+    protected abstract List<? extends AbstractAccountRequest> getAbstractRequests(RequestFile requestFile);
 
     protected abstract String getPuAccountFieldName();
 
@@ -108,7 +108,7 @@ public abstract class AbstractSaveTaskBean<E extends IExecutorObject> implements
         return inputFileName;
     }
 
-    protected  void save(RequestFile<AbstractAccountRequest> requestFile, boolean updatePuAccount) throws SaveException {
+    protected  void save(RequestFile requestFile, boolean updatePuAccount) throws SaveException {
         final RequestFileDescription description = requestFileDescriptionBean.getFileDescription(requestFile.getType());
 
         DBFWriter writer = null;
@@ -129,7 +129,7 @@ public abstract class AbstractSaveTaskBean<E extends IExecutorObject> implements
             writer.setFields(fields);
 
             //Сохранение строк
-            List<? extends AbstractRequest> rows;
+            List<? extends AbstractAccountRequest> rows;
             try {
                 rows = getAbstractRequests(requestFile);
                 requestFile.setRequests(rows);

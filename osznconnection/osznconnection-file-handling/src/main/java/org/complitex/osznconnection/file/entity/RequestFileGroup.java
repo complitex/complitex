@@ -18,8 +18,8 @@ public class RequestFileGroup implements IExecutorObject{
 
     private Long id;
 
-    private RequestFile<Benefit> benefitFile;
-    private RequestFile<Payment> paymentFile;
+    private RequestFile benefitFile;
+    private RequestFile paymentFile;
 
     private int loadedRecordCount;
     private int bindedRecordCount;
@@ -148,7 +148,7 @@ public class RequestFileGroup implements IExecutorObject{
         this.benefitFile = benefitFile;
     }
 
-    public RequestFile<Payment> getPaymentFile() {
+    public RequestFile getPaymentFile() {
         return paymentFile;
     }
 

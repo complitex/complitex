@@ -172,7 +172,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFil
 
         //проверяем что не обрабатывается в данный момент
         if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
-            throw new BindException(new AlreadyProcessingException(requestFile), true, requestFile);
+            throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
         }
 
         requestFile.setStatus(RequestFileStatus.BINDING);

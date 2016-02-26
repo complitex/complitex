@@ -14,7 +14,7 @@ import java.util.List;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class FacilityForm2SaveTaskBean extends AbstractSaveTaskBean implements ITaskBean {
+public class FacilityForm2SaveTaskBean extends AbstractSaveTaskBean implements ITaskBean<RequestFile> {
 
     @EJB
     private FacilityForm2Bean facilityForm2Bean2;

@@ -86,7 +86,7 @@ public class PaymentBean extends AbstractRequestBean {
         sqlSession().insert(MAPPING_NAMESPACE + ".insertPaymentList", abstractRequests);
     }
 
-    public List<AbstractAccountRequest> getPayments(long requestFileId) {
+    public List<Payment> getPayments(long requestFileId) {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".selectPayments", requestFileId);
     }
 

@@ -14,14 +14,14 @@ import java.util.Map;
  */
 @Local
 public interface ITaskBean<T extends IExecutorObject> {
-    public boolean execute(T object, Map commandParameters) throws ExecuteException;
+    boolean execute(T object, Map commandParameters) throws ExecuteException;
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void onError(T object);
+    void onError(T object);
 
-    public String getModuleName();
+    String getModuleName();
 
-    public Class getControllerClass();
+    Class getControllerClass();
 
-    public Log.EVENT getEvent();
+    Log.EVENT getEvent();
 }
