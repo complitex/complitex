@@ -14,7 +14,7 @@ import java.util.List;
  *
  * Информация о файле запроса: имя, дата загрузки, организация, дата, количество записей, размер файла, статус.
  */
-public class RequestFile<T extends AbstractAccountRequest> extends AbstractExecutorObject {
+public class RequestFile<T extends AbstractRequest> extends AbstractExecutorObject {
     private Long id;
     private Long groupId;
     private Date loaded = DateUtil.getCurrentDate();

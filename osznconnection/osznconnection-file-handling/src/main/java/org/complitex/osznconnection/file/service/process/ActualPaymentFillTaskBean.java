@@ -1,7 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
 import com.google.common.collect.Lists;
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.ExecuteException;
@@ -33,7 +32,7 @@ import java.util.*;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class ActualPaymentFillTaskBean implements ITaskBean {
+public class ActualPaymentFillTaskBean implements ITaskBean<RequestFile> {
 
     private final Logger log = LoggerFactory.getLogger(ActualPaymentFillTaskBean.class);
 
@@ -54,13 +53,10 @@ public class ActualPaymentFillTaskBean implements ITaskBean {
 
 
     @Override
-    public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
-        RequestFile requestFile = (RequestFile) executorObject;
-
-        requestFile.setStatus(requestFileBean.getRequestFileStatus(requestFile)); //обновляем статус из базы данных
-
-        if (requestFile.isProcessing()) { //проверяем что не обрабатывается в данный момент
-            throw new FillException(new AlreadyProcessingException(requestFile), true, requestFile);
+    public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
+        //проверяем что не обрабатывается в данный момент
+        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
+            throw new FillException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
         }
 
         requestFile.setStatus(RequestFileStatus.FILLING);
@@ -89,9 +85,7 @@ public class ActualPaymentFillTaskBean implements ITaskBean {
     }
 
     @Override
-    public void onError(IExecutorObject executorObject) {
-        RequestFile requestFile = (RequestFile) executorObject;
-
+    public void onError(RequestFile requestFile) {
         requestFile.setStatus(RequestFileStatus.FILL_ERROR);
         requestFileBean.save(requestFile);
     }

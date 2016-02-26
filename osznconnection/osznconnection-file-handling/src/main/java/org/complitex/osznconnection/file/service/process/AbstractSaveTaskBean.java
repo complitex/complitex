@@ -6,8 +6,10 @@ import com.linuxense.javadbf.DBFWriter;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.service.RequestFileBean;
@@ -26,25 +28,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractSaveTaskBean<T extends AbstractAccountRequest>{
+public abstract class AbstractSaveTaskBean<E extends IExecutorObject> implements ITaskBean<E>{
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @EJB
     private RequestFileBean requestFileBean;
+
     @EJB
     private RequestFileDescriptionBean requestFileDescriptionBean;
 
-    public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
-        RequestFile requestFile = (RequestFile) executorObject;
-
+    protected boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException{
         // получаем значение опции и параметров комманды
         // опция перезаписи номера л/с поставщика услуг номером л/с модуля начислений при выгрузке файла запроса
-        final boolean updatePuAccount = ((Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT)).booleanValue();
+        final boolean updatePuAccount = (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT);
 
-        requestFile.setStatus(requestFileBean.getRequestFileStatus(requestFile)); //обновляем статус из базы данных
-
-        if (requestFile.isProcessing()) { //проверяем что не обрабатывается в данный момент
-            throw new SaveException(new AlreadyProcessingException(requestFile), true, requestFile);
+        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) { //проверяем что не обрабатывается в данный момент
+            throw new SaveException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
         }
 
         requestFile.setStatus(RequestFileStatus.SAVING);
@@ -59,8 +58,7 @@ public abstract class AbstractSaveTaskBean<T extends AbstractAccountRequest>{
         return true;
     }
 
-    public void onError(IExecutorObject executorObject) {
-        RequestFile requestFile = (RequestFile) executorObject;
+    public void onError(RequestFile requestFile) {
         requestFile.setStatus(RequestFileStatus.SAVE_ERROR);
         requestFileBean.save(requestFile);
     }
@@ -87,7 +85,7 @@ public abstract class AbstractSaveTaskBean<T extends AbstractAccountRequest>{
         return field;
     }
 
-    protected abstract List<T> getAbstractRequests(RequestFile requestFile);
+    protected abstract List<AbstractRequest> getAbstractRequests(RequestFile requestFile);
 
     protected abstract String getPuAccountFieldName();
 
@@ -110,7 +108,7 @@ public abstract class AbstractSaveTaskBean<T extends AbstractAccountRequest>{
         return inputFileName;
     }
 
-    protected final void save(RequestFile<T> requestFile, boolean updatePuAccount) throws SaveException {
+    protected  void save(RequestFile<AbstractAccountRequest> requestFile, boolean updatePuAccount) throws SaveException {
         final RequestFileDescription description = requestFileDescriptionBean.getFileDescription(requestFile.getType());
 
         DBFWriter writer = null;
@@ -131,7 +129,7 @@ public abstract class AbstractSaveTaskBean<T extends AbstractAccountRequest>{
             writer.setFields(fields);
 
             //Сохранение строк
-            List<T> rows;
+            List<? extends AbstractRequest> rows;
             try {
                 rows = getAbstractRequests(requestFile);
                 requestFile.setRequests(rows);

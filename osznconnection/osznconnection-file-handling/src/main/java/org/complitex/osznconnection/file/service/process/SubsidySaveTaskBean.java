@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.service.process;
 
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.Subsidy;
 import org.complitex.osznconnection.file.entity.SubsidyDBF;
@@ -14,7 +13,7 @@ import java.util.List;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidySaveTaskBean extends AbstractSaveTaskBean<Subsidy> implements ITaskBean {
+public class SubsidySaveTaskBean extends AbstractSaveTaskBean<Subsidy> {
 
     @EJB
     private SubsidyBean subsidyBean;

@@ -1,7 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
 import com.google.common.collect.Lists;
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.service.ConfigBean;
@@ -36,7 +35,7 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidyBindTaskBean extends AbstractTaskBean {
+public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
 
     private final Logger log = LoggerFactory.getLogger(SubsidyBindTaskBean.class);
     @Resource
@@ -150,16 +149,12 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
     }
 
     @Override
-    public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
+    public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         // ищем в параметрах комманды опцию "Переписывать номер л/с ПУ номером л/с МН"
         final Boolean updatePuAccount = commandParameters.containsKey(GlobalOptions.UPDATE_PU_ACCOUNT)
                 ? (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT) : false;
 
-        RequestFile requestFile = (RequestFile) executorObject;
-
-        requestFile.setStatus(requestFileBean.getRequestFileStatus(requestFile)); //обновляем статус из базы данных
-
-        if (requestFile.isProcessing()) { //проверяем что не обрабатывается в данный момент
+        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) { //проверяем что не обрабатывается в данный момент
             throw new BindException(new AlreadyProcessingException(requestFile), true, requestFile);
         }
 
@@ -191,9 +186,7 @@ public class SubsidyBindTaskBean extends AbstractTaskBean {
     }
 
     @Override
-    public void onError(IExecutorObject executorObject) {
-        RequestFile requestFile = (RequestFile) executorObject;
-
+    public void onError(RequestFile requestFile) {
         requestFile.setStatus(RequestFileStatus.BIND_ERROR);
         requestFileBean.save(requestFile);
     }

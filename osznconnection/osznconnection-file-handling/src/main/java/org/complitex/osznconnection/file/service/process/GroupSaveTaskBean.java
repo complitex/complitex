@@ -1,8 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.BenefitBean;
 import org.complitex.osznconnection.file.service.PaymentBean;
@@ -24,7 +22,7 @@ import java.util.Map;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class GroupSaveTaskBean extends AbstractSaveTaskBean implements ITaskBean {
+public class GroupSaveTaskBean extends AbstractSaveTaskBean<RequestFileGroup> {
 
     @EJB
     private PaymentBean paymentBean;
@@ -34,17 +32,13 @@ public class GroupSaveTaskBean extends AbstractSaveTaskBean implements ITaskBean
     private RequestFileGroupBean requestFileGroupBean;
 
     @Override
-    public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
-        RequestFileGroup group = (RequestFileGroup) executorObject;
-
+    public boolean execute(RequestFileGroup group, Map commandParameters) throws ExecuteException {
         // получаем значение опции и параметров комманды
         // опция перезаписи номера л/с поставщика услуг номером л/с модуля начислений при выгрузке файла запроса
-        final boolean updatePuAccount = ((Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT)).booleanValue();
+        final boolean updatePuAccount = (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT);
 
-        group.setStatus(requestFileGroupBean.getRequestFileStatus(group)); //обновляем статус из базы данных
-
-        if (group.isProcessing()) { //проверяем что не обрабатывается в данный момент
-            throw new SaveException(new AlreadyProcessingException(group), true, group);
+        if (requestFileGroupBean.getRequestFileStatus(group).isProcessing()) { //проверяем что не обрабатывается в данный момент
+            throw new SaveException(new AlreadyProcessingException(group.getFullName()), true, group);
         }
 
         group.setStatus(RequestFileStatus.SAVING);
@@ -61,8 +55,7 @@ public class GroupSaveTaskBean extends AbstractSaveTaskBean implements ITaskBean
     }
 
     @Override
-    public void onError(IExecutorObject executorObject) {
-        RequestFileGroup group = (RequestFileGroup) executorObject;
+    public void onError(RequestFileGroup group) {
         group.setStatus(RequestFileStatus.SAVE_ERROR);
         requestFileGroupBean.save(group);
     }
@@ -73,7 +66,7 @@ public class GroupSaveTaskBean extends AbstractSaveTaskBean implements ITaskBean
     }
 
     @Override
-    protected List<AbstractAccountRequest> getAbstractRequests(RequestFile requestFile) {
+    protected List<? extends AbstractRequest> getAbstractRequests(RequestFile requestFile) {
         switch (requestFile.getType()) {
             case BENEFIT:
                 return benefitBean.getBenefits(requestFile.getId());
