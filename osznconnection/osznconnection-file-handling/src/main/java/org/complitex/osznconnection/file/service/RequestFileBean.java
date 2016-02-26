@@ -214,8 +214,8 @@ public class RequestFileBean extends AbstractBean {
         }
     }
 
-    public RequestFileStatus getRequestFileStatus(RequestFile requestFile) {
-        return sqlSession().selectOne(NS + ".selectRequestFileStatus", requestFile);
+    public RequestFileStatus getRequestFileStatus(Long requestFileId) {
+        return sqlSession().selectOne(NS + ".selectRequestFileStatus", requestFileId);
     }
 
     public void fixProcessingOnInit() {

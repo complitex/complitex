@@ -24,4 +24,9 @@ public enum RequestFileStatus implements IFixedIdType {
     public Integer getId() {
         return id;
     }
+
+    public boolean isProcessing(){
+        return this.equals(LOADING) || this.equals(BINDING) || this.equals(FILLING) || this.equals(SAVING);
+
+    }
 }

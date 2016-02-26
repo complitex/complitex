@@ -75,10 +75,7 @@ public class RequestFile<T extends AbstractAccountRequest> extends AbstractExecu
     }
 
     public boolean isProcessing() {
-        return RequestFileStatus.LOADING.equals(status)
-                || RequestFileStatus.BINDING.equals(status)
-                || RequestFileStatus.FILLING.equals(status)
-                || RequestFileStatus.SAVING.equals(status);
+        return status != null && status.isProcessing();
     }
 
     public String getCode(){

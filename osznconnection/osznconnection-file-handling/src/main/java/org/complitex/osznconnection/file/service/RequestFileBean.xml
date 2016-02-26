@@ -266,8 +266,7 @@
             AND `type` = #{requestFileType}
     </select>
     
-    <select id="selectRequestFileStatus" resultType="org.complitex.osznconnection.file.entity.RequestFileStatus"
-            parameterType="long">
+    <select id="selectRequestFileStatus" resultType="org.complitex.osznconnection.file.entity.RequestFileStatus" parameterType="long">
         select `status` from `request_file` where `id` = #{id}
     </select>
 

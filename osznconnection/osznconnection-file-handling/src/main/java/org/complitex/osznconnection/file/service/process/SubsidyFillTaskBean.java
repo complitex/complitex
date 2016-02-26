@@ -33,7 +33,7 @@ import java.util.*;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidyFillTaskBean implements ITaskBean{
+public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
     private final Logger log = LoggerFactory.getLogger(SubsidyFillTaskBean.class);
 
     @Resource
@@ -61,12 +61,9 @@ public class SubsidyFillTaskBean implements ITaskBean{
     private OsznOrganizationStrategy organizationStrategy;
 
     @Override
-    public boolean execute(IExecutorObject object, Map commandParameters) throws ExecuteException {
-        RequestFile requestFile = (RequestFile) object;
-
-        requestFile.setStatus(requestFileBean.getRequestFileStatus(requestFile)); //обновляем статус из базы данных
-
-        if (requestFile.isProcessing()) { //проверяем что не обрабатывается в данный момент
+    public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
+        //проверяем что не обрабатывается в данный момент
+        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
             throw new FillException(new AlreadyProcessingException(requestFile), true, requestFile);
         }
 
@@ -198,9 +195,7 @@ public class SubsidyFillTaskBean implements ITaskBean{
     }
 
     @Override
-    public void onError(IExecutorObject object) {
-        RequestFile requestFile = (RequestFile) object;
-
+    public void onError(RequestFile requestFile) {
         requestFile.setStatus(RequestFileStatus.FILL_ERROR);
         requestFileBean.save(requestFile);
     }
