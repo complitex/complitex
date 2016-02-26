@@ -501,6 +501,12 @@ public class ProcessManagerBean {
     }
 
     @Asynchronous
+    public void fillDwellingCharacteristics(List<Long> ids, Map processParameters) {
+        execute(FILL_DWELLING_CHARACTERISTICS, DwellingCharacteristicsFillTaskBean.class, getDwellingCharacteristicsFiles(ids),
+                null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+    }
+
+    @Asynchronous
     public void saveDwellingCharacteristics(List<Long> ids, Map processParameters) {
         execute(SAVE_DWELLING_CHARACTERISTICS, DwellingCharacteristicsSaveTaskBean.class,
                 getDwellingCharacteristicsFiles(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);

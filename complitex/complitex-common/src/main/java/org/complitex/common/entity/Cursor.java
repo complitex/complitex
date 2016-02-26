@@ -16,7 +16,8 @@ public class Cursor<T> implements Serializable{
     public Cursor() {
     }
 
-    public Cursor(Integer resultCode, List<T> data) {
+    @SuppressWarnings("unchecked")
+    public Cursor(Integer resultCode, List data) {
         this.resultCode = resultCode;
         this.data = data;
     }

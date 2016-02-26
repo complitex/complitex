@@ -80,9 +80,7 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
                 }
 
                 userTransaction.begin();
-
                 fill(subsidy);
-
                 userTransaction.commit();
             }
         } catch (Exception e) {
@@ -120,7 +118,7 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
 
         String districtName = addressService.resolveOutgoingDistrict(subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
 
-        List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount( subsidy, districtName,
+        List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(subsidy, districtName,
                 subsidy.getAccountNumber() + "", subsidy.getDate());
 
         accountDetails.add(new AccountDetail());

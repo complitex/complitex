@@ -795,9 +795,12 @@ public class ServiceProviderAdapter extends AbstractBean {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    public List<BenefitData> getBenefitData(String dataSource, String accountNumber, Date date)
-            throws DBException {
+    public List<BenefitData> getBenefitData(Long userOrganizationId, String accountNumber, Date date) throws DBException {
+        return getBenefitData(organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId), accountNumber, date);
+    }
+
+
+    public List<BenefitData> getBenefitData(String dataSource, String accountNumber, Date date) throws DBException {
         Map<String, Object> params = newHashMap();
         params.put("accountNumber", accountNumber);
         params.put("dat1", date);
@@ -1434,5 +1437,19 @@ public class ServiceProviderAdapter extends AbstractBean {
 
     private boolean isCalcCenterAccount(String realPuAccountNumber, String calcCenterAccount) {
         return (realPuAccountNumber.length() == 10) && realPuAccountNumber.equals(calcCenterAccount);
+    }
+
+    public Cursor<PaymentAndBenefitData> getPaymentAndBenefit(Long userOrganizationId, String accountNumber, Date date) throws DBException {
+        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
+
+        Map<String, Object> params = newHashMap();
+        params.put("accountNumber", accountNumber);
+        params.put("dat1", date);
+
+        sqlSession(dataSource).selectOne(NS + ".processPaymentAndBenefit", params);
+
+        log.info("getPaymentAndBenefit. {}", params);
+
+        return new Cursor<>((Integer) params.get("resultCode"), (List) params.get("data"));
     }
 }

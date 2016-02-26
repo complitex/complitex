@@ -24,7 +24,7 @@ public class DwellingCharacteristicsSaveTaskBean extends AbstractSaveTaskBean im
     private ConfigBean configBean;
 
     @Override
-    public List<AbstractAccountRequest> getAbstractRequests(RequestFile requestFile) {
+    public List<? extends AbstractAccountRequest> getAbstractRequests(RequestFile requestFile) {
         return dwellingCharacteristicsBean.getDwellingCharacteristics(requestFile.getId());
     }
 

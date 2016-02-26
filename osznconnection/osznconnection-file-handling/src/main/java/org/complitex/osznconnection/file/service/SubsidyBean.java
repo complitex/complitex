@@ -89,11 +89,7 @@ public class SubsidyBean extends AbstractRequestBean {
     }
 
     public boolean isSubsidyFileBound(long fileId) {
-        return unboundCount(fileId) == 0;
-    }
-
-    private int unboundCount(long fileId) {
-        return countByFile(fileId, RequestStatus.unboundStatuses());
+        return countByFile(fileId, RequestStatus.unboundStatuses()) == 0;
     }
 
     public boolean isSubsidyFileFilled(Long requestFileId){

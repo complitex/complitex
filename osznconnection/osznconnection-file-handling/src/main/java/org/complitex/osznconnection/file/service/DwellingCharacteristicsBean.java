@@ -80,11 +80,11 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
 
 
     public boolean isDwellingCharacteristicsFileBound(long fileId) {
-        return unboundCount(fileId) == 0;
+        return countByFile(fileId, RequestStatus.unboundStatuses()) == 0;
     }
 
-    private int unboundCount(long fileId) {
-        return countByFile(fileId, RequestStatus.unboundStatuses());
+    public boolean isDwellingCharacteristicsFileFilled(Long requestFileId){
+        return countByFile(requestFileId, RequestStatus.UNPROCESSED_SET_STATUSES) == 0;
     }
 
     private Integer countByFile(long fileId, Set<RequestStatus> statuses) {
@@ -93,7 +93,6 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
         params.put("statuses", statuses);
         return sqlSession().selectOne(MAPPING_NAMESPACE + ".countByFile", params);
     }
-
 
     public void update(DwellingCharacteristics dwellingCharacteristics) {
         sqlSession().update(MAPPING_NAMESPACE + ".update", dwellingCharacteristics);
@@ -186,7 +185,7 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
         sqlSession().update(MAPPING_NAMESPACE + ".markCorrected", params);
     }
 
-    public List<AbstractAccountRequest> getDwellingCharacteristics(long requestFileId) {
+    public List<DwellingCharacteristics> getDwellingCharacteristics(long requestFileId) {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".selectDwellingCharacteristics", requestFileId);
     }
 }

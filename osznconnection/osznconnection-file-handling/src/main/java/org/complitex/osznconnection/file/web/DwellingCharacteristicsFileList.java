@@ -78,6 +78,7 @@ public final class DwellingCharacteristicsFileList extends ScrollListPage {
 
             @Override
             protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
+                processManagerBean.fillDwellingCharacteristics(selectedFileIds, commandParameters);
             }
 
             @Override
