@@ -109,10 +109,9 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
     }
 
 
-    private List<Long> findIdsForOperation(long fileId) {
+    public List<Long> findIdsForOperation(long fileId) {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".findIdsForOperation", fileId);
     }
-
 
     public List<DwellingCharacteristics> findForOperation(long fileId, List<Long> ids) {
         List<DwellingCharacteristics> list = sqlSession().selectList(MAPPING_NAMESPACE + ".findForOperation",

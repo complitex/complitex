@@ -27,6 +27,8 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -68,16 +70,21 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
         //todo clear before filling
 
         try {
-            List<DwellingCharacteristics> dwellingCharacteristicsList = dwellingCharacteristicsBean.getDwellingCharacteristics(requestFile.getId());
+            List<Long> ids = dwellingCharacteristicsBean.findIdsForOperation(requestFile.getId());
 
-            for (DwellingCharacteristics dwellingCharacteristics : dwellingCharacteristicsList){
-                if (requestFile.isCanceled()){
-                    throw new FillException(new CanceledByUserException(), true, requestFile);
+            for (Long id : ids) {
+                List<DwellingCharacteristics> dwellingCharacteristicsList = dwellingCharacteristicsBean
+                        .findForOperation(requestFile.getId(), Collections.singletonList(id));
+
+                for (DwellingCharacteristics dwellingCharacteristics : dwellingCharacteristicsList){
+                    if (requestFile.isCanceled()){
+                        throw new FillException(new CanceledByUserException(), true, requestFile);
+                    }
+
+                    userTransaction.begin();
+                    fill(dwellingCharacteristics);
+                    userTransaction.commit();
                 }
-
-                userTransaction.begin();
-                fill(dwellingCharacteristics);
-                userTransaction.commit();
             }
 
 
@@ -108,6 +115,10 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
      * Заполняются поля VL (код формы собственности через соответствие), PLZAG (общая площадь), PLOPAL (отапливаемая площадь).
      */
     private void fill(DwellingCharacteristics dwellingCharacteristics) throws DBException {
+        if (dwellingCharacteristics.getAccountNumber() == null){
+            return;
+        }
+
         Cursor<PaymentAndBenefitData> cursor = serviceProviderAdapter.getPaymentAndBenefit(dwellingCharacteristics.getUserOrganizationId(),
                 dwellingCharacteristics.getAccountNumber(), dwellingCharacteristics.getDate());
 
