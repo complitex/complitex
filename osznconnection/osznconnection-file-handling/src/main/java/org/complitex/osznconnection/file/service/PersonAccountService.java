@@ -183,7 +183,8 @@ public class PersonAccountService extends AbstractBean {
 
                     if (bond){
                         bond = detail.getBuildingCorp() == null || detail.getBuildingCorp().equalsIgnoreCase(request.getOutgoingBuildingCorp()) ||
-                                detail.getBuildingCorp().equalsIgnoreCase(request.getBuildingCorp());
+                                (request.getBuildingCorp() != null &&
+                                        detail.getBuildingCorp().equalsIgnoreCase(AddressUtil.replaceBuildingCorpSymbol(request.getBuildingCorp())));
                     }
 
                     if (bond){

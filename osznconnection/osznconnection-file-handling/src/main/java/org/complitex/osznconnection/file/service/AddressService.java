@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import static org.complitex.address.util.AddressUtil.replaceBuildingCorpSymbol;
 import static org.complitex.address.util.AddressUtil.replaceBuildingNumberSymbol;
 import static org.complitex.common.util.StringUtil.removeWhiteSpaces;
 
@@ -307,9 +308,10 @@ public class AddressService extends AbstractBean {
 
         //Связывание дома
         String buildingNumber = replaceBuildingNumberSymbol(request.getBuildingNumber());
+        String buildingCorp = replaceBuildingCorpSymbol(request.getBuildingCorp());
 
         List<BuildingCorrection> buildingCorrections = addressCorrectionBean.getBuildingCorrections(
-                request.getStreetId(), null, buildingNumber, request.getBuildingCorp(),
+                request.getStreetId(), null, buildingNumber, buildingCorp,
                 osznId, userOrganizationId);
 
         if (buildingCorrections.size() == 1) {
@@ -318,7 +320,7 @@ public class AddressService extends AbstractBean {
             request.setStatus(RequestStatus.MORE_ONE_LOCAL_BUILDING_CORRECTION);
         } else {
             List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(request.getCityId(),
-                    request.getStreetId(), buildingNumber, request.getBuildingCorp());
+                    request.getStreetId(), buildingNumber, buildingCorp);
 
             if (buildingIds.size() == 1){
                 request.setBuildingId(buildingIds.get(0));

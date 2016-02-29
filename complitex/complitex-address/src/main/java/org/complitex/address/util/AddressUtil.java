@@ -16,6 +16,14 @@ public class AddressUtil {
         return null;
     }
 
+    public static String replaceBuildingCorpSymbol(String buildingCorp){
+        if (buildingCorp != null){
+            return buildingCorp.replaceFirst("^0+(?!$)", "");
+        }
+
+        return null;
+    }
+
     public static String replaceApartmentSymbol(String apartment){
         if (apartment != null){
             return apartment.replaceFirst("^0+(?!$)", "");
