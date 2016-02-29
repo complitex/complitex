@@ -311,6 +311,15 @@
                 <if test="buildingCorp != null">
                     AND TO_CYRILLIC(`CORP`) = #{buildingCorp}
                 </if>
+                <if test="cityId != null">
+                    AND internal_city_id = #{cityId}
+                </if>
+                <if test="streetId != null">
+                    AND internal_street_id = #{streetId}
+                </if>
+                <if test="streetTypeId != null">
+                    AND internal_street_type_id = #{streetTypeId}
+                </if>
     </update>
     
     <select id="selectSubsidies" resultMap="subsidyResultMap" parameterType="long">

@@ -229,9 +229,13 @@ public class PaymentBean extends AbstractRequestBean {
 
         switch (entity){
             case BUILDING:
+                params.put("cityId", payment.getCityId());
+                params.put("streetId", payment.getStreetId());
                 params.put("buildingNumber", payment.getBuildingNumber());
                 params.put("buildingCorp", payment.getBuildingCorp());
             case STREET:
+                params.put("cityId", payment.getCityId());
+                params.put("streetTypeId", payment.getStreetTypeId());
                 params.put("street", payment.getStreet());
             case CITY:
                 params.put("city", payment.getCity());

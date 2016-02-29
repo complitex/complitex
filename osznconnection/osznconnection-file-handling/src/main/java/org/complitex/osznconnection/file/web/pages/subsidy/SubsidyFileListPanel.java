@@ -109,7 +109,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
             @Override
             public Component filter() {
                 return new OrganizationPicker("serviceProvider",
-                        new PropertyModel<DomainObject>(getModel(), "serviceProvider"),
+                        new PropertyModel<>(getModel(), "serviceProvider"),
                         SERVICE_PROVIDER_TYPE);
             }
 

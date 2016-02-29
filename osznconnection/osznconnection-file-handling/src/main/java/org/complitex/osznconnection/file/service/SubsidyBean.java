@@ -161,14 +161,14 @@ public class SubsidyBean extends AbstractRequestBean {
 
         switch (entity){
             case BUILDING:
-                params.put("city", subsidy.getCity());
-                params.put("street", subsidy.getStreet());
+                params.put("cityId", subsidy.getCityId());
+                params.put("streetId", subsidy.getStreetId());
                 params.put("buildingNumber", subsidy.getBuildingNumber());
                 params.put("buildingCorp", subsidy.getBuildingCorp());
                 break;
             case STREET:
-                params.put("city", subsidy.getCity());
-                params.put("streetType", subsidy.getStreetType());
+                params.put("cityId", subsidy.getCityId());
+                params.put("streetTypeId", subsidy.getStreetTypeId());
                 params.put("street", subsidy.getStreet());
                 break;
             case CITY:
