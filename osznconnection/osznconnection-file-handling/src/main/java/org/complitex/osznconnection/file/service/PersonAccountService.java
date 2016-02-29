@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.service;
 
+import org.complitex.address.util.AddressUtil;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.*;
@@ -15,6 +16,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Set;
+
+import static org.complitex.address.util.AddressUtil.replaceApartmentSymbol;
+import static org.complitex.address.util.AddressUtil.replaceBuildingNumberSymbol;
 
 /**
  * Разрешает номер л/c
@@ -164,14 +168,31 @@ public class PersonAccountService extends AbstractBean {
 
                     Set<String> streetNames = addressService.getStreetNames(request);
 
-                    if (detail.getStreet() != null &&
-                            detail.getBuildingNumber() != null &&
-                            detail.getApartment() != null &&
-                            (detail.getStreet().equalsIgnoreCase(request.getOutgoingStreet()) || streetNames.contains(detail.getStreet().toUpperCase())) &&
-                            (detail.getBuildingNumber().equalsIgnoreCase(request.getOutgoingBuildingNumber()) || detail.getBuildingNumber().equalsIgnoreCase(request.getBuildingNumber())) &&
-                            (detail.getBuildingCorp() == null || detail.getBuildingCorp().equalsIgnoreCase(request.getOutgoingBuildingCorp()) || detail.getBuildingCorp().equalsIgnoreCase(request.getBuildingCorp())) &&
-                            (detail.getApartment().equalsIgnoreCase(request.getOutgoingApartment()) || detail.getApartment().equalsIgnoreCase(request.getApartment()))){
+                    boolean bond = detail.getStreet() != null && detail.getBuildingNumber() != null && detail.getApartment() != null;
 
+                    if (bond){
+                        bond = detail.getStreet().equalsIgnoreCase(request.getOutgoingStreet()) ||
+                                streetNames.contains(detail.getStreet().toUpperCase());
+                    }
+
+                    if (bond){
+                        bond = detail.getBuildingNumber().equalsIgnoreCase(request.getOutgoingBuildingNumber()) ||
+                                (request.getBuildingNumber() != null &&
+                                        detail.getBuildingNumber().equalsIgnoreCase(replaceBuildingNumberSymbol(request.getBuildingNumber())));
+                    }
+
+                    if (bond){
+                        bond = detail.getBuildingCorp() == null || detail.getBuildingCorp().equalsIgnoreCase(request.getOutgoingBuildingCorp()) ||
+                                detail.getBuildingCorp().equalsIgnoreCase(request.getBuildingCorp());
+                    }
+
+                    if (bond){
+                        bond = detail.getApartment().equalsIgnoreCase(request.getOutgoingApartment()) ||
+                                (request.getApartment() != null &&
+                                        detail.getApartment().equalsIgnoreCase(replaceApartmentSymbol(request.getApartment())));
+                    }
+
+                    if (bond){
                         request.setAccountNumber(detail.getAccCode());
                         request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 

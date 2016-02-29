@@ -1,3 +1,5 @@
+import org.complitex.address.util.AddressUtil;
+
 import java.util.Arrays;
 
 /**
@@ -6,6 +8,6 @@ import java.util.Arrays;
  */
 public class RuntimeHang {
     public static void main(String[] args) {
-        System.out.println(Arrays.toString("123456".split("\\.")));
+        System.out.println(AddressUtil.replaceBuildingNumberSymbol("00FfLl,345"));
     }
 }
