@@ -126,35 +126,19 @@ public class ServiceProviderAdapter extends AbstractBean {
             }
 
             //zheu code.account
-            String zheuCodeAccount = accountDetail.getZheuCode();
+            if (accountDetail.getZheuCode() != null) {
+                String[] zheuCodeAccount = accountDetail.getZheuCode().split("\\.");
 
-            if (zheuCodeAccount!= null && zheuCodeAccount.length() > 1) {
-                int dot = accountDetail.getZheuCode().indexOf('.');
-
-                if (dot > -1){
-                    String zheuAccount = zheuCodeAccount.substring(dot + 1);
-                    String zheuCode = zheuCodeAccount.substring(0, dot);
-
-                    int sep = -1;
-                    char[] chars = spAccountNumber.toCharArray();
-                    for (int i = 0; i < chars.length; ++i){
-                        if (!Character.isDigit(chars[i])){
-                            sep = i;
-                            break;
-                        }
-                    }
-
-                    String code = sep > -1 ? spAccountNumber.substring(0, sep) : null;
-                    String account = spAccountNumber.substring(sep + 1);
-
-                    if ((code == null || code.equals(zheuCode)) && account.equals(zheuAccount) ||
-                            spAccountNumber.equals(zheuCode + zheuAccount)){
-                        request.setAccountNumber(accountDetail.getAccCode());
-                        request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+                if (zheuCodeAccount.length == 2 &&
+                        ((spAccountNumber.length() >= zheuCodeAccount[0].length() + zheuCodeAccount[1].length() &&
+                                spAccountNumber.startsWith(zheuCodeAccount[0]) &&
+                                spAccountNumber.endsWith(zheuCodeAccount[1])) ||
+                                spAccountNumber.equals(zheuCodeAccount[1]))){
+                    request.setAccountNumber(accountDetail.getAccCode());
+                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
                         return accountDetail;
                     }
-                }
             }
         }
 
