@@ -63,10 +63,10 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
     private ServiceProviderAdapter serviceProviderAdapter;
 
     public void bind(Subsidy subsidy, boolean updatePuAccount) throws DBException {
-        String accountNumber = subsidy.getStringField(SubsidyDBF.RASH);
+        String puAccountNumber = subsidy.getStringField(SubsidyDBF.RASH);
 
         //resolve local account number
-        personAccountService.localResolveAccountNumber(subsidy, accountNumber, true);
+        personAccountService.localResolveAccountNumber(subsidy, puAccountNumber, true);
 
         if (!ACCOUNT_NUMBER_RESOLVED.equals(subsidy.getStatus()) && !MORE_ONE_ACCOUNTS_LOCALLY.equals(subsidy.getStatus())){
             //resolve address
@@ -82,13 +82,13 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
 
             //resolve account number
             if (subsidy.getStatus().isAddressResolved()){
-                personAccountService.resolveAccountNumber(subsidy, accountNumber,
+                personAccountService.resolveAccountNumber(subsidy, puAccountNumber,
                         subsidyService.getServiceProviderCode(subsidy.getRequestFileId()),
                         false);
 
                 if (MORE_ONE_ACCOUNTS.equals(subsidy.getStatus())){
                     personAccountService.forceResolveAccountNumber(subsidy, addressService.resolveOutgoingDistrict(
-                            subsidy.getOrganizationId(), subsidy.getUserOrganizationId()), accountNumber);
+                            subsidy.getOrganizationId(), subsidy.getUserOrganizationId()), puAccountNumber);
                 }
             }
         }

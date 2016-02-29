@@ -87,14 +87,14 @@ public class PersonAccountService extends AbstractBean {
         return null;
     }
 
-    public void save(AbstractAccountRequest request, String accountNumber) throws MoreOneAccountException {
+    public void save(AbstractAccountRequest request, String puAccountNumber) throws MoreOneAccountException {
         Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
 
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(new PersonAccount(request,
-                accountNumber, billingId, false)));
+                puAccountNumber, billingId, false)));
 
         if (personAccounts.isEmpty()){
-            personAccountBean.save(new PersonAccount(request, accountNumber, billingId, true));
+            personAccountBean.save(new PersonAccount(request, puAccountNumber, billingId, true));
         }else if (personAccounts.size() == 1){
             PersonAccount personAccount = personAccounts.get(0);
 
@@ -106,9 +106,9 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
-    public void localResolveAccountNumber(AbstractAccountRequest request, String accountNumber, boolean useAddressNames){
+    public void localResolveAccountNumber(AbstractAccountRequest request, String puAccountNumber, boolean useAddressNames){
         try {
-            String localAccountNumber = getLocalAccountNumber(request, accountNumber, useAddressNames);
+            String localAccountNumber = getLocalAccountNumber(request, puAccountNumber, useAddressNames);
 
             if (localAccountNumber != null) {
                 request.setAccountNumber(localAccountNumber);
@@ -119,12 +119,12 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
-    public void resolveAccountNumber(AbstractAccountRequest request, String accountNumber,
+    public void resolveAccountNumber(AbstractAccountRequest request, String puAccountNumber,
                                      String servicingOrganizationCode,
                                      boolean updatePuAccount) throws DBException {
         try {
             //resolve local account
-            String localAccountNumber = getLocalAccountNumber(request, accountNumber, false);
+            String localAccountNumber = getLocalAccountNumber(request, puAccountNumber, false);
 
             if (localAccountNumber != null) {
                 request.setAccountNumber(localAccountNumber);
@@ -135,7 +135,7 @@ public class PersonAccountService extends AbstractBean {
 
             //resolve remote account
             AccountDetail accountDetail = serviceProviderAdapter.acquireAccountDetail(request,
-                    request.getLastName(), accountNumber,
+                    request.getLastName(), puAccountNumber,
                     request.getOutgoingDistrict(), request.getOutgoingStreetType(), request.getOutgoingStreet(),
                     request.getOutgoingBuildingNumber(), request.getOutgoingBuildingCorp(),
                     request.getOutgoingApartment(), request.getDate(), updatePuAccount);
@@ -149,7 +149,7 @@ public class PersonAccountService extends AbstractBean {
                     return;
                 }
 
-                save(request, accountNumber);
+                save(request, puAccountNumber);
             }
         } catch (MoreOneAccountException e) {
             request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);

@@ -60,7 +60,7 @@ public class PersonAccount implements Serializable {
         buildingId = request.getBuildingId();
         apartmentId = request.getApartmentId();
 
-        this.accountNumber = request.getAccountNumber();
+        accountNumber = request.getAccountNumber();
         organizationId = request.getOrganizationId();
         userOrganizationId = request.getUserOrganizationId();
 
