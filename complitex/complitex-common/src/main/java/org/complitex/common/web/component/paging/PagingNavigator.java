@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -52,6 +53,8 @@ public class PagingNavigator extends Panel {
     private Component[] toUpdate;
     private List<IPagingNavigatorListener> listeners = new ArrayList<IPagingNavigatorListener>();
 
+    private boolean jsUpdate = false;
+
     /**
      * The same as general constructor except that navigator don't persist number of rows per page to preferences.
      * 
@@ -59,8 +62,12 @@ public class PagingNavigator extends Panel {
      * @param dataView Data view.
      * @param toUpdate List of components to be updated on navigation events.
      */
-    public PagingNavigator(String id, final DataView<?> dataView, Component... toUpdate) {
-        this(id, dataView, null, toUpdate);
+    public PagingNavigator(String id, DataView<?> dataView, Component... toUpdate) {
+        this(id, dataView, null, false, toUpdate);
+    }
+
+    public PagingNavigator(String id, final DataView<?> dataView, final String page, Component... toUpdate) {
+        this(id, dataView, page, false, toUpdate);
     }
 
     @Override
@@ -77,14 +84,15 @@ public class PagingNavigator extends Panel {
      * {@link PreferenceKey#ROWS_PER_PAGE} preference.
      * @param toUpdate List of components to be updated on navigation events.
      */
-    public PagingNavigator(String id, final DataView<?> dataView, final String page, Component... toUpdate) {
+    public PagingNavigator(String id, final DataView<?> dataView, final String page, boolean jsUpdate, Component... toUpdate) {
         super(id);
         setOutputMarkupId(true);
 
         this.dataView = dataView;
+        this.jsUpdate = jsUpdate;
         this.toUpdate = toUpdate;
 
-        rowsPerPagePropertyModel = new IModel<Long>() {
+        rowsPerPagePropertyModel = new Model<Long>() {
             @Override
             public Long getObject() {
                 return dataView.getItemsPerPage();
@@ -92,19 +100,21 @@ public class PagingNavigator extends Panel {
 
             @Override
             public void setObject(Long items) {
-                dataView.setItemsPerPage(items != null ? items : SUPPORTED_PAGE_SIZES.get(0));
-            }
+                if (page != null && items != null) {
+                    getSession().putPreference(page, PreferenceKey.ROWS_PER_PAGE, items, true);
+                }
 
-            @Override
-            public void detach() {
+                dataView.setItemsPerPage(items != null ? items : SUPPORTED_PAGE_SIZES.get(0));
             }
         };
 
         //retrieve table page size from preferences.
-        Long rowsPerPage;
+        Long rowsPerPage = null;
         if (page != null) {
             rowsPerPage = getSession().getPreferenceLong(page, PreferenceKey.ROWS_PER_PAGE, SUPPORTED_PAGE_SIZES.get(0));
-        } else {
+        }
+
+        if (rowsPerPage == null){
             rowsPerPage = SUPPORTED_PAGE_SIZES.get(0);
         }
 
@@ -237,32 +247,26 @@ public class PagingNavigator extends Panel {
         pageNavigator.add(newPageForm);
 
         //page size
-        IModel<Long> pageSizeModel = new Model<Long>() {
-
+        DropDownChoice<Long> pageSize = new DropDownChoice<Long>("pageSize", rowsPerPagePropertyModel, SUPPORTED_PAGE_SIZES){
             @Override
-            public Long getObject() {
-                return rowsPerPagePropertyModel.getObject();
-            }
-
-            @Override
-            public void setObject(Long rowsPerPage) {
-                if (page != null) {
-                    getSession().putPreference(page, PreferenceKey.ROWS_PER_PAGE, rowsPerPage, true);
-                }
-                rowsPerPagePropertyModel.setObject(rowsPerPage);
+            protected boolean wantOnSelectionChangedNotifications() {
+                return jsUpdate;
             }
         };
-        DropDownChoice<Long> pageSize = new DropDownChoice<>("pageSize", pageSizeModel, SUPPORTED_PAGE_SIZES);
         pageSize.setNullValid(false);
 
-        pageSize.add(new AjaxFormComponentUpdatingBehavior("change") {
+        if (!jsUpdate){
+            pageSize.add(new AjaxFormComponentUpdatingBehavior("change") {
 
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                //update model - pageSizeModel
-                updatePageComponents(target);
-            }
-        });
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    //update model - pageSizeModel
+                    updatePageComponents(target);
+                }
+            });
+        }
+
+
         pageNavigator.add(pageSize);
 
         //all pages region

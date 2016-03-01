@@ -225,7 +225,7 @@ public final class SubsidyList extends TemplatePage {
         final SubsidyEditDialog editPanel = new SubsidyEditDialog("edit_panel", content);
         add(editPanel);
 
-        final CheckGroup<Subsidy> checkGroup = new CheckGroup<>("checkGroup", new ArrayList<Subsidy>());
+        final CheckGroup<Subsidy> checkGroup = new CheckGroup<>("checkGroup", new ArrayList<>());
         filterForm.add(checkGroup);
 
         filterForm.add(new CheckGroupSelector("checkAll", checkGroup));

@@ -453,10 +453,10 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
 
         //Контейнер чекбокса "Переписать л/с ПУ" для ajax
         WebMarkupContainer optionContainer = new WebMarkupContainer("options");
-        optionContainer.setVisibilityAllowed(modificationManager.isModificationsAllowed());
+        optionContainer.setVisibilityAllowed(false);
         form.add(optionContainer);
 
-        optionContainer.add(new CheckBox("update_pu_account", new Model<Boolean>(
+        optionContainer.add(new CheckBox("update_pu_account", new Model<>(
                 getSessionParameter(GlobalOptions.UPDATE_PU_ACCOUNT))).add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override

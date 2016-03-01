@@ -13,7 +13,7 @@ public final class ProcessPagingNavigator extends PagingNavigator {
 
     public ProcessPagingNavigator(String id, DataView<?> dataView, String page, final SelectManager selectManager,
             Component... toUpdate) {
-        super(id, dataView, page, toUpdate);
+        super(id, dataView, page, true, toUpdate);
 
         addListener(new IPagingNavigatorListener() { //clear select checkbox model on page change
 
