@@ -7,6 +7,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -59,7 +60,7 @@ public class AddressCorrectionDialog<T> extends Panel {
     private Dialog dialog;
     private WebMarkupContainer searchComponent;
     private SearchComponentState state;
-    private DisableAwareDropDownChoice<DomainObject> streetTypeSelect;
+    private DropDownChoice<DomainObject> streetTypeSelect;
     private FeedbackPanel messages;
     private WebMarkupContainer container;
 

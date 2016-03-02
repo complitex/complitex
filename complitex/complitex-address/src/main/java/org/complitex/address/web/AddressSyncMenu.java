@@ -1,12 +1,15 @@
 package org.complitex.address.web;
 
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.web.sync.AddressSyncPage;
+import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
 /**
  * @author inheaven on 020 20.07.15 17:07
  */
+@AuthorizeInstantiation(SecurityRole.ADMIN_MODULE_EDIT)
 public class AddressSyncMenu extends ResourceTemplateMenu{
     public AddressSyncMenu() {
         add("organization_sync", AddressSyncPage.class, new PageParameters().add("entity", "organization"));

@@ -268,13 +268,8 @@ public class SessionBean extends AbstractBean {
         return objectIds;
     }
 
-    private boolean hasOuterOrganization(Long objectId) {
-        return getAllOuterOrganizationObjectIds().contains(objectId);
-    }
-
     public boolean isAuthorized(Long outerOrganizationObjectId, Long userOrganizationId) {
-        return isAdmin()
-                || (hasOuterOrganization(outerOrganizationObjectId) && isUserOrganizationVisibleToCurrentUser(userOrganizationId));
+        return isAdmin() || isUserOrganizationVisibleToCurrentUser(userOrganizationId);
     }
 
     /**

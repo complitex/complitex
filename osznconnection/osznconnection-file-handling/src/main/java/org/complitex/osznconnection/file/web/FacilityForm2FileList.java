@@ -10,16 +10,15 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.*;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.MonthDropDownChoice;
 import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
+import org.complitex.common.web.component.organization.OrganizationPicker;
+import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
@@ -28,6 +27,7 @@ import org.complitex.osznconnection.file.service.file_description.RequestFileDes
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.process.*;
+import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.pages.ScrollListPage;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -131,10 +131,15 @@ public final class FacilityForm2FileList extends ScrollListPage {
         form.add(new TextField<String>("id"));
 
         //Осзн
-        form.add(new OsznFilter("organization"));
+        form.add(new OrganizationPicker("organization",
+                new PropertyModel<>(model, "organization"),
+                OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
+                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE));
 
         // Организация пользователя
-        form.add(new UserOrganizationFilter("userOrganization"));
+        form.add(new OrganizationPicker("userOrganization",
+                new PropertyModel<>(model, "userOrganization"),
+                OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
         //Месяц
         form.add(new MonthDropDownChoice("month").setNullValid(true));

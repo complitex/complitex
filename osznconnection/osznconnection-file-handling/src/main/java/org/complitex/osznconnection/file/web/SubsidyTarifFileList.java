@@ -18,6 +18,7 @@ import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.organization.OrganizationPicker;
+import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
@@ -147,7 +148,9 @@ public class SubsidyTarifFileList extends TemplatePage {
                 OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE));
 
         // Организация пользователя
-        form.add(new UserOrganizationFilter("userOrganization"));
+        form.add(new OrganizationPicker("userOrganization",
+                new PropertyModel<>(model, "userOrganization"),
+                OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
         //Год
         form.add(new YearDropDownChoice("year").setNullValid(true));
