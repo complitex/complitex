@@ -41,7 +41,6 @@ import static org.complitex.common.entity.PreferenceKey.CURRENT_PAGE;
  * @author Artem
  */
 public class PagingNavigator extends Panel {
-
     private static final int LEFT_OFFSET = 3;
     private static final int RIGHT_OFFSET = 3;
     private static final List<Long> SUPPORTED_PAGE_SIZES = Arrays.asList(10L, 20L, 30L, 50L, 100L);
@@ -52,8 +51,6 @@ public class PagingNavigator extends Panel {
     private IModel<Long> rowsPerPagePropertyModel;
     private Component[] toUpdate;
     private List<IPagingNavigatorListener> listeners = new ArrayList<IPagingNavigatorListener>();
-
-    private boolean jsUpdate = false;
 
     /**
      * The same as general constructor except that navigator don't persist number of rows per page to preferences.
@@ -66,7 +63,7 @@ public class PagingNavigator extends Panel {
         this(id, dataView, null, false, toUpdate);
     }
 
-    public PagingNavigator(String id, final DataView<?> dataView, final String page, Component... toUpdate) {
+    public PagingNavigator(String id, final DataView<?> dataView, String page, Component... toUpdate) {
         this(id, dataView, page, false, toUpdate);
     }
 
@@ -84,12 +81,11 @@ public class PagingNavigator extends Panel {
      * {@link PreferenceKey#ROWS_PER_PAGE} preference.
      * @param toUpdate List of components to be updated on navigation events.
      */
-    public PagingNavigator(String id, final DataView<?> dataView, final String page, boolean jsUpdate, Component... toUpdate) {
+    public PagingNavigator(String id, DataView<?> dataView, String page, boolean jsUpdate, Component... toUpdate) {
         super(id);
         setOutputMarkupId(true);
 
         this.dataView = dataView;
-        this.jsUpdate = jsUpdate;
         this.toUpdate = toUpdate;
 
         rowsPerPagePropertyModel = new Model<Long>() {

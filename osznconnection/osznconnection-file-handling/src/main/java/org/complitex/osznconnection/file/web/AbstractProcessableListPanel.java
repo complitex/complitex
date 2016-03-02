@@ -152,7 +152,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
     protected F newFilter() {
         try {
             F filter = getFilterClass().newInstance();
-            filter.setSortProperty("loaded");
+            filter.setSortProperty("id");
 
             initFilter(filter);
 
