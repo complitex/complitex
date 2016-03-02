@@ -22,6 +22,7 @@ import org.complitex.common.web.component.MonthDropDownChoice;
 import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -146,14 +147,14 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
         form.add(new TextField<String>("name"));
 
         //Осзн
-        form.add(new OrganizationPicker("organization",
-                new PropertyModel<>(model, "organization"),
+        form.add(new OrganizationIdPicker("organization",
+                new PropertyModel<>(model, "organizationId"),
                 OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
                 OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE));
 
         // Организация пользователя
-        form.add(new OrganizationPicker("userOrganization",
-                new PropertyModel<>(model, "userOrganization"),
+        form.add(new OrganizationIdPicker("userOrganization",
+                new PropertyModel<>(model, "userOrganizationId"),
                 OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
         //Месяц

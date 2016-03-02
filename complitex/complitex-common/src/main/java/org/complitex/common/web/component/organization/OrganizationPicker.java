@@ -20,7 +20,7 @@ public class OrganizationPicker extends Panel {
     private Label organizationLabel;
 
     public OrganizationPicker(String id, final IModel<DomainObject> model, Long... organizationTypeIds) {
-        super(id, model);
+        super(id);
 
         pickerDialog = new OrganizationPickerDialog("dialog", model, organizationTypeIds){
             @Override

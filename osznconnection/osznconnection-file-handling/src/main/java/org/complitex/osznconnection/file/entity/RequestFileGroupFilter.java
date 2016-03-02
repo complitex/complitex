@@ -15,19 +15,15 @@ public class RequestFileGroupFilter extends AbstractFilter {
     private Long groupId;
     private Date loaded;
     private String name;
-    private Long organizationId;
     private Integer registry;
     private Integer year;
     private Integer month;
     private String directory;
     private String paymentName;
     private String benefitName;
-    private DomainObject organization;
-    private DomainObject userOrganization;
+
     private RequestFileType type;
     private RequestFileStatus status;
-    private String userOrganizationsString;
-    private String outerOrganizationsString;
 
     public Long getId() {
         return id;
@@ -59,14 +55,6 @@ public class RequestFileGroupFilter extends AbstractFilter {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getOrganizationId() {
-        return organizationId;
-    }
-
-    public void setOrganizationId(Long organizationId) {
-        this.organizationId = organizationId;
     }
 
     public Integer getRegistry() {
@@ -117,14 +105,6 @@ public class RequestFileGroupFilter extends AbstractFilter {
         this.benefitName = benefitName;
     }
 
-    public DomainObject getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(DomainObject organization) {
-        this.organization = organization;
-    }
-
     public RequestFileType getType() {
         return type;
     }
@@ -139,29 +119,5 @@ public class RequestFileGroupFilter extends AbstractFilter {
 
     public void setStatus(RequestFileStatus status) {
         this.status = status;
-    }
-
-    public String getUserOrganizationsString() {
-        return userOrganizationsString;
-    }
-
-    public void setUserOrganizationsString(String userOrganizationsString) {
-        this.userOrganizationsString = userOrganizationsString;
-    }
-
-    public String getOuterOrganizationsString() {
-        return outerOrganizationsString;
-    }
-
-    public void setOuterOrganizationsString(String outerOrganizationsString) {
-        this.outerOrganizationsString = outerOrganizationsString;
-    }
-
-    public DomainObject getUserOrganization() {
-        return userOrganization;
-    }
-
-    public void setUserOrganization(DomainObject userOrganization) {
-        this.userOrganization = userOrganization;
     }
 }

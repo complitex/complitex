@@ -91,8 +91,8 @@
             <if test="directory != null">and p.`directory` like CONCAT('%',#{directory},'%')</if>
             <if test="paymentName != null">and p.`name` like CONCAT('%',#{paymentName},'%')</if>
             <if test="benefitName != null">and b.`name` like CONCAT('%',#{benefitName},'%')</if>            
-            <if test="organization != null">and p.`organization_id` = #{organization.id}</if>
-            <if test="userOrganization != null">and p.`user_organization_id` = #{userOrganization.id}</if>
+            <if test="organizationId != null">and p.`organization_id` = #{organizationId}</if>
+            <if test="userOrganizationId != null">and p.`user_organization_id` = #{userOrganizationId}</if>
             <if test="registry != null">and p.`registry` = #{registry}</if>
             <if test="year != null">and YEAR(p.`begin_date`) = #{year}</if>
             <if test="month != null">and MONTH(p.`begin_date`) = #{month}</if>

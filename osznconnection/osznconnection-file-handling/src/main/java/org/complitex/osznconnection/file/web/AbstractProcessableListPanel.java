@@ -34,6 +34,7 @@ import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.wicket.BroadcastBehavior;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
@@ -309,14 +310,14 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
         form.add(new DatePicker<Date>("loaded"));
 
         //ОСЗН
-        form.add(new OrganizationPicker("organization",
-                new PropertyModel<>(model, "organization"),
+        form.add(new OrganizationIdPicker("organization",
+                new PropertyModel<>(model, "organizationId"),
                 OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
                 OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE));
 
         // Организация пользователя
-        form.add(new OrganizationPicker("userOrganization",
-                new PropertyModel<>(model, "userOrganization"),
+        form.add(new OrganizationIdPicker("userOrganization",
+                new PropertyModel<>(model, "userOrganizationId"),
                 OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
         //Месяц

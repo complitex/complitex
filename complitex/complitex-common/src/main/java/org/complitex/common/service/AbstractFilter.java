@@ -15,9 +15,12 @@ public class AbstractFilter implements Serializable {
     private boolean ascending;
 
     private boolean admin;
-    private DomainObject userOrganization;
+
     private String userOrganizationsString;
     private String outerOrganizationsString;
+
+    private Long organizationId;
+    private Long userOrganizationId;
 
     public long getFirst() {
         return first;
@@ -75,11 +78,19 @@ public class AbstractFilter implements Serializable {
         this.outerOrganizationsString = outerOrganizationsString;
     }
 
-    public DomainObject getUserOrganization() {
-        return userOrganization;
+    public Long getOrganizationId() {
+        return organizationId;
     }
 
-    public void setUserOrganization(DomainObject userOrganization) {
-        this.userOrganization = userOrganization;
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
+
+    public Long getUserOrganizationId() {
+        return userOrganizationId;
+    }
+
+    public void setUserOrganizationId(Long userOrganizationId) {
+        this.userOrganizationId = userOrganizationId;
     }
 }

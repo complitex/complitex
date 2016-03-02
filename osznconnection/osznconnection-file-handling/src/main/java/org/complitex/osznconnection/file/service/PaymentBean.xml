@@ -216,6 +216,15 @@
         <if test="status != null">
             AND p.`status` = #{status}
         </if>
+
+        <if test="organizationId != null">
+            f.`organization_id` = #{organizationId}
+        </if>
+
+        <if test="userOrganizationId != null">
+            f.`user_organization_id` = #{userOrganizationId}
+        </if>
+
     </sql>
 
     <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.PaymentExample">

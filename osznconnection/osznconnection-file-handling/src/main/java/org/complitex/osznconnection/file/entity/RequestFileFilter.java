@@ -16,7 +16,6 @@ public class RequestFileFilter extends AbstractFilter {
     private Long groupId;
     private Date loaded;
     private String name;
-    private Long organizationId;
     private Integer registry;
     private Integer year;
     private Integer month;
@@ -25,11 +24,13 @@ public class RequestFileFilter extends AbstractFilter {
     private Integer dbfRecordCount;
     private Long length;
     private String checkSum;
-    private DomainObject organization;
+
     private RequestFileType type;
     private RequestFileStatus status;
-    private DomainObject serviceProvider;
+
     private BigDecimal sum;
+
+    private DomainObject serviceProvider;
 
     public Long getId() {
         return id;
@@ -61,14 +62,6 @@ public class RequestFileFilter extends AbstractFilter {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getOrganizationId() {
-        return organizationId;
-    }
-
-    public void setOrganizationId(Long organizationId) {
-        this.organizationId = organizationId;
     }
 
     public Integer getRegistry() {
@@ -135,15 +128,6 @@ public class RequestFileFilter extends AbstractFilter {
         this.checkSum = checkSum;
     }
 
-    public DomainObject getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(DomainObject organization) {
-        this.organization = organization;
-        this.organizationId = organization != null ? organization.getObjectId() : null;
-    }
-
     public RequestFileType getType() {
         return type;
     }
@@ -160,19 +144,19 @@ public class RequestFileFilter extends AbstractFilter {
         this.status = status;
     }
 
-    public DomainObject getServiceProvider() {
-        return serviceProvider;
-    }
-
-    public void setServiceProvider(DomainObject serviceProvider) {
-        this.serviceProvider = serviceProvider;
-    }
-
     public BigDecimal getSum() {
         return sum;
     }
 
     public void setSum(BigDecimal sum) {
         this.sum = sum;
+    }
+
+    public DomainObject getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public void setServiceProvider(DomainObject serviceProvider) {
+        this.serviceProvider = serviceProvider;
     }
 }
