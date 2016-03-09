@@ -53,9 +53,10 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
 
     @Override
     protected Cursor<AccountDetail> getAccountDetails(Subsidy subsidy) throws DBException {
-        return lookupBean.getAccountDetails(subsidy.getOutgoingDistrict(), subsidy.getOutgoingStreetType(),
-                subsidy.getOutgoingStreet(), subsidy.getOutgoingBuildingNumber(), subsidy.getOutgoingBuildingCorp(),
-                subsidy.getOutgoingApartment(), (Date) subsidy.getField(SubsidyDBF.DAT1), subsidy.getUserOrganizationId());
+        return lookupBean.getAccountDetails(subsidy.getOutgoingDistrict(), getServiceProviderCode(subsidy),
+                subsidy.getOutgoingStreetType(), subsidy.getOutgoingStreet(), subsidy.getOutgoingBuildingNumber(),
+                subsidy.getOutgoingBuildingCorp(), subsidy.getOutgoingApartment(), (Date) subsidy.getField(SubsidyDBF.DAT1),
+                subsidy.getUserOrganizationId());
     }
 
     @Override
