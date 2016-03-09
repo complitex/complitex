@@ -82,14 +82,17 @@ public class RequestFile extends AbstractExecutorObject {
     }
 
     public String getEdrpou(){
-        Pattern pattern = Pattern.compile("^(\\D*)(\\d*)(\\d{4})(\\..*)");
-        Matcher matcher = pattern.matcher(name);
+        Matcher matcher = getEdrpouPattern().matcher(name);
 
         if (matcher.matches()){
             return matcher.group(2);
         }
 
         return null;
+    }
+
+    public Pattern getEdrpouPattern(){
+        return Pattern.compile("^(\\D*)(\\d*)(\\d{4})(\\..*)");
     }
 
     @Override

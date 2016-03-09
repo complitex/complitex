@@ -136,7 +136,7 @@ public class PersonAccountService extends AbstractBean {
             //resolve remote account
             AccountDetail accountDetail = serviceProviderAdapter.acquireAccountDetail(request,
                     request.getLastName(), puAccountNumber,
-                    request.getOutgoingDistrict(), null, request.getOutgoingStreetType(), request.getOutgoingStreet(),
+                    request.getOutgoingDistrict(), serviceProviderCode, request.getOutgoingStreetType(), request.getOutgoingStreet(),
                     request.getOutgoingBuildingNumber(), request.getOutgoingBuildingCorp(),
                     request.getOutgoingApartment(), request.getDate(), updatePuAccount);
 
