@@ -89,11 +89,12 @@ public class ActualPaymentBindTaskBean implements ITaskBean<RequestFile> {
         }
     }
 
-    private boolean resolveRemoteAccountNumber(ActualPayment actualPayment, Date date, Boolean updatePuAccount) throws DBException {
+    private boolean resolveRemoteAccountNumber(String serviceProviderCode, ActualPayment actualPayment, Date date,
+                                               Boolean updatePuAccount) throws DBException {
         serviceProviderAdapter.acquireAccountDetail(actualPayment,
                 actualPayment.getStringField(ActualPaymentDBF.SUR_NAM),
                 actualPayment.getStringField(ActualPaymentDBF.OWN_NUM), actualPayment.getOutgoingDistrict(),
-                null, actualPayment.getOutgoingStreetType(), actualPayment.getOutgoingStreet(),
+                serviceProviderCode, actualPayment.getOutgoingStreetType(), actualPayment.getOutgoingStreet(),
                 actualPayment.getOutgoingBuildingNumber(), actualPayment.getOutgoingBuildingCorp(),
                 actualPayment.getOutgoingApartment(), date, updatePuAccount);
 
@@ -108,7 +109,7 @@ public class ActualPaymentBindTaskBean implements ITaskBean<RequestFile> {
         return actualPayment.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    private void bind(ActualPayment actualPayment, Date date, Boolean updatePuAccount) throws DBException {
+    private void bind(String serviceProviderCode, ActualPayment actualPayment, Date date, Boolean updatePuAccount) throws DBException {
         //resolve address
         resolveAddress(actualPayment);
 
@@ -117,7 +118,7 @@ public class ActualPaymentBindTaskBean implements ITaskBean<RequestFile> {
             resolveLocalAccount(actualPayment);
 
             if (actualPayment.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-                resolveRemoteAccountNumber(actualPayment, date, updatePuAccount);
+                resolveRemoteAccountNumber(serviceProviderCode, actualPayment, date, updatePuAccount);
             }
         }
 
@@ -125,9 +126,12 @@ public class ActualPaymentBindTaskBean implements ITaskBean<RequestFile> {
         actualPaymentBean.update(actualPayment);
     }
 
-    private void bindActualPaymentFile(RequestFile actualPaymentFile, Boolean updatePuAccount) throws BindException, DBException, CanceledByUserException {
+    private void bindActualPaymentFile(RequestFile requestFile, Boolean updatePuAccount) throws BindException, DBException, CanceledByUserException {
+        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
         //извлечь из базы все id подлежащие связыванию для файла actualPayment и доставать записи порциями по BATCH_SIZE штук.
-        List<Long> notResolvedPaymentIds = actualPaymentBean.findIdsForBinding(actualPaymentFile.getId());
+        List<Long> notResolvedPaymentIds = actualPaymentBean.findIdsForBinding(requestFile.getId());
         List<Long> batch = Lists.newArrayList();
 
         int batchSize = configBean.getInteger(FileHandlingConfig.BIND_BATCH_SIZE, true);
@@ -140,16 +144,16 @@ public class ActualPaymentBindTaskBean implements ITaskBean<RequestFile> {
             }
 
             //достать из базы очередную порцию записей
-            List<ActualPayment> actualPayments = actualPaymentBean.findForOperation(actualPaymentFile.getId(), batch);
+            List<ActualPayment> actualPayments = actualPaymentBean.findForOperation(requestFile.getId(), batch);
             for (ActualPayment actualPayment : actualPayments) {
-                if (actualPaymentFile.isCanceled()) {
+                if (requestFile.isCanceled()) {
                     throw new CanceledByUserException();
                 }
 
                 //связать actualPayment запись
                 try {
                     userTransaction.begin();
-                    bind(actualPayment, actualPaymentBean.getFirstDay(actualPayment, actualPaymentFile), updatePuAccount);
+                    bind(serviceProviderCode, actualPayment, actualPaymentBean.getFirstDay(actualPayment, requestFile), updatePuAccount);
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The actual payment item ( id = " + actualPayment.getId() + ") was bound with error: ", e);

@@ -156,12 +156,12 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
-    public void forceResolveAccountNumber(AbstractAccountRequest request, String district, String organizationCode,
+    public void forceResolveAccountNumber(AbstractAccountRequest request, String district, String serviceProviderCode,
                                           String accountNumber) throws DBException{
         try {
             //force resolve remote account
             List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(request, district,
-                    organizationCode, accountNumber, request.getDate());
+                    serviceProviderCode, accountNumber, request.getDate());
 
             if (accountDetails != null) {
                 if (accountDetails.size() == 1){
