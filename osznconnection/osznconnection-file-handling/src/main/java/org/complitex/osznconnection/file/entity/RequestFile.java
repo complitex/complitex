@@ -92,7 +92,15 @@ public class RequestFile extends AbstractExecutorObject {
     }
 
     public Pattern getEdrpouPattern(){
-        return Pattern.compile("^(\\D*)(\\d*)(\\d{4})(\\..*)");
+        switch (type){
+            case PAYMENT:
+            case BENEFIT:
+                return Pattern.compile("^(\\D*)(\\d*)(\\d{6})(\\..*)");
+            case SUBSIDY:
+                return Pattern.compile("^(\\D*)(\\d*)(\\d{4})(\\..*)");
+        }
+
+        return Pattern.compile("^(\\D*)(\\d{8}|\\d{10})(\\d{6})(\\..*)");
     }
 
     @Override
