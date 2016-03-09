@@ -7,9 +7,8 @@ import org.complitex.common.entity.IConfig;
  *         Date: 04.10.2010 11:12:46
  */
 public enum FileHandlingConfig implements IConfig {
-    PAYMENT_FILENAME_PREFIX("mask"),
-    BENEFIT_FILENAME_PREFIX("mask"),
-    PAYMENT_BENEFIT_FILENAME_SUFFIX("mask"),
+    PAYMENT_FILENAME_MASK("mask"),
+    BENEFIT_FILENAME_MASK("mask"),
     
     ACTUAL_PAYMENT_FILENAME_MASK("mask"),
     SUBSIDY_FILENAME_MASK("mask"),

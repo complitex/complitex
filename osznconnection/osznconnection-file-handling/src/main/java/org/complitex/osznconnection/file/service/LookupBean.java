@@ -43,11 +43,11 @@ public class LookupBean extends AbstractBean {
      * Вся работа по поиску делегируется адаптеру взаимодействия с ЦН.
      * См. org.complitex.osznconnection.file.calculation.adapter.DefaultCalculationCenterAdapter.acquireAccountCorrectionDetails()
      */
-    public Cursor<AccountDetail> getAccountDetails(String district, String streetType, String street,
+    public Cursor<AccountDetail> getAccountDetails(String district, String serviceProviderCode, String streetType, String street,
             String buildingNumber, String buildingCorp, String apartment, Date date, long userOrganizationId) throws DBException {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
 
-        return adapter.getAccountDetails(dataSource, district, null, streetType, street, buildingNumber, buildingCorp, apartment, date);
+        return adapter.getAccountDetails(dataSource, district, serviceProviderCode, streetType, street, buildingNumber, buildingCorp, apartment, date);
     }
 
 

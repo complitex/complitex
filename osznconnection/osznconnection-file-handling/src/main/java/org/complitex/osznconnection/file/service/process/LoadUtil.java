@@ -11,12 +11,12 @@ import org.complitex.osznconnection.file.service.exception.StorageNotFoundExcept
 import org.complitex.osznconnection.file.service.process.RequestFileStorage.RequestFiles;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import static org.complitex.common.util.DateUtil.newDate;
 import static org.complitex.osznconnection.file.entity.FileHandlingConfig.*;
 import static org.complitex.osznconnection.file.service.process.RequestFileDirectoryType.*;
@@ -59,106 +59,57 @@ public class LoadUtil {
     }
 
     private static boolean isMatches(FileHandlingConfig config, String name) {
-        return Pattern.compile(getConfigString(config), Pattern.CASE_INSENSITIVE).matcher(name).matches();
+        return Pattern.compile(getConfigString(config), CASE_INSENSITIVE).matcher(name).matches();
     }
 
-    private static boolean isMatches(FileHandlingConfig config, String name, int month, int year) {
-        return Pattern.compile(getPattern(getConfigString(config), month, year),
-                Pattern.CASE_INSENSITIVE).matcher(name).matches();
-    }
-
-    private static boolean isMatches(FileHandlingConfig prefix, FileHandlingConfig suffix, String name, int month, int year) {
-        return Pattern.compile(getConfigString(prefix) + getPattern(getConfigString(suffix), month, year),
-                Pattern.CASE_INSENSITIVE).matcher(name).matches();
+    private static boolean isMatches(String name, FileHandlingConfig config, int month, int year) {
+        return Pattern.compile(getPattern(getConfigString(config), month, year), CASE_INSENSITIVE).matcher(name).matches();
     }
 
     private static RequestFiles getInputSubsidyTarifFiles(long userOrganizationId, long osznId, 
             final FileHandlingConfig mask) throws StorageNotFoundException {
         return RequestFileStorage.INSTANCE.getInputRequestFiles(userOrganizationId, osznId, REFERENCES_DIR,
-                new FileFilter() {
-
-                    @Override
-                    public boolean accept(File file) {
-                        return isMatches(mask, file.getName());
-                    }
-                });
+                file -> isMatches(mask, file.getName()));
     }
 
     private static RequestFiles getInputFacilityReferenceFiles(long userOrganizationId, long osznId,
             final FileHandlingConfig mask) throws StorageNotFoundException {
         return RequestFileStorage.INSTANCE.getInputRequestFiles(userOrganizationId, osznId, REFERENCES_DIR,
-                new FileFilter() {
-
-                    @Override
-                    public boolean accept(File file) {
-                        return isMatches(mask, file.getName());
-                    }
-                });
+                file -> isMatches(mask, file.getName()));
     }
 
-    private static RequestFiles getInputPaymentBenefitFiles(long userOrganizationId, long osznId, final FileHandlingConfig prefix,
-            final FileHandlingConfig suffix, final int month, final int year)
+    private static RequestFiles getInputPaymentBenefitFiles(FileHandlingConfig mask, int month, int year, long osznId, long userOrganizationId)
             throws StorageNotFoundException {
         return RequestFileStorage.INSTANCE.getInputRequestFiles(userOrganizationId, osznId, LOAD_PAYMENT_BENEFIT_FILES_DIR,
-                new FileFilter() {
-
-                    @Override
-                    public boolean accept(File file) {
-                        return isMatches(prefix, suffix, file.getName(), month, year);
-                    }
-                });
+                file -> isMatches(file.getName(), mask, month, year));
     }
 
     private static RequestFiles getInputActualPaymentFiles(long userOrganizationId, long osznId, final FileHandlingConfig mask,
             final int month, final int year) throws StorageNotFoundException {
         return RequestFileStorage.INSTANCE.getInputRequestFiles(userOrganizationId, osznId, LOAD_ACTUAL_PAYMENT_DIR,
-                new FileFilter() {
-
-                    @Override
-                    public boolean accept(File file) {
-                        return isMatches(mask, file.getName(), month, year);
-                    }
-                });
+                file -> isMatches(file.getName(), mask, month, year));
     }
 
     private static RequestFiles getInputSubsidyFiles(long userOrganizationId, long osznId, final FileHandlingConfig mask,
             final int month, final int year) throws StorageNotFoundException {
         return RequestFileStorage.INSTANCE.getInputRequestFiles(userOrganizationId, osznId, LOAD_SUBSIDY_DIR,
-                new FileFilter() {
-
-                    @Override
-                    public boolean accept(File file) {
-                        return isMatches(mask, file.getName(), month, year);
-                    }
-                });
+                file -> isMatches(file.getName(), mask, month, year));
     }
 
     private static RequestFiles getInputDwellingCharacteristicsFiles(long userOrganizationId, long osznId,
             final FileHandlingConfig mask) throws StorageNotFoundException {
         return RequestFileStorage.INSTANCE.getInputRequestFiles(userOrganizationId, osznId, LOAD_DWELLING_CHARACTERISTICS_DIR,
-                new FileFilter() {
-
-                    @Override
-                    public boolean accept(File file) {
-                        return isMatches(mask, file.getName());
-                    }
-                });
+                file -> isMatches(mask, file.getName()));
     }
 
     private static RequestFiles getInputFacilityServiceTypeFiles(long userOrganizationId, long osznId,
             final FileHandlingConfig mask) throws StorageNotFoundException {
         return RequestFileStorage.INSTANCE.getInputRequestFiles(userOrganizationId, osznId, LOAD_FACILITY_SERVICE_TYPE_DIR,
-                new FileFilter() {
-
-                    @Override
-                    public boolean accept(File file) {
-                        return isMatches(mask, file.getName());
-                    }
-                });
+                file -> isMatches(mask, file.getName()));
     }
 
-    private static String getSuffix(String name, FileHandlingConfig prefix) {
-        return name.substring(getConfigString(prefix).length()).toLowerCase();
+    private static String getSuffix(String name) {
+        return name.replaceAll("\\D*", "");
     }
 
     private static RequestFile newPaymentBenefitRequestFile(File file, RequestFileType type, String relativeDirectory,
@@ -183,8 +134,8 @@ public class LoadUtil {
 
         //payment
         for (int month = monthFrom; month <= monthTo; ++month) {
-            RequestFiles requestFiles = getInputPaymentBenefitFiles(userOrganizationId, osznId, PAYMENT_FILENAME_PREFIX,
-                    PAYMENT_BENEFIT_FILENAME_SUFFIX, month, year);
+            RequestFiles requestFiles = getInputPaymentBenefitFiles(PAYMENT_FILENAME_MASK, month, year,
+                    osznId, userOrganizationId);
 
             List<File> payments = requestFiles.getFiles();
             for (int i = 0; i < payments.size(); ++i) {
@@ -206,7 +157,7 @@ public class LoadUtil {
                     requestFileGroupsMap.put(file.getParent(), map);
                 }
 
-                map.put(getSuffix(file.getName(), PAYMENT_FILENAME_PREFIX), group);
+                map.put(getSuffix(file.getName()), group);
             }
         }
 
@@ -214,8 +165,8 @@ public class LoadUtil {
 
         //benefit
         for (int month = monthFrom; month <= monthTo; ++month) {
-            RequestFiles requestFiles = getInputPaymentBenefitFiles(userOrganizationId, osznId, BENEFIT_FILENAME_PREFIX,
-                    PAYMENT_BENEFIT_FILENAME_SUFFIX, month, year);
+            RequestFiles requestFiles = getInputPaymentBenefitFiles(BENEFIT_FILENAME_MASK, month, year,
+                    userOrganizationId, osznId);
 
             List<File> benefits = requestFiles.getFiles();
             for (File file : benefits) {
@@ -226,7 +177,7 @@ public class LoadUtil {
                 Map<String, RequestFileGroup> map = requestFileGroupsMap.get(file.getParent());
 
                 if (map != null) {
-                    RequestFileGroup group = map.get(getSuffix(file.getName(), BENEFIT_FILENAME_PREFIX));
+                    RequestFileGroup group = map.get(getSuffix(file.getName()));
 
                     if (group != null) {
                         group.setBenefitFile(requestFile);

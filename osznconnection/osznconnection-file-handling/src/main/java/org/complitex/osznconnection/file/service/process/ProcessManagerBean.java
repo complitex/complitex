@@ -244,7 +244,7 @@ public class ProcessManagerBean {
                 }
             }
         } catch (Exception e) {
-            process.preprocessError();
+            process.preprocessError(); //todo add ui message
 
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null,

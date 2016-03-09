@@ -48,9 +48,7 @@ public class ConfigBean extends AbstractBean{
         for (IConfig config : configs){
             String value = getValue(config.name());
 
-            if (value != null) {
-                configMap.put(config, value);
-            }
+            configMap.put(config, value != null ? value : "");
         }
     }
 
@@ -90,9 +88,7 @@ public class ConfigBean extends AbstractBean{
         if (flush){
             String value = getValue(config.name());
 
-            if (value != null){
-                configMap.put(config, value);
-            }
+            configMap.put(config, value != null ? value : "");
         }
 
         return configMap.get(config);

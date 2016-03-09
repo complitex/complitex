@@ -181,7 +181,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
             }
         });
 
-        //lookup by fio
+        //lookup by person
         fioContainer = new WebMarkupContainer("fio_container");
         fioContainer.setOutputMarkupId(true);
         accordion.add(fioContainer);
@@ -347,7 +347,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     };
 
     protected Cursor<AccountDetail> getAccountDetails(T request) throws DBException{
-        return lookupBean.getAccountDetails( request.getOutgoingDistrict(),
+        return lookupBean.getAccountDetails( request.getOutgoingDistrict(), getServiceProviderCode(request),
                 request.getOutgoingStreetType(), request.getOutgoingStreet(),
                 request.getOutgoingBuildingNumber(), request.getOutgoingBuildingCorp(),
                 request.getOutgoingApartment(), request.getDate(), request.getUserOrganizationId());
