@@ -166,7 +166,7 @@ public class LoadUtil {
         //benefit
         for (int month = monthFrom; month <= monthTo; ++month) {
             RequestFiles requestFiles = getInputPaymentBenefitFiles(BENEFIT_FILENAME_MASK, month, year,
-                    userOrganizationId, osznId);
+                    osznId, userOrganizationId);
 
             List<File> benefits = requestFiles.getFiles();
             for (File file : benefits) {

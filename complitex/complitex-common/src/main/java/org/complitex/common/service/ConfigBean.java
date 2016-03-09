@@ -126,10 +126,17 @@ public class ConfigBean extends AbstractBean{
     
 
     public void update(final IConfig config, final String value){
-        sqlSession().update(MAPPING_NAMESPACE + ".updateConfig", new HashMap<String, String>() {{
-            put("name", config.name());
-            put("value", value);
-        }});
+        if (isExist(config.name())){
+            sqlSession().update(MAPPING_NAMESPACE + ".updateConfig", new HashMap<String, String>() {{
+                put("name", config.name());
+                put("value", value);
+            }});
+        }else{
+            sqlSession().insert(MAPPING_NAMESPACE + ".insertConfig", new HashMap<String, String>(){{
+                put("name", config.name());
+                put("value", value);
+            }});
+        }
     }
 
     protected Set<Class<? extends IConfig>> getIConfigClasses() {
@@ -140,10 +147,7 @@ public class ConfigBean extends AbstractBean{
 
 
     private void insert(final String name, final String value){
-        sqlSession().insert(MAPPING_NAMESPACE + ".insertConfig", new HashMap<String, String>(){{
-            put("name", name);
-            put("value", value);
-        }});
+
     }
 
 
