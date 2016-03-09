@@ -218,11 +218,11 @@
         </if>
 
         <if test="organizationId != null">
-            f.`organization_id` = #{organizationId}
+            AND f.`organization_id` = #{organizationId}
         </if>
 
         <if test="userOrganizationId != null">
-            f.`user_organization_id` = #{userOrganizationId}
+            AND f.`user_organization_id` = #{userOrganizationId}
         </if>
 
     </sql>

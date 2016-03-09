@@ -13,6 +13,9 @@ public class AbstractRequestExample implements Serializable {
     private RequestStatus status;
     private Long requestFileId;
 
+    private Long organizationId;
+    private Long userOrganizationId;
+
     public RequestStatus getStatus() {
         return status;
     }
@@ -27,5 +30,21 @@ public class AbstractRequestExample implements Serializable {
 
     public void setRequestFileId(Long requestFileId) {
         this.requestFileId = requestFileId;
+    }
+
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
+
+    public Long getUserOrganizationId() {
+        return userOrganizationId;
+    }
+
+    public void setUserOrganizationId(Long userOrganizationId) {
+        this.userOrganizationId = userOrganizationId;
     }
 }
