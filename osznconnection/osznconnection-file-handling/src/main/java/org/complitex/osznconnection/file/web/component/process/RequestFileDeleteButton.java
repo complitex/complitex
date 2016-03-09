@@ -45,7 +45,7 @@ public abstract class RequestFileDeleteButton extends DeleteButton {
     @Override
     public void onClick(AjaxRequestTarget target) {
         for (long requestFileId : selectManager.getSelectedFileIds()) {
-            RequestFile requestFile = requestFileBean.findById(requestFileId);
+            RequestFile requestFile = requestFileBean.getRequestFile(requestFileId);
             try {
                 requestFileBean.delete(requestFile);
 

@@ -58,7 +58,7 @@ public class RequestFileBean extends AbstractBean {
     @EJB
     private RequestFileHistoryBean requestFileHistoryBean;
 
-    public RequestFile findById(long fileId) {
+    public RequestFile getRequestFile(long fileId) {
         return sqlSession().selectOne(NS + ".findById", fileId);
     }
 

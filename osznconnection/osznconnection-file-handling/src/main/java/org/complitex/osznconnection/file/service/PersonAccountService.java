@@ -245,7 +245,7 @@ public class PersonAccountService extends AbstractBean {
         actualPaymentBean.updateAccountNumber(actualPayment);
 
         long actualPaymentFileId = actualPayment.getRequestFileId();
-        RequestFile actualPaymentFile = requestFileBean.findById(actualPaymentFileId);
+        RequestFile actualPaymentFile = requestFileBean.getRequestFile(actualPaymentFileId);
 
         if (actualPaymentBean.isActualPaymentFileBound(actualPaymentFileId)) {
             actualPaymentFile.setStatus(RequestFileStatus.BOUND);
@@ -266,7 +266,7 @@ public class PersonAccountService extends AbstractBean {
         subsidyBean.updateAccountNumberForSimilarSubs(subsidy);
 
         long subsidyFileId = subsidy.getRequestFileId();
-        RequestFile subsidyFile = requestFileBean.findById(subsidyFileId);
+        RequestFile subsidyFile = requestFileBean.getRequestFile(subsidyFileId);
 
         if (subsidyBean.isSubsidyFileBound(subsidyFileId)) {
             subsidyFile.setStatus(RequestFileStatus.BOUND);
@@ -286,7 +286,7 @@ public class PersonAccountService extends AbstractBean {
         dwellingCharacteristicsBean.updateAccountNumber(dwellingCharacteristics);
 
         long dwellingCharacteristicsFileId = dwellingCharacteristics.getRequestFileId();
-        RequestFile dwellingCharacteristicsFile = requestFileBean.findById(dwellingCharacteristicsFileId);
+        RequestFile dwellingCharacteristicsFile = requestFileBean.getRequestFile(dwellingCharacteristicsFileId);
 
         if (dwellingCharacteristicsBean.isDwellingCharacteristicsFileBound(dwellingCharacteristicsFileId)) {
             dwellingCharacteristicsFile.setStatus(RequestFileStatus.BOUND);
@@ -307,7 +307,7 @@ public class PersonAccountService extends AbstractBean {
         facilityServiceTypeBean.updateAccountNumber(facilityServiceType);
 
         long facilityServiceTypeFileId = facilityServiceType.getRequestFileId();
-        RequestFile facilityServiceTypeFile = requestFileBean.findById(facilityServiceTypeFileId);
+        RequestFile facilityServiceTypeFile = requestFileBean.getRequestFile(facilityServiceTypeFileId);
 
         if (facilityServiceTypeBean.isFacilityServiceTypeFileBound(facilityServiceTypeFileId)) {
             facilityServiceTypeFile.setStatus(RequestFileStatus.BOUND);

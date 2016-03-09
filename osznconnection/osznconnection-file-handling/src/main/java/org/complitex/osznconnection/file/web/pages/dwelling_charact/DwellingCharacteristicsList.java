@@ -94,7 +94,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
     }
 
     private void init() {
-        final RequestFile dwellingCharacteristicsFile = requestFileBean.findById(fileId);
+        final RequestFile dwellingCharacteristicsFile = requestFileBean.getRequestFile(fileId);
 
         //Проверка доступа к данным
         if (!sessionBean.isAuthorized(dwellingCharacteristicsFile.getOrganizationId(),

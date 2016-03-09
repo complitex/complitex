@@ -67,9 +67,4 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
     protected String getTitle(Subsidy subsidy) {
         return subsidy.getFio() + ", " + subsidy.getAddress(getLocale());
     }
-
-    @Override
-    protected String getServiceProviderCode(Subsidy subsidy) {
-        return subsidyService.getServiceProviderCode(subsidy.getRequestFileId(), subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
-    }
 }

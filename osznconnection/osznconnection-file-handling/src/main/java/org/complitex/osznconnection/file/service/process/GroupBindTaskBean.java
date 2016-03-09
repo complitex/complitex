@@ -181,11 +181,8 @@ public class GroupBindTaskBean implements ITaskBean {
      * Если не успешно, то попытаться разрешить адрес по схеме "ОСЗН адрес -> локальная адресная база -> адрес центра начислений".
      * Если адрес разрешен, то пытаемся разрешить номер л/c в ЦН.
      */
-    private void bind(Payment payment, Boolean updatePuAccount) throws DBException {
+    private void bind(String serviceProviderCode, Payment payment, Boolean updatePuAccount) throws DBException {
         String accountNumber = payment.getStringField(PaymentDBF.OWN_NUM_SR);
-
-        String serviceProviderCode = organizationStrategy.getServiceProviderCode(payment.getStringField(PaymentDBF.ENT_COD),
-                payment.getOrganizationId(), payment.getUserOrganizationId());
 
         //resolve local account number
         personAccountService.localResolveAccountNumber(payment, accountNumber, true);
@@ -218,13 +215,16 @@ public class GroupBindTaskBean implements ITaskBean {
 
     /**
      * Связать payment файл.
-     * @param paymentFile Файл запроса начислений
+     * @param requestFile Файл запроса начислений
      * @throws BindException Ошибка связывания
      */
-    private void bindPaymentFile(RequestFile paymentFile, Boolean updatePuAccount)
+    private void bindPaymentFile(RequestFile requestFile, Boolean updatePuAccount)
             throws BindException, DBException, CanceledByUserException {
+        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
         //извлечь из базы все id подлежащие связыванию для файла payment и доставать записи порциями по BATCH_SIZE штук.
-        List<Long> notResolvedPaymentIds = paymentBean.findIdsForBinding(paymentFile.getId());
+        List<Long> notResolvedPaymentIds = paymentBean.findIdsForBinding(requestFile.getId());
         List<Long> batch = Lists.newArrayList();
 
         int batchSize = configBean.getInteger(FileHandlingConfig.BIND_BATCH_SIZE, true);
@@ -237,16 +237,16 @@ public class GroupBindTaskBean implements ITaskBean {
             }
 
             //достать из базы очередную порцию записей
-            List<Payment> payments = paymentBean.findForOperation(paymentFile.getId(), batch);
+            List<Payment> payments = paymentBean.findForOperation(requestFile.getId(), batch);
             for (Payment payment : payments) {
-                if (paymentFile.isCanceled()) {
+                if (requestFile.isCanceled()) {
                     throw new CanceledByUserException();
                 }
 
                 //связать payment запись
                 try {
                     userTransaction.begin();
-                    bind(payment, updatePuAccount);
+                    bind(serviceProviderCode, payment, updatePuAccount);
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The payment item ( id = " + payment.getId() + ") was bound with error: ", e);
@@ -257,7 +257,7 @@ public class GroupBindTaskBean implements ITaskBean {
                         log.error("Couldn't rollback transaction for binding payment item.", e1);
                     }
 
-                    throw new BindException(e, false, paymentFile);
+                    throw new BindException(e, false, requestFile);
                 }
             }
         }

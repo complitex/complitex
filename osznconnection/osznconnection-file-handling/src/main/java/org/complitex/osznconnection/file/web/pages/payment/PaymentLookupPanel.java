@@ -51,10 +51,4 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
     protected void updateAccountNumber(Payment payment, String accountNumber) {
         personAccountService.updateAccountNumber(payment, accountNumber);
     }
-
-    @Override
-    protected String getServiceProviderCode(Payment payment) {
-        return organizationStrategy.getServiceProviderCode(payment.getStringField(PaymentDBF.ENT_COD),
-                payment.getOrganizationId(), payment.getUserOrganizationId());
-    }
 }

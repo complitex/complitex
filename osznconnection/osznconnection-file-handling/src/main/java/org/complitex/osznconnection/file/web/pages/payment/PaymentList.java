@@ -91,7 +91,7 @@ public final class PaymentList extends TemplatePage {
     }
 
     private void init() {
-        final RequestFile paymentFile = requestFileBean.findById(fileId);
+        final RequestFile paymentFile = requestFileBean.getRequestFile(fileId);
 
         //Проверка доступа к данным
         if (!osznSessionBean.isAuthorized(paymentFile.getOrganizationId(), paymentFile.getUserOrganizationId())) {

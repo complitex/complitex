@@ -94,7 +94,7 @@ public final class ActualPaymentList extends TemplatePage {
     }
 
     private void init() {
-        final RequestFile actualPaymentFile = requestFileBean.findById(fileId);
+        final RequestFile actualPaymentFile = requestFileBean.getRequestFile(fileId);
 
         //Проверка доступа к данным
         if (!sessionBean.isAuthorized(actualPaymentFile.getOrganizationId(), actualPaymentFile.getUserOrganizationId())) {

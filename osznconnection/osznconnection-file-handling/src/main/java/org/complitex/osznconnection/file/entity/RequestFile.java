@@ -5,8 +5,11 @@ import org.complitex.common.util.DateUtil;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -78,8 +81,15 @@ public class RequestFile extends AbstractExecutorObject {
         return status != null && status.isProcessing();
     }
 
-    public String getCode(){
-        return name.substring(0, name.length() - 8);
+    public String getEdrpou(){
+        Pattern pattern = Pattern.compile("^(\\D*)(\\d*)(\\d{4})(\\..*)");
+        Matcher matcher = pattern.matcher(name);
+
+        if (matcher.matches()){
+            return matcher.group(2);
+        }
+
+        return null;
     }
 
     @Override

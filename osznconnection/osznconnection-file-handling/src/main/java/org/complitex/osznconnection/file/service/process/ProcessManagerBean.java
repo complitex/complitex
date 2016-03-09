@@ -271,7 +271,7 @@ public class ProcessManagerBean {
         List<RequestFile> requestFiles = new ArrayList<RequestFile>();
 
         for (Long id : ids) {
-            RequestFile requestFile = requestFileBean.findById(id);
+            RequestFile requestFile = requestFileBean.getRequestFile(id);
 
             if (requestFile != null && !requestFile.isProcessing() && !isGlobalWaiting(BIND_ACTUAL_PAYMENT, requestFile)
                     && !isGlobalWaiting(FILL_ACTUAL_PAYMENT, requestFile) && !isGlobalWaiting(SAVE_ACTUAL_PAYMENT, requestFile)) {
@@ -285,7 +285,7 @@ public class ProcessManagerBean {
         List<RequestFile> requestFiles = new ArrayList<RequestFile>();
 
         for (Long id : ids) {
-            RequestFile requestFile = requestFileBean.findById(id);
+            RequestFile requestFile = requestFileBean.getRequestFile(id);
 
             if (requestFile != null && !requestFile.isProcessing() && !isGlobalWaiting(BIND_SUBSIDY, requestFile)
                     && !isGlobalWaiting(FILL_SUBSIDY, requestFile) && !isGlobalWaiting(SAVE_SUBSIDY, requestFile)) {
@@ -299,7 +299,7 @@ public class ProcessManagerBean {
         List<RequestFile> requestFiles = new ArrayList<RequestFile>();
 
         for (Long id : ids) {
-            RequestFile requestFile = requestFileBean.findById(id);
+            RequestFile requestFile = requestFileBean.getRequestFile(id);
 
             if (requestFile != null && !requestFile.isProcessing() && !isGlobalWaiting(BIND_DWELLING_CHARACTERISTICS, requestFile)
                     && !isGlobalWaiting(FILL_DWELLING_CHARACTERISTICS, requestFile)
@@ -314,7 +314,7 @@ public class ProcessManagerBean {
         List<RequestFile> requestFiles = new ArrayList<RequestFile>();
 
         for (Long id : ids) {
-            RequestFile requestFile = requestFileBean.findById(id);
+            RequestFile requestFile = requestFileBean.getRequestFile(id);
 
             if (requestFile != null && !requestFile.isProcessing() && !isGlobalWaiting(BIND_FACILITY_SERVICE_TYPE, requestFile)
                     && !isGlobalWaiting(FILL_FACILITY_SERVICE_TYPE, requestFile)
@@ -329,7 +329,7 @@ public class ProcessManagerBean {
         List<RequestFile> requestFiles = new ArrayList<RequestFile>();
 
         for (Long id : ids) {
-            RequestFile requestFile = requestFileBean.findById(id);
+            RequestFile requestFile = requestFileBean.getRequestFile(id);
 
             if (requestFile != null && !requestFile.isProcessing()
                     && !isGlobalWaiting(FILL_FACILITY_FORM2, requestFile)

@@ -89,7 +89,7 @@ public final class BenefitList extends TemplatePage {
     }
 
     private void init() {
-        RequestFile requestFile = requestFileBean.findById(fileId);
+        RequestFile requestFile = requestFileBean.getRequestFile(fileId);
 
         //Проверка доступа к данным
         if (!sessionBean.isAuthorized(requestFile.getOrganizationId(), requestFile.getUserOrganizationId())) {

@@ -64,6 +64,9 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
+        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
         //проверяем что не обрабатывается в данный момент
         if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
             throw new FillException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
@@ -82,7 +85,7 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
                 }
 
                 userTransaction.begin();
-                fill(subsidy);
+                fill(serviceProviderCode, subsidy);
                 userTransaction.commit();
             }
         } catch (Exception e) {
@@ -116,10 +119,8 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
      своя запись мастер-данных, в поля BEGIN0 и END0 которой записывается первое и последнее число месяца
      к которому относится данная запись мастер-данных.
      */
-    private void fill(Subsidy subsidy) throws DBException, UnknownAccountNumberTypeException {
+    private void fill(String serviceProviderCode, Subsidy subsidy) throws DBException, UnknownAccountNumberTypeException {
         String districtName = addressService.resolveOutgoingDistrict(subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
-        String serviceProviderCode = subsidyService.getServiceProviderCode(subsidy.getRequestFileId(),
-                subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
 
         List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(subsidy, districtName,
                serviceProviderCode, subsidy.getAccountNumber() + "", subsidy.getDate());

@@ -77,7 +77,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
                 DomainObject organization = getOrganizationModel().getObject();
 
                 OrganizationCorrection correction = new OrganizationCorrection(null, organization.getObjectId(),
-                        requestFile.getCode(), requestFile.getOrganizationId(), requestFile.getUserOrganizationId(),
+                        requestFile.getEdrpou(), requestFile.getOrganizationId(), requestFile.getUserOrganizationId(),
                         moduleBean.getModuleId());
 
                 if (organizationCorrectionBean.getOrganizationCorrectionsCount(FilterWrapper.of(correction)) == 0){

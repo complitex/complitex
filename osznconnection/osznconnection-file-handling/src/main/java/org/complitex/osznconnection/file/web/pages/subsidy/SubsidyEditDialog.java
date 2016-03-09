@@ -146,7 +146,7 @@ public class SubsidyEditDialog extends Panel {
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 Subsidy subsidy = subsidyModel.getObject();
 
-                RequestFile requestFile = requestFileBean.findById(subsidy.getRequestFileId());
+                RequestFile requestFile = requestFileBean.getRequestFile(subsidy.getRequestFileId());
 
                 if (SUBSIDY_NM_PAY_ERROR.equals(subsidy.getStatus())) {
                     subsidy.setStatus(RequestStatus.LOADED);

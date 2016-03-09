@@ -22,6 +22,7 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.ShowMode;
@@ -30,12 +31,15 @@ import org.complitex.common.web.component.search.WiQuerySearchComponent;
 import org.complitex.common.web.component.wiquery.ExtendedDialog;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.AccountDetail;
+import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.LookupBean;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.file.web.component.account.AccountNumberPickerPanel;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.odlabs.wiquery.ui.accordion.Accordion;
 import org.odlabs.wiquery.ui.options.HeightStyleEnum;
 import org.slf4j.LoggerFactory;
@@ -59,6 +63,12 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
 
     @EJB
     private StreetStrategy streetStrategy;
+
+    @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
+    private OsznOrganizationStrategy organizationStrategy;
+
+    @EJB
+    private RequestFileBean requestFileBean;
 
     private IModel<String> apartmentModel;
     private IModel<List<AccountDetail>> accountDetailsModel;
@@ -350,7 +360,10 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     }
 
     protected String getServiceProviderCode(T request){
-        return null;
+        RequestFile requestFile = requestFileBean.getRequestFile(request.getRequestFileId());
+
+        return organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(), requestFile.getOrganizationId(),
+                requestFile.getUserOrganizationId());
     }
 
     private void lookupByAddress(AjaxRequestTarget target) {

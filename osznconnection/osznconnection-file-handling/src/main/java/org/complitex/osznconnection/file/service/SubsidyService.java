@@ -93,7 +93,7 @@ public class SubsidyService {
     }
 
     public Long getServiceProviderId(Long subsidyRequestFileId){
-        return getServiceProviderId(requestFileBean.findById(subsidyRequestFileId));
+        return getServiceProviderId(requestFileBean.getRequestFile(subsidyRequestFileId));
     }
 
     public Long getServiceProviderId(RequestFile subsidyRequestFile){
@@ -106,15 +106,6 @@ public class SubsidyService {
         return !list.isEmpty() ?  list.get(0).getObjectId() : organizationStrategy.getObjectIdByEdrpou(code);
     }
 
-    public String getServiceProviderCode(Long requestFileId, Long organizationId, Long userOrganizationId){
-        RequestFile requestFile = requestFileBean.findById(requestFileId);
-
-        String fileName = requestFile.getName();
-        String code = fileName.substring(0, fileName.length()-8);
-
-        return organizationStrategy.getServiceProviderCode(code, organizationId, userOrganizationId);
-    }
-
     public String displayServicingOrganization(RequestFile subsidyRequestFile, Locale locale){
         Long organizationId = getServiceProviderId(subsidyRequestFile);
 
@@ -125,11 +116,11 @@ public class SubsidyService {
         }
     }
 
-    public void bind(Subsidy subsidy) throws DBException {
-        subsidyBindTaskBean.bind(subsidy, false);
+    public void bind(String serviceProviderCode, Subsidy subsidy) throws DBException {
+        subsidyBindTaskBean.bind(serviceProviderCode, subsidy, false);
 
         if (subsidyBean.isSubsidyFileBound(subsidy.getRequestFileId())) {
-            RequestFile requestFile = requestFileBean.findById(subsidy.getRequestFileId());
+            RequestFile requestFile = requestFileBean.getRequestFile(subsidy.getRequestFileId());
             requestFile.setStatus(RequestFileStatus.BOUND);
             requestFileBean.save(requestFile);
         }

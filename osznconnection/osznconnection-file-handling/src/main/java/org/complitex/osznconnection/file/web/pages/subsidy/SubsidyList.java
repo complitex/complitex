@@ -27,6 +27,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.service.SessionBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
@@ -43,6 +44,7 @@ import org.complitex.osznconnection.file.web.SubsidyFileList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
@@ -77,6 +79,9 @@ public final class SubsidyList extends TemplatePage {
     @EJB
     private SessionBean sessionBean;
 
+    @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
+    private OsznOrganizationStrategy organizationStrategy;
+
     private IModel<SubsidyExample> example;
     private long fileId;
 
@@ -96,18 +101,20 @@ public final class SubsidyList extends TemplatePage {
     }
 
     private void init() {
-        final RequestFile subsidyFile = requestFileBean.findById(fileId);
+        RequestFile requestFile = requestFileBean.getRequestFile(fileId);
+        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
         //Проверка доступа к данным
-        if (!sessionBean.isAuthorized(subsidyFile.getOrganizationId(), subsidyFile.getUserOrganizationId())) {
+        if (!sessionBean.isAuthorized(requestFile.getOrganizationId(), requestFile.getUserOrganizationId())) {
             throw new UnauthorizedInstantiationException(this.getClass());
         }
 
         final DataRowHoverBehavior dataRowHoverBehavior = new DataRowHoverBehavior();
         add(dataRowHoverBehavior);
 
-        String label = getStringFormat("label", subsidyFile.getDirectory(), File.separator, subsidyFile.getName(),
-                subsidyService.displayServicingOrganization(subsidyFile, getLocale()));
+        String label = getStringFormat("label", requestFile.getDirectory(), File.separator, requestFile.getName(),
+                subsidyService.displayServicingOrganization(requestFile, getLocale()));
 
         add(new Label("title", label));
         add(new Label("label", label));
@@ -377,7 +384,7 @@ public final class SubsidyList extends TemplatePage {
 
                 for (Subsidy subsidy : subsidies){
                     try {
-                        subsidyService.bind(subsidy);
+                        subsidyService.bind(serviceProviderCode, subsidy);
 
                         if (subsidy.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
                             info(getStringFormat("info_bound", subsidy.getFio()));

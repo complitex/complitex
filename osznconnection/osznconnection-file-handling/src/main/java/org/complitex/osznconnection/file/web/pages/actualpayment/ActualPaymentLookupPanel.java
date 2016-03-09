@@ -57,7 +57,7 @@ public class ActualPaymentLookupPanel extends AbstractLookupPanel<ActualPayment>
 
     @Override
     protected Cursor<AccountDetail> getAccountDetails(ActualPayment actualPayment)throws DBException {
-        RequestFile actualPaymentFile = requestFileBean.findById(actualPayment.getRequestFileId());
+        RequestFile actualPaymentFile = requestFileBean.getRequestFile(actualPayment.getRequestFileId());
 
         return lookupBean.getAccountDetails(actualPayment.getOutgoingDistrict(),
                 actualPayment.getOutgoingStreetType(), actualPayment.getOutgoingStreet(),

@@ -96,7 +96,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
     }
 
     private void init() {
-        final RequestFile facilityServiceTypeFile = requestFileBean.findById(fileId);
+        final RequestFile facilityServiceTypeFile = requestFileBean.getRequestFile(fileId);
 
         //Проверка доступа к данным
         if (!sessionBean.isAuthorized(facilityServiceTypeFile.getOrganizationId(),

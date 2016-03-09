@@ -16,6 +16,7 @@ import org.complitex.osznconnection.file.service.exception.CanceledByUserExcepti
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,16 +58,14 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
     private RequestFileBean requestFileBean;
 
     @EJB
-    private SubsidyService subsidyService;
-
-    @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
 
-    public void bind(Subsidy subsidy, boolean updatePuAccount) throws DBException {
+    @EJB
+    private OsznOrganizationStrategy organizationStrategy;
+
+    public void bind(String serviceProviderCode, Subsidy subsidy, boolean updatePuAccount) throws DBException {
         String puAccountNumber = subsidy.getStringField(SubsidyDBF.RASH);
 
-        String serviceProviderCode = subsidyService.getServiceProviderCode(subsidy.getRequestFileId(),
-                subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
 
         //resolve local account number
         personAccountService.localResolveAccountNumber(subsidy, puAccountNumber, true);
@@ -99,10 +98,13 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
         subsidyBean.update(subsidy);
     }
 
-    private void bindSubsidyFile(RequestFile subsidyFile, Boolean updatePuAccount)
+    private void bindSubsidyFile(RequestFile requestFile, Boolean updatePuAccount)
             throws BindException, DBException, CanceledByUserException {
+        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
         //извлечь из базы все id подлежащие связыванию для файла subsidy и доставать записи порциями по BATCH_SIZE штук.
-        List<Long> notResolvedSubsidyIds = subsidyBean.findIdsForBinding(subsidyFile.getId());
+        List<Long> notResolvedSubsidyIds = subsidyBean.findIdsForBinding(requestFile.getId());
 
         List<Long> batch = Lists.newArrayList();
 
@@ -116,16 +118,16 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
             }
 
             //достать из базы очередную порцию записей
-            List<Subsidy> subsidies = subsidyBean.findForOperation(subsidyFile.getId(), batch);
+            List<Subsidy> subsidies = subsidyBean.findForOperation(requestFile.getId(), batch);
             for (Subsidy subsidy : subsidies) {
-                if (subsidyFile.isCanceled()) {
+                if (requestFile.isCanceled()) {
                     throw new CanceledByUserException();
                 }
 
                 //связать subsidy запись
                 try {
                     userTransaction.begin();
-                    bind(subsidy, updatePuAccount);
+                    bind(serviceProviderCode, subsidy, updatePuAccount);
                     userTransaction.commit();
                 } catch (ServiceRuntimeException e){
                     try {
@@ -134,7 +136,7 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
                         log.error("Couldn't rollback transaction for binding subsidy item.", e1);
                     }
 
-                    throw new BindException(e, true, subsidyFile);
+                    throw new BindException(e, true, requestFile);
                 } catch (Exception e) {
                     try {
                         userTransaction.rollback();
@@ -144,7 +146,7 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
 
                     log.error("The subsidy item ( id = " + subsidy.getId() + ") was bound with error: ", e);
 
-                    throw new BindException(e, false, subsidyFile);
+                    throw new BindException(e, false, requestFile);
                 }
             }
         }
