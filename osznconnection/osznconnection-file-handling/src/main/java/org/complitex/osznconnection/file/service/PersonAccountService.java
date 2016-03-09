@@ -136,7 +136,7 @@ public class PersonAccountService extends AbstractBean {
             //resolve remote account
             AccountDetail accountDetail = serviceProviderAdapter.acquireAccountDetail(request,
                     request.getLastName(), puAccountNumber,
-                    request.getOutgoingDistrict(), request.getOutgoingStreetType(), request.getOutgoingStreet(),
+                    request.getOutgoingDistrict(), null, request.getOutgoingStreetType(), request.getOutgoingStreet(),
                     request.getOutgoingBuildingNumber(), request.getOutgoingBuildingCorp(),
                     request.getOutgoingApartment(), request.getDate(), updatePuAccount);
 
@@ -156,11 +156,12 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
-    public void forceResolveAccountNumber(AbstractAccountRequest request, String district, String accountNumber) throws DBException{
+    public void forceResolveAccountNumber(AbstractAccountRequest request, String district, String organizationCode,
+                                          String accountNumber) throws DBException{
         try {
             //force resolve remote account
             List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(request, district,
-                    accountNumber, request.getDate());
+                    organizationCode, accountNumber, request.getDate());
 
             if (accountDetails != null) {
                 if (accountDetails.size() == 1){

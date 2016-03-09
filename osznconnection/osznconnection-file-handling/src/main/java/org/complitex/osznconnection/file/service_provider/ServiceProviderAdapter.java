@@ -85,11 +85,12 @@ public class ServiceProviderAdapter extends AbstractBean {
      * -5 - нет улицы,
      * -6 - нет типа улицы,
      * -7 - нет района,
+     * -8 - неправильная с.е.
      * остальное - номер л/с
      *
      */
     public AccountDetail acquireAccountDetail(AbstractAccountRequest request, String lastName,
-                                              String puAccountNumber, String district, String streetType,
+                                              String puAccountNumber, String district, String organizationCode, String streetType,
                                               String street, String buildingNumber, String buildingCorp, String apartment,
                                               Date date, Boolean updatePUAccount) throws DBException {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
@@ -106,7 +107,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         puAccountNumber = puAccountNumber.replaceFirst("^0+(?!$)", "");
 
         //z$runtime_sz_utl.getAccAttrs()
-        Cursor<AccountDetail> cursor = getAccountDetails(dataSource, district, streetType,
+        Cursor<AccountDetail> cursor = getAccountDetails(dataSource, district, organizationCode, streetType,
                 street, buildingNumber, buildingCorp, apartment, date);
 
         if (cursor.isEmpty()) {
@@ -162,12 +163,12 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     public void acquireFacilityPersonAccount(AbstractAccountRequest request,
-                                             String district, String streetType, String street, String buildingNumber,
+                                             String district, String organizationCode, String streetType, String street, String buildingNumber,
                                              String buildingCorp, String apartment, Date date, String inn,
                                              String passport) throws DBException {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
-        Cursor<AccountDetail> cursor = getAccountDetails(dataSource, district, streetType, street, buildingNumber,
+        Cursor<AccountDetail> cursor = getAccountDetails(dataSource, district, organizationCode, streetType, street, buildingNumber,
                 buildingCorp, apartment, date);
 
         if (cursor.isEmpty()) {
@@ -216,6 +217,9 @@ public class ServiceProviderAdapter extends AbstractBean {
             case -7:
                 request.setStatus(RequestStatus.DISTRICT_NOT_FOUND);
                 break;
+            case -8:
+                request.setStatus(RequestStatus.SERVICING_ORGANIZATION_NOT_FOUND);
+                break;
         }
     }
 
@@ -239,16 +243,18 @@ public class ServiceProviderAdapter extends AbstractBean {
      * -5 - нет улицы,
      * -6 - нет типа улицы,
      * -7 - нет района,
+     * -8 - с.е. не найдена
      *
      * @return AccountDetails
      */
     @SuppressWarnings("unchecked")
-    public Cursor<AccountDetail> getAccountDetails(String dataSource, String district, String streetType,
+    public Cursor<AccountDetail> getAccountDetails(String dataSource, String district, String organizationCode, String streetType,
                                                    String street, String buildingNumber, String buildingCorp,
                                                    String apartment, Date date) throws DBException {
         Map<String, Object> params = newHashMap();
 
         params.put("pDistrName", district);
+        params.put("pOrgCode", organizationCode);
         params.put("pStSortName", streetType);
         params.put("pStreetName", street);
         params.put("pHouseNum", buildingNumber);
@@ -264,15 +270,16 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     @SuppressWarnings("unchecked")
-    public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district, String account, Date date)
+    public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district,
+                                                              String organizationCode, String account, Date date)
             throws DBException, UnknownAccountNumberTypeException {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
         int accountType = determineAccountType(account);
-        List<AccountDetail> accountDetails = null;
 
         Map<String, Object> params = newHashMap();
         params.put("pDistrName", district);
+        params.put("pOrgCode", organizationCode);
         params.put("pAccCode", account);
         params.put("pAccCodeType", accountType);
         params.put("date", date);
@@ -288,6 +295,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
 
         Integer resultCode = (Integer) params.get("resultCode");
+        List<AccountDetail> accountDetails = (List<AccountDetail>) params.get("details");
 
         if (resultCode == null) {
             log.error("acquireAccountDetailsByAccount. Result code is null. Request id: {}, request class: {}, calculation center: {}",
@@ -299,8 +307,6 @@ public class ServiceProviderAdapter extends AbstractBean {
         } else {
             switch (resultCode) {
                 case 1:
-                    accountDetails = (List<AccountDetail>) params.get("details");
-
                     if (accountDetails == null || accountDetails.isEmpty()) {
                         log.error("acquireAccountDetailsByAccount. Result code is 1 but account details data is null or empty. "
                                         + "Request id: {}, request class: {}, calculation center: {}",
@@ -326,6 +332,9 @@ public class ServiceProviderAdapter extends AbstractBean {
                 case -2:
                     request.setStatus(RequestStatus.DISTRICT_NOT_FOUND);
                     break;
+                case -8:
+                    request.setStatus(RequestStatus.SERVICING_ORGANIZATION_NOT_FOUND);
+                    break;
                 default:
                     log.error("acquireAccountDetailsByAccount. Unexpected result code: {}. Request id: {}, request class: {}"
                             + ", calculation center: {}", resultCode, request.getId(), request.getClass(), dataSource);
@@ -340,19 +349,21 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     @SuppressWarnings("unchecked")
-    public List<AccountDetail> getAccountDetailsByFio(String dataSource, String districtName, String servicingOrganizationCode,
-                                                      String lastName, String firstName, String middleName, Date date)
-            throws DBException {
+    public List<AccountDetail> getAccountDetailsByPerson(String dataSource, String districtName, String organizationCode,
+                                                         String lastName, String firstName, String middleName,
+                                                         String inn, String passport, Date date) throws DBException {
         Map<String, Object> map = new HashMap<>();
         map.put("districtName", districtName);
-        map.put("servicingOrganizationCode", servicingOrganizationCode);
+        map.put("organizationCode", organizationCode);
         map.put("lastName", lastName);
         map.put("firstName", firstName);
         map.put("middleName", middleName);
+        map.put("inn", inn);
+        map.put("passport", passport);
         map.put("date", date);
 
 
-        sqlSession(dataSource).selectOne(NS + ".getAttrsByFIO", map);
+        sqlSession(dataSource).selectOne(NS + ".getAttrsByPerson", map);
 
         return (List<AccountDetail>) map.get("accountDetails");
     }

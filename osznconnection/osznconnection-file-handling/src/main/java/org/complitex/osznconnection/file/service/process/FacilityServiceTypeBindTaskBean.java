@@ -89,7 +89,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
 
     private boolean resolveRemoteAccountNumber(FacilityServiceType facilityServiceType, Boolean updatePuAccount) throws DBException {
         serviceProviderAdapter.acquireFacilityPersonAccount(facilityServiceType,
-                facilityServiceType.getOutgoingDistrict(), facilityServiceType.getOutgoingStreetType(),
+                facilityServiceType.getOutgoingDistrict(), null, facilityServiceType.getOutgoingStreetType(),
                 facilityServiceType.getOutgoingStreet(),
                 facilityServiceType.getOutgoingBuildingNumber(), facilityServiceType.getOutgoingBuildingCorp(),
                 facilityServiceType.getOutgoingApartment(), facilityServiceType.getDate(),

@@ -93,7 +93,7 @@ public class ActualPaymentBindTaskBean implements ITaskBean<RequestFile> {
         serviceProviderAdapter.acquireAccountDetail(actualPayment,
                 actualPayment.getStringField(ActualPaymentDBF.SUR_NAM),
                 actualPayment.getStringField(ActualPaymentDBF.OWN_NUM), actualPayment.getOutgoingDistrict(),
-                actualPayment.getOutgoingStreetType(), actualPayment.getOutgoingStreet(),
+                null, actualPayment.getOutgoingStreetType(), actualPayment.getOutgoingStreet(),
                 actualPayment.getOutgoingBuildingNumber(), actualPayment.getOutgoingBuildingCorp(),
                 actualPayment.getOutgoingApartment(), date, updatePuAccount);
 

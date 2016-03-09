@@ -47,22 +47,21 @@ public class LookupBean extends AbstractBean {
             String buildingNumber, String buildingCorp, String apartment, Date date, long userOrganizationId) throws DBException {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
 
-        return adapter.getAccountDetails(dataSource, district, streetType, street, buildingNumber, buildingCorp, apartment, date);
+        return adapter.getAccountDetails(dataSource, district, null, streetType, street, buildingNumber, buildingCorp, apartment, date);
     }
 
 
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district, String account)
+    public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district,
+                                                              String organizationCode, String account)
             throws DBException, UnknownAccountNumberTypeException {
-        return adapter.acquireAccountDetailsByAccount(request, district, account, request.getDate());
+        return adapter.acquireAccountDetailsByAccount(request, district, organizationCode, account, request.getDate());
     }
 
-    public List<AccountDetail> getAccountDetailsByFio(Long userOrganizationId, String districtName,
-                                                      String servicingOrganizationCode, String lastName, String firstName,
-                                                      String middleName, Date date) throws DBException {
-        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
-
-        return adapter.getAccountDetailsByFio(dataSource, districtName, servicingOrganizationCode, lastName, firstName,
-                middleName, date);
+    public List<AccountDetail> getAccountDetailsByPerson(Long userOrganizationId, String districtName,
+                                                         String organizationCode, String lastName, String firstName,
+                                                         String middleName, String inn, String passport, Date date) throws DBException {
+        return adapter.getAccountDetailsByPerson(organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId),
+                districtName, organizationCode, lastName, firstName, middleName, inn, passport, date);
     }
 }

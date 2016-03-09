@@ -12,8 +12,9 @@
 
     <select id="acquireAccountDetailsByAddress" statementType="CALLABLE" parameterType="map">
         <![CDATA[
-        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GETACCATTRS(
+        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GetAccAttrs(
             #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
+            #{pOrgCode, mode=IN, javaType=string, jdbcType=VARCHAR},
             #{pStSortName, mode=IN, javaType=string, jdbcType=VARCHAR},
             #{pStreetName, mode=IN, javaType=string, jdbcType=VARCHAR},
             #{pHouseNum, mode=IN, javaType=string, jdbcType=VARCHAR},
@@ -43,8 +44,9 @@
 
     <select id="getAttrsByAccCode" statementType="CALLABLE" parameterType="map">
         <![CDATA[
-        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GETATTRSBYACCCODE(
+        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GetAttrsByAccCode(
         #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
+        #{pOrgCode, mode=IN, javaType=string, jdbcType=VARCHAR},
         #{pAccCode, mode=IN, javaType=string, jdbcType=VARCHAR},
         #{pAccCodeType, mode=IN, javaType=int, jdbcType=INTEGER},
         #{date, mode=IN, javaType=date, jdbcType=DATE},
@@ -53,16 +55,18 @@
         ]]>
     </select>
 
-     <!-- getAttrsByFIO-->
+     <!-- getAttrsByPerson-->
 
-    <select id="getAttrsByFIO" statementType="CALLABLE" parameterType="map">
+    <select id="getAttrsByPerson" statementType="CALLABLE" parameterType="map">
         <![CDATA[
-        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GETATTRSBYFIO (
+        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GetAttrsByPerson(
         #{districtName, mode=IN, javaType=string, jdbcType=VARCHAR},
-        #{servicingOrganizationCode, mode=IN, javaType=string, jdbcType=VARCHAR},
+        #{organizationCode, mode=IN, javaType=string, jdbcType=VARCHAR},
         #{lastName, mode=IN, javaType=string, jdbcType=VARCHAR},
         #{firstName, mode=IN, javaType=string, jdbcType=VARCHAR},
         #{middleName, mode=IN, javaType=string, jdbcType=VARCHAR},
+        #{inn, mode=IN, javaType=string, jdbcType=VARCHAR},
+        #{passport, mode=IN, javaType=string, jdbcType=VARCHAR},
         #{date, mode=IN, javaType=date, jdbcType=DATE},
         #{accountDetails, mode=OUT, jdbcType=CURSOR, resultMap=accountDetailResultMap})
         }

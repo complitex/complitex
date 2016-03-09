@@ -2,7 +2,6 @@ package org.complitex.osznconnection.file.service.process;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.service.ConfigBean;
@@ -86,7 +85,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFil
 
     private boolean resolveRemoteAccountNumber(DwellingCharacteristics dwellingCharacteristics) throws DBException {
         serviceProviderAdapter.acquireFacilityPersonAccount(dwellingCharacteristics,
-                dwellingCharacteristics.getOutgoingDistrict(), dwellingCharacteristics.getOutgoingStreetType(),
+                dwellingCharacteristics.getOutgoingDistrict(), null, dwellingCharacteristics.getOutgoingStreetType(),
                 dwellingCharacteristics.getOutgoingStreet(),
                 dwellingCharacteristics.getOutgoingBuildingNumber(), dwellingCharacteristics.getOutgoingBuildingCorp(),
                 dwellingCharacteristics.getOutgoingApartment(), dwellingCharacteristics.getDate(),

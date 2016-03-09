@@ -17,6 +17,7 @@ import org.complitex.osznconnection.file.service.exception.MoreOneAccountExcepti
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +66,9 @@ public class GroupBindTaskBean implements ITaskBean {
 
     @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
+
+    @EJB
+    private OsznOrganizationStrategy organizationStrategy;
 
     @Override
     public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
@@ -180,6 +184,8 @@ public class GroupBindTaskBean implements ITaskBean {
     private void bind(Payment payment, Boolean updatePuAccount) throws DBException {
         String accountNumber = payment.getStringField(PaymentDBF.OWN_NUM_SR);
 
+        String serviceProviderCode = organizationStrategy.getServiceProviderCode(payment.getStringField(PaymentDBF.ENT_COD));
+
         //resolve local account number
         personAccountService.localResolveAccountNumber(payment, accountNumber, true);
 
@@ -189,15 +195,15 @@ public class GroupBindTaskBean implements ITaskBean {
 
             //resolve account number
             if (payment.getStatus().isAddressResolved()){
-                personAccountService.resolveAccountNumber(payment, accountNumber, null, false);
+                personAccountService.resolveAccountNumber(payment, accountNumber, serviceProviderCode, false);
 
                 if (MORE_ONE_ACCOUNTS.equals(payment.getStatus())){
                     personAccountService.forceResolveAccountNumber(payment, addressService.resolveOutgoingDistrict(
-                            payment.getOrganizationId(), payment.getUserOrganizationId()), accountNumber);
+                            payment.getOrganizationId(), payment.getUserOrganizationId()), serviceProviderCode, accountNumber);
                 }
             }else if (MORE_ONE_LOCAL_STREET.equals(payment.getStatus())){
                 personAccountService.forceResolveAccountNumber(payment, addressService.resolveOutgoingDistrict(
-                        payment.getOrganizationId(), payment.getUserOrganizationId()), accountNumber);
+                        payment.getOrganizationId(), payment.getUserOrganizationId()), serviceProviderCode, accountNumber);
             }
         }
 

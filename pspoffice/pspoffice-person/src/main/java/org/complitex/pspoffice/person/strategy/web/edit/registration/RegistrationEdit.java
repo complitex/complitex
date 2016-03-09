@@ -12,6 +12,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -31,7 +32,6 @@ import org.complitex.common.util.Numbers;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
-import org.complitex.common.web.component.combobox.Combobox;
 import org.complitex.common.web.component.dateinput.MaskedDateInput;
 import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
 import org.complitex.common.web.component.fieldset.CollapsibleFieldset;
@@ -378,19 +378,21 @@ public class RegistrationEdit extends FormTemplatePage {
             }
         }
 
-        Combobox<DomainObject> ownerRelationship = new Combobox<DomainObject>("input", ownerRelationshipModel,
+        DropDownChoice<DomainObject> ownerRelationship = new DropDownChoice<>("input", ownerRelationshipModel,
                 allOwnerRelationships, new DomainObjectDisableAwareRenderer() {
 
             @Override
             public Object getDisplayValue(DomainObject object) {
                 return ownerRelationshipStrategy.displayDomainObject(object, getLocale());
             }
-        }, canEdit());
+        });
 
+        ownerRelationship.setEnabled(canEdit());
         ownerRelationship.setNullValid(true).
                 setRequired(ownerRelationshipAttributeType.isMandatory()).
                 setLabel(labelModel);
         ownerRelationshipContainer.add(ownerRelationship);
+
         return ownerRelationshipContainer;
     }
 

@@ -1,19 +1,15 @@
 package org.complitex.osznconnection.file.web.pages.payment;
 
 import org.apache.wicket.Component;
-import org.complitex.common.entity.Cursor;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.entity.Payment;
 import org.complitex.osznconnection.file.entity.PaymentDBF;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
 import javax.ejb.EJB;
-import java.util.Date;
 
 /**
  * Панель для поиска номера л/c по различным параметрам: по адресу, по номеру лиц. счета, по номеру в мегабанке.
@@ -57,7 +53,7 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
     }
 
     @Override
-    protected String getServicingOrganizationCode(Payment request) {
+    protected String getServiceProviderCode(Payment request) {
         return organizationStrategy.getServiceProviderCode(request.getStringField(PaymentDBF.ENT_COD));
     }
 }

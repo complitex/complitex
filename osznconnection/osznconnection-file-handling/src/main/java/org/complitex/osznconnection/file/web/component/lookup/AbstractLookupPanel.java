@@ -186,9 +186,9 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                 String district = resolveOutgoingDistrict(request);
 
                 try {
-                    List<AccountDetail> accountDetails = lookupBean.getAccountDetailsByFio(request.getUserOrganizationId(),
-                            district, getServicingOrganizationCode(request), lastNameModel.getObject(),
-                            firstNameModel.getObject(), middleNameModel.getObject(), (Date)request.getField("DAT1"));
+                    List<AccountDetail> accountDetails = lookupBean.getAccountDetailsByPerson(request.getUserOrganizationId(),
+                            district, getServiceProviderCode(request), lastNameModel.getObject(),
+                            firstNameModel.getObject(), middleNameModel.getObject(), null, null, (Date)request.getField("DAT1"));
 
                     accountDetailsModel.setObject(accountDetails);
 
@@ -329,7 +329,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
 
     protected final List<AccountDetail> acquireAccountDetailsByAccount(T request, String district, String account)
             throws DBException, UnknownAccountNumberTypeException {
-        return lookupBean.acquireAccountDetailsByAccount(request, district, account);
+        return lookupBean.acquireAccountDetailsByAccount(request, district, getServiceProviderCode(request), account);
     }
 
     protected void resolveOutgoingAddress(T request){
@@ -349,7 +349,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         return addressService.resolveOutgoingDistrict(request.getOrganizationId(), request.getUserOrganizationId());
     }
 
-    protected String getServicingOrganizationCode(T request){
+    protected String getServiceProviderCode(T request){
         return null;
     }
 

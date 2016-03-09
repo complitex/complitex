@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.service.process;
 
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
@@ -25,7 +24,10 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -115,15 +117,13 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
      к которому относится данная запись мастер-данных.
      */
     private void fill(Subsidy subsidy) throws DBException, UnknownAccountNumberTypeException {
-
         String districtName = addressService.resolveOutgoingDistrict(subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
+        String serviceProviderCode = subsidyService.getServiceProviderCode(subsidy.getRequestFileId());
 
         List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(subsidy, districtName,
-                subsidy.getAccountNumber() + "", subsidy.getDate());
+               serviceProviderCode, subsidy.getAccountNumber() + "", subsidy.getDate());
 
-        accountDetails.add(new AccountDetail());
-
-        if (!accountDetails.isEmpty()){
+        if (accountDetails != null && !accountDetails.isEmpty()){
             //clear
             subsidyMasterDataBean.clearSubsidyMasterDataList(subsidy.getId());
 

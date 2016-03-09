@@ -4,6 +4,8 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Preference;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.component.search.SearchComponentState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -16,6 +18,8 @@ import java.util.List;
  */
 @Stateless
 public class PreferenceBean extends AbstractBean{
+    private Logger log = LoggerFactory.getLogger(getClass());
+
     private static final String MAPPING_NAMESPACE = PreferenceBean.class.getName();
 
     @EJB
@@ -47,12 +51,16 @@ public class PreferenceBean extends AbstractBean{
 
 
     public void save(Preference preference){
-        if (preference.getId() == null){
-            sqlSession().insert(MAPPING_NAMESPACE + ".insertPreference", preference);
-        } else if (preference.getValue() != null) {
-            sqlSession().update(MAPPING_NAMESPACE + ".updatePreference", preference);
-        } else {
-            sqlSession().delete(MAPPING_NAMESPACE + ".deletePreference", preference);
+        try {
+            if (preference.getId() == null){
+                sqlSession().insert(MAPPING_NAMESPACE + ".insertPreference", preference);
+            } else if (preference.getValue() != null) {
+                sqlSession().update(MAPPING_NAMESPACE + ".updatePreference", preference);
+            } else {
+                sqlSession().delete(MAPPING_NAMESPACE + ".deletePreference", preference);
+            }
+        } catch (Exception e) {
+            log.error("error update preference", e);
         }
     }
 
