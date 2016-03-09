@@ -106,29 +106,13 @@ public class SubsidyService {
         return !list.isEmpty() ?  list.get(0).getObjectId() : organizationStrategy.getObjectIdByEdrpou(code);
     }
 
-    public String getServiceProviderEdrpou(Long requestFileId){
+    public String getServiceProviderCode(Long requestFileId, Long organizationId, Long userOrganizationId){
         RequestFile requestFile = requestFileBean.findById(requestFileId);
 
         String fileName = requestFile.getName();
         String code = fileName.substring(0, fileName.length()-8);
 
-        List<OrganizationCorrection> list = organizationCorrectionBean.getOrganizationCorrections(
-                FilterWrapper.of(new OrganizationCorrection(null, null, code, requestFile.getOrganizationId(),
-                        requestFile.getUserOrganizationId(), null)));
-
-        if (!list.isEmpty()){
-            String edrpou =  organizationStrategy.getDomainObject(list.get(0).getObjectId()).getStringValue(OsznOrganizationStrategy.EDRPOU);
-
-            if (edrpou != null){
-                return edrpou;
-            }
-        }
-
-        return code;
-    }
-
-    public String getServiceProviderCode(Long requestFileId, Long organizationId, Long userOrganizationId){
-        return organizationStrategy.getServiceProviderCode(getServiceProviderEdrpou(requestFileId), organizationId, userOrganizationId);
+        return organizationStrategy.getServiceProviderCode(code, organizationId, userOrganizationId);
     }
 
     public String displayServicingOrganization(RequestFile subsidyRequestFile, Locale locale){
