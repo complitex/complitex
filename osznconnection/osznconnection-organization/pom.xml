@@ -21,9 +21,16 @@
             <groupId>org.complitex</groupId>
             <artifactId>complitex-address</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.complitex</groupId>
             <artifactId>complitex-organization</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.complitex</groupId>
+            <artifactId>complitex-correction</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

@@ -53,7 +53,8 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
     }
 
     @Override
-    protected String getServiceProviderCode(Payment request) {
-        return organizationStrategy.getServiceProviderCode(request.getStringField(PaymentDBF.ENT_COD));
+    protected String getServiceProviderCode(Payment payment) {
+        return organizationStrategy.getServiceProviderCode(payment.getStringField(PaymentDBF.ENT_COD),
+                payment.getOrganizationId(), payment.getUserOrganizationId());
     }
 }

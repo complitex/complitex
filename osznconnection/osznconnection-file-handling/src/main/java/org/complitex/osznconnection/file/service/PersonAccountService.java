@@ -120,7 +120,7 @@ public class PersonAccountService extends AbstractBean {
     }
 
     public void resolveAccountNumber(AbstractAccountRequest request, String puAccountNumber,
-                                     String servicingOrganizationCode,
+                                     String serviceProviderCode,
                                      boolean updatePuAccount) throws DBException {
         try {
             //resolve local account
@@ -142,8 +142,8 @@ public class PersonAccountService extends AbstractBean {
 
             if (request.getStatus() == RequestStatus.ACCOUNT_NUMBER_RESOLVED) {
                 //check servicing organization
-                if (servicingOrganizationCode != null && accountDetail.getZheu() != null &&
-                        !servicingOrganizationCode.toUpperCase().equals(accountDetail.getZheu().toUpperCase())){
+                if (serviceProviderCode != null && accountDetail.getZheu() != null &&
+                        !serviceProviderCode.toUpperCase().equals(accountDetail.getZheu().toUpperCase())){
                     request.setStatus(RequestStatus.SERVICING_ORGANIZATION_NOT_FOUND);
 
                     return;

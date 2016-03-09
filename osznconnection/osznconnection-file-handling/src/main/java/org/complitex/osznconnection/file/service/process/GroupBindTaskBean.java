@@ -184,7 +184,8 @@ public class GroupBindTaskBean implements ITaskBean {
     private void bind(Payment payment, Boolean updatePuAccount) throws DBException {
         String accountNumber = payment.getStringField(PaymentDBF.OWN_NUM_SR);
 
-        String serviceProviderCode = organizationStrategy.getServiceProviderCode(payment.getStringField(PaymentDBF.ENT_COD));
+        String serviceProviderCode = organizationStrategy.getServiceProviderCode(payment.getStringField(PaymentDBF.ENT_COD),
+                payment.getOrganizationId(), payment.getUserOrganizationId());
 
         //resolve local account number
         personAccountService.localResolveAccountNumber(payment, accountNumber, true);

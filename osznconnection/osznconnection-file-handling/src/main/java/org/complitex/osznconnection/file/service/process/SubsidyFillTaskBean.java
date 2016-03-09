@@ -118,7 +118,8 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
      */
     private void fill(Subsidy subsidy) throws DBException, UnknownAccountNumberTypeException {
         String districtName = addressService.resolveOutgoingDistrict(subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
-        String serviceProviderCode = subsidyService.getServiceProviderCode(subsidy.getRequestFileId());
+        String serviceProviderCode = subsidyService.getServiceProviderCode(subsidy.getRequestFileId(),
+                subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
 
         List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(subsidy, districtName,
                serviceProviderCode, subsidy.getAccountNumber() + "", subsidy.getDate());

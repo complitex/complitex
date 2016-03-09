@@ -127,8 +127,8 @@ public class SubsidyService {
         return code;
     }
 
-    public String getServiceProviderCode(Long requestFileId){
-        return organizationStrategy.getServiceProviderCode(getServiceProviderEdrpou(requestFileId));
+    public String getServiceProviderCode(Long requestFileId, Long organizationId, Long userOrganizationId){
+        return organizationStrategy.getServiceProviderCode(getServiceProviderEdrpou(requestFileId), organizationId, userOrganizationId);
     }
 
     public String displayServicingOrganization(RequestFile subsidyRequestFile, Locale locale){

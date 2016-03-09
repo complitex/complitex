@@ -2,10 +2,7 @@ package org.complitex.osznconnection.organization.strategy;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.*;
 import org.complitex.common.service.exception.ServiceRuntimeException;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
@@ -14,6 +11,8 @@ import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringCultures;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
+import org.complitex.correction.entity.OrganizationCorrection;
+import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationEditComponent;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationValidator;
@@ -144,6 +143,9 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
 
     @EJB
     private StringCultureBean stringBean;
+
+    @EJB
+    private OrganizationCorrectionBean organizationCorrectionBean;
 
     @Override
     public IValidator getValidator() {
@@ -281,8 +283,19 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
         return super.displayAttribute(attribute, locale);
     }
 
-    public String getServiceProviderCode(String edrpou){
-        Long serviceProviderId = getObjectIdByEdrpou(edrpou);
+    public String getServiceProviderCode(String edrpou, Long organizationId, Long userOrganizationId){
+        Long serviceProviderId = null;
+
+        List<OrganizationCorrection> list = organizationCorrectionBean.getOrganizationCorrections(
+                FilterWrapper.of(new OrganizationCorrection(null, null, edrpou, organizationId, userOrganizationId, null)));
+
+        if (!list.isEmpty()){
+            serviceProviderId = list.get(0).getObjectId();
+        }
+
+        if (serviceProviderId == null){
+            serviceProviderId = getObjectIdByEdrpou(edrpou);
+        }
 
         if (serviceProviderId != null){
             return getDomainObject(serviceProviderId).getStringValue(OsznOrganizationStrategy.CODE);
