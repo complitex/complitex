@@ -98,6 +98,12 @@ public class AddressService extends AbstractBean {
      * Это алгоритм применяется и к поиску домов и с незначительными поправками к поиску улиц.
      */
     private void resolveLocalAddress(AbstractAddressRequest request){
+        //clear internal address ids
+        request.setCityId(null);
+        request.setStreetTypeId(null);
+        request.setStreetId(null);
+        request.setBuildingId(null);
+
         Long osznId = request.getOrganizationId();
         Long userOrganizationId = request.getUserOrganizationId();
 
