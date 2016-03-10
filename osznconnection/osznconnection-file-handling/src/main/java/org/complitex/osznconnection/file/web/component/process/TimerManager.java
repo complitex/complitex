@@ -67,13 +67,9 @@ public final class TimerManager implements Serializable {
                 if (!processingManager.isGlobalProcessing() && waitForStopTimer.incrementAndGet() > 2) {
                     this.stop(target);
                     target.add(form);
-                } else {
-                    if (!updateComponents.isEmpty()) {
-                        for (Component c : updateComponents) {
-                            target.add(c);
-                        }
-                    }
                 }
+
+                updateComponents.forEach(target::add);
 
                 timerIndex.incrementAndGet();
             }
@@ -85,6 +81,7 @@ public final class TimerManager implements Serializable {
 
         List<AjaxSelfUpdatingTimerBehavior> timers = newArrayList(filter(dataViewContainer.getBehaviors(),
                 AjaxSelfUpdatingTimerBehavior.class));
+
         if (timers != null && !timers.isEmpty()) {
             for (AjaxSelfUpdatingTimerBehavior t : timers) {
                 if (!t.isStopped()) {

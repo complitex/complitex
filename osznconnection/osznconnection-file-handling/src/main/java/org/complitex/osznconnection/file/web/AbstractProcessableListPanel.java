@@ -74,6 +74,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
         public abstract Component field(Item<M> item);
     }
     private static final int AJAX_TIMER = 1;
+
     @EJB
     private ProcessManagerBean processManagerBean;
     private RequestFileLoadPanel requestFileLoadPanel;
@@ -95,8 +96,6 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
 
     public AbstractProcessableListPanel(String id) {
         super(id);
-
-
 
         init();
     }

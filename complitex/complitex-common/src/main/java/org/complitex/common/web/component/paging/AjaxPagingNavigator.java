@@ -89,7 +89,7 @@ public class AjaxPagingNavigator extends org.apache.wicket.ajax.markup.html.navi
                 }
             }
         };
-        TextField<String> newPageNumber = new TextField<>("newPageNumber", newPageNumberModel);
+        TextField<String> newPageNumber = new TextField<>("newPageNumber", newPageNumberModel, String.class);
         AjaxButton goToPage = new AjaxButton("goToPage", newPageForm) {
 
             @Override
