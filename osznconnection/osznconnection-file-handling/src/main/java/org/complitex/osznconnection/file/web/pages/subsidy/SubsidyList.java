@@ -298,9 +298,7 @@ public final class SubsidyList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, subsidy, subsidy.getCityId(), subsidy.getStreetId(),
-                                subsidy.getBuildingId(), subsidy.getStringField(SubsidyDBF.FLAT),
-                                subsidy.getStringField(SubsidyDBF.RASH));
+                        lookupPanel.open(target, subsidy, subsidy.getStringField(SubsidyDBF.RASH));
 
                         target.add(item.add(AttributeModifier.append("class", "data-row-hover")));
                     }

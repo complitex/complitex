@@ -241,9 +241,7 @@ public final class PaymentList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, payment, payment.getCityId(), payment.getStreetId(),
-                                payment.getBuildingId(), payment.getStringField(PaymentDBF.FLAT),
-                                payment.getStringField(PaymentDBF.OWN_NUM_SR));
+                        lookupPanel.open(target, payment, payment.getStringField(PaymentDBF.OWN_NUM_SR));
                     }
                 };
                 item.add(lookup);

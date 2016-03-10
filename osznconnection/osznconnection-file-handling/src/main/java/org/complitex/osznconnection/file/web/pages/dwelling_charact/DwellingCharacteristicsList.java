@@ -252,10 +252,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, dwellingCharacteristics, dwellingCharacteristics.getCityId(),
-                                dwellingCharacteristics.getStreetId(), dwellingCharacteristics.getBuildingId(),
-                                dwellingCharacteristics.getApartment(),
-                                dwellingCharacteristics.getAccountNumber());
+                        lookupPanel.open(target, dwellingCharacteristics, dwellingCharacteristics.getAccountNumber());
                     }
                 };
                 item.add(lookup);

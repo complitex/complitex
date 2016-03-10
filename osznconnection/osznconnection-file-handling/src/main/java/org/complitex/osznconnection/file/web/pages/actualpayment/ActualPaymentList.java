@@ -240,9 +240,7 @@ public final class ActualPaymentList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, actualPayment, actualPayment.getCityId(), actualPayment.getStreetId(),
-                                actualPayment.getBuildingId(), actualPayment.getStringField(ActualPaymentDBF.FLAT),
-                                actualPayment.getStringField(ActualPaymentDBF.OWN_NUM));
+                        lookupPanel.open(target, actualPayment, actualPayment.getStringField(ActualPaymentDBF.OWN_NUM));
                     }
                 };
                 item.add(lookup);

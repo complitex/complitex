@@ -17,6 +17,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
@@ -63,6 +64,9 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
 
     @EJB
     private StreetStrategy streetStrategy;
+
+    @EJB
+    private BuildingStrategy buildingStrategy;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
@@ -255,7 +259,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         });
     }
 
-    protected final void closeDialog(AjaxRequestTarget target) {
+    private void closeDialog(AjaxRequestTarget target) {
         dialog.close(target);
     }
 
@@ -274,20 +278,35 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
 
     protected abstract void initInternalAddress(T request, Long cityId, Long streetId, Long streetTypeId, Long buildingId, String apartment);
 
-    protected final void initSearchComponentState(SearchComponentState componentState, Long cityId, Long streetId, Long buildingId) {
-        componentState.clear();
-        if (cityId != null) {
-            componentState.put("city", findObject(cityId, "city"));
+    private void initSearchComponentState() {
+        addressSearchComponentState.clear();
+        if (request.getCityId() != null) {
+            addressSearchComponentState.put("city", findObject(request.getCityId(), "city"));
         }
-        if (streetId != null) {
-            componentState.put("street", findObject(streetId, "street"));
+
+        if (request.getStreetId() != null) {
+            addressSearchComponentState.put("street", findObject(request.getStreetId(), "street"));
+        }else if (request.getCityId() != null && request.getStreet() != null){
+            List<Long> streetIds = streetStrategy.getStreetIds(request.getCityId(), request.getStreetTypeId(), request.getStreet());
+
+            if (streetIds.size() == 1){
+                addressSearchComponentState.put("street", findObject(streetIds.get(0), "street"));
+            }
         }
-        if (buildingId != null) {
-            componentState.put("building", findObject(buildingId, "building"));
+
+        if (request.getBuildingId() != null) {
+            addressSearchComponentState.put("building", findObject(request.getBuildingId(), "building"));
+        }else if (request.getStreetId() != null && request.getBuildingNumber() != null){
+            List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(request.getCityId(), request.getStreetId(),
+                    request.getBuildingNumber(), request.getBuildingCorp());
+
+            if (buildingIds.size() == 0){
+                addressSearchComponentState.put("building", findObject(buildingIds.get(0), "building"));
+            }
         }
     }
 
-    protected final DomainObject findObject(Long objectId, String entity) {
+    private DomainObject findObject(Long objectId, String entity) {
         IStrategy strategy = strategyFactory.getStrategy(entity);
         return strategy.getDomainObject(objectId, true);
     }
@@ -298,8 +317,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         return "";
     }
 
-    public void open(AjaxRequestTarget target, T request, Long cityId, Long streetId, Long buildingId, String apartment,
-            String serviceProviderAccountNumber) {
+    public void open(AjaxRequestTarget target, T request, String serviceProviderAccountNumber) {
         this.request = CloneUtil.cloneObject(request);
         this.initialRequest = request;
 
@@ -313,8 +331,10 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         lastNameModel.setObject(request.getLastName());
 
         //lookup by address
-        apartmentModel.setObject(apartment);
-        initSearchComponentState(addressSearchComponentState, cityId, streetId, buildingId);
+        apartmentModel.setObject(request.getApartment());
+
+        initSearchComponentState();
+
         addressSearchComponent.reinitialize(target);
         addressSearchComponent.setVisible(true);
 
@@ -337,14 +357,14 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         dialog.open(target);
     }
 
-    protected final List<AccountDetail> acquireAccountDetailsByAccount(T request, String district, String account)
+    private List<AccountDetail> acquireAccountDetailsByAccount(T request, String district, String account)
             throws DBException, UnknownAccountNumberTypeException {
         return lookupBean.acquireAccountDetailsByAccount(request, district, getServiceProviderCode(request), account);
     }
 
     protected void resolveOutgoingAddress(T request){
         lookupBean.resolveOutgoingAddress(request);
-    };
+    }
 
     protected Cursor<AccountDetail> getAccountDetails(T request) throws DBException{
         return lookupBean.getAccountDetails( request.getOutgoingDistrict(), getServiceProviderCode(request),
@@ -355,7 +375,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
 
     protected abstract void updateAccountNumber(T request, String accountNumber);
 
-    protected String resolveOutgoingDistrict(T request) {
+    private String resolveOutgoingDistrict(T request) {
         return addressService.resolveOutgoingDistrict(request.getOrganizationId(), request.getUserOrganizationId());
     }
 
