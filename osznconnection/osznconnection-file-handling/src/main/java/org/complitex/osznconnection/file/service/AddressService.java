@@ -676,11 +676,10 @@ public class AddressService extends AbstractBean {
         if (streetNames.isEmpty()){
             addressCorrectionBean.getStreetCorrections(request.getCityId(),request.getStreetTypeId(), null, null,
                     request.getStreet(), request.getOrganizationId(), request.getUserOrganizationId())
-                    .forEach(c -> streetStrategy.getStreetIds(request.getCityId(), request.getStreetTypeId(), c.getCorrection())
-                            .forEach(id -> streetStrategy.getDomainObject(id)
-                                    .getAttribute(StreetStrategy.NAME)
-                                    .getStringCultures()
-                                    .forEach(s -> streetNames.add(s.getValue().toUpperCase()))));
+                    .forEach(c -> streetStrategy.getDomainObject(c.getObjectId())
+                            .getAttribute(StreetStrategy.NAME)
+                            .getStringCultures()
+                            .forEach(s -> streetNames.add(s.getValue().toUpperCase())));
         }
 
         if (streetNames.isEmpty()){
