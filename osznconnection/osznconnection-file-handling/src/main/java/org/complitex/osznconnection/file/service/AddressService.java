@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.service;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
@@ -10,8 +9,6 @@ import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.address.util.AddressUtil;
-import org.complitex.common.entity.DictionaryObject;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.ModuleBean;
@@ -22,7 +19,9 @@ import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
+import org.complitex.osznconnection.file.entity.AbstractAddressRequest;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
@@ -97,7 +96,7 @@ public class AddressService extends AbstractBean {
      *
      * Это алгоритм применяется и к поиску домов и с незначительными поправками к поиску улиц.
      */
-    private void resolveLocalAddress(AbstractAddressRequest request){
+    public void resolveLocalAddress(AbstractAddressRequest request){
         //clear internal address ids
         request.setCityId(null);
         request.setStreetTypeId(null);
@@ -497,57 +496,13 @@ public class AddressService extends AbstractBean {
      * разрешить адрес по схеме "ОСЗН адрес -> локальная адресная база -> адрес центра начислений"
      */
 
-    public void resolveAddress(Payment payment) {
+    public void resolveAddress(AbstractAddressRequest request) {
         //разрешить адрес локально
-        resolveLocalAddress(payment);
+        resolveLocalAddress(request);
 
         //если адрес локально разрешен, разрешить адрес для ЦН.
-        if (payment.getStatus().isAddressResolvedLocally()) {
-            resolveOutgoingAddress(payment);
-        }
-    }
-
-
-    public void resolveAddress(ActualPayment actualPayment) {
-        //разрешить адрес локально
-        resolveLocalAddress(actualPayment);
-
-        //если адрес локально разрешен, разрешить адрес для ЦН.
-        if (actualPayment.getStatus().isAddressResolvedLocally()) {
-            resolveOutgoingAddress(actualPayment);
-        }
-    }
-
-
-    public void resolveAddress(Subsidy subsidy) {
-        //разрешить адрес локально
-        resolveLocalAddress(subsidy);
-
-        //если адрес локально разрешен, разрешить адрес для ЦН.
-        if (subsidy.getStatus().isAddressResolvedLocally()) {
-            resolveOutgoingAddress(subsidy);
-        }
-    }
-
-
-    public void resolveAddress(DwellingCharacteristics dwellingCharacteristics) {
-        //разрешить адрес локально
-        resolveLocalAddress(dwellingCharacteristics);
-
-        //если адрес локально разрешен, разрешить адрес для ЦН.
-        if (dwellingCharacteristics.getStatus().isAddressResolvedLocally()) {
-            resolveOutgoingAddress(dwellingCharacteristics);
-        }
-    }
-
-
-    public void resolveAddress(FacilityServiceType facilityServiceType) {
-        //разрешить адрес локально
-        resolveLocalAddress(facilityServiceType);
-
-        //если адрес локально разрешен, разрешить адрес для ЦН.
-        if (facilityServiceType.getStatus().isAddressResolvedLocally()) {
-            resolveOutgoingAddress(facilityServiceType);
+        if (request.getStatus().isAddressResolvedLocally()) {
+            resolveOutgoingAddress(request);
         }
     }
 

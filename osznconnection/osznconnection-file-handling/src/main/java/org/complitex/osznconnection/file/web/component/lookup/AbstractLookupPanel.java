@@ -43,6 +43,7 @@ import org.complitex.osznconnection.file.web.component.account.AccountNumberPick
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.odlabs.wiquery.ui.accordion.Accordion;
 import org.odlabs.wiquery.ui.options.HeightStyleEnum;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
@@ -94,6 +95,10 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     private IModel<String> firstNameModel = Model.of("");
     private IModel<String> middleNameModel = Model.of("");
     private IModel<String> lastNameModel = Model.of("");
+    private IModel<String> innModel = Model.of("");
+    private IModel<String> passportModel = Model.of("");
+
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     public AbstractLookupPanel(String id, Component... toUpdate) {
         super(id);
@@ -193,6 +198,8 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         fioContainer.add(new TextField<>("lastName", lastNameModel));
         fioContainer.add(new TextField<>("firstName", firstNameModel));
         fioContainer.add(new TextField<>("middleName", middleNameModel));
+        fioContainer.add(new TextField<>("inn", innModel));
+        fioContainer.add(new TextField<>("passport", passportModel));
 
         fioContainer.add(new IndicatingAjaxButton("lookupByFio") {
             @Override
@@ -202,7 +209,8 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                 try {
                     List<AccountDetail> accountDetails = lookupBean.getAccountDetailsByPerson(request.getUserOrganizationId(),
                             district, getServiceProviderCode(request), lastNameModel.getObject(),
-                            firstNameModel.getObject(), middleNameModel.getObject(), null, null, (Date)request.getField("DAT1"));
+                            firstNameModel.getObject(), middleNameModel.getObject(), innModel.getObject(),
+                            passportModel.getObject(), (Date)request.getField("DAT1"));
 
                     accountDetailsModel.setObject(accountDetails);
 
@@ -280,29 +288,23 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
 
     private void initSearchComponentState() {
         addressSearchComponentState.clear();
+
+        if (request.getCityId() == null || request.getStreetId() == null || request.getBuildingId() == null) {
+            try {
+                addressService.resolveLocalAddress(request);
+            } catch (Exception e) {
+                log.warn("error init address component", e);
+            }
+        }
+
         if (request.getCityId() != null) {
             addressSearchComponentState.put("city", findObject(request.getCityId(), "city"));
         }
-
         if (request.getStreetId() != null) {
             addressSearchComponentState.put("street", findObject(request.getStreetId(), "street"));
-        }else if (request.getCityId() != null && request.getStreet() != null){
-            List<Long> streetIds = streetStrategy.getStreetIds(request.getCityId(), request.getStreetTypeId(), request.getStreet());
-
-            if (streetIds.size() == 1){
-                addressSearchComponentState.put("street", findObject(streetIds.get(0), "street"));
-            }
         }
-
         if (request.getBuildingId() != null) {
             addressSearchComponentState.put("building", findObject(request.getBuildingId(), "building"));
-        }else if (request.getStreetId() != null && request.getBuildingNumber() != null){
-            List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(request.getCityId(), request.getStreetId(),
-                    request.getBuildingNumber(), request.getBuildingCorp());
-
-            if (buildingIds.size() == 0){
-                addressSearchComponentState.put("building", findObject(buildingIds.get(0), "building"));
-            }
         }
     }
 
@@ -325,10 +327,16 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         accountDetailsModel.setObject(null);
         accountNumberPickerPanel.setVisible(false);
 
-        //lookup by owner fio
-        firstNameModel.setObject(request.getFirstName());
-        middleNameModel.setObject(request.getMiddleName());
-        lastNameModel.setObject(request.getLastName());
+        //lookup by person
+        if (Strings.isEmpty(request.getInn()) && Strings.isEmpty(request.getPassport())){
+            firstNameModel.setObject(request.getFirstName());
+            middleNameModel.setObject(request.getMiddleName());
+            lastNameModel.setObject(request.getLastName());
+        }
+
+        innModel.setObject(request.getInn());
+        passportModel.setObject(request.getPassport());
+
 
         //lookup by address
         apartmentModel.setObject(request.getApartment());

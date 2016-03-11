@@ -13,6 +13,9 @@ public abstract class AbstractAccountRequest<E extends Enum> extends AbstractAdd
     private String firstName;
     private String middleName;
 
+    private String inn;
+    private String passport;
+
     public PersonalName getPersonalName(){
         return new PersonalName(getFirstName(), getMiddleName(), getLastName());
     }
@@ -47,5 +50,21 @@ public abstract class AbstractAccountRequest<E extends Enum> extends AbstractAdd
 
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
+    }
+
+    public String getInn() {
+        return inn;
+    }
+
+    public void setInn(String inn) {
+        this.inn = inn;
+    }
+
+    public String getPassport() {
+        return passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport = passport;
     }
 }

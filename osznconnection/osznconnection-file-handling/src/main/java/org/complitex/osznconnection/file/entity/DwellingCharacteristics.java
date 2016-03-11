@@ -35,4 +35,14 @@ public class DwellingCharacteristics extends AbstractAccountRequest<DwellingChar
     public String getApartment() {
         return getUpStringField(DwellingCharacteristicsDBF.APT, "_CYR");
     }
+
+    @Override
+    public String getPassport() {
+        return getStringField(DwellingCharacteristicsDBF.PASPPIL);
+    }
+
+    @Override
+    public String getInn() {
+        return getStringField(DwellingCharacteristicsDBF.IDPIL);
+    }
 }

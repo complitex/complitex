@@ -1,9 +1,5 @@
 package org.complitex.osznconnection.file.entity;
 
-/**
- *
- * @author Artem
- */
 public enum DwellingCharacteristicsDBF {
 
     COD, // Код района

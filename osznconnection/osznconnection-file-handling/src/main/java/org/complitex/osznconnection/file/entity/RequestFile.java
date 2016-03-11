@@ -5,7 +5,6 @@ import org.complitex.common.util.DateUtil;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -91,16 +90,20 @@ public class RequestFile extends AbstractExecutorObject {
         return null;
     }
 
-    public Pattern getEdrpouPattern(){
+    private Pattern getEdrpouPattern(){
         switch (type){
             case PAYMENT:
             case BENEFIT:
                 return Pattern.compile("^(\\D*)(\\d*)(\\d{6})(\\..*)");
             case SUBSIDY:
                 return Pattern.compile("^(\\D*)(\\d*)(\\d{4})(\\..*)");
+            case DWELLING_CHARACTERISTICS:
+            case FACILITY_SERVICE_TYPE:
+                return Pattern.compile("^(\\D*)(\\d*)(\\..*)");
+
         }
 
-        return Pattern.compile("^(\\D*)(\\d{8}|\\d{10})(\\d{6})(\\..*)");
+        return Pattern.compile("^(\\D*)(.*)(\\..*)");
     }
 
     @Override
