@@ -362,8 +362,9 @@ public class ServiceProviderAdapter extends AbstractBean {
         map.put("passport", passport);
         map.put("date", date);
 
-
         sqlSession(dataSource).selectOne(NS + ".getAttrsByPerson", map);
+
+        log.info("getAttrsByPerson {}", map);
 
         return (List<AccountDetail>) map.get("accountDetails");
     }

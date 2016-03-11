@@ -18,22 +18,22 @@ public class FacilityServiceType extends AbstractAccountRequest<FacilityServiceT
 
     @Override
     public String getStreetCode() {
-        return getStringField(FacilityServiceTypeDBF.CDUL);
+        return getUpStringField(FacilityServiceTypeDBF.CDUL, "_CYR");
     }
 
     @Override
     public String getBuildingCorp() {
-        return getStringField(FacilityServiceTypeDBF.BUILD);
+        return getUpStringField(FacilityServiceTypeDBF.BUILD, "_CYR");
     }
 
     @Override
     public String getBuildingNumber() {
-        return getStringField(FacilityServiceTypeDBF.HOUSE);
+        return getUpStringField(FacilityServiceTypeDBF.HOUSE, "_CYR");
     }
 
     @Override
     public String getApartment() {
-        return getStringField(FacilityServiceTypeDBF.APT);
+        return getUpStringField(FacilityServiceTypeDBF.APT, "_CYR");
     }
 
     @Override

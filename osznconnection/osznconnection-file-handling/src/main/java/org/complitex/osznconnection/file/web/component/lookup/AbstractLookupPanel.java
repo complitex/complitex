@@ -47,7 +47,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import java.util.Date;
 import java.util.List;
 
 import static org.apache.wicket.util.string.Strings.isEmpty;
@@ -210,7 +209,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                     List<AccountDetail> accountDetails = lookupBean.getAccountDetailsByPerson(request.getUserOrganizationId(),
                             district, getServiceProviderCode(request), lastNameModel.getObject(),
                             firstNameModel.getObject(), middleNameModel.getObject(), innModel.getObject(),
-                            passportModel.getObject(), (Date)request.getField("DAT1"));
+                            passportModel.getObject(), request.getDate());
 
                     accountDetailsModel.setObject(accountDetails);
 
@@ -365,11 +364,6 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         dialog.open(target);
     }
 
-    private List<AccountDetail> acquireAccountDetailsByAccount(T request, String district, String account)
-            throws DBException, UnknownAccountNumberTypeException {
-        return lookupBean.acquireAccountDetailsByAccount(request, district, getServiceProviderCode(request), account);
-    }
-
     protected void resolveOutgoingAddress(T request){
         lookupBean.resolveOutgoingAddress(request);
     }
@@ -482,8 +476,8 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
             }
             if (!isEmpty(outgoingDistrict)) {
                 try {
-                    List<AccountDetail> accountDetails = acquireAccountDetailsByAccount(request, outgoingDistrict,
-                            accountNumberModel.getObject());
+                    List<AccountDetail> accountDetails = lookupBean.acquireAccountDetailsByAccount(request,
+                            outgoingDistrict, getServiceProviderCode(request), accountNumberModel.getObject());
 
                     if (accountDetails == null || accountDetails.isEmpty()) {
                         error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));
