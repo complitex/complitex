@@ -19,7 +19,7 @@ import org.complitex.osznconnection.file.service.exception.CanceledByUserExcepti
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
-import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +67,9 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
     @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
 
+    @EJB
+    private OsznOrganizationStrategy organizationStrategy;
+
     private boolean resolveAddress(FacilityServiceType facilityServiceType) {
         addressService.resolveAddress(facilityServiceType);
 
@@ -87,9 +90,9 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
         }
     }
 
-    private boolean resolveRemoteAccountNumber(FacilityServiceType facilityServiceType, Boolean updatePuAccount) throws DBException {
+    private boolean resolveRemoteAccountNumber(String serviceProviderCode, FacilityServiceType facilityServiceType) throws DBException {
         serviceProviderAdapter.acquireFacilityPersonAccount(facilityServiceType,
-                facilityServiceType.getOutgoingDistrict(), null, facilityServiceType.getOutgoingStreetType(),
+                facilityServiceType.getOutgoingDistrict(), serviceProviderCode, facilityServiceType.getOutgoingStreetType(),
                 facilityServiceType.getOutgoingStreet(),
                 facilityServiceType.getOutgoingBuildingNumber(), facilityServiceType.getOutgoingBuildingCorp(),
                 facilityServiceType.getOutgoingApartment(), facilityServiceType.getDate(),
@@ -108,7 +111,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
         return facilityServiceType.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    private void bind(FacilityServiceType facilityServiceType, Boolean updatePuAccount)
+    private void bind(String serviceProviderCode, FacilityServiceType facilityServiceType)
             throws DBException {
         //resolve address
         resolveAddress(facilityServiceType);
@@ -118,7 +121,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
             resolveLocalAccount(facilityServiceType);
 
             if (facilityServiceType.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-                resolveRemoteAccountNumber(facilityServiceType,updatePuAccount);
+                resolveRemoteAccountNumber(serviceProviderCode, facilityServiceType);
             }
         }
 
@@ -126,10 +129,12 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
         facilityServiceTypeBean.update(facilityServiceType);
     }
 
-    private void bindFacilityServiceTypeFile(RequestFile facilityServiceTypeFile, Boolean updatePuAccount)
-            throws BindException, DBException, CanceledByUserException {
+    private void bindFacilityServiceTypeFile(RequestFile requestFile) throws BindException, DBException, CanceledByUserException {
+        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
         //извлечь из базы все id подлежащие связыванию для файла facility service type и доставать записи порциями по BATCH_SIZE штук.
-        List<Long> notResolvedFacilityServiceTypeIds = facilityServiceTypeBean.findIdsForBinding(facilityServiceTypeFile.getId());
+        List<Long> notResolvedFacilityServiceTypeIds = facilityServiceTypeBean.findIdsForBinding(requestFile.getId());
         List<Long> batch = Lists.newArrayList();
 
         int batchSize = configBean.getInteger(FileHandlingConfig.BIND_BATCH_SIZE, true);
@@ -143,16 +148,16 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
 
             //достать из базы очередную порцию записей
             List<FacilityServiceType> facilityServiceTypes =
-                    facilityServiceTypeBean.findForOperation(facilityServiceTypeFile.getId(), batch);
+                    facilityServiceTypeBean.findForOperation(requestFile.getId(), batch);
             for (FacilityServiceType facilityServiceType : facilityServiceTypes) {
-                if (facilityServiceTypeFile.isCanceled()) {
+                if (requestFile.isCanceled()) {
                     throw new CanceledByUserException();
                 }
 
                 //связать dwelling characteristics запись
                 try {
                     userTransaction.begin();
-                    bind(facilityServiceType, updatePuAccount);
+                    bind(serviceProviderCode, facilityServiceType);
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The facility service type item ( id = " + facilityServiceType.getId() + ") was bound with error: ", e);
@@ -169,10 +174,6 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        // ищем в параметрах команды опцию "Переписывать номер л/с ПУ номером л/с МН"
-        final Boolean updatePuAccount = commandParameters.containsKey(GlobalOptions.UPDATE_PU_ACCOUNT)
-                ? (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT) : false;
-
         //проверяем что не обрабатывается в данный момент
         if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
             throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
@@ -185,7 +186,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
 
         //связывание файла facility service type
         try {
-            bindFacilityServiceTypeFile(requestFile, updatePuAccount);
+            bindFacilityServiceTypeFile(requestFile);
         } catch (DBException e) {
             throw new RuntimeException(e);
         } catch (CanceledByUserException e) {

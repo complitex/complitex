@@ -19,6 +19,7 @@ import org.complitex.osznconnection.file.service.exception.CanceledByUserExcepti
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +63,9 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFil
     @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
 
+    @EJB
+    private OsznOrganizationStrategy organizationStrategy;
+
 
     private boolean resolveAddress(DwellingCharacteristics dwellingCharacteristics) {
         addressService.resolveAddress(dwellingCharacteristics);
@@ -83,9 +87,9 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFil
         }
     }
 
-    private boolean resolveRemoteAccountNumber(DwellingCharacteristics dwellingCharacteristics) throws DBException {
+    private boolean resolveRemoteAccountNumber(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws DBException {
         serviceProviderAdapter.acquireFacilityPersonAccount(dwellingCharacteristics,
-                dwellingCharacteristics.getOutgoingDistrict(), null, dwellingCharacteristics.getOutgoingStreetType(),
+                dwellingCharacteristics.getOutgoingDistrict(), serviceProviderCode, dwellingCharacteristics.getOutgoingStreetType(),
                 dwellingCharacteristics.getOutgoingStreet(),
                 dwellingCharacteristics.getOutgoingBuildingNumber(), dwellingCharacteristics.getOutgoingBuildingCorp(),
                 dwellingCharacteristics.getOutgoingApartment(), dwellingCharacteristics.getDate(),
@@ -103,7 +107,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFil
         return dwellingCharacteristics.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    private void bind(DwellingCharacteristics dwellingCharacteristics) throws DBException {
+    private void bind(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws DBException {
         //resolve address
         resolveAddress(dwellingCharacteristics);
 
@@ -112,7 +116,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFil
             resolveLocalAccount(dwellingCharacteristics);
 
             if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-                resolveRemoteAccountNumber(dwellingCharacteristics);
+                resolveRemoteAccountNumber(serviceProviderCode, dwellingCharacteristics);
             }
         }
 
@@ -122,6 +126,9 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFil
 
     private void bindDwellingCharacteristicsFile(RequestFile requestFile)
             throws BindException, DBException, CanceledByUserException {
+        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
         //извлечь из базы все id подлежащие связыванию для файла dwelling characteristics и доставать записи порциями по BATCH_SIZE штук.
         List<Long> notResolvedDwellingCharacteristicsIds = dwellingCharacteristicsBean.findIdsForBinding(requestFile.getId());
         List<Long> batch = Lists.newArrayList();
@@ -146,7 +153,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFil
                 //связать dwelling characteristics запись
                 try {
                     userTransaction.begin();
-                    bind(dwellingCharacteristic);
+                    bind(serviceProviderCode, dwellingCharacteristic);
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The dwelling characteristics item ( id = " + dwellingCharacteristic.getId() + ") was bound with error: ", e);
