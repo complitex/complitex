@@ -184,7 +184,9 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
 
             if (facilityStreet != null) {
                 f.setStreet(facilityStreet.getStreet());
-                f.setStreetType(facilityStreet.getStreetType());
+                if (facilityStreet.getStreetType() != null) {
+                    f.setStreetType(facilityStreet.getStreetType().replace(".", ""));
+                }
                 f.setStreetTypeCode(facilityStreet.getStreetTypeCode());
             }
         }
