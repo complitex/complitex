@@ -111,7 +111,7 @@ public class StreetStrategy extends TemplateStrategy {
 
     @Override
     public List<Long> getColumnAttributeTypeIds() {
-        return Lists.newArrayList(NAME);
+        return Lists.newArrayList(STREET_TYPE, NAME);
     }
 
     @Override
@@ -120,7 +120,6 @@ public class StreetStrategy extends TemplateStrategy {
         String streetTypeName = getStreetTypeShortName(object, locale);
 
         return streetTypeName != null ? streetTypeName + " " + streetName : streetName;
-
     }
 
     public String getStreetTypeShortName(DomainObject domainObject, Locale locale){

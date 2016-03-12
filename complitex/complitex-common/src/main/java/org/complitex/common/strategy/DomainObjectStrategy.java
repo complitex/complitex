@@ -1205,6 +1205,10 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                 return dateFormatter.format(new DateConverter().toObject(attribute.getStringValue()));
             case "GENDER":
                 return new GenderConverter().toObject(attribute.getStringValue()).equals(Gender.MALE) ? "Муж." : "Жен."; //todo resource
+            case "STREET_TYPE":
+                IStrategy strategy = strategyFactory.getStrategy("street_type");
+
+                return strategy.displayDomainObject(strategy.getDomainObject(attribute.getValueId(), true), locale);
         }
 
         return StringCultures.getValue(attribute.getStringCultures(), locale);
