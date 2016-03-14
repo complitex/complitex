@@ -191,7 +191,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             }
         }
 
-        log.info("acquireFacilityPersonAccount ACCOUNT_NUMBER_MISMATCH inn={}, passport={}", inn, passport);
+        log.info("acquireFacilityPersonAccount ACCOUNT_NUMBER_MISMATCH inn='{}', passport='{}'", inn, passport);
 
         request.setStatus(RequestStatus.ACCOUNT_NUMBER_MISMATCH);
     }
