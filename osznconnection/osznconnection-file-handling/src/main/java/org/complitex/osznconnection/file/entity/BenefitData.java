@@ -1,7 +1,8 @@
 package org.complitex.osznconnection.file.entity;
 
-import java.io.Serializable;
 import org.apache.wicket.util.string.Strings;
+
+import java.io.Serializable;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -125,8 +126,19 @@ public class BenefitData implements Serializable {
 
     @Override
     public String toString() {
-        return "first name = " + firstName + ", middle name = " + middleName + ", last name = " + lastName + ", Inn = " + inn
-                + ", passport serial = " + passportSerial + ", passport number = " + passportNumber + ", benefit code = " + code
-                + ", order fam = " + orderFamily + ", user count = " + userCount;
+        return "BenefitData{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", inn='" + inn + '\'' +
+                ", passportSerial='" + passportSerial + '\'' +
+                ", passportNumber='" + passportNumber + '\'' +
+                ", orderFamily='" + orderFamily + '\'' +
+                ", code='" + code + '\'' +
+                ", userCount='" + userCount + '\'' +
+                ", calcCenterId=" + calcCenterId +
+                ", privilegeObjectId=" + privilegeObjectId +
+                ", osznPrivilegeCode='" + osznPrivilegeCode + '\'' +
+                '}';
     }
 }

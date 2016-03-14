@@ -147,8 +147,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
             }
 
             //достать из базы очередную порцию записей
-            List<FacilityServiceType> facilityServiceTypes =
-                    facilityServiceTypeBean.findForOperation(requestFile.getId(), batch);
+            List<FacilityServiceType> facilityServiceTypes = facilityServiceTypeBean.findForOperation(requestFile.getId(), batch);
             for (FacilityServiceType facilityServiceType : facilityServiceTypes) {
                 if (requestFile.isCanceled()) {
                     throw new CanceledByUserException();

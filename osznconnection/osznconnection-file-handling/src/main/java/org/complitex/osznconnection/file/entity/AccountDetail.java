@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.entity;
 
-import com.google.common.base.MoreObjects;
 import org.complitex.address.util.AddressRenderer;
 
 import java.io.Serializable;
@@ -146,21 +145,21 @@ public class AccountDetail implements Serializable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("accCode", accCode)
-                .add("ownerFio", ownerFio)
-                .add("ownerINN", ownerINN)
-                .add("ercCode", ercCode)
-                .add("zheu", zheu)
-                .add("zheuCode", zheuCode)
-                .add("street", street)
-                .add("streetType", streetType)
-                .add("buildingNumber", buildingNumber)
-                .add("buildingCorp", buildingCorp)
-                .add("apartment", apartment)
-                .add("houseCode", houseCode)
-                .add("districtCode", districtCode)
-                .add("address", address)
-                .toString();
+        return "AccountDetail{" +
+                "accCode='" + accCode + '\'' +
+                ", ownerFio='" + ownerFio + '\'' +
+                ", ownerINN='" + ownerINN + '\'' +
+                ", ercCode='" + ercCode + '\'' +
+                ", zheu='" + zheu + '\'' +
+                ", zheuCode='" + zheuCode + '\'' +
+                ", street='" + street + '\'' +
+                ", streetType='" + streetType + '\'' +
+                ", buildingNumber='" + buildingNumber + '\'' +
+                ", buildingCorp='" + buildingCorp + '\'' +
+                ", apartment='" + apartment + '\'' +
+                ", houseCode='" + houseCode + '\'' +
+                ", districtCode='" + districtCode + '\'' +
+                ", address='" + address + '\'' +
+                '}';
     }
 }
