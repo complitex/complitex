@@ -315,7 +315,7 @@ public class PersonAccountService extends AbstractBean {
         }
 
         try {
-            save(facilityServiceType, facilityServiceType.getStringField(FacilityServiceTypeDBF.IDCODE));
+            save(facilityServiceType, facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL));
         } catch (MoreOneAccountException e) {
             throw new RuntimeException(e);
         }

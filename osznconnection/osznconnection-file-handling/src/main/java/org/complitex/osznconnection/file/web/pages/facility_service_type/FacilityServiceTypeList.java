@@ -219,10 +219,10 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
             @Override
             protected void populateItem(Item<FacilityServiceType> item) {
-                final FacilityServiceType facilityServiceType = item.getModelObject();
+                FacilityServiceType facilityServiceType = item.getModelObject();
 
-                item.add(new Label("account", facilityServiceType.getStringField(FacilityServiceTypeDBF.RAH)));
-                item.add(new Label("idCode", facilityServiceType.getStringField(FacilityServiceTypeDBF.IDCODE)));
+                item.add(new Label("account", facilityServiceType.getAccountNumber()));
+                item.add(new Label("idCode", facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL)));
                 item.add(new Label("firstName", facilityServiceType.getFirstName()));
                 item.add(new Label("middleName", facilityServiceType.getMiddleName()));
                 item.add(new Label("lastName", facilityServiceType.getLastName()));
@@ -258,7 +258,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, facilityServiceType, facilityServiceType.getStringField(FacilityServiceTypeDBF.IDCODE));
+                        lookupPanel.open(target, facilityServiceType, facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL));
                     }
                 };
                 item.add(lookup);
@@ -267,7 +267,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
         filterForm.add(data);
 
         filterForm.add(new ArrowOrderByBorder("accountHeader", OrderBy.RAH.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("idCodeHeader", OrderBy.IDCODE.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("idCodeHeader", OrderBy.IDPIL.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", OrderBy.FIRST_NAME.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("middleNameHeader", OrderBy.MIDDLE_NAME.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("lastNameHeader", OrderBy.LAST_NAME.getOrderBy(), dataProvider, data, content));

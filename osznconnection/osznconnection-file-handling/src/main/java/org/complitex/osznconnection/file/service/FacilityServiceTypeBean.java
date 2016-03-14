@@ -10,10 +10,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.collect.ImmutableMap.of;
 import static org.complitex.osznconnection.file.entity.FacilityServiceTypeDBF.CDUL;
@@ -33,7 +30,7 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
     public enum OrderBy {
 
         RAH(FacilityServiceTypeDBF.RAH.name()),
-        IDCODE(FacilityServiceTypeDBF.IDCODE.name()),
+        IDPIL(FacilityServiceTypeDBF.IDPIL.name()),
         FIRST_NAME("first_name"),
         MIDDLE_NAME("middle_name"),
         LAST_NAME("last_name"),
@@ -129,18 +126,17 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
     }
 
 
-    public void clearBeforeBinding(long fileId, Set<Long> serviceProviderTypeIds) {
-        Map<String, String> updateFieldMap = null;
+    public void clearBeforeBinding(Long requestFileId, Set<Long> serviceProviderTypeIds) {
+        Map<String, String> updateFieldMap = new HashMap<>();
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
-            updateFieldMap = Maps.newHashMap();
             for (FacilityServiceTypeDBF field : getUpdatableFields(serviceProviderTypeIds)) {
                 updateFieldMap.put(field.name(), "-1");
             }
         }
 
-        sqlSession().update(NS + ".clearBeforeBinding",
-                of("status", RequestStatus.LOADED, "fileId", fileId, "updateFieldMap", updateFieldMap));
-        clearWarnings(fileId, RequestFileType.FACILITY_SERVICE_TYPE);
+        sqlSession().update(NS + ".clearBeforeBinding", of("status", RequestStatus.LOADED, "fileId", requestFileId,
+                "updateFieldMap", updateFieldMap));
+        clearWarnings(requestFileId, RequestFileType.FACILITY_SERVICE_TYPE);
     }
 
     private Set<FacilityServiceTypeDBF> getUpdatableFields(Set<Long> serviceProviderTypeIds) {

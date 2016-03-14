@@ -33,7 +33,7 @@ import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Map;
 
-import static org.complitex.osznconnection.file.entity.FacilityServiceTypeDBF.IDCODE;
+import static org.complitex.osznconnection.file.entity.FacilityServiceTypeDBF.IDPIL;
 import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
 import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
 
@@ -79,7 +79,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
     private void resolveLocalAccount(FacilityServiceType facilityServiceType) {
         try {
             String accountNumber = personAccountService.getLocalAccountNumber(facilityServiceType,
-                    facilityServiceType.getStringField(IDCODE));
+                    facilityServiceType.getStringField(IDPIL));
 
             if (!Strings.isEmpty(accountNumber)) {
                 facilityServiceType.setAccountNumber(accountNumber);
@@ -102,7 +102,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
 
         if (facilityServiceType.getStatus() == ACCOUNT_NUMBER_RESOLVED) {
             try {
-                personAccountService.save(facilityServiceType, facilityServiceType.getStringField(IDCODE));
+                personAccountService.save(facilityServiceType, facilityServiceType.getStringField(IDPIL));
             } catch (MoreOneAccountException e) {
                 throw new DBException(e);
             }
@@ -182,7 +182,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
         requestFile.setStatus(RequestFileStatus.BINDING);
         requestFileBean.save(requestFile);
 
-//        facilityServiceTypeBean.clearBeforeBinding(requestFile.getId(), billingContext.getServiceIds()); todo
+        facilityServiceTypeBean.clearBeforeBinding(requestFile.getId(), null);
 
         //связывание файла facility service type
         try {

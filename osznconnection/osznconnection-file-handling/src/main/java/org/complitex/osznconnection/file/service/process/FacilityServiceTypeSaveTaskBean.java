@@ -30,7 +30,7 @@ public class FacilityServiceTypeSaveTaskBean extends AbstractSaveTaskBean implem
 
     @Override
     protected String getPuAccountFieldName() {
-        return FacilityServiceTypeDBF.IDCODE.name();
+        return FacilityServiceTypeDBF.IDPIL.name();
     }
 
     @Override

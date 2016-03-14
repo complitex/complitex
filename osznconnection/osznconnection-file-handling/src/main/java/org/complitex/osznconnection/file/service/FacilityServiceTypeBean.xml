@@ -30,9 +30,6 @@
         <result column="street" property="street"/>
         <result column="street_type" property="streetType"/>
 
-        <result column="organization_id" property="organizationId"/>
-        <result column="user_organization_id" property="userOrganizationId"/>
-
         <association property="dbfFields" javaType="map">
             <result column="FIO_CYR" property="FIO_CYR"/>
             <result column="CDUL_CYR" property="CDUL_CYR"/>
@@ -160,8 +157,9 @@
         w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
         p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
         FROM (
-            SELECT DISTINCT fst.`id`, fst.`status`, fst.`request_file_id`, fst.`IDCODE`, fst.`FIO`, fst.`CDUL`,
+            SELECT DISTINCT fst.`id`, fst.`status`, fst.`request_file_id`, fst.`FIO`, fst.`CDUL`,
                 fst.`HOUSE`, fst.`BUILD`, fst.`APT`, fst.`date`, fst.`IDPIL`, fst.`PASPPIL`,
+                fst.`account_number`,
 
                 TO_CYRILLIC(fst.`first_name`) first_name,
                 TO_CYRILLIC(fst.`middle_name`) middle_name,
