@@ -171,7 +171,7 @@
                 TO_CYRILLIC(fst.`BUILD`) BUILD_CYR,
                 TO_CYRILLIC(fst.`APT`) APT_CYR,
 
-                f.`organization_id`,
+                f.`organization_id`, f.`user_organization_id`,
                 fst.`internal_city_id`, fst.`internal_street_id`, fst.`internal_street_type_id`, fst.`internal_building_id`,
                 fst.`outgoing_city`, fst.`outgoing_district`, fst.`outgoing_street`, fst.`outgoing_street_type`, fst.`outgoing_building_number`,
                 fst.`outgoing_building_corp`, fst.`outgoing_apartment`,

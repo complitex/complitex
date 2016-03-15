@@ -479,7 +479,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
             Long serviceAttributeId = serviceId != null ? userOrganization.getAttributes(SERVICE).stream()
                     .filter(a -> serviceId.equals(a.getValueId()))
                     .findAny()
-                    .orElseThrow(() -> new ServiceRuntimeException("dataSource not found"))
+                    .orElseThrow(() -> new ServiceRuntimeException("DataSource not found"))
                     .getAttributeId() : 1L;
 
             Long billingId = userOrganization.getAttribute(BILLING, serviceAttributeId).getValueId();
@@ -487,11 +487,11 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
             if(billingId != null){
                 return billingId;
             }else {
-                throw new ServiceRuntimeException("МН не найдет для организации {0}",
+                throw new ServiceRuntimeException("Billing not found for organization {0}",
                         userOrganization.getStringValue(OrganizationStrategy.NAME));
             }
         }else {
-            throw new ServiceRuntimeException("Организация не найдена по идентификатору {0}", userOrganizationId);
+            throw new ServiceRuntimeException("UserOrganizationId is null");
         }
     }
 
