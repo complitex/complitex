@@ -38,11 +38,11 @@ public class FacilityServiceType extends AbstractAccountRequest<FacilityServiceT
 
     @Override
     public String getInn() {
-        return getStringField(FacilityServiceTypeDBF.PASPPIL);
+        return getStringField(FacilityServiceTypeDBF.IDPIL);
     }
 
     @Override
     public String getPassport() {
-        return getStringField(FacilityServiceTypeDBF.IDPIL);
+        return getStringField(FacilityServiceTypeDBF.PASPPIL);
     }
 }
