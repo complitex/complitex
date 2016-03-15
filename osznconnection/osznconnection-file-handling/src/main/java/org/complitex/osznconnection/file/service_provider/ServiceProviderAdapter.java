@@ -191,9 +191,9 @@ public class ServiceProviderAdapter extends AbstractBean {
             }
         }
 
-        log.info("acquireFacilityPersonAccount ACCOUNT_NUMBER_MISMATCH inn='{}', passport='{}'", inn, passport);
+        log.info("acquireFacilityPersonAccount BENEFIT_OWNER_NOT_ASSOCIATED inn='{}', passport='{}'", inn, passport);
 
-        request.setStatus(RequestStatus.ACCOUNT_NUMBER_MISMATCH);
+        request.setStatus(RequestStatus.BENEFIT_OWNER_NOT_ASSOCIATED);
     }
 
     private void updateCursorResultCode(AbstractAccountRequest request, Cursor<AccountDetail> cursor) {
