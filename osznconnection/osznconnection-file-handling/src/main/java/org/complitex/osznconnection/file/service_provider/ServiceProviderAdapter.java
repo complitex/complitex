@@ -266,7 +266,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         sqlSession(dataSource).selectOne(NS + ".acquireAccountDetailsByAddress", params);
 
-        log.info("getAccountDetails out: {}", params);
+        log.info("getAccountDetails getAccAttrs: {}", params);
 
         return new Cursor<>((Integer) params.get("resultCode"), (List<AccountDetail>) params.get("details"));
     }
@@ -293,7 +293,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                 throw new DBException(e);
             }
         } finally {
-            log.info("acquireAccountDetailsByAccount. Calculation center: {}, parameters : {}", dataSource, params);
+            log.info("acquireAccountDetailsByAccount getAttrsByAccCode {}", params);
         }
 
         Integer resultCode = (Integer) params.get("resultCode");
@@ -412,7 +412,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         sqlSession(dataSource).selectOne(NS + ".processPaymentAndBenefit", params);
 
-        log.info("processPaymentAndBenefit. Calculation center: {}, parameters : {}", dataSource, params);
+        log.info("processPaymentAndBenefit getChargeAndParams {}", params);
 
         Integer resultCode = (Integer) params.get("resultCode");
         if (resultCode == null) {
@@ -811,7 +811,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                 throw new DBException(e);
             }
         }finally {
-            log.info("getBenefitData {}", params);
+            log.info("getBenefitData getPrivs {}", params);
         }
 
         return (List<BenefitData>) params.get("benefitData");
@@ -1055,7 +1055,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                 throw new DBException(e);
             }
         } finally {
-            log.info("processBenefit. Calculation center: {}, parameters : {}", dataSource, params);
+            log.info("processBenefit getPrivs {}", params);
             if (log.isDebugEnabled()) {
                 log.debug("processBenefit. Time of operation: {} sec.", (System.nanoTime() - startTime) / 1000000000F);
             }
