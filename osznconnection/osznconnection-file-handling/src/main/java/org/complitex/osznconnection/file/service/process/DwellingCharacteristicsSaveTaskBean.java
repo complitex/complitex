@@ -30,7 +30,7 @@ public class DwellingCharacteristicsSaveTaskBean extends AbstractSaveTaskBean im
 
     @Override
     public String getPuAccountFieldName() {
-        return DwellingCharacteristicsDBF.IDCODE.name();
+        return DwellingCharacteristicsDBF.IDPIL.name();
     }
 
     @Override

@@ -217,7 +217,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
             protected void populateItem(Item<DwellingCharacteristics> item) {
                 final DwellingCharacteristics dwellingCharacteristics = item.getModelObject();
 
-                item.add(new Label("idCode", dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDCODE)));
+                item.add(new Label("idCode", dwellingCharacteristics.getInn()));
                 item.add(new Label("firstName", dwellingCharacteristics.getFirstName()));
                 item.add(new Label("middleName", dwellingCharacteristics.getMiddleName()));
                 item.add(new Label("lastName", dwellingCharacteristics.getLastName()));
@@ -260,7 +260,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         };
         filterForm.add(data);
 
-        filterForm.add(new ArrowOrderByBorder("idCodeHeader", DwellingCharacteristicsBean.OrderBy.IDCODE.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("idCodeHeader", DwellingCharacteristicsBean.OrderBy.IDPIL.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", DwellingCharacteristicsBean.OrderBy.FIRST_NAME.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("middleNameHeader", DwellingCharacteristicsBean.OrderBy.MIDDLE_NAME.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("lastNameHeader", DwellingCharacteristicsBean.OrderBy.LAST_NAME.getOrderBy(), dataProvider, data, content));

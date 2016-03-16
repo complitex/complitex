@@ -154,9 +154,9 @@ public abstract class AbstractSaveTaskBean{
                     rowData[i] = request.getDbfFields().get(fieldName);
 
                     // перезаписываем номер л/с ПУ номером л/с МН при наличии установленной опции
-                    if (updatePuAccount && fieldName.equals(getPuAccountFieldName())) {
-                        rowData[i] = request.getAccountNumber();
-                    }
+//                    if (updatePuAccount && fieldName.equals(getPuAccountFieldName())) {
+//                        rowData[i] = request.getAccountNumber();
+//                    }
                 }
 
                 writer.addRecord(rowData);

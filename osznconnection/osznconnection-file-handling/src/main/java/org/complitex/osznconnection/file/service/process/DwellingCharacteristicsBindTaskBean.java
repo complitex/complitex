@@ -33,7 +33,6 @@ import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Map;
 
-import static org.complitex.osznconnection.file.entity.DwellingCharacteristicsDBF.IDCODE;
 import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
 import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
 
@@ -76,7 +75,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFil
     private void resolveLocalAccount(DwellingCharacteristics dwellingCharacteristics) {
         try {
             String accountNumber = personAccountService.getLocalAccountNumber(dwellingCharacteristics,
-                    dwellingCharacteristics.getStringField(IDCODE));
+                    dwellingCharacteristics.getInn());
 
             if (!Strings.isEmpty(accountNumber)) {
                 dwellingCharacteristics.setAccountNumber(accountNumber);
@@ -93,12 +92,12 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFil
                 dwellingCharacteristics.getOutgoingStreet(),
                 dwellingCharacteristics.getOutgoingBuildingNumber(), dwellingCharacteristics.getOutgoingBuildingCorp(),
                 dwellingCharacteristics.getOutgoingApartment(), dwellingCharacteristics.getDate(),
-                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDPIL),
-                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.PASPPIL));
+                dwellingCharacteristics.getInn(),
+                dwellingCharacteristics.getPassport());
 
         if (dwellingCharacteristics.getStatus() == RequestStatus.ACCOUNT_NUMBER_RESOLVED) {
             try {
-                personAccountService.save(dwellingCharacteristics, dwellingCharacteristics.getStringField(IDCODE));
+                personAccountService.save(dwellingCharacteristics, dwellingCharacteristics.getInn());
             } catch (MoreOneAccountException e) {
                 throw new DBException(e);
             }

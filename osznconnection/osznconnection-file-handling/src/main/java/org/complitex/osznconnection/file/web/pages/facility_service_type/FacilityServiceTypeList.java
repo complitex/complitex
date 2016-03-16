@@ -222,7 +222,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
                 FacilityServiceType facilityServiceType = item.getModelObject();
 
                 item.add(new Label("account", facilityServiceType.getAccountNumber()));
-                item.add(new Label("idCode", facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL)));
+                item.add(new Label("idCode", facilityServiceType.getInn()));
                 item.add(new Label("firstName", facilityServiceType.getFirstName()));
                 item.add(new Label("middleName", facilityServiceType.getMiddleName()));
                 item.add(new Label("lastName", facilityServiceType.getLastName()));
@@ -258,7 +258,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, facilityServiceType, facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL));
+                        lookupPanel.open(target, facilityServiceType, facilityServiceType.getInn());
                     }
                 };
                 item.add(lookup);

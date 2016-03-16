@@ -30,6 +30,9 @@
         <result column="CDUL" property="streetCode"/>
 
         <association property="dbfFields" javaType="map">
+            <result column="IDPIL_CYR" property="IDPIL_CYR"/>
+            <result column="PASPPIL_CYR" property="PASPPIL_CYR"/>
+
             <result column="FIO_CYR" property="FIO_CYR"/>
             <result column="HOUSE_CYR" property="HOUSE_CYR"/>
             <result column="BUILD_CYR" property="BUILD_CYR"/>
@@ -145,6 +148,10 @@
         FROM (
             SELECT DISTINCT d.`id`, d.`status`, d.`request_file_id`, d.`IDCODE`, d.`FIO`, d.`IDPIL`, d.`PASPPIL`,
                 d.`CDUL`, d.`HOUSE`, d.`BUILD`, d.`APT`, d.`date`,
+
+                TO_CYRILLIC(d.`IDPIL`) IDPIL_CYR,
+                TO_CYRILLIC(d.`PASPPIL`) PASPPIL_CYR,
+
                 TO_CYRILLIC(d.`first_name`) first_name,
                 TO_CYRILLIC(d.`middle_name`) middle_name,
                 TO_CYRILLIC(d.`last_name`) last_name,
@@ -227,6 +234,9 @@
     
     <select id="findForOperation" parameterType="map" resultMap="dwellingCharacteristicsResultMap">
         SELECT d.*, f.`organization_id`, f.`user_organization_id`, d.`IDPIL`, d.`PASPPIL`,
+            TO_CYRILLIC(d.`IDPIL`) IDPIL_CYR,
+            TO_CYRILLIC(d.`PASPPIL`) PASPPIL_CYR,
+
             TO_CYRILLIC(d.`first_name`) first_name,
             TO_CYRILLIC(d.`middle_name`) middle_name,
             TO_CYRILLIC(d.`last_name`) last_name,

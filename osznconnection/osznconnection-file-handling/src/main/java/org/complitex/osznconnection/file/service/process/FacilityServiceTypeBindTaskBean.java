@@ -8,7 +8,10 @@ import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.FacilityServiceType;
+import org.complitex.osznconnection.file.entity.FileHandlingConfig;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
@@ -33,7 +36,6 @@ import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Map;
 
-import static org.complitex.osznconnection.file.entity.FacilityServiceTypeDBF.IDPIL;
 import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
 import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
 
@@ -79,7 +81,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
     private void resolveLocalAccount(FacilityServiceType facilityServiceType) {
         try {
             String accountNumber = personAccountService.getLocalAccountNumber(facilityServiceType,
-                    facilityServiceType.getStringField(IDPIL));
+                    facilityServiceType.getInn());
 
             if (!Strings.isEmpty(accountNumber)) {
                 facilityServiceType.setAccountNumber(accountNumber);
@@ -96,13 +98,13 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
                 facilityServiceType.getOutgoingStreet(),
                 facilityServiceType.getOutgoingBuildingNumber(), facilityServiceType.getOutgoingBuildingCorp(),
                 facilityServiceType.getOutgoingApartment(), facilityServiceType.getDate(),
-                facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL),
-                facilityServiceType.getStringField(FacilityServiceTypeDBF.PASPPIL));
+                facilityServiceType.getInn(),
+                facilityServiceType.getPassport());
 
 
         if (facilityServiceType.getStatus() == ACCOUNT_NUMBER_RESOLVED) {
             try {
-                personAccountService.save(facilityServiceType, facilityServiceType.getStringField(IDPIL));
+                personAccountService.save(facilityServiceType, facilityServiceType.getInn());
             } catch (MoreOneAccountException e) {
                 throw new DBException(e);
             }

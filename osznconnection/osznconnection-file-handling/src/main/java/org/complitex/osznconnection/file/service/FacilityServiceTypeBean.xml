@@ -31,6 +31,9 @@
         <result column="street_type" property="streetType"/>
 
         <association property="dbfFields" javaType="map">
+            <result column="IDPIL_CYR" property="IDPIL_CYR"/>
+            <result column="PASPPIL_CYR" property="PASPPIL_CYR"/>
+
             <result column="FIO_CYR" property="FIO_CYR"/>
             <result column="CDUL_CYR" property="CDUL_CYR"/>
             <result column="HOUSE_CYR" property="HOUSE_CYR"/>
@@ -161,6 +164,9 @@
                 fst.`HOUSE`, fst.`BUILD`, fst.`APT`, fst.`date`, fst.`IDPIL`, fst.`PASPPIL`,
                 fst.`account_number`,
 
+                TO_CYRILLIC(fst.`IDPIL`) IDPIL_CYR,
+                TO_CYRILLIC(fst.`PASPPIL`) PASPPIL_CYR,
+
                 TO_CYRILLIC(fst.`first_name`) first_name,
                 TO_CYRILLIC(fst.`middle_name`) middle_name,
                 TO_CYRILLIC(fst.`last_name`) last_name,
@@ -246,6 +252,9 @@
     
     <select id="findForOperation" parameterType="map" resultMap="facilityServiceTypeResultMap">
         SELECT fst.*,
+
+        TO_CYRILLIC(fst.`IDPIL`) IDPIL_CYR,
+        TO_CYRILLIC(fst.`PASPPIL`) PASPPIL_CYR,
 
         TO_CYRILLIC(fst.`FIO`) FIO_CYR,
         TO_CYRILLIC(fst.`CDUL`) CDUL_CYR,

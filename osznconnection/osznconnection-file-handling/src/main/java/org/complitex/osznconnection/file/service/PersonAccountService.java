@@ -294,7 +294,7 @@ public class PersonAccountService extends AbstractBean {
         }
 
         try {
-            save(dwellingCharacteristics, dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDCODE));
+            save(dwellingCharacteristics, dwellingCharacteristics.getInn());
         } catch (MoreOneAccountException e) {
             throw new RuntimeException(e);
         }
@@ -315,7 +315,7 @@ public class PersonAccountService extends AbstractBean {
         }
 
         try {
-            save(facilityServiceType, facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL));
+            save(facilityServiceType, facilityServiceType.getInn());
         } catch (MoreOneAccountException e) {
             throw new RuntimeException(e);
         }
