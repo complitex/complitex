@@ -381,6 +381,7 @@ public final class SubsidyList extends TemplatePage {
                 Collection<Subsidy> subsidies = checkGroup.getModelObject();
 
                 for (Subsidy subsidy : subsidies){
+                    //noinspection Duplicates
                     try {
                         subsidyService.bind(serviceProviderCode, subsidy);
 

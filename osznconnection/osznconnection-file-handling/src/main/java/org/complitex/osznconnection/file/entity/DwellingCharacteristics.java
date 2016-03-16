@@ -45,4 +45,8 @@ public class DwellingCharacteristics extends AbstractAccountRequest<DwellingChar
     public String getInn() {
         return getUpStringField(DwellingCharacteristicsDBF.IDPIL, "_CYR");
     }
+
+    public String getFio(){
+        return getStringField(DwellingCharacteristicsDBF.FIO);
+    }
 }

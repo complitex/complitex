@@ -5,14 +5,14 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
@@ -22,6 +22,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.common.service.SessionBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
@@ -32,6 +34,7 @@ import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
+import org.complitex.osznconnection.file.service.process.DwellingCharacteristicsBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -40,23 +43,26 @@ import org.complitex.osznconnection.file.web.DwellingCharacteristicsFileList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static org.complitex.common.util.StringUtil.emptyOnNull;
 import static org.complitex.osznconnection.file.entity.DwellingCharacteristicsDBF.CDUL;
 
-/**
- *
- * @author Artem
- */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public final class DwellingCharacteristicsList extends TemplatePage {
+    private Logger log = LoggerFactory.getLogger(DwellingCharacteristicsList.class);
+
     @EJB
     private DwellingCharacteristicsBean dwellingCharacteristicsBean;
 
@@ -75,8 +81,15 @@ public final class DwellingCharacteristicsList extends TemplatePage {
     @EJB
     private SessionBean sessionBean;
 
+    @EJB
+    private DwellingCharacteristicsBindTaskBean dwellingCharacteristicsBindTaskBean;
+
+    @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
+    private OsznOrganizationStrategy organizationStrategy;
+
     private IModel<DwellingCharacteristicsExample> example;
     private long fileId;
+
 
     public DwellingCharacteristicsList(PageParameters params) {
         this.fileId = params.get("request_file_id").toLong();
@@ -94,28 +107,33 @@ public final class DwellingCharacteristicsList extends TemplatePage {
     }
 
     private void init() {
-        final RequestFile dwellingCharacteristicsFile = requestFileBean.getRequestFile(fileId);
+        RequestFile requestFile = requestFileBean.getRequestFile(fileId);
+        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
 
         //Проверка доступа к данным
-        if (!sessionBean.isAuthorized(dwellingCharacteristicsFile.getOrganizationId(),
-                dwellingCharacteristicsFile.getUserOrganizationId())) {
+        if (!sessionBean.isAuthorized(requestFile.getOrganizationId(),
+                requestFile.getUserOrganizationId())) {
             throw new UnauthorizedInstantiationException(this.getClass());
         }
 
         final DataRowHoverBehavior dataRowHoverBehavior = new DataRowHoverBehavior();
         add(dataRowHoverBehavior);
 
-        String label = getStringFormat("label", dwellingCharacteristicsFile.getDirectory(), File.separator,
-                dwellingCharacteristicsFile.getName());
+        String label = getStringFormat("label", requestFile.getDirectory(), File.separator,
+                requestFile.getName());
 
         add(new Label("title", label));
         add(new Label("label", label));
 
-        final WebMarkupContainer content = new WebMarkupContainer("content");
+        WebMarkupContainer content = new WebMarkupContainer("content");
         content.setOutputMarkupId(true);
         add(content);
 
-        final Form filterForm = new Form("filterForm");
+        content.add(new FeedbackPanel("messages"));
+
+        Form filterForm = new Form("filterForm");
         content.add(filterForm);
         example = new Model<>(newExample());
 
@@ -211,12 +229,16 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 };
         add(lookupPanel);
 
+        CheckGroup<DwellingCharacteristics> checkGroup = new CheckGroup<>("checkGroup", new ArrayList<>());
+        filterForm.add(checkGroup);
+
         DataView<DwellingCharacteristics> data = new DataView<DwellingCharacteristics>("data", dataProvider, 1) {
 
             @Override
             protected void populateItem(Item<DwellingCharacteristics> item) {
                 final DwellingCharacteristics dwellingCharacteristics = item.getModelObject();
 
+                item.add(new Check<>("check", Model.of(dwellingCharacteristics), checkGroup));
                 item.add(new Label("idCode", dwellingCharacteristics.getInn()));
                 item.add(new Label("firstName", dwellingCharacteristics.getFirstName()));
                 item.add(new Label("middleName", dwellingCharacteristics.getMiddleName()));
@@ -258,8 +280,9 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 item.add(lookup);
             }
         };
-        filterForm.add(data);
+        checkGroup.add(data);
 
+        filterForm.add(new CheckGroupSelector("checkAll", checkGroup));
         filterForm.add(new ArrowOrderByBorder("idCodeHeader", DwellingCharacteristicsBean.OrderBy.IDPIL.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", DwellingCharacteristicsBean.OrderBy.FIRST_NAME.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("middleNameHeader", DwellingCharacteristicsBean.OrderBy.MIDDLE_NAME.getOrderBy(), dataProvider, data, content));
@@ -282,5 +305,34 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         filterForm.add(back);
 
         content.add(new PagingNavigator("navigator", data, getPreferencesPage() + fileId, content));
+
+        //Связать
+        filterForm.add(new IndicatingAjaxButton("bind") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form form) {
+                Collection<DwellingCharacteristics> list = checkGroup.getModelObject();
+
+                list.forEach(request -> {
+                    //noinspection Duplicates
+                    try {
+                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, request);
+
+                        if (request.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
+                            info(getStringFormat("info_bound", request.getInn(), request.getFio()));
+                        }else {
+                            error(getStringFormat("error_bound", request.getFio(),
+                                    StatusRenderUtil.displayStatus(request.getStatus(), getLocale())));
+
+                        }
+                    } catch (Exception e) {
+                        error(ExceptionUtil.getCauseMessage(e, true));
+                        log.error("error dwellingCharacteristics bind", e);
+                    }
+                });
+
+                checkGroup.getModelObject().clear();
+                target.add(content);
+            }
+        });
     }
 }

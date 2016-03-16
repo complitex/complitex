@@ -5,8 +5,8 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.AddressService;
@@ -36,9 +36,9 @@ import java.util.Map;
 import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
 import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
 
-@Stateless
+@Stateless(name = "DwellingCharacteristicsBindTaskBean")
 @TransactionManagement(TransactionManagementType.BEAN)
-public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFile> {
+public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(DwellingCharacteristicsBindTaskBean.class);
 
     @Resource
@@ -106,7 +106,7 @@ public class DwellingCharacteristicsBindTaskBean implements ITaskBean<RequestFil
         return dwellingCharacteristics.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    private void bind(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws DBException {
+    public void bind(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws DBException {
         //resolve address
         resolveAddress(dwellingCharacteristics);
 
