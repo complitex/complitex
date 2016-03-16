@@ -351,24 +351,25 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     @SuppressWarnings("unchecked")
-    public List<AccountDetail> getAccountDetailsByPerson(String dataSource, String districtName, String organizationCode,
+    public Cursor<AccountDetail> getAccountDetailsByPerson(String dataSource, String districtName, String organizationCode,
                                                          String lastName, String firstName, String middleName,
                                                          String inn, String passport, Date date) throws DBException {
-        Map<String, Object> map = new HashMap<>();
-        map.put("districtName", districtName);
-        map.put("organizationCode", organizationCode);
-        map.put("lastName", lastName);
-        map.put("firstName", firstName);
-        map.put("middleName", middleName);
-        map.put("inn", inn);
-        map.put("passport", passport);
-        map.put("date", date);
+        Map<String, Object> params = new HashMap<>();
 
-        sqlSession(dataSource).selectOne(NS + ".getAttrsByPerson", map);
+        params.put("districtName", districtName);
+        params.put("organizationCode", organizationCode);
+        params.put("lastName", lastName);
+        params.put("firstName", firstName);
+        params.put("middleName", middleName);
+        params.put("inn", inn);
+        params.put("passport", passport);
+        params.put("date", date);
 
-        log.info("getAttrsByPerson {}", map);
+        sqlSession(dataSource).selectOne(NS + ".getAttrsByPerson", params);
 
-        return (List<AccountDetail>) map.get("accountDetails");
+        log.info("getAttrsByPerson {}", params);
+
+        return new Cursor<>((Integer) params.get("resultCode"), (List<AccountDetail>) params.get("accountDetails"));
     }
 
     /**

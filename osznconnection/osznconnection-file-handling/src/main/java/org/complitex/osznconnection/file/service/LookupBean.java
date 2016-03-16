@@ -58,7 +58,7 @@ public class LookupBean extends AbstractBean {
         return adapter.acquireAccountDetailsByAccount(request, district, organizationCode, account, request.getDate());
     }
 
-    public List<AccountDetail> getAccountDetailsByPerson(Long userOrganizationId, String districtName,
+    public Cursor<AccountDetail> getAccountDetailsByPerson(Long userOrganizationId, String districtName,
                                                          String organizationCode, String lastName, String firstName,
                                                          String middleName, String inn, String passport, Date date) throws DBException {
         return adapter.getAccountDetailsByPerson(organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId),

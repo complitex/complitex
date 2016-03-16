@@ -206,12 +206,18 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                 String district = resolveOutgoingDistrict(request);
 
                 try {
-                    List<AccountDetail> accountDetails = lookupBean.getAccountDetailsByPerson(request.getUserOrganizationId(),
+                    Cursor<AccountDetail> accountDetails = lookupBean.getAccountDetailsByPerson(request.getUserOrganizationId(),
                             district, getServiceProviderCode(request), lastNameModel.getObject(),
                             firstNameModel.getObject(), middleNameModel.getObject(), innModel.getObject(),
                             passportModel.getObject(), request.getDate());
 
-                    accountDetailsModel.setObject(accountDetails);
+                    if (accountDetails.isEmpty()){
+                        cursorError(accountDetails);
+                    }else{
+                        accountDetailsModel.setObject(accountDetails.getData());
+                    }
+
+                    target.add(messages);
 
                     accountNumberPickerPanel.setVisible(accountDetailsModel.getObject() != null
                             && !accountDetailsModel.getObject().isEmpty());
@@ -412,29 +418,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                         Cursor<AccountDetail> accountDetails = getAccountDetails(request);
 
                         if (accountDetails.isEmpty()) {
-                            switch (accountDetails.getResultCode()){
-                                case 0:
-                                    error(StatusRenderUtil.displayStatus(ACCOUNT_NUMBER_NOT_FOUND, getLocale()));
-                                    break;
-                                case -2:
-                                    error(StatusRenderUtil.displayStatus(APARTMENT_NOT_FOUND, getLocale()));
-                                    break;
-                                case -3:
-                                    error(StatusRenderUtil.displayStatus(BUILDING_CORP_NOT_FOUND, getLocale()));
-                                    break;
-                                case -4:
-                                    error(StatusRenderUtil.displayStatus(BUILDING_NOT_FOUND, getLocale()));
-                                    break;
-                                case -5:
-                                    error(StatusRenderUtil.displayStatus(STREET_NOT_FOUND, getLocale()));
-                                    break;
-                                case -6:
-                                    error(StatusRenderUtil.displayStatus(STREET_TYPE_NOT_FOUND, getLocale()));
-                                    break;
-                                case -7:
-                                    error(StatusRenderUtil.displayStatus(DISTRICT_NOT_FOUND, getLocale()));
-                                    break;
-                            }
+                            cursorError(accountDetails);
                         } else {
                             accountDetailsModel.setObject(accountDetails.getData());
                             if (accountDetails.getData().size() == 1) {
@@ -458,6 +442,35 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         accountNumberPickerPanel.setVisible(becameVisible);
         if (wasVisible || becameVisible) {
             target.add(accountNumberPickerPanel);
+        }
+    }
+
+    private void cursorError(Cursor<AccountDetail> accountDetails) {
+        switch (accountDetails.getResultCode()){
+            case 0:
+                error(StatusRenderUtil.displayStatus(ACCOUNT_NUMBER_NOT_FOUND, getLocale()));
+                break;
+            case -2:
+                error(StatusRenderUtil.displayStatus(APARTMENT_NOT_FOUND, getLocale()));
+                break;
+            case -3:
+                error(StatusRenderUtil.displayStatus(BUILDING_CORP_NOT_FOUND, getLocale()));
+                break;
+            case -4:
+                error(StatusRenderUtil.displayStatus(BUILDING_NOT_FOUND, getLocale()));
+                break;
+            case -5:
+                error(StatusRenderUtil.displayStatus(STREET_NOT_FOUND, getLocale()));
+                break;
+            case -6:
+                error(StatusRenderUtil.displayStatus(STREET_TYPE_NOT_FOUND, getLocale()));
+                break;
+            case -7:
+                error(StatusRenderUtil.displayStatus(DISTRICT_NOT_FOUND, getLocale()));
+                break;
+            case -8:
+                error(StatusRenderUtil.displayStatus(SERVICING_ORGANIZATION_NOT_FOUND, getLocale()));
+                break;
         }
     }
 
