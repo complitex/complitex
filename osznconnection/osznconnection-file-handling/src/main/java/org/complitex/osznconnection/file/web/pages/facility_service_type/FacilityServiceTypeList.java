@@ -5,14 +5,14 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
@@ -22,6 +22,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.common.service.SessionBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
@@ -33,6 +35,7 @@ import org.complitex.osznconnection.file.service.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.FacilityServiceTypeBean.OrderBy;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
+import org.complitex.osznconnection.file.service.process.FacilityServiceTypeBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -41,23 +44,26 @@ import org.complitex.osznconnection.file.web.FacilityServiceTypeFileList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static org.complitex.common.util.StringUtil.emptyOnNull;
 import static org.complitex.osznconnection.file.entity.FacilityServiceTypeDBF.CDUL;
 
-/**
- *
- * @author Artem
- */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public final class FacilityServiceTypeList extends TemplatePage {
+    private Logger log = LoggerFactory.getLogger(FacilityServiceTypeList.class);
+
     @EJB
     private FacilityServiceTypeBean facilityServiceTypeBean;
 
@@ -76,8 +82,15 @@ public final class FacilityServiceTypeList extends TemplatePage {
     @EJB
     private SessionBean sessionBean;
 
+    @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
+    private OsznOrganizationStrategy organizationStrategy;
+
+    @EJB
+    private FacilityServiceTypeBindTaskBean facilityServiceTypeBindTaskBean;
+
     private IModel<FacilityServiceTypeExample> example;
     private long fileId;
+
 
     public FacilityServiceTypeList(PageParameters params) {
         this.fileId = params.get("request_file_id").toLong();
@@ -96,19 +109,22 @@ public final class FacilityServiceTypeList extends TemplatePage {
     }
 
     private void init() {
-        final RequestFile facilityServiceTypeFile = requestFileBean.getRequestFile(fileId);
+        RequestFile requestFile = requestFileBean.getRequestFile(fileId);
+        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
 
         //Проверка доступа к данным
-        if (!sessionBean.isAuthorized(facilityServiceTypeFile.getOrganizationId(),
-                facilityServiceTypeFile.getUserOrganizationId())) {
+        if (!sessionBean.isAuthorized(requestFile.getOrganizationId(),
+                requestFile.getUserOrganizationId())) {
             throw new UnauthorizedInstantiationException(this.getClass());
         }
 
         final DataRowHoverBehavior dataRowHoverBehavior = new DataRowHoverBehavior();
         add(dataRowHoverBehavior);
 
-        String label = getStringFormat("label", facilityServiceTypeFile.getDirectory(), File.separator,
-                facilityServiceTypeFile.getName());
+        String label = getStringFormat("label", requestFile.getDirectory(), File.separator,
+                requestFile.getName());
 
         add(new Label("title", label));
         add(new Label("label", label));
@@ -116,6 +132,8 @@ public final class FacilityServiceTypeList extends TemplatePage {
         final WebMarkupContainer content = new WebMarkupContainer("content");
         content.setOutputMarkupId(true);
         add(content);
+
+        content.add(new FeedbackPanel("messages"));
 
         final Form filterForm = new Form("filterForm");
         content.add(filterForm);
@@ -215,12 +233,16 @@ public final class FacilityServiceTypeList extends TemplatePage {
                 };
         add(lookupPanel);
 
+        CheckGroup<FacilityServiceType> checkGroup = new CheckGroup<>("checkGroup", new ArrayList<>());
+        filterForm.add(checkGroup);
+
         DataView<FacilityServiceType> data = new DataView<FacilityServiceType>("data", dataProvider, 1) {
 
             @Override
             protected void populateItem(Item<FacilityServiceType> item) {
                 FacilityServiceType facilityServiceType = item.getModelObject();
 
+                item.add(new Check<>("check", Model.of(facilityServiceType), checkGroup));
                 item.add(new Label("account", facilityServiceType.getAccountNumber()));
                 item.add(new Label("idCode", facilityServiceType.getInn()));
                 item.add(new Label("firstName", facilityServiceType.getFirstName()));
@@ -264,8 +286,9 @@ public final class FacilityServiceTypeList extends TemplatePage {
                 item.add(lookup);
             }
         };
-        filterForm.add(data);
+        checkGroup.add(data);
 
+        filterForm.add(new CheckGroupSelector("checkAll", checkGroup));
         filterForm.add(new ArrowOrderByBorder("accountHeader", OrderBy.RAH.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("idCodeHeader", OrderBy.IDPIL.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", OrderBy.FIRST_NAME.getOrderBy(), dataProvider, data, content));
@@ -289,5 +312,34 @@ public final class FacilityServiceTypeList extends TemplatePage {
         filterForm.add(back);
 
         content.add(new PagingNavigator("navigator", data, getPreferencesPage() + fileId, content));
+
+        //Связать
+        filterForm.add(new IndicatingAjaxButton("bind") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form form) {
+                Collection<FacilityServiceType> list = checkGroup.getModelObject();
+
+                //noinspection Duplicates
+                list.forEach(request -> {
+                    try {
+                        facilityServiceTypeBindTaskBean.bind(serviceProviderCode, request);
+
+                        if (request.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
+                            info(getStringFormat("info_bound", request.getInn(), request.getFio()));
+                        }else {
+                            error(getStringFormat("error_bound", request.getFio(),
+                                    StatusRenderUtil.displayStatus(request.getStatus(), getLocale())));
+
+                        }
+                    } catch (Exception e) {
+                        error(ExceptionUtil.getCauseMessage(e, true));
+                        log.error("error dwellingCharacteristics bind", e);
+                    }
+                });
+
+                checkGroup.getModelObject().clear();
+                target.add(content);
+            }
+        });
     }
 }

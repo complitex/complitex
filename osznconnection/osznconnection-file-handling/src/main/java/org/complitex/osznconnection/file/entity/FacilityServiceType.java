@@ -45,4 +45,8 @@ public class FacilityServiceType extends AbstractAccountRequest<FacilityServiceT
     public String getPassport() {
         return getUpStringField(FacilityServiceTypeDBF.PASPPIL, "_CYR");
     }
+
+    public String getFio(){
+        return getStringField(FacilityServiceTypeDBF.FIO);
+    }
 }

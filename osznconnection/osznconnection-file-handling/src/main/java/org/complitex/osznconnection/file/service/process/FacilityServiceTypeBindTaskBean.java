@@ -5,8 +5,8 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
@@ -45,7 +45,7 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_AC
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
+public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(FacilityServiceTypeBindTaskBean.class);
 
     @Resource
@@ -113,7 +113,7 @@ public class FacilityServiceTypeBindTaskBean implements ITaskBean<RequestFile> {
         return facilityServiceType.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    private void bind(String serviceProviderCode, FacilityServiceType facilityServiceType)
+    public void bind(String serviceProviderCode, FacilityServiceType facilityServiceType)
             throws DBException {
         //resolve address
         resolveAddress(facilityServiceType);
