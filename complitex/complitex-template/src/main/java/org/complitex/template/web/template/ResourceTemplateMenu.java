@@ -6,6 +6,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.template.web.pages.EntityDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,9 +92,13 @@ public abstract class ResourceTemplateMenu implements ITemplateMenu {
         templateLinks.add(new ResourceTemplateLink(key, this, page, pageParameters, null));
     }
 
-    protected void addStrategy(String key){
+    protected void addDictionary(String key){
         IStrategy serviceStrategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(key);
         add(key, serviceStrategy.getListPage(), serviceStrategy.getListPageParams());
+    }
+
+    protected void addDescription(String key){
+        add(key, EntityDescription.class, new PageParameters().add(EntityDescription.ENTITY, key));
     }
     
     protected final void add(ITemplateLink menuItemLink){

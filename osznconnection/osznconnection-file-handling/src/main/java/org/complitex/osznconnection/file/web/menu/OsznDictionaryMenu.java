@@ -7,10 +7,10 @@ import org.complitex.template.web.template.ResourceTemplateMenu;
  */
 public class OsznDictionaryMenu extends ResourceTemplateMenu{
     public OsznDictionaryMenu() {
-        addStrategy("organization");
-        addStrategy("organization_type");
-        addStrategy("ownership");
-        addStrategy("privilege");
-        addStrategy("service");
+        addDictionary("organization");
+        addDictionary("organization_type");
+        addDictionary("ownership");
+        addDictionary("privilege");
+        addDictionary("service");
     }
 }
