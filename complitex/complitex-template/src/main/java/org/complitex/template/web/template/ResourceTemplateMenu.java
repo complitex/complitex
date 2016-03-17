@@ -3,6 +3,9 @@ package org.complitex.template.web.template;
 import com.google.common.base.CaseFormat;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.util.EjbBeanLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,6 +89,11 @@ public abstract class ResourceTemplateMenu implements ITemplateMenu {
 
     protected void add(String key, Class<? extends Page> page, PageParameters pageParameters){
         templateLinks.add(new ResourceTemplateLink(key, this, page, pageParameters, null));
+    }
+
+    protected void addStrategy(String key){
+        IStrategy serviceStrategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(key);
+        add(key, serviceStrategy.getListPage(), serviceStrategy.getListPageParams());
     }
     
     protected final void add(ITemplateLink menuItemLink){

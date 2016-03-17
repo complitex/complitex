@@ -2,6 +2,7 @@ package org.complitex.organization.strategy;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -51,5 +52,10 @@ public class ServiceStrategy extends TemplateStrategy{
     @Override
     public String[] getListRoles() {
         return new String[]{SecurityRole.ADMIN_MODULE_EDIT};
+    }
+
+    @Override
+    public String getPluralEntityLabel(Locale locale) {
+        return ResourceUtil.getString(ServiceStrategy.class.getName(), getEntityName(), locale);
     }
 }

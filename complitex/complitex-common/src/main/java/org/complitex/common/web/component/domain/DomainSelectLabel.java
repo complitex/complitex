@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.StrategyFactory;
@@ -37,7 +36,7 @@ public class DomainSelectLabel extends Panel {
         add(name);
 
         DomainSelectDialog domainSelectDialog = new DomainSelectDialog("domainSelectDialog", entityName,
-                new ResourceModel(id)){
+                new ResourceModel(entityName)){
             @Override
             protected void onSelect(AjaxRequestTarget target) {
                 target.add(name);

@@ -47,6 +47,6 @@ public class ServiceCorrectionList extends AbstractCorrectionList<ServiceCorrect
 
     @Override
     protected PageParameters getEditPageParams(Long objectCorrectionId) {
-        return null;
+        return new PageParameters().add("correction_id", objectCorrectionId);
     }
 }

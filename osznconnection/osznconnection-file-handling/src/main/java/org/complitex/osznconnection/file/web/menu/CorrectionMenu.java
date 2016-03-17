@@ -11,15 +11,15 @@ import org.complitex.template.web.template.ResourceTemplateMenu;
 public class CorrectionMenu extends ResourceTemplateMenu {
 
     public CorrectionMenu() {
-        add(OrganizationCorrectionList.class);
-        add(ServiceCorrectionList.class);
         add(CityCorrectionList.class);
         add(DistrictCorrectionList.class);
         add(StreetCorrectionList.class);
         add(StreetTypeCorrectionList.class);
         add(BuildingCorrectionList.class);
+        add(OrganizationCorrectionList.class);
         add(OwnershipCorrectionList.class);
         add(PersonAccountList.class);
         add(PrivilegeCorrectionList.class);
+        add(ServiceCorrectionList.class);
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public class ServiceCorrectionBean extends CorrectionBean {
     public final static String NS = ServiceCorrectionBean.class.getName();
     
-    public ServiceCorrection geServiceCorrection(Long id){
+    public ServiceCorrection getServiceCorrection(Long id){
         return sqlSession().selectOne(NS + ".selectServiceCorrection", id);
     }
 

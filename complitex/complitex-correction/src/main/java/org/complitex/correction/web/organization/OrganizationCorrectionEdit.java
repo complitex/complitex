@@ -51,7 +51,7 @@ public class OrganizationCorrectionEdit extends FormTemplatePage {
 
             @Override
             protected WebMarkupContainer internalObjectPanel(String id) {
-                return new OrganizationIdPicker(id, new PropertyModel<Long>(getCorrection(), "objectId"),
+                return new OrganizationIdPicker(id, new PropertyModel<>(getCorrection(), "objectId"),
                         OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE);
             }
 
