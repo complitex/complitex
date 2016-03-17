@@ -6,10 +6,10 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -375,7 +375,7 @@ public final class SubsidyList extends TemplatePage {
         });
 
         //Связать
-        filterForm.add(new AjaxSubmitLink("bind") {
+        filterForm.add(new IndicatingAjaxButton("bind") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form form) {
                 Collection<Subsidy> subsidies = checkGroup.getModelObject();

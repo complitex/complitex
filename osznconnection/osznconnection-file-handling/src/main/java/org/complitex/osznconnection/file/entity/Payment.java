@@ -55,5 +55,9 @@ public class Payment extends AbstractAccountRequest<PaymentDBF> {
         return getUpStringField(PaymentDBF.FLAT, "_CYR");
     }
 
+    public String getFio(){
+        return getLastName() + " " + getFirstName() + " " + getMiddleName();
+    }
+
 
 }

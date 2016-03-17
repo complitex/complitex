@@ -2,11 +2,10 @@ package org.complitex.osznconnection.file.service.process;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.*;
@@ -16,7 +15,6 @@ import org.complitex.osznconnection.file.service.exception.CanceledByUserExcepti
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
-import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +38,7 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.*;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class GroupBindTaskBean implements ITaskBean {
+public class GroupBindTaskBean extends AbstractTaskBean<RequestFileGroup> {
     private final Logger log = LoggerFactory.getLogger(GroupBindTaskBean.class);
 
     @Resource
@@ -71,13 +69,7 @@ public class GroupBindTaskBean implements ITaskBean {
     private OsznOrganizationStrategy organizationStrategy;
 
     @Override
-    public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
-        // ищем в параметрах комманды опцию "Переписывать номер л/с ПУ номером л/с МН"
-        final Boolean updatePuAccount = commandParameters.containsKey(GlobalOptions.UPDATE_PU_ACCOUNT)
-                ? (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT) : false;
-
-        RequestFileGroup group = (RequestFileGroup) executorObject;
-
+    public boolean execute(RequestFileGroup group, Map commandParameters) throws ExecuteException {
         group.setStatus(requestFileGroupBean.getRequestFileStatus(group)); //обновляем статус из базы данных
 
         if (group.isProcessing()) { //проверяем что не обрабатывается в данный момент
@@ -94,7 +86,7 @@ public class GroupBindTaskBean implements ITaskBean {
         //связывание файла payment
         RequestFile paymentFile = group.getPaymentFile();
         try {
-            bindPaymentFile(paymentFile, updatePuAccount);
+            bindPaymentFile(paymentFile);
         } catch (DBException e) {
             throw new RuntimeException(e);
         } catch (CanceledByUserException e) {
@@ -122,9 +114,7 @@ public class GroupBindTaskBean implements ITaskBean {
     }
 
     @Override
-    public void onError(IExecutorObject executorObject) {
-        RequestFileGroup group = (RequestFileGroup) executorObject;
-
+    public void onError(RequestFileGroup group) {
         group.setStatus(RequestFileStatus.BIND_ERROR);
         requestFileGroupBean.save(group);
     }
@@ -181,7 +171,7 @@ public class GroupBindTaskBean implements ITaskBean {
      * Если не успешно, то попытаться разрешить адрес по схеме "ОСЗН адрес -> локальная адресная база -> адрес центра начислений".
      * Если адрес разрешен, то пытаемся разрешить номер л/c в ЦН.
      */
-    private void bind(String serviceProviderCode, Payment payment, Boolean updatePuAccount) throws DBException {
+    public void bind(String serviceProviderCode, Payment payment) throws DBException {
         String accountNumber = payment.getStringField(PaymentDBF.OWN_NUM_SR);
 
         //resolve local account number
@@ -218,7 +208,7 @@ public class GroupBindTaskBean implements ITaskBean {
      * @param requestFile Файл запроса начислений
      * @throws BindException Ошибка связывания
      */
-    private void bindPaymentFile(RequestFile requestFile, Boolean updatePuAccount)
+    private void bindPaymentFile(RequestFile requestFile)
             throws BindException, DBException, CanceledByUserException {
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
@@ -246,7 +236,7 @@ public class GroupBindTaskBean implements ITaskBean {
                 //связать payment запись
                 try {
                     userTransaction.begin();
-                    bind(serviceProviderCode, payment, updatePuAccount);
+                    bind(serviceProviderCode, payment);
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The payment item ( id = " + payment.getId() + ") was bound with error: ", e);
