@@ -1,9 +1,9 @@
 package org.complitex.common.service.executor;
 
-import java.util.Map;
 import org.complitex.common.entity.IExecutorObject;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -17,15 +17,15 @@ import static org.complitex.common.service.executor.ExecutorCommand.STATUS.*;
  *        Date: 24.01.11 15:18
  */
 public class ExecutorCommand {
-    public static enum STATUS {
+    public enum STATUS {
         NEW, RUNNING, COMPLETED, CRITICAL_ERROR, CANCELED
     }
 
     protected STATUS status = STATUS.NEW;
 
-    protected int successCount = 0;
-    protected int skippedCount = 0;
-    protected int errorCount = 0;
+    protected AtomicInteger successCount = new AtomicInteger(0);
+    protected AtomicInteger skippedCount = new AtomicInteger(0);
+    protected AtomicInteger errorCount = new AtomicInteger(0);
     protected AtomicBoolean stop = new AtomicBoolean(false);
 
     protected List<IExecutorObject> processed = new CopyOnWriteArrayList<IExecutorObject>();
@@ -40,7 +40,7 @@ public class ExecutorCommand {
     protected Map commandParameters;
 
     private int maxErrors;
-    int maxThread;
+    private int maxThread;
 
     private IExecutorObject object;
 
@@ -53,27 +53,27 @@ public class ExecutorCommand {
     }
 
     public int getSuccessCount() {
-        return successCount;
+        return successCount.get();
     }
 
     public void incrementSuccessCount(){
-        successCount++;
+        successCount.incrementAndGet();
     }
 
     public int getSkippedCount() {
-        return skippedCount;
+        return skippedCount.get();
     }
 
     public void incrementSkippedCount(){
-        skippedCount++;
+        skippedCount.incrementAndGet();
     }
 
     public int getErrorCount() {
-        return errorCount;
+        return errorCount.get();
     }
 
     public void incrementErrorCount(){
-        errorCount++;
+        errorCount.incrementAndGet();
     }
 
     public List<IExecutorObject> getProcessed() {
@@ -85,9 +85,9 @@ public class ExecutorCommand {
     }
 
     public void init(){
-        successCount = 0;
-        skippedCount = 0;
-        errorCount = 0;
+        successCount.set(0);
+        skippedCount.set(0);
+        errorCount.set(0);
 
         processed.clear();
         queue.clear();
