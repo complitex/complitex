@@ -25,6 +25,8 @@ public class RequestFileGroupFilter extends AbstractFilter {
     private RequestFileType type;
     private RequestFileStatus status;
 
+    private DomainObject serviceProvider;
+
     public Long getId() {
         return id;
     }
@@ -119,5 +121,13 @@ public class RequestFileGroupFilter extends AbstractFilter {
 
     public void setStatus(RequestFileStatus status) {
         this.status = status;
+    }
+
+    public DomainObject getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public void setServiceProvider(DomainObject serviceProvider) {
+        this.serviceProvider = serviceProvider;
     }
 }

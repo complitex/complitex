@@ -284,6 +284,16 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     }
 
     public String getServiceProviderCode(String edrpou, Long organizationId, Long userOrganizationId){
+        Long serviceProviderId = getServiceProviderId(edrpou, organizationId, userOrganizationId);
+
+        if (serviceProviderId != null){
+            return getDomainObject(serviceProviderId).getStringValue(OsznOrganizationStrategy.CODE);
+        }else {
+            throw new ServiceRuntimeException("ПУ не найден по ЕДРПОУ {0}", edrpou);
+        }
+    }
+
+    public Long getServiceProviderId(String edrpou, Long organizationId, Long userOrganizationId){
         Long serviceProviderId = null;
 
         List<OrganizationCorrection> list = organizationCorrectionBean.getOrganizationCorrections(
@@ -297,10 +307,6 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
             serviceProviderId = getObjectIdByEdrpou(edrpou);
         }
 
-        if (serviceProviderId != null){
-            return getDomainObject(serviceProviderId).getStringValue(OsznOrganizationStrategy.CODE);
-        }else {
-            throw new ServiceRuntimeException("ПУ не найден по ЕДРПОУ {0}", edrpou);
-        }
+        return serviceProviderId;
     }
 }

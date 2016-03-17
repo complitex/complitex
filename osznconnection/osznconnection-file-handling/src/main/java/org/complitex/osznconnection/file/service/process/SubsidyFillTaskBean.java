@@ -64,6 +64,9 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
+        Long serviceProviderId = organizationStrategy.getServiceProviderId(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
@@ -85,7 +88,7 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
                 }
 
                 userTransaction.begin();
-                fill(serviceProviderCode, subsidy);
+                fill(serviceProviderId, serviceProviderCode, subsidy);
                 userTransaction.commit();
             }
         } catch (Exception e) {
@@ -119,7 +122,7 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
      своя запись мастер-данных, в поля BEGIN0 и END0 которой записывается первое и последнее число месяца
      к которому относится данная запись мастер-данных.
      */
-    private void fill(String serviceProviderCode, Subsidy subsidy) throws DBException, UnknownAccountNumberTypeException {
+    private void fill(Long serviceProviderId, String serviceProviderCode, Subsidy subsidy) throws DBException, UnknownAccountNumberTypeException {
         String districtName = addressService.resolveOutgoingDistrict(subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
 
         List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(subsidy, districtName,
@@ -136,7 +139,7 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
             for (int i=0; i <= numm; ++i){
                 Date date = DateUtil.addMonth(subsidy.getDate(), -i);
 
-                addSubsidyMasterData(subsidy, accountDetail, date);
+                addSubsidyMasterData(serviceProviderId, subsidy, accountDetail, date);
             }
 
             subsidy.setStatus(RequestStatus.PROCESSED);
@@ -145,7 +148,7 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
         subsidyBean.update(subsidy);
     }
 
-    private void addSubsidyMasterData(Subsidy subsidy, AccountDetail accountDetail, Date date){
+    private void addSubsidyMasterData(Long serviceProviderId, Subsidy subsidy, AccountDetail accountDetail, Date date){
         SubsidyMasterData subsidyMasterData = new SubsidyMasterData();
 
         //fill from remote call
@@ -183,13 +186,11 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
         subsidyMasterData.putField(SubsidyMasterDataDBF.END0, DateUtil.getLastDayOfMonth(date));
 
         //servicing organization
-        Long servicingOrganizationId = subsidyService.getServiceProviderId(subsidy.getRequestFileId());
-
-        if (servicingOrganizationId == null){
+        if (serviceProviderId == null){
             throw new RuntimeException("Null servicing organization for requestFileId " + subsidy.getRequestFileId());
         }
 
-        subsidyMasterData.setServicingOrganizationId(servicingOrganizationId);
+        subsidyMasterData.setServicingOrganizationId(serviceProviderId);
 
         subsidyMasterDataBean.save(subsidyMasterData);
     }

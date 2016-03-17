@@ -1,9 +1,7 @@
 package org.complitex.osznconnection.file.service;
 
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.DateUtil;
-import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.process.SubsidyBindTaskBean;
@@ -15,7 +13,6 @@ import javax.ejb.Stateless;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -92,27 +89,15 @@ public class SubsidyService {
         return dat1.before(dat2) && DateUtil.getMonthDiff(dat1, dat2) <= 6;
     }
 
-    public Long getServiceProviderId(Long subsidyRequestFileId){
-        return getServiceProviderId(requestFileBean.getRequestFile(subsidyRequestFileId));
-    }
 
-    public Long getServiceProviderId(RequestFile subsidyRequestFile){
-        String code = subsidyRequestFile.getName().substring(0, subsidyRequestFile.getName().length()-8);
-
-        List<OrganizationCorrection> list = organizationCorrectionBean.getOrganizationCorrections(
-                FilterWrapper.of(new OrganizationCorrection(null, null, code, subsidyRequestFile.getOrganizationId(),
-                        subsidyRequestFile.getUserOrganizationId(), null)));
-
-        return !list.isEmpty() ?  list.get(0).getObjectId() : organizationStrategy.getObjectIdByEdrpou(code);
-    }
-
-    public String displayServicingOrganization(RequestFile subsidyRequestFile, Locale locale){
-        Long organizationId = getServiceProviderId(subsidyRequestFile);
+    public String displayServicingOrganization(RequestFile requestFile, Locale locale){
+        Long organizationId = organizationStrategy.getServiceProviderId(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
         if (organizationId != null){
             return organizationStrategy.displayShortNameAndCode(organizationStrategy.getDomainObject(organizationId, true), locale);
         }else {
-            return subsidyRequestFile.getName().substring(0, subsidyRequestFile.getName().length() - 8);
+            return requestFile.getEdrpou();
         }
     }
 

@@ -12,7 +12,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.LogBean;
-import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.scroll.ScrollListBehavior;
@@ -62,44 +61,6 @@ public class GroupList extends ScrollListPage {
             super(id);
 
             add(new Label("title", new ResourceModel("title")));
-
-            //Номер реестра
-            addColumn(new Column() {
-
-                @Override
-                public Component head(ISortStateLocator stateLocator, DataView<?> dataView, Component refresh) {
-                    return new ArrowOrderByBorder("header.registry", "registry", stateLocator, dataView, refresh);
-                }
-
-                @Override
-                public Component filter() {
-                    return new TextField<String>("registry");
-                }
-
-                @Override
-                public Component field(Item<RequestFileGroup> item) {
-                    return new Label("registry", StringUtil.valueOf(item.getModelObject().getRegistry()));
-                }
-            });
-
-            //Директория
-            addColumn(new Column() {
-
-                @Override
-                public Component head(ISortStateLocator stateLocator, DataView<?> dataView, Component refresh) {
-                    return new ArrowOrderByBorder("header.directory", "directory", stateLocator, dataView, refresh);
-                }
-
-                @Override
-                public Component filter() {
-                    return new TextField<String>("directory");
-                }
-
-                @Override
-                public Component field(Item<RequestFileGroup> item) {
-                    return new Label("directory", item.getModelObject().getDirectory());
-                }
-            });
 
             //Файл начислений
             addColumn(new Column() {

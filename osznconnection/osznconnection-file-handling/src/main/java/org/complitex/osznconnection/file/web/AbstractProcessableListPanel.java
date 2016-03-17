@@ -21,10 +21,13 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.AbstractFilter;
+import org.complitex.common.service.ModuleBean;
 import org.complitex.common.service.executor.AsyncTaskBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.StringUtil;
@@ -32,12 +35,17 @@ import org.complitex.common.web.component.DatePicker;
 import org.complitex.common.web.component.MonthDropDownChoice;
 import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
+import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
+import org.complitex.common.web.component.organization.OrganizationPickerDialog;
 import org.complitex.common.wicket.BroadcastBehavior;
+import org.complitex.correction.entity.OrganizationCorrection;
+import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
+import org.complitex.osznconnection.file.entity.AbstractRequestFile;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
@@ -49,6 +57,7 @@ import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.file.web.component.process.*;
 import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.template.TemplateSession;
@@ -61,9 +70,10 @@ import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.*;
 
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
 import static org.complitex.osznconnection.file.entity.RequestFileStatus.*;
 
-public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F extends AbstractFilter> extends Panel {
+public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile, F extends AbstractFilter> extends Panel {
 
     protected abstract class Column implements Serializable {
 
@@ -71,20 +81,31 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
 
         public abstract Component filter();
 
-        public abstract Component field(Item<M> item);
+        public abstract Component field(Item<R> item);
     }
     private static final int AJAX_TIMER = 1;
 
     @EJB
     private ProcessManagerBean processManagerBean;
+
+
+    @EJB
+    private ModuleBean moduleBean;
+
+    @EJB
+    private OrganizationCorrectionBean organizationCorrectionBean;
+
+    @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
+    private OsznOrganizationStrategy organizationStrategy;
+
     private RequestFileLoadPanel requestFileLoadPanel;
     private RequestFileHistoryPanel requestFileHistoryPanel;
     private ModificationManager modificationManager;
     private ProcessingManager processingManager;
     private MessagesManager messagesManager;
     private Form<F> form;
-    private ProcessDataView<M> dataView;
-    private DataProvider<M> dataProvider;
+    private ProcessDataView<R> dataView;
+    private DataProvider<R> dataProvider;
     private final List<Column> columns = new ArrayList<Column>();
     private WebMarkupContainer dataViewContainer;
     private AjaxFeedbackPanel messages;
@@ -164,34 +185,34 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
 
     protected abstract Long getCount(F filter);
 
-    protected abstract List<M> getObjects(F filter);
+    protected abstract List<R> getObjects(F filter);
 
-    protected abstract Date getLoaded(M object);
+    protected abstract Date getLoaded(R object);
 
-    protected abstract long getOsznId(M object);
+    protected abstract long getOsznId(R object);
 
-    protected abstract long getUserOrganizationId(M object);
+    protected abstract long getUserOrganizationId(R object);
 
-    protected abstract int getMonth(M object);
+    protected abstract int getMonth(R object);
 
-    protected abstract int getYear(M object);
+    protected abstract int getYear(R object);
 
-    protected abstract int getLoadedRecordCount(M object);
+    protected abstract int getLoadedRecordCount(R object);
 
-    protected abstract int getBindedRecordCount(M object);
+    protected abstract int getBindedRecordCount(R object);
 
-    protected abstract int getFilledRecordCount(M object);
+    protected abstract int getFilledRecordCount(R object);
 
-    protected abstract M getById(long id);
+    protected abstract R getById(long id);
 
-    protected abstract void delete(M object);
+    protected abstract void delete(R object);
 
-    protected abstract RequestFile getRequestFile(M object);
+    protected abstract RequestFile getRequestFile(R object);
 
-    protected void logSuccessfulDeletion(M object) {
+    protected void logSuccessfulDeletion(R object) {
     }
 
-    protected void logFailDeletion(M object, Exception e) {
+    protected void logFailDeletion(R object, Exception e) {
     }
 
     protected final void addColumn(Column column) {
@@ -308,6 +329,38 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
         //Дата загрузки
         form.add(new DatePicker<Date>("loaded"));
 
+        Model<R> selectedRequestFileModel = new Model<>();
+
+        OrganizationPickerDialog serviceProviderDialog = new OrganizationPickerDialog("organization_correction_dialog",
+                Model.of(new DomainObject()), OsznOrganizationTypeStrategy.SERVICE_PROVIDER_TYPE) {
+            @Override
+            protected void onSelect(AjaxRequestTarget target) {
+                R requestFile = selectedRequestFileModel.getObject();
+                DomainObject organization = getOrganizationModel().getObject();
+
+                OrganizationCorrection correction = new OrganizationCorrection(null, organization.getObjectId(),
+                        requestFile.getEdrpou(), requestFile.getOrganizationId(), requestFile.getUserOrganizationId(),
+                        moduleBean.getModuleId());
+
+                if (organizationCorrectionBean.getOrganizationCorrectionsCount(FilterWrapper.of(correction)) == 0){
+                    organizationCorrectionBean.save(correction);
+
+                    getSession().info(String.format(getString("info_correction_added"),
+                            organizationStrategy.displayShortNameAndCode(organization, getLocale())));
+                }else {
+                    getSession().error(getString("error_correction_exist"));
+                }
+
+                target.add(getMessages(), getDataViewContainer());
+            }
+        };
+        add(serviceProviderDialog);
+
+        //ПУ
+        form.add(new OrganizationPicker("serviceProvider",
+                new PropertyModel<>(getModel(), "serviceProvider"),
+                SERVICE_PROVIDER_TYPE));
+
         //ОСЗН
         form.add(new OrganizationIdPicker("organization",
                 new PropertyModel<>(model, "organizationId"),
@@ -332,10 +385,10 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
         selectManager = new SelectManager();
 
         //Модель данных списка
-        dataProvider = new DataProvider<M>() {
+        dataProvider = new DataProvider<R>() {
 
             @Override
-            protected Iterable<M> getData(long first, long count) {
+            protected Iterable<R> getData(long first, long count) {
                 final F filter = model.getObject();
 
                 getSession().putPreferenceObject(getPreferencePage(), PreferenceKey.FILTER_OBJECT, filter);
@@ -346,7 +399,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
                 filter.setSortProperty(getSort().getProperty());
                 filter.setAscending(getSort().isAscending());
 
-                List<M> objects = getObjects(filter);
+                List<R> objects = getObjects(filter);
 
                 selectManager.initializeSelectModels(objects);
 
@@ -369,19 +422,48 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
         timerManager.addUpdateComponent(messages);
 
         //Таблица файлов запросов
-        dataView = new ProcessDataView<M>("objects", dataProvider) {
+        dataView = new ProcessDataView<R>("objects", dataProvider) {
 
             @Override
-            protected void populateItem(final Item<M> item) {
-                final Long objectId = item.getModelObject().getId();
+            protected void populateItem(final Item<R> item) {
+                Long objectId = item.getModelObject().getId();
+                R rf = item.getModelObject();
 
-                item.add(new ItemCheckBoxPanel<M>("itemCheckBoxPanel", processingManager, selectManager));
+                item.add(new ItemCheckBoxPanel<R>("itemCheckBoxPanel", processingManager, selectManager));
 
                 //Идентификатор файла
                 item.add(new Label("id", StringUtil.valueOf(objectId)));
 
                 //Дата загрузки
                 item.add(new ItemDateLoadedLabel("loaded", getLoaded(item.getModelObject())));
+
+                //ПУ
+                item.add(new AjaxLinkLabel("service_provider", new LoadableDetachableModel<String>() {
+                    @Override
+                    protected String load() {
+                        Long organizationId = organizationStrategy.getServiceProviderId(rf.getEdrpou(),
+                                rf.getOrganizationId(), rf.getUserOrganizationId());
+
+                        if (organizationId != null){
+                            return organizationStrategy.displayShortNameAndCode(
+                                    organizationStrategy.getDomainObject(organizationId, true), getLocale());
+                        }else {
+                            return rf.getEdrpou();
+                        }
+                    }
+                }) {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        serviceProviderDialog.open(target);
+                        selectedRequestFileModel.setObject(rf);
+                    }
+
+                    @Override
+                    public boolean isEnabled() {
+                        return organizationStrategy.getServiceProviderId(rf.getEdrpou(),
+                                rf.getOrganizationId(), rf.getUserOrganizationId()) == null;
+                    }
+                });
 
                 //ОСЗН
                 item.add(new ItemOrganizationLabel("organization", getOsznId(item.getModelObject())));
@@ -443,6 +525,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
         dataViewContainer.add(new ProcessPagingNavigator("paging", dataView, getPreferencePage(), selectManager, form));
 
         //Сортировка
+        form.add(new ArrowOrderByBorder("header.service_provider", "service_provider", dataProvider, dataView, form));
         form.add(new ArrowOrderByBorder("header.id", "id", dataProvider, dataView, form));
         form.add(new ArrowOrderByBorder("header.loaded", "loaded", dataProvider, dataView, form));
         form.add(new ArrowOrderByBorder("header.organization", "organization_id", dataProvider, dataView, form));
@@ -535,7 +618,7 @@ public abstract class AbstractProcessableListPanel<M extends IExecutorObject, F 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 for (long objectId : selectManager.getSelectedFileIds()) {
-                    final M object = getById(objectId);
+                    final R object = getById(objectId);
 
                     if (object != null) {
                         try {

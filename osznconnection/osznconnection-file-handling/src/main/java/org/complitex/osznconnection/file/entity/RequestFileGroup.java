@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.entity;
 
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.LogChangeList;
 import org.complitex.common.util.DateUtil;
 
@@ -13,11 +12,7 @@ import java.util.List;
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 29.09.2010 14:31:02
  */
-public class RequestFileGroup implements IExecutorObject{
-    public final static String TABLE = "request_file_group";
-
-    private Long id;
-
+public class RequestFileGroup extends AbstractRequestFile{
     private RequestFile benefitFile;
     private RequestFile paymentFile;
 
@@ -27,9 +22,9 @@ public class RequestFileGroup implements IExecutorObject{
 
     private RequestFileStatus status;
 
-    private boolean cancel = false;
-
-    private String errorMessage;
+    public String getEdrpou(){
+        return paymentFile != null ? paymentFile.getEdrpou() : benefitFile != null ? benefitFile.getEdrpou() : null;
+    }
 
     @Override
     public String getLogObjectName() {
@@ -67,21 +62,15 @@ public class RequestFileGroup implements IExecutorObject{
             return DateUtil.getMax(paymentFile.getLoaded(), benefitFile.getLoaded());
         }
 
-        if (paymentFile != null) return paymentFile.getLoaded();
-        if (benefitFile != null) return benefitFile.getLoaded();
-        return null;        
+        return paymentFile != null ? paymentFile.getLoaded() : benefitFile != null ? benefitFile.getLoaded() : null;
     }
 
     public Long getOrganizationId(){
-        if (paymentFile != null) return paymentFile.getOrganizationId();
-        if (benefitFile != null) return benefitFile.getOrganizationId();
-        return -1L;
+        return paymentFile != null ? paymentFile.getOrganizationId() : benefitFile != null ? benefitFile.getOrganizationId() : null;
     }
     
     public Long getUserOrganizationId(){
-        if (paymentFile != null) return paymentFile.getUserOrganizationId();
-        if (benefitFile != null) return benefitFile.getUserOrganizationId();
-        return -1L;
+        return paymentFile != null ? paymentFile.getUserOrganizationId() : benefitFile != null ? benefitFile.getUserOrganizationId() : null;
     }
 
     public int getRegistry(){
@@ -130,14 +119,6 @@ public class RequestFileGroup implements IExecutorObject{
     @Override
     public String getObjectName() {
         return getFullName();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public RequestFile getBenefitFile() {
@@ -191,7 +172,7 @@ public class RequestFileGroup implements IExecutorObject{
     @Override
     public String toString() {
         return "RequestFileGroup{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", benefitFile=" + benefitFile +
                 ", paymentFile=" + paymentFile +
                 ", loadedRecordCount=" + loadedRecordCount +
@@ -203,21 +184,8 @@ public class RequestFileGroup implements IExecutorObject{
 
     @Override
     public void cancel() {
-        cancel = true;
+        super.cancel();
         paymentFile.cancel();
         benefitFile.cancel();
-    }
-
-    @Override
-    public boolean isCanceled() {
-        return cancel;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
     }
 }

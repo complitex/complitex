@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  *
  * Информация о файле запроса: имя, дата загрузки, организация, дата, количество записей, размер файла, статус.
  */
-public class RequestFile extends AbstractExecutorObject {
+public class RequestFile extends AbstractRequestFile {
     private Long id;
     private Long groupId;
     private Date loaded = DateUtil.getCurrentDate();

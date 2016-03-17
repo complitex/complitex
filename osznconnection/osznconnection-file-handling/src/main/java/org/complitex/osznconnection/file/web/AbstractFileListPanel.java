@@ -28,11 +28,12 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractFileListPanel extends AbstractProcessableListPanel<RequestFile, RequestFileFilter> {
-
     @EJB
     private RequestFileBean requestFileBean;
+
     @EJB
     private LogBean logBean;
+
     @EJB
     private RequestFileDescriptionBean requestFileDescriptionBean;
 
