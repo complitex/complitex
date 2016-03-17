@@ -23,9 +23,9 @@ public class ExecutorCommand {
 
     protected STATUS status = STATUS.NEW;
 
-    protected AtomicInteger successCount = new AtomicInteger(0);
-    protected AtomicInteger skippedCount = new AtomicInteger(0);
-    protected AtomicInteger errorCount = new AtomicInteger(0);
+    private AtomicInteger successCount = new AtomicInteger(0);
+    private AtomicInteger skippedCount = new AtomicInteger(0);
+    private AtomicInteger errorCount = new AtomicInteger(0);
     protected AtomicBoolean stop = new AtomicBoolean(false);
 
     protected List<IExecutorObject> processed = new CopyOnWriteArrayList<IExecutorObject>();
