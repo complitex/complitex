@@ -1044,24 +1044,18 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("accountNumber", accountNumber);
         params.put("dat1", dat1);
 
-        long startTime = 0;
-        if (log.isDebugEnabled()) {
-            startTime = System.nanoTime();
-        }
         try {
             sqlSession(dataSource).selectOne(NS + ".getBenefitData", params);
         } catch (Exception e) {
             if (!OracleErrors.isCursorClosedError(e)) {
                 throw new DBException(e);
             }
-        } finally {
+        }finally {
             log.info("processBenefit getPrivs {}", params);
-            if (log.isDebugEnabled()) {
-                log.debug("processBenefit. Time of operation: {} sec.", (System.nanoTime() - startTime) / 1000000000F);
-            }
         }
 
         Integer resultCode = (Integer) params.get("resultCode");
+
         if (resultCode == null) {
             log.error("processBenefit. Result code is null. Account number: {}, dat1: {}, calculation center: {}",
                     accountNumber, dat1, dataSource);
@@ -1075,6 +1069,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             switch (resultCode) {
                 case 1:
                     List<BenefitData> benefitData = (List<BenefitData>) params.get("benefitData");
+
                     if (benefitData != null && !benefitData.isEmpty()) {
                         if (checkOrderFam(dataSource, "processBenefit", benefitData, benefits, dat1)
                                 && checkBenefitCode(dataSource, "processBenefit", benefitData, benefits, dat1)) {
@@ -1082,8 +1077,8 @@ public class ServiceProviderAdapter extends AbstractBean {
                         }
                     } else {
                         log.error("processBenefit. Result code is 1 but benefit data is null or empty. Account number: {}, dat1: {},"
-                                        + " calculation center: {}",
-                                accountNumber, dat1, dataSource);
+                                        + " calculation center: {}", accountNumber, dat1, dataSource);
+
                         for (Benefit benefit : benefits) {
                             logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
                                     ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
@@ -1094,6 +1089,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                     break;
                 case -1:
                     setStatus(benefits, RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
+
                     break;
                 default:
                     log.error("processBenefit. Unexpected result code: {}. Account number: {}, dat1: {}, calculation center: {}",
