@@ -1,14 +1,12 @@
 package org.complitex.osznconnection.file.service.process;
 
 import org.complitex.common.entity.Cursor;
-import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Log;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service.DwellingCharacteristicsBean;
-import org.complitex.osznconnection.file.service.OwnershipCorrectionBean;
+import org.complitex.osznconnection.file.service.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
@@ -16,7 +14,6 @@ import org.complitex.osznconnection.file.service.exception.CanceledByUserExcepti
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
-import org.complitex.osznconnection.file.strategy.OwnershipStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,12 +29,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * inheaven on 25.02.2016.
+ * inheaven on 18.03.2016.
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFile>{
-    private final Logger log = LoggerFactory.getLogger(DwellingCharacteristicsFillTaskBean.class);
+public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFile>{
+    private final Logger log = LoggerFactory.getLogger(FacilityServiceTypeFillTaskBean.class);
 
     @Resource
     private UserTransaction userTransaction;
@@ -49,13 +46,7 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
     private ServiceProviderAdapter serviceProviderAdapter;
 
     @EJB
-    private DwellingCharacteristicsBean dwellingCharacteristicsBean;
-
-    @EJB
-    private OwnershipCorrectionBean ownershipCorrectionBean;
-
-    @EJB
-    private OwnershipStrategy ownershipStrategy;
+    private FacilityServiceTypeBean facilityServiceTypeBean;
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
@@ -66,27 +57,23 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
         requestFile.setStatus(RequestFileStatus.FILLING);
         requestFileBean.save(requestFile);
 
-        //todo clear before filling
-
         try {
-            List<Long> ids = dwellingCharacteristicsBean.findIdsForOperation(requestFile.getId());
+            List<Long> ids = facilityServiceTypeBean.findIdsForOperation(requestFile.getId());
 
             for (Long id : ids) {
-                List<DwellingCharacteristics> dwellingCharacteristicsList = dwellingCharacteristicsBean
+                List<FacilityServiceType> facilityServiceTypes = facilityServiceTypeBean
                         .findForOperation(requestFile.getId(), Collections.singletonList(id));
 
-                for (DwellingCharacteristics dwellingCharacteristics : dwellingCharacteristicsList){
+                for (FacilityServiceType facilityServiceType : facilityServiceTypes){
                     if (requestFile.isCanceled()){
                         throw new FillException(new CanceledByUserException(), true, requestFile);
                     }
 
                     userTransaction.begin();
-                    fill(dwellingCharacteristics);
+                    fill(facilityServiceType);
                     userTransaction.commit();
                 }
             }
-
-
         } catch (Exception e) {
             log.error("Ошибка обработки файла субсидии", e);
 
@@ -100,29 +87,27 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
         }
 
         //проверить все ли записи в файле субсидии обработались
-        if (!dwellingCharacteristicsBean.isDwellingCharacteristicsFileFilled(requestFile.getId())) {
+        if (!facilityServiceTypeBean.isFacilityServiceTypeFileFilled(requestFile.getId())) {
             throw new FillException(true, requestFile);
         }
 
         requestFile.setStatus(RequestFileStatus.FILLED);
         requestFileBean.save(requestFile);
 
+
         return true;
     }
 
-    /**
-     * Заполняются поля VL (код формы собственности через соответствие), PLZAG (общая площадь), PLOPAL (отапливаемая площадь).
-     */
-    private void fill(DwellingCharacteristics dwellingCharacteristics) throws DBException {
-        if (dwellingCharacteristics.getAccountNumber() == null){
+    private void fill(FacilityServiceType facilityServiceType) throws DBException {
+        if (facilityServiceType.getAccountNumber() == null){
             return;
         }
 
-        Cursor<PaymentAndBenefitData> cursor = serviceProviderAdapter.getPaymentAndBenefit(dwellingCharacteristics.getUserOrganizationId(),
-                dwellingCharacteristics.getAccountNumber(), dwellingCharacteristics.getDate());
+        Cursor<PaymentAndBenefitData> cursor = serviceProviderAdapter.getPaymentAndBenefit(facilityServiceType.getUserOrganizationId(),
+                facilityServiceType.getAccountNumber(), facilityServiceType.getDate());
 
         if (cursor.getResultCode() == -1){
-            dwellingCharacteristics.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
+            facilityServiceType.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
 
             return;
         }
@@ -130,27 +115,14 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
         if (cursor.getData().size() == 1){
             PaymentAndBenefitData data = cursor.getData().get(0);
 
-            String ownership = null;
-            Long ownershipId = ownershipCorrectionBean.findInternalOwnership(data.getOwnership(), dwellingCharacteristics.getBuildingId());
 
-            if (ownershipId != null){
-                DomainObject object = ownershipStrategy.getDomainObject(ownershipId);
-
-                if (object != null){
-                    ownership = object.getStringValue(OwnershipStrategy.NAME);
-                }else{
-                    log.warn("Форма собственности не найдена {} ко коррекции {}", ownershipId, data.getOwnership());
-                }
-            }else {
-                log.warn("Форма собственности не найдена {}", data.getOwnership());
-            }
-
-            dwellingCharacteristics.setField(DwellingCharacteristicsDBF.VL, ownership);
-            dwellingCharacteristics.setField(DwellingCharacteristicsDBF.PLZAG, data.getReducedArea());
-            dwellingCharacteristics.setField(DwellingCharacteristicsDBF.PLOPAL, data.getHeatingArea());
-        }else if(cursor.getData().size() > 1){
-            dwellingCharacteristics.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
+        }else {
+            facilityServiceType.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
         }
+
+
+
+
     }
 
     @Override
@@ -161,16 +133,16 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
 
     @Override
     public String getModuleName() {
-        return  Module.NAME;
+        return Module.NAME;
     }
 
     @Override
     public Class getControllerClass() {
-        return DwellingCharacteristicsFillTaskBean.class;
+        return FacilityServiceTypeFillTaskBean.class;
     }
 
     @Override
     public Log.EVENT getEvent() {
-        return  Log.EVENT.EDIT;
+        return Log.EVENT.EDIT;
     }
 }

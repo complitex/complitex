@@ -84,6 +84,10 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
         return unboundCount(fileId) == 0;
     }
 
+    public boolean isFacilityServiceTypeFileFilled(Long requestFileId){
+        return countByFile(requestFileId, RequestStatus.UNPROCESSED_SET_STATUSES) == 0;
+    }
+
     private int unboundCount(long fileId) {
         return countByFile(fileId, RequestStatus.unboundStatuses());
     }
@@ -106,19 +110,19 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
     }
 
 
-    public List<Long> findIdsForBinding(long fileId) {
+    public List<Long> findIdsForBinding(Long fileId) {
         return findIdsForOperation(fileId);
     }
 
 
-    private List<Long> findIdsForOperation(long fileId) {
-        return sqlSession().selectList(NS + ".findIdsForOperation", fileId);
+    public List<Long> findIdsForOperation(Long requestFileId) {
+        return sqlSession().selectList(NS + ".findIdsForOperation", requestFileId);
     }
 
 
-    public List<FacilityServiceType> findForOperation(long fileId, List<Long> ids) {
+    public List<FacilityServiceType> findForOperation(Long requestFileId, List<Long> ids) {
         List<FacilityServiceType> list = sqlSession().selectList(NS + ".findForOperation",
-                of("requestFileId", fileId, "ids", ids));
+                of("requestFileId", requestFileId, "ids", ids));
 
         loadFacilityStreet(list);
 
