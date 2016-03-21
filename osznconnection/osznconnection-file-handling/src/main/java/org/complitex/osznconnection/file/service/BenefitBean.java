@@ -309,9 +309,10 @@ public class BenefitBean extends AbstractRequestBean {
                         osznBenefitCode = privilegeCorrectionBean.findPrivilegeCode(internalPrivilege, osznId,
                                 benefit.getUserOrganizationId());
                     }
-                    benefitDataItem.setPrivilegeObjectId(internalPrivilege);
-                    benefitDataItem.setOsznPrivilegeCode(osznBenefitCode);
-                    benefitDataItem.setCalcCenterId(billingId);
+                    benefitDataItem.setPrivilegeId(internalPrivilege);
+                    benefitDataItem.setPrivilegeCode(osznBenefitCode);
+                    benefitDataItem.setBillingId(billingId);
+
                     notConnectedBenefitData.add(benefitDataItem);
                 }
             }
@@ -320,7 +321,7 @@ public class BenefitBean extends AbstractRequestBean {
     }
 
     public void connectBenefit(Benefit benefit, final BenefitData selectedBenefitData, boolean checkBenefitData) throws DBException {
-        String osznBenefitCode = selectedBenefitData.getOsznPrivilegeCode();
+        String osznBenefitCode = selectedBenefitData.getPrivilegeCode();
         benefit.setField(BenefitDBF.PRIV_CAT, Integer.valueOf(osznBenefitCode));
         benefit.setField(BenefitDBF.ORD_FAM, Integer.valueOf(selectedBenefitData.getOrderFamily()));
         benefit.setStatus(RequestStatus.PROCESSED);

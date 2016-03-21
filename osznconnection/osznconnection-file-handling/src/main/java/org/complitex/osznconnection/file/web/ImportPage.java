@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static org.complitex.address.entity.AddressImportFile.*;
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.BILLING_TYPE;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -112,7 +113,7 @@ public class ImportPage extends TemplatePage {
 
                     @Override
                     protected List<? extends DomainObject> load() {
-                        return organizationStrategy.getAllCalculationCentres(getLocale());
+                        return organizationStrategy.getOrganizations(BILLING_TYPE);
                     }
                 }, new DomainObjectDisableAwareRenderer() {
 

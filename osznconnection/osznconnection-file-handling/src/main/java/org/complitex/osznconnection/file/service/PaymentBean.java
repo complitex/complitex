@@ -101,7 +101,7 @@ public class PaymentBean extends AbstractRequestBean {
     }
 
 
-    public void update(Payment payment, Set<Long> serviceProviderTypeIds) {
+    public void update(Payment payment, List<Long> serviceProviderTypeIds) {
         Map<String, Object> updateFieldMap = null;
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
             updateFieldMap = Maps.newHashMap();
@@ -113,7 +113,7 @@ public class PaymentBean extends AbstractRequestBean {
         update(payment);
     }
 
-    private Set<PaymentDBF> getUpdatableFields(Set<Long> serviceProviderTypeIds) {
+    private Set<PaymentDBF> getUpdatableFields(List<Long> serviceProviderTypeIds) {
         final Set<PaymentDBF> updatableFields = Sets.newHashSet();
 
         for (long serviceProviderTypeId : serviceProviderTypeIds) {
@@ -254,7 +254,7 @@ public class PaymentBean extends AbstractRequestBean {
      * @param fileId fileId
      */
 
-    public void clearBeforeBinding(long fileId, Set<Long> serviceProviderTypeIds) {
+    public void clearBeforeBinding(long fileId, List<Long> serviceProviderTypeIds) {
         Map<String, String> updateFieldMap = null;
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
             updateFieldMap = Maps.newHashMap();
@@ -273,7 +273,7 @@ public class PaymentBean extends AbstractRequestBean {
      * @param fileId fileId
      */
 
-    public void clearBeforeProcessing(long fileId, Set<Long> serviceProviderTypeIds) {
+    public void clearBeforeProcessing(long fileId, List<Long> serviceProviderTypeIds) {
         Map<String, String> updateFieldMap = null;
         if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
             updateFieldMap = Maps.newHashMap();

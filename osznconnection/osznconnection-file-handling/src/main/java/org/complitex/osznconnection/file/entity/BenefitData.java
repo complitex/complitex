@@ -3,13 +3,13 @@ package org.complitex.osznconnection.file.entity;
 import org.apache.wicket.util.string.Strings;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 18.10.2010 17:11:01
  */
 public class BenefitData implements Serializable {
-
     private String firstName;
     private String lastName;
     private String middleName;
@@ -19,9 +19,13 @@ public class BenefitData implements Serializable {
     private String orderFamily;
     private String code;
     private String userCount;
-    private Long calcCenterId;
-    private Long privilegeObjectId;
-    private String osznPrivilegeCode;
+    private String budget;
+    private Date dateIn;
+    private Date dateOut;
+
+    private Long billingId;
+    private Long privilegeId;
+    private String privilegeCode;
 
     public String getFirstName() {
         return firstName;
@@ -95,28 +99,52 @@ public class BenefitData implements Serializable {
         this.userCount = userCount;
     }
 
-    public String getOsznPrivilegeCode() {
-        return osznPrivilegeCode;
+    public String getPrivilegeCode() {
+        return privilegeCode;
     }
 
-    public void setOsznPrivilegeCode(String osznBenefitCode) {
-        this.osznPrivilegeCode = osznBenefitCode;
+    public void setPrivilegeCode(String osznBenefitCode) {
+        this.privilegeCode = osznBenefitCode;
     }
 
-    public Long getPrivilegeObjectId() {
-        return privilegeObjectId;
+    public Long getPrivilegeId() {
+        return privilegeId;
     }
 
-    public void setPrivilegeObjectId(Long privilegeObjectId) {
-        this.privilegeObjectId = privilegeObjectId;
+    public void setPrivilegeId(Long privilegeId) {
+        this.privilegeId = privilegeId;
     }
 
-    public Long getCalcCenterId() {
-        return calcCenterId;
+    public Long getBillingId() {
+        return billingId;
     }
 
-    public void setCalcCenterId(Long calcCenterId) {
-        this.calcCenterId = calcCenterId;
+    public void setBillingId(Long billingId) {
+        this.billingId = billingId;
+    }
+
+    public String getBudget() {
+        return budget;
+    }
+
+    public void setBudget(String budget) {
+        this.budget = budget;
+    }
+
+    public Date getDateIn() {
+        return dateIn;
+    }
+
+    public void setDateIn(Date dateIn) {
+        this.dateIn = dateIn;
+    }
+
+    public Date getDateOut() {
+        return dateOut;
+    }
+
+    public void setDateOut(Date dateOut) {
+        this.dateOut = dateOut;
     }
 
     public boolean isEmpty() {
@@ -136,9 +164,9 @@ public class BenefitData implements Serializable {
                 ", orderFamily='" + orderFamily + '\'' +
                 ", code='" + code + '\'' +
                 ", userCount='" + userCount + '\'' +
-                ", calcCenterId=" + calcCenterId +
-                ", privilegeObjectId=" + privilegeObjectId +
-                ", osznPrivilegeCode='" + osznPrivilegeCode + '\'' +
+                ", billingId=" + billingId +
+                ", privilegeId=" + privilegeId +
+                ", privilegeCode='" + privilegeCode + '\'' +
                 '}';
     }
 }

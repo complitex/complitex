@@ -178,9 +178,9 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
 
         for (AccountDetail accountDetail : cursor.getData()) {
-            List<BenefitData> benefitDataList = getBenefitData(dataSource, accountDetail.getAccCode(), date);
+            Cursor<BenefitData> benefitDataCursor = getBenefitData(dataSource, accountDetail.getAccCode(), date);
 
-            for (BenefitData d : benefitDataList){
+            for (BenefitData d : benefitDataCursor.getData()){
                 if (inn != null && inn.equals(d.getInn())
                         || (passport != null && passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){
                     request.setAccountNumber(accountDetail.getAccCode());
@@ -794,12 +794,12 @@ public class ServiceProviderAdapter extends AbstractBean {
         return null;
     }
 
-    public List<BenefitData> getBenefitData(Long userOrganizationId, String accountNumber, Date date) throws DBException {
+    public Cursor<BenefitData> getBenefitData(Long userOrganizationId, String accountNumber, Date date) throws DBException {
         return getBenefitData(organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId), accountNumber, date);
     }
 
 
-    public List<BenefitData> getBenefitData(String dataSource, String accountNumber, Date date) throws DBException {
+    public Cursor<BenefitData> getBenefitData(String dataSource, String accountNumber, Date date) throws DBException {
         Map<String, Object> params = newHashMap();
         params.put("accountNumber", accountNumber);
         params.put("dat1", date);
@@ -814,7 +814,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             log.info("getBenefitData getPrivs {}", params);
         }
 
-        return (List<BenefitData>) params.get("benefitData");
+        return new Cursor<>((Integer) params.get("resultCode"), (List) params.get("benefitData"));
     }
 
     protected static class BenefitDataId implements Serializable {
@@ -1049,7 +1049,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             startTime = System.nanoTime();
         }
         try {
-            sqlSession(dataSource).selectOne(NS + ".processBenefit", params);
+            sqlSession(dataSource).selectOne(NS + ".getBenefitData", params);
         } catch (Exception e) {
             if (!OracleErrors.isCursorClosedError(e)) {
                 throw new DBException(e);

@@ -539,6 +539,12 @@ public class ProcessManagerBean {
     }
 
     @Asynchronous
+    public void fillFacilityServiceType(List<Long> ids, Map processParameters) {
+        execute(FILL_FACILITY_SERVICE_TYPE, FacilityServiceTypeFillTaskBean.class, getFacilityServiceTypeFiles(ids),
+                null, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
+    }
+
+    @Asynchronous
     public void saveFacilityServiceType(List<Long> ids, Map processParameters) {
         execute(SAVE_FACILITY_SERVICE_TYPE, FacilityServiceTypeSaveTaskBean.class,
                 getFacilityServiceTypeFiles(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);

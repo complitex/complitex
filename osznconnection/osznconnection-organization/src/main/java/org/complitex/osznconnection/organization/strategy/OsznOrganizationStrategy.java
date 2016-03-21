@@ -183,14 +183,6 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
         return getOrganizations(SERVICING_ORGANIZATION_TYPE, BILLING_TYPE, SERVICING_ORGANIZATION_TYPE);
     }
 
-    public List<? extends DomainObject> getAllOSZNs(Locale locale) {
-        return getOrganizations(SERVICING_ORGANIZATION_TYPE);
-    }
-
-    public List<? extends DomainObject> getAllCalculationCentres(Locale locale) {
-        return getOrganizations(BILLING_TYPE);
-    }
-
     @Override
     public boolean isSimpleAttributeType(AttributeType attributeType) {
         return !CUSTOM_ATTRIBUTE_TYPES.contains(attributeType.getId()) &&

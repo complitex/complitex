@@ -1,12 +1,17 @@
 package org.complitex.osznconnection.file.service.process;
 
 import org.complitex.common.entity.Cursor;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.util.DateUtil;
+import org.complitex.organization.strategy.ServiceStrategy;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.FacilityServiceTypeBean;
+import org.complitex.osznconnection.file.service.PrivilegeCorrectionBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
@@ -14,6 +19,8 @@ import org.complitex.osznconnection.file.service.exception.CanceledByUserExcepti
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
+import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +55,18 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
     @EJB
     private FacilityServiceTypeBean facilityServiceTypeBean;
 
+    @EJB
+    private OsznOrganizationStrategy organizationStrategy;
+
+    @EJB
+    private ServiceStrategy serviceStrategy;
+
+    @EJB
+    private PrivilegeCorrectionBean privilegeCorrectionBean;
+
+    @EJB
+    private PrivilegeStrategy privilegeStrategy;
+
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()){
@@ -56,6 +75,14 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
 
         requestFile.setStatus(RequestFileStatus.FILLING);
         requestFileBean.save(requestFile);
+
+        List<Long> serviceIds = organizationStrategy.getServices(requestFile.getUserOrganizationId());
+        Integer serviceCode = null;
+
+        if (!serviceIds.isEmpty()){
+            DomainObject service = serviceStrategy.getDomainObject(serviceIds.get(0));
+            serviceCode = Integer.valueOf(service.getStringValue(ServiceStrategy.CODE));
+        }
 
         try {
             List<Long> ids = facilityServiceTypeBean.findIdsForOperation(requestFile.getId());
@@ -70,7 +97,7 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                     }
 
                     userTransaction.begin();
-                    fill(facilityServiceType);
+                    fill(serviceCode, facilityServiceType);
                     userTransaction.commit();
                 }
             }
@@ -98,12 +125,23 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
         return true;
     }
 
-    private void fill(FacilityServiceType facilityServiceType) throws DBException {
+    /**
+     * LGCODE - код услуги ПУ
+     * KAT - категория льготы данного льготника через соответствия.
+     * YEARIN - год начала действия льготы.
+     * MONTHIN - месяц начала действия льготы.
+     * YEAROUT - год окончания действия льготы.
+     * MONTHOUT - месяц окончания действия льготы.
+     * RAH - номер л/с ПУ (номер л/с с которым связана запись).
+     * RIZN - код услуги через соответствия данного отдела льгот.
+     * TARIF - код тарифа из справочника тарифов данного отдела льгот для данного кода услуги.
+     */
+    private void fill(Integer serviceCode, FacilityServiceType facilityServiceType) throws DBException {
         if (facilityServiceType.getAccountNumber() == null){
             return;
         }
 
-        Cursor<PaymentAndBenefitData> cursor = serviceProviderAdapter.getPaymentAndBenefit(facilityServiceType.getUserOrganizationId(),
+        Cursor<BenefitData> cursor = serviceProviderAdapter.getBenefitData(facilityServiceType.getUserOrganizationId(),
                 facilityServiceType.getAccountNumber(), facilityServiceType.getDate());
 
         if (cursor.getResultCode() == -1){
@@ -113,16 +151,34 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
         }
 
         if (cursor.getData().size() == 1){
-            PaymentAndBenefitData data = cursor.getData().get(0);
+            BenefitData data = cursor.getData().get(0);
 
+            facilityServiceType.setField(FacilityServiceTypeDBF.LGCODE, serviceCode);
+
+            List<PrivilegeCorrection> corrections = privilegeCorrectionBean.getPrivilegeCorrections(FilterWrapper.of(
+                    new PrivilegeCorrection(data.getPrivilegeCode(), facilityServiceType.getOrganizationId(),
+                            facilityServiceType.getUserOrganizationId())));
+            if (!corrections.isEmpty()){
+                DomainObject privilege = privilegeStrategy.getDomainObject(corrections.get(0).getObjectId());
+
+                facilityServiceType.setField(FacilityServiceTypeDBF.KAT, Integer.valueOf(privilege.getStringValue(PrivilegeStrategy.CODE)));
+            }
+
+            facilityServiceType.setField(FacilityServiceTypeDBF.YEARIN, DateUtil.getYear(data.getDateIn()));
+            facilityServiceType.setField(FacilityServiceTypeDBF.MONTHIN, DateUtil.getMonth(data.getDateIn()));
+
+            facilityServiceType.setField(FacilityServiceTypeDBF.YEAROUT, DateUtil.getYear(data.getDateOut()));
+            facilityServiceType.setField(FacilityServiceTypeDBF.MONTHOUT, DateUtil.getMonth(data.getDateOut()));
+
+            facilityServiceType.setField(FacilityServiceTypeDBF.RAH, facilityServiceType.getAccountNumber());
+
+            //todo rizn tarif
 
         }else {
             facilityServiceType.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
         }
 
-
-
-
+        facilityServiceTypeBean.update(facilityServiceType);
     }
 
     @Override

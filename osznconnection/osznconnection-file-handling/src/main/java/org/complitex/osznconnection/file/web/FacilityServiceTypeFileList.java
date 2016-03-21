@@ -78,6 +78,7 @@ public final class FacilityServiceTypeFileList extends ScrollListPage {
 
             @Override
             protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
+                processManagerBean.fillFacilityServiceType(selectedFileIds, commandParameters);
             }
 
             @Override

@@ -102,7 +102,7 @@
 
     <select id="processPaymentAndBenefit" statementType="CALLABLE" parameterType="map">
         <![CDATA[
-         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GETCHARGEANDPARAMS(
+         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GetChargeAndParams(
             #{accountNumber, mode=IN, javaType=string, jdbcType=VARCHAR},
             #{dat1, mode=IN, javaType=date, jdbcType=DATE},
             #{data, mode=OUT, jdbcType=CURSOR, resultMap=paymentAndBenefitDataResultMap})
@@ -120,11 +120,14 @@
         <result property="orderFamily" column="ord"/>
         <result property="code" column="cc"/>
         <result property="userCount" column="uc"/>
+        <result property="budget" column="bud"/>
+        <result property="dateIn" column="date_in"/>
+        <result property="dateOut" column="date_out"/>
     </resultMap>
 
     <sql id="getPrivs">
         <![CDATA[
-         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GETPRIVS(
+         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GetPrivs(
             #{accountNumber, mode=IN, javaType=string, jdbcType=VARCHAR},
             #{dat1, mode=IN, javaType=date, jdbcType=DATE},
             #{benefitData, mode=OUT, jdbcType=CURSOR, resultMap=benefitDataResultMap})
@@ -132,14 +135,9 @@
         ]]>
     </sql>
 
-    <select id="processBenefit" statementType="CALLABLE" parameterType="map">
-        <include refid="org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter.getPrivs"/>
-    </select>
-
     <select id="getBenefitData" statementType="CALLABLE" parameterType="map">
         <include refid="org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter.getPrivs"/>
     </select>
-
 
     <resultMap id="actualPaymentDataResultMap" type="org.complitex.osznconnection.file.entity.ActualPaymentData">
         <result property="apartmentFeeCharge" column="fact_charge"/>

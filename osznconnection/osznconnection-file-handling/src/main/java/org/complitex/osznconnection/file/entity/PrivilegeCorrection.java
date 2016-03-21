@@ -10,14 +10,13 @@ public class PrivilegeCorrection extends Correction {
     public PrivilegeCorrection() {
     }
 
-    public PrivilegeCorrection(String externalId, Long objectId, String privilege,
-                               Long organizationId, Long userOrganizationId, Long moduleId) {
-        setExternalId(externalId);
-        setObjectId(objectId);
-        setCorrection(privilege);
-        setOrganizationId(organizationId);
-        setModuleId(moduleId);
-        setUserOrganizationId(userOrganizationId);
+    public PrivilegeCorrection(String externalId, Long objectId, String correction, Long organizationId,
+                               Long userOrganizationId, Long moduleId) {
+        super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
+    }
+
+    public PrivilegeCorrection(String correction, Long organizationId, Long userOrganizationId) {
+        super(correction, organizationId, userOrganizationId);
     }
 
     @Override

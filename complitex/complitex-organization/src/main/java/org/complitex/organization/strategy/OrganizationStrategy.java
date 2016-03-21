@@ -519,7 +519,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         return map;
     }
 
-    public Set<Long> getServices(Long userOrganizationId){
+    public List<Long> getServices(Long userOrganizationId){
         return getDomainObject(userOrganizationId).getValueIds(SERVICE);
     }
 

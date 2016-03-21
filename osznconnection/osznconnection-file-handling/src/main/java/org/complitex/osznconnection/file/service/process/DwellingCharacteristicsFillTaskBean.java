@@ -151,6 +151,8 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
         }else if(cursor.getData().size() > 1){
             dwellingCharacteristics.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
         }
+
+        dwellingCharacteristicsBean.update(dwellingCharacteristics);
     }
 
     @Override

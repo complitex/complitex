@@ -248,9 +248,9 @@ public class BenefitConnectPanel extends Panel {
     private boolean validateBenefitData(BenefitData benefitData) {
         boolean valid = true;
         long osznId = benefit.getOrganizationId();
-        long calculationCenterId = benefitData.getCalcCenterId();
-        String osznBenefitCode = benefitData.getOsznPrivilegeCode();
-        Long privilegeObjectId = benefitData.getPrivilegeObjectId();
+        long calculationCenterId = benefitData.getBillingId();
+        String osznBenefitCode = benefitData.getPrivilegeCode();
+        Long privilegeObjectId = benefitData.getPrivilegeId();
         if (privilegeObjectId == null) {
             valid = false;
             RequestWarning warning = new RequestWarning(RequestFileType.BENEFIT, RequestWarningStatus.PRIVILEGE_OBJECT_NOT_FOUND);
