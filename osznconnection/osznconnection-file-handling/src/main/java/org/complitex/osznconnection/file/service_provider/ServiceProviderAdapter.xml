@@ -130,7 +130,7 @@
          {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GetPrivs(
             #{accountNumber, mode=IN, javaType=string, jdbcType=VARCHAR},
             #{dat1, mode=IN, javaType=date, jdbcType=DATE},
-            #{benefitData, mode=OUT, jdbcType=CURSOR, resultMap=benefitDataResultMap})
+            #{data, mode=OUT, jdbcType=CURSOR, resultMap=benefitDataResultMap})
         }
         ]]>
     </sql>

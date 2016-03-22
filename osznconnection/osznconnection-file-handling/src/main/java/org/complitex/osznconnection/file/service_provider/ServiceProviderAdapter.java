@@ -756,7 +756,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             switch (resultCode) {
                 case 1:
                     @SuppressWarnings("unchecked")
-                    List<BenefitData> benefitData = (List<BenefitData>) params.get("benefitData");
+                    List<BenefitData> benefitData = (List<BenefitData>) params.get("data");
                     if (benefitData != null && !benefitData.isEmpty()) {
                         if (checkOrderFam(dataSource, "getBenefitData", benefitData, newArrayList(benefit), dat1)
                                 && checkBenefitCode(dataSource, "getBenefitData", benefitData, newArrayList(benefit), dat1)) {
@@ -814,7 +814,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             log.info("getBenefitData getPrivs {}", params);
         }
 
-        return new Cursor<>((Integer) params.get("resultCode"), (List) params.get("benefitData"));
+        return new Cursor<>((Integer) params.get("resultCode"), (List) params.get("data"));
     }
 
     protected static class BenefitDataId implements Serializable {
@@ -1068,7 +1068,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         } else {
             switch (resultCode) {
                 case 1:
-                    List<BenefitData> benefitData = (List<BenefitData>) params.get("benefitData");
+                    List<BenefitData> benefitData = (List<BenefitData>) params.get("data");
 
                     if (benefitData != null && !benefitData.isEmpty()) {
                         if (checkOrderFam(dataSource, "processBenefit", benefitData, benefits, dat1)
