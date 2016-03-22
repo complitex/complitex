@@ -61,6 +61,19 @@ public class LookupBean extends AbstractBean {
     public Cursor<AccountDetail> getAccountDetailsByPerson(Long userOrganizationId, String districtName,
                                                          String organizationCode, String lastName, String firstName,
                                                          String middleName, String inn, String passport, Date date) throws DBException {
+        if (lastName != null){
+            lastName = lastName.toUpperCase();
+        }
+        if (firstName != null){
+            firstName = firstName.toUpperCase();
+        }
+        if (middleName != null){
+            middleName = middleName.toUpperCase();
+        }
+        if (passport != null){
+            passport = passport.toUpperCase();
+        }
+
         return adapter.getAccountDetailsByPerson(organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId),
                 districtName, organizationCode, lastName, firstName, middleName, inn, passport, date);
     }
