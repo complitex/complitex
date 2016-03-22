@@ -229,6 +229,8 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                         facilityServiceType.setStatus(PROCESSED);
                     }else{
                         facilityServiceType.setStatus(TARIF_NOT_FOUND);
+
+                        log.info("TARIF_NOT_FOUND serviceCode={}, tarif={}, date={}", serviceCode, tarif, facilityServiceType.getDate());
                     }
                 }
 
