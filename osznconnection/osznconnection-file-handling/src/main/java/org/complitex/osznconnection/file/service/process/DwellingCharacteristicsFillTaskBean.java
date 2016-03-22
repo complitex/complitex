@@ -123,6 +123,7 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
 
         if (cursor.getResultCode() == -1){
             dwellingCharacteristics.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
+            dwellingCharacteristicsBean.update(dwellingCharacteristics);
 
             return;
         }

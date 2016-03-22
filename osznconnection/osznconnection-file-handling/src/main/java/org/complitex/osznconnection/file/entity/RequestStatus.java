@@ -84,7 +84,10 @@ public enum RequestStatus implements IFixedIdType {
     SUBSIDY_NM_PAY_ERROR(250),
     SERVICING_ORGANIZATION_NOT_FOUND(251),
 
-    WRONG_DATES(252);
+    WRONG_DATES(252),
+
+    SERVICE_NOT_FOUND(253),
+    TARIF_NOT_FOUND(254);
 
     private Integer id;
 
