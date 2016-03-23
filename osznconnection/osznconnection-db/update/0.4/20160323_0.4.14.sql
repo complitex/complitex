@@ -40,4 +40,6 @@ ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `VL` INTEGER(3) COMMENT 'Т
 ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `PLZAG` DECIMAL(8,2) COMMENT 'Общая площадь помещения';
 ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `PLOPAL` DECIMAL(8,2) COMMENT 'Отапливаемая площадь помещения';
 
+update request_file_field_description set type='java.lang.Long' where type ='java.lang.Integer' and length > 9;
+
 INSERT INTO `update` (`version`) VALUE ('20160323_0.4.14');

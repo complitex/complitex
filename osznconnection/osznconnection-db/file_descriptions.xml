@@ -328,7 +328,7 @@
         <fields>
             <field length="4" type="java.lang.Integer" name="COD"/>
             <field length="12" type="java.lang.Integer" name="CDPR"/>
-            <field length="10" type="java.lang.Integer" name="NCARD"/>
+            <field length="10" type="java.lang.Long" name="NCARD"/>
             <field length="10" type="java.lang.String" name="IDCODE"/>
             <field length="14" type="java.lang.String" name="PASP"/>
             <field length="50" type="java.lang.String" name="FIO"/>
@@ -348,8 +348,8 @@
     <file-description type="FACILITY_SERVICE_TYPE">
         <fields>
             <field length="4" type="java.lang.Integer" name="COD"/>
-            <field length="12" type="java.lang.Integer" name="CDPR"/>
-            <field length="10" type="java.lang.Integer" name="NCARD"/>
+            <field length="12" type="java.lang.Long" name="CDPR"/>
+            <field length="10" type="java.lang.Long" name="NCARD"/>
             <field length="10" type="java.lang.String" name="IDCODE"/>
             <field length="14" type="java.lang.String" name="PASP"/>
             <field length="50" type="java.lang.String" name="FIO"/>
@@ -369,7 +369,7 @@
             <field length="2" type="java.lang.Integer" name="MONTHOUT"/>
             <field length="25" type="java.lang.String" name="RAH"/>
             <field length="6" type="java.lang.Integer" name="RIZN"/>
-            <field length="10" type="java.lang.Integer" name="TARIF"/>
+            <field length="10" type="java.lang.Long" name="TARIF"/>
         </fields>
     </file-description>
 
