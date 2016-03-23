@@ -18,6 +18,7 @@ import org.complitex.osznconnection.file.service.exception.AlreadyProcessingExce
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
+import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
@@ -41,9 +42,8 @@ import static org.complitex.osznconnection.file.entity.FacilityServiceTypeDBF.*;
 import static org.complitex.osznconnection.file.entity.FacilityTarifDBF.TAR_CODE;
 import static org.complitex.osznconnection.file.entity.FacilityTarifDBF.TAR_SERV;
 import static org.complitex.osznconnection.file.entity.RequestFileStatus.FILL_ERROR;
-import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS;
-import static org.complitex.osznconnection.file.entity.RequestStatus.PROCESSED;
-import static org.complitex.osznconnection.file.entity.RequestStatus.TARIF_NOT_FOUND;
+import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_SERVICE_TYPE;
+import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 import static org.complitex.osznconnection.file.strategy.PrivilegeStrategy.CODE;
 
 /**
@@ -81,6 +81,9 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
     @EJB
     private FacilityReferenceBookBean facilityReferenceBookBean;
 
+    @EJB
+    private RequestWarningBean requestWarningBean;
+
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()){
@@ -89,6 +92,9 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
 
         requestFile.setStatus(RequestFileStatus.FILLING);
         requestFileBean.save(requestFile);
+
+        //clear warning
+        requestWarningBean.delete(requestFile.getId(), FACILITY_SERVICE_TYPE);
 
         try {
             List<Long> ids = facilityServiceTypeBean.findIdsForOperation(requestFile.getId());
@@ -229,6 +235,11 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                         facilityServiceType.setStatus(PROCESSED);
                     }else{
                         facilityServiceType.setStatus(TARIF_NOT_FOUND);
+
+                        RequestWarning warning = new RequestWarning(facilityServiceType.getId(), FACILITY_SERVICE_TYPE,
+                                RequestWarningStatus.TARIF_NOT_FOUND);
+                        warning.addParameter(new RequestWarningParameter(0, tarif));
+                        requestWarningBean.save(warning);
 
                         log.info("TARIF_NOT_FOUND serviceCode={}, tarif={}, date={}", serviceCode, tarif, facilityServiceType.getDate());
                     }
