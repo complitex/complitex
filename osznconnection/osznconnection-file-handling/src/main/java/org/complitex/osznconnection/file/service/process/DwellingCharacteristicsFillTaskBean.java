@@ -1,7 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
 import org.complitex.common.entity.Cursor;
-import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
@@ -131,24 +130,29 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
         if (cursor.getData().size() == 1){
             PaymentAndBenefitData data = cursor.getData().get(0);
 
+            dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLZAG, data.getReducedArea());
+            dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLOPAL, data.getHeatingArea());
+
             String ownership = null;
-            Long ownershipId = ownershipCorrectionBean.findInternalOwnership(data.getOwnership(), dwellingCharacteristics.getBuildingId());
+            Long ownershipId = ownershipCorrectionBean.findInternalOwnership(data.getOwnership(), dwellingCharacteristics.getUserOrganizationId());
 
             if (ownershipId != null){
-                DomainObject object = ownershipStrategy.getDomainObject(ownershipId);
+                ownership = ownershipCorrectionBean.findOwnershipCode(ownershipId, dwellingCharacteristics.getOrganizationId(),
+                        dwellingCharacteristics.getUserOrganizationId());
 
-                if (object != null){
-                    ownership = object.getStringValue(OwnershipStrategy.NAME);
-                }else{
-                    log.warn("Форма собственности не найдена {} ко коррекции {}", ownershipId, data.getOwnership());
-                }
-            }else {
-                log.warn("Форма собственности не найдена {}", data.getOwnership());
+                dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
             }
 
-            dwellingCharacteristics.setField(DwellingCharacteristicsDBF.VL, ownership);
-            dwellingCharacteristics.setField(DwellingCharacteristicsDBF.PLZAG, data.getReducedArea());
-            dwellingCharacteristics.setField(DwellingCharacteristicsDBF.PLOPAL, data.getHeatingArea());
+            if (ownership == null){
+                dwellingCharacteristics.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
+                dwellingCharacteristicsBean.update(dwellingCharacteristics);
+
+                log.warn("Форма собственности не найдена {}", data.getOwnership());
+
+                return;
+            }
+
+            dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.VL, ownership);
         }else if(cursor.getData().size() > 1){
             dwellingCharacteristics.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
         }

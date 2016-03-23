@@ -135,7 +135,7 @@ public class LoadRequestFileBean {
                     DBFField field = reader.getField(i);
                     currentFieldName = field.getName();
 
-                    request.setField(currentFieldName, value);
+                    request.putField(currentFieldName, value);
                 }
 
                 //post processing after filling all fields of request

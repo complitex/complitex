@@ -24,9 +24,9 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
     private RequestStatus status;
 
     private List<RequestWarning> warnings = Lists.newArrayList();
-    private Map<String, Object> dbfFields = new HashMap<>();
 
-    private Map<String, Object> updateFieldMap;
+    private Map<String, Object> dbfFields = new HashMap<>();
+    private Map<String, Object> updateFieldMap = new HashMap<>();
 
     private Date date;
 
@@ -42,8 +42,12 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
         return dbfFields.get(fieldName);
     }
 
-    public void setField(String fieldName, Object object) {
+    public void putField(String fieldName, Object object) {
         dbfFields.put(fieldName, object);
+    }
+
+    public void putField(E e, Object object) {
+        putField(e.name(), object);
     }
 
     public Object getField(E e) {
@@ -62,8 +66,8 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
         return o != null ? o.toString() : null;
     }
 
-    public void setField(E e, Object object) {
-        setField(e.name(), object);
+    public void putUpdateField(E e, Object object) {
+        updateFieldMap.put(e.name(), object);
     }
 
     public abstract RequestFileType getRequestFileType();

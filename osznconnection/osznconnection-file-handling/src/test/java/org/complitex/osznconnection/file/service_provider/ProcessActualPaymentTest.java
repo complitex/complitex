@@ -18,7 +18,7 @@ public class ProcessActualPaymentTest extends AbstractTest {
         ActualPayment p = new ActualPayment() {
 
             @Override
-            public void setField(String fieldName, Object object) {
+            public void putField(String fieldName, Object object) {
                 super.getDbfFields().put(fieldName, object != null ? object.toString() : null);
             }
         };

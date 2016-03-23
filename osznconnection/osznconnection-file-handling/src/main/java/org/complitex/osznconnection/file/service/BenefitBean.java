@@ -322,8 +322,8 @@ public class BenefitBean extends AbstractRequestBean {
 
     public void connectBenefit(Benefit benefit, final BenefitData selectedBenefitData, boolean checkBenefitData) throws DBException {
         String osznBenefitCode = selectedBenefitData.getPrivilegeCode();
-        benefit.setField(BenefitDBF.PRIV_CAT, Integer.valueOf(osznBenefitCode));
-        benefit.setField(BenefitDBF.ORD_FAM, Integer.valueOf(selectedBenefitData.getOrderFamily()));
+        benefit.putField(BenefitDBF.PRIV_CAT, Integer.valueOf(osznBenefitCode));
+        benefit.putField(BenefitDBF.ORD_FAM, Integer.valueOf(selectedBenefitData.getOrderFamily()));
         benefit.setStatus(RequestStatus.PROCESSED);
 
         update(benefit);

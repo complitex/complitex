@@ -87,7 +87,8 @@ public enum RequestStatus implements IFixedIdType {
     WRONG_DATES(252),
 
     SERVICE_NOT_FOUND(253),
-    TARIF_NOT_FOUND(254);
+    TARIF_NOT_FOUND(254),
+    OWNERSHIP_NOT_FOUND(256);
 
     private Integer id;
 

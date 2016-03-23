@@ -207,16 +207,16 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
             if (!corrections.isEmpty()){
                 DomainObject privilege = privilegeStrategy.getDomainObject(corrections.get(0).getObjectId());
 
-                facilityServiceType.setField(KAT, Integer.valueOf(privilege.getStringValue(CODE)));
+                facilityServiceType.putUpdateField(KAT, Integer.valueOf(privilege.getStringValue(CODE)));
             }
 
-            facilityServiceType.setField(YEARIN, DateUtil.getYear(data.getDateIn()));
-            facilityServiceType.setField(MONTHIN, DateUtil.getMonth(data.getDateIn()));
+            facilityServiceType.putUpdateField(YEARIN, DateUtil.getYear(data.getDateIn()));
+            facilityServiceType.putUpdateField(MONTHIN, DateUtil.getMonth(data.getDateIn()));
 
-            facilityServiceType.setField(YEAROUT, DateUtil.getYear(data.getDateOut()));
-            facilityServiceType.setField(MONTHOUT, DateUtil.getMonth(data.getDateOut()));
+            facilityServiceType.putUpdateField(YEAROUT, DateUtil.getYear(data.getDateOut()));
+            facilityServiceType.putUpdateField(MONTHOUT, DateUtil.getMonth(data.getDateOut()));
 
-            facilityServiceType.setField(RAH, facilityServiceType.getAccountNumber());
+            facilityServiceType.putUpdateField(RAH, facilityServiceType.getAccountNumber());
 
             Cursor<PaymentAndBenefitData> cursorTarif = serviceProviderAdapter.getPaymentAndBenefit(facilityServiceType.getUserOrganizationId(),
                     facilityServiceType.getAccountNumber(), facilityServiceType.getDate());
@@ -237,8 +237,8 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
 
                 if (tarif != null){
                     FacilityTarif facilityTarif = new FacilityTarif();
-                    facilityTarif.setField(FacilityTarifDBF.TAR_COST, tarif);
-                    facilityTarif.setField(FacilityTarifDBF.TAR_CDPLG, serviceCode);
+                    facilityTarif.putUpdateField(FacilityTarifDBF.TAR_COST, tarif);
+                    facilityTarif.putUpdateField(FacilityTarifDBF.TAR_CDPLG, serviceCode);
                     facilityTarif.setDate(facilityServiceType.getDate());
 
                     List<FacilityTarif> list = facilityReferenceBookBean.getFacilityTarifs(FilterWrapper.of(facilityTarif));
@@ -246,8 +246,8 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                     if (!list.isEmpty()){
                         FacilityTarif ft = list.get(0);
 
-                        facilityServiceType.setField(TARIF, ft.getField(TAR_CODE));
-                        facilityServiceType.setField(RIZN, ft.getField(TAR_SERV));
+                        facilityServiceType.putUpdateField(TARIF, ft.getField(TAR_CODE));
+                        facilityServiceType.putUpdateField(RIZN, ft.getField(TAR_SERV));
 
                         facilityServiceType.setStatus(PROCESSED);
                     }else{

@@ -36,7 +36,7 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
         subsidy.setStreetId(streetId);
         subsidy.setStreetTypeId(streetTypeId);
         subsidy.setBuildingId(buildingId);
-        subsidy.setField(SubsidyDBF.FLAT + "_CYR", apartment != null ? apartment : "");
+        subsidy.putField(SubsidyDBF.FLAT + "_CYR", apartment != null ? apartment : "");
     }
 
     @Override

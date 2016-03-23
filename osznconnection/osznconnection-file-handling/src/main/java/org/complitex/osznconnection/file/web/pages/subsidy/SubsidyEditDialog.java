@@ -221,7 +221,7 @@ public class SubsidyEditDialog extends Panel {
                 for (int i = 1; i <= 8; ++i){
                     BigDecimal sm = summa.multiply((BigDecimal) subsidy.getField("SB" + i))
                             .divide(sumSBn, 2, RoundingMode.HALF_UP);
-                    subsidy.setField("SM" + i, sm);
+                    subsidy.putField("SM" + i, sm);
 
                     target.add(textFieldMap.get("SM" + i));
                 }
@@ -240,7 +240,7 @@ public class SubsidyEditDialog extends Panel {
                     for (int i = 0; i < Math.abs(diff); ++i){
                         int index = (i % 8) + 1;
 
-                        subsidy.setField("SM" + index, ((BigDecimal)subsidy.getField("SM" + index)).add(one));
+                        subsidy.putField("SM" + index, ((BigDecimal)subsidy.getField("SM" + index)).add(one));
                     }
                 }
             }
@@ -258,9 +258,9 @@ public class SubsidyEditDialog extends Panel {
 
                 SubsidySum subsidySum = subsidyService.getSubsidySum(subsidy);
 
-                subsidy.setField(NM_PAY, subsidySum.getNSum());
-                subsidy.setField(SUMMA, subsidySum.getSmSum());
-                subsidy.setField(SUBS, subsidySum.getSbSum());
+                subsidy.putField(NM_PAY, subsidySum.getNSum()); //todo update field
+                subsidy.putField(SUMMA, subsidySum.getSmSum());
+                subsidy.putField(SUBS, subsidySum.getSbSum());
 
                 validate(target);
             }

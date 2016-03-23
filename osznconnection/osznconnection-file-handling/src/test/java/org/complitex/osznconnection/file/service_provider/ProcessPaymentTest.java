@@ -53,14 +53,14 @@ public class ProcessPaymentTest extends AbstractTest {
             }
 
             @Override
-            public void setField(String fieldName, Object object) {
+            public void putField(String fieldName, Object object) {
                 getDbfFields().put(fieldName, object != null ? object.toString() : null);
             }
         };
         Benefit b = new Benefit() {
 
             @Override
-            public void setField(String fieldName, Object object) {
+            public void putField(String fieldName, Object object) {
                 getDbfFields().put(fieldName, object != null ? object.toString() : null);
             }
         };

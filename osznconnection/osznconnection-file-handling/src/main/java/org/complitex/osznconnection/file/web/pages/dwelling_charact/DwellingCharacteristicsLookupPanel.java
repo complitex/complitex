@@ -1,13 +1,10 @@
 package org.complitex.osznconnection.file.web.pages.dwelling_charact;
 
 import org.apache.wicket.Component;
-import org.complitex.common.entity.Cursor;
-import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.entity.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.DwellingCharacteristicsDBF;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
 
 import javax.ejb.EJB;
@@ -31,7 +28,7 @@ public class DwellingCharacteristicsLookupPanel extends AbstractLookupPanel<Dwel
         dwellingCharacteristics.setStreetId(streetId);
         dwellingCharacteristics.setStreetTypeId(streetTypeId);
         dwellingCharacteristics.setBuildingId(buildingId);
-        dwellingCharacteristics.setField(DwellingCharacteristicsDBF.APT, apartment != null ? apartment : "");
+        dwellingCharacteristics.putField(DwellingCharacteristicsDBF.APT, apartment != null ? apartment : "");
     }
 
     @Override

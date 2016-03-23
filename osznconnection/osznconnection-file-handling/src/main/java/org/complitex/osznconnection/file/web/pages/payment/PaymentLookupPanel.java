@@ -37,7 +37,7 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
         payment.setStreetId(streetId);
         payment.setStreetTypeId(streetTypeId);
         payment.setBuildingId(buildingId);
-        payment.setField(PaymentDBF.FLAT, apartment != null ? apartment : "");
+        payment.putField(PaymentDBF.FLAT, apartment != null ? apartment : "");
     }
 
     @Override

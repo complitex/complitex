@@ -2,8 +2,6 @@ package org.complitex.osznconnection.file.service;
 
 import com.google.common.collect.ImmutableMap;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.AbstractBean;
-import org.complitex.correction.entity.Correction;
 import org.complitex.correction.service.CorrectionBean;
 import org.complitex.osznconnection.file.entity.OwnershipCorrection;
 
@@ -22,12 +20,12 @@ public class OwnershipCorrectionBean extends CorrectionBean {
     /**
      * Найти id внутреннего объекта системы(форму власти) в таблице коррекций форм власти по коррекции(correction) и организации(organizationId)
      * @param correction
-     * @param calculationCenterId
+     * @param organizationId
      * @return
      */
 
-    public Long findInternalOwnership(String correction, long calculationCenterId) {
-        Map<String, Object> params = ImmutableMap.<String, Object>of("correction", correction, "organizationId", calculationCenterId);
+    public Long findInternalOwnership(String correction, long organizationId) {
+        Map<String, Object> params = ImmutableMap.<String, Object>of("correction", correction, "organizationId", organizationId);
         List<Long> ids = sqlSession().selectList(NS + ".findInternalOwnership", params);
         if (ids != null && !ids.isEmpty()) {
             return ids.get(0);

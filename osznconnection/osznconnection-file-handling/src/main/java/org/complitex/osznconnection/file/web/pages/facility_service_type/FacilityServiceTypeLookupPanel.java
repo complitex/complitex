@@ -1,13 +1,10 @@
 package org.complitex.osznconnection.file.web.pages.facility_service_type;
 
 import org.apache.wicket.Component;
-import org.complitex.common.entity.Cursor;
-import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.entity.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.FacilityServiceTypeDBF;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
 
 import javax.ejb.EJB;
@@ -35,7 +32,7 @@ public class FacilityServiceTypeLookupPanel extends AbstractLookupPanel<Facility
         facilityServiceType.setStreetId(streetId);
         facilityServiceType.setStreetTypeId(streetTypeId);
         facilityServiceType.setBuildingId(buildingId);
-        facilityServiceType.setField(FacilityServiceTypeDBF.APT, apartment != null ? apartment : "");
+        facilityServiceType.putField(FacilityServiceTypeDBF.APT, apartment != null ? apartment : "");
     }
 
     @Override
