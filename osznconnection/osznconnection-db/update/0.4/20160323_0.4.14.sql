@@ -1,6 +1,6 @@
 ALTER TABLE `facility_service_type` MODIFY COLUMN `COD` INTEGER(4) COMMENT 'Код района';
-ALTER TABLE `facility_service_type` MODIFY COLUMN `CDPR` INTEGER(12) COMMENT 'Код ЄДРПОУ (ОГРН) организации';
-ALTER TABLE `facility_service_type` MODIFY COLUMN `NCARD` INTEGER(10) COMMENT 'Идентификатор льготника';
+ALTER TABLE `facility_service_type` MODIFY COLUMN `CDPR` BIGINT(12) COMMENT 'Код ЄДРПОУ (ОГРН) организации';
+ALTER TABLE `facility_service_type` MODIFY COLUMN `NCARD` BIGINT(10) COMMENT 'Идентификатор льготника';
 ALTER TABLE `facility_service_type` MODIFY COLUMN `IDCODE` VARCHAR(10) COMMENT 'ИНН собственника жилья/льготника (ставят ИНН льготника)';
 ALTER TABLE `facility_service_type` MODIFY COLUMN `PASP` VARCHAR(14) COMMENT 'Серия и номер паспорта собственника жилья/льготника (ставят паспорт льготника)';
 ALTER TABLE `facility_service_type` MODIFY COLUMN `FIO` VARCHAR(50) COMMENT 'ФИО собственника жилья/льготника (ставят ФИО льготника)';
@@ -20,6 +20,24 @@ ALTER TABLE `facility_service_type` MODIFY COLUMN `YEAROUT` INTEGER(4) COMMENT '
 ALTER TABLE `facility_service_type` MODIFY COLUMN `MONTHOUT` INTEGER(2) COMMENT 'Месяц окончания действия льготы';
 ALTER TABLE `facility_service_type` MODIFY COLUMN `RAH` VARCHAR(25) COMMENT 'Номер л/с ПУ';
 ALTER TABLE `facility_service_type` MODIFY COLUMN `RIZN` INTEGER(6) COMMENT 'Тип услуги';
-ALTER TABLE `facility_service_type` MODIFY COLUMN `TARIF` INTEGER(10) COMMENT 'Код тарифа услуги';
+ALTER TABLE `facility_service_type` MODIFY COLUMN `TARIF` BIGINT(10) COMMENT 'Код тарифа услуги';
+
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `COD` INTEGER(4) COMMENT 'Код района';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `CDPR` BIGINT(12) COMMENT 'Код ЄДРПОУ (ОГРН) организации';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `NCARD` BIGINT(10) COMMENT 'Идентификатор льготника';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `IDCODE` VARCHAR(10) COMMENT 'ИНН собственника жилья/льготника (ставят ИНН льготника)';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `PASP` VARCHAR(14) COMMENT 'Серия и номер паспорта собственника жилья/льготника (ставят паспорт льготника)';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `FIO` VARCHAR(50) COMMENT 'ФИО собственника жилья/льготника (ставят ФИО льготника)';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `IDPIL` VARCHAR(10) COMMENT 'ИНН льготника';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `PASPPIL` VARCHAR(14) COMMENT 'Серия и номер паспорта льготника';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `FIOPIL` VARCHAR(50) COMMENT 'ФИО льготника';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `INDEX` INTEGER(6) COMMENT 'Почтовый индекс';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `CDUL` INTEGER(5) COMMENT 'Код улицы';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `HOUSE` VARCHAR(7) COMMENT 'Номер дома';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `BUILD` VARCHAR(2) COMMENT 'Корпус';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `APT` VARCHAR(4) COMMENT 'Номер квартиры';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `VL` INTEGER(3) COMMENT 'Тип собственности';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `PLZAG` DECIMAL(8,2) COMMENT 'Общая площадь помещения';
+ALTER TABLE `dwelling_characteristics` MODIFY COLUMN `PLOPAL` DECIMAL(8,2) COMMENT 'Отапливаемая площадь помещения';
 
 INSERT INTO `update` (`version`) VALUE ('20160323_0.4.14');
