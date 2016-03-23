@@ -315,7 +315,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 list.forEach(request -> {
                     //noinspection Duplicates
                     try {
-                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, request, false);
+                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, request);
 
                         if (request.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
                             info(getStringFormat("info_bound", request.getInn(), request.getFio()));

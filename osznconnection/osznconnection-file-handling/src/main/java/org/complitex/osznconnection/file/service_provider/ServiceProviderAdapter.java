@@ -165,7 +165,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     public void acquireFacilityPersonAccount(AbstractAccountRequest request,
                                              String district, String organizationCode, String streetType, String street, String buildingNumber,
                                              String buildingCorp, String apartment, Date date, String inn,
-                                             String passport, boolean benefit) throws DBException {
+                                             String passport) throws DBException {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
         Cursor<AccountDetail> cursor = getAccountDetails(dataSource, district, organizationCode, streetType, street, buildingNumber,
@@ -177,34 +177,33 @@ public class ServiceProviderAdapter extends AbstractBean {
             return;
         }
 
-        if (benefit){
-            for (AccountDetail accountDetail : cursor.getData()) {
-                Cursor<BenefitData> benefitDataCursor = getBenefitData(dataSource, accountDetail.getAccCode(), date);
+        for (AccountDetail accountDetail : cursor.getData()) {
+            checkFacilityPerson(request, accountDetail.getAccCode(), date, inn, passport);
 
-                for (BenefitData d : benefitDataCursor.getData()){
-                    if (inn != null && inn.equals(d.getInn())
-                            || (passport != null && passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){
-                        request.setAccountNumber(accountDetail.getAccCode());
-                        request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
-
-                        return;
-                    }
-                }
-            }
-
-            log.info("acquireFacilityPersonAccount BENEFIT_OWNER_NOT_ASSOCIATED inn='{}', passport='{}'", inn, passport);
-
-            request.setStatus(RequestStatus.BENEFIT_OWNER_NOT_ASSOCIATED);
-        }else{
-            if (cursor.getData().size() == 1){
-                AccountDetail accountDetail = cursor.getData().get(0);
-
-                request.setAccountNumber(accountDetail.getAccCode());
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
-            }else if (cursor.getData().size() > 1){
-                request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
+            if (request.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
+                return;
             }
         }
+    }
+
+    public void checkFacilityPerson(AbstractAccountRequest request, String accountNumber, Date date, String inn, String passport) throws DBException {
+        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
+
+        Cursor<BenefitData> benefitDataCursor = getBenefitData(dataSource, accountNumber, date);
+
+        for (BenefitData d : benefitDataCursor.getData()){
+            if (inn != null && inn.equals(d.getInn())
+                    || (passport != null && passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){
+                request.setAccountNumber(accountNumber);
+                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+
+                return;
+            }
+        }
+
+        log.info("acquireFacilityPersonAccount BENEFIT_OWNER_NOT_ASSOCIATED inn='{}', passport='{}'", inn, passport);
+
+        request.setStatus(RequestStatus.BENEFIT_OWNER_NOT_ASSOCIATED);
     }
 
     private void updateCursorResultCode(AbstractAccountRequest request, Cursor<AccountDetail> cursor) {
@@ -378,7 +377,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         sqlSession(dataSource).selectOne(NS + ".getAttrsByPerson", params);
 
-        log.info("getAttrsByPerson {}", params);
+        log.info("getAttrsByPerson GetAttrsByPerson {}", params);
 
         return new Cursor<>((Integer) params.get("resultCode"), (List<AccountDetail>) params.get("accountDetails"));
     }

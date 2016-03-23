@@ -19,6 +19,7 @@ import java.util.Set;
 
 import static org.complitex.address.util.AddressUtil.replaceApartmentSymbol;
 import static org.complitex.address.util.AddressUtil.replaceBuildingNumberSymbol;
+import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
 
 /**
  * Разрешает номер л/c
@@ -112,7 +113,7 @@ public class PersonAccountService extends AbstractBean {
 
             if (localAccountNumber != null) {
                 request.setAccountNumber(localAccountNumber);
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+                request.setStatus(ACCOUNT_NUMBER_RESOLVED);
             }
         } catch (MoreOneAccountException e) {
             request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
@@ -128,7 +129,7 @@ public class PersonAccountService extends AbstractBean {
 
             if (accountNumber != null) {
                 request.setAccountNumber(accountNumber);
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+                request.setStatus(ACCOUNT_NUMBER_RESOLVED);
 
                 return;
             }
@@ -140,7 +141,7 @@ public class PersonAccountService extends AbstractBean {
                     request.getOutgoingBuildingNumber(), request.getOutgoingBuildingCorp(),
                     request.getOutgoingApartment(), request.getDate(), updatePuAccount);
 
-            if (request.getStatus() == RequestStatus.ACCOUNT_NUMBER_RESOLVED) {
+            if (request.getStatus() == ACCOUNT_NUMBER_RESOLVED) {
                 //check servicing organization
                 if (serviceProviderCode != null && accountDetail.getZheu() != null &&
                         !serviceProviderCode.toUpperCase().equals(accountDetail.getZheu().toUpperCase())){
@@ -196,7 +197,7 @@ public class PersonAccountService extends AbstractBean {
 
                     if (bond){
                         request.setAccountNumber(detail.getAccCode());
-                        request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+                        request.setStatus(ACCOUNT_NUMBER_RESOLVED);
 
                         save(request, accountNumber);
                     }else {
@@ -219,7 +220,7 @@ public class PersonAccountService extends AbstractBean {
 
     public void updateAccountNumber(Payment payment, String accountNumber) {
         payment.setAccountNumber(accountNumber);
-        payment.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+        payment.setStatus(ACCOUNT_NUMBER_RESOLVED);
 
         benefitBean.updateAccountNumber(payment.getId(), accountNumber);
         paymentBean.updateAccountNumber(payment);
@@ -241,7 +242,7 @@ public class PersonAccountService extends AbstractBean {
 
     public void updateAccountNumber(ActualPayment actualPayment, String accountNumber) {
         actualPayment.setAccountNumber(accountNumber);
-        actualPayment.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+        actualPayment.setStatus(ACCOUNT_NUMBER_RESOLVED);
         actualPaymentBean.updateAccountNumber(actualPayment);
 
         long actualPaymentFileId = actualPayment.getRequestFileId();
@@ -262,7 +263,7 @@ public class PersonAccountService extends AbstractBean {
 
     public void updateAccountNumber(Subsidy subsidy, String accountNumber) {
         subsidy.setAccountNumber(accountNumber);
-        subsidy.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+        subsidy.setStatus(ACCOUNT_NUMBER_RESOLVED);
         subsidyBean.updateAccountNumberForSimilarSubs(subsidy);
 
         long subsidyFileId = subsidy.getRequestFileId();
@@ -281,42 +282,58 @@ public class PersonAccountService extends AbstractBean {
     }
 
     public void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics, String accountNumber) {
-        dwellingCharacteristics.setAccountNumber(accountNumber);
-        dwellingCharacteristics.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
-        dwellingCharacteristicsBean.updateAccountNumber(dwellingCharacteristics);
-
-        long dwellingCharacteristicsFileId = dwellingCharacteristics.getRequestFileId();
-        RequestFile dwellingCharacteristicsFile = requestFileBean.getRequestFile(dwellingCharacteristicsFileId);
-
-        if (dwellingCharacteristicsBean.isDwellingCharacteristicsFileBound(dwellingCharacteristicsFileId)) {
-            dwellingCharacteristicsFile.setStatus(RequestFileStatus.BOUND);
-            requestFileBean.save(dwellingCharacteristicsFile);
-        }
-
         try {
+            serviceProviderAdapter.checkFacilityPerson(dwellingCharacteristics, accountNumber, dwellingCharacteristics.getDate(),
+                    dwellingCharacteristics.getInn(), dwellingCharacteristics.getPassport());
+
+            if (!dwellingCharacteristics.getStatus().equals(ACCOUNT_NUMBER_RESOLVED)){
+                dwellingCharacteristicsBean.update(dwellingCharacteristics);
+
+                return;
+            }
+
+            dwellingCharacteristicsBean.updateAccountNumber(dwellingCharacteristics);
+
+            long dwellingCharacteristicsFileId = dwellingCharacteristics.getRequestFileId();
+            RequestFile dwellingCharacteristicsFile = requestFileBean.getRequestFile(dwellingCharacteristicsFileId);
+
+            if (dwellingCharacteristicsBean.isDwellingCharacteristicsFileBound(dwellingCharacteristicsFileId)) {
+                dwellingCharacteristicsFile.setStatus(RequestFileStatus.BOUND);
+                requestFileBean.save(dwellingCharacteristicsFile);
+            }
+
+
             save(dwellingCharacteristics, dwellingCharacteristics.getInn());
-        } catch (MoreOneAccountException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
 
     public void updateAccountNumber(FacilityServiceType facilityServiceType, String accountNumber) {
-        facilityServiceType.setAccountNumber(accountNumber);
-        facilityServiceType.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
-        facilityServiceTypeBean.updateAccountNumber(facilityServiceType);
-
-        long facilityServiceTypeFileId = facilityServiceType.getRequestFileId();
-        RequestFile facilityServiceTypeFile = requestFileBean.getRequestFile(facilityServiceTypeFileId);
-
-        if (facilityServiceTypeBean.isFacilityServiceTypeFileBound(facilityServiceTypeFileId)) {
-            facilityServiceTypeFile.setStatus(RequestFileStatus.BOUND);
-            requestFileBean.save(facilityServiceTypeFile);
-        }
-
         try {
+            serviceProviderAdapter.checkFacilityPerson(facilityServiceType, accountNumber, facilityServiceType.getDate(),
+                    facilityServiceType.getInn(), facilityServiceType.getPassport());
+
+            if (!facilityServiceType.getStatus().equals(ACCOUNT_NUMBER_RESOLVED)){
+                facilityServiceTypeBean.update(facilityServiceType);
+
+                return;
+            }
+
+            facilityServiceTypeBean.updateAccountNumber(facilityServiceType);
+
+            long facilityServiceTypeFileId = facilityServiceType.getRequestFileId();
+            RequestFile facilityServiceTypeFile = requestFileBean.getRequestFile(facilityServiceTypeFileId);
+
+            if (facilityServiceTypeBean.isFacilityServiceTypeFileBound(facilityServiceTypeFileId)) {
+                facilityServiceTypeFile.setStatus(RequestFileStatus.BOUND);
+                requestFileBean.save(facilityServiceTypeFile);
+            }
+
+
             save(facilityServiceType, facilityServiceType.getInn());
-        } catch (MoreOneAccountException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

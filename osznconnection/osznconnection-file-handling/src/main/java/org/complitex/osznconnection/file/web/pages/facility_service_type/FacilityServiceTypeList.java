@@ -322,7 +322,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
                 //noinspection Duplicates
                 list.forEach(request -> {
                     try {
-                        facilityServiceTypeBindTaskBean.bind(serviceProviderCode, request, false);
+                        facilityServiceTypeBindTaskBean.bind(serviceProviderCode, request);
 
                         if (request.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
                             info(getStringFormat("info_bound", request.getInn(), request.getFio()));
