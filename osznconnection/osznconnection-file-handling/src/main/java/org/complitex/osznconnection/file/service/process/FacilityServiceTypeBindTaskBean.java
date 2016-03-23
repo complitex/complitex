@@ -8,10 +8,7 @@ import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.FacilityServiceType;
-import org.complitex.osznconnection.file.entity.FileHandlingConfig;
-import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.RequestFileStatus;
+import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
@@ -115,15 +112,23 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
 
     public void bind(String serviceProviderCode, FacilityServiceType facilityServiceType)
             throws DBException {
-        //resolve address
-        resolveAddress(facilityServiceType);
+        String inn = facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL);
 
-        if (facilityServiceType.getStatus().isAddressResolved()){
-            //resolve local account.
-            resolveLocalAccount(facilityServiceType);
+        //resolve local account number
+        personAccountService.localResolveAccountNumber(facilityServiceType, inn, true);
 
-            if (facilityServiceType.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-                resolveRemoteAccountNumber(serviceProviderCode, facilityServiceType);
+        //noinspection Duplicates
+        if (facilityServiceType.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
+            //resolve address
+            resolveAddress(facilityServiceType);
+
+            if (facilityServiceType.getStatus().isAddressResolved()){
+                //resolve local account.
+                resolveLocalAccount(facilityServiceType);
+
+                if (facilityServiceType.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
+                    resolveRemoteAccountNumber(serviceProviderCode, facilityServiceType);
+                }
             }
         }
 

@@ -107,15 +107,23 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
     }
 
     public void bind(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws DBException {
-        //resolve address
-        resolveAddress(dwellingCharacteristics);
+        String inn = dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDPIL);
 
-        if (dwellingCharacteristics.getStatus().isAddressResolved()){
-            //resolve local account.
-            resolveLocalAccount(dwellingCharacteristics);
+        //resolve local account number
+        personAccountService.localResolveAccountNumber(dwellingCharacteristics, inn, true);
 
-            if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-                resolveRemoteAccountNumber(serviceProviderCode, dwellingCharacteristics);
+        //noinspection Duplicates
+        if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
+            //resolve address
+            resolveAddress(dwellingCharacteristics);
+
+            if (dwellingCharacteristics.getStatus().isAddressResolved()){
+                //resolve local account.
+                resolveLocalAccount(dwellingCharacteristics);
+
+                if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
+                    resolveRemoteAccountNumber(serviceProviderCode, dwellingCharacteristics);
+                }
             }
         }
 

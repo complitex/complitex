@@ -67,16 +67,16 @@ public class PersonAccountService extends AbstractBean {
     @EJB
     private AddressService addressService;
 
-    public String getLocalAccountNumber(AbstractAccountRequest request, String accountNumber) throws MoreOneAccountException {
-        return getLocalAccountNumber(request, accountNumber, false);
+    public String getLocalAccountNumber(AbstractAccountRequest request, String puAccountNumber) throws MoreOneAccountException {
+        return getLocalAccountNumber(request, puAccountNumber, false);
     }
 
-    public String getLocalAccountNumber(AbstractAccountRequest request, String accountNumber, boolean useAddressNames)
+    public String getLocalAccountNumber(AbstractAccountRequest request, String puAccountNumber, boolean useAddressNames)
             throws MoreOneAccountException {
         Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
 
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(new PersonAccount(request,
-                accountNumber, billingId, useAddressNames)));
+                puAccountNumber, billingId, useAddressNames)));
 
         if (personAccounts.size() == 1){
             return personAccounts.get(0).getAccountNumber();
@@ -124,10 +124,10 @@ public class PersonAccountService extends AbstractBean {
                                      boolean updatePuAccount) throws DBException {
         try {
             //resolve local account
-            String localAccountNumber = getLocalAccountNumber(request, puAccountNumber, false);
+            String accountNumber = getLocalAccountNumber(request, puAccountNumber, false);
 
-            if (localAccountNumber != null) {
-                request.setAccountNumber(localAccountNumber);
+            if (accountNumber != null) {
+                request.setAccountNumber(accountNumber);
                 request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
                 return;

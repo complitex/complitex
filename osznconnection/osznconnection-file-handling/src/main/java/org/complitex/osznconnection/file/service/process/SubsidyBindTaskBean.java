@@ -66,11 +66,10 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
     public void bind(String serviceProviderCode, Subsidy subsidy, boolean updatePuAccount) throws DBException {
         String puAccountNumber = subsidy.getStringField(SubsidyDBF.RASH);
 
-
         //resolve local account number
         personAccountService.localResolveAccountNumber(subsidy, puAccountNumber, true);
 
-        if (!ACCOUNT_NUMBER_RESOLVED.equals(subsidy.getStatus()) && !MORE_ONE_ACCOUNTS_LOCALLY.equals(subsidy.getStatus())){
+        if (subsidy.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
             //resolve address
             String city = subsidy.getCity();
 
