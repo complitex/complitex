@@ -364,8 +364,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         //ОСЗН
         form.add(new OrganizationIdPicker("organization",
                 new PropertyModel<>(model, "organizationId"),
-                OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
-                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE));
+                getOsznOrganizationTypes()));
 
         // Организация пользователя
         form.add(new OrganizationIdPicker("userOrganization",
@@ -729,6 +728,11 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                 startTimer(target, getLoadProcessType());
             }
+
+            @Override
+            protected Long[] getOsznOrganizationTypes() {
+                return AbstractProcessableListPanel.this.getOsznOrganizationTypes();
+            }
         };
         add(requestFileLoadPanel);
 
@@ -790,7 +794,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         selectManager.clearSelection();
         timerManager.addTimer();
         target.add(form);
-
     }
 
     protected WebMarkupContainer getDataViewContainer() {
@@ -803,5 +806,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     public IModel<F> getModel() {
         return model;
+    }
+
+    protected Long[] getOsznOrganizationTypes(){
+        return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
+                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
     }
 }

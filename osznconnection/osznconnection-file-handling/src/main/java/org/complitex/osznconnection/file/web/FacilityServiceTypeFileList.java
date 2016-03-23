@@ -11,6 +11,7 @@ import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.file.web.pages.facility_service_type.FacilityServiceTypeList;
+import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.pages.ScrollListPage;
 import org.complitex.template.web.security.SecurityRole;
@@ -95,6 +96,11 @@ public final class FacilityServiceTypeFileList extends ScrollListPage {
             @Override
             protected MonthParameterViewMode getLoadMonthParameterViewMode() {
                 return MonthParameterViewMode.EXACT;
+            }
+
+            @Override
+            protected Long[] getOsznOrganizationTypes() {
+                return new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
             }
         });
     }

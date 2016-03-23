@@ -69,8 +69,7 @@ public abstract class RequestFileLoadPanel extends Panel {
         final IModel<Long> osznModel = new Model<>();
         form.add(new OrganizationIdPicker("oszn",
                 osznModel,
-                OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
-                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE));
+                getOsznOrganizationTypes()));
 
         //user organization
         final WebMarkupContainer userOrganizationContainer = new WebMarkupContainer("userOrganizationContainer");
@@ -178,4 +177,9 @@ public abstract class RequestFileLoadPanel extends Panel {
     }
 
     protected abstract void load(Long userOrganizationId, Long osznId, DateParameter dateParameter, AjaxRequestTarget target);
+
+    protected Long[] getOsznOrganizationTypes(){
+        return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
+                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
+    }
 }

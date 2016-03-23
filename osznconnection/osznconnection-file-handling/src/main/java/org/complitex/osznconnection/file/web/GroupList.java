@@ -28,6 +28,7 @@ import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.file.web.pages.benefit.BenefitList;
 import org.complitex.osznconnection.file.web.pages.payment.PaymentList;
+import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.pages.ScrollListPage;
 import org.complitex.template.web.security.SecurityRole;
@@ -276,6 +277,11 @@ public class GroupList extends ScrollListPage {
             for (RequestFile rf : processManagerBean.getLinkError(ProcessType.LOAD_GROUP, true)) {
                 error(getStringFormat("request_file.link_error", rf.getFullName()));
             }
+        }
+
+        @Override
+        protected Long[] getOsznOrganizationTypes() {
+            return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE};
         }
     }
     private final GroupListPanel groupListPanel;

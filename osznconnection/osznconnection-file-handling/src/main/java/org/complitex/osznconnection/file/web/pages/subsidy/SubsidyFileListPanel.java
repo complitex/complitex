@@ -18,6 +18,7 @@ import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.SubsidyFileList;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
+import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -138,5 +139,10 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     @Override
     protected boolean isExportVisible() {
         return true;
+    }
+
+    @Override
+    protected Long[] getOsznOrganizationTypes() {
+        return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE};
     }
 }
