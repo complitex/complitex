@@ -402,8 +402,8 @@
             <field length="3" type="java.lang.Integer" name="TAR_METER"/>
             <field scale="2" length="11" type="java.math.BigDecimal" name="TAR_NMBAS"/>
             <field scale="2" length="11" type="java.math.BigDecimal" name="TAR_NMSUP"/>
-            <field scale="4" length="11" type="java.math.BigDecimal" name="TAR_NMUBS"/>
-            <field scale="4" length="11" type="java.math.BigDecimal" name="TAR_NMUSP"/>
+            <field scale="6" length="22" type="java.math.BigDecimal" name="TAR_NMUBS"/>
+            <field scale="6" length="22" type="java.math.BigDecimal" name="TAR_NMUSP"/>
             <field scale="4" length="11" type="java.math.BigDecimal" name="TAR_NMUMX"/>
             <field length="10" type="java.lang.Integer" name="TAR_TPNMB"/>
             <field length="10" type="java.lang.Integer" name="TAR_TPNMS"/>

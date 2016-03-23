@@ -109,6 +109,7 @@ public abstract class AbstractSaveTaskBean{
         final RequestFileDescription description = requestFileDescriptionBean.getFileDescription(requestFile.getType());
 
         DBFWriter writer = null;
+        String fieldName = "";
 
         try {
             //устанавливаем абсолютный путь для сохранения файла запроса
@@ -142,7 +143,7 @@ public abstract class AbstractSaveTaskBean{
                 Object[] rowData = new Object[fields.length];
 
                 for (int i = 0; i < fields.length; ++i) {
-                    String fieldName = fields[i].getName();
+                    fieldName = fields[i].getName();
 
                     RequestFileFieldDescription fieldDescription = description.getField(fieldName);
                     if (fieldDescription == null) {
@@ -168,6 +169,9 @@ public abstract class AbstractSaveTaskBean{
             if (writer != null) {
                 writer.rollback();
             }
+
+            log.error("error save fieldName = {}", fieldName);
+
             throw new SaveException(e, requestFile);
         }
     }
