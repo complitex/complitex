@@ -2,6 +2,7 @@ package org.complitex.osznconnection.file.entity;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 
@@ -11,7 +12,7 @@ public class StatusDetail implements Serializable {
 
     private String id;
     private Long count;
-    private Map<String, String> details;
+    private Map<String, Object> details;
 
     public String getId() {
         return id;
@@ -21,16 +22,16 @@ public class StatusDetail implements Serializable {
         this.id = id;
     }
 
-    public Map<String, String> getDetails() {
+    public Map<String, Object> getDetails() {
         return details;
     }
 
-    public void setDetails(Map<String, String> details) {
+    public void setDetails(Map<String, Object> details) {
         this.details = details;
     }
 
     public String getDetail(String detailName) {
-        return details.get(detailName);
+        return Objects.toString(details.get(detailName));
     }
 
     public Long getCount() {
