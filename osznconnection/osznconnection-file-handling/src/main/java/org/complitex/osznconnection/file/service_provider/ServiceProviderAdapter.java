@@ -165,7 +165,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     public void acquireFacilityPersonAccount(AbstractAccountRequest request,
                                              String district, String organizationCode, String streetType, String street, String buildingNumber,
                                              String buildingCorp, String apartment, Date date, String inn,
-                                             String passport) throws DBException {
+                                             String passport, boolean benefit) throws DBException {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
         Cursor<AccountDetail> cursor = getAccountDetails(dataSource, district, organizationCode, streetType, street, buildingNumber,
@@ -177,23 +177,34 @@ public class ServiceProviderAdapter extends AbstractBean {
             return;
         }
 
-        for (AccountDetail accountDetail : cursor.getData()) {
-            Cursor<BenefitData> benefitDataCursor = getBenefitData(dataSource, accountDetail.getAccCode(), date);
+        if (benefit){
+            for (AccountDetail accountDetail : cursor.getData()) {
+                Cursor<BenefitData> benefitDataCursor = getBenefitData(dataSource, accountDetail.getAccCode(), date);
 
-            for (BenefitData d : benefitDataCursor.getData()){
-                if (inn != null && inn.equals(d.getInn())
-                        || (passport != null && passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){
-                    request.setAccountNumber(accountDetail.getAccCode());
-                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+                for (BenefitData d : benefitDataCursor.getData()){
+                    if (inn != null && inn.equals(d.getInn())
+                            || (passport != null && passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){
+                        request.setAccountNumber(accountDetail.getAccCode());
+                        request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
-                    return;
+                        return;
+                    }
                 }
             }
+
+            log.info("acquireFacilityPersonAccount BENEFIT_OWNER_NOT_ASSOCIATED inn='{}', passport='{}'", inn, passport);
+
+            request.setStatus(RequestStatus.BENEFIT_OWNER_NOT_ASSOCIATED);
+        }else{
+            if (cursor.getData().size() == 1){
+                AccountDetail accountDetail = cursor.getData().get(0);
+
+                request.setAccountNumber(accountDetail.getAccCode());
+                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+            }else if (cursor.getData().size() > 1){
+                request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
+            }
         }
-
-        log.info("acquireFacilityPersonAccount BENEFIT_OWNER_NOT_ASSOCIATED inn='{}', passport='{}'", inn, passport);
-
-        request.setStatus(RequestStatus.BENEFIT_OWNER_NOT_ASSOCIATED);
     }
 
     private void updateCursorResultCode(AbstractAccountRequest request, Cursor<AccountDetail> cursor) {

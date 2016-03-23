@@ -86,14 +86,14 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
         }
     }
 
-    private boolean resolveRemoteAccountNumber(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws DBException {
+    private boolean resolveRemoteAccountNumber(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics, boolean benefit) throws DBException {
         serviceProviderAdapter.acquireFacilityPersonAccount(dwellingCharacteristics,
                 dwellingCharacteristics.getOutgoingDistrict(), serviceProviderCode, dwellingCharacteristics.getOutgoingStreetType(),
                 dwellingCharacteristics.getOutgoingStreet(),
                 dwellingCharacteristics.getOutgoingBuildingNumber(), dwellingCharacteristics.getOutgoingBuildingCorp(),
                 dwellingCharacteristics.getOutgoingApartment(), dwellingCharacteristics.getDate(),
                 dwellingCharacteristics.getInn(),
-                dwellingCharacteristics.getPassport());
+                dwellingCharacteristics.getPassport(), benefit);
 
         if (dwellingCharacteristics.getStatus() == RequestStatus.ACCOUNT_NUMBER_RESOLVED) {
             try {
@@ -106,7 +106,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
         return dwellingCharacteristics.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    public void bind(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws DBException {
+    public void bind(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics, boolean benefit) throws DBException {
         String inn = dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDPIL);
 
         //resolve local account number
@@ -122,7 +122,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
                 resolveLocalAccount(dwellingCharacteristics);
 
                 if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-                    resolveRemoteAccountNumber(serviceProviderCode, dwellingCharacteristics);
+                    resolveRemoteAccountNumber(serviceProviderCode, dwellingCharacteristics, benefit);
                 }
             }
         }
@@ -160,7 +160,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
                 //связать dwelling characteristics запись
                 try {
                     userTransaction.begin();
-                    bind(serviceProviderCode, dwellingCharacteristic);
+                    bind(serviceProviderCode, dwellingCharacteristic, true);
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The dwelling characteristics item ( id = " + dwellingCharacteristic.getId() + ") was bound with error: ", e);

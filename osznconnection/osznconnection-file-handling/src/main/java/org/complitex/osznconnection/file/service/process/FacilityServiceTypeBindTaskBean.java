@@ -89,14 +89,14 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
         }
     }
 
-    private boolean resolveRemoteAccountNumber(String serviceProviderCode, FacilityServiceType facilityServiceType) throws DBException {
+    private boolean resolveRemoteAccountNumber(String serviceProviderCode, FacilityServiceType facilityServiceType, boolean benefit) throws DBException {
         serviceProviderAdapter.acquireFacilityPersonAccount(facilityServiceType,
                 facilityServiceType.getOutgoingDistrict(), serviceProviderCode, facilityServiceType.getOutgoingStreetType(),
                 facilityServiceType.getOutgoingStreet(),
                 facilityServiceType.getOutgoingBuildingNumber(), facilityServiceType.getOutgoingBuildingCorp(),
                 facilityServiceType.getOutgoingApartment(), facilityServiceType.getDate(),
                 facilityServiceType.getInn(),
-                facilityServiceType.getPassport());
+                facilityServiceType.getPassport(), benefit);
 
 
         if (facilityServiceType.getStatus() == ACCOUNT_NUMBER_RESOLVED) {
@@ -110,7 +110,7 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
         return facilityServiceType.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    public void bind(String serviceProviderCode, FacilityServiceType facilityServiceType)
+    public void bind(String serviceProviderCode, FacilityServiceType facilityServiceType, boolean benefit)
             throws DBException {
         String inn = facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL);
 
@@ -127,7 +127,7 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
                 resolveLocalAccount(facilityServiceType);
 
                 if (facilityServiceType.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
-                    resolveRemoteAccountNumber(serviceProviderCode, facilityServiceType);
+                    resolveRemoteAccountNumber(serviceProviderCode, facilityServiceType, benefit);
                 }
             }
         }
@@ -163,7 +163,7 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
                 //связать dwelling characteristics запись
                 try {
                     userTransaction.begin();
-                    bind(serviceProviderCode, facilityServiceType);
+                    bind(serviceProviderCode, facilityServiceType, true);
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The facility service type item ( id = " + facilityServiceType.getId() + ") was bound with error: ", e);
