@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
+import com.google.common.base.Strings;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
@@ -7,6 +8,8 @@ import org.complitex.common.entity.Log;
 import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.util.DateUtil;
+import org.complitex.correction.entity.ServiceCorrection;
+import org.complitex.correction.service.ServiceCorrectionBean;
 import org.complitex.organization.strategy.ServiceStrategy;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
@@ -71,6 +74,9 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
 
     @EJB
     private ServiceStrategy serviceStrategy;
+
+    @EJB
+    private ServiceCorrectionBean serviceCorrectionBean;
 
     @EJB
     private PrivilegeCorrectionBean privilegeCorrectionBean;
@@ -154,21 +160,32 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
         }
 
         //service code
-        Integer serviceCode = Integer.valueOf(facilityServiceType.getStringField(FacilityServiceTypeDBF.LGCODE));
+        String serviceCode = null;
 
-        //service check for user organization
-//        boolean hasService = organizationStrategy.getServices(facilityServiceType.getUserOrganizationId())
-//                .stream()
-//                .map(id -> serviceStrategy.getDomainObject(id))
-//                .filter(s -> s != null)
-//                .map(s -> s.getStringValue(ServiceStrategy.CODE))
-//                .findAny()
-//                .isPresent();
-//
-//        if (!hasService){
-//            facilityServiceType.setStatus(RequestStatus.SERVICE_NOT_FOUND);
-//            facilityServiceTypeBean.update(facilityServiceType);
-//        }
+        List<ServiceCorrection> serviceCorrections = serviceCorrectionBean.getServiceCorrections(FilterWrapper.of(
+                new ServiceCorrection(facilityServiceType.getStringField(FacilityServiceTypeDBF.LGCODE),
+                        facilityServiceType.getOrganizationId(), facilityServiceType.getUserOrganizationId())));
+
+        if (!serviceCorrections.isEmpty()){
+            ServiceCorrection serviceCorrection = serviceCorrections.get(0);
+
+            if (!Strings.isNullOrEmpty(serviceCorrection.getExternalId())){
+                serviceCode = serviceCorrection.getExternalId();
+            }else {
+                DomainObject service = serviceStrategy.getDomainObject(serviceCorrection.getObjectId());
+
+                if (service != null && !Strings.isNullOrEmpty(service.getStringValue(ServiceStrategy.CODE))){
+                    serviceCode = service.getStringValue(CODE);
+                }
+            }
+        }
+
+        if (serviceCode == null){
+            facilityServiceType.setStatus(SERVICE_NOT_FOUND);
+            facilityServiceTypeBean.update(facilityServiceType);
+
+            return;
+        }
 
         //benefit data
         Cursor<BenefitData> cursor = serviceProviderAdapter.getBenefitData(facilityServiceType.getUserOrganizationId(),
@@ -210,10 +227,10 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                 BigDecimal tarif = null;
 
                 switch (serviceCode){
-                    case 500:
+                    case "500":
                         tarif = d.getApartmentFeeTarif();
                         break;
-                    case 5061:
+                    case "5061":
                         tarif = d.getGarbageDisposalTarif();
                         break;
                 }
