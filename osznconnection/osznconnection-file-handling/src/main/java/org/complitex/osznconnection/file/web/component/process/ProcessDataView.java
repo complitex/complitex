@@ -5,7 +5,6 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.IExecutorObject;
-import org.complitex.osznconnection.file.web.component.ReuseIfLongIdEqualStrategy;
 
 /**
  *
@@ -17,7 +16,7 @@ public abstract class ProcessDataView<M extends IExecutorObject> extends DataVie
 
     public ProcessDataView(String id, IDataProvider<M> dataProvider) {
         super(id, dataProvider);
-        setItemReuseStrategy(new ReuseIfLongIdEqualStrategy());
+        //setItemReuseStrategy(new ReuseIfLongIdEqualStrategy());
     }
 
     @Override

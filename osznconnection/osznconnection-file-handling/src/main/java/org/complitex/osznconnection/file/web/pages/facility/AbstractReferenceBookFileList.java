@@ -23,7 +23,6 @@ import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
@@ -213,13 +212,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
                 item.add(new Label("dbf_record_count", StringUtil.valueOf(item.getModelObject().getDbfRecordCount())));
 
                 //Количество загруженных записей
-                item.add(new Label("loaded_record_count", new LoadableDetachableModel<String>() {
-
-                    @Override
-                    protected String load() {
-                        return StringUtil.valueOf(requestFile.getLoadedRecordCount());
-                    }
-                }));
+                item.add(new Label("loaded_record_count", requestFile.getLoadedRecordCount()));
 
                 //Статус
                 item.add(new ItemStatusLabel("status", processingManager, timerManager));
