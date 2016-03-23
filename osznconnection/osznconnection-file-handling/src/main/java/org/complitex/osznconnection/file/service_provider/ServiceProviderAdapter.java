@@ -201,7 +201,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             }
         }
 
-        log.info("acquireFacilityPersonAccount BENEFIT_OWNER_NOT_ASSOCIATED inn='{}', passport='{}'", inn, passport);
+        log.info("checkFacilityPerson BENEFIT_OWNER_NOT_ASSOCIATED accountNumber={}, inn='{}', passport='{}'", accountNumber, inn, passport);
 
         request.setStatus(RequestStatus.BENEFIT_OWNER_NOT_ASSOCIATED);
     }
