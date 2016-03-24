@@ -237,8 +237,8 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
 
                 if (tarif != null){
                     FacilityTarif facilityTarif = new FacilityTarif();
-                    facilityTarif.putUpdateField(FacilityTarifDBF.TAR_COST, tarif);
-                    facilityTarif.putUpdateField(FacilityTarifDBF.TAR_CDPLG, serviceCode);
+                    facilityTarif.putField(FacilityTarifDBF.TAR_COST, tarif);
+                    facilityTarif.putField(FacilityTarifDBF.TAR_CDPLG, serviceCode);
                     facilityTarif.setDate(facilityServiceType.getDate());
 
                     List<FacilityTarif> list = facilityReferenceBookBean.getFacilityTarifs(FilterWrapper.of(facilityTarif));
