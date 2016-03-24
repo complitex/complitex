@@ -388,11 +388,6 @@
 
     <update id="clearBeforeBinding" parameterType="map">
         UPDATE `payment` SET
-        `account_number` = NULL,
-        `internal_city_id` = NULL,
-        `internal_street_id` = NULL, `internal_street_type_id` = NULL, `internal_building_id` = NULL, `internal_apartment_id` = NULL,
-        `outgoing_city` = NULL, `outgoing_district` = NULL, `outgoing_street` = NULL, `outgoing_street_type` = NULL,
-        `outgoing_building_number` = NULL, `outgoing_building_corp` = NULL, `outgoing_apartment` = NULL,
         `FROG` = NULL,
         `FL_PAY` = NULL,
         `NM_PAY` = NULL,

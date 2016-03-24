@@ -107,10 +107,8 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
     }
 
     public void bind(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws DBException {
-        String inn = dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDPIL);
-
         //resolve local account number
-        personAccountService.localResolveAccountNumber(dwellingCharacteristics, inn, true);
+        personAccountService.localResolveAccountNumber(dwellingCharacteristics, dwellingCharacteristics.getInn(), true);
 
         //noinspection Duplicates
         if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){

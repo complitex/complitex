@@ -112,10 +112,8 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
 
     public void bind(String serviceProviderCode, FacilityServiceType facilityServiceType)
             throws DBException {
-        String inn = facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL);
-
         //resolve local account number
-        personAccountService.localResolveAccountNumber(facilityServiceType, inn, true);
+        personAccountService.localResolveAccountNumber(facilityServiceType, facilityServiceType.getInn(), true);
 
         //noinspection Duplicates
         if (facilityServiceType.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
