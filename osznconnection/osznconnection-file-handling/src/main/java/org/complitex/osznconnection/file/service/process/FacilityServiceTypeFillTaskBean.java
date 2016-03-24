@@ -198,78 +198,84 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
             return;
         }
 
-        if (cursor.getData().size() == 1){
-            BenefitData data = cursor.getData().get(0);
+        for (BenefitData bd : cursor.getData()){
+            if (facilityServiceType.getInn() != null && facilityServiceType.getInn().equals(bd.getInn())
+                    || (facilityServiceType.getPassport() != null &&
+                    facilityServiceType.getPassport().matches(bd.getPassportSerial() + "\\s*" + bd.getPassportNumber()))) {
+                BenefitData data = cursor.getData().get(0);
 
-            List<PrivilegeCorrection> corrections = privilegeCorrectionBean.getPrivilegeCorrections(FilterWrapper.of(
-                    new PrivilegeCorrection(data.getCode(), facilityServiceType.getOrganizationId(),
-                            facilityServiceType.getUserOrganizationId())));
-            if (!corrections.isEmpty()){
-                DomainObject privilege = privilegeStrategy.getDomainObject(corrections.get(0).getObjectId());
+                List<PrivilegeCorrection> corrections = privilegeCorrectionBean.getPrivilegeCorrections(FilterWrapper.of(
+                        new PrivilegeCorrection(data.getCode(), facilityServiceType.getOrganizationId(),
+                                facilityServiceType.getUserOrganizationId())));
+                if (!corrections.isEmpty()) {
+                    DomainObject privilege = privilegeStrategy.getDomainObject(corrections.get(0).getObjectId());
 
-                facilityServiceType.putUpdateField(KAT, Integer.valueOf(privilege.getStringValue(CODE)));
-            }
-
-            facilityServiceType.putUpdateField(YEARIN, DateUtil.getYear(data.getDateIn()));
-            facilityServiceType.putUpdateField(MONTHIN, DateUtil.getMonth(data.getDateIn()));
-
-            facilityServiceType.putUpdateField(YEAROUT, DateUtil.getYear(data.getDateOut()));
-            facilityServiceType.putUpdateField(MONTHOUT, DateUtil.getMonth(data.getDateOut()));
-
-            facilityServiceType.putUpdateField(RAH, facilityServiceType.getAccountNumber());
-
-            Cursor<PaymentAndBenefitData> cursorTarif = serviceProviderAdapter.getPaymentAndBenefit(facilityServiceType.getUserOrganizationId(),
-                    facilityServiceType.getAccountNumber(), facilityServiceType.getDate());
-
-            if (!cursorTarif.isEmpty()){
-                PaymentAndBenefitData d = cursorTarif.getData().get(0);
-
-                BigDecimal tarif = null;
-
-                switch (serviceCode){
-                    case "500":
-                        tarif = d.getApartmentFeeTarif();
-                        break;
-                    case "5061":
-                        tarif = d.getGarbageDisposalTarif();
-                        break;
+                    facilityServiceType.putUpdateField(KAT, Integer.valueOf(privilege.getStringValue(CODE)));
                 }
 
-                if (tarif != null){
-                    FacilityTarif facilityTarif = new FacilityTarif();
-                    facilityTarif.putField(FacilityTarifDBF.TAR_COST, tarif);
-                    facilityTarif.putField(FacilityTarifDBF.TAR_CDPLG, serviceCode);
+                facilityServiceType.putUpdateField(YEARIN, DateUtil.getYear(data.getDateIn()));
+                facilityServiceType.putUpdateField(MONTHIN, DateUtil.getMonth(data.getDateIn()));
 
-                    facilityTarif.setOrganizationId(facilityServiceType.getOrganizationId());
-                    facilityTarif.setUserOrganizationId(facilityServiceType.getUserOrganizationId());
-                    facilityTarif.setDate(facilityServiceType.getDate());
+                facilityServiceType.putUpdateField(YEAROUT, DateUtil.getYear(data.getDateOut()));
+                facilityServiceType.putUpdateField(MONTHOUT, DateUtil.getMonth(data.getDateOut()));
 
-                    List<FacilityTarif> list = facilityReferenceBookBean.getFacilityTarifs(FilterWrapper.of(facilityTarif));
+                facilityServiceType.putUpdateField(RAH, facilityServiceType.getAccountNumber());
 
-                    if (!list.isEmpty()){
-                        FacilityTarif ft = list.get(0);
+                Cursor<PaymentAndBenefitData> cursorTarif = serviceProviderAdapter.getPaymentAndBenefit(facilityServiceType.getUserOrganizationId(),
+                        facilityServiceType.getAccountNumber(), facilityServiceType.getDate());
 
-                        facilityServiceType.putUpdateField(TARIF, ft.getField(TAR_CODE));
-                        facilityServiceType.putUpdateField(RIZN, ft.getField(TAR_SERV));
+                if (!cursorTarif.isEmpty()) {
+                    PaymentAndBenefitData d = cursorTarif.getData().get(0);
 
-                        facilityServiceType.setStatus(PROCESSED);
-                    }else{
-                        facilityServiceType.setStatus(TARIF_NOT_FOUND);
+                    BigDecimal tarif = null;
 
-                        RequestWarning warning = new RequestWarning(facilityServiceType.getId(), FACILITY_SERVICE_TYPE,
-                                RequestWarningStatus.TARIF_NOT_FOUND);
-                        warning.addParameter(new RequestWarningParameter(0, tarif));
-                        requestWarningBean.save(warning);
+                    switch (serviceCode) {
+                        case "500":
+                            tarif = d.getApartmentFeeTarif();
+                            break;
+                        case "5061":
+                            tarif = d.getGarbageDisposalTarif();
+                            break;
+                    }
 
-                        log.info("TARIF_NOT_FOUND serviceCode={}, tarif={}, date={}", serviceCode, tarif, facilityServiceType.getDate());
+                    if (tarif != null) {
+                        FacilityTarif facilityTarif = new FacilityTarif();
+                        facilityTarif.putField(FacilityTarifDBF.TAR_COST, tarif);
+                        facilityTarif.putField(FacilityTarifDBF.TAR_CDPLG, serviceCode);
+
+                        facilityTarif.setOrganizationId(facilityServiceType.getOrganizationId());
+                        facilityTarif.setUserOrganizationId(facilityServiceType.getUserOrganizationId());
+                        facilityTarif.setDate(facilityServiceType.getDate());
+
+                        List<FacilityTarif> list = facilityReferenceBookBean.getFacilityTarifs(FilterWrapper.of(facilityTarif));
+
+                        if (!list.isEmpty()) {
+                            FacilityTarif ft = list.get(0);
+
+                            facilityServiceType.putUpdateField(TARIF, ft.getField(TAR_CODE));
+                            facilityServiceType.putUpdateField(RIZN, ft.getField(TAR_SERV));
+
+                            facilityServiceType.setStatus(PROCESSED);
+                        } else {
+                            facilityServiceType.setStatus(TARIF_NOT_FOUND);
+
+                            RequestWarning warning = new RequestWarning(facilityServiceType.getId(), FACILITY_SERVICE_TYPE,
+                                    RequestWarningStatus.TARIF_NOT_FOUND);
+                            warning.addParameter(new RequestWarningParameter(0, tarif));
+                            requestWarningBean.save(warning);
+
+                            log.info("TARIF_NOT_FOUND serviceCode={}, tarif={}, date={}", serviceCode, tarif, facilityServiceType.getDate());
+                        }
                     }
                 }
 
+                facilityServiceTypeBean.update(facilityServiceType);
+
+                return;
             }
-        }else {
-            facilityServiceType.setStatus(MORE_ONE_ACCOUNTS);
         }
 
+        facilityServiceType.setStatus(BENEFIT_OWNER_NOT_ASSOCIATED);
         facilityServiceTypeBean.update(facilityServiceType);
     }
 
