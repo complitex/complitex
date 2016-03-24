@@ -22,9 +22,9 @@
         
         <result column="street_correction_id" property="streetCorrectionId"/>
         
-        <result column="last_name" property="lastName"/>
-        <result column="first_name" property="firstName"/>
-        <result column="middle_name" property="middleName"/>
+        <result column="last_name_cyr" property="lastName"/>
+        <result column="first_name_cyr" property="firstName"/>
+        <result column="middle_name_cyr" property="middleName"/>
         
         <result column="city" property="city"/>
         <result column="street" property="street"/>
@@ -167,9 +167,9 @@
                 TO_CYRILLIC(fst.`IDPIL`) IDPIL_CYR,
                 TO_CYRILLIC(fst.`PASPPIL`) PASPPIL_CYR,
 
-                TO_CYRILLIC(fst.`first_name`) first_name,
-                TO_CYRILLIC(fst.`middle_name`) middle_name,
-                TO_CYRILLIC(fst.`last_name`) last_name,
+                TO_CYRILLIC(fst.`first_name`) first_name_cyr,
+                TO_CYRILLIC(fst.`middle_name`) middle_name_cyr,
+                TO_CYRILLIC(fst.`last_name`) last_name_cyr,
 
                 TO_CYRILLIC(fst.`FIO`) FIO_CYR,
                 TO_CYRILLIC(fst.`CDUL`) CDUL_CYR,
@@ -251,7 +251,7 @@
     </select>
     
     <select id="findForOperation" parameterType="map" resultMap="facilityServiceTypeResultMap">
-        SELECT fst.*,
+        SELECT
 
         TO_CYRILLIC(fst.`IDPIL`) IDPIL_CYR,
         TO_CYRILLIC(fst.`PASPPIL`) PASPPIL_CYR,
@@ -261,6 +261,12 @@
         TO_CYRILLIC(fst.`HOUSE`) HOUSE_CYR,
         TO_CYRILLIC(fst.`BUILD`) BUILD_CYR,
         TO_CYRILLIC(fst.`APT`) APT_CYR,
+
+        TO_CYRILLIC(fst.`first_name`) first_name_cyr,
+        TO_CYRILLIC(fst.`middle_name`) middle_name_cyr,
+        TO_CYRILLIC(fst.`last_name`) last_name_cyr,
+
+        fst.*,
 
         f.`organization_id`, f.`user_organization_id`
         FROM `facility_service_type` fst JOIN `request_file` f ON fst.`request_file_id` = f.`id`
