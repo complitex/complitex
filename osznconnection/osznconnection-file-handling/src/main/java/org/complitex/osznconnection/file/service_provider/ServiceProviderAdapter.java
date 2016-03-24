@@ -191,6 +191,10 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         Cursor<BenefitData> benefitDataCursor = getBenefitData(dataSource, accountNumber, date);
 
+        if (benefitDataCursor.isEmpty() && benefitDataCursor.getResultCode() == 1){
+            warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.EMPTY_BENEFIT_DATA);
+        }
+
         for (BenefitData d : benefitDataCursor.getData()){
             if (inn != null && inn.equals(d.getInn())
                     || (passport != null && passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){

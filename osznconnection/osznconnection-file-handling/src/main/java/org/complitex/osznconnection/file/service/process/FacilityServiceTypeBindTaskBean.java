@@ -8,7 +8,10 @@ import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.FacilityServiceType;
+import org.complitex.osznconnection.file.entity.FileHandlingConfig;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
@@ -17,6 +20,7 @@ import org.complitex.osznconnection.file.service.exception.AlreadyProcessingExce
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
+import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -33,6 +37,7 @@ import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Map;
 
+import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_SERVICE_TYPE;
 import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
 import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
 
@@ -68,6 +73,9 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
 
     @EJB
     private OsznOrganizationStrategy organizationStrategy;
+
+    @EJB
+    private RequestWarningBean requestWarningBean;
 
     private boolean resolveAddress(FacilityServiceType facilityServiceType) {
         addressService.resolveAddress(facilityServiceType);
@@ -187,6 +195,9 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
         requestFileBean.save(requestFile);
 
         facilityServiceTypeBean.clearBeforeBinding(requestFile.getId(), null);
+
+        //clear warning
+        requestWarningBean.delete(requestFile.getId(), FACILITY_SERVICE_TYPE);
 
         //связывание файла facility service type
         try {
