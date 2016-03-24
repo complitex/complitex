@@ -156,8 +156,7 @@
 
     <sql id="selectFacilityTarifsWhere">
         <where>
-            `request_file_id` = #{object.requestFileId}
-
+            <if test="object.requestFileId != null">`request_file_id` = #{object.requestFileId}</if>
             <if test="object.dbfFields.TAR_CODE != null">and `TAR_CODE` = #{object.dbfFields.TAR_CODE}</if>
             <if test="object.dbfFields.TAR_CDPLG != null">and `TAR_CDPLG` = #{object.dbfFields.TAR_CDPLG}</if>
             <if test="object.dbfFields.TAR_SERV != null">and `TAR_SERV` = #{object.dbfFields.TAR_SERV}</if>
@@ -186,12 +185,12 @@
 
     <select id="selectFacilityTarifs" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="facilityTarifResultMap">
-        select t.* from `facility_tarif_reference` t left join `request_file` r on t.request_file_id = r.id
+        select t.*, r.loaded from `facility_tarif_reference` t left join `request_file` r on t.request_file_id = r.id
 
         <include refid="selectFacilityTarifsWhere"/>
 
-        order by t.${sortProperty} <if test="sortProperty != 'TAR_DATEB' and  sortProperty != 'TAR_DATEE'">+ 0</if>
-         ${asc} limit #{first}, #{count}
+        order by r.loaded desc, t.${sortProperty} <if test="sortProperty != 'TAR_DATEB' and  sortProperty != 'TAR_DATEE'">+ 0</if>
+         ${limit}
     </select>
 
     <select id="selectFacilityTarifsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">

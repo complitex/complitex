@@ -63,8 +63,12 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
         return ascending ? "asc" : "desc";
     }
 
+    public String getLimit(){
+        return count > 0 ? " limit " + first + ", " + count : "";
+    }
+
     public String getOrderLimit(){
-        return "order by `" + getSortProperty() + "` " + getAsc() + (count > 0 ? " limit " + first + ", " + count : "");
+        return "order by `" + getSortProperty() + "` " + getAsc() + getLimit();
     }
 
     public Map<String, Object> getMap() {
