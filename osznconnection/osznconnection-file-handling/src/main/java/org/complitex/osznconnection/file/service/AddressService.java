@@ -164,6 +164,12 @@ public class AddressService extends AbstractBean {
         }
 
         //Связывание улицы
+        if (request.getStreet() == null || request.getStreet().isEmpty()){
+            request.setStatus(RequestStatus.STREET_NOT_FOUND);
+
+            return;
+        }
+
         List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(request.getCityId(),
                 request.getStreetTypeId(), null, null,  request.getStreet(),
                 osznId, userOrganizationId);
