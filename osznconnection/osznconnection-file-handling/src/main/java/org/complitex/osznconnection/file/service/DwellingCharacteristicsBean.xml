@@ -233,7 +233,7 @@
     </select>
     
     <select id="findForOperation" parameterType="map" resultMap="dwellingCharacteristicsResultMap">
-        SELECT d.*, f.`organization_id`, f.`user_organization_id`,
+        SELECT d.*, f.`organization_id`, f.`user_organization_id`, d.`IDPIL`, d.`PASPPIL`,
             TO_CYRILLIC(d.`IDPIL`) IDPIL_CYR,
             TO_CYRILLIC(d.`PASPPIL`) PASPPIL_CYR,
 
@@ -255,6 +255,10 @@
    
    <update id="clearBeforeBinding" parameterType="map">
         UPDATE `dwelling_characteristics` SET
+        `account_number` = NULL,
+        `internal_city_id` = NULL, `internal_street_id` = NULL, `internal_street_type_id` = NULL, `internal_building_id` = NULL,
+        `outgoing_city` = NULL, `outgoing_district` = NULL, `outgoing_street` = NULL, `outgoing_street_type` = NULL,
+        `outgoing_building_number` = NULL, `outgoing_building_corp` = NULL, `outgoing_apartment` = NULL,
         `status` = #{status}
         <if test="updateFieldMap != null">
             <foreach collection="updateFieldMap.entrySet()" item="item" index="key">

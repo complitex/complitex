@@ -273,6 +273,10 @@
    
    <update id="clearBeforeBinding" parameterType="map">
         UPDATE `facility_service_type` SET
+        `account_number` = NULL,
+        `internal_city_id` = NULL, `internal_street_id` = NULL, `internal_street_type_id` = NULL, `internal_building_id` = NULL,
+        `outgoing_city` = NULL, `outgoing_district` = NULL, `outgoing_street` = NULL, `outgoing_street_type` = NULL,
+        `outgoing_building_number` = NULL, `outgoing_building_corp` = NULL, `outgoing_apartment` = NULL,
         `status` = #{status}
         <if test="updateFieldMap != null">
             <foreach collection="updateFieldMap.entrySet()" item="item" index="key">
