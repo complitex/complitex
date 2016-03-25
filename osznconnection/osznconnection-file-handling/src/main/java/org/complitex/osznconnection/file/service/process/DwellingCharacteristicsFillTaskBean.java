@@ -13,6 +13,7 @@ import org.complitex.osznconnection.file.service.exception.AlreadyProcessingExce
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
+import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.strategy.OwnershipStrategy;
@@ -29,6 +30,8 @@ import javax.transaction.UserTransaction;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static org.complitex.osznconnection.file.entity.RequestFileType.DWELLING_CHARACTERISTICS;
 
 /**
  * inheaven on 25.02.2016.
@@ -56,6 +59,9 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
     @EJB
     private OwnershipStrategy ownershipStrategy;
 
+    @EJB
+    private RequestWarningBean requestWarningBean;
+
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()){
@@ -66,6 +72,9 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
         requestFileBean.save(requestFile);
 
         //todo clear before filling
+
+        //clear warning
+        requestWarningBean.delete(requestFile.getId(), DWELLING_CHARACTERISTICS);
 
         try {
             List<Long> ids = dwellingCharacteristicsBean.findIdsForOperation(requestFile.getId());

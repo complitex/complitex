@@ -17,6 +17,7 @@ import org.complitex.osznconnection.file.service.exception.AlreadyProcessingExce
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
+import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -33,6 +34,7 @@ import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Map;
 
+import static org.complitex.osznconnection.file.entity.RequestFileType.DWELLING_CHARACTERISTICS;
 import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
 import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
 
@@ -64,6 +66,9 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
 
     @EJB
     private OsznOrganizationStrategy organizationStrategy;
+
+    @EJB
+    private RequestWarningBean requestWarningBean;
 
 
     private boolean resolveAddress(DwellingCharacteristics dwellingCharacteristics) {
@@ -190,6 +195,9 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
         requestFileBean.save(requestFile);
 
         dwellingCharacteristicsBean.clearBeforeBinding(requestFile.getId(), null);
+
+        //clear warning
+        requestWarningBean.delete(requestFile.getId(), DWELLING_CHARACTERISTICS);
 
         //связывание файла dwelling characteristics
         try {
