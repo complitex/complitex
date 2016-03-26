@@ -535,7 +535,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         //Контейнер чекбокса "Переписать л/с ПУ" для ajax
         WebMarkupContainer optionContainer = new WebMarkupContainer("options");
-        optionContainer.setVisibilityAllowed(false);
+        optionContainer.setVisibilityAllowed(true);
         form.add(optionContainer);
 
         optionContainer.add(new CheckBox("update_pu_account", new Model<>(
