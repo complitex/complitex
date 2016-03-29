@@ -408,7 +408,7 @@
 
             <!--building-->
             <when test="status == 202 or status == 209 or status == 225">
-                SELECT CONCAT(`CDUL`, `HOUSE`) `id`, COUNT(*) `count`,
+                SELECT CONCAT(`CDUL`, `HOUSE`) `id`, COUNT(*) `count`, `HOUSE`,
                 (select TO_CYRILLIC(KLKUL_NAME) from facility_street_reference left join facility_street_type_reference on KLKUL_CODE = KL_CODEKUL where `CDUL` = `KL_CODEUL` limit 1) KLKUL_NAME,
                 (select TO_CYRILLIC(`KL_NAME`) from facility_street_reference where `CDUL` = `KL_CODEUL` limit 1) KL_NAME
                 FROM `dwelling_characteristics` d
