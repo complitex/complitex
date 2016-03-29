@@ -3,6 +3,7 @@ package org.complitex.osznconnection.file.web;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
@@ -104,7 +105,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     private ProcessingManager processingManager;
     private MessagesManager messagesManager;
     private Form<F> form;
-    private ProcessDataView<R> dataView;
+    private DataView<R> dataView;
     private DataProvider<R> dataProvider;
     private final List<Column> columns = new ArrayList<Column>();
     private WebMarkupContainer dataViewContainer;
@@ -327,7 +328,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         form.add(new TextField<String>("id"));
 
         //Дата загрузки
-        form.add(new DatePicker("loaded"));
+        form.add(new DatePicker("loaded").add(new OnChangeAjaxBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                //update model
+            }
+        }));
 
         Model<R> selectedRequestFileModel = new Model<>();
 
@@ -421,7 +427,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         timerManager.addUpdateComponent(messages);
 
         //Таблица файлов запросов
-        dataView = new ProcessDataView<R>("objects", dataProvider) {
+        dataView = new DataView<R>("objects", dataProvider) {
 
             @Override
             protected void populateItem(final Item<R> item) {
