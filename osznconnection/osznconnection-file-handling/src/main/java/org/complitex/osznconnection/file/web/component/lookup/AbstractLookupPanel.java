@@ -337,11 +337,14 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
             firstNameModel.setObject(request.getFirstName());
             middleNameModel.setObject(request.getMiddleName());
             lastNameModel.setObject(request.getLastName());
+        }else{
+            firstNameModel.setObject(null);
+            middleNameModel.setObject(null);
+            lastNameModel.setObject(null);
         }
 
         innModel.setObject(request.getInn());
         passportModel.setObject(request.getPassport());
-
 
         //lookup by address
         apartmentModel.setObject(request.getApartment());
