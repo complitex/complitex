@@ -19,6 +19,9 @@ public class DwellingCharacteristicsExample extends AbstractRequestExample {
     private String orderByClause;
     private boolean asc;
 
+    private String street;
+    private String streetType;
+
     public String getIdCode() {
         return idCode;
     }
@@ -121,5 +124,21 @@ public class DwellingCharacteristicsExample extends AbstractRequestExample {
 
     public void setAsc(boolean asc) {
         this.asc = asc;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getStreetType() {
+        return streetType;
+    }
+
+    public void setStreetType(String streetType) {
+        this.streetType = streetType;
     }
 }

@@ -378,7 +378,9 @@
         <choose>
             <!--account number -->
             <when test="status == 212 or status == 213">
-                SELECT `FIO` `id`, COUNT(1) `count`, `first_name`, `middle_name`, `last_name`, `FIO`
+                SELECT `FIO` `id`, COUNT(1) `count`,
+                TO_CYRILLIC(`first_name`) first_name, TO_CYRILLIC(`middle_name`) middle_name, TO_CYRILLIC(`last_name`) last_name,
+                TO_CYRILLIC(`FIO`) FIO
                 FROM `dwelling_characteristics`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
                 GROUP BY 1
@@ -386,7 +388,7 @@
 
             <!--street type-->
             <when test="status == 237 or status == 207 or status == 223">
-                SELECT CONCAT(st.`KLKUL_CODE`) `id`, COUNT(1) `count`, st.`KLKUL_NAME`
+                SELECT CONCAT(st.`KLKUL_CODE`) `id`, COUNT(1) `count`, TO_CYRILLIC(st.`KLKUL_NAME`) KLKUL_NAME
                 FROM `dwelling_characteristics` d
                 LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
                 LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
@@ -396,27 +398,30 @@
 
             <!--street-->
             <when test="status == 201 or status == 208 or status == 207 or status == 224">
-                SELECT CONCAT(`CDUL`) `id`, COUNT(1) `count`, st.`KLKUL_NAME`, s.`KL_NAME`, `CDUL`
+                SELECT CONCAT(`CDUL`) `id`, COUNT(1) `count`, CDUL,
+                (select TO_CYRILLIC(KLKUL_NAME) from facility_street_reference left join facility_street_type_reference on KLKUL_CODE = KL_CODEKUL where `CDUL` = `KL_CODEUL` limit 1) KLKUL_NAME,
+                (select TO_CYRILLIC(`KL_NAME`) from facility_street_reference where `CDUL` = `KL_CODEUL` limit 1) KL_NAME
                 FROM `dwelling_characteristics` d
-                LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
-                LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
                 WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
                 GROUP BY 1
             </when>
 
             <!--building-->
             <when test="status == 202 or status == 209 or status == 225">
-                SELECT CONCAT(`CDUL`, `HOUSE`) `id`, COUNT(1) `count`, st.`KLKUL_NAME`, s.`KL_NAME`, `CDUL`, `HOUSE`
+                SELECT CONCAT(`CDUL`, `HOUSE`) `id`, COUNT(*) `count`,
+                (select TO_CYRILLIC(KLKUL_NAME) from facility_street_reference left join facility_street_type_reference on KLKUL_CODE = KL_CODEKUL where `CDUL` = `KL_CODEUL` limit 1) KLKUL_NAME,
+                (select TO_CYRILLIC(`KL_NAME`) from facility_street_reference where `CDUL` = `KL_CODEUL` limit 1) KL_NAME
                 FROM `dwelling_characteristics` d
-                LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
-                LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
                 WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
                 GROUP BY 1
             </when>
 
             <!--building corp-->
             <when test="status == 226">
-                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`) `id`, COUNT(1) `count`, st.`KLKUL_NAME`, s.`KL_NAME`, `CDUL`, `HOUSE`, `BUILD`
+                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`) `id`, COUNT(1) `count`,
+                (select TO_CYRILLIC(KLKUL_NAME) from facility_street_reference left join facility_street_type_reference on KLKUL_CODE = KL_CODEKUL where `CDUL` = `KL_CODEUL` limit 1) KLKUL_NAME,
+                (select TO_CYRILLIC(`KL_NAME`) from facility_street_reference where `CDUL` = `KL_CODEUL` limit 1) KL_NAME,
+                `CDUL`, `HOUSE`, `BUILD`
                 FROM `dwelling_characteristics` d
                 LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
                 LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
@@ -426,10 +431,11 @@
 
             <!-- apartment -->
             <when test="status == 227">
-                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`, `APT`) `id`, COUNT(1) `count`, st.`KLKUL_NAME`, s.`KL_NAME`, `CDUL`, `HOUSE`, `BUILD`, `APT`
+                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`, `APT`) `id`, COUNT(1) `count`,
+                (select TO_CYRILLIC(KLKUL_NAME) from facility_street_reference left join facility_street_type_reference on KLKUL_CODE = KL_CODEKUL where `CDUL` = `KL_CODEUL` limit 1) KLKUL_NAME,
+                (select TO_CYRILLIC(`KL_NAME`) from facility_street_reference where `CDUL` = `KL_CODEUL` limit 1) KL_NAME,
+                `CDUL`, `HOUSE`, `BUILD`, `APT`
                 FROM `dwelling_characteristics` d
-                LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
-                LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
                 WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
                 GROUP BY 1
             </when>
@@ -472,7 +478,8 @@
         <choose>
             <!--account number -->
             <when test="status == 212 or status == 213">
-                SELECT `FIO` `id`, COUNT(1) `count`, `first_name`, `middle_name`, `last_name`, `FIO` FROM `facility_service_type`
+                SELECT `FIO` `id`, COUNT(1) `count`, TO_CYRILLIC(`first_name`), TO_CYRILLIC(`middle_name`), TO_CYRILLIC(`last_name`),
+                TO_CYRILLIC(`FIO`) FROM `facility_service_type`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
                 GROUP BY 1
             </when>

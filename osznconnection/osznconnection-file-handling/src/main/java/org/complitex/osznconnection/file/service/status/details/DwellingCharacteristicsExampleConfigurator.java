@@ -17,6 +17,8 @@ public class DwellingCharacteristicsExampleConfigurator extends AbstractExampleC
         example.setFirstName(statusDetail.getDetail("firstName"));
         example.setMiddleName(statusDetail.getDetail("middleName"));
         example.setStreetCode(statusDetail.getDetail("streetCode"));
+        example.setStreetType(statusDetail.getDetail("streetType"));
+        example.setStreet(statusDetail.getDetail("street"));
         example.setBuilding(statusDetail.getDetail("building"));
         example.setCorp(statusDetail.getDetail("buildingCorp"));
         example.setApartment(statusDetail.getDetail("apartment"));

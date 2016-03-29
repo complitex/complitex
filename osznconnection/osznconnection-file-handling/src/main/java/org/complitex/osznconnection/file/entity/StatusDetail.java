@@ -31,7 +31,7 @@ public class StatusDetail implements Serializable {
     }
 
     public String getDetail(String detailName) {
-        return Objects.toString(details.get(detailName));
+        return details.get(detailName) != null ? Objects.toString(details.get(detailName)) : null;
     }
 
     public Long getCount() {
