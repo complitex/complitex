@@ -20,9 +20,9 @@ public class DatePicker<T> extends org.odlabs.wiquery.ui.datepicker.DatePicker<T
 
     private static final String RELATIVE_IMAGE_SRC = "images/calendar2.png";
 
-    private static IConverter<Date> CONVERTER = new PatternDateConverter("dd.MM.yyyy", true);
+    private static IConverter<Date> CONVERTER = new PatternDateConverter("dd.MM.yyyy", false);
 
-    private static IConverter<Date> NOT_NULL_CONVERTER = new PatternDateConverter("dd.MM.yyyy", true){
+    private static IConverter<Date> NOT_NULL_CONVERTER = new PatternDateConverter("dd.MM.yyyy", false){
         @Override
         public Date convertToObject(String value, Locale locale) {
             return value != null && !value.isEmpty() ? super.convertToObject(value, locale) : DEFAULT_END_DATE;

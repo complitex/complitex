@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -23,6 +22,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.SharedResourceReference;
 import org.apache.wicket.util.string.Strings;
@@ -166,10 +166,10 @@ public class PagingNavigator extends Panel {
         pageBar.add(newNavigation("navigationBefore", "pageLinkBefore", "pageNumberBefore", dataView, navigationBeforeModel));
 
         //navigation after
-        IModel<List<Long>> navigationAfterModel = new AbstractReadOnlyModel<List<Long>>() {
+        IModel<List<Long>> navigationAfterModel = new LoadableDetachableModel<List<Long>>() {
 
             @Override
-            public List<Long> getObject() {
+            public List<Long> load() {
                 List<Long> result = new ArrayList<>();
 
                 long currentPage = dataView.getCurrentPage();

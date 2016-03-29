@@ -31,13 +31,13 @@ import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.StringUtil;
-import org.complitex.common.web.component.DatePicker;
 import org.complitex.common.web.component.MonthDropDownChoice;
 import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.dateinput.MaskedDateInput;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.organization.OrganizationPickerDialog;
@@ -327,7 +327,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         form.add(new TextField<String>("id"));
 
         //Дата загрузки
-        form.add(new DatePicker<Date>("loaded"));
+        form.add(new MaskedDateInput("loaded"));
 
         Model<R> selectedRequestFileModel = new Model<>();
 
