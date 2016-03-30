@@ -131,6 +131,9 @@
                 <when test="sortProperty == 'status'">order by `status`</when>
                 <when test="sortProperty == 'paymentName'">order by p.`name`</when>
                 <when test="sortProperty == 'benefitName'">order by b.`name`</when>
+                <when test="sortProperty == 'service_provider'">order by p.`name`</when>
+                <when test="sortProperty == 'month'">order by MONTH(p.`begin_date`)</when>
+                <when test="sortProperty == 'year'">order by YEAR(p.`begin_date`)</when>
                 <otherwise>order by p.`${sortProperty}`</otherwise>
             </choose>
             <choose>
