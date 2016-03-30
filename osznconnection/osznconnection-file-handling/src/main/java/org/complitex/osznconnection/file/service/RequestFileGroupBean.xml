@@ -98,7 +98,7 @@
             <if test="month != null">and MONTH(p.`begin_date`) = #{month}</if>
             <if test="status != null">and g.`status` = #{status}</if>
             <if test="serviceProvider != null">
-                and p.`name` like concat('${serviceProvider.getAttribute(926).stringCultures[0].value}', '%')
+                and p.`name` like concat('%', #{edrpou}, '%')
             </if>
 
             <include refid="permissionFilter"/>

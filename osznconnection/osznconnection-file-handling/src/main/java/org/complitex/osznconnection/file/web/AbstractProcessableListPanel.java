@@ -365,7 +365,13 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         //ПУ
         form.add(new OrganizationPicker("serviceProvider",
                 new PropertyModel<>(getModel(), "serviceProvider"),
-                SERVICE_PROVIDER_TYPE));
+                SERVICE_PROVIDER_TYPE){
+            @Override
+            protected void onSelect(AjaxRequestTarget target) {
+                AbstractProcessableListPanel.this.getModel().getObject()
+                        .setEdrpou(getOrganizationModel().getObject().getStringValue(OsznOrganizationStrategy.EDRPOU));
+            }
+        });
 
         //ОСЗН
         form.add(new OrganizationIdPicker("organization",

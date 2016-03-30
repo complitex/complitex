@@ -26,6 +26,7 @@ public class RequestFileGroupFilter extends AbstractFilter {
     private RequestFileStatus status;
 
     private DomainObject serviceProvider;
+    private String edrpou;
 
     public Long getId() {
         return id;
@@ -129,5 +130,13 @@ public class RequestFileGroupFilter extends AbstractFilter {
 
     public void setServiceProvider(DomainObject serviceProvider) {
         this.serviceProvider = serviceProvider;
+    }
+
+    public String getEdrpou() {
+        return edrpou;
+    }
+
+    public void setEdrpou(String edrpou) {
+        this.edrpou = edrpou;
     }
 }
