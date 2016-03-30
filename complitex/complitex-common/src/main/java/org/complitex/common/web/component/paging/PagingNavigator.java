@@ -320,7 +320,7 @@ public class PagingNavigator extends Panel {
                 //appendScrollupJavascript(target);
                 updatePageComponents(target);
             }
-        };
+        }.setAutoEnable(false);
     }
 
     protected void updatePageComponents(AjaxRequestTarget target) {
@@ -358,7 +358,7 @@ public class PagingNavigator extends Panel {
                     listener.onChangePage();
                 }
             }
-        };
+        }.setAutoEnable(false);
     }
 
     protected void appendScrollupJavascript(AjaxRequestTarget target) {

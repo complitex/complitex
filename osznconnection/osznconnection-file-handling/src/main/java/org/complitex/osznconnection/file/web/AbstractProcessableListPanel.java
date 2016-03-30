@@ -5,7 +5,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -307,7 +307,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         };
         form.add(filter_reset);
 
-        AjaxButton find = new AjaxButton("find", form) {
+        AjaxSubmitLink find = new AjaxSubmitLink("find", form) {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
