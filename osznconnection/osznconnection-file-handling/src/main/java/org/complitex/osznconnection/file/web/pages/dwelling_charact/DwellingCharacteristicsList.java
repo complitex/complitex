@@ -21,6 +21,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.ExceptionUtil;
@@ -30,10 +31,7 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample;
-import org.complitex.osznconnection.file.service.AddressService;
-import org.complitex.osznconnection.file.service.DwellingCharacteristicsBean;
-import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.StatusRenderUtil;
+import org.complitex.osznconnection.file.service.*;
 import org.complitex.osznconnection.file.service.process.DwellingCharacteristicsBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsStatusDetailRenderer;
@@ -86,6 +84,9 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
+
+    @EJB
+    private FacilityReferenceBookBean facilityReferenceBookBean;
 
     private IModel<DwellingCharacteristicsExample> example;
     private long fileId;
@@ -173,7 +174,36 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<>(example, "firstName")));
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<>(example, "middleName")));
         filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<>(example, "lastName")));
-        filterForm.add(new TextField<>("streetReferenceFilter", new PropertyModel<>(example, "streetReference")));
+        filterForm.add(new TextField<>("streetReferenceFilter", new Model<String>(){
+            @Override
+            public String getObject() {
+                String streetCode = example.getObject().getStreetCode();
+
+                if (streetCode != null) {
+                    FacilityStreet facilityStreet = facilityReferenceBookBean.getFacilityStreet(streetCode,
+                            requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
+                    if (facilityStreet != null){
+                        return facilityStreet.getStreet();
+                    }
+                }
+
+                return null;
+            }
+
+            @Override
+            public void setObject(String object) {
+                FacilityStreet facilityStreet = new FacilityStreet();
+                facilityStreet.putField(FacilityStreetDBF.KL_NAME, object);
+
+                List<FacilityStreet> facilityStreets = facilityReferenceBookBean.getFacilityStreets(FilterWrapper.of(facilityStreet));
+
+                if (!facilityStreets.isEmpty()){
+                    example.getObject().setStreetCode(facilityStreets.get(0).getStreetCode());
+                }
+            }
+        }));
+
         filterForm.add(new TextField<>("buildingFilter", new PropertyModel<>(example, "building")));
         filterForm.add(new TextField<>("corpFilter", new PropertyModel<>(example, "corp")));
         filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<>(example, "apartment")));

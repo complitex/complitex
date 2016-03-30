@@ -73,6 +73,7 @@
         <result column="request_file_id" property="requestFileId"/>
 
         <result column="street" property="street"/>
+        <result column="street_code" property="streetCode"/>
         <result column="street_type" property="streetType"/>
         <result column="street_type_code" property="streetTypeCode"/>
 
@@ -86,18 +87,19 @@
 
     <sql id="selectFacilityStreetsWhere">
         <where>
-            `request_file_id` = #{object.requestFileId}
+            <if test="object.requestFileId != null">`request_file_id` = #{object.requestFileId}</if>
             <if test="object.dbfFields.KL_CODERN != null">and `KL_CODERN` = #{object.dbfFields.KL_CODERN}</if>
             <if test="object.dbfFields.KL_CODEUL != null">and `KL_CODEUL` = #{object.dbfFields.KL_CODEUL}</if>
-            <if test="object.dbfFields.KL_NAME != null">and `KL_NAME` like concat('%', #{object.dbfFields.KL_NAME}, '%')</if>
+            <if test="object.dbfFields.KL_NAME != null">and TO_CYRILLIC(`KL_NAME`) like concat('%', #{object.dbfFields.KL_NAME}, '%')</if>
             <if test="object.dbfFields.KL_CODEKUL != null">and `KL_CODEKUL` = #{object.dbfFields.KL_CODEKUL}</if>
         </where>
     </sql>
 
     <select id="selectFacilityStreets" parameterType="org.complitex.common.entity.FilterWrapper"
         resultMap="facilityStreetResultMap">
-        select * from `facility_street_reference` <include refid="selectFacilityStreetsWhere"/>
-          order by ${sortProperty} <if test="sortProperty != 'KL_NAME'">+ 0</if> ${asc} limit #{first}, #{count}
+        select *, TO_CYRILLIC(`KL_NAME`) street, `KL_CODEUL` as street_code
+        from `facility_street_reference` <include refid="selectFacilityStreetsWhere"/>
+          order by ${sortProperty} <if test="sortProperty != 'KL_NAME'">+ 0</if> ${asc} ${limit}
     </select>
 
     <select id="selectFacilityStreetsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
@@ -105,7 +107,7 @@
     </select>
 
     <select id="selectFacilityStreetByCode" parameterType="map" resultMap="facilityStreetResultMap">
-        select * from `facility_street_reference` s join `request_file` rf on s.`request_file_id` = rf.`id`
+        select *, TO_CYRILLIC(s.`KL_NAME`) street from `facility_street_reference` s join `request_file` rf on s.`request_file_id` = rf.`id`
           where s.`KL_CODEUL` = #{streetCode} and rf.`organization_id` = #{osznId}
               and rf.`user_organization_id` = #{userOrganizationId}
             order by rf.`begin_date` desc limit 1

@@ -114,9 +114,9 @@
             AND d.`CDUL` LIKE CONCAT('%', #{streetCode}, '%')
         </if>
 
-        <if test="streetReference != null">
-            AND s.`KL_NAME` LIKE CONCAT('%', #{streetReference}, '%')
-        </if>
+        <!--<if test="streetReference != null">-->
+            <!--AND s.`KL_NAME` LIKE CONCAT('%', #{streetReference}, '%')-->
+        <!--</if>-->
 
         <if test="building != null">
             AND d.`HOUSE` LIKE CONCAT('%', #{building}, '%')
