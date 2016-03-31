@@ -204,7 +204,9 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                     facilityServiceType.getPassport().matches(bd.getPassportSerial() + "\\s*" + bd.getPassportNumber()))) {
                 BenefitData data = cursor.getData().get(0);
 
-                facilityServiceType.putUpdateField(KAT, data.getCode());
+                if ("Г".equals(data.getBudget())) {
+                    facilityServiceType.putUpdateField(KAT, data.getCode());
+                }
 
                 facilityServiceType.putUpdateField(YEARIN, DateUtil.getYear(data.getDateIn()));
                 facilityServiceType.putUpdateField(MONTHIN, DateUtil.getMonth(data.getDateIn()));
