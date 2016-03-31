@@ -205,8 +205,15 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                 BenefitData data = cursor.getData().get(0);
 
                 List<PrivilegeCorrection> corrections = privilegeCorrectionBean.getPrivilegeCorrections(FilterWrapper.of(
-                        new PrivilegeCorrection(data.getCode(), facilityServiceType.getOrganizationId(),
-                                facilityServiceType.getUserOrganizationId())));
+                        new PrivilegeCorrection(data.getCode(), null, null, facilityServiceType.getOrganizationId(),
+                                facilityServiceType.getUserOrganizationId(), null)));
+
+                if (corrections.isEmpty()){
+                    privilegeCorrectionBean.getPrivilegeCorrections(FilterWrapper.of(
+                            new PrivilegeCorrection(data.getCode(), null, null, facilityServiceType.getUserOrganizationId(),
+                                    facilityServiceType.getUserOrganizationId(), null)));
+                }
+
                 if (!corrections.isEmpty()) {
                     DomainObject privilege = privilegeStrategy.getDomainObject(corrections.get(0).getObjectId());
 
