@@ -10,7 +10,6 @@ public class OsznDictionaryMenu extends ResourceTemplateMenu{
         addDictionary("organization");
         addDictionary("organization_type");
         addDictionary("ownership");
-        addDictionary("privilege");
         addDictionary("service");
     }
 }

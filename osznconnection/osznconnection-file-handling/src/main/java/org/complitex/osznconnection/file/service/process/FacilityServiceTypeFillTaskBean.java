@@ -204,21 +204,7 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                     facilityServiceType.getPassport().matches(bd.getPassportSerial() + "\\s*" + bd.getPassportNumber()))) {
                 BenefitData data = cursor.getData().get(0);
 
-                List<PrivilegeCorrection> corrections = privilegeCorrectionBean.getPrivilegeCorrections(FilterWrapper.of(
-                        new PrivilegeCorrection(data.getCode(), null, null, facilityServiceType.getOrganizationId(),
-                                facilityServiceType.getUserOrganizationId(), null)));
-
-                if (corrections.isEmpty()){
-                    privilegeCorrectionBean.getPrivilegeCorrections(FilterWrapper.of(
-                            new PrivilegeCorrection(data.getCode(), null, null, facilityServiceType.getUserOrganizationId(),
-                                    facilityServiceType.getUserOrganizationId(), null)));
-                }
-
-                if (!corrections.isEmpty()) {
-                    DomainObject privilege = privilegeStrategy.getDomainObject(corrections.get(0).getObjectId());
-
-                    facilityServiceType.putUpdateField(KAT, Integer.valueOf(privilege.getStringValue(CODE)));
-                }
+                facilityServiceType.putUpdateField(KAT, data.getCode());
 
                 facilityServiceType.putUpdateField(YEARIN, DateUtil.getYear(data.getDateIn()));
                 facilityServiceType.putUpdateField(MONTHIN, DateUtil.getMonth(data.getDateIn()));
