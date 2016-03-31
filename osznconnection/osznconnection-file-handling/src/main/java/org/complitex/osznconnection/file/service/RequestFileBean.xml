@@ -77,7 +77,7 @@
             <if test="type != null">and `type` = #{type}</if>
             <if test="status != null">and `status` = #{status}</if>
             <if test="serviceProvider != null">
-                and `name` like concat('${serviceProvider.getAttribute(926).stringCultures[0].value}', '%')
+                and `name` like concat(#{edrpou}, '%')
             </if>
             <include refid="permissionFilter"/>
         </where>

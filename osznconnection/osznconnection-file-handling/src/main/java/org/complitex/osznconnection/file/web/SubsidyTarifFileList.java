@@ -206,8 +206,7 @@ public class SubsidyTarifFileList extends TemplatePage {
 
                     @Override
                     protected String load() {
-                        return StringUtil.valueOf(item.getModelObject().getLoadedRecordCount(),
-                                item.getModelObject().getDbfRecordCount());
+                        return String.valueOf(item.getModelObject().getLoadedRecordCount());
                     }
                 }));
 

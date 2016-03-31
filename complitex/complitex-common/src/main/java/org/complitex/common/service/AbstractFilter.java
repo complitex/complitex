@@ -22,6 +22,9 @@ public class AbstractFilter implements Serializable {
     private Long organizationId;
     private Long userOrganizationId;
 
+    private DomainObject serviceProvider;
+    private String edrpou;
+
     public long getFirst() {
         return first;
     }
@@ -92,5 +95,21 @@ public class AbstractFilter implements Serializable {
 
     public void setUserOrganizationId(Long userOrganizationId) {
         this.userOrganizationId = userOrganizationId;
+    }
+
+    public DomainObject getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public void setServiceProvider(DomainObject serviceProvider) {
+        this.serviceProvider = serviceProvider;
+    }
+
+    public String getEdrpou() {
+        return edrpou;
+    }
+
+    public void setEdrpou(String edrpou) {
+        this.edrpou = edrpou;
     }
 }

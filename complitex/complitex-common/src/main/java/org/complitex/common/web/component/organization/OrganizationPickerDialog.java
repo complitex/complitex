@@ -1,13 +1,9 @@
 package org.complitex.common.web.component.organization;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -19,6 +15,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IModelComparator;
+import org.apache.wicket.model.Model;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
@@ -105,7 +102,19 @@ public class OrganizationPickerDialog extends Panel {
                     }
                 }));
 
-        final RadioGroup<DomainObject> radioGroup = new RadioGroup<DomainObject>("radioGroup", organizationModel){
+        RadioGroup<DomainObject> radioGroup = new RadioGroup<DomainObject>("radioGroup", new Model<DomainObject>(){
+            @Override
+            public DomainObject getObject() {
+                return organizationModel.getObject();
+            }
+
+            @Override
+            public void setObject(DomainObject object) {
+                if (object != null){
+                    organizationModel.setObject(object);
+                }
+            }
+        }){
             @Override
             public IModelComparator getModelComparator() {
                 return (component, newObject) -> !(component.getDefaultModelObject() == null || newObject == null)

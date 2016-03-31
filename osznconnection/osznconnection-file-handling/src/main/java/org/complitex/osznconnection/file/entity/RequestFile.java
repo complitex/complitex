@@ -73,7 +73,7 @@ public class RequestFile extends AbstractRequestFile {
             return null;
         }
 
-        return (directory != null ? directory + File.separator : "") + name;
+        return (directory != null && !directory.isEmpty() ? directory + File.separator : "") + name;
     }
 
     public boolean isProcessing() {
