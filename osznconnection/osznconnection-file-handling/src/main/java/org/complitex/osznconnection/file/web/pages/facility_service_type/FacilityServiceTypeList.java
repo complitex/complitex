@@ -280,7 +280,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, facilityServiceType, facilityServiceType.getInn());
+                        lookupPanel.open(target, facilityServiceType, facilityServiceType.getAccountNumber());
                     }
                 };
                 item.add(lookup);
