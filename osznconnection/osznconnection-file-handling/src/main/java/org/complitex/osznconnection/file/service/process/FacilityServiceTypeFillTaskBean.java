@@ -209,10 +209,10 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                 }
 
                 facilityServiceType.putUpdateField(YEARIN, DateUtil.getYear(data.getDateIn()));
-                facilityServiceType.putUpdateField(MONTHIN, DateUtil.getMonth(data.getDateIn()));
+                facilityServiceType.putUpdateField(MONTHIN, DateUtil.getMonth(data.getDateIn()) + 1);
 
                 facilityServiceType.putUpdateField(YEAROUT, DateUtil.getYear(data.getDateOut()));
-                facilityServiceType.putUpdateField(MONTHOUT, DateUtil.getMonth(data.getDateOut()));
+                facilityServiceType.putUpdateField(MONTHOUT, DateUtil.getMonth(data.getDateOut()) + 1);
 
                 facilityServiceType.putUpdateField(RAH, facilityServiceType.getAccountNumber());
 
