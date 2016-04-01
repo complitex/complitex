@@ -103,6 +103,10 @@ public class AddressService extends AbstractBean {
         request.setStreetId(null);
         request.setBuildingId(null);
 
+        if ("0".equals(request.getBuildingCorp())){
+            request.setBuildingCorp(null);
+        }
+
         Long osznId = request.getOrganizationId();
         Long userOrganizationId = request.getUserOrganizationId();
 
