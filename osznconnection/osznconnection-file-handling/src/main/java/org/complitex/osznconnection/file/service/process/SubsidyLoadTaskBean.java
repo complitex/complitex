@@ -7,9 +7,11 @@ import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
+import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.SubsidyBean;
-import org.complitex.osznconnection.file.service.SubsidyService;
+import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
+import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
 import org.complitex.osznconnection.file.service.util.SubsidyNameParser;
 
 import javax.ejb.EJB;

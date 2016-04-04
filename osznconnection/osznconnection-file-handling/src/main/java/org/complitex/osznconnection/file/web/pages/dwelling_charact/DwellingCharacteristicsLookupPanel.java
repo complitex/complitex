@@ -1,8 +1,8 @@
 package org.complitex.osznconnection.file.web.pages.dwelling_charact;
 
 import org.apache.wicket.Component;
-import org.complitex.osznconnection.file.entity.DwellingCharacteristics;
-import org.complitex.osznconnection.file.entity.DwellingCharacteristicsDBF;
+import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
+import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;

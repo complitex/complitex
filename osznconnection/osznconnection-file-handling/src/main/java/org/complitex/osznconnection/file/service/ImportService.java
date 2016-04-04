@@ -17,8 +17,12 @@ import org.complitex.organization.exception.RootOrganizationNotFound;
 import org.complitex.organization.service.OrganizationImportService;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.CorrectionImportFile;
-import org.complitex.osznconnection.file.entity.OwnershipImportFile;
-import org.complitex.osznconnection.file.entity.PrivilegeImportFile;
+import org.complitex.osznconnection.file.entity.privilege.OwnershipImportFile;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeImportFile;
+import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionImportService;
+import org.complitex.osznconnection.file.service.privilege.OwnershipImportService;
+import org.complitex.osznconnection.file.service.privilege.PrivilegeCorrectionImportService;
+import org.complitex.osznconnection.file.service.privilege.PrivilegeImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

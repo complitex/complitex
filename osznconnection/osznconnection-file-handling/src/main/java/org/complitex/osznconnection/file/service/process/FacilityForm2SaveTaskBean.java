@@ -2,9 +2,9 @@ package org.complitex.osznconnection.file.service.process;
 
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
-import org.complitex.osznconnection.file.entity.FacilityForm2DBF;
+import org.complitex.osznconnection.file.entity.privilege.FacilityForm2DBF;
 import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.service.FacilityForm2Bean;
+import org.complitex.osznconnection.file.service.privilege.FacilityForm2Bean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

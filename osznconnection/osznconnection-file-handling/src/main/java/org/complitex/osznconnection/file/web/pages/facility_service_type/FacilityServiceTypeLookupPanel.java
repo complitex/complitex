@@ -1,8 +1,8 @@
 package org.complitex.osznconnection.file.web.pages.facility_service_type;
 
 import org.apache.wicket.Component;
-import org.complitex.osznconnection.file.entity.FacilityServiceType;
-import org.complitex.osznconnection.file.entity.FacilityServiceTypeDBF;
+import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
+import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;

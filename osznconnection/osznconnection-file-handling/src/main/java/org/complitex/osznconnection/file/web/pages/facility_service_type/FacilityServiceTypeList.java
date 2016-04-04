@@ -30,9 +30,11 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.FacilityServiceTypeExample;
+import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
+import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF;
 import org.complitex.osznconnection.file.service.AddressService;
-import org.complitex.osznconnection.file.service.FacilityServiceTypeBean;
-import org.complitex.osznconnection.file.service.FacilityServiceTypeBean.OrderBy;
+import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
+import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean.OrderBy;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.process.FacilityServiceTypeBindTaskBean;
@@ -58,7 +60,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.complitex.common.util.StringUtil.emptyOnNull;
-import static org.complitex.osznconnection.file.entity.FacilityServiceTypeDBF.CDUL;
+import static org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF.CDUL;
 
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public final class FacilityServiceTypeList extends TemplatePage {

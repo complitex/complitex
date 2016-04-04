@@ -20,7 +20,7 @@ import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.RequestFileGroupFilter;
 import org.complitex.osznconnection.file.entity.RequestFileType;
-import org.complitex.osznconnection.file.service.RequestFileGroupBean;
+import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;

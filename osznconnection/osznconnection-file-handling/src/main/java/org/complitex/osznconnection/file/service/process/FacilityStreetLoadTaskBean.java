@@ -7,7 +7,9 @@ import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service.FacilityReferenceBookBean;
+import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
+import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
+import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 
 import javax.ejb.EJB;

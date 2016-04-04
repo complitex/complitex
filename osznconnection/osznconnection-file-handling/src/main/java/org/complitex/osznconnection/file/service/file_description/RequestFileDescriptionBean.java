@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.privilege.*;
+import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionValidateException.ValidationError;
 import org.complitex.osznconnection.file.service.file_description.jaxb.Field;
 import org.complitex.osznconnection.file.service.file_description.jaxb.Fields;

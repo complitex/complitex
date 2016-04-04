@@ -8,7 +8,9 @@ import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service.DwellingCharacteristicsBean;
+import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
+import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
+import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.util.FacilityNameParser;
 

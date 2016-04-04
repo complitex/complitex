@@ -6,7 +6,9 @@ import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service.FacilityReferenceBookBean;
+import org.complitex.osznconnection.file.entity.privilege.FacilityStreetType;
+import org.complitex.osznconnection.file.entity.privilege.FacilityStreetTypeDBF;
+import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 
 import javax.ejb.EJB;

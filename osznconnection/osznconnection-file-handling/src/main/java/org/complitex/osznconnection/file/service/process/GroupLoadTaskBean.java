@@ -6,10 +6,14 @@ import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service.BenefitBean;
-import org.complitex.osznconnection.file.service.PaymentBean;
+import org.complitex.osznconnection.file.entity.subsidy.Benefit;
+import org.complitex.osznconnection.file.entity.subsidy.BenefitDBF;
+import org.complitex.osznconnection.file.entity.subsidy.Payment;
+import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
+import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
+import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.RequestFileGroupBean;
+import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -74,15 +78,15 @@ public class GroupLoadTaskBean implements ITaskBean {
             @Override
             public void postProcess(int rowNumber, AbstractRequest request) {
                 //установка номера реестра
-                if (rowNumber == 0) {
-                    Payment payment = (Payment) request;
-
-                    Long registry = (Long) payment.getField(PaymentDBF.REE_NUM);
-
-                    if (registry != null) {
-                        paymentFile.setRegistry(registry.intValue());
-                    }
-                }
+//                if (rowNumber == 0) {
+//                    Payment payment = (Payment) request;
+//
+//                    Long registry = (Long) payment.getField(PaymentDBF.REE_NUM);
+//
+//                    if (registry != null) {
+//                        //paymentFile.setRegistry(registry.intValue());
+//                    }
+//                }
             }
         });
 
@@ -108,15 +112,15 @@ public class GroupLoadTaskBean implements ITaskBean {
                 @Override
                 public void postProcess(int rowNumber, AbstractRequest request) {
                     //установка номера реестра
-                    if (rowNumber == 0) {
-                        Benefit benefit = (Benefit) request;
-
-                        Long registry = (Long) benefit.getField(BenefitDBF.REE_NUM);
-
-                        if (registry != null) {
-                            benefitFile.setRegistry(registry.intValue());
-                        }
-                    }
+//                    if (rowNumber == 0) {
+//                        Benefit benefit = (Benefit) request;
+//
+//                        Long registry = (Long) benefit.getField(BenefitDBF.REE_NUM);
+//
+//                        if (registry != null) {
+//                            benefitFile.setRegistry(registry.intValue());
+//                        }
+//                    }
                 }
             });
 

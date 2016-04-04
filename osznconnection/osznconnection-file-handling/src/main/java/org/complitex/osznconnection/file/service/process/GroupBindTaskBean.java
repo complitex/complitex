@@ -8,11 +8,16 @@ import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.subsidy.Payment;
+import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
 import org.complitex.osznconnection.file.service.*;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
+import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
+import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
+import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -29,7 +34,7 @@ import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Map;
 
-import static org.complitex.osznconnection.file.entity.PaymentDBF.OWN_NUM_SR;
+import static org.complitex.osznconnection.file.entity.subsidy.PaymentDBF.OWN_NUM_SR;
 import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 
 /**

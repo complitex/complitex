@@ -12,9 +12,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.osznconnection.file.entity.SubsidyMasterData;
-import org.complitex.osznconnection.file.entity.SubsidyMasterDataDBF;
-import org.complitex.osznconnection.file.service.SubsidyMasterDataBean;
+import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterData;
+import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataDBF;
+import org.complitex.osznconnection.file.service.subsidy.SubsidyMasterDataBean;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;

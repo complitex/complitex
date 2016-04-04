@@ -86,22 +86,27 @@
         <!--<mapper resource="org/complitex/osznconnection/organization/strategy/OsznOrganization.xml"/>-->
 
         <mapper resource="org/complitex/osznconnection/file/service/AbstractRequestBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/PaymentBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/ActualPaymentBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/SubsidyBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/DwellingCharacteristicsBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/FacilityServiceTypeBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/FacilityForm2Bean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/FacilityReferenceBookBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/OwnershipCorrectionBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/PrivilegeCorrectionBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/RequestFileBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/RequestFileGroupBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/BenefitBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/SubsidyTarifBean.xml"/>
+
+        <mapper resource="org/complitex/osznconnection/file/service/subsidy/RequestFileGroupBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/subsidy/PaymentBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/subsidy/ActualPaymentBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/subsidy/SubsidyBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/subsidy/BenefitBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/subsidy/SubsidyTarifBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/subsidy/SubsidyMasterDataBean.xml"/>
+
+        <mapper resource="org/complitex/osznconnection/file/service/privilege/DwellingCharacteristicsBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityServiceTypeBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityForm2Bean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityReferenceBookBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/privilege/OwnershipCorrectionBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/privilege/PrivilegeCorrectionBean.xml"/>
+
+
         <mapper resource="org/complitex/osznconnection/file/service/PersonAccountBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/RequestFileHistoryBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/SubsidyMasterDataBean.xml"/>
+
 
         <mapper resource="org/complitex/osznconnection/file/service/status/details/StatusDetailBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/warning/RequestWarningBean.xml"/>

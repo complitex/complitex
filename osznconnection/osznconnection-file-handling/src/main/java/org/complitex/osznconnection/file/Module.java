@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file;
 
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.RequestFileGroupBean;
+import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;

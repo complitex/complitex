@@ -2,10 +2,9 @@ package org.complitex.osznconnection.file.service.process;
 
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
-import org.complitex.osznconnection.file.entity.ActualPayment;
-import org.complitex.osznconnection.file.entity.ActualPaymentDBF;
+import org.complitex.osznconnection.file.entity.subsidy.ActualPaymentDBF;
 import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.service.ActualPaymentBean;
+import org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

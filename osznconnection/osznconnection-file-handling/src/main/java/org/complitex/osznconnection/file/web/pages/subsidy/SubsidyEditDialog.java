@@ -18,9 +18,12 @@ import org.complitex.common.web.component.LabelTextField;
 import org.complitex.common.web.component.wiquery.ExtendedDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.SubsidyExample;
+import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
+import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
+import org.complitex.osznconnection.file.entity.subsidy.SubsidySum;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.SubsidyBean;
-import org.complitex.osznconnection.file.service.SubsidyService;
+import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
+import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescription;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
 import org.complitex.osznconnection.file.service.file_description.RequestFileFieldDescription;
@@ -33,7 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.complitex.osznconnection.file.entity.RequestStatus.SUBSIDY_NM_PAY_ERROR;
-import static org.complitex.osznconnection.file.entity.SubsidyDBF.*;
+import static org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF.*;
 
 
 /**

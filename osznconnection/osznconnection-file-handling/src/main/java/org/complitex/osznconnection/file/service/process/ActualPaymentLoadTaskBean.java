@@ -6,7 +6,9 @@ import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service.ActualPaymentBean;
+import org.complitex.osznconnection.file.entity.subsidy.ActualPayment;
+import org.complitex.osznconnection.file.entity.subsidy.ActualPaymentDBF;
+import org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 
 import javax.ejb.EJB;

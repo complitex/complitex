@@ -9,7 +9,6 @@
         <result column="directory" property="directory"/>
         <result column="organization_id" property="organizationId"/>
         <result column="user_organization_id" property="userOrganizationId"/>
-        <result column="registry" property="registry"/>
         <result column="begin_date" property="beginDate"/>
         <result column="end_date" property="endDate"/>
         <result column="dbf_record_count" property="dbfRecordCount"/>
@@ -29,17 +28,16 @@
     <insert id="insertRequestFile" parameterType="org.complitex.osznconnection.file.entity.RequestFile"
             keyProperty="id" useGeneratedKeys="true">
         insert into `request_file`
-            (`group_id`, `organization_id`, `name`, `directory`, `registry`, `begin_date`, `end_date`, `dbf_record_count`,
+            (`group_id`, `organization_id`, `name`, `directory`, `begin_date`, `end_date`, `dbf_record_count`,
              `length`, `check_sum`, `type`, `loaded`, `status`, `user_organization_id`)
         values
-            (#{groupId}, #{organizationId}, #{name}, #{directory}, #{registry}, #{beginDate}, #{endDate},
+            (#{groupId}, #{organizationId}, #{name}, #{directory}, #{beginDate}, #{endDate},
              #{dbfRecordCount}, #{length}, #{checkSum}, #{type}, #{loaded}, #{status}, #{userOrganizationId});
     </insert>
 
     <update id="updateRequestFile" parameterType="org.complitex.osznconnection.file.entity.RequestFile">
         update `request_file`
         <set>
-            <if test="registry != null">`registry` = #{registry},</if>
             <if test="status != null">`status` = #{status}</if>
         </set>
         where `id` = #{id}
@@ -70,7 +68,6 @@
             <if test="name != null">and `name` like CONCAT('%',#{name},'%')</if>
             <if test="organizationId != null">and `organization_id` = #{organizationId}</if>
             <if test="userOrganizationId != null">and `user_organization_id` = #{userOrganizationId}</if>
-            <if test="registry != null">and `registry` = #{registry}</if>
             <if test="year != null">and YEAR(`begin_date`) = #{year}</if>
             <if test="month != null">and MONTH(`begin_date`) = #{month}</if>
             <if test="dbfRecordCount != null">and `dbf_record_count` like concat('%',#{dbfRecordCount},'%')</if>
@@ -242,7 +239,7 @@
             `request_file`
         where
             `name` = #{name} and organization_id = #{organizationId} and `user_organization_id` = #{userOrganizationId}
-                and `registry` = #{registry} and `begin_date` = #{beginDate}
+                and `begin_date` = #{beginDate}
                   and (`end_date` = #{endDate} or `end_date` is null)
             and `check_sum` = #{checkSum}
     </select>
@@ -251,7 +248,7 @@
             resultType="long">
         select id from `request_file` where `name` = #{name} and `organization_id` = #{organizationId}
             and `user_organization_id` = #{userOrganizationId}
-            and `registry` = #{registry} and `begin_date` = #{beginDate}
+            and `begin_date` = #{beginDate}
             and (`end_date` = #{endDate} or `end_date` is null)
             and (`check_sum` = #{checkSum} or `check_sum` is null)
         limit 1

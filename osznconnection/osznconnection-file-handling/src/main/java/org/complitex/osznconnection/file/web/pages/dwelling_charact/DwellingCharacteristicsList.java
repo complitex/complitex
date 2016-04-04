@@ -31,7 +31,13 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample;
+import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
+import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
+import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
+import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
 import org.complitex.osznconnection.file.service.*;
+import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
+import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 import org.complitex.osznconnection.file.service.process.DwellingCharacteristicsBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsStatusDetailRenderer;
@@ -55,7 +61,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.complitex.common.util.StringUtil.emptyOnNull;
-import static org.complitex.osznconnection.file.entity.DwellingCharacteristicsDBF.CDUL;
+import static org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF.CDUL;
 
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public final class DwellingCharacteristicsList extends TemplatePage {

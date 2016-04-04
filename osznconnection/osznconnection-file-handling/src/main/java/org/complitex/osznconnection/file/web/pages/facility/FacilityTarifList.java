@@ -3,9 +3,9 @@ package org.complitex.osznconnection.file.web.pages.facility;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.osznconnection.file.entity.FacilityTarif;
-import org.complitex.osznconnection.file.entity.FacilityTarifDBF;
-import org.complitex.osznconnection.file.service.FacilityReferenceBookBean;
+import org.complitex.osznconnection.file.entity.privilege.FacilityTarif;
+import org.complitex.osznconnection.file.entity.privilege.FacilityTarifDBF;
+import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.ListTemplatePage;
 

@@ -7,10 +7,10 @@ import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.SubsidyTarif;
-import org.complitex.osznconnection.file.entity.SubsidyTarifDBF;
+import org.complitex.osznconnection.file.entity.subsidy.SubsidyTarif;
+import org.complitex.osznconnection.file.entity.subsidy.SubsidyTarifDBF;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.SubsidyTarifBean;
+import org.complitex.osznconnection.file.service.subsidy.SubsidyTarifBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

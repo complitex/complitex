@@ -3,10 +3,10 @@ package org.complitex.osznconnection.file.service.process;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
-import org.complitex.osznconnection.file.entity.DwellingCharacteristicsDBF;
+import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.service.DwellingCharacteristicsBean;
+import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

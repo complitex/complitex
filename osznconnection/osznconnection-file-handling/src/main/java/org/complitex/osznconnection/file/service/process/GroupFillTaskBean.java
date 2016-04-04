@@ -8,9 +8,11 @@ import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service.BenefitBean;
-import org.complitex.osznconnection.file.service.PaymentBean;
-import org.complitex.osznconnection.file.service.RequestFileGroupBean;
+import org.complitex.osznconnection.file.entity.subsidy.Benefit;
+import org.complitex.osznconnection.file.entity.subsidy.Payment;
+import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
+import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
+import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
@@ -28,9 +30,6 @@ import javax.ejb.TransactionManagementType;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

@@ -12,6 +12,6 @@ public class AlreadyLoadedException extends AbstractException {
             "и идентификатором организации: {3} уже загружен";
 
     public AlreadyLoadedException(RequestFile rf) {
-        super(MESSAGE_PATTERN, rf.getName(), rf.getRegistry(), rf.getBeginDate(), rf.getOrganizationId());
+        super(MESSAGE_PATTERN, rf.getName(), null, rf.getBeginDate(), rf.getOrganizationId());
     }
 }

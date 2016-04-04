@@ -2,8 +2,8 @@ package org.complitex.osznconnection.file.web.pages.payment;
 
 import org.apache.wicket.Component;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.osznconnection.file.entity.Payment;
-import org.complitex.osznconnection.file.entity.PaymentDBF;
+import org.complitex.osznconnection.file.entity.subsidy.Payment;
+import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
