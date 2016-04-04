@@ -2,8 +2,8 @@ package org.complitex.osznconnection.file.service.subsidy;
 
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.osznconnection.file.entity.RequestFileGroup;
-import org.complitex.osznconnection.file.entity.RequestFileGroupFilter;
+import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
+import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroupFilter;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 

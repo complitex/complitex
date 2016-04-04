@@ -1,7 +1,9 @@
-package org.complitex.osznconnection.file.entity;
+package org.complitex.osznconnection.file.entity.subsidy;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractFilter;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
+import org.complitex.osznconnection.file.entity.RequestFileType;
 
 import java.util.Date;
 

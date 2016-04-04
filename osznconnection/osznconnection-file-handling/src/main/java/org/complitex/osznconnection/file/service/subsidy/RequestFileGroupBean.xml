@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean">
-    <resultMap id="requestFileGroupResultMap" type="org.complitex.osznconnection.file.entity.RequestFileGroup">
+    <resultMap id="requestFileGroupResultMap" type="org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup">
         <id column="gid" property="id"/>
 
         <result column="status" property="status"/>
@@ -43,12 +43,12 @@
         </association>
     </resultMap>
 
-    <insert id="insertRequestFileGroup"  parameterType="org.complitex.osznconnection.file.entity.RequestFileGroup"
+    <insert id="insertRequestFileGroup"  parameterType="org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup"
             keyProperty="id" useGeneratedKeys="true">
         insert into `request_file_group` (`status`) value (#{status})
     </insert>
 
-    <update id="updateRequestFileGroup"  parameterType="org.complitex.osznconnection.file.entity.RequestFileGroup">
+    <update id="updateRequestFileGroup"  parameterType="org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup">
         update `request_file_group` set `status` = #{status} where `id` = #{id}
     </update>
 
@@ -102,7 +102,7 @@
         </where>
     </sql>
 
-    <select id="selectRequestFilesGroups" parameterType="org.complitex.osznconnection.file.entity.RequestFileGroupFilter"
+    <select id="selectRequestFilesGroups" parameterType="org.complitex.osznconnection.file.entity.subsidy.RequestFileGroupFilter"
             resultMap="requestFileGroupResultMap">
         select
             g.id as gid,

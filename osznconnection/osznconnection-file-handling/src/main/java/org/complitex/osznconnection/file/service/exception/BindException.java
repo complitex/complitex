@@ -2,7 +2,7 @@ package org.complitex.osznconnection.file.service.exception;
 
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.RequestFileGroup;
+import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

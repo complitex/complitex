@@ -10,6 +10,7 @@ import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.subsidy.Payment;
 import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
+import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.service.*;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;

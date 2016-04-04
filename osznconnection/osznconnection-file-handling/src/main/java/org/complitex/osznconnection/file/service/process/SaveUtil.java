@@ -6,6 +6,7 @@ import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
+import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
 import org.complitex.osznconnection.file.service.warning.IWarningRenderer;

@@ -12,6 +12,7 @@ import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataFile;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;

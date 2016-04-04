@@ -10,6 +10,7 @@ import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.subsidy.Benefit;
 import org.complitex.osznconnection.file.entity.subsidy.Payment;
+import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;

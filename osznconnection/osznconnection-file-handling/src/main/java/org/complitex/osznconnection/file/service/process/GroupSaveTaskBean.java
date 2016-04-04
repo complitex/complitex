@@ -4,6 +4,7 @@ import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
+import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;

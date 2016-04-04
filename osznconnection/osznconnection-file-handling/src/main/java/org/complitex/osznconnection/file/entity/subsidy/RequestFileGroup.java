@@ -1,12 +1,14 @@
-package org.complitex.osznconnection.file.entity;
+package org.complitex.osznconnection.file.entity.subsidy;
 
 import org.complitex.common.entity.LogChangeList;
+import org.complitex.osznconnection.file.entity.AbstractRequestFileGroup;
+import org.complitex.osznconnection.file.entity.RequestFile;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 29.09.2010 14:31:02
  */
-public class RequestFileGroup extends AbstractRequestFileGroup{
+public class RequestFileGroup extends AbstractRequestFileGroup {
 
     @Override
     public LogChangeList getLogChangeList() {

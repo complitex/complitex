@@ -5,7 +5,7 @@ import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.RequestFileGroup;
+import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
 import org.complitex.osznconnection.file.service.process.RequestFileStorage.RequestFiles;
