@@ -16,9 +16,8 @@ import org.complitex.common.web.component.scroll.ScrollListBehavior;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
-import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +33,9 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     @EJB
     private LogBean logBean;
 
-    @EJB
-    private RequestFileDescriptionBean requestFileDescriptionBean;
-
-    public AbstractFileListPanel(String id) {
-        super(id);
+    public AbstractFileListPanel(String id, ProcessType loadProcessType, ProcessType bindProcessType,
+                                 ProcessType fillProcessType, ProcessType saveProcessType) {
+        super(id, loadProcessType, bindProcessType, fillProcessType, saveProcessType);
 
         //Имя
         addColumn(new Column() {
@@ -60,17 +57,6 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
                         new PageParameters().set("request_file_id", item.getModelObject().getId()));
             }
         });
-    }
-
-    @Override
-    protected boolean hasFieldDescription() {
-        return requestFileDescriptionBean.getFileDescription(getRequestFileType()) != null;
-    }
-
-    @Override
-    protected void initFilter(RequestFileFilter filter) {
-        super.initFilter(filter);
-        filter.setType(getRequestFileType());
     }
 
     @Override
@@ -164,8 +150,6 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     protected MonthParameterViewMode getLoadMonthParameterViewMode() {
         return MonthParameterViewMode.RANGE;
     }
-
-    protected abstract RequestFileType getRequestFileType();
 
     protected abstract Class<? extends WebPage> getItemListPageClass();
 }

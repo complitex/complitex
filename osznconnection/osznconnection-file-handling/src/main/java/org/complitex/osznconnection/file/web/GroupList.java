@@ -19,11 +19,9 @@ import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroupFilter;
-import org.complitex.osznconnection.file.entity.RequestFileType;
-import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
-import org.complitex.osznconnection.file.service.process.ProcessType;
+import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.file.web.pages.benefit.BenefitList;
@@ -39,6 +37,8 @@ import javax.ejb.EJB;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
 /**
  *
@@ -59,7 +59,7 @@ public class GroupList extends ScrollListPage {
     private class GroupListPanel extends AbstractProcessableListPanel<RequestFileGroup, RequestFileGroupFilter> {
 
         GroupListPanel(String id) {
-            super(id);
+            super(id, LOAD_GROUP, BIND_GROUP, FILL_GROUP, SAVE_GROUP);
 
             add(new Label("title", new ResourceModel("title")));
 
@@ -131,34 +131,8 @@ public class GroupList extends ScrollListPage {
         }
 
         @Override
-        protected boolean hasFieldDescription() {
-            return requestFileDescriptionBean.getFileDescription(RequestFileType.PAYMENT) != null
-                    && requestFileDescriptionBean.getFileDescription(RequestFileType.BENEFIT) != null;
-        }
-
-        @Override
         protected String getPreferencePage() {
             return GroupList.class.getName();
-        }
-
-        @Override
-        protected ProcessType getLoadProcessType() {
-            return ProcessType.LOAD_GROUP;
-        }
-
-        @Override
-        protected ProcessType getBindProcessType() {
-            return ProcessType.BIND_GROUP;
-        }
-
-        @Override
-        protected ProcessType getFillProcessType() {
-            return ProcessType.FILL_GROUP;
-        }
-
-        @Override
-        protected ProcessType getSaveProcessType() {
-            return ProcessType.SAVE_GROUP;
         }
 
         @Override
@@ -274,7 +248,7 @@ public class GroupList extends ScrollListPage {
 
         @Override
         protected void showMessages(AjaxRequestTarget target) {
-            for (RequestFile rf : processManagerBean.getLinkError(ProcessType.LOAD_GROUP, true)) {
+            for (RequestFile rf : processManagerBean.getLinkError(LOAD_GROUP, true)) {
                 error(getStringFormat("request_file.link_error", rf.getFullName()));
             }
         }

@@ -5,12 +5,10 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
-import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
-import org.complitex.osznconnection.file.web.pages.dwelling_charact.DwellingCharacteristicsList;
+import org.complitex.osznconnection.file.web.pages.privilege.DwellingCharacteristicsList;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.pages.ScrollListPage;
@@ -19,6 +17,8 @@ import org.complitex.template.web.security.SecurityRole;
 import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
+
+import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
 /**
  *
@@ -35,7 +35,8 @@ public final class DwellingCharacteristicsFileList extends ScrollListPage {
         super(parameters);
 
         add(new Label("title", new ResourceModel("title")));
-        add(fileListPanel = new AbstractFileListPanel("fileListPanel") {
+        add(fileListPanel = new AbstractFileListPanel("fileListPanel", LOAD_DWELLING_CHARACTERISTICS,
+                BIND_DWELLING_CHARACTERISTICS, FILL_DWELLING_CHARACTERISTICS, SAVE_DWELLING_CHARACTERISTICS) {
 
             @Override
             protected String getPreferencePage() {
@@ -43,33 +44,8 @@ public final class DwellingCharacteristicsFileList extends ScrollListPage {
             }
 
             @Override
-            protected RequestFileType getRequestFileType() {
-                return RequestFileType.DWELLING_CHARACTERISTICS;
-            }
-
-            @Override
             protected Class<? extends WebPage> getItemListPageClass() {
                 return DwellingCharacteristicsList.class;
-            }
-
-            @Override
-            protected ProcessType getLoadProcessType() {
-                return ProcessType.LOAD_DWELLING_CHARACTERISTICS;
-            }
-
-            @Override
-            protected ProcessType getBindProcessType() {
-                return ProcessType.BIND_DWELLING_CHARACTERISTICS;
-            }
-
-            @Override
-            protected ProcessType getFillProcessType() {
-                return ProcessType.FILL_DWELLING_CHARACTERISTICS;
-            }
-
-            @Override
-            protected ProcessType getSaveProcessType() {
-                return ProcessType.SAVE_DWELLING_CHARACTERISTICS;
             }
 
             @Override

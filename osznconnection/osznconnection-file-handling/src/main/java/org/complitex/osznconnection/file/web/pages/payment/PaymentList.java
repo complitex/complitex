@@ -36,7 +36,7 @@ import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
-import org.complitex.osznconnection.file.service.process.GroupBindTaskBean;
+import org.complitex.osznconnection.file.service.subsidy.task.GroupBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.PaymentBenefitStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.PaymentExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;

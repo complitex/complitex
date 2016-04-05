@@ -25,7 +25,7 @@ import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreetType;
 import org.complitex.osznconnection.file.entity.privilege.FacilityTarif;
-import org.complitex.osznconnection.file.service.process.FacilityStreetLoadTaskBean;
+import org.complitex.osznconnection.file.service.privilege.task.FacilityStreetLoadTaskBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

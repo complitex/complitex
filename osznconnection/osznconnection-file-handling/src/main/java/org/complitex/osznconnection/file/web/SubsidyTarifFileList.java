@@ -37,7 +37,7 @@ import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -56,10 +56,8 @@ public class SubsidyTarifFileList extends TemplatePage {
     @EJB
     private RequestFileDescriptionBean requestFileDescriptionBean;
     private RequestFileLoadPanel requestFileLoadPanel;
-    private final ModificationManager modificationManager;
 
     public SubsidyTarifFileList() {
-        this.modificationManager = new ModificationManager(this, hasFieldDescription());
         init();
     }
 
@@ -231,7 +229,6 @@ public class SubsidyTarifFileList extends TemplatePage {
 
         WebMarkupContainer buttons = new WebMarkupContainer("buttons");
         buttons.setOutputMarkupId(true);
-        buttons.setVisibilityAllowed(modificationManager.isModificationsAllowed());
         form.add(buttons);
 
         timerManager.addUpdateComponent(buttons);
@@ -288,19 +285,11 @@ public class SubsidyTarifFileList extends TemplatePage {
 
         //Отобразить сообщения
         messagesManager.showMessages();
-
-        //Отобразить сообщения об отсутствии описания файлов запросов если необходимо
-        modificationManager.reportErrorIfNecessary();
     }
 
     @Override
     protected List<ToolbarButton> getToolbarButtons(String id) {
-        return Arrays.asList(new LoadButton(id) {
-
-            {
-                setVisibilityAllowed(modificationManager.isModificationsAllowed());
-            }
-
+        return Collections.singletonList(new LoadButton(id) {
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 requestFileLoadPanel.open(target);

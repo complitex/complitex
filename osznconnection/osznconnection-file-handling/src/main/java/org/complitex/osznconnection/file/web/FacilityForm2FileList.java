@@ -47,10 +47,8 @@ public final class FacilityForm2FileList extends ScrollListPage {
     private RequestFileDescriptionBean requestFileDescriptionBean;
     private WebMarkupContainer buttons;
     private Form<RequestFileFilter> form;
-    private ModificationManager modificationManager;
 
     public FacilityForm2FileList() {
-        this.modificationManager = new ModificationManager(this, hasFieldDescription());
         init();
     }
 
@@ -217,7 +215,6 @@ public final class FacilityForm2FileList extends ScrollListPage {
         //Контейнер кнопок для ajax
         buttons = new WebMarkupContainer("buttons");
         buttons.setOutputMarkupId(true);
-        buttons.setVisibilityAllowed(modificationManager.isModificationsAllowed());
         form.add(buttons);
 
         timerManager.addUpdateComponent(buttons);
@@ -304,9 +301,6 @@ public final class FacilityForm2FileList extends ScrollListPage {
 
         //Отобразить сообщения
         messagesManager.showMessages();
-
-        //Отобразить сообщения об отсутствии описания файлов запросов если необходимо
-        modificationManager.reportErrorIfNecessary();
     }
 
     private ProcessType getFillProcessType() {

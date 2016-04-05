@@ -5,9 +5,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
-import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.pages.actualpayment.ActualPaymentList;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
@@ -18,6 +16,8 @@ import org.complitex.template.web.security.SecurityRole;
 import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
+
+import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class ActualPaymentFileList extends ScrollListPage {
@@ -30,7 +30,8 @@ public class ActualPaymentFileList extends ScrollListPage {
         super(parameters);
 
         add(new Label("title", new ResourceModel("title")));
-        add(fileListPanel = new AbstractFileListPanel("fileListPanel") {
+        add(fileListPanel = new AbstractFileListPanel("fileListPanel", LOAD_ACTUAL_PAYMENT,
+                BIND_ACTUAL_PAYMENT, FILL_ACTUAL_PAYMENT, SAVE_ACTUAL_PAYMENT) {
 
             @Override
             protected String getPreferencePage() {
@@ -38,33 +39,8 @@ public class ActualPaymentFileList extends ScrollListPage {
             }
 
             @Override
-            protected RequestFileType getRequestFileType() {
-                return RequestFileType.ACTUAL_PAYMENT;
-            }
-
-            @Override
             protected Class<? extends WebPage> getItemListPageClass() {
                 return ActualPaymentList.class;
-            }
-
-            @Override
-            protected ProcessType getLoadProcessType() {
-                return ProcessType.LOAD_ACTUAL_PAYMENT;
-            }
-
-            @Override
-            protected ProcessType getBindProcessType() {
-                return ProcessType.BIND_ACTUAL_PAYMENT;
-            }
-
-            @Override
-            protected ProcessType getFillProcessType() {
-                return ProcessType.FILL_ACTUAL_PAYMENT;
-            }
-
-            @Override
-            protected ProcessType getSaveProcessType() {
-                return ProcessType.SAVE_ACTUAL_PAYMENT;
             }
 
             @Override

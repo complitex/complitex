@@ -12,12 +12,16 @@ import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataFile;
 import org.complitex.osznconnection.file.service.RequestFileBean;
+import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBean;
+import org.complitex.osznconnection.file.service.privilege.task.*;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
+import org.complitex.osznconnection.file.service.subsidy.task.*;
 import org.complitex.osznconnection.file.service.warning.ReportWarningRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +60,9 @@ public class ProcessManagerBean {
 
     @EJB
     private RequestFileGroupBean requestFileGroupBean;
+
+    @EJB
+    private PrivilegeFileGroupBean privilegeFileGroupBean;
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -161,6 +168,22 @@ public class ProcessManagerBean {
         return false;
     }
 
+    public boolean isProcessing(IExecutorObject executorObject, ProcessType... processTypes) {
+        if (executorObject == null || executorObject.isProcessing()){
+            return true;
+        }
+
+        for (ProcessType processType : processTypes) {
+            for (Process process : getAllUsersProcess(processType)) {
+                if (process.isRunning() && process.isWaiting(executorObject)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public boolean isGlobalProcessing(ProcessType processType) {
         for (Process process : getAllUsersProcess(processType)) {
             if (process.isProcessing()) {
@@ -197,6 +220,67 @@ public class ProcessManagerBean {
                 executorBean.executeNext(process);
             }
         }
+    }
+
+    private List<RequestFileGroup> getRequestFileGroups(List<Long> ids) {
+        List<RequestFileGroup> groups = new ArrayList<RequestFileGroup>();
+
+        for (Long id : ids) {
+            RequestFileGroup group = requestFileGroupBean.getRequestFileGroup(id);
+
+            if (!isProcessing(group, BIND_GROUP, FILL_GROUP, SAVE_GROUP)) {
+                groups.add(group);
+            }
+        }
+
+        return groups;
+    }
+
+    private List<RequestFile> getRequestFiles(List<Long> ids, ProcessType... processTypes) {
+        List<RequestFile> requestFiles = new ArrayList<RequestFile>();
+
+        for (Long id : ids) {
+            RequestFile requestFile = requestFileBean.getRequestFile(id);
+
+            if (!isProcessing(requestFile, processTypes)) {
+                requestFiles.add(requestFile);
+            }
+        }
+        return requestFiles;
+    }
+
+    private List<RequestFile> getActualPaymentFiles(List<Long> ids) {
+        return getRequestFiles(ids, BIND_ACTUAL_PAYMENT, FILL_ACTUAL_PAYMENT, SAVE_ACTUAL_PAYMENT);
+    }
+
+    private List<RequestFile> getSubsidyFiles(List<Long> ids) {
+        return getRequestFiles(ids,  BIND_SUBSIDY, FILL_SUBSIDY, SAVE_SUBSIDY);
+    }
+
+    private List<RequestFile> getDwellingCharacteristicsFiles(List<Long> ids) {
+        return getRequestFiles(ids, BIND_DWELLING_CHARACTERISTICS, FILL_DWELLING_CHARACTERISTICS, SAVE_DWELLING_CHARACTERISTICS);
+    }
+
+    private List<RequestFile> getFacilityServiceTypeFiles(List<Long> ids) {
+        return getRequestFiles(ids, BIND_FACILITY_SERVICE_TYPE, FILL_FACILITY_SERVICE_TYPE, SAVE_FACILITY_SERVICE_TYPE);
+    }
+
+    private List<RequestFile> getFacilityForm2Files(List<Long> ids) {
+        return getRequestFiles(ids, FILL_FACILITY_FORM2, SAVE_FACILITY_FORM2);
+    }
+
+    private List<PrivilegeFileGroup> getPrivilegeFileGroups(List<Long> ids) {
+        List<PrivilegeFileGroup> groups = new ArrayList<>();
+
+        for (Long id : ids) {
+            PrivilegeFileGroup group = privilegeFileGroupBean.getPrivilegeFileGroup(id);
+
+            if (!isProcessing(group, BIND_GROUP, FILL_GROUP, SAVE_GROUP)) {
+                groups.add(group);
+            }
+        }
+
+        return groups;
     }
 
     @Asynchronous
@@ -254,102 +338,14 @@ public class ProcessManagerBean {
         }
     }
 
-    private List<RequestFileGroup> getGroups(List<Long> ids) {
-        List<RequestFileGroup> groups = new ArrayList<RequestFileGroup>();
-
-        for (Long id : ids) {
-            RequestFileGroup group = requestFileGroupBean.getRequestFileGroup(id);
-
-            if (group != null && !group.isProcessing() && !isGlobalWaiting(BIND_GROUP, group) && !isGlobalWaiting(FILL_GROUP, group)
-                    && !isGlobalWaiting(SAVE_GROUP, group)) {
-                groups.add(group);
-            }
-        }
-
-        return groups;
-    }
-
-    private List<RequestFile> getActualPaymentFiles(List<Long> ids) {
-        List<RequestFile> requestFiles = new ArrayList<RequestFile>();
-
-        for (Long id : ids) {
-            RequestFile requestFile = requestFileBean.getRequestFile(id);
-
-            if (requestFile != null && !requestFile.isProcessing() && !isGlobalWaiting(BIND_ACTUAL_PAYMENT, requestFile)
-                    && !isGlobalWaiting(FILL_ACTUAL_PAYMENT, requestFile) && !isGlobalWaiting(SAVE_ACTUAL_PAYMENT, requestFile)) {
-                requestFiles.add(requestFile);
-            }
-        }
-        return requestFiles;
-    }
-
-    private List<RequestFile> getSubsidyFiles(List<Long> ids) {
-        List<RequestFile> requestFiles = new ArrayList<RequestFile>();
-
-        for (Long id : ids) {
-            RequestFile requestFile = requestFileBean.getRequestFile(id);
-
-            if (requestFile != null && !requestFile.isProcessing() && !isGlobalWaiting(BIND_SUBSIDY, requestFile)
-                    && !isGlobalWaiting(FILL_SUBSIDY, requestFile) && !isGlobalWaiting(SAVE_SUBSIDY, requestFile)) {
-                requestFiles.add(requestFile);
-            }
-        }
-        return requestFiles;
-    }
-
-    private List<RequestFile> getDwellingCharacteristicsFiles(List<Long> ids) {
-        List<RequestFile> requestFiles = new ArrayList<RequestFile>();
-
-        for (Long id : ids) {
-            RequestFile requestFile = requestFileBean.getRequestFile(id);
-
-            if (requestFile != null && !requestFile.isProcessing() && !isGlobalWaiting(BIND_DWELLING_CHARACTERISTICS, requestFile)
-                    && !isGlobalWaiting(FILL_DWELLING_CHARACTERISTICS, requestFile)
-                    && !isGlobalWaiting(SAVE_DWELLING_CHARACTERISTICS, requestFile)) {
-                requestFiles.add(requestFile);
-            }
-        }
-        return requestFiles;
-    }
-
-    private List<RequestFile> getFacilityServiceTypeFiles(List<Long> ids) {
-        List<RequestFile> requestFiles = new ArrayList<RequestFile>();
-
-        for (Long id : ids) {
-            RequestFile requestFile = requestFileBean.getRequestFile(id);
-
-            if (requestFile != null && !requestFile.isProcessing() && !isGlobalWaiting(BIND_FACILITY_SERVICE_TYPE, requestFile)
-                    && !isGlobalWaiting(FILL_FACILITY_SERVICE_TYPE, requestFile)
-                    && !isGlobalWaiting(SAVE_FACILITY_SERVICE_TYPE, requestFile)) {
-                requestFiles.add(requestFile);
-            }
-        }
-        return requestFiles;
-    }
-
-    private List<RequestFile> getFacilityForm2Files(List<Long> ids) {
-        List<RequestFile> requestFiles = new ArrayList<RequestFile>();
-
-        for (Long id : ids) {
-            RequestFile requestFile = requestFileBean.getRequestFile(id);
-
-            if (requestFile != null && !requestFile.isProcessing()
-                    && !isGlobalWaiting(FILL_FACILITY_FORM2, requestFile)
-                    && !isGlobalWaiting(SAVE_FACILITY_FORM2, requestFile)) {
-                requestFiles.add(requestFile);
-            }
-        }
-        return requestFiles;
-    }
-
     @Asynchronous
     public void bindGroup(List<Long> ids, Map processParameters) {
-        execute(BIND_GROUP, GroupBindTaskBean.class, getGroups(ids), null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+        execute(BIND_GROUP, GroupBindTaskBean.class, getRequestFileGroups(ids), null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
     @Asynchronous
     public void fillGroup(List<Long> ids, Map processParameters) {
-        execute(FILL_GROUP, GroupFillTaskBean.class, getGroups(ids), null, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
+        execute(FILL_GROUP, GroupFillTaskBean.class, getRequestFileGroups(ids), null, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
     @Asynchronous
@@ -368,7 +364,7 @@ public class ProcessManagerBean {
             }
         };
 
-        execute(SAVE_GROUP, GroupSaveTaskBean.class, getGroups(ids), listener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+        execute(SAVE_GROUP, GroupSaveTaskBean.class, getRequestFileGroups(ids), listener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
     @Asynchronous
@@ -613,5 +609,77 @@ public class ProcessManagerBean {
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
         }
+    }
+
+    @Asynchronous
+    public void loadPrivilegeGroup(long userOrganizationId, long osznId, int monthFrom, int monthTo, int year) {
+        Process process = getProcess(LOAD_PRIVILEGE_GROUP);
+
+        //TODO add privilege group load bean
+
+//        try {
+//            //поиск групп файлов запросов
+//            if (!process.isRunning()) {
+//                process.setPreprocess(true);
+//                process.init();
+//            }
+//
+//            LoadUtil.LoadGroupParameter loadParameter = LoadUtil.getLoadGroupParameter(userOrganizationId, osznId,
+//                    monthFrom, monthTo, year);
+//
+//            for (RequestFileGroup fileGroup : loadParameter.getRequestFileGroups()) {
+//                fileGroup.getPaymentFile().setUserOrganizationId(userOrganizationId);
+//                fileGroup.getBenefitFile().setUserOrganizationId(userOrganizationId);
+//            }
+//
+//            List<RequestFile> linkError = loadParameter.getLinkError();
+//
+//            process.addLinkError(linkError);
+//
+//            for (RequestFile rf : linkError) {
+//                logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null, rf.getId(),
+//                        Log.EVENT.CREATE, rf.getLogChangeList(), "Связанный файл не найден для объекта {0}",
+//                        rf.getLogObjectName());
+//            }
+//
+//            process.getQueue().addAll(loadParameter.getRequestFileGroups());
+//
+//            //загрузка данных
+//            if (!process.isRunning()) {
+//                process.setPreprocess(false);
+//                process.setMaxErrors(configBean.getInteger(LOAD_MAX_ERROR_COUNT, true));
+//                process.setMaxThread(configBean.getInteger(LOAD_THREAD_SIZE, true));
+//                process.setTask(EjbBeanLocator.getBean(GroupLoadTaskBean.class));
+//
+//                executorBean.execute(process);
+//            } else {
+//                int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
+//
+//                for (int i = 0; i < freeThreadCount; ++i) {
+//                    executorBean.executeNext(process);
+//                }
+//            }
+//        } catch (Exception e) {
+//            process.preprocessError(); //todo add ui message
+//
+//            log.error("Ошибка процесса загрузки файлов.", e);
+//            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null,
+//                    Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+//        }
+    }
+
+    @Asynchronous
+    public void bindPrivilegeGroup(List<Long> ids, Map processParameters) {
+        execute(BIND_PRIVILEGE_GROUP, PrivilegeGroupBindTaskBean.class, getPrivilegeFileGroups(ids), null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+    }
+
+    @Asynchronous
+    public void fillPrivilegeGroup(List<Long> ids, Map processParameters) {
+        execute(FILL_PRIVILEGE_GROUP, PrivilegeGroupFillTaskBean.class, getPrivilegeFileGroups(ids), null, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
+    }
+
+    @Asynchronous
+    public void savePrivilegeGroup(List<Long> ids, Map processParameters) {
+        execute(SAVE_PRIVILEGE_GROUP, PrivilegeGroupSaveTaskBean.class, getPrivilegeFileGroups(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 }

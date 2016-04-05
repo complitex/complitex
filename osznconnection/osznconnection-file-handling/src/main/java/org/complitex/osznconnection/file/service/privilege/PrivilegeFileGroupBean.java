@@ -10,11 +10,16 @@ import java.util.List;
  * inheaven on 04.04.2016.
  */
 public class PrivilegeFileGroupBean extends AbstractBean{
+    public PrivilegeFileGroup getPrivilegeFileGroup(Long id){
+        return sqlSession().selectOne("selectPrivilegeFileGroup", id);
+    }
+
     public List<PrivilegeFileGroup> getPrivilegeFileGroups(RequestFileFilter filter){
         return sqlSession().selectList("selectPrivilegeFilesGroups", filter);
     }
 
-    public Long etPrivilegeFileGroupsCount(RequestFileFilter filter){
+    public Long getPrivilegeFileGroupsCount(RequestFileFilter filter){
         return sqlSession().selectOne("selectPrivilegeFilesGroupsCount", filter);
     }
+
 }

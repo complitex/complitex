@@ -7,7 +7,7 @@ import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidySum;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.process.SubsidyBindTaskBean;
+import org.complitex.osznconnection.file.service.subsidy.task.SubsidyBindTaskBean;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
