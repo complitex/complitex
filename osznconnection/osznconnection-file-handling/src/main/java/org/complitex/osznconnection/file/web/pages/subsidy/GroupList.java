@@ -1,4 +1,4 @@
-package org.complitex.osznconnection.file.web;
+package org.complitex.osznconnection.file.web.pages.subsidy;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -22,9 +22,9 @@ import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroupFilter;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
+import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
-import org.complitex.osznconnection.file.web.pages.benefit.BenefitList;
 import org.complitex.osznconnection.file.web.pages.payment.PaymentList;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -172,47 +171,7 @@ public class GroupList extends ScrollListPage {
         }
 
         @Override
-        protected Date getLoaded(RequestFileGroup object) {
-            return object.getLoaded();
-        }
-
-        @Override
-        protected long getOsznId(RequestFileGroup object) {
-            return object.getOrganizationId();
-        }
-
-        @Override
-        protected long getUserOrganizationId(RequestFileGroup object) {
-            return object.getUserOrganizationId();
-        }
-
-        @Override
-        protected int getMonth(RequestFileGroup object) {
-            return object.getMonth();
-        }
-
-        @Override
-        protected int getYear(RequestFileGroup object) {
-            return object.getYear();
-        }
-
-        @Override
-        protected int getLoadedRecordCount(RequestFileGroup object) {
-            return object.getLoadedRecordCount();
-        }
-
-        @Override
-        protected int getBindedRecordCount(RequestFileGroup object) {
-            return object.getBindedRecordCount();
-        }
-
-        @Override
-        protected int getFilledRecordCount(RequestFileGroup object) {
-            return object.getFilledRecordCount();
-        }
-
-        @Override
-        protected RequestFileGroup getById(long id) {
+        protected RequestFileGroup getObject(long id) {
             return requestFileGroupBean.getRequestFileGroup(id);
         }
 

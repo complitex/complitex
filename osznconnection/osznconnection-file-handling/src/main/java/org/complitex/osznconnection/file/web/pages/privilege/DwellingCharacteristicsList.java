@@ -43,7 +43,6 @@ import org.complitex.osznconnection.file.service.status.details.DwellingCharacte
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
-import org.complitex.osznconnection.file.web.DwellingCharacteristicsFileList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;

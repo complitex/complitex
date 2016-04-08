@@ -1,4 +1,4 @@
-package org.complitex.osznconnection.file.web.pages.benefit;
+package org.complitex.osznconnection.file.web.pages.subsidy;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.Component;

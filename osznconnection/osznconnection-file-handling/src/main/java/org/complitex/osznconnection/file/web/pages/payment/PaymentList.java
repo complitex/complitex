@@ -41,7 +41,7 @@ import org.complitex.osznconnection.file.service.status.details.PaymentBenefitSt
 import org.complitex.osznconnection.file.service.status.details.PaymentExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
-import org.complitex.osznconnection.file.web.GroupList;
+import org.complitex.osznconnection.file.web.pages.subsidy.GroupList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;

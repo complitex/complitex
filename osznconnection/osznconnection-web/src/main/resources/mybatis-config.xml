@@ -96,6 +96,7 @@
         <mapper resource="org/complitex/osznconnection/file/service/subsidy/SubsidyTarifBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/subsidy/SubsidyMasterDataBean.xml"/>
 
+        <mapper resource="org/complitex/osznconnection/file/service/privilege/PrivilegeFileGroupBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/privilege/DwellingCharacteristicsBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityServiceTypeBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityForm2Bean.xml"/>

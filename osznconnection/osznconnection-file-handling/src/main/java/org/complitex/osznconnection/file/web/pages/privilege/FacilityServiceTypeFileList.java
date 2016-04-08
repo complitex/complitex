@@ -1,4 +1,4 @@
-package org.complitex.osznconnection.file.web;
+package org.complitex.osznconnection.file.web.pages.privilege;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebPage;
@@ -6,8 +6,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
-import org.complitex.osznconnection.file.web.pages.actualpayment.ActualPaymentList;
+import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.pages.ScrollListPage;
@@ -19,54 +20,63 @@ import java.util.Map;
 
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
+/**
+ *
+ * @author Artem
+ */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
-public class ActualPaymentFileList extends ScrollListPage {
+public final class FacilityServiceTypeFileList extends ScrollListPage {
 
     @EJB
     private ProcessManagerBean processManagerBean;
     private final AbstractFileListPanel fileListPanel;
 
-    public ActualPaymentFileList(PageParameters parameters) {
+    public FacilityServiceTypeFileList(PageParameters parameters) {
         super(parameters);
 
         add(new Label("title", new ResourceModel("title")));
-        add(fileListPanel = new AbstractFileListPanel("fileListPanel", LOAD_ACTUAL_PAYMENT,
-                BIND_ACTUAL_PAYMENT, FILL_ACTUAL_PAYMENT, SAVE_ACTUAL_PAYMENT) {
+        add(fileListPanel = new AbstractFileListPanel("fileListPanel", LOAD_FACILITY_SERVICE_TYPE,
+                BIND_FACILITY_SERVICE_TYPE, FILL_FACILITY_SERVICE_TYPE, SAVE_FACILITY_SERVICE_TYPE) {
 
             @Override
             protected String getPreferencePage() {
-                return ActualPaymentFileList.class.getName();
+                return FacilityServiceTypeFileList.class.getName();
             }
 
             @Override
             protected Class<? extends WebPage> getItemListPageClass() {
-                return ActualPaymentList.class;
+                return FacilityServiceTypeList.class;
             }
 
             @Override
             protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.bindActualPayment(selectedFileIds, commandParameters);
+                processManagerBean.bindFacilityServiceType(selectedFileIds, commandParameters);
             }
 
             @Override
             protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.fillActualPayment(selectedFileIds, commandParameters);
+                processManagerBean.fillFacilityServiceType(selectedFileIds, commandParameters);
             }
 
             @Override
             protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.saveActualPayment(selectedFileIds, commandParameters);
+                processManagerBean.saveFacilityServiceType(selectedFileIds, commandParameters);
             }
 
             @Override
             protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-                processManagerBean.loadActualPayment(userOrganizationId, osznId,
-                        dateParameter.getMonthFrom(), dateParameter.getMonthTo(), dateParameter.getYear());
+                processManagerBean.loadFacilityServiceType(userOrganizationId, osznId,
+                        dateParameter.getMonth(), dateParameter.getYear());
+            }
+
+            @Override
+            protected MonthParameterViewMode getLoadMonthParameterViewMode() {
+                return MonthParameterViewMode.EXACT;
             }
 
             @Override
             protected Long[] getOsznOrganizationTypes() {
-                return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE};
+                return new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
             }
         });
     }

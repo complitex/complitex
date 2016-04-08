@@ -1,4 +1,4 @@
-package org.complitex.osznconnection.file.web.pages.benefit;
+package org.complitex.osznconnection.file.web.pages.subsidy;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -37,7 +37,6 @@ import org.complitex.osznconnection.file.service.status.details.BenefitExampleCo
 import org.complitex.osznconnection.file.service.status.details.PaymentBenefitStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
-import org.complitex.osznconnection.file.web.GroupList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;

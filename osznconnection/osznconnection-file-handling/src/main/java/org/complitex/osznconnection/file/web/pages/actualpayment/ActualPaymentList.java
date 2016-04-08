@@ -39,7 +39,7 @@ import org.complitex.osznconnection.file.service.status.details.ActualPaymentExa
 import org.complitex.osznconnection.file.service.status.details.ActualPaymentStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
-import org.complitex.osznconnection.file.web.ActualPaymentFileList;
+import org.complitex.osznconnection.file.web.pages.subsidy.ActualPaymentFileList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;

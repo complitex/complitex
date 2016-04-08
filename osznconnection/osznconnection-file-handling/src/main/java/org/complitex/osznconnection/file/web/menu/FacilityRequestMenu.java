@@ -1,11 +1,12 @@
 package org.complitex.osznconnection.file.web.menu;
 
-import org.complitex.osznconnection.file.web.DwellingCharacteristicsFileList;
-import org.complitex.osznconnection.file.web.FacilityForm2FileList;
-import org.complitex.osznconnection.file.web.FacilityServiceTypeFileList;
+import org.complitex.osznconnection.file.web.pages.privilege.DwellingCharacteristicsFileList;
+import org.complitex.osznconnection.file.web.pages.privilege.FacilityForm2FileList;
+import org.complitex.osznconnection.file.web.pages.privilege.FacilityServiceTypeFileList;
 import org.complitex.osznconnection.file.web.pages.facility.FacilityStreetFileList;
 import org.complitex.osznconnection.file.web.pages.facility.FacilityStreetTypeFileList;
 import org.complitex.osznconnection.file.web.pages.facility.FacilityTarifFileList;
+import org.complitex.osznconnection.file.web.pages.privilege.PrivilegeFileGroupList;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
 import java.util.Locale;
@@ -16,6 +17,7 @@ import java.util.Locale;
  */
 public class FacilityRequestMenu extends ResourceTemplateMenu {
     public FacilityRequestMenu() {
+        add("privilege_list", PrivilegeFileGroupList.class);
         add("dwelling_characteristics_list", DwellingCharacteristicsFileList.class);
         add("facility_service_type_list", FacilityServiceTypeFileList.class);
         add("facility_form2_list", FacilityForm2FileList.class);

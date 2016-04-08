@@ -42,7 +42,6 @@ import org.complitex.osznconnection.file.service.status.details.FacilityServiceT
 import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
-import org.complitex.osznconnection.file.web.FacilityServiceTypeFileList;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;

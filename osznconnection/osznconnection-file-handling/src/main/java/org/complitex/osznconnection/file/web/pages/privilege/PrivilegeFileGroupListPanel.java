@@ -13,11 +13,13 @@ import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
+import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 
-import java.util.Date;
+import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,11 @@ import static org.complitex.osznconnection.file.service.process.ProcessType.*;
  * inheaven on 05.04.2016.
  */
 public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<PrivilegeFileGroup, RequestFileFilter>{
+    @EJB
+    private ProcessManagerBean processManagerBean;
+
+    @EJB
+    private PrivilegeFileGroupBean privilegeFileGroupBean;
 
 
     public PrivilegeFileGroupListPanel(String id) {
@@ -43,7 +50,7 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
 
             @Override
             public Component filter() {
-                return new TextField<String>("name");
+                return new TextField<String>("firstName");
             }
 
             @Override
@@ -69,7 +76,7 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
 
             @Override
             public Component filter() {
-                return new TextField<String>("name");
+                return new TextField<String>("secondName");
             }
 
             @Override
@@ -89,27 +96,27 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
 
     @Override
     protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-
+        processManagerBean.loadPrivilegeGroup(userOrganizationId, osznId, dateParameter.getMonthFrom(), dateParameter.getMonthTo(), dateParameter.getYear());
     }
 
     @Override
     protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-
+        processManagerBean.bindPrivilegeGroup(selectedFileIds, commandParameters);
     }
 
     @Override
     protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-
+        processManagerBean.fillPrivilegeGroup(selectedFileIds, commandParameters);
     }
 
     @Override
     protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-
+        processManagerBean.savePrivilegeGroup(selectedFileIds, commandParameters);
     }
 
     @Override
     protected RequestFileLoadPanel.MonthParameterViewMode getLoadMonthParameterViewMode() {
-        return null;
+        return RequestFileLoadPanel.MonthParameterViewMode.RANGE;
     }
 
     @Override
@@ -119,66 +126,26 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
 
     @Override
     protected Long getCount(RequestFileFilter filter) {
-        return null;
+        return privilegeFileGroupBean.getPrivilegeFileGroupsCount(filter);
     }
 
     @Override
     protected List<PrivilegeFileGroup> getObjects(RequestFileFilter filter) {
-        return null;
+        return privilegeFileGroupBean.getPrivilegeFileGroups(filter);
     }
 
     @Override
-    protected Date getLoaded(PrivilegeFileGroup object) {
-        return null;
-    }
-
-    @Override
-    protected long getOsznId(PrivilegeFileGroup object) {
-        return 0;
-    }
-
-    @Override
-    protected long getUserOrganizationId(PrivilegeFileGroup object) {
-        return 0;
-    }
-
-    @Override
-    protected int getMonth(PrivilegeFileGroup object) {
-        return 0;
-    }
-
-    @Override
-    protected int getYear(PrivilegeFileGroup object) {
-        return 0;
-    }
-
-    @Override
-    protected int getLoadedRecordCount(PrivilegeFileGroup object) {
-        return 0;
-    }
-
-    @Override
-    protected int getBindedRecordCount(PrivilegeFileGroup object) {
-        return 0;
-    }
-
-    @Override
-    protected int getFilledRecordCount(PrivilegeFileGroup object) {
-        return 0;
-    }
-
-    @Override
-    protected PrivilegeFileGroup getById(long id) {
-        return null;
+    protected PrivilegeFileGroup getObject(long id) {
+        return privilegeFileGroupBean.getPrivilegeFileGroup(id);
     }
 
     @Override
     protected void delete(PrivilegeFileGroup object) {
-
+        privilegeFileGroupBean.delete(object);
     }
 
     @Override
     protected RequestFile getRequestFile(PrivilegeFileGroup object) {
-        return null;
+        return object.getDwellingCharacteristicsRequestFile();
     }
 }

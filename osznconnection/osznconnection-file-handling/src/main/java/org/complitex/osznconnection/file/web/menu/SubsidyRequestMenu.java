@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.osznconnection.file.web.ActualPaymentFileList;
-import org.complitex.osznconnection.file.web.GroupList;
-import org.complitex.osznconnection.file.web.SubsidyFileList;
-import org.complitex.osznconnection.file.web.SubsidyTarifFileList;
+import org.complitex.osznconnection.file.web.pages.subsidy.ActualPaymentFileList;
+import org.complitex.osznconnection.file.web.pages.subsidy.GroupList;
+import org.complitex.osznconnection.file.web.pages.subsidy.SubsidyFileList;
+import org.complitex.osznconnection.file.web.pages.subsidy.SubsidyTarifFileList;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

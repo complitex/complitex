@@ -35,6 +35,14 @@ public abstract class AbstractRequestFile extends AbstractExecutorObject{
     private Long organizationId;
     private Long userOrganizationId;
 
+    public int getMonth(){
+        return DateUtil.getMonth(beginDate) + 1;
+    }
+
+    public int getYear(){
+        return DateUtil.getYear(beginDate);
+    }
+
     public String getFullName() {
         if (name == null) {
             return null;

@@ -29,6 +29,9 @@ public class RequestFileFilter extends AbstractFilter {
 
     private BigDecimal sum;
 
+    private String firstName;
+    private String secondName;
+
     public Long getId() {
         return id;
     }
@@ -147,5 +150,21 @@ public class RequestFileFilter extends AbstractFilter {
 
     public void setSum(BigDecimal sum) {
         this.sum = sum;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 }

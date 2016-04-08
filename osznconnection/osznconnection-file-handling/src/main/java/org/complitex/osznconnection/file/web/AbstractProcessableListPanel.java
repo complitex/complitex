@@ -183,23 +183,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     protected abstract List<R> getObjects(F filter);
 
-    protected abstract Date getLoaded(R object);
-
-    protected abstract long getOsznId(R object);
-
-    protected abstract long getUserOrganizationId(R object);
-
-    protected abstract int getMonth(R object);
-
-    protected abstract int getYear(R object);
-
-    protected abstract int getLoadedRecordCount(R object);
-
-    protected abstract int getBindedRecordCount(R object);
-
-    protected abstract int getFilledRecordCount(R object);
-
-    protected abstract R getById(long id);
+    protected abstract R getObject(long id);
 
     protected abstract void delete(R object);
 
@@ -435,7 +419,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 item.add(new Label("id", StringUtil.valueOf(objectId)));
 
                 //Дата загрузки
-                item.add(new ItemDateLoadedLabel("loaded", getLoaded(item.getModelObject())));
+                item.add(new ItemDateLoadedLabel("loaded", rf.getLoaded()));
 
                 //ПУ
                 item.add(new AjaxLinkLabel("service_provider", new LoadableDetachableModel<String>() {
@@ -466,20 +450,20 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 });
 
                 //ОСЗН
-                item.add(new ItemOrganizationLabel("organization", getOsznId(item.getModelObject())));
+                item.add(new ItemOrganizationLabel("organization", rf.getOrganizationId()));
 
                 //Организация пользователя
-                item.add(new ItemOrganizationLabel("userOrganization", getUserOrganizationId(item.getModelObject())));
+                item.add(new ItemOrganizationLabel("userOrganization", rf.getUserOrganizationId()));
 
-                item.add(new Label("month", DateUtil.displayMonth(getMonth(item.getModelObject()), getLocale())));
-                item.add(new Label("year", StringUtil.valueOf(getYear(item.getModelObject()))));
+                item.add(new Label("month", DateUtil.displayMonth(rf.getMonth(), getLocale())));
+                item.add(new Label("year", StringUtil.valueOf(rf.getYear())));
 
                 //Количество загруженных записей
                 item.add(new Label("loaded_record_count", new LoadableDetachableModel<String>() {
 
                     @Override
                     protected String load() {
-                        return StringUtil.valueOf(getLoadedRecordCount(item.getModelObject()));
+                        return StringUtil.valueOf(rf.getLoadedRecordCount());
                     }
                 }));
 
@@ -488,7 +472,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                     @Override
                     protected String load() {
-                        return StringUtil.valueOf(getBindedRecordCount(item.getModelObject()));
+                        return StringUtil.valueOf(rf.getBindedRecordCount());
                     }
                 }));
 
@@ -497,7 +481,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                     @Override
                     protected String load() {
-                        return StringUtil.valueOf(getFilledRecordCount(item.getModelObject()));
+                        return StringUtil.valueOf(rf.getFilledRecordCount());
                     }
                 }));
 
@@ -617,7 +601,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             public void onClick(AjaxRequestTarget target) {
                 for (long objectId : selectManager.getSelectedFileIds()) {
-                    final R object = getById(objectId);
+                    final R object = getObject(objectId);
 
                     if (object != null) {
                         try {

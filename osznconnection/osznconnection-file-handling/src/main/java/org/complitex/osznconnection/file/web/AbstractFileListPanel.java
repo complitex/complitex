@@ -9,7 +9,6 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.LogBean;
-import org.complitex.common.util.DateUtil;
 import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.scroll.ScrollListBehavior;
@@ -23,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractFileListPanel extends AbstractProcessableListPanel<RequestFile, RequestFileFilter> {
@@ -92,47 +90,7 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     }
 
     @Override
-    protected Date getLoaded(RequestFile object) {
-        return object.getLoaded();
-    }
-
-    @Override
-    protected long getOsznId(RequestFile object) {
-        return object.getOrganizationId();
-    }
-
-    @Override
-    protected long getUserOrganizationId(RequestFile object) {
-        return object.getUserOrganizationId();
-    }
-
-    @Override
-    protected int getMonth(RequestFile object) {
-        return DateUtil.getMonth(object.getBeginDate()) + 1;
-    }
-
-    @Override
-    protected int getYear(RequestFile object) {
-        return DateUtil.getYear(object.getBeginDate());
-    }
-
-    @Override
-    protected int getLoadedRecordCount(RequestFile object) {
-        return object.getLoadedRecordCount();
-    }
-
-    @Override
-    protected int getBindedRecordCount(RequestFile object) {
-        return object.getBindedRecordCount();
-    }
-
-    @Override
-    protected int getFilledRecordCount(RequestFile object) {
-        return object.getFilledRecordCount();
-    }
-
-    @Override
-    protected RequestFile getById(long id) {
+    protected RequestFile getObject(long id) {
         return requestFileBean.getRequestFile(id);
     }
 
