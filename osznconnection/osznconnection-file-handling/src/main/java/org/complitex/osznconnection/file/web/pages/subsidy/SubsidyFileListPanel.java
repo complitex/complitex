@@ -12,6 +12,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
@@ -22,6 +23,7 @@ import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
 
+import static org.complitex.osznconnection.file.entity.RequestFileType.SUBSIDY;
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
 /**
@@ -34,10 +36,13 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     @EJB
     private ProcessManagerBean processManagerBean;
 
+    @EJB
+    private RequestFileBean requestFileBean;
+
     private SubsidyExportDialog subsidyExportDialog;
 
     public SubsidyFileListPanel(String id) {
-        super(id, LOAD_SUBSIDY, BIND_SUBSIDY, FILL_SUBSIDY, SAVE_SUBSIDY);
+        super(id, SUBSIDY, LOAD_SUBSIDY, BIND_SUBSIDY, FILL_SUBSIDY, SAVE_SUBSIDY);
 
         add(subsidyExportDialog = new SubsidyExportDialog("subsidy_export_dialog"){
             @Override

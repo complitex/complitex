@@ -173,7 +173,6 @@ CREATE TABLE `request_file` (
     `name` VARCHAR(22) NOT NULL COMMENT 'Имя файла',
     `directory` VARCHAR(255) COMMENT 'Директория файла',
     `organization_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор организации',
-    `registry` INTEGER(2) NOT NULL COMMENT 'Номер реестра',
     `begin_date` DATE NOT NULL COMMENT 'Дата начала',
     `end_date` DATE NULL COMMENT 'Дата окончания',
     `dbf_record_count` BIGINT(20) NOT NULL DEFAULT 0 COMMENT 'Количество записей в исходном файле',
@@ -188,13 +187,11 @@ CREATE TABLE `request_file` (
     KEY `key_loaded` (`loaded`),
     KEY `key_name` (`name`),
     KEY `key_organization_id` (`organization_id`),
-    KEY `key_registry` (`registry`),
     KEY `key_begin_date` (`begin_date`),
     KEY `key_end_date` (`end_date`),
     KEY `key_type` (`type`) ,
     KEY `key_user_organization_id` (`user_organization_id`),
     CONSTRAINT `fk_request_file__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`),
-    CONSTRAINT `fk_request_file__request_file_group` FOREIGN KEY (`group_id`) REFERENCES `request_file_group` (`id`),
     CONSTRAINT `fk_request_file__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Файл запросов';
 

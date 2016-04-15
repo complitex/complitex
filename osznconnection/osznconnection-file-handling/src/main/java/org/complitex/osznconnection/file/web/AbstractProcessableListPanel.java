@@ -120,10 +120,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     private ProcessType fillProcessType;
     private ProcessType saveProcessType;
 
-    public AbstractProcessableListPanel(String id, ProcessType loadProcessType, ProcessType bindProcessType, 
-                                        ProcessType fillProcessType, ProcessType saveProcessType) {
+    public AbstractProcessableListPanel(String id, ProcessType loadProcessType,
+                                        ProcessType bindProcessType, ProcessType fillProcessType, ProcessType saveProcessType) {
         super(id);
-        
+
         this.loadProcessType = loadProcessType;
         this.bindProcessType = bindProcessType;
         this.fillProcessType = fillProcessType;
@@ -790,5 +790,9 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     protected Long[] getOsznOrganizationTypes(){
         return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
                 OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
+    }
+
+    public RequestFileLoadPanel getRequestFileLoadPanel(){
+        return requestFileLoadPanel;
     }
 }

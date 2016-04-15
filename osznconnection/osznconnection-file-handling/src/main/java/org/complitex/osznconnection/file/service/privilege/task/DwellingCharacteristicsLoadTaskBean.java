@@ -1,17 +1,19 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.PersonalName;
 import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.FileHandlingConfig;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
-import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
+import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
 import org.complitex.osznconnection.file.service.util.FacilityNameParser;
 
@@ -25,7 +27,7 @@ import java.util.Map;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class DwellingCharacteristicsLoadTaskBean implements ITaskBean {
+public class DwellingCharacteristicsLoadTaskBean extends AbstractTaskBean<RequestFile> {
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -37,9 +39,7 @@ public class DwellingCharacteristicsLoadTaskBean implements ITaskBean {
     private ConfigBean configBean;
 
     @Override
-    public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
-        RequestFile requestFile = (RequestFile) executorObject;
-
+    public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         requestFile.setStatus(RequestFileStatus.LOADING);
 
         final String defaultCity = configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY, true);
@@ -90,8 +90,7 @@ public class DwellingCharacteristicsLoadTaskBean implements ITaskBean {
     }
 
     @Override
-    public void onError(IExecutorObject executorObject) {
-        RequestFile requestFile = (RequestFile) executorObject;
+    public void onError(RequestFile requestFile) {
         requestFileBean.delete(requestFile);
     }
 

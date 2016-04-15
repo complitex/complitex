@@ -333,8 +333,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
             @Override
             public void onClick() {
                 PageParameters params = new PageParameters();
-                params.set(DwellingCharacteristicsFileList.SCROLL_PARAMETER, fileId);
-                setResponsePage(DwellingCharacteristicsFileList.class, params);
+                setResponsePage(PrivilegeFileGroupList.class, params);
             }
         };
         filterForm.add(back);

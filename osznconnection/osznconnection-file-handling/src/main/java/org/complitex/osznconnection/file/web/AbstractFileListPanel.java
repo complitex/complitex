@@ -15,6 +15,7 @@ import org.complitex.common.web.component.scroll.ScrollListBehavior;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
+import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
@@ -31,9 +32,13 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     @EJB
     private LogBean logBean;
 
-    public AbstractFileListPanel(String id, ProcessType loadProcessType, ProcessType bindProcessType,
+    private RequestFileType requestFileType;
+
+    public AbstractFileListPanel(String id, RequestFileType requestFileType, ProcessType loadProcessType, ProcessType bindProcessType,
                                  ProcessType fillProcessType, ProcessType saveProcessType) {
         super(id, loadProcessType, bindProcessType, fillProcessType, saveProcessType);
+
+        this.requestFileType = requestFileType;
 
         //Имя
         addColumn(new Column() {
@@ -81,11 +86,15 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
 
     @Override
     protected Long getCount(RequestFileFilter filter) {
+        filter.setType(requestFileType);
+
         return requestFileBean.getCount(filter);
     }
 
     @Override
     protected List<RequestFile> getObjects(RequestFileFilter filter) {
+        filter.setType(requestFileType);
+
         return requestFileBean.getRequestFiles(filter);
     }
 

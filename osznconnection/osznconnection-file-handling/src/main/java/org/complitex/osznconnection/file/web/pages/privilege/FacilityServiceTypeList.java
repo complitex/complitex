@@ -306,8 +306,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
             @Override
             public void onClick() {
                 PageParameters params = new PageParameters();
-                params.set(FacilityServiceTypeFileList.SCROLL_PARAMETER, fileId);
-                setResponsePage(FacilityServiceTypeFileList.class, params);
+                setResponsePage(PrivilegeFileGroupList.class, params);
             }
         };
         filterForm.add(back);

@@ -113,8 +113,7 @@ public class RequestFileStorage {
 
     public String getRelativeParent(File file, String subPath) {
         File root = new File(subPath);
-        String absolutePath = file.getParent();
-        return absolutePath.substring(root.getAbsolutePath().length());
+        return file.getParent().substring(root.getAbsolutePath().length());
     }
 
     public String getRequestFilesStorageDirectory(Long userOrganizationId, Long osznId, RequestFileDirectoryType fileDirectoryType)

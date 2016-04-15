@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
@@ -18,6 +19,7 @@ import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
 
+import static org.complitex.osznconnection.file.entity.RequestFileType.ACTUAL_PAYMENT;
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
@@ -25,13 +27,17 @@ public class ActualPaymentFileList extends ScrollListPage {
 
     @EJB
     private ProcessManagerBean processManagerBean;
+
+    @EJB
+    private RequestFileBean requestFileBean;
+
     private final AbstractFileListPanel fileListPanel;
 
     public ActualPaymentFileList(PageParameters parameters) {
         super(parameters);
 
         add(new Label("title", new ResourceModel("title")));
-        add(fileListPanel = new AbstractFileListPanel("fileListPanel", LOAD_ACTUAL_PAYMENT,
+        add(fileListPanel = new AbstractFileListPanel("fileListPanel", ACTUAL_PAYMENT, LOAD_ACTUAL_PAYMENT,
                 BIND_ACTUAL_PAYMENT, FILL_ACTUAL_PAYMENT, SAVE_ACTUAL_PAYMENT) {
 
             @Override

@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
@@ -18,6 +19,7 @@ import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
 
+import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_SERVICE_TYPE;
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
 /**
@@ -29,13 +31,17 @@ public final class FacilityServiceTypeFileList extends ScrollListPage {
 
     @EJB
     private ProcessManagerBean processManagerBean;
+
+    @EJB
+    private RequestFileBean requestFileBean;
+
     private final AbstractFileListPanel fileListPanel;
 
     public FacilityServiceTypeFileList(PageParameters parameters) {
         super(parameters);
 
         add(new Label("title", new ResourceModel("title")));
-        add(fileListPanel = new AbstractFileListPanel("fileListPanel", LOAD_FACILITY_SERVICE_TYPE,
+        add(fileListPanel = new AbstractFileListPanel("fileListPanel", FACILITY_SERVICE_TYPE, LOAD_FACILITY_SERVICE_TYPE,
                 BIND_FACILITY_SERVICE_TYPE, FILL_FACILITY_SERVICE_TYPE, SAVE_FACILITY_SERVICE_TYPE) {
 
             @Override

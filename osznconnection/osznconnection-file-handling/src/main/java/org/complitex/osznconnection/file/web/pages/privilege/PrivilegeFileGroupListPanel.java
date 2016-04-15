@@ -18,6 +18,7 @@ import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
+import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -96,7 +97,7 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
 
     @Override
     protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-        processManagerBean.loadPrivilegeGroup(userOrganizationId, osznId, dateParameter.getMonthFrom(), dateParameter.getMonthTo(), dateParameter.getYear());
+        processManagerBean.loadPrivilegeGroup(userOrganizationId, osznId, dateParameter.getMonth(), dateParameter.getYear());
     }
 
     @Override
@@ -116,7 +117,7 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
 
     @Override
     protected RequestFileLoadPanel.MonthParameterViewMode getLoadMonthParameterViewMode() {
-        return RequestFileLoadPanel.MonthParameterViewMode.RANGE;
+        return RequestFileLoadPanel.MonthParameterViewMode.EXACT;
     }
 
     @Override
@@ -147,5 +148,10 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
     @Override
     protected RequestFile getRequestFile(PrivilegeFileGroup object) {
         return object.getDwellingCharacteristicsRequestFile();
+    }
+
+    @Override
+    protected Long[] getOsznOrganizationTypes() {
+        return new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
     }
 }

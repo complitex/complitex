@@ -294,7 +294,7 @@ public class ProcessManagerBean {
                 process.init();
             }
 
-            LoadUtil.LoadGroupParameter loadParameter = LoadUtil.getLoadGroupParameter(userOrganizationId, osznId,
+            LoadGroupParameter<RequestFileGroup> loadParameter = LoadUtil.getLoadGroupParameter(userOrganizationId, osznId,
                     monthFrom, monthTo, year);
 
             for (RequestFileGroup fileGroup : loadParameter.getRequestFileGroups()) {
@@ -612,60 +612,52 @@ public class ProcessManagerBean {
     }
 
     @Asynchronous
-    public void loadPrivilegeGroup(long userOrganizationId, long osznId, int monthFrom, int monthTo, int year) {
+    public void loadPrivilegeGroup(long userOrganizationId, long osznId, int month, int year) {
         Process process = getProcess(LOAD_PRIVILEGE_GROUP);
 
-        //TODO add privilege group load bean
+        try {
+            //поиск групп файлов запросов
+            if (!process.isRunning()) {
+                process.setPreprocess(true);
+                process.init();
+            }
 
-//        try {
-//            //поиск групп файлов запросов
-//            if (!process.isRunning()) {
-//                process.setPreprocess(true);
-//                process.init();
-//            }
-//
-//            LoadUtil.LoadGroupParameter loadParameter = LoadUtil.getLoadGroupParameter(userOrganizationId, osznId,
-//                    monthFrom, monthTo, year);
-//
-//            for (RequestFileGroup fileGroup : loadParameter.getRequestFileGroups()) {
-//                fileGroup.getPaymentFile().setUserOrganizationId(userOrganizationId);
-//                fileGroup.getBenefitFile().setUserOrganizationId(userOrganizationId);
-//            }
-//
-//            List<RequestFile> linkError = loadParameter.getLinkError();
-//
-//            process.addLinkError(linkError);
-//
-//            for (RequestFile rf : linkError) {
-//                logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null, rf.getId(),
-//                        Log.EVENT.CREATE, rf.getLogChangeList(), "Связанный файл не найден для объекта {0}",
-//                        rf.getLogObjectName());
-//            }
-//
-//            process.getQueue().addAll(loadParameter.getRequestFileGroups());
-//
-//            //загрузка данных
-//            if (!process.isRunning()) {
-//                process.setPreprocess(false);
-//                process.setMaxErrors(configBean.getInteger(LOAD_MAX_ERROR_COUNT, true));
-//                process.setMaxThread(configBean.getInteger(LOAD_THREAD_SIZE, true));
-//                process.setTask(EjbBeanLocator.getBean(GroupLoadTaskBean.class));
-//
-//                executorBean.execute(process);
-//            } else {
-//                int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
-//
-//                for (int i = 0; i < freeThreadCount; ++i) {
-//                    executorBean.executeNext(process);
-//                }
-//            }
-//        } catch (Exception e) {
-//            process.preprocessError(); //todo add ui message
-//
-//            log.error("Ошибка процесса загрузки файлов.", e);
-//            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null,
-//                    Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
-//        }
+            LoadGroupParameter<PrivilegeFileGroup> loadParameter = LoadUtil.getLoadPrivilegeGroupParameter(userOrganizationId, osznId, month, year);
+
+            List<RequestFile> linkError = loadParameter.getLinkError();
+
+            process.addLinkError(linkError);
+
+            for (RequestFile rf : linkError) {
+                logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null, rf.getId(),
+                        Log.EVENT.CREATE, rf.getLogChangeList(), "Связанный файл не найден для объекта {0}",
+                        rf.getLogObjectName());
+            }
+
+            process.getQueue().addAll(loadParameter.getRequestFileGroups());
+
+            //загрузка данных
+            if (!process.isRunning()) {
+                process.setPreprocess(false);
+                process.setMaxErrors(configBean.getInteger(LOAD_MAX_ERROR_COUNT, true));
+                process.setMaxThread(configBean.getInteger(LOAD_THREAD_SIZE, true));
+                process.setTask(EjbBeanLocator.getBean(PrivilegeGroupLoadTaskBean.class));
+
+                executorBean.execute(process);
+            } else {
+                int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
+
+                for (int i = 0; i < freeThreadCount; ++i) {
+                    executorBean.executeNext(process);
+                }
+            }
+        } catch (Exception e) {
+            process.preprocessError(); //todo add ui message
+
+            log.error("Ошибка процесса загрузки файлов.", e);
+            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null,
+                    Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+        }
     }
 
     @Asynchronous
