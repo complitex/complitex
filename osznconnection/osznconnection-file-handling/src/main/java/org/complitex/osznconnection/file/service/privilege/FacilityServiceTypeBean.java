@@ -195,4 +195,11 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
             }
         }
     }
+
+    public List<FacilityServiceType> getFacilityServiceTypeListByGroup(Long groupId){
+        List<FacilityServiceType> list =  sqlSession().selectList("selectFacilityServiceTypeByGroup", groupId);
+        loadFacilityStreet(list);
+
+        return list;
+    }
 }

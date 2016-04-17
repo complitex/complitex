@@ -28,4 +28,9 @@ public class PrivilegeFileGroup extends AbstractRequestFileGroup {
     public LogChangeList getLogChangeList() {
         return null;
     }
+
+    @Override
+    public boolean isProcessing() {
+        return getDwellingCharacteristicsRequestFile().isProcessing() || getFacilityServiceTypeRequestFile().isProcessing();
+    }
 }

@@ -156,7 +156,8 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
      * RIZN - код услуги через соответствия данного отдела льгот.
      * TARIF - код тарифа из справочника тарифов данного отдела льгот для данного кода услуги.
      */
-    private void fill(FacilityServiceType facilityServiceType) throws DBException {
+    @SuppressWarnings("Duplicates")
+    public void fill(FacilityServiceType facilityServiceType) throws DBException {
         if (facilityServiceType.getAccountNumber() == null){
             return;
         }

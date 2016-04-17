@@ -191,4 +191,11 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
     public List<DwellingCharacteristics> getDwellingCharacteristics(long requestFileId) {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".selectDwellingCharacteristics", requestFileId);
     }
+
+    public List<DwellingCharacteristics> getDwellingCharacteristicsListByGroup(Long groupId){
+        List<DwellingCharacteristics> list = sqlSession().selectList("selectDwellingCharacteristicsListByGroup", groupId);
+        loadFacilityStreet(list);
+
+        return list;
+    }
 }

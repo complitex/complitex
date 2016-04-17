@@ -123,7 +123,7 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
     /**
      * Заполняются поля VL (код формы собственности через соответствие), PLZAG (общая площадь), PLOPAL (отапливаемая площадь).
      */
-    private void fill(DwellingCharacteristics dwellingCharacteristics) throws DBException {
+    public void fill(DwellingCharacteristics dwellingCharacteristics) throws DBException {
         if (dwellingCharacteristics.getAccountNumber() == null){
             return;
         }

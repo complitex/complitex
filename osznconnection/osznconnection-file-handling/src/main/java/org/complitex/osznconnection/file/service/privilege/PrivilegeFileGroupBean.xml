@@ -8,6 +8,8 @@
         <result column="binded_record_count" property="bindedRecordCount"/>
         <result column="filled_record_count" property="filledRecordCount"/>
 
+        <result column="status" property="status"/>
+
         <association property="firstRequestFile" javaType="org.complitex.osznconnection.file.entity.RequestFile">
             <id column="f_id" property="id"/>
             <result column="f_groupId" property="groupId"/>
@@ -22,6 +24,7 @@
             <result column="f_length" property="length"/>
             <result column="f_check_sum" property="checkSum"/>
             <result column="f_type" property="type"/>
+            <result column="f_status" property="status"/>
         </association>
         <association property="secondRequestFile" javaType="org.complitex.osznconnection.file.entity.RequestFile">
             <id column="s_id" property="id"/>
@@ -37,6 +40,7 @@
             <result column="s_length" property="length"/>
             <result column="s_check_sum" property="checkSum"/>
             <result column="s_type" property="type"/>
+            <result column="s_status" property="status"/>
         </association>
     </resultMap>
 
@@ -76,12 +80,14 @@
         f.id as f_id, f.loaded as f_loaded, f.name as f_name, f.directory as f_directory,
         f.organization_id as f_organization_id, f.`user_organization_id` as f_user_organization_id,
         f.begin_date as f_begin_date, f.end_date as f_end_date, f.dbf_record_count as f_dbf_record_count,
-        f.length as f_length, f.check_sum as f_check_sum, f.type as f_type,
+        f.length as f_length, f.check_sum as f_check_sum, f.type as f_type, f.status as f_status,
+
+        f.status as `status`,
 
         s.id as s_id, s.loaded as s_loaded, s.name as s_name, s.directory as s_directory,
         s.organization_id as s_organization_id, s.`user_organization_id` as s_user_organization_id,
         s.begin_date as s_begin_date, s.end_date as s_end_date, s.dbf_record_count as s_dbf_record_count,
-        s.length as s_length, s.check_sum as s_check_sum, s.type as s_type,
+        s.length as s_length, s.check_sum as s_check_sum, s.type as s_type, s.status as s_status,
 
         (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id`) as loaded_record_count,
         (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id` and `account_number` is not null) as binded_record_count,
@@ -119,6 +125,32 @@
         left join request_file f on (f.group_id = g.group_id and f.type = 6)
         left join request_file s on (s.group_id = g.group_id and s.type = 7)
         <include refid="requestFileGroupFilterWhere"/>
+    </select>
+
+    <select id="selectPrivilegeFileGroup" resultMap="privilegeFileGroupResultMap" parameterType="long">
+        select
+            g.group_id as gid,
+
+            f.id as f_id, f.loaded as f_loaded, f.name as f_name, f.directory as f_directory,
+            f.organization_id as f_organization_id, f.`user_organization_id` as f_user_organization_id,
+            f.begin_date as f_begin_date, f.end_date as f_end_date, f.dbf_record_count as f_dbf_record_count,
+            f.length as f_length, f.check_sum as f_check_sum, f.type as f_type, f.status as f_status,
+
+            f.status as `status`,
+
+            s.id as s_id, s.loaded as s_loaded, s.name as s_name, s.directory as s_directory,
+            s.organization_id as s_organization_id, s.`user_organization_id` as s_user_organization_id,
+            s.begin_date as s_begin_date, s.end_date as s_end_date, s.dbf_record_count as s_dbf_record_count,
+            s.length as s_length, s.check_sum as s_check_sum, s.type as s_type, s.status as s_status,
+
+            (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id`) as loaded_record_count,
+            (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id` and `account_number` is not null) as binded_record_count,
+            (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id` and `status` = 215) as filled_record_count
+
+        from (select group_id from request_file where type = 6 or type = 7 group by group_id) g
+            left join request_file f on (f.group_id = g.group_id and f.type = 6)
+            left join request_file s on (s.group_id = g.group_id and s.type = 7)
+        where g.group_id = #{group}
     </select>
 
 

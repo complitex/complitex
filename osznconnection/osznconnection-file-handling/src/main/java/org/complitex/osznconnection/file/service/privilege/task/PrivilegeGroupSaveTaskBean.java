@@ -4,19 +4,32 @@ import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.util.Map;
 
 /**
  * inheaven on 05.04.2016.
  */
+@Stateless
 public class PrivilegeGroupSaveTaskBean extends AbstractTaskBean<PrivilegeFileGroup>{
+    @EJB
+    private DwellingCharacteristicsSaveTaskBean dwellingCharacteristicsSaveTaskBean;
+
+    @EJB
+    private FacilityServiceTypeSaveTaskBean facilityServiceTypeSaveTaskBean;
+
     @Override
-    public boolean execute(PrivilegeFileGroup object, Map commandParameters) throws ExecuteException {
-        return false;
+    public boolean execute(PrivilegeFileGroup group, Map commandParameters) throws ExecuteException {
+        dwellingCharacteristicsSaveTaskBean.execute(group.getDwellingCharacteristicsRequestFile(), commandParameters);
+        facilityServiceTypeSaveTaskBean.execute(group.getFacilityServiceTypeRequestFile(), commandParameters);
+
+        return true;
     }
 
     @Override
-    public void onError(PrivilegeFileGroup object) {
-
+    public void onError(PrivilegeFileGroup group) {
+        dwellingCharacteristicsSaveTaskBean.onError(group.getDwellingCharacteristicsRequestFile());
+        facilityServiceTypeSaveTaskBean.onError(group.getFacilityServiceTypeRequestFile());
     }
 }

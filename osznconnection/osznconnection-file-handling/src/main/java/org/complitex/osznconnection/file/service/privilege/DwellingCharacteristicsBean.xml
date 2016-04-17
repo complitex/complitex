@@ -306,5 +306,25 @@
     <delete id="deleteDwellingCharacteristics" parameterType="long">
         DELETE FROM `dwelling_characteristics` WHERE `request_file_id` = #{id};
     </delete>
+
+    <select id="selectDwellingCharacteristicsListByGroup" resultMap="dwellingCharacteristicsResultMap" parameterType="long">
+        SELECT f.`organization_id`, f.`user_organization_id`, d.`IDPIL`, d.`PASPPIL`,
+            TO_CYRILLIC(d.`IDPIL`) IDPIL_CYR,
+            TO_CYRILLIC(d.`PASPPIL`) PASPPIL_CYR,
+
+            TO_CYRILLIC(d.`FIO`) FIO_CYR,
+            TO_CYRILLIC(d.`HOUSE`) HOUSE_CYR,
+            TO_CYRILLIC(d.`BUILD`) BUILD_CYR,
+            TO_CYRILLIC(d.`APT`) APT_CYR,
+
+            TO_CYRILLIC(d.`first_name`) first_name_cyr,
+            TO_CYRILLIC(d.`middle_name`) middle_name_cyr,
+            TO_CYRILLIC(d.`last_name`) last_name_cyr,
+
+            d.*
+        FROM `dwelling_characteristics` d
+        LEFT JOIN `request_file` f ON d.`request_file_id` = f.`id`
+        WHERE f.group_id = #{groupId}
+    </select>
     
 </mapper>
