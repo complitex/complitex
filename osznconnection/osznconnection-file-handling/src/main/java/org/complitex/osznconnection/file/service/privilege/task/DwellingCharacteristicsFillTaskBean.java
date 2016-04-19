@@ -2,19 +2,22 @@ package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.Log;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.PaymentAndBenefitData;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
-import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
-import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
+import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
+import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
@@ -40,7 +43,7 @@ import static org.complitex.osznconnection.file.entity.RequestFileType.DWELLING_
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFile>{
+public class DwellingCharacteristicsFillTaskBean extends AbstractTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(DwellingCharacteristicsFillTaskBean.class);
 
     @Resource
@@ -123,6 +126,7 @@ public class DwellingCharacteristicsFillTaskBean implements ITaskBean<RequestFil
     /**
      * Заполняются поля VL (код формы собственности через соответствие), PLZAG (общая площадь), PLOPAL (отапливаемая площадь).
      */
+    @SuppressWarnings("Duplicates")
     public void fill(DwellingCharacteristics dwellingCharacteristics) throws DBException {
         if (dwellingCharacteristics.getAccountNumber() == null){
             return;

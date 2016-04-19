@@ -1,13 +1,12 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
-import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
-import org.complitex.osznconnection.file.service.process.AbstractSaveTaskBean;
+import org.complitex.osznconnection.file.service.process.AbstractRequestFileSaveTaskBean;
 import org.complitex.osznconnection.file.service.process.RequestFileDirectoryType;
 
 import javax.ejb.EJB;
@@ -18,7 +17,7 @@ import java.util.List;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class DwellingCharacteristicsSaveTaskBean extends AbstractSaveTaskBean implements ITaskBean<RequestFile>{
+public class DwellingCharacteristicsSaveTaskBean extends AbstractRequestFileSaveTaskBean {
     @EJB
     private DwellingCharacteristicsBean dwellingCharacteristicsBean;
 

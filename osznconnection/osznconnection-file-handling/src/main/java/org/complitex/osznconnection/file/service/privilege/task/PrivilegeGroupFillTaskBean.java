@@ -15,6 +15,7 @@ import org.complitex.osznconnection.file.entity.privilege.*;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
+import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
@@ -25,6 +26,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +46,7 @@ import static org.complitex.osznconnection.file.strategy.PrivilegeStrategy.CODE;
  * inheaven on 05.04.2016.
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGroup>{
     private Logger log = LoggerFactory.getLogger(PrivilegeGroupFillTaskBean.class);
 
@@ -108,6 +112,10 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
         try {
             List<PrivilegeGroup> privilegeGroups = privilegeGroupService.getPrivilegeGroups(group.getId());
             for (PrivilegeGroup p : privilegeGroups){
+                if (group.isCanceled()){
+                    throw new CanceledByUserException();
+                }
+
                 if (p.getFacilityServiceType() != null && p.getDwellingCharacteristics() != null){
                     fill(p);
                 }else if (p.getDwellingCharacteristics() != null){
@@ -246,8 +254,6 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                 dwellingCharacteristicsBean.update(dwellingCharacteristics);
 
                 log.warn("Форма собственности не найдена {}", d.getOwnership());
-
-                return;
             }
 
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.VL, ownership);

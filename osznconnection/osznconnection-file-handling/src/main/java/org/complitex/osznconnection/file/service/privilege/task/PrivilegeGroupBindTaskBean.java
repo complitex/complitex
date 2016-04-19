@@ -11,6 +11,7 @@ import org.complitex.osznconnection.file.entity.privilege.PrivilegeGroup;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
+import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;
@@ -19,6 +20,8 @@ import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrate
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +32,7 @@ import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_
  * inheaven on 05.04.2016.
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class PrivilegeGroupBindTaskBean extends AbstractTaskBean<PrivilegeFileGroup>{
     @EJB
     private DwellingCharacteristicsBean dwellingCharacteristicsBean;
@@ -89,6 +93,10 @@ public class PrivilegeGroupBindTaskBean extends AbstractTaskBean<PrivilegeFileGr
 
         try {
             for (PrivilegeGroup p : privilegeGroups){
+                if (group.isCanceled()) {
+                    throw new CanceledByUserException();
+                }
+
                 if (p.getDwellingCharacteristics() != null){
                     dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, p.getDwellingCharacteristics());
 
@@ -100,6 +108,14 @@ public class PrivilegeGroupBindTaskBean extends AbstractTaskBean<PrivilegeFileGr
                         f.setStreetTypeId(d.getStreetTypeId());
                         f.setStreetId(d.getStreetId());
                         f.setBuildingId(d.getBuildingId());
+
+                        f.setOutgoingCity(d.getOutgoingCity());
+                        f.setOutgoingStreetType(d.getOutgoingStreetType());
+                        f.setOutgoingStreet(d.getOutgoingStreet());
+                        f.setOutgoingBuildingNumber(d.getOutgoingBuildingNumber());
+                        f.setOutgoingBuildingCorp(d.getOutgoingBuildingCorp());
+                        f.setOutgoingApartment(d.getOutgoingApartment());
+
                         f.setAccountNumber(d.getAccountNumber());
                         f.setStatus(d.getStatus());
 
