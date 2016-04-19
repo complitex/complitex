@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.service_provider;
 
-import org.complitex.osznconnection.file.entity.ActualPayment;
-import org.complitex.osznconnection.file.entity.ActualPaymentDBF;
+import org.complitex.osznconnection.file.entity.subsidy.ActualPayment;
+import org.complitex.osznconnection.file.entity.subsidy.ActualPaymentDBF;
 
 /**
  *

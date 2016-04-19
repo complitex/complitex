@@ -1,9 +1,9 @@
 package org.complitex.osznconnection.file.service_provider;
 
-import org.complitex.osznconnection.file.entity.Benefit;
-import org.complitex.osznconnection.file.entity.BenefitDBF;
-import org.complitex.osznconnection.file.entity.Payment;
-import org.complitex.osznconnection.file.entity.PaymentDBF;
+import org.complitex.osznconnection.file.entity.subsidy.Benefit;
+import org.complitex.osznconnection.file.entity.subsidy.BenefitDBF;
+import org.complitex.osznconnection.file.entity.subsidy.Payment;
+import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
 
 import java.math.BigDecimal;
 import java.util.Date;

@@ -1,7 +1,5 @@
 package org.complitex.osznconnection.file.web.pages.ownership;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -17,8 +15,8 @@ import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
-import org.complitex.osznconnection.file.entity.OwnershipCorrection;
-import org.complitex.osznconnection.file.service.OwnershipCorrectionBean;
+import org.complitex.osznconnection.file.entity.privilege.OwnershipCorrection;
+import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
 import org.complitex.osznconnection.file.strategy.OwnershipStrategy;
 import org.complitex.template.web.component.toolbar.DeleteItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;

@@ -101,7 +101,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     private RequestFileLoadPanel requestFileLoadPanel;
     private RequestFileHistoryPanel requestFileHistoryPanel;
-    private ModificationManager modificationManager;
     private ProcessingManager processingManager;
     private MessagesManager messagesManager;
     private Form<F> form;
@@ -116,29 +115,30 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     private IModel<F> model;
 
-    public AbstractProcessableListPanel(String id) {
+    private ProcessType loadProcessType;
+    private ProcessType bindProcessType;
+    private ProcessType fillProcessType;
+    private ProcessType saveProcessType;
+
+    public AbstractProcessableListPanel(String id, ProcessType loadProcessType,
+                                        ProcessType bindProcessType, ProcessType fillProcessType, ProcessType saveProcessType) {
         super(id);
+
+        this.loadProcessType = loadProcessType;
+        this.bindProcessType = bindProcessType;
+        this.fillProcessType = fillProcessType;
+        this.saveProcessType = saveProcessType;
 
         init();
     }
 
-    protected abstract boolean hasFieldDescription();
-
-    protected abstract ProcessType getLoadProcessType();
-
-    protected abstract ProcessType getBindProcessType();
-
-    protected abstract ProcessType getFillProcessType();
-
-    protected abstract ProcessType getSaveProcessType();
+    protected abstract void load(long userOrganizationId, long osznId, DateParameter dateParameter);
 
     protected abstract void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters);
 
     protected abstract void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters);
 
     protected abstract void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters);
-
-    protected abstract void load(long userOrganizationId, long osznId, DateParameter dateParameter);
 
     protected void export(AjaxRequestTarget target, List<Long> selectedFileIds){
         //override me
@@ -168,15 +168,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     protected abstract String getPreferencePage();
 
-    protected void initFilter(F filter) {
-    }
-
     protected F newFilter() {
         try {
             F filter = getFilterClass().newInstance();
             filter.setSortProperty("id");
-
-            initFilter(filter);
 
             return filter;
         } catch (Exception e) {
@@ -188,23 +183,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     protected abstract List<R> getObjects(F filter);
 
-    protected abstract Date getLoaded(R object);
-
-    protected abstract long getOsznId(R object);
-
-    protected abstract long getUserOrganizationId(R object);
-
-    protected abstract int getMonth(R object);
-
-    protected abstract int getYear(R object);
-
-    protected abstract int getLoadedRecordCount(R object);
-
-    protected abstract int getBindedRecordCount(R object);
-
-    protected abstract int getFilledRecordCount(R object);
-
-    protected abstract R getById(long id);
+    protected abstract R getObject(long id);
 
     protected abstract void delete(R object);
 
@@ -238,9 +217,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         //Отобразить сообщения
         messagesManager.showMessages();
-        
-        //Отобразить сообщения об отсутствии описания файлов запросов если необходимо
-        modificationManager.reportErrorIfNecessary();
     }
 
     @Override
@@ -259,25 +235,22 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     private void init() {
         add(new DataRowHoverBehavior());
 
-        modificationManager = new ModificationManager(this, hasFieldDescription());
-
-        processingManager = new ProcessingManager(getLoadProcessType(), getBindProcessType(),
-                getFillProcessType(),getSaveProcessType());
+        processingManager = new ProcessingManager(loadProcessType, bindProcessType, fillProcessType, saveProcessType);
 
         messagesManager = new MessagesManager(this) {
 
             @Override
             public void showMessages(AjaxRequestTarget target) {
-                addMessages("load_process", target, getLoadProcessType(), LOADED, LOAD_ERROR);
-                addMessages("bind_process", target, getBindProcessType(), BOUND, BIND_ERROR);
-                addMessages("fill_process", target, getFillProcessType(), FILLED, FILL_ERROR);
-                addMessages("save_process", target, getSaveProcessType(), SAVED, SAVE_ERROR);
+                addMessages("load_process", target, loadProcessType, LOADED, LOAD_ERROR);
+                addMessages("bind_process", target, bindProcessType, BOUND, BIND_ERROR);
+                addMessages("fill_process", target, fillProcessType, FILLED, FILL_ERROR);
+                addMessages("save_process", target, saveProcessType, SAVED, SAVE_ERROR);
                 addMessages("export_process", target, getExportProcessType(), EXPORTED, EXPORT_ERROR);
 
-                addCompetedMessages("load_process", getLoadProcessType());
-                addCompetedMessages("bind_process", getBindProcessType());
-                addCompetedMessages("fill_process", getFillProcessType());
-                addCompetedMessages("save_process", getSaveProcessType());
+                addCompetedMessages("load_process", loadProcessType);
+                addCompetedMessages("bind_process", bindProcessType);
+                addCompetedMessages("fill_process", fillProcessType);
+                addCompetedMessages("save_process", saveProcessType);
                 addCompetedMessages("export_process", getExportProcessType());
 
                 AbstractProcessableListPanel.this.showMessages(target);
@@ -446,7 +419,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 item.add(new Label("id", StringUtil.valueOf(objectId)));
 
                 //Дата загрузки
-                item.add(new ItemDateLoadedLabel("loaded", getLoaded(item.getModelObject())));
+                item.add(new ItemDateLoadedLabel("loaded", rf.getLoaded()));
 
                 //ПУ
                 item.add(new AjaxLinkLabel("service_provider", new LoadableDetachableModel<String>() {
@@ -477,20 +450,20 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 });
 
                 //ОСЗН
-                item.add(new ItemOrganizationLabel("organization", getOsznId(item.getModelObject())));
+                item.add(new ItemOrganizationLabel("organization", rf.getOrganizationId()));
 
                 //Организация пользователя
-                item.add(new ItemOrganizationLabel("userOrganization", getUserOrganizationId(item.getModelObject())));
+                item.add(new ItemOrganizationLabel("userOrganization", rf.getUserOrganizationId()));
 
-                item.add(new Label("month", DateUtil.displayMonth(getMonth(item.getModelObject()), getLocale())));
-                item.add(new Label("year", StringUtil.valueOf(getYear(item.getModelObject()))));
+                item.add(new Label("month", DateUtil.displayMonth(rf.getMonth(), getLocale())));
+                item.add(new Label("year", StringUtil.valueOf(rf.getYear())));
 
                 //Количество загруженных записей
                 item.add(new Label("loaded_record_count", new LoadableDetachableModel<String>() {
 
                     @Override
                     protected String load() {
-                        return StringUtil.valueOf(getLoadedRecordCount(item.getModelObject()));
+                        return StringUtil.valueOf(rf.getLoadedRecordCount());
                     }
                 }));
 
@@ -499,7 +472,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                     @Override
                     protected String load() {
-                        return StringUtil.valueOf(getBindedRecordCount(item.getModelObject()));
+                        return StringUtil.valueOf(rf.getBindedRecordCount());
                     }
                 }));
 
@@ -508,7 +481,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                     @Override
                     protected String load() {
-                        return StringUtil.valueOf(getFilledRecordCount(item.getModelObject()));
+                        return StringUtil.valueOf(rf.getFilledRecordCount());
                     }
                 }));
 
@@ -562,7 +535,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         //Контейнер кнопок для ajax
         WebMarkupContainer buttons = new WebMarkupContainer("buttons");
         buttons.setOutputMarkupId(true);
-        buttons.setVisibilityAllowed(modificationManager.isModificationsAllowed());
         form.add(buttons);
 
         timerManager.addUpdateComponent(buttons);
@@ -583,7 +555,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             public void onClick(AjaxRequestTarget target) {
                 bind(selectManager.getSelectedFileIds(), buildCommandParameters());
 
-                startTimer(target, getBindProcessType());
+                startTimer(target, bindProcessType);
             }
         });
 
@@ -594,7 +566,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             public void onClick(AjaxRequestTarget target) {
                 fill(selectManager.getSelectedFileIds(), buildCommandParameters());
 
-                startTimer(target, getFillProcessType());
+                startTimer(target, fillProcessType);
             }
         });
 
@@ -605,7 +577,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             public void onClick(AjaxRequestTarget target) {
                 save(selectManager.getSelectedFileIds(), buildCommandParameters());
 
-                startTimer(target, getSaveProcessType());
+                startTimer(target, saveProcessType);
             }
         });
 
@@ -629,7 +601,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             public void onClick(AjaxRequestTarget target) {
                 for (long objectId : selectManager.getSelectedFileIds()) {
-                    final R object = getById(objectId);
+                    final R object = getObject(objectId);
 
                     if (object != null) {
                         try {
@@ -656,12 +628,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             public boolean isVisible() {
-                return processManagerBean.isProcessing(getLoadProcessType());
+                return processManagerBean.isProcessing(loadProcessType);
             }
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                processManagerBean.cancel(getLoadProcessType());
+                processManagerBean.cancel(loadProcessType);
                 info(getString("load_process.canceling"));
                 target.add(form);
             }
@@ -672,12 +644,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             public boolean isVisible() {
-                return processManagerBean.isProcessing(getBindProcessType());
+                return processManagerBean.isProcessing(bindProcessType);
             }
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                processManagerBean.cancel(getBindProcessType());
+                processManagerBean.cancel(bindProcessType);
                 info(getString("bind_process.canceling"));
                 target.add(form);
             }
@@ -688,12 +660,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             public boolean isVisible() {
-                return processManagerBean.isProcessing(getFillProcessType());
+                return processManagerBean.isProcessing(fillProcessType);
             }
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                processManagerBean.cancel(getFillProcessType());
+                processManagerBean.cancel(fillProcessType);
                 info(getString("fill_process.canceling"));
                 target.add(form);
             }
@@ -704,12 +676,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             public boolean isVisible() {
-                return processManagerBean.isProcessing(getSaveProcessType());
+                return processManagerBean.isProcessing(saveProcessType);
             }
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                processManagerBean.cancel(getSaveProcessType());
+                processManagerBean.cancel(saveProcessType);
                 info(getString("save_process.canceling"));
                 target.add(form);
             }
@@ -738,7 +710,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             protected void load(Long userOrganizationId, Long osznId, DateParameter dateParameter, AjaxRequestTarget target) {
                 AbstractProcessableListPanel.this.load(userOrganizationId, osznId, dateParameter);
 
-                startTimer(target, getLoadProcessType());
+                startTimer(target, loadProcessType);
             }
 
             @Override
@@ -787,12 +759,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     }
 
     public List<ToolbarButton> getToolbarButtons(String id) {
-        return Arrays.asList(new LoadButton(id) {
-
-            {
-                setVisibilityAllowed(modificationManager.isModificationsAllowed());
-            }
-
+        return Collections.singletonList(new LoadButton(id) {
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 requestFileLoadPanel.open(target);
@@ -823,5 +790,9 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     protected Long[] getOsznOrganizationTypes(){
         return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
                 OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
+    }
+
+    public RequestFileLoadPanel getRequestFileLoadPanel(){
+        return requestFileLoadPanel;
     }
 }

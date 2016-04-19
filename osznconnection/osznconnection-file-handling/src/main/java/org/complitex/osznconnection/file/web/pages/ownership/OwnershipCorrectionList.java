@@ -6,8 +6,8 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.correction.web.AbstractCorrectionList;
-import org.complitex.osznconnection.file.entity.OwnershipCorrection;
-import org.complitex.osznconnection.file.service.OwnershipCorrectionBean;
+import org.complitex.osznconnection.file.entity.privilege.OwnershipCorrection;
+import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
 
 import javax.ejb.EJB;
 import java.util.List;

@@ -12,7 +12,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.*;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.StringUtil;
@@ -42,7 +45,7 @@ import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -57,10 +60,8 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
     @EJB
     private RequestFileDescriptionBean requestFileDescriptionBean;
     private RequestFileLoadPanel requestFileLoadPanel;
-    private final ModificationManager modificationManager;
 
     protected AbstractReferenceBookFileList() {
-        this.modificationManager = new ModificationManager(this, hasFieldDescription());
         init();
     }
 
@@ -236,7 +237,6 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
 
         WebMarkupContainer buttons = new WebMarkupContainer("buttons");
         buttons.setOutputMarkupId(true);
-        buttons.setVisibilityAllowed(modificationManager.isModificationsAllowed());
         form.add(buttons);
 
         timerManager.addUpdateComponent(buttons);
@@ -298,9 +298,6 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
 
         //Отобразить сообщения
         messagesManager.showMessages();
-
-        //Отобразить сообщения об отсутствии описания файлов запросов если необходимо
-        modificationManager.reportErrorIfNecessary();
     }
 
     private RequestFileFilter newFilter() {
@@ -311,12 +308,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
 
     @Override
     protected List<ToolbarButton> getToolbarButtons(String id) {
-        return Arrays.asList(new LoadButton(id) {
-
-            {
-                setVisibilityAllowed(modificationManager.isModificationsAllowed());
-            }
-
+        return Collections.singletonList(new LoadButton(id) {
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 requestFileLoadPanel.open(target);

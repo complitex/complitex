@@ -25,6 +25,10 @@ public class AbstractFilter implements Serializable {
     private DomainObject serviceProvider;
     private String edrpou;
 
+    public String getLimit(){
+        return count > 0 ? " limit " + first + ", " + count : "";
+    }
+
     public long getFirst() {
         return first;
     }

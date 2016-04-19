@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.service_provider;
 
-import org.complitex.osznconnection.file.entity.Benefit;
-import org.complitex.osznconnection.file.entity.BenefitDBF;
+import org.complitex.osznconnection.file.entity.subsidy.Benefit;
+import org.complitex.osznconnection.file.entity.subsidy.BenefitDBF;
 
 /**
  *

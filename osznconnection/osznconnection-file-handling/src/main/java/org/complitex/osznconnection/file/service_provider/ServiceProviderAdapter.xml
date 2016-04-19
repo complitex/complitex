@@ -139,7 +139,7 @@
         <include refid="org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter.getPrivs"/>
     </select>
 
-    <resultMap id="actualPaymentDataResultMap" type="org.complitex.osznconnection.file.entity.ActualPaymentData">
+    <resultMap id="actualPaymentDataResultMap" type="org.complitex.osznconnection.file.entity.subsidy.ActualPaymentData">
         <result property="apartmentFeeCharge" column="fact_charge"/>
         <result property="apartmentFeeTarif" column="fact_tarif"/>
         <result property="heatingCharge" column="fact_charge_ot"/>

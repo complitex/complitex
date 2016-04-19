@@ -5,8 +5,9 @@ import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.RequestFileType;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
+import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
 import org.complitex.osznconnection.file.service.process.RequestFileStorage.RequestFiles;
 
@@ -15,6 +16,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import static org.complitex.common.util.DateUtil.newDate;
@@ -28,25 +31,6 @@ import static org.complitex.osznconnection.file.service.process.RequestFileDirec
 public class LoadUtil {
 
     private LoadUtil() {
-    }
-
-    public static class LoadGroupParameter {
-
-        List<RequestFileGroup> requestFileGroups;
-        List<RequestFile> linkError;
-
-        public LoadGroupParameter(List<RequestFileGroup> requestFileGroups, List<RequestFile> linkError) {
-            this.requestFileGroups = requestFileGroups;
-            this.linkError = linkError;
-        }
-
-        public List<RequestFileGroup> getRequestFileGroups() {
-            return requestFileGroups;
-        }
-
-        public List<RequestFile> getLinkError() {
-            return linkError;
-        }
     }
 
     private static String getConfigString(FileHandlingConfig config) {
@@ -112,6 +96,18 @@ public class LoadUtil {
         return name.replaceAll("\\D*", "");
     }
 
+    private static String getPrivilegeSuffix(String name) {
+        int p = name.indexOf(".");
+
+        return p > 0 ? name.substring(p+1) : "";
+    }
+
+    private static String getPrefix(String name){
+        int p = name.indexOf(".");
+
+        return p > 0 ? name.substring(0, p) : "";
+    }
+
     private static RequestFile newPaymentBenefitRequestFile(File file, RequestFileType type, String relativeDirectory,
             long osznId, Date beginDate, Date endDate) {
         RequestFile requestFile = new RequestFile();
@@ -127,10 +123,10 @@ public class LoadUtil {
         return requestFile;
     }
 
-    public static LoadGroupParameter getLoadGroupParameter(long userOrganizationId, long osznId,
-            int monthFrom, int monthTo, int year) throws StorageNotFoundException {
+       public static LoadGroupParameter<RequestFileGroup> getLoadGroupParameter(long userOrganizationId, long osznId,
+                                                           int monthFrom, int monthTo, int year) throws StorageNotFoundException {
 
-        Map<String, Map<String, RequestFileGroup>> requestFileGroupsMap = new HashMap<String, Map<String, RequestFileGroup>>();
+        Map<String, Map<String, RequestFileGroup>> requestFileGroupsMap = new HashMap<>();
 
         //payment
         for (int month = monthFrom; month <= monthTo; ++month) {
@@ -161,7 +157,7 @@ public class LoadUtil {
             }
         }
 
-        List<RequestFile> linkError = new ArrayList<RequestFile>();
+        List<RequestFile> linkError = new ArrayList<>();
 
         //benefit
         for (int month = monthFrom; month <= monthTo; ++month) {
@@ -189,7 +185,7 @@ public class LoadUtil {
             }
         }
 
-        List<RequestFileGroup> requestFileGroups = new ArrayList<RequestFileGroup>();
+        List<RequestFileGroup> requestFileGroups = new ArrayList<>();
 
         for (Map<String, RequestFileGroup> map : requestFileGroupsMap.values()) {
             for (RequestFileGroup group : map.values()) {
@@ -203,8 +199,40 @@ public class LoadUtil {
             }
         }
 
-        return new LoadGroupParameter(requestFileGroups, linkError);
+        return new LoadGroupParameter<>(requestFileGroups, linkError);
     }
+
+    public static LoadGroupParameter<PrivilegeFileGroup> getLoadPrivilegeGroupParameter(long userOrganizationId, long osznId,
+                                                           int month, int year) throws StorageNotFoundException {
+        List<RequestFile> dwellingCharacteristicsRequestFiles = getDwellingCharacteristics(userOrganizationId, osznId, month, year);
+        List<RequestFile> facilityServiceTypeRequestFiles = getFacilityServiceTypes(userOrganizationId, osznId, month, year);
+
+        Map<String, List<RequestFile>> map = Stream
+                .concat(dwellingCharacteristicsRequestFiles.stream(), facilityServiceTypeRequestFiles.stream())
+                .collect(Collectors.groupingBy(RequestFile::getDirectory));
+
+        List<PrivilegeFileGroup> list = new ArrayList<>();
+
+        map.values().forEach(v ->{
+            PrivilegeFileGroup group = new PrivilegeFileGroup();
+            group.setId(System.nanoTime());
+
+            v.forEach(f -> {
+                f.setGroupId(group.getId());
+
+                if (f.getType().equals(RequestFileType.DWELLING_CHARACTERISTICS)){
+                    group.setDwellingCharacteristicsRequestFile(f);
+                }else if (f.getType().equals(RequestFileType.FACILITY_SERVICE_TYPE)){
+                    group.setFacilityServiceTypeRequestFile(f);
+                }
+            });
+
+            list.add(group);
+        } );
+
+        return new LoadGroupParameter<>(list, new ArrayList<>());
+    }
+
 
     public static List<RequestFile> getSubsidyTarifs(long userOrganizationId, long osznId, int month, int year)
             throws StorageNotFoundException {
@@ -305,6 +333,7 @@ public class LoadUtil {
             requestFile.setAbsolutePath(file.getAbsolutePath());
             requestFile.setDirectory(RequestFileStorage.INSTANCE.getRelativeParent(file, requestFiles.getPath()));
             requestFile.setOrganizationId(osznId);
+            requestFile.setUserOrganizationId(userOrganizationId);
             requestFile.setBeginDate(newDate(year, month));
             requestFile.setType(RequestFileType.DWELLING_CHARACTERISTICS);
 
@@ -330,6 +359,7 @@ public class LoadUtil {
             requestFile.setAbsolutePath(file.getAbsolutePath());
             requestFile.setDirectory(RequestFileStorage.INSTANCE.getRelativeParent(file, requestFiles.getPath()));
             requestFile.setOrganizationId(osznId);
+            requestFile.setUserOrganizationId(userOrganizationId);
             requestFile.setBeginDate(newDate(year, month));
             requestFile.setType(RequestFileType.FACILITY_SERVICE_TYPE);
 

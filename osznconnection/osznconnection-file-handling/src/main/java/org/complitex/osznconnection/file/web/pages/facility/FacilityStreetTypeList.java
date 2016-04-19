@@ -4,9 +4,9 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.StringUtil;
-import org.complitex.osznconnection.file.entity.FacilityStreetType;
-import org.complitex.osznconnection.file.entity.FacilityStreetTypeDBF;
-import org.complitex.osznconnection.file.service.FacilityReferenceBookBean;
+import org.complitex.osznconnection.file.entity.privilege.FacilityStreetType;
+import org.complitex.osznconnection.file.entity.privilege.FacilityStreetTypeDBF;
+import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.ListTemplatePage;
 

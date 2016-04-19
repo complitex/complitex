@@ -12,17 +12,19 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.RequestFileType;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
-import org.complitex.osznconnection.file.web.SubsidyFileList;
 import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 
 import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
+
+import static org.complitex.osznconnection.file.entity.RequestFileType.SUBSIDY;
+import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -34,10 +36,13 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     @EJB
     private ProcessManagerBean processManagerBean;
 
+    @EJB
+    private RequestFileBean requestFileBean;
+
     private SubsidyExportDialog subsidyExportDialog;
 
     public SubsidyFileListPanel(String id) {
-        super(id);
+        super(id, SUBSIDY, LOAD_SUBSIDY, BIND_SUBSIDY, FILL_SUBSIDY, SAVE_SUBSIDY);
 
         add(subsidyExportDialog = new SubsidyExportDialog("subsidy_export_dialog"){
             @Override
@@ -71,38 +76,13 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     }
 
     @Override
-    protected String getPreferencePage() {
-        return SubsidyFileList.class.getName();
-    }
-
-    @Override
-    protected RequestFileType getRequestFileType() {
-        return RequestFileType.SUBSIDY;
-    }
-
-    @Override
     protected Class<? extends WebPage> getItemListPageClass() {
         return SubsidyList.class;
     }
 
     @Override
-    protected ProcessType getLoadProcessType() {
-        return ProcessType.LOAD_SUBSIDY;
-    }
-
-    @Override
-    protected ProcessType getBindProcessType() {
-        return ProcessType.BIND_SUBSIDY;
-    }
-
-    @Override
-    protected ProcessType getFillProcessType() {
-        return ProcessType.FILL_SUBSIDY;
-    }
-
-    @Override
-    protected ProcessType getSaveProcessType() {
-        return ProcessType.SAVE_SUBSIDY;
+    protected String getPreferencePage() {
+        return SubsidyFileList.class.getName();
     }
 
     @Override

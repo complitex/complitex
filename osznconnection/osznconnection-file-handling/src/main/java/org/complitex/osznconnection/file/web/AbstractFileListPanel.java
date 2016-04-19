@@ -9,7 +9,6 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.LogBean;
-import org.complitex.common.util.DateUtil;
 import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.scroll.ScrollListBehavior;
@@ -18,13 +17,12 @@ import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractFileListPanel extends AbstractProcessableListPanel<RequestFile, RequestFileFilter> {
@@ -34,11 +32,13 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     @EJB
     private LogBean logBean;
 
-    @EJB
-    private RequestFileDescriptionBean requestFileDescriptionBean;
+    private RequestFileType requestFileType;
 
-    public AbstractFileListPanel(String id) {
-        super(id);
+    public AbstractFileListPanel(String id, RequestFileType requestFileType, ProcessType loadProcessType, ProcessType bindProcessType,
+                                 ProcessType fillProcessType, ProcessType saveProcessType) {
+        super(id, loadProcessType, bindProcessType, fillProcessType, saveProcessType);
+
+        this.requestFileType = requestFileType;
 
         //Имя
         addColumn(new Column() {
@@ -60,17 +60,6 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
                         new PageParameters().set("request_file_id", item.getModelObject().getId()));
             }
         });
-    }
-
-    @Override
-    protected boolean hasFieldDescription() {
-        return requestFileDescriptionBean.getFileDescription(getRequestFileType()) != null;
-    }
-
-    @Override
-    protected void initFilter(RequestFileFilter filter) {
-        super.initFilter(filter);
-        filter.setType(getRequestFileType());
     }
 
     @Override
@@ -97,56 +86,20 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
 
     @Override
     protected Long getCount(RequestFileFilter filter) {
+        filter.setType(requestFileType);
+
         return requestFileBean.getCount(filter);
     }
 
     @Override
     protected List<RequestFile> getObjects(RequestFileFilter filter) {
+        filter.setType(requestFileType);
+
         return requestFileBean.getRequestFiles(filter);
     }
 
     @Override
-    protected Date getLoaded(RequestFile object) {
-        return object.getLoaded();
-    }
-
-    @Override
-    protected long getOsznId(RequestFile object) {
-        return object.getOrganizationId();
-    }
-
-    @Override
-    protected long getUserOrganizationId(RequestFile object) {
-        return object.getUserOrganizationId();
-    }
-
-    @Override
-    protected int getMonth(RequestFile object) {
-        return DateUtil.getMonth(object.getBeginDate()) + 1;
-    }
-
-    @Override
-    protected int getYear(RequestFile object) {
-        return DateUtil.getYear(object.getBeginDate());
-    }
-
-    @Override
-    protected int getLoadedRecordCount(RequestFile object) {
-        return object.getLoadedRecordCount();
-    }
-
-    @Override
-    protected int getBindedRecordCount(RequestFile object) {
-        return object.getBindedRecordCount();
-    }
-
-    @Override
-    protected int getFilledRecordCount(RequestFile object) {
-        return object.getFilledRecordCount();
-    }
-
-    @Override
-    protected RequestFile getById(long id) {
+    protected RequestFile getObject(long id) {
         return requestFileBean.getRequestFile(id);
     }
 
@@ -164,8 +117,6 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     protected MonthParameterViewMode getLoadMonthParameterViewMode() {
         return MonthParameterViewMode.RANGE;
     }
-
-    protected abstract RequestFileType getRequestFileType();
 
     protected abstract Class<? extends WebPage> getItemListPageClass();
 }

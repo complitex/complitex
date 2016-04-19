@@ -22,6 +22,7 @@ import org.complitex.correction.service.exception.NotFoundCorrectionException;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.AbstractAddressRequest;
 import org.complitex.osznconnection.file.entity.RequestStatus;
+import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
