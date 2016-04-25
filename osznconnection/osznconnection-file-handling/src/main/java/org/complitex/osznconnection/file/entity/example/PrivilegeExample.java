@@ -1,39 +1,62 @@
 package org.complitex.osznconnection.file.entity.example;
 
 /**
- *
- * @author Artem
+ * @author inheaven on 025 25.04.16 15:16
  */
-public class FacilityServiceTypeExample extends AbstractRequestExample {
-    private String accountNumber;
-    private String idCode;
+public class PrivilegeExample extends AbstractRequestExample{
+    private Long groupId;
+    private String inn;
+    private String passport;
+
+    private String fio;
     private String firstName;
     private String middleName;
     private String lastName;
+
+    private String streetType;
     private String streetCode;
-    private String streetReference;
+    private String street;
+
     private String building;
     private String corp;
     private String apartment;
-    private Long first;
-    private Long count;
+
+    private long first;
+    private long count;
+
     private String orderByClause;
     private boolean asc;
 
-    public String getAccountNumber() {
-        return accountNumber;
+    public Long getGroupId() {
+        return groupId;
     }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
-    public String getIdCode() {
-        return idCode;
+    public String getInn() {
+        return inn;
     }
 
-    public void setIdCode(String idCode) {
-        this.idCode = idCode;
+    public void setInn(String inn) {
+        this.inn = inn;
+    }
+
+    public String getPassport() {
+        return passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport = passport;
+    }
+
+    public String getFio() {
+        return fio;
+    }
+
+    public void setFio(String fio) {
+        this.fio = fio;
     }
 
     public String getFirstName() {
@@ -60,6 +83,14 @@ public class FacilityServiceTypeExample extends AbstractRequestExample {
         this.lastName = lastName;
     }
 
+    public String getStreetType() {
+        return streetType;
+    }
+
+    public void setStreetType(String streetType) {
+        this.streetType = streetType;
+    }
+
     public String getStreetCode() {
         return streetCode;
     }
@@ -68,12 +99,12 @@ public class FacilityServiceTypeExample extends AbstractRequestExample {
         this.streetCode = streetCode;
     }
 
-    public String getStreetReference() {
-        return streetReference;
+    public String getStreet() {
+        return street;
     }
 
-    public void setStreetReference(String streetReference) {
-        this.streetReference = streetReference;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public String getBuilding() {
@@ -100,19 +131,19 @@ public class FacilityServiceTypeExample extends AbstractRequestExample {
         this.apartment = apartment;
     }
 
-    public Long getFirst() {
+    public long getFirst() {
         return first;
     }
 
-    public void setFirst(Long first) {
+    public void setFirst(long first) {
         this.first = first;
     }
 
-    public Long getCount() {
+    public long getCount() {
         return count;
     }
 
-    public void setCount(Long count) {
+    public void setCount(long count) {
         this.count = count;
     }
 

@@ -28,15 +28,17 @@ import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
-import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.entity.example.FacilityServiceTypeExample;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestStatus;
+import org.complitex.osznconnection.file.entity.StatusDetailInfo;
+import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF;
 import org.complitex.osznconnection.file.service.AddressService;
-import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
-import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean.OrderBy;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
+import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
+import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean.OrderBy;
 import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceTypeBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeStatusDetailRenderer;
@@ -89,7 +91,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
     @EJB
     private FacilityServiceTypeBindTaskBean facilityServiceTypeBindTaskBean;
 
-    private IModel<FacilityServiceTypeExample> example;
+    private IModel<PrivilegeExample> example;
     private long fileId;
 
 
@@ -102,8 +104,8 @@ public final class FacilityServiceTypeList extends TemplatePage {
         example.setObject(newExample());
     }
 
-    private FacilityServiceTypeExample newExample() {
-        FacilityServiceTypeExample e = new FacilityServiceTypeExample();
+    private PrivilegeExample newExample() {
+        PrivilegeExample e = new PrivilegeExample();
         e.setRequestFileId(fileId);
 
         return e;
@@ -140,8 +142,8 @@ public final class FacilityServiceTypeList extends TemplatePage {
         content.add(filterForm);
         example = new Model<>(newExample());
 
-        StatusDetailPanel<FacilityServiceTypeExample> statusDetailPanel =
-                new StatusDetailPanel<FacilityServiceTypeExample>("statusDetailsPanel", example,
+        StatusDetailPanel<PrivilegeExample> statusDetailPanel =
+                new StatusDetailPanel<PrivilegeExample>("statusDetailsPanel", example,
                 new FacilityServiceTypeExampleConfigurator(), new FacilityServiceTypeStatusDetailRenderer(), content) {
 
                     @Override

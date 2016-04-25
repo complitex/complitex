@@ -1,17 +1,13 @@
 package org.complitex.osznconnection.file.service.status.details;
 
 import org.complitex.osznconnection.file.entity.StatusDetail;
-import org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample;
+import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 
-/**
- *
- * @author Artem
- */
-public class DwellingCharacteristicsExampleConfigurator extends AbstractExampleConfigurator<DwellingCharacteristicsExample> {
+public class DwellingCharacteristicsExampleConfigurator extends AbstractExampleConfigurator<PrivilegeExample> {
 
     @Override
-    public DwellingCharacteristicsExample createExample(StatusDetail statusDetail) {
-        DwellingCharacteristicsExample example = new DwellingCharacteristicsExample();
+    public PrivilegeExample createExample(StatusDetail statusDetail) {
+        PrivilegeExample example = new PrivilegeExample();
 
         example.setLastName(statusDetail.getDetail("lastName"));
         example.setFirstName(statusDetail.getDetail("firstName"));

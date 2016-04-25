@@ -29,13 +29,17 @@ import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
-import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestStatus;
+import org.complitex.osznconnection.file.entity.StatusDetailInfo;
+import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
-import org.complitex.osznconnection.file.service.*;
+import org.complitex.osznconnection.file.service.AddressService;
+import org.complitex.osznconnection.file.service.RequestFileBean;
+import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 import org.complitex.osznconnection.file.service.privilege.task.DwellingCharacteristicsBindTaskBean;
@@ -93,7 +97,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
     @EJB
     private FacilityReferenceBookBean facilityReferenceBookBean;
 
-    private IModel<DwellingCharacteristicsExample> example;
+    private IModel<PrivilegeExample> example;
     private long fileId;
 
 
@@ -106,8 +110,8 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         example.setObject(newExample());
     }
 
-    private DwellingCharacteristicsExample newExample() {
-        final DwellingCharacteristicsExample e = new DwellingCharacteristicsExample();
+    private PrivilegeExample newExample() {
+        final PrivilegeExample e = new PrivilegeExample();
         e.setRequestFileId(fileId);
         return e;
     }
@@ -143,8 +147,8 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         content.add(filterForm);
         example = new Model<>(newExample());
 
-        StatusDetailPanel<DwellingCharacteristicsExample> statusDetailPanel =
-                new StatusDetailPanel<DwellingCharacteristicsExample>("statusDetailsPanel", example,
+        StatusDetailPanel<PrivilegeExample> statusDetailPanel =
+                new StatusDetailPanel<PrivilegeExample>("statusDetailsPanel", example,
                 new DwellingCharacteristicsExampleConfigurator(), new DwellingCharacteristicsStatusDetailRenderer(), content) {
 
                     @Override

@@ -102,14 +102,14 @@
     </insert>
     
     <sql id="filter">
+        <if test="groupId != null">
+            and f.`group_id` = #{groupId}
+        </if>
+
         <if test="accountNumber != null">
             AND fst.`RAH` LIKE CONCAT('%',#{accountNumber},'%')
         </if>
 
-        <!--<if test="idCode != null">
-            AND fst.`IDCODE` LIKE CONCAT('%',#{idCode},'%')
-        </if>-->
-        
         <if test="firstName != null">
             AND fst.`first_name` LIKE CONCAT('%',#{firstName},'%')
         </if>
@@ -122,24 +122,32 @@
             AND fst.`last_name` LIKE CONCAT('%',#{lastName},'%')
         </if>
 
-        <!--<if test="streetCode != null">
-            AND fst.`CDUL` LIKE CONCAT('%', #{streetCode}, '%')
+        <if test="fio != null">
+            and fst.`FIO` = #{fio}
         </if>
 
-        <if test="streetReference != null">
-            AND  fsr.`KL_NAME` LIKE CONCAT('%', #{streetReference}, '%')
-        </if>-->
+        <if test="inn != null">
+            and fst.`IDPIL` = #{inn}
+        </if>
+
+        <if test="passport != null">
+            and fst.`PASSPIL` = #{passport}
+        </if>
+
+        <if test="streetCode != null">
+            and fst.`CDUL` = #{streetCode}
+        </if>
 
         <if test="building != null">
-            AND fst.`HOUSE` LIKE CONCAT('%', #{building}, '%')
+            AND fst.`HOUSE` = #{building}
         </if>
 
         <if test="corp != null">
-            AND fst.`BUILD` LIKE CONCAT('%', #{corp}, '%')
+            AND fst.`BUILD` = #{corp}
         </if>
 
         <if test="apartment != null">
-            AND fst.`APT` LIKE CONCAT('%', #{apartment}, '%')
+            AND fst.`APT` = #{apartment}
         </if>
 
         <if test="status != null">
@@ -147,14 +155,14 @@
         </if>
     </sql>
 
-    <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.FacilityServiceTypeExample">
+    <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.PrivilegeExample">
         SELECT COUNT(distinct fst.`id`) FROM `facility_service_type` fst
           LEFT JOIN `facility_street_reference` fsr ON fst.`CDUL` = fsr.`KL_CODEUL`
         WHERE fst.`request_file_id` = #{requestFileId}
         <include refid="org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean.filter"/>
     </select>
 
-    <select id="find" parameterType="org.complitex.osznconnection.file.entity.example.FacilityServiceTypeExample"
+    <select id="find" parameterType="org.complitex.osznconnection.file.entity.example.PrivilegeExample"
             resultMap="facilityServiceTypeResultMap">
         SELECT t.*,  
         w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,

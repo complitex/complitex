@@ -3,8 +3,10 @@ package org.complitex.osznconnection.file.service.privilege;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.RequestFileType;
+import org.complitex.osznconnection.file.entity.RequestStatus;
+import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
@@ -69,12 +71,12 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
     }
 
 
-    public Long getCount(DwellingCharacteristicsExample example) {
+    public Long getCount(PrivilegeExample example) {
         return sqlSession().selectOne(MAPPING_NAMESPACE + ".count", example);
     }
 
 
-    public List<DwellingCharacteristics> find(DwellingCharacteristicsExample example) {
+    public List<DwellingCharacteristics> find(PrivilegeExample example) {
         List<DwellingCharacteristics> list = sqlSession().selectList(MAPPING_NAMESPACE + ".find", example);
 
         loadFacilityStreet(list);

@@ -1,17 +1,17 @@
 package org.complitex.osznconnection.file.service.status.details;
 
 import org.complitex.osznconnection.file.entity.StatusDetail;
-import org.complitex.osznconnection.file.entity.example.FacilityServiceTypeExample;
+import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 
 /**
  *
  * @author Artem
  */
-public class FacilityServiceTypeExampleConfigurator extends AbstractExampleConfigurator<FacilityServiceTypeExample> {
+public class FacilityServiceTypeExampleConfigurator extends AbstractExampleConfigurator<PrivilegeExample> {
 
     @Override
-    public FacilityServiceTypeExample createExample(StatusDetail statusDetail) {
-        FacilityServiceTypeExample example = new FacilityServiceTypeExample();
+    public PrivilegeExample createExample(StatusDetail statusDetail) {
+        PrivilegeExample example = new PrivilegeExample();
         example.setLastName(statusDetail.getDetail("lastName"));
         example.setFirstName(statusDetail.getDetail("firstName"));
         example.setMiddleName(statusDetail.getDetail("middleName"));

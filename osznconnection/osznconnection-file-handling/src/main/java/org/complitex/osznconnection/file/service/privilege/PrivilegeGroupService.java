@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.service.privilege;
 
+import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeGroup;
@@ -50,5 +51,35 @@ public class PrivilegeGroupService {
         });
 
         return privilegeGroups;
+    }
+
+    public PrivilegeGroup getPrivilegeGroup(Long groupId, String inn, String passport, String fio, String streetCode,
+                                            String buildingNumber, String buildingCorp, String apartment){
+        PrivilegeExample example = new PrivilegeExample();
+
+        example.setGroupId(groupId);
+        example.setInn(inn);
+        example.setPassport(passport);
+        example.setFio(fio);
+        example.setStreetCode(streetCode);
+        example.setBuilding(buildingNumber);
+        example.setCorp(buildingCorp);
+        example.setApartment(apartment);
+
+        PrivilegeGroup privilegeGroup = new PrivilegeGroup();
+
+        List<DwellingCharacteristics> dwellingCharacteristicsList = dwellingCharacteristicsBean.find(example);
+
+        if (dwellingCharacteristicsList.size() == 1){
+            privilegeGroup.setDwellingCharacteristics(dwellingCharacteristicsList.get(0));
+        }
+
+        List<FacilityServiceType> facilityServiceTypeList = facilityServiceTypeBean.find(example);
+
+        if (facilityServiceTypeList.size() == 1){
+            privilegeGroup.setFacilityServiceType(facilityServiceTypeList.get(0));
+        }
+
+        return privilegeGroup;
     }
 }

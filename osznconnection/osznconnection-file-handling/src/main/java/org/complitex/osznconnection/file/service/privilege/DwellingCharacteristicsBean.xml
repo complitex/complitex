@@ -94,6 +94,10 @@
     </insert>
     
     <sql id="filter">
+        <if test="groupId != null">
+            and f.`group_id` = #{groupId}
+        </if>
+
         <if test="idCode != null">
             AND d.`IDCODE` LIKE CONCAT('%',#{idCode},'%')
         </if>
@@ -110,22 +114,30 @@
             AND d.`last_name` LIKE CONCAT('%',#{lastName},'%')
         </if>
 
-        <if test="streetCode != null">
-            AND d.`CDUL` LIKE CONCAT('%', #{streetCode}, '%')
+        <if test="fio != null">
+            and d.`FIO` = #{fio}
         </if>
 
-        <!--<if test="streetReference != null">-->
-            <!--AND s.`KL_NAME` LIKE CONCAT('%', #{streetReference}, '%')-->
-        <!--</if>-->
+        <if test="inn != null">
+            and d.`IDPIL` = #{inn}
+        </if>
+
+        <if test="passport != null">
+            and d.`PASSPIL` = #{passport}
+        </if>
+
+        <if test="streetCode != null">
+            AND d.`CDUL` =  #{streetCode}
+        </if>
 
         <if test="building != null">
-            AND d.`HOUSE` LIKE CONCAT('%', #{building}, '%')
+            AND d.`HOUSE` = #{building}
         </if>
         <if test="corp != null">
-            AND d.`BUILD` LIKE CONCAT('%', #{corp}, '%')
+            AND d.`BUILD` =  #{corp})
         </if>
         <if test="apartment != null">
-            AND d.`APT` LIKE CONCAT('%', #{apartment}, '%')
+            AND d.`APT` = #{apartment}
         </if>
 
         <if test="status != null">
@@ -133,14 +145,14 @@
         </if>
     </sql>
 
-    <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample">
+    <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.PrivilegeExample">
         SELECT COUNT(distinct d.`id`) FROM `dwelling_characteristics` d
           LEFT JOIN `facility_street_reference` s ON d.`CDUL` = s.`KL_CODEUL`
         WHERE d.`request_file_id` = #{requestFileId}
         <include refid="org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean.filter"/>
     </select>
 
-    <select id="find" parameterType="org.complitex.osznconnection.file.entity.example.DwellingCharacteristicsExample"
+    <select id="find" parameterType="org.complitex.osznconnection.file.entity.example.PrivilegeExample"
             resultMap="dwellingCharacteristicsResultMap">
         SELECT t.*,  
             w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
