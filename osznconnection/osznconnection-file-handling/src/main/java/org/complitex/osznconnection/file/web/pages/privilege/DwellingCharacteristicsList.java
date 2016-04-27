@@ -179,7 +179,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         };
         dataProvider.setSort("", SortOrder.ASCENDING);
 
-        filterForm.add(new TextField<>("idCodeFilter", new PropertyModel<>(example, "idCode")));
+        filterForm.add(new TextField<>("idCodeFilter", new PropertyModel<>(example, "inn")));
         filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<>(example, "firstName")));
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<>(example, "middleName")));
         filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<>(example, "lastName")));

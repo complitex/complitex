@@ -11,16 +11,19 @@ import org.complitex.common.service.executor.IExecutorListener;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.ExportType;
+import org.complitex.osznconnection.file.entity.FileHandlingConfig;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataFile;
 import org.complitex.osznconnection.file.service.RequestFileBean;
+import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBean;
 import org.complitex.osznconnection.file.service.privilege.task.*;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
-import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
 import org.complitex.osznconnection.file.service.subsidy.task.*;
 import org.complitex.osznconnection.file.service.warning.ReportWarningRenderer;
 import org.slf4j.Logger;
@@ -204,7 +207,7 @@ public class ProcessManagerBean {
         if (!process.isRunning()) {
             process.init();
 
-            process.setMaxThread(configBean.getInteger(threadCount, true));
+            process.setMaxThread(SAVE_THREAD_SIZE.equals(threadCount) ? 1 : configBean.getInteger(threadCount, true));
             process.setMaxErrors(configBean.getInteger(maxErrorCount, true));
             process.setTask(EjbBeanLocator.getBean(taskClass));
             process.setListener(listener);

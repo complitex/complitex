@@ -98,10 +98,6 @@
             and f.`group_id` = #{groupId}
         </if>
 
-        <if test="idCode != null">
-            AND d.`IDCODE` LIKE CONCAT('%',#{idCode},'%')
-        </if>
-        
         <if test="firstName != null">
             AND d.`first_name` LIKE CONCAT('%',#{firstName},'%')
         </if>

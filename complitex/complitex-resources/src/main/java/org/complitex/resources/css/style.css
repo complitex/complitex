@@ -109,7 +109,7 @@ ul { margin: 0px; padding: 5px 0px 15px 30px; list-style-type: square; }
 .formFrame { margin-bottom: 20px; width: 100%; }
 .formFrame .ff_l { background:url('../images/formFrame-l.gif') repeat-y #C4CDD4; }
 .formFrame .ff_r { background:url('../images/formFrame-r.gif') repeat-y #C4CDD4; }
-.formFrame .ff_b, .formFrame .ff_bl, .formFrame .ff_br { background:url('../images/formFrame-b.gif') repeat-x #C4CDD4; }
+.formFrame .ff_b, .formFrame .ff_bl, .formFrame .ff_br { background:url('../images/formFrame-b.gif') repeat-x #C4CDD4; font-size: 0}
 .formFrame .ff_t { background:url('../images/formFrame-t.gif') repeat-x #C4CDD4; width: 100%; padding: 12px 11px 18px 11px;}
 
 .formFrame h2 {background-color: #B0BAC3; margin: 0px 0px 12px 0px; padding: 4px 5px 5px 8px; color: #FFFFFF; font-size: 16px;}
