@@ -1,9 +1,11 @@
 package org.complitex.osznconnection.file.service.privilege;
 
+import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeGroup;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -20,6 +22,9 @@ public class PrivilegeGroupService {
 
     @EJB
     private FacilityServiceTypeBean facilityServiceTypeBean;
+
+    @EJB
+    private RequestFileBean requestFileBean;
 
     public List<PrivilegeGroup> getPrivilegeGroups(Long groupId){
         List<PrivilegeGroup> privilegeGroups = new ArrayList<>();
@@ -53,18 +58,17 @@ public class PrivilegeGroupService {
         return privilegeGroups;
     }
 
-    public PrivilegeGroup getPrivilegeGroup(Long groupId, String inn, String passport, String fio, String streetCode,
-                                            String buildingNumber, String buildingCorp, String apartment){
+    public PrivilegeGroup getPrivilegeGroup(AbstractAccountRequest request){
         PrivilegeExample example = new PrivilegeExample();
 
-        example.setGroupId(groupId);
-        example.setInn(inn);
-        example.setPassport(passport);
-        example.setFio(fio);
-        example.setStreetCode(streetCode);
-        example.setBuilding(buildingNumber);
-        example.setCorp(buildingCorp);
-        example.setApartment(apartment);
+        example.setGroupId(requestFileBean.getRequestFile(request.getRequestFileId()).getGroupId());
+        example.setInn(request.getInn());
+        example.setPassport(request.getPassport());
+        example.setFio(request.getFio());
+        example.setStreetCode(request.getStreetCode());
+        example.setBuilding(request.getBuildingNumber());
+        example.setCorp(request.getBuildingCorp());
+        example.setApartment(request.getApartment());
 
         PrivilegeGroup privilegeGroup = new PrivilegeGroup();
 

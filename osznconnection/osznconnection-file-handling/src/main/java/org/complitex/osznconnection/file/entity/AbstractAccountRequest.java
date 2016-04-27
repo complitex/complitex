@@ -9,6 +9,8 @@ import org.complitex.common.entity.PersonalName;
 public abstract class AbstractAccountRequest<E extends Enum> extends AbstractAddressRequest<E> {
     private String accountNumber;
 
+    private String fio;
+
     private String lastName;
     private String firstName;
     private String middleName;
@@ -26,6 +28,14 @@ public abstract class AbstractAccountRequest<E extends Enum> extends AbstractAdd
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public String getFio() {
+        return fio;
+    }
+
+    public void setFio(String fio) {
+        this.fio = fio;
     }
 
     public String getLastName() {

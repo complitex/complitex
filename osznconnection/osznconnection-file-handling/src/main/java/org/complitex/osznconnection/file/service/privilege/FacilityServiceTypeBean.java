@@ -163,19 +163,20 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
     }
 
 
-    public void markCorrected(FacilityServiceType facilityServiceType, AddressEntity addressEntity) {
+    @SuppressWarnings("Duplicates")
+    public void markCorrected(AbstractAccountRequest request, AddressEntity addressEntity) {
         Map<String, Object> params = Maps.newHashMap();
 
-        params.put("fileId", facilityServiceType.getRequestFileId());
+        params.put("fileId", request.getRequestFileId());
 
         switch (addressEntity){
             case BUILDING:
-                params.put("buildingNumber", facilityServiceType.getBuildingNumber());
-                params.put("buildingCorp", facilityServiceType.getBuildingCorp());
+                params.put("buildingNumber", request.getBuildingNumber());
+                params.put("buildingCorp", request.getBuildingCorp());
             case STREET:
-                params.put("streetCode", facilityServiceType.getStreetCode());
+                params.put("streetCode", request.getStreetCode());
             case STREET_TYPE:
-                params.put("streetTypeCode", facilityServiceType.getStreetTypeCode());
+                params.put("streetTypeCode", request.getStreetTypeCode());
         }
 
         sqlSession().update(NS + ".markCorrected", params);

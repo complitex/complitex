@@ -37,6 +37,7 @@ import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
+import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean.OrderBy;
 import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceTypeBindTaskBean;
@@ -69,6 +70,9 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
     @EJB
     private FacilityServiceTypeBean facilityServiceTypeBean;
+
+    @EJB
+    private DwellingCharacteristicsBean dwellingCharacteristicsBean;
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -175,15 +179,15 @@ public final class FacilityServiceTypeList extends TemplatePage {
         dataProvider.setSort("", SortOrder.ASCENDING);
 
         filterForm.add(new TextField<>("accountFilter", new PropertyModel<String>(example, "accountNumber")));
-        filterForm.add(new TextField<>("idCodeFilter", new PropertyModel<String>(example, "idCode")));
+        filterForm.add(new TextField<>("idCodeFilter", new PropertyModel<String>(example, "inn")));
         filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<String>(example, "firstName")));
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<String>(example, "middleName")));
         filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<String>(example, "lastName")));
-        filterForm.add(new TextField<>("streetReferenceFilter", new PropertyModel<String>(example, "streetReference")));
+        filterForm.add(new TextField<>("streetReferenceFilter", new PropertyModel<String>(example, "street")));
         filterForm.add(new TextField<>("buildingFilter", new PropertyModel<String>(example, "building")));
         filterForm.add(new TextField<>("corpFilter", new PropertyModel<String>(example, "corp")));
         filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<String>(example, "apartment")));
-        filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<RequestStatus>(example, "status"),
+        filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<>(example, "status"),
                 Arrays.asList(RequestStatus.values()), new StatusRenderer()).setNullValid(true));
 
         AjaxLink<Void> reset = new AjaxLink<Void>("reset") {
@@ -216,6 +220,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
                     @Override
                     protected void onCorrect(AjaxRequestTarget target, IModel<FacilityServiceType> model, AddressEntity addressEntity) {
                         facilityServiceTypeBean.markCorrected(model.getObject(), addressEntity);
+                        dwellingCharacteristicsBean.markCorrected(model.getObject(), addressEntity);
 
                         target.add(content, statusDetailPanel);
                         dataRowHoverBehavior.deactivateDataRow(target);
@@ -283,7 +288,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, facilityServiceType, facilityServiceType.getAccountNumber());
+                        lookupPanel.open(target, facilityServiceType, null);
                     }
                 };
                 item.add(lookup);

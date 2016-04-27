@@ -3,8 +3,10 @@ package org.complitex.osznconnection.file.web.pages.privilege;
 import org.apache.wicket.Component;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeGroup;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
+import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
 
 import javax.ejb.EJB;
@@ -20,6 +22,9 @@ public class FacilityServiceTypeLookupPanel extends AbstractLookupPanel<Facility
 
     @EJB
     private PersonAccountService personAccountService;
+
+    @EJB
+    private PrivilegeGroupService privilegeGroupService;
 
     public FacilityServiceTypeLookupPanel(String id, Component... toUpdate) {
         super(id, toUpdate);
@@ -46,5 +51,11 @@ public class FacilityServiceTypeLookupPanel extends AbstractLookupPanel<Facility
     @Override
     protected void updateAccountNumber(FacilityServiceType facilityServiceType, String accountNumber) {
         personAccountService.updateAccountNumber(facilityServiceType, accountNumber);
+
+        PrivilegeGroup privilegeGroup = privilegeGroupService.getPrivilegeGroup(facilityServiceType);
+
+        if (privilegeGroup.getDwellingCharacteristics() != null){
+            personAccountService.updateAccountNumber(privilegeGroup.getDwellingCharacteristics(), accountNumber);
+        }
     }
 }

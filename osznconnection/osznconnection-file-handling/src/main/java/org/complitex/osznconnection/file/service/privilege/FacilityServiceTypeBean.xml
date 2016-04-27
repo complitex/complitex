@@ -107,7 +107,7 @@
         </if>
 
         <if test="accountNumber != null">
-            AND fst.`RAH` LIKE CONCAT('%',#{accountNumber},'%')
+            AND fst.`account_number` = #{accountNumber}
         </if>
 
         <if test="firstName != null">
@@ -131,7 +131,7 @@
         </if>
 
         <if test="passport != null">
-            and fst.`PASSPIL` = #{passport}
+            and fst.`PASPPIL` = #{passport}
         </if>
 
         <if test="streetCode != null">

@@ -21,6 +21,8 @@ public class PrivilegeExample extends AbstractRequestExample{
     private String corp;
     private String apartment;
 
+    private String accountNumber;
+
     private long first;
     private long count;
 
@@ -129,6 +131,14 @@ public class PrivilegeExample extends AbstractRequestExample{
 
     public void setApartment(String apartment) {
         this.apartment = apartment;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public long getFirst() {

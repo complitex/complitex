@@ -42,6 +42,7 @@ import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
+import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.privilege.task.DwellingCharacteristicsBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsStatusDetailRenderer;
@@ -72,6 +73,9 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
     @EJB
     private DwellingCharacteristicsBean dwellingCharacteristicsBean;
+
+    @EJB
+    private FacilityServiceTypeBean facilityServiceTypeBean;
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -179,6 +183,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         };
         dataProvider.setSort("", SortOrder.ASCENDING);
 
+        filterForm.add(new TextField<>("accountFilter", new PropertyModel<String>(example, "accountNumber")));
         filterForm.add(new TextField<>("idCodeFilter", new PropertyModel<>(example, "inn")));
         filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<>(example, "firstName")));
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<>(example, "middleName")));
@@ -248,10 +253,13 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                     @Override
                     protected void onCorrect(AjaxRequestTarget target, IModel<DwellingCharacteristics> model, AddressEntity addressEntity) {
                         dwellingCharacteristicsBean.markCorrected(model.getObject(), addressEntity);
+                        facilityServiceTypeBean.markCorrected(model.getObject(), addressEntity);
 
                         target.add(content, statusDetailPanel);
                         dataRowHoverBehavior.deactivateDataRow(target);
                         statusDetailPanel.rebuild();
+
+                        clearExample();
                     }
                 };
         add(addressCorrectionDialog);
@@ -278,6 +286,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 final DwellingCharacteristics dwellingCharacteristics = item.getModelObject();
 
                 item.add(new Check<>("check", Model.of(dwellingCharacteristics), checkGroup));
+                item.add(new Label("account", dwellingCharacteristics.getAccountNumber()));
                 item.add(new Label("idCode", dwellingCharacteristics.getInn()));
                 item.add(new Label("firstName", dwellingCharacteristics.getFirstName()));
                 item.add(new Label("middleName", dwellingCharacteristics.getMiddleName()));
@@ -313,7 +322,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, dwellingCharacteristics, dwellingCharacteristics.getAccountNumber());
+                        lookupPanel.open(target, dwellingCharacteristics, null);
                     }
                 };
                 item.add(lookup);
@@ -322,6 +331,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         checkGroup.add(data);
 
         filterForm.add(new CheckGroupSelector("checkAll", checkGroup));
+        filterForm.add(new ArrowOrderByBorder("accountHeader", FacilityServiceTypeBean.OrderBy.RAH.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("idCodeHeader", DwellingCharacteristicsBean.OrderBy.IDPIL.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", DwellingCharacteristicsBean.OrderBy.FIRST_NAME.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("middleNameHeader", DwellingCharacteristicsBean.OrderBy.MIDDLE_NAME.getOrderBy(), dataProvider, data, content));

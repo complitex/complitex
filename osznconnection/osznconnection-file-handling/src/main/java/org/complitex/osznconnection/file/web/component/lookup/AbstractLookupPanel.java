@@ -364,7 +364,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         //immediately search
         if (request.getStatus().isImmediatelySearchByAddress()){
             lookupByAddress(target);
-        }else {
+        }else if (serviceProviderAccountNumber != null){
             lookupByAccount(target);
         }
 

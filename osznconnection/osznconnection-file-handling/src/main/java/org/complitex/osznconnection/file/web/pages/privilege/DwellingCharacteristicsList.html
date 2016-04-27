@@ -20,6 +20,7 @@
                         <thead>
                             <tr>
                                 <th></th>
+                                <th wicket:id="accountHeader"><wicket:message key="account"/></th>
                                 <th wicket:id="idCodeHeader"><wicket:message key="idcode"/></th>
                                 <th wicket:id="lastNameHeader"><wicket:message key="last_name"/></th>
                                 <th wicket:id="firstNameHeader"><wicket:message key="first_name"/></th>
@@ -35,6 +36,7 @@
                             </tr>
                             <tr>
                                 <th><input type="checkbox" wicket:id="checkAll"/></th>
+                                <th><input type="text" wicket:id="accountFilter"/></th>
                                 <th><input type="text" wicket:id="idCodeFilter"/></th>
                                 <th><input type="text" wicket:id="lastNameFilter"/></th>
                                 <th><input type="text" wicket:id="firstNameFilter"/></th>
@@ -56,6 +58,7 @@
                         <tbody wicket:id="checkGroup">
                             <tr wicket:id="data" class="data-row">
                                 <td onclick="bubble(event)"><input type="checkbox" wicket:id="check"/></td>
+                                <td><span wicket:id="account"></span></td>
                                 <td><span wicket:id="idCode"></span></td>
                                 <td><span wicket:id="lastName"></span></td>
                                 <td><span wicket:id="firstName"></span></td>

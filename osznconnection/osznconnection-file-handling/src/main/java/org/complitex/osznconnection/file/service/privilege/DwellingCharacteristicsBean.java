@@ -3,6 +3,7 @@ package org.complitex.osznconnection.file.service.privilege;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
+import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.RequestStatus;
@@ -172,19 +173,20 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
     }
 
 
-    public void markCorrected(DwellingCharacteristics dwellingCharacteristics, AddressEntity addressEntity) {
+    @SuppressWarnings("Duplicates")
+    public void markCorrected(AbstractAccountRequest request, AddressEntity addressEntity) {
         Map<String, Object> params = Maps.newHashMap();
 
-        params.put("fileId", dwellingCharacteristics.getRequestFileId());
+        params.put("fileId", request.getRequestFileId());
 
         switch (addressEntity){
             case BUILDING:
-                params.put("buildingNumber", dwellingCharacteristics.getBuildingNumber());
-                params.put("buildingCorp", dwellingCharacteristics.getBuildingCorp());
+                params.put("buildingNumber", request.getBuildingNumber());
+                params.put("buildingCorp", request.getBuildingCorp());
            case STREET:
-               params.put("streetCode", dwellingCharacteristics.getStreetCode());
+               params.put("streetCode", request.getStreetCode());
             case STREET_TYPE:
-                params.put("streetTypeCode", dwellingCharacteristics.getStreetTypeCode());
+                params.put("streetTypeCode", request.getStreetTypeCode());
         }
 
         sqlSession().update(MAPPING_NAMESPACE + ".markCorrected", params);
