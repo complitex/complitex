@@ -439,17 +439,17 @@ INSERT INTO `request_file_field_description` VALUES (370,13,'FLAG','java.lang.In
 
 -- Request files --
 INSERT INTO `request_file_group`(`id`, `status`) VALUES (1, 110);
-INSERT INTO `request_file`(id, group_id, organization_id, `name`, `directory`, `registry`, `begin_date`, `loaded`, `type`,
+INSERT INTO `request_file`(id, group_id, organization_id, `name`, `directory`, `begin_date`, `loaded`, `type`,
     `user_organization_id`, `status`) 
     VALUES
-(1,1,1,'A_123405.dbf', 'AB', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, 3, 110),
-(2,1,1,'AF123405.dbf', 'AB', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 3, 110),
-(3,null,1,'TARIF12.dbf', 'AB', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, 3, 110),
-(4,null,1,'B1170710.dbf', 'AB', 1, CURRENT_TIMESTAMP, '2011-01-12', 4, 4, 110),
-(5,null,1,'J000001.dbf', '1234\\AB', 1, CURRENT_TIMESTAMP, '2011-01-12', 5, 4, 110),
+(1,1,1,'A_123405.dbf', 'AB', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, 3, 110),
+(2,1,1,'AF123405.dbf', 'AB', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 3, 110),
+(3,null,1,'TARIF12.dbf', 'AB', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, 3, 110),
+(4,null,1,'B1170710.dbf', 'AB', CURRENT_TIMESTAMP, '2011-01-12', 4, 4, 110),
+(5,null,1,'J000001.dbf', '1234\\AB', CURRENT_TIMESTAMP, '2011-01-12', 5, 4, 110),
 -- (6,null,1,'J000002.dbf', '123456\\AB', 1, CURRENT_TIMESTAMP, '2011-01-12', 'SUBSIDY', 4, 110),
-(7,null,1,'12345678.a01','',1,CURRENT_TIMESTAMP,'2012-01-01',6 ,4, 110),
-(8,null,1,'12345678.b01','',1,CURRENT_TIMESTAMP,'2012-01-01',9 ,4, 110);
+(7,null,1,'12345678.a01','',CURRENT_TIMESTAMP,'2012-01-01',6 ,4, 110),
+(8,null,1,'12345678.b01','',CURRENT_TIMESTAMP,'2012-01-01',9 ,4, 110);
 
 -- Benefit
 insert into `benefit`(`OWN_NUM`, `OWN_NUM_SR`, `OZN`, `F_NAM`, `M_NAM`, `SUR_NAM`, `request_file_id`, `IND_COD`, `PSP_NUM`)

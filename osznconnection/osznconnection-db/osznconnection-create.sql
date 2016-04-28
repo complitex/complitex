@@ -182,7 +182,7 @@ CREATE TABLE `request_file` (
     `status` INTEGER COMMENT 'См. таблицу status_description и класс RequestFileStatus',
     `user_organization_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор организации пользователя, который загрузил текущий файл',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `request_file_unique_id` (`name`, `organization_id`, `user_organization_id`, `registry`, `begin_date`, `end_date`),
+    UNIQUE KEY `request_file_unique_id` (`name`, `organization_id`, `user_organization_id`, `begin_date`, `end_date`),
     KEY `key_group_id` (`group_id`),
     KEY `key_loaded` (`loaded`),
     KEY `key_name` (`name`),
