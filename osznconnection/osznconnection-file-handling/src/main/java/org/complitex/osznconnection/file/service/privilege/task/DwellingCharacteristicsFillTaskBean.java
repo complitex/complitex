@@ -167,7 +167,7 @@ public class DwellingCharacteristicsFillTaskBean extends AbstractTaskBean<Reques
                 return;
             }
 
-            dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.VL, ownership);
+//            dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.VL, ownership);
         }else if(cursor.getData().size() > 1){
             dwellingCharacteristics.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
         }

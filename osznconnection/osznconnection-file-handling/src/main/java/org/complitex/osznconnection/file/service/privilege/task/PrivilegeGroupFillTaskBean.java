@@ -37,7 +37,6 @@ import static org.complitex.osznconnection.file.entity.RequestFileType.DWELLING_
 import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_SERVICE_TYPE;
 import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 import static org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF.*;
-import static org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF.RIZN;
 import static org.complitex.osznconnection.file.entity.privilege.FacilityTarifDBF.TAR_CODE;
 import static org.complitex.osznconnection.file.entity.privilege.FacilityTarifDBF.TAR_SERV;
 import static org.complitex.osznconnection.file.strategy.PrivilegeStrategy.CODE;
@@ -256,7 +255,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                 log.warn("Форма собственности не найдена {}", d.getOwnership());
             }
 
-            dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.VL, ownership);
+//            dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.VL, ownership);
 
             //facilityServiceType
             BigDecimal tarif = null;
