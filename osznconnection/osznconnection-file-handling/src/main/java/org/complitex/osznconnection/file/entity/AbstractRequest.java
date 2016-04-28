@@ -66,6 +66,12 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
         return o != null ? o.toString() : null;
     }
 
+    public String getStringField(E e, String postfix) {
+        Object o = dbfFields.get(e.name() + postfix);
+
+        return o != null ? o.toString() : null;
+    }
+
     public void putUpdateField(E e, Object object) {
         updateFieldMap.put(e.name(), object);
     }

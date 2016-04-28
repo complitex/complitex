@@ -50,6 +50,6 @@ public class DwellingCharacteristics extends AbstractAccountRequest<DwellingChar
     }
 
     public String getFio(){
-        return getStringField(DwellingCharacteristicsDBF.FIO);
+        return getStringField(DwellingCharacteristicsDBF.FIO, "_CYR");
     }
 }

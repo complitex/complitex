@@ -35,7 +35,6 @@
             <result column="PASPPIL_CYR" property="PASPPIL_CYR"/>
 
             <result column="FIO_CYR" property="FIO_CYR"/>
-            <result column="CDUL_CYR" property="CDUL_CYR"/>
             <result column="HOUSE_CYR" property="HOUSE_CYR"/>
             <result column="BUILD_CYR" property="BUILD_CYR"/>
             <result column="APT_CYR" property="APT_CYR"/>
@@ -100,65 +99,70 @@
             )
         </foreach>
     </insert>
-    
+
     <sql id="filter">
-        <if test="groupId != null">
-            and f.`group_id` = #{groupId}
-        </if>
+        <where>
+            <if test="requestFileId != null">
+                fst.`request_file_id` = #{requestFileId}
+            </if>
 
-        <if test="accountNumber != null">
-            AND fst.`account_number` = #{accountNumber}
-        </if>
+            <if test="groupId != null">
+                and f.`group_id` = #{groupId}
+            </if>
 
-        <if test="firstName != null">
-            AND fst.`first_name` LIKE CONCAT('%',#{firstName},'%')
-        </if>
+            <if test="accountNumber != null">
+                AND fst.`account_number` = #{accountNumber}
+            </if>
 
-        <if test="middleName != null">
-            AND fst.`middle_name` LIKE CONCAT('%',#{middleName},'%')
-        </if>
+            <if test="firstName != null">
+                AND fst.`first_name` LIKE CONCAT('%',#{firstName},'%')
+            </if>
 
-        <if test="lastName != null">
-            AND fst.`last_name` LIKE CONCAT('%',#{lastName},'%')
-        </if>
+            <if test="middleName != null">
+                AND fst.`middle_name` LIKE CONCAT('%',#{middleName},'%')
+            </if>
 
-        <if test="fio != null">
-            and fst.`FIO` = #{fio}
-        </if>
+            <if test="lastName != null">
+                AND fst.`last_name` LIKE CONCAT('%',#{lastName},'%')
+            </if>
 
-        <if test="inn != null">
-            and fst.`IDPIL` = #{inn}
-        </if>
+            <if test="fio != null">
+                and fst.`FIO` = #{fio}
+            </if>
 
-        <if test="passport != null">
-            and fst.`PASPPIL` = #{passport}
-        </if>
+            <if test="inn != null">
+                and fst.`IDPIL` = #{inn}
+            </if>
 
-        <if test="streetCode != null">
-            and fst.`CDUL` = #{streetCode}
-        </if>
+            <if test="passport != null">
+                and fst.`PASPPIL` = #{passport}
+            </if>
 
-        <if test="building != null">
-            AND fst.`HOUSE` = #{building}
-        </if>
+            <if test="streetCode != null">
+                and fst.`CDUL` = #{streetCode}
+            </if>
 
-        <if test="corp != null">
-            AND fst.`BUILD` = #{corp}
-        </if>
+            <if test="building != null">
+                AND fst.`HOUSE` = #{building}
+            </if>
 
-        <if test="apartment != null">
-            AND fst.`APT` = #{apartment}
-        </if>
+            <if test="corp != null">
+                AND fst.`BUILD` = #{corp}
+            </if>
 
-        <if test="status != null">
-            AND fst.`status` = #{status}
-        </if>
+            <if test="apartment != null">
+                AND fst.`APT` = #{apartment}
+            </if>
+
+            <if test="status != null">
+                AND fst.`status` = #{status}
+            </if>
+        </where>
     </sql>
 
     <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.PrivilegeExample">
         SELECT COUNT(distinct fst.`id`) FROM `facility_service_type` fst
           LEFT JOIN `facility_street_reference` fsr ON fst.`CDUL` = fsr.`KL_CODEUL`
-        WHERE fst.`request_file_id` = #{requestFileId}
         <include refid="org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean.filter"/>
     </select>
 
@@ -180,7 +184,6 @@
                 TO_CYRILLIC(fst.`last_name`) last_name_cyr,
 
                 TO_CYRILLIC(fst.`FIO`) FIO_CYR,
-                TO_CYRILLIC(fst.`CDUL`) CDUL_CYR,
                 TO_CYRILLIC(fst.`HOUSE`) HOUSE_CYR,
                 TO_CYRILLIC(fst.`BUILD`) BUILD_CYR,
                 TO_CYRILLIC(fst.`APT`) APT_CYR,
@@ -193,8 +196,7 @@
             FROM `facility_service_type` fst
                 JOIN `request_file` f ON f.`id` = fst.`request_file_id`
                 LEFT JOIN `facility_street_reference` fsr ON fst.`CDUL` = fsr.`KL_CODEUL`
-            WHERE fst.`request_file_id` = #{requestFileId}
-                <include refid="org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean.filter"/>
+             <include refid="org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean.filter"/>
                 <if test="orderByClause != null">
                     <choose>
                         <when test="orderByClause == 'IDCODE' or orderByClause == 'HOUSE' or orderByClause == 'BUILD'
@@ -265,7 +267,6 @@
         TO_CYRILLIC(fst.`PASPPIL`) PASPPIL_CYR,
 
         TO_CYRILLIC(fst.`FIO`) FIO_CYR,
-        TO_CYRILLIC(fst.`CDUL`) CDUL_CYR,
         TO_CYRILLIC(fst.`HOUSE`) HOUSE_CYR,
         TO_CYRILLIC(fst.`BUILD`) BUILD_CYR,
         TO_CYRILLIC(fst.`APT`) APT_CYR,
@@ -342,7 +343,6 @@
             TO_CYRILLIC(fst.`PASPPIL`) PASPPIL_CYR,
 
             TO_CYRILLIC(fst.`FIO`) FIO_CYR,
-            TO_CYRILLIC(fst.`CDUL`) CDUL_CYR,
             TO_CYRILLIC(fst.`HOUSE`) HOUSE_CYR,
             TO_CYRILLIC(fst.`BUILD`) BUILD_CYR,
             TO_CYRILLIC(fst.`APT`) APT_CYR,

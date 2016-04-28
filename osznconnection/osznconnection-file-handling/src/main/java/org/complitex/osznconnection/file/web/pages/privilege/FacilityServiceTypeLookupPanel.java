@@ -52,7 +52,15 @@ public class FacilityServiceTypeLookupPanel extends AbstractLookupPanel<Facility
     protected void updateAccountNumber(FacilityServiceType facilityServiceType, String accountNumber) {
         personAccountService.updateAccountNumber(facilityServiceType, accountNumber);
 
-        PrivilegeGroup privilegeGroup = privilegeGroupService.getPrivilegeGroup(facilityServiceType);
+        PrivilegeGroup privilegeGroup = privilegeGroupService.getPrivilegeGroup(
+                facilityServiceType.getRequestFileId(),
+                facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL),
+                facilityServiceType.getStringField(FacilityServiceTypeDBF.PASPPIL),
+                facilityServiceType.getStringField(FacilityServiceTypeDBF.FIO),
+                facilityServiceType.getStringField(FacilityServiceTypeDBF.CDUL),
+                facilityServiceType.getStringField(FacilityServiceTypeDBF.HOUSE),
+                facilityServiceType.getStringField(FacilityServiceTypeDBF.BUILD),
+                facilityServiceType.getStringField(FacilityServiceTypeDBF.APT));
 
         if (privilegeGroup.getDwellingCharacteristics() != null){
             personAccountService.updateAccountNumber(privilegeGroup.getDwellingCharacteristics(), accountNumber);

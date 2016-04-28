@@ -47,7 +47,15 @@ public class DwellingCharacteristicsLookupPanel extends AbstractLookupPanel<Dwel
     protected void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics, String accountNumber) {
         personAccountService.updateAccountNumber(dwellingCharacteristics, accountNumber);
 
-        PrivilegeGroup privilegeGroup = privilegeGroupService.getPrivilegeGroup(dwellingCharacteristics);
+        PrivilegeGroup privilegeGroup = privilegeGroupService.getPrivilegeGroup(
+                dwellingCharacteristics.getRequestFileId(),
+                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDPIL),
+                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.PASPPIL),
+                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.FIO),
+                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.CDUL),
+                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.HOUSE),
+                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.BUILD),
+                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT));
 
         if (privilegeGroup.getFacilityServiceType() != null){
             personAccountService.updateAccountNumber(privilegeGroup.getFacilityServiceType(), accountNumber);

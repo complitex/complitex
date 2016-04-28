@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.service.privilege;
 
-import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
@@ -58,19 +57,27 @@ public class PrivilegeGroupService {
         return privilegeGroups;
     }
 
-    public PrivilegeGroup getPrivilegeGroup(AbstractAccountRequest request){
-        PrivilegeExample example = new PrivilegeExample();
-
-        example.setGroupId(requestFileBean.getRequestFile(request.getRequestFileId()).getGroupId());
-        example.setInn(request.getInn());
-        example.setPassport(request.getPassport());
-        example.setFio(request.getFio());
-        example.setStreetCode(request.getStreetCode());
-        example.setBuilding(request.getBuildingNumber());
-        example.setCorp(request.getBuildingCorp());
-        example.setApartment(request.getApartment());
-
+    public PrivilegeGroup getPrivilegeGroup(Long requestFileId, String inn, String passport, String fio, String streetCode,
+                                            String buildingNumber, String buildingCorp, String appartment){
         PrivilegeGroup privilegeGroup = new PrivilegeGroup();
+
+        Long groupId = requestFileBean.getRequestFile(requestFileId).getGroupId();
+
+        if (groupId == null){
+            return privilegeGroup;
+        }
+
+        PrivilegeExample example = new PrivilegeExample();
+        example.setGroupId(groupId);
+        example.setInn(inn);
+        example.setPassport(passport);
+        example.setFio(fio);
+        example.setStreetCode(streetCode);
+        example.setBuilding(buildingNumber);
+        example.setCorp(buildingCorp);
+        example.setApartment(appartment);
+
+
 
         List<DwellingCharacteristics> dwellingCharacteristicsList = dwellingCharacteristicsBean.find(example);
 

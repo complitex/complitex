@@ -50,6 +50,6 @@ public class FacilityServiceType extends AbstractAccountRequest<FacilityServiceT
     }
 
     public String getFio(){
-        return getStringField(FacilityServiceTypeDBF.FIO);
+        return getStringField(FacilityServiceTypeDBF.FIO, "_CYR");
     }
 }
