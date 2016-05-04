@@ -40,7 +40,9 @@ public class ActualPayment extends AbstractAccountRequest<ActualPaymentDBF> {
 
     @Override
     public String getBuildingCorp() {
-        return getStringField(ActualPaymentDBF.CORP_NUM);
+        String corp = getStringField(ActualPaymentDBF.CORP_NUM);
+
+        return corp.matches("0*") ? "" : corp;
     }
 
     @Override
