@@ -25,7 +25,6 @@ import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.organization.entity.OrganizationImportFile;
 import org.complitex.osznconnection.file.entity.CorrectionImportFile;
-import org.complitex.osznconnection.file.entity.privilege.OwnershipImportFile;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeImportFile;
 import org.complitex.osznconnection.file.service.ImportService;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -82,7 +81,7 @@ public class ImportPage extends TemplatePage {
         Collections.addAll(dictionaryList, OrganizationImportFile.values());
         Collections.addAll(dictionaryList, AddressImportFile.values());
         Collections.addAll(dictionaryList, PrivilegeImportFile.values());
-        Collections.addAll(dictionaryList, OwnershipImportFile.values());
+        //Collections.addAll(dictionaryList, OwnershipImportFile.values());
 
         //Справочники
         form.add(new CheckBoxMultipleChoice<>("dictionary", dictionaryModel, dictionaryList,
