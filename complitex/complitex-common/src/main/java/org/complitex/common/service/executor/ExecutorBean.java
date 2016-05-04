@@ -12,16 +12,15 @@ import javax.ejb.*;
  *         Date: 01.11.10 12:50
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class ExecutorBean {
     private final Logger log = LoggerFactory.getLogger(ExecutorBean.class);
 
     @EJB
-    private AsyncTaskBean asyncTaskBean;
-
-    @EJB
     private LogBean logBean;
 
-    public void executeNext(final ExecutorCommand executorCommand){
+    @Asynchronous
+    public <T extends IExecutorObject> void executeNext(ExecutorCommand<T> executorCommand){
         IExecutorObject object = executorCommand.getQueue().poll();
         IExecutorListener listener = executorCommand.getListener();
         ITaskBean task = executorCommand.getTask();
@@ -36,7 +35,6 @@ public class ExecutorBean {
                 }
 
                 log.info("Процесс {} завершен", task.getControllerClass());
-                logInfo(task, "Процесс {0} завершен", task.getControllerClass().getSimpleName());
             }
 
             return;
@@ -48,7 +46,6 @@ public class ExecutorBean {
                 executorCommand.setStatus(ExecutorCommand.STATUS.CANCELED);
 
                 log.warn("Процесс {} отменен пользователем", task.getControllerClass());
-                logError(object, task, "Процесс {0} отменен пользователем", task.getControllerClass().getSimpleName());
             }
 
             return;
@@ -60,7 +57,6 @@ public class ExecutorBean {
                 executorCommand.setStatus(ExecutorCommand.STATUS.CRITICAL_ERROR);
 
                 log.error("Превышено количество ошибок в процессе {}", task.getControllerClass());
-                logError(object, task, "Превышено количество ошибок в процессе {0}", task.getControllerClass().getSimpleName());
             }
 
             return;
@@ -69,39 +65,59 @@ public class ExecutorBean {
         //Выполняем задачу
         executorCommand.setObject(object);
         executorCommand.startTask();
-        asyncTaskBean.execute(object, task, new ITaskListener(){
-
-            @Override
-            public void done(IExecutorObject object, STATUS status) {
-                boolean next = true;
-
-                executorCommand.getProcessed().add(object);
-                executorCommand.stopTask();
-
-                switch (status){
-                    case SUCCESS:
-                        executorCommand.incrementSuccessCount();
-                        break;
-                    case SKIPPED:
-                        executorCommand.incrementSkippedCount();
-                        break;
-                    case ERROR:
-                        executorCommand.incrementErrorCount();
-                        break;
-                    case CRITICAL_ERROR:
-                        executorCommand.incrementErrorCount();
-                        executorCommand.setStatus(ExecutorCommand.STATUS.CRITICAL_ERROR);
-                        next = false;
-                        break;
-                }
-
-                if (next) {
-                    executeNext(executorCommand);
-                }
-            }
-        }, executorCommand.getCommandParameters());
 
         log.info("Выполнение процесса {} над объектом {}", task.getControllerClass().getSimpleName(), object);
+
+        try {
+            boolean noSkip = task.execute(object, executorCommand.getCommandParameters());
+
+            if (noSkip) {
+                executorCommand.incrementSuccessCount();
+
+                log.debug("Задача {} завершена успешно.", task);
+
+            }else{
+                executorCommand.incrementSkippedCount();
+
+                log.debug("Задача {} пропущена.", task);
+            }
+        } catch (ExecuteException e) {
+
+            object.setErrorMessage(e.getMessage());
+
+            try {
+                task.onError(object);
+            } catch (Exception e1) {
+                log.error("Критическая ошибка", e1);
+            }
+
+            if (e.isWarn()) {
+                log.warn(e.getMessage());
+            }else{
+                log.error(e.getMessage(), e);
+            }
+
+            executorCommand.incrementErrorCount();
+
+            //next
+            executeNext(executorCommand);
+        } catch (Exception e){
+            object.setErrorMessage(e.getMessage());
+
+            try {
+                task.onError(object);
+            } catch (Exception e1) {
+                log.error("Критическая ошибка", e1);
+            }
+
+            log.error("Критическая ошибка", e);
+
+            executorCommand.incrementErrorCount();
+            executorCommand.setStatus(ExecutorCommand.STATUS.CRITICAL_ERROR);
+        }finally {
+            executorCommand.getProcessed().add(object);
+            executorCommand.stopTask();
+        }
     }
 
     public void execute(final ExecutorCommand executorCommand){
@@ -118,13 +134,6 @@ public class ExecutorBean {
                 executorCommand.getTask().getControllerClass().getSimpleName(),
                 executorCommand.getQueue().size());
 
-
-        logInfo(executorCommand.getQueue().element().getClass(),
-                executorCommand.getTask(),
-                "Начат процесс {0}, количество объектов: {1}",
-                executorCommand.getTask().getControllerClass().getSimpleName(),
-                executorCommand.getQueue().size());
-
         //execute threads
         executorCommand.setStatus(ExecutorCommand.STATUS.RUNNING);
 
@@ -133,16 +142,4 @@ public class ExecutorBean {
         }
     }
 
-    private void logError(IExecutorObject object, ITaskBean task, String decs, Object... args){
-        logBean.error(task.getModuleName(), task.getControllerClass(),  object.getClass(), null, object.getId(),
-                task.getEvent(), object.getLogChangeList(), decs, args);
-    }
-
-    private void logInfo(Class modelClass, ITaskBean task, String decs, Object... args){
-        logBean.info(task.getModuleName(), task.getControllerClass(), modelClass, null, task.getEvent(), decs, args);
-    }
-
-    private void logInfo(ITaskBean task, String decs, Object... args){
-        logBean.info(task.getModuleName(), task.getControllerClass(), null, null, task.getEvent(), decs, args);
-    }
 }

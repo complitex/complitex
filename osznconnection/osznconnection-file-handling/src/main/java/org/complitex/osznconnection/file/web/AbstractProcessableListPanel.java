@@ -20,17 +20,14 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
-import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.AbstractFilter;
 import org.complitex.common.service.ModuleBean;
-import org.complitex.common.service.executor.AsyncTaskBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.DateUtil;
-import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.DatePicker;
 import org.complitex.common.web.component.MonthDropDownChoice;
@@ -42,7 +39,6 @@ import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.organization.OrganizationPickerDialog;
-import org.complitex.common.wicket.BroadcastBehavior;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
@@ -724,16 +720,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         //Запуск таймера
         timerManager.startTimer();
-
-        add(new BroadcastBehavior(ProcessManagerBean.class, AsyncTaskBean.class) {
-            @Override
-            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
-                if ("error".equals(key)){
-                    error(ExceptionUtil.getCauseMessage((Exception) payload, true));
-                    handler.add(messages);
-                }
-            }
-        });
     }
 
     private Boolean getSessionParameter(Enum<?> key) {
@@ -750,7 +736,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     }
 
     private Map<Enum<?>, Object> buildCommandParameters() {
-        Map<Enum<?>, Object> commandParameters = new HashMap<Enum<?>, Object>();
+        Map<Enum<?>, Object> commandParameters = new HashMap<>();
         commandParameters.put(GlobalOptions.UPDATE_PU_ACCOUNT, getSessionParameter(GlobalOptions.UPDATE_PU_ACCOUNT));
         return commandParameters;
     }

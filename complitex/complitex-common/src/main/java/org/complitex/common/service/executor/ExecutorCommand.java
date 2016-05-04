@@ -16,7 +16,7 @@ import static org.complitex.common.service.executor.ExecutorCommand.STATUS.*;
  * @author Anatoly A. Ivanov java@inheaven.ru
  *        Date: 24.01.11 15:18
  */
-public class ExecutorCommand {
+public class ExecutorCommand<T extends IExecutorObject> {
     public enum STATUS {
         NEW, RUNNING, COMPLETED, CRITICAL_ERROR, CANCELED
     }
@@ -28,12 +28,12 @@ public class ExecutorCommand {
     private AtomicInteger errorCount = new AtomicInteger(0);
     protected AtomicBoolean stop = new AtomicBoolean(false);
 
-    protected List<IExecutorObject> processed = new CopyOnWriteArrayList<IExecutorObject>();
+    protected List<IExecutorObject> processed = new CopyOnWriteArrayList<>();
 
     private AtomicInteger runningThread = new AtomicInteger(0);
 
-    private Queue<IExecutorObject> queue = new ConcurrentLinkedQueue<IExecutorObject>();
-    private ITaskBean task;
+    private Queue<T> queue = new ConcurrentLinkedQueue<>();
+    private ITaskBean<T> task;
     private IExecutorListener listener;
     
     // параметры управления ходом выполнения комманды
@@ -128,12 +128,8 @@ public class ExecutorCommand {
         runningThread.decrementAndGet();
     }
 
-    public Queue<IExecutorObject> getQueue() {
+    public Queue<T> getQueue() {
         return queue;
-    }
-
-    public void setQueue(Queue<IExecutorObject> queue) {
-        this.queue = queue;
     }
 
     public ITaskBean getTask() {

@@ -78,7 +78,8 @@ public class ProcessManagerBean {
 
     private Map<String, Map<ProcessType, Process>> processStatusMap = new ConcurrentHashMap<String, Map<ProcessType, Process>>();
 
-    private Process getProcess(ProcessType processType) {
+    @SuppressWarnings("unchecked")
+    private <T extends IExecutorObject> Process<T> getProcess(ProcessType processType) {
         //Principal Name
         String principalName = sessionContext.getCallerPrincipal().getName();
 
@@ -125,8 +126,8 @@ public class ProcessManagerBean {
         return Collections.emptyList();
     }
 
-    public <T> List<T> getProcessed(ProcessType processType, Object queryKey) {
-        return getProcess(processType).getProcessed(queryKey);
+    public <T extends IExecutorObject> List<T> getProcessed(ProcessType processType, Object queryKey) {
+        return (List<T>) getProcess(processType).getProcessed(queryKey);
     }
 
     public int getSuccessCount(ProcessType processType) {
@@ -197,10 +198,10 @@ public class ProcessManagerBean {
         return false;
     }
 
-    private void execute(ProcessType processType, Class<? extends ITaskBean> taskClass,
-            List<? extends IExecutorObject> list, IExecutorListener listener,
+    private <T extends IExecutorObject> void execute(ProcessType processType, Class<? extends ITaskBean> taskClass,
+            List<T> list, IExecutorListener listener,
             FileHandlingConfig threadCount, FileHandlingConfig maxErrorCount, Map processParameters) {
-        Process process = getProcess(processType);
+        Process<T> process = getProcess(processType);
 
         process.getQueue().addAll(list);
 
@@ -226,7 +227,7 @@ public class ProcessManagerBean {
     }
 
     private List<RequestFileGroup> getRequestFileGroups(List<Long> ids) {
-        List<RequestFileGroup> groups = new ArrayList<RequestFileGroup>();
+        List<RequestFileGroup> groups = new ArrayList<>();
 
         for (Long id : ids) {
             RequestFileGroup group = requestFileGroupBean.getRequestFileGroup(id);
@@ -240,7 +241,7 @@ public class ProcessManagerBean {
     }
 
     private List<RequestFile> getRequestFiles(List<Long> ids, ProcessType... processTypes) {
-        List<RequestFile> requestFiles = new ArrayList<RequestFile>();
+        List<RequestFile> requestFiles = new ArrayList<>();
 
         for (Long id : ids) {
             RequestFile requestFile = requestFileBean.getRequestFile(id);
