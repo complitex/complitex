@@ -31,7 +31,9 @@ public class DwellingCharacteristics extends AbstractAccountRequest<DwellingChar
 
     @Override
     public String getBuildingCorp() {
-        return getUpStringField(DwellingCharacteristicsDBF.BUILD, "_CYR");
+        String corp = getUpStringField(DwellingCharacteristicsDBF.BUILD, "_CYR");
+
+        return corp.matches("0*") ? "" : corp;
     }
 
     @Override

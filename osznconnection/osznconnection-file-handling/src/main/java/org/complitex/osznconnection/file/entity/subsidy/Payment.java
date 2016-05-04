@@ -50,7 +50,9 @@ public class Payment extends AbstractAccountRequest<PaymentDBF> {
 
     @Override
     public String getBuildingCorp() {
-        return getUpStringField(PaymentDBF.CORP_NUM, "_CYR");
+        String corp = getUpStringField(PaymentDBF.CORP_NUM, "_CYR");
+
+        return corp.matches("0*") ? "" : corp;
     }
 
     @Override

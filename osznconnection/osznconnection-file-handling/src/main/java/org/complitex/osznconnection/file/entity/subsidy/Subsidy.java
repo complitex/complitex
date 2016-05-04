@@ -69,7 +69,9 @@ public class Subsidy extends AbstractAccountRequest<SubsidyDBF> {
 
     @Override
     public String getBuildingCorp() {
-        return getUpStringField(SubsidyDBF.CORP, "_CYR");
+        String corp = getUpStringField(SubsidyDBF.CORP, "_CYR");
+
+        return corp.matches("0*") ? "" : corp;
     }
 
     @Override

@@ -26,7 +26,9 @@ public class FacilityServiceType extends AbstractAccountRequest<FacilityServiceT
 
     @Override
     public String getBuildingCorp() {
-        return getUpStringField(FacilityServiceTypeDBF.BUILD, "_CYR");
+        String corp = getUpStringField(FacilityServiceTypeDBF.BUILD, "_CYR");
+
+        return corp.matches("0*") ? "" : corp;
     }
 
     @Override
