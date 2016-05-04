@@ -255,4 +255,11 @@ public class RequestFileBean extends AbstractBean {
             }
         }
     }
+
+    public void updateStatus(Long requestFileId, RequestFileStatus status){
+        RequestFile requestFile = getRequestFile(requestFileId);
+        requestFile.setStatus(status);
+
+        save(requestFile);
+    }
 }

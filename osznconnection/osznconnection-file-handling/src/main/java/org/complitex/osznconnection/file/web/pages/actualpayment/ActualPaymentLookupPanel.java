@@ -3,13 +3,14 @@ package org.complitex.osznconnection.file.web.pages.actualpayment;
 import org.apache.wicket.Component;
 import org.complitex.common.entity.Cursor;
 import org.complitex.osznconnection.file.entity.AccountDetail;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.ActualPayment;
 import org.complitex.osznconnection.file.entity.subsidy.ActualPaymentDBF;
-import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
+import org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
 
@@ -69,5 +70,9 @@ public class ActualPaymentLookupPanel extends AbstractLookupPanel<ActualPayment>
     @Override
     protected void updateAccountNumber(ActualPayment actualPayment, String accountNumber) {
         personAccountService.updateAccountNumber(actualPayment, accountNumber);
+
+        if (actualPaymentBean.isActualPaymentFileBound(actualPayment.getRequestFileId())) {
+            requestFileBean.updateStatus(actualPayment.getRequestFileId(), RequestFileStatus.BOUND);
+        }
     }
 }

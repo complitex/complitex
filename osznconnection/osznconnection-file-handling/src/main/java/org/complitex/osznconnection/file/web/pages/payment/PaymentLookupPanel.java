@@ -2,10 +2,17 @@ package org.complitex.osznconnection.file.web.pages.payment;
 
 import org.apache.wicket.Component;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Payment;
 import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
+import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
+import org.complitex.osznconnection.file.service.RequestFileBean;
+import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
+import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
+import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
@@ -25,6 +32,18 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
+
+    @EJB
+    private PaymentBean paymentBean;
+
+    @EJB
+    private BenefitBean benefitBean;
+
+    @EJB
+    private RequestFileBean requestFileBean;
+
+    @EJB
+    private RequestFileGroupBean requestFileGroupBean;
 
 
     public PaymentLookupPanel(String id, Component... toUpdate) {
@@ -50,5 +69,15 @@ public class PaymentLookupPanel extends AbstractLookupPanel<Payment> {
     @Override
     protected void updateAccountNumber(Payment payment, String accountNumber) {
         personAccountService.updateAccountNumber(payment, accountNumber);
+
+        //update file status
+        RequestFile paymentFile = requestFileBean.getRequestFile(payment.getRequestFileId());
+        RequestFileGroup group = requestFileGroupBean.getRequestFileGroup(paymentFile.getGroupId());
+
+        if (paymentBean.isPaymentFileBound(payment.getRequestFileId())
+                && (group.getBenefitFile() == null || benefitBean.isBenefitFileBound(group.getBenefitFile().getId()))){
+            group.setStatus(RequestFileStatus.BOUND);
+            requestFileGroupBean.save(group);
+        }
     }
 }

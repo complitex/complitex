@@ -1,11 +1,16 @@
 package org.complitex.osznconnection.file.web.pages.privilege;
 
 import org.apache.wicket.Component;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
+import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeGroup;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
+import org.complitex.osznconnection.file.service.RequestFileBean;
+import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
+import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
 
@@ -21,6 +26,15 @@ public class DwellingCharacteristicsLookupPanel extends AbstractLookupPanel<Dwel
 
     @EJB
     private PrivilegeGroupService privilegeGroupService;
+
+    @EJB
+    private DwellingCharacteristicsBean dwellingCharacteristicsBean;
+
+    @EJB
+    private FacilityServiceTypeBean facilityServiceTypeBean;
+
+    @EJB
+    private RequestFileBean requestFileBean;
 
     public DwellingCharacteristicsLookupPanel(String id, Component... toUpdate) {
         super(id, toUpdate);
@@ -47,6 +61,11 @@ public class DwellingCharacteristicsLookupPanel extends AbstractLookupPanel<Dwel
     protected void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics, String accountNumber) {
         personAccountService.updateAccountNumber(dwellingCharacteristics, accountNumber);
 
+        if (dwellingCharacteristicsBean.isDwellingCharacteristicsFileBound(dwellingCharacteristics.getRequestFileId())) {
+            requestFileBean.updateStatus(dwellingCharacteristics.getRequestFileId(), RequestFileStatus.BOUND);
+        }
+
+        //facilityServiceType
         PrivilegeGroup privilegeGroup = privilegeGroupService.getPrivilegeGroup(
                 dwellingCharacteristics.getRequestFileId(),
                 dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDPIL),
@@ -58,7 +77,13 @@ public class DwellingCharacteristicsLookupPanel extends AbstractLookupPanel<Dwel
                 dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT));
 
         if (privilegeGroup.getFacilityServiceType() != null){
-            personAccountService.updateAccountNumber(privilegeGroup.getFacilityServiceType(), accountNumber);
+            FacilityServiceType facilityServiceType = privilegeGroup.getFacilityServiceType();
+
+            personAccountService.updateAccountNumber(facilityServiceType, accountNumber);
+
+            if (facilityServiceTypeBean.isFacilityServiceTypeFileBound(facilityServiceType.getRequestFileId())) {
+                requestFileBean.updateStatus(facilityServiceType.getRequestFileId(), RequestFileStatus.BOUND);
+            }
         }
     }
 }

@@ -3,10 +3,13 @@ package org.complitex.osznconnection.file.web.pages.subsidy;
 import org.apache.wicket.Component;
 import org.complitex.common.entity.Cursor;
 import org.complitex.osznconnection.file.entity.AccountDetail;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
+import org.complitex.osznconnection.file.service.RequestFileBean;
+import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
@@ -24,6 +27,12 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
 
     @EJB
     private SubsidyService subsidyService;
+
+    @EJB
+    private SubsidyBean subsidyBean;
+
+    @EJB
+    private RequestFileBean requestFileBean;
 
     public SubsidyLookupPanel(String id, Component... toUpdate) {
         super(id, toUpdate);
@@ -62,6 +71,11 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
     @Override
     protected void updateAccountNumber(Subsidy subsidy, String accountNumber) {
         personAccountService.updateAccountNumber(subsidy, accountNumber);
+
+        //update status
+        if (subsidyBean.isSubsidyFileBound(subsidy.getRequestFileId())){
+            requestFileBean.updateStatus(subsidy.getRequestFileId(), RequestFileStatus.BOUND);
+        }
     }
 
     @Override
