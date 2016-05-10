@@ -229,7 +229,10 @@ public class GroupBindTaskBean extends AbstractTaskBean<RequestFileGroup> {
                 //связать payment запись
                 try {
                     userTransaction.begin();
+
                     bind(serviceProviderCode, payment);
+                    onRequest(payment);
+
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The payment item ( id = " + payment.getId() + ") was bound with error: ", e);

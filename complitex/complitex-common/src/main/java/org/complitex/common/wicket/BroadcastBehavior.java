@@ -22,8 +22,8 @@ public abstract class BroadcastBehavior extends WebSocketBehavior {
 
     @Override
     protected void onPush(WebSocketRequestHandler handler, IWebSocketPushMessage message) {
-        if (message instanceof BroadcastPayload) {
-            BroadcastPayload p = (BroadcastPayload) message;
+        if (message instanceof BroadcastMessage) {
+            BroadcastMessage p = (BroadcastMessage) message;
 
             for (Class<?> producer : producers) {
                 if (producer.isAssignableFrom(p.getProducer()) && (key == null || key.equals(p.getKey()))) {

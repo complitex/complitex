@@ -64,6 +64,8 @@ public class FacilityStreetLoadTaskBean extends AbstractTaskBean<RequestFile> {
             @Override
             public void save(List<AbstractRequest> requests) throws ExecuteException {
                 facilityReferenceBookBean.insert(requests);
+
+                requests.forEach(r -> onRequest(r));
             }
         });
         requestFile.setStatus(RequestFileStatus.LOADED);

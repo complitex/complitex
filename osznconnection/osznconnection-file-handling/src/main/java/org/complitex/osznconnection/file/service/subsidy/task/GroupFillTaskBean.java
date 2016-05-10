@@ -4,19 +4,22 @@ import com.google.common.collect.Lists;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.FileHandlingConfig;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Benefit;
 import org.complitex.osznconnection.file.entity.subsidy.Payment;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
-import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
-import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
-import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
+import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
+import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
+import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -30,7 +33,10 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -38,7 +44,7 @@ import java.util.*;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class GroupFillTaskBean implements ITaskBean {
+public class GroupFillTaskBean extends AbstractTaskBean {
     private final Logger log = LoggerFactory.getLogger(GroupFillTaskBean.class);
 
     @Resource
@@ -197,7 +203,10 @@ public class GroupFillTaskBean implements ITaskBean {
                 //обработать payment запись
                 try {
                     userTransaction.begin();
+
                     process(payment);
+                    onRequest(payment);
+
                     userTransaction.commit();
                 } catch (DBException e) {
                     try {
@@ -257,6 +266,8 @@ public class GroupFillTaskBean implements ITaskBean {
                 for (Benefit benefit : benefits) {
                     try {
                         benefitBean.update(benefit);
+
+                        onRequest(benefit);
                     } catch (Exception e) {
                         log.error("The benefit item (id = " + benefit.getId() + ") was processed with error: ", e);
                         throw new FillException(e, false, benefitFile);

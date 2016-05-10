@@ -122,6 +122,8 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                 }else if (p.getFacilityServiceType() != null){
                     facilityServiceTypeFillTaskBean.fill(p.getFacilityServiceType());
                 }
+
+                onRequest(p);
             }
         } catch (Exception e) {
             throw new FillException(e, false, dwellingCharacteristicsRequestFile);

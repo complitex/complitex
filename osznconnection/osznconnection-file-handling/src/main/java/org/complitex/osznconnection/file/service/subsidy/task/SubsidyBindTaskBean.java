@@ -130,7 +130,10 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
                 //связать subsidy запись
                 try {
                     userTransaction.begin();
+
                     bind(serviceProviderCode, subsidy, updatePuAccount);
+                    onRequest(subsidy);
+
                     userTransaction.commit();
                 } catch (ServiceRuntimeException e){
                     try {

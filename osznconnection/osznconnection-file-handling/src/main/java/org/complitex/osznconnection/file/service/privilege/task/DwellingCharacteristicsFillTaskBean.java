@@ -95,6 +95,7 @@ public class DwellingCharacteristicsFillTaskBean extends AbstractTaskBean<Reques
 
                     userTransaction.begin();
                     fill(dwellingCharacteristics);
+                    onRequest(dwellingCharacteristics);
                     userTransaction.commit();
                 }
             }

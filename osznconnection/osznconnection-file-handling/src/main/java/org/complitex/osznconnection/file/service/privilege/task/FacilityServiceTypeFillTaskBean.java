@@ -117,7 +117,10 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                     }
 
                     userTransaction.begin();
+
                     fill(facilityServiceType);
+                    onRequest(facilityServiceType);
+
                     userTransaction.commit();
                 }
             }

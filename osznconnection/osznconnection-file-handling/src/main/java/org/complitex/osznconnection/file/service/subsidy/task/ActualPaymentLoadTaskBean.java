@@ -2,15 +2,17 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.ActualPayment;
 import org.complitex.osznconnection.file.entity.subsidy.ActualPaymentDBF;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
 import org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean;
-import org.complitex.osznconnection.file.service.RequestFileBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -25,7 +27,7 @@ import java.util.Map;
  */
 @Stateless(name = "ActualPaymentLoadTaskBean")
 @TransactionManagement(TransactionManagementType.BEAN)
-public class ActualPaymentLoadTaskBean implements ITaskBean {
+public class ActualPaymentLoadTaskBean extends AbstractTaskBean {
     @EJB
     private RequestFileBean requestFileBean;
 
@@ -57,6 +59,8 @@ public class ActualPaymentLoadTaskBean implements ITaskBean {
             @Override
             public void save(List<AbstractRequest> batch) {
                 actualPaymentBean.insert(batch);
+
+                batch.forEach(r -> onRequest(r));
             }
         });
 

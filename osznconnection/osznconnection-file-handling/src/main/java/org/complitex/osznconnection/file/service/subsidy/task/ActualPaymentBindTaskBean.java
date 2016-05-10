@@ -5,13 +5,14 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.FileHandlingConfig;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.ActualPayment;
 import org.complitex.osznconnection.file.entity.subsidy.ActualPaymentDBF;
-import org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
@@ -19,6 +20,7 @@ import org.complitex.osznconnection.file.service.exception.AlreadyProcessingExce
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
+import org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
@@ -44,7 +46,7 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_AC
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class ActualPaymentBindTaskBean implements ITaskBean<RequestFile> {
+public class ActualPaymentBindTaskBean extends AbstractTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(ActualPaymentBindTaskBean.class);
 
     @Resource
@@ -155,7 +157,10 @@ public class ActualPaymentBindTaskBean implements ITaskBean<RequestFile> {
                 //связать actualPayment запись
                 try {
                     userTransaction.begin();
+
                     bind(serviceProviderCode, actualPayment, actualPaymentBean.getFirstDay(actualPayment, requestFile), updatePuAccount);
+                    onRequest(actualPayment);
+
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The actual payment item ( id = " + actualPayment.getId() + ") was bound with error: ", e);

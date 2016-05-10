@@ -60,6 +60,8 @@ public class FacilityServiceTypeLoadTaskBean extends AbstractTaskBean<RequestFil
             @Override
             public void save(List<AbstractRequest> batch) {
                 facilityServiceTypeBean.insert(batch);
+
+                batch.forEach(r -> onRequest(r));
             }
 
             @Override

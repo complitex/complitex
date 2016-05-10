@@ -166,7 +166,10 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
                 //связать dwelling characteristics запись
                 try {
                     userTransaction.begin();
+
                     bind(serviceProviderCode, facilityServiceType);
+                    onRequest(facilityServiceType);
+
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The facility service type item ( id = " + facilityServiceType.getId() + ") was bound with error: ", e);

@@ -60,6 +60,8 @@ public class DwellingCharacteristicsLoadTaskBean extends AbstractTaskBean<Reques
             @Override
             public void save(List<AbstractRequest> batch) {
                 dwellingCharacteristicsBean.insert(batch);
+
+                batch.forEach(r -> onRequest(r));
             }
 
             @Override

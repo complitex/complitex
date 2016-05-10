@@ -3,10 +3,13 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.PersonalName;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
 import org.complitex.osznconnection.file.service.RequestFileBean;
@@ -24,7 +27,7 @@ import java.util.Map;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidyLoadTaskBean implements ITaskBean {
+public class SubsidyLoadTaskBean extends AbstractTaskBean {
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -67,6 +70,8 @@ public class SubsidyLoadTaskBean implements ITaskBean {
                 }
 
                 subsidyBean.insert(batch);
+
+                batch.forEach(r -> onRequest(r));
             }
 
             @Override

@@ -2,11 +2,12 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyTarif;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyTarifDBF;
 import org.complitex.osznconnection.file.service.RequestFileBean;
@@ -19,7 +20,6 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import java.util.List;
 import java.util.Map;
-import org.complitex.osznconnection.file.entity.RequestFileStatus;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -27,7 +27,7 @@ import org.complitex.osznconnection.file.entity.RequestFileStatus;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidyTarifLoadTaskBean implements ITaskBean {
+public class SubsidyTarifLoadTaskBean extends AbstractTaskBean {
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -60,6 +60,8 @@ public class SubsidyTarifLoadTaskBean implements ITaskBean {
             @Override
             public void save(List<AbstractRequest> batch) {
                 subsidyTarifBean.insert(batch);
+
+                batch.forEach(r -> onRequest(r));
             }
         });
 

@@ -2,15 +2,17 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.*;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
 import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
-import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 
 import javax.ejb.EJB;
@@ -26,7 +28,7 @@ import java.util.Map;
  */
 @Stateless(name = "GroupLoadTaskBean")
 @TransactionManagement(TransactionManagementType.BEAN)
-public class GroupLoadTaskBean implements ITaskBean {
+public class GroupLoadTaskBean extends AbstractTaskBean {
 
     @EJB
     protected PaymentBean paymentBean;
@@ -71,6 +73,8 @@ public class GroupLoadTaskBean implements ITaskBean {
             @Override
             public void save(List<AbstractRequest> batch) {
                 paymentBean.insert(batch);
+
+                batch.forEach(r -> onRequest(r));
             }
 
             @Override
@@ -105,6 +109,8 @@ public class GroupLoadTaskBean implements ITaskBean {
                 @Override
                 public void save(List<AbstractRequest> batch) {
                     benefitBean.insert(batch);
+
+                    batch.forEach(r -> onRequest(r));
                 }
 
                 @Override

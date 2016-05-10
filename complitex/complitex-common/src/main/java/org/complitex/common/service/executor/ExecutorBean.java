@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.*;
 
+import static org.complitex.common.service.executor.ExecutorCommand.STATUS.*;
+
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 01.11.10 12:50
@@ -28,7 +30,7 @@ public class ExecutorBean {
         //Все задачи выполнены
         if (object == null){
             if (executorCommand.isDone()){
-                executorCommand.setStatus(ExecutorCommand.STATUS.COMPLETED);
+                executorCommand.setStatus(COMPLETED);
 
                 if (listener != null) {
                     listener.onComplete(executorCommand.getProcessed());
@@ -43,7 +45,7 @@ public class ExecutorBean {
         //Отмена процесса
         if (executorCommand.isStop()){
             if (executorCommand.isRunning()) {
-                executorCommand.setStatus(ExecutorCommand.STATUS.CANCELED);
+                executorCommand.setStatus(CANCELED);
 
                 log.warn("Процесс {} отменен пользователем", task.getControllerClass());
             }
@@ -54,7 +56,7 @@ public class ExecutorBean {
         //Похоже что-то отломалось
         if (executorCommand.getErrorCount() > executorCommand.getMaxErrors()){
             if (executorCommand.isDone()){
-                executorCommand.setStatus(ExecutorCommand.STATUS.CRITICAL_ERROR);
+                executorCommand.setStatus(CRITICAL_ERROR);
 
                 log.error("Превышено количество ошибок в процессе {}", task.getControllerClass());
             }
@@ -82,7 +84,6 @@ public class ExecutorBean {
                 log.debug("Задача {} пропущена.", task);
             }
         } catch (ExecuteException e) {
-
             object.setErrorMessage(e.getMessage());
 
             try {
@@ -113,7 +114,7 @@ public class ExecutorBean {
             log.error("Критическая ошибка", e);
 
             executorCommand.incrementErrorCount();
-            executorCommand.setStatus(ExecutorCommand.STATUS.CRITICAL_ERROR);
+            executorCommand.setStatus(CRITICAL_ERROR);
         }finally {
             executorCommand.getProcessed().add(object);
             executorCommand.stopTask();
@@ -126,7 +127,7 @@ public class ExecutorBean {
         }
 
         if (executorCommand.getQueue().isEmpty()){
-            executorCommand.setStatus(ExecutorCommand.STATUS.COMPLETED);
+            executorCommand.setStatus(COMPLETED);
             return;
         }
 

@@ -4,7 +4,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.WebSocketPushBroadcaster;
 import org.complitex.common.entity.WebSocketPushMessage;
-import org.complitex.common.wicket.BroadcastPayload;
+import org.complitex.common.wicket.BroadcastMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,9 +45,9 @@ public class BroadcastService {
     }
 
     @Asynchronous
-    public void broadcast(Class producer, String key, Object payload){
+    public <T> void broadcast(Class producer, String key, T payload){
         try {
-            broadcaster.broadcastAll(application, new BroadcastPayload(producer, key, payload));
+            broadcaster.broadcastAll(application, new BroadcastMessage<>(producer, key, payload));
         } catch (Exception e) {
             log.error("broadcast error", e);
         }

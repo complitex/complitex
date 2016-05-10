@@ -125,6 +125,8 @@ public class PrivilegeGroupBindTaskBean extends AbstractTaskBean<PrivilegeFileGr
                     facilityServiceTypeBindTaskBean.bind(serviceProviderCode, p.getFacilityServiceType());
 
                 }
+
+                onRequest(p);
             }
         } catch (Exception e) {
             throw new BindException(e, false, dwellingCharacteristicsRequestFile);

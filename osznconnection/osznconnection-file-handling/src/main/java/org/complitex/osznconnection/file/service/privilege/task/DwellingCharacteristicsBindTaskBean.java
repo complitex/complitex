@@ -164,7 +164,10 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
                 //связать dwelling characteristics запись
                 try {
                     userTransaction.begin();
+
                     bind(serviceProviderCode, dwellingCharacteristic);
+                    onRequest(dwellingCharacteristic);
+
                     userTransaction.commit();
                 } catch (Exception e) {
                     log.error("The dwelling characteristics item ( id = " + dwellingCharacteristic.getId() + ") was bound with error: ", e);

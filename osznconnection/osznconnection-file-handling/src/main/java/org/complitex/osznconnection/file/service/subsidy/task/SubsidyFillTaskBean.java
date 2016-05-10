@@ -1,16 +1,20 @@
 package org.complitex.osznconnection.file.service.subsidy.task;
 
 import org.complitex.common.entity.Log;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.AccountDetail;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterData;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataDBF;
-import org.complitex.osznconnection.file.service.*;
+import org.complitex.osznconnection.file.service.AddressService;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
@@ -42,7 +46,7 @@ import java.util.Map;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
+public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(SubsidyFillTaskBean.class);
 
     @Resource
@@ -95,7 +99,10 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
                 }
 
                 userTransaction.begin();
+
                 fill(serviceProviderId, serviceProviderCode, subsidy);
+                onRequest(subsidy);
+
                 userTransaction.commit();
             }
         } catch (Exception e) {
