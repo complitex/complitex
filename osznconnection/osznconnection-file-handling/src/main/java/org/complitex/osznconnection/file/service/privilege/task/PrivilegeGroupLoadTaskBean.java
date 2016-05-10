@@ -39,9 +39,4 @@ public class PrivilegeGroupLoadTaskBean extends AbstractTaskBean<PrivilegeFileGr
 
         return true;
     }
-
-    @Override
-    public void onError(PrivilegeFileGroup object) {
-
-    }
 }

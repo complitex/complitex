@@ -40,47 +40,53 @@ public class DwellingCharacteristicsLoadTaskBean extends AbstractTaskBean<Reques
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        requestFile.setStatus(RequestFileStatus.LOADING);
+        try {
+            requestFile.setStatus(RequestFileStatus.LOADING);
 
-        final String defaultCity = configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY, true);
-        final Date dwellingCharacteristicsDate = requestFile.getBeginDate();
+            final String defaultCity = configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY, true);
+            final Date dwellingCharacteristicsDate = requestFile.getBeginDate();
 
-        boolean noSkip = loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
+            boolean noSkip = loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
 
-            @Override
-            public Enum[] getFieldNames() {
-                return DwellingCharacteristicsDBF.values();
+                @Override
+                public Enum[] getFieldNames() {
+                    return DwellingCharacteristicsDBF.values();
+                }
+
+                @Override
+                public AbstractRequest newObject() {
+                    return new DwellingCharacteristics(defaultCity, dwellingCharacteristicsDate);
+                }
+
+                @Override
+                public void save(List<AbstractRequest> batch) {
+                    dwellingCharacteristicsBean.insert(batch);
+
+                    batch.forEach(r -> onRequest(r));
+                }
+
+                @Override
+                public void postProcess(int rowNumber, AbstractRequest request) {
+                    final DwellingCharacteristics dwellingCharacteristics = (DwellingCharacteristics) request;
+                    parseFio(dwellingCharacteristics);
+                }
+            });
+
+            if (!noSkip) {
+                requestFile.setStatus(RequestFileStatus.SKIPPED);
+
+                return false; //skip - file already loaded
             }
 
-            @Override
-            public AbstractRequest newObject() {
-                return new DwellingCharacteristics(defaultCity, dwellingCharacteristicsDate);
-            }
+            requestFile.setStatus(RequestFileStatus.LOADED);
+            requestFileBean.save(requestFile);
 
-            @Override
-            public void save(List<AbstractRequest> batch) {
-                dwellingCharacteristicsBean.insert(batch);
+            return true;
+        } catch (Exception e) {
+            requestFileBean.delete(requestFile);
 
-                batch.forEach(r -> onRequest(r));
-            }
-
-            @Override
-            public void postProcess(int rowNumber, AbstractRequest request) {
-                final DwellingCharacteristics dwellingCharacteristics = (DwellingCharacteristics) request;
-                parseFio(dwellingCharacteristics);
-            }
-        });
-
-        if (!noSkip) {
-            requestFile.setStatus(RequestFileStatus.SKIPPED);
-
-            return false; //skip - file already loaded
+            throw e;
         }
-
-        requestFile.setStatus(RequestFileStatus.LOADED);
-        requestFileBean.save(requestFile);
-
-        return true;
     }
 
     private void parseFio(DwellingCharacteristics dwellingCharacteristics) {
@@ -89,11 +95,6 @@ public class DwellingCharacteristicsLoadTaskBean extends AbstractTaskBean<Reques
         dwellingCharacteristics.setFirstName(personalName.getFirstName());
         dwellingCharacteristics.setMiddleName(personalName.getMiddleName());
         dwellingCharacteristics.setLastName(personalName.getLastName());
-    }
-
-    @Override
-    public void onError(RequestFile requestFile) {
-        requestFileBean.delete(requestFile);
     }
 
     @Override

@@ -94,58 +94,65 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()){
-            throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.FILLING);
-        requestFileBean.save(requestFile);
-
-        //clear warning
-        requestWarningBean.delete(requestFile.getId(), FACILITY_SERVICE_TYPE);
-
         try {
-            List<Long> ids = facilityServiceTypeBean.findIdsForOperation(requestFile.getId());
-
-            for (Long id : ids) {
-                List<FacilityServiceType> facilityServiceTypes = facilityServiceTypeBean
-                        .findForOperation(requestFile.getId(), Collections.singletonList(id));
-
-                for (FacilityServiceType facilityServiceType : facilityServiceTypes){
-                    if (requestFile.isCanceled()){
-                        throw new FillException(new CanceledByUserException(), true, requestFile);
-                    }
-
-                    userTransaction.begin();
-
-                    fill(facilityServiceType);
-                    onRequest(facilityServiceType);
-
-                    userTransaction.commit();
-                }
+            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()){
+                throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
             }
-        } catch (Exception e) {
-            log.error("Ошибка обработки файла субсидии", e);
+
+            requestFile.setStatus(RequestFileStatus.FILLING);
+            requestFileBean.save(requestFile);
+
+            //clear warning
+            requestWarningBean.delete(requestFile.getId(), FACILITY_SERVICE_TYPE);
 
             try {
-                userTransaction.rollback();
-            } catch (SystemException e1) {
-                log.error("", e1);
+                List<Long> ids = facilityServiceTypeBean.findIdsForOperation(requestFile.getId());
+
+                for (Long id : ids) {
+                    List<FacilityServiceType> facilityServiceTypes = facilityServiceTypeBean
+                            .findForOperation(requestFile.getId(), Collections.singletonList(id));
+
+                    for (FacilityServiceType facilityServiceType : facilityServiceTypes){
+                        if (requestFile.isCanceled()){
+                            throw new FillException(new CanceledByUserException(), true, requestFile);
+                        }
+
+                        userTransaction.begin();
+
+                        fill(facilityServiceType);
+                        onRequest(facilityServiceType);
+
+                        userTransaction.commit();
+                    }
+                }
+            } catch (Exception e) {
+                log.error("Ошибка обработки файла субсидии", e);
+
+                try {
+                    userTransaction.rollback();
+                } catch (SystemException e1) {
+                    log.error("", e1);
+                }
+
+                throw new RuntimeException(e);
             }
 
-            throw new RuntimeException(e);
+            //проверить все ли записи в файле субсидии обработались
+            if (!facilityServiceTypeBean.isFacilityServiceTypeFileFilled(requestFile.getId())) {
+                throw new FillException(true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.FILLED);
+            requestFileBean.save(requestFile);
+
+
+            return true;
+        } catch (Exception e) {
+            requestFile.setStatus(FILL_ERROR);
+            requestFileBean.save(requestFile);
+
+            throw e;
         }
-
-        //проверить все ли записи в файле субсидии обработались
-        if (!facilityServiceTypeBean.isFacilityServiceTypeFileFilled(requestFile.getId())) {
-            throw new FillException(true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.FILLED);
-        requestFileBean.save(requestFile);
-
-
-        return true;
     }
 
     /**
@@ -278,11 +285,5 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
 
         facilityServiceType.setStatus(BENEFIT_OWNER_NOT_ASSOCIATED);
         facilityServiceTypeBean.update(facilityServiceType);
-    }
-
-    @Override
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(FILL_ERROR);
-        requestFileBean.save(requestFile);
     }
 }

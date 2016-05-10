@@ -12,8 +12,6 @@ import java.util.Map;
 public interface ITaskBean<T extends IExecutorObject> {
     boolean execute(T object, Map commandParameters) throws ExecuteException;
 
-    void onError(T object);
-
     String getModuleName();
 
     Class getControllerClass();

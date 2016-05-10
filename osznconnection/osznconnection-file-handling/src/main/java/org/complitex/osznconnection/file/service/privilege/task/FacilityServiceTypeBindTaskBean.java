@@ -186,42 +186,43 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        //проверяем что не обрабатывается в данный момент
-        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
-            throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.BINDING);
-        requestFileBean.save(requestFile);
-
-        facilityServiceTypeBean.clearBeforeBinding(requestFile.getId(), null);
-
-        //clear warning
-        requestWarningBean.delete(requestFile.getId(), FACILITY_SERVICE_TYPE);
-
-        //связывание файла facility service type
         try {
-            bindFacilityServiceTypeFile(requestFile);
-        } catch (DBException e) {
-            throw new RuntimeException(e);
-        } catch (CanceledByUserException e) {
-            throw new BindException(e, true, requestFile);
+            //проверяем что не обрабатывается в данный момент
+            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
+                throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.BINDING);
+            requestFileBean.save(requestFile);
+
+            facilityServiceTypeBean.clearBeforeBinding(requestFile.getId(), null);
+
+            //clear warning
+            requestWarningBean.delete(requestFile.getId(), FACILITY_SERVICE_TYPE);
+
+            //связывание файла facility service type
+            try {
+                bindFacilityServiceTypeFile(requestFile);
+            } catch (DBException e) {
+                throw new RuntimeException(e);
+            } catch (CanceledByUserException e) {
+                throw new BindException(e, true, requestFile);
+            }
+
+            //проверить все ли записи в facility service type файле связались
+            if (!facilityServiceTypeBean.isFacilityServiceTypeFileBound(requestFile.getId())) {
+                throw new BindException(true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.BOUND);
+            requestFileBean.save(requestFile);
+
+            return true;
+        } catch (Exception e) {
+            requestFile.setStatus(RequestFileStatus.BIND_ERROR);
+            requestFileBean.save(requestFile);
+
+            throw e;
         }
-
-        //проверить все ли записи в facility service type файле связались
-        if (!facilityServiceTypeBean.isFacilityServiceTypeFileBound(requestFile.getId())) {
-            throw new BindException(true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.BOUND);
-        requestFileBean.save(requestFile);
-
-        return true;
-    }
-
-    @Override
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(RequestFileStatus.BIND_ERROR);
-        requestFileBean.save(requestFile);
     }
 }

@@ -44,41 +44,42 @@ public class FacilityStreetLoadTaskBean extends AbstractTaskBean<RequestFile> {
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        requestFile.setStatus(RequestFileStatus.LOADING);
+        try {
+            requestFile.setStatus(RequestFileStatus.LOADING);
 
-        //update date range
-        requestFileBean.updateDateRange(requestFile);
+            //update date range
+            requestFileBean.updateDateRange(requestFile);
 
-        loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
+            loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
 
-            @Override
-            public Enum[] getFieldNames() {
-                return FacilityStreetDBF.values();
-            }
+                @Override
+                public Enum[] getFieldNames() {
+                    return FacilityStreetDBF.values();
+                }
 
-            @Override
-            public AbstractRequest newObject() {
-                return new FacilityStreet();
-            }
+                @Override
+                public AbstractRequest newObject() {
+                    return new FacilityStreet();
+                }
 
-            @Override
-            public void save(List<AbstractRequest> requests) throws ExecuteException {
-                facilityReferenceBookBean.insert(requests);
+                @Override
+                public void save(List<AbstractRequest> requests) throws ExecuteException {
+                    facilityReferenceBookBean.insert(requests);
 
-                requests.forEach(r -> onRequest(r));
-            }
-        });
-        requestFile.setStatus(RequestFileStatus.LOADED);
+                    requests.forEach(r -> onRequest(r));
+                }
+            });
+            requestFile.setStatus(RequestFileStatus.LOADED);
 
-        requestFileBean.save(requestFile);
+            requestFileBean.save(requestFile);
 
-        return true;
-    }
+            return true;
+        } catch (Exception e) {
+            requestFile.setStatus(RequestFileStatus.LOAD_ERROR);
+            requestFileBean.save(requestFile);
 
-    @Override
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(RequestFileStatus.LOAD_ERROR);
-        requestFileBean.save(requestFile);
+            throw e;
+        }
     }
 
     @Override

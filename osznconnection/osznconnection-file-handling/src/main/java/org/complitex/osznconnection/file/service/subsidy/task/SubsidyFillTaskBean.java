@@ -75,57 +75,64 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        Long serviceProviderId = organizationStrategy.getServiceProviderId(requestFile.getEdrpou(),
-                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
-
-        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
-                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
-
-        //проверяем что не обрабатывается в данный момент
-        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
-            throw new FillException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.FILLING);
-        requestFileBean.save(requestFile);
-
-        //Обработка
         try {
-            List<Subsidy> subsidies = subsidyBean.getSubsidies(requestFile.getId());
+            Long serviceProviderId = organizationStrategy.getServiceProviderId(requestFile.getEdrpou(),
+                    requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
-            for (Subsidy subsidy : subsidies){
-                if (requestFile.isCanceled()){
-                    throw new FillException(new CanceledByUserException(), true, requestFile);
+            String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                    requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
+            //проверяем что не обрабатывается в данный момент
+            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
+                throw new FillException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.FILLING);
+            requestFileBean.save(requestFile);
+
+            //Обработка
+            try {
+                List<Subsidy> subsidies = subsidyBean.getSubsidies(requestFile.getId());
+
+                for (Subsidy subsidy : subsidies){
+                    if (requestFile.isCanceled()){
+                        throw new FillException(new CanceledByUserException(), true, requestFile);
+                    }
+
+                    userTransaction.begin();
+
+                    fill(serviceProviderId, serviceProviderCode, subsidy);
+                    onRequest(subsidy);
+
+                    userTransaction.commit();
+                }
+            } catch (Exception e) {
+                log.error("Ошибка обработки файла субсидии", e);
+
+                try {
+                    userTransaction.rollback();
+                } catch (SystemException e1) {
+                    log.error("", e1);
                 }
 
-                userTransaction.begin();
-
-                fill(serviceProviderId, serviceProviderCode, subsidy);
-                onRequest(subsidy);
-
-                userTransaction.commit();
+                throw new RuntimeException(e);
             }
+
+            //проверить все ли записи в файле субсидии обработались
+            if (!subsidyBean.isSubsidyFileFilled(requestFile.getId())) {
+                throw new FillException(true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.FILLED);
+            requestFileBean.save(requestFile);
+
+            return true;
         } catch (Exception e) {
-            log.error("Ошибка обработки файла субсидии", e);
+            requestFile.setStatus(RequestFileStatus.FILL_ERROR);
+            requestFileBean.save(requestFile);
 
-            try {
-                userTransaction.rollback();
-            } catch (SystemException e1) {
-                log.error("", e1);
-            }
-
-            throw new RuntimeException(e);
+            throw e;
         }
-
-        //проверить все ли записи в файле субсидии обработались
-        if (!subsidyBean.isSubsidyFileFilled(requestFile.getId())) {
-            throw new FillException(true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.FILLED);
-        requestFileBean.save(requestFile);
-
-        return true;
     }
 
     /**
@@ -207,12 +214,6 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
         subsidyMasterData.setServicingOrganizationId(serviceProviderId);
 
         subsidyMasterDataBean.save(subsidyMasterData);
-    }
-
-    @Override
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(RequestFileStatus.FILL_ERROR);
-        requestFileBean.save(requestFile);
     }
 
     @Override

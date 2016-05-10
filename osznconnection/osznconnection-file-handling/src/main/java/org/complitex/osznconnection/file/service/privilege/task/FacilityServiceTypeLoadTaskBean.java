@@ -40,47 +40,53 @@ public class FacilityServiceTypeLoadTaskBean extends AbstractTaskBean<RequestFil
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        requestFile.setStatus(RequestFileStatus.LOADING);
+        try {
+            requestFile.setStatus(RequestFileStatus.LOADING);
 
-        final String defaultCity = configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY, true);
-        final Date facilityServiceTypeDate = requestFile.getBeginDate();
+            final String defaultCity = configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY, true);
+            final Date facilityServiceTypeDate = requestFile.getBeginDate();
 
-        boolean noSkip = loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
+            boolean noSkip = loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
 
-            @Override
-            public Enum[] getFieldNames() {
-                return FacilityServiceTypeDBF.values();
+                @Override
+                public Enum[] getFieldNames() {
+                    return FacilityServiceTypeDBF.values();
+                }
+
+                @Override
+                public AbstractRequest newObject() {
+                    return new FacilityServiceType(defaultCity, facilityServiceTypeDate);
+                }
+
+                @Override
+                public void save(List<AbstractRequest> batch) {
+                    facilityServiceTypeBean.insert(batch);
+
+                    batch.forEach(r -> onRequest(r));
+                }
+
+                @Override
+                public void postProcess(int rowNumber, AbstractRequest request) {
+                    final FacilityServiceType facilityServiceType = (FacilityServiceType) request;
+                    parseFio(facilityServiceType);
+                }
+            });
+
+            if (!noSkip) {
+                requestFile.setStatus(RequestFileStatus.SKIPPED);
+
+                return false; //skip - file already loaded
             }
 
-            @Override
-            public AbstractRequest newObject() {
-                return new FacilityServiceType(defaultCity, facilityServiceTypeDate);
-            }
+            requestFile.setStatus(RequestFileStatus.LOADED);
+            requestFileBean.save(requestFile);
 
-            @Override
-            public void save(List<AbstractRequest> batch) {
-                facilityServiceTypeBean.insert(batch);
+            return true;
+        } catch (Exception e) {
+            requestFileBean.delete(requestFile);
 
-                batch.forEach(r -> onRequest(r));
-            }
-
-            @Override
-            public void postProcess(int rowNumber, AbstractRequest request) {
-                final FacilityServiceType facilityServiceType = (FacilityServiceType) request;
-                parseFio(facilityServiceType);
-            }
-        });
-
-        if (!noSkip) {
-            requestFile.setStatus(RequestFileStatus.SKIPPED);
-
-            return false; //skip - file already loaded
+            throw e;
         }
-
-        requestFile.setStatus(RequestFileStatus.LOADED);
-        requestFileBean.save(requestFile);
-
-        return true;
     }
 
     private void parseFio(FacilityServiceType facilityServiceType) {
@@ -89,11 +95,6 @@ public class FacilityServiceTypeLoadTaskBean extends AbstractTaskBean<RequestFil
         facilityServiceType.setFirstName(personalName.getFirstName());
         facilityServiceType.setMiddleName(personalName.getMiddleName());
         facilityServiceType.setLastName(personalName.getLastName());
-    }
-
-    @Override
-    public void onError(RequestFile requestFile ) {
-        requestFileBean.delete(requestFile);
     }
 
     @Override

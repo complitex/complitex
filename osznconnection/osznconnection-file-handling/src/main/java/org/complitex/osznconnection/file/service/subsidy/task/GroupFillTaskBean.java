@@ -1,7 +1,6 @@
 package org.complitex.osznconnection.file.service.subsidy.task;
 
 import com.google.common.collect.Lists;
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
@@ -44,7 +43,7 @@ import java.util.Set;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class GroupFillTaskBean extends AbstractTaskBean {
+public class GroupFillTaskBean extends AbstractTaskBean<RequestFileGroup> {
     private final Logger log = LoggerFactory.getLogger(GroupFillTaskBean.class);
 
     @Resource
@@ -69,58 +68,55 @@ public class GroupFillTaskBean extends AbstractTaskBean {
     private OsznOrganizationStrategy organizationStrategy;
 
     @Override
-    public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
-        RequestFileGroup group = (RequestFileGroup) executorObject;
-
-        group.setStatus(requestFileGroupBean.getRequestFileStatus(group)); //обновляем статус из базы данных
-
-        if (group.isProcessing()) { //проверяем что не обрабатывается в данный момент
-            throw new FillException(new AlreadyProcessingException(group.getFullName()), true, group);
-        }
-
-        group.setStatus(RequestFileStatus.FILLING);
-        requestFileGroupBean.save(group);
-
-        //очищаем колонки которые заполняются во время обработки для записей в таблицах payment и benefit
-        paymentBean.clearBeforeProcessing(group.getPaymentFile().getId(),
-                organizationStrategy.getServices(group.getPaymentFile().getUserOrganizationId()));
-        benefitBean.clearBeforeProcessing(group.getBenefitFile().getId());
-
-        //обработка файла payment
+    public boolean execute(RequestFileGroup group, Map commandParameters) throws ExecuteException {
         try {
-            processPayment(group.getPaymentFile());
-        } catch (DBException e) {
-            throw new RuntimeException(e);
+            group.setStatus(requestFileGroupBean.getRequestFileStatus(group)); //обновляем статус из базы данных
+
+            if (group.isProcessing()) { //проверяем что не обрабатывается в данный момент
+                throw new FillException(new AlreadyProcessingException(group.getFullName()), true, group);
+            }
+
+            group.setStatus(RequestFileStatus.FILLING);
+            requestFileGroupBean.save(group);
+
+            //очищаем колонки которые заполняются во время обработки для записей в таблицах payment и benefit
+            paymentBean.clearBeforeProcessing(group.getPaymentFile().getId(),
+                    organizationStrategy.getServices(group.getPaymentFile().getUserOrganizationId()));
+            benefitBean.clearBeforeProcessing(group.getBenefitFile().getId());
+
+            //обработка файла payment
+            try {
+                processPayment(group.getPaymentFile());
+            } catch (DBException e) {
+                throw new RuntimeException(e);
+            }
+
+            //обработка файла benefit
+            try {
+                processBenefit(group.getBenefitFile());
+            } catch (DBException e) {
+                throw new RuntimeException(e);
+            }
+
+            //проверить все ли записи в payment файле обработались
+            if (!paymentBean.isPaymentFileProcessed(group.getPaymentFile().getId())) {
+                throw new FillException(true, group.getPaymentFile());
+            }
+
+            if (!benefitBean.isBenefitFileProcessed(group.getBenefitFile().getId())) {
+                throw new FillException(true, group.getBenefitFile());
+            }
+
+            group.setStatus(RequestFileStatus.FILLED);
+            requestFileGroupBean.save(group);
+
+            return true;
+        } catch (Exception e) {
+            group.setStatus(RequestFileStatus.FILL_ERROR);
+            requestFileGroupBean.save(group);
+
+            throw e;
         }
-
-        //обработка файла benefit
-        try {
-            processBenefit(group.getBenefitFile());
-        } catch (DBException e) {
-            throw new RuntimeException(e);
-        }
-
-        //проверить все ли записи в payment файле обработались
-        if (!paymentBean.isPaymentFileProcessed(group.getPaymentFile().getId())) {
-            throw new FillException(true, group.getPaymentFile());
-        }
-
-        if (!benefitBean.isBenefitFileProcessed(group.getBenefitFile().getId())) {
-            throw new FillException(true, group.getBenefitFile());
-        }
-
-        group.setStatus(RequestFileStatus.FILLED);
-        requestFileGroupBean.save(group);
-
-        return true;
-    }
-
-    @Override
-    public void onError(IExecutorObject executorObject) {
-        RequestFileGroup group = (RequestFileGroup) executorObject;
-
-        group.setStatus(RequestFileStatus.FILL_ERROR);
-        requestFileGroupBean.save(group);
     }
 
     @Override

@@ -58,40 +58,41 @@ public class ActualPaymentFillTaskBean extends AbstractTaskBean<RequestFile> {
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        //проверяем что не обрабатывается в данный момент
-        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
-            throw new FillException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
-        }
+        try {
+            //проверяем что не обрабатывается в данный момент
+            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
+                throw new FillException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
+            }
 
-        requestFile.setStatus(RequestFileStatus.FILLING);
-        requestFileBean.save(requestFile);
+            requestFile.setStatus(RequestFileStatus.FILLING);
+            requestFileBean.save(requestFile);
 
 //        actualPaymentBean.clearBeforeProcessing(requestFile.getId(), getServiceProviderTypeIds(billingContexts)); todo
 
-        //обработка файла actualPayment
-        try {
-            processActualPayment(requestFile);
-        } catch (DBException e) {
-            throw new RuntimeException(e);
-        } catch (CanceledByUserException e) {
-            throw new FillException(e, true, requestFile);
+            //обработка файла actualPayment
+            try {
+                processActualPayment(requestFile);
+            } catch (DBException e) {
+                throw new RuntimeException(e);
+            } catch (CanceledByUserException e) {
+                throw new FillException(e, true, requestFile);
+            }
+
+            //проверить все ли записи в actualPayment файле обработались
+            if (!actualPaymentBean.isActualPaymentFileProcessed(requestFile.getId())) {
+                throw new FillException(true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.FILLED);
+            requestFileBean.save(requestFile);
+
+            return true;
+        } catch (Exception e) {
+            requestFile.setStatus(RequestFileStatus.FILL_ERROR);
+            requestFileBean.save(requestFile);
+
+            throw e;
         }
-
-        //проверить все ли записи в actualPayment файле обработались
-        if (!actualPaymentBean.isActualPaymentFileProcessed(requestFile.getId())) {
-            throw new FillException(true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.FILLED);
-        requestFileBean.save(requestFile);
-
-        return true;
-    }
-
-    @Override
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(RequestFileStatus.FILL_ERROR);
-        requestFileBean.save(requestFile);
     }
 
     @Override

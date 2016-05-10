@@ -10,25 +10,24 @@ import org.complitex.common.service.SessionBean;
 import org.complitex.common.service.executor.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
+import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterData;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataDBF;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataFile;
-import org.complitex.osznconnection.file.service.process.RequestFileStorage;
-import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
 import org.complitex.osznconnection.file.service.exception.SaveException;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescription;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
 import org.complitex.osznconnection.file.service.file_description.RequestFileFieldDescription;
 import org.complitex.osznconnection.file.service.file_description.convert.DBFFieldTypeConverter;
+import org.complitex.osznconnection.file.service.process.RequestFileStorage;
+import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -95,6 +94,8 @@ public class SubsidyExportTaskBean implements ITaskBean<SubsidyMasterDataFile> {
                 masterDataFile.setStatus(RequestFileStatus.EXPORTED);
             }
         } catch (Exception e) {
+            masterDataFile.setStatus(RequestFileStatus.EXPORT_ERROR);
+
             throw new ExecuteException(e, "Ошибка экспорта");
         }
 
@@ -189,12 +190,6 @@ public class SubsidyExportTaskBean implements ITaskBean<SubsidyMasterDataFile> {
             field.setDecimalCount(scale);
         }
         return field;
-    }
-
-    @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void onError(SubsidyMasterDataFile masterDataFile) {
-        masterDataFile.setStatus(RequestFileStatus.EXPORT_ERROR);
     }
 
     @Override

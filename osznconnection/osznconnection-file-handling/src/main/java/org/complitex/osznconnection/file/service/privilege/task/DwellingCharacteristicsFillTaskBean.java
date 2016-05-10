@@ -69,59 +69,66 @@ public class DwellingCharacteristicsFillTaskBean extends AbstractTaskBean<Reques
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()){
-            throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.FILLING);
-        requestFileBean.save(requestFile);
-
-        //todo clear before filling
-
-        //clear warning
-        requestWarningBean.delete(requestFile.getId(), DWELLING_CHARACTERISTICS);
-
         try {
-            List<Long> ids = dwellingCharacteristicsBean.findIdsForOperation(requestFile.getId());
-
-            for (Long id : ids) {
-                List<DwellingCharacteristics> dwellingCharacteristicsList = dwellingCharacteristicsBean
-                        .findForOperation(requestFile.getId(), Collections.singletonList(id));
-
-                for (DwellingCharacteristics dwellingCharacteristics : dwellingCharacteristicsList){
-                    if (requestFile.isCanceled()){
-                        throw new FillException(new CanceledByUserException(), true, requestFile);
-                    }
-
-                    userTransaction.begin();
-                    fill(dwellingCharacteristics);
-                    onRequest(dwellingCharacteristics);
-                    userTransaction.commit();
-                }
+            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()){
+                throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
             }
 
+            requestFile.setStatus(RequestFileStatus.FILLING);
+            requestFileBean.save(requestFile);
 
-        } catch (Exception e) {
-            log.error("Ошибка обработки файла субсидии", e);
+            //todo clear before filling
+
+            //clear warning
+            requestWarningBean.delete(requestFile.getId(), DWELLING_CHARACTERISTICS);
 
             try {
-                userTransaction.rollback();
-            } catch (SystemException e1) {
-                log.error("", e1);
+                List<Long> ids = dwellingCharacteristicsBean.findIdsForOperation(requestFile.getId());
+
+                for (Long id : ids) {
+                    List<DwellingCharacteristics> dwellingCharacteristicsList = dwellingCharacteristicsBean
+                            .findForOperation(requestFile.getId(), Collections.singletonList(id));
+
+                    for (DwellingCharacteristics dwellingCharacteristics : dwellingCharacteristicsList){
+                        if (requestFile.isCanceled()){
+                            throw new FillException(new CanceledByUserException(), true, requestFile);
+                        }
+
+                        userTransaction.begin();
+                        fill(dwellingCharacteristics);
+                        onRequest(dwellingCharacteristics);
+                        userTransaction.commit();
+                    }
+                }
+
+
+            } catch (Exception e) {
+                log.error("Ошибка обработки файла субсидии", e);
+
+                try {
+                    userTransaction.rollback();
+                } catch (SystemException e1) {
+                    log.error("", e1);
+                }
+
+                throw new RuntimeException(e);
             }
 
-            throw new RuntimeException(e);
+            //проверить все ли записи в файле субсидии обработались
+            if (!dwellingCharacteristicsBean.isDwellingCharacteristicsFileFilled(requestFile.getId())) {
+                throw new FillException(true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.FILLED);
+            requestFileBean.save(requestFile);
+
+            return true;
+        } catch (Exception e) {
+            requestFile.setStatus(RequestFileStatus.FILL_ERROR);
+            requestFileBean.save(requestFile);
+
+            throw e;
         }
-
-        //проверить все ли записи в файле субсидии обработались
-        if (!dwellingCharacteristicsBean.isDwellingCharacteristicsFileFilled(requestFile.getId())) {
-            throw new FillException(true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.FILLED);
-        requestFileBean.save(requestFile);
-
-        return true;
     }
 
     /**
@@ -174,12 +181,6 @@ public class DwellingCharacteristicsFillTaskBean extends AbstractTaskBean<Reques
         }
 
         dwellingCharacteristicsBean.update(dwellingCharacteristics);
-    }
-
-    @Override
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(RequestFileStatus.FILL_ERROR);
-        requestFileBean.save(requestFile);
     }
 
     @Override

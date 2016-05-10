@@ -177,46 +177,47 @@ public class ActualPaymentBindTaskBean extends AbstractTaskBean<RequestFile> {
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        // ищем в параметрах комманды опцию "Переписывать номер л/с ПУ номером л/с МН"
-        final Boolean updatePuAccount = commandParameters.containsKey(GlobalOptions.UPDATE_PU_ACCOUNT)
-                ? (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT) : false;
-
-        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) { //проверяем что не обрабатывается в данный момент
-            throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.BINDING);
-        requestFileBean.save(requestFile);
-
-        //получаем информацию о текущем контексте вычислений
-        Set<Long> serviceIds = new HashSet<>(); //todo get services by user organization
-
-        actualPaymentBean.clearBeforeBinding(requestFile.getId(), serviceIds);
-
-        //связывание файла actualPayment
         try {
-            bindActualPaymentFile(requestFile, updatePuAccount);
-        } catch (DBException e) {
-            throw new RuntimeException(e);
-        } catch (CanceledByUserException e) {
-            throw new BindException(e, true, requestFile);
+            // ищем в параметрах комманды опцию "Переписывать номер л/с ПУ номером л/с МН"
+            final Boolean updatePuAccount = commandParameters.containsKey(GlobalOptions.UPDATE_PU_ACCOUNT)
+                    ? (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT) : false;
+
+            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) { //проверяем что не обрабатывается в данный момент
+                throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.BINDING);
+            requestFileBean.save(requestFile);
+
+            //получаем информацию о текущем контексте вычислений
+            Set<Long> serviceIds = new HashSet<>(); //todo get services by user organization
+
+            actualPaymentBean.clearBeforeBinding(requestFile.getId(), serviceIds);
+
+            //связывание файла actualPayment
+            try {
+                bindActualPaymentFile(requestFile, updatePuAccount);
+            } catch (DBException e) {
+                throw new RuntimeException(e);
+            } catch (CanceledByUserException e) {
+                throw new BindException(e, true, requestFile);
+            }
+
+            //проверить все ли записи в actualPayment файле связались
+            if (!actualPaymentBean.isActualPaymentFileBound(requestFile.getId())) {
+                throw new BindException(true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.BOUND);
+            requestFileBean.save(requestFile);
+
+            return true;
+        } catch (Exception e) {
+            requestFile.setStatus(RequestFileStatus.BIND_ERROR);
+            requestFileBean.save(requestFile);
+
+            throw e;
         }
-
-        //проверить все ли записи в actualPayment файле связались
-        if (!actualPaymentBean.isActualPaymentFileBound(requestFile.getId())) {
-            throw new BindException(true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.BOUND);
-        requestFileBean.save(requestFile);
-
-        return true;
-    }
-
-    @Override
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(RequestFileStatus.BIND_ERROR);
-        requestFileBean.save(requestFile);
     }
 
     @Override

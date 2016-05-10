@@ -186,46 +186,47 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        // ищем в параметрах комманды опцию "Переписывать номер л/с ПУ номером л/с МН"
+        try {
+            // ищем в параметрах комманды опцию "Переписывать номер л/с ПУ номером л/с МН"
 //        final Boolean updatePuAccount = commandParameters.containsKey(GlobalOptions.UPDATE_PU_ACCOUNT)
 //                ? (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT) : false;
 
-        //проверяем что не обрабатывается в данный момент
-        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
-            throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
+            //проверяем что не обрабатывается в данный момент
+            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
+                throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.BINDING);
+            requestFileBean.save(requestFile);
+
+            dwellingCharacteristicsBean.clearBeforeBinding(requestFile.getId(), null);
+
+            //clear warning
+            requestWarningBean.delete(requestFile.getId(), DWELLING_CHARACTERISTICS);
+
+            //связывание файла dwelling characteristics
+            try {
+                bindDwellingCharacteristicsFile(requestFile);
+            } catch (DBException e) {
+                throw new RuntimeException(e);
+            } catch (CanceledByUserException e) {
+                throw new BindException(e, true, requestFile);
+            }
+
+            //проверить все ли записи в dwelling characteristics файле связались
+            if (!dwellingCharacteristicsBean.isDwellingCharacteristicsFileBound(requestFile.getId())) {
+                throw new BindException(true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.BOUND);
+            requestFileBean.save(requestFile);
+
+            return true;
+        } catch (Exception e) {
+            requestFile.setStatus(RequestFileStatus.BIND_ERROR);
+            requestFileBean.save(requestFile);
+
+            throw e;
         }
-
-        requestFile.setStatus(RequestFileStatus.BINDING);
-        requestFileBean.save(requestFile);
-
-        dwellingCharacteristicsBean.clearBeforeBinding(requestFile.getId(), null);
-
-        //clear warning
-        requestWarningBean.delete(requestFile.getId(), DWELLING_CHARACTERISTICS);
-
-        //связывание файла dwelling characteristics
-        try {
-            bindDwellingCharacteristicsFile(requestFile);
-        } catch (DBException e) {
-            throw new RuntimeException(e);
-        } catch (CanceledByUserException e) {
-            throw new BindException(e, true, requestFile);
-        }
-
-        //проверить все ли записи в dwelling characteristics файле связались
-        if (!dwellingCharacteristicsBean.isDwellingCharacteristicsFileBound(requestFile.getId())) {
-            throw new BindException(true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.BOUND);
-        requestFileBean.save(requestFile);
-
-        return true;
-    }
-
-    @Override
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(RequestFileStatus.BIND_ERROR);
-        requestFileBean.save(requestFile);
     }
 }

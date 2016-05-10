@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.service.subsidy.task;
 
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.PersonalName;
 import org.complitex.common.service.executor.AbstractTaskBean;
@@ -27,7 +26,7 @@ import java.util.Map;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidyLoadTaskBean extends AbstractTaskBean {
+public class SubsidyLoadTaskBean extends AbstractTaskBean<RequestFile> {
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -42,58 +41,62 @@ public class SubsidyLoadTaskBean extends AbstractTaskBean {
     private SubsidyService subsidyService;
 
     @Override
-    public boolean execute(IExecutorObject executorObject, Map commandParameters) throws ExecuteException {
-        final RequestFile requestFile = (RequestFile) executorObject;
+    public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
+        try {
+            requestFile.setStatus(RequestFileStatus.LOADING);
 
-        requestFile.setStatus(RequestFileStatus.LOADING);
+            boolean noSkip = loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
 
-        boolean noSkip = loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
-
-            @Override
-            public Enum[] getFieldNames() {
-                return SubsidyDBF.values();
-            }
-
-            @Override
-            public AbstractRequest newObject() {
-                return new Subsidy();
-            }
-
-            @Override
-            public void save(List<AbstractRequest> batch) {
-                //check sum
-                for (AbstractRequest request : batch) {
-                    if (!subsidyService.validateSum(request)){
-                        request.setStatus(RequestStatus.SUBSIDY_NM_PAY_ERROR);
-                        requestFile.setStatus(RequestFileStatus.LOAD_ERROR);
-                    }
+                @Override
+                public Enum[] getFieldNames() {
+                    return SubsidyDBF.values();
                 }
 
-                subsidyBean.insert(batch);
+                @Override
+                public AbstractRequest newObject() {
+                    return new Subsidy();
+                }
 
-                batch.forEach(r -> onRequest(r));
+                @Override
+                public void save(List<AbstractRequest> batch) {
+                    //check sum
+                    for (AbstractRequest request : batch) {
+                        if (!subsidyService.validateSum(request)){
+                            request.setStatus(RequestStatus.SUBSIDY_NM_PAY_ERROR);
+                            requestFile.setStatus(RequestFileStatus.LOAD_ERROR);
+                        }
+                    }
+
+                    subsidyBean.insert(batch);
+
+                    batch.forEach(r -> onRequest(r));
+                }
+
+                @Override
+                public void postProcess(int rowNumber, AbstractRequest request) {
+                    final Subsidy subsidy = (Subsidy) request;
+                    parseFio(subsidy);
+                }
+            });
+
+            if (!noSkip) {
+                requestFile.setStatus(RequestFileStatus.SKIPPED);
+
+                return false; //skip - file already loaded
             }
 
-            @Override
-            public void postProcess(int rowNumber, AbstractRequest request) {
-                final Subsidy subsidy = (Subsidy) request;
-                parseFio(subsidy);
+            if (!requestFile.getStatus().equals(RequestFileStatus.LOAD_ERROR)) {
+                requestFile.setStatus(RequestFileStatus.LOADED);
             }
-        });
 
-        if (!noSkip) {
-            requestFile.setStatus(RequestFileStatus.SKIPPED);
+            requestFileBean.save(requestFile);
 
-            return false; //skip - file already loaded
+            return true;
+        } catch (Exception e) {
+            requestFileBean.delete(requestFile);
+
+            throw e;
         }
-
-        if (!requestFile.getStatus().equals(RequestFileStatus.LOAD_ERROR)) {
-            requestFile.setStatus(RequestFileStatus.LOADED);
-        }
-
-        requestFileBean.save(requestFile);
-
-        return true;
     }
 
     private void parseFio(Subsidy subsidy) {
@@ -103,12 +106,6 @@ public class SubsidyLoadTaskBean extends AbstractTaskBean {
         subsidy.setFirstName(personName.getFirstName());
         subsidy.setMiddleName(personName.getMiddleName());
         subsidy.setLastName(personName.getLastName());
-    }
-
-    @Override
-    public void onError(IExecutorObject executorObject) {
-        RequestFile requestFile = (RequestFile) executorObject;
-        requestFileBean.delete(requestFile);
     }
 
     @Override

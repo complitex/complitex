@@ -26,10 +26,4 @@ public class PrivilegeGroupSaveTaskBean extends AbstractTaskBean<PrivilegeFileGr
 
         return true;
     }
-
-    @Override
-    public void onError(PrivilegeFileGroup group) {
-        dwellingCharacteristicsSaveTaskBean.onError(group.getDwellingCharacteristicsRequestFile());
-        facilityServiceTypeSaveTaskBean.onError(group.getFacilityServiceTypeRequestFile());
-    }
 }

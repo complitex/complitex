@@ -78,53 +78,54 @@ public class GroupBindTaskBean extends AbstractTaskBean<RequestFileGroup> {
 
     @Override
     public boolean execute(RequestFileGroup group, Map commandParameters) throws ExecuteException {
-        group.setStatus(requestFileGroupBean.getRequestFileStatus(group)); //обновляем статус из базы данных
-
-        if (group.isProcessing()) { //проверяем что не обрабатывается в данный момент
-            throw new BindException(new AlreadyProcessingException(group.getFullName()), true, group);
-        }
-
-        group.setStatus(RequestFileStatus.BINDING);
-        requestFileGroupBean.save(group);
-
-        //очищаем колонки которые заполняются во время связывания и обработки для записей в таблицах payment и benefit
-        //paymentBean.clearBeforeBinding(group.getPaymentFile().getId(), billingContext.getServiceIds());
-        benefitBean.clearBeforeBinding(group.getBenefitFile().getId());
-
-        //связывание файла payment
-        RequestFile paymentFile = group.getPaymentFile();
         try {
-            bindPaymentFile(paymentFile);
-        } catch (DBException e) {
-            throw new RuntimeException(e);
-        } catch (CanceledByUserException e) {
-            throw new BindException(e, true, group);
+            group.setStatus(requestFileGroupBean.getRequestFileStatus(group)); //обновляем статус из базы данных
+
+            if (group.isProcessing()) { //проверяем что не обрабатывается в данный момент
+                throw new BindException(new AlreadyProcessingException(group.getFullName()), true, group);
+            }
+
+            group.setStatus(RequestFileStatus.BINDING);
+            requestFileGroupBean.save(group);
+
+            //очищаем колонки которые заполняются во время связывания и обработки для записей в таблицах payment и benefit
+            //paymentBean.clearBeforeBinding(group.getPaymentFile().getId(), billingContext.getServiceIds());
+            benefitBean.clearBeforeBinding(group.getBenefitFile().getId());
+
+            //связывание файла payment
+            RequestFile paymentFile = group.getPaymentFile();
+            try {
+                bindPaymentFile(paymentFile);
+            } catch (DBException e) {
+                throw new RuntimeException(e);
+            } catch (CanceledByUserException e) {
+                throw new BindException(e, true, group);
+            }
+
+            //связывание файла benefit
+            RequestFile benefitFile = group.getBenefitFile();
+            bindBenefitFile(benefitFile);
+
+            //проверить все ли записи в payment файле связались
+            if (!paymentBean.isPaymentFileBound(paymentFile.getId())) {
+                throw new BindException(true, paymentFile);
+            }
+
+            //проверить все ли записи в benefit файле связались
+            if (!benefitBean.isBenefitFileBound(benefitFile.getId())) {
+                throw new BindException(true, benefitFile);
+            }
+
+            group.setStatus(RequestFileStatus.BOUND);
+            requestFileGroupBean.save(group);
+
+            return true;
+        } catch (Exception e) {
+            group.setStatus(RequestFileStatus.BIND_ERROR);
+            requestFileGroupBean.save(group);
+
+            throw e;
         }
-
-        //связывание файла benefit
-        RequestFile benefitFile = group.getBenefitFile();
-        bindBenefitFile(benefitFile);
-
-        //проверить все ли записи в payment файле связались
-        if (!paymentBean.isPaymentFileBound(paymentFile.getId())) {
-            throw new BindException(true, paymentFile);
-        }
-
-        //проверить все ли записи в benefit файле связались
-        if (!benefitBean.isBenefitFileBound(benefitFile.getId())) {
-            throw new BindException(true, benefitFile);
-        }
-
-        group.setStatus(RequestFileStatus.BOUND);
-        requestFileGroupBean.save(group);
-
-        return true;
-    }
-
-    @Override
-    public void onError(RequestFileGroup group) {
-        group.setStatus(RequestFileStatus.BIND_ERROR);
-        requestFileGroupBean.save(group);
     }
 
     /**

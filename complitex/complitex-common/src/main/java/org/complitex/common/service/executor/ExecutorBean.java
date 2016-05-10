@@ -86,12 +86,6 @@ public class ExecutorBean {
         } catch (ExecuteException e) {
             object.setErrorMessage(e.getMessage());
 
-            try {
-                task.onError(object);
-            } catch (Exception e1) {
-                log.error("Критическая ошибка", e1);
-            }
-
             if (e.isWarn()) {
                 log.warn(e.getMessage());
             }else{
@@ -104,12 +98,6 @@ public class ExecutorBean {
             executeNext(executorCommand);
         } catch (Exception e){
             object.setErrorMessage(e.getMessage());
-
-            try {
-                task.onError(object);
-            } catch (Exception e1) {
-                log.error("Критическая ошибка", e1);
-            }
 
             log.error("Критическая ошибка", e);
 
