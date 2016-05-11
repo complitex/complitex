@@ -103,11 +103,6 @@ public class FacilityServiceTypeLoadTaskBean extends AbstractTaskBean<RequestFil
     }
 
     @Override
-    public Class<?> getControllerClass() {
-        return FacilityServiceTypeLoadTaskBean.class;
-    }
-
-    @Override
     public Log.EVENT getEvent() {
         return Log.EVENT.CREATE;
     }

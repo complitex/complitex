@@ -132,7 +132,7 @@ public class ExecutorCommand<T extends IExecutorObject> {
         return queue;
     }
 
-    public ITaskBean getTask() {
+    public ITaskBean<T> getTask() {
         return task;
     }
 

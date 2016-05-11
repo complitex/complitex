@@ -76,7 +76,7 @@ public class ProcessManagerBean {
     @EJB
     private BroadcastService broadcastService;
 
-    private Map<String, Map<ProcessType, Process>> processStatusMap = new ConcurrentHashMap<String, Map<ProcessType, Process>>();
+    private Map<String, Map<ProcessType, Process>> processStatusMap = new ConcurrentHashMap<>();
 
     @SuppressWarnings("unchecked")
     private <T extends IExecutorObject> Process<T> getProcess(ProcessType processType) {

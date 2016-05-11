@@ -154,11 +154,6 @@ public class GroupLoadTaskBean extends AbstractTaskBean<RequestFileGroup> {
     }
 
     @Override
-    public Class<?> getControllerClass() {
-        return GroupLoadTaskBean.class;
-    }
-
-    @Override
     public Log.EVENT getEvent() {
         return Log.EVENT.CREATE;
     }

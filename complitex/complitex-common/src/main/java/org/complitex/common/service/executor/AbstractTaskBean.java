@@ -1,5 +1,6 @@
 package org.complitex.common.service.executor;
 
+import org.complitex.common.Module;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.BroadcastService;
@@ -20,7 +21,7 @@ public abstract class AbstractTaskBean<T extends IExecutorObject> implements ITa
 
     @Override
     public String getModuleName() {
-        return "AbstractTaskBean";
+        return Module.NAME;
     }
 
     @Override

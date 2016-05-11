@@ -189,11 +189,6 @@ public class DwellingCharacteristicsFillTaskBean extends AbstractTaskBean<Reques
     }
 
     @Override
-    public Class getControllerClass() {
-        return DwellingCharacteristicsFillTaskBean.class;
-    }
-
-    @Override
     public Log.EVENT getEvent() {
         return  Log.EVENT.EDIT;
     }

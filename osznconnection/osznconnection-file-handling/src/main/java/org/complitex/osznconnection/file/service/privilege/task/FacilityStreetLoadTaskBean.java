@@ -88,11 +88,6 @@ public class FacilityStreetLoadTaskBean extends AbstractTaskBean<RequestFile> {
     }
 
     @Override
-    public Class<?> getControllerClass() {
-        return FacilityStreetLoadTaskBean.class;
-    }
-
-    @Override
     public Log.EVENT getEvent() {
         return Log.EVENT.CREATE;
     }

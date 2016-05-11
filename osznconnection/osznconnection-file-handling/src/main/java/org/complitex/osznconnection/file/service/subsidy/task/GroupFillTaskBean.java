@@ -125,11 +125,6 @@ public class GroupFillTaskBean extends AbstractTaskBean<RequestFileGroup> {
     }
 
     @Override
-    public Class<?> getControllerClass() {
-        return GroupFillTaskBean.class;
-    }
-
-    @Override
     public Log.EVENT getEvent() {
         return Log.EVENT.EDIT;
     }

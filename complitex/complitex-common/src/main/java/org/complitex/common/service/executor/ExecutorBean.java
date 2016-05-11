@@ -1,6 +1,7 @@
 package org.complitex.common.service.executor;
 
 import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.service.BroadcastService;
 import org.complitex.common.service.LogBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,22 +20,26 @@ public class ExecutorBean {
     private final Logger log = LoggerFactory.getLogger(ExecutorBean.class);
 
     @EJB
+    private BroadcastService broadcastService;
+
+    @EJB
     private LogBean logBean;
 
     @Asynchronous
     public <T extends IExecutorObject> void executeNext(ExecutorCommand<T> executorCommand){
-        IExecutorObject object = executorCommand.getQueue().poll();
-        IExecutorListener listener = executorCommand.getListener();
-        ITaskBean task = executorCommand.getTask();
+        T object = executorCommand.getQueue().poll();
+        ITaskBean<T> task = executorCommand.getTask();
 
         //Все задачи выполнены
         if (object == null){
             if (executorCommand.isDone()){
                 executorCommand.setStatus(COMPLETED);
 
-                if (listener != null) {
-                    listener.onComplete(executorCommand.getProcessed());
+                if (executorCommand.getListener() != null) {
+                    executorCommand.getListener().onComplete(executorCommand.getProcessed());
                 }
+
+                broadcastService.broadcast(getClass(), "onComplete", executorCommand);
 
                 log.info("Процесс {} завершен", task.getControllerClass());
             }
@@ -46,6 +51,8 @@ public class ExecutorBean {
         if (executorCommand.isStop()){
             if (executorCommand.isRunning()) {
                 executorCommand.setStatus(CANCELED);
+
+                broadcastService.broadcast(getClass(), "onCancel", executorCommand);
 
                 log.warn("Процесс {} отменен пользователем", task.getControllerClass());
             }
@@ -76,15 +83,22 @@ public class ExecutorBean {
             if (noSkip) {
                 executorCommand.incrementSuccessCount();
 
-                log.debug("Задача {} завершена успешно.", task);
+                broadcastService.broadcast(getClass(), "onSuccess", object);
 
+                log.debug("Задача {} завершена успешно.", task);
             }else{
                 executorCommand.incrementSkippedCount();
+
+                broadcastService.broadcast(getClass(), "onSkip", object);
 
                 log.debug("Задача {} пропущена.", task);
             }
         } catch (ExecuteException e) {
+            executorCommand.incrementErrorCount();
+
             object.setErrorMessage(e.getMessage());
+
+            broadcastService.broadcast(getClass(), "onError", object);
 
             if (e.isWarn()) {
                 log.warn(e.getMessage());
@@ -92,17 +106,17 @@ public class ExecutorBean {
                 log.error(e.getMessage(), e);
             }
 
-            executorCommand.incrementErrorCount();
-
             //next
             executeNext(executorCommand);
         } catch (Exception e){
+            executorCommand.incrementErrorCount();
+
+            executorCommand.setStatus(CRITICAL_ERROR);
             object.setErrorMessage(e.getMessage());
 
-            log.error("Критическая ошибка", e);
+            broadcastService.broadcast(getClass(), "onError", object);
 
-            executorCommand.incrementErrorCount();
-            executorCommand.setStatus(CRITICAL_ERROR);
+            log.error("Критическая ошибка", e);
         }finally {
             executorCommand.getProcessed().add(object);
             executorCommand.stopTask();
@@ -116,8 +130,13 @@ public class ExecutorBean {
 
         if (executorCommand.getQueue().isEmpty()){
             executorCommand.setStatus(COMPLETED);
+
+            broadcastService.broadcast(getClass(), "onComplete", executorCommand);
+
             return;
         }
+
+        broadcastService.broadcast(getClass(), "onBegin", executorCommand);
 
         log.info("Начат процесс {}, количество объектов: {}",
                 executorCommand.getTask().getControllerClass().getSimpleName(),
@@ -130,5 +149,4 @@ public class ExecutorBean {
             executeNext(executorCommand);
         }
     }
-
 }

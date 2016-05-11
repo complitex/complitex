@@ -81,11 +81,6 @@ public class SubsidyTarifLoadTaskBean extends AbstractTaskBean<RequestFile> {
     }
 
     @Override
-    public Class<?> getControllerClass() {
-        return SubsidyTarifLoadTaskBean.class;
-    }
-
-    @Override
     public Log.EVENT getEvent() {
         return Log.EVENT.CREATE;
     }

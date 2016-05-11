@@ -226,11 +226,6 @@ public class ActualPaymentBindTaskBean extends AbstractTaskBean<RequestFile> {
     }
 
     @Override
-    public Class getControllerClass() {
-        return ActualPaymentBindTaskBean.class;
-    }
-
-    @Override
     public EVENT getEvent() {
         return Log.EVENT.EDIT;
     }

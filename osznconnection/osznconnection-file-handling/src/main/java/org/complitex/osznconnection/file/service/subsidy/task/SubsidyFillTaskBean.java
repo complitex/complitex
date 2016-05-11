@@ -222,11 +222,6 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
     }
 
     @Override
-    public Class getControllerClass() {
-        return SubsidyFillTaskBean.class;
-    }
-
-    @Override
     public Log.EVENT getEvent() {
         return Log.EVENT.EDIT;
     }
