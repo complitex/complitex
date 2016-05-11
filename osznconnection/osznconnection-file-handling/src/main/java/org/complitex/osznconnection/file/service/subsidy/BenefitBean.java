@@ -6,10 +6,8 @@ import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.BenefitExample;
 import org.complitex.osznconnection.file.entity.subsidy.Benefit;
 import org.complitex.osznconnection.file.entity.subsidy.BenefitDBF;
-import org.complitex.osznconnection.file.entity.BenefitData;
 import org.complitex.osznconnection.file.entity.subsidy.Payment;
 import org.complitex.osznconnection.file.service.AbstractRequestBean;
-import org.complitex.osznconnection.file.service.privilege.PrivilegeCorrectionBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
@@ -33,9 +31,6 @@ public class BenefitBean extends AbstractRequestBean {
     public static final String MAPPING_NAMESPACE = BenefitBean.class.getName();
     @EJB
     private PaymentBean paymentBean;
-
-    @EJB
-    private PrivilegeCorrectionBean privilegeCorrectionBean;
 
     @EJB
     private RequestFileGroupBean requestFileGroupBean;
@@ -310,14 +305,7 @@ public class BenefitBean extends AbstractRequestBean {
                 }
 
                 if (suitable) {
-                    String osznBenefitCode = null;
-                    Long internalPrivilege = privilegeCorrectionBean.findInternalPrivilege(benefitDataItem.getCode(), billingId);
-                    if (internalPrivilege != null) {
-                        osznBenefitCode = privilegeCorrectionBean.findPrivilegeCode(internalPrivilege, osznId,
-                                benefit.getUserOrganizationId());
-                    }
-                    benefitDataItem.setPrivilegeId(internalPrivilege);
-                    benefitDataItem.setPrivilegeCode(osznBenefitCode);
+                    benefitDataItem.setPrivilegeCode(benefitDataItem.getCode());
                     benefitDataItem.setBillingId(billingId);
 
                     notConnectedBenefitData.add(benefitDataItem);

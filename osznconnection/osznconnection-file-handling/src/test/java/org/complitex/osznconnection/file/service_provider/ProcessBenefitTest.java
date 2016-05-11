@@ -12,17 +12,17 @@ public class ProcessBenefitTest extends AbstractTest {
     @Override
     protected ServiceProviderAdapter newAdapter() {
         return new ServiceProviderTestAdapter() {
-
-            @Override
-            protected Long findInternalPrivilege(String calculationCenterPrivilege, long calculationCenterId) {
-                System.out.println("calculationCenterPrivilege code : " + calculationCenterPrivilege);
-                return 1L;
-            }
-
-            @Override
-            protected String findOSZNPrivilegeCode(Long internalPrivilege, long osznId, long userOrganizationId) {
-                return "11";
-            }
+//
+//            @Override
+//            protected Long findInternalPrivilege(String calculationCenterPrivilege, long calculationCenterId) {
+//                System.out.println("calculationCenterPrivilege code : " + calculationCenterPrivilege);
+//                return 1L;
+//            }
+//
+//            @Override
+//            protected String findOSZNPrivilegeCode(Long internalPrivilege, long osznId, long userOrganizationId) {
+//                return "11";
+//            }
         };
     }
 

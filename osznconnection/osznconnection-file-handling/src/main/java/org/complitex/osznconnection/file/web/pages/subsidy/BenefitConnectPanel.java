@@ -253,16 +253,10 @@ public class BenefitConnectPanel extends Panel {
         long osznId = benefit.getOrganizationId();
         long calculationCenterId = benefitData.getBillingId();
         String osznBenefitCode = benefitData.getPrivilegeCode();
-        Long privilegeObjectId = benefitData.getPrivilegeId();
-        if (privilegeObjectId == null) {
-            valid = false;
-            RequestWarning warning = new RequestWarning(RequestFileType.BENEFIT, RequestWarningStatus.PRIVILEGE_OBJECT_NOT_FOUND);
-            warning.addParameter(new RequestWarningParameter(0, benefitData.getCode()));
-            warning.addParameter(new RequestWarningParameter(1, "organization", calculationCenterId));
-            error(webWarningRenderer.display(warning, getLocale()));
-        } else if (osznBenefitCode == null) {
+
+        if (osznBenefitCode == null) {
             RequestWarning warning = new RequestWarning(RequestFileType.BENEFIT, RequestWarningStatus.PRIVILEGE_CODE_NOT_FOUND);
-            warning.addParameter(new RequestWarningParameter(0, "privilege", privilegeObjectId));
+            warning.addParameter(new RequestWarningParameter(0, "privilege", osznBenefitCode));
             warning.addParameter(new RequestWarningParameter(1, "organization", osznId));
             error(webWarningRenderer.display(warning, getLocale()));
             valid = false;
@@ -273,7 +267,7 @@ public class BenefitConnectPanel extends Panel {
                 RequestWarning warning = new RequestWarning(RequestFileType.BENEFIT, RequestWarningStatus.PRIVILEGE_CODE_INVALID);
                 warning.addParameter(new RequestWarningParameter(0, osznBenefitCode));
                 warning.addParameter(new RequestWarningParameter(1, "organization", osznId));
-                warning.addParameter(new RequestWarningParameter(2, "privilege", privilegeObjectId));
+                warning.addParameter(new RequestWarningParameter(2, "privilege", osznBenefitCode));
                 error(webWarningRenderer.display(warning, getLocale()));
                 valid = false;
             }

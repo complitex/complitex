@@ -22,7 +22,6 @@ import org.complitex.osznconnection.file.service.exception.CanceledByUserExcepti
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
-import org.complitex.osznconnection.file.service.privilege.PrivilegeCorrectionBean;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.DBException;
@@ -79,9 +78,6 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
 
     @EJB
     private ServiceCorrectionBean serviceCorrectionBean;
-
-    @EJB
-    private PrivilegeCorrectionBean privilegeCorrectionBean;
 
     @EJB
     private PrivilegeStrategy privilegeStrategy;
