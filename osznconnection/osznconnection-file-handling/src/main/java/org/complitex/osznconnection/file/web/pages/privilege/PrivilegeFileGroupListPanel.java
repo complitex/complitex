@@ -13,6 +13,7 @@ import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
@@ -36,6 +37,8 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
     @EJB
     private PrivilegeFileGroupBean privilegeFileGroupBean;
 
+    @EJB
+    private RequestFileBean requestFileBean;
 
     public PrivilegeFileGroupListPanel(String id) {
         super(id, LOAD_PRIVILEGE_GROUP, BIND_PRIVILEGE_GROUP, FILL_PRIVILEGE_GROUP, SAVE_PRIVILEGE_GROUP);
@@ -142,7 +145,13 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
 
     @Override
     protected void delete(PrivilegeFileGroup object) {
-        privilegeFileGroupBean.delete(object);
+        if (object.getDwellingCharacteristicsRequestFile() != null) {
+            requestFileBean.delete(object.getDwellingCharacteristicsRequestFile());
+        }
+
+        if (object.getFacilityServiceTypeRequestFile() != null){
+            requestFileBean.delete(object.getFacilityServiceTypeRequestFile());
+        }
     }
 
     @Override
