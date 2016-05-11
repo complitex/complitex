@@ -670,7 +670,7 @@ CREATE TABLE `dwelling_characteristics` (
     `COD` INTEGER(4) COMMENT 'Код района',
     `CDPR` BIGINT(12) COMMENT 'Код ЄДРПОУ (ОГРН) организации',
     `NCARD` BIGINT(10) COMMENT 'Идентификатор льготника',
-    `IDCODE` BIGINT(10) COMMENT 'ИНН собственника жилья/льготника (ставят ИНН льготника)',
+    `IDCODE` VARCHAR(10) COMMENT 'ИНН собственника жилья/льготника (ставят ИНН льготника)',
     `PASP` VARCHAR(14) COMMENT 'Серия и номер паспорта собственника жилья/льготника (ставят паспорт льготника)',
     `FIO` VARCHAR(50) COMMENT 'ФИО собственника жилья/льготника (ставят ФИО льготника)',
     `IDPIL` VARCHAR(10) COMMENT 'ИНН льготника',

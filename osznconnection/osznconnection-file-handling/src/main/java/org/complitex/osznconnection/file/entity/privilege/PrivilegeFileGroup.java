@@ -36,6 +36,7 @@ public class PrivilegeFileGroup extends AbstractRequestFileGroup {
 
     @Override
     public boolean isProcessing() {
-        return getDwellingCharacteristicsRequestFile().isProcessing() || getFacilityServiceTypeRequestFile().isProcessing();
+        return (getDwellingCharacteristicsRequestFile() != null && getDwellingCharacteristicsRequestFile().isProcessing()) ||
+                (getFacilityServiceTypeRequestFile() != null) && getFacilityServiceTypeRequestFile().isProcessing();
     }
 }
