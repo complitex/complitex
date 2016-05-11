@@ -8,11 +8,6 @@ import org.complitex.osznconnection.file.entity.RequestFile;
  * inheaven on 04.04.2016.
  */
 public class PrivilegeFileGroup extends AbstractRequestFileGroup {
-    @Override
-    public String getFullName() {
-        return getDwellingCharacteristicsRequestFile().getFullName() + ", " + getFacilityServiceTypeRequestFile().getFullName();
-    }
-
     public RequestFile getDwellingCharacteristicsRequestFile(){
         return getFirstRequestFile();
     }
