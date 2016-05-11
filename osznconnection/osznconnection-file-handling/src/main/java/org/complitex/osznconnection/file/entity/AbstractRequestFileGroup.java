@@ -27,6 +27,12 @@ public abstract class AbstractRequestFileGroup extends AbstractRequestFile{
         this.secondRequestFile = secondRequestFile;
     }
 
+    @Override
+    public String getFullName() {
+        return (firstRequestFile != null ? firstRequestFile.getFullName() + ", "  : "")
+                + (secondRequestFile != null ? secondRequestFile.getFullName() : "");
+    }
+
     public String getEdrpou(){
         return firstRequestFile != null ? firstRequestFile.getEdrpou() : secondRequestFile != null ? secondRequestFile.getEdrpou() : null;
     }

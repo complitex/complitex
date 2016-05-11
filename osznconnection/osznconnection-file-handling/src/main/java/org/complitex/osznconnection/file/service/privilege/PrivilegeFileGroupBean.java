@@ -23,9 +23,4 @@ public class PrivilegeFileGroupBean extends AbstractBean{
     public Long getPrivilegeFileGroupsCount(RequestFileFilter filter){
         return sqlSession().selectOne("selectPrivilegeFilesGroupsCount", filter);
     }
-
-    public void delete(PrivilegeFileGroup privilegeFileGroup){
-        //todo delete
-    }
-
 }
