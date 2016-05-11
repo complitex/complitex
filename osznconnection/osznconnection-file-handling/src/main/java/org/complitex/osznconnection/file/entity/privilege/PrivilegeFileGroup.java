@@ -10,7 +10,8 @@ import org.complitex.osznconnection.file.entity.RequestFile;
 public class PrivilegeFileGroup extends AbstractRequestFileGroup {
     @Override
     public String getFullName() {
-        return getDwellingCharacteristicsRequestFile().getFullName() + ", " + getFacilityServiceTypeRequestFile().getFullName();
+        return (getDwellingCharacteristicsRequestFile() != null ? getDwellingCharacteristicsRequestFile().getFullName() + ", "  : "")
+                + (getFacilityServiceTypeRequestFile() != null ? getFacilityServiceTypeRequestFile().getFullName() : "");
     }
 
     public RequestFile getDwellingCharacteristicsRequestFile(){
