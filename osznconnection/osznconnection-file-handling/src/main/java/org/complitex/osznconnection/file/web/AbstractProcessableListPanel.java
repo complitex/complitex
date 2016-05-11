@@ -20,12 +20,15 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
+import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.AbstractFilter;
 import org.complitex.common.service.ModuleBean;
+import org.complitex.common.service.executor.AbstractTaskBean;
+import org.complitex.common.service.executor.ExecutorBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.StringUtil;
@@ -39,6 +42,7 @@ import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.organization.OrganizationPickerDialog;
+import org.complitex.common.wicket.BroadcastBehavior;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
@@ -68,7 +72,6 @@ import java.text.MessageFormat;
 import java.util.*;
 
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
-import static org.complitex.osznconnection.file.entity.RequestFileStatus.*;
 
 public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile, F extends AbstractFilter> extends Panel {
 
@@ -107,7 +110,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     private AjaxFeedbackPanel messages;
 
     private SelectManager selectManager;
-    private TimerManager timerManager;
 
     private IModel<F> model;
 
@@ -210,9 +212,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         for (Column column : columns) {
             form.add(column.head(dataProvider, dataView, form));
         }
-
-        //Отобразить сообщения
-        messagesManager.showMessages();
     }
 
     @Override
@@ -232,26 +231,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         add(new DataRowHoverBehavior());
 
         processingManager = new ProcessingManager(loadProcessType, bindProcessType, fillProcessType, saveProcessType);
-
-        messagesManager = new MessagesManager(this) {
-
-            @Override
-            public void showMessages(AjaxRequestTarget target) {
-                addMessages("load_process", target, loadProcessType, LOADED, LOAD_ERROR);
-                addMessages("bind_process", target, bindProcessType, BOUND, BIND_ERROR);
-                addMessages("fill_process", target, fillProcessType, FILLED, FILL_ERROR);
-                addMessages("save_process", target, saveProcessType, SAVED, SAVE_ERROR);
-                addMessages("export_process", target, getExportProcessType(), EXPORTED, EXPORT_ERROR);
-
-                addCompetedMessages("load_process", loadProcessType);
-                addCompetedMessages("bind_process", bindProcessType);
-                addCompetedMessages("fill_process", fillProcessType);
-                addCompetedMessages("save_process", saveProcessType);
-                addCompetedMessages("export_process", getExportProcessType());
-
-                AbstractProcessableListPanel.this.showMessages(target);
-            }
-        };
 
         messages = new AjaxFeedbackPanel("messages");
         add(messages);
@@ -398,9 +377,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         dataViewContainer.setOutputMarkupId(true);
         form.add(dataViewContainer);
 
-        timerManager = new TimerManager(AJAX_TIMER, messagesManager, processingManager, form, dataViewContainer);
-        timerManager.addUpdateComponent(messages);
-
         //Таблица файлов запросов
         dataView = new DataView<R>("objects", dataProvider) {
 
@@ -491,7 +467,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 };
                 item.add(history);
 
-                history.add(new ItemStatusLabel("status", processingManager, timerManager));
+                history.add(new ItemStatusLabel("status", processingManager));
 
                 //Дополнительные поля
                 for (Column column : columns) {
@@ -533,8 +509,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         buttons.setOutputMarkupId(true);
         form.add(buttons);
 
-        timerManager.addUpdateComponent(buttons);
-
         //Загрузить
         buttons.add(new AjaxLink<Void>("load") {
 
@@ -550,8 +524,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             public void onClick(AjaxRequestTarget target) {
                 bind(selectManager.getSelectedFileIds(), buildCommandParameters());
-
-                startTimer(target, bindProcessType);
             }
         });
 
@@ -561,8 +533,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             public void onClick(AjaxRequestTarget target) {
                 fill(selectManager.getSelectedFileIds(), buildCommandParameters());
-
-                startTimer(target, fillProcessType);
             }
         });
 
@@ -572,8 +542,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             public void onClick(AjaxRequestTarget target) {
                 save(selectManager.getSelectedFileIds(), buildCommandParameters());
-
-                startTimer(target, saveProcessType);
             }
         });
 
@@ -705,8 +673,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             protected void load(Long userOrganizationId, Long osznId, DateParameter dateParameter, AjaxRequestTarget target) {
                 AbstractProcessableListPanel.this.load(userOrganizationId, osznId, dateParameter);
-
-                startTimer(target, loadProcessType);
             }
 
             @Override
@@ -718,8 +684,44 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         add(requestFileHistoryPanel = new RequestFileHistoryPanel("history_panel"));
 
-        //Запуск таймера
-        timerManager.startTimer();
+        //Messages
+        add(new BroadcastBehavior(ExecutorBean.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                if (key == null){
+                    return;
+                }
+
+
+
+                switch (key){
+                    case "onBegin":
+//                        getSession().info();
+                        break;
+                    case "onComplete":
+                        break;
+                    case "onCancel":
+
+                        break;
+
+                    case "onSuccess":
+                        break;
+                    case "onSkip":
+                        break;
+                    case "onError":
+                        break;
+                }
+
+
+            }
+        });
+
+        add(new BroadcastBehavior(AbstractTaskBean.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+
+            }
+        });
     }
 
     private Boolean getSessionParameter(Enum<?> key) {
@@ -753,13 +755,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
     }
 
-    protected void startTimer(AjaxRequestTarget target, ProcessType processType){
-        messagesManager.resetCompletedStatus(processType);
-
-        selectManager.clearSelection();
-        timerManager.addTimer();
-        target.add(form);
-    }
 
     protected WebMarkupContainer getDataViewContainer() {
         return dataViewContainer;
