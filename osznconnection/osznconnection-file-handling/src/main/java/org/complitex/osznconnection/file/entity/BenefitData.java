@@ -24,7 +24,7 @@ public class BenefitData implements Serializable {
     private Date dateOut;
 
     private Long billingId;
-    private Long privilegeId;
+
     private String privilegeCode;
 
     public String getFirstName() {
@@ -107,14 +107,6 @@ public class BenefitData implements Serializable {
         this.privilegeCode = osznBenefitCode;
     }
 
-    public Long getPrivilegeId() {
-        return privilegeId;
-    }
-
-    public void setPrivilegeId(Long privilegeId) {
-        this.privilegeId = privilegeId;
-    }
-
     public Long getBillingId() {
         return billingId;
     }
@@ -165,7 +157,6 @@ public class BenefitData implements Serializable {
                 ", code='" + code + '\'' +
                 ", userCount='" + userCount + '\'' +
                 ", billingId=" + billingId +
-                ", privilegeId=" + privilegeId +
                 ", privilegeCode='" + privilegeCode + '\'' +
                 '}';
     }

@@ -169,12 +169,15 @@ public enum RequestStatus implements IFixedIdType {
     }
     
     public static final Set<RequestStatus> UNPROCESSED_SET_STATUSES =
-            Sets.immutableEnumSet(ImmutableList.<RequestStatus>builder().addAll(UNBOUND_STATUSES).
-            add(ACCOUNT_NUMBER_RESOLVED).
-            add(SUBSIDY_TARIF_CODE_NOT_FOUND).
-            add(BENEFIT_OWNER_NOT_ASSOCIATED).
-            add(BENEFIT_NOT_FOUND).
-            add(PROCESSING_INVALID_FORMAT).build());
+            Sets.immutableEnumSet(ImmutableList.<RequestStatus>builder().addAll(UNBOUND_STATUSES)
+                    .add(ACCOUNT_NUMBER_RESOLVED)
+                    .add(SUBSIDY_TARIF_CODE_NOT_FOUND)
+                    .add(BENEFIT_OWNER_NOT_ASSOCIATED)
+                    .add(BENEFIT_NOT_FOUND)
+                    .add(PROCESSING_INVALID_FORMAT)
+                    .add(PROCESSING_INVALID_FORMAT)
+                    .add(OWNERSHIP_NOT_FOUND)
+                    .build());
 
 
     public boolean isNotIn(RequestStatus... statuses){
