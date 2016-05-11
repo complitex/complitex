@@ -621,6 +621,8 @@ public class ServiceProviderAdapter extends AbstractBean {
                         + "and calculation center id: {}", calcCenterOwnershipCode, billingId);
 
                 for (Benefit benefit : benefits) {
+                    benefit.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
+
                     RequestWarning warning = new RequestWarning(benefit.getId(), RequestFileType.BENEFIT,
                             RequestWarningStatus.OWNERSHIP_OBJECT_NOT_FOUND);
                     warning.addParameter(new RequestWarningParameter(0, calcCenterOwnershipCode));
@@ -639,6 +641,8 @@ public class ServiceProviderAdapter extends AbstractBean {
                             internalOwnershipId, osznId, payment.getUserOrganizationId());
 
                     for (Benefit benefit : benefits) {
+                        benefit.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
+
                         RequestWarning warning = new RequestWarning(benefit.getId(), RequestFileType.BENEFIT,
                                 RequestWarningStatus.OWNERSHIP_CODE_NOT_FOUND);
                         warning.addParameter(new RequestWarningParameter(0, "ownership", internalOwnershipId));
@@ -647,6 +651,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
                         logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
                                 webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
+
                     }
                 } else {
                     Integer ownershipCodeAsInt = null;
@@ -657,6 +662,8 @@ public class ServiceProviderAdapter extends AbstractBean {
                                 osznOwnershipCode, osznId, internalOwnershipId);
 
                         for (Benefit benefit : benefits) {
+                            benefit.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
+
                             RequestWarning warning = new RequestWarning(benefit.getId(), RequestFileType.BENEFIT,
                                     RequestWarningStatus.OWNERSHIP_CODE_INVALID);
                             warning.addParameter(new RequestWarningParameter(0, osznOwnershipCode));
