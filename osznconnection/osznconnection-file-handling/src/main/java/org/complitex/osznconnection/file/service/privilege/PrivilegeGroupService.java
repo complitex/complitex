@@ -10,6 +10,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * inheaven on 18.04.2016.
@@ -36,14 +37,14 @@ public class PrivilegeGroupService {
         facilityServiceTypeList.forEach(f -> {
             PrivilegeGroup g = privilegeGroups.parallelStream()
                     .filter(p -> p.getDwellingCharacteristics() != null)
-                    .filter(p -> p.getDwellingCharacteristics().getInn().equals(f.getInn()))
-                    .filter(p -> p.getDwellingCharacteristics().getPassport().equals(f.getPassport()))
-                    .filter(p -> p.getDwellingCharacteristics().getFio().equals(f.getFio()))
-                    .filter(p -> p.getDwellingCharacteristics().getCity().equals(f.getCity()))
-                    .filter(p -> p.getDwellingCharacteristics().getStreetType().equals(f.getStreetType()))
-                    .filter(p -> p.getDwellingCharacteristics().getStreet().equals(f.getStreet()))
-                    .filter(p -> p.getDwellingCharacteristics().getBuildingNumber().equals(f.getBuildingNumber()))
-                    .filter(p -> p.getDwellingCharacteristics().getBuildingCorp().equals(f.getBuildingCorp()))
+                    .filter(p -> Objects.equals(p.getDwellingCharacteristics().getInn(), f.getInn()))
+                    .filter(p -> Objects.equals(p.getDwellingCharacteristics().getPassport(), f.getPassport()))
+                    .filter(p -> Objects.equals(p.getDwellingCharacteristics().getFio(), f.getFio()))
+                    .filter(p -> Objects.equals(p.getDwellingCharacteristics().getCity(), f.getCity()))
+                    .filter(p -> Objects.equals(p.getDwellingCharacteristics().getStreetType(), f.getStreetType()))
+                    .filter(p -> Objects.equals(p.getDwellingCharacteristics().getStreet(), f.getStreet()))
+                    .filter(p -> Objects.equals(p.getDwellingCharacteristics().getBuildingNumber(), f.getBuildingNumber()))
+                    .filter(p -> Objects.equals(p.getDwellingCharacteristics().getBuildingCorp(), f.getBuildingCorp()))
                     .findAny()
                     .orElse(null);
 
