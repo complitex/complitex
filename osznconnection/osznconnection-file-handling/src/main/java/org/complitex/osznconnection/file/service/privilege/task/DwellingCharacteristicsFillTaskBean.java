@@ -148,6 +148,8 @@ public class DwellingCharacteristicsFillTaskBean extends AbstractTaskBean<Reques
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLZAG, data.getReducedArea());
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLOPAL, data.getHeatingArea());
 
+            dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
+
 //            String ownership = null;
 //            Long ownershipId = ownershipCorrectionBean.findInternalOwnership(data.getOwnership(), dwellingCharacteristics.getUserOrganizationId());
 //

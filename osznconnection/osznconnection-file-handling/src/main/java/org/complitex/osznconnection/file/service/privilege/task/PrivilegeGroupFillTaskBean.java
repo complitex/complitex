@@ -238,22 +238,24 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLZAG, d.getReducedArea());
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLOPAL, d.getHeatingArea());
 
-            String ownership = null;
-            Long ownershipId = ownershipCorrectionBean.findInternalOwnership(d.getOwnership(), dwellingCharacteristics.getUserOrganizationId());
+            dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
 
-            if (ownershipId != null){
-                ownership = ownershipCorrectionBean.findOwnershipCode(ownershipId, dwellingCharacteristics.getOrganizationId(),
-                        dwellingCharacteristics.getUserOrganizationId());
-
-                dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
-            }
-
-            if (ownership == null){
-                dwellingCharacteristics.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
-                dwellingCharacteristicsBean.update(dwellingCharacteristics);
-
-                log.warn("Форма собственности не найдена {}", d.getOwnership());
-            }
+//            String ownership = null;
+//            Long ownershipId = ownershipCorrectionBean.findInternalOwnership(d.getOwnership(), dwellingCharacteristics.getUserOrganizationId());
+//
+//            if (ownershipId != null){
+//                ownership = ownershipCorrectionBean.findOwnershipCode(ownershipId, dwellingCharacteristics.getOrganizationId(),
+//                        dwellingCharacteristics.getUserOrganizationId());
+//
+//                dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
+//            }
+//
+//            if (ownership == null){
+//                dwellingCharacteristics.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
+//                dwellingCharacteristicsBean.update(dwellingCharacteristics);
+//
+//                log.warn("Форма собственности не найдена {}", d.getOwnership());
+//            }
 
 //            dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.VL, ownership);
 
