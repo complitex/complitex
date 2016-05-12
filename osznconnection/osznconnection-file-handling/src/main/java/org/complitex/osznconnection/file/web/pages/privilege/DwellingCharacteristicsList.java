@@ -39,6 +39,7 @@ import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.privilege.task.DwellingCharacteristicsBindTaskBean;
+import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceTypeBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -90,6 +91,9 @@ public final class DwellingCharacteristicsList extends TemplatePage {
     @EJB
     private DwellingCharacteristicsBindTaskBean dwellingCharacteristicsBindTaskBean;
 
+    @EJB
+    private FacilityServiceTypeBindTaskBean facilityServiceTypeBindTaskBean;
+
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
 
@@ -98,6 +102,9 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
     @EJB
     private PrivilegeFileGroupBean privilegeFileGroupBean;
+
+    @EJB
+    private PrivilegeGroupService privilegeGroupService;
 
     private IModel<PrivilegeExample> example;
 
@@ -365,17 +372,30 @@ public final class DwellingCharacteristicsList extends TemplatePage {
             protected void onSubmit(AjaxRequestTarget target, Form form) {
                 Collection<DwellingCharacteristics> list = checkGroup.getModelObject();
 
-                list.forEach(request -> {
+                list.forEach(dwellingCharacteristics -> {
                     //noinspection Duplicates
                     try {
-                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, request);
+                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, dwellingCharacteristics);
 
-                        if (request.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
-                            info(getStringFormat("info_bound", request.getInn(), request.getFio()));
+                        if (dwellingCharacteristics.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
+                            info(getStringFormat("info_bound", dwellingCharacteristics.getInn(), dwellingCharacteristics.getFio()));
                         }else {
-                            error(getStringFormat("error_bound", request.getFio(),
-                                    StatusRenderUtil.displayStatus(request.getStatus(), getLocale())));
+                            error(getStringFormat("error_bound", dwellingCharacteristics.getFio(),
+                                    StatusRenderUtil.displayStatus(dwellingCharacteristics.getStatus(), getLocale())));
+                        }
 
+                        PrivilegeGroup privilegeGroup = privilegeGroupService.getPrivilegeGroup(
+                                dwellingCharacteristics.getRequestFileId(),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDPIL),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.PASPPIL),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.FIO),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.CDUL),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.HOUSE),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.BUILD),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT));
+
+                        if (privilegeGroup.getFacilityServiceType() != null){
+                            facilityServiceTypeBindTaskBean.bind(serviceProviderCode, privilegeGroup.getFacilityServiceType());
                         }
                     } catch (Exception e) {
                         error(ExceptionUtil.getCauseMessage(e, true));
