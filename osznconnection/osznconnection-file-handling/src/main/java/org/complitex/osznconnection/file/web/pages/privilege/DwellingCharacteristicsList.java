@@ -33,16 +33,11 @@ import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
-import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
-import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
-import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
-import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
+import org.complitex.osznconnection.file.entity.privilege.*;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
-import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
-import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
-import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
+import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.privilege.task.DwellingCharacteristicsBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsStatusDetailRenderer;
@@ -101,9 +96,14 @@ public final class DwellingCharacteristicsList extends TemplatePage {
     @EJB
     private FacilityReferenceBookBean facilityReferenceBookBean;
 
-    private IModel<PrivilegeExample> example;
-    private long fileId;
+    @EJB
+    private PrivilegeFileGroupBean privilegeFileGroupBean;
 
+    private IModel<PrivilegeExample> example;
+
+    private Long fileId;
+
+    private IModel<PrivilegeFileGroup> privilegeFileGroupModel;
 
     public DwellingCharacteristicsList(PageParameters params) {
         this.fileId = params.get("request_file_id").toLong();
@@ -122,6 +122,9 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
     private void init() {
         RequestFile requestFile = requestFileBean.getRequestFile(fileId);
+
+        privilegeFileGroupModel = Model.of(privilegeFileGroupBean.getPrivilegeFileGroup(requestFile.getGroupId()));
+
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
@@ -252,8 +255,12 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 new AddressCorrectionDialog<DwellingCharacteristics>("addressCorrectionPanel") {
                     @Override
                     protected void onCorrect(AjaxRequestTarget target, IModel<DwellingCharacteristics> model, AddressEntity addressEntity) {
-                        dwellingCharacteristicsBean.markCorrected(model.getObject(), addressEntity);
-                        facilityServiceTypeBean.markCorrected(model.getObject(), addressEntity);
+                        dwellingCharacteristicsBean.markCorrected(model.getObject().getRequestFileId(), model.getObject(), addressEntity);
+
+                        PrivilegeFileGroup group = privilegeFileGroupModel.getObject();
+                        if (group != null && group.getFacilityServiceTypeRequestFile() != null){
+                            facilityServiceTypeBean.markCorrected(group.getFacilityServiceTypeRequestFile().getId(), model.getObject(), addressEntity);
+                        }
 
                         target.add(content, statusDetailPanel);
                         dataRowHoverBehavior.deactivateDataRow(target);

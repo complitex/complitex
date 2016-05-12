@@ -1,9 +1,11 @@
 package org.complitex.osznconnection.file.entity.privilege;
 
+import java.io.Serializable;
+
 /**
  * inheaven on 18.04.2016.
  */
-public class PrivilegeGroup {
+public class PrivilegeGroup implements Serializable{
     private DwellingCharacteristics dwellingCharacteristics;
     private FacilityServiceType facilityServiceType;
 
