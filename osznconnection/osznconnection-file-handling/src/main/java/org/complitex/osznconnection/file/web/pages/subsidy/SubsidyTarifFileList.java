@@ -96,7 +96,7 @@ public class SubsidyTarifFileList extends TemplatePage {
         add(messages);
 
         //Фильтр модель
-        final RequestFileFilter filter = (RequestFileFilter) getFilterObject(newFilter());
+        final RequestFileFilter filter = getFilterObject(newFilter());
         final IModel<RequestFileFilter> model = new CompoundPropertyModel<RequestFileFilter>(filter);
 
         //Фильтр форма
