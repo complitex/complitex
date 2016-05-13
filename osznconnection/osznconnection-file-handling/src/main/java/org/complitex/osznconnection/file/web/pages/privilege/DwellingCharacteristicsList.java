@@ -33,17 +33,13 @@ import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
-import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
-import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
-import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
-import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
+import org.complitex.osznconnection.file.entity.privilege.*;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
-import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
-import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
-import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
+import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.privilege.task.DwellingCharacteristicsBindTaskBean;
+import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceTypeBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -95,15 +91,26 @@ public final class DwellingCharacteristicsList extends TemplatePage {
     @EJB
     private DwellingCharacteristicsBindTaskBean dwellingCharacteristicsBindTaskBean;
 
+    @EJB
+    private FacilityServiceTypeBindTaskBean facilityServiceTypeBindTaskBean;
+
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
 
     @EJB
     private FacilityReferenceBookBean facilityReferenceBookBean;
 
-    private IModel<PrivilegeExample> example;
-    private long fileId;
+    @EJB
+    private PrivilegeFileGroupBean privilegeFileGroupBean;
 
+    @EJB
+    private PrivilegeGroupService privilegeGroupService;
+
+    private IModel<PrivilegeExample> example;
+
+    private Long fileId;
+
+    private IModel<PrivilegeFileGroup> privilegeFileGroupModel;
 
     public DwellingCharacteristicsList(PageParameters params) {
         this.fileId = params.get("request_file_id").toLong();
@@ -122,6 +129,9 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
     private void init() {
         RequestFile requestFile = requestFileBean.getRequestFile(fileId);
+
+        privilegeFileGroupModel = Model.of(privilegeFileGroupBean.getPrivilegeFileGroup(requestFile.getGroupId()));
+
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
@@ -252,14 +262,16 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 new AddressCorrectionDialog<DwellingCharacteristics>("addressCorrectionPanel") {
                     @Override
                     protected void onCorrect(AjaxRequestTarget target, IModel<DwellingCharacteristics> model, AddressEntity addressEntity) {
-                        dwellingCharacteristicsBean.markCorrected(model.getObject(), addressEntity);
-                        facilityServiceTypeBean.markCorrected(model.getObject(), addressEntity);
+                        dwellingCharacteristicsBean.markCorrected(model.getObject().getRequestFileId(), model.getObject(), addressEntity);
+
+                        PrivilegeFileGroup group = privilegeFileGroupModel.getObject();
+                        if (group != null && group.getFacilityServiceTypeRequestFile() != null){
+                            facilityServiceTypeBean.markCorrected(group.getFacilityServiceTypeRequestFile().getId(), model.getObject(), addressEntity);
+                        }
 
                         target.add(content, statusDetailPanel);
                         dataRowHoverBehavior.deactivateDataRow(target);
                         statusDetailPanel.rebuild();
-
-                        clearExample();
                     }
                 };
         add(addressCorrectionDialog);
@@ -360,17 +372,30 @@ public final class DwellingCharacteristicsList extends TemplatePage {
             protected void onSubmit(AjaxRequestTarget target, Form form) {
                 Collection<DwellingCharacteristics> list = checkGroup.getModelObject();
 
-                list.forEach(request -> {
+                list.forEach(dwellingCharacteristics -> {
                     //noinspection Duplicates
                     try {
-                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, request);
+                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, dwellingCharacteristics);
 
-                        if (request.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
-                            info(getStringFormat("info_bound", request.getInn(), request.getFio()));
+                        if (dwellingCharacteristics.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
+                            info(getStringFormat("info_bound", dwellingCharacteristics.getInn(), dwellingCharacteristics.getFio()));
                         }else {
-                            error(getStringFormat("error_bound", request.getFio(),
-                                    StatusRenderUtil.displayStatus(request.getStatus(), getLocale())));
+                            error(getStringFormat("error_bound", dwellingCharacteristics.getFio(),
+                                    StatusRenderUtil.displayStatus(dwellingCharacteristics.getStatus(), getLocale())));
+                        }
 
+                        PrivilegeGroup privilegeGroup = privilegeGroupService.getPrivilegeGroup(
+                                dwellingCharacteristics.getRequestFileId(),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDPIL),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.PASPPIL),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.FIO),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.CDUL),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.HOUSE),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.BUILD),
+                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT));
+
+                        if (privilegeGroup.getFacilityServiceType() != null){
+                            facilityServiceTypeBindTaskBean.bind(serviceProviderCode, privilegeGroup.getFacilityServiceType());
                         }
                     } catch (Exception e) {
                         error(ExceptionUtil.getCauseMessage(e, true));

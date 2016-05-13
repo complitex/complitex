@@ -1,5 +1,6 @@
 package org.complitex.correction.web.service;
 
+import com.google.common.collect.Lists;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -12,10 +13,13 @@ import org.complitex.common.web.component.domain.DomainSelectLabel;
 import org.complitex.correction.entity.ServiceCorrection;
 import org.complitex.correction.service.ServiceCorrectionBean;
 import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
+import org.complitex.template.web.component.toolbar.DeleteItemButton;
+import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
 
 import javax.ejb.EJB;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -27,8 +31,10 @@ public class ServiceCorrectionEdit extends FormTemplatePage {
     @EJB
     private ServiceCorrectionBean serviceCorrectionBean;
 
+    private AbstractCorrectionEditPanel correctionEditPanel;
+
     public ServiceCorrectionEdit(PageParameters params) {
-        add(new AbstractCorrectionEditPanel<ServiceCorrection>("service_correction_edit_panel",
+        add(correctionEditPanel = new AbstractCorrectionEditPanel<ServiceCorrection>("service_correction_edit_panel",
                 params.get("correction_id").toOptionalLong()) {
 
             @Override
@@ -86,6 +92,24 @@ public class ServiceCorrectionEdit extends FormTemplatePage {
                 return new ResourceModel("title");
             }
         });
+    }
+
+    @Override
+    protected List<ToolbarButton> getToolbarButtons(String id) {
+        List<ToolbarButton> toolbar = Lists.newArrayList();
+        toolbar.add(new DeleteItemButton(id) {
+
+            @Override
+            protected void onClick() {
+                correctionEditPanel.executeDeletion();
+            }
+
+            @Override
+            public boolean isVisible() {
+                return !correctionEditPanel.isNew();
+            }
+        });
+        return toolbar;
     }
 
 }

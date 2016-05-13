@@ -32,14 +32,16 @@ import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
-import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
-import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF;
+import org.complitex.osznconnection.file.entity.privilege.*;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean.OrderBy;
+import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBean;
+import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;
+import org.complitex.osznconnection.file.service.privilege.task.DwellingCharacteristicsBindTaskBean;
 import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceTypeBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeStatusDetailRenderer;
@@ -95,8 +97,19 @@ public final class FacilityServiceTypeList extends TemplatePage {
     @EJB
     private FacilityServiceTypeBindTaskBean facilityServiceTypeBindTaskBean;
 
+    @EJB
+    private DwellingCharacteristicsBindTaskBean dwellingCharacteristicsBindTaskBean;
+
+    @EJB
+    private PrivilegeFileGroupBean privilegeFileGroupBean;
+
+    @EJB
+    private PrivilegeGroupService privilegeGroupService;
+
     private IModel<PrivilegeExample> example;
     private long fileId;
+
+    private IModel<PrivilegeFileGroup> privilegeFileGroupModel;
 
 
     public FacilityServiceTypeList(PageParameters params) {
@@ -117,6 +130,9 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
     private void init() {
         RequestFile requestFile = requestFileBean.getRequestFile(fileId);
+
+        privilegeFileGroupModel = Model.of(privilegeFileGroupBean.getPrivilegeFileGroup(requestFile.getGroupId()));
+
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
@@ -219,8 +235,12 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
                     @Override
                     protected void onCorrect(AjaxRequestTarget target, IModel<FacilityServiceType> model, AddressEntity addressEntity) {
-                        facilityServiceTypeBean.markCorrected(model.getObject(), addressEntity);
-                        dwellingCharacteristicsBean.markCorrected(model.getObject(), addressEntity);
+                        facilityServiceTypeBean.markCorrected(model.getObject().getRequestFileId(), model.getObject(), addressEntity);
+
+                        PrivilegeFileGroup group = privilegeFileGroupModel.getObject();
+                        if (group != null && group.getDwellingCharacteristicsRequestFile() != null){
+                            dwellingCharacteristicsBean.markCorrected(group.getDwellingCharacteristicsRequestFile().getId(), model.getObject(), addressEntity);
+                        }
 
                         target.add(content, statusDetailPanel);
                         dataRowHoverBehavior.deactivateDataRow(target);
@@ -327,16 +347,29 @@ public final class FacilityServiceTypeList extends TemplatePage {
                 Collection<FacilityServiceType> list = checkGroup.getModelObject();
 
                 //noinspection Duplicates
-                list.forEach(request -> {
+                list.forEach(facilityServiceType -> {
                     try {
-                        facilityServiceTypeBindTaskBean.bind(serviceProviderCode, request);
+                        facilityServiceTypeBindTaskBean.bind(serviceProviderCode, facilityServiceType);
 
-                        if (request.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
-                            info(getStringFormat("info_bound", request.getInn(), request.getFio()));
+                        if (facilityServiceType.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
+                            info(getStringFormat("info_bound", facilityServiceType.getInn(), facilityServiceType.getFio()));
                         }else {
-                            error(getStringFormat("error_bound", request.getFio(),
-                                    StatusRenderUtil.displayStatus(request.getStatus(), getLocale())));
+                            error(getStringFormat("error_bound", facilityServiceType.getFio(),
+                                    StatusRenderUtil.displayStatus(facilityServiceType.getStatus(), getLocale())));
+                        }
 
+                        PrivilegeGroup privilegeGroup = privilegeGroupService.getPrivilegeGroup(
+                                facilityServiceType.getRequestFileId(),
+                                facilityServiceType.getStringField(FacilityServiceTypeDBF.IDPIL),
+                                facilityServiceType.getStringField(FacilityServiceTypeDBF.PASPPIL),
+                                facilityServiceType.getStringField(FacilityServiceTypeDBF.FIO),
+                                facilityServiceType.getStringField(FacilityServiceTypeDBF.CDUL),
+                                facilityServiceType.getStringField(FacilityServiceTypeDBF.HOUSE),
+                                facilityServiceType.getStringField(FacilityServiceTypeDBF.BUILD),
+                                facilityServiceType.getStringField(FacilityServiceTypeDBF.APT));
+
+                        if (privilegeGroup.getDwellingCharacteristics() != null){
+                            dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, privilegeGroup.getDwellingCharacteristics());
                         }
                     } catch (Exception e) {
                         error(ExceptionUtil.getCauseMessage(e, true));

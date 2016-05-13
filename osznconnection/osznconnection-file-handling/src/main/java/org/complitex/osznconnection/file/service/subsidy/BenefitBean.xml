@@ -177,7 +177,7 @@
                 TO_CYRILLIC(p.`CORP_NUM`) building_corp,
                 TO_CYRILLIC(p.`FLAT`) apartment,
 
-                bf.`organization_id`, b.`account_number`, b.`IND_COD`, b.`PSP_SER`, b.`PSP_NUM`, b.`PRIV_CAT`
+                bf.`organization_id`, bf.`user_organization_id`, b.`account_number`, b.`IND_COD`, b.`PSP_SER`, b.`PSP_NUM`, b.`PRIV_CAT`
             FROM
                 `benefit` b
                     JOIN `request_file` bf ON b.`request_file_id` = bf.`id`

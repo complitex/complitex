@@ -1,5 +1,7 @@
 package org.complitex.osznconnection.file.service.privilege;
 
+import org.apache.commons.collections4.map.HashedMap;
+import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
@@ -10,6 +12,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * inheaven on 18.04.2016.
@@ -26,35 +29,33 @@ public class PrivilegeGroupService {
     private RequestFileBean requestFileBean;
 
     public List<PrivilegeGroup> getPrivilegeGroups(Long groupId){
-        List<PrivilegeGroup> privilegeGroups = new ArrayList<>();
-
         List<DwellingCharacteristics> dwellingCharacteristicsList = dwellingCharacteristicsBean.getDwellingCharacteristicsListByGroup(groupId);
         List<FacilityServiceType> facilityServiceTypeList = facilityServiceTypeBean.getFacilityServiceTypeListByGroup(groupId);
 
-        dwellingCharacteristicsList.forEach(d -> privilegeGroups.add(new PrivilegeGroup(d)));
+        Map<String, PrivilegeGroup> privilegeGroupMap = new HashedMap<>(dwellingCharacteristicsList.size());
 
-        facilityServiceTypeList.forEach(f -> {
-            PrivilegeGroup g = privilegeGroups.parallelStream()
-                    .filter(p -> p.getDwellingCharacteristics() != null)
-                    .filter(p -> p.getDwellingCharacteristics().getInn().equals(f.getInn()))
-                    .filter(p -> p.getDwellingCharacteristics().getPassport().equals(f.getPassport()))
-                    .filter(p -> p.getDwellingCharacteristics().getFio().equals(f.getFio()))
-                    .filter(p -> p.getDwellingCharacteristics().getCity().equals(f.getCity()))
-                    .filter(p -> p.getDwellingCharacteristics().getStreetType().equals(f.getStreetType()))
-                    .filter(p -> p.getDwellingCharacteristics().getStreet().equals(f.getStreet()))
-                    .filter(p -> p.getDwellingCharacteristics().getBuildingNumber().equals(f.getBuildingNumber()))
-                    .filter(p -> p.getDwellingCharacteristics().getBuildingCorp().equals(f.getBuildingCorp()))
-                    .findAny()
-                    .orElse(null);
+        for (DwellingCharacteristics dwellingCharacteristics : dwellingCharacteristicsList){
+            privilegeGroupMap.put(getPrivilegeKey(dwellingCharacteristics), new PrivilegeGroup(dwellingCharacteristics));
+        }
 
-            if (g != null){
-                g.setFacilityServiceType(f);
+        for (FacilityServiceType facilityServiceType : facilityServiceTypeList){
+            String key = getPrivilegeKey(facilityServiceType);
+
+            PrivilegeGroup privilegeGroup = privilegeGroupMap.get(key);
+
+            if (privilegeGroup != null){
+                privilegeGroup.setFacilityServiceType(facilityServiceType);
             }else{
-                privilegeGroups.add(new PrivilegeGroup(f));
+                privilegeGroupMap.put(key, new PrivilegeGroup(facilityServiceType));
             }
-        });
+        }
 
-        return privilegeGroups;
+        return new ArrayList<>(privilegeGroupMap.values());
+    }
+
+    private String getPrivilegeKey(AbstractAccountRequest request){
+        return request.getInn() + request.getPassport() + request.getFio() + request.getCity() + request.getStreetType() +
+                request.getStreet() + request.getBuildingNumber() + request.getBuildingCorp();
     }
 
     public PrivilegeGroup getPrivilegeGroup(Long requestFileId, String inn, String passport, String fio, String streetCode,

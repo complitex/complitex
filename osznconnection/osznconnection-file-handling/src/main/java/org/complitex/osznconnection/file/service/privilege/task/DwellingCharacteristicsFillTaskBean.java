@@ -156,24 +156,26 @@ public class DwellingCharacteristicsFillTaskBean extends AbstractTaskBean<Reques
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLZAG, data.getReducedArea());
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLOPAL, data.getHeatingArea());
 
-            String ownership = null;
-            Long ownershipId = ownershipCorrectionBean.findInternalOwnership(data.getOwnership(), dwellingCharacteristics.getUserOrganizationId());
+            dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
 
-            if (ownershipId != null){
-                ownership = ownershipCorrectionBean.findOwnershipCode(ownershipId, dwellingCharacteristics.getOrganizationId(),
-                        dwellingCharacteristics.getUserOrganizationId());
-
-                dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
-            }
-
-            if (ownership == null){
-                dwellingCharacteristics.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
-                dwellingCharacteristicsBean.update(dwellingCharacteristics);
-
-                log.warn("Форма собственности не найдена {}", data.getOwnership());
-
-                return;
-            }
+//            String ownership = null;
+//            Long ownershipId = ownershipCorrectionBean.findInternalOwnership(data.getOwnership(), dwellingCharacteristics.getUserOrganizationId());
+//
+//            if (ownershipId != null){
+//                ownership = ownershipCorrectionBean.findOwnershipCode(ownershipId, dwellingCharacteristics.getOrganizationId(),
+//                        dwellingCharacteristics.getUserOrganizationId());
+//
+//                dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
+//            }
+//
+//            if (ownership == null){
+//                dwellingCharacteristics.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
+//                dwellingCharacteristicsBean.update(dwellingCharacteristics);
+//
+//                log.warn("Форма собственности не найдена {}", data.getOwnership());
+//
+//                return;
+//            }
 
 //            dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.VL, ownership);
         }else if(cursor.getData().size() > 1){

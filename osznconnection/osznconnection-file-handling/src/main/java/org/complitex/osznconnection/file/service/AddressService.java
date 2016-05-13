@@ -170,7 +170,7 @@ public class AddressService extends AbstractBean {
 
         //Связывание улицы
         if (request.getStreet() == null || request.getStreet().isEmpty()){
-            request.setStatus(RequestStatus.STREET_NOT_FOUND);
+            request.setStatus(RequestStatus.STREET_UNRESOLVED_LOCALLY);
 
             return;
         }

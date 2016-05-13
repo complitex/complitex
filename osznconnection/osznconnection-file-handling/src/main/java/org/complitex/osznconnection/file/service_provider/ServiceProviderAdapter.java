@@ -912,11 +912,13 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         Map<String, BenefitData> orderFams = newHashMap();
         for (BenefitData data : benefitData) {
-            String orderFam = data.getOrderFamily();
-            BenefitData dublicate = orderFams.get(orderFam);
-            if (dublicate != null) {
+            String orderFamBudgedKey = data.getOrderFamily() + data.getBudget();
+
+            BenefitData duplicate = orderFams.get(orderFamBudgedKey);
+
+            if (duplicate != null) {
                 log.error(method + ". Order fam is not unique. At least two benefit data have the same order fam. First: {}, second {}. "
-                        + "Account number: {}, dat1: {}, calculation center: {}", data, dublicate, accountNumber, dat1, dataSource);
+                        + "Account number: {}, dat1: {}, calculation center: {}", data, duplicate, accountNumber, dat1, dataSource);
                 for (Benefit benefit : benefits) {
                     benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
@@ -925,7 +927,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                 }
                 return false;
             } else {
-                orderFams.put(orderFam, data);
+                orderFams.put(orderFamBudgedKey, data);
             }
         }
         return true;

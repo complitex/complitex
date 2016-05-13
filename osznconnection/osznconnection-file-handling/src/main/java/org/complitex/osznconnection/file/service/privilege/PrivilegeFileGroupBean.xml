@@ -12,7 +12,7 @@
 
         <association property="firstRequestFile" javaType="org.complitex.osznconnection.file.entity.RequestFile">
             <id column="f_id" property="id"/>
-            <result column="f_groupId" property="groupId"/>
+            <result column="f_group_id" property="groupId"/>
             <result column="f_loaded" property="loaded"/>
             <result column="f_name" property="name"/>
             <result column="f_directory" property="directory"/>
@@ -28,7 +28,7 @@
         </association>
         <association property="secondRequestFile" javaType="org.complitex.osznconnection.file.entity.RequestFile">
             <id column="s_id" property="id"/>
-            <result column="s_groupId" property="groupId"/>
+            <result column="s_group_id" property="groupId"/>
             <result column="s_loaded" property="loaded"/>
             <result column="s_name" property="name"/>
             <result column="s_directory" property="directory"/>
@@ -78,14 +78,14 @@
         select
         g.group_id as gid,
         
-        f.id as f_id, f.loaded as f_loaded, f.name as f_name, f.directory as f_directory,
+        f.id as f_id, f.group_id as f_group_id, f.loaded as f_loaded, f.name as f_name, f.directory as f_directory,
         f.organization_id as f_organization_id, f.`user_organization_id` as f_user_organization_id,
         f.begin_date as f_begin_date, f.end_date as f_end_date, f.dbf_record_count as f_dbf_record_count,
         f.length as f_length, f.check_sum as f_check_sum, f.type as f_type, f.status as f_status,
 
         f.status as `status`,
 
-        s.id as s_id, s.loaded as s_loaded, s.name as s_name, s.directory as s_directory,
+        s.id as s_id, s.group_id as s_group_id, s.loaded as s_loaded, s.name as s_name, s.directory as s_directory,
         s.organization_id as s_organization_id, s.`user_organization_id` as s_user_organization_id,
         s.begin_date as s_begin_date, s.end_date as s_end_date, s.dbf_record_count as s_dbf_record_count,
         s.length as s_length, s.check_sum as s_check_sum, s.type as s_type, s.status as s_status,

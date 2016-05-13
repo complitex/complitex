@@ -164,10 +164,10 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
 
 
     @SuppressWarnings("Duplicates")
-    public void markCorrected(AbstractAccountRequest request, AddressEntity addressEntity) {
+    public void markCorrected(Long requestFileId, AbstractAccountRequest request, AddressEntity addressEntity) {
         Map<String, Object> params = Maps.newHashMap();
 
-        params.put("fileId", request.getRequestFileId());
+        params.put("fileId", requestFileId);
 
         switch (addressEntity){
             case BUILDING:
