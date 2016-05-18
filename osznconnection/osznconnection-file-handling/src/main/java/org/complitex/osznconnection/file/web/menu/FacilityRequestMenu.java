@@ -18,8 +18,8 @@ import java.util.Locale;
 public class FacilityRequestMenu extends ResourceTemplateMenu {
     public FacilityRequestMenu() {
         add("privilege_list", PrivilegeFileGroupList.class);
-        add("dwelling_characteristics_list", DwellingCharacteristicsFileList.class);
-        add("facility_service_type_list", FacilityServiceTypeFileList.class);
+//        add("dwelling_characteristics_list", DwellingCharacteristicsFileList.class);
+//        add("facility_service_type_list", FacilityServiceTypeFileList.class);
         add("facility_form2_list", FacilityForm2FileList.class);
         add("facility_street_type_file_list", FacilityStreetTypeFileList.class);
         add("facility_street_file_list", FacilityStreetFileList.class);
