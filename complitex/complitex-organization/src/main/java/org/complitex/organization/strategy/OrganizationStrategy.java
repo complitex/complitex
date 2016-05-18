@@ -7,7 +7,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.*;
 import org.complitex.common.exception.DeleteException;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
-import org.complitex.common.service.exception.ServiceRuntimeException;
+import org.complitex.common.exception.ServiceRuntimeException;
 import org.complitex.common.strategy.*;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.AttributeUtil;

@@ -210,7 +210,7 @@ public class SubsidyTarifFileList extends TemplatePage {
                 }));
 
                 //Статус
-                item.add(new ItemStatusLabel("status", processingManager, timerManager));
+                item.add(new ItemStatusLabel("status", processingManager));
             }
         };
         dataViewContainer.add(dataView);

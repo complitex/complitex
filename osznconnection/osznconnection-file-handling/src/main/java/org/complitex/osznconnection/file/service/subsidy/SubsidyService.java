@@ -8,7 +8,6 @@ import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidySum;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.subsidy.task.SubsidyBindTaskBean;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
 import javax.ejb.EJB;
@@ -104,7 +103,7 @@ public class SubsidyService {
         }
     }
 
-    public void bind(String serviceProviderCode, Subsidy subsidy) throws DBException {
+    public void bind(String serviceProviderCode, Subsidy subsidy) {
         subsidyBindTaskBean.bind(serviceProviderCode, subsidy, false);
 
         if (subsidyBean.isSubsidyFileBound(subsidy.getRequestFileId())) {

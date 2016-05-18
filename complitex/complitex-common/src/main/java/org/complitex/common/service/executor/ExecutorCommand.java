@@ -16,7 +16,7 @@ import static org.complitex.common.service.executor.ExecutorCommand.STATUS.*;
  * @author Anatoly A. Ivanov java@inheaven.ru
  *        Date: 24.01.11 15:18
  */
-public class ExecutorCommand {
+public class ExecutorCommand<T extends IExecutorObject> {
     public enum STATUS {
         NEW, RUNNING, COMPLETED, CRITICAL_ERROR, CANCELED
     }
@@ -28,12 +28,12 @@ public class ExecutorCommand {
     private AtomicInteger errorCount = new AtomicInteger(0);
     protected AtomicBoolean stop = new AtomicBoolean(false);
 
-    protected List<IExecutorObject> processed = new CopyOnWriteArrayList<IExecutorObject>();
+    protected List<IExecutorObject> processed = new CopyOnWriteArrayList<>();
 
     private AtomicInteger runningThread = new AtomicInteger(0);
 
-    private Queue<IExecutorObject> queue = new ConcurrentLinkedQueue<IExecutorObject>();
-    private ITaskBean task;
+    private Queue<T> queue = new ConcurrentLinkedQueue<>();
+    private ITaskBean<T> task;
     private IExecutorListener listener;
     
     // параметры управления ходом выполнения комманды
@@ -43,6 +43,54 @@ public class ExecutorCommand {
     private int maxThread;
 
     private IExecutorObject object;
+
+    private String errorMessage;
+
+    private int size;
+
+    public void init(){
+        successCount.set(0);
+        skippedCount.set(0);
+        errorCount.set(0);
+
+        processed.clear();
+        queue.clear();
+
+        stop.set(false);
+    }
+
+    public void cancel(){
+        stop.set(true);
+        object.cancel();
+    }
+
+    public void clear(){
+        queue.clear();
+    }
+
+    public boolean isWaiting(IExecutorObject executorObject){
+        for (IExecutorObject o : queue){
+            if (executorObject.getId().equals(o.getId())){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void addObjects(List<T> objects){
+        queue.addAll(objects);
+
+        size = queue.size();
+    }
+
+    public T pollObject(){
+        return queue.poll();
+    }
+
+    public boolean isEmpty(){
+        return queue.isEmpty();
+    }
 
     public STATUS getStatus() {
         return status;
@@ -84,17 +132,6 @@ public class ExecutorCommand {
         return stop.get();
     }
 
-    public void init(){
-        successCount.set(0);
-        skippedCount.set(0);
-        errorCount.set(0);
-
-        processed.clear();
-        queue.clear();
-
-        stop.set(false);
-    }
-
     public boolean isRunning(){
         return RUNNING.equals(status);
     }
@@ -115,11 +152,6 @@ public class ExecutorCommand {
         return CANCELED.equals(status);
     }
 
-    public void cancel(){
-        stop.set(true);
-        object.cancel();
-    }
-
     public void startTask(){
         runningThread.incrementAndGet();
     }
@@ -128,15 +160,7 @@ public class ExecutorCommand {
         runningThread.decrementAndGet();
     }
 
-    public Queue<IExecutorObject> getQueue() {
-        return queue;
-    }
-
-    public void setQueue(Queue<IExecutorObject> queue) {
-        this.queue = queue;
-    }
-
-    public ITaskBean getTask() {
+    public ITaskBean<T> getTask() {
         return task;
     }
 
@@ -168,16 +192,6 @@ public class ExecutorCommand {
         this.maxThread = maxThread;
     }
 
-    public boolean isWaiting(IExecutorObject executorObject){
-        for (IExecutorObject o : queue){
-            if (executorObject.getId().equals(o.getId())){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public IExecutorObject getObject() {
         return object;
     }
@@ -196,5 +210,21 @@ public class ExecutorCommand {
 
     public void setCommandParameters(Map processParameters) {
         this.commandParameters = processParameters;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }

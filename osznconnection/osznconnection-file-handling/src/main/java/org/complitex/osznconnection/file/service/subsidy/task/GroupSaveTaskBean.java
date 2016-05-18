@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.service.subsidy.task;
 
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
@@ -38,31 +38,32 @@ public class GroupSaveTaskBean extends AbstractSaveTaskBean implements ITaskBean
 
     @Override
     public boolean execute(RequestFileGroup group, Map commandParameters) throws ExecuteException {
-        // получаем значение опции и параметров комманды
-        // опция перезаписи номера л/с поставщика услуг номером л/с модуля начислений при выгрузке файла запроса
-        final boolean updatePuAccount = (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT);
+        try {
+            // получаем значение опции и параметров комманды
+            // опция перезаписи номера л/с поставщика услуг номером л/с модуля начислений при выгрузке файла запроса
+            final boolean updatePuAccount = (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT);
 
-        if (requestFileGroupBean.getRequestFileStatus(group).isProcessing()) { //проверяем что не обрабатывается в данный момент
-            throw new SaveException(new AlreadyProcessingException(group.getFullName()), true, group);
+            if (requestFileGroupBean.getRequestFileStatus(group).isProcessing()) { //проверяем что не обрабатывается в данный момент
+                throw new SaveException(new AlreadyProcessingException(group.getFullName()), true, group);
+            }
+
+            group.setStatus(RequestFileStatus.SAVING);
+            requestFileGroupBean.save(group);
+
+            //сохранение начислений
+            save(group.getPaymentFile(), updatePuAccount);
+            save(group.getBenefitFile(), updatePuAccount);
+
+            group.setStatus(RequestFileStatus.SAVED);
+            requestFileGroupBean.save(group);
+
+            return true;
+        } catch (Exception e) {
+            group.setStatus(RequestFileStatus.SAVE_ERROR);
+            requestFileGroupBean.save(group);
+
+            throw e;
         }
-
-        group.setStatus(RequestFileStatus.SAVING);
-        requestFileGroupBean.save(group);
-
-        //сохранение начислений
-        save(group.getPaymentFile(), updatePuAccount);
-        save(group.getBenefitFile(), updatePuAccount);
-
-        group.setStatus(RequestFileStatus.SAVED);
-        requestFileGroupBean.save(group);
-
-        return true;
-    }
-
-    @Override
-    public void onError(RequestFileGroup group) {
-        group.setStatus(RequestFileStatus.SAVE_ERROR);
-        requestFileGroupBean.save(group);
     }
 
     @Override

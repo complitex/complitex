@@ -4,7 +4,6 @@ import com.google.common.base.Predicate;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.Log.EVENT;
-import org.complitex.common.oracle.OracleErrors;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.strategy.StringLocaleBean;
@@ -17,7 +16,6 @@ import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBe
 import org.complitex.osznconnection.file.service.subsidy.SubsidyTarifBean;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
@@ -89,7 +87,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     public AccountDetail acquireAccountDetail(AbstractAccountRequest request, String lastName,
                                               String puAccountNumber, String district, String organizationCode, String streetType,
                                               String street, String buildingNumber, String buildingCorp, String apartment,
-                                              Date date, Boolean updatePUAccount) throws DBException {
+                                              Date date, Boolean updatePUAccount){
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
         request.setStatus(RequestStatus.ACCOUNT_NUMBER_MISMATCH);
@@ -162,7 +160,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     public void acquireFacilityPersonAccount(AbstractAccountRequest request,
                                              String district, String organizationCode, String streetType, String street, String buildingNumber,
                                              String buildingCorp, String apartment, Date date, String inn,
-                                             String passport) throws DBException {
+                                             String passport){
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
         Cursor<AccountDetail> cursor = getAccountDetails(dataSource, district, organizationCode, streetType, street, buildingNumber,
@@ -183,7 +181,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
     }
 
-    public void checkFacilityPerson(AbstractAccountRequest request, String accountNumber, Date date, String inn, String passport) throws DBException {
+    public void checkFacilityPerson(AbstractAccountRequest request, String accountNumber, Date date, String inn, String passport){
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
         Cursor<BenefitData> benefitDataCursor = getBenefitData(dataSource, accountNumber, date);
@@ -263,7 +261,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     @SuppressWarnings("unchecked")
     public Cursor<AccountDetail> getAccountDetails(String dataSource, String district, String organizationCode, String streetType,
                                                    String street, String buildingNumber, String buildingCorp,
-                                                   String apartment, Date date) throws DBException {
+                                                   String apartment, Date date){
         Map<String, Object> params = newHashMap();
 
         params.put("pDistrName", district);
@@ -285,7 +283,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     @SuppressWarnings("unchecked")
     public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district,
                                                               String organizationCode, String account, Date date)
-            throws DBException, UnknownAccountNumberTypeException {
+            throws UnknownAccountNumberTypeException {
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
 
         int accountType = determineAccountType(account);
@@ -299,10 +297,6 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         try {
             sqlSession(dataSource).selectOne(NS + ".getAttrsByAccCode", params);
-        } catch (Exception e) {
-            if (!OracleErrors.isCursorClosedError(e) && !(e.getCause() instanceof NullPointerException)) {
-                throw new DBException(e);
-            }
         } finally {
             log.info("acquireAccountDetailsByAccount getAttrsByAccCode {}", params);
         }
@@ -364,7 +358,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     @SuppressWarnings("unchecked")
     public Cursor<AccountDetail> getAccountDetailsByPerson(String dataSource, String districtName, String organizationCode,
                                                          String lastName, String firstName, String middleName,
-                                                         String inn, String passport, Date date) throws DBException {
+                                                         String inn, String passport, Date date){
         Map<String, Object> params = new HashMap<>();
 
         params.put("districtName", districtName);
@@ -393,8 +387,7 @@ public class ServiceProviderAdapter extends AbstractBean {
      * закрытый курсор как ошибку и выбрасывает исключение.
      *
      */
-    public void processPaymentAndBenefit(Long billingId, Set<Long> serviceIds, Payment payment,
-                                         List<Benefit> benefits) throws DBException {
+    public void processPaymentAndBenefit(Long billingId, Set<Long> serviceIds, Payment payment, List<Benefit> benefits){
         if (payment.getAccountNumber() == null){
             return;
         }
@@ -738,7 +731,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         return subsidyTarifBean.getCode3(T11_CS_UNI, osznId, userOrganizationId, service);
     }
 
-    public Collection<BenefitData> getBenefitData(Benefit benefit, Date dat1) throws DBException {
+    public Collection<BenefitData> getBenefitData(Benefit benefit, Date dat1){
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(benefit.getUserOrganizationId());
 
         Map<String, Object> params = newHashMap();
@@ -751,10 +744,6 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
         try {
             sqlSession(dataSource).selectOne(NS + ".getBenefitData", params);
-        } catch (Exception e) {
-            if (!OracleErrors.isCursorClosedError(e)) {
-                throw new DBException(e);
-            }
         } finally {
             log.info("getBenefitData. Calculation center: {}, parameters : {}", dataSource, params);
             if (log.isDebugEnabled()) {
@@ -812,22 +801,18 @@ public class ServiceProviderAdapter extends AbstractBean {
         return null;
     }
 
-    public Cursor<BenefitData> getBenefitData(Long userOrganizationId, String accountNumber, Date date) throws DBException {
+    public Cursor<BenefitData> getBenefitData(Long userOrganizationId, String accountNumber, Date date){
         return getBenefitData(organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId), accountNumber, date);
     }
 
 
-    public Cursor<BenefitData> getBenefitData(String dataSource, String accountNumber, Date date) throws DBException {
+    public Cursor<BenefitData> getBenefitData(String dataSource, String accountNumber, Date date){
         Map<String, Object> params = newHashMap();
         params.put("accountNumber", accountNumber);
         params.put("dat1", date);
 
         try {
             sqlSession(dataSource).selectOne(NS + ".getBenefitData", params);
-        } catch (Exception e) {
-            if (!OracleErrors.isCursorClosedError(e)) {
-                throw new DBException(e);
-            }
         }finally {
             log.info("getBenefitData getPrivs {}", params);
         }
@@ -1057,8 +1042,7 @@ public class ServiceProviderAdapter extends AbstractBean {
      * @param dat1 дата из поля DAT1 payment записи, соответствующей группе benefits записей со значением в поле FROG большим 0
      * @param benefits группа benefit записей
      */
-    public void processBenefit(Date dat1, List<Benefit> benefits)
-            throws DBException {
+    public void processBenefit(Date dat1, List<Benefit> benefits){
         String accountNumber = benefits.get(0).getAccountNumber();
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(benefits.get(0).getUserOrganizationId());
 
@@ -1068,11 +1052,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         try {
             sqlSession(dataSource).selectOne(NS + ".getBenefitData", params);
-        } catch (Exception e) {
-            if (!OracleErrors.isCursorClosedError(e)) {
-                throw new DBException(e);
-            }
-        }finally {
+        } finally {
             log.info("processBenefit getPrivs {}", params);
         }
 
@@ -1289,8 +1269,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         throw new UnknownAccountNumberTypeException();
     }
 
-    public void processActualPayment(String dataSource, Set<Long> serviceIds, ActualPayment actualPayment, Date date)
-            throws DBException {
+    public void processActualPayment(String dataSource, Set<Long> serviceIds, ActualPayment actualPayment, Date date){
         Map<String, Object> params = newHashMap();
         params.put("accountNumber", actualPayment.getAccountNumber());
         params.put("date", date);
@@ -1301,10 +1280,6 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
         try {
             sqlSession(dataSource).selectOne(NS + ".processActualPayment", params);
-        } catch (Exception e) {
-            if (!OracleErrors.isCursorClosedError(e)) {
-                throw new DBException(e);
-            }
         } finally {
             log.info("processActualPayment. Calculation center: {}, parameters : {}", dataSource, params);
             if (log.isDebugEnabled()) {
@@ -1402,7 +1377,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         return (realPuAccountNumber.length() == 10) && realPuAccountNumber.equals(calcCenterAccount);
     }
 
-    public Cursor<PaymentAndBenefitData> getPaymentAndBenefit(Long userOrganizationId, String accountNumber, Date date) throws DBException {
+    public Cursor<PaymentAndBenefitData> getPaymentAndBenefit(Long userOrganizationId, String accountNumber, Date date){
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
 
         Map<String, Object> params = newHashMap();

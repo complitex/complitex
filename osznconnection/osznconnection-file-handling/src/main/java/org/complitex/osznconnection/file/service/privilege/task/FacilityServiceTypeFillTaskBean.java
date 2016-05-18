@@ -5,7 +5,7 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.util.DateUtil;
 import org.complitex.correction.entity.ServiceCorrection;
 import org.complitex.correction.service.ServiceCorrectionBean;
@@ -18,25 +18,21 @@ import org.complitex.osznconnection.file.entity.privilege.FacilityTarifDBF;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -57,9 +53,6 @@ import static org.complitex.osznconnection.file.strategy.PrivilegeStrategy.CODE;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFile>{
     private final Logger log = LoggerFactory.getLogger(FacilityServiceTypeFillTaskBean.class);
-
-    @Resource
-    private UserTransaction userTransaction;
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -90,17 +83,17 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()){
-            throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.FILLING);
-        requestFileBean.save(requestFile);
-
-        //clear warning
-        requestWarningBean.delete(requestFile.getId(), FACILITY_SERVICE_TYPE);
-
         try {
+            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()){
+                throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.FILLING);
+            requestFileBean.save(requestFile);
+
+            //clear warning
+            requestWarningBean.delete(requestFile.getId(), FACILITY_SERVICE_TYPE);
+
             List<Long> ids = facilityServiceTypeBean.findIdsForOperation(requestFile.getId());
 
             for (Long id : ids) {
@@ -112,33 +105,28 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                         throw new FillException(new CanceledByUserException(), true, requestFile);
                     }
 
-                    userTransaction.begin();
                     fill(facilityServiceType);
-                    userTransaction.commit();
+                    onRequest(facilityServiceType);
+
                 }
             }
-        } catch (Exception e) {
-            log.error("Ошибка обработки файла субсидии", e);
 
-            try {
-                userTransaction.rollback();
-            } catch (SystemException e1) {
-                log.error("", e1);
+            //проверить все ли записи в файле субсидии обработались
+            if (!facilityServiceTypeBean.isFacilityServiceTypeFileFilled(requestFile.getId())) {
+                throw new FillException(true, requestFile);
             }
 
-            throw new RuntimeException(e);
+            requestFile.setStatus(RequestFileStatus.FILLED);
+            requestFileBean.save(requestFile);
+
+
+            return true;
+        } catch (Exception e) {
+            requestFile.setStatus(FILL_ERROR);
+            requestFileBean.save(requestFile);
+
+            throw e;
         }
-
-        //проверить все ли записи в файле субсидии обработались
-        if (!facilityServiceTypeBean.isFacilityServiceTypeFileFilled(requestFile.getId())) {
-            throw new FillException(true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.FILLED);
-        requestFileBean.save(requestFile);
-
-
-        return true;
     }
 
     /**
@@ -153,7 +141,7 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
      * TARIF - код тарифа из справочника тарифов данного отдела льгот для данного кода услуги.
      */
     @SuppressWarnings("Duplicates")
-    public void fill(FacilityServiceType facilityServiceType) throws DBException {
+    public void fill(FacilityServiceType facilityServiceType){
         if (facilityServiceType.getAccountNumber() == null){
             return;
         }
@@ -271,11 +259,5 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
 
         facilityServiceType.setStatus(BENEFIT_OWNER_NOT_ASSOCIATED);
         facilityServiceTypeBean.update(facilityServiceType);
-    }
-
-    @Override
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(FILL_ERROR);
-        requestFileBean.save(requestFile);
     }
 }

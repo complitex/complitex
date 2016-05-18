@@ -1,6 +1,6 @@
 package org.complitex.common.service;
 
-import org.complitex.common.service.exception.WrongCurrentPasswordException;
+import org.complitex.common.exception.WrongCurrentPasswordException;
 
 import java.util.Locale;
 

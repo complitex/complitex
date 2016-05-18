@@ -9,12 +9,10 @@ import org.complitex.osznconnection.file.entity.RequestFileStatus;
 
 public class ItemStatusLabel extends Label {
     private final ProcessingManager processingManager;
-    private final TimerManager timerManager;
 
-    public ItemStatusLabel(String id, ProcessingManager processingManager, TimerManager timerManager) {
+    public ItemStatusLabel(String id, ProcessingManager processingManager) {
         super(id);
         this.processingManager = processingManager;
-        this.timerManager = timerManager;
     }
 
     @Override
@@ -24,7 +22,6 @@ public class ItemStatusLabel extends Label {
         final Item item = findParent(Item.class);
 
         setDefaultModel(new LoadableDetachableModel<String>() {
-
             @Override
             protected String load() {
                 if (item.getModelObject() instanceof IExecutorObject) {
@@ -32,7 +29,7 @@ public class ItemStatusLabel extends Label {
 
                     String dots = "";
                     if (object.isProcessing() && processingManager.isGlobalProcessing()) {
-                        dots += StringUtil.getDots(timerManager.getTimerIndex() % 5);
+                        dots += "...";
                     }
 
                     if (object.getStatus() instanceof RequestFileStatus) {

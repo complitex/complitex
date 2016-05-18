@@ -2,7 +2,6 @@ package org.complitex.osznconnection.file.service_provider;
 
 import org.complitex.osznconnection.file.entity.subsidy.Payment;
 import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 
 import java.util.Date;
@@ -16,9 +15,6 @@ public class AcquireAccountCorrectionDetailsTest extends AbstractTest {
     public static void main(String[] args) {
         try {
             new AcquireAccountCorrectionDetailsTest().executeTest();
-        } catch (DBException e) {
-            System.out.println("DB error.");
-            throw new RuntimeException(e);
         } catch (UnknownAccountNumberTypeException e) {
             System.out.println("Unknown account number type exception.");
         } catch (Exception e) {

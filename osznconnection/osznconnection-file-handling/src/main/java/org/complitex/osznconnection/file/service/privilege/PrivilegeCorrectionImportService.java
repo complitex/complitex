@@ -3,9 +3,9 @@ package org.complitex.osznconnection.file.service.privilege;
 import au.com.bytecode.opencsv.CSVReader;
 import org.complitex.common.service.AbstractImportService;
 import org.complitex.common.service.IImportListener;
-import org.complitex.common.service.exception.ImportFileNotFoundException;
-import org.complitex.common.service.exception.ImportFileReadException;
-import org.complitex.common.service.exception.ImportObjectLinkException;
+import org.complitex.common.exception.ImportFileNotFoundException;
+import org.complitex.common.exception.ImportFileReadException;
+import org.complitex.common.exception.ImportObjectLinkException;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeCorrection;
 import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class PrivilegeCorrectionImportService extends AbstractImportService {
      * @param listener
      * @throws ImportFileNotFoundException
      * @throws ImportFileReadException
-     * @throws org.complitex.common.service.exception.ImportObjectLinkException
+     * @throws ImportObjectLinkException
      */
     public void process(long orgId, long intOrgId, IImportListener listener)
             throws ImportFileNotFoundException, ImportFileReadException, ImportObjectLinkException {

@@ -11,7 +11,6 @@ import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
 
 import javax.ejb.EJB;
@@ -57,7 +56,7 @@ public class ActualPaymentLookupPanel extends AbstractLookupPanel<ActualPayment>
 
 
     @Override
-    protected Cursor<AccountDetail> getAccountDetails(ActualPayment actualPayment)throws DBException {
+    protected Cursor<AccountDetail> getAccountDetails(ActualPayment actualPayment){
         RequestFile actualPaymentFile = requestFileBean.getRequestFile(actualPayment.getRequestFileId());
 
         return lookupBean.getAccountDetails(actualPayment.getOutgoingDistrict(), getServiceProviderCode(actualPayment),

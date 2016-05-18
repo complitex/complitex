@@ -2,7 +2,7 @@ package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
@@ -44,49 +44,47 @@ public class FacilityStreetLoadTaskBean extends AbstractTaskBean<RequestFile> {
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        requestFile.setStatus(RequestFileStatus.LOADING);
+        try {
+            requestFile.setStatus(RequestFileStatus.LOADING);
 
-        //update date range
-        requestFileBean.updateDateRange(requestFile);
+            //update date range
+            requestFileBean.updateDateRange(requestFile);
 
-        loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
+            loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
 
-            @Override
-            public Enum[] getFieldNames() {
-                return FacilityStreetDBF.values();
-            }
+                @Override
+                public Enum[] getFieldNames() {
+                    return FacilityStreetDBF.values();
+                }
 
-            @Override
-            public AbstractRequest newObject() {
-                return new FacilityStreet();
-            }
+                @Override
+                public AbstractRequest newObject() {
+                    return new FacilityStreet();
+                }
 
-            @Override
-            public void save(List<AbstractRequest> requests) throws ExecuteException {
-                facilityReferenceBookBean.insert(requests);
-            }
-        });
-        requestFile.setStatus(RequestFileStatus.LOADED);
+                @Override
+                public void save(List<AbstractRequest> requests) throws ExecuteException {
+                    facilityReferenceBookBean.insert(requests);
 
-        requestFileBean.save(requestFile);
+                    requests.forEach(r -> onRequest(r));
+                }
+            });
+            requestFile.setStatus(RequestFileStatus.LOADED);
 
-        return true;
-    }
+            requestFileBean.save(requestFile);
 
-    @Override
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(RequestFileStatus.LOAD_ERROR);
-        requestFileBean.save(requestFile);
+            return true;
+        } catch (Exception e) {
+            requestFile.setStatus(RequestFileStatus.LOAD_ERROR);
+            requestFileBean.save(requestFile);
+
+            throw e;
+        }
     }
 
     @Override
     public String getModuleName() {
         return Module.NAME;
-    }
-
-    @Override
-    public Class<?> getControllerClass() {
-        return FacilityStreetLoadTaskBean.class;
     }
 
     @Override

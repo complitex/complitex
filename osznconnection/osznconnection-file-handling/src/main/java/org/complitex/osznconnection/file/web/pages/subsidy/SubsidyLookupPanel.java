@@ -11,7 +11,6 @@ import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPanel;
 
 import javax.ejb.EJB;
@@ -61,7 +60,7 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
     }
 
     @Override
-    protected Cursor<AccountDetail> getAccountDetails(Subsidy subsidy) throws DBException {
+    protected Cursor<AccountDetail> getAccountDetails(Subsidy subsidy){
         return lookupBean.getAccountDetails(subsidy.getOutgoingDistrict(), getServiceProviderCode(subsidy),
                 subsidy.getOutgoingStreetType(), subsidy.getOutgoingStreet(), subsidy.getOutgoingBuildingNumber(),
                 subsidy.getOutgoingBuildingCorp(), subsidy.getOutgoingApartment(), (Date) subsidy.getField(SubsidyDBF.DAT1),

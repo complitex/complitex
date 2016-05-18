@@ -44,12 +44,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     public SubsidyFileListPanel(String id) {
         super(id, SUBSIDY, LOAD_SUBSIDY, BIND_SUBSIDY, FILL_SUBSIDY, SAVE_SUBSIDY);
 
-        add(subsidyExportDialog = new SubsidyExportDialog("subsidy_export_dialog"){
-            @Override
-            protected void onExport(AjaxRequestTarget target) {
-                SubsidyFileListPanel.this.startTimer(target, ProcessType.EXPORT_SUBSIDY);
-            }
-        });
+        add(subsidyExportDialog = new SubsidyExportDialog("subsidy_export_dialog"));
 
         addColumn(new Column() {
                 @Override

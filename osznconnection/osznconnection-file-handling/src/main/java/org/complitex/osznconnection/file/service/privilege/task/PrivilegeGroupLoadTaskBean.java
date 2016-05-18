@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
@@ -38,10 +38,5 @@ public class PrivilegeGroupLoadTaskBean extends AbstractTaskBean<PrivilegeFileGr
         }
 
         return true;
-    }
-
-    @Override
-    public void onError(PrivilegeFileGroup object) {
-
     }
 }

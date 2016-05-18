@@ -1,6 +1,6 @@
 package org.complitex.keconnection.organization.service.exception;
 
-import org.complitex.common.service.exception.AbstractException;
+import org.complitex.common.exception.AbstractException;
 
 import javax.ejb.ApplicationException;
 

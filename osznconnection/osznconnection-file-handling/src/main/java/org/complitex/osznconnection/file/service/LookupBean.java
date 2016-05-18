@@ -6,7 +6,6 @@ import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
@@ -44,7 +43,7 @@ public class LookupBean extends AbstractBean {
      * См. org.complitex.osznconnection.file.calculation.adapter.DefaultCalculationCenterAdapter.acquireAccountCorrectionDetails()
      */
     public Cursor<AccountDetail> getAccountDetails(String district, String serviceProviderCode, String streetType, String street,
-            String buildingNumber, String buildingCorp, String apartment, Date date, long userOrganizationId) throws DBException {
+            String buildingNumber, String buildingCorp, String apartment, Date date, long userOrganizationId){
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
 
         return adapter.getAccountDetails(dataSource, district, serviceProviderCode, streetType, street, buildingNumber, buildingCorp, apartment, date);
@@ -54,13 +53,13 @@ public class LookupBean extends AbstractBean {
     @TransactionAttribute(TransactionAttributeType.NEVER)
     public List<AccountDetail> acquireAccountDetailsByAccount(AbstractRequest request, String district,
                                                               String organizationCode, String account)
-            throws DBException, UnknownAccountNumberTypeException {
+            throws UnknownAccountNumberTypeException {
         return adapter.acquireAccountDetailsByAccount(request, district, organizationCode, account, request.getDate());
     }
 
     public Cursor<AccountDetail> getAccountDetailsByPerson(Long userOrganizationId, String districtName,
                                                          String organizationCode, String lastName, String firstName,
-                                                         String middleName, String inn, String passport, Date date) throws DBException {
+                                                         String middleName, String inn, String passport, Date date){
         if (lastName != null){
             lastName = lastName.toUpperCase();
         }

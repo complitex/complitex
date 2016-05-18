@@ -4,7 +4,8 @@ import com.google.common.collect.Lists;
 import com.linuxense.javadbf.DBFField;
 import com.linuxense.javadbf.DBFWriter;
 import org.complitex.common.entity.Log;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.CanceledByUserException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -35,29 +36,31 @@ public abstract class AbstractSaveTaskBean{
     private RequestFileDescriptionBean requestFileDescriptionBean;
 
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException{
-        // получаем значение опции и параметров комманды
-        // опция перезаписи номера л/с поставщика услуг номером л/с модуля начислений при выгрузке файла запроса
-        final boolean updatePuAccount = (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT);
+        try {
+            // получаем значение опции и параметров комманды
+            // опция перезаписи номера л/с поставщика услуг номером л/с модуля начислений при выгрузке файла запроса
+            final boolean updatePuAccount = (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT);
 
-        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) { //проверяем что не обрабатывается в данный момент
-            throw new SaveException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
+            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) { //проверяем что не обрабатывается в данный момент
+                throw new SaveException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.SAVING);
+            requestFileBean.save(requestFile);
+
+            //сохранение
+            save(requestFile, updatePuAccount);
+
+            requestFile.setStatus(RequestFileStatus.SAVED);
+            requestFileBean.save(requestFile);
+
+            return true;
+        } catch (Exception e) {
+            requestFile.setStatus(RequestFileStatus.SAVE_ERROR);
+            requestFileBean.save(requestFile);
+
+            throw e;
         }
-
-        requestFile.setStatus(RequestFileStatus.SAVING);
-        requestFileBean.save(requestFile);
-
-        //сохранение
-        save(requestFile, updatePuAccount);
-
-        requestFile.setStatus(RequestFileStatus.SAVED);
-        requestFileBean.save(requestFile);
-
-        return true;
-    }
-
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(RequestFileStatus.SAVE_ERROR);
-        requestFileBean.save(requestFile);
     }
 
     public String getModuleName() {

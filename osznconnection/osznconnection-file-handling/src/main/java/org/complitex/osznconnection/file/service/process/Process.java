@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
+import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.service.executor.ExecutorCommand;
 import org.complitex.osznconnection.file.entity.RequestFile;
 
@@ -14,10 +15,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 24.01.11 16:07
  */
-public class Process extends ExecutorCommand{
-    private List<RequestFile> linkError = new CopyOnWriteArrayList<RequestFile>();
+public class Process<T extends IExecutorObject> extends ExecutorCommand<T>{
+    private List<RequestFile> linkError = new CopyOnWriteArrayList<>();
 
-    Map<Object, Integer> processedIndex = new ConcurrentHashMap<Object, Integer>();
+    private Map<Object, Integer> processedIndex = new ConcurrentHashMap<>();
 
     private ProcessType processType;
 
@@ -25,12 +26,12 @@ public class Process extends ExecutorCommand{
     private int preprocessErrorCount = 0;
     private boolean preprocessError = false;
 
-    public ProcessType getProcessType() {
-        return processType;
+    public Process(ProcessType processType) {
+        this.processType = processType;
     }
 
-    public void setProcessType(ProcessType processType) {
-        this.processType = processType;
+    public ProcessType getProcessType() {
+        return processType;
     }
 
     public boolean isPreprocess() {
@@ -52,7 +53,7 @@ public class Process extends ExecutorCommand{
     }
 
     public List<RequestFile> getLinkError(boolean flush) {
-        List<RequestFile> list = new ArrayList<RequestFile>();
+        List<RequestFile> list = new ArrayList<>();
         list.addAll(linkError);
 
         if (flush){
@@ -63,8 +64,8 @@ public class Process extends ExecutorCommand{
     }
 
      @SuppressWarnings({"unchecked"})
-     public <T> List<T> getProcessed(Object queryKey){
-        List<T> list = new ArrayList<T>();
+     public  List<T> getProcessed(Object queryKey){
+        List<T> list = new ArrayList<>();
 
         Integer index = processedIndex.get(queryKey);
 

@@ -10,7 +10,6 @@ import org.complitex.osznconnection.file.entity.subsidy.Payment;
 import org.complitex.osznconnection.file.service.AbstractRequestBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
 import javax.ejb.EJB;
@@ -272,7 +271,7 @@ public class BenefitBean extends AbstractRequestBean {
         clearWarnings(fileId, RequestFileType.BENEFIT);
     }
 
-    public Collection<BenefitData> getBenefitData(Benefit benefit) throws DBException {
+    public Collection<BenefitData> getBenefitData(Benefit benefit){
         Long billingId = organizationStrategy.getBillingId(benefit.getUserOrganizationId());
         long osznId = benefit.getOrganizationId();
         RequestFile benefitRequestFile = requestFileBean.getRequestFile(benefit.getRequestFileId());
@@ -315,7 +314,7 @@ public class BenefitBean extends AbstractRequestBean {
         return notConnectedBenefitData;
     }
 
-    public void connectBenefit(Benefit benefit, final BenefitData selectedBenefitData, boolean checkBenefitData) throws DBException {
+    public void connectBenefit(Benefit benefit, final BenefitData selectedBenefitData, boolean checkBenefitData){
         String osznBenefitCode = selectedBenefitData.getPrivilegeCode();
         benefit.putField(BenefitDBF.PRIV_CAT, Integer.valueOf(osznBenefitCode));
         benefit.putField(BenefitDBF.ORD_FAM, Integer.valueOf(selectedBenefitData.getOrderFamily()));

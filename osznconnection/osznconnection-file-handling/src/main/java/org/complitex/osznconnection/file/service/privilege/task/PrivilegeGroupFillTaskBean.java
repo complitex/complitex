@@ -5,7 +5,7 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.util.DateUtil;
 import org.complitex.correction.entity.ServiceCorrection;
 import org.complitex.correction.service.ServiceCorrectionBean;
@@ -15,12 +15,11 @@ import org.complitex.osznconnection.file.entity.privilege.*;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,67 +86,79 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
 
     @Override
     public boolean execute(PrivilegeFileGroup group, Map commandParameters) throws ExecuteException {
-        RequestFile dwellingCharacteristicsRequestFile = group.getDwellingCharacteristicsRequestFile();
-        RequestFile facilityServiceTypeRequestFile = group.getFacilityServiceTypeRequestFile();
-
-        if (requestFileBean.getRequestFileStatus(dwellingCharacteristicsRequestFile.getId()).isProcessing()){
-            throw new BindException(new AlreadyProcessingException(dwellingCharacteristicsRequestFile.getFullName()), true, dwellingCharacteristicsRequestFile);
-        }
-        if (requestFileBean.getRequestFileStatus(facilityServiceTypeRequestFile.getId()).isProcessing()){
-            throw new BindException(new AlreadyProcessingException(facilityServiceTypeRequestFile.getFullName()), true, facilityServiceTypeRequestFile);
-        }
-
-        //filling
-        dwellingCharacteristicsRequestFile.setStatus(RequestFileStatus.FILLING);
-        requestFileBean.save(dwellingCharacteristicsRequestFile);
-
-        facilityServiceTypeRequestFile.setStatus(RequestFileStatus.FILLING);
-        requestFileBean.save(facilityServiceTypeRequestFile);
-
-        //clear warning
-        requestWarningBean.delete(dwellingCharacteristicsRequestFile.getId(), DWELLING_CHARACTERISTICS);
-        requestWarningBean.delete(facilityServiceTypeRequestFile.getId(), FACILITY_SERVICE_TYPE);
-
         try {
-            List<PrivilegeGroup> privilegeGroups = privilegeGroupService.getPrivilegeGroups(group.getId());
-            for (PrivilegeGroup p : privilegeGroups){
-                if (group.isCanceled()){
-                    throw new CanceledByUserException();
-                }
+            RequestFile dwellingCharacteristicsRequestFile = group.getDwellingCharacteristicsRequestFile();
+            RequestFile facilityServiceTypeRequestFile = group.getFacilityServiceTypeRequestFile();
 
-                if (p.getFacilityServiceType() != null && p.getDwellingCharacteristics() != null){
-                    fill(p);
-                }else if (p.getDwellingCharacteristics() != null){
-                    dwellingCharacteristicsFillTaskBean.fill(p.getDwellingCharacteristics());
-                }else if (p.getFacilityServiceType() != null){
-                    facilityServiceTypeFillTaskBean.fill(p.getFacilityServiceType());
-                }
+            if (requestFileBean.getRequestFileStatus(dwellingCharacteristicsRequestFile.getId()).isProcessing()){
+                throw new BindException(new AlreadyProcessingException(dwellingCharacteristicsRequestFile.getFullName()), true, dwellingCharacteristicsRequestFile);
             }
+            if (requestFileBean.getRequestFileStatus(facilityServiceTypeRequestFile.getId()).isProcessing()){
+                throw new BindException(new AlreadyProcessingException(facilityServiceTypeRequestFile.getFullName()), true, facilityServiceTypeRequestFile);
+            }
+
+            //filling
+            dwellingCharacteristicsRequestFile.setStatus(RequestFileStatus.FILLING);
+            requestFileBean.save(dwellingCharacteristicsRequestFile);
+
+            facilityServiceTypeRequestFile.setStatus(RequestFileStatus.FILLING);
+            requestFileBean.save(facilityServiceTypeRequestFile);
+
+            //clear warning
+            requestWarningBean.delete(dwellingCharacteristicsRequestFile.getId(), DWELLING_CHARACTERISTICS);
+            requestWarningBean.delete(facilityServiceTypeRequestFile.getId(), FACILITY_SERVICE_TYPE);
+
+            try {
+                List<PrivilegeGroup> privilegeGroups = privilegeGroupService.getPrivilegeGroups(group.getId());
+                for (PrivilegeGroup p : privilegeGroups){
+                    if (group.isCanceled()){
+                        throw new CanceledByUserException();
+                    }
+
+                    if (p.getFacilityServiceType() != null && p.getDwellingCharacteristics() != null){
+                        fill(p);
+                    }else if (p.getDwellingCharacteristics() != null){
+                        dwellingCharacteristicsFillTaskBean.fill(p.getDwellingCharacteristics());
+                    }else if (p.getFacilityServiceType() != null){
+                        facilityServiceTypeFillTaskBean.fill(p.getFacilityServiceType());
+                    }
+
+                    onRequest(p);
+                }
+            } catch (Exception e) {
+                throw new FillException(e, false, dwellingCharacteristicsRequestFile);
+            }
+
+            //filled
+            if (!dwellingCharacteristicsBean.isDwellingCharacteristicsFileFilled(dwellingCharacteristicsRequestFile.getId())) {
+                throw new FillException(true, dwellingCharacteristicsRequestFile);
+            }
+            if (!facilityServiceTypeBean.isFacilityServiceTypeFileFilled(facilityServiceTypeRequestFile.getId())) {
+                throw new FillException(true, facilityServiceTypeRequestFile);
+            }
+
+            dwellingCharacteristicsRequestFile.setStatus(RequestFileStatus.FILLED);
+            requestFileBean.save(dwellingCharacteristicsRequestFile);
+
+            facilityServiceTypeRequestFile.setStatus(RequestFileStatus.FILLED);
+            requestFileBean.save(facilityServiceTypeRequestFile);
+
+
+            return false;
         } catch (Exception e) {
-            throw new FillException(e, false, dwellingCharacteristicsRequestFile);
+            group.getDwellingCharacteristicsRequestFile().setStatus(FILL_ERROR);
+            requestFileBean.save(group.getDwellingCharacteristicsRequestFile());
+
+            group.getFacilityServiceTypeRequestFile().setStatus(FILL_ERROR);
+            requestFileBean.save(group.getFacilityServiceTypeRequestFile());
+
+            throw e;
         }
-
-        //filled
-        if (!dwellingCharacteristicsBean.isDwellingCharacteristicsFileFilled(dwellingCharacteristicsRequestFile.getId())) {
-            throw new FillException(true, dwellingCharacteristicsRequestFile);
-        }
-        if (!facilityServiceTypeBean.isFacilityServiceTypeFileFilled(facilityServiceTypeRequestFile.getId())) {
-            throw new FillException(true, facilityServiceTypeRequestFile);
-        }
-
-        dwellingCharacteristicsRequestFile.setStatus(RequestFileStatus.FILLED);
-        requestFileBean.save(dwellingCharacteristicsRequestFile);
-
-        facilityServiceTypeRequestFile.setStatus(RequestFileStatus.FILLED);
-        requestFileBean.save(facilityServiceTypeRequestFile);
-
-
-        return false;
     }
 
 
     @SuppressWarnings("Duplicates")
-    private void fill(PrivilegeGroup group) throws DBException {
+    private void fill(PrivilegeGroup group){
         DwellingCharacteristics dwellingCharacteristics = group.getDwellingCharacteristics();
         FacilityServiceType facilityServiceType = group.getFacilityServiceType();
 
@@ -304,14 +315,5 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
 
         dwellingCharacteristicsBean.update(dwellingCharacteristics);
         facilityServiceTypeBean.update(facilityServiceType);
-    }
-
-    @Override
-    public void onError(PrivilegeFileGroup group) {
-        group.getDwellingCharacteristicsRequestFile().setStatus(FILL_ERROR);
-        requestFileBean.save(group.getDwellingCharacteristicsRequestFile());
-
-        group.getFacilityServiceTypeRequestFile().setStatus(FILL_ERROR);
-        requestFileBean.save(group.getFacilityServiceTypeRequestFile());
     }
 }

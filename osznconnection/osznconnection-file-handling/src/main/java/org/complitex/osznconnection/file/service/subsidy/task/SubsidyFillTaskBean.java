@@ -1,36 +1,36 @@
 package org.complitex.osznconnection.file.service.subsidy.task;
 
 import org.complitex.common.entity.Log;
-import org.complitex.common.service.executor.ExecuteException;
-import org.complitex.common.service.executor.ITaskBean;
+import org.complitex.common.service.executor.AbstractTaskBean;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.AccountDetail;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterData;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataDBF;
-import org.complitex.osznconnection.file.service.*;
+import org.complitex.osznconnection.file.service.AddressService;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
-import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyMasterDataBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -42,11 +42,8 @@ import java.util.Map;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
+public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(SubsidyFillTaskBean.class);
-
-    @Resource
-    private UserTransaction userTransaction;
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -71,22 +68,22 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        Long serviceProviderId = organizationStrategy.getServiceProviderId(requestFile.getEdrpou(),
-                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
-
-        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
-                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
-
-        //проверяем что не обрабатывается в данный момент
-        if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
-            throw new FillException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.FILLING);
-        requestFileBean.save(requestFile);
-
-        //Обработка
         try {
+            Long serviceProviderId = organizationStrategy.getServiceProviderId(requestFile.getEdrpou(),
+                    requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
+            String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                    requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
+            //проверяем что не обрабатывается в данный момент
+            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
+                throw new FillException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.FILLING);
+            requestFileBean.save(requestFile);
+
+            //Обработка
             List<Subsidy> subsidies = subsidyBean.getSubsidies(requestFile.getId());
 
             for (Subsidy subsidy : subsidies){
@@ -94,31 +91,27 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
                     throw new FillException(new CanceledByUserException(), true, requestFile);
                 }
 
-                userTransaction.begin();
                 fill(serviceProviderId, serviceProviderCode, subsidy);
-                userTransaction.commit();
+                onRequest(subsidy);
             }
+
+            //проверить все ли записи в файле субсидии обработались
+            if (!subsidyBean.isSubsidyFileFilled(requestFile.getId())) {
+                throw new FillException(true, requestFile);
+            }
+
+            requestFile.setStatus(RequestFileStatus.FILLED);
+            requestFileBean.save(requestFile);
+
+            return true;
+        } catch (UnknownAccountNumberTypeException e){
+            throw new FillException(e, true, requestFile);
         } catch (Exception e) {
-            log.error("Ошибка обработки файла субсидии", e);
+            requestFile.setStatus(RequestFileStatus.FILL_ERROR);
+            requestFileBean.save(requestFile);
 
-            try {
-                userTransaction.rollback();
-            } catch (SystemException e1) {
-                log.error("", e1);
-            }
-
-            throw new RuntimeException(e);
+            throw e;
         }
-
-        //проверить все ли записи в файле субсидии обработались
-        if (!subsidyBean.isSubsidyFileFilled(requestFile.getId())) {
-            throw new FillException(true, requestFile);
-        }
-
-        requestFile.setStatus(RequestFileStatus.FILLED);
-        requestFileBean.save(requestFile);
-
-        return true;
     }
 
     /**
@@ -129,7 +122,7 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
      своя запись мастер-данных, в поля BEGIN0 и END0 которой записывается первое и последнее число месяца
      к которому относится данная запись мастер-данных.
      */
-    private void fill(Long serviceProviderId, String serviceProviderCode, Subsidy subsidy) throws DBException, UnknownAccountNumberTypeException {
+    private void fill(Long serviceProviderId, String serviceProviderCode, Subsidy subsidy) throws UnknownAccountNumberTypeException {
         String districtName = addressService.resolveOutgoingDistrict(subsidy.getOrganizationId(), subsidy.getUserOrganizationId());
 
         List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(subsidy, districtName,
@@ -203,19 +196,8 @@ public class SubsidyFillTaskBean implements ITaskBean<RequestFile>{
     }
 
     @Override
-    public void onError(RequestFile requestFile) {
-        requestFile.setStatus(RequestFileStatus.FILL_ERROR);
-        requestFileBean.save(requestFile);
-    }
-
-    @Override
     public String getModuleName() {
         return Module.NAME;
-    }
-
-    @Override
-    public Class getControllerClass() {
-        return SubsidyFillTaskBean.class;
     }
 
     @Override
