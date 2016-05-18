@@ -4,6 +4,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.complitex.common.entity.IExecutorObject;
+import org.complitex.common.util.StringUtil;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 
 public class ItemStatusLabel extends Label {
@@ -21,7 +22,6 @@ public class ItemStatusLabel extends Label {
         final Item item = findParent(Item.class);
 
         setDefaultModel(new LoadableDetachableModel<String>() {
-
             @Override
             protected String load() {
                 if (item.getModelObject() instanceof IExecutorObject) {
@@ -29,7 +29,7 @@ public class ItemStatusLabel extends Label {
 
                     String dots = "";
                     if (object.isProcessing() && processingManager.isGlobalProcessing()) {
-//                        dots += StringUtil.getDots(timerManager.getTimerIndex() % 5);
+                        dots += "...";
                     }
 
                     if (object.getStatus() instanceof RequestFileStatus) {

@@ -44,6 +44,54 @@ public class ExecutorCommand<T extends IExecutorObject> {
 
     private IExecutorObject object;
 
+    private String errorMessage;
+
+    private int size;
+
+    public void init(){
+        successCount.set(0);
+        skippedCount.set(0);
+        errorCount.set(0);
+
+        processed.clear();
+        queue.clear();
+
+        stop.set(false);
+    }
+
+    public void cancel(){
+        stop.set(true);
+        object.cancel();
+    }
+
+    public void clear(){
+        queue.clear();
+    }
+
+    public boolean isWaiting(IExecutorObject executorObject){
+        for (IExecutorObject o : queue){
+            if (executorObject.getId().equals(o.getId())){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void addObjects(List<T> objects){
+        queue.addAll(objects);
+
+        size = queue.size();
+    }
+
+    public T pollObject(){
+        return queue.poll();
+    }
+
+    public boolean isEmpty(){
+        return queue.isEmpty();
+    }
+
     public STATUS getStatus() {
         return status;
     }
@@ -84,17 +132,6 @@ public class ExecutorCommand<T extends IExecutorObject> {
         return stop.get();
     }
 
-    public void init(){
-        successCount.set(0);
-        skippedCount.set(0);
-        errorCount.set(0);
-
-        processed.clear();
-        queue.clear();
-
-        stop.set(false);
-    }
-
     public boolean isRunning(){
         return RUNNING.equals(status);
     }
@@ -115,21 +152,12 @@ public class ExecutorCommand<T extends IExecutorObject> {
         return CANCELED.equals(status);
     }
 
-    public void cancel(){
-        stop.set(true);
-        object.cancel();
-    }
-
     public void startTask(){
         runningThread.incrementAndGet();
     }
 
     public void stopTask(){
         runningThread.decrementAndGet();
-    }
-
-    public Queue<T> getQueue() {
-        return queue;
     }
 
     public ITaskBean<T> getTask() {
@@ -164,16 +192,6 @@ public class ExecutorCommand<T extends IExecutorObject> {
         this.maxThread = maxThread;
     }
 
-    public boolean isWaiting(IExecutorObject executorObject){
-        for (IExecutorObject o : queue){
-            if (executorObject.getId().equals(o.getId())){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public IExecutorObject getObject() {
         return object;
     }
@@ -192,5 +210,21 @@ public class ExecutorCommand<T extends IExecutorObject> {
 
     public void setCommandParameters(Map processParameters) {
         this.commandParameters = processParameters;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }

@@ -4,7 +4,7 @@ import org.complitex.common.entity.Log;
 import org.complitex.common.entity.PersonalName;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;

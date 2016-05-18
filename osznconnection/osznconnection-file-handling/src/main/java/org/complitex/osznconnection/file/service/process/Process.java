@@ -26,12 +26,12 @@ public class Process<T extends IExecutorObject> extends ExecutorCommand<T>{
     private int preprocessErrorCount = 0;
     private boolean preprocessError = false;
 
-    public ProcessType getProcessType() {
-        return processType;
+    public Process(ProcessType processType) {
+        this.processType = processType;
     }
 
-    public void setProcessType(ProcessType processType) {
-        this.processType = processType;
+    public ProcessType getProcessType() {
+        return processType;
     }
 
     public boolean isPreprocess() {

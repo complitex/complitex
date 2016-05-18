@@ -22,8 +22,12 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.util.collections.ArrayListStack;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.AbstractFilter;
 import org.complitex.common.service.ModuleBean;
@@ -31,6 +35,7 @@ import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecutorBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.DatePicker;
 import org.complitex.common.web.component.MonthDropDownChoice;
@@ -48,6 +53,7 @@ import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.AbstractRequestFile;
 import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.service.process.Process;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
@@ -117,6 +123,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     private ProcessType bindProcessType;
     private ProcessType fillProcessType;
     private ProcessType saveProcessType;
+
+    private List<Component> updateComponents = new ArrayList<>();
 
     public AbstractProcessableListPanel(String id, ProcessType loadProcessType,
                                         ProcessType bindProcessType, ProcessType fillProcessType, ProcessType saveProcessType) {
@@ -437,7 +445,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     protected String load() {
                         return StringUtil.valueOf(rf.getLoadedRecordCount());
                     }
-                }));
+                }).setOutputMarkupId(true).setMarkupId("loaded_record_count" + rf.getId()));
 
                 //Количество связанных записей
                 item.add(new Label("binded_record_count", new LoadableDetachableModel<String>() {
@@ -446,7 +454,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     protected String load() {
                         return StringUtil.valueOf(rf.getBindedRecordCount());
                     }
-                }));
+                }).setOutputMarkupId(true).setMarkupId("binded_record_count" + rf.getId()));
 
                 //Количество обработанных записей
                 item.add(new Label("filled_record_count", new LoadableDetachableModel<String>() {
@@ -455,7 +463,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     protected String load() {
                         return StringUtil.valueOf(rf.getFilledRecordCount());
                     }
-                }));
+                }).setOutputMarkupId(true).setMarkupId("filled_record_count" + rf.getId()));
 
                 //Статус
                 AjaxLink history = new AjaxLink("history") {
@@ -467,7 +475,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 };
                 item.add(history);
 
-                history.add(new ItemStatusLabel("status", processingManager));
+                history.add(new ItemStatusLabel("status", processingManager).setOutputMarkupId(true).setMarkupId("status" + rf.getId()));
 
                 //Дополнительные поля
                 for (Column column : columns) {
@@ -524,6 +532,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             public void onClick(AjaxRequestTarget target) {
                 bind(selectManager.getSelectedFileIds(), buildCommandParameters());
+                selectManager.clearSelection();
             }
         });
 
@@ -533,6 +542,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             public void onClick(AjaxRequestTarget target) {
                 fill(selectManager.getSelectedFileIds(), buildCommandParameters());
+                selectManager.clearSelection();
             }
         });
 
@@ -542,6 +552,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             public void onClick(AjaxRequestTarget target) {
                 save(selectManager.getSelectedFileIds(), buildCommandParameters());
+                selectManager.clearSelection();
             }
         });
 
@@ -686,40 +697,92 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         //Messages
         add(new BroadcastBehavior(ExecutorBean.class) {
+            private long lastUpdate = System.currentTimeMillis();
+
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
                 if (key == null){
                     return;
                 }
 
+                if (payload instanceof Process){
+                    Process process = (Process) payload;
+                    String prefix = process.getProcessType().name().split("_")[0].toLowerCase();
 
+                    switch (key){
+                        case "onBegin":
+                            info(getString(prefix + "_process.begin", process.getSize()));
 
-                switch (key){
-                    case "onBegin":
-//                        getSession().info();
-                        break;
-                    case "onComplete":
-                        break;
-                    case "onCancel":
+                            break;
+                        case "onComplete":
+                            info(getString(prefix + "_process.completed", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
 
-                        break;
+                            break;
+                        case "onCancel":
+                            info(getString(prefix + "_process.canceled", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
 
-                    case "onSuccess":
-                        break;
-                    case "onSkip":
-                        break;
-                    case "onError":
-                        break;
+                            break;
+                        case "onCriticalError":
+                            error(process.getErrorMessage());
+                            info(getString(prefix + "_process.critical_error", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
+
+                            break;
+                    }
+
+                    handler.add(messages, form);
                 }
 
+                if (payload instanceof IExecutorObject){
+                    IExecutorObject object = (IExecutorObject) payload;
 
+                    switch (key){
+                        case "onSuccess":
+                        case "onSkip":
+                            if (System.currentTimeMillis() - lastUpdate > 1000){
+                                handler.add(messages, form);
+
+                                lastUpdate = System.currentTimeMillis();
+                            }
+
+                            break;
+                        case "onError":
+                            error(object.getErrorMessage());
+                            handler.add(messages, form);
+
+                            break;
+                    }
+                }
             }
         });
 
         add(new BroadcastBehavior(AbstractTaskBean.class) {
+            private long lastUpdate = System.currentTimeMillis();
+
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                if (System.currentTimeMillis() - lastUpdate > 40){
+                    dataView.beforeRender();
+                    dataView.markRendering(false);
 
+                    dataView.visitChildren(Label.class, (object, visit) -> {
+                        if (object.getOutputMarkupId()){
+                            handler.add(object);
+                        }
+                    });
+
+                    lastUpdate = System.currentTimeMillis();
+                }
+            }
+        });
+
+        add(new BroadcastBehavior(ProcessManagerBean.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                if (payload instanceof Exception){
+                    error(ExceptionUtil.getCauseMessage((Exception) payload));
+
+                    handler.add(messages);
+                }
             }
         });
     }
@@ -775,5 +838,9 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     public RequestFileLoadPanel getRequestFileLoadPanel(){
         return requestFileLoadPanel;
+    }
+
+    private String getString(String key, Object... parameters) {
+        return MessageFormat.format(getString(key), parameters);
     }
 }

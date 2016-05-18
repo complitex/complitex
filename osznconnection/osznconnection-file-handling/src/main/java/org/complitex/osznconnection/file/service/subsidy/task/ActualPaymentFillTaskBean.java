@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -13,21 +13,17 @@ import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.ActualPayment;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
-import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import java.util.*;
 
 /**
@@ -37,11 +33,7 @@ import java.util.*;
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ActualPaymentFillTaskBean extends AbstractTaskBean<RequestFile> {
-
     private final Logger log = LoggerFactory.getLogger(ActualPaymentFillTaskBean.class);
-
-    @Resource
-    private UserTransaction userTransaction;
 
     @EJB
     protected ConfigBean configBean;
@@ -72,8 +64,6 @@ public class ActualPaymentFillTaskBean extends AbstractTaskBean<RequestFile> {
             //обработка файла actualPayment
             try {
                 processActualPayment(requestFile);
-            } catch (DBException e) {
-                throw new RuntimeException(e);
             } catch (CanceledByUserException e) {
                 throw new FillException(e, true, requestFile);
             }
@@ -105,7 +95,7 @@ public class ActualPaymentFillTaskBean extends AbstractTaskBean<RequestFile> {
         return Log.EVENT.EDIT;
     }
 
-    private void process(ActualPayment actualPayment, Date date) throws DBException {
+    private void process(ActualPayment actualPayment, Date date){
         if (RequestStatus.unboundStatuses().contains(actualPayment.getStatus())) {
             return;
         }
@@ -144,7 +134,7 @@ public class ActualPaymentFillTaskBean extends AbstractTaskBean<RequestFile> {
     }
 
     private void processActualPayment(RequestFile actualPaymentFile)
-            throws FillException, DBException, CanceledByUserException {
+            throws FillException, CanceledByUserException {
         //извлечь из базы все id подлежащие обработке для файла actualPayment и доставать записи порциями по BATCH_SIZE штук.
         long startTime = 0;
         if (log.isDebugEnabled()) {
@@ -170,22 +160,8 @@ public class ActualPaymentFillTaskBean extends AbstractTaskBean<RequestFile> {
                 }
 
                 //обработать actualPayment запись
-                try {
-                    userTransaction.begin();
-
-                    process(actualPayment, actualPaymentBean.getFirstDay(actualPayment, actualPaymentFile));
-                    onRequest(actualPayment);
-
-                    userTransaction.commit();
-                } catch (Exception e) {
-                    log.error("The actual payment item (id = " + actualPayment.getId() + ") was processed with error: ", e);
-
-                    try {
-                        userTransaction.rollback();
-                    } catch (SystemException e1) {
-                        log.error("Couldn't rollback transaction for processing actual payment item.", e1);
-                    }
-                }
+                process(actualPayment, actualPaymentBean.getFirstDay(actualPayment, actualPaymentFile));
+                onRequest(actualPayment);
             }
         }
     }

@@ -215,7 +215,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
                 item.add(new Label("loaded_record_count", requestFile.getLoadedRecordCount()));
 
                 //Статус
-                item.add(new ItemStatusLabel("status", processingManager, timerManager));
+                item.add(new ItemStatusLabel("status", processingManager));
             }
         };
         dataViewContainer.add(dataView);

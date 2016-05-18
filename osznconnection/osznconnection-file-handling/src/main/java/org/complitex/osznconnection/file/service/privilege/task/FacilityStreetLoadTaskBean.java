@@ -2,7 +2,7 @@ package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.AbstractRequest;

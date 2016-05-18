@@ -2,6 +2,7 @@ package org.complitex.common.service.executor;
 
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.Log;
+import org.complitex.common.exception.ExecuteException;
 
 import java.util.Map;
 

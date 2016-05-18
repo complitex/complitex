@@ -7,7 +7,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.IUserProfileBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.service.exception.WrongCurrentPasswordException;
+import org.complitex.common.exception.WrongCurrentPasswordException;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;

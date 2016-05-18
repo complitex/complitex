@@ -1,7 +1,7 @@
 package org.complitex.keconnection.heatmeter.service;
 
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.service.exception.ConcurrentModificationException;
+import org.complitex.common.exception.ConcurrentModificationException;
 import org.complitex.common.util.DateUtil;
 import org.complitex.keconnection.heatmeter.entity.*;
 

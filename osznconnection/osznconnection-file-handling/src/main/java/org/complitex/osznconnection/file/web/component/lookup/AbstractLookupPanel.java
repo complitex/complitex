@@ -37,7 +37,6 @@ import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.LookupBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.file.web.component.account.AccountNumberPickerPanel;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -377,7 +376,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         lookupBean.resolveOutgoingAddress(request);
     }
 
-    protected Cursor<AccountDetail> getAccountDetails(T request) throws DBException{
+    protected Cursor<AccountDetail> getAccountDetails(T request) {
         return lookupBean.getAccountDetails( request.getOutgoingDistrict(), getServiceProviderCode(request),
                 request.getOutgoingStreetType(), request.getOutgoingStreet(),
                 request.getOutgoingBuildingNumber(), request.getOutgoingBuildingCorp(),
@@ -428,7 +427,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                                 accountDetailModel.setObject(accountDetails.getData().get(0));
                             }
                         }
-                    } catch (DBException e) {
+                    } catch (Exception e) {
                         error(getString("remote_db_error"));
                         LoggerFactory.getLogger(getClass()).error("", e);
                     }
@@ -503,11 +502,11 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                             accountDetailModel.setObject(accountDetails.get(0));
                         }
                     }
-                } catch (DBException e) {
-                    error(getString("remote_db_error"));
-                    LoggerFactory.getLogger(getClass()).error("", e);
                 } catch (UnknownAccountNumberTypeException e) {
                     error(getString("unknown_account_number_type"));
+                } catch (Exception e) {
+                    error(getString("remote_db_error"));
+                    LoggerFactory.getLogger(getClass()).error("", e);
                 }
             } else {
                 error(StatusRenderUtil.displayStatus(request.getStatus(), getLocale()));

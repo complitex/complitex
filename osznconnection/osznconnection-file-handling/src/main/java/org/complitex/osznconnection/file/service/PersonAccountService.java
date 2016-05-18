@@ -10,10 +10,8 @@ import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
-import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service.subsidy.*;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
@@ -129,7 +127,7 @@ public class PersonAccountService extends AbstractBean {
 
     public void resolveAccountNumber(AbstractAccountRequest request, String puAccountNumber,
                                      String serviceProviderCode,
-                                     boolean updatePuAccount) throws DBException {
+                                     boolean updatePuAccount) {
         try {
             //resolve local account
             String accountNumber = getLocalAccountNumber(request, puAccountNumber, false);
@@ -165,7 +163,7 @@ public class PersonAccountService extends AbstractBean {
     }
 
     public void forceResolveAccountNumber(AbstractAccountRequest request, String district, String serviceProviderCode,
-                                          String accountNumber) throws DBException{
+                                          String accountNumber){
         try {
             //force resolve remote account
             List<AccountDetail> accountDetails = serviceProviderAdapter.acquireAccountDetailsByAccount(request, district,

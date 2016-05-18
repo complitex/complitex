@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.service.exception;
 
-import org.complitex.common.service.exception.AbstractException;
+import org.complitex.common.exception.AbstractException;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

@@ -11,7 +11,7 @@ import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.ModuleBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.correction.entity.CityCorrection;

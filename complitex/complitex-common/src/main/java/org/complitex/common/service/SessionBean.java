@@ -6,7 +6,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.UserGroup.GROUP_NAME;
-import org.complitex.common.service.exception.WrongCurrentPasswordException;
+import org.complitex.common.exception.WrongCurrentPasswordException;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.PermissionBean;
 import org.complitex.common.strategy.StrategyFactory;

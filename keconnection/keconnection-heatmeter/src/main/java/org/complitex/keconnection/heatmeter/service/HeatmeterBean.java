@@ -5,7 +5,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.mybatis.XmlMapper;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.exception.ConcurrentModificationException;
+import org.complitex.common.exception.ConcurrentModificationException;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;

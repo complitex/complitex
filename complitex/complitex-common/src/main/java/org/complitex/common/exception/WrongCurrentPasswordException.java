@@ -1,4 +1,4 @@
-package org.complitex.common.service.exception;
+package org.complitex.common.exception;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

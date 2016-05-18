@@ -43,6 +43,7 @@ import static org.complitex.osznconnection.file.service.process.ProcessType.*;
  */
 @Singleton(name = "ProcessManagerBean")
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
+@TransactionManagement(TransactionManagementType.BEAN)
 public class ProcessManagerBean {
     private final Logger log = LoggerFactory.getLogger(ProcessManagerBean.class);
 
@@ -95,7 +96,7 @@ public class ProcessManagerBean {
         }
 
         if (process == null) {
-            process = new Process();
+            process = new Process(processType);
             map.put(processType, process);
         }
 
@@ -203,8 +204,6 @@ public class ProcessManagerBean {
             FileHandlingConfig threadCount, FileHandlingConfig maxErrorCount, Map processParameters) {
         Process<T> process = getProcess(processType);
 
-        process.getQueue().addAll(list);
-
         if (!process.isRunning()) {
             process.init();
 
@@ -214,12 +213,13 @@ public class ProcessManagerBean {
             process.setListener(listener);
             process.setCommandParameters(processParameters);
 
-            process.getQueue().addAll(list);
+            process.addObjects(list);
 
             executorBean.execute(process);
         } else {
-            int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
+            process.addObjects(list);
 
+            int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
             for (int i = 0; i < freeThreadCount; ++i) {
                 executorBean.executeNext(process);
             }
@@ -289,7 +289,7 @@ public class ProcessManagerBean {
 
     @Asynchronous
     public void loadGroup(long userOrganizationId, long osznId, int monthFrom, int monthTo, int year) {
-        Process process = getProcess(LOAD_GROUP);
+        Process<RequestFileGroup> process = getProcess(LOAD_GROUP);
 
         try {
             //поиск групп файлов запросов
@@ -316,7 +316,7 @@ public class ProcessManagerBean {
                         rf.getLogObjectName());
             }
 
-            process.getQueue().addAll(loadParameter.getRequestFileGroups());
+            process.addObjects(loadParameter.getRequestFileGroups());
 
             //загрузка данных
             if (!process.isRunning()) {
@@ -334,7 +334,9 @@ public class ProcessManagerBean {
                 }
             }
         } catch (Exception e) {
-            process.preprocessError(); //todo add ui message
+            process.preprocessError();
+
+            broadcastService.broadcast(getClass(), "onError", e);
 
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null,
@@ -617,7 +619,7 @@ public class ProcessManagerBean {
 
     @Asynchronous
     public void loadPrivilegeGroup(long userOrganizationId, long osznId, int month, int year) {
-        Process process = getProcess(LOAD_PRIVILEGE_GROUP);
+        Process<PrivilegeFileGroup> process = getProcess(LOAD_PRIVILEGE_GROUP);
 
         try {
             //поиск групп файлов запросов
@@ -638,7 +640,7 @@ public class ProcessManagerBean {
                         rf.getLogObjectName());
             }
 
-            process.getQueue().addAll(loadParameter.getRequestFileGroups());
+            process.addObjects(loadParameter.getRequestFileGroups());
 
             //загрузка данных
             if (!process.isRunning()) {
@@ -656,7 +658,9 @@ public class ProcessManagerBean {
                 }
             }
         } catch (Exception e) {
-            process.preprocessError(); //todo add ui message
+            process.preprocessError();
+
+            broadcastService.broadcast(getClass(), "onError", e);
 
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null,

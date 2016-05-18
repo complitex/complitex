@@ -260,17 +260,9 @@ public class PaymentBean extends AbstractRequestBean {
      * @param fileId fileId
      */
 
-    public void clearBeforeBinding(long fileId, List<Long> serviceProviderTypeIds) {
-        Map<String, String> updateFieldMap = null;
-        if (serviceProviderTypeIds != null && !serviceProviderTypeIds.isEmpty()) {
-            updateFieldMap = Maps.newHashMap();
-            for (PaymentDBF field : getUpdatableFields(serviceProviderTypeIds)) {
-                updateFieldMap.put(field.name(), null);
-            }
-        }
-
+    public void clearBeforeBinding(long fileId) {
         sqlSession().update(MAPPING_NAMESPACE + ".clearBeforeBinding",
-                ImmutableMap.of("status", RequestStatus.LOADED, "fileId", fileId, "updateFieldMap", updateFieldMap));
+                ImmutableMap.of("status", RequestStatus.LOADED, "fileId", fileId));
         clearWarnings(fileId, RequestFileType.PAYMENT);
     }
 

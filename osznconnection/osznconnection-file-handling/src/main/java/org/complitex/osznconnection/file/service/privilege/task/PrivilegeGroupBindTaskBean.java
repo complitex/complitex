@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
@@ -11,7 +11,7 @@ import org.complitex.osznconnection.file.entity.privilege.PrivilegeGroup;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;

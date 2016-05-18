@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.service.subsidy.task;
 
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;

@@ -1,6 +1,4 @@
-package org.complitex.common.service.executor;
-
-import org.complitex.common.service.exception.AbstractException;
+package org.complitex.common.exception;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

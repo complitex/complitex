@@ -5,7 +5,7 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.util.DateUtil;
 import org.complitex.correction.entity.ServiceCorrection;
 import org.complitex.correction.service.ServiceCorrectionBean;
@@ -15,12 +15,11 @@ import org.complitex.osznconnection.file.entity.privilege.*;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,7 +158,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
 
 
     @SuppressWarnings("Duplicates")
-    private void fill(PrivilegeGroup group) throws DBException {
+    private void fill(PrivilegeGroup group){
         DwellingCharacteristics dwellingCharacteristics = group.getDwellingCharacteristics();
         FacilityServiceType facilityServiceType = group.getFacilityServiceType();
 

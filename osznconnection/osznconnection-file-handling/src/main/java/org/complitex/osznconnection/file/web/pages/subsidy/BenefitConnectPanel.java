@@ -22,11 +22,9 @@ import org.complitex.common.util.StringUtil;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.subsidy.Benefit;
 import org.complitex.osznconnection.file.entity.subsidy.BenefitDBF;
-import org.complitex.osznconnection.file.entity.BenefitData;
-import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
+import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.odlabs.wiquery.core.javascript.JsStatement;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 import org.odlabs.wiquery.ui.dialog.Dialog;
@@ -55,7 +53,7 @@ public class BenefitConnectPanel extends Panel {
                 if (benefitDataCollection != null) {
                     data = Lists.newArrayList(benefitDataCollection);
                 }
-            } catch (DBException e) {
+            } catch (Exception e) {
                 error(getString("db_error"));
                 LoggerFactory.getLogger(getClass()).error("", e);
             }
@@ -217,7 +215,7 @@ public class BenefitConnectPanel extends Panel {
                                 closeDialog(target);
                                 return;
                         }
-                    } catch (DBException e) {
+                    } catch (Exception e) {
                         error(getString("db_error"));
                         LoggerFactory.getLogger(getClass()).error("", e);
                     }

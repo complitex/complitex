@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
@@ -15,23 +15,19 @@ import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Map;
 
@@ -43,9 +39,6 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_AC
 @TransactionManagement(TransactionManagementType.BEAN)
 public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(DwellingCharacteristicsBindTaskBean.class);
-
-    @Resource
-    private UserTransaction userTransaction;
 
     @EJB
     protected ConfigBean configBean;
@@ -92,7 +85,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
         }
     }
 
-    private boolean resolveRemoteAccountNumber(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws DBException {
+    private boolean resolveRemoteAccountNumber(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws MoreOneAccountException {
         serviceProviderAdapter.acquireFacilityPersonAccount(dwellingCharacteristics,
                 dwellingCharacteristics.getOutgoingDistrict(), serviceProviderCode, dwellingCharacteristics.getOutgoingStreetType(),
                 dwellingCharacteristics.getOutgoingStreet(),
@@ -102,17 +95,13 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
                 dwellingCharacteristics.getPassport());
 
         if (dwellingCharacteristics.getStatus() == RequestStatus.ACCOUNT_NUMBER_RESOLVED) {
-            try {
-                personAccountService.save(dwellingCharacteristics, dwellingCharacteristics.getInn());
-            } catch (MoreOneAccountException e) {
-                throw new DBException(e);
-            }
+            personAccountService.save(dwellingCharacteristics, dwellingCharacteristics.getInn());
         }
 
         return dwellingCharacteristics.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    public void bind(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws DBException {
+    public void bind(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws MoreOneAccountException {
         //resolve local account number
         personAccountService.localResolveAccountNumber(dwellingCharacteristics, dwellingCharacteristics.getInn(), true);
 
@@ -136,7 +125,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
     }
 
     private void bindDwellingCharacteristicsFile(RequestFile requestFile)
-            throws BindException, DBException, CanceledByUserException {
+            throws BindException, CanceledByUserException {
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
@@ -163,22 +152,10 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
 
                 //связать dwelling characteristics запись
                 try {
-                    userTransaction.begin();
-
                     bind(serviceProviderCode, dwellingCharacteristic);
                     onRequest(dwellingCharacteristic);
-
-                    userTransaction.commit();
-                } catch (Exception e) {
-                    log.error("The dwelling characteristics item ( id = " + dwellingCharacteristic.getId() + ") was bound with error: ", e);
-
-                    try {
-                        userTransaction.rollback();
-                    } catch (SystemException e1) {
-                        log.error("Couldn't rollback transaction for binding dwelling characteristics item.", e1);
-                    }
-
-                    throw new BindException(e, false, requestFile);
+                } catch (MoreOneAccountException e) {
+                    throw new BindException(e, true, requestFile);
                 }
             }
         }
@@ -207,8 +184,6 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
             //связывание файла dwelling characteristics
             try {
                 bindDwellingCharacteristicsFile(requestFile);
-            } catch (DBException e) {
-                throw new RuntimeException(e);
             } catch (CanceledByUserException e) {
                 throw new BindException(e, true, requestFile);
             }

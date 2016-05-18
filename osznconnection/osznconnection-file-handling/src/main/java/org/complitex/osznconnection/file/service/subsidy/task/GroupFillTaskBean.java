@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -14,24 +14,20 @@ import org.complitex.osznconnection.file.entity.subsidy.Benefit;
 import org.complitex.osznconnection.file.entity.subsidy.Payment;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
-import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +41,6 @@ import java.util.Set;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class GroupFillTaskBean extends AbstractTaskBean<RequestFileGroup> {
     private final Logger log = LoggerFactory.getLogger(GroupFillTaskBean.class);
-
-    @Resource
-    private UserTransaction userTransaction;
 
     @EJB
     protected ConfigBean configBean;
@@ -85,18 +78,10 @@ public class GroupFillTaskBean extends AbstractTaskBean<RequestFileGroup> {
             benefitBean.clearBeforeProcessing(group.getBenefitFile().getId());
 
             //обработка файла payment
-            try {
-                processPayment(group.getPaymentFile());
-            } catch (DBException e) {
-                throw new RuntimeException(e);
-            }
+            processPayment(group.getPaymentFile());
 
             //обработка файла benefit
-            try {
-                processBenefit(group.getBenefitFile());
-            } catch (DBException e) {
-                throw new RuntimeException(e);
-            }
+            processBenefit(group.getBenefitFile());
 
             //проверить все ли записи в payment файле обработались
             if (!paymentBean.isPaymentFileProcessed(group.getPaymentFile().getId())) {
@@ -140,7 +125,7 @@ public class GroupFillTaskBean extends AbstractTaskBean<RequestFileGroup> {
      *
      * @param payment Запись запроса начислений
      */
-    private void process(Payment payment) throws DBException {
+    private void process(Payment payment){
 //        if (RequestStatus.unboundStatuses().contains(payment.getStatus())) {
 //            return;
 //        }
@@ -171,7 +156,7 @@ public class GroupFillTaskBean extends AbstractTaskBean<RequestFileGroup> {
      * @param paymentFile Файл запроса начислений
      * @throws FillException Ошибка обработки
      */
-    private void processPayment(RequestFile paymentFile) throws FillException, DBException {
+    private void processPayment(RequestFile paymentFile) throws FillException {
         //извлечь из базы все id подлежащие обработке для файла payment и доставать записи порциями по BATCH_SIZE штук.
         List<Long> notResolvedPaymentIds = paymentBean.findIdsForProcessing(paymentFile.getId());
         List<Long> batch = Lists.newArrayList();
@@ -192,30 +177,8 @@ public class GroupFillTaskBean extends AbstractTaskBean<RequestFileGroup> {
                 }
 
                 //обработать payment запись
-                try {
-                    userTransaction.begin();
-
-                    process(payment);
-                    onRequest(payment);
-
-                    userTransaction.commit();
-                } catch (DBException e) {
-                    try {
-                        userTransaction.rollback();
-                    } catch (SystemException e1) {
-                        log.error("Couldn't rollback transaction for processing payment item.", e1);
-                    }
-
-                    throw e;
-                } catch (Exception e) {
-                    log.error("The payment item (id = " + payment.getId() + ") was processed with error: ", e);
-
-                    try {
-                        userTransaction.rollback();
-                    } catch (SystemException e1) {
-                        log.error("Couldn't rollback transaction for processing payment item.", e1);
-                    }
-                }
+                process(payment);
+                onRequest(payment);
             }
         }
     }
@@ -237,7 +200,7 @@ public class GroupFillTaskBean extends AbstractTaskBean<RequestFileGroup> {
      * @param benefitFile Файл запроса льгот
      * @throws FillException Ошибка обработки
      */
-    private void processBenefit(RequestFile benefitFile) throws FillException, DBException {
+    private void processBenefit(RequestFile benefitFile) throws FillException {
         List<String> allAccountNumbers = benefitBean.getAllAccountNumbers(benefitFile.getId());
 
         for (String accountNumber : allAccountNumbers) {

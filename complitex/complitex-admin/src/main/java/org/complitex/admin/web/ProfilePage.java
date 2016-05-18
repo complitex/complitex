@@ -16,7 +16,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Preference;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.service.exception.WrongCurrentPasswordException;
+import org.complitex.common.exception.WrongCurrentPasswordException;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.back.BackInfo;

@@ -195,7 +195,7 @@ public final class FacilityForm2FileList extends ScrollListPage {
                 }));
 
                 //Статус
-                item.add(new ItemStatusLabel("status", processingManager, timerManager));
+                item.add(new ItemStatusLabel("status", processingManager));
             }
         };
         dataViewContainer.add(dataView);

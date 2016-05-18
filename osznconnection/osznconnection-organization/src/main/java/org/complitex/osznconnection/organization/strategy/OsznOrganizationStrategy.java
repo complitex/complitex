@@ -3,7 +3,7 @@ package org.complitex.osznconnection.organization.strategy;
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.*;
-import org.complitex.common.service.exception.ServiceRuntimeException;
+import org.complitex.common.exception.ServiceRuntimeException;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;

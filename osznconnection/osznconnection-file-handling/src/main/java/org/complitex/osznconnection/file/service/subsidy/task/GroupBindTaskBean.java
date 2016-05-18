@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
@@ -16,24 +16,20 @@ import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.osznconnection.file.service.exception.CanceledByUserException;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.service_provider.exception.DBException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Map;
 
@@ -48,9 +44,6 @@ import static org.complitex.osznconnection.file.entity.subsidy.PaymentDBF.OWN_NU
 @TransactionManagement(TransactionManagementType.BEAN)
 public class GroupBindTaskBean extends AbstractTaskBean<RequestFileGroup> {
     private final Logger log = LoggerFactory.getLogger(GroupBindTaskBean.class);
-
-    @Resource
-    private UserTransaction userTransaction;
 
     @EJB
     protected ConfigBean configBean;
@@ -89,15 +82,13 @@ public class GroupBindTaskBean extends AbstractTaskBean<RequestFileGroup> {
             requestFileGroupBean.save(group);
 
             //очищаем колонки которые заполняются во время связывания и обработки для записей в таблицах payment и benefit
-            //paymentBean.clearBeforeBinding(group.getPaymentFile().getId(), billingContext.getServiceIds());
+            paymentBean.clearBeforeBinding(group.getPaymentFile().getId());
             benefitBean.clearBeforeBinding(group.getBenefitFile().getId());
 
             //связывание файла payment
             RequestFile paymentFile = group.getPaymentFile();
             try {
                 bindPaymentFile(paymentFile);
-            } catch (DBException e) {
-                throw new RuntimeException(e);
             } catch (CanceledByUserException e) {
                 throw new BindException(e, true, group);
             }
@@ -165,7 +156,7 @@ public class GroupBindTaskBean extends AbstractTaskBean<RequestFileGroup> {
      * Если не успешно, то попытаться разрешить адрес по схеме "ОСЗН адрес -> локальная адресная база -> адрес центра начислений".
      * Если адрес разрешен, то пытаемся разрешить номер л/c в ЦН.
      */
-    public void bind(String serviceProviderCode, Payment payment) throws DBException {
+    public void bind(String serviceProviderCode, Payment payment){
         String accountNumber = payment.getStringField(PaymentDBF.OWN_NUM_SR);
 
         //resolve local account number
@@ -203,7 +194,7 @@ public class GroupBindTaskBean extends AbstractTaskBean<RequestFileGroup> {
      * @throws BindException Ошибка связывания
      */
     private void bindPaymentFile(RequestFile requestFile)
-            throws BindException, DBException, CanceledByUserException {
+            throws BindException, CanceledByUserException {
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
@@ -228,24 +219,8 @@ public class GroupBindTaskBean extends AbstractTaskBean<RequestFileGroup> {
                 }
 
                 //связать payment запись
-                try {
-                    userTransaction.begin();
-
-                    bind(serviceProviderCode, payment);
-                    onRequest(payment);
-
-                    userTransaction.commit();
-                } catch (Exception e) {
-                    log.error("The payment item ( id = " + payment.getId() + ") was bound with error: ", e);
-
-                    try {
-                        userTransaction.rollback();
-                    } catch (SystemException e1) {
-                        log.error("Couldn't rollback transaction for binding payment item.", e1);
-                    }
-
-                    throw new BindException(e, false, requestFile);
-                }
+                bind(serviceProviderCode, payment);
+                onRequest(payment);
             }
         }
     }

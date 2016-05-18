@@ -3,8 +3,8 @@ package org.complitex.common.util;
 import au.com.bytecode.opencsv.CSVReader;
 import nl.knaw.dans.common.dbflib.CorruptedTableException;
 import nl.knaw.dans.common.dbflib.Table;
-import org.complitex.common.service.exception.ImportFileNotFoundException;
-import org.complitex.common.service.exception.ImportFileReadException;
+import org.complitex.common.exception.ImportFileNotFoundException;
+import org.complitex.common.exception.ImportFileReadException;
 
 import java.io.*;
 
