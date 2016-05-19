@@ -45,7 +45,7 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
 
             @Override
             public boolean isEnabled() {
-                return !processingManager.isGlobalWaiting(item.getModelObject()) && !processingManager.isGlobalProcessing();
+                return !processingManager.isGlobalWaiting(item.getModelObject());
             }
 
             @Override
