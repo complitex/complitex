@@ -89,7 +89,6 @@ public class ExecutorBean {
 
             executorCommand.startTask();
             boolean noSkip = task.execute(object, executorCommand.getCommandParameters());
-            executorCommand.stopTask();
 
             if (noSkip) {
                 executorCommand.incrementSuccessCount();
@@ -135,6 +134,8 @@ public class ExecutorBean {
             broadcastService.broadcast(getClass(), "onCriticalError", executorCommand);
 
             log.error("Критическая ошибка", e);
+        }finally {
+            executorCommand.stopTask();
         }
     }
 
