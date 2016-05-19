@@ -277,6 +277,11 @@ public class SubsidyTarifFileList extends TemplatePage {
                 timerManager.addTimer();
                 target.add(form);
             }
+
+            @Override
+            protected Long[] getOsznOrganizationTypes() {
+                return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE};
+            }
         };
 
         add(requestFileLoadPanel);
