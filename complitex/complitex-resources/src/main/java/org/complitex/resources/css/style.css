@@ -86,7 +86,7 @@ img {
 h1 { color: #007AAE; font-size: 20px; font-weight: normal; margin: 0px; padding: 0px 0px 10px 0px;}
 h2 { color: #273540; font-size: 16px; font-weight: bold; margin: 0px; padding: 5px 0px 10px 0px;}
 p { margin: 0px; padding: 0px 0px 10px 0px;}
-ul { margin: 0px; padding: 5px 0px 15px 30px; list-style-type: square; }
+ul { margin: 0; padding: 5px 0 15px 0; list-style-type: none; }
 
 .tbColor { width: 100%; border-top: 1px solid #667584; margin-bottom: 5px; border-spacing: 0}
 .tbColor th { color: #007AAE; background-color:#CBD2D8; border-bottom: 1px solid #667584; padding: 4px 8px 5px 8px; text-align:left;}

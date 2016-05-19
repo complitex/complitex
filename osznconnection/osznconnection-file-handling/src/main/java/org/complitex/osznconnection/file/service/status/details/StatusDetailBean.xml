@@ -492,18 +492,22 @@
     </resultMap>
 
     <select id="getFacilityServiceTypeStatusDetailInfo" parameterType="long" 
-                        resultMap="dwellingCharacteristicsStatusDetailInfo">
+                        resultMap="facilityServiceTypeStatusDetailInfo">
         SELECT COUNT(1) `count`, `status`, `request_file_id` FROM `facility_service_type` WHERE `request_file_id` = #{id}
         GROUP BY `status`
         ORDER BY `count` DESC
     </select>
 
-    <select id="getFacilityServiceTypeStatusDetails" parameterType="map" resultMap="dwellingCharacteristicsStatusDetail">
+    <select id="getFacilityServiceTypeStatusDetails" parameterType="map" resultMap="facilityServiceTypeStatusDetail">
         <choose>
             <!--account number -->
-            <when test="status == 212 or status == 213">
-                SELECT `FIO` `id`, COUNT(1) `count`, TO_CYRILLIC(`first_name`), TO_CYRILLIC(`middle_name`), TO_CYRILLIC(`last_name`),
-                TO_CYRILLIC(`FIO`) FROM `facility_service_type`
+            <when test="status == 212 or status == 213 or status == 217">
+                SELECT `FIO` `id`, COUNT(1) `count`,
+                TO_CYRILLIC(`first_name`) first_name,
+                TO_CYRILLIC(`middle_name`) middle_name,
+                TO_CYRILLIC(`last_name`) last_name,
+                TO_CYRILLIC(`FIO`) FIO
+                FROM `facility_service_type`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
                 GROUP BY 1
             </when>

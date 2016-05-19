@@ -115,19 +115,19 @@
             </if>
 
             <if test="firstName != null">
-                AND fst.`first_name` LIKE CONCAT('%',#{firstName},'%')
+                AND TO_CYRILLIC(fst.`first_name`) LIKE CONCAT('%',#{firstName},'%')
             </if>
 
             <if test="middleName != null">
-                AND fst.`middle_name` LIKE CONCAT('%',#{middleName},'%')
+                AND TO_CYRILLIC(fst.`middle_name`) LIKE CONCAT('%',#{middleName},'%')
             </if>
 
             <if test="lastName != null">
-                AND fst.`last_name` LIKE CONCAT('%',#{lastName},'%')
+                AND TO_CYRILLIC(fst.`last_name`) LIKE CONCAT('%',#{lastName},'%')
             </if>
 
             <if test="fio != null">
-                and fst.`FIO` = #{fio}
+                and TO_CYRILLIC(fst.`FIO`) = #{fio}
             </if>
 
             <if test="inn != null">

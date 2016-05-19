@@ -20,9 +20,10 @@ public class FacilityServiceTypeStatusDetailRenderer implements IStatusDetailRen
 
         switch (status) {
             case ACCOUNT_NUMBER_NOT_FOUND:
-            case MORE_ONE_ACCOUNTS: {
+            case BENEFIT_OWNER_NOT_ASSOCIATED:
+            case MORE_ONE_ACCOUNTS:
                 return statusDetail.getDetail("fio");
-            }
+
             case STREET_UNRESOLVED_LOCALLY:
             case STREET_UNRESOLVED:
             case STREET_TYPE_UNRESOLVED_LOCALLY:
