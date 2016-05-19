@@ -279,7 +279,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         form.add(find);
 
         //Select all checkbox
-        form.add(new SelectAllCheckBoxPanel("selectAllCheckBoxPanel", processingManager));
+        form.add(new SelectAllCheckBoxPanel("selectAllCheckBoxPanel", processingManager).setOutputMarkupId(true));
 
         //Id
         form.add(new TextField<String>("id"));
