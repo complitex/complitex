@@ -47,6 +47,11 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
             public boolean isEnabled() {
                 return !processingManager.isGlobalWaiting(item.getModelObject()) && !processingManager.isGlobalProcessing();
             }
+
+            @Override
+            public String getInputName() {
+                return "select" + item.getModelObject().getId();
+            }
         };
 
         checkBox.add(new AjaxFormComponentUpdatingBehavior("change") {

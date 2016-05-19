@@ -75,6 +75,7 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
+import java.time.LocalTime;
 import java.util.*;
 
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
@@ -705,26 +706,28 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     return;
                 }
 
+                String time = LocalTime.now().toString() + " ";
+
                 if (payload instanceof Process){
                     Process process = (Process) payload;
                     String prefix = process.getProcessType().name().split("_")[0].toLowerCase();
 
                     switch (key){
                         case "onBegin":
-                            info(getString(prefix + "_process.begin", process.getSize()));
+                            info(time + getString(prefix + "_process.begin"));
 
                             break;
                         case "onComplete":
-                            info(getString(prefix + "_process.completed", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
+                            info(time + getString(prefix + "_process.completed", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
 
                             break;
                         case "onCancel":
-                            info(getString(prefix + "_process.canceled", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
+                            info(time + getString(prefix + "_process.canceled", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
 
                             break;
                         case "onCriticalError":
                             error(process.getErrorMessage());
-                            info(getString(prefix + "_process.critical_error", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
+                            info(time + getString(prefix + "_process.critical_error", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
 
                             break;
                     }
@@ -746,7 +749,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                             break;
                         case "onError":
-                            error(object.getErrorMessage());
+                            error(time + object.getErrorMessage());
                             handler.add(messages, form);
 
                             break;
