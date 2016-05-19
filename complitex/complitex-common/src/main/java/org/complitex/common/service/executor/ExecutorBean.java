@@ -99,6 +99,8 @@ public class ExecutorBean {
                 log.debug("Задача {} пропущена.", task);
             }
 
+            //next
+            executorCommand.getProcessed().add(object);
             executeNext(executorCommand);
         } catch (ExecuteException e) {
             executorCommand.stopTask();
@@ -114,6 +116,7 @@ public class ExecutorBean {
             }
 
             //next
+            executorCommand.getProcessed().add(object);
             executeNext(executorCommand);
         } catch (Exception e){
             executorCommand.clear();
@@ -126,8 +129,6 @@ public class ExecutorBean {
             broadcastService.broadcast(getClass(), "onCriticalError", executorCommand);
 
             log.error("Критическая ошибка", e);
-        }finally {
-            executorCommand.getProcessed().add(object);
         }
     }
 
