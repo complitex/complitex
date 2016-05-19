@@ -3,6 +3,7 @@ package org.complitex.osznconnection.file.web.component.process;
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.Form;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.LogBean;
 import org.complitex.osznconnection.file.Module;
@@ -43,7 +44,7 @@ public abstract class RequestFileDeleteButton extends DeleteButton {
     }
 
     @Override
-    public void onClick(AjaxRequestTarget target) {
+    public void onSubmit(AjaxRequestTarget target, Form form) {
         for (long requestFileId : selectManager.getSelectedFileIds()) {
             RequestFile requestFile = requestFileBean.getRequestFile(requestFileId);
             try {

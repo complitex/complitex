@@ -29,8 +29,14 @@ public class ExecutorBean {
     @EJB
     private LogBean logBean;
 
-    @Asynchronous
-    public <T extends IExecutorObject> void executeNext(ExecutorCommand<T> executorCommand){
+    @EJB
+    private AsyncBean asyncBean;
+
+    public <T extends IExecutorObject> void executeNextAsync(ExecutorCommand<T> executorCommand){
+        asyncBean.async(() -> executeNext(executorCommand));
+    }
+
+    private <T extends IExecutorObject> void executeNext(ExecutorCommand<T> executorCommand){
         ITaskBean<T> task = executorCommand.getTask();
 
         if (executorCommand.isStop()){
@@ -101,7 +107,7 @@ public class ExecutorBean {
 
             //next
             executorCommand.getProcessed().add(object);
-            executeNext(executorCommand);
+            executeNextAsync(executorCommand);
         } catch (ExecuteException e) {
             executorCommand.stopTask();
 
@@ -117,7 +123,7 @@ public class ExecutorBean {
 
             //next
             executorCommand.getProcessed().add(object);
-            executeNext(executorCommand);
+            executeNextAsync(executorCommand);
         } catch (Exception e){
             executorCommand.clear();
             executorCommand.stopTask();
@@ -155,7 +161,7 @@ public class ExecutorBean {
         executorCommand.setStatus(ExecutorCommand.STATUS.RUNNING);
 
         for (int i = 0; i < executorCommand.getMaxThread(); ++i){
-            executeNext(executorCommand);
+            executeNextAsync(executorCommand);
         }
     }
 }

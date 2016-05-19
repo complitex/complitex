@@ -3,12 +3,13 @@ package org.complitex.osznconnection.file.web.component.process;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 
 /**
  *
  * @author Artem
  */
-public abstract class DeleteButton extends AjaxLink<Void> {
+public abstract class DeleteButton extends AjaxSubmitLink {
 
     public DeleteButton(String id) {
         super(id);

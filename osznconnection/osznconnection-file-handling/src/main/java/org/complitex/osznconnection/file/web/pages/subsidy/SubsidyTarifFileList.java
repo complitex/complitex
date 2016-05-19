@@ -180,7 +180,7 @@ public class SubsidyTarifFileList extends TemplatePage {
                 final Long objectId = item.getModelObject().getId();
 
                 //Выбор файлов
-                item.add(new ItemCheckBoxPanel<RequestFile>("itemCheckBoxPanel", processingManager, selectManager));
+                item.add(new ItemCheckBoxPanel<RequestFile>("itemCheckBoxPanel", processingManager, selectManager, item.getModel()));
 
                 //Идентификатор файла
                 item.add(new Label("id", StringUtil.valueOf(objectId)));

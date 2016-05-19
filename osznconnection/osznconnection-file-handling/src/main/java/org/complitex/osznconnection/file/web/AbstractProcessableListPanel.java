@@ -394,7 +394,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 Long objectId = item.getModelObject().getId();
                 R rf = item.getModelObject();
 
-                item.add(new ItemCheckBoxPanel<R>("itemCheckBoxPanel", processingManager, selectManager));
+                item.add(new ItemCheckBoxPanel<R>("itemCheckBoxPanel", processingManager, selectManager, item.getModel()));
 
                 //Идентификатор файла
                 item.add(new Label("id", StringUtil.valueOf(objectId)));
@@ -519,49 +519,49 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         form.add(buttons);
 
         //Загрузить
-        buttons.add(new AjaxLink<Void>("load") {
+        buttons.add(new AjaxSubmitLink("load") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onSubmit(AjaxRequestTarget target, Form form) {
                 requestFileLoadPanel.open(target);
             }
         });
 
         //Связать
-        buttons.add(new AjaxLink<Void>("bind") {
+        buttons.add(new AjaxSubmitLink("bind") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onSubmit(AjaxRequestTarget target, Form form) {
                 bind(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
             }
         });
 
         //Обработать
-        buttons.add(new AjaxLink<Void>("process") {
+        buttons.add(new AjaxSubmitLink("process") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onSubmit(AjaxRequestTarget target, Form form) {
                 fill(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
             }
         });
 
         //Выгрузить
-        buttons.add(new AjaxLink<Void>("save") {
+        buttons.add(new AjaxSubmitLink("save") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onSubmit(AjaxRequestTarget target, Form form) {
                 save(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
             }
         });
 
         //Экспортировать
-        buttons.add(new AjaxLink<Void>("export") {
+        buttons.add(new AjaxSubmitLink("export") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onSubmit(AjaxRequestTarget target, Form form) {
                 export(target, selectManager.getSelectedFileIds());
             }
 
@@ -575,7 +575,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         buttons.add(new DeleteButton("delete") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onSubmit(AjaxRequestTarget target, Form form) {
                 for (long objectId : selectManager.getSelectedFileIds()) {
                     final R object = getObject(objectId);
 

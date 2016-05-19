@@ -5,7 +5,9 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.SharedResourceReference;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.web.component.css.CssAttributeBehavior;
@@ -22,44 +24,48 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
     private final ProcessingManager processingManager;
     private final SelectManager selectManager;
 
-    public ItemCheckBoxPanel(String id, ProcessingManager processingManager, SelectManager selectManager) {
+    private IModel<? extends IExecutorObject> model;
+
+    public ItemCheckBoxPanel(String id, ProcessingManager processingManager, SelectManager selectManager, IModel<? extends IExecutorObject> model) {
         super(id);
         this.processingManager = processingManager;
         this.selectManager = selectManager;
+
+        this.model = model;
     }
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
 
-        final Item<IExecutorObject> item = findParent(Item.class);
-
         //Выбор файлов
-        CheckBox checkBox = new CheckBox("selected", selectManager.newSelectCheckboxModel(item.getModelObject().getId())) {
+        CheckBox checkBox = new CheckBox("selected", selectManager.newSelectCheckboxModel(model.getObject().getId())) {
 
             @Override
             public boolean isVisible() {
-                return !item.getModelObject().isProcessing()
-                        && !processingManager.isGlobalWaiting(item.getModelObject());
+                return !model.getObject().isProcessing()
+                        && !processingManager.isGlobalWaiting(model.getObject());
             }
 
             @Override
             public boolean isEnabled() {
-                return !processingManager.isGlobalWaiting(item.getModelObject());
+                return !processingManager.isGlobalWaiting(model.getObject());
             }
 
             @Override
             public String getInputName() {
-                return "select" + item.getModelObject().getId();
+                return "select" + model.getObject().getId();
             }
         };
 
-        checkBox.add(new AjaxFormComponentUpdatingBehavior("change") {
+        checkBox.setMarkupId("select" + model.getObject().getId());
 
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-            }
-        });
+//        checkBox.add(new AjaxFormComponentUpdatingBehavior("change") {
+//
+//            @Override
+//            protected void onUpdate(AjaxRequestTarget target) {
+//            }
+//        });
         checkBox.add(new CssAttributeBehavior("processable-list-panel-select"));
         add(checkBox);
 
@@ -68,7 +74,7 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
 
             @Override
             public boolean isVisible() {
-                return item.getModelObject().isProcessing();
+                return model.getObject().isProcessing();
             }
         });
 
@@ -77,8 +83,7 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
 
             @Override
             public boolean isVisible() {
-                return processingManager.isGlobalWaiting(item.getModelObject())
-                        && !item.getModelObject().isProcessing();
+                return processingManager.isGlobalWaiting(model.getObject()) && !model.getObject().isProcessing();
             }
         });
     }

@@ -221,7 +221,7 @@ public class ProcessManagerBean {
 
             int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
             for (int i = 0; i < freeThreadCount; ++i) {
-                executorBean.executeNext(process);
+                executorBean.executeNextAsync(process);
             }
         }
     }
@@ -330,7 +330,7 @@ public class ProcessManagerBean {
                 int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
 
                 for (int i = 0; i < freeThreadCount; ++i) {
-                    executorBean.executeNext(process);
+                    executorBean.executeNextAsync(process);
                 }
             }
         } catch (Exception e) {
@@ -654,7 +654,7 @@ public class ProcessManagerBean {
                 int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
 
                 for (int i = 0; i < freeThreadCount; ++i) {
-                    executorBean.executeNext(process);
+                    executorBean.executeNextAsync(process);
                 }
             }
         } catch (Exception e) {

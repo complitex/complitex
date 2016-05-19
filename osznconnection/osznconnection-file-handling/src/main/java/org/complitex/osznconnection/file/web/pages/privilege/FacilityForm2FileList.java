@@ -171,7 +171,7 @@ public final class FacilityForm2FileList extends ScrollListPage {
                 final RequestFile requestFile = item.getModelObject();
 
                 //Выбор файлов
-                item.add(new ItemCheckBoxPanel<>("itemCheckBoxPanel", processingManager, selectManager));
+                item.add(new ItemCheckBoxPanel<>("itemCheckBoxPanel", processingManager, selectManager, item.getModel()));
 
                 //Идентификатор файла
                 item.add(new Label("id", StringUtil.valueOf(requestFile.getId())));
