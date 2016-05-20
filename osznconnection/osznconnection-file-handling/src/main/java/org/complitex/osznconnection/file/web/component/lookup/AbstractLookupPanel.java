@@ -202,6 +202,8 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         fioContainer.add(new IndicatingAjaxButton("lookupByFio") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                accountDetailsModel.setObject(null);
+
                 String district = resolveOutgoingDistrict(request);
 
                 try {
