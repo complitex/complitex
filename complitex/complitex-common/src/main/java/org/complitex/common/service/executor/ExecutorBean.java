@@ -1,7 +1,6 @@
 package org.complitex.common.service.executor;
 
 import org.complitex.common.entity.IExecutorObject;
-import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.service.LogBean;
@@ -108,8 +107,6 @@ public class ExecutorBean {
             executorCommand.getProcessed().add(object);
             executeNextAsync(executorCommand);
         } catch (ExecuteException e) {
-            executorCommand.stopTask();
-
             executorCommand.incrementErrorCount();
             object.setErrorMessage(e.getMessage());
             broadcastService.broadcast(getClass(), "onError", object);
@@ -125,7 +122,6 @@ public class ExecutorBean {
             executeNextAsync(executorCommand);
         } catch (Exception e){
             executorCommand.clear();
-            executorCommand.stopTask();
 
             executorCommand.incrementErrorCount();
             executorCommand.setStatus(CRITICAL_ERROR);
@@ -158,10 +154,12 @@ public class ExecutorBean {
                 executorCommand.getTask().getControllerClass().getSimpleName(),
                 executorCommand.getSize());
 
-        //execute threads
         executorCommand.setStatus(ExecutorCommand.STATUS.RUNNING);
 
-        for (int i = 0; i < executorCommand.getMaxThread(); ++i){
+        int size = Math.min(executorCommand.getMaxThread(), executorCommand.getSize());
+
+        //execute threads
+        for (int i = 0; i < size; ++i){
             executeNextAsync(executorCommand);
         }
     }

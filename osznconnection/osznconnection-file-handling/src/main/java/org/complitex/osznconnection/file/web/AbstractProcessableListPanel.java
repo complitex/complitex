@@ -22,9 +22,6 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.util.collections.ArrayListStack;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.IExecutorObject;
@@ -763,6 +760,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                //onRequest
                 if (System.currentTimeMillis() - lastUpdate > 40){
                     dataView.beforeRender();
                     dataView.markRendering(false);
