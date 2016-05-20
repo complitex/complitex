@@ -2,7 +2,7 @@ package ru.flexpay.eirc.registry.service.handle.exchange;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.StatusType;
-import org.complitex.common.service.exception.AbstractException;
+import org.complitex.common.exception.AbstractException;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.CloneUtil;
 import ru.flexpay.eirc.registry.entity.Container;

@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.service;
 
 import com.google.common.collect.Queues;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

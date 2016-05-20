@@ -2,7 +2,7 @@ package ru.flexpay.eirc;
 
 import org.complitex.common.EjbTestBeanLocator;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.executor.ExecuteException;
+import org.complitex.common.exception.ExecuteException;
 import org.junit.Test;
 import ru.flexpay.eirc.eirc_account.entity.EircAccount;
 import ru.flexpay.eirc.eirc_account.service.EircAccountBean;

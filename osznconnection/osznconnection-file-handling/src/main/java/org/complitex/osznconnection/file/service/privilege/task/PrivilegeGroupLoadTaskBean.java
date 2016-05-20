@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
@@ -27,16 +27,18 @@ public class PrivilegeGroupLoadTaskBean extends AbstractTaskBean<PrivilegeFileGr
 
         RequestFile dwellingCharacteristicsRequestFile = group.getDwellingCharacteristicsRequestFile();
 
+        boolean skip = false;
+
         if (dwellingCharacteristicsRequestFile != null) {
-            dwellingCharacteristicsLoadTaskBean.execute(dwellingCharacteristicsRequestFile, commandParameters);
+            skip = dwellingCharacteristicsLoadTaskBean.execute(dwellingCharacteristicsRequestFile, commandParameters);
         }
 
         RequestFile facilityServiceTypeRequestFile = group.getFacilityServiceTypeRequestFile();
 
         if (facilityServiceTypeRequestFile != null) {
-            facilityServiceTypeLoadTaskBean.execute(facilityServiceTypeRequestFile, commandParameters);
+            skip &= facilityServiceTypeLoadTaskBean.execute(facilityServiceTypeRequestFile, commandParameters);
         }
 
-        return true;
+        return skip;
     }
 }

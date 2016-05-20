@@ -5,7 +5,7 @@ import org.apache.commons.validator.routines.checkdigit.CheckDigitException;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.exception.AbstractException;
+import org.complitex.common.exception.AbstractException;
 import org.complitex.common.util.AttributeUtil;
 import ru.flexpay.eirc.dictionary.entity.Address;
 import ru.flexpay.eirc.dictionary.entity.Person;

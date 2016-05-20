@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.registry.service.handle.exchange;
 
-import org.complitex.common.service.exception.AbstractException;
+import org.complitex.common.exception.AbstractException;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import ru.flexpay.eirc.registry.entity.Container;
