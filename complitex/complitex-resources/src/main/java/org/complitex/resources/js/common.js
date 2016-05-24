@@ -162,13 +162,13 @@ Complitex.Common = {
  * |yyyyyy|  ??    |            |yyyyyy|  ??    |
  * -----------------            -----------------
  */
-var alignTableColumns = function() {
-    var largest = 0;
-    $('table.same-width th').each(function() {
-        var width = $(this)[0].offsetWidth;
-        if(width > largest) {
-            largest = width;
-        }
-    }).width(largest);
-};
-$(document).ready(alignTableColumns);
+// var alignTableColumns = function() {
+//     var largest = 0;
+//     $('table.same-width th').each(function() {
+//         var width = $(this)[0].offsetWidth;
+//         if(width > largest) {
+//             largest = width;
+//         }
+//     }).width(largest);
+// };
+// $(document).ready(alignTableColumns);

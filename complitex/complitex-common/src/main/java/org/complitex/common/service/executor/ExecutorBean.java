@@ -4,6 +4,7 @@ import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.service.LogBean;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,6 @@ import static org.complitex.common.service.executor.ExecutorCommand.STATUS.*;
  *         Date: 01.11.10 12:50
  */
 @Stateless
-@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ExecutorBean {
     private final Logger log = LoggerFactory.getLogger(ExecutorBean.class);
@@ -35,8 +35,8 @@ public class ExecutorBean {
         asyncBean.async(() -> executeNext(executorCommand));
     }
 
-    private <T extends IExecutorObject> void executeNext(ExecutorCommand<T> executorCommand){
-        ITaskBean<T> task = executorCommand.getTask();
+    public <T extends IExecutorObject> void executeNext(ExecutorCommand<T> executorCommand){
+        ITaskBean<T> task = EjbBeanLocator.getBean(executorCommand.getTaskClass());
 
         if (executorCommand.isStop()){
             if (executorCommand.isRunning()) {
@@ -58,6 +58,10 @@ public class ExecutorBean {
                 log.error("Превышено количество ошибок в процессе {}", task.getControllerClass());
             }
 
+            return;
+        }
+
+        if (executorCommand.getStatus().equals(CRITICAL_ERROR)){
             return;
         }
 
@@ -84,9 +88,8 @@ public class ExecutorBean {
 
         //execute
         try {
-            executorCommand.setObject(object);
-
             executorCommand.startTask();
+
             boolean noSkip = task.execute(object, executorCommand.getCommandParameters());
 
             if (noSkip) {
@@ -102,10 +105,6 @@ public class ExecutorBean {
 
                 log.debug("Задача {} пропущена.", task);
             }
-
-            //next
-            executorCommand.getProcessed().add(object);
-            executeNextAsync(executorCommand);
         } catch (ExecuteException e) {
             executorCommand.incrementErrorCount();
             object.setErrorMessage(e.getMessage());
@@ -116,10 +115,6 @@ public class ExecutorBean {
             }else{
                 log.error(e.getMessage(), e);
             }
-
-            //next
-            executorCommand.getProcessed().add(object);
-            executeNextAsync(executorCommand);
         } catch (Exception e){
             executorCommand.clear();
 
@@ -131,7 +126,9 @@ public class ExecutorBean {
 
             log.error("Критическая ошибка", e);
         }finally {
+            executorCommand.getProcessed().add(object);
             executorCommand.stopTask();
+            executeNextAsync(executorCommand);
         }
     }
 
@@ -151,7 +148,7 @@ public class ExecutorBean {
         broadcastService.broadcast(getClass(), "onBegin", executorCommand);
 
         log.info("Начат процесс {}, количество объектов: {}",
-                executorCommand.getTask().getControllerClass().getSimpleName(),
+                executorCommand.getTaskClass().getSimpleName(),
                 executorCommand.getSize());
 
         executorCommand.setStatus(ExecutorCommand.STATUS.RUNNING);

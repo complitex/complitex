@@ -43,7 +43,7 @@ public class EntityBean extends AbstractBean {
     }
 
     public Entity getEntity(String dataSource, String entity) {
-        return loadFromDb(dataSource, entity);
+        return dataSource != null ? loadFromDb(dataSource, entity): getEntity(entity);
     }
 
     public Entity getEntity(String entityName) {

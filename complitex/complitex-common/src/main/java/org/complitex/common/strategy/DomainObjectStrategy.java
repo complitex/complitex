@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -69,6 +71,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String displayDomainObject(Long objectId, Locale locale) {
         DomainObject domainObject = getDomainObject(objectId, true);
 

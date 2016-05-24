@@ -44,6 +44,10 @@ public class BroadcastService {
 
     @Asynchronous
     public <T> void broadcast(Class producer, String key, T payload){
+        broadcastSync(producer, key, payload);
+    }
+
+    private <T> void broadcastSync(Class producer, String key, T payload){
         try {
             broadcaster.broadcastAll(application, new BroadcastMessage<>(producer, key, payload));
         } catch (Exception e) {

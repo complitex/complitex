@@ -26,10 +26,12 @@ import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrate
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +70,9 @@ public class GroupBindTaskBean extends AbstractTaskBean<RequestFileGroup> {
 
     @EJB
     private OsznOrganizationStrategy organizationStrategy;
+
+    @Resource
+    private UserTransaction userTransaction;
 
     @Override
     public boolean execute(RequestFileGroup group, Map commandParameters) throws ExecuteException {

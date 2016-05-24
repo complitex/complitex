@@ -199,7 +199,7 @@ public class ProcessManagerBean {
         return false;
     }
 
-    private <T extends IExecutorObject> void execute(ProcessType processType, Class<? extends ITaskBean> taskClass,
+    private <T extends IExecutorObject> void execute(ProcessType processType, Class<? extends ITaskBean<T>> taskClass,
             List<T> list, IExecutorListener listener,
             FileHandlingConfig threadCount, FileHandlingConfig maxErrorCount, Map processParameters) {
         Process<T> process = getProcess(processType);
@@ -209,7 +209,7 @@ public class ProcessManagerBean {
 
             process.setMaxThread(SAVE_THREAD_SIZE.equals(threadCount) ? 1 : configBean.getInteger(threadCount, true));
             process.setMaxErrors(configBean.getInteger(maxErrorCount, true));
-            process.setTask(EjbBeanLocator.getBean(taskClass));
+            process.setTaskClass(taskClass);
             process.setListener(listener);
             process.setCommandParameters(processParameters);
 
@@ -323,7 +323,7 @@ public class ProcessManagerBean {
                 process.setPreprocess(false);
                 process.setMaxErrors(configBean.getInteger(LOAD_MAX_ERROR_COUNT, true));
                 process.setMaxThread(configBean.getInteger(LOAD_THREAD_SIZE, true));
-                process.setTask(EjbBeanLocator.getBean(GroupLoadTaskBean.class));
+                process.setTaskClass(GroupLoadTaskBean.class);
 
                 executorBean.execute(process);
             } else {
@@ -647,7 +647,7 @@ public class ProcessManagerBean {
                 process.setPreprocess(false);
                 process.setMaxErrors(configBean.getInteger(LOAD_MAX_ERROR_COUNT, true));
                 process.setMaxThread(configBean.getInteger(LOAD_THREAD_SIZE, true));
-                process.setTask(EjbBeanLocator.getBean(PrivilegeGroupLoadTaskBean.class));
+                process.setTaskClass(PrivilegeGroupLoadTaskBean.class);
 
                 executorBean.execute(process);
             } else {

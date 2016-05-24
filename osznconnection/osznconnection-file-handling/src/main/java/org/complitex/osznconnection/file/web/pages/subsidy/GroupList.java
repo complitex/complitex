@@ -30,6 +30,7 @@ import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationT
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.pages.ScrollListPage;
 import org.complitex.template.web.security.SecurityRole;
+import org.complitex.template.web.template.TemplatePage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,12 +40,8 @@ import java.util.Map;
 
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
-/**
- *
- * @author Artem
- */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
-public class GroupList extends ScrollListPage {
+public class GroupList extends TemplatePage {
 
     @EJB
     private RequestFileGroupBean requestFileGroupBean;
@@ -220,8 +217,6 @@ public class GroupList extends ScrollListPage {
     private final GroupListPanel groupListPanel;
 
     public GroupList(PageParameters params) {
-        super(params);
-
         add(groupListPanel = new GroupListPanel("groupListPanel"));
     }
 
