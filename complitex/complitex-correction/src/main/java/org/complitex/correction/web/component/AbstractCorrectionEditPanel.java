@@ -30,8 +30,7 @@ import java.util.Locale;
 
 /**
  * Абстрактная панель для редактирования коррекций.
- * @author Artem
- */
+  */
 public abstract class AbstractCorrectionEditPanel<T extends Correction> extends Panel {
 
     @EJB
@@ -108,28 +107,16 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
             valid = false;
         }
 
-        //calculation center must have null user organization but oszn must have non null user organization.
         if (isNew()) {
-            boolean isOszn = false;  //todo fix validate
-            //find outer organization object and determine whether it is oszn or calculation center.
-//            for (DomainObject outerOrganization : allOuterOrganizationsModel.getObject()) {
-//                if (outerOrganization.getId().equals(correction.getOrganizationId())) {
-//                    //choosen outer organization found.
-//                    isOszn = outerOrganization.getAttribute(IOsznOrganizationStrategy.ORGANIZATION_TYPE).getValueId().
-//                            equals(OsznOrganizationTypeStrategy.OSZN);
-//                    break;
-//                }
-//            }
-//
-//            if (isOszn && correction.getUserOrganizationId() == null) {
-//                error(getString("oszn_must_have_user_organization"));
-//                valid = false;
-//            }
-//
-//            if (!isOszn && correction.getUserOrganizationId() != null) {
-//                error(getString("calculation_center_must_not_have_user_organization"));
-//                valid = false;
-//            }
+            if (correction.getOrganizationId() == null) {
+                error(getString("error_organization"));
+                valid = false;
+            }
+
+            if (correction.getUserOrganizationId() == null) {
+                error(getString("error_user_organization"));
+                valid = false;
+            }
         }
 
 
@@ -151,9 +138,7 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
         if (backPageParameters == null && useScrolling) {
             backPageParameters = new PageParameters();
         }
-//        if (useScrolling) {
-//            backPageParameters.set(AbstractCorrectionList.SCROLL_PARAMETER, getModel().getId());
-//        }
+
         if (backPageParameters != null) {
             setResponsePage(getBackPageClass(), backPageParameters);
         } else {
@@ -219,28 +204,14 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
 
         //Organization
         final OrganizationIdPicker organization = new OrganizationIdPicker("organizationId",
-                new PropertyModel<Long>(correction, "organizationId"),
+                new PropertyModel<>(correction, "organizationId"),
                 getOrganizationTypeIds());
         organization.setEnabled(isNew()).add();
         form.add(organization);
 
-//        if (freezeOrganization()) {
-//            organization.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-//
-//                @Override
-//                protected void onUpdate(AjaxRequestTarget target) {
-//                    organization.setEnabled(false);
-//                    target.add(organization);
-//                    if (correctionInputPanel.isVisible() && freezeOrganization()) {
-//                        target.add(correctionInputPanel);
-//                    }
-//                }
-//            });
-//        }
-
         //User Organization
         form.add(new OrganizationIdPicker("userOrganizationId",
-                new PropertyModel<Long>(correction, "userOrganizationId"),
+                new PropertyModel<>(correction, "userOrganizationId"),
                 OrganizationTypeStrategy.USER_ORGANIZATION_TYPE).
                 setEnabled(isNew() && sessionBean.isAdmin()));
 
