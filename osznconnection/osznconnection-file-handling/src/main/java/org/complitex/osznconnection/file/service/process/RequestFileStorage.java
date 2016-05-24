@@ -70,7 +70,7 @@ public class RequestFileStorage {
     }
 
     public File createOutputRequestFileDirectory(String parent, String name, String child) throws StorageNotFoundException {
-        checkOutputRequestFileStorageExists(parent);
+//        checkOutputRequestFileStorageExists(parent);
 
         //Создаем директорию с промежуточным именем если что
         File dir = new File(parent, child);
