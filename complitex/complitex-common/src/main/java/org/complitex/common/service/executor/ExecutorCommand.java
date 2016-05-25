@@ -33,8 +33,8 @@ public class ExecutorCommand<T extends IExecutorObject> {
 
     private AtomicInteger runningThread = new AtomicInteger(0);
 
-    private List<T> list = new ArrayList<>();
-    private AtomicInteger index = new AtomicInteger(0);
+    private Queue<T> queue = new ConcurrentLinkedQueue<>();
+    private Queue<T> processingQueue = new ConcurrentLinkedQueue<T>();
 
     private Class<? extends ITaskBean<T>> taskClass;
     private IExecutorListener listener;
@@ -55,8 +55,7 @@ public class ExecutorCommand<T extends IExecutorObject> {
         errorCount.set(0);
 
         processed.clear();
-        list.clear();
-        index.set(0);
+        queue.clear();
 
         stop.set(false);
     }
@@ -64,37 +63,39 @@ public class ExecutorCommand<T extends IExecutorObject> {
     public void cancel(){
         stop.set(true);
 
-        list.forEach(IExecutorObject::cancel);
+        processingQueue.forEach(IExecutorObject::cancel);
     }
 
     public void clear(){
-        list.clear();
-        index.set(0);
+        queue.clear();
+        processingQueue.clear();
     }
 
     public boolean isWaiting(IExecutorObject executorObject){
-        return list.stream().skip(index.get())
+        return queue.stream()
                 .filter(o -> executorObject.getId().equals(o.getId()))
                 .findAny()
                 .isPresent();
     }
 
     public void addObjects(List<T> objects){
-        list.addAll(objects);
+        queue.addAll(objects);
 
-        size = list.size();
+        size = queue.size();
     }
 
     public T pollObject(){
-        if (index.get() >= list.size()){
-            return null;
+        T object = queue.poll();
+
+        if (object != null) {
+            processingQueue.add(object);
         }
 
-        return list.get(index.getAndIncrement());
+        return object;
     }
 
     public boolean isEmpty(){
-        return list.size() - index.get() == 0;
+        return queue.isEmpty();
     }
 
     public STATUS getStatus() {

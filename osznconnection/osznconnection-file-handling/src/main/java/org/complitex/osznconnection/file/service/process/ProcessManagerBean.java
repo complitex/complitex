@@ -6,10 +6,9 @@ import org.complitex.common.entity.Log;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.LogBean;
-import org.complitex.common.service.executor.ExecutorBean;
+import org.complitex.common.service.executor.ExecutorService;
 import org.complitex.common.service.executor.IExecutorListener;
 import org.complitex.common.service.executor.ITaskBean;
-import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.ExportType;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
@@ -51,7 +50,7 @@ public class ProcessManagerBean {
     private SessionContext sessionContext;
 
     @EJB
-    private ExecutorBean executorBean;
+    private ExecutorService executorService;
 
     @EJB
     private ConfigBean configBean;
@@ -215,13 +214,13 @@ public class ProcessManagerBean {
 
             process.addObjects(list);
 
-            executorBean.execute(process);
+            executorService.execute(process);
         } else {
             process.addObjects(list);
 
             int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
             for (int i = 0; i < freeThreadCount; ++i) {
-                executorBean.executeNextAsync(process);
+                executorService.executeNextAsync(process);
             }
         }
     }
@@ -325,12 +324,12 @@ public class ProcessManagerBean {
                 process.setMaxThread(configBean.getInteger(LOAD_THREAD_SIZE, true));
                 process.setTaskClass(GroupLoadTaskBean.class);
 
-                executorBean.execute(process);
+                executorService.execute(process);
             } else {
                 int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
 
                 for (int i = 0; i < freeThreadCount; ++i) {
-                    executorBean.executeNextAsync(process);
+                    executorService.executeNextAsync(process);
                 }
             }
         } catch (Exception e) {
@@ -649,12 +648,12 @@ public class ProcessManagerBean {
                 process.setMaxThread(configBean.getInteger(LOAD_THREAD_SIZE, true));
                 process.setTaskClass(PrivilegeGroupLoadTaskBean.class);
 
-                executorBean.execute(process);
+                executorService.execute(process);
             } else {
                 int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
 
                 for (int i = 0; i < freeThreadCount; ++i) {
-                    executorBean.executeNextAsync(process);
+                    executorService.executeNextAsync(process);
                 }
             }
         } catch (Exception e) {

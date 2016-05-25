@@ -17,10 +17,11 @@ import static org.complitex.common.service.executor.ExecutorCommand.STATUS.*;
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 01.11.10 12:50
  */
-@Stateless
+@Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
-public class ExecutorBean {
-    private final Logger log = LoggerFactory.getLogger(ExecutorBean.class);
+@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
+public class ExecutorService {
+    private final Logger log = LoggerFactory.getLogger(ExecutorService.class);
 
     @EJB
     private BroadcastService broadcastService;
@@ -128,7 +129,7 @@ public class ExecutorBean {
         }finally {
             executorCommand.getProcessed().add(object);
             executorCommand.stopTask();
-            executeNextAsync(executorCommand);
+            asyncBean.async(() -> executeNext(executorCommand));
         }
     }
 
@@ -157,7 +158,7 @@ public class ExecutorBean {
 
         //execute threads
         for (int i = 0; i < size; ++i){
-            executeNextAsync(executorCommand);
+            asyncBean.async(() -> executeNext(executorCommand));
         }
     }
 }

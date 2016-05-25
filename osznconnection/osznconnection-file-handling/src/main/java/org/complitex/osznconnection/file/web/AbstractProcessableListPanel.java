@@ -29,7 +29,7 @@ import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.AbstractFilter;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecutorBean;
+import org.complitex.common.service.executor.ExecutorService;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ExceptionUtil;
@@ -696,15 +696,9 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         add(requestFileHistoryPanel = new RequestFileHistoryPanel("history_panel"));
 
         //Messages
-        add(new BroadcastBehavior(ExecutorBean.class, AbstractTaskBean.class) {
-            private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());
-
+        add(new BroadcastBehavior(ExecutorService.class) {
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
-                if (key == null){
-                    return;
-                }
-
                 String time = LocalTime.now().toString() + " ";
 
                 if (payload instanceof Process){
@@ -734,13 +728,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     handler.add(messages, dataViewContainer, buttons);
                 }
 
-                if (System.currentTimeMillis() - lastUpdate.get() < 1000){
-                    return;
-                }
-
                 if (payload instanceof IExecutorObject){
-                    lastUpdate.set(System.currentTimeMillis());
-
                     IExecutorObject object = (IExecutorObject) payload;
 
                     switch (key){
@@ -756,16 +744,22 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                             break;
                     }
                 }
+            }
+        });
 
-                //onRequest
-                if ("onRequest".equals(key)){
+        add(new BroadcastBehavior(AbstractTaskBean.class) {
+            private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());
+
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                if ("onRequest".equals(key) && System.currentTimeMillis() - lastUpdate.get() > 1000){
                     lastUpdate.set(System.currentTimeMillis());
 
                     dataView.beforeRender();
                     dataView.markRendering(false);
 
                     dataView.visitChildren(Label.class, (object, visit) -> {
-                        if (object.getMarkupId().contains("count")){
+                        if (object.getOutputMarkupId()){
                             handler.add(object);
                         }
                     });

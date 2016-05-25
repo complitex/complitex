@@ -67,8 +67,8 @@
 
     <sql id="requestFileGroupFilterFrom">
         from `request_file_group` g
-            left join `request_file` p on g.`id` = p.`group_id`
-            left join `request_file` b on g.`id` = b.`group_id`
+            left join `request_file` p on g.`id` = p.`group_id` and p.`type` = 2
+            left join `request_file` b on g.`id` = b.`group_id` and b.`type` = 1
     </sql>
     
     <sql id="permissionFilter">
@@ -83,7 +83,6 @@
         
     <sql id="requestFileGroupFilterWhere">
         <where>
-            p.`type` = 2 and b.`type` = 1
             and (p.`id` is not null or b.`id` is not null)
             <if test="id != null">and g.`id` = #{id}</if>
             <if test="loaded != null">and YEAR(p.`loaded`) = YEAR(#{loaded}) and DAYOFYEAR(p.`loaded`) = DAYOFYEAR(#{loaded})</if>
