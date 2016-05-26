@@ -62,7 +62,7 @@
             <if test="object.firstName != null">
                 <choose>
                     <when test="object.middleName != null and object.middleName.length() == 1">
-                        and SUBSTRING(pa.`first_name`, 0, 1) = #{object.firstName}
+                        and SUBSTRING(pa.`first_name`, 1, 1) = #{object.firstName}
                     </when>
                     <otherwise>and pa.`first_name` = #{object.firstName}</otherwise>
                 </choose>
@@ -70,7 +70,7 @@
             <if test="object.middleName != null">
                 <choose>
                     <when test="object.middleName != null and object.middleName.length() == 1">
-                        and SUBSTRING(pa.`middle_name`, 0, 1) = #{object.middleName}
+                        and SUBSTRING(pa.`middle_name`, 1, 1) = #{object.middleName}
                     </when>
                     <otherwise>and pa.`middle_name` = #{object.middleName}</otherwise>
                 </choose>
