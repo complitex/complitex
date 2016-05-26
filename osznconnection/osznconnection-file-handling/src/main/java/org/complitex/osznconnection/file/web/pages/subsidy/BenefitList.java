@@ -245,7 +245,7 @@ public final class BenefitList extends TemplatePage {
             @Override
             public void onSubmit() {
                 PageParameters params = new PageParameters();
-                params.set(GroupList.SCROLL_PARAMETER, fileId);
+//                params.set(GroupList.SCROLL_PARAMETER, fileId);
                 setResponsePage(GroupList.class, params);
             }
         };

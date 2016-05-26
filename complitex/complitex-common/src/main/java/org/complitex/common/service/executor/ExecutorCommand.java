@@ -2,6 +2,7 @@ package org.complitex.common.service.executor;
 
 import org.complitex.common.entity.IExecutorObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -33,7 +34,9 @@ public class ExecutorCommand<T extends IExecutorObject> {
     private AtomicInteger runningThread = new AtomicInteger(0);
 
     private Queue<T> queue = new ConcurrentLinkedQueue<>();
-    private ITaskBean<T> task;
+    private Queue<T> processingQueue = new ConcurrentLinkedQueue<T>();
+
+    private Class<? extends ITaskBean<T>> taskClass;
     private IExecutorListener listener;
     
     // параметры управления ходом выполнения комманды
@@ -41,8 +44,6 @@ public class ExecutorCommand<T extends IExecutorObject> {
 
     private int maxErrors;
     private int maxThread;
-
-    private IExecutorObject object;
 
     private String errorMessage;
 
@@ -61,21 +62,20 @@ public class ExecutorCommand<T extends IExecutorObject> {
 
     public void cancel(){
         stop.set(true);
-        object.cancel();
+
+        processingQueue.forEach(IExecutorObject::cancel);
     }
 
     public void clear(){
         queue.clear();
+        processingQueue.clear();
     }
 
     public boolean isWaiting(IExecutorObject executorObject){
-        for (IExecutorObject o : queue){
-            if (executorObject.getId().equals(o.getId())){
-                return true;
-            }
-        }
-
-        return false;
+        return queue.stream()
+                .filter(o -> executorObject.getId().equals(o.getId()))
+                .findAny()
+                .isPresent();
     }
 
     public void addObjects(List<T> objects){
@@ -85,7 +85,13 @@ public class ExecutorCommand<T extends IExecutorObject> {
     }
 
     public T pollObject(){
-        return queue.poll();
+        T object = queue.poll();
+
+        if (object != null) {
+            processingQueue.add(object);
+        }
+
+        return object;
     }
 
     public boolean isEmpty(){
@@ -160,12 +166,12 @@ public class ExecutorCommand<T extends IExecutorObject> {
         runningThread.decrementAndGet();
     }
 
-    public ITaskBean<T> getTask() {
-        return task;
+    public Class<? extends ITaskBean<T>> getTaskClass() {
+        return taskClass;
     }
 
-    public void setTask(ITaskBean task) {
-        this.task = task;
+    public void setTaskClass(Class<? extends ITaskBean<T>> taskClass) {
+        this.taskClass = taskClass;
     }
 
     public IExecutorListener getListener() {
@@ -190,14 +196,6 @@ public class ExecutorCommand<T extends IExecutorObject> {
 
     public void setMaxThread(int maxThread) {
         this.maxThread = maxThread;
-    }
-
-    public IExecutorObject getObject() {
-        return object;
-    }
-
-    public void setObject(IExecutorObject object) {
-        this.object = object;
     }
 
     public int getRunningThreadCount(){

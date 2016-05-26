@@ -11,6 +11,8 @@ public class OsznWebApplication extends ComplitexWebApplication{
     protected void init() {
         super.init();
 
+        getDebugSettings().setAjaxDebugModeEnabled(false);
+
         mountPage("/address-sync", AddressSyncPage.class);
     }
 }

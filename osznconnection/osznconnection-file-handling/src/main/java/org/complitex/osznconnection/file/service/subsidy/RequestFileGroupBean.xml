@@ -5,9 +5,9 @@
         <id column="gid" property="id"/>
 
         <result column="status" property="status"/>
-        <result column="loaded_record_count" property="loadedRecordCount"/>
-        <result column="binded_record_count" property="bindedRecordCount"/>
-        <result column="filled_record_count" property="filledRecordCount"/>
+        <association property="loadedRecordCount" column="p_id" select="loadedRecordCount"/>
+        <association property="bindedRecordCount" column="p_id" select="bindedRecordCount"/>
+        <association property="filledRecordCount" column="p_id" select="filledRecordCount"/>
 
         <association property="benefitFile" javaType="org.complitex.osznconnection.file.entity.RequestFile">
             <id column="b_id" property="id"/>
@@ -83,7 +83,7 @@
         
     <sql id="requestFileGroupFilterWhere">
         <where>
-            (p.`id` is not null or b.`id` is not null) 
+            and (p.`id` is not null or b.`id` is not null)
             <if test="id != null">and g.`id` = #{id}</if>
             <if test="loaded != null">and YEAR(p.`loaded`) = YEAR(#{loaded}) and DAYOFYEAR(p.`loaded`) = DAYOFYEAR(#{loaded})</if>
             <if test="directory != null">and p.`directory` like CONCAT('%',#{directory},'%')</if>
@@ -102,6 +102,18 @@
         </where>
     </sql>
 
+    <select id="loadedRecordCount" parameterType="long" resultType="int">
+        SELECT COUNT(1) FROM `payment` WHERE `request_file_id` = #{requestFileId}
+    </select>
+
+    <select id="bindedRecordCount" parameterType="long" resultType="int">
+        SELECT COUNT(1) FROM `payment` WHERE `request_file_id` = #{requestFileId} AND `account_number` IS NOT NULL
+    </select>
+
+    <select id="filledRecordCount" parameterType="long" resultType="int">
+        SELECT COUNT(1) FROM `payment` WHERE `request_file_id` = #{requestFileId} AND `status` = 215
+    </select>
+
     <select id="selectRequestFilesGroups" parameterType="org.complitex.osznconnection.file.entity.subsidy.RequestFileGroupFilter"
             resultMap="requestFileGroupResultMap">
         select
@@ -116,11 +128,7 @@
             p.id as p_id, p.loaded as p_loaded, p.name as p_name, p.directory as p_directory, 
             p.organization_id as p_organization_id, p.`user_organization_id` as p_user_organization_id,
             p.begin_date as p_begin_date, p.end_date as p_end_date, p.dbf_record_count as p_dbf_record_count,
-            p.length as p_length, p.check_sum as p_check_sum, p.type as p_type,
-
-            (SELECT COUNT(1) FROM `payment` WHERE `request_file_id` = p.`id`) AS loaded_record_count,
-            (SELECT COUNT(1) FROM `payment` WHERE `request_file_id` = p.`id` AND `account_number` IS NOT NULL) AS binded_record_count,
-            (SELECT COUNT(1) FROM `payment` WHERE `request_file_id` = p.`id` AND `status` = 215) AS filled_record_count
+            p.length as p_length, p.check_sum as p_check_sum, p.type as p_type
         <include refid="requestFileGroupFilterFrom"/>
         <include refid="requestFileGroupFilterWhere"/>
         <if test="sortProperty != null">

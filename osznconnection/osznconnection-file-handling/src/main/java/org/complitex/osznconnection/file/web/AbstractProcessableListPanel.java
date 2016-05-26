@@ -29,7 +29,7 @@ import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.AbstractFilter;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.service.executor.ExecutorBean;
+import org.complitex.common.service.executor.ExecutorService;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ExceptionUtil;
@@ -41,6 +41,7 @@ import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
+import org.complitex.common.web.component.image.StaticImage;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.organization.OrganizationPickerDialog;
@@ -74,6 +75,7 @@ import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
 
@@ -428,10 +430,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 });
 
                 //ОСЗН
-                item.add(new ItemOrganizationLabel("organization", rf.getOrganizationId()));
+                item.add(new Label("organization", organizationStrategy.displayDomainObject(rf.getOrganizationId(), getLocale())));
 
                 //Организация пользователя
-                item.add(new ItemOrganizationLabel("userOrganization", rf.getUserOrganizationId()));
+                item.add(new Label("userOrganization", organizationStrategy.displayDomainObject(rf.getUserOrganizationId(), getLocale())));
 
                 item.add(new Label("month", DateUtil.displayMonth(rf.getMonth(), getLocale())));
                 item.add(new Label("year", StringUtil.valueOf(rf.getYear())));
@@ -597,7 +599,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         //Отменить загрузку
-        buttons.add(new AjaxLink<Void>("load_cancel") {
+        buttons.add(new AjaxLink("load_cancel") {
 
             @Override
             public boolean isVisible() {
@@ -613,7 +615,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         //Отменить связывание
-        buttons.add(new AjaxLink<Void>("bind_cancel") {
+        buttons.add(new AjaxLink("bind_cancel") {
 
             @Override
             public boolean isVisible() {
@@ -629,7 +631,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         //Отменить обработку
-        buttons.add(new AjaxLink<Void>("fill_cancel") {
+        buttons.add(new AjaxLink("fill_cancel") {
 
             @Override
             public boolean isVisible() {
@@ -645,7 +647,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         //Отменить выгрузку
-        buttons.add(new AjaxLink<Void>("save_cancel") {
+        buttons.add(new AjaxLink("save_cancel") {
 
             @Override
             public boolean isVisible() {
@@ -661,7 +663,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         //Отменить экспорт
-        buttons.add(new AjaxLink<Void>("export_cancel") {
+        buttons.add(new AjaxLink("export_cancel") {
 
             @Override
             public boolean isVisible() {
@@ -694,15 +696,9 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         add(requestFileHistoryPanel = new RequestFileHistoryPanel("history_panel"));
 
         //Messages
-        add(new BroadcastBehavior(ExecutorBean.class) {
-            private long lastUpdate = System.currentTimeMillis();
-
+        add(new BroadcastBehavior(ExecutorService.class) {
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
-                if (key == null){
-                    return;
-                }
-
                 String time = LocalTime.now().toString() + " ";
 
                 if (payload instanceof Process){
@@ -729,7 +725,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                             break;
                     }
 
-                    handler.add(messages, form);
+                    handler.add(messages, dataViewContainer, buttons);
                 }
 
                 if (payload instanceof IExecutorObject){
@@ -738,16 +734,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     switch (key){
                         case "onSuccess":
                         case "onSkip":
-                            if (System.currentTimeMillis() - lastUpdate > 1000){
-                                handler.add(messages, form);
-
-                                lastUpdate = System.currentTimeMillis();
-                            }
+                            handler.add(messages, dataViewContainer);
 
                             break;
                         case "onError":
                             error(time + object.getErrorMessage());
-                            handler.add(messages, form);
+                            handler.add(messages, dataViewContainer);
 
                             break;
                     }
@@ -756,12 +748,13 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         add(new BroadcastBehavior(AbstractTaskBean.class) {
-            private long lastUpdate = System.currentTimeMillis();
+            private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());
 
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
-                //onRequest
-                if (System.currentTimeMillis() - lastUpdate > 40){
+                if ("onRequest".equals(key) && System.currentTimeMillis() - lastUpdate.get() > 1000){
+                    lastUpdate.set(System.currentTimeMillis());
+
                     dataView.beforeRender();
                     dataView.markRendering(false);
 
@@ -770,8 +763,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                             handler.add(object);
                         }
                     });
-
-                    lastUpdate = System.currentTimeMillis();
                 }
             }
         });

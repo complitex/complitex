@@ -6,10 +6,9 @@ import org.complitex.common.entity.Log;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.LogBean;
-import org.complitex.common.service.executor.ExecutorBean;
+import org.complitex.common.service.executor.ExecutorService;
 import org.complitex.common.service.executor.IExecutorListener;
 import org.complitex.common.service.executor.ITaskBean;
-import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.ExportType;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
@@ -51,7 +50,7 @@ public class ProcessManagerBean {
     private SessionContext sessionContext;
 
     @EJB
-    private ExecutorBean executorBean;
+    private ExecutorService executorService;
 
     @EJB
     private ConfigBean configBean;
@@ -199,7 +198,7 @@ public class ProcessManagerBean {
         return false;
     }
 
-    private <T extends IExecutorObject> void execute(ProcessType processType, Class<? extends ITaskBean> taskClass,
+    private <T extends IExecutorObject> void execute(ProcessType processType, Class<? extends ITaskBean<T>> taskClass,
             List<T> list, IExecutorListener listener,
             FileHandlingConfig threadCount, FileHandlingConfig maxErrorCount, Map processParameters) {
         Process<T> process = getProcess(processType);
@@ -209,19 +208,19 @@ public class ProcessManagerBean {
 
             process.setMaxThread(SAVE_THREAD_SIZE.equals(threadCount) ? 1 : configBean.getInteger(threadCount, true));
             process.setMaxErrors(configBean.getInteger(maxErrorCount, true));
-            process.setTask(EjbBeanLocator.getBean(taskClass));
+            process.setTaskClass(taskClass);
             process.setListener(listener);
             process.setCommandParameters(processParameters);
 
             process.addObjects(list);
 
-            executorBean.execute(process);
+            executorService.execute(process);
         } else {
             process.addObjects(list);
 
             int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
             for (int i = 0; i < freeThreadCount; ++i) {
-                executorBean.executeNextAsync(process);
+                executorService.executeNextAsync(process);
             }
         }
     }
@@ -323,14 +322,14 @@ public class ProcessManagerBean {
                 process.setPreprocess(false);
                 process.setMaxErrors(configBean.getInteger(LOAD_MAX_ERROR_COUNT, true));
                 process.setMaxThread(configBean.getInteger(LOAD_THREAD_SIZE, true));
-                process.setTask(EjbBeanLocator.getBean(GroupLoadTaskBean.class));
+                process.setTaskClass(GroupLoadTaskBean.class);
 
-                executorBean.execute(process);
+                executorService.execute(process);
             } else {
                 int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
 
                 for (int i = 0; i < freeThreadCount; ++i) {
-                    executorBean.executeNextAsync(process);
+                    executorService.executeNextAsync(process);
                 }
             }
         } catch (Exception e) {
@@ -647,14 +646,14 @@ public class ProcessManagerBean {
                 process.setPreprocess(false);
                 process.setMaxErrors(configBean.getInteger(LOAD_MAX_ERROR_COUNT, true));
                 process.setMaxThread(configBean.getInteger(LOAD_THREAD_SIZE, true));
-                process.setTask(EjbBeanLocator.getBean(PrivilegeGroupLoadTaskBean.class));
+                process.setTaskClass(PrivilegeGroupLoadTaskBean.class);
 
-                executorBean.execute(process);
+                executorService.execute(process);
             } else {
                 int freeThreadCount = process.getMaxThread() - process.getRunningThreadCount();
 
                 for (int i = 0; i < freeThreadCount; ++i) {
-                    executorBean.executeNextAsync(process);
+                    executorService.executeNextAsync(process);
                 }
             }
         } catch (Exception e) {
