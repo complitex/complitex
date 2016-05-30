@@ -1,13 +1,8 @@
 package org.complitex.osznconnection.file.web.component.process;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.SharedResourceReference;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.web.component.css.CssAttributeBehavior;
@@ -76,7 +71,7 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
             public boolean isVisible() {
                 return model.getObject().isProcessing();
             }
-        });
+        }.setOutputMarkupId(true));
 
         //Анимация ожидание
         add(new StaticImage("waiting", new SharedResourceReference(IMAGE_AJAX_WAITING)) {
@@ -85,6 +80,6 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
             public boolean isVisible() {
                 return processingManager.isGlobalWaiting(model.getObject()) && !model.getObject().isProcessing();
             }
-        });
+        }.setOutputMarkupId(true));
     }
 }

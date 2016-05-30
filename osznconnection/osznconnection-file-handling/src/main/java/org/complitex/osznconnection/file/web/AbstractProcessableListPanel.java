@@ -1,6 +1,7 @@
 package org.complitex.osznconnection.file.web;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -41,7 +42,6 @@ import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
-import org.complitex.common.web.component.image.StaticImage;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.organization.OrganizationPickerDialog;
@@ -430,10 +430,20 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 });
 
                 //ОСЗН
-                item.add(new Label("organization", organizationStrategy.displayDomainObject(rf.getOrganizationId(), getLocale())));
+                item.add(new Label("organization", new LoadableDetachableModel<String>() {
+                    @Override
+                    protected String load() {
+                        return organizationStrategy.displayDomainObject(rf.getOrganizationId(), getLocale());
+                    }
+                }));
 
                 //Организация пользователя
-                item.add(new Label("userOrganization", organizationStrategy.displayDomainObject(rf.getUserOrganizationId(), getLocale())));
+                item.add(new Label("userOrganization", new LoadableDetachableModel<String>() {
+                    @Override
+                    protected String load() {
+                        return organizationStrategy.displayDomainObject(rf.getUserOrganizationId(), getLocale());
+                    }
+                }));
 
                 item.add(new Label("month", DateUtil.displayMonth(rf.getMonth(), getLocale())));
                 item.add(new Label("year", StringUtil.valueOf(rf.getYear())));
@@ -749,6 +759,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         add(new BroadcastBehavior(AbstractTaskBean.class) {
             private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());
+            private Map<String, IModel> models = new HashMap<>();
 
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
@@ -758,11 +769,20 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     dataView.beforeRender();
                     dataView.markRendering(false);
 
-                    dataView.visitChildren(Label.class, (object, visit) -> {
-                        if (object.getOutputMarkupId()){
-                            handler.add(object);
-                        }
-                    });
+                    dataView.visitChildren(Item.class, (object, visit) ->
+                            ((MarkupContainer)object).visitChildren((o, v) -> {
+                                if (o.getOutputMarkupId()) {
+                                    String k = object.getId() + o.getId();
+
+                                    IModel model = models.get(k);
+
+                                    if (model == null || !Objects.equals(model.getObject(), object.getDefaultModel().getObject())){
+                                        models.put(k, object.getDefaultModel());
+
+                                        handler.add(o);
+                                    }
+                                }
+                            }));
                 }
             }
         });
