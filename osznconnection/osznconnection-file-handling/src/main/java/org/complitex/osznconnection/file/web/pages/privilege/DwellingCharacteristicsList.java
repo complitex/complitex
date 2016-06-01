@@ -55,10 +55,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static org.complitex.common.util.StringUtil.emptyOnNull;
 import static org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF.CDUL;
@@ -131,10 +128,6 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         RequestFile requestFile = requestFileBean.getRequestFile(fileId);
 
         privilegeFileGroupModel = Model.of(privilegeFileGroupBean.getPrivilegeFileGroup(requestFile.getGroupId()));
-
-        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
-                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
-
 
         //Проверка доступа к данным
         if (!sessionBean.isAuthorized(requestFile.getOrganizationId(),
@@ -303,8 +296,16 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 item.add(new Label("firstName", dwellingCharacteristics.getFirstName()));
                 item.add(new Label("middleName", dwellingCharacteristics.getMiddleName()));
                 item.add(new Label("lastName", dwellingCharacteristics.getLastName()));
-                item.add(new Label("streetReference", emptyOnNull(dwellingCharacteristics.getStreetType()) + " "
-                        + emptyOnNull(dwellingCharacteristics.getStreet())));
+
+                String streetType = dwellingCharacteristics.getStreetType() != null
+                        ? dwellingCharacteristics.getStreetType()
+                        : "";
+
+                String street = dwellingCharacteristics.getStreet() != null
+                        ? dwellingCharacteristics.getStreet()
+                        : "[" + dwellingCharacteristics.getStreetCode() + "]";
+
+                item.add(new Label("streetReference", streetType + " " + street));
                 item.add(new Label("building", dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.HOUSE)));
                 item.add(new Label("corp", dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.BUILD)));
                 item.add(new Label("apartment", dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT)));
@@ -375,6 +376,9 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 list.forEach(dwellingCharacteristics -> {
                     //noinspection Duplicates
                     try {
+                        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
                         dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, dwellingCharacteristics);
 
                         if (dwellingCharacteristics.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){

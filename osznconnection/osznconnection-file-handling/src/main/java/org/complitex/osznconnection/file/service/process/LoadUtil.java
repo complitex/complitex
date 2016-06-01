@@ -209,7 +209,7 @@ public class LoadUtil {
 
         Map<String, List<RequestFile>> map = Stream
                 .concat(dwellingCharacteristicsRequestFiles.stream(), facilityServiceTypeRequestFiles.stream())
-                .collect(Collectors.groupingBy(RequestFile::getDirectory));
+                .collect(Collectors.groupingBy(r -> r.getDirectory() + r.getShortName()));
 
         List<PrivilegeFileGroup> list = new ArrayList<>();
 

@@ -21,9 +21,14 @@ public class PrivilegeGroupSaveTaskBean extends AbstractTaskBean<PrivilegeFileGr
 
     @Override
     public boolean execute(PrivilegeFileGroup group, Map commandParameters) throws ExecuteException {
-        dwellingCharacteristicsSaveTaskBean.execute(group.getDwellingCharacteristicsRequestFile(), commandParameters);
-        facilityServiceTypeSaveTaskBean.execute(group.getFacilityServiceTypeRequestFile(), commandParameters);
+        if (group.getDwellingCharacteristicsRequestFile() != null) {
+            dwellingCharacteristicsSaveTaskBean.execute(group.getDwellingCharacteristicsRequestFile(), commandParameters);
+        }
 
-        return true;
+        if (group.getFacilityServiceTypeRequestFile() != null) {
+            facilityServiceTypeSaveTaskBean.execute(group.getFacilityServiceTypeRequestFile(), commandParameters);
+        }
+
+        return false;
     }
 }

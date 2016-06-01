@@ -133,10 +133,6 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
         privilegeFileGroupModel = Model.of(privilegeFileGroupBean.getPrivilegeFileGroup(requestFile.getGroupId()));
 
-        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
-                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
-
-
         //Проверка доступа к данным
         if (!sessionBean.isAuthorized(requestFile.getOrganizationId(),
                 requestFile.getUserOrganizationId())) {
@@ -349,6 +345,9 @@ public final class FacilityServiceTypeList extends TemplatePage {
                 //noinspection Duplicates
                 list.forEach(facilityServiceType -> {
                     try {
+                        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
                         facilityServiceTypeBindTaskBean.bind(serviceProviderCode, facilityServiceType);
 
                         if (facilityServiceType.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){

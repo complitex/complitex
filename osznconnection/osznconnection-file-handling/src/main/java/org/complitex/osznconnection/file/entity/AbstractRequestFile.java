@@ -51,6 +51,10 @@ public abstract class AbstractRequestFile extends AbstractExecutorObject{
         return (directory != null && !directory.isEmpty() ? directory + File.separator : "") + name;
     }
 
+    public String getShortName(){
+        return name.substring(0, name.indexOf('.'));
+    }
+
     @Override
     public String getObjectName() {
         return getFullName();
