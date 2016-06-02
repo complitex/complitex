@@ -206,7 +206,7 @@ public class ProcessManagerBean {
         if (!process.isRunning()) {
             process.init();
 
-            process.setMaxThread(SAVE_THREAD_SIZE.equals(threadCount) ? 1 : configBean.getInteger(threadCount, true));
+            process.setMaxThread(configBean.getInteger(threadCount, true));
             process.setMaxErrors(configBean.getInteger(maxErrorCount, true));
             process.setTaskClass(taskClass);
             process.setListener(listener);
