@@ -77,8 +77,8 @@
             resultMap="privilegeFileGroupResultMap">
         select
         g.group_id as gid,
-        greatest(f.status, s.status) as `status`,
-        
+        if(f.status is not null, f.status, s.status) as `status`,
+
         f.id as f_id, f.group_id as f_group_id, f.loaded as f_loaded, f.name as f_name, f.directory as f_directory,
         f.organization_id as f_organization_id, f.`user_organization_id` as f_user_organization_id,
         f.begin_date as f_begin_date, f.end_date as f_end_date, f.dbf_record_count as f_dbf_record_count,
