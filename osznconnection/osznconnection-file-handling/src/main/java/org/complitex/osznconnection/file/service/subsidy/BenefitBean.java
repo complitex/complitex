@@ -148,6 +148,7 @@ public class BenefitBean extends AbstractRequestBean {
      * @param fileId fileId
      */
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void updateBindingStatus(long fileId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("fileId", fileId);

@@ -18,6 +18,7 @@ import java.util.Map;
 public abstract class AbstractRequest<E extends Enum> implements ILongId{
     private Long id;
     private Long requestFileId;
+    private Long groupId;
     private Long organizationId;
     private Long userOrganizationId;
 
@@ -92,6 +93,14 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
 
     public void setRequestFileId(Long requestFileId) {
         this.requestFileId = requestFileId;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
     public Long getOrganizationId() {

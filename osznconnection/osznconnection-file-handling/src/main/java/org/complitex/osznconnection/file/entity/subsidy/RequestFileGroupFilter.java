@@ -13,7 +13,6 @@ import java.util.Date;
  */
 public class RequestFileGroupFilter extends AbstractFilter {
 
-    private Long id;
     private Long groupId;
     private Date loaded;
     private String name;
@@ -29,14 +28,6 @@ public class RequestFileGroupFilter extends AbstractFilter {
 
     private DomainObject serviceProvider;
     private String edrpou;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getGroupId() {
         return groupId;

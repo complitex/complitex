@@ -30,10 +30,10 @@ public class ExecutorService {
     private LogBean logBean;
 
     @EJB
-    private AsyncBean asyncBean;
+    private AsyncService asyncService;
 
     public <T extends IExecutorObject> void executeNextAsync(ExecutorCommand<T> executorCommand){
-        asyncBean.async(() -> executeNext(executorCommand));
+        asyncService.async(() -> executeNext(executorCommand));
     }
 
     public <T extends IExecutorObject> void executeNext(ExecutorCommand<T> executorCommand){
@@ -129,7 +129,7 @@ public class ExecutorService {
         }finally {
             executorCommand.getProcessed().add(object);
             executorCommand.stopTask();
-            asyncBean.async(() -> executeNext(executorCommand));
+            executeNext(executorCommand);
         }
     }
 
@@ -158,7 +158,7 @@ public class ExecutorService {
 
         //execute threads
         for (int i = 0; i < size; ++i){
-            asyncBean.async(() -> executeNext(executorCommand));
+            asyncService.async(() -> executeNext(executorCommand));
         }
     }
 }

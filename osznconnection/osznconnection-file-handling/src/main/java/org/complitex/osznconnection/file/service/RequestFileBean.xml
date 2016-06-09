@@ -62,8 +62,8 @@
 
     <sql id="requestFilesFilterWhere">
         <where>
-            <if test="id != null">`id` like #{id}</if>
-            <if test="groupId != null">`group_id` = #{groupId}</if>
+            <if test="id != null">rf.`id` = #{id}</if>
+            <if test="groupId != null">and `group_id` = #{groupId}</if>
             <if test="loaded != null">AND YEAR(`loaded`) = YEAR(#{loaded}) AND DAYOFYEAR(`loaded`) = DAYOFYEAR(#{loaded})</if>
             <if test="name != null">and `name` like CONCAT('%',#{name},'%')</if>
             <if test="organizationId != null">and `organization_id` = #{organizationId}</if>

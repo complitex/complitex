@@ -49,6 +49,7 @@ import org.complitex.common.wicket.BroadcastBehavior;
 import org.complitex.correction.entity.OrganizationCorrection;
 import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.AbstractRequestFile;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.service.process.Process;
@@ -387,16 +388,19 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         //Таблица файлов запросов
         dataView = new DataView<R>("objects", dataProvider) {
+            @Override
+            protected Item<R> newItem(String id, int index, IModel<R> model) {
+                return super.newItem("item" + model.getObject().getId(), index, model);
+            }
 
             @Override
             protected void populateItem(final Item<R> item) {
-                Long objectId = item.getModelObject().getId();
                 R rf = item.getModelObject();
 
                 item.add(new ItemCheckBoxPanel<R>("itemCheckBoxPanel", processingManager, selectManager, item.getModel()));
 
                 //Идентификатор файла
-                item.add(new Label("id", StringUtil.valueOf(objectId)));
+                item.add(new Label("id", StringUtil.valueOf(rf.getId())));
 
                 //Дата загрузки
                 item.add(new ItemDateLoadedLabel("loaded", rf.getLoaded()));
@@ -448,32 +452,30 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 item.add(new Label("month", DateUtil.displayMonth(rf.getMonth(), getLocale())));
                 item.add(new Label("year", StringUtil.valueOf(rf.getYear())));
 
-                //Количество загруженных записей
-                item.add(new Label("loaded_record_count", new LoadableDetachableModel<String>() {
-
+                IModel<R> rfModel = new LoadableDetachableModel<R>() {
                     @Override
-                    protected String load() {
-                        return StringUtil.valueOf(rf.getLoadedRecordCount());
+                    protected R load() {
+                        F filter = newFilter();
+                        filter.setId(rf.getId());
+                        filter.setCount(1);
+
+                        List<R> list =  getObjects(filter);
+
+                        return list != null ? list.get(0) : null;
                     }
-                }).setOutputMarkupId(true).setMarkupId("loaded_record_count" + rf.getId()));
+                };
+
+                //Количество загруженных записей
+                item.add(new Label("loaded_record_count", new PropertyModel<String>(rfModel, "loadedRecordCount"))
+                        .setOutputMarkupId(true).setMarkupId("loaded_record_count" + rf.getId()));
 
                 //Количество связанных записей
-                item.add(new Label("binded_record_count", new LoadableDetachableModel<String>() {
-
-                    @Override
-                    protected String load() {
-                        return StringUtil.valueOf(rf.getBindedRecordCount());
-                    }
-                }).setOutputMarkupId(true).setMarkupId("binded_record_count" + rf.getId()));
+                item.add(new Label("binded_record_count", new PropertyModel<String>(rfModel, "bindedRecordCount"))
+                        .setOutputMarkupId(true).setMarkupId("binded_record_count" + rf.getId()));
 
                 //Количество обработанных записей
-                item.add(new Label("filled_record_count", new LoadableDetachableModel<String>() {
-
-                    @Override
-                    protected String load() {
-                        return StringUtil.valueOf(rf.getFilledRecordCount());
-                    }
-                }).setOutputMarkupId(true).setMarkupId("filled_record_count" + rf.getId()));
+                item.add(new Label("filled_record_count", new PropertyModel<String>(rfModel, "filledRecordCount"))
+                        .setOutputMarkupId(true).setMarkupId("filled_record_count" + rf.getId()));
 
                 //Статус
                 AjaxLink history = new AjaxLink("history") {
@@ -759,30 +761,27 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         add(new BroadcastBehavior(AbstractTaskBean.class) {
             private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());
-            private Map<String, IModel> models = new HashMap<>();
 
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
                 if ("onRequest".equals(key) && System.currentTimeMillis() - lastUpdate.get() > 1000){
                     lastUpdate.set(System.currentTimeMillis());
 
-                    dataView.beforeRender();
-                    dataView.markRendering(false);
+                    AbstractRequest request = (AbstractRequest) payload;
 
-                    dataView.visitChildren(Item.class, (object, visit) ->
-                            ((MarkupContainer)object).visitChildren((o, v) -> {
-                                if (o.getOutputMarkupId()) {
-                                    String k = object.getId() + o.getId();
+                    Long id = request.getGroupId() != null ? request.getGroupId() : request.getRequestFileId();
 
-                                    IModel model = models.get(k);
+                    MarkupContainer item = (MarkupContainer) dataView.get("item" + id);
 
-                                    if (model == null || !Objects.equals(model.getObject(), object.getDefaultModel().getObject())){
-                                        models.put(k, object.getDefaultModel());
+                    if (item != null){
+                        item.visitChildren((o, v) -> {
+                            if (o.getOutputMarkupId()) {
+                                handler.add(o);
+                            }
 
-                                        handler.add(o);
-                                    }
-                                }
-                            }));
+                            v.dontGoDeeper();
+                        });
+                    }
                 }
             }
         });

@@ -27,6 +27,8 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
         this.selectManager = selectManager;
 
         this.model = model;
+
+        setOutputMarkupId(true);
     }
 
     @Override
@@ -36,15 +38,17 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
         //Выбор файлов
         CheckBox checkBox = new CheckBox("selected", selectManager.newSelectCheckboxModel(model.getObject().getId())) {
 
-            @Override
-            public boolean isVisible() {
-                return !model.getObject().isProcessing()
-                        && !processingManager.isGlobalWaiting(model.getObject());
-            }
+//            @Override
+//            public boolean isVisible() {
+//                return !model.getObject().isProcessing()
+//                        && !processingManager.isGlobalWaiting(model.getObject());
+//            }
 
             @Override
             public boolean isEnabled() {
-                return !processingManager.isGlobalWaiting(model.getObject());
+                return !processingManager.isGlobalWaiting(model.getObject()) &&
+                        !model.getObject().isProcessing()
+                        && !processingManager.isGlobalWaiting(model.getObject());
             }
 
             @Override

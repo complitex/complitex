@@ -9,6 +9,7 @@ import java.io.Serializable;
  *         Date: 15.08.2010 1:16:53
  */
 public class AbstractFilter implements Serializable {
+    private Long id;
     private long first;
     private long count;
     private String sortProperty;
@@ -24,6 +25,14 @@ public class AbstractFilter implements Serializable {
 
     private DomainObject serviceProvider;
     private String edrpou;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getLimit(){
         return count > 0 ? " limit " + first + ", " + count : "";
