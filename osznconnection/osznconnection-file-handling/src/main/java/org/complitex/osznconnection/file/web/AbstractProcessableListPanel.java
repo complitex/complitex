@@ -90,7 +90,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         public abstract Component field(Item<R> item);
     }
-    private static final int AJAX_TIMER = 1;
 
     @EJB
     private ProcessManagerBean processManagerBean;
@@ -124,8 +123,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     private ProcessType bindProcessType;
     private ProcessType fillProcessType;
     private ProcessType saveProcessType;
-
-    private List<Component> updateComponents = new ArrayList<>();
 
     public AbstractProcessableListPanel(String id, ProcessType loadProcessType,
                                         ProcessType bindProcessType, ProcessType fillProcessType, ProcessType saveProcessType) {

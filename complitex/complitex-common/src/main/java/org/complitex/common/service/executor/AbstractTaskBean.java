@@ -6,6 +6,7 @@ import org.complitex.common.entity.Log;
 import org.complitex.common.service.BroadcastService;
 
 import javax.ejb.EJB;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author Anatoly Ivanov
@@ -15,8 +16,14 @@ public abstract class AbstractTaskBean<T extends IExecutorObject> implements ITa
     @EJB
     private BroadcastService broadcastService;
 
+    private static AtomicLong lastOnRequest = new AtomicLong(System.currentTimeMillis());
+
     protected <R> void onRequest(R request){
-        broadcastService.broadcast(getClass(), "onRequest", request);
+        if (System.currentTimeMillis() - lastOnRequest.get() > 1000) {
+            broadcastService.broadcast(getClass(), "onRequest", request);
+
+            lastOnRequest.set(System.currentTimeMillis());
+        }
     }
 
     @Override

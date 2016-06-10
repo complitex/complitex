@@ -135,12 +135,21 @@ public class BenefitBean extends AbstractRequestBean {
      * @param accountNumber номер л/c
      */
 
-    public void updateAccountNumber(long paymentId, String accountNumber) {
+    public void updateAccountNumber(Long paymentId, String accountNumber) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("paymentId", paymentId);
         params.put("accountNumber", accountNumber);
         params.put("status", RequestStatus.ACCOUNT_NUMBER_RESOLVED);
-        sqlSession().update(MAPPING_NAMESPACE + ".updateAccountNumber", params);
+
+        try {
+            sqlSession().update(MAPPING_NAMESPACE + ".updateAccountNumber", params);
+        } catch (Exception e) {
+            if (e.getMessage().contains("Deadlock")){
+                updateAccountNumber(paymentId, accountNumber);
+            }else {
+                throw e;
+            }
+        }
     }
 
     /**
@@ -148,12 +157,20 @@ public class BenefitBean extends AbstractRequestBean {
      * @param fileId fileId
      */
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void updateBindingStatus(long fileId) {
+    public void updateBindingStatus(Long fileId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("fileId", fileId);
         params.put("statuses", RequestStatus.unboundStatuses());
-        sqlSession().update(MAPPING_NAMESPACE + ".updateBindingStatus", params);
+
+        try {
+            sqlSession().update(MAPPING_NAMESPACE + ".updateBindingStatus", params);
+        } catch (Exception e) {
+            if (e.getMessage().contains("Deadlock")){
+                updateBindingStatus(fileId);
+            }else {
+                throw e;
+            }
+        }
     }
 
     /**

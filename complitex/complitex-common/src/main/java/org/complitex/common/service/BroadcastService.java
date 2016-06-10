@@ -5,7 +5,6 @@ import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.WebSocketPushBroadcaster;
 import org.apache.wicket.protocol.ws.concurrent.Executor;
 import org.complitex.common.entity.WebSocketPushMessage;
-import org.complitex.common.service.executor.AsyncService;
 import org.complitex.common.wicket.BroadcastMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +25,6 @@ public class BroadcastService {
 
     private WebSocketPushBroadcaster broadcaster;
 
-    @EJB
-    private AsyncService asyncService;
-
     public void setApplication(Application application){
         this.application = application;
 
@@ -38,7 +34,7 @@ public class BroadcastService {
         Executor executor = new Executor() {
             @Override
             public void run(Runnable command) {
-                asyncService.async(command);
+                command.run();
             }
 
             @Override
