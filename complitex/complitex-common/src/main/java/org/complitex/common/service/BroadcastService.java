@@ -9,7 +9,9 @@ import org.complitex.common.wicket.BroadcastMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Resource;
 import javax.ejb.*;
+import javax.enterprise.concurrent.ManagedExecutorService;
 import java.util.concurrent.Callable;
 
 /**
@@ -25,6 +27,9 @@ public class BroadcastService {
 
     private WebSocketPushBroadcaster broadcaster;
 
+    @Resource
+    private ManagedExecutorService executorService;
+
     public void setApplication(Application application){
         this.application = application;
 
@@ -34,7 +39,7 @@ public class BroadcastService {
         Executor executor = new Executor() {
             @Override
             public void run(Runnable command) {
-                command.run();
+                executorService.submit(command);
             }
 
             @Override
