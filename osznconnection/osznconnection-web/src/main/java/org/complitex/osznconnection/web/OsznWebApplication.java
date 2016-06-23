@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.web;
 
+import org.apache.wicket.util.time.Duration;
 import org.complitex.address.web.sync.AddressSyncPage;
 import org.complitex.template.web.ComplitexWebApplication;
 
@@ -14,5 +15,7 @@ public class OsznWebApplication extends ComplitexWebApplication{
         getDebugSettings().setAjaxDebugModeEnabled(false);
 
         mountPage("/address-sync", AddressSyncPage.class);
+
+        getRequestCycleSettings().setTimeout(Duration.minutes(5));
     }
 }

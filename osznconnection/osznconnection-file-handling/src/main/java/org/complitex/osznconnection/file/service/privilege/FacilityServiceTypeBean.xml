@@ -30,6 +30,8 @@
         <result column="street" property="street"/>
         <result column="street_type" property="streetType"/>
 
+        <result column="group_id" property="groupId"/>
+
         <association property="dbfFields" javaType="map">
             <result column="IDPIL_CYR" property="IDPIL_CYR"/>
             <result column="PASPPIL_CYR" property="PASPPIL_CYR"/>
@@ -188,7 +190,7 @@
                 TO_CYRILLIC(fst.`BUILD`) BUILD_CYR,
                 TO_CYRILLIC(fst.`APT`) APT_CYR,
 
-                f.`organization_id`, f.`user_organization_id`,
+                f.`organization_id`, f.`user_organization_id`, f.`group_id`,
                 fst.`internal_city_id`, fst.`internal_street_id`, fst.`internal_street_type_id`, fst.`internal_building_id`,
                 fst.`outgoing_city`, fst.`outgoing_district`, fst.`outgoing_street`, fst.`outgoing_street_type`, fst.`outgoing_building_number`,
                 fst.`outgoing_building_corp`, fst.`outgoing_apartment`,
@@ -277,7 +279,7 @@
 
         fst.*,
 
-        f.`organization_id`, f.`user_organization_id`
+        f.`organization_id`, f.`user_organization_id`, f.`group_id`
         FROM `facility_service_type` fst JOIN `request_file` f ON fst.`request_file_id` = f.`id`
         WHERE fst.`request_file_id` = #{requestFileId}
             AND fst.`id` IN

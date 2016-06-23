@@ -11,7 +11,6 @@ import java.util.Date;
  *
  */
 public class RequestFileFilter extends AbstractFilter {
-    private Long id;
     private Long groupId;
     private Date loaded;
     private String name;
@@ -31,14 +30,6 @@ public class RequestFileFilter extends AbstractFilter {
 
     private String firstName;
     private String secondName;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getGroupId() {
         return groupId;

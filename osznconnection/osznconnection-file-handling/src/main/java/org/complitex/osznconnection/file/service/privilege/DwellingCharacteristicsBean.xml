@@ -29,6 +29,8 @@
         <result column="street_type" property="streetType"/>
         <result column="CDUL" property="streetCode"/>
 
+        <result column="group_id" property="groupId"/>
+
         <association property="dbfFields" javaType="map">
             <result column="IDPIL_CYR" property="IDPIL_CYR"/>
             <result column="PASPPIL_CYR" property="PASPPIL_CYR"/>
@@ -178,7 +180,7 @@
                 TO_CYRILLIC(d.`BUILD`) BUILD_CYR,
                 TO_CYRILLIC(d.`APT`) APT_CYR,
 
-                f.`organization_id`, f.`user_organization_id`,
+                f.`organization_id`, f.`user_organization_id`, f.`group_id`,
                 d.`internal_city_id`, d.`internal_street_id`, d.`internal_street_type_id`, d.`internal_building_id`,
                 d.`outgoing_city`, d.`outgoing_district`, d.`outgoing_street`, d.`outgoing_street_type`, d.`outgoing_building_number`,
                 d.`outgoing_building_corp`, d.`outgoing_apartment`,
@@ -250,7 +252,7 @@
     </select>
 
     <select id="findForOperation" parameterType="map" resultMap="dwellingCharacteristicsResultMap">
-        SELECT f.`organization_id`, f.`user_organization_id`, d.`IDPIL`, d.`PASPPIL`,
+        SELECT f.`organization_id`, f.`user_organization_id`, f.`group_id`, d.`IDPIL`, d.`PASPPIL`,
             TO_CYRILLIC(d.`IDPIL`) IDPIL_CYR,
             TO_CYRILLIC(d.`PASPPIL`) PASPPIL_CYR,
 

@@ -1,5 +1,8 @@
 package org.complitex.osznconnection.file.web.component.process;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -27,6 +30,8 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
         this.selectManager = selectManager;
 
         this.model = model;
+
+        setOutputMarkupId(true);
     }
 
     @Override
@@ -35,11 +40,13 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
 
         //Выбор файлов
         CheckBox checkBox = new CheckBox("selected", selectManager.newSelectCheckboxModel(model.getObject().getId())) {
-
             @Override
-            public boolean isVisible() {
-                return !model.getObject().isProcessing()
-                        && !processingManager.isGlobalWaiting(model.getObject());
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+
+                boolean visible = !model.getObject().isProcessing() && !processingManager.isGlobalWaiting(model.getObject());
+
+                tag.getAttributes().put("style", "display: " + (visible ? "block" : "none"));
             }
 
             @Override
@@ -55,12 +62,12 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
 
         checkBox.setMarkupId("select" + model.getObject().getId());
 
-//        checkBox.add(new AjaxFormComponentUpdatingBehavior("change") {
-//
-//            @Override
-//            protected void onUpdate(AjaxRequestTarget target) {
-//            }
-//        });
+        checkBox.add(new AjaxFormComponentUpdatingBehavior("change") {
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+            }
+        });
         checkBox.add(new CssAttributeBehavior("processable-list-panel-select"));
         add(checkBox);
 
