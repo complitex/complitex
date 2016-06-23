@@ -51,6 +51,7 @@ import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.AbstractRequestFile;
 import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
 import org.complitex.osznconnection.file.service.process.Process;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
@@ -794,6 +795,15 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     error(ExceptionUtil.getCauseMessage((Exception) payload));
 
                     handler.add(messages);
+                }
+            }
+        });
+
+        add(new BroadcastBehavior(LoadRequestFileBean.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                if ("onUpdate".equals(key)){
+                    handler.add(messages, dataViewContainer);
                 }
             }
         });

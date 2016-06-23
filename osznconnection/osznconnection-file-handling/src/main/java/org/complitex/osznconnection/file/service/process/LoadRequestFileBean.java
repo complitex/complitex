@@ -4,6 +4,7 @@ import com.linuxense.javadbf.DBFField;
 import com.linuxense.javadbf.DBFReader;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.complitex.common.exception.CanceledByUserException;
+import org.complitex.common.service.BroadcastService;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.util.DateUtil;
@@ -38,12 +39,18 @@ import java.util.*;
 public class LoadRequestFileBean {
 
     private final Logger log = LoggerFactory.getLogger(LoadRequestFileBean.class);
+
     @EJB
     private ConfigBean configBean;
+
     @EJB
     private RequestFileBean requestFileBean;
+
     @EJB
     private RequestFileDescriptionBean requestFileDescriptionBean;
+
+    @EJB
+    private BroadcastService broadcastService;
 
     public static abstract class AbstractLoadRequestFile {
 
@@ -155,6 +162,8 @@ public class LoadRequestFileBean {
                     //сохранение
                     try {
                         requestFileBean.save(requestFile);
+
+                        broadcastService.broadcast(getClass(), "onUpdate", requestFile);
                     } catch (Exception e) {
                         throw new SqlSessionException(e);
                     }
