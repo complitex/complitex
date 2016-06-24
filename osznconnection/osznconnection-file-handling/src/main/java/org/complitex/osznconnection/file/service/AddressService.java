@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import static org.complitex.address.util.AddressUtil.replaceApartmentSymbol;
 import static org.complitex.address.util.AddressUtil.replaceBuildingCorpSymbol;
 import static org.complitex.address.util.AddressUtil.replaceBuildingNumberSymbol;
 import static org.complitex.common.util.StringUtil.removeWhiteSpaces;
@@ -498,7 +499,7 @@ public class AddressService extends AbstractBean {
         }
 
         //квартира
-        request.setOutgoingApartment(removeWhiteSpaces(request.getApartment()));
+        request.setOutgoingApartment(replaceApartmentSymbol(removeWhiteSpaces(request.getApartment())));
 
         request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
     }

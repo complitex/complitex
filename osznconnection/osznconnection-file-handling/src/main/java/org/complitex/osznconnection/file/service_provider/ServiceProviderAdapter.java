@@ -32,6 +32,7 @@ import java.util.*;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
+import static org.complitex.address.util.AddressUtil.replaceApartmentSymbol;
 
 /**
  *
@@ -262,6 +263,9 @@ public class ServiceProviderAdapter extends AbstractBean {
     public Cursor<AccountDetail> getAccountDetails(String dataSource, String district, String organizationCode, String streetType,
                                                    String street, String buildingNumber, String buildingCorp,
                                                    String apartment, Date date){
+        //^0+(?!$)
+        apartment = replaceApartmentSymbol(apartment);
+
         Map<String, Object> params = newHashMap();
 
         params.put("pDistrName", district);
