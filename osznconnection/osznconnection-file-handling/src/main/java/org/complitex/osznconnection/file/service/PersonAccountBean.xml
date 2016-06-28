@@ -87,7 +87,10 @@
 
             <if test="object.cityId != null">and pa.`city_object_id` = #{object.cityId}</if>
             <if test="object.streetId != null">and pa.`street_object_id` = #{object.streetId}</if>
+
             <if test="object.buildingId != null">and pa.`building_object_id` = #{object.buildingId}</if>
+            <if test="object.buildingId == null and nullable">and pa.`building_object_id` is null</if>
+
             <if test="object.apartmentId != null">and pa.`apartment_object_id` = #{object.apartmentId}</if>
 
             <if test="object.accountNumber != null">and pa.`account_number` = #{object.accountNumber}</if>

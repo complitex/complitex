@@ -32,6 +32,8 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
 
     private boolean camelToUnderscore = true;
 
+    private boolean nullable = false;
+
     public FilterWrapper() {
     }
 
@@ -189,5 +191,15 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
 
     public void setCamelToUnderscore(boolean camelToUnderscore) {
         this.camelToUnderscore = camelToUnderscore;
+    }
+
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    public FilterWrapper<T> setNullable(boolean nullable) {
+        this.nullable = nullable;
+
+        return this;
     }
 }

@@ -81,8 +81,8 @@ public class PersonAccountService extends AbstractBean {
             throws MoreOneAccountException {
         Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
 
-        List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(new PersonAccount(request,
-                puAccountNumber, billingId, useAddressNames)));
+        List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(
+                new PersonAccount(request, puAccountNumber, billingId, useAddressNames)).setNullable(true));
 
         if (personAccounts.size() == 1){
             return personAccounts.get(0).getAccountNumber();
@@ -96,8 +96,8 @@ public class PersonAccountService extends AbstractBean {
     public void save(AbstractAccountRequest request, String puAccountNumber) throws MoreOneAccountException {
         Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
 
-        List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(new PersonAccount(request,
-                puAccountNumber, billingId, false)));
+        List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(
+                new PersonAccount(request,puAccountNumber, billingId, false)).setNullable(true));
 
         if (personAccounts.isEmpty()){
             personAccountBean.save(new PersonAccount(request, puAccountNumber, billingId, true));
