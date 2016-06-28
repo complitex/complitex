@@ -1104,6 +1104,35 @@ CREATE TABLE `request_file_history` (
     ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'История файла запроса';
 
+CREATE TABLE `privilege_prolongation` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
+  `request_file_id` BIGINT(20) NULL COMMENT 'Идентификатор файла запросов',
+  `account_number` VARCHAR(100) NULL COMMENT 'Номер счета',
+  `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Код статуса',
+
+  `COD` INTEGER(4) COMMENT 'Код ОСЗН',
+  `CDPR` BIGINT(12) COMMENT 'ЕДРПОУ код предприятия',
+  `NCARD` BIGINT(10) COMMENT 'Номер дела в ОСЗН',
+  `IDPIL` VARCHAR(10) COMMENT 'Иден.код льготника',
+  `PASPPIL` VARCHAR(14) COMMENT 'Паспорт льготника',
+  `FIOPIL` VARCHAR(50) COMMENT 'ФИО льготника',
+  `INDEX` INTEGER(6) COMMENT 'Почтовый индекс',
+  `CDUL` INTEGER(5) COMMENT 'Код улицы',
+  `HOUSE` VARCHAR(7) COMMENT 'Номер дома',
+  `BUILD` VARCHAR(2) COMMENT 'Номер корпуса',
+  `APT` VARCHAR(4) COMMENT 'Номер квартиры',
+  `KAT` INTEGER(4) COMMENT 'Код льготы ЕДАРП',
+  `LGCODE` INTEGER(4) COMMENT 'Код услуги',
+  `DATEIN` DATE COMMENT 'Дата начала действия льготы',
+  `DATEOUT` DATE COMMENT 'Дата окончания действия льготы',
+  `RAH` VARCHAR(25) COMMENT 'Номер л/с ПУ',
+
+  PRIMARY KEY (`id`),
+  KEY `key_request_file_id` (`request_file_id`),
+  KEY `key_account_number` (`account_number`),
+  CONSTRAINT `fk_benefit__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+)ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Файлы продления льгот';
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
