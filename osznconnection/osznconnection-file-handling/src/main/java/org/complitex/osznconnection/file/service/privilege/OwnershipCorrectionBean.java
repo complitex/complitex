@@ -25,11 +25,14 @@ public class OwnershipCorrectionBean extends CorrectionBean {
      */
 
     public Long findInternalOwnership(String correction, long organizationId) {
-        Map<String, Object> params = ImmutableMap.<String, Object>of("correction", correction, "organizationId", organizationId);
-        List<Long> ids = sqlSession().selectList(NS + ".findInternalOwnership", params);
-        if (ids != null && !ids.isEmpty()) {
-            return ids.get(0);
+        if (correction != null) {
+            Map<String, Object> params = ImmutableMap.of("correction", correction, "organizationId", organizationId);
+            List<Long> ids = sqlSession().selectList(NS + ".findInternalOwnership", params);
+            if (ids != null && !ids.isEmpty()) {
+                return ids.get(0);
+            }
         }
+
         return null;
     }
 
