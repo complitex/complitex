@@ -612,22 +612,26 @@ public class ServiceProviderAdapter extends AbstractBean {
         //benefits
         if (benefits != null && !benefits.isEmpty()) {
             String calcCenterOwnershipCode = data.getOwnership();
+
             Long internalOwnershipId = findInternalOwnership(calcCenterOwnershipCode, billingId);
+
             if (internalOwnershipId == null) {
-                log.error("Couldn't find in corrections internal ownership object by calculation center's ownership code: '{}' "
-                        + "and calculation center id: {}", calcCenterOwnershipCode, billingId);
+                if (calcCenterOwnershipCode != null) {
+                    log.error("Couldn't find in corrections internal ownership object by calculation center's ownership code: '{}' "
+                            + "and calculation center id: {}", calcCenterOwnershipCode, billingId);
 
-                for (Benefit benefit : benefits) {
-                    benefit.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
+                    for (Benefit benefit : benefits) {
+                        benefit.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
 
-                    RequestWarning warning = new RequestWarning(benefit.getId(), RequestFileType.BENEFIT,
-                            RequestWarningStatus.OWNERSHIP_OBJECT_NOT_FOUND);
-                    warning.addParameter(new RequestWarningParameter(0, calcCenterOwnershipCode));
-                    warning.addParameter(new RequestWarningParameter(1, "organization", billingId));
-                    warningBean.save(warning);
+                        RequestWarning warning = new RequestWarning(benefit.getId(), RequestFileType.BENEFIT,
+                                RequestWarningStatus.OWNERSHIP_OBJECT_NOT_FOUND);
+                        warning.addParameter(new RequestWarningParameter(0, calcCenterOwnershipCode));
+                        warning.addParameter(new RequestWarningParameter(1, "organization", billingId));
+                        warningBean.save(warning);
 
-                    logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                            webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
+                        logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
+                                webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
+                    }
                 }
             } else {
                 final long osznId = payment.getOrganizationId();
