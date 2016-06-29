@@ -202,8 +202,10 @@ public class RequestFileBean extends AbstractBean {
     }
 
 
-    public void deleteSubsidyTarifFiles(Long organizationId) {
-        List<RequestFile> subsidyTarifs = sqlSession().selectList(NS + ".findSubsidyTarifFiles", organizationId);
+    public void deleteSubsidyTarifFiles(Long organizationId, Long userOrganizationId) {
+        List<RequestFile> subsidyTarifs = sqlSession().selectList(NS + ".findSubsidyTarifFiles",
+                ImmutableMap.of("organizationId", organizationId, "userOrganizationId", userOrganizationId));
+
         for (RequestFile subsidyTarif : subsidyTarifs) {
             delete(subsidyTarif);
         }

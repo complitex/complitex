@@ -39,7 +39,7 @@ public class SubsidyTarifLoadTaskBean extends AbstractTaskBean<RequestFile> {
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         try {
             //delete previous subsidy tarif files.
-            requestFileBean.deleteSubsidyTarifFiles(requestFile.getOrganizationId());
+            requestFileBean.deleteSubsidyTarifFiles(requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
             requestFile.setStatus(RequestFileStatus.LOADING);
 

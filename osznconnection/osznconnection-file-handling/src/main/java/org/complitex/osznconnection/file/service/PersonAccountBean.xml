@@ -86,7 +86,9 @@
             <if test="object.apartment != null">and pa.`apartment` = #{object.apartment}</if>
 
             <if test="object.cityId != null">and pa.`city_object_id` = #{object.cityId}</if>
+
             <if test="object.streetId != null">and pa.`street_object_id` = #{object.streetId}</if>
+            <!--<if test="object.streetId == null and nullable">and pa.`street_object_id` is null</if> todo-->
 
             <if test="object.buildingId != null">and pa.`building_object_id` = #{object.buildingId}</if>
             <if test="object.buildingId == null and nullable">and pa.`building_object_id` is null</if>
