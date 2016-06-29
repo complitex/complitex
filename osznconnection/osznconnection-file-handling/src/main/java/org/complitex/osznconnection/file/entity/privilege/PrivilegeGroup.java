@@ -1,11 +1,12 @@
 package org.complitex.osznconnection.file.entity.privilege;
 
-import java.io.Serializable;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.RequestFileType;
 
 /**
  * inheaven on 18.04.2016.
  */
-public class PrivilegeGroup implements Serializable{
+public class PrivilegeGroup extends AbstractRequest {
     private DwellingCharacteristics dwellingCharacteristics;
     private FacilityServiceType facilityServiceType;
 
@@ -34,5 +35,23 @@ public class PrivilegeGroup implements Serializable{
 
     public void setFacilityServiceType(FacilityServiceType facilityServiceType) {
         this.facilityServiceType = facilityServiceType;
+    }
+
+    @Override
+    public Long getGroupId() {
+        if (dwellingCharacteristics != null){
+            return dwellingCharacteristics.getGroupId();
+        }
+
+        if (facilityServiceType != null){
+            return facilityServiceType.getGroupId();
+        }
+
+        return null;
+    }
+
+    @Override
+    public RequestFileType getRequestFileType() {
+        return null;
     }
 }

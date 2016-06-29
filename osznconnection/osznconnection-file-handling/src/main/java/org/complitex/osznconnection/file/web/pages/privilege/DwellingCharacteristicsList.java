@@ -55,9 +55,11 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
-import static org.complitex.common.util.StringUtil.emptyOnNull;
 import static org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF.CDUL;
 
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
@@ -219,7 +221,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                     example.getObject().setStreetCode(facilityStreets.get(0).getStreetCode());
                 }
             }
-        }));
+        }, String.class));
 
         filterForm.add(new TextField<>("buildingFilter", new PropertyModel<>(example, "building")));
         filterForm.add(new TextField<>("corpFilter", new PropertyModel<>(example, "corp")));
