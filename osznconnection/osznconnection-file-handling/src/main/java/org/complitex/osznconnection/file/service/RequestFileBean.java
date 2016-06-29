@@ -211,7 +211,6 @@ public class RequestFileBean extends AbstractBean {
         }
     }
 
-
     public void deleteFacilityReferenceFiles(long osznId, long userOrganizationId, RequestFileType requestFileType) {
         List<RequestFile> facilityReferenceFiles = sqlSession().selectList(NS + ".getFacilityReferenceFiles",
                 ImmutableMap.of("osznId", osznId, "userOrganizationId", userOrganizationId,
