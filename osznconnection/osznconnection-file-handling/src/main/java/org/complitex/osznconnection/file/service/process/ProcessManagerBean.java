@@ -681,4 +681,43 @@ public class ProcessManagerBean {
     public void savePrivilegeGroup(List<Long> ids, Map processParameters) {
         execute(SAVE_PRIVILEGE_GROUP, PrivilegeGroupSaveTaskBean.class, getPrivilegeFileGroups(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
+
+    @Asynchronous
+    public void loadPrivilegeProlongation(long userOrganizationId, long osznId, int month, int year) {
+        try {
+            List<RequestFile> list = LoadUtil.getDwellingCharacteristics(userOrganizationId, osznId, month, year);
+
+            for (RequestFile file : list) {
+                file.setUserOrganizationId(userOrganizationId);
+            }
+
+            execute(LOAD_DWELLING_CHARACTERISTICS, DwellingCharacteristicsLoadTaskBean.class, list, null,
+                    LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
+        } catch (Exception e) {
+            log.error("Ошибка процесса загрузки файлов.", e);
+            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
+                    Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "error", e);
+        }
+    }
+
+    @Asynchronous
+    public void bindPrivilegeProlongation(List<Long> ids, Map processParameters) {
+        execute(BIND_DWELLING_CHARACTERISTICS, DwellingCharacteristicsBindTaskBean.class, getDwellingCharacteristicsFiles(ids),
+                null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+    }
+
+    @Asynchronous
+    public void fillPrivilegeProlongation(List<Long> ids, Map processParameters) {
+        execute(FILL_DWELLING_CHARACTERISTICS, DwellingCharacteristicsFillTaskBean.class, getDwellingCharacteristicsFiles(ids),
+                null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+    }
+
+    @Asynchronous
+    public void savePrivilegeProlongation(List<Long> ids, Map processParameters) {
+        execute(SAVE_DWELLING_CHARACTERISTICS, DwellingCharacteristicsSaveTaskBean.class,
+                getDwellingCharacteristicsFiles(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+    }
+
 }

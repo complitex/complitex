@@ -326,7 +326,9 @@
     </delete>
 
     <select id="selectDwellingCharacteristicsListByGroup" resultMap="dwellingCharacteristicsResultMap" parameterType="long">
-        SELECT f.`organization_id`, f.`user_organization_id`, d.`IDPIL`, d.`PASPPIL`,
+        SELECT f.`organization_id`, f.`user_organization_id`,  f.group_id,
+            d.`IDPIL`, d.`PASPPIL`,
+
             TO_CYRILLIC(d.`IDPIL`) IDPIL_CYR,
             TO_CYRILLIC(d.`PASPPIL`) PASPPIL_CYR,
 
