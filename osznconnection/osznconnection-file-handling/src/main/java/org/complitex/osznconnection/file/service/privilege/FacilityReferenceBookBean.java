@@ -7,11 +7,11 @@ import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.Log;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.ModuleBean;
-import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.correction.entity.CityCorrection;
@@ -20,7 +20,9 @@ import org.complitex.correction.entity.StreetCorrection;
 import org.complitex.correction.entity.StreetTypeCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.FileHandlingConfig;
+import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreetType;
@@ -74,7 +76,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void insert(List<AbstractRequest> requests) {
+    public void insert(List<? extends AbstractRequest> requests) {
         if (requests != null && !requests.isEmpty()) {
             final RequestFileType requestFileType = requests.get(0).getRequestFileType();
             final String table = getTableName(requestFileType);

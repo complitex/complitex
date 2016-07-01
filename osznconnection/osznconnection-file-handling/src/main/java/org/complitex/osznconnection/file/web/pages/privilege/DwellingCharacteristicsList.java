@@ -257,7 +257,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 new AddressCorrectionDialog<DwellingCharacteristics>("addressCorrectionPanel") {
                     @Override
                     protected void onCorrect(AjaxRequestTarget target, IModel<DwellingCharacteristics> model, AddressEntity addressEntity) {
-                        dwellingCharacteristicsBean.markCorrected(model.getObject().getRequestFileId(), model.getObject(), addressEntity);
+                        dwellingCharacteristicsBean.markCorrected(model.getObject(), addressEntity);
 
                         PrivilegeFileGroup group = privilegeFileGroupModel.getObject();
                         if (group != null && group.getFacilityServiceTypeRequestFile() != null){

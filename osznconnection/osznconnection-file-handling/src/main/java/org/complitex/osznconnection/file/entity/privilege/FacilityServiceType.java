@@ -21,7 +21,7 @@ public class FacilityServiceType extends AbstractAccountRequest<FacilityServiceT
 
     @Override
     public String getStreetCode() {
-        return getUpStringField(FacilityServiceTypeDBF.CDUL, "_CYR");
+        return getStringField(FacilityServiceTypeDBF.CDUL);
     }
 
     @Override

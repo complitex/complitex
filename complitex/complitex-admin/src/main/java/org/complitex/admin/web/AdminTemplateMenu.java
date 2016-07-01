@@ -1,6 +1,8 @@
 package org.complitex.admin.web;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.logging.web.LogList;
 import org.complitex.template.web.pages.ConfigEdit;
 import org.complitex.template.web.security.SecurityRole;
@@ -10,8 +12,6 @@ import org.complitex.template.web.template.ResourceTemplateMenu;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -30,6 +30,29 @@ public class AdminTemplateMenu extends ResourceTemplateMenu {
     @Override
     public List<ITemplateLink> getTemplateLinks(Locale locale) {
         List<ITemplateLink> links = new ArrayList<ITemplateLink>();
+
+        links.add(new ITemplateLink() {
+
+            @Override
+            public String getLabel(Locale locale) {
+                return getString(ConfigEdit.class, locale, "title");
+            }
+
+            @Override
+            public Class<? extends Page> getPage() {
+                return ConfigEdit.class;
+            }
+
+            @Override
+            public PageParameters getParameters() {
+                return new PageParameters();
+            }
+
+            @Override
+            public String getTagId() {
+                return "ConfigEdit";
+            }
+        });
 
         links.add(new ITemplateLink() {
 
@@ -74,29 +97,6 @@ public class AdminTemplateMenu extends ResourceTemplateMenu {
             @Override
             public String getTagId() {
                 return "Log";
-            }
-        });
-
-        links.add(new ITemplateLink() {
-
-            @Override
-            public String getLabel(Locale locale) {
-                return getString(ConfigEdit.class, locale, "title");
-            }
-
-            @Override
-            public Class<? extends Page> getPage() {
-                return ConfigEdit.class;
-            }
-
-            @Override
-            public PageParameters getParameters() {
-                return new PageParameters();
-            }
-
-            @Override
-            public String getTagId() {
-                return "ConfigEdit";
             }
         });
 

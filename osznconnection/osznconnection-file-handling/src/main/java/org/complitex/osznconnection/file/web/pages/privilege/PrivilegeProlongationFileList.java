@@ -5,6 +5,9 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileFilter;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
@@ -36,7 +39,7 @@ public class PrivilegeProlongationFileList extends TemplatePage {
     private AbstractFileListPanel fileListPanel;
 
     public PrivilegeProlongationFileList(PageParameters parameters) {
-        //todo parameter filter
+        PrivilegeProlongation.TYPE type = null; //todo
 
         add(new Label("title", new ResourceModel("title")));
         add(fileListPanel = new AbstractFileListPanel("fileListPanel", PRIVILEGE_PROLONGATION,
@@ -50,27 +53,26 @@ public class PrivilegeProlongationFileList extends TemplatePage {
 
             @Override
             protected Class<? extends WebPage> getItemListPageClass() {
-                return DwellingCharacteristicsList.class;
+                return PrivilegeProlongationList.class;
             }
 
             @Override
             protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.bindDwellingCharacteristics(selectedFileIds, commandParameters);
+                processManagerBean.bindPrivilegeProlongation(selectedFileIds, commandParameters);
             }
 
             @Override
             protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.fillDwellingCharacteristics(selectedFileIds, commandParameters);
             }
 
             @Override
             protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.saveDwellingCharacteristics(selectedFileIds, commandParameters);
+
             }
 
             @Override
             protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-                processManagerBean.loadDwellingCharacteristics(userOrganizationId, osznId,
+                processManagerBean.loadPrivilegeProlongation(type, userOrganizationId, osznId,
                         dateParameter.getMonth(), dateParameter.getYear());
             }
 
@@ -82,6 +84,16 @@ public class PrivilegeProlongationFileList extends TemplatePage {
             @Override
             protected Long[] getOsznOrganizationTypes() {
                 return new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
+            }
+
+            @Override
+            protected Long getCount(RequestFileFilter filter) {
+                return super.getCount(filter); //todo
+            }
+
+            @Override
+            protected List<RequestFile> getObjects(RequestFileFilter filter) {
+                return super.getObjects(filter); //todo
             }
         });
     }

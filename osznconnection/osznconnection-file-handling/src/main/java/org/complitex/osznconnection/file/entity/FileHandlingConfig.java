@@ -25,6 +25,9 @@ public enum FileHandlingConfig implements IConfig {
     FACILITY_STREET_REFERENCE_FILENAME_MASK("mask"),
     FACILITY_TARIF_REFERENCE_FILENAME_MASK("mask"),
 
+    PRIVILEGE_PROLONGATION_S_FILENAME_MASK("mask"),
+    PRIVILEGE_PROLONGATION_P_FILENAME_MASK("mask"),
+
     LOAD_THREAD_SIZE("thread"),
     BIND_THREAD_SIZE("thread"),
     FILL_THREAD_SIZE("thread"),

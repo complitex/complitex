@@ -1,7 +1,7 @@
 -- --------------------------------
 -- Current database version
 -- --------------------------------
-INSERT INTO `update` (`version`) VALUE ('20160412_0.5.0');
+INSERT INTO `update` (`version`) VALUE ('20160629_0.5.1');
 -- --------------------------------
 
 -- --------------------------------
@@ -21,6 +21,8 @@ INSERT INTO `config` (`name`,`value`) VALUES ('SUBSIDY_TARIF_FILENAME_MASK','TAR
 INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_STREET_TYPE_REFERENCE_FILENAME_MASK','KLKATUL\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_STREET_REFERENCE_FILENAME_MASK','KLUL\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_TARIF_REFERENCE_FILENAME_MASK','TARIF\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('PRIVILEGE_PROLONGATION_S_FILENAME_MASK','(\\d{8}|\\d{10})\\.s\\d{2}');
+INSERT INTO `config` (`name`,`value`) VALUES ('PRIVILEGE_PROLONGATION_P_FILENAME_MASK','(\\d{8}|\\d{10})\\.p\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('LOAD_THREAD_SIZE','2');
 INSERT INTO `config` (`name`,`value`) VALUES ('BIND_THREAD_SIZE','4');
 INSERT INTO `config` (`name`,`value`) VALUES ('FILL_THREAD_SIZE','4');
@@ -147,6 +149,11 @@ INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_t
 INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (930, 1, UPPER('Корневой каталог для экспорта файлов'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (930, 900, 0, 930, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (930, 930, UPPER('string'));
+
+-- Load privilege prolongation directory. --
+INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (931, 1, UPPER('Директория входящих файлов продления льгот')), (931, 2, UPPER('Директория входящих файлов продления льгот'));
+INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (931, 900, 0, 931, 1);
+INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (931, 931, UPPER('string'));
 
 -- --------------------------------
 -- Ownership

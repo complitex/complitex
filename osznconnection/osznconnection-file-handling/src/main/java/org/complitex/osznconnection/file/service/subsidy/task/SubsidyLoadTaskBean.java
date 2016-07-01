@@ -2,8 +2,8 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.PersonalName;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -12,6 +12,7 @@ import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
 import org.complitex.osznconnection.file.service.RequestFileBean;
+import org.complitex.osznconnection.file.service.process.AbstractLoadRequestFile;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
@@ -45,7 +46,7 @@ public class SubsidyLoadTaskBean extends AbstractTaskBean<RequestFile> {
         try {
             requestFile.setStatus(RequestFileStatus.LOADING);
 
-            boolean noSkip = loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
+            boolean noSkip = loadRequestFileBean.load(requestFile, new AbstractLoadRequestFile<Subsidy>() {
 
                 @Override
                 public Enum[] getFieldNames() {
@@ -53,12 +54,12 @@ public class SubsidyLoadTaskBean extends AbstractTaskBean<RequestFile> {
                 }
 
                 @Override
-                public AbstractRequest newObject() {
+                public Subsidy newObject() {
                     return new Subsidy();
                 }
 
                 @Override
-                public void save(List<AbstractRequest> batch) {
+                public void save(List<Subsidy> batch) {
                     //check sum
                     for (AbstractRequest request : batch) {
                         if (!subsidyService.validateSum(request)){
@@ -73,7 +74,7 @@ public class SubsidyLoadTaskBean extends AbstractTaskBean<RequestFile> {
                 }
 
                 @Override
-                public void postProcess(int rowNumber, AbstractRequest request) {
+                public void postProcess(int rowNumber, Subsidy request) {
                     final Subsidy subsidy = (Subsidy) request;
                     parseFio(subsidy);
                 }

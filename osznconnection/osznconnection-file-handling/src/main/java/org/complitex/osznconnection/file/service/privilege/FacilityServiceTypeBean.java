@@ -4,14 +4,11 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
-import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF;
-import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
-import org.complitex.osznconnection.file.service.AbstractRequestBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -27,7 +24,7 @@ import static org.complitex.osznconnection.file.entity.privilege.FacilityService
  * @author Artem
  */
 @Stateless
-public class FacilityServiceTypeBean extends AbstractRequestBean {
+public class FacilityServiceTypeBean extends AbstractPrivilegeBean {
     public static final String NS = FacilityServiceTypeBean.class.getName();
     private static final Map<Long, Set<FacilityServiceTypeDBF>> UPDATE_FIELD_MAP = of();
 
@@ -65,10 +62,11 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void insert(List<AbstractRequest> abstractRequests) {
+    public void insert(List<FacilityServiceType> abstractRequests) {
         if (abstractRequests.isEmpty()) {
             return;
         }
+
         sqlSession().insert(NS + ".insertFacilityServiceTypeList", abstractRequests);
     }
 
@@ -162,42 +160,16 @@ public class FacilityServiceTypeBean extends AbstractRequestBean {
         return Collections.unmodifiableSet(updatableFields);
     }
 
+    public void markCorrected(FacilityServiceType facilityServiceType, AddressEntity addressEntity) {
+        markPrivilegeCorrected(NS + ".markCorrected", facilityServiceType, addressEntity);
+    }
 
-    @SuppressWarnings("Duplicates")
     public void markCorrected(Long requestFileId, AbstractAccountRequest request, AddressEntity addressEntity) {
-        Map<String, Object> params = Maps.newHashMap();
-
-        params.put("fileId", requestFileId);
-
-        switch (addressEntity){
-            case BUILDING:
-                params.put("buildingNumber", request.getBuildingNumber());
-                params.put("buildingCorp", request.getBuildingCorp());
-            case STREET:
-                params.put("streetCode", request.getStreetCode());
-            case STREET_TYPE:
-                params.put("streetTypeCode", request.getStreetTypeCode());
-        }
-
-        sqlSession().update(NS + ".markCorrected", params);
+        markPrivilegeCorrected(NS + ".markCorrected", requestFileId, request, addressEntity);
     }
 
     public List<AbstractAccountRequest> getFacilityServiceType(long requestFileId) {
         return sqlSession().selectList(NS + ".selectFacilityServiceType", requestFileId);
-    }
-
-    public void loadFacilityStreet(List<FacilityServiceType> list){
-        for (FacilityServiceType f : list){
-            FacilityStreet facilityStreet = facilityReferenceBookBean.getFacilityStreet(f.getRequestFileId(), f.getStringField(CDUL));
-
-            if (facilityStreet != null) {
-                f.setStreet(facilityStreet.getStreet());
-                if (facilityStreet.getStreetType() != null) {
-                    f.setStreetType(facilityStreet.getStreetType().replace(".", ""));
-                }
-                f.setStreetTypeCode(facilityStreet.getStreetTypeCode());
-            }
-        }
     }
 
     public List<FacilityServiceType> getFacilityServiceTypeListByGroup(Long groupId){

@@ -4,9 +4,9 @@ import com.linuxense.javadbf.DBFField;
 import com.linuxense.javadbf.DBFReader;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.complitex.common.exception.CanceledByUserException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.service.ConfigBean;
-import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
@@ -51,18 +51,6 @@ public class LoadRequestFileBean {
 
     @EJB
     private BroadcastService broadcastService;
-
-    public static abstract class AbstractLoadRequestFile {
-
-        public abstract Enum[] getFieldNames();
-
-        public abstract AbstractRequest newObject();
-
-        public abstract void save(List<AbstractRequest> batch) throws ExecuteException;
-
-        public void postProcess(int rowNumber, AbstractRequest request) {
-        }
-    }
 
     public boolean load(RequestFile requestFile, AbstractLoadRequestFile loadRequestFile) throws ExecuteException {
         String currentFieldName = "0";
