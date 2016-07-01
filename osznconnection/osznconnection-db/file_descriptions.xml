@@ -433,4 +433,25 @@
             <field length="1" type="java.lang.Integer" name="FLAG"/>
         </fields>
     </file-description>
+
+    <file-description type="PRIVILEGE_PROLONGATION">
+        <fields>
+            <field length="4" type="java.lang.Integer" name="COD"/>
+            <field length="12" type="java.lang.Long" name="CDPR"/>
+            <field length="10" type="java.lang.Long" name="NCARD"/>
+            <field length="10" type="java.lang.String" name="IDPIL"/>
+            <field length="14" type="java.lang.String" name="PASPPIL"/>
+            <field length="50" type="java.lang.String" name="FIOPIL"/>
+            <field length="6" type="java.lang.Integer" name="INDEX"/>
+            <field length="5" type="java.lang.Integer" name="CDUL"/>
+            <field length="7" type="java.lang.String" name="HOUSE"/>
+            <field length="2" type="java.lang.String" name="BUILD"/>
+            <field length="4" type="java.lang.String" name="APT"/>
+            <field length="4" type="java.lang.Integer" name="KAT"/>
+            <field length="4" type="java.lang.Integer" name="LGCODE"/>
+            <field length="10" type="java.util.Date" name="DATEIN"/>
+            <field length="10" type="java.util.Date" name="DATEOUT"/>
+            <field length="25" type="java.lang.String" name="RAH"/>
+        </fields>
+    </file-description>
 </file-descriptions>
