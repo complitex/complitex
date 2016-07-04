@@ -26,15 +26,15 @@
 
         <result column="city" property="city"/>
 
-        <result column="IDPIL_CYR" property="IDPIL_CYR"/>
-        <result column="PASPPIL_CYR" property="PASPPIL_CYR"/>
-
-        <result column="FIOPIL_CYR" property="FIOPIL_CYR"/>
-        <result column="HOUSE_CYR" property="HOUSE_CYR"/>
-        <result column="BUILD_CYR" property="BUILD_CYR"/>
-        <result column="APT_CYR" property="APT_CYR"/>
-
         <association property="dbfFields" javaType="map">
+            <result column="IDPIL_CYR" property="IDPIL_CYR"/>
+            <result column="PASPPIL_CYR" property="PASPPIL_CYR"/>
+
+            <result column="FIOPIL_CYR" property="FIOPIL_CYR"/>
+            <result column="HOUSE_CYR" property="HOUSE_CYR"/>
+            <result column="BUILD_CYR" property="BUILD_CYR"/>
+            <result column="APT_CYR" property="APT_CYR"/>
+
             <result column="COD" property="COD"/>
             <result column="CDPR" property="CDPR"/>
             <result column="NCARD" property="NCARD"/>
@@ -82,7 +82,7 @@
         w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
         p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
         FROM (
-        SELECT DISTINCT r.`id`, r.`status`, r.`request_file_id`, r.`IDCODE`, r.`FIO`, r.`IDPIL`, r.`PASPPIL`,
+        SELECT DISTINCT r.`id`, r.`status`, r.`request_file_id`, r.`FIOPIL`, r.`IDPIL`, r.`PASPPIL`,
         r.`CDUL`, r.`HOUSE`, r.`BUILD`, r.`APT`, r.`date`,
 
         TO_CYRILLIC(r.`IDPIL`) IDPIL_CYR,
@@ -179,4 +179,12 @@
     <delete id="deletePrivilegeProlongation" parameterType="long">
         delete from `privilege_prolongation` where `request_file_id` = #{id};
     </delete>
+
+    <select id="countByFile" resultType="int" parameterType="map">
+        SELECT COUNT(1) FROM `privilege_prolongation`
+        WHERE `request_file_id` = #{requestFileId} AND `status` IN
+        <foreach collection="statuses" item="status" open="(" close=")" separator=",">
+            #{status}
+        </foreach>
+    </select>
 </mapper>

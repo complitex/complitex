@@ -43,7 +43,7 @@ public class ActualPaymentLoadTaskBean extends AbstractTaskBean<RequestFile> {
         try {
             requestFile.setStatus(RequestFileStatus.LOADING);
 
-            boolean noSkip = loadRequestFileBean.load(requestFile, new AbstractLoadRequestFile() {
+            boolean noSkip = loadRequestFileBean.load(requestFile, new AbstractLoadRequestFile<ActualPayment>() {
 
                 @Override
                 public Enum[] getFieldNames() {
@@ -51,12 +51,12 @@ public class ActualPaymentLoadTaskBean extends AbstractTaskBean<RequestFile> {
                 }
 
                 @Override
-                public AbstractRequest newObject() {
+                public ActualPayment newObject() {
                     return new ActualPayment();
                 }
 
                 @Override
-                public void save(List<AbstractRequest> batch) {
+                public void save(List<ActualPayment> batch) {
                     actualPaymentBean.insert(batch);
 
                     batch.forEach(r -> onRequest(r));

@@ -3,7 +3,10 @@ package org.complitex.osznconnection.file.service.status.details;
 import org.complitex.osznconnection.file.entity.StatusDetail;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 
-public class DwellingCharacteristicsExampleConfigurator extends AbstractExampleConfigurator<PrivilegeExample> {
+/**
+ * @author inheaven on 03.07.2016.
+ */
+public class PrivilegeExampleConfigurator extends AbstractExampleConfigurator<PrivilegeExample> {
 
     @Override
     public PrivilegeExample createExample(StatusDetail statusDetail) {

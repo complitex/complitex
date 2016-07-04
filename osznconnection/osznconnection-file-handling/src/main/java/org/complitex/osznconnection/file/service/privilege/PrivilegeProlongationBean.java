@@ -1,17 +1,23 @@
 package org.complitex.osznconnection.file.service.privilege;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import org.complitex.address.entity.AddressEntity;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 
+import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author inheaven on 27.06.16.
  */
+@Stateless
 public class PrivilegeProlongationBean extends AbstractPrivilegeBean{
     public static final String NS = PrivilegeProlongationBean.class.getName();
 
@@ -67,5 +73,17 @@ public class PrivilegeProlongationBean extends AbstractPrivilegeBean{
 
     public void delete(Long requestFileId){
         sqlSession().delete(NS + ".deletePrivilegeProlongation", requestFileId);
+    }
+
+    /*todo extract*/
+    private Integer countByFile(Long fileId, Set<RequestStatus> statuses) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("requestFileId", fileId);
+        params.put("statuses", statuses);
+        return sqlSession().selectOne(NS + ".countByFile", params);
+    }
+
+    public boolean isPrivilegeProlongationBound(Long fileId) {
+        return countByFile(fileId, RequestStatus.unboundStatuses()) == 0;
     }
 }

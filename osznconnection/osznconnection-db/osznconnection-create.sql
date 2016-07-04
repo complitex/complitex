@@ -1110,6 +1110,26 @@ CREATE TABLE `privilege_prolongation` (
   `account_number` VARCHAR(100) NULL COMMENT 'Номер счета',
   `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Код статуса',
 
+  `internal_city_id` BIGINT(20) COMMENT 'Идентификатор населенного пункта',
+  `internal_street_id` BIGINT(20) COMMENT 'Идентификатор улицы',
+  `internal_street_type_id` BIGINT(20) COMMENT 'Идентификатор типа улицы',
+  `internal_building_id` BIGINT(20) COMMENT 'Идентификатор дома',
+
+  `outgoing_city` VARCHAR(100) COMMENT 'Название населенного пункта используемое центром начисления',
+  `outgoing_district` VARCHAR(100) COMMENT 'Название района используемое центром начисления',
+  `outgoing_street` VARCHAR(100) COMMENT 'Название улицы используемое центром начисления',
+  `outgoing_street_type` VARCHAR(100) COMMENT 'Название типа улицы используемое центром начисления',
+  `outgoing_building_number` VARCHAR(100) COMMENT 'Номер дома используемый центром начисления',
+  `outgoing_building_corp` VARCHAR(100) COMMENT 'Корпус используемый центром начисления',
+  `outgoing_apartment` VARCHAR(100) COMMENT 'Номер квартиры. Не используется',
+
+  `date` DATE NOT NULL COMMENT 'Дата',
+
+  `first_name` VARCHAR(100) COMMENT 'Имя',
+  `last_name` VARCHAR(100) COMMENT 'Фамилия',
+  `middle_name` VARCHAR(100) COMMENT 'Отчество',
+  `city` VARCHAR(100) NOT NULL COMMENT 'Населенный пункт',
+
   `COD` INTEGER(4) COMMENT 'Код ОСЗН',
   `CDPR` BIGINT(12) COMMENT 'ЕДРПОУ код предприятия',
   `NCARD` BIGINT(10) COMMENT 'Номер дела в ОСЗН',
@@ -1123,14 +1143,14 @@ CREATE TABLE `privilege_prolongation` (
   `APT` VARCHAR(4) COMMENT 'Номер квартиры',
   `KAT` INTEGER(4) COMMENT 'Код льготы ЕДАРП',
   `LGCODE` INTEGER(4) COMMENT 'Код услуги',
-  `DATEIN` DATE COMMENT 'Дата начала действия льготы',
-  `DATEOUT` DATE COMMENT 'Дата окончания действия льготы',
+  `DATEIN` VARCHAR(10) COMMENT 'Дата начала действия льготы',
+  `DATEOUT` VARCHAR(10) COMMENT 'Дата окончания действия льготы',
   `RAH` VARCHAR(25) COMMENT 'Номер л/с ПУ',
 
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
   KEY `key_account_number` (`account_number`),
-  CONSTRAINT `fk_benefit__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_privilege_prolongation__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
 )ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Файлы продления льгот';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

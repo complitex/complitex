@@ -40,8 +40,8 @@ import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.privilege.task.DwellingCharacteristicsBindTaskBean;
 import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceTypeBindTaskBean;
-import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsExampleConfigurator;
-import org.complitex.osznconnection.file.service.status.details.DwellingCharacteristicsStatusDetailRenderer;
+import org.complitex.osznconnection.file.service.status.details.PrivilegeExampleConfigurator;
+import org.complitex.osznconnection.file.service.status.details.PrivilegeStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
@@ -158,7 +158,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
         StatusDetailPanel<PrivilegeExample> statusDetailPanel =
                 new StatusDetailPanel<PrivilegeExample>("statusDetailsPanel", example,
-                new DwellingCharacteristicsExampleConfigurator(), new DwellingCharacteristicsStatusDetailRenderer(), content) {
+                new PrivilegeExampleConfigurator(), new PrivilegeStatusDetailRenderer(), content) {
 
                     @Override
                     public List<StatusDetailInfo> loadStatusDetails() {

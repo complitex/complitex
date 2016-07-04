@@ -46,8 +46,8 @@ import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBea
 import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;
 import org.complitex.osznconnection.file.service.privilege.task.DwellingCharacteristicsBindTaskBean;
 import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceTypeBindTaskBean;
-import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeExampleConfigurator;
-import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeStatusDetailRenderer;
+import org.complitex.osznconnection.file.service.status.details.PrivilegeExampleConfigurator;
+import org.complitex.osznconnection.file.service.status.details.PrivilegeStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
@@ -163,7 +163,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
         StatusDetailPanel<PrivilegeExample> statusDetailPanel =
                 new StatusDetailPanel<PrivilegeExample>("statusDetailsPanel", example,
-                new FacilityServiceTypeExampleConfigurator(), new FacilityServiceTypeStatusDetailRenderer(), content) {
+                new PrivilegeExampleConfigurator(), new PrivilegeStatusDetailRenderer(), content) {
 
                     @Override
                     public List<StatusDetailInfo> loadStatusDetails() {

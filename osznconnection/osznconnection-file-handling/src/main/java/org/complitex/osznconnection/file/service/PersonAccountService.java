@@ -6,10 +6,12 @@ import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
+import org.complitex.osznconnection.file.service.privilege.PrivilegeProlongationBean;
 import org.complitex.osznconnection.file.service.subsidy.*;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
@@ -72,6 +74,9 @@ public class PersonAccountService extends AbstractBean {
 
     @EJB
     private AddressService addressService;
+
+    @EJB
+    private PrivilegeProlongationBean privilegeProlongationBean;
 
     public String getLocalAccountNumber(AbstractAccountRequest request, String puAccountNumber) throws MoreOneAccountException {
         return getLocalAccountNumber(request, puAccountNumber, false);
@@ -338,6 +343,33 @@ public class PersonAccountService extends AbstractBean {
 
 
             save(facilityServiceType, facilityServiceType.getInn());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateAccountNumber(PrivilegeProlongation privilegeProlongation, String accountNumber) {
+        try {
+            serviceProviderAdapter.checkFacilityPerson(privilegeProlongation, accountNumber, privilegeProlongation.getDate(),
+                    privilegeProlongation.getInn(), privilegeProlongation.getPassport());
+
+            if (!privilegeProlongation.getStatus().equals(ACCOUNT_NUMBER_RESOLVED)){
+                privilegeProlongationBean.updatePrivilegeProlongation(privilegeProlongation);
+
+                return;
+            }
+
+            privilegeProlongationBean.updatePrivilegeProlongationAccountNumber(privilegeProlongation);
+
+            Long requestFileId = privilegeProlongation.getRequestFileId();
+            RequestFile requestFile = requestFileBean.getRequestFile(requestFileId);
+
+            if (privilegeProlongationBean.isPrivilegeProlongationBound(requestFileId)) {
+                requestFile.setStatus(RequestFileStatus.BOUND);
+                requestFileBean.save(requestFile);
+            }
+
+            save(privilegeProlongation, privilegeProlongation.getInn());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

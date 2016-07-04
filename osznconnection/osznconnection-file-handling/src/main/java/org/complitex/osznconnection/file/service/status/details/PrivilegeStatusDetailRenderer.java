@@ -8,13 +8,9 @@ import java.io.Serializable;
 import java.util.Locale;
 import java.util.Objects;
 
-/**
- *
- * @author Artem
- */
-public class DwellingCharacteristicsStatusDetailRenderer implements IStatusDetailRenderer, Serializable {
+public class PrivilegeStatusDetailRenderer implements IStatusDetailRenderer, Serializable {
 
-    private static final String RESOURCE_BUNDLE = DwellingCharacteristicsStatusDetailRenderer.class.getName();
+    private static final String RESOURCE_BUNDLE = PrivilegeStatusDetailRenderer.class.getName();
 
     @Override
     public String displayStatusDetail(RequestStatus status, StatusDetail statusDetail, Locale locale) {

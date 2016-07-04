@@ -547,4 +547,106 @@
             </otherwise>
         </choose>
     </select>
+
+    <!-- privilege prolongation status detail objects -->
+    <resultMap id="privilegeProlongationStatusDetailInfo" type="org.complitex.osznconnection.file.entity.StatusDetailInfo"
+               extends="statusDetailInfo">
+        <collection property="statusDetails" column="status=status,id=request_file_id"
+                    ofType="org.complitex.osznconnection.file.entity.StatusDetail"
+                    select="getPrivilegeProlongationStatusDetails"/>
+    </resultMap>
+
+    <resultMap id="privilegeProlongationStatusDetail" type="org.complitex.osznconnection.file.entity.StatusDetail"
+               extends="statusDetail">
+        <association property="details" javaType="map">
+            <result column="FIO" property="fio"/>
+            <result column="first_name" property="firstName"/>
+            <result column="middle_name" property="middleName"/>
+            <result column="last_name" property="lastName"/>
+            <result column="KLKUL_CODE" property="streetTypeCode"/>
+            <result column="KLKUL_NAME" property="streetType"/>
+            <result column="CDUL" property="streetCode"/>
+            <result column="KL_NAME" property="street"/>
+            <result column="HOUSE" property="building"/>
+            <result column="BUILD" property="buildingCorp"/>
+            <result column="APT" property="apartment"/>
+        </association>
+    </resultMap>
+
+    <select id="getPrivilegeProlongationStatusDetailInfo" parameterType="long" resultMap="privilegeProlongationStatusDetailInfo">
+        SELECT COUNT(1) `count`, `status`, `request_file_id` FROM `privilege_prolongation` WHERE `request_file_id` = #{id}
+        GROUP BY `status`
+        ORDER BY `count` DESC
+    </select>
+
+    <select id="getPrivilegeProlongationStatusDetails" parameterType="map" resultMap="privilegeProlongationStatusDetail">
+        <choose>
+            <!--account number -->
+            <when test="status == 212 or status == 213">
+                SELECT `FIO` `id`, COUNT(1) `count`,
+                TO_CYRILLIC(`first_name`) first_name, TO_CYRILLIC(`middle_name`) middle_name, TO_CYRILLIC(`last_name`) last_name,
+                TO_CYRILLIC(`FIOPIL`) FIO
+                FROM `privilege_prolongation`
+                WHERE `request_file_id` = #{id} AND `status` = #{status}
+                GROUP BY 1
+            </when>
+
+            <!--street type-->
+            <when test="status == 237 or status == 207 or status == 223">
+                SELECT CONCAT(st.`KLKUL_CODE`) `id`, COUNT(1) `count`, TO_CYRILLIC(st.`KLKUL_NAME`) KLKUL_NAME
+                FROM `privilege_prolongation` d
+                LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
+                LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
+                WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
+                GROUP BY 1
+            </when>
+
+            <!--street-->
+            <when test="status == 201 or status == 208 or status == 207 or status == 224">
+                SELECT CONCAT(`CDUL`) `id`, COUNT(1) `count`, CDUL,
+                (select TO_CYRILLIC(KLKUL_NAME) from facility_street_reference left join facility_street_type_reference on KLKUL_CODE = KL_CODEKUL where `CDUL` = `KL_CODEUL` limit 1) KLKUL_NAME,
+                (select TO_CYRILLIC(`KL_NAME`) from facility_street_reference where `CDUL` = `KL_CODEUL` limit 1) KL_NAME
+                FROM `privilege_prolongation` d
+                WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
+                GROUP BY 1
+            </when>
+
+            <!--building-->
+            <when test="status == 202 or status == 209 or status == 225">
+                SELECT CONCAT(`CDUL`, `HOUSE`) `id`, COUNT(*) `count`, `HOUSE`,
+                (select TO_CYRILLIC(KLKUL_NAME) from facility_street_reference left join facility_street_type_reference on KLKUL_CODE = KL_CODEKUL where `CDUL` = `KL_CODEUL` limit 1) KLKUL_NAME,
+                (select TO_CYRILLIC(`KL_NAME`) from facility_street_reference where `CDUL` = `KL_CODEUL` limit 1) KL_NAME
+                FROM `privilege_prolongation` d
+                WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
+                GROUP BY 1
+            </when>
+
+            <!--building corp-->
+            <when test="status == 226">
+                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`) `id`, COUNT(1) `count`,
+                (select TO_CYRILLIC(KLKUL_NAME) from facility_street_reference left join facility_street_type_reference on KLKUL_CODE = KL_CODEKUL where `CDUL` = `KL_CODEUL` limit 1) KLKUL_NAME,
+                (select TO_CYRILLIC(`KL_NAME`) from facility_street_reference where `CDUL` = `KL_CODEUL` limit 1) KL_NAME,
+                `CDUL`, `HOUSE`, `BUILD`
+                FROM `privilege_prolongation` d
+                LEFT JOIN `facility_street_reference` s ON `CDUL` = s.`KL_CODEUL`
+                LEFT JOIN `facility_street_type_reference` st on st.`KLKUL_CODE` = s.`KL_CODEKUL`
+                WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
+                GROUP BY 1
+            </when>
+
+            <!-- apartment -->
+            <when test="status == 227">
+                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`, `APT`) `id`, COUNT(1) `count`,
+                (select TO_CYRILLIC(KLKUL_NAME) from facility_street_reference left join facility_street_type_reference on KLKUL_CODE = KL_CODEKUL where `CDUL` = `KL_CODEUL` limit 1) KLKUL_NAME,
+                (select TO_CYRILLIC(`KL_NAME`) from facility_street_reference where `CDUL` = `KL_CODEUL` limit 1) KL_NAME,
+                `CDUL`, `HOUSE`, `BUILD`, `APT`
+                FROM `privilege_prolongation` d
+                WHERE d.`request_file_id` = #{id} AND d.`status` = #{status}
+                GROUP BY 1
+            </when>
+            <otherwise>
+                SELECT 1 FROM DUAL where 1=0;
+            </otherwise>
+        </choose>
+    </select>
 </mapper>

@@ -39,7 +39,19 @@ public class PrivilegeProlongationFileList extends TemplatePage {
     private AbstractFileListPanel fileListPanel;
 
     public PrivilegeProlongationFileList(PageParameters parameters) {
-        PrivilegeProlongation.TYPE type = null; //todo
+        PrivilegeProlongation.TYPE type;
+
+        switch (parameters.get("type").toString("s")){
+            case "s":
+                type = PrivilegeProlongation.TYPE.S;
+                break;
+            case "p" :
+                type = PrivilegeProlongation.TYPE.P;
+                break;
+
+            default:
+                type = PrivilegeProlongation.TYPE.S;
+        }
 
         add(new Label("title", new ResourceModel("title")));
         add(fileListPanel = new AbstractFileListPanel("fileListPanel", PRIVILEGE_PROLONGATION,

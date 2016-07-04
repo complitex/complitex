@@ -1,12 +1,10 @@
 package org.complitex.osznconnection.file.service.status.details;
 
 import org.complitex.common.service.AbstractBean;
+import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import java.util.List;
-import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -40,5 +38,9 @@ public class StatusDetailBean extends AbstractBean {
     
     public List<StatusDetailInfo> getFacilityServiceTypeStatusDetails(long requestFileId) {
         return sqlSession().selectList(MAPPING_NAMESPACE + ".getFacilityServiceTypeStatusDetailInfo", requestFileId);
+    }
+
+    public List<StatusDetailInfo> getPrivilegeProlongationStatusDetails(long requestFileId) {
+        return sqlSession().selectList(MAPPING_NAMESPACE + ".getPrivilegeProlongationStatusDetailInfo", requestFileId);
     }
 }
