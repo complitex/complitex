@@ -64,7 +64,7 @@ public class PrivilegeProlongationBean extends AbstractPrivilegeBean{
     }
 
     public void clearPrivilegeProlongationBound(Long requestFileId){
-        sqlSession().update(NS + ".clearPrivilegeProlongationBound", requestFileId);
+        sqlSession().update(NS + ".clearPrivilegeProlongationBound", ImmutableMap.of("fileId", requestFileId, "status", RequestStatus.LOADED));
     }
 
     public void markPrivilegeProlongationCorrected(PrivilegeProlongation privilegeProlongation, AddressEntity addressEntity){

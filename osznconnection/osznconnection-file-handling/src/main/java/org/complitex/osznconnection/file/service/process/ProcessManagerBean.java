@@ -687,7 +687,7 @@ public class ProcessManagerBean {
     }
 
     public void bindPrivilegeProlongation(List<Long> ids, Map processParameters) {
-        execute(BIND_PRIVILEGE_PROLONGATION, DwellingCharacteristicsBindTaskBean.class,
+        execute(BIND_PRIVILEGE_PROLONGATION, PrivilegeProlongationBindTaskBean.class,
                 getRequestFiles(ids, BIND_PRIVILEGE_PROLONGATION), null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT,
                 processParameters);
     }
