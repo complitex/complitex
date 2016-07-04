@@ -6,10 +6,7 @@ import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
-import org.complitex.osznconnection.file.service.privilege.FacilityForm2Bean;
-import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
-import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
+import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.subsidy.*;
 
 import javax.ejb.EJB;
@@ -62,6 +59,9 @@ public class RequestFileBean extends AbstractBean {
 
     @EJB
     private RequestFileHistoryBean requestFileHistoryBean;
+
+    @EJB
+    private PrivilegeProlongationBean privilegeProlongationBean;
 
     public RequestFile getRequestFile(long fileId) {
         return sqlSession().selectOne(NS + ".findById", fileId);
@@ -193,6 +193,10 @@ public class RequestFileBean extends AbstractBean {
                 case FACILITY_STREET:
                 case FACILITY_TARIF:
                     facilityReferenceBookBean.delete(requestFile.getId(), requestFile.getType());
+                    break;
+
+                case PRIVILEGE_PROLONGATION:
+                    privilegeProlongationBean.delete(requestFile.getId());
                     break;
             }
         }
