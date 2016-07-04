@@ -2,7 +2,7 @@ package org.complitex.osznconnection.file.service.subsidy;
 
 import com.google.common.collect.Maps;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.subsidy.SubsidyTarif;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescription;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
 
@@ -30,9 +30,9 @@ public class SubsidyTarifBean extends AbstractBean {
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void insert(List<AbstractRequest> abstractRequests) {
-        for (AbstractRequest abstractRequest : abstractRequests) {
-            sqlSession().insert(MAPPING_NAMESPACE + ".insertTarif", abstractRequest);
+    public void insert(List<SubsidyTarif> subsidyTarifList) {
+        for (SubsidyTarif subsidyTarif : subsidyTarifList) {
+            sqlSession().insert(MAPPING_NAMESPACE + ".insertTarif", subsidyTarif);
         }
     }
 

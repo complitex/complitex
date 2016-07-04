@@ -103,10 +103,11 @@ public class BenefitBean extends AbstractRequestBean {
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void insert(List<AbstractRequest> abstractRequests) {
+    public void insert(List<Benefit> abstractRequests) {
         if (abstractRequests.isEmpty()) {
             return;
         }
+
         sqlSession().insert(MAPPING_NAMESPACE + ".insertBenefitList", abstractRequests);
     }
 

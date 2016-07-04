@@ -15,6 +15,7 @@ import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataFile;
 import org.complitex.osznconnection.file.service.RequestFileBean;
@@ -286,7 +287,8 @@ public class ProcessManagerBean {
         return groups;
     }
 
-    @Asynchronous
+    /*Group*/
+
     public void loadGroup(long userOrganizationId, long osznId, int monthFrom, int monthTo, int year) {
         Process<RequestFileGroup> process = getProcess(LOAD_GROUP);
 
@@ -343,17 +345,14 @@ public class ProcessManagerBean {
         }
     }
 
-    @Asynchronous
     public void bindGroup(List<Long> ids, Map processParameters) {
         execute(BIND_GROUP, GroupBindTaskBean.class, getRequestFileGroups(ids), null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void fillGroup(List<Long> ids, Map processParameters) {
         execute(FILL_GROUP, GroupFillTaskBean.class, getRequestFileGroups(ids), null, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void saveGroup(List<Long> ids, Map processParameters) {
         IExecutorListener listener = new IExecutorListener() {
 
@@ -372,7 +371,8 @@ public class ProcessManagerBean {
         execute(SAVE_GROUP, GroupSaveTaskBean.class, getRequestFileGroups(ids), listener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
+    /*ActualPayment*/
+
     public void loadActualPayment(long userOrganizationId, long osznId, int monthFrom, int monthTo, int year) {
         try {
             List<RequestFile> list = LoadUtil.getActualPayments(userOrganizationId, osznId, monthFrom, monthTo, year);
@@ -391,25 +391,23 @@ public class ProcessManagerBean {
         }
     }
 
-    @Asynchronous
     public void bindActualPayment(List<Long> ids, Map processParameters) {
         execute(BIND_ACTUAL_PAYMENT, ActualPaymentBindTaskBean.class, getActualPaymentFiles(ids), null, BIND_THREAD_SIZE,
                 BIND_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void fillActualPayment(List<Long> ids, Map processParameters) {
         execute(FILL_ACTUAL_PAYMENT, ActualPaymentFillTaskBean.class, getActualPaymentFiles(ids), null, FILL_THREAD_SIZE,
                 FILL_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void saveActualPayment(List<Long> ids, Map processParameters) {
         execute(SAVE_ACTUAL_PAYMENT, ActualPaymentSaveTaskBean.class, getActualPaymentFiles(ids), null, SAVE_THREAD_SIZE,
                 SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
+    /*Subsidy*/
+
     public void loadSubsidy(long userOrganizationId, long osznId, int monthFrom, int monthTo, int year) {
         try {
             List<RequestFile> list = LoadUtil.getSubsidies(userOrganizationId, osznId, monthFrom, monthTo, year);
@@ -428,25 +426,21 @@ public class ProcessManagerBean {
         }
     }
 
-    @Asynchronous
     public void bindSubsidy(List<Long> ids, Map processParameters) {
         execute(BIND_SUBSIDY, SubsidyBindTaskBean.class, getSubsidyFiles(ids), null, BIND_THREAD_SIZE,
                 BIND_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void fillSubsidy(List<Long> ids, Map processParameters) {
         execute(FILL_SUBSIDY, SubsidyFillTaskBean.class, getSubsidyFiles(ids), null, FILL_THREAD_SIZE,
                 FILL_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void saveSubsidy(List<Long> ids, Map processParameters) {
         execute(SAVE_SUBSIDY, SubsidySaveTaskBean.class, getSubsidyFiles(ids), null, SAVE_THREAD_SIZE,
                 SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void exportSubsidy(List<Long> ids, ExportType type, RequestFileType requestFileType, Date date) {
         List<SubsidyMasterDataFile> list = subsidyBean.getSubsidyMasterDataFiles(ids, type, date);
 
@@ -458,7 +452,8 @@ public class ProcessManagerBean {
         execute(EXPORT_SUBSIDY, SubsidyExportTaskBean.class, list, null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
     }
 
-    @Asynchronous
+    /*SubsidyTarif*/
+
     public void loadSubsidyTarif(long userOrganizationId, long osznId, int month, int year) {
         try {
             List<RequestFile> list = LoadUtil.getSubsidyTarifs(userOrganizationId, osznId, month, year);
@@ -477,7 +472,8 @@ public class ProcessManagerBean {
         }
     }
 
-    @Asynchronous
+    /*DwellingCharacteristics*/
+
     public void loadDwellingCharacteristics(long userOrganizationId, long osznId, int month, int year) {
         try {
             List<RequestFile> list = LoadUtil.getDwellingCharacteristics(userOrganizationId, osznId, month, year);
@@ -497,25 +493,23 @@ public class ProcessManagerBean {
         }
     }
 
-    @Asynchronous
     public void bindDwellingCharacteristics(List<Long> ids, Map processParameters) {
         execute(BIND_DWELLING_CHARACTERISTICS, DwellingCharacteristicsBindTaskBean.class, getDwellingCharacteristicsFiles(ids),
                 null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void fillDwellingCharacteristics(List<Long> ids, Map processParameters) {
         execute(FILL_DWELLING_CHARACTERISTICS, DwellingCharacteristicsFillTaskBean.class, getDwellingCharacteristicsFiles(ids),
                 null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void saveDwellingCharacteristics(List<Long> ids, Map processParameters) {
         execute(SAVE_DWELLING_CHARACTERISTICS, DwellingCharacteristicsSaveTaskBean.class,
                 getDwellingCharacteristicsFiles(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
+    /*FacilityServiceType*/
+
     public void loadFacilityServiceType(long userOrganizationId, long osznId, int month, int year) {
         try {
             List<RequestFile> list = LoadUtil.getFacilityServiceTypes(userOrganizationId, osznId, month, year);
@@ -535,31 +529,28 @@ public class ProcessManagerBean {
         }
     }
 
-    @Asynchronous
     public void bindFacilityServiceType(List<Long> ids, Map processParameters) {
         execute(BIND_FACILITY_SERVICE_TYPE, FacilityServiceTypeBindTaskBean.class, getFacilityServiceTypeFiles(ids),
                 null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void fillFacilityServiceType(List<Long> ids, Map processParameters) {
         execute(FILL_FACILITY_SERVICE_TYPE, FacilityServiceTypeFillTaskBean.class, getFacilityServiceTypeFiles(ids),
                 null, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void saveFacilityServiceType(List<Long> ids, Map processParameters) {
         execute(SAVE_FACILITY_SERVICE_TYPE, FacilityServiceTypeSaveTaskBean.class,
                 getFacilityServiceTypeFiles(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void saveFacilityForm2(List<Long> ids, Map processParameters) {
         execute(SAVE_FACILITY_FORM2, FacilityForm2SaveTaskBean.class,
                 getFacilityForm2Files(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
+    /*FacilityTarifReferences*/
+
     public void loadFacilityStreetTypeReferences(long userOrganizationId, long osznId, int month, int year) {
         try {
             List<RequestFile> list = LoadUtil.getFacilityStreetTypeReferences(userOrganizationId, osznId, month, year);
@@ -577,7 +568,6 @@ public class ProcessManagerBean {
         }
     }
 
-    @Asynchronous
     public void loadFacilityStreetReferences(long userOrganizationId, long osznId, int month, int year,
             Locale locale) {
         try {
@@ -597,7 +587,6 @@ public class ProcessManagerBean {
         }
     }
 
-    @Asynchronous
     public void loadFacilityTarifReferences(long userOrganizationId, long osznId, int month, int year,
             Locale locale) {
         try {
@@ -616,7 +605,8 @@ public class ProcessManagerBean {
         }
     }
 
-    @Asynchronous
+    /*PrivilegeGroup*/
+
     public void loadPrivilegeGroup(long userOrganizationId, long osznId, int month, int year) {
         Process<PrivilegeFileGroup> process = getProcess(LOAD_PRIVILEGE_GROUP);
 
@@ -667,18 +657,38 @@ public class ProcessManagerBean {
         }
     }
 
-    @Asynchronous
     public void bindPrivilegeGroup(List<Long> ids, Map processParameters) {
         execute(BIND_PRIVILEGE_GROUP, PrivilegeGroupBindTaskBean.class, getPrivilegeFileGroups(ids), null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void fillPrivilegeGroup(List<Long> ids, Map processParameters) {
         execute(FILL_PRIVILEGE_GROUP, PrivilegeGroupFillTaskBean.class, getPrivilegeFileGroups(ids), null, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
-    @Asynchronous
     public void savePrivilegeGroup(List<Long> ids, Map processParameters) {
         execute(SAVE_PRIVILEGE_GROUP, PrivilegeGroupSaveTaskBean.class, getPrivilegeFileGroups(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+    }
+
+    /*PrivilegeProlongation*/
+
+    public void loadPrivilegeProlongation(PrivilegeProlongation.TYPE type, Long userOrganizationId, Long osznId, int month, int year) {
+        try {
+            List<RequestFile> list = LoadUtil.getPrivilegeProlongation(type, userOrganizationId, osznId, month, year);
+
+            execute(LOAD_PRIVILEGE_PROLONGATION, PrivilegeProlongationLoadTaskBean.class, list, null, LOAD_THREAD_SIZE,
+                    LOAD_MAX_ERROR_COUNT, null);
+        } catch (Exception e) {
+            log.error("Ошибка процесса загрузки файлов.", e);
+            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
+                    Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "error", e);
+        }
+    }
+
+    public void bindPrivilegeProlongation(List<Long> ids, Map processParameters) {
+        execute(BIND_PRIVILEGE_PROLONGATION, DwellingCharacteristicsBindTaskBean.class,
+                getRequestFiles(ids, BIND_PRIVILEGE_PROLONGATION), null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT,
+                processParameters);
     }
 }

@@ -1,14 +1,14 @@
 package org.complitex.osznconnection.file.service.subsidy.task;
 
 import org.complitex.common.entity.Log;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.RequestFileBean;
+import org.complitex.osznconnection.file.service.process.AbstractLoadRequestFile;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
 import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
@@ -56,7 +56,7 @@ public class GroupLoadTaskBean extends AbstractTaskBean<RequestFileGroup> {
             paymentFile.setStatus(RequestFileStatus.LOADING);
 
             //load payment
-            boolean noSkip = loadRequestFileBean.load(paymentFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
+            boolean noSkip = loadRequestFileBean.load(paymentFile, new AbstractLoadRequestFile<Payment>() {
 
                 @Override
                 public Enum[] getFieldNames() {
@@ -64,19 +64,19 @@ public class GroupLoadTaskBean extends AbstractTaskBean<RequestFileGroup> {
                 }
 
                 @Override
-                public AbstractRequest newObject() {
+                public Payment newObject() {
                     return new Payment();
                 }
 
                 @Override
-                public void save(List<AbstractRequest> batch) {
+                public void save(List<Payment> batch) {
                     paymentBean.insert(batch);
 
                     batch.forEach(r -> onRequest(r));
                 }
 
                 @Override
-                public void postProcess(int rowNumber, AbstractRequest request) {
+                public void postProcess(int rowNumber, Payment request) {
                     //установка номера реестра
     //                if (rowNumber == 0) {
     //                    Payment payment = (Payment) request;
@@ -92,7 +92,7 @@ public class GroupLoadTaskBean extends AbstractTaskBean<RequestFileGroup> {
 
             // load benefit
             if (noSkip) {
-                boolean notLoaded = loadRequestFileBean.load(group.getBenefitFile(), new LoadRequestFileBean.AbstractLoadRequestFile() {
+                boolean notLoaded = loadRequestFileBean.load(group.getBenefitFile(), new AbstractLoadRequestFile<Benefit>() {
 
                     @Override
                     public Enum[] getFieldNames() {
@@ -100,19 +100,19 @@ public class GroupLoadTaskBean extends AbstractTaskBean<RequestFileGroup> {
                     }
 
                     @Override
-                    public AbstractRequest newObject() {
+                    public Benefit newObject() {
                         return new Benefit();
                     }
 
                     @Override
-                    public void save(List<AbstractRequest> batch) {
+                    public void save(List<Benefit> batch) {
                         benefitBean.insert(batch);
 
                         batch.forEach(r -> onRequest(r));
                     }
 
                     @Override
-                    public void postProcess(int rowNumber, AbstractRequest request) {
+                    public void postProcess(int rowNumber, Benefit request) {
                         //установка номера реестра
     //                    if (rowNumber == 0) {
     //                        Benefit benefit = (Benefit) request;

@@ -4,14 +4,11 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
-import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
-import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
-import org.complitex.osznconnection.file.service.AbstractRequestBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -22,14 +19,10 @@ import java.util.*;
 import static com.google.common.collect.ImmutableMap.of;
 import static org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF.CDUL;
 
-/**
- *
- * @author Artem
- */
 @Stateless
-public class DwellingCharacteristicsBean extends AbstractRequestBean {
+public class DwellingCharacteristicsBean extends AbstractPrivilegeBean {
+    public static final String NS = DwellingCharacteristicsBean.class.getName();
 
-    public static final String MAPPING_NAMESPACE = DwellingCharacteristicsBean.class.getName();
     private static final Map<Long, Set<DwellingCharacteristicsDBF>> UPDATE_FIELD_MAP = of();
 
     @EJB
@@ -59,26 +52,27 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
 
 
     public void delete(long requestFileId) {
-        sqlSession().delete(MAPPING_NAMESPACE + ".deleteDwellingCharacteristics", requestFileId);
+        sqlSession().delete(NS + ".deleteDwellingCharacteristics", requestFileId);
     }
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void insert(List<AbstractRequest> abstractRequests) {
+    public void insert(List<DwellingCharacteristics> abstractRequests) {
         if (abstractRequests.isEmpty()) {
             return;
         }
-        sqlSession().insert(MAPPING_NAMESPACE + ".insertDwellingCharacteristicsList", abstractRequests);
+
+        sqlSession().insert(NS + ".insertDwellingCharacteristicsList", abstractRequests);
     }
 
 
     public Long getCount(PrivilegeExample example) {
-        return sqlSession().selectOne(MAPPING_NAMESPACE + ".count", example);
+        return sqlSession().selectOne(NS + ".count", example);
     }
 
 
     public List<DwellingCharacteristics> find(PrivilegeExample example) {
-        List<DwellingCharacteristics> list = sqlSession().selectList(MAPPING_NAMESPACE + ".find", example);
+        List<DwellingCharacteristics> list = sqlSession().selectList(NS + ".find", example);
 
         loadFacilityStreet(list);
 
@@ -98,16 +92,16 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
         Map<String, Object> params = Maps.newHashMap();
         params.put("requestFileId", fileId);
         params.put("statuses", statuses);
-        return sqlSession().selectOne(MAPPING_NAMESPACE + ".countByFile", params);
+        return sqlSession().selectOne(NS + ".countByFile", params);
     }
 
     public void update(DwellingCharacteristics dwellingCharacteristics) {
-        sqlSession().update(MAPPING_NAMESPACE + ".update", dwellingCharacteristics);
+        sqlSession().update(NS + ".update", dwellingCharacteristics);
     }
 
 
     public void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics) {
-        sqlSession().update(MAPPING_NAMESPACE + ".updateAccountNumber", dwellingCharacteristics);
+        sqlSession().update(NS + ".updateAccountNumber", dwellingCharacteristics);
     }
 
 
@@ -117,32 +111,17 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
 
 
     public List<Long> findIdsForOperation(long fileId) {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".findIdsForOperation", fileId);
+        return sqlSession().selectList(NS + ".findIdsForOperation", fileId);
     }
 
     public List<DwellingCharacteristics> findForOperation(long fileId, List<Long> ids) {
-        List<DwellingCharacteristics> list = sqlSession().selectList(MAPPING_NAMESPACE + ".findForOperation",
+        List<DwellingCharacteristics> list = sqlSession().selectList(NS + ".findForOperation",
                 of("requestFileId", fileId, "ids", ids));
 
         loadFacilityStreet(list);
 
         return list;
     }
-
-    public void loadFacilityStreet(List<DwellingCharacteristics> list){
-        for (DwellingCharacteristics d : list){
-            FacilityStreet facilityStreet = facilityReferenceBookBean.getFacilityStreet(d.getRequestFileId(), d.getStreetCode());
-
-            if (facilityStreet != null) {
-                d.setStreet(facilityStreet.getStreet());
-                if (facilityStreet.getStreetType() != null) {
-                    d.setStreetType(facilityStreet.getStreetType().replace(".", ""));
-                }
-                d.setStreetTypeCode(facilityStreet.getStreetTypeCode());
-            }
-        }
-    }
-
 
     public void clearBeforeBinding(long fileId, Set<Long> serviceProviderTypeIds) {
         Map<String, String> updateFieldMap = new HashMap<>();
@@ -154,7 +133,7 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
             }
         }
 
-        sqlSession().update(MAPPING_NAMESPACE + ".clearBeforeBinding",
+        sqlSession().update(NS + ".clearBeforeBinding",
                 of("status", RequestStatus.LOADED, "fileId", fileId, "updateFieldMap", updateFieldMap));
         clearWarnings(fileId, RequestFileType.DWELLING_CHARACTERISTICS);
     }
@@ -172,28 +151,16 @@ public class DwellingCharacteristicsBean extends AbstractRequestBean {
         return Collections.unmodifiableSet(updateableFields);
     }
 
-
-    @SuppressWarnings("Duplicates")
     public void markCorrected(Long requestFileId, AbstractAccountRequest request, AddressEntity addressEntity) {
-        Map<String, Object> params = Maps.newHashMap();
+        markPrivilegeCorrected(NS + ".markCorrected", requestFileId, request, addressEntity);
+    }
 
-        params.put("fileId", requestFileId);
-
-        switch (addressEntity){
-            case BUILDING:
-                params.put("buildingNumber", request.getBuildingNumber());
-                params.put("buildingCorp", request.getBuildingCorp());
-           case STREET:
-               params.put("streetCode", request.getStreetCode());
-            case STREET_TYPE:
-                params.put("streetTypeCode", request.getStreetTypeCode());
-        }
-
-        sqlSession().update(MAPPING_NAMESPACE + ".markCorrected", params);
+    public void markCorrected(DwellingCharacteristics dwellingCharacteristics, AddressEntity addressEntity) {
+        markPrivilegeCorrected(NS + ".markCorrected", dwellingCharacteristics, addressEntity);
     }
 
     public List<DwellingCharacteristics> getDwellingCharacteristics(long requestFileId) {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".selectDwellingCharacteristics", requestFileId);
+        return sqlSession().selectList(NS + ".selectDwellingCharacteristics", requestFileId);
     }
 
     public List<DwellingCharacteristics> getDwellingCharacteristicsListByGroup(Long groupId){

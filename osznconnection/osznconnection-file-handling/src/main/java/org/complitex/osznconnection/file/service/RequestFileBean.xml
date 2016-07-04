@@ -165,6 +165,18 @@
                 as filled_record_count
         <include refid="org.complitex.osznconnection.file.service.RequestFileBean.fromFilterSort"/>
     </select>
+
+    <select id="selectPrivilegeProlongations" parameterType="org.complitex.osznconnection.file.entity.RequestFileFilter"
+            resultMap="requestFileResultMap">
+        SELECT *,
+        (SELECT COUNT(1) FROM `privilege_prolongation` WHERE `request_file_id` = rf.`id`)
+        as loaded_record_count,
+        (SELECT COUNT(1) FROM `privilege_prolongation` WHERE `request_file_id` = rf.`id` AND `account_number` IS NOT NULL)
+        as binded_record_count,
+        (SELECT COUNT(1) FROM `privilege_prolongation` WHERE `request_file_id` = rf.`id` AND `status` = 215)
+        as filled_record_count
+        <include refid="org.complitex.osznconnection.file.service.RequestFileBean.fromFilterSort"/>
+    </select>
     
     <sql id="fromFilterSort">
         FROM `request_file` rf

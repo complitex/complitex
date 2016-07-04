@@ -1,12 +1,12 @@
 package org.complitex.osznconnection.file.web.menu;
 
-import org.complitex.osznconnection.file.web.pages.privilege.DwellingCharacteristicsFileList;
-import org.complitex.osznconnection.file.web.pages.privilege.FacilityForm2FileList;
-import org.complitex.osznconnection.file.web.pages.privilege.FacilityServiceTypeFileList;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.osznconnection.file.web.pages.facility.FacilityStreetFileList;
 import org.complitex.osznconnection.file.web.pages.facility.FacilityStreetTypeFileList;
 import org.complitex.osznconnection.file.web.pages.facility.FacilityTarifFileList;
+import org.complitex.osznconnection.file.web.pages.privilege.FacilityForm2FileList;
 import org.complitex.osznconnection.file.web.pages.privilege.PrivilegeFileGroupList;
+import org.complitex.osznconnection.file.web.pages.privilege.PrivilegeProlongationFileList;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
 import java.util.Locale;
@@ -24,6 +24,8 @@ public class FacilityRequestMenu extends ResourceTemplateMenu {
         add("facility_street_type_file_list", FacilityStreetTypeFileList.class);
         add("facility_street_file_list", FacilityStreetFileList.class);
         add("facility_tarif_file_list", FacilityTarifFileList.class);
+        add("privilege_prolongation_s", PrivilegeProlongationFileList.class, new PageParameters().add("type", "s"));
+        add("privilege_prolongation_p", PrivilegeProlongationFileList.class, new PageParameters().add("type", "p"));
 
     }
 

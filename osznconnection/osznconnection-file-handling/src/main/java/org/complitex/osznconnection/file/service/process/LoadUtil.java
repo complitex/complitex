@@ -7,6 +7,7 @@ import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
 import org.complitex.osznconnection.file.service.process.RequestFileStorage.RequestFiles;
@@ -438,5 +439,35 @@ public class LoadUtil {
             facilityTarifFiles.add(requestFile);
         }
         return facilityTarifFiles;
+    }
+
+    public static List<RequestFile> getPrivilegeProlongation(PrivilegeProlongation.TYPE type, Long userOrganizationId,
+                                                             Long osznId, int month, int year)
+            throws StorageNotFoundException {
+        FileHandlingConfig fileHandlingConfig = type.equals(PrivilegeProlongation.TYPE.S)
+                ? PRIVILEGE_PROLONGATION_S_FILENAME_MASK
+                : PRIVILEGE_PROLONGATION_P_FILENAME_MASK;
+
+        RequestFiles requestFiles = RequestFileStorage.INSTANCE.getInputRequestFiles(userOrganizationId, osznId,
+                LOAD_PRIVILEGE_PROLONGATION_DIR, file -> isMatches(fileHandlingConfig, file.getName()));
+
+        List<RequestFile> list = new ArrayList<>();
+
+        for (File file : requestFiles.getFiles()) {
+            RequestFile requestFile = new RequestFile();
+
+            requestFile.setName(file.getName());
+            requestFile.setLength(file.length());
+            requestFile.setAbsolutePath(file.getAbsolutePath());
+            requestFile.setDirectory(RequestFileStorage.INSTANCE.getRelativeParent(file, requestFiles.getPath()));
+            requestFile.setOrganizationId(osznId);
+            requestFile.setUserOrganizationId(userOrganizationId);
+            requestFile.setBeginDate(newDate(year, month));
+            requestFile.setType(RequestFileType.PRIVILEGE_PROLONGATION);
+
+            list.add(requestFile);
+        }
+
+        return list;
     }
 }

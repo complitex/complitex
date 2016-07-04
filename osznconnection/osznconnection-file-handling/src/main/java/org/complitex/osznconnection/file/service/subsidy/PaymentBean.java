@@ -6,7 +6,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.organization.strategy.ServiceStrategy;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.RequestFileType;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.example.PaymentExample;
 import org.complitex.osznconnection.file.entity.subsidy.Payment;
 import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
@@ -81,7 +82,7 @@ public class PaymentBean extends AbstractRequestBean {
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void insert(List<AbstractRequest> abstractRequests) {
+    public void insert(List<Payment> abstractRequests) {
         if (abstractRequests.isEmpty()) {
             return;
         }

@@ -79,7 +79,7 @@ public class ActualPaymentBean extends AbstractRequestBean {
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void insert(List<AbstractRequest> abstractRequests) {
+    public void insert(List<ActualPayment> abstractRequests) {
         if (abstractRequests.isEmpty()) {
             return;
         }

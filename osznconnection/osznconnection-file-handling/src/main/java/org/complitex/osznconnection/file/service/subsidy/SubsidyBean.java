@@ -5,7 +5,9 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.common.service.SessionBean;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.ExportType;
+import org.complitex.osznconnection.file.entity.RequestFileType;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.example.SubsidyExample;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
@@ -70,10 +72,11 @@ public class SubsidyBean extends AbstractRequestBean {
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void insert(List<AbstractRequest> abstractRequests) {
+    public void insert(List<Subsidy> abstractRequests) {
         if (abstractRequests.isEmpty()) {
             return;
         }
+
         sqlSession().insert(NS + ".insertSubsidyList", abstractRequests);
     }
 

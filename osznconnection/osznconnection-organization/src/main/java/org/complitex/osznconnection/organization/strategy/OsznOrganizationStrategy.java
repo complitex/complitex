@@ -36,77 +36,81 @@ import static org.complitex.osznconnection.organization_type.strategy.OsznOrgani
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
 public class OsznOrganizationStrategy extends OrganizationStrategy {
     /**
-     * Load payments/benefits directory. It is OSZN only attribute.
+     * Load payments/benefits directory. 
      */
     public final static long LOAD_PAYMENT_BENEFIT_FILES_DIR = 915;
 
     /**
-     * Save payments/benefits directory. It is OSZN only attribute.
+     * Save payments/benefits directory. 
      */
     public final static long SAVE_PAYMENT_BENEFIT_FILES_DIR = 916;
 
     /**
-     * Load actual payments directory. It is OSZN only attribute.
+     * Load actual payments directory. 
      */
     public final static long LOAD_ACTUAL_PAYMENT_DIR = 917;
 
     /**
-     * Save actual payments directory. It is OSZN only attribute.
+     * Save actual payments directory. 
      */
     public final static long SAVE_ACTUAL_PAYMENT_DIR = 918;
 
     /**
-     * Load subsidies directory. It is OSZN only attribute.
+     * Load subsidies directory. 
      */
     public final static long LOAD_SUBSIDY_DIR = 919;
 
     /**
-     * Save subsidies directory. It is OSZN only attribute.
+     * Save subsidies directory. 
      */
     public final static long SAVE_SUBSIDY_DIR = 920;
 
     /**
-     * Load dwelling characteristics directory. It is OSZN only attribute.
+     * Load dwelling characteristics directory. 
      */
     public final static long LOAD_DWELLING_CHARACTERISTICS_DIR = 921;
 
     /**
-     * Save dwelling characteristics directory. It is OSZN only attribute.
+     * Save dwelling characteristics directory. 
      */
     public final static long SAVE_DWELLING_CHARACTERISTICS_DIR = 922;
 
     /**
-     * Load facility service type directory. It is OSZN only attribute.
+     * Load facility service type directory. 
      */
     public final static long LOAD_FACILITY_SERVICE_TYPE_DIR = 923;
 
     /**
-     * Save facility service type directory. It is OSZN only attribute.
+     * Save facility service type directory. 
      */
     public final static long SAVE_FACILITY_SERVICE_TYPE_DIR = 924;
 
     /**
-     * References directory. It is OSZN only attribute.
+     * References directory. 
      */
     public final static long REFERENCES_DIR = 925;
 
     /**
-     * EDRPOU(ЕДРПОУ). It is user organization only attribute.
+     * EDRPOU(ЕДРПОУ). 
      */
     public final static long EDRPOU = 926;
 
     /**
-     * Root directory for loading and saving request files. It is user organization only attribute.
+     * Root directory for loading and saving request files. 
      */
     public final static long ROOT_REQUEST_FILE_DIRECTORY = 927;
 
     /**
-     * Save facility form2 directory. It is OSZN only attribute.
+     * Save facility form2 directory. 
      */
     public final static long SAVE_FACILITY_FORM2_DIR = 928;
 
     public final static long ROOT_EXPORT_DIRECTORY = 930;
 
+    /**
+     * Load dwelling characteristics directory.
+     */
+    public final static long LOAD_PRIVILEGE_PROLONGATION_DIR = 931;
 
     private final Logger log = LoggerFactory.getLogger(OsznOrganizationStrategy.class);
     public static final String OSZN_ORGANIZATION_STRATEGY_NAME = IOrganizationStrategy.BEAN_NAME;
@@ -118,7 +122,8 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
 
     public static final List<Long> LOAD_SAVE_FILE_DIR_PRIVILEGES_ATTRIBUTES =
             ImmutableList.of(LOAD_DWELLING_CHARACTERISTICS_DIR, SAVE_DWELLING_CHARACTERISTICS_DIR,
-                    LOAD_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_FORM2_DIR);
+                    LOAD_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_FORM2_DIR,
+                    LOAD_PRIVILEGE_PROLONGATION_DIR);
 
     private static final List<Long> CUSTOM_ATTRIBUTE_TYPES = ImmutableList.<Long>builder().
             add(DATA_SOURCE).

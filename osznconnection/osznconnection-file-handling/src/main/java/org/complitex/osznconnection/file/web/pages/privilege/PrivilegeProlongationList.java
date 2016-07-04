@@ -33,13 +33,15 @@ import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
-import org.complitex.osznconnection.file.entity.privilege.*;
+import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
+import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
-import org.complitex.osznconnection.file.service.privilege.*;
-import org.complitex.osznconnection.file.service.privilege.task.DwellingCharacteristicsBindTaskBean;
-import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceTypeBindTaskBean;
+import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
+import org.complitex.osznconnection.file.service.privilege.PrivilegeProlongationBean;
+import org.complitex.osznconnection.file.service.privilege.task.PrivilegeProlongationBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.PrivilegeExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.PrivilegeStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -60,17 +62,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF.CDUL;
-
+/**
+ * @author inheaven on 29.06.16.
+ */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
-public final class DwellingCharacteristicsList extends TemplatePage {
-    private Logger log = LoggerFactory.getLogger(DwellingCharacteristicsList.class);
+public class PrivilegeProlongationList extends TemplatePage {
+    private Logger log = LoggerFactory.getLogger(PrivilegeProlongationList.class);
 
     @EJB
-    private DwellingCharacteristicsBean dwellingCharacteristicsBean;
-
-    @EJB
-    private FacilityServiceTypeBean facilityServiceTypeBean;
+    private PrivilegeProlongationBean privilegeProlongationBean;
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -88,10 +88,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
     private SessionBean sessionBean;
 
     @EJB
-    private DwellingCharacteristicsBindTaskBean dwellingCharacteristicsBindTaskBean;
-
-    @EJB
-    private FacilityServiceTypeBindTaskBean facilityServiceTypeBindTaskBean;
+    private PrivilegeProlongationBindTaskBean privilegeProlongationBindTaskBean;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
@@ -99,19 +96,11 @@ public final class DwellingCharacteristicsList extends TemplatePage {
     @EJB
     private FacilityReferenceBookBean facilityReferenceBookBean;
 
-    @EJB
-    private PrivilegeFileGroupBean privilegeFileGroupBean;
-
-    @EJB
-    private PrivilegeGroupService privilegeGroupService;
-
     private IModel<PrivilegeExample> example;
 
     private Long fileId;
 
-    private IModel<PrivilegeFileGroup> privilegeFileGroupModel;
-
-    public DwellingCharacteristicsList(PageParameters params) {
+    public PrivilegeProlongationList(PageParameters params) {
         this.fileId = params.get("request_file_id").toLong();
         init();
     }
@@ -128,8 +117,6 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
     private void init() {
         RequestFile requestFile = requestFileBean.getRequestFile(fileId);
-
-        privilegeFileGroupModel = Model.of(privilegeFileGroupBean.getPrivilegeFileGroup(requestFile.getGroupId()));
 
         //Проверка доступа к данным
         if (!sessionBean.isAuthorized(requestFile.getOrganizationId(),
@@ -158,32 +145,34 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
         StatusDetailPanel<PrivilegeExample> statusDetailPanel =
                 new StatusDetailPanel<PrivilegeExample>("statusDetailsPanel", example,
-                new PrivilegeExampleConfigurator(), new PrivilegeStatusDetailRenderer(), content) {
+                        new PrivilegeExampleConfigurator(), new PrivilegeStatusDetailRenderer(), content) {
 
                     @Override
                     public List<StatusDetailInfo> loadStatusDetails() {
-                        return statusDetailBean.getDwellingCharacteristicsStatusDetails(fileId);
+                        return statusDetailBean.getPrivilegeProlongationStatusDetails(fileId);
                     }
                 };
         add(statusDetailPanel);
 
-        final DataProvider<DwellingCharacteristics> dataProvider = new DataProvider<DwellingCharacteristics>() {
+        final DataProvider<PrivilegeProlongation> dataProvider = new DataProvider<PrivilegeProlongation>() {
 
             @Override
-            protected Iterable<? extends DwellingCharacteristics> getData(long first, long count) {
+            protected Iterable<PrivilegeProlongation> getData(long first, long count) {
                 example.getObject().setAsc(getSort().isAscending());
                 if (!Strings.isEmpty(getSort().getProperty())) {
                     example.getObject().setOrderByClause(getSort().getProperty());
                 }
                 example.getObject().setFirst(first);
                 example.getObject().setCount(count);
-                return dwellingCharacteristicsBean.find(example.getObject());
+
+                return privilegeProlongationBean.getPrivilegeProlongations(example.getObject());
             }
 
             @Override
             protected Long getSize() {
                 example.getObject().setAsc(getSort().isAscending());
-                return dwellingCharacteristicsBean.getCount(example.getObject());
+
+                return privilegeProlongationBean.getPrivilegeProlongationsCount(example.getObject());
             }
         };
         dataProvider.setSort("", SortOrder.ASCENDING);
@@ -193,7 +182,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<>(example, "firstName")));
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<>(example, "middleName")));
         filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<>(example, "lastName")));
-        filterForm.add(new TextField<>("streetReferenceFilter", new Model<String>(){
+        filterForm.add(new TextField<>("streetReferenceFilter", new Model<String>() {
             @Override
             public String getObject() {
                 String streetCode = example.getObject().getStreetCode();
@@ -202,7 +191,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                     FacilityStreet facilityStreet = facilityReferenceBookBean.getFacilityStreet(streetCode,
                             requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
-                    if (facilityStreet != null){
+                    if (facilityStreet != null) {
                         return facilityStreet.getStreet();
                     }
                 }
@@ -217,7 +206,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
                 List<FacilityStreet> facilityStreets = facilityReferenceBookBean.getFacilityStreets(FilterWrapper.of(facilityStreet));
 
-                if (!facilityStreets.isEmpty()){
+                if (!facilityStreets.isEmpty()) {
                     example.getObject().setStreetCode(facilityStreets.get(0).getStreetCode());
                 }
             }
@@ -253,16 +242,11 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         filterForm.add(submit);
 
         //Панель коррекции адреса
-        final AddressCorrectionDialog<DwellingCharacteristics> addressCorrectionDialog =
-                new AddressCorrectionDialog<DwellingCharacteristics>("addressCorrectionPanel") {
+        final AddressCorrectionDialog<PrivilegeProlongation> addressCorrectionDialog =
+                new AddressCorrectionDialog<PrivilegeProlongation>("addressCorrectionPanel") {
                     @Override
-                    protected void onCorrect(AjaxRequestTarget target, IModel<DwellingCharacteristics> model, AddressEntity addressEntity) {
-                        dwellingCharacteristicsBean.markCorrected(model.getObject(), addressEntity);
-
-                        PrivilegeFileGroup group = privilegeFileGroupModel.getObject();
-                        if (group != null && group.getFacilityServiceTypeRequestFile() != null){
-                            facilityServiceTypeBean.markCorrected(group.getFacilityServiceTypeRequestFile().getId(), model.getObject(), addressEntity);
-                        }
+                    protected void onCorrect(AjaxRequestTarget target, IModel<PrivilegeProlongation> model, AddressEntity addressEntity) {
+                        privilegeProlongationBean.markPrivilegeProlongationCorrected(model.getObject(), addressEntity);
 
                         target.add(content, statusDetailPanel);
                         dataRowHoverBehavior.deactivateDataRow(target);
@@ -272,8 +256,8 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         add(addressCorrectionDialog);
 
         //Панель поиска
-        final DwellingCharacteristicsLookupPanel lookupPanel =
-                new DwellingCharacteristicsLookupPanel("lookupPanel", content, statusDetailPanel) {
+        final PrivilegeProlongationLookupPanel lookupPanel =
+                new PrivilegeProlongationLookupPanel("lookupPanel", content, statusDetailPanel) {
 
                     @Override
                     protected void onClose(AjaxRequestTarget target) {
@@ -283,61 +267,61 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 };
         add(lookupPanel);
 
-        CheckGroup<DwellingCharacteristics> checkGroup = new CheckGroup<>("checkGroup", new ArrayList<>());
+        CheckGroup<PrivilegeProlongation> checkGroup = new CheckGroup<>("checkGroup", new ArrayList<>());
         filterForm.add(checkGroup);
 
-        DataView<DwellingCharacteristics> data = new DataView<DwellingCharacteristics>("data", dataProvider, 1) {
+        DataView<PrivilegeProlongation> data = new DataView<PrivilegeProlongation>("data", dataProvider, 1) {
 
             @Override
-            protected void populateItem(Item<DwellingCharacteristics> item) {
-                final DwellingCharacteristics dwellingCharacteristics = item.getModelObject();
+            protected void populateItem(Item<PrivilegeProlongation> item) {
+                final PrivilegeProlongation privilegeProlongation = item.getModelObject();
 
-                item.add(new Check<>("check", Model.of(dwellingCharacteristics), checkGroup));
-                item.add(new Label("account", dwellingCharacteristics.getAccountNumber()));
-                item.add(new Label("idCode", dwellingCharacteristics.getInn()));
-                item.add(new Label("firstName", dwellingCharacteristics.getFirstName()));
-                item.add(new Label("middleName", dwellingCharacteristics.getMiddleName()));
-                item.add(new Label("lastName", dwellingCharacteristics.getLastName()));
+                item.add(new Check<>("check", Model.of(privilegeProlongation), checkGroup));
+                item.add(new Label("account", privilegeProlongation.getAccountNumber()));
+                item.add(new Label("idCode", privilegeProlongation.getInn()));
+                item.add(new Label("firstName", privilegeProlongation.getFirstName()));
+                item.add(new Label("middleName", privilegeProlongation.getMiddleName()));
+                item.add(new Label("lastName", privilegeProlongation.getLastName()));
 
-                String streetType = dwellingCharacteristics.getStreetType() != null
-                        ? dwellingCharacteristics.getStreetType()
+                String streetType = privilegeProlongation.getStreetType() != null
+                        ? privilegeProlongation.getStreetType()
                         : "";
 
-                String street = dwellingCharacteristics.getStreet() != null
-                        ? dwellingCharacteristics.getStreet()
-                        : "[" + dwellingCharacteristics.getStreetCode() + "]";
+                String street = privilegeProlongation.getStreet() != null
+                        ? privilegeProlongation.getStreet()
+                        : "[" + privilegeProlongation.getStreetCode() + "]";
 
                 item.add(new Label("streetReference", streetType + " " + street));
-                item.add(new Label("building", dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.HOUSE)));
-                item.add(new Label("corp", dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.BUILD)));
-                item.add(new Label("apartment", dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT)));
-                item.add(new Label("status", StatusRenderUtil.displayStatus(dwellingCharacteristics.getStatus(), getLocale())));
-                item.add(new Label("statusDetails", webWarningRenderer.display(dwellingCharacteristics.getWarnings(), getLocale())));
+                item.add(new Label("building", privilegeProlongation.getBuildingNumber()));
+                item.add(new Label("corp", privilegeProlongation.getBuildingCorp()));
+                item.add(new Label("apartment", privilegeProlongation.getApartment()));
+                item.add(new Label("status", StatusRenderUtil.displayStatus(privilegeProlongation.getStatus(), getLocale())));
+                item.add(new Label("statusDetails", webWarningRenderer.display(privilegeProlongation.getWarnings(), getLocale())));
 
                 AjaxLink addressCorrectionLink = new IndicatingAjaxLink("addressCorrectionLink") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        dwellingCharacteristics.setStreet(dwellingCharacteristics.getStreet() != null
-                                ? dwellingCharacteristics.getStreet()
-                                : getString("streetCodePrefix") + " " + dwellingCharacteristics.getStringField(CDUL));
+                        privilegeProlongation.setStreet(privilegeProlongation.getStreet() != null
+                                ? privilegeProlongation.getStreet()
+                                : getString("streetCodePrefix") + " " + privilegeProlongation.getStreetCode());
 
-                        dwellingCharacteristics.setStreetType(dwellingCharacteristics.getStreetType() != null
-                                ? dwellingCharacteristics.getStreetType()
+                        privilegeProlongation.setStreetType(privilegeProlongation.getStreetType() != null
+                                ? privilegeProlongation.getStreetType()
                                 : getString("streetTypeNotFound"));
 
-                        addressCorrectionDialog.open(target, item.getModel(), dwellingCharacteristics.getPersonalName(),
-                                dwellingCharacteristics.getExternalAddress(), dwellingCharacteristics.getLocalAddress());
+                        addressCorrectionDialog.open(target, item.getModel(), privilegeProlongation.getPersonalName(),
+                                privilegeProlongation.getExternalAddress(), privilegeProlongation.getLocalAddress());
                     }
                 };
-                addressCorrectionLink.setVisible(dwellingCharacteristics.getStatus().isAddressCorrectable());
+                addressCorrectionLink.setVisible(privilegeProlongation.getStatus().isAddressCorrectable());
                 item.add(addressCorrectionLink);
 
                 AjaxLink lookup = new IndicatingAjaxLink("lookup") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, dwellingCharacteristics, null);
+                        lookupPanel.open(target, privilegeProlongation, null);
                     }
                 };
                 item.add(lookup);
@@ -346,23 +330,23 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         checkGroup.add(data);
 
         filterForm.add(new CheckGroupSelector("checkAll", checkGroup));
-        filterForm.add(new ArrowOrderByBorder("accountHeader", FacilityServiceTypeBean.OrderBy.RAH.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("idCodeHeader", DwellingCharacteristicsBean.OrderBy.IDPIL.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("firstNameHeader", DwellingCharacteristicsBean.OrderBy.FIRST_NAME.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("middleNameHeader", DwellingCharacteristicsBean.OrderBy.MIDDLE_NAME.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("lastNameHeader", DwellingCharacteristicsBean.OrderBy.LAST_NAME.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("streetReferenceHeader", DwellingCharacteristicsBean.OrderBy.STREET_REFERENCE.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("buildingHeader", DwellingCharacteristicsBean.OrderBy.BUILDING.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("corpHeader", DwellingCharacteristicsBean.OrderBy.CORP.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("apartmentHeader", DwellingCharacteristicsBean.OrderBy.APARTMENT.getOrderBy(), dataProvider, data, content));
-        filterForm.add(new ArrowOrderByBorder("statusHeader", DwellingCharacteristicsBean.OrderBy.STATUS.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("accountHeader", "account_number", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("idCodeHeader", "IDPIL", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("firstNameHeader", "first_name", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("middleNameHeader", "middle_name", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("lastNameHeader", "last_name", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("streetReferenceHeader", "street_reference", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("buildingHeader", "HOUSE", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("corpHeader", "CORP", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("apartmentHeader", "APT", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("statusHeader", "status", dataProvider, data, content));
 
         Link<Void> back = new Link<Void>("back") {
 
             @Override
             public void onClick() {
                 PageParameters params = new PageParameters();
-                setResponsePage(PrivilegeFileGroupList.class, params);
+                setResponsePage(PrivilegeProlongationFileList.class, params);
             }
         };
         filterForm.add(back);
@@ -373,39 +357,25 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         filterForm.add(new IndicatingAjaxButton("bind") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form form) {
-                Collection<DwellingCharacteristics> list = checkGroup.getModelObject();
+                Collection<PrivilegeProlongation> list = checkGroup.getModelObject();
 
-                list.forEach(dwellingCharacteristics -> {
+                list.forEach(privilegeProlongation -> {
                     //noinspection Duplicates
                     try {
                         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
-                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, dwellingCharacteristics);
+                        privilegeProlongationBindTaskBean.bind(serviceProviderCode, privilegeProlongation);
 
-                        if (dwellingCharacteristics.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
-                            info(getStringFormat("info_bound", dwellingCharacteristics.getInn(), dwellingCharacteristics.getFio()));
-                        }else {
-                            error(getStringFormat("error_bound", dwellingCharacteristics.getFio(),
-                                    StatusRenderUtil.displayStatus(dwellingCharacteristics.getStatus(), getLocale())));
-                        }
-
-                        PrivilegeGroup privilegeGroup = privilegeGroupService.getPrivilegeGroup(
-                                dwellingCharacteristics.getRequestFileId(),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.IDPIL),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.PASPPIL),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.FIO),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.CDUL),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.HOUSE),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.BUILD),
-                                dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT));
-
-                        if (privilegeGroup.getFacilityServiceType() != null){
-                            facilityServiceTypeBindTaskBean.bind(serviceProviderCode, privilegeGroup.getFacilityServiceType());
+                        if (privilegeProlongation.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)) {
+                            info(getStringFormat("info_bound", privilegeProlongation.getInn(), privilegeProlongation.getFio()));
+                        } else {
+                            error(getStringFormat("error_bound", privilegeProlongation.getFio(),
+                                    StatusRenderUtil.displayStatus(privilegeProlongation.getStatus(), getLocale())));
                         }
                     } catch (Exception e) {
                         error(ExceptionUtil.getCauseMessage(e, true));
-                        log.error("error dwellingCharacteristics bind", e);
+                        log.error("error privilegeProlongation bind", e);
                     }
                 });
 

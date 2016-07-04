@@ -32,7 +32,10 @@ import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
-import org.complitex.osznconnection.file.entity.privilege.*;
+import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
+import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeGroup;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
@@ -43,8 +46,8 @@ import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBea
 import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;
 import org.complitex.osznconnection.file.service.privilege.task.DwellingCharacteristicsBindTaskBean;
 import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceTypeBindTaskBean;
-import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeExampleConfigurator;
-import org.complitex.osznconnection.file.service.status.details.FacilityServiceTypeStatusDetailRenderer;
+import org.complitex.osznconnection.file.service.status.details.PrivilegeExampleConfigurator;
+import org.complitex.osznconnection.file.service.status.details.PrivilegeStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
@@ -160,7 +163,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
         StatusDetailPanel<PrivilegeExample> statusDetailPanel =
                 new StatusDetailPanel<PrivilegeExample>("statusDetailsPanel", example,
-                new FacilityServiceTypeExampleConfigurator(), new FacilityServiceTypeStatusDetailRenderer(), content) {
+                new PrivilegeExampleConfigurator(), new PrivilegeStatusDetailRenderer(), content) {
 
                     @Override
                     public List<StatusDetailInfo> loadStatusDetails() {
@@ -231,7 +234,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
                     @Override
                     protected void onCorrect(AjaxRequestTarget target, IModel<FacilityServiceType> model, AddressEntity addressEntity) {
-                        facilityServiceTypeBean.markCorrected(model.getObject().getRequestFileId(), model.getObject(), addressEntity);
+                        facilityServiceTypeBean.markCorrected(model.getObject(), addressEntity);
 
                         PrivilegeFileGroup group = privilegeFileGroupModel.getObject();
                         if (group != null && group.getDwellingCharacteristicsRequestFile() != null){

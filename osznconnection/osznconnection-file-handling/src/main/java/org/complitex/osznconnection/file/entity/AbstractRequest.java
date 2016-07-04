@@ -77,6 +77,7 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
         updateFieldMap.put(e.name(), object);
     }
 
+    //todo move to constructor
     public abstract RequestFileType getRequestFileType();
 
     public Long getId() {

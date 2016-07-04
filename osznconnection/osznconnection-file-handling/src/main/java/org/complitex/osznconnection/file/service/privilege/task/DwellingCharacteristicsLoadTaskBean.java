@@ -2,11 +2,10 @@ package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.PersonalName;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.exception.ExecuteException;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
@@ -14,6 +13,7 @@ import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristic
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
+import org.complitex.osznconnection.file.service.process.AbstractLoadRequestFile;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
 import org.complitex.osznconnection.file.service.util.FacilityNameParser;
 
@@ -46,7 +46,7 @@ public class DwellingCharacteristicsLoadTaskBean extends AbstractTaskBean<Reques
             final String defaultCity = configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY, true);
             final Date dwellingCharacteristicsDate = requestFile.getBeginDate();
 
-            boolean noSkip = loadRequestFileBean.load(requestFile, new LoadRequestFileBean.AbstractLoadRequestFile() {
+            boolean noSkip = loadRequestFileBean.load(requestFile, new AbstractLoadRequestFile<DwellingCharacteristics>() {
 
                 @Override
                 public Enum[] getFieldNames() {
@@ -54,21 +54,20 @@ public class DwellingCharacteristicsLoadTaskBean extends AbstractTaskBean<Reques
                 }
 
                 @Override
-                public AbstractRequest newObject() {
+                public DwellingCharacteristics newObject() {
                     return new DwellingCharacteristics(defaultCity, dwellingCharacteristicsDate);
                 }
 
                 @Override
-                public void save(List<AbstractRequest> batch) {
+                public void save(List<DwellingCharacteristics> batch) {
                     dwellingCharacteristicsBean.insert(batch);
 
                     batch.forEach(r -> onRequest(r));
                 }
 
                 @Override
-                public void postProcess(int rowNumber, AbstractRequest request) {
-                    final DwellingCharacteristics dwellingCharacteristics = (DwellingCharacteristics) request;
-                    parseFio(dwellingCharacteristics);
+                public void postProcess(int rowNumber, DwellingCharacteristics request) {
+                    parseFio(request);
                 }
             });
 

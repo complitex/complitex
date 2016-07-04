@@ -1,9 +1,9 @@
 package org.complitex.osznconnection.file.service;
 
 import com.google.common.collect.ImmutableMap;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
@@ -90,6 +90,8 @@ public class RequestFileBean extends AbstractBean {
                 return getFacilityStreetFiles(filter);
             case FACILITY_TARIF:
                 return getFacilityTarifFiles(filter);
+            case PRIVILEGE_PROLONGATION:
+                return getPrivilegeProlongationFiles(filter);
         }
         throw new IllegalStateException("Unexpected request file type detected: '" + filter.getType() + "'.");
     }
@@ -128,6 +130,10 @@ public class RequestFileBean extends AbstractBean {
 
     private List<RequestFile> getSubsidyTarifFiles(RequestFileFilter filter) {
         return sqlSession().selectList(NS + ".selectSubsidyTarifFiles", filter);
+    }
+
+    private List<RequestFile> getPrivilegeProlongationFiles(RequestFileFilter filter) {
+        return sqlSession().selectList(NS + ".selectPrivilegeProlongations", filter);
     }
 
     public Long getCount(RequestFileFilter filter) {
