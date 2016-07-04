@@ -355,7 +355,7 @@
 
             fst.*,
 
-            f.`organization_id`, f.`user_organization_id`, f.group_id
+            f.`organization_id`, f.`user_organization_id`, f.`group_id`
         FROM `facility_service_type` fst
         JOIN `request_file` f ON fst.`request_file_id` = f.`id`
         WHERE f.group_id = #{groupId}
