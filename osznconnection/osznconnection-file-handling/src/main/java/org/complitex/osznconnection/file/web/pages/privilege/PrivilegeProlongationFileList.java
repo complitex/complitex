@@ -100,12 +100,16 @@ public class PrivilegeProlongationFileList extends TemplatePage {
 
             @Override
             protected Long getCount(RequestFileFilter filter) {
-                return super.getCount(filter); //todo
+                filter.setSubType(type.name());
+
+                return super.getCount(filter);
             }
 
             @Override
             protected List<RequestFile> getObjects(RequestFileFilter filter) {
-                return super.getObjects(filter); //todo
+                filter.setSubType(type.name());
+
+                return super.getObjects(filter);
             }
         });
     }

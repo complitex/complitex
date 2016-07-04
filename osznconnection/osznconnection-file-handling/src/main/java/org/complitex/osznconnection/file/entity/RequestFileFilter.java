@@ -31,6 +31,8 @@ public class RequestFileFilter extends AbstractFilter {
     private String firstName;
     private String secondName;
 
+    private String subType;
+
     public Long getGroupId() {
         return groupId;
     }
@@ -157,5 +159,13 @@ public class RequestFileFilter extends AbstractFilter {
 
     public void setSecondName(String secondName) {
         this.secondName = secondName;
+    }
+
+    public String getSubType() {
+        return subType;
+    }
+
+    public void setSubType(String subType) {
+        this.subType = subType;
     }
 }
