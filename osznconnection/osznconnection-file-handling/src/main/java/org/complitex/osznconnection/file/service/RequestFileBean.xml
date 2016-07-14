@@ -88,7 +88,7 @@
             resultMap="requestFileResultMap">
         SELECT *,
             (SELECT COUNT(1) FROM `subsidy_tarif` WHERE `request_file_id` = rf.`id`) as loaded_record_count
-        <include refid="org.complitex.osznconnection.file.service.RequestFileBean.fromFilterSort"/>
+        <include refid="org.complitex.oszPnconnection.file.service.RequestFileBean.fromFilterSort"/>
     </select>
     
     <select id="selectSubsidyFiles" parameterType="org.complitex.osznconnection.file.entity.RequestFileFilter"
