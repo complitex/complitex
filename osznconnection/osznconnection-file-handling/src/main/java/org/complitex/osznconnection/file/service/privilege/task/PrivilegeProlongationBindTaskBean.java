@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import org.apache.wicket.util.string.Strings;
 import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.ConfigBean;
@@ -10,6 +10,7 @@ import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongationDBF;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
@@ -78,7 +79,7 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
         try {
             String accountNumber = personAccountService.getLocalAccountNumber(privilegeProlongation, privilegeProlongation.getInn());
 
-            if (!Strings.isEmpty(accountNumber)) {
+            if (!Strings.isNullOrEmpty(accountNumber)) {
                 privilegeProlongation.setAccountNumber(accountNumber);
                 privilegeProlongation.setStatus(ACCOUNT_NUMBER_RESOLVED);
             }
@@ -104,8 +105,14 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
     }
 
     public void bind(String serviceProviderCode, PrivilegeProlongation privilegeProlongation) throws MoreOneAccountException {
+        String puAccountNumber = privilegeProlongation.getStringField(PrivilegeProlongationDBF.RAH);
+
         //resolve local account number
-        personAccountService.localResolveAccountNumber(privilegeProlongation, privilegeProlongation.getInn(), true);
+        if (!Strings.isNullOrEmpty(puAccountNumber)){
+            personAccountService.localResolveAccountNumber(privilegeProlongation, puAccountNumber, true);
+        }else {
+            personAccountService.localResolveAccountNumber(privilegeProlongation, privilegeProlongation.getInn(), true);
+        }
 
         //noinspection Duplicates
         if (privilegeProlongation.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
@@ -113,8 +120,12 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
             resolveAddress(privilegeProlongation);
 
             if (privilegeProlongation.getStatus().isAddressResolved()) {
-                //resolve local account.
-                resolveLocalAccount(privilegeProlongation);
+                //resolve account number
+                if (!Strings.isNullOrEmpty(puAccountNumber)){
+                    personAccountService.resolveAccountNumber(privilegeProlongation, puAccountNumber, serviceProviderCode, false);
+                }else {
+                    resolveLocalAccount(privilegeProlongation);
+                }
 
                 if (privilegeProlongation.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, privilegeProlongation);
