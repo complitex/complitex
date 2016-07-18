@@ -51,6 +51,10 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
         putField(e.name(), object);
     }
 
+    public void putField(E e, String postfix, Object object) {
+        putField(e.name() + postfix, object);
+    }
+
     public Object getField(E e) {
         return getField(e.name());
     }

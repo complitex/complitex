@@ -47,7 +47,7 @@ public class DwellingCharacteristicsLookupPanel extends AbstractLookupPanel<Dwel
         dwellingCharacteristics.setStreetId(streetId);
         dwellingCharacteristics.setStreetTypeId(streetTypeId);
         dwellingCharacteristics.setBuildingId(buildingId);
-        dwellingCharacteristics.putField(DwellingCharacteristicsDBF.APT, apartment != null ? apartment : "");
+        dwellingCharacteristics.putField(DwellingCharacteristicsDBF.APT, "_CYR", apartment != null ? apartment : "");
     }
 
     @Override

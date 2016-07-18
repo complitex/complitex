@@ -40,7 +40,7 @@ public class PrivilegeProlongationLookupPanel extends AbstractLookupPanel<Privil
         privilegeProlongation.setStreetId(streetId);
         privilegeProlongation.setStreetTypeId(streetTypeId);
         privilegeProlongation.setBuildingId(buildingId);
-        privilegeProlongation.putField(PrivilegeProlongationDBF.APT, apartment != null ? apartment : "");
+        privilegeProlongation.putField(PrivilegeProlongationDBF.APT, "_CYR", apartment != null ? apartment : "");
     }
 
     @Override

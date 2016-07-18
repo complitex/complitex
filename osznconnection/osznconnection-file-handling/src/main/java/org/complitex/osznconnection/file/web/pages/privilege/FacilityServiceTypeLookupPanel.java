@@ -51,7 +51,7 @@ public class FacilityServiceTypeLookupPanel extends AbstractLookupPanel<Facility
         facilityServiceType.setStreetId(streetId);
         facilityServiceType.setStreetTypeId(streetTypeId);
         facilityServiceType.setBuildingId(buildingId);
-        facilityServiceType.putField(FacilityServiceTypeDBF.APT, apartment != null ? apartment : "");
+        facilityServiceType.putField(FacilityServiceTypeDBF.APT, "_CYR", apartment != null ? apartment : "");
     }
 
     @Override
