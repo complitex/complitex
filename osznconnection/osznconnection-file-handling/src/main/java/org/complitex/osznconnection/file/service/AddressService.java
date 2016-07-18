@@ -475,7 +475,7 @@ public class AddressService extends AbstractBean {
 
         //дом
         List<BuildingCorrection> buildingCorrections = addressCorrectionBean.getBuildingCorrections(null,
-                request.getBuildingId(), null, null, billingId, null);
+                request.getBuildingId(), null, null, billingId, userOrganizationId);
 
         if (buildingCorrections.isEmpty()){
             Building building = buildingStrategy.getDomainObject(request.getBuildingId(), true);
