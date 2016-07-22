@@ -67,12 +67,15 @@
             <if test="fio != null">
                 and r.`FIOPIL` = #{fio}
             </if>
+
+            <if test="spAccountNumber != null">
+                and r.`RAH` = #{spAccountNumber}
+            </if>
         </where>
     </sql>
 
     <select id="selectPrivilegeProlongationsCount" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.PrivilegeExample">
         SELECT COUNT(distinct r.`id`) FROM `privilege_prolongation` r
-        LEFT JOIN `facility_street_reference` s ON r.`CDUL` = s.`KL_CODEUL`
         <include refid="filter"/>
     </select>
 
@@ -83,7 +86,7 @@
         p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
         FROM (
         SELECT DISTINCT r.`id`, r.`status`, r.`request_file_id`, r.`FIOPIL`, r.`IDPIL`, r.`PASPPIL`,
-        r.`CDUL`, r.`HOUSE`, r.`BUILD`, r.`APT`, r.`date`,
+        r.`CDUL`, r.`HOUSE`, r.`BUILD`, r.`APT`, r.`date`, r.`RAH`,
 
         TO_CYRILLIC(r.`IDPIL`) IDPIL_CYR,
         TO_CYRILLIC(r.`PASPPIL`) PASPPIL_CYR,
@@ -103,12 +106,17 @@
         r.`outgoing_building_corp`, r.`outgoing_apartment`,
         r.`city`, r.account_number
         FROM `privilege_prolongation` r
-        JOIN `request_file` f ON f.`id` = r.`request_file_id`
+        LEFT JOIN `request_file` f ON f.`id` = r.`request_file_id`
+
         <include refid="filter"/>
 
         <if test="orderByClause != null">
             <choose>
-                <when test="orderByClause == 'IDCODE' or orderByClause == 'HOUSE' or orderByClause == 'BUILD' or orderByClause == 'APT'">
+                <when test="orderByClause == 'street_reference'">
+                    ORDER BY r.`CDUL`
+                </when>
+
+                <when test="orderByClause == 'IDCODE' or orderByClause == 'HOUSE' or orderByClause == 'BUILD' or orderByClause == 'APT' or orderByClause == 'RAH'">
                     ORDER BY `${orderByClause}`+0
                 </when>
                 <otherwise>ORDER BY `${orderByClause}`</otherwise>
