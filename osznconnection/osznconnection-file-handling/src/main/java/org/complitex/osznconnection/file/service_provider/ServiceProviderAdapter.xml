@@ -167,4 +167,15 @@
         }
         ]]>
     </select>
+
+    <select id="createPrivHeader" statementType="CALLABLE" parameterType="map">
+        {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call z$runtime_sz_utl.CreatePrivHeader(
+          #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pDate, mode=IN, javaType=date, jdbcType=DATE},
+          #{pFile, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pCnt, mode=IN, javaType=int, jdbcType=NUMERIC},
+          #{pProfit, mode=IN, javaType=boolean, jdbcType=BOOLEAN}
+        )}
+    </select>
+
 </mapper>

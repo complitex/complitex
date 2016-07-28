@@ -1398,4 +1398,18 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         return new Cursor<>((Integer) params.get("resultCode"), (List) params.get("data"));
     }
+
+    public Long createPrivilegeProlongationHeader(Long userOrganizationId, String district, Date date, String fileName,
+                                                  Integer recordsCount, boolean profit){
+        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("pDistrName", district);
+        map.put("pDate", date);
+        map.put("pFile", fileName);
+        map.put("pCnt", recordsCount);
+        map.put("pProfit", profit);
+
+        return sqlSession(dataSource).selectOne(NS + ".createPrivHeader", map);
+    }
 }

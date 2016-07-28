@@ -38,7 +38,7 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_AC
 /**
  * @author inheaven on 02.07.2016.
  */
-@Stateless()
+@Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(PrivilegeProlongationBindTaskBean.class);
