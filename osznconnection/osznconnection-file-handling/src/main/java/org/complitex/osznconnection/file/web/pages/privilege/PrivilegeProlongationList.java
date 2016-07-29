@@ -36,6 +36,7 @@ import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongationDBF;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
@@ -178,6 +179,7 @@ public class PrivilegeProlongationList extends TemplatePage {
         dataProvider.setSort("", SortOrder.ASCENDING);
 
         filterForm.add(new TextField<>("accountFilter", new PropertyModel<String>(example, "accountNumber")));
+        filterForm.add(new TextField<>("spAccountFilter", new PropertyModel<String>(example, "spAccountNumber")));
         filterForm.add(new TextField<>("idCodeFilter", new PropertyModel<>(example, "inn")));
         filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<>(example, "firstName")));
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<>(example, "middleName")));
@@ -278,6 +280,7 @@ public class PrivilegeProlongationList extends TemplatePage {
 
                 item.add(new Check<>("check", Model.of(privilegeProlongation), checkGroup));
                 item.add(new Label("account", privilegeProlongation.getAccountNumber()));
+                item.add(new Label("spAccount", privilegeProlongation.getStringField(PrivilegeProlongationDBF.RAH)));
                 item.add(new Label("idCode", privilegeProlongation.getInn()));
                 item.add(new Label("firstName", privilegeProlongation.getFirstName()));
                 item.add(new Label("middleName", privilegeProlongation.getMiddleName()));
@@ -321,7 +324,7 @@ public class PrivilegeProlongationList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, privilegeProlongation, null);
+                        lookupPanel.open(target, privilegeProlongation, privilegeProlongation.getStringField(PrivilegeProlongationDBF.RAH));
                     }
                 };
                 item.add(lookup);
@@ -331,6 +334,7 @@ public class PrivilegeProlongationList extends TemplatePage {
 
         filterForm.add(new CheckGroupSelector("checkAll", checkGroup));
         filterForm.add(new ArrowOrderByBorder("accountHeader", "account_number", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("spAccountHeader", "RAH", dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("idCodeHeader", "IDPIL", dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", "first_name", dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("middleNameHeader", "middle_name", dataProvider, data, content));
