@@ -1,5 +1,6 @@
 package org.complitex.common.mybatis;
 
+import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.executor.resultset.DefaultResultSetHandler;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
@@ -51,6 +52,11 @@ public class CursorResultSetHandler implements ResultSetHandler {
         } catch (Exception e) {
             log.error("Ошибочка в получении значения приватного поля", e);
         }
+    }
+
+    @Override
+    public <E> Cursor<E> handleCursorResultSets(Statement statement) throws SQLException {
+        return defaultResultSetHandler.handleCursorResultSets(statement);
     }
 
     public void handleOutputParameters(CallableStatement cs) throws SQLException {
