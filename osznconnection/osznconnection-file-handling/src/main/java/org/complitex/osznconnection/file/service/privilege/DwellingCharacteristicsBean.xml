@@ -102,7 +102,7 @@
             </if>
 
             <if test="groupId != null">
-                and d.`group_id` = #{groupId}
+                and f.`group_id` = #{groupId}
             </if>
 
             <if test="accountNumber != null">
