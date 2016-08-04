@@ -7,6 +7,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
@@ -159,6 +160,7 @@ public class AccountNumberPickerPanel extends Panel {
             @Override
             protected void populateItem(Item<AccountDetail> item) {
                 AccountDetail detail = item.getModelObject();
+
                 item.add(new Radio<>("radio", item.getModel(), radioGroup).setEnabled(!Strings.isEmpty(detail.getAccCode())));
                 item.add(new Label("accCode", of(detail.getAccCode())));
                 item.add(new Label("zheu", of(detail.getZheu())));
@@ -167,8 +169,24 @@ public class AccountNumberPickerPanel extends Panel {
                 item.add(new Label("address", of(detail.displayAddress(getLocale()))));
                 item.add(new Label("ownerInn", of(detail.getOwnerINN())));
                 item.add(new Label("ercCode", of(detail.getErcCode())));
+
+                WebMarkupContainer residentsContainer = new WebMarkupContainer("residentsContainer");
+                residentsContainer.setOutputMarkupPlaceholderTag(true);
+                residentsContainer.setOutputMarkupId(true);
+                residentsContainer.setVisible(false);
+                item.add(residentsContainer);
+
+                item.add(new AjaxLink("residents") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        residentsContainer.setVisible(!residentsContainer.isVisible());
+
+                        target.add(residentsContainer);
+                    }
+                });
             }
         };
+        accountDetails.setRenderBodyOnly(true);
         radioGroup.add(accountDetails);
 
         add(new ArrowOrderByBorder("accCodeHeader", "accCode", dataProvider, accountDetails, this));
