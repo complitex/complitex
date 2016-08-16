@@ -324,7 +324,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
             serviceBillingContainer.add(new AjaxLink("add") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    organization.addAttributes(SERVICE, BILLING);
+                    organization.addAttributePair(SERVICE, BILLING);
                     target.add(serviceBillingContainer);
                 }
             });

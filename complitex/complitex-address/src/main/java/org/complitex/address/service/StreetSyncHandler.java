@@ -7,7 +7,6 @@ import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
@@ -89,13 +88,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
             DomainObject oldStreet = streetStrategy.getDomainObject(sync.getObjectId());
             DomainObject street = streetStrategy.getDomainObject(sync.getObjectId());
 
-            Attribute code = new Attribute();
-            code.setAttributeId((long) street.getAttributes(STREET_CODE).size() + 1); //todo add mass attribute add remove
-            code.setAttributeTypeId(STREET_CODE);
-            code.setValueId(Long.valueOf(sync.getExternalId()));
-            code.setValueTypeId(STREET_CODE);
-
-            street.addAttribute(code);
+            street.addAttribute(STREET_CODE, Long.valueOf(sync.getExternalId()));
 
             streetStrategy.update(oldStreet, street, sync.getDate());
             addressSyncBean.delete(sync.getId());

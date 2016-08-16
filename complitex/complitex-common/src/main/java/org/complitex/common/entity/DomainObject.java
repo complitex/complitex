@@ -46,7 +46,7 @@ public class DomainObject implements ILongId {
         }
     }
 
-    public void addAttributes(Long attributeTypeId1, Long attributeTypeId2){
+    public void addAttributePair(Long attributeTypeId1, Long attributeTypeId2){
         Long attributeId = attributes.stream()
                 .filter(a -> a.getAttributeTypeId().equals(attributeTypeId1))
                 .mapToLong(Attribute::getAttributeId)
@@ -55,7 +55,20 @@ public class DomainObject implements ILongId {
 
         attributes.add(new Attribute(attributeTypeId1, attributeId));
         attributes.add(new Attribute(attributeTypeId2, attributeId));
+    }
 
+    public void addAttribute(Long attributeTypeId, Long valueId){
+        Long attributeId = attributes.stream()
+                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .mapToLong(Attribute::getAttributeId)
+                .max()
+                .orElse(0) + 1;
+
+        Attribute attribute = new Attribute();
+        attribute.setAttributeId(attributeId);
+        attribute.setAttributeTypeId(attributeTypeId);
+        attribute.setValueTypeId(attributeTypeId);
+        attribute.setValueId(valueId);
     }
 
     public Attribute getAttribute(Long attributeTypeId) {
