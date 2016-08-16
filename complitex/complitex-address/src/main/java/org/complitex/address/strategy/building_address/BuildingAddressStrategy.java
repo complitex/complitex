@@ -118,7 +118,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
         for (DomainObject object : objects) {
             loadAttributes(object);
             //load subject ids
-            object.setSubjectIds(loadSubjects(object.getPermissionId()));
+            object.setSubjectIds(getSubjects(object.getPermissionId()));
         }
         return objects;
     }

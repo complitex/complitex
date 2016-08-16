@@ -182,7 +182,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
         for (KeOrganization organization : organizations) {
             loadAttributes(organization);
             //load subject ids
-            organization.setSubjectIds(loadSubjects(organization.getPermissionId()));
+            organization.setSubjectIds(getSubjects(organization.getPermissionId()));
             //load operating month date
             loadOperatingMonthDate(organization);
         }

@@ -39,7 +39,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.complitex.common.util.StringUtil.removeWhiteSpaces;
-import static org.complitex.common.util.StringUtil.toCyrillic;
 
 @Stateless
 public class BuildingStrategy extends TemplateStrategy {
@@ -163,7 +162,7 @@ public class BuildingStrategy extends TemplateStrategy {
                     building.addAttribute(address.getAttribute(BuildingAddressStrategy.CORP));
                     building.addAttribute(address.getAttribute(BuildingAddressStrategy.STRUCTURE));
 
-                    building.setSubjectIds(loadSubjects(building.getPermissionId()));
+                    building.setSubjectIds(getSubjects(building.getPermissionId()));
 
                     buildings.add(building);
                 } else {
@@ -280,7 +279,7 @@ public class BuildingStrategy extends TemplateStrategy {
             updateStringsForNewLocales(building);
 
             //load subject ids
-            building.setSubjectIds(loadSubjects(building.getPermissionId()));
+            building.setSubjectIds(getSubjects(building.getPermissionId()));
 
             //load building codes
             building.setBuildingCodes(loadBuildingCodes(building));
@@ -705,8 +704,8 @@ public class BuildingStrategy extends TemplateStrategy {
         Set<Long> addressIds = getBuildingAddresses(objectId);
 
         deleteStrings(objectId);
-        deleteAttribute(objectId);
-        deleteDomainObject(objectId, locale);
+        deleteAttributes(objectId);
+        deleteDomainObject(objectId);
 
         //delete building address:
         for (Long addressId : addressIds) {

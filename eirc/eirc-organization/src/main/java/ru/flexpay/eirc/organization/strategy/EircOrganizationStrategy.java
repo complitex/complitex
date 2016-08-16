@@ -285,8 +285,8 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
         deleteChecks(objectId, locale);
 
         deleteStrings(objectId);
-        deleteAttribute(objectId);
-        deleteDomainObject(objectId, locale);
+        deleteAttributes(objectId);
+        deleteDomainObject(objectId);
     }
 
     @Override

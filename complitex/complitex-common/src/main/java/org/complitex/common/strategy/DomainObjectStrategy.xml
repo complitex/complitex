@@ -346,7 +346,7 @@
         ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
     </select>
 
-    <delete id="deleteAttribute" parameterType="map">
+    <delete id="deleteAttributes" parameterType="map">
         DELETE FROM `${entityName}_attribute` WHERE `object_id` = #{objectId}
     </delete>
 

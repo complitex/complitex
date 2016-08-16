@@ -8,7 +8,6 @@ import org.complitex.common.entity.*;
 import org.complitex.common.entity.Log.STATUS;
 import org.complitex.common.exception.DeleteException;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
-import org.complitex.common.mysql.MySqlErrors;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
@@ -27,7 +26,6 @@ import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -91,22 +89,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return attributeType != null && isSimpleAttributeType(attributeType);
     }
 
-    protected String getDisableSuccess() {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, "disable_success", stringLocaleBean.getSystemLocale());
-    }
-
-    protected String getDisableError() {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, "disable_error", stringLocaleBean.getSystemLocale());
-    }
-
-    protected String getEnableSuccess() {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, "enable_success", stringLocaleBean.getSystemLocale());
-    }
-
-    protected String getEnableError() {
-        return ResourceUtil.getString(RESOURCE_BUNDLE, "enable_error", stringLocaleBean.getSystemLocale());
-    }
-
     @Override
     @Asynchronous
     public void disable(final DomainObject object) {
@@ -114,10 +96,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         try {
             changeActivity(object, false);
             log.info("The process of disabling of {} tree has been successful.", getEntityName());
-            logBean.logChangeActivity(STATUS.OK, getEntityName(), object.getObjectId(), false, getDisableSuccess());
+            logBean.logChangeActivity(STATUS.OK, getEntityName(), object.getObjectId(), false,
+                    ResourceUtil.getString(RESOURCE_BUNDLE, "disable_success", stringLocaleBean.getSystemLocale()));
         } catch (Exception e) {
             log.error("The process of disabling of " + getEntityName() + " tree has been failed.", e);
-            logBean.logChangeActivity(STATUS.ERROR, getEntityName(), object.getObjectId(), false, getDisableError());
+            logBean.logChangeActivity(STATUS.ERROR, getEntityName(), object.getObjectId(), false,
+                    ResourceUtil.getString(RESOURCE_BUNDLE, "disable_error", stringLocaleBean.getSystemLocale()));
         }
         log.info("The process of disabling of {} tree took {} sec.", getEntityName(), (System.currentTimeMillis() - start) / 1000);
     }
@@ -139,10 +123,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         try {
             changeActivity(object, true);
             log.info("The process of enabling of {} tree has been successful.", getEntityName());
-            logBean.logChangeActivity(STATUS.OK, getEntityName(), object.getObjectId(), true, getEnableSuccess());
+            logBean.logChangeActivity(STATUS.OK, getEntityName(), object.getObjectId(), true,
+                    ResourceUtil.getString(RESOURCE_BUNDLE, "enable_success", stringLocaleBean.getSystemLocale()));
         } catch (Exception e) {
             log.error("The process of enabling of " + getEntityName() + " tree has been failed.", e);
-            logBean.logChangeActivity(STATUS.ERROR, getEntityName(), object.getObjectId(), true, getEnableError());
+            logBean.logChangeActivity(STATUS.ERROR, getEntityName(), object.getObjectId(), true,
+                    ResourceUtil.getString(RESOURCE_BUNDLE, "enable_error", stringLocaleBean.getSystemLocale()));
         }
         log.info("The process of enabling of {} tree took {} sec.", getEntityName(), (System.currentTimeMillis() - start) / 1000);
     }
@@ -262,7 +248,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             updateStringsForNewLocales(object);
 
             //load subject ids
-            object.setSubjectIds(loadSubjects(dataSource, object.getPermissionId()));
+            object.setSubjectIds(getSubjects(dataSource, object.getPermissionId()));
         }
 
         return object;
@@ -287,9 +273,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                 "externalId", externalId));
     }
 
-
-    //todo change to void
-    protected Set<Long> loadSubjects(String dataSource, Long permissionId) {
+    protected Set<Long> getSubjects(String dataSource, Long permissionId) {
         if (Objects.equals(permissionId, PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
             return new HashSet<>(Collections.singletonList(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID));
         } else {
@@ -298,8 +282,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
 
-    protected Set<Long> loadSubjects(Long permissionId) {
-        return loadSubjects(null, permissionId);
+    protected Set<Long> getSubjects(Long permissionId) {
+        return getSubjects(null, permissionId);
     }
 
     protected void updateStringsForNewLocales(DomainObject object) {
@@ -375,7 +359,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         objects.forEach(o -> {
             o.setEntityName(getEntityName());
             loadAttributes(o);
-            o.setSubjectIds(loadSubjects(o.getPermissionId()));
+            o.setSubjectIds(getSubjects(o.getPermissionId()));
         });
 
         return objects;
@@ -707,7 +691,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     protected void replaceObjectPermissions(PermissionInfo objectPermissionInfo, Set<Long> subjectIds) {
-        Set<Long> oldSubjectIds = loadSubjects(objectPermissionInfo.getPermissionId());
+        Set<Long> oldSubjectIds = getSubjects(objectPermissionInfo.getPermissionId());
         if (isNeedToChangePermission(oldSubjectIds, subjectIds)) {
             long oldPermission = objectPermissionInfo.getPermissionId();
             objectPermissionInfo.setPermissionId(getNewPermissionId(subjectIds));
@@ -1058,7 +1042,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected void changeObjectPermissions(PermissionInfo objectPermissionInfo, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
-        Set<Long> currentSubjectIds = loadSubjects(objectPermissionInfo.getPermissionId());
+        Set<Long> currentSubjectIds = getSubjects(objectPermissionInfo.getPermissionId());
         Set<Long> newSubjectIds = new HashSet<>(currentSubjectIds);
 
         if (addSubjectIds != null) {
@@ -1200,14 +1184,17 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             case "INTEGER":
                 return attribute.getStringValue();
             case "BOOLEAN":
-                return Boolean.valueOf(attribute.getStringValue()) ? "Да" : "Нет"; //todo resource
+                return ResourceUtil.getString(RESOURCE_BUNDLE, Boolean.valueOf(attribute.getStringValue()) ? "yes" : "no",
+                        stringLocaleBean.getSystemLocale());
             case "DATE":
             case "DATE2":
             case "MASKED_DATE":
                 DateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy", locale);
                 return dateFormatter.format(new DateConverter().toObject(attribute.getStringValue()));
             case "GENDER":
-                return new GenderConverter().toObject(attribute.getStringValue()).equals(Gender.MALE) ? "Муж." : "Жен."; //todo resource
+                return ResourceUtil.getString(RESOURCE_BUNDLE,
+                        new GenderConverter().toObject(attribute.getStringValue()).equals(Gender.MALE) ? "male" : "female",
+                        stringLocaleBean.getSystemLocale());
             case "STREET_TYPE":
                 IStrategy strategy = strategyFactory.getStrategy("street_type");
 
@@ -1222,8 +1209,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     public void delete(Long objectId, Locale locale) throws DeleteException {
         deleteChecks(objectId, locale);
         deleteStrings(objectId);
-        deleteAttribute(objectId);
-        deleteDomainObject(objectId, locale);
+        deleteAttributes(objectId);
+        deleteDomainObject(objectId);
     }
 
 
@@ -1241,44 +1228,22 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
 
-    protected void deleteAttribute(Long objectId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("entityName", getEntityName()); //todo filter
-        params.put("objectId", objectId);
-
-        sqlSession().delete(NS + ".deleteAttribute", params);
-    }
-
-
-    protected void deleteDomainObject(Long objectId, Locale locale) throws DeleteException {
+    protected void deleteAttributes(Long objectId) {
         Map<String, Object> params = new HashMap<>();
         params.put("entityName", getEntityName());
         params.put("objectId", objectId);
 
-        try {
-            sqlSession().delete(NS + ".deleteDomainObject", params);
-        } catch (Exception e) {
-            SQLException sqlException = null; //todo wtf
-            Throwable t = e;
-            while (true) {
-                if (t == null) {
-                    break;
-                }
-                if (t instanceof SQLException) {
-                    sqlException = (SQLException) t;
-                    break;
-                }
-                t = t.getCause();
-            }
-
-            if (sqlException != null && MySqlErrors.isIntegrityConstraintViolationError(sqlException)) {
-                throw new DeleteException(ResourceUtil.getString(RESOURCE_BUNDLE, "delete_error", locale));
-            } else {
-                throw new RuntimeException(e);
-            }
-        }
+        sqlSession().delete(NS + ".deleteAttributes", params);
     }
 
+
+    protected void deleteDomainObject(Long objectId) throws DeleteException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("entityName", getEntityName());
+        params.put("objectId", objectId);
+
+        sqlSession().delete(NS + ".deleteDomainObject", params);
+    }
 
     protected void childrenExistCheck(Long objectId, Locale locale) throws DeleteException {
         String[] realChildren = getRealChildren();

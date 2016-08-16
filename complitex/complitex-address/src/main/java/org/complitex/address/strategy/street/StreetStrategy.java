@@ -90,7 +90,7 @@ public class StreetStrategy extends TemplateStrategy {
         objects.forEach(o -> {
             o.setEntityName(getEntityName());
             loadAttributes(o);
-            o.setSubjectIds(loadSubjects(o.getPermissionId()));
+            o.setSubjectIds(getSubjects(o.getPermissionId()));
         });
 
         return objects;
