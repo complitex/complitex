@@ -7,16 +7,14 @@ import java.util.Date;
 
 public class DwellingCharacteristics extends AbstractAccountRequest<DwellingCharacteristicsDBF> {
     public DwellingCharacteristics() {
+        super(RequestFileType.DWELLING_CHARACTERISTICS);
     }
 
     public DwellingCharacteristics(String city, Date date) {
+        super(RequestFileType.DWELLING_CHARACTERISTICS);
+
         setCity(city);
         setDate(date);
-    }
-
-    @Override
-    public RequestFileType getRequestFileType() {
-        return RequestFileType.DWELLING_CHARACTERISTICS;
     }
 
     @Override

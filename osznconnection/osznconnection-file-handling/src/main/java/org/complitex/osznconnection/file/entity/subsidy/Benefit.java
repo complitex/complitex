@@ -14,9 +14,8 @@ import org.complitex.osznconnection.file.entity.RequestFileType;
  * @see BenefitDBF
  */
 public class Benefit extends AbstractAccountRequest<BenefitDBF> {
-    @Override
-    public RequestFileType getRequestFileType() {
-        return RequestFileType.BENEFIT;
+    public Benefit() {
+        super(RequestFileType.BENEFIT);
     }
 
     public boolean hasPriv() {

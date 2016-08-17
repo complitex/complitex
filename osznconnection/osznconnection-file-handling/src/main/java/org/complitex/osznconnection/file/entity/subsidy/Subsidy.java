@@ -9,16 +9,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-/**
- *
- * @author Artem
- */
 public class Subsidy extends AbstractAccountRequest<SubsidyDBF> {
     public final static List<String> CYR = Collections.unmodifiableList(Arrays.asList(
             "FIO", "NP_NAME", "CAT_V", "NAME_V", "BLD", "CORP", "FLAT"
     ));
 
     private List<SubsidyMasterData> masterDataList;
+
+    public Subsidy() {
+        super(RequestFileType.SUBSIDY);
+    }
 
     public String getAddress(Locale locale){
         return AddressRenderer.displayAddress(getStreetType(), getStreet(), getBuildingNumber(), getBuildingCorp(),
@@ -35,11 +35,6 @@ public class Subsidy extends AbstractAccountRequest<SubsidyDBF> {
 
     public String getFio(){
         return getUpStringField(SubsidyDBF.FIO, "_CYR");
-    }
-
-    @Override
-    public RequestFileType getRequestFileType() {
-        return RequestFileType.SUBSIDY;
     }
 
     @Override

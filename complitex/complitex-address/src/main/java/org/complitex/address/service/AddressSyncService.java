@@ -376,7 +376,7 @@ public class AddressSyncService {
 
         //street code duplicate
         if (syncEntity.equals(STREET)){
-            externalDuplicate.stream().forEach(s -> {
+            externalDuplicate.forEach(s -> {
                 DomainObjectFilter filter = new DomainObjectFilter();
                 filter.setParent("city", s.getParentId());
                 filter.addAttribute(StreetStrategy.NAME, s.getName());
@@ -393,7 +393,7 @@ public class AddressSyncService {
             });
         }
 
-        externalDuplicate.stream().forEach(s -> addressSyncBean.delete(s.getId()));
+        externalDuplicate.forEach(s -> addressSyncBean.delete(s.getId()));
 
         broadcastService.broadcast(getClass(), "add_all_complete", syncEntity);
     }

@@ -18,6 +18,10 @@ public abstract class AbstractAccountRequest<E extends Enum> extends AbstractAdd
     private String inn;
     private String passport;
 
+    public AbstractAccountRequest(RequestFileType requestFileType) {
+        super(requestFileType);
+    }
+
     public PersonalName getPersonalName(){
         return new PersonalName(getFirstName(), getMiddleName(), getLastName());
     }

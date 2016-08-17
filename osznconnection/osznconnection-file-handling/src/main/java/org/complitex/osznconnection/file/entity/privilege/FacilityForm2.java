@@ -8,8 +8,7 @@ import org.complitex.osznconnection.file.entity.RequestFileType;
  * @author Artem
  */
 public class FacilityForm2 extends AbstractAccountRequest<FacilityForm2DBF> {
-    @Override
-    public RequestFileType getRequestFileType() {
-        return RequestFileType.FACILITY_FORM2;
+    public FacilityForm2() {
+        super(RequestFileType.FACILITY_FORM2);
     }
 }

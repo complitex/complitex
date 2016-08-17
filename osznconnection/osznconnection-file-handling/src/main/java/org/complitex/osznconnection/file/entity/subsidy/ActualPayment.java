@@ -3,14 +3,9 @@ package org.complitex.osznconnection.file.entity.subsidy;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 
-/**
- *
- * @author Artem
- */
 public class ActualPayment extends AbstractAccountRequest<ActualPaymentDBF> {
-    @Override
-    public RequestFileType getRequestFileType() {
-        return RequestFileType.ACTUAL_PAYMENT;
+    public ActualPayment() {
+        super(RequestFileType.ACTUAL_PAYMENT);
     }
 
     @Override

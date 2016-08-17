@@ -24,12 +24,18 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
 
     private RequestStatus status;
 
+    private RequestFileType requestFileType;
+
     private List<RequestWarning> warnings = Lists.newArrayList();
 
     private Map<String, Object> dbfFields = new HashMap<>();
     private Map<String, Object> updateFieldMap = new HashMap<>();
 
     private Date date;
+
+    public AbstractRequest(RequestFileType requestFileType) {
+        this.requestFileType = requestFileType;
+    }
 
     public Map<String, Object> getUpdateFieldMap() {
         return updateFieldMap;
@@ -81,8 +87,9 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
         updateFieldMap.put(e.name(), object);
     }
 
-    //todo move to constructor
-    public abstract RequestFileType getRequestFileType();
+    public RequestFileType getRequestFileType(){
+        return requestFileType;
+    }
 
     public Long getId() {
         return id;

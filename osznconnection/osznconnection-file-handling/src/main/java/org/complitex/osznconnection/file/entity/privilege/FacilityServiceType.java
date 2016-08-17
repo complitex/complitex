@@ -6,15 +6,13 @@ import org.complitex.osznconnection.file.entity.RequestFileType;
 import java.util.Date;
 
 public class FacilityServiceType extends AbstractAccountRequest<FacilityServiceTypeDBF> {
-    @Override
-    public RequestFileType getRequestFileType() {
-        return RequestFileType.FACILITY_SERVICE_TYPE;
-    }
-
     public FacilityServiceType() {
+        super(RequestFileType.FACILITY_SERVICE_TYPE);
     }
 
     public FacilityServiceType(String city, Date date) {
+        super(RequestFileType.FACILITY_SERVICE_TYPE);
+
         setCity(city);
         setDate(date);
     }

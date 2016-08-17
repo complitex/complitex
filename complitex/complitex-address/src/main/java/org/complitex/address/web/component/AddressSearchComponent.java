@@ -1,6 +1,5 @@
 package org.complitex.address.web.component;
 
-import com.google.common.collect.ImmutableList;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.complitex.address.entity.AddressEntity;
@@ -63,28 +62,11 @@ public class AddressSearchComponent extends WiQuerySearchComponent {
 
                 @Override
                 public DomainObject getObject(String id, IModel<? extends List<? extends DomainObject>> choices) {
-                    return choices.getObject().stream().filter(c -> id.equals(String.valueOf(c.getObjectId()))).findAny().get();
+                    return choices.getObject().stream().filter(c -> id.equals(String.valueOf(c.getObjectId()))).findAny().orElseGet(null);
                 }
             };
         }
 
         return super.newAutocompleteItemRenderer(entity);
-    }
-
-    protected static List<String> getFilters(AddressEntity addressEntity) {
-        switch (addressEntity) {
-            case CITY:
-                return ImmutableList.of("city");
-            case STREET:
-                return ImmutableList.of("city", "street");
-            case BUILDING:
-                return ImmutableList.of("city", "street", "building");
-            case APARTMENT:
-                return ImmutableList.of("city", "street", "building", "apartment");
-            case ROOM:
-                return ImmutableList.of("city", "street", "building", "apartment", "room");
-        }
-
-        return ImmutableList.of("city", "street", "building");
     }
 }

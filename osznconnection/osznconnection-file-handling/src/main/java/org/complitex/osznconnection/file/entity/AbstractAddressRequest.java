@@ -32,6 +32,10 @@ public abstract class AbstractAddressRequest<E extends Enum> extends AbstractReq
     private String outgoingBuildingCorp;
     private String outgoingApartment;
 
+    public AbstractAddressRequest(RequestFileType requestFileType) {
+        super(requestFileType);
+    }
+
     public LocalAddress getLocalAddress(){
         return new LocalAddress(getCityId(), getStreetTypeId(), getStreetId(), getBuildingId(), getApartmentId(), null);
     }

@@ -13,9 +13,8 @@ import org.complitex.osznconnection.file.entity.RequestFileType;
  * @see PaymentDBF
  */
 public class Payment extends AbstractAccountRequest<PaymentDBF> {
-    @Override
-    public RequestFileType getRequestFileType() {
-        return RequestFileType.PAYMENT;
+    public Payment() {
+        super(RequestFileType.PAYMENT);
     }
 
     @Override
@@ -63,6 +62,4 @@ public class Payment extends AbstractAccountRequest<PaymentDBF> {
     public String getFio(){
         return getLastName() + " " + getFirstName() + " " + getMiddleName();
     }
-
-
 }

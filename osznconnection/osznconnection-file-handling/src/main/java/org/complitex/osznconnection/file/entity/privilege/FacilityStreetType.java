@@ -3,20 +3,14 @@ package org.complitex.osznconnection.file.entity.privilege;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 
-/**
- *
- * @author Artem
- */
 public class FacilityStreetType extends AbstractRequest<FacilityStreetTypeDBF> {
     public FacilityStreetType() {
+        super(RequestFileType.FACILITY_STREET_TYPE);
     }
 
     public FacilityStreetType(Long requestFileId) {
-        setRequestFileId(requestFileId);
-    }
+        super(RequestFileType.FACILITY_STREET_TYPE);
 
-    @Override
-    public RequestFileType getRequestFileType() {
-        return RequestFileType.FACILITY_STREET_TYPE;
+        setRequestFileId(requestFileId);
     }
 }

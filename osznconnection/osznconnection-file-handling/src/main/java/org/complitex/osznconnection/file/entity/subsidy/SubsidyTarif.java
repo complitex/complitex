@@ -11,9 +11,7 @@ import org.complitex.osznconnection.file.entity.RequestFileType;
  * Имя файла TARIF12.DBF
  */
 public class SubsidyTarif extends AbstractRequest {
-
-    @Override
-    public RequestFileType getRequestFileType() {
-        return RequestFileType.SUBSIDY_TARIF;
+    public SubsidyTarif() {
+        super(RequestFileType.SUBSIDY_TARIF);
     }
 }

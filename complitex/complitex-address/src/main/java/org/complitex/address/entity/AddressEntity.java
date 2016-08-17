@@ -1,6 +1,9 @@
 package org.complitex.address.entity;
 
+import com.google.common.collect.ImmutableList;
 import org.complitex.common.mybatis.IFixedIdType;
+
+import java.util.List;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -36,5 +39,22 @@ public enum AddressEntity implements IFixedIdType{
         }
 
         return null;
+    }
+
+    public List<String> getFilters() {
+        switch (this) {
+            case CITY:
+                return ImmutableList.of("city");
+            case STREET:
+                return ImmutableList.of("city", "street");
+            case BUILDING:
+                return ImmutableList.of("city", "street", "building");
+            case APARTMENT:
+                return ImmutableList.of("city", "street", "building", "apartment");
+            case ROOM:
+                return ImmutableList.of("city", "street", "building", "apartment", "room");
+        }
+
+        return ImmutableList.of("city", "street", "building");
     }
 }

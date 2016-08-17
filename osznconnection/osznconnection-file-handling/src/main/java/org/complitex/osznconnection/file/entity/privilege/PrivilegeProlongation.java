@@ -9,11 +9,9 @@ import org.complitex.osznconnection.file.entity.RequestFileType;
 public class PrivilegeProlongation extends AbstractAccountRequest<PrivilegeProlongationDBF>{
     public enum TYPE {S, P}
 
-    @Override
-    public RequestFileType getRequestFileType() {
-        return RequestFileType.PRIVILEGE_PROLONGATION;
+    public PrivilegeProlongation() {
+        super(RequestFileType.PRIVILEGE_PROLONGATION);
     }
-
 
     @Override
     public String getStreetCode() {

@@ -1,6 +1,5 @@
 package org.complitex.correction.web.component;
 
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -291,20 +290,7 @@ public class AddressCorrectionDialog<T> extends Panel {
     }
 
     protected List<String> getFilters(AddressEntity addressEntity) {
-        switch (addressEntity) {
-            case CITY:
-                return ImmutableList.of("city");
-            case STREET:
-                return ImmutableList.of("city", "street");
-            case BUILDING:
-                return ImmutableList.of("city", "street", "building");
-            case APARTMENT:
-                return ImmutableList.of("city", "street", "building", "apartment");
-            case ROOM:
-                return ImmutableList.of("city", "street", "building", "apartment", "room");
-        }
-
-        return ImmutableList.of("city", "street", "building");
+        return addressEntity.getFilters();
     }
 
     public void open(AjaxRequestTarget target, IModel<T> model, PersonalName personalName, AddressEntity addressEntity,

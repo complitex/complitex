@@ -1,7 +1,6 @@
 package org.complitex.osznconnection.file.entity.privilege;
 
 import org.complitex.osznconnection.file.entity.AbstractRequest;
-import org.complitex.osznconnection.file.entity.RequestFileType;
 
 /**
  * inheaven on 18.04.2016.
@@ -11,13 +10,18 @@ public class PrivilegeGroup extends AbstractRequest {
     private FacilityServiceType facilityServiceType;
 
     public PrivilegeGroup() {
+        super(null);
     }
 
     public PrivilegeGroup(DwellingCharacteristics dwellingCharacteristics) {
+        super(null);
+
         this.dwellingCharacteristics = dwellingCharacteristics;
     }
 
     public PrivilegeGroup(FacilityServiceType facilityServiceType) {
+        super(null);
+
         this.facilityServiceType = facilityServiceType;
     }
 
@@ -47,11 +51,6 @@ public class PrivilegeGroup extends AbstractRequest {
             return facilityServiceType.getGroupId();
         }
 
-        return null;
-    }
-
-    @Override
-    public RequestFileType getRequestFileType() {
         return null;
     }
 }
