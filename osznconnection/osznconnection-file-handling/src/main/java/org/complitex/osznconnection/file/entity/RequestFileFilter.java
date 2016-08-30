@@ -33,6 +33,10 @@ public class RequestFileFilter extends AbstractFilter {
 
     private String subType;
 
+    public String getRecordTable(){
+        return type.name().toLowerCase();
+    }
+
     public Long getGroupId() {
         return groupId;
     }

@@ -72,68 +72,36 @@ public class RequestFileBean extends AbstractBean {
         sessionBean.prepareFilterForPermissionCheck(filter);
 
         switch (filter.getType()) {
+            case SUBSIDY_TARIF:
+            case FACILITY_STREET_TYPE_REFERENCE:
+            case FACILITY_STREET_REFERENCE:
+            case FACILITY_TARIF_REFERENCE:
+                return getLoadedRequestFiles(filter);
+
             case ACTUAL_PAYMENT:
-                return getActualPaymentFiles(filter);
+            case DWELLING_CHARACTERISTICS:
+            case FACILITY_SERVICE_TYPE:
+            case FACILITY_FORM2:
+            case PRIVILEGE_PROLONGATION:
+                return getProcessedRequestFiles(filter);
+
             case SUBSIDY:
                 return getSubsidyFiles(filter);
-            case SUBSIDY_TARIF:
-                return getSubsidyTarifFiles(filter);
-            case DWELLING_CHARACTERISTICS:
-                return getDwellingCharacteristicsFiles(filter);
-            case FACILITY_SERVICE_TYPE:
-                return getFacilityServiceTypeFiles(filter);
-            case FACILITY_FORM2:
-                return getFacilityForm2Files(filter);
-            case FACILITY_STREET_TYPE:
-                return getFacilityStreetTypeFiles(filter);
-            case FACILITY_STREET:
-                return getFacilityStreetFiles(filter);
-            case FACILITY_TARIF:
-                return getFacilityTarifFiles(filter);
-            case PRIVILEGE_PROLONGATION:
-                return getPrivilegeProlongationFiles(filter);
         }
         throw new IllegalStateException("Unexpected request file type detected: '" + filter.getType() + "'.");
     }
 
-    private List<RequestFile> getActualPaymentFiles(RequestFileFilter filter) {
-        return sqlSession().selectList(NS + ".selectActualPaymentFiles", filter);
+
+    private List<RequestFile> getLoadedRequestFiles(RequestFileFilter filter) {
+        return sqlSession().selectList(NS + ".selectLoadedRequestFiles", filter);
+    }
+
+    private List<RequestFile> getProcessedRequestFiles(RequestFileFilter filter) {
+        return sqlSession().selectList(NS + ".selectProcessedRequestFiles", filter);
     }
 
     private List<RequestFile> getSubsidyFiles(RequestFileFilter filter) {
         return sqlSession().selectList(NS + ".selectSubsidyFiles", filter);
-    }
-
-    private List<RequestFile> getDwellingCharacteristicsFiles(RequestFileFilter filter) {
-        return sqlSession().selectList(NS + ".selectDwellingCharacteristicsFiles", filter);
-    }
-
-    private List<RequestFile> getFacilityServiceTypeFiles(RequestFileFilter filter) {
-        return sqlSession().selectList(NS + ".selectFacilityServiceTypeFiles", filter);
-    }
-
-    private List<RequestFile> getFacilityForm2Files(RequestFileFilter filter) {
-        return sqlSession().selectList(NS + ".selectFacilityForm2Files", filter);
-    }
-
-    private List<RequestFile> getFacilityStreetTypeFiles(RequestFileFilter filter) {
-        return sqlSession().selectList(NS + ".selectFacilityStreetTypeFiles", filter);
-    }
-
-    private List<RequestFile> getFacilityStreetFiles(RequestFileFilter filter) {
-        return sqlSession().selectList(NS + ".selectFacilityStreetFiles", filter);
-    }
-
-    private List<RequestFile> getFacilityTarifFiles(RequestFileFilter filter) {
-        return sqlSession().selectList(NS + ".selectFacilityTarifFiles", filter);
-    }
-
-    private List<RequestFile> getSubsidyTarifFiles(RequestFileFilter filter) {
-        return sqlSession().selectList(NS + ".selectSubsidyTarifFiles", filter);
-    }
-
-    private List<RequestFile> getPrivilegeProlongationFiles(RequestFileFilter filter) {
-        return sqlSession().selectList(NS + ".selectPrivilegeProlongations", filter);
     }
 
     public Long getCount(RequestFileFilter filter) {
@@ -160,7 +128,6 @@ public class RequestFileBean extends AbstractBean {
 
         }
     }
-
 
     public void delete(RequestFile requestFile) {
         if (requestFile.getType() != null && requestFile.getId() != null) {
@@ -189,9 +156,9 @@ public class RequestFileBean extends AbstractBean {
                 case FACILITY_FORM2:
                     facilityForm2Bean.delete(requestFile.getId());
                     break;
-                case FACILITY_STREET_TYPE:
-                case FACILITY_STREET:
-                case FACILITY_TARIF:
+                case FACILITY_STREET_TYPE_REFERENCE:
+                case FACILITY_STREET_REFERENCE:
+                case FACILITY_TARIF_REFERENCE:
                     facilityReferenceBookBean.delete(requestFile.getId(), requestFile.getType());
                     break;
 
@@ -207,7 +174,7 @@ public class RequestFileBean extends AbstractBean {
         return sqlSession().selectOne(NS + ".selectLoadedId", requestFile);
     }
 
-    public boolean checkLoaded(RequestFile requestFile) {
+    private boolean checkLoaded(RequestFile requestFile) {
         return sqlSession().selectOne(NS + ".selectIsLoaded", requestFile);
     }
 
@@ -241,11 +208,11 @@ public class RequestFileBean extends AbstractBean {
         sqlSession().update(NS + ".fixSavingOnInit");
     }
 
-    public RequestFile getLastRequestFile(RequestFile requestFile){
+    private RequestFile getLastRequestFile(RequestFile requestFile){
         return sqlSession().selectOne(NS + ".selectLastRequestFile", requestFile);
     }
 
-    public RequestFile getFirstRequestFile(RequestFile requestFile){
+    private RequestFile getFirstRequestFile(RequestFile requestFile){
         return sqlSession().selectOne(NS + ".selectFirstRequestFile", requestFile);
     }
 

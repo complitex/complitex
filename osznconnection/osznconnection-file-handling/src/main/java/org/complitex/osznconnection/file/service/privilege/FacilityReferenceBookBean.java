@@ -89,11 +89,11 @@ public class FacilityReferenceBookBean extends AbstractBean {
 
     public String getTableName(RequestFileType requestFileType) {
         switch (requestFileType) {
-            case FACILITY_STREET_TYPE:
+            case FACILITY_STREET_TYPE_REFERENCE:
                 return "facility_street_type_reference";
-            case FACILITY_STREET:
+            case FACILITY_STREET_REFERENCE:
                 return "facility_street_reference";
-            case FACILITY_TARIF:
+            case FACILITY_TARIF_REFERENCE:
                 return "facility_tarif_reference";
             default:
                 throw new IllegalStateException("Illegal request file type: " + requestFileType);

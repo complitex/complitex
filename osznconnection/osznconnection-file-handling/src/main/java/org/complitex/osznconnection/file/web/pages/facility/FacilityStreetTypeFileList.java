@@ -25,7 +25,7 @@ public final class FacilityStreetTypeFileList extends AbstractReferenceBookFileL
 
     @Override
     protected RequestFileType getRequestFileType() {
-        return RequestFileType.FACILITY_STREET_TYPE;
+        return RequestFileType.FACILITY_STREET_TYPE_REFERENCE;
     }
 
     @Override

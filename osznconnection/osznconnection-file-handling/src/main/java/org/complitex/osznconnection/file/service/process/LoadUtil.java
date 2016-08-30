@@ -387,7 +387,7 @@ public class LoadUtil {
             requestFile.setDirectory(RequestFileStorage.INSTANCE.getRelativeParent(file, requestFiles.getPath()));
             requestFile.setOrganizationId(osznId);
             requestFile.setBeginDate(newDate(year, month));
-            requestFile.setType(RequestFileType.FACILITY_STREET_TYPE);
+            requestFile.setType(RequestFileType.FACILITY_STREET_TYPE_REFERENCE);
             streetTypeFiles.add(requestFile);
         }
         return streetTypeFiles;
@@ -411,7 +411,7 @@ public class LoadUtil {
             requestFile.setDirectory(RequestFileStorage.INSTANCE.getRelativeParent(file, requestFiles.getPath()));
             requestFile.setOrganizationId(osznId);
             requestFile.setBeginDate(newDate(year, month));
-            requestFile.setType(RequestFileType.FACILITY_STREET);
+            requestFile.setType(RequestFileType.FACILITY_STREET_REFERENCE);
             streetFiles.add(requestFile);
         }
         return streetFiles;
@@ -435,7 +435,7 @@ public class LoadUtil {
             requestFile.setDirectory(RequestFileStorage.INSTANCE.getRelativeParent(file, requestFiles.getPath()));
             requestFile.setOrganizationId(osznId);
             requestFile.setBeginDate(newDate(year, month));
-            requestFile.setType(RequestFileType.FACILITY_TARIF);
+            requestFile.setType(RequestFileType.FACILITY_TARIF_REFERENCE);
             facilityTarifFiles.add(requestFile);
         }
         return facilityTarifFiles;

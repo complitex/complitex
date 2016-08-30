@@ -3,7 +3,7 @@ package org.complitex.osznconnection.file.service.file_description;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.privilege.*;
 import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionValidateException.ValidationError;
@@ -53,10 +53,10 @@ public class RequestFileDescriptionBean extends AbstractBean {
             put(RequestFileType.SUBSIDY_S_FILE, SubsidySFileDBF.class).
             put(RequestFileType.SUBSIDY_TARIF, SubsidyTarifDBF.class).
             put(RequestFileType.DWELLING_CHARACTERISTICS, DwellingCharacteristicsDBF.class).
-            put(RequestFileType.FACILITY_STREET_TYPE, FacilityStreetTypeDBF.class).
-            put(RequestFileType.FACILITY_STREET, FacilityStreetDBF.class).
+            put(RequestFileType.FACILITY_STREET_TYPE_REFERENCE, FacilityStreetTypeDBF.class).
+            put(RequestFileType.FACILITY_STREET_REFERENCE, FacilityStreetDBF.class).
             put(RequestFileType.FACILITY_SERVICE_TYPE, FacilityServiceTypeDBF.class).
-            put(RequestFileType.FACILITY_TARIF, FacilityTarifDBF.class).
+            put(RequestFileType.FACILITY_TARIF_REFERENCE, FacilityTarifDBF.class).
             put(RequestFileType.FACILITY_FORM2, FacilityForm2DBF.class).
             build();
 

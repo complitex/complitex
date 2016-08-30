@@ -22,7 +22,7 @@ public final class FacilityStreetFileList extends AbstractReferenceBookFileList 
 
     @Override
     protected RequestFileType getRequestFileType() {
-        return RequestFileType.FACILITY_STREET;
+        return RequestFileType.FACILITY_STREET_REFERENCE;
     }
 
     @Override

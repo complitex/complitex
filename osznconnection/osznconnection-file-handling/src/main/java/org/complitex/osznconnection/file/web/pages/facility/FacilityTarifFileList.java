@@ -22,7 +22,7 @@ public final class FacilityTarifFileList extends AbstractReferenceBookFileList {
 
     @Override
     protected RequestFileType getRequestFileType() {
-        return RequestFileType.FACILITY_TARIF;
+        return RequestFileType.FACILITY_TARIF_REFERENCE;
     }
 
     @Override
