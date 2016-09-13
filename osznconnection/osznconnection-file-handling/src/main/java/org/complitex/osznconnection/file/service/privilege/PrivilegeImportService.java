@@ -3,10 +3,10 @@ package org.complitex.osznconnection.file.service.privilege;
 import au.com.bytecode.opencsv.CSVReader;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.AbstractImportService;
-import org.complitex.common.service.IImportListener;
 import org.complitex.common.exception.ImportFileNotFoundException;
 import org.complitex.common.exception.ImportFileReadException;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.IImportListener;
 import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.StringCultures;
@@ -64,7 +64,7 @@ public class PrivilegeImportService extends AbstractImportService{
                 StringCultures.getSystemStringCulture(code.getStringCultures()).setValue(line[1].trim());
 
                 //Короткое наименование
-                //todo implement in future release
+
 
                 //Название привилегии
                 Attribute name = domainObject.getAttribute(PrivilegeStrategy.NAME);

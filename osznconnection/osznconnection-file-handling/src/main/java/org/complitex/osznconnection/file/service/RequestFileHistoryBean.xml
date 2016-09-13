@@ -13,8 +13,7 @@
     </insert>
 
     <select id="selectRequestFileHistories" resultMap="requestFileHistoryResultMap" parameterType="long">
-        select * from (select * from `request_file_history` where `request_file_id` = #{requestFileId} order by `id` desc) h
-          group by ((h.`status` - 100) div 10) order by h.`id` desc
+       select * from `request_file_history` where `request_file_id` = #{requestFileId} order by `id` desc
     </select>
 
     <select id="selectLastRequestFileHistory" resultMap="requestFileHistoryResultMap" parameterType="long">

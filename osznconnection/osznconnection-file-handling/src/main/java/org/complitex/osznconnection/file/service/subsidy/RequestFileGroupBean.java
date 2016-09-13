@@ -2,9 +2,10 @@ package org.complitex.osznconnection.file.service.subsidy;
 
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.SessionBean;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroupFilter;
-import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 
 import javax.ejb.EJB;
@@ -61,6 +62,14 @@ public class RequestFileGroupBean extends AbstractBean {
             sqlSession().insert(MAPPING_NAMESPACE + ".insertRequestFileGroup", group);
         } else {
             sqlSession().update(MAPPING_NAMESPACE + ".updateRequestFileGroup", group);
+        }
+
+        RequestFile paymentFile = group.getPaymentFile();
+
+        if (paymentFile != null){
+            paymentFile.setStatus(group.getStatus());
+
+            requestFileBean.save(paymentFile);
         }
     }
 

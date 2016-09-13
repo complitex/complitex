@@ -108,7 +108,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     private RequestFileLoadPanel requestFileLoadPanel;
     private RequestFileHistoryPanel requestFileHistoryPanel;
     private ProcessingManager processingManager;
-    private MessagesManager messagesManager;
     private Form<F> form;
     private DataView<R> dataView;
     private DataProvider<R> dataProvider;

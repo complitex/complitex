@@ -2,9 +2,10 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 
 import com.google.common.collect.Lists;
 import org.complitex.common.entity.Log;
+import org.complitex.common.exception.CanceledByUserException;
+import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.exception.ExecuteException;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -13,7 +14,6 @@ import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.ActualPayment;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
-import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
@@ -58,8 +58,6 @@ public class ActualPaymentFillTaskBean extends AbstractTaskBean<RequestFile> {
 
             requestFile.setStatus(RequestFileStatus.FILLING);
             requestFileBean.save(requestFile);
-
-//        actualPaymentBean.clearBeforeProcessing(requestFile.getId(), getServiceProviderTypeIds(billingContexts)); todo
 
             //обработка файла actualPayment
             try {

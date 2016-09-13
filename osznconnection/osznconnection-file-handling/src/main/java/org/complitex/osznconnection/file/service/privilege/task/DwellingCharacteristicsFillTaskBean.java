@@ -2,8 +2,9 @@ package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.Log;
-import org.complitex.common.service.executor.AbstractTaskBean;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.PaymentAndBenefitData;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -14,7 +15,6 @@ import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristic
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
@@ -69,8 +69,6 @@ public class DwellingCharacteristicsFillTaskBean extends AbstractTaskBean<Reques
 
             requestFile.setStatus(RequestFileStatus.FILLING);
             requestFileBean.save(requestFile);
-
-            //todo clear before filling
 
             //clear warning
             requestWarningBean.delete(requestFile.getId(), DWELLING_CHARACTERISTICS);

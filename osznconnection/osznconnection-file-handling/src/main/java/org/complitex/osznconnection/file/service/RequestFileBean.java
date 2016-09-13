@@ -67,7 +67,6 @@ public class RequestFileBean extends AbstractBean {
         return sqlSession().selectOne(NS + ".findById", fileId);
     }
 
-    //todo move methods to own bean
     public List<RequestFile> getRequestFiles(RequestFileFilter filter) {
         sessionBean.prepareFilterForPermissionCheck(filter);
 
@@ -120,12 +119,7 @@ public class RequestFileBean extends AbstractBean {
             sqlSession().update(NS + ".updateRequestFile", requestFile);
 
             //history
-            RequestFileHistory last = requestFileHistoryBean.getLastRequestFileHistory(requestFile.getId());
-
-            if (last != null && !last.getStatus().equals(requestFile.getStatus())){
-                requestFileHistoryBean.save(new RequestFileHistory(requestFile.getId(), requestFile.getStatus(), DateUtil.getCurrentDate()));
-            }
-
+            requestFileHistoryBean.save(new RequestFileHistory(requestFile.getId(), requestFile.getStatus(), DateUtil.getCurrentDate()));
         }
     }
 

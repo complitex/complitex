@@ -36,11 +36,7 @@
     </insert>
 
     <update id="updateRequestFile" parameterType="org.complitex.osznconnection.file.entity.RequestFile">
-        update `request_file`
-        <set>
-            <if test="status != null">`status` = #{status}</if>
-        </set>
-        where `id` = #{id}
+        update `request_file` set `status` = #{status} where `id` = #{id}
     </update>
 
     <delete id="deleteRequestFile" parameterType="long">

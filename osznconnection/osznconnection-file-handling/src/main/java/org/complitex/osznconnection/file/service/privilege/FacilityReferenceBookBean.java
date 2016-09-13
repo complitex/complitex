@@ -166,7 +166,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
 
     public void updateStreetCorrections(FacilityStreet street, Long userOrganizationId, Long osznId,
             final String streetTypeReferenceFileName) throws ExecuteException {
-        Locale locale = stringLocaleBean.getSystemLocale(); //todo locale?
+        Locale locale = stringLocaleBean.getSystemLocale();
         Long moduleId = moduleBean.getModuleId();
 
         String streetName = street.getStringField(FacilityStreetDBF.KL_NAME);
@@ -186,8 +186,8 @@ public class FacilityReferenceBookBean extends AbstractBean {
             cityId = cityCorrection.getObjectId();
         } else {
             final String errorKey = cityCorrections.size() > 1 ? "city_corrections.too_many" : "city_corrections.not_found";
-            throw new ExecuteException(
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, errorKey, locale, printStringValue(defaultCity, locale)));
+            throw new ExecuteException(ResourceUtil.getFormatString(RESOURCE_BUNDLE, errorKey, locale,
+                    printStringValue(defaultCity, locale)));
         }
 
         String streetTypeName;
@@ -198,9 +198,8 @@ public class FacilityReferenceBookBean extends AbstractBean {
         } else {
             final String errorKey = streetTypeNames.size() > 1 ? "facility_street_type.too_many"
                     : "facility_street_type.not_found";
-            throw new ExecuteException(
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, errorKey, locale, printStringValue(streetCode, locale),
-                    streetTypeReferenceFileName));
+            throw new ExecuteException(ResourceUtil.getFormatString(RESOURCE_BUNDLE, errorKey, locale,
+                    printStringValue(streetCode, locale), streetTypeReferenceFileName));
         }
 
         Long streetTypeId;
@@ -212,8 +211,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
             streetTypeCorrection = streetTypeCorrections.get(0);
             streetTypeId = streetTypeCorrection.getObjectId();
         } else if (streetTypeCorrections.size() > 1) {
-            throw new ExecuteException(
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_street_type_corrections.too_many",
+            throw new ExecuteException(ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_street_type_corrections.too_many",
                     locale, printStringValue(streetTypeName, locale)));
         } else {
             // искать по внутренней базе типов улиц
@@ -225,8 +223,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
 
                 addressCorrectionBean.save(streetTypeCorrection);
             } else if (streetTypeIds.size() > 1) {
-                throw new ExecuteException(
-                        ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_internal_street_type.too_many",
+                throw new ExecuteException(ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_internal_street_type.too_many",
                                 locale, printStringValue(streetTypeName, locale)));
             } else {
                 logBean.error(Module.NAME, FacilityStreetLoadTaskBean.class, FacilityStreet.class, null, street.getId(),
@@ -234,14 +231,13 @@ public class FacilityReferenceBookBean extends AbstractBean {
                         ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_internal_street_type.not_found",
                         locale, printStringValue(streetTypeName, locale)));
                 log.error("No one internal street type was found in local base. Street type name: '{}', oszn id: {}, "
-                        + "user organization id: {}", new Object[]{streetTypeName, osznId, userOrganizationId});
+                        + "user organization id: {}", streetTypeName, osznId, userOrganizationId);
                 return;
             }
         }
 
-        List<StreetCorrection> streetCorrections =
-                addressCorrectionBean.getStreetCorrections(cityCorrection.getObjectId(), streetTypeCorrection.getObjectId(),
-                        null, null, streetName, osznId, userOrganizationId);
+        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(cityCorrection.getObjectId(),
+                streetTypeCorrection.getObjectId(), null, null, streetName, osznId, userOrganizationId);
 
         if (streetCorrections.size() == 1) {
             StreetCorrection streetCorrection = streetCorrections.get(0);
@@ -252,8 +248,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
                 addressCorrectionBean.save(streetCorrection);
             }
         } else if (streetCorrections.size() > 1) {
-            throw new ExecuteException(
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_street_corrections.too_many",
+            throw new ExecuteException(ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_street_corrections.too_many",
                             locale, printStringValue(cityCorrection.getCorrection(), locale), cityCorrection.getId(),
                             printStringValue(streetTypeCorrection.getCorrection(), locale), streetTypeCorrection.getId(),
                             printStringValue(streetName, locale)));
@@ -262,7 +257,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
             List<Long> streetIds = streetStrategy.getStreetIds(cityId, streetTypeId, streetName);
 
             if (streetIds.size() == 1) {
-                long streetId = streetIds.get(0); //todo locate and update from address base
+                long streetId = streetIds.get(0);
 
                 StreetCorrection streetCorrection =  new StreetCorrection(cityId, streetTypeId,
                         streetCode.toUpperCase(), streetId, streetName.toUpperCase(),
@@ -276,19 +271,17 @@ public class FacilityReferenceBookBean extends AbstractBean {
                 final String internalStreetTypeName = streetTypeStrategy.displayDomainObject(internalStreetType, locale);
 
                 if (streetIds.size() > 1) {
-                    throw new ExecuteException(
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_internal_street.too_many",
+                    throw new ExecuteException(ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_internal_street.too_many",
                                     locale, internalCityName, cityId, internalStreetTypeName, streetTypeId,
                                     printStringValue(streetName, locale)));
                 } else {
                     logBean.error(Module.NAME, FacilityStreetLoadTaskBean.class, FacilityStreet.class, null, street.getId(),
-                            Log.EVENT.CREATE, null,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_internal_street.not_found",
+                            Log.EVENT.CREATE, null, ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_internal_street.not_found",
                             locale, internalCityName, cityId, internalStreetTypeName, streetTypeId,
                             printStringValue(streetName, locale)));
                     log.error("No one internal street was found in local base. Internal city id: {}, "
                             + "internal street type id: {}, street name: '{}', oszn id: {}, user organization id: {}",
-                            new Object[]{cityId, streetTypeId, streetName, osznId, userOrganizationId});
+                            cityId, streetTypeId, streetName, osznId, userOrganizationId);
                 }
             }
         }

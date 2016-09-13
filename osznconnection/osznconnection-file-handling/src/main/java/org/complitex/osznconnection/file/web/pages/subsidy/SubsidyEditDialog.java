@@ -16,17 +16,20 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.complitex.common.web.component.LabelTextField;
 import org.complitex.common.web.component.wiquery.ExtendedDialog;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
+import org.complitex.osznconnection.file.entity.RequestFileType;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.example.SubsidyExample;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidySum;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
-import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescription;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
 import org.complitex.osznconnection.file.service.file_description.RequestFileFieldDescription;
+import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
+import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
 
 import javax.ejb.EJB;
 import java.math.BigDecimal;
@@ -261,7 +264,7 @@ public class SubsidyEditDialog extends Panel {
 
                 SubsidySum subsidySum = subsidyService.getSubsidySum(subsidy);
 
-                subsidy.putField(NM_PAY, subsidySum.getNSum()); //todo update field
+                subsidy.putField(NM_PAY, subsidySum.getNSum());
                 subsidy.putField(SUMMA, subsidySum.getSmSum());
                 subsidy.putField(SUBS, subsidySum.getSbSum());
 
