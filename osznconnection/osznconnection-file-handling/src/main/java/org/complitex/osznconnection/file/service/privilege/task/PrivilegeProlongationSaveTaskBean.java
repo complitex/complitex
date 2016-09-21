@@ -1,9 +1,13 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
+import org.complitex.address.strategy.district.DistrictStrategy;
+import org.complitex.common.entity.DomainObject;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.executor.AbstractTaskBean;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,10 +25,26 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
     @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
 
+    @EJB
+    private OsznOrganizationStrategy osznOrganizationStrategy;
+
+    @EJB
+    private DistrictStrategy districtStrategy;
+
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
+        String district = null;
 
-        String district = ""; //todo get district
+        DomainObject organization = osznOrganizationStrategy.getDomainObject(requestFile.getOrganizationId());
+
+        if (organization != null && organization.getAttribute(IOrganizationStrategy.DISTRICT) != null){
+            DomainObject districtObject = districtStrategy.getDomainObject(organization.getAttribute(IOrganizationStrategy.DISTRICT).getValueId());
+
+            if (districtObject != null){
+                district = districtObject.getStringValue(DistrictStrategy.NAME);
+            }
+        }
+
         boolean profit = requestFile.getName().matches(".*//.(S|s).*");
 
         Long collectionId = serviceProviderAdapter.createPrivilegeProlongationHeader(requestFile.getUserOrganizationId(),

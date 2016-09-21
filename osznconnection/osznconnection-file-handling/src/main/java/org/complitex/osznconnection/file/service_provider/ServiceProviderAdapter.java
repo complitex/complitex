@@ -11,6 +11,7 @@ import org.complitex.common.util.ResourceUtil;
 import org.complitex.organization.strategy.ServiceStrategy;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyTarifBean;
@@ -1411,5 +1412,11 @@ public class ServiceProviderAdapter extends AbstractBean {
         map.put("pProfit", profit);
 
         return sqlSession(dataSource).selectOne(NS + ".createPrivHeader", map);
+    }
+
+    public void savePrivilegeProlongation(Long userOrganizationId, List<PrivilegeProlongation> privilegeProlongations){
+        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
+
+        sqlSessionBatch(dataSource).insert(NS + ".insertPriv", privilegeProlongations);
     }
 }

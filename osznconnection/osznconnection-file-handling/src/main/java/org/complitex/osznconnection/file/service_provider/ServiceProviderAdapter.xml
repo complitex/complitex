@@ -178,4 +178,21 @@
         )}
     </select>
 
+    <insert id="insertPriv" parameterType="list" useGeneratedKeys="false">
+        insert into comp.z#k_priv_rec
+        (
+          `C_COD`, `C_INDEX`, `C_KODUL`, `C_KAT`, `C_LGCODE`, `C_STATUS`, `C_CDPR`, `C_NCARD`, `C_IDPIL`, `C_DATEIN`,
+          `C_DATEOUT`, `C_PASPPIL`, `C_FIOPIL`, `C_HOUSE`, `C_BUILD`, `C_APT`, `C_RAH`, `COLLECTION_ID`
+        )
+        values
+        <foreach collection="privList" item="p" separator=",">
+            (
+              #{p.dbfFields.COD}, #{p.dbfFields.INDEX}, #{p.dbfFields.CDUL}, #{p.dbfFields.KAT}, #{p.dbfFields.LGCODE},
+              null, #{p.dbfFields.}, #{p.dbfFields.CDPR}, #{p.dbfFields.NCARD}, #{p.dbfFields.IDPIL},
+              #{p.dbfFields.DATEIN}, #{p.dbfFields.DATEOUT}, #{p.dbfFields.PASPPIL}, #{p.dbfFields.FIOPIL},
+              #{p.dbfFields.HOUSE}, #{p.dbfFields.BUILD}, #{p.dbfFields.APT}, #{p.dbfFields.RAH},
+              #{p.dbfFields.COLLECTION_ID}
+            )
+        </foreach>
+    </insert>
 </mapper>

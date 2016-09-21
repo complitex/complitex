@@ -1,5 +1,6 @@
 package org.complitex.common.service;
 
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionManager;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
@@ -32,6 +33,10 @@ public abstract class AbstractBean {
 
     protected SqlSession sqlSession(String dataSource){
         return sqlSessionFactoryBean.getSqlSessionManager(dataSource, DEFAULT_ENVIRONMENT);
+    }
+
+    protected SqlSession sqlSessionBatch(String dataSource){
+        return sqlSessionFactoryBean.getSqlSessionManager(dataSource, DEFAULT_ENVIRONMENT).openSession(ExecutorType.BATCH);
     }
 
     public void setSqlSessionFactoryBean(SqlSessionFactoryBean sqlSessionFactoryBean) {
