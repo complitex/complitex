@@ -1,6 +1,7 @@
 package org.complitex.osznconnection.file.service_provider;
 
 import com.google.common.base.Predicate;
+import org.apache.ibatis.session.SqlSessionManager;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.Log.EVENT;
@@ -11,6 +12,7 @@ import org.complitex.common.util.ResourceUtil;
 import org.complitex.organization.strategy.ServiceStrategy;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyTarifBean;
@@ -1408,8 +1410,26 @@ public class ServiceProviderAdapter extends AbstractBean {
         map.put("pDate", date);
         map.put("pFile", fileName);
         map.put("pCnt", recordsCount);
-        map.put("pProfit", profit);
+        map.put("pProfit", profit ? 1 : 0);
 
-        return sqlSession(dataSource).selectOne(NS + ".createPrivHeader", map);
+        sqlSession(dataSource).selectOne(NS + ".createPrivHeader", map);
+
+        return (Long) map.get("collectionId");
     }
+
+    public void savePrivilegeProlongation(Long userOrganizationId, List<PrivilegeProlongation> privilegeProlongations){
+        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
+
+        SqlSessionManager sqlSessionManager = sqlSessionManager(dataSource);
+
+        sqlSessionManager.startManagedSession();
+
+        privilegeProlongations.forEach(p -> {
+            sqlSessionManager.insert(NS + ".insertPriv", Collections.singleton(p));
+            sqlSessionManager.commit(true);
+        });
+
+        sqlSessionManager.close();
+    }
+
 }

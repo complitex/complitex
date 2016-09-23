@@ -14,7 +14,11 @@ public class SaveException extends ExecuteException {
         super(cause, MESSAGE_PATTERN, requestFile.getObjectName());
     }
 
-     public SaveException(Throwable cause, boolean warn, IExecutorObject requestFile) {
+    public SaveException(Throwable cause, boolean warn, IExecutorObject requestFile) {
         super(cause, warn, MESSAGE_PATTERN, requestFile.getObjectName());
+    }
+
+    public SaveException(String pattern, Object... arguments) {
+        super(pattern, arguments);
     }
 }

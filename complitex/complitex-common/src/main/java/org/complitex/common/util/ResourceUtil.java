@@ -37,6 +37,14 @@ public final class ResourceUtil {
         }
     }
 
+    public static String getString(Class _class, String key) {
+        try {
+            return getResourceBundle(_class.getName(), Locales.getSystemLocale()).getString(key);
+        } catch (Exception e) {
+            return key;
+        }
+    }
+
     public static String getFormatString(String bundle, String key, Locale locale, Object... parameters) {
         return MessageFormat.format(getResourceBundle(bundle, locale).getString(key), parameters);
     }
