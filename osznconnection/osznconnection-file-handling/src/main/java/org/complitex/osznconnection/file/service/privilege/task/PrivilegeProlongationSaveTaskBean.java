@@ -56,17 +56,18 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
             }
         }
 
-        boolean profit = requestFile.getName().matches(".*//.(S|s).*");
+        List<Long> ids = privilegeProlongationBean.getPrivilegeProlongationIds(requestFile.getId());
+
+        boolean profit = requestFile.getName().matches(".*\\.(S|s).*");
 
         //todo test requestFile.getBeginDate()
         Calendar calendar = Calendar.getInstance();
         calendar.set(2016, Calendar.DECEMBER, 1, 0, 0, 0);
 
         Long collectionId = serviceProviderAdapter.createPrivilegeProlongationHeader(requestFile.getUserOrganizationId(),
-                district, calendar.getTime(), requestFile.getName(), requestFile.getLoadedRecordCount(), profit);
+                district, calendar.getTime(), requestFile.getName(), ids.size(), profit);
 
         if (collectionId > 0){
-            List<Long> ids = privilegeProlongationBean.getPrivilegeProlongationIds(requestFile.getId());
             List<PrivilegeProlongation> list = privilegeProlongationBean.getPrivilegeProlongationForOperation(requestFile.getId(), ids);
 
             serviceProviderAdapter.savePrivilegeProlongation(requestFile.getUserOrganizationId(), list);

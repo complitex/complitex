@@ -169,17 +169,13 @@
     </select>
 
     <select id="createPrivHeader" statementType="CALLABLE" parameterType="map">
-        {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call comp.z$runtime_sz_utl.CreatePrivHeader(
-          #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
-          #{pDate, mode=IN, javaType=date, jdbcType=DATE},
-          #{pFile, mode=IN, javaType=string, jdbcType=VARCHAR},
-          #{pCnt, mode=IN, javaType=int, jdbcType=NUMERIC},
-          #{pProfit, mode=IN, javaType=boolean, jdbcType=BOOLEAN}
+        {#{collectionId, mode=OUT, jdbcType=INTEGER} = call COMP.Z$RUNTIME_SZ_UTL.CreatePrivHeader(
+          #{pDistrName}, #{pDate, jdbcType=DATE}, #{pFile}, #{pCnt}, #{pProfit}
         )}
     </select>
 
     <insert id="insertPriv" parameterType="list" useGeneratedKeys="false">
-        insert into comp.z#k_priv_rec
+        insert into COMP.Z#K_PRIV_REC
         (
           `ID`, ``C_COD`, `C_INDEX`, `C_KODUL`, `C_KAT`, `C_LGCODE`, `C_STATUS`, `C_CDPR`, `C_NCARD`, `C_IDPIL`, `C_DATEIN`,
           `C_DATEOUT`, `C_PASPPIL`, `C_FIOPIL`, `C_HOUSE`, `C_BUILD`, `C_APT`, `C_RAH`, `COLLECTION_ID`
