@@ -79,7 +79,7 @@ public class PrivilegeProlongationFileList extends TemplatePage {
 
             @Override
             protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-
+                processManagerBean.savePrivilegeProlongation(selectedFileIds, commandParameters);
             }
 
             @Override
