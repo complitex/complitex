@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -62,10 +63,13 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
 
         //todo test requestFile.getBeginDate()
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2016, Calendar.DECEMBER, 1, 0, 0, 0);
+        calendar.set(2016, Calendar.DECEMBER, 2, 0, 0, 0);
+
+
+        Date date = calendar.getTime();
 
         Long collectionId = serviceProviderAdapter.createPrivilegeProlongationHeader(requestFile.getUserOrganizationId(),
-                district, calendar.getTime(), requestFile.getName(), ids.size(), profit);
+                district, date, requestFile.getName(), ids.size(), profit);
 
         if (collectionId == null){
             throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_collection_id"));
@@ -83,7 +87,7 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_district_not_found"), district);
                 case -2: //Дублируется имя файла для заданного месяца
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_filename_duplicate"),
-                            requestFile.getName(), requestFile.getBeginDate());
+                            requestFile.getName(), date);
                 case -3: //Неправильное кол-во записей в файле
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_record_count"),
                             requestFile.getLoadedRecordCount());

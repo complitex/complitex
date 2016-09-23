@@ -1,6 +1,7 @@
 package org.complitex.osznconnection.file.service_provider;
 
 import com.google.common.base.Predicate;
+import org.apache.ibatis.session.SqlSessionManager;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.Log.EVENT;
@@ -1419,6 +1420,16 @@ public class ServiceProviderAdapter extends AbstractBean {
     public void savePrivilegeProlongation(Long userOrganizationId, List<PrivilegeProlongation> privilegeProlongations){
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
 
-        sqlSessionBatch(dataSource).insert(NS + ".insertPriv", privilegeProlongations);
+        SqlSessionManager sqlSessionManager = sqlSessionManager(dataSource);
+
+        sqlSessionManager.startManagedSession();
+
+        privilegeProlongations.forEach(p -> {
+            sqlSessionManager.insert(NS + ".insertPriv", Collections.singleton(p));
+            sqlSessionManager.commit(true);
+        });
+
+        sqlSessionManager.close();
     }
+
 }

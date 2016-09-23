@@ -23,6 +23,10 @@ public abstract class AbstractBean {
         return sqlSessionFactoryBean.getSqlSessionManager();
     }
 
+    protected SqlSessionManager sqlSessionManager(String dataSource){
+        return sqlSessionFactoryBean.getSqlSessionManager(dataSource, DEFAULT_ENVIRONMENT);
+    }
+
     protected SqlSession sqlSession(){
         return sqlSessionFactoryBean.getSqlSessionManager();
     }
@@ -36,7 +40,7 @@ public abstract class AbstractBean {
     }
 
     protected SqlSession sqlSessionBatch(String dataSource){
-        return sqlSessionFactoryBean.getSqlSessionManager(dataSource, DEFAULT_ENVIRONMENT).openSession(ExecutorType.BATCH);
+        return sqlSessionFactoryBean.getSqlSessionManager(dataSource, DEFAULT_ENVIRONMENT).openSession(ExecutorType.BATCH, true);
     }
 
     public void setSqlSessionFactoryBean(SqlSessionFactoryBean sqlSessionFactoryBean) {
