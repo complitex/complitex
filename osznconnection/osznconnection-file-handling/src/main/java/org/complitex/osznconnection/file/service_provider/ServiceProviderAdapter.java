@@ -1409,9 +1409,11 @@ public class ServiceProviderAdapter extends AbstractBean {
         map.put("pDate", date);
         map.put("pFile", fileName);
         map.put("pCnt", recordsCount);
-        map.put("pProfit", profit);
+        map.put("pProfit", profit ? 1 : 0);
 
-        return sqlSession(dataSource).selectOne(NS + ".createPrivHeader", map);
+        sqlSession(dataSource).selectOne(NS + ".createPrivHeader", map);
+
+        return (Long) map.get("collectionId");
     }
 
     public void savePrivilegeProlongation(Long userOrganizationId, List<PrivilegeProlongation> privilegeProlongations){

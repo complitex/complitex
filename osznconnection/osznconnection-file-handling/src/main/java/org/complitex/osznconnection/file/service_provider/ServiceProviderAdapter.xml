@@ -169,24 +169,28 @@
     </select>
 
     <select id="createPrivHeader" statementType="CALLABLE" parameterType="map">
-        {#{collectionId, mode=OUT, jdbcType=INTEGER} = call COMP.Z$RUNTIME_SZ_UTL.CreatePrivHeader(
-          #{pDistrName}, #{pDate, jdbcType=DATE}, #{pFile}, #{pCnt}, #{pProfit}
+        {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreatePrivHeader(
+          #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pDate, mode=IN, javaType=DATE, jdbcType=DATE},
+          #{pFile, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pCnt, mode=IN, javaType=int, jdbcType=NUMERIC},
+          #{pProfit, mode=IN, javaType=int, jdbcType=INTEGER}
         )}
     </select>
 
     <insert id="insertPriv" parameterType="list" useGeneratedKeys="false">
         insert into COMP.Z#K_PRIV_REC
         (
-          `ID`, ``C_COD`, `C_INDEX`, `C_KODUL`, `C_KAT`, `C_LGCODE`, `C_STATUS`, `C_CDPR`, `C_NCARD`, `C_IDPIL`, `C_DATEIN`,
+          `ID`, `C_COD`, `C_INDEX`, `C_KODUL`, `C_KAT`, `C_LGCODE`, `C_STATUS`, `C_CDPR`, `C_NCARD`, `C_IDPIL`, `C_DATEIN`,
           `C_DATEOUT`, `C_PASPPIL`, `C_FIOPIL`, `C_HOUSE`, `C_BUILD`, `C_APT`, `C_RAH`, `COLLECTION_ID`
         )
         values
-        <foreach collection="privList" item="p" separator=",">
+        <foreach collection="list" item="p" separator=",">
             (
-              comp.seq_id.nextval, #{p.dbfFields.COD}, #{p.dbfFields.INDEX}, #{p.dbfFields.CDUL}, #{p.dbfFields.KAT},
+              comp.seq_id.nextval, #{p.dbfFields.COLLECTION_ID}, #{p.dbfFields.COD}, #{p.dbfFields.INDEX}, #{p.dbfFields.CDUL}, #{p.dbfFields.KAT},
               #{p.dbfFields.LGCODE}, 0, #{p.dbfFields.}, #{p.dbfFields.CDPR}, #{p.dbfFields.NCARD}, #{p.dbfFields.IDPIL},
               #{p.dbfFields.DATEIN}, #{p.dbfFields.DATEOUT}, #{p.dbfFields.PASPPIL}, #{p.dbfFields.FIOPIL},
-              #{p.dbfFields.HOUSE}, #{p.dbfFields.BUILD}, #{p.dbfFields.APT}, #{p.dbfFields.RAH}, #{p.dbfFields.COLLECTION_ID}
+              #{p.dbfFields.HOUSE}, #{p.dbfFields.BUILD}, #{p.dbfFields.APT}, #{p.dbfFields.RAH}
             )
         </foreach>
     </insert>

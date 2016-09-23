@@ -4,6 +4,7 @@
 <configuration>
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="jdbcTypeForNull" value="NULL" />
     </settings>
 
     <typeHandlers>
@@ -24,17 +25,17 @@
                      javaType="org.complitex.osznconnection.file.entity.RequestWarningStatus"/>
     </typeHandlers>
 
-    <plugins>
-        <!--cursor plugin-->
-        <plugin interceptor="org.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>
+    <!--<plugins>-->
+        <!--&lt;!&ndash;cursor plugin&ndash;&gt;-->
+        <!--&lt;!&ndash;<plugin interceptor="org.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>&ndash;&gt;-->
 
-        <!--cache plugin-->
-        <!--<plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheExecutorPlugin">
-            <property name="excludeNamespaces" value="
-            org.complitex.common.entity.StringLocale,
-            org.complitex.common.entity.Entity"/>
-        </plugin>-->
-    </plugins>
+        <!--&lt;!&ndash;cache plugin&ndash;&gt;-->
+        <!--&lt;!&ndash;<plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheExecutorPlugin">-->
+            <!--<property name="excludeNamespaces" value="-->
+            <!--org.complitex.common.entity.StringLocale,-->
+            <!--org.complitex.common.entity.Entity"/>-->
+        <!--</plugin>&ndash;&gt;-->
+    <!--</plugins>-->
 
     <environments default="local">
         <environment id="local">

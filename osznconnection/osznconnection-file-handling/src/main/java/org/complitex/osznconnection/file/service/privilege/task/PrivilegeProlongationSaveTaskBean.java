@@ -67,8 +67,14 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
         Long collectionId = serviceProviderAdapter.createPrivilegeProlongationHeader(requestFile.getUserOrganizationId(),
                 district, calendar.getTime(), requestFile.getName(), ids.size(), profit);
 
+        if (collectionId == null){
+            throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_collection_id"));
+        }
+
         if (collectionId > 0){
             List<PrivilegeProlongation> list = privilegeProlongationBean.getPrivilegeProlongationForOperation(requestFile.getId(), ids);
+
+            list.forEach(p -> p.getDbfFields().put("COLLECTION_ID", collectionId));
 
             serviceProviderAdapter.savePrivilegeProlongation(requestFile.getUserOrganizationId(), list);
         }else {
