@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -62,11 +61,6 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
         boolean profit = requestFile.getName().matches(".*\\.(S|s).*");
 
         Date date = requestFile.getBeginDate();
-
-        //test
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2016, Calendar.DECEMBER, 1, 0, 0, 0);
-        date = calendar.getTime();
 
         Long collectionId = serviceProviderAdapter.createPrivilegeProlongationHeader(requestFile.getUserOrganizationId(),
                 district, date, requestFile.getName(), ids.size(), profit);
