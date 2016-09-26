@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.web.pages.privilege;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -79,7 +80,7 @@ public class PrivilegeProlongationFileList extends TemplatePage {
 
             @Override
             protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.savePrivilegeProlongation(selectedFileIds, commandParameters);
+
             }
 
             @Override
@@ -110,6 +111,16 @@ public class PrivilegeProlongationFileList extends TemplatePage {
                 filter.setSubType(type.name());
 
                 return super.getObjects(filter);
+            }
+
+            @Override
+            protected void export(AjaxRequestTarget target, List<Long> selectedFileIds) {
+                processManagerBean.exportPrivilegeProlongation(selectedFileIds, null);
+            }
+
+            @Override
+            protected boolean isExportVisible() {
+                return true;
             }
         });
     }

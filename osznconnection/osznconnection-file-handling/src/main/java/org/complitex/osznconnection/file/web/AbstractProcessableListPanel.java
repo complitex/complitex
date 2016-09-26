@@ -571,6 +571,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             public void onSubmit(AjaxRequestTarget target, Form form) {
                 export(target, selectManager.getSelectedFileIds());
+                selectManager.clearSelection();
             }
 
             @Override

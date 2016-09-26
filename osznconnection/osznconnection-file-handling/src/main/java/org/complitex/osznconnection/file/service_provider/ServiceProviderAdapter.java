@@ -1417,7 +1417,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         return (Long) map.get("collectionId");
     }
 
-    public void savePrivilegeProlongation(Long userOrganizationId, List<PrivilegeProlongation> privilegeProlongations){
+    public void exportPrivilegeProlongation(Long userOrganizationId, List<PrivilegeProlongation> privilegeProlongations){
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
 
         SqlSessionManager sqlSessionManager = sqlSessionManager(dataSource);

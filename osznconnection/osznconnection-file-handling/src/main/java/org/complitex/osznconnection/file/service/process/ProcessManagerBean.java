@@ -692,9 +692,9 @@ public class ProcessManagerBean {
                 processParameters);
     }
 
-    public void savePrivilegeProlongation(List<Long> ids, Map processParameters) {
-        execute(SAVE_PRIVILEGE_PROLONGATION, PrivilegeProlongationSaveTaskBean.class,
-                getRequestFiles(ids, SAVE_PRIVILEGE_PROLONGATION), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT,
+    public void exportPrivilegeProlongation(List<Long> ids, Map processParameters) {
+        execute(EXPORT_PRIVILEGE_PROLONGATION, PrivilegeProlongationSaveTaskBean.class,
+                getRequestFiles(ids, EXPORT_PRIVILEGE_PROLONGATION), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT,
                 processParameters);
     }
 }
