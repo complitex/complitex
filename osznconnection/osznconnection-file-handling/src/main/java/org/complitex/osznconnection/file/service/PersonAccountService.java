@@ -23,6 +23,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.complitex.address.util.AddressUtil.replaceApartmentSymbol;
 import static org.complitex.address.util.AddressUtil.replaceBuildingNumberSymbol;
@@ -89,31 +90,35 @@ public class PersonAccountService extends AbstractBean {
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(
                 new PersonAccount(request, puAccountNumber, billingId, useAddressNames)).setNullable(true));
 
-        if (personAccounts.size() == 1){
-            return personAccounts.get(0).getAccountNumber();
-        }else if (personAccounts.size() > 1){
-            throw new MoreOneAccountException();
-        }
+        Set<String> accountNumberSet = personAccounts.stream().map(PersonAccount::getAccountNumber).collect(Collectors.toSet());
 
-        return null;
+        if (accountNumberSet.isEmpty()){
+            return null;
+        }else if (accountNumberSet.size() == 1){
+            return accountNumberSet.iterator().next();
+        }else{
+            throw new MoreOneAccountException(accountNumberSet.toString());
+        }
     }
 
     public void save(AbstractAccountRequest request, String puAccountNumber) throws MoreOneAccountException {
         Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
 
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(
-                new PersonAccount(request,puAccountNumber, billingId, false)).setNullable(true));
+                new PersonAccount(request, puAccountNumber, billingId, true)).setNullable(true));
 
-        if (personAccounts.isEmpty()){
+        Set<String> accountNumberSet = personAccounts.stream().map(PersonAccount::getAccountNumber).collect(Collectors.toSet());
+
+        if (accountNumberSet.isEmpty()){
             personAccountBean.save(new PersonAccount(request, puAccountNumber, billingId, true));
-        }else if (personAccounts.size() == 1){
+        }else if (accountNumberSet.size() == 1){
             PersonAccount personAccount = personAccounts.get(0);
 
             if (!personAccount.getAccountNumber().equals(request.getAccountNumber())){
                 personAccountBean.save(personAccount);
             }
-        }else {
-            throw new MoreOneAccountException();
+        }else{
+            throw new MoreOneAccountException(accountNumberSet.toString());
         }
     }
 
@@ -271,6 +276,7 @@ public class PersonAccountService extends AbstractBean {
     }
 
 
+    //todo move to service
     public void updateAccountNumber(Subsidy subsidy, String accountNumber) {
         subsidy.setAccountNumber(accountNumber);
         subsidy.setStatus(ACCOUNT_NUMBER_RESOLVED);

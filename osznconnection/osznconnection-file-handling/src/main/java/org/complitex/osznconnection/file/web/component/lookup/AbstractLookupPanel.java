@@ -241,7 +241,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         form.add(accountNumberPickerPanel);
 
         // save/cancel
-        form.add(new AjaxLink<Void>("save") {
+        form.add(new IndicatingAjaxLink("save") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {

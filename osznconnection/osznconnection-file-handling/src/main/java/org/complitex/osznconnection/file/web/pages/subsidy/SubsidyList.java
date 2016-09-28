@@ -227,6 +227,9 @@ public final class SubsidyList extends TemplatePage {
             protected void onClose(AjaxRequestTarget target) {
                 super.onClose(target);
                 dataRowHoverBehavior.deactivateDataRow(target);
+
+                target.add(statusDetailPanel);
+                statusDetailPanel.rebuild();
             }
         };
         add(lookupPanel);

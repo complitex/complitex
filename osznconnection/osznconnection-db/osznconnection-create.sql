@@ -923,11 +923,9 @@ CREATE TABLE `person_account` (
     `user_organization_id` BIGINT(20),
     `calc_center_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор центра начислений',
 
-    PRIMARY KEY (`id`),
+   `created` TIMESTAMP DEFAULT current_timestamp COMMENT 'Время создания',
 
-    UNIQUE KEY `unique_person_account` (`first_name`, `middle_name`, `last_name`, `city_object_id`, `street_object_id`,
-      `building_object_id`, `apartment_object_id`,`pu_account_number`,`organization_id`, `user_organization_id`,
-      `calc_center_id`),
+    PRIMARY KEY (`id`),
 
     KEY `key_city_object_id` (`city_object_id`),
     KEY `key_street_object_id` (`street_object_id`),
