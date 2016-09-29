@@ -66,7 +66,7 @@ public class RequestFileGroupBean extends AbstractBean {
 
         RequestFile paymentFile = group.getPaymentFile();
 
-        if (paymentFile != null){
+        if (paymentFile != null && paymentFile.getId() != null){
             paymentFile.setStatus(group.getStatus());
 
             requestFileBean.save(paymentFile);
