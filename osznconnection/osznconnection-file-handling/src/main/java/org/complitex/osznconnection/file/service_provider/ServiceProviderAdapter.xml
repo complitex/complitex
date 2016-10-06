@@ -169,12 +169,12 @@
     </select>
 
     <select id="createPrivHeader" statementType="CALLABLE" parameterType="map">
-        {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreatePrivHeader(
+        {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call z$runtime_sz_utl.CreatePrivHeader(
           #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
-          #{pDate, mode=IN, javaType=DATE, jdbcType=DATE},
+          #{pDate, mode=IN, javaType=date, jdbcType=DATE},
           #{pFile, mode=IN, javaType=string, jdbcType=VARCHAR},
           #{pCnt, mode=IN, javaType=int, jdbcType=NUMERIC},
-          #{pProfit, mode=IN, javaType=int, jdbcType=INTEGER}
+          #{pProfit, mode=IN, javaType=boolean, jdbcType=BOOLEAN}
         )}
     </select>
 
@@ -194,4 +194,21 @@
             )
         </foreach>
     </insert>
+
+    <resultMap id="lodgerResultMap" type="org.complitex.osznconnection.file.entity.Lodger">
+        <result property="fio" column="FIO"/>
+        <result property="birthDate" column="BIRTH_DATE"/>
+        <result property="passport" column="PASSPORT"/>
+        <result property="idCode" column="IDCODE"/>
+        <result property="dateIn" column="DATE_IN"/>
+        <result property="dateOut" column="DATE_OUT"/>
+    </resultMap>
+
+    <select id="getLodgers" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.getLodgers(
+          #{pAccCode, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pDate, mode=IN, javaType=date, jdbcType=DATE},
+          #{data, mode=OUT, jdbcType=CURSOR, resultMap=lodgerResultMap}
+        )}
+    </select>
 </mapper>

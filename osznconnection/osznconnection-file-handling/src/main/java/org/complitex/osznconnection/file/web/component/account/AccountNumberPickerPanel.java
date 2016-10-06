@@ -7,26 +7,37 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.common.entity.Cursor;
+import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.osznconnection.file.entity.AccountDetail;
+import org.complitex.osznconnection.file.entity.Lodger;
+import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 
+import javax.ejb.EJB;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import static org.apache.wicket.model.Model.of;
@@ -37,6 +48,9 @@ import static org.apache.wicket.model.Model.of;
  * @author Artem
  */
 public class AccountNumberPickerPanel extends Panel {
+    @EJB
+    private ServiceProviderAdapter serviceProviderAdapter;
+
     private static class TextFieldUpdating extends OnChangeAjaxBehavior{
         @Override
         protected void onUpdate(AjaxRequestTarget target) {
@@ -48,11 +62,16 @@ public class AccountNumberPickerPanel extends Panel {
     private IModel<List<AccountDetail>> accountDetailsModel;
     private IModel<AccountDetail> accountDetailModel;
 
+    private IModel<Date> dateModel;
+    private IModel<Long> userOrganizationId;
+
     public AccountNumberPickerPanel(String id, IModel<List<AccountDetail>> accountDetailsModel,
-            IModel<AccountDetail> accountDetailModel) {
+            IModel<AccountDetail> accountDetailModel, IModel<Date> dateModel, IModel<Long> userOrganizationId) {
         super(id);
         this.accountDetailsModel = accountDetailsModel;
         this.accountDetailModel = accountDetailModel;
+        this.dateModel = dateModel;
+        this.userOrganizationId = userOrganizationId;
 
         setOutputMarkupId(true);
 
@@ -151,7 +170,7 @@ public class AccountNumberPickerPanel extends Panel {
 
             @Override
             protected Long getSize() {
-                return Long.valueOf(getList().size());
+                return (long) getList().size();
             }
         };
 
@@ -161,7 +180,9 @@ public class AccountNumberPickerPanel extends Panel {
             protected void populateItem(Item<AccountDetail> item) {
                 AccountDetail detail = item.getModelObject();
 
-                item.add(new Radio<>("radio", item.getModel(), radioGroup).setEnabled(!Strings.isEmpty(detail.getAccCode())));
+                item.add(new Radio<>("radio", item.getModel(), radioGroup)
+                        .setEnabled(!Strings.isEmpty(detail.getAccCode()) || dataProvider.size() == 1));
+
                 item.add(new Label("accCode", of(detail.getAccCode())));
                 item.add(new Label("zheu", of(detail.getZheu())));
                 item.add(new Label("zheuCode", of(detail.getZheuCode())));
@@ -170,18 +191,52 @@ public class AccountNumberPickerPanel extends Panel {
                 item.add(new Label("ownerInn", of(detail.getOwnerINN())));
                 item.add(new Label("ercCode", of(detail.getErcCode())));
 
-                WebMarkupContainer residentsContainer = new WebMarkupContainer("residentsContainer");
-                residentsContainer.setOutputMarkupPlaceholderTag(true);
-                residentsContainer.setOutputMarkupId(true);
-                residentsContainer.setVisible(false);
-                item.add(residentsContainer);
+                WebMarkupContainer lodgersContainer = new WebMarkupContainer("lodgersContainer");
+                lodgersContainer.setOutputMarkupPlaceholderTag(true);
+                lodgersContainer.setOutputMarkupId(true);
+                lodgersContainer.setVisible(false);
+                item.add(lodgersContainer);
 
-                item.add(new AjaxLink("residents") {
+                ListModel<Lodger> lodgerModel = new ListModel<>();
+
+                FeedbackPanel feedbackPanel = new FeedbackPanel("messages", new ContainerFeedbackMessageFilter(lodgersContainer));
+                lodgersContainer.add(feedbackPanel);
+
+                lodgersContainer.add(new ListView<Lodger>("lodgers", lodgerModel) {
+                    @Override
+                    protected void populateItem(ListItem<Lodger> i) {
+                        Lodger lodger = i.getModelObject();
+
+                        i.add(new Label("fio", Model.of(lodger.getFio())));
+                        i.add(new Label("birthDate", Model.of(lodger.getBirthDate())));
+                        i.add(new Label("passport", Model.of(lodger.getPassport())));
+                        i.add(new Label("idCode", Model.of(lodger.getIdCode())));
+                        i.add(new Label("dateIn", Model.of(lodger.getDateIn())));
+                        i.add(new Label("dateOut", Model.of(lodger.getDateOut())));
+                    }
+                });
+
+                item.add(new AjaxLink("lodgers") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        residentsContainer.setVisible(!residentsContainer.isVisible());
+                        try {
+                            Cursor<Lodger> cursor =  serviceProviderAdapter.getLodgers(userOrganizationId.getObject(),
+                                    detail.getAccCode(), dateModel.getObject());
 
-                        target.add(residentsContainer);
+                            if (cursor.getResultCode() == -1){
+                                lodgersContainer.error(getString("error_acc_code_not_found"));
+                            }else if (cursor.getResultCode() == -10){
+                                lodgersContainer.error(getString("error_error"));
+                            }else if (cursor.getData() != null){
+                                lodgerModel.setObject(cursor.getData());
+                            }
+                        } catch (Exception e) {
+                            lodgersContainer.error(ExceptionUtil.getCauseMessage(e));
+                        }
+
+                        lodgersContainer.setVisible(!lodgersContainer.isVisible());
+
+                        target.add(lodgersContainer);
                     }
                 });
             }

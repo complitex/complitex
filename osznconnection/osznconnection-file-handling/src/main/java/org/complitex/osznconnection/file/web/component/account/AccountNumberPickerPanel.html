@@ -46,26 +46,28 @@
                     <td><span wicket:id="address"></span></td>
                     <td><span wicket:id="ownerInn"></span></td>
                     <td><span wicket:id="ercCode"></span></td>
-                    <td><a wicket:id="residents"><wicket:message key="residents"/></a></td>
+                    <td><a wicket:id="lodgers"><wicket:message key="lodgers"/></a></td>
                 </tr>
-                <tr wicket:id="residentsContainer">
+                <tr wicket:id="lodgersContainer">
                     <td colspan="8">
+                        <div wicket:id="messages"></div>
                         <table cellpadding="0" cellspacing="0" border="0">
                             <tr>
                                 <th><wicket:message key="fio"/></th>
-                                <th><wicket:message key="birthday"/></th>
-                                <th><wicket:message key="document"/></th>
-                                <th><wicket:message key="beginDate"/></th>
-                                <th><wicket:message key="endDate"/></th>
+                                <th><wicket:message key="birthDate"/></th>
+                                <th><wicket:message key="passport"/></th>
+                                <th><wicket:message key="idCode"/></th>
+                                <th><wicket:message key="dateIn"/></th>
+                                <th><wicket:message key="dateOut"/></th>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                            <tr wicket:id="lodgers">
+                                <td wicket:id="fio"></td>
+                                <td wicket:id="birthDate"></td>
+                                <td wicket:id="passport"></td>
+                                <td wicket:id="idCode"></td>
+                                <td wicket:id="dateIn"></td>
+                                <td wicket:id="dateOut"></td>
                             </tr>
-
                         </table>
                     </td>
                 </tr>

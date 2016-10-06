@@ -46,6 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
+import java.util.Date;
 import java.util.List;
 
 import static org.apache.wicket.util.string.Strings.isEmpty;
@@ -76,6 +77,8 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     private IModel<String> apartmentModel;
     private IModel<List<AccountDetail>> accountDetailsModel;
     private IModel<AccountDetail> accountDetailModel;
+    private IModel<Date> dateModel;
+    private IModel<Long> userOrganizationIdModel;
     private AccountNumberPickerPanel accountNumberPickerPanel;
     private FeedbackPanel messages;
     private ExtendedDialog dialog;
@@ -235,7 +238,11 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         //account number picker panel
         accountDetailModel = new Model<>();
         accountDetailsModel = Model.ofList(null);
-        accountNumberPickerPanel = new AccountNumberPickerPanel("accountNumberPickerPanel", accountDetailsModel, accountDetailModel);
+        dateModel = new Model<>();
+        userOrganizationIdModel = new Model<>();
+
+        accountNumberPickerPanel = new AccountNumberPickerPanel("accountNumberPickerPanel", accountDetailsModel,
+                accountDetailModel, dateModel, userOrganizationIdModel);
         accountNumberPickerPanel.setOutputMarkupPlaceholderTag(true);
         accountNumberPickerPanel.setVisible(false);
         form.add(accountNumberPickerPanel);
@@ -332,6 +339,11 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         accountDetailModel.setObject(null);
         accountDetailsModel.setObject(null);
         accountNumberPickerPanel.setVisible(false);
+
+        RequestFile requestFile =  requestFileBean.getRequestFile(request.getRequestFileId());
+
+        dateModel.setObject(requestFile.getBeginDate());
+        userOrganizationIdModel.setObject(requestFile.getUserOrganizationId());
 
         //lookup by person
         if (Strings.isEmpty(request.getInn()) && Strings.isEmpty(request.getPassport())){

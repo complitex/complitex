@@ -1421,17 +1421,25 @@ public class ServiceProviderAdapter extends AbstractBean {
     public void exportPrivilegeProlongation(Long userOrganizationId, List<PrivilegeProlongation> privilegeProlongations){
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
 
-        SqlSession sqlSessionManager = sqlSessionManager(dataSource).openSession(ExecutorType.BATCH);
-
-        try {
+        try (SqlSession sqlSessionManager = sqlSessionManager(dataSource).openSession(ExecutorType.BATCH)) {
             privilegeProlongations.forEach(p -> {
                 sqlSessionManager.insert(NS + ".insertPriv", Collections.singleton(p));
             });
 
             sqlSessionManager.commit();
-        } finally {
-            sqlSessionManager.close();
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public Cursor<Lodger> getLodgers(Long userOrganizationId, String accountNumber, Date date){
+        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("pAccCode", accountNumber);
+        map.put("pDate", date);
+
+        sqlSession(dataSource).selectOne(NS + ".getLodgers", map);
+
+        return new Cursor<>((Integer) map.get("resultCode"), (List<Lodger>) map.get("data"));
+    }
 }
