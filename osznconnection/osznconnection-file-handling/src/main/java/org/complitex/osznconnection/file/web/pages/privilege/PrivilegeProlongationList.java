@@ -30,6 +30,7 @@ import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
@@ -386,6 +387,11 @@ public class PrivilegeProlongationList extends TemplatePage {
                         log.error("error privilegeProlongation bind", e);
                     }
                 });
+
+                if (privilegeProlongationBean.isPrivilegeProlongationBound(requestFile.getId())) {
+                    requestFile.setStatus(RequestFileStatus.BOUND);
+                    requestFileBean.save(requestFile);
+                }
 
                 checkGroup.getModelObject().clear();
                 target.add(content);
