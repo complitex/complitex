@@ -81,4 +81,8 @@ public abstract class AbstractAccountRequest<E extends Enum> extends AbstractAdd
     public void setPassport(String passport) {
         this.passport = passport;
     }
+
+    public String getPuAccountNumber(){
+        return null;
+    }
 }

@@ -186,8 +186,11 @@
     </delete>
     
     <sql id="filter">
-        <if test="account != null">
-            AND p.`OWN_NUM_SR` LIKE CONCAT('%',#{account},'%')
+        <if test="accountNumber != null">
+            AND p.`account_number` LIKE CONCAT('%',#{accountNumber},'%')
+        </if>
+        <if test="puAccountNumber != null">
+            AND p.`OWN_NUM_SR` LIKE CONCAT('%',#{puAccountNumber},'%')
         </if>
         <if test="firstName != null">
             AND TO_CYRILLIC(p.`F_NAM`) LIKE CONCAT('%',#{firstName},'%')
@@ -240,7 +243,7 @@
         w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
         p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
         FROM (
-            SELECT p.`id`, p.`status`, p.`request_file_id`, p.`OWN_NUM_SR`,
+            SELECT p.`id`, p.`status`, p.`request_file_id`, p.`OWN_NUM_SR`, p.`account_number`,
                 TO_CYRILLIC(p.`F_NAM`) F_NAM_CYR,
                 TO_CYRILLIC(p.`M_NAM`) M_NAM_CYR,
                 TO_CYRILLIC(p.`SUR_NAM`) SUR_NAM_CYR,

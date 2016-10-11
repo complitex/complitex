@@ -349,7 +349,11 @@ public class PrivilegeProlongationList extends TemplatePage {
 
             @Override
             public void onClick() {
+                boolean profit = requestFile.getName().matches(".*\\.(S|s).*");
+
                 PageParameters params = new PageParameters();
+                params.set("type", profit ? "s" : "p");
+
                 setResponsePage(PrivilegeProlongationFileList.class, params);
             }
         };

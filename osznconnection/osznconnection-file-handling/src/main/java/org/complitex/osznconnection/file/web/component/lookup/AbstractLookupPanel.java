@@ -2,8 +2,10 @@ package org.complitex.osznconnection.file.web.component.lookup;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -14,8 +16,8 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
@@ -82,16 +84,16 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     private AccountNumberPickerPanel accountNumberPickerPanel;
     private FeedbackPanel messages;
     private ExtendedDialog dialog;
-    private Label header;
+    private WebMarkupContainer header;
     private SearchComponentState addressSearchComponentState;
     private WiQuerySearchComponent addressSearchComponent;
     private T request;
-    private T initialRequest;
+    private IModel<T> initialRequestModel = new Model<>();
     private IModel<String> accountNumberModel = new Model<>();
 
     private WebMarkupContainer addressContainer;
     private WebMarkupContainer accountContainer;
-    private WebMarkupContainer fioContainer;
+    private WebMarkupContainer personContainer;
 
     private IModel<String> firstNameModel = Model.of("");
     private IModel<String> middleNameModel = Model.of("");
@@ -122,15 +124,68 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         messages.setOutputMarkupId(true);
         dialog.add(messages);
 
-        header = new Label("header", new LoadableDetachableModel<String>() {
-
-            @Override
-            protected String load() {
-                return request != null ? getTitle(request) : "";
-            }
-        });
+        header = new WebMarkupContainer("header");
         header.setOutputMarkupId(true);
         dialog.add(header);
+
+        //header
+
+        header.add(new Label("puAccountNumber", new PropertyModel<>(initialRequestModel, "puAccountNumber"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        accountNumberModel.setObject(initialRequestModel.getObject().getPuAccountNumber());
+
+                        target.add(accountContainer);
+                    }
+                }));
+        header.add(new Label("lastName", new PropertyModel<>(initialRequestModel, "lastName"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        lastNameModel.setObject(initialRequestModel.getObject().getLastName());
+
+                        target.add(personContainer);
+                    }
+                }));
+        header.add(new Label("firstName", new PropertyModel<>(initialRequestModel, "firstName"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        firstNameModel.setObject(initialRequestModel.getObject().getFirstName());
+
+                        target.add(personContainer);
+                    }
+                }));
+        header.add(new Label("middleName", new PropertyModel<>(initialRequestModel, "middleName"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        middleNameModel.setObject(initialRequestModel.getObject().getMiddleName());
+
+                        target.add(personContainer);
+                    }
+                }));
+        header.add(new Label("passport", new PropertyModel<>(initialRequestModel, "passport"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        passportModel.setObject(initialRequestModel.getObject().getPassport());
+
+                        target.add(personContainer);
+                    }
+                }));
+
+        header.add(new Label("idCode", new PropertyModel<>(initialRequestModel, "inn"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        innModel.setObject(initialRequestModel.getObject().getInn());
+
+                        target.add(personContainer);
+                    }
+                }));
+
 
         Form form = new Form("form");
         dialog.add(form);
@@ -176,12 +231,12 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         accordion.add(accountContainer);
 
         accountContainer.add(new TextField<>("accountNumber", accountNumberModel, String.class)
-                .add(new AjaxFormComponentUpdatingBehavior("change") {
+                .add(new OnChangeAjaxBehavior() {
 
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-            }
-        }));
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                    }
+                }));
 
         accountContainer.add(new IndicatingAjaxLink("lookupByAccount") {
 
@@ -192,17 +247,28 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         });
 
         //lookup by person
-        fioContainer = new WebMarkupContainer("fio_container");
-        fioContainer.setOutputMarkupId(true);
-        accordion.add(fioContainer);
+        personContainer = new WebMarkupContainer("fio_container");
+        personContainer.setOutputMarkupId(true);
+        accordion.add(personContainer);
 
-        fioContainer.add(new TextField<>("lastName", lastNameModel));
-        fioContainer.add(new TextField<>("firstName", firstNameModel));
-        fioContainer.add(new TextField<>("middleName", middleNameModel));
-        fioContainer.add(new TextField<>("inn", innModel));
-        fioContainer.add(new TextField<>("passport", passportModel));
+        personContainer.add(new TextField<>("lastName", lastNameModel));
+        personContainer.add(new TextField<>("firstName", firstNameModel));
+        personContainer.add(new TextField<>("middleName", middleNameModel));
+        personContainer.add(new TextField<>("inn", innModel));
+        personContainer.add(new TextField<>("passport", passportModel));
 
-        fioContainer.add(new IndicatingAjaxButton("lookupByFio") {
+        personContainer.visitChildren(TextField.class, (component, visit) -> {
+            component.add(new OnChangeAjaxBehavior() {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+
+                }
+            });
+
+            visit.dontGoDeeper();
+        });
+
+        personContainer.add(new IndicatingAjaxButton("lookupByFio") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 accountDetailsModel.setObject(null);
@@ -254,7 +320,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
             public void onClick(AjaxRequestTarget target) {
                 if (accountDetailModel.getObject() != null && !isEmpty(accountDetailModel.getObject().getAccCode())) {
                     try {
-                        updateAccountNumber(initialRequest, accountDetailModel.getObject().getAccCode());
+                        updateAccountNumber(initialRequestModel.getObject(), accountDetailModel.getObject().getAccCode());
                         for (Component component : toUpdate) {
                             target.add(component);
                         }
@@ -328,13 +394,9 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
 
     protected abstract boolean isInternalAddressCorrect(T request);
 
-    protected String getTitle(T request){
-        return "";
-    }
-
     public void open(AjaxRequestTarget target, T request, String serviceProviderAccountNumber) {
         this.request = CloneUtil.cloneObject(request);
-        this.initialRequest = request;
+        initialRequestModel.setObject(request);;
 
         accountDetailModel.setObject(null);
         accountDetailsModel.setObject(null);
@@ -381,7 +443,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
             lookupByAccount(target);
         }
 
-        target.add(accountNumberPickerPanel, addressContainer, accountContainer, fioContainer, messages, header);
+        target.add(accountNumberPickerPanel, addressContainer, accountContainer, personContainer, messages, header);
 
         dialog.open(target);
     }

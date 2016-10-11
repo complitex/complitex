@@ -164,7 +164,8 @@ public final class PaymentList extends TemplatePage {
         };
         dataProvider.setSort("", SortOrder.ASCENDING);
 
-        filterForm.add(new TextField<>("accountFilter", new PropertyModel<>(example, "account")));
+//        filterForm.add(new TextField<>("accountNumberFilter", new PropertyModel<>(example, "accountNumber")));
+        filterForm.add(new TextField<>("puAccountNumberFilter", new PropertyModel<>(example, "puAccountNumber")));
         filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<>(example, "firstName")));
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<>(example, "middleName")));
         filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<>(example, "lastName")));
@@ -233,7 +234,8 @@ public final class PaymentList extends TemplatePage {
                 final Payment payment = item.getModelObject();
 
                 item.add(new Check<>("check", Model.of(payment), checkGroup));
-                item.add(new Label("account", payment.getStringField(PaymentDBF.OWN_NUM_SR)));
+//                item.add(new Label("accountNumber", payment.getAccountNumber()));
+                item.add(new Label("puAccountNumber", payment.getStringField(PaymentDBF.OWN_NUM_SR)));
                 item.add(new Label("firstName", payment.getFirstName()));
                 item.add(new Label("middleName", payment.getMiddleName()));
                 item.add(new Label("lastName", payment.getLastName()));
@@ -272,7 +274,8 @@ public final class PaymentList extends TemplatePage {
         checkGroup.add(data);
 
         filterForm.add(new CheckGroupSelector("checkAll", checkGroup));
-        filterForm.add(new ArrowOrderByBorder("accountHeader", PaymentBean.OrderBy.ACCOUNT.getOrderBy(), dataProvider, data, content));
+//        filterForm.add(new ArrowOrderByBorder("accountNumberHeader", PaymentBean.OrderBy.ACCOUNT_NUMBER.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("puAccountNumberHeader", PaymentBean.OrderBy.PU_ACCOUNT_NUMBER.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", PaymentBean.OrderBy.FIRST_NAME.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("middleNameHeader", PaymentBean.OrderBy.MIDDLE_NAME.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("lastNameHeader", PaymentBean.OrderBy.LAST_NAME.getOrderBy(), dataProvider, data, content));

@@ -48,4 +48,9 @@ public class PrivilegeProlongation extends AbstractAccountRequest<PrivilegeProlo
     public String getFio(){
         return getStringField(PrivilegeProlongationDBF.FIOPIL, "_CYR");
     }
+
+    @Override
+    public String getPuAccountNumber() {
+        return getStringField(PrivilegeProlongationDBF.RAH);
+    }
 }

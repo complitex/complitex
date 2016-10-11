@@ -12,7 +12,7 @@ public class PaymentExampleConfigurator extends AbstractExampleConfigurator<Paym
     @Override
     public PaymentExample createExample(StatusDetail statusDetail) {
         PaymentExample example = new PaymentExample();
-        example.setAccount(statusDetail.getDetail("account"));
+        example.setPuAccountNumber(statusDetail.getDetail("account"));
         example.setCity(statusDetail.getDetail("city"));
         example.setStreet(statusDetail.getDetail("street"));
         example.setBuilding(statusDetail.getDetail("building"));

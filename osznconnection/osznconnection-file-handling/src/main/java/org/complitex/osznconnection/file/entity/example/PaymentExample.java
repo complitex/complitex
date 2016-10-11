@@ -18,55 +18,9 @@ public class PaymentExample extends AbstractRequestExample {
     private long count;
     private String orderByClause;
     private boolean asc;
-    private String account;
 
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getApartment() {
-        return apartment;
-    }
-
-    public void setApartment(String apartment) {
-        this.apartment = apartment;
-    }
-
-    public boolean isAsc() {
-        return asc;
-    }
-
-    public void setAsc(boolean asc) {
-        this.asc = asc;
-    }
-
-    public String getBuilding() {
-        return building;
-    }
-
-    public void setBuilding(String building) {
-        this.building = building;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCorp() {
-        return corp;
-    }
-
-    public void setCorp(String corp) {
-        this.corp = corp;
-    }
+    private String accountNumber;
+    private String puAccountNumber;
 
     public String getFirstName() {
         return firstName;
@@ -74,14 +28,6 @@ public class PaymentExample extends AbstractRequestExample {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getMiddleName() {
@@ -92,12 +38,52 @@ public class PaymentExample extends AbstractRequestExample {
         this.middleName = middleName;
     }
 
-    public String getOrderByClause() {
-        return orderByClause;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setOrderByClause(String orderByClause) {
-        this.orderByClause = orderByClause;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
+    }
+
+    public String getCorp() {
+        return corp;
+    }
+
+    public void setCorp(String corp) {
+        this.corp = corp;
+    }
+
+    public String getApartment() {
+        return apartment;
+    }
+
+    public void setApartment(String apartment) {
+        this.apartment = apartment;
     }
 
     public long getFirst() {
@@ -116,11 +102,37 @@ public class PaymentExample extends AbstractRequestExample {
         this.count = count;
     }
 
-    public String getStreet() {
-        return street;
+    public String getOrderByClause() {
+        return orderByClause;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public void setOrderByClause(String orderByClause) {
+        this.orderByClause = orderByClause;
+    }
+
+    public boolean isAsc() {
+        return asc;
+    }
+
+    public void setAsc(boolean asc) {
+        this.asc = asc;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getPuAccountNumber() {
+        return puAccountNumber;
+    }
+
+    public void setPuAccountNumber(String puAccountNumber) {
+        this.puAccountNumber = puAccountNumber;
     }
 }
+
+

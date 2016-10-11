@@ -62,4 +62,9 @@ public class Payment extends AbstractAccountRequest<PaymentDBF> {
     public String getFio(){
         return getLastName() + " " + getFirstName() + " " + getMiddleName();
     }
+
+    @Override
+    public String getPuAccountNumber() {
+        return getStringField(PaymentDBF.OWN_NUM_SR);
+    }
 }

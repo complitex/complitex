@@ -18,7 +18,6 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.service.SessionBean;
@@ -26,16 +25,18 @@ import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestStatus;
+import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.BenefitExample;
 import org.complitex.osznconnection.file.entity.subsidy.Benefit;
 import org.complitex.osznconnection.file.entity.subsidy.BenefitDBF;
-import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.status.details.BenefitExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.PaymentBenefitStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
+import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
@@ -44,6 +45,7 @@ import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -100,11 +102,10 @@ public final class BenefitList extends TemplatePage {
         final DataRowHoverBehavior dataRowHoverBehavior = new DataRowHoverBehavior();
         add(dataRowHoverBehavior);
 
-        String fileName = requestFile.getName();
-        String directory = requestFile.getDirectory();
-        IModel<String> labelModel = new StringResourceModel("label", this, Model.of(new Object[]{fileName, directory}));
-        add(new Label("title", labelModel));
-        add(new Label("label", labelModel));
+        String label = getStringFormat("label", requestFile.getDirectory(), File.separator, requestFile.getName());
+
+        add(new Label("title", label));
+        add(new Label("label", label));
 
         final WebMarkupContainer content = new WebMarkupContainer("content");
         content.setOutputMarkupId(true);

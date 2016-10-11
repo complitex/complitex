@@ -44,7 +44,8 @@ public class PaymentBean extends AbstractRequestBean {
 
     public enum OrderBy {
 
-        ACCOUNT(PaymentDBF.OWN_NUM_SR.name()),
+        ACCOUNT_NUMBER("account_number"),
+        PU_ACCOUNT_NUMBER(PaymentDBF.OWN_NUM_SR.name()),
         FIRST_NAME(PaymentDBF.F_NAM.name()),
         MIDDLE_NAME(PaymentDBF.M_NAM.name()),
         LAST_NAME(PaymentDBF.SUR_NAM.name()),
@@ -56,7 +57,7 @@ public class PaymentBean extends AbstractRequestBean {
         STATUS("status");
         private String orderBy;
 
-        private OrderBy(String orderBy) {
+        OrderBy(String orderBy) {
             this.orderBy = orderBy;
         }
 

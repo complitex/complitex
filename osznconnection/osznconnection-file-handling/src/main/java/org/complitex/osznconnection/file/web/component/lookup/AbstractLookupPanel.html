@@ -8,7 +8,18 @@
 <wicket:panel>
     <div wicket:id="dialog" style="display: none" wicket:message="title:title">
         <div wicket:id="messages"></div>
-        <div wicket:id="header" style="margin-bottom: 20px"></div>
+        <div wicket:id="header" style="margin-bottom: 20px">
+            <table style="cursor: pointer">
+                <tr>
+                    <td wicket:id="puAccountNumber"></td>
+                    <td wicket:id="lastName"></td>
+                    <td wicket:id="firstName"></td>
+                    <td wicket:id="middleName"></td>
+                    <td wicket:id="passport"></td>
+                    <td wicket:id="idCode"></td>
+                </tr>
+            </table>
+        </div>
 
         <form action="#" wicket:id="form">
             <div wicket:id="accordion">

@@ -76,9 +76,4 @@ public class SubsidyLookupPanel extends AbstractLookupPanel<Subsidy> {
             requestFileBean.updateStatus(subsidy.getRequestFileId(), RequestFileStatus.BOUND);
         }
     }
-
-    @Override
-    protected String getTitle(Subsidy subsidy) {
-        return subsidy.getFio() + ", " + subsidy.getAddress(getLocale());
-    }
 }

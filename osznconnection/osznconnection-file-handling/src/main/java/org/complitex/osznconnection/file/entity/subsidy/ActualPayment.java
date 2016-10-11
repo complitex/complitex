@@ -44,4 +44,9 @@ public class ActualPayment extends AbstractAccountRequest<ActualPaymentDBF> {
     public String getApartment() {
         return getStringField(ActualPaymentDBF.FLAT);
     }
+
+    @Override
+    public String getPuAccountNumber() {
+        return getStringField(ActualPaymentDBF.OWN_NUM);
+    }
 }
