@@ -1440,6 +1440,8 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         sqlSession(dataSource).selectOne(NS + ".getLodgers", map);
 
+        log.info("getLodgers {}", map);
+
         return new Cursor<>((Integer) map.get("resultCode"), (List<Lodger>) map.get("data"));
     }
 }

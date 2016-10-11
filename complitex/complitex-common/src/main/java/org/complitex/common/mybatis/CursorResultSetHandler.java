@@ -73,7 +73,7 @@ public class CursorResultSetHandler implements ResultSetHandler {
                     Integer okCode = (Integer) metaParam.getValue("okCode");
 
                     if (okCode == null){
-                        okCode = 1;
+                        okCode = 0;
                     }
 
                     if (resultCode != null && resultCode >= okCode) {

@@ -61,4 +61,16 @@ public class Lodger implements Serializable{
     public void setDateOut(Date dateOut) {
         this.dateOut = dateOut;
     }
+
+    @Override
+    public String toString() {
+        return "Lodger{" +
+                "fio='" + fio + '\'' +
+                ", birthDate=" + birthDate +
+                ", passport='" + passport + '\'' +
+                ", idCode='" + idCode + '\'' +
+                ", dateIn=" + dateIn +
+                ", dateOut=" + dateOut +
+                '}';
+    }
 }
