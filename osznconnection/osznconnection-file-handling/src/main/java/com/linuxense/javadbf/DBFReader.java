@@ -13,9 +13,12 @@
 
 package com.linuxense.javadbf;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.GregorianCalendar;
 
 /**
 	DBFReader class can creates objects to represent DBF data.
@@ -217,13 +220,15 @@ public class DBFReader extends DBFBase {
 	
 						try {
 
-							GregorianCalendar calendar = new GregorianCalendar( 
-								Integer.parseInt( new String( t_byte_year)),
-								Integer.parseInt( new String( t_byte_month)) - 1,
-								Integer.parseInt( new String( t_byte_day))
-							);
-	
-							recordObjects[i] = calendar.getTime();
+							int year = Integer.parseInt( new String( t_byte_year));
+							int month = Integer.parseInt( new String( t_byte_month)) - 1;
+							int day = Integer.parseInt( new String( t_byte_day));
+
+							if (year > 0 && month >= 1 && day > 0) {
+								recordObjects[i] = new GregorianCalendar(year, month, day).getTime();
+							}else{
+								recordObjects[i] = null;
+							}
 						}
 						catch ( NumberFormatException e) {
 							/* this field may be empty or may have improper value set */
