@@ -138,7 +138,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                     return "";
                 }
 
-                return o.getPuAccountNumber() + ",";
+                return o.getPuAccountNumber() != null ? o.getPuAccountNumber() + "," : "";
             }
         }));
         header.add(new Label("lastName", new PropertyModel<>(initialRequestModel, "lastName")));
