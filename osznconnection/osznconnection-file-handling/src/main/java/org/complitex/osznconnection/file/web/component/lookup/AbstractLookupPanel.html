@@ -9,14 +9,19 @@
     <div wicket:id="dialog" style="display: none" wicket:message="title:title">
         <div wicket:id="messages"></div>
         <div wicket:id="header" style="margin-bottom: 20px">
-            <table style="cursor: pointer">
+            <table>
                 <tr>
-                    <td wicket:id="puAccountNumber"></td>
-                    <td wicket:id="lastName"></td>
-                    <td wicket:id="firstName"></td>
-                    <td wicket:id="middleName"></td>
-                    <td wicket:id="passport"></td>
-                    <td wicket:id="idCode"></td>
+                    <td>
+                        <span  wicket:id="puAccountNumber"></span>
+                    </td>
+                    <td>
+                        <span wicket:id="lastName"></span>
+                        <span wicket:id="firstName"></span>
+                        <span wicket:id="middleName"></span>,
+                    </td>
+                    <td>
+                        <span wicket:id="address"></span>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -50,7 +55,7 @@
                     <table class="tbForm" wicket:id="account_container">
                         <tr>
                             <th>
-                                <wicket:message key="lookup_by_account_label"/>:
+                                <span wicket:id="accountNumberLabel" style="cursor: pointer"></span>:
                             </th>
                             <td>
                                 <input type="text" wicket:id="accountNumber"/>
@@ -67,19 +72,19 @@
                     <table class="tbForm" wicket:id="fio_container">
                         <tr>
                             <th>
-                                <wicket:message key="lastName"/>:
+                                <span wicket:id="lastNameLabel" style="cursor: pointer"></span>:
                             </th>
                             <td>
                                 <input type="text" wicket:id="lastName"/>
                             </td>
                             <th>
-                                <wicket:message key="firstName"/>:
+                                <span wicket:id="firstNameLabel" style="cursor: pointer"></span>:
                             </th>
                             <td>
                                 <input type="text" wicket:id="firstName"/>
                             </td>
                             <th>
-                                <wicket:message key="middleName"/>:
+                                <span wicket:id="middleNameLabel" style="cursor: pointer"></span>:
                             </th>
                             <td>
                                 <input type="text" wicket:id="middleName"/>
@@ -91,13 +96,13 @@
                         </tr>
                         <tr>
                             <th>
-                                <wicket:message key="passport"/>:
+                                <span wicket:id="passportLabel" style="cursor: pointer"></span>:
                             </th>
                             <td>
                                 <input type="text" wicket:id="passport"/>
                             </td>
                             <th>
-                                <wicket:message key="inn"/>:
+                                <span wicket:id="innLabel" style="cursor: pointer"></span>:
                             </th>
                             <td>
                                 <input type="text" wicket:id="inn"/>

@@ -15,9 +15,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.*;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
@@ -50,6 +48,7 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static org.apache.wicket.util.string.Strings.isEmpty;
 import static org.complitex.osznconnection.file.entity.RequestStatus.*;
@@ -130,62 +129,38 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
 
         //header
 
-        header.add(new Label("puAccountNumber", new PropertyModel<>(initialRequestModel, "puAccountNumber"))
-                .add(new AjaxEventBehavior("click") {
-                    @Override
-                    protected void onEvent(AjaxRequestTarget target) {
-                        accountNumberModel.setObject(initialRequestModel.getObject().getPuAccountNumber());
+        header.add(new Label("puAccountNumber", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                T o = initialRequestModel.getObject();
 
-                        target.add(accountContainer);
-                    }
-                }));
-        header.add(new Label("lastName", new PropertyModel<>(initialRequestModel, "lastName"))
-                .add(new AjaxEventBehavior("click") {
-                    @Override
-                    protected void onEvent(AjaxRequestTarget target) {
-                        lastNameModel.setObject(initialRequestModel.getObject().getLastName());
+                if (o == null){
+                    return "";
+                }
 
-                        target.add(personContainer);
-                    }
-                }));
-        header.add(new Label("firstName", new PropertyModel<>(initialRequestModel, "firstName"))
-                .add(new AjaxEventBehavior("click") {
-                    @Override
-                    protected void onEvent(AjaxRequestTarget target) {
-                        firstNameModel.setObject(initialRequestModel.getObject().getFirstName());
+                return o.getPuAccountNumber() + ",";
+            }
+        }));
+        header.add(new Label("lastName", new PropertyModel<>(initialRequestModel, "lastName")));
+        header.add(new Label("firstName", new PropertyModel<>(initialRequestModel, "firstName")));
+        header.add(new Label("middleName", new PropertyModel<>(initialRequestModel, "middleName")));
+        header.add(new Label("address", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                T o = initialRequestModel.getObject();
 
-                        target.add(personContainer);
-                    }
-                }));
-        header.add(new Label("middleName", new PropertyModel<>(initialRequestModel, "middleName"))
-                .add(new AjaxEventBehavior("click") {
-                    @Override
-                    protected void onEvent(AjaxRequestTarget target) {
-                        middleNameModel.setObject(initialRequestModel.getObject().getMiddleName());
+                if (o == null){
+                    return "";
+                }
 
-                        target.add(personContainer);
-                    }
-                }));
-        header.add(new Label("passport", new PropertyModel<>(initialRequestModel, "passport"))
-                .add(new AjaxEventBehavior("click") {
-                    @Override
-                    protected void onEvent(AjaxRequestTarget target) {
-                        passportModel.setObject(initialRequestModel.getObject().getPassport());
-
-                        target.add(personContainer);
-                    }
-                }));
-
-        header.add(new Label("idCode", new PropertyModel<>(initialRequestModel, "inn"))
-                .add(new AjaxEventBehavior("click") {
-                    @Override
-                    protected void onEvent(AjaxRequestTarget target) {
-                        innModel.setObject(initialRequestModel.getObject().getInn());
-
-                        target.add(personContainer);
-                    }
-                }));
-
+                return Objects.toString(o.getCity(), "") + " " +
+                        Objects.toString(o.getStreetType(), "") + " " +
+                        Objects.toString(o.getStreet(), "") + " " +
+                        Objects.toString(o.getBuildingNumber(), "") + " " +
+                        Objects.toString(o.getBuildingCorp(), "") + " " +
+                        Objects.toString(o.getApartment(), "");
+            }
+        }));
 
         Form form = new Form("form");
         dialog.add(form);
@@ -230,6 +205,16 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         accountContainer.setOutputMarkupId(true);
         accordion.add(accountContainer);
 
+        accountContainer.add(new Label("accountNumberLabel", new ResourceModel("lookup_by_account_label"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        accountNumberModel.setObject(initialRequestModel.getObject().getPuAccountNumber());
+
+                        target.add(accountContainer);
+                    }
+                }));
+
         accountContainer.add(new TextField<>("accountNumber", accountNumberModel, String.class)
                 .add(new OnChangeAjaxBehavior() {
 
@@ -251,11 +236,60 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         personContainer.setOutputMarkupId(true);
         accordion.add(personContainer);
 
+        personContainer.add(new Label("lastNameLabel", new ResourceModel("lastName"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        lastNameModel.setObject(initialRequestModel.getObject().getLastName());
+
+                        target.add(personContainer);
+                    }
+                }));
         personContainer.add(new TextField<>("lastName", lastNameModel));
+
+        personContainer.add(new Label("firstNameLabel", new ResourceModel("firstName"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        firstNameModel.setObject(initialRequestModel.getObject().getFirstName());
+
+                        target.add(personContainer);
+                    }
+                }));
         personContainer.add(new TextField<>("firstName", firstNameModel));
+
+        personContainer.add(new Label("middleNameLabel", new ResourceModel("middleName"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        middleNameModel.setObject(initialRequestModel.getObject().getMiddleName());
+
+                        target.add(personContainer);
+                    }
+                }));
         personContainer.add(new TextField<>("middleName", middleNameModel));
-        personContainer.add(new TextField<>("inn", innModel));
+
+        personContainer.add(new Label("passportLabel", new ResourceModel("passport"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        passportModel.setObject(initialRequestModel.getObject().getPassport());
+
+                        target.add(personContainer);
+                    }
+                }));
         personContainer.add(new TextField<>("passport", passportModel));
+
+        personContainer.add(new Label("innLabel", new ResourceModel("inn"))
+                .add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        innModel.setObject(initialRequestModel.getObject().getInn());
+
+                        target.add(personContainer);
+                    }
+                }));
+        personContainer.add(new TextField<>("inn", innModel));
 
         personContainer.visitChildren(TextField.class, (component, visit) -> {
             component.add(new OnChangeAjaxBehavior() {
