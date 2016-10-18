@@ -23,7 +23,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
-import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.StringUtil;
@@ -79,7 +78,18 @@ public class AccountNumberPickerPanel extends Panel {
     }
 
     private void init() {
-        final RadioGroup<AccountDetail> radioGroup = new RadioGroup<AccountDetail>("radioGroup", accountDetailModel);
+        final RadioGroup<AccountDetail> radioGroup = new RadioGroup<AccountDetail>("radioGroup", accountDetailModel){
+            @Override
+            protected void onBeforeRender() {
+                super.onBeforeRender();
+
+                List<AccountDetail> list = accountDetailsModel.getObject();
+
+                if (list != null && list.size() == 1){
+                    getModel().setObject(list.get(0));
+                }
+            }
+        };
         radioGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 
             @Override
@@ -180,9 +190,7 @@ public class AccountNumberPickerPanel extends Panel {
             protected void populateItem(Item<AccountDetail> item) {
                 AccountDetail detail = item.getModelObject();
 
-                item.add(new Radio<>("radio", item.getModel(), radioGroup)
-                        .setEnabled(!Strings.isEmpty(detail.getAccCode()) || dataProvider.size() == 1));
-
+                item.add(new Radio<>("radio", item.getModel(), radioGroup));
                 item.add(new Label("accCode", of(detail.getAccCode())));
                 item.add(new Label("zheu", of(detail.getZheu())));
                 item.add(new Label("zheuCode", of(detail.getZheuCode())));
