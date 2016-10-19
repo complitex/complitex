@@ -7,7 +7,7 @@ import org.complitex.template.web.template.ResourceTemplateMenu;
 /**
  * inheaven on 17.03.2016.
  */
-@AuthorizeInstantiation(SecurityRole.ADDRESS_MODULE_EDIT)
+@AuthorizeInstantiation(SecurityRole.ADMIN_MODULE_EDIT)
 public class OsznDescriptionMenu extends ResourceTemplateMenu{
     public OsznDescriptionMenu() {
         addDescription("country");
