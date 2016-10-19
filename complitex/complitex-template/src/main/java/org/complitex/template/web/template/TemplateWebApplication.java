@@ -55,14 +55,16 @@ import java.util.*;
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 22.07.2010 18:36:29
  */
-public abstract class TemplateWebApplication extends ServletAuthWebApplication
-        implements IWebComponentResolvableApplication {
+public abstract class TemplateWebApplication extends ServletAuthWebApplication implements IWebComponentResolvableApplication {
 
     private final Logger log = LoggerFactory.getLogger(TemplateWebApplication.class);
     private static final String TEMPLATE_CONFIG_FILE_NAME = "template-config.xml";
     private static final ThemeResourceReference theme = new ThemeResourceReference();
-    private volatile Collection<Class<ITemplateMenu>> menuClasses;
+
+    private Collection<Class<ITemplateMenu>> menuClasses;
     private IWebComponentResolver webComponentResolver;
+
+    private TemplateLoader templateLoader;
 
     @Override
     protected void init() {
@@ -90,8 +92,10 @@ public abstract class TemplateWebApplication extends ServletAuthWebApplication
         addResourceReplacement(WiQueryCoreThemeResourceReference.get(), theme);
     }
 
+    @SuppressWarnings("unchecked")
     private void initializeTemplateConfig() throws RuntimeException {
         try {
+            //load template
             Iterator<URL> resources = getApplicationSettings().getClassResolver().getResources(TEMPLATE_CONFIG_FILE_NAME);
             InputStream inputStream;
             if (resources.hasNext()) {
@@ -104,20 +108,22 @@ public abstract class TemplateWebApplication extends ServletAuthWebApplication
                 throw new RuntimeException("Template config file " + TEMPLATE_CONFIG_FILE_NAME + " was not found.");
             }
 
-            TemplateLoader templateLoader = new TemplateLoader(inputStream);
+            templateLoader = new TemplateLoader(inputStream);
             final IClassResolver classResolver = getApplicationSettings().getClassResolver();
 
             //template menus
-            Collection<String> menuClassNames = templateLoader.getMenuClassNames();
+            List<String> menuClassNames = templateLoader.getMenuElements();
+
             final Collection<Class<ITemplateMenu>> templateMenuClasses = new ArrayList<Class<ITemplateMenu>>();
+
             for (String menuClassName : menuClassNames) {
                 try {
-                    Class<ITemplateMenu> menuClass = (Class<ITemplateMenu>) classResolver.resolveClass(menuClassName);
-                    templateMenuClasses.add(menuClass);
+                    templateMenuClasses.add((Class<ITemplateMenu>) classResolver.resolveClass(menuClassName));
                 } catch (ClassNotFoundException e) {
                     log.warn("Меню не найдено: {}", menuClassName);
                 }
             }
+
             this.menuClasses = Collections.unmodifiableCollection(templateMenuClasses);
 
             //custom web components
@@ -355,5 +361,9 @@ public abstract class TemplateWebApplication extends ServletAuthWebApplication
 
     private ISessionStorage newSessionStorage() {
         return new DefaultSessionStorage();
+    }
+
+    public TemplateLoader getTemplateLoader() {
+        return templateLoader;
     }
 }

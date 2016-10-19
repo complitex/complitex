@@ -52,7 +52,6 @@ import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
-import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +66,7 @@ import java.util.List;
 /**
  * @author inheaven on 29.06.16.
  */
-@AuthorizeInstantiation(SecurityRole.AUTHORIZED)
+@AuthorizeInstantiation({"PRIVILEGE_PROLONGATION_S", "PRIVILEGE_PROLONGATION_P"})
 public class PrivilegeProlongationList extends TemplatePage {
     private Logger log = LoggerFactory.getLogger(PrivilegeProlongationList.class);
 

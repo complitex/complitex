@@ -8,6 +8,7 @@
             <xs:sequence>
                 <xs:element ref="web-components" minOccurs="0"/>
                 <xs:element ref="sidebar"/>
+                <xs:element ref="groups"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -34,6 +35,21 @@
     <xs:element name="menu">
         <xs:complexType>
             <xs:attribute name="class" use="required" type="xs:string"/>
+            <xs:attribute name="grant" use="optional" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="groups">
+        <xs:complexType>
+            <xs:sequence  maxOccurs="unbounded">
+                <xs:element ref="group"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="group">
+        <xs:complexType>
+            <xs:attribute name="name" use="required" type="xs:string"/>
         </xs:complexType>
     </xs:element>
 

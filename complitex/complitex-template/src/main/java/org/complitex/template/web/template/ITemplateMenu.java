@@ -16,19 +16,18 @@ public interface ITemplateMenu extends Serializable{
      * @param locale Текущая локализация
      * @return Заголовок меню в зависимости от текущей локализации
      */
-    public String getTitle(Locale locale);
+    String getTitle(Locale locale);
 
     /**
      * Список ссылок на функциональные страницы модуля.
      * @param locale Текущая локализация
      * @return Список ссылок
      */
-    public List<ITemplateLink> getTemplateLinks(Locale locale);
+    List<ITemplateLink> getTemplateLinks(Locale locale);
 
     /**
      * Возвращает идентификатор html тега.
      * @return идентификатор html тега
      */
-    public String getTagId();
-
+    String getTagId();
 }

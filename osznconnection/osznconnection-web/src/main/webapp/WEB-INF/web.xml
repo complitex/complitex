@@ -55,6 +55,32 @@
         <role-name>CHILD_ORGANIZATION_VIEW</role-name>
     </security-role>
 
+    <!--SUBSIDY-->
+
+    <security-role>
+        <role-name>SUBSIDY_GROUP</role-name>
+    </security-role>
+    <security-role>
+        <role-name>SUBSIDY_ACTUAL</role-name>
+    </security-role>
+    <security-role>
+        <role-name>SUBSIDY_FILE</role-name>
+    </security-role>
+
+    <!--PRIVILEGE-->
+    <security-role>
+        <role-name>PRIVILEGE_GROUP</role-name>
+    </security-role>
+    <security-role>
+        <role-name>PRIVILEGE_FORM_2</role-name>
+    </security-role>
+    <security-role>
+        <role-name>PRIVILEGE_PROLONGATION_S</role-name>
+    </security-role>
+    <security-role>
+        <role-name>PRIVILEGE_PROLONGATION_P</role-name>
+    </security-role>
+
      <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>osznconnectionRealm</realm-name>

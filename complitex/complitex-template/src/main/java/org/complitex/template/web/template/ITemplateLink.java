@@ -1,10 +1,10 @@
 package org.complitex.template.web.template;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.io.Serializable;
 import java.util.Locale;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -37,4 +37,8 @@ public interface ITemplateLink extends Serializable {
      * @return tag id.
      */
     String getTagId();
+
+    default String[] getRoles(){
+        return null;
+    }
 }

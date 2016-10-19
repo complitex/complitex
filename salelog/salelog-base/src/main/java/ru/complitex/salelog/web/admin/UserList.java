@@ -226,7 +226,7 @@ public class UserList extends ScrollListPage {
         StringBuilder sb = new StringBuilder();
 
         for (Iterator<UserGroup> it = user.getUserGroups().iterator();;) {
-            sb.append(getString(it.next().getGroupName().name()));
+            sb.append(getString(it.next().getGroupName()));
             if (!it.hasNext()) {
                 return sb.toString();
             }

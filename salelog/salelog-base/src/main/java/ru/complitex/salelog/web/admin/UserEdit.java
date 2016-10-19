@@ -149,9 +149,9 @@ public class UserEdit extends FormTemplatePage {
         CheckGroup<UserGroup> usergroups = new CheckGroup<UserGroup>("usergroups",
                 new PropertyModel<Collection<UserGroup>>(userModel, "userGroups"));
 
-        usergroups.add(new Check<>("ADMINISTRATORS", getUserGroup(userModel.getObject(), ADMINISTRATORS)));
-        usergroups.add(new Check<>("EMPLOYEES", getUserGroup(userModel.getObject(), EMPLOYEES)));
-        usergroups.add(new Check<>("EMPLOYEES_CHILD_VIEW", getUserGroup(userModel.getObject(), EMPLOYEES_CHILD_VIEW)));
+        usergroups.add(new Check<>("ADMINISTRATORS", getUserGroup(userModel.getObject(), ADMINISTRATORS.name())));
+        usergroups.add(new Check<>("EMPLOYEES", getUserGroup(userModel.getObject(), EMPLOYEES.name())));
+        usergroups.add(new Check<>("EMPLOYEES_CHILD_VIEW", getUserGroup(userModel.getObject(), EMPLOYEES_CHILD_VIEW.name())));
 
         form.add(usergroups);
 
@@ -218,18 +218,14 @@ public class UserEdit extends FormTemplatePage {
         return valid;
     }
 
-    private IModel<UserGroup> getUserGroup(User user, UserGroup.GROUP_NAME group_name) {
-        if (!user.getUserGroups().isEmpty()) {
-            for (UserGroup userGroup : user.getUserGroups()) {
-                if (userGroup.getGroupName().equals(group_name)) {
-                    return new Model<UserGroup>(userGroup);
-                }
+    private IModel<UserGroup> getUserGroup(User user, String groupName) {
+        for (UserGroup userGroup : user.getUserGroups()) {
+            if (userGroup.getGroupName().equals(groupName)) {
+                return new Model<>(userGroup);
             }
         }
 
-        UserGroup userGroup = new UserGroup();
-        userGroup.setGroupName(group_name);
-        return new Model<>(userGroup);
+        return new Model<>(new UserGroup(groupName));
     }
 
     private List<LogChange> getLogChanges(User oldUser, User newUser) {
@@ -255,7 +251,7 @@ public class UserEdit extends FormTemplatePage {
         //группы привилегий
         if (oldUser == null) {
             for (UserGroup ng : newUser.getUserGroups()) {
-                logChanges.add(new LogChange(getString("usergroup"), null, getString(ng.getGroupName().name())));
+                logChanges.add(new LogChange(getString("usergroup"), null, getString(ng.getGroupName())));
             }
         } else {
             for (UserGroup og : oldUser.getUserGroups()) { //deleted group
@@ -269,7 +265,7 @@ public class UserEdit extends FormTemplatePage {
                 }
 
                 if (deleted) {
-                    logChanges.add(new LogChange(getString("usergroup"), getString(og.getGroupName().name()), null));
+                    logChanges.add(new LogChange(getString("usergroup"), getString(og.getGroupName()), null));
                 }
             }
 
@@ -284,7 +280,7 @@ public class UserEdit extends FormTemplatePage {
                 }
 
                 if (added) {
-                    logChanges.add(new LogChange(getString("usergroup"), null, getString(ng.getGroupName().name())));
+                    logChanges.add(new LogChange(getString("usergroup"), null, getString(ng.getGroupName())));
                 }
             }
         }

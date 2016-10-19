@@ -1,6 +1,5 @@
 package org.complitex.common.service;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
@@ -45,32 +44,29 @@ public class SessionBean extends AbstractBean {
     private IOrganizationStrategy organizationStrategy;
 
     public boolean isAdmin() {
-        final Set<GROUP_NAME> userGroups = getCurrentUserGroups();
+        List<String> userGroups = getCurrentUserGroups();
 
-        return userGroups != null && userGroups.contains(GROUP_NAME.ADMINISTRATORS);
+        return userGroups != null && userGroups.contains(GROUP_NAME.ADMINISTRATORS.name());
     }
 
-    private Set<GROUP_NAME> getCurrentUserGroups() {
-        final String login = sessionContext.getCallerPrincipal().getName();
-        List<String> ugs = sqlSession().selectList(MAPPING_NAMESPACE + ".getUserGroups", login);
+    private List<String> getCurrentUserGroups() {
+        return sqlSession().selectList(MAPPING_NAMESPACE + ".getUserGroups", sessionContext.getCallerPrincipal().getName());
+    }
 
-        if (ugs != null && !ugs.isEmpty()) {
-            final Set<GROUP_NAME> userGroups = EnumSet.noneOf(GROUP_NAME.class);
-
-            for (String ug : ugs) {
-                GROUP_NAME group;
-                try {
-                    group = GROUP_NAME.valueOf(ug);
-                } catch (IllegalArgumentException e) {
-                    throw new IllegalStateException("User with login `" + login + "` is member of unknown user group: `" + ug + "`", e);
-                }
-                userGroups.add(group);
-            }
-
-            return ImmutableSet.copyOf(userGroups);
+    public boolean hasAnyUserGroup(String... userGroups) {
+        if (userGroups == null){
+            return false;
         }
 
-        return null;
+        List<String> list = getCurrentUserGroups();
+
+        for (String userGroup : userGroups){
+            if (list.contains(userGroup)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Long getCurrentUserId() {

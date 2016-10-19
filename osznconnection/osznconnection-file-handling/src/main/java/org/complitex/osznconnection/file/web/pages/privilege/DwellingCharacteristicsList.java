@@ -48,7 +48,6 @@ import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
-import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +61,7 @@ import java.util.List;
 
 import static org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF.CDUL;
 
-@AuthorizeInstantiation(SecurityRole.AUTHORIZED)
+@AuthorizeInstantiation("PRIVILEGE_GROUP")
 public final class DwellingCharacteristicsList extends TemplatePage {
     private Logger log = LoggerFactory.getLogger(DwellingCharacteristicsList.class);
 

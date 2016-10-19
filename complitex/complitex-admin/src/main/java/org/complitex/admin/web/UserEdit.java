@@ -160,9 +160,18 @@ public class UserEdit extends FormTemplatePage {
         CheckGroup<UserGroup> usergroups = new CheckGroup<>("usergroups",
                 new PropertyModel<Collection<UserGroup>>(userModel, "userGroups"));
 
-        usergroups.add(new Check<>("ADMINISTRATORS", getUserGroup(userModel.getObject(), ADMINISTRATORS)));
-        usergroups.add(new Check<>("EMPLOYEES", getUserGroup(userModel.getObject(), EMPLOYEES)));
-        usergroups.add(new Check<>("EMPLOYEES_CHILD_VIEW", getUserGroup(userModel.getObject(), EMPLOYEES_CHILD_VIEW)));
+        usergroups.add(new Check<>("ADMINISTRATORS", getUserGroup(userModel.getObject(), ADMINISTRATORS.name())));
+        usergroups.add(new Check<>("EMPLOYEES", getUserGroup(userModel.getObject(), EMPLOYEES.name())));
+        usergroups.add(new Check<>("EMPLOYEES_CHILD_VIEW", getUserGroup(userModel.getObject(), EMPLOYEES_CHILD_VIEW.name())));
+
+        //Дополнительные группы привилегий
+        usergroups.add(new ListView<String>("customUserGroups", getTemplateWebApplication().getTemplateLoader().getGroupNames()) {
+            @Override
+            protected void populateItem(ListItem<String> item) {
+                item.add(new Check<>("userGroupName", getUserGroup(userModel.getObject(), item.getModel().getObject())));
+                item.add(new Label("userGroupLabel", new ResourceModel(item.getModel().getObject())));
+            }
+        });
 
         form.add(usergroups);
 
@@ -345,7 +354,7 @@ public class UserEdit extends FormTemplatePage {
         if (user.getUserOrganizations().isEmpty() && user.getUserGroups() != null) {
             boolean isAdmin = false;
             for (UserGroup ug : user.getUserGroups()) {
-                if (ug.getGroupName() == UserGroup.GROUP_NAME.ADMINISTRATORS) {
+                if (ug.getGroupName().equals(UserGroup.GROUP_NAME.ADMINISTRATORS.name())) {
                     isAdmin = true;
                     break;
                 }
@@ -358,18 +367,14 @@ public class UserEdit extends FormTemplatePage {
         return valid;
     }
 
-    private IModel<UserGroup> getUserGroup(User user, UserGroup.GROUP_NAME group_name) {
-        if (!user.getUserGroups().isEmpty()) {
-            for (UserGroup userGroup : user.getUserGroups()) {
-                if (userGroup.getGroupName().equals(group_name)) {
-                    return new Model<>(userGroup);
-                }
+    private IModel<UserGroup> getUserGroup(User user, String groupName) {
+        for (UserGroup userGroup : user.getUserGroups()) {
+            if (userGroup.getGroupName().equals(groupName)) {
+                return new Model<>(userGroup);
             }
         }
 
-        UserGroup userGroup = new UserGroup();
-        userGroup.setGroupName(group_name);
-        return new Model<>(userGroup);
+        return new Model<>(new UserGroup(groupName));
     }
 
     private List<LogChange> getLogChanges(User oldUser, User newUser) {
@@ -395,7 +400,7 @@ public class UserEdit extends FormTemplatePage {
         //группы привилегий
         if (oldUser == null) {
             for (UserGroup ng : newUser.getUserGroups()) {
-                logChanges.add(new LogChange(getString("usergroup"), null, getString(ng.getGroupName().name())));
+                logChanges.add(new LogChange(getString("usergroup"), null, getString(ng.getGroupName())));
             }
         } else {
             for (UserGroup og : oldUser.getUserGroups()) { //deleted group
@@ -409,7 +414,7 @@ public class UserEdit extends FormTemplatePage {
                 }
 
                 if (deleted) {
-                    logChanges.add(new LogChange(getString("usergroup"), getString(og.getGroupName().name()), null));
+                    logChanges.add(new LogChange(getString("usergroup"), getString(og.getGroupName()), null));
                 }
             }
 
@@ -424,7 +429,7 @@ public class UserEdit extends FormTemplatePage {
                 }
 
                 if (added) {
-                    logChanges.add(new LogChange(getString("usergroup"), null, getString(ng.getGroupName().name())));
+                    logChanges.add(new LogChange(getString("usergroup"), null, getString(ng.getGroupName())));
                 }
             }
         }
