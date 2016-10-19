@@ -62,8 +62,10 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
 
         Date date = requestFile.getBeginDate();
 
+        String zheuCode = ""; //todo
+
         Long collectionId = serviceProviderAdapter.createPrivilegeProlongationHeader(requestFile.getUserOrganizationId(),
-                district, date, requestFile.getName(), ids.size(), profit);
+                district, zheuCode, date, requestFile.getName(), ids.size(), profit);
 
         if (collectionId == null){
             throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_collection_id"));
@@ -79,18 +81,15 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
             switch (collectionId.intValue()){
                 case -1: //Не найден р-он
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_district_not_found"), district);
-                case -2: //Дублируется имя файла для заданного месяца
-                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_filename_duplicate"),
-                            requestFile.getName(), date);
                 case -3: //Неправильное кол-во записей в файле
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_record_count"),
                             requestFile.getLoadedRecordCount());
-                case -4: //Не указана зависимость от дохода
-                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_profit"));
                 case -5: //Не указан месяц файла
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_month"));
                 case -6: //Не указано имя файла
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_filename"));
+                case -7: //Не определена организация
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_organization_undefined"), zheuCode);
             }
         }
 

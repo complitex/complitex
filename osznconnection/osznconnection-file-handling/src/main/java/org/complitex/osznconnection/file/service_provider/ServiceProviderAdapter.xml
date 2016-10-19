@@ -171,6 +171,7 @@
     <select id="createPrivHeader" statementType="CALLABLE" parameterType="map">
         {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreatePrivHeader(
           #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
           #{pDate, mode=IN, javaType=DATE, jdbcType=DATE},
           #{pFile, mode=IN, javaType=string, jdbcType=VARCHAR},
           #{pCnt, mode=IN, javaType=int, jdbcType=NUMERIC},
@@ -211,4 +212,29 @@
           #{data, mode=OUT, jdbcType=CURSOR, resultMap=lodgerResultMap}
         )}
     </select>
+
+    <select id="createSubsHeader" statementType="CALLABLE" parameterType="map">
+        #{#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreateSubsHeader(
+          #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pDate, mode=IN, javaType=DATE, jdbcType=DATE},
+          #{pFile, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pCnt, mode=IN, javaType=int, jdbcType=NUMERIC}
+          )}
+    </select>
+
+    <insert id="insertBuffSubs" parameterType="org.complitex.osznconnection.file.entity.subsidy.Subsidy" useGeneratedKeys="false">
+        insert into COMP.Z#BUFF_SUBS
+        (
+          ID, COLLECTION_ID, C_LAST_NAME, C_FIRST_NAME, C_MIDDLE_NAME, C_DISTRICT, C_STREET, C_HOUSE, C_FLAT,
+          C_ACC_CODE, C_PART, C_EXT_STREET_NAME, C_EXT_ID, C_EXT_STREET_SORT, C_DATE_B, C_DATE_E, C_SUMMA, C_SUBS,
+          C_NM_PAY, C_OBS, C_NUMM
+        )
+        values
+        (
+          COMP.SEQ_ID.NEXTVAL, #{p.dbfFields.COLLECTION_ID}, #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{},
+          #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{}
+        )
+
+    </insert>
 </mapper>

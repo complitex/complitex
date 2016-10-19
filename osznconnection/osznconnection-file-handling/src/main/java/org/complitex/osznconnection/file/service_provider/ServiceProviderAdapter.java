@@ -1402,12 +1402,13 @@ public class ServiceProviderAdapter extends AbstractBean {
         return new Cursor<>((Integer) params.get("resultCode"), (List) params.get("data"));
     }
 
-    public Long createPrivilegeProlongationHeader(Long userOrganizationId, String district, Date date, String fileName,
+    public Long createPrivilegeProlongationHeader(Long userOrganizationId, String district, String zheuCode, Date date, String fileName,
                                                   Integer recordsCount, boolean profit){
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
 
         Map<String, Object> map = new HashMap<>();
         map.put("pDistrName", district);
+        map.put("pZheuCode", zheuCode);
         map.put("pDate", date);
         map.put("pFile", fileName);
         map.put("pCnt", recordsCount);
@@ -1443,5 +1444,21 @@ public class ServiceProviderAdapter extends AbstractBean {
         log.info("getLodgers {}", map);
 
         return new Cursor<>((Integer) map.get("resultCode"), (List<Lodger>) map.get("data"));
+    }
+
+    public Long createSubsHeader(Long userOrganizationId, String district, String zheuCode, Date date, String fileName,
+                                 Integer recordsCount){
+        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("pDistrName", district);
+        map.put("pZheuCode", zheuCode);
+        map.put("pDate", date);
+        map.put("pFile", fileName);
+        map.put("pCnt", recordsCount);
+
+        sqlSession(dataSource).selectOne(NS + ".createSubsHeader", map);
+
+        return (Long) map.get("collectionId");
     }
 }
