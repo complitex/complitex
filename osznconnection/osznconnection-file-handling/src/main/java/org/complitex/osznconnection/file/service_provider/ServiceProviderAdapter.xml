@@ -214,7 +214,7 @@
     </select>
 
     <select id="createSubsHeader" statementType="CALLABLE" parameterType="map">
-        #{#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreateSubsHeader(
+        {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreateSubsHeader(
           #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
           #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
           #{pDate, mode=IN, javaType=DATE, jdbcType=DATE},
@@ -223,7 +223,7 @@
           )}
     </select>
 
-    <insert id="insertBuffSubs" parameterType="org.complitex.osznconnection.file.entity.subsidy.Subsidy" useGeneratedKeys="false">
+    <!--<insert id="insertBuffSubs" parameterType="org.complitex.osznconnection.file.entity.subsidy.Subsidy" useGeneratedKeys="false">
         insert into COMP.Z#BUFF_SUBS
         (
           ID, COLLECTION_ID, C_LAST_NAME, C_FIRST_NAME, C_MIDDLE_NAME, C_DISTRICT, C_STREET, C_HOUSE, C_FLAT,
@@ -236,5 +236,5 @@
           #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{}
         )
 
-    </insert>
+    </insert>-->
 </mapper>
