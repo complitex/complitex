@@ -17,29 +17,29 @@ public class NameBean extends AbstractBean{
     /*select names by filter*/
 
     @SuppressWarnings({"unchecked"})
-    public List<String> getFirstNames(final String filter, final int size){
+    public List<String> getFirstNames(String filter,  int count){
         return sqlSession().selectList(NS + ".selectFirstNames",
                 new HashMap(){{
                     put("filter", filter);
-                    put("size", size);
+                    put("count", count);
                 }});
     }
 
     @SuppressWarnings({"unchecked"})
-    public List<String> getMiddleNames(final String filter, final int size){
+    public List<String> getMiddleNames(String filter, int count){
         return sqlSession().selectList(NS + ".selectMiddleNames",
                 new HashMap(){{
                     put("filter", filter);
-                    put("size", size);
+                    put("count", count);
                 }});
     }
 
     @SuppressWarnings({"unchecked"})
-    public List<String> getLastNames(final String filter, final int size){
+    public List<String> getLastNames(String filter, int count){
         return sqlSession().selectList(NS + ".selectLastNames",
                 new HashMap(){{
                     put("filter", filter);
-                    put("size", size);
+                    put("count", count);
                 }});
     }
 
