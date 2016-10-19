@@ -2,7 +2,6 @@ package org.complitex.osznconnection.file.web.pages.privilege;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
-import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 /**
  * inheaven on 05.04.2016.
  */
-@AuthorizeInstantiation(SecurityRole.AUTHORIZED)
+@AuthorizeInstantiation("PRIVILEGE_GROUP")
 public class PrivilegeFileGroupList extends TemplatePage{
     private PrivilegeFileGroupListPanel privilegeFileGroupListPanel;
 

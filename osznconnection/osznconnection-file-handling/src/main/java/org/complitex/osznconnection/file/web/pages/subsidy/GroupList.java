@@ -28,8 +28,6 @@ import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel
 import org.complitex.osznconnection.file.web.pages.payment.PaymentList;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
-import org.complitex.template.web.pages.ScrollListPage;
-import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +38,7 @@ import java.util.Map;
 
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
-@AuthorizeInstantiation(SecurityRole.AUTHORIZED)
+@AuthorizeInstantiation("SUBSIDY_GROUP")
 public class GroupList extends TemplatePage {
 
     @EJB

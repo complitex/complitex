@@ -16,7 +16,6 @@ import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
-import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
@@ -29,7 +28,7 @@ import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 /**
  * @author inheaven on 28.06.16.
  */
-@AuthorizeInstantiation(SecurityRole.AUTHORIZED)
+@AuthorizeInstantiation({"PRIVILEGE_PROLONGATION_S", "PRIVILEGE_PROLONGATION_P"})
 public class PrivilegeProlongationFileList extends TemplatePage {
     @EJB
     private ProcessManagerBean processManagerBean;

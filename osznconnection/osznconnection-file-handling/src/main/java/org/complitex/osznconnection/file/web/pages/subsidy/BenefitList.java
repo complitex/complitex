@@ -41,7 +41,6 @@ import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;
-import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
@@ -49,11 +48,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
-@AuthorizeInstantiation(SecurityRole.AUTHORIZED)
+@AuthorizeInstantiation("SUBSIDY_GROUP")
 public final class BenefitList extends TemplatePage {
 
     public static final String FILE_ID = "request_file_id";

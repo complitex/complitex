@@ -30,15 +30,10 @@ import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.process.*;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.pages.ScrollListPage;
-import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;
 
-/**
- *
- * @author Artem
- */
-@AuthorizeInstantiation(SecurityRole.AUTHORIZED)
+@AuthorizeInstantiation("PRIVILEGE_FORM_2")
 public final class FacilityForm2FileList extends ScrollListPage {
 
     private static final int AJAX_TIMER = 4;
