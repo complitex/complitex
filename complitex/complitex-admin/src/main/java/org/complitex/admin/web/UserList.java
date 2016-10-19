@@ -112,6 +112,8 @@ public class UserList extends ScrollListPage {
 
         filterForm.add(new TextField<String>("login", new PropertyModel<String>(filterModel, "login")));
         filterForm.add(new AttributeFiltersPanel("user_info", filter.getAttributeFilters()));
+
+        //todo string group
         filterForm.add(new DropDownChoice<UserGroup.GROUP_NAME>("usergroups",
                 new PropertyModel<UserGroup.GROUP_NAME>(filterModel, "groupName"),
                 new ListModel<UserGroup.GROUP_NAME>(Arrays.asList(UserGroup.GROUP_NAME.values())),
@@ -226,7 +228,7 @@ public class UserList extends ScrollListPage {
         StringBuilder sb = new StringBuilder();
 
         for (Iterator<UserGroup> it = user.getUserGroups().iterator();;) {
-            sb.append(getString(it.next().getGroupName().name()));
+            sb.append(getString(it.next().getGroupName()));
             if (!it.hasNext()) {
                 return sb.toString();
             }

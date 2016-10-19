@@ -15,7 +15,7 @@
     </web-components>
     <sidebar>
         <menu class="org.complitex.osznconnection.file.web.menu.SubsidyRequestMenu"/>
-        <menu class="org.complitex.osznconnection.file.web.menu.FacilityRequestMenu"/>
+        <menu class="org.complitex.osznconnection.file.web.menu.PrivilegeRequestMenu"/>
         <menu class="org.complitex.osznconnection.file.web.menu.CorrectionMenu"/>
         <menu class="org.complitex.address.menu.AddressMenu"/>
         <menu class="org.complitex.osznconnection.file.web.menu.OsznDictionaryMenu"/>
@@ -23,4 +23,13 @@
         <menu class="org.complitex.osznconnection.file.web.AdminTemplateMenu"/>
         <menu class="org.complitex.osznconnection.file.web.menu.OsznDescriptionMenu"/>
     </sidebar>
+    <groups>
+        <group name="SUBSIDY_GROUP"/>
+        <group name="SUBSIDY_ACTUAL"/>
+        <group name="SUBSIDY_FILE"/>
+        <group name="PRIVILEGE_GROUP"/>
+        <group name="PRIVILEGE_FORM_2"/>
+        <group name="PRIVILEGE_PROLONGATION_S"/>
+        <group name="PRIVILEGE_PROLONGATION_P"/>
+    </groups>
 </template>

@@ -36,6 +36,7 @@ import javax.ejb.EJB;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -129,6 +130,7 @@ public abstract class TemplatePage extends WebPage {
         }.setVisible(isUserAuthorized));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -215,7 +217,12 @@ public abstract class TemplatePage extends WebPage {
             }
 
             add(new Label("menu_title", menu.getTitle(getLocale())));
-            add(new ListView<ITemplateLink>("menu_items", menu.getTemplateLinks(getLocale())) {
+
+            List<ITemplateLink> templateLinks = menu.getTemplateLinks(getLocale()).stream()
+                    .filter(l -> l.getRoles() == null || sessionBean.hasAnyUserGroup(l.getRoles()))
+                    .collect(Collectors.toList());
+
+            add(new ListView<ITemplateLink>("menu_items", templateLinks) {
 
                 @Override
                 protected void populateItem(ListItem<ITemplateLink> item) {

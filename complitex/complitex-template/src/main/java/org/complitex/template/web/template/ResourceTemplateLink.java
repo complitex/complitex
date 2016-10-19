@@ -15,6 +15,7 @@ public class ResourceTemplateLink implements ITemplateLink{
     private PageParameters pageParameters;
     private String tagId;
     private ResourceTemplateMenu resourceTemplateMenu;
+    private String[] roles;
 
     public ResourceTemplateLink(String key, ResourceTemplateMenu resourceTemplateMenu, Class<? extends Page> page,
                                 PageParameters pageParameters, String tagId) {
@@ -25,10 +26,27 @@ public class ResourceTemplateLink implements ITemplateLink{
         this.tagId = tagId;
     }
 
+    public ResourceTemplateLink(String key, ResourceTemplateMenu resourceTemplateMenu, Class<? extends Page> page,
+                                PageParameters pageParameters, String tagId, String[] roles) {
+        this.key = key;
+        this.page = page;
+        this.resourceTemplateMenu = resourceTemplateMenu;
+        this.pageParameters = pageParameters;
+        this.tagId = tagId;
+        this.roles = roles;
+    }
+
     public ResourceTemplateLink(String key, ResourceTemplateMenu resourceTemplateMenu, Class<? extends Page> page) {
         this.key = key;
         this.page = page;
         this.resourceTemplateMenu = resourceTemplateMenu;
+    }
+
+    public ResourceTemplateLink(String key, ResourceTemplateMenu resourceTemplateMenu, Class<? extends Page> page, String[] roles) {
+        this.key = key;
+        this.page = page;
+        this.resourceTemplateMenu = resourceTemplateMenu;
+        this.roles = roles;
     }
 
     @Override
@@ -49,5 +67,10 @@ public class ResourceTemplateLink implements ITemplateLink{
     @Override
     public String getTagId() {
         return tagId != null ? tagId : key;
+    }
+
+    @Override
+    public String[] getRoles() {
+        return roles;
     }
 }

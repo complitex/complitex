@@ -88,8 +88,16 @@ public abstract class ResourceTemplateMenu implements ITemplateMenu {
         templateLinks.add(new ResourceTemplateLink(key, this, page));
     }
 
+    protected void add(String key, Class<? extends Page> page, String[] roles){
+        templateLinks.add(new ResourceTemplateLink(key, this, page, roles));
+    }
+
     protected void add(String key, Class<? extends Page> page, PageParameters pageParameters){
         templateLinks.add(new ResourceTemplateLink(key, this, page, pageParameters, null));
+    }
+
+    protected void add(String key, Class<? extends Page> page, PageParameters pageParameters, String[] roles){
+        templateLinks.add(new ResourceTemplateLink(key, this, page, pageParameters, null, roles));
     }
 
     protected void addDictionary(String key){

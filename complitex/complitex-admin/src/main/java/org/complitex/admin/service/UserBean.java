@@ -32,12 +32,11 @@ public class UserBean extends AbstractBean {
     public User newUser() {
         User user = new User();
 
-        user.setUserGroups(new ArrayList<UserGroup>());
+        user.setUserGroups(new ArrayList<>());
         user.setUserInfo(userInfoStrategy.newInstance());
 
         return user;
     }
-
 
     public boolean isUniqueLogin(String login) {
         return (Boolean) sqlSession().selectOne(STATEMENT_PREFIX + ".isUniqueLogin", login);

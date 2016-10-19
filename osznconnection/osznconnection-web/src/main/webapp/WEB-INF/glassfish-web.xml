@@ -58,4 +58,38 @@
         <role-name>CHILD_ORGANIZATION_VIEW</role-name>
         <group-name>EMPLOYEES_CHILD_VIEW</group-name>
     </security-role-mapping>
+
+    <!--SUBSIDY-->
+
+    <security-role-mapping>
+        <role-name>SUBSIDY_GROUP</role-name>
+        <group-name>SUBSIDY_GROUP</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>SUBSIDY_ACTUAL</role-name>
+        <group-name>SUBSIDY_ACTUAL</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>SUBSIDY_FILE</role-name>
+        <group-name>SUBSIDY_FILE</group-name>
+    </security-role-mapping>
+
+    <!--PRIVILEGE-->
+
+    <security-role-mapping>
+        <role-name>PRIVILEGE_GROUP</role-name>
+        <group-name>PRIVILEGE_GROUP</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>PRIVILEGE_FORM_2</role-name>
+        <group-name>PRIVILEGE_FORM_2</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>PRIVILEGE_PROLONGATION_S</role-name>
+        <group-name>PRIVILEGE_PROLONGATION_S</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>PRIVILEGE_PROLONGATION_P</role-name>
+        <group-name>PRIVILEGE_PROLONGATION_P</group-name>
+    </security-role-mapping>
 </glassfish-web-app>

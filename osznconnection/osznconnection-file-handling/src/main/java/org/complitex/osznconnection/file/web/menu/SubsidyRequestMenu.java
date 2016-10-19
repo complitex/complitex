@@ -1,22 +1,24 @@
 package org.complitex.osznconnection.file.web.menu;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.osznconnection.file.web.pages.subsidy.ActualPaymentFileList;
+import org.complitex.osznconnection.file.web.pages.subsidy.GroupList;
+import org.complitex.osznconnection.file.web.pages.subsidy.SubsidyFileList;
+import org.complitex.osznconnection.file.web.pages.subsidy.SubsidyTarifFileList;
 import org.complitex.template.web.template.ITemplateLink;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.osznconnection.file.web.pages.subsidy.ActualPaymentFileList;
-import org.complitex.osznconnection.file.web.pages.subsidy.GroupList;
-import org.complitex.osznconnection.file.web.pages.subsidy.SubsidyFileList;
-import org.complitex.osznconnection.file.web.pages.subsidy.SubsidyTarifFileList;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 27.08.2010 17:31:55
  */
+@AuthorizeInstantiation({"SUBSIDY_GROUP", "SUBSIDY_ACTUAL", "SUBSIDY_FILE"})
 public class SubsidyRequestMenu extends ResourceTemplateMenu {
 
     @Override
@@ -49,6 +51,11 @@ public class SubsidyRequestMenu extends ResourceTemplateMenu {
             public String getTagId() {
                 return "RequestFileGroupList";
             }
+
+            @Override
+            public String[] getRoles() {
+                return new String[]{"SUBSIDY_GROUP"};
+            }
         });
 
         links.add(new ITemplateLink() {
@@ -72,6 +79,11 @@ public class SubsidyRequestMenu extends ResourceTemplateMenu {
             public String getTagId() {
                 return "ActualPaymentFileList";
             }
+
+            @Override
+            public String[] getRoles() {
+                return new String[]{"SUBSIDY_ACTUAL"};
+            }
         });
 
         links.add(new ITemplateLink() {
@@ -94,6 +106,11 @@ public class SubsidyRequestMenu extends ResourceTemplateMenu {
             @Override
             public String getTagId() {
                 return "SubsidyFileList";
+            }
+
+            @Override
+            public String[] getRoles() {
+                return new String[]{"SUBSIDY_FILE"};
             }
         });
 

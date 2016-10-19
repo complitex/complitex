@@ -7,17 +7,22 @@ import java.io.Serializable;
  *         Date: 21.07.2010 15:26:28
  */
 public class UserGroup implements Serializable{
-    public static enum GROUP_NAME{
+    public enum GROUP_NAME{
         ADMINISTRATORS,
         EMPLOYEES,
         EMPLOYEES_CHILD_VIEW
     }
 
     private Long id;
-
     private String login;
+    private String groupName;
 
-    private GROUP_NAME groupName;
+    public UserGroup() {
+    }
+
+    public UserGroup(String groupName) {
+        this.groupName = groupName;
+    }
 
     public Long getId() {
         return id;
@@ -35,11 +40,11 @@ public class UserGroup implements Serializable{
         this.login = login;
     }
 
-    public GROUP_NAME getGroupName() {
+    public String getGroupName() {
         return groupName;
     }
 
-    public void setGroupName(GROUP_NAME groupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
 
