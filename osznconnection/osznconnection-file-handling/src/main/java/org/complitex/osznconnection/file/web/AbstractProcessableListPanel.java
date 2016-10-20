@@ -425,8 +425,9 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                     @Override
                     public boolean isEnabled() {
-                        return organizationStrategy.getServiceProviderId(rf.getEdrpou(),
-                                rf.getOrganizationId(), rf.getUserOrganizationId()) == null;
+                        return true;
+//                        return organizationStrategy.getServiceProviderId(rf.getEdrpou(),
+//                                rf.getOrganizationId(), rf.getUserOrganizationId()) == null;
                     }
                 });
 

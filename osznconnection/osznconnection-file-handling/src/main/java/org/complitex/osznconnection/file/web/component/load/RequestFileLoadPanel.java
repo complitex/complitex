@@ -82,7 +82,7 @@ public abstract class RequestFileLoadPanel extends Panel {
                 OsznOrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
         Long currentUserOrganizationId = sessionBean.getCurrentUserOrganizationId(getSession());
-        userOrganizationContainer.setVisible(currentUserOrganizationId == null);
+        //userOrganizationContainer.setVisible(currentUserOrganizationId == null);
 
         final DropDownChoice<Integer> year = new YearDropDownChoice("year", new Model<>());
         year.setRequired(true);
