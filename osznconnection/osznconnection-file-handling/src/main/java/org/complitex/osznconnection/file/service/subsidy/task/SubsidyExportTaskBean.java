@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -67,11 +66,11 @@ public class SubsidyExportTaskBean extends AbstractTaskBean<RequestFile>{
 
         List<Subsidy> list = subsidyBean.getSubsidies(requestFile.getId());
 
-//        Date date = requestFile.getBeginDate(); todo
+        Date date = requestFile.getBeginDate();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2016, Calendar.DECEMBER, 1);
-        Date date = calendar.getTime();
+//        Calendar calendar = Calendar.getInstance(); test
+//        calendar.set(2016, Calendar.DECEMBER, 1);
+//        Date date = calendar.getTime();
 
         String zheuCode = osznOrganizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
