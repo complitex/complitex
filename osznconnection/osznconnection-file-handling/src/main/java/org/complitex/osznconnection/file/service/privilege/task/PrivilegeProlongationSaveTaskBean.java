@@ -62,7 +62,8 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
 
         Date date = requestFile.getBeginDate();
 
-        String zheuCode = ""; //todo
+        String zheuCode =  osznOrganizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
         Long collectionId = serviceProviderAdapter.createPrivilegeProlongationHeader(requestFile.getUserOrganizationId(),
                 district, zheuCode, date, requestFile.getName(), ids.size(), profit);

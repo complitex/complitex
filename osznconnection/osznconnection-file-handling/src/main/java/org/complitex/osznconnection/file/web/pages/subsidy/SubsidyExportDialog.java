@@ -258,15 +258,15 @@ public class SubsidyExportDialog extends Panel {
 
                 switch (model.getObject().getExportType()){
                     case BALANCE_HOLDER:
-                        processManagerBean.exportSubsidy(getIds(p.getBalanceHolders()), BALANCE_HOLDER,
+                        processManagerBean.exportSubsidyMasterData(getIds(p.getBalanceHolders()), BALANCE_HOLDER,
                                 p.getRequestFileType(), p.getDate());
                         break;
                     case DISTRICT:
-                        processManagerBean.exportSubsidy(getIds(p.getDistricts()), DISTRICT,
+                        processManagerBean.exportSubsidyMasterData(getIds(p.getDistricts()), DISTRICT,
                                 p.getRequestFileType(), p.getDate());
                         break;
                     case SERVICING_ORGANIZATION:
-                        processManagerBean.exportSubsidy(getIds(p.getServicingOrganizations()), SERVICING_ORGANIZATION,
+                        processManagerBean.exportSubsidyMasterData(getIds(p.getServicingOrganizations()), SERVICING_ORGANIZATION,
                                 p.getRequestFileType(), p.getDate());
                         break;
                 }

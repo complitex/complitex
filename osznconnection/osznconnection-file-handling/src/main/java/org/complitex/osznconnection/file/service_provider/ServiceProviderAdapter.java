@@ -10,6 +10,7 @@ import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.ResourceUtil;
+import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.organization.strategy.ServiceStrategy;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
@@ -1458,7 +1459,38 @@ public class ServiceProviderAdapter extends AbstractBean {
         map.put("pCnt", recordsCount);
 
         sqlSession(dataSource).selectOne(NS + ".createSubsHeader", map);
+//        map.put("collectionId", 1L); //todo test
 
         return (Long) map.get("collectionId");
+    }
+
+    public void exportSubsidy(Long userOrganizationId, List<Subsidy> subsidies){
+        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
+
+        Long serviceId = organizationStrategy.getDomainObject(userOrganizationId).getAttribute(OrganizationStrategy.SERVICE).getValueId();
+
+        try (SqlSession sqlSessionManager = sqlSessionManager(dataSource).openSession(ExecutorType.BATCH)) {
+            subsidies.forEach(s -> {
+                if (s.getAccountNumber() == null){
+                    s.setAccountNumber(s.getPuAccountNumber());
+                }
+
+                if (serviceId == 1){
+                    s.getDbfFields().put("C_SUMMA ", s.getField(SubsidyDBF.SM1));
+                    s.getDbfFields().put("C_SUBS", s.getField(SubsidyDBF.SB1));
+                    s.getDbfFields().put("C_NM_PAY", s.getField(SubsidyDBF.P1));
+                    s.getDbfFields().put("C_OBS", s.getField(SubsidyDBF.OB1));
+                }else if (serviceId == 7){
+                    s.getDbfFields().put("C_SUMMA ", s.getField(SubsidyDBF.SM7));
+                    s.getDbfFields().put("C_SUBS", s.getField(SubsidyDBF.SB7));
+                    s.getDbfFields().put("C_NM_PAY", s.getField(SubsidyDBF.P7));
+                    s.getDbfFields().put("C_OBS", s.getField(SubsidyDBF.OB7));
+                }
+
+                sqlSessionManager.insert(NS + ".insertBuffSubs", s);
+            });
+
+            sqlSessionManager.commit();
+        }
     }
 }

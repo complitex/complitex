@@ -223,18 +223,21 @@
           )}
     </select>
 
-    <!--<insert id="insertBuffSubs" parameterType="org.complitex.osznconnection.file.entity.subsidy.Subsidy" useGeneratedKeys="false">
+    <insert id="insertBuffSubs" parameterType="org.complitex.osznconnection.file.entity.subsidy.Subsidy" useGeneratedKeys="false">
         insert into COMP.Z#BUFF_SUBS
         (
           ID, COLLECTION_ID, C_LAST_NAME, C_FIRST_NAME, C_MIDDLE_NAME, C_DISTRICT, C_STREET, C_HOUSE, C_FLAT,
-          C_ACC_CODE, C_PART, C_EXT_STREET_NAME, C_EXT_ID, C_EXT_STREET_SORT, C_DATE_B, C_DATE_E, C_SUMMA, C_SUBS,
-          C_NM_PAY, C_OBS, C_NUMM
+          C_STATUS, C_ACC_CODE, C_PART, C_EXT_STREET_NAME, C_EXT_ID, C_EXT_STREET_SORT, C_DATE_B, C_DATE_E,
+          C_SUMMA, C_SUBS, C_NM_PAY, C_OBS, C_NUMM
         )
         values
         (
-          COMP.SEQ_ID.NEXTVAL, #{p.dbfFields.COLLECTION_ID}, #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{},
-          #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{}, #{}
+          COMP.SEQ_ID.NEXTVAL, #{dbfFields.COLLECTION_ID}, #{lastName}, #{firstName}, #{middleName},
+          #{dbfFields.ID_RAJ}, #{dbfFields.VULCOD}, #{dbfFields.BLD}, #{dbfFields.FLAT}, 0,
+          #{accountNumber}, #{dbfFields.CORP}, #{dbfFields.NAME_V}, #{dbfFields.NUMB}, #{dbfFields.CAT_V},
+          #{dbfFields.DAT1}, #{dbfFields.DAT2}, #{dbfFields.C_SUMMA}, #{dbfFields.C_SUBS}, #{dbfFields.C_NM_PAY},
+          #{dbfFields.C_OBS}, #{dbfFields.NUMM}
         )
 
-    </insert>-->
+    </insert>
 </mapper>

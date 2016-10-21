@@ -82,7 +82,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
 
     @Override
     protected ProcessType getExportProcessType() {
-        return ProcessType.EXPORT_SUBSIDY;
+        return ProcessType.EXPORT_SUBSIDY_MASTER_DATA;
     }
 
     @Override
@@ -108,7 +108,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
 
     @Override
     protected void export(AjaxRequestTarget target, List<Long> selectedFileIds) {
-        subsidyExportDialog.open(target);
+        processManagerBean.exportSubsidy(selectedFileIds);
     }
 
     @Override
