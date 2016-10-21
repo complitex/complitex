@@ -20,7 +20,7 @@
         
         <result column="date" property="date"/>
         
-        <result column="street_correction_id" property="streetCorrectionId"/>
+        <!--<result column="street_correction_id" property="streetCorrectionId"/>-->
         
         <result column="last_name_cyr" property="lastName"/>
         <result column="first_name_cyr" property="firstName"/>
