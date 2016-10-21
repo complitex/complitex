@@ -1476,12 +1476,12 @@ public class ServiceProviderAdapter extends AbstractBean {
                 }
 
                 if (serviceId == 1){
-                    s.getDbfFields().put("C_SUMMA ", s.getField(SubsidyDBF.SM1));
+                    s.getDbfFields().put("C_SUMMA", s.getField(SubsidyDBF.SM1));
                     s.getDbfFields().put("C_SUBS", s.getField(SubsidyDBF.SB1));
                     s.getDbfFields().put("C_NM_PAY", s.getField(SubsidyDBF.P1));
                     s.getDbfFields().put("C_OBS", s.getField(SubsidyDBF.OB1));
                 }else if (serviceId == 7){
-                    s.getDbfFields().put("C_SUMMA ", s.getField(SubsidyDBF.SM7));
+                    s.getDbfFields().put("C_SUMMA", s.getField(SubsidyDBF.SM7));
                     s.getDbfFields().put("C_SUBS", s.getField(SubsidyDBF.SB7));
                     s.getDbfFields().put("C_NM_PAY", s.getField(SubsidyDBF.P7));
                     s.getDbfFields().put("C_OBS", s.getField(SubsidyDBF.OB7));
