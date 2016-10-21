@@ -441,7 +441,7 @@ public class ProcessManagerBean {
                 SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
-    public void exportSubsidy(List<Long> ids, ExportType type, RequestFileType requestFileType, Date date) {
+    public void exportSubsidyMasterData(List<Long> ids, ExportType type, RequestFileType requestFileType, Date date) {
         List<SubsidyMasterDataFile> list = subsidyBean.getSubsidyMasterDataFiles(ids, type, date);
 
         //set type
@@ -449,7 +449,13 @@ public class ProcessManagerBean {
             f.setType(requestFileType);
         }
 
-        execute(EXPORT_SUBSIDY, SubsidyExportTaskBean.class, list, null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
+        execute(EXPORT_SUBSIDY_MASTER_DATA, SubsidyMasterDataExportTaskBean.class, list, null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
+    }
+
+    public void exportSubsidy(List<Long> ids) {
+        execute(EXPORT_SUBSIDY, PrivilegeProlongationSaveTaskBean.class,
+                getRequestFiles(ids, EXPORT_SUBSIDY), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT,
+                null);
     }
 
     /*SubsidyTarif*/

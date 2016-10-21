@@ -29,10 +29,6 @@ import java.util.Locale;
 import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.BILLING_TYPE;
 import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE;
 
-/**
- *
- * @author Artem
- */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
 public class OsznOrganizationStrategy extends OrganizationStrategy {
     /**

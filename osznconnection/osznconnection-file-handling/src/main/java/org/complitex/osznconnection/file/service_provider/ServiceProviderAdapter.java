@@ -1461,4 +1461,34 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         return (Long) map.get("collectionId");
     }
+
+    public void exportSubsidy(Long organizationId, Long userOrganizationId, List<Subsidy> subsidies){
+        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
+
+//        organizationStrategy.getDomainObject()
+
+
+
+        try (SqlSession sqlSessionManager = sqlSessionManager(dataSource).openSession(ExecutorType.BATCH)) {
+            subsidies.forEach(s -> {
+                //SM
+                s.getDbfFields().put("C_SUMMA ", null);
+
+                //SB
+                s.getDbfFields().put("C_SUBS", null);
+
+                //P
+                s.getDbfFields().put("C_NM_PAY", null);
+
+                //OB
+                s.getDbfFields().put("C_OBS", null);
+
+
+
+//                sqlSessionManager.insert(NS + ".insertBuffSubs", s);
+            });
+
+            sqlSessionManager.commit();
+        }
+    }
 }

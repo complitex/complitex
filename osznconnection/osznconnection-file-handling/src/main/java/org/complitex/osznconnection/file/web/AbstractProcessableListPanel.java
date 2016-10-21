@@ -153,7 +153,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     }
 
     protected ProcessType getExportProcessType(){
-        return ProcessType.EXPORT_SUBSIDY;
+        return ProcessType.EXPORT_SUBSIDY_MASTER_DATA;
     }
 
     protected abstract MonthParameterViewMode getLoadMonthParameterViewMode();
