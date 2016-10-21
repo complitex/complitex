@@ -233,8 +233,8 @@
         values
         (
           COMP.SEQ_ID.NEXTVAL, #{dbfFields.COLLECTION_ID}, #{lastName}, #{firstName}, #{middleName},
-          #{dbfFields.ID_RAJ}, #{dbfFields.VULCOD}, #{dbfFields.BLD}, #{dbfFields.FLAT}, 0,
-          #{accountNumber}, #{dbfFields.CORP}, #{dbfFields.NAME_V}, #{dbfFields.NUMB}, #{dbfFields.CAT_V},
+          #{dbfFields.ID_RAJ}, #{dbfFields.VULCOD}, #{dbfFields.BLD_CYR}, #{dbfFields.FLAT_CYR}, 0,
+          #{accountNumber}, #{dbfFields.CORP_CYR}, #{dbfFields.NAME_V_CYR}, #{dbfFields.NUMB}, #{dbfFields.CAT_V_CYR},
           #{dbfFields.DAT1}, #{dbfFields.DAT2}, #{dbfFields.C_SUMMA}, #{dbfFields.C_SUBS}, #{dbfFields.C_NM_PAY},
           #{dbfFields.C_OBS}, #{dbfFields.NUMM}
         )

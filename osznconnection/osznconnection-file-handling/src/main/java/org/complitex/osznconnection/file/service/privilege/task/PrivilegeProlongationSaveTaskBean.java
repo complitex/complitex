@@ -7,7 +7,9 @@ import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.SaveException;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeProlongationBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
@@ -42,8 +44,14 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
     @EJB
     private PrivilegeProlongationBean privilegeProlongationBean;
 
+    @EJB
+    private RequestFileBean requestFileBean;
+
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
+        requestFile.setStatus(RequestFileStatus.SAVING);
+        requestFileBean.save(requestFile);
+
         String district = null;
 
         DomainObject organization = osznOrganizationStrategy.getDomainObject(requestFile.getOrganizationId());
@@ -79,6 +87,10 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
 
             serviceProviderAdapter.exportPrivilegeProlongation(requestFile.getUserOrganizationId(), list);
         }else {
+            requestFile.setStatus(RequestFileStatus.SAVE_ERROR);
+            requestFileBean.save(requestFile);
+
+            //noinspection Duplicates
             switch (collectionId.intValue()){
                 case -1: //Не найден р-он
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_district_not_found"), district);
