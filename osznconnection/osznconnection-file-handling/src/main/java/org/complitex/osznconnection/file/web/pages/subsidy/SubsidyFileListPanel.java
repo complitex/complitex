@@ -108,7 +108,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
 
     @Override
     protected void export(AjaxRequestTarget target, List<Long> selectedFileIds) {
-        subsidyExportDialog.open(target);
+        processManagerBean.exportSubsidy(selectedFileIds);
     }
 
     @Override

@@ -453,7 +453,7 @@ public class ProcessManagerBean {
     }
 
     public void exportSubsidy(List<Long> ids) {
-        execute(EXPORT_SUBSIDY, PrivilegeProlongationSaveTaskBean.class,
+        execute(EXPORT_SUBSIDY, SubsidyExportTaskBean.class,
                 getRequestFiles(ids, EXPORT_SUBSIDY), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT,
                 null);
     }

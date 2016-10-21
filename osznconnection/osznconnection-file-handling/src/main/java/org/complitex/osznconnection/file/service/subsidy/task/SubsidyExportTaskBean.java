@@ -7,7 +7,9 @@ import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.SaveException;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
@@ -17,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +45,14 @@ public class SubsidyExportTaskBean extends AbstractTaskBean<RequestFile>{
     @EJB
     private SubsidyBean subsidyBean;
 
+    @EJB
+    private RequestFileBean requestFileBean;
+
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
+        requestFile.setStatus(RequestFileStatus.SAVING);
+        requestFileBean.save(requestFile);
+
         String district = null;
 
         DomainObject organization = osznOrganizationStrategy.getDomainObject(requestFile.getOrganizationId());
@@ -58,7 +67,11 @@ public class SubsidyExportTaskBean extends AbstractTaskBean<RequestFile>{
 
         List<Subsidy> list = subsidyBean.getSubsidies(requestFile.getId());
 
-        Date date = requestFile.getBeginDate();
+//        Date date = requestFile.getBeginDate(); todo
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2016, Calendar.DECEMBER, 1);
+        Date date = calendar.getTime();
 
         String zheuCode = osznOrganizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
@@ -75,6 +88,9 @@ public class SubsidyExportTaskBean extends AbstractTaskBean<RequestFile>{
 
             serviceProviderAdapter.exportSubsidy(requestFile.getUserOrganizationId(), list);
         }else{
+            requestFile.setStatus(RequestFileStatus.SAVE_ERROR);
+            requestFileBean.save(requestFile);
+
             //noinspection Duplicates
             switch (collectionId.intValue()){
                 case -1: //Не найден р-он
@@ -90,6 +106,9 @@ public class SubsidyExportTaskBean extends AbstractTaskBean<RequestFile>{
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_organization_undefined"), zheuCode);
             }
         }
+
+        requestFile.setStatus(RequestFileStatus.SAVED);
+        requestFileBean.save(requestFile);
 
         return true;
     }
