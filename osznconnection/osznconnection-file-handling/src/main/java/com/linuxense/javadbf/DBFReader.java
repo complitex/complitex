@@ -224,7 +224,7 @@ public class DBFReader extends DBFBase {
 							int month = Integer.parseInt( new String( t_byte_month)) - 1;
 							int day = Integer.parseInt( new String( t_byte_day));
 
-							if (year > 0 && month >= 1 && day > 0) {
+							if (year > 0 && month >= 0 && day > 0) {
 								recordObjects[i] = new GregorianCalendar(year, month, day).getTime();
 							}else{
 								recordObjects[i] = null;
