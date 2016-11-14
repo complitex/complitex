@@ -219,7 +219,7 @@ CREATE TABLE `payment` (
     `outgoing_building_corp` VARCHAR(100) COMMENT 'Корпус используемый центром начисления',
     `outgoing_apartment` VARCHAR(100) COMMENT 'Номер квартиры. Не используется',
 
-    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Код статуса. См. таблицу status_description и класс RequestStatus',
+    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
 
     `OWN_NUM` BIGINT(15) COMMENT 'Номер дела',
     `REE_NUM` INTEGER(2) COMMENT 'Номер реестра',
@@ -312,7 +312,7 @@ CREATE TABLE `benefit` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор льготы',
     `request_file_id` BIGINT(20) NULL COMMENT 'Идентификатор файла запросов',
     `account_number` VARCHAR(100) NULL COMMENT 'Номер счета',
-    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Код статуса. См. таблицу status_description и класс RequestStatus',
+    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
 
 	`OWN_NUM` BIGINT(15) COMMENT 'Номер дела',
 	`REE_NUM` INTEGER(2) COMMENT 'Номер реестра',
@@ -354,7 +354,7 @@ DROP TABLE IF EXISTS `subsidy_tarif`;
 CREATE TABLE `subsidy_tarif` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор тарифа',
     `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла тарифов',
-    `status` INTEGER NULL COMMENT 'Код статуса. См. таблицу status_description и класс RequestStatus',
+    `status` INTEGER NULL COMMENT 'Статус',
 
     `T11_DATA_T` DATE COMMENT '',
     `T11_DATA_E` DATE COMMENT '',
@@ -402,7 +402,7 @@ CREATE TABLE `actual_payment` (
     `outgoing_building_corp` VARCHAR(100) COMMENT 'Корпус используемый центром начисления',
     `outgoing_apartment` VARCHAR(100) COMMENT 'Номер квартиры. Не используется',
 
-    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'См. таблицу status_description и класс RequestStatus',
+    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
 
     `SUR_NAM` VARCHAR(30) COMMENT 'Фамилия',
     `F_NAM` VARCHAR(15) COMMENT 'Имя',
@@ -489,7 +489,7 @@ CREATE TABLE `subsidy` (
     `outgoing_building_corp` VARCHAR(100) COMMENT 'Корпус используемый центром начисления',
     `outgoing_apartment` VARCHAR(100) COMMENT 'Номер квартиры. Не используется',
 
-    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'См. таблицу status_description и класс RequestStatus',
+    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
 
     `first_name` VARCHAR(100) COMMENT 'Имя',
     `last_name` VARCHAR(100) COMMENT 'Фамилия',
@@ -660,7 +660,7 @@ CREATE TABLE `dwelling_characteristics` (
 
     `date` DATE NOT NULL COMMENT 'Дата. Производное поле. Первое число месяца, который был указан при загрузке файла, содержащего данную запись.',
 
-    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'См. таблицу status_description и класс RequestStatus',
+    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
 
     `first_name` VARCHAR(100) COMMENT 'Имя',
     `last_name` VARCHAR(100) COMMENT 'Фамилия',
@@ -731,7 +731,7 @@ CREATE TABLE `facility_service_type` (
 
     `date` DATE NOT NULL COMMENT 'Дата. Производное поле. Первое число месяца, который был указан при загрузке файла, содержащего данную запись.',
 
-    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'См. таблицу status_description и класс RequestStatus',
+    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
 
     `first_name` VARCHAR(100) COMMENT 'Имя',
     `last_name` VARCHAR(100) COMMENT 'Фамилия',
@@ -794,28 +794,31 @@ CREATE TABLE `facility_form2` (
     `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла запросов',
 
     `account_number` VARCHAR(100) COMMENT 'Номер счета',
-    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'См. таблицу status_description и класс RequestStatus',
+    `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
 
-    `CDPR` VARCHAR(100) COMMENT 'Код ЄДРПОУ (ОГРН) организации',
-    `IDCODE` VARCHAR(100) COMMENT 'ИНН льготника',
-    `FIO` VARCHAR(100) COMMENT 'ФИО льготника',
     `first_name` VARCHAR(100) COMMENT 'Имя',
     `last_name` VARCHAR(100) COMMENT 'Фамилия',
     `middle_name` VARCHAR(100) COMMENT 'Отчество',
-    `PPOS` VARCHAR(100) COMMENT '',
-    `RS` VARCHAR(100) COMMENT 'Номер л/с ПУ',
-    `YEARIN` VARCHAR(100) COMMENT 'Год выгрузки данных',
-    `MONTHIN` VARCHAR(100) COMMENT 'Месяц выгрузки данных',
-    `LGCODE` VARCHAR(100) COMMENT 'Код льготы',
-    `DATA1` VARCHAR(100) COMMENT 'Дата начала периода',
-    `DATA2` VARCHAR(100) COMMENT 'Дата окончания периода',
-    `LGKOL` VARCHAR(100) COMMENT 'Кол-во пользующихся льготой',
-    `LGKAT` VARCHAR(100) COMMENT 'Категория льготы ЕДАРП',
-    `LGPRC` VARCHAR(100) COMMENT 'Процент льготы',
-    `SUMM` VARCHAR(100) COMMENT 'Сумма возмещения',
-    `FACT` VARCHAR(100) COMMENT 'Объем фактического потребления (для услуг со счетчиком)',
-    `TARIF` VARCHAR(100) COMMENT 'Ставка тарифа',
-    `FLAG` VARCHAR(100) COMMENT '',
+
+    `CDPR` BIGINT(12) COMMENT 'Код ЄДРПОУ (ОГРН) организации',
+    `IDCODE` VARCHAR(10) COMMENT 'ИНН льготника',
+    `FIO` VARCHAR(50) COMMENT 'ФИО льготника',
+    `PPOS` VARCHAR(15) COMMENT '0',
+    `RS` VARCHAR(25) COMMENT 'Номер л/с ПУ',
+    `YEARIN` INTEGER(4) COMMENT 'Год выгрузки данных',
+    `MONTHIN` INTEGER(2) COMMENT 'Месяц выгрузки данных',
+    `LGCODE` INTEGER(4) COMMENT 'Код льготы',
+    `DATA1` DATE COMMENT 'Дата начала периода',
+    `DATA2` DATE COMMENT 'Дата окончания периода',
+    `LGKOL` INTEGER(2) COMMENT 'Кол-во пользующихся льготой',
+    `LGKAT` VARCHAR(3) COMMENT 'Категория льготы ЕДАРП',
+    `LGPRC` INTEGER(3) COMMENT 'Процент льготы',
+    `SUMM` DECIMAL(8,2) COMMENT 'Сумма возмещения',
+    `FACT` DECIMAL(19,6) COMMENT 'Объем фактического потребления (для услуг со счетчиком)',
+    `TARIF` DECIMAL(14,7) COMMENT 'Ставка тарифа',
+    `FLAG` INTEGER(1) COMMENT '',
+
+    `DEPART` INTEGER COMMENT 'Код участка',
 
     PRIMARY KEY (`id`),
     KEY `key_request_file_id` (`request_file_id`),
@@ -833,7 +836,7 @@ DROP TABLE IF EXISTS `facility_street_type_reference`;
 CREATE TABLE `facility_street_type_reference` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор объекта тип улицы',
     `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла типов улиц',
-    `status` INTEGER NULL COMMENT 'Код статуса. См. таблицу status_description и класс RequestStatus',
+    `status` INTEGER NULL COMMENT 'Код статуса. Статус',
 
     `KLKUL_CODE` VARCHAR(100) COMMENT 'Код типа улицы',
     `KLKUL_NAME` VARCHAR(100) COMMENT 'Наименование типа улицы',
@@ -850,7 +853,7 @@ DROP TABLE IF EXISTS `facility_street_reference`;
 CREATE TABLE `facility_street_reference` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор объекта улица',
     `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла улиц',
-    `status` INTEGER NULL COMMENT 'Код статуса. См. таблицу status_description и класс RequestStatus',
+    `status` INTEGER NULL COMMENT 'Статус',
 
     `KL_CODERN` VARCHAR(100) COMMENT 'Код района',
     `KL_CODEUL` VARCHAR(100) COMMENT 'Код улицы',
@@ -869,7 +872,7 @@ DROP TABLE IF EXISTS `facility_tarif_reference`;
 CREATE TABLE `facility_tarif_reference` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор объекта тариф',
     `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла тарифов',
-    `status` INTEGER NULL COMMENT 'Код статуса. См. таблицу status_description и класс RequestStatus',
+    `status` INTEGER NULL COMMENT 'Статус',
 
     `TAR_CODE` BIGINT(10) COMMENT 'Код тарифа',
     `TAR_CDPLG` BIGINT(10) COMMENT 'Код услуги',

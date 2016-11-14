@@ -238,6 +238,35 @@
           #{dbfFields.DAT1}, #{dbfFields.DAT2}, #{dbfFields.C_SUMMA}, #{dbfFields.C_SUBS}, #{dbfFields.C_NM_PAY},
           #{dbfFields.C_OBS}, #{dbfFields.NUMM}
         )
-
     </insert>
+    
+    <resultMap id="privsFResultMap" type="org.complitex.osznconnection.file.entity.privilege.PrivsF">
+        <result property="depart" column="DEPART"/>
+        <result property="cdpr" column="CDPR"/>
+        <result property="idCode" column="IDCODE"/>
+        <result property="fio" column="FIO"/>
+        <result property="ppos" column="PPOS"/>
+        <result property="rs" column="RS"/>
+        <result property="yearId" column="YEARIN"/>
+        <result property="monthIn" column="MONTHIN"/>
+        <result property="lgCode" column="LGCODE"/>
+        <result property="data1" column="DATA1"/>
+        <result property="data2" column="DATA2"/>
+        <result property="lgKol" column="LGKOL"/>
+        <result property="lgKat" column="LGKAT"/>
+        <result property="lgPrc" column="LGPRC"/>
+        <result property="summ" column="SUMM"/>
+        <result property="fact" column="FACT"/>
+        <result property="tarif" column="TARIF"/>
+        <result property="flag" column="FLAG"/>
+    </resultMap>
+
+    <select id="getPrivdF" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.GetPrivsF(
+          #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pDate, mode=IN, javaType=date, jdbcType=DATE},
+          #{cur, mode=OUT, jdbcType=CURSOR, resultMap=privsFResultMap}
+        )}
+    </select>
 </mapper>
