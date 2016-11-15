@@ -65,6 +65,7 @@ INSERT INTO `request_file_description` VALUES (11,'FACILITY_SERVICE_TYPE','dd.MM
 INSERT INTO `request_file_description` VALUES (12,'FACILITY_TARIF','dd.MM.yyyy');
 INSERT INTO `request_file_description` VALUES (13,'FACILITY_FORM2','dd.MM.yyyy');
 INSERT INTO `request_file_description` VALUES (14,'PRIVILEGE_PROLONGATION','dd.MM.yyyy');
+INSERT INTO `request_file_description` VALUES (15,'FACILITY_LOCAL','dd.MM.yyyy');
 
 -- Request File Descriptions Fields--
 INSERT INTO `request_file_field_description` VALUES (1,1,'SUR_NAM','java.lang.String',30,NULL);
@@ -454,6 +455,43 @@ INSERT INTO `request_file_field_description` VALUES (383,14,'LGCODE','java.lang.
 INSERT INTO `request_file_field_description` VALUES (364,14,'DATEIN','java.util.Date',10,NULL);
 INSERT INTO `request_file_field_description` VALUES (365,14,'DATEOUT','java.util.Date',10,NULL);
 INSERT INTO `request_file_field_description` VALUES (386,14,'RAH','java.lang.String',25,NULL);
+
+INSERT INTO `request_file_field_description` VALUES (387,15,'COD','java.lang.Integer',4,NULL);
+INSERT INTO `request_file_field_description` VALUES (388,15,'CDPR','java.lang.Long',12,NULL);
+INSERT INTO `request_file_field_description` VALUES (389,15,'NCARD','java.lang.Long',10,NULL);
+INSERT INTO `request_file_field_description` VALUES (390,15,'IDCODE','java.lang.String',10,NULL);
+INSERT INTO `request_file_field_description` VALUES (391,15,'PASP','java.lang.String',14,NULL);
+INSERT INTO `request_file_field_description` VALUES (392,15,'FIO','java.lang.String',50,NULL);
+INSERT INTO `request_file_field_description` VALUES (393,15,'IDPIL','java.lang.String',10,NULL);
+INSERT INTO `request_file_field_description` VALUES (394,15,'PASPPIL','java.lang.String',14,NULL);
+INSERT INTO `request_file_field_description` VALUES (395,15,'FIOPIL','java.lang.String',50,NULL);
+INSERT INTO `request_file_field_description` VALUES (396,15,'INDEX','java.lang.Integer',6,NULL);
+INSERT INTO `request_file_field_description` VALUES (397,15,'NAMUL','java.lang.String',20,NULL);
+INSERT INTO `request_file_field_description` VALUES (398,15,'CDUL','java.lang.Integer',5,NULL);
+INSERT INTO `request_file_field_description` VALUES (399,15,'HOUSE','java.lang.String',7,NULL);
+INSERT INTO `request_file_field_description` VALUES (400,15,'BUILD','java.lang.String',2,NULL);
+INSERT INTO `request_file_field_description` VALUES (401,15,'APT','java.lang.String',4,NULL);
+INSERT INTO `request_file_field_description` VALUES (402,15,'LGCODE','java.lang.Integer',4,NULL);
+INSERT INTO `request_file_field_description` VALUES (403,15,'KAT','java.lang.Integer',4,NULL);
+INSERT INTO `request_file_field_description` VALUES (404,15,'YEARIN','java.lang.Integer',4,NULL);
+INSERT INTO `request_file_field_description` VALUES (405,15,'MONTHIN','java.lang.Integer',2,NULL);
+INSERT INTO `request_file_field_description` VALUES (406,15,'YEAR','java.lang.Integer',4,NULL);
+INSERT INTO `request_file_field_description` VALUES (407,15,'MONTH','java.lang.Integer',2,NULL);
+INSERT INTO `request_file_field_description` VALUES (408,15,'RAH','java.lang.Long',10,NULL);
+INSERT INTO `request_file_field_description` VALUES (409,15,'RIZN','java.lang.Integer',6,NULL);
+INSERT INTO `request_file_field_description` VALUES (410,15,'TARIF','java.lang.Long',10,NULL);
+INSERT INTO `request_file_field_description` VALUES (411,15,'VL','java.lang.Integer',3,NULL);
+INSERT INTO `request_file_field_description` VALUES (412,15,'PLZAG','java.math.BigDecimal',6,2);
+INSERT INTO `request_file_field_description` VALUES (413,15,'PLPIL','java.math.BigDecimal',6,2);
+INSERT INTO `request_file_field_description` VALUES (414,15,'TARIFS','java.math.BigDecimal',10,2);
+INSERT INTO `request_file_field_description` VALUES (415,15,'TARIFN','java.math.BigDecimal',10,3);
+INSERT INTO `request_file_field_description` VALUES (416,15,'SUM','java.math.BigDecimal',10,2);
+INSERT INTO `request_file_field_description` VALUES (417,15,'LGKOL','java.lang.Integer',2,NULL);
+INSERT INTO `request_file_field_description` VALUES (418,15,'SUMPER','java.math.BigDecimal',10,2);
+INSERT INTO `request_file_field_description` VALUES (419,15,'DATN','java.util.Date',8,NULL);
+INSERT INTO `request_file_field_description` VALUES (420,15,'DATK','java.util.Date',8,NULL);
+INSERT INTO `request_file_field_description` VALUES (421,15,'PSN','java.lang.Integer',2,NULL);
+INSERT INTO `request_file_field_description` VALUES (422,15,'SUMM','java.math.BigDecimal',10,2);
 
 -- Request files --
 INSERT INTO `request_file_group`(`id`, `status`) VALUES (1, 110);

@@ -167,6 +167,8 @@
         }
         ]]>
     </select>
+    
+    <!--privilege export-->
 
     <select id="createPrivHeader" statementType="CALLABLE" parameterType="map">
         {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreatePrivHeader(
@@ -195,6 +197,8 @@
             )
         </foreach>
     </insert>
+    
+    <!--lodgers-->
 
     <resultMap id="lodgerResultMap" type="org.complitex.osznconnection.file.entity.Lodger">
         <result property="fio" column="FIO"/>
@@ -212,6 +216,8 @@
           #{data, mode=OUT, jdbcType=CURSOR, resultMap=lodgerResultMap}
         )}
     </select>
+    
+    <!--subsidy export-->
 
     <select id="createSubsHeader" statementType="CALLABLE" parameterType="map">
         {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreateSubsHeader(
@@ -240,33 +246,90 @@
         )
     </insert>
     
-    <resultMap id="privsFResultMap" type="org.complitex.osznconnection.file.entity.privilege.PrivsF">
-        <result property="depart" column="DEPART"/>
-        <result property="cdpr" column="CDPR"/>
-        <result property="idCode" column="IDCODE"/>
-        <result property="fio" column="FIO"/>
-        <result property="ppos" column="PPOS"/>
-        <result property="rs" column="RS"/>
-        <result property="yearId" column="YEARIN"/>
-        <result property="monthIn" column="MONTHIN"/>
-        <result property="lgCode" column="LGCODE"/>
-        <result property="data1" column="DATA1"/>
-        <result property="data2" column="DATA2"/>
-        <result property="lgKol" column="LGKOL"/>
-        <result property="lgKat" column="LGKAT"/>
-        <result property="lgPrc" column="LGPRC"/>
-        <result property="summ" column="SUMM"/>
-        <result property="fact" column="FACT"/>
-        <result property="tarif" column="TARIF"/>
-        <result property="flag" column="FLAG"/>
+    <!--facility form 2-->
+    
+    <resultMap id="privsFResultMap" type="org.complitex.osznconnection.file.entity.privilege.FacilityForm2">
+
+        <association property="dbfFields" javaType="map">
+            <result property="DEPART" column="DEPART"/>
+            <result property="CDPR" column="CDPR"/>
+            <result property="IDCODE" column="IDCODE"/>
+            <result property="FIO" column="FIO"/>
+            <result property="PPOS" column="PPOS"/>
+            <result property="RS" column="RS"/>
+            <result property="YEARIN" column="YEARIN"/>
+            <result property="MONTHIN" column="MONTHIN"/>
+            <result property="LGCODE" column="LGCODE"/>
+            <result property="DATA1" column="DATA1"/>
+            <result property="DATA2" column="DATA2"/>
+            <result property="LGKOL" column="LGKOL"/>
+            <result property="LGKAT" column="LGKAT"/>
+            <result property="LGPRC" column="LGPRC"/>
+            <result property="SUMM" column="SUMM"/>
+            <result property="FACT" column="FACT"/>
+            <result property="TARIF" column="TARIF"/>
+            <result property="FLAG" column="FLAG"/>
+        </association>
     </resultMap>
 
-    <select id="getPrivdF" statementType="CALLABLE" parameterType="map">
+    <select id="getPrivsF" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.GetPrivsF(
           #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
           #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
           #{pDate, mode=IN, javaType=date, jdbcType=DATE},
           #{cur, mode=OUT, jdbcType=CURSOR, resultMap=privsFResultMap}
+        )}
+    </select>
+    
+    <!--facility local-->
+    
+    <resultMap id="privsMResultMap" type="org.complitex.osznconnection.file.entity.privilege.FacilityLocal">
+        <association property="dbfFields" javaType="map">
+            <result property="COD" column="COD"/>
+            <result property="CDPR" column="CDPR"/>
+            <result property="NCARD" column="NCARD"/>
+            <result property="IDCODE" column="IDCODE"/>
+            <result property="PASP" column="PASP"/>
+            <result property="FIO" column="FIO"/>
+            <result property="IDPIL" column="IDPIL"/>
+            <result property="PASPPIL" column="PASPPIL"/>
+            <result property="FIOPIL" column="FIOPIL"/>
+            <result property="INDEX" column="INDEX"/>
+            <result property="NAMUL" column="NAMUL"/>
+            <result property="CDUL" column="CDUL"/>
+            <result property="HOUSE" column="HOUSE"/>
+            <result property="BUILD" column="BUILD"/>
+            <result property="APT" column="APT"/>
+            <result property="LGCODE" column="LGCODE"/>
+            <result property="KAT" column="KAT"/>
+            <result property="YEARIN" column="YEARIN"/>
+            <result property="MONTHIN" column="MONTHIN"/>
+            <result property="YEAR" column="YEAR"/>
+            <result property="MONTH" column="MONTH"/>
+            <result property="RAH" column="RAH"/>
+            <result property="RIZN" column="RIZN"/>
+            <result property="TARIF" column="TARIF"/>
+            <result property="VL" column="VL"/>
+            <result property="PLZAG" column="PLZAG"/>
+            <result property="PLPIL" column="PLPIL"/>
+            <result property="TARIFS" column="TARIFS"/>
+            <result property="TARIFN" column="TARIFN"/>
+            <result property="SUM" column="SUM"/>
+            <result property="LGKOL" column="LGKOL"/>
+            <result property="SUMPER" column="SUMPER"/>
+            <result property="DATN" column="DATN"/>
+            <result property="DATK" column="DATK"/>
+            <result property="PSN" column="PSN"/>
+            <result property="SUMM" column="SUMM"/>
+        </association>
+    </resultMap>
+
+    <select id="getPrivsM" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.GetPrivsM(
+          #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
+          #{pDate, mode=IN, javaType=date, jdbcType=DATE},
+          #{cur, mode=OUT, jdbcType=CURSOR, resultMap=privsMResultMap}
         )}
     </select>
 </mapper>

@@ -20,7 +20,8 @@ public enum RequestFileType implements IFixedIdType{
     FACILITY_TARIF_REFERENCE(11),
     SUBSIDY_J_FILE(12),
     SUBSIDY_S_FILE(13),
-    PRIVILEGE_PROLONGATION(14);
+    PRIVILEGE_PROLONGATION(14),
+    FACILITY_LOCAL(15);
 
     private Integer id;
 

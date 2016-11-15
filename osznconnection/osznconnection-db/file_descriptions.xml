@@ -434,6 +434,47 @@
         </fields>
     </file-description>
 
+    <file-description type="FACILITY_LOCAL">
+        <fields>
+            <field length="4" type="java.lang.Integer" name="COD"/>
+            <field length="12" type="java.lang.Long" name="CDPR"/>
+            <field length="10" type="java.lang.Long" name="NCARD"/>
+            <field length="10" type="java.lang.String" name="IDCODE"/>
+            <field length="14" type="java.lang.String" name="PASP"/>
+            <field length="50" type="java.lang.String" name="FIO"/>
+            <field length="10" type="java.lang.String" name="IDPIL"/>
+            <field length="14" type="java.lang.String" name="PASPPIL"/>
+            <field length="50" type="java.lang.String" name="FIOPIL"/>
+            <field length="6" type="java.lang.Integer" name="INDEX"/>
+            <field length="20" type="java.lang.String" name="NAMUL"/>
+            <field length="5" type="java.lang.Integer" name="CDUL"/>
+            <field length="7" type="java.lang.String" name="HOUSE"/>
+            <field length="2" type="java.lang.String" name="BUILD"/>
+            <field length="4" type="java.lang.String" name="APT"/>
+            <field length="4" type="java.lang.Integer" name="LGCODE"/>
+            <field length="4" type="java.lang.Integer" name="KAT"/>
+            <field length="4" type="java.lang.Integer" name="YEARIN"/>
+            <field length="2" type="java.lang.Integer" name="MONTHIN"/>
+            <field length="4" type="java.lang.Integer" name="YEAR"/>
+            <field length="2" type="java.lang.Integer" name="MONTH"/>
+            <field length="10" type="java.lang.Long" name="RAH"/>
+            <field length="6" type="java.lang.Integer" name="RIZN"/>
+            <field length="10" type="java.lang.Long" name="TARIF"/>
+            <field length="3" type="java.lang.Integer" name="VL"/>
+            <field length="6" scale="2" type="java.math.BigDecimal" name="PLZAG"/>
+            <field length="6" scale="2" type="java.math.BigDecimal" name="PLPIL"/>
+            <field length="10" scale="2" type="java.math.BigDecimal" name="TARIFS"/>
+            <field length="10" scale="3" type="java.math.BigDecimal" name="TARIFN"/>
+            <field length="10" scale="2" type="java.math.BigDecimal" name="SUM"/>
+            <field length="2" type="java.lang.Integer" name="LGKOL"/>
+            <field length="10" scale="2" type="java.math.BigDecimal" name="SUMPER"/>
+            <field length="8" type="java.util.Date" name="DATN"/>
+            <field length="8" type="java.util.Date" name="DATK"/>
+            <field length="2" type="java.lang.Integer" name="PSN"/>
+            <field length="10" scale="2" type="java.math.BigDecimal" name="SUMM"/>
+        </fields>
+    </file-description>
+
     <file-description type="PRIVILEGE_PROLONGATION">
         <fields>
             <field length="4" type="java.lang.Integer" name="COD"/>

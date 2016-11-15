@@ -11,10 +11,6 @@ CREATE TABLE `facility_form2` (
   `account_number` VARCHAR(100) COMMENT 'Номер счета',
   `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
 
-  `first_name` VARCHAR(100) COMMENT 'Имя',
-  `last_name` VARCHAR(100) COMMENT 'Фамилия',
-  `middle_name` VARCHAR(100) COMMENT 'Отчество',
-
   `CDPR` BIGINT(12) COMMENT 'Код ЄДРПОУ (ОГРН) организации',
   `IDCODE` VARCHAR(10) COMMENT 'ИНН льготника',
   `FIO` VARCHAR(50) COMMENT 'ФИО льготника',

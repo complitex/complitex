@@ -796,10 +796,6 @@ CREATE TABLE `facility_form2` (
     `account_number` VARCHAR(100) COMMENT 'Номер счета',
     `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
 
-    `first_name` VARCHAR(100) COMMENT 'Имя',
-    `last_name` VARCHAR(100) COMMENT 'Фамилия',
-    `middle_name` VARCHAR(100) COMMENT 'Отчество',
-
     `CDPR` BIGINT(12) COMMENT 'Код ЄДРПОУ (ОГРН) организации',
     `IDCODE` VARCHAR(10) COMMENT 'ИНН льготника',
     `FIO` VARCHAR(50) COMMENT 'ФИО льготника',
@@ -826,6 +822,63 @@ CREATE TABLE `facility_form2` (
     KEY `key_status` (`status`),
     CONSTRAINT `fk_facility_form2__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Файлы форма-2 льгота';
+
+-- ------------------------------
+-- Facility Local
+-- ------------------------------
+
+DROP TABLE IF EXISTS `facility_local`;
+
+CREATE TABLE `facility_local` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор объекта местной льготы',
+  `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла запросов',
+
+  `account_number` VARCHAR(100) COMMENT 'Номер счета',
+  `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
+
+  `COD` INTEGER(4) COMMENT 'Код района',
+  `CDPR` BIGINT(12) COMMENT 'Код ОКПО балансодержателя',
+  `NCARD` BIGINT(10) COMMENT 'NULL',
+  `IDCODE` VARCHAR(10) COMMENT 'ИНН ответственного по л/с',
+  `PASP` VARCHAR(14) COMMENT 'Серия и номер паспорта ответственного',
+  `FIO` VARCHAR(50) COMMENT 'ФИО ответственного',
+  `IDPIL` VARCHAR(10) COMMENT 'ИНН носителя льготы',
+  `PASPPIL` VARCHAR(14) COMMENT 'Серия и номер паспорта носителя льготы',
+  `FIOPIL` VARCHAR(50) COMMENT 'ФИО носителя льготы',
+  `INDEX` INTEGER(6) COMMENT 'NULL',
+  `NAMUL` VARCHAR(20) COMMENT 'Название и тип улицы',
+  `CDUL` INTEGER(5) COMMENT 'Код улицы в СЗ',
+  `HOUSE` VARCHAR(7) COMMENT 'Номер дома',
+  `BUILD` VARCHAR(2) COMMENT 'Часть дома',
+  `APT` VARCHAR(4) COMMENT 'Номер квартиры',
+  `LGCODE` INTEGER(4) COMMENT '500 (для ЖКС) или 5061 (для мусора)',
+  `KAT` INTEGER(4) COMMENT 'Код льготной категории',
+  `YEARIN` INTEGER(4) COMMENT 'Год формирования',
+  `MONTHIN` INTEGER(2) COMMENT 'Месяц формирования',
+  `YEAR` INTEGER(4) COMMENT 'Расчетный год',
+  `MONTH` INTEGER(2) COMMENT 'Расчетный месяц',
+  `RAH` BIGINT(10) COMMENT 'Номер л/с',
+  `RIZN` INTEGER(6) COMMENT 'NULL',
+  `TARIF` BIGINT(10) COMMENT 'NULL',
+  `VL` INTEGER(3) COMMENT 'NULL',
+  `PLZAG` DECIMAL(6,2) COMMENT 'Общая площадь (ЖКС) или NULL (мусор)',
+  `PLPIL` DECIMAL(6,2) COMMENT 'Льготная площадь (ЖКС) или NULL (мусор)',
+  `TARIFS` DECIMAL(10,2) COMMENT '0.37 (при наличии услуг 050 или 160 в ЖКС) 0.28 (в остальных случаях в ЖКС) NULL (в мусоре)',
+  `TARIFN` DECIMAL(10,3) COMMENT 'Тариф',
+  `SUM` DECIMAL(10,2) COMMENT 'Возмещение текущего месяца',
+  `LGKOL` INTEGER(2) COMMENT 'Количество пользующихся льготой',
+  `SUMPER` DECIMAL(10,2) COMMENT 'Сумма перерасчетов возмещения',
+  `DATN` DATE COMMENT 'Начало расчетного периода (текущего)',
+  `DATK` DATE COMMENT 'Окончание расчетного периода (текущего)',
+  `PSN` INTEGER(2) COMMENT 'Причина снятия льготы',
+  `SUMM` DECIMAL(10,2) COMMENT 'Итоговая сумма (текущее возмещение и перерасчеты)',
+
+  PRIMARY KEY (`id`),
+  KEY `key_request_file_id` (`request_file_id`),
+  KEY `key_account_number` (`account_number`),
+  KEY `key_status` (`status`),
+  CONSTRAINT `fk_facility_local__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Записи местной льготы';
 
 -- ------------------------------
 -- Facility Street Type Reference
