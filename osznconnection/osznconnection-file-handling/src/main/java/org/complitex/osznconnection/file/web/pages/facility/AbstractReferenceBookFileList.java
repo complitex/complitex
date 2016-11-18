@@ -35,7 +35,6 @@ import org.complitex.osznconnection.file.service.file_description.RequestFileDes
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.LoadButton;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.file.web.component.process.*;
@@ -73,7 +72,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
 
     protected abstract RequestFileType getRequestFileType();
 
-    protected abstract void load(long userOrganizationId, long osznId, DateParameter dateParameter);
+    protected abstract void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo);
 
     protected abstract ProcessType getLoadProcessType();
 
@@ -275,8 +274,8 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
         requestFileLoadPanel = new RequestFileLoadPanel("load_panel", new ResourceModel("load_panel_title"),
                 MonthParameterViewMode.EXACT) {
             @Override
-            protected void load(Long userOrganizationId, Long osznId, DateParameter dateParameter, AjaxRequestTarget target) {
-                AbstractReferenceBookFileList.this.load(userOrganizationId, osznId, dateParameter);
+            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
+                AbstractReferenceBookFileList.this.load(userOrganizationId, organizationId, year, monthFrom, monthTo);
 
                 messagesManager.resetCompletedStatus(getLoadProcessType());
 

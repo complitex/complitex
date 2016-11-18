@@ -7,7 +7,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.pages.actualpayment.ActualPaymentList;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
@@ -64,9 +63,8 @@ public class ActualPaymentFileList extends TemplatePage {
             }
 
             @Override
-            protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-                processManagerBean.loadActualPayment(userOrganizationId, osznId,
-                        dateParameter.getMonthFrom(), dateParameter.getMonthTo(), dateParameter.getYear());
+            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+                processManagerBean.loadActualPayment(userOrganizationId, organizationId, year, monthFrom, monthTo);
             }
 
             @Override

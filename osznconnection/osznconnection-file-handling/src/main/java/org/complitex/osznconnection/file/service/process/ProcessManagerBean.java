@@ -289,7 +289,7 @@ public class ProcessManagerBean {
 
     /*Group*/
 
-    public void loadGroup(long userOrganizationId, long osznId, int monthFrom, int monthTo, int year) {
+    public void loadGroup(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
         Process<RequestFileGroup> process = getProcess(LOAD_GROUP);
 
         try {
@@ -299,7 +299,7 @@ public class ProcessManagerBean {
                 process.init();
             }
 
-            LoadGroupParameter<RequestFileGroup> loadParameter = LoadUtil.getLoadGroupParameter(userOrganizationId, osznId,
+            LoadGroupParameter<RequestFileGroup> loadParameter = LoadUtil.getLoadGroupParameter(userOrganizationId, organizationId,
                     monthFrom, monthTo, year);
 
             for (RequestFileGroup fileGroup : loadParameter.getRequestFileGroups()) {
@@ -373,9 +373,9 @@ public class ProcessManagerBean {
 
     /*ActualPayment*/
 
-    public void loadActualPayment(long userOrganizationId, long osznId, int monthFrom, int monthTo, int year) {
+    public void loadActualPayment(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
         try {
-            List<RequestFile> list = LoadUtil.getActualPayments(userOrganizationId, osznId, monthFrom, monthTo, year);
+            List<RequestFile> list = LoadUtil.getActualPayments(userOrganizationId, organizationId, monthFrom, monthTo, year);
 
             for (RequestFile file : list) {
                 file.setUserOrganizationId(userOrganizationId);
@@ -408,9 +408,9 @@ public class ProcessManagerBean {
 
     /*Subsidy*/
 
-    public void loadSubsidy(long userOrganizationId, long osznId, int monthFrom, int monthTo, int year) {
+    public void loadSubsidy(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
         try {
-            List<RequestFile> list = LoadUtil.getSubsidies(userOrganizationId, osznId, monthFrom, monthTo, year);
+            List<RequestFile> list = LoadUtil.getSubsidies(userOrganizationId, organizationId, monthFrom, monthTo, year);
 
             for (RequestFile file : list) {
                 file.setUserOrganizationId(userOrganizationId);
@@ -460,9 +460,9 @@ public class ProcessManagerBean {
 
     /*SubsidyTarif*/
 
-    public void loadSubsidyTarif(long userOrganizationId, long osznId, int month, int year) {
+    public void loadSubsidyTarif(Long userOrganizationId, Long organizationId, int year, int month) {
         try {
-            List<RequestFile> list = LoadUtil.getSubsidyTarifs(userOrganizationId, osznId, month, year);
+            List<RequestFile> list = LoadUtil.getSubsidyTarifs(userOrganizationId, organizationId, month, year);
 
             for (RequestFile file : list) {
                 file.setUserOrganizationId(userOrganizationId);
@@ -480,7 +480,7 @@ public class ProcessManagerBean {
 
     /*DwellingCharacteristics*/
 
-    public void loadDwellingCharacteristics(long userOrganizationId, long osznId, int month, int year) {
+    public void loadDwellingCharacteristics(Long userOrganizationId, Long osznId, int year, int month) {
         try {
             List<RequestFile> list = LoadUtil.getDwellingCharacteristics(userOrganizationId, osznId, month, year);
 
@@ -516,7 +516,7 @@ public class ProcessManagerBean {
 
     /*FacilityServiceType*/
 
-    public void loadFacilityServiceType(long userOrganizationId, long osznId, int month, int year) {
+    public void loadFacilityServiceType(long userOrganizationId, long osznId, int year, int month) {
         try {
             List<RequestFile> list = LoadUtil.getFacilityServiceTypes(userOrganizationId, osznId, month, year);
 
@@ -550,6 +550,12 @@ public class ProcessManagerBean {
                 getFacilityServiceTypeFiles(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
+    /*FacilityForm2*/
+
+    public void loadFacilityForm2(Long userOrganizationId, Long osznId, int year, int month){
+        //todo execute facility form 2 load process
+    }
+
     public void saveFacilityForm2(List<Long> ids, Map processParameters) {
         execute(SAVE_FACILITY_FORM2, FacilityForm2SaveTaskBean.class,
                 getFacilityForm2Files(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
@@ -557,9 +563,9 @@ public class ProcessManagerBean {
 
     /*FacilityTarifReferences*/
 
-    public void loadFacilityStreetTypeReferences(long userOrganizationId, long osznId, int month, int year) {
+    public void loadFacilityStreetTypeReferences(Long userOrganizationId, Long organizationId, int year, int month) {
         try {
-            List<RequestFile> list = LoadUtil.getFacilityStreetTypeReferences(userOrganizationId, osznId, month, year);
+            List<RequestFile> list = LoadUtil.getFacilityStreetTypeReferences(userOrganizationId, organizationId, month, year);
 
             for (RequestFile file : list) {
                 file.setUserOrganizationId(userOrganizationId);
@@ -574,10 +580,10 @@ public class ProcessManagerBean {
         }
     }
 
-    public void loadFacilityStreetReferences(long userOrganizationId, long osznId, int month, int year,
-            Locale locale) {
+    public void loadFacilityStreetReferences(Long userOrganizationId, Long organizationId, int year, int month,
+                                             Locale locale) {
         try {
-            List<RequestFile> list = LoadUtil.getFacilityStreetReferences(userOrganizationId, osznId, month, year);
+            List<RequestFile> list = LoadUtil.getFacilityStreetReferences(userOrganizationId, organizationId, month, year);
 
             for (RequestFile file : list) {
                 file.setUserOrganizationId(userOrganizationId);
@@ -593,10 +599,10 @@ public class ProcessManagerBean {
         }
     }
 
-    public void loadFacilityTarifReferences(long userOrganizationId, long osznId, int month, int year,
-            Locale locale) {
+    public void loadFacilityTarifReferences(Long userOrganizationId, Long organizationId, int year, int month,
+                                            Locale locale) {
         try {
-            List<RequestFile> list = LoadUtil.getFacilityTarifReferences(userOrganizationId, osznId, month, year);
+            List<RequestFile> list = LoadUtil.getFacilityTarifReferences(userOrganizationId, organizationId, month, year);
 
             for (RequestFile file : list) {
                 file.setUserOrganizationId(userOrganizationId);
@@ -613,7 +619,7 @@ public class ProcessManagerBean {
 
     /*PrivilegeGroup*/
 
-    public void loadPrivilegeGroup(long userOrganizationId, long osznId, int month, int year) {
+    public void loadPrivilegeGroup(Long userOrganizationId, Long organizationId, int year, int month) {
         Process<PrivilegeFileGroup> process = getProcess(LOAD_PRIVILEGE_GROUP);
 
         try {
@@ -623,7 +629,7 @@ public class ProcessManagerBean {
                 process.init();
             }
 
-            LoadGroupParameter<PrivilegeFileGroup> loadParameter = LoadUtil.getLoadPrivilegeGroupParameter(userOrganizationId, osznId, month, year);
+            LoadGroupParameter<PrivilegeFileGroup> loadParameter = LoadUtil.getLoadPrivilegeGroupParameter(userOrganizationId, organizationId, month, year);
 
             List<RequestFile> linkError = loadParameter.getLinkError();
 
@@ -677,9 +683,9 @@ public class ProcessManagerBean {
 
     /*PrivilegeProlongation*/
 
-    public void loadPrivilegeProlongation(PrivilegeProlongation.TYPE type, Long userOrganizationId, Long osznId, int month, int year) {
+    public void loadPrivilegeProlongation(PrivilegeProlongation.TYPE type, Long userOrganizationId, Long organizationId, int year, int month) {
         try {
-            List<RequestFile> list = LoadUtil.getPrivilegeProlongation(type, userOrganizationId, osznId, month, year);
+            List<RequestFile> list = LoadUtil.getPrivilegeProlongation(type, userOrganizationId, organizationId, month, year);
 
             execute(LOAD_PRIVILEGE_PROLONGATION, PrivilegeProlongationLoadTaskBean.class, list, null, LOAD_THREAD_SIZE,
                     LOAD_MAX_ERROR_COUNT, null);

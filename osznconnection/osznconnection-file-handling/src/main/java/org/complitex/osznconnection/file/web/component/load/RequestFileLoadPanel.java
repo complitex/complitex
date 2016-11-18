@@ -6,7 +6,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -25,7 +24,6 @@ import org.odlabs.wiquery.ui.dialog.Dialog;
 import javax.ejb.EJB;
 
 public abstract class RequestFileLoadPanel extends Panel {
-
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
 
@@ -35,10 +33,7 @@ public abstract class RequestFileLoadPanel extends Panel {
     private final Dialog dialog;
     private static final String MONTH_COMPONENT_ID = "monthComponent";
 
-    public static enum MonthParameterViewMode {
-
-        RANGE, EXACT, HIDDEN
-    }
+    public enum MonthParameterViewMode { RANGE, EXACT, HIDDEN }
 
     public RequestFileLoadPanel(String id, IModel<String> title, final MonthParameterViewMode monthParameterViewMode) {
         super(id);
@@ -57,16 +52,16 @@ public abstract class RequestFileLoadPanel extends Panel {
         WebMarkupContainer content = new WebMarkupContainer("content");
         dialog.add(content);
 
-        final FeedbackPanel messages = new FeedbackPanel("messages", new ContainerFeedbackMessageFilter(content));
+        FeedbackPanel messages = new FeedbackPanel("messages", new ContainerFeedbackMessageFilter(content));
         messages.setOutputMarkupId(true);
         content.add(messages);
 
         //Форма
-        Form<Void> form = new Form<Void>("form");
+        Form form = new Form("form");
         content.add(form);
 
         //ОСЗН
-        final IModel<Long> osznModel = new Model<>();
+        IModel<Long> osznModel = new Model<>();
         form.add(new OrganizationIdPicker("oszn",
                 osznModel,
                 getOsznOrganizationTypes()));
@@ -75,7 +70,7 @@ public abstract class RequestFileLoadPanel extends Panel {
         final WebMarkupContainer userOrganizationContainer = new WebMarkupContainer("userOrganizationContainer");
         form.add(userOrganizationContainer);
 
-        final IModel<Long> userOrganizationModel = new Model<>();
+        IModel<Long> userOrganizationModel = new Model<>();
 
         userOrganizationContainer.add(new OrganizationIdPicker("userOrganization",
                 userOrganizationModel,
@@ -84,16 +79,16 @@ public abstract class RequestFileLoadPanel extends Panel {
         Long currentUserOrganizationId = sessionBean.getCurrentUserOrganizationId(getSession());
         //userOrganizationContainer.setVisible(currentUserOrganizationId == null);
 
-        final DropDownChoice<Integer> year = new YearDropDownChoice("year", new Model<>());
-        year.setRequired(true);
-        form.add(year);
+        IModel<Integer> yearModel = new Model<>();
+        form.add(new YearDropDownChoice("year", yearModel).setRequired(true));
 
         WebMarkupContainer monthParameterContainer = new WebMarkupContainer("monthParameterContainer");
         monthParameterContainer.setVisible(monthParameterViewMode != MonthParameterViewMode.HIDDEN);
         form.add(monthParameterContainer);
 
-        final IModel<MonthRange> monthRangeModel = new Model<>();
+        IModel<MonthRange> monthRangeModel = new Model<>();
         Component monthComponent;
+
         switch (monthParameterViewMode) {
             case RANGE:
                 monthComponent = new MonthRangePanel(MONTH_COMPONENT_ID, monthRangeModel);
@@ -134,16 +129,19 @@ public abstract class RequestFileLoadPanel extends Panel {
                 long currentUserOrganizationId = mainUserOrganizationId != null ? mainUserOrganizationId
                         : userOrganizationModel.getObject();
 
-                DateParameter dateParameter;
-                if (monthParameterViewMode == MonthParameterViewMode.HIDDEN) {
-                    dateParameter = new DateParameter(year.getModelObject());
-                } else {
-                    final MonthRange monthRange = monthRangeModel.getObject();
-                    dateParameter = new DateParameter(year.getModelObject(),
-                            monthRange.getMonthFrom(), monthRange.getMonthTo());
+                int year = yearModel.getObject();
+
+                int monthFrom = -1;
+                int monthTo = -1;
+
+                if (monthParameterViewMode != MonthParameterViewMode.HIDDEN) {
+                    MonthRange monthRange = monthRangeModel.getObject();
+
+                    monthFrom = monthRange.getMonthFrom();
+                    monthTo = monthRange.getMonthTo();
                 }
 
-                load(currentUserOrganizationId, osznModel.getObject(), dateParameter, target);
+                load(currentUserOrganizationId, osznModel.getObject(), year, monthFrom, monthTo, target);
 
                 target.add(messages);
                 dialog.close(target);
@@ -157,7 +155,7 @@ public abstract class RequestFileLoadPanel extends Panel {
         form.add(load);
 
         //Отмена
-        AjaxLink<Void> cancel = new AjaxLink<Void>("cancel") {
+        AjaxLink cancel = new AjaxLink("cancel") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -176,7 +174,7 @@ public abstract class RequestFileLoadPanel extends Panel {
         return (TemplateSession) super.getSession();
     }
 
-    protected abstract void load(Long userOrganizationId, Long osznId, DateParameter dateParameter, AjaxRequestTarget target);
+    protected abstract void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target);
 
     protected Long[] getOsznOrganizationTypes(){
         return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,

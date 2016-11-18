@@ -1,309 +1,80 @@
 package org.complitex.osznconnection.file.web.pages.privilege;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.*;
-import org.complitex.common.util.DateUtil;
-import org.complitex.common.util.StringUtil;
-import org.complitex.common.web.component.MonthDropDownChoice;
-import org.complitex.common.web.component.YearDropDownChoice;
-import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
-import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
-import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
-import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.RequestFileFilter;
-import org.complitex.osznconnection.file.entity.RequestFileStatus;
-import org.complitex.osznconnection.file.entity.RequestFileType;
-import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
+import org.apache.wicket.model.ResourceModel;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
-import org.complitex.osznconnection.file.service.process.ProcessType;
-import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
-import org.complitex.osznconnection.file.web.component.process.*;
+import org.complitex.osznconnection.file.web.AbstractFileListPanel;
+import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
-import org.complitex.template.web.pages.ScrollListPage;
+import org.complitex.template.web.component.toolbar.ToolbarButton;
+import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
+import java.util.List;
+import java.util.Map;
+
+import static org.complitex.osznconnection.file.entity.RequestFileType.PRIVILEGE_PROLONGATION;
+import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
 @AuthorizeInstantiation("PRIVILEGE_FORM_2")
-public final class FacilityForm2FileList extends ScrollListPage {
-
-    private static final int AJAX_TIMER = 4;
+public final class FacilityForm2FileList extends TemplatePage {
     @EJB
     private ProcessManagerBean processManagerBean;
-    @EJB
-    private RequestFileDescriptionBean requestFileDescriptionBean;
-    private WebMarkupContainer buttons;
-    private Form<RequestFileFilter> form;
+
+    private AbstractFileListPanel fileListPanel;
 
     public FacilityForm2FileList() {
-        init();
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        AbstractProcessableListPanel.renderResources(response);
-    }
-
-    private boolean hasFieldDescription() {
-        return requestFileDescriptionBean.getFileDescription(RequestFileType.FACILITY_FORM2) != null;
-    }
-
-    private RequestFileFilter newFilter() {
-        RequestFileFilter filter = new RequestFileFilter();
-        filter.setType(RequestFileType.FACILITY_FORM2);
-        return filter;
-    }
-
-    private void init() {
-        final ProcessingManager processingManager = new ProcessingManager(getFillProcessType(), getSaveProcessType());
-        final MessagesManager messagesManager = new MessagesManager(this) {
-
-            @Override
-            public void showMessages(AjaxRequestTarget target) {
-                addMessages("fill_process", target, getFillProcessType(),
-                        RequestFileStatus.FILLED, RequestFileStatus.FILL_ERROR);
-                addMessages("save_process", target, getSaveProcessType(),
-                        RequestFileStatus.SAVED, RequestFileStatus.SAVE_ERROR);
-
-                addCompetedMessages("fill_process", getFillProcessType());
-                addCompetedMessages("save_process", getSaveProcessType());
-            }
-        };
-
         add(new Label("title", new ResourceModel("title")));
 
-        final AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");
-        add(messages);
-
-        //Фильтр модель
-        RequestFileFilter filter = getFilterObject(newFilter());
-        final IModel<RequestFileFilter> model = new CompoundPropertyModel<>(filter);
-
-        //Фильтр форма
-        form = new Form<>("form", model);
-        form.setOutputMarkupId(true);
-        add(form);
-
-        AjaxLink<Void> filter_reset = new AjaxLink<Void>("filter_reset") {
+        add(fileListPanel = new AbstractFileListPanel("fileListPanel", PRIVILEGE_PROLONGATION,
+                LOAD_PRIVILEGE_PROLONGATION, BIND_PRIVILEGE_PROLONGATION, FILL_PRIVILEGE_PROLONGATION,
+                SAVE_PRIVILEGE_PROLONGATION) {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                RequestFileFilter filterObject = newFilter();
-                model.setObject(filterObject);
-                target.add(form);
-            }
-        };
-        form.add(filter_reset);
-
-        AjaxButton find = new AjaxButton("find", form) {
-
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                target.add(form);
+            protected String getPreferencePage() {
+                return PrivilegeProlongationFileList.class.getName();
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            protected Class<? extends WebPage> getItemListPageClass() {
+                return PrivilegeProlongationList.class;
             }
-        };
-        form.add(find);
-
-        //Select all checkbox
-        form.add(new SelectAllCheckBoxPanel("selectAllCheckBoxPanel", processingManager));
-
-        //Id
-        form.add(new TextField<String>("id"));
-
-        //Осзн
-        form.add(new OrganizationIdPicker("organization",
-                new PropertyModel<>(model, "organizationId"),
-                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE));
-
-        // Организация пользователя
-        form.add(new OrganizationIdPicker("userOrganization",
-                new PropertyModel<>(model, "userOrganizationId"),
-                OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
-
-        //Месяц
-        form.add(new MonthDropDownChoice("month").setNullValid(true));
-
-        //Год
-        form.add(new YearDropDownChoice("year").setNullValid(true));
-
-        //Статус
-        form.add(new RequestFileStatusFilter("status"));
-
-        //Модель выбранных элементов списка.
-        final SelectManager selectManager = new SelectManager();
-
-        //Модель данных списка
-        final RequestFileDataProvider dataProvider = new RequestFileDataProvider(this, model, selectManager);
-
-        //Контейнер для ajax
-        final WebMarkupContainer dataViewContainer = new WebMarkupContainer("request_files_container");
-        dataViewContainer.setOutputMarkupId(true);
-        form.add(dataViewContainer);
-
-        final TimerManager timerManager = new TimerManager(AJAX_TIMER, messagesManager, processingManager, form,
-                dataViewContainer);
-        timerManager.addUpdateComponent(messages);
-
-        //Таблица файлов запросов
-        final ProcessDataView<RequestFile> dataView = new ProcessDataView<RequestFile>("request_files", dataProvider) {
 
             @Override
-            protected void populateItem(Item<RequestFile> item) {
-                final RequestFile requestFile = item.getModelObject();
-
-                //Выбор файлов
-                item.add(new ItemCheckBoxPanel<>("itemCheckBoxPanel", processingManager, selectManager, item.getModel()));
-
-                //Идентификатор файла
-                item.add(new Label("id", StringUtil.valueOf(requestFile.getId())));
-
-                //ОСЗН
-                item.add(new ItemOrganizationLabel("organization", requestFile.getOrganizationId()));
-
-                //Организация пользователя
-                item.add(new ItemOrganizationLabel("userOrganization", requestFile.getUserOrganizationId()));
-
-                item.add(new Label("month", DateUtil.displayMonth(requestFile.getBeginDate(), getLocale())));
-                item.add(new Label("year", DateUtil.getYear(requestFile.getBeginDate()) + ""));
-
-                //Количество обработанных записей
-                item.add(new Label("filled_record_count", new LoadableDetachableModel<String>() {
-
-                    @Override
-                    protected String load() {
-                        return StringUtil.valueOf(requestFile.getFilledRecordCount());
-                    }
-                }));
-
-                //Статус
-                item.add(new ItemStatusLabel("status", processingManager));
+            protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
+                processManagerBean.bindPrivilegeProlongation(selectedFileIds, commandParameters);
             }
-        };
-        dataViewContainer.add(dataView);
-
-        //Постраничная навигация
-        ProcessPagingNavigator pagingNavigator = new ProcessPagingNavigator("paging", dataView, getPreferencesPage(),
-                selectManager, form);
-        form.add(pagingNavigator);
-
-        //Сортировка
-        form.add(new ArrowOrderByBorder("header.id", "id", dataProvider, dataView, form));
-        form.add(new ArrowOrderByBorder("header.organization", "organization_id", dataProvider, dataView, form));
-        form.add(new ArrowOrderByBorder("header.user_organization", "user_organization_id", dataProvider, dataView, form));
-        form.add(new ArrowOrderByBorder("header.month", "month", dataProvider, dataView, form));
-        form.add(new ArrowOrderByBorder("header.year", "year", dataProvider, dataView, form));
-        form.add(new ArrowOrderByBorder("header.status", "status", dataProvider, dataView, form));
-
-        //Контейнер кнопок для ajax
-        buttons = new WebMarkupContainer("buttons");
-        buttons.setOutputMarkupId(true);
-        form.add(buttons);
-
-        timerManager.addUpdateComponent(buttons);
-
-        //Обработать
-        buttons.add(new AjaxLink<Void>("process") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                //TODO: add start processing dialog
+            protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
+            }
+
+            @Override
+            protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
+
+            }
+
+            @Override
+            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+                processManagerBean.loadFacilityForm2(userOrganizationId, organizationId, year, monthFrom);
+            }
+
+            @Override
+            protected RequestFileLoadPanel.MonthParameterViewMode getLoadMonthParameterViewMode() {
+                return RequestFileLoadPanel.MonthParameterViewMode.EXACT;
+            }
+
+            @Override
+            protected Long[] getOsznOrganizationTypes() {
+                return new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
             }
         });
 
-        //Выгрузить
-        buttons.add(new AjaxLink<Void>("save") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                messagesManager.resetCompletedStatus(getSaveProcessType());
-
-                processManagerBean.saveFacilityForm2(selectManager.getSelectedFileIds(), null);
-
-                selectManager.clearSelection();
-                timerManager.addTimer();
-                target.add(form);
-            }
-        });
-
-        //Удалить
-        buttons.add(new RequestFileDeleteButton("delete", selectManager, form, messages) {
-
-            @Override
-            protected Class<?> getLoggerControllerClass() {
-                return FacilityForm2FileList.class;
-            }
-
-            @Override
-            protected void logSuccess(RequestFile requestFile) {
-                log().info("Request file (ID : {}, full name: '{}') has been deleted.", requestFile.getId(),
-                        requestFile.getFullName());
-            }
-
-            @Override
-            protected void logError(RequestFile requestFile, Exception e) {
-                log().error("Cannot delete request file (ID : " + requestFile.getId() + ", full name: '"
-                        + requestFile.getFullName() + "').", e);
-            }
-        });
-
-        //Отменить обработку
-        buttons.add(new AjaxLink<Void>("fill_cancel") {
-
-            @Override
-            public boolean isVisible() {
-                return processManagerBean.isProcessing(getFillProcessType());
-            }
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                processManagerBean.cancel(getFillProcessType());
-                info(getString("fill_process.canceling"));
-                target.add(form);
-            }
-        });
-
-        //Отменить выгрузку
-        buttons.add(new AjaxLink<Void>("save_cancel") {
-
-            @Override
-            public boolean isVisible() {
-                return processManagerBean.isProcessing(getSaveProcessType());
-            }
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                processManagerBean.cancel(getSaveProcessType());
-                info(getString("save_process.canceling"));
-                target.add(form);
-            }
-        });
-
-        //Запуск таймера
-        timerManager.startTimer();
-
-        //Отобразить сообщения
-        messagesManager.showMessages();
     }
 
-    private ProcessType getFillProcessType() {
-        return ProcessType.FILL_FACILITY_FORM2;
-    }
-
-    private ProcessType getSaveProcessType() {
-        return ProcessType.SAVE_FACILITY_FORM2;
+    protected List<ToolbarButton> getToolbarButtons(String id) {
+        return fileListPanel.getToolbarButtons(id);
     }
 }

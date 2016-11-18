@@ -23,7 +23,6 @@ import org.complitex.osznconnection.file.service.file_description.RequestFileDes
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.file.web.pages.payment.PaymentList;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
@@ -145,9 +144,8 @@ public class GroupList extends TemplatePage {
         }
 
         @Override
-        protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-            processManagerBean.loadGroup(userOrganizationId, osznId,
-                    dateParameter.getMonthFrom(), dateParameter.getMonthTo(), dateParameter.getYear());
+        protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+            processManagerBean.loadGroup(userOrganizationId, organizationId, year, monthFrom, monthTo);
         }
 
         @Override

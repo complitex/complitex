@@ -28,7 +28,6 @@ import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.LoadButton;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.file.web.component.process.*;
@@ -268,8 +267,8 @@ public class SubsidyTarifFileList extends TemplatePage {
         requestFileLoadPanel = new RequestFileLoadPanel("load_panel", new ResourceModel("load_panel_title"),
                 MonthParameterViewMode.HIDDEN) {
             @Override
-            protected void load(Long userOrganizationId, Long osznId, DateParameter dateParameter, AjaxRequestTarget target) {
-                processManagerBean.loadSubsidyTarif(userOrganizationId, osznId, dateParameter.getMonth(), dateParameter.getYear());
+            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
+                processManagerBean.loadSubsidyTarif(userOrganizationId, organizationId, year, monthFrom);
 
                 messagesManager.resetCompletedStatus(ProcessType.LOAD_SUBSIDY_TARIF);
 

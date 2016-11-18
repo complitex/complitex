@@ -12,7 +12,6 @@ import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
@@ -83,9 +82,8 @@ public class PrivilegeProlongationFileList extends TemplatePage {
             }
 
             @Override
-            protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-                processManagerBean.loadPrivilegeProlongation(type, userOrganizationId, osznId,
-                        dateParameter.getMonth(), dateParameter.getYear());
+            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+                processManagerBean.loadPrivilegeProlongation(type, userOrganizationId, organizationId, year, monthFrom);
             }
 
             @Override

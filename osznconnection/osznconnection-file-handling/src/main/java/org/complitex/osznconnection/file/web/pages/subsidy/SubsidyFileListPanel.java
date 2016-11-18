@@ -16,7 +16,6 @@ import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 
 import javax.ejb.EJB;
@@ -86,9 +85,8 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     }
 
     @Override
-    protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-        processManagerBean.loadSubsidy(userOrganizationId, osznId,
-                dateParameter.getMonthFrom(), dateParameter.getMonthTo(), dateParameter.getYear());
+    protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+        processManagerBean.loadSubsidy(userOrganizationId, organizationId, year, monthFrom, monthTo);
     }
 
     @Override

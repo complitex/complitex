@@ -5,7 +5,6 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;
@@ -29,9 +28,8 @@ public final class FacilityStreetTypeFileList extends AbstractReferenceBookFileL
     }
 
     @Override
-    protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-        processManagerBean.loadFacilityStreetTypeReferences(userOrganizationId, osznId, dateParameter.getMonth(),
-                dateParameter.getYear());
+    protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+        processManagerBean.loadFacilityStreetTypeReferences(userOrganizationId, organizationId, year, monthFrom);
     }
 
     @Override

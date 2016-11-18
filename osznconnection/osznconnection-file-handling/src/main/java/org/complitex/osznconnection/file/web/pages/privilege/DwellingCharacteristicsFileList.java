@@ -8,7 +8,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
@@ -70,9 +69,8 @@ public final class DwellingCharacteristicsFileList extends ScrollListPage {
             }
 
             @Override
-            protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-                processManagerBean.loadDwellingCharacteristics(userOrganizationId, osznId,
-                        dateParameter.getMonth(), dateParameter.getYear());
+            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+                processManagerBean.loadDwellingCharacteristics(userOrganizationId, organizationId, year, monthFrom);
             }
 
             @Override

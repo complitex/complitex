@@ -17,7 +17,6 @@ import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 
@@ -99,8 +98,8 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
     }
 
     @Override
-    protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-        processManagerBean.loadPrivilegeGroup(userOrganizationId, osznId, dateParameter.getMonth(), dateParameter.getYear());
+    protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+        processManagerBean.loadPrivilegeGroup(userOrganizationId, organizationId, year, monthFrom);
     }
 
     @Override

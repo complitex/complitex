@@ -59,7 +59,6 @@ import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.LoadButton;
 import org.complitex.osznconnection.file.web.component.RequestFileHistoryPanel;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.file.web.component.process.*;
@@ -136,7 +135,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         init();
     }
 
-    protected abstract void load(long userOrganizationId, long osznId, DateParameter dateParameter);
+    protected abstract void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo);
 
     protected abstract void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters);
 
@@ -693,8 +692,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         requestFileLoadPanel = new RequestFileLoadPanel("load_panel", new ResourceModel("load_panel_title"),
                 getLoadMonthParameterViewMode()) {
             @Override
-            protected void load(Long userOrganizationId, Long osznId, DateParameter dateParameter, AjaxRequestTarget target) {
-                AbstractProcessableListPanel.this.load(userOrganizationId, osznId, dateParameter);
+            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
+                AbstractProcessableListPanel.this.load(userOrganizationId, organizationId, year, monthFrom, monthTo);
             }
 
             @Override

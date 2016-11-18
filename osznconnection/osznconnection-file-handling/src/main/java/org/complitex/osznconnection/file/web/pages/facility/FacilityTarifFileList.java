@@ -4,7 +4,6 @@ import org.apache.wicket.Page;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 
 import javax.ejb.EJB;
 
@@ -26,9 +25,8 @@ public final class FacilityTarifFileList extends AbstractReferenceBookFileList {
     }
 
     @Override
-    protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-        processManagerBean.loadFacilityTarifReferences(userOrganizationId, osznId, dateParameter.getMonth(),
-                dateParameter.getYear(), getLocale());
+    protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+        processManagerBean.loadFacilityTarifReferences(userOrganizationId, organizationId, year, monthFrom, getLocale());
     }
 
     @Override

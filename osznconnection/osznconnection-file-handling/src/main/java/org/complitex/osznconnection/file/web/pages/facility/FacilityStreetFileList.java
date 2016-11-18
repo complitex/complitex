@@ -4,14 +4,9 @@ import org.apache.wicket.Page;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
-import org.complitex.osznconnection.file.web.component.load.DateParameter;
 
 import javax.ejb.EJB;
 
-/**
- *
- * @author Artem
- */
 public final class FacilityStreetFileList extends AbstractReferenceBookFileList {
 
     @EJB
@@ -26,9 +21,8 @@ public final class FacilityStreetFileList extends AbstractReferenceBookFileList 
     }
 
     @Override
-    protected void load(long userOrganizationId, long osznId, DateParameter dateParameter) {
-        processManagerBean.loadFacilityStreetReferences(userOrganizationId, osznId, dateParameter.getMonth(),
-                dateParameter.getYear(), getLocale());
+    protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+        processManagerBean.loadFacilityStreetReferences(userOrganizationId, organizationId, year, monthFrom, getLocale());
     }
 
     @Override
