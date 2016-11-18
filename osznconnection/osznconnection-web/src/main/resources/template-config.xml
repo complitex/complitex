@@ -29,6 +29,7 @@
         <group name="SUBSIDY_FILE"/>
         <group name="PRIVILEGE_GROUP"/>
         <group name="PRIVILEGE_FORM_2"/>
+        <group name="PRIVILEGE_LOCAL"/>
         <group name="PRIVILEGE_PROLONGATION_S"/>
         <group name="PRIVILEGE_PROLONGATION_P"/>
     </groups>

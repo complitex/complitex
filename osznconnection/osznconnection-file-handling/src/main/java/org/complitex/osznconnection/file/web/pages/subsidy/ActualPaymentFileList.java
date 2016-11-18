@@ -48,18 +48,18 @@ public class ActualPaymentFileList extends TemplatePage {
             }
 
             @Override
-            protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.bindActualPayment(selectedFileIds, commandParameters);
+            protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+                processManagerBean.bindActualPayment(selectedFileIds, parameters);
             }
 
             @Override
-            protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.fillActualPayment(selectedFileIds, commandParameters);
+            protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+                processManagerBean.fillActualPayment(selectedFileIds, parameters);
             }
 
             @Override
-            protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.saveActualPayment(selectedFileIds, commandParameters);
+            protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+                processManagerBean.saveActualPayment(selectedFileIds, parameters);
             }
 
             @Override

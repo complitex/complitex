@@ -246,7 +246,7 @@ public class ProcessManagerBean {
         for (Long id : ids) {
             RequestFile requestFile = requestFileBean.getRequestFile(id);
 
-            if (!isProcessing(requestFile, processTypes)) {
+            if (!isProcessing(requestFile, processTypes)) { //todo check global processing
                 requestFiles.add(requestFile);
             }
         }
@@ -270,7 +270,11 @@ public class ProcessManagerBean {
     }
 
     private List<RequestFile> getFacilityForm2Files(List<Long> ids) {
-        return getRequestFiles(ids, FILL_FACILITY_FORM2, SAVE_FACILITY_FORM2);
+        return getRequestFiles(ids, SAVE_FACILITY_FORM2);
+    }
+
+    private List<RequestFile> getFacilityLocalFiles(List<Long> ids) {
+        return getRequestFiles(ids, SAVE_FACILITY_LOCAL);
     }
 
     private List<PrivilegeFileGroup> getPrivilegeFileGroups(List<Long> ids) {
@@ -552,12 +556,23 @@ public class ProcessManagerBean {
 
     /*FacilityForm2*/
 
-    public void loadFacilityForm2(Long userOrganizationId, Long osznId, int year, int month){
+    public void loadFacilityForm2(Long userOrganizationId, Long organizationId, int year, int month){
         //todo execute facility form 2 load process
     }
 
     public void saveFacilityForm2(List<Long> ids, Map processParameters) {
         execute(SAVE_FACILITY_FORM2, FacilityForm2SaveTaskBean.class,
+                getFacilityForm2Files(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+    }
+
+    /*FacilityLocal*/
+
+    public void loadFacilityLocal(Long userOrganizationId, Long organizationId, int year, int month){
+        //todo execute facility form 2 load process
+    }
+
+    public void saveFacilityLocal(List<Long> ids, Map processParameters) {
+        execute(SAVE_FACILITY_LOCAL, FacilityForm2SaveTaskBean.class,
                 getFacilityForm2Files(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 

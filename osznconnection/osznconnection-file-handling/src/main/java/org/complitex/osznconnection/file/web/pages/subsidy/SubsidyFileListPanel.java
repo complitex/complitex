@@ -90,18 +90,18 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     }
 
     @Override
-    protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-        processManagerBean.bindSubsidy(selectedFileIds, commandParameters);
+    protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+        processManagerBean.bindSubsidy(selectedFileIds, parameters);
     }
 
     @Override
-    protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-        processManagerBean.fillSubsidy(selectedFileIds, commandParameters);
+    protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+        processManagerBean.fillSubsidy(selectedFileIds, parameters);
     }
 
     @Override
-    protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-        processManagerBean.saveSubsidy(selectedFileIds, commandParameters);
+    protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+        processManagerBean.saveSubsidy(selectedFileIds, parameters);
     }
 
     @Override

@@ -54,18 +54,18 @@ public final class DwellingCharacteristicsFileList extends ScrollListPage {
             }
 
             @Override
-            protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.bindDwellingCharacteristics(selectedFileIds, commandParameters);
+            protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+                processManagerBean.bindDwellingCharacteristics(selectedFileIds, parameters);
             }
 
             @Override
-            protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.fillDwellingCharacteristics(selectedFileIds, commandParameters);
+            protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+                processManagerBean.fillDwellingCharacteristics(selectedFileIds, parameters);
             }
 
             @Override
-            protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.saveDwellingCharacteristics(selectedFileIds, commandParameters);
+            protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+                processManagerBean.saveDwellingCharacteristics(selectedFileIds, parameters);
             }
 
             @Override

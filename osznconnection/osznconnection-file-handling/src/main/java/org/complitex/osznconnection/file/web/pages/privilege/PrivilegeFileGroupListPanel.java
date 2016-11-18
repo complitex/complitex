@@ -103,18 +103,18 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
     }
 
     @Override
-    protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-        processManagerBean.bindPrivilegeGroup(selectedFileIds, commandParameters);
+    protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+        processManagerBean.bindPrivilegeGroup(selectedFileIds, parameters);
     }
 
     @Override
-    protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-        processManagerBean.fillPrivilegeGroup(selectedFileIds, commandParameters);
+    protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+        processManagerBean.fillPrivilegeGroup(selectedFileIds, parameters);
     }
 
     @Override
-    protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-        processManagerBean.savePrivilegeGroup(selectedFileIds, commandParameters);
+    protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+        processManagerBean.savePrivilegeGroup(selectedFileIds, parameters);
     }
 
     @Override

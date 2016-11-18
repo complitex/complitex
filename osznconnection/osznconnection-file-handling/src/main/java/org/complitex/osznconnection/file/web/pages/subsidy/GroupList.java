@@ -129,18 +129,18 @@ public class GroupList extends TemplatePage {
         }
 
         @Override
-        protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-            processManagerBean.bindGroup(selectedFileIds, commandParameters);
+        protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+            processManagerBean.bindGroup(selectedFileIds, parameters);
         }
 
         @Override
-        protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-            processManagerBean.fillGroup(selectedFileIds, commandParameters);
+        protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+            processManagerBean.fillGroup(selectedFileIds, parameters);
         }
 
         @Override
-        protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-            processManagerBean.saveGroup(selectedFileIds, commandParameters);
+        protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+            processManagerBean.saveGroup(selectedFileIds, parameters);
         }
 
         @Override

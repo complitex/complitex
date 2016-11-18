@@ -1,38 +1,28 @@
 package org.complitex.osznconnection.file.service.privilege;
 
-import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
-import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.privilege.FacilityForm2;
 import org.complitex.osznconnection.file.service.AbstractRequestBean;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 public class FacilityForm2Bean extends AbstractRequestBean {
+    public static final String NS = FacilityForm2Bean.class.getName();
 
-    public static final String MAPPING_NAMESPACE = FacilityForm2Bean.class.getName();
-
-
-    public void delete(long requestFileId) {
-        sqlSession().delete(MAPPING_NAMESPACE + ".deleteFacilityForm2", requestFileId);
-    }
-
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void insert(List<AbstractRequest> abstractRequests) {
-        if (abstractRequests.isEmpty()) {
+    public void save(List<FacilityForm2> facilityForm2List) {
+        if (facilityForm2List.isEmpty()) {
             return;
         }
-        sqlSession().insert(MAPPING_NAMESPACE + ".insertFacilityForm2List", abstractRequests);
+
+        sqlSession().insert(NS + ".insertFacilityForm2List", facilityForm2List);
     }
 
-    public List<AbstractAccountRequest> getFacilityForm2(long requestFileId) {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".selectFacilityForm2", requestFileId);
+    public List<FacilityForm2> getFacilityForm2(Long requestFileId) {
+        return sqlSession().selectList(NS + ".selectFacilityForm2List", requestFileId);
+    }
+
+    public void delete(Long requestFileId) {
+        sqlSession().delete(NS + ".deleteFacilityForm2", requestFileId);
     }
 }

@@ -68,16 +68,16 @@ public class PrivilegeProlongationFileList extends TemplatePage {
             }
 
             @Override
-            protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.bindPrivilegeProlongation(selectedFileIds, commandParameters);
+            protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+                processManagerBean.bindPrivilegeProlongation(selectedFileIds, parameters);
             }
 
             @Override
-            protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
+            protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
             }
 
             @Override
-            protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
+            protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
 
             }
 

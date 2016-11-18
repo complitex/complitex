@@ -75,6 +75,9 @@
         <role-name>PRIVILEGE_FORM_2</role-name>
     </security-role>
     <security-role>
+        <role-name>PRIVILEGE_LOCAL</role-name>
+    </security-role>
+    <security-role>
         <role-name>PRIVILEGE_PROLONGATION_S</role-name>
     </security-role>
     <security-role>

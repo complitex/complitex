@@ -123,8 +123,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     private ProcessType fillProcessType;
     private ProcessType saveProcessType;
 
-    public AbstractProcessableListPanel(String id, ProcessType loadProcessType,
-                                        ProcessType bindProcessType, ProcessType fillProcessType, ProcessType saveProcessType) {
+    public AbstractProcessableListPanel(String id, ProcessType loadProcessType, ProcessType bindProcessType,
+                                        ProcessType fillProcessType, ProcessType saveProcessType) {
         super(id);
 
         this.loadProcessType = loadProcessType;
@@ -137,14 +137,22 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     protected abstract void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo);
 
-    protected abstract void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters);
+    protected abstract void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters);
 
-    protected abstract void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters);
+    protected abstract void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters);
 
-    protected abstract void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters);
+    protected abstract void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters);
 
     protected void export(AjaxRequestTarget target, List<Long> selectedFileIds){
         //override me
+    }
+
+    protected boolean isBindVisible(){
+        return true;
+    }
+
+    protected boolean isFillVisible(){
+        return true;
     }
 
     protected boolean isExportVisible(){
@@ -543,6 +551,11 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 bind(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
             }
+
+            @Override
+            public boolean isVisible() {
+                return isBindVisible();
+            }
         });
 
         //Обработать
@@ -552,6 +565,11 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             public void onSubmit(AjaxRequestTarget target, Form form) {
                 fill(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
+            }
+
+            @Override
+            public boolean isVisible() {
+                return isFillVisible();
             }
         });
 

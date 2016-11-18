@@ -85,6 +85,10 @@
         <group-name>PRIVILEGE_FORM_2</group-name>
     </security-role-mapping>
     <security-role-mapping>
+        <role-name>PRIVILEGE_LOCAL</role-name>
+        <group-name>PRIVILEGE_LOCAL</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
         <role-name>PRIVILEGE_PROLONGATION_S</role-name>
         <group-name>PRIVILEGE_PROLONGATION_S</group-name>
     </security-role-mapping>

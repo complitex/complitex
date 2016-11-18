@@ -15,35 +15,38 @@ import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
 
-import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_FORM2;
+import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_LOCAL;
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
-@AuthorizeInstantiation("PRIVILEGE_FORM_2")
-public final class FacilityForm2FileList extends TemplatePage {
+/**
+ * @author inheaven on 017 17.11.16.
+ */
+@AuthorizeInstantiation("PRIVILEGE_LOCAL")
+public class FacilityLocalFileList extends TemplatePage{
     @EJB
     private ProcessManagerBean processManagerBean;
 
     private AbstractFileListPanel fileListPanel;
 
-    public FacilityForm2FileList() {
+    public FacilityLocalFileList() {
         add(new Label("title", new ResourceModel("title")));
 
-        add(fileListPanel = new AbstractFileListPanel("fileListPanel", FACILITY_FORM2,
-                LOAD_FACILITY_FORM2, BIND_FACILITY_FORM2, FILL_FACILITY_FORM2, SAVE_FACILITY_FORM2) {
+        add(fileListPanel = new AbstractFileListPanel("fileListPanel", FACILITY_LOCAL,
+                LOAD_FACILITY_LOCAL, BIND_FACILITY_LOCAL, FILL_FACILITY_LOCAL, SAVE_FACILITY_LOCAL) {
 
             @Override
             protected String getPreferencePage() {
-                return FacilityForm2FileList.class.getName();
+                return FacilityLocalFileList.class.getName();
             }
 
             @Override
             protected Class<? extends WebPage> getItemListPageClass() {
-                return null; //todo list
+                return null; //todo list page
             }
 
             @Override
             protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-                processManagerBean.loadFacilityForm2(userOrganizationId, organizationId, year, monthFrom);
+                processManagerBean.loadFacilityLocal(userOrganizationId, organizationId, year, monthFrom);
             }
 
             @Override
@@ -56,7 +59,7 @@ public final class FacilityForm2FileList extends TemplatePage {
 
             @Override
             protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.saveFacilityForm2(selectedFileIds, parameters);
+                processManagerBean.saveFacilityLocal(selectedFileIds, parameters);
             }
 
             @Override

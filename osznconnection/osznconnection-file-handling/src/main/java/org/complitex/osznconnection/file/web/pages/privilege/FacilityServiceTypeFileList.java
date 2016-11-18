@@ -54,18 +54,18 @@ public final class FacilityServiceTypeFileList extends ScrollListPage {
             }
 
             @Override
-            protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.bindFacilityServiceType(selectedFileIds, commandParameters);
+            protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+                processManagerBean.bindFacilityServiceType(selectedFileIds, parameters);
             }
 
             @Override
-            protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.fillFacilityServiceType(selectedFileIds, commandParameters);
+            protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+                processManagerBean.fillFacilityServiceType(selectedFileIds, parameters);
             }
 
             @Override
-            protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> commandParameters) {
-                processManagerBean.saveFacilityServiceType(selectedFileIds, commandParameters);
+            protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+                processManagerBean.saveFacilityServiceType(selectedFileIds, parameters);
             }
 
             @Override

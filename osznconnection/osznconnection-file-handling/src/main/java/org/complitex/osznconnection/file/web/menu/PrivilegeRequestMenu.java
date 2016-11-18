@@ -6,6 +6,7 @@ import org.complitex.osznconnection.file.web.pages.facility.FacilityStreetFileLi
 import org.complitex.osznconnection.file.web.pages.facility.FacilityStreetTypeFileList;
 import org.complitex.osznconnection.file.web.pages.facility.FacilityTarifFileList;
 import org.complitex.osznconnection.file.web.pages.privilege.FacilityForm2FileList;
+import org.complitex.osznconnection.file.web.pages.privilege.FacilityLocalFileList;
 import org.complitex.osznconnection.file.web.pages.privilege.PrivilegeFileGroupList;
 import org.complitex.osznconnection.file.web.pages.privilege.PrivilegeProlongationFileList;
 import org.complitex.template.web.template.ResourceTemplateMenu;
@@ -17,6 +18,7 @@ public class PrivilegeRequestMenu extends ResourceTemplateMenu {
     public PrivilegeRequestMenu() {
         add("privilege_list", PrivilegeFileGroupList.class, new String[]{"PRIVILEGE_GROUP"});
         add("facility_form2_list", FacilityForm2FileList.class, new String[]{"PRIVILEGE_FORM_2"});
+        add("facility_local_list", FacilityLocalFileList.class, new String[]{"PRIVILEGE_LOCAL"});
         add("facility_street_type_file_list", FacilityStreetTypeFileList.class);
         add("facility_street_file_list", FacilityStreetFileList.class);
         add("facility_tarif_file_list", FacilityTarifFileList.class);

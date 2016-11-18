@@ -1,28 +1,25 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.common.service.executor.ITaskBean;
-import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
-import org.complitex.osznconnection.file.entity.privilege.FacilityForm2DBF;
 import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.privilege.FacilityForm2;
+import org.complitex.osznconnection.file.entity.privilege.FacilityForm2DBF;
 import org.complitex.osznconnection.file.service.privilege.FacilityForm2Bean;
 import org.complitex.osznconnection.file.service.process.AbstractSaveTaskBean;
 import org.complitex.osznconnection.file.service.process.RequestFileDirectoryType;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import java.util.List;
 
 @Stateless
-@TransactionManagement(TransactionManagementType.BEAN)
 public class FacilityForm2SaveTaskBean extends AbstractSaveTaskBean implements ITaskBean<RequestFile> {
 
     @EJB
     private FacilityForm2Bean facilityForm2Bean2;
 
     @Override
-    protected List<AbstractAccountRequest> getAbstractRequests(RequestFile requestFile) {
+    protected List<FacilityForm2> getAbstractRequests(RequestFile requestFile) {
         return facilityForm2Bean2.getFacilityForm2(requestFile.getId());
     }
 
