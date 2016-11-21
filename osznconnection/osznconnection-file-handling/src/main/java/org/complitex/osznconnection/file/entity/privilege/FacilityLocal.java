@@ -10,4 +10,10 @@ public class FacilityLocal extends AbstractAccountRequest<FacilityLocalDBF>{
     public FacilityLocal() {
         super(RequestFileType.FACILITY_LOCAL);
     }
+
+    public FacilityLocal(Long requestFileId){
+        super(RequestFileType.FACILITY_LOCAL);
+
+        setRequestFileId(requestFileId);
+    }
 }

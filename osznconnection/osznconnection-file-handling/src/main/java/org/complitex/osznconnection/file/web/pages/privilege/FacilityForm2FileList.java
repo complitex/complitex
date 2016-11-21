@@ -38,7 +38,7 @@ public final class FacilityForm2FileList extends TemplatePage {
 
             @Override
             protected Class<? extends WebPage> getItemListPageClass() {
-                return null; //todo list
+                return FacilityForm2List.class;
             }
 
             @Override

@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.service.privilege;
 
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.osznconnection.file.entity.privilege.FacilityLocal;
 import org.complitex.osznconnection.file.service.AbstractRequestBean;
 
@@ -17,7 +18,7 @@ public class FacilityLocalBean extends AbstractRequestBean{
         return sqlSession().selectList(NS + ".selectFacilityLocal", requestFileId);
     }
 
-    public void insert(List<FacilityLocal> facilityLocals) {
+    public void save(List<FacilityLocal> facilityLocals) {
         if (facilityLocals.isEmpty()) {
             return;
         }
@@ -25,11 +26,15 @@ public class FacilityLocalBean extends AbstractRequestBean{
         sqlSession().insert(NS + ".insertFacilityLocalList", facilityLocals);
     }
 
+    public List<FacilityLocal> getFacilityLocals(FilterWrapper<FacilityLocal> filterWrapper){
+        return sqlSession().selectList(NS + ".selectFacilityLocals", filterWrapper);
+    }
+
+    public Long getFacilityLocalsCount(FilterWrapper<FacilityLocal> filterWrapper){
+        return sqlSession().selectOne(NS + ".selectFacilityLocalsCount", filterWrapper);
+    }
+
     public void delete(Long requestFileId) {
         sqlSession().delete(NS + ".deleteFacilityLocal", requestFileId);
     }
-
-
-
-
 }

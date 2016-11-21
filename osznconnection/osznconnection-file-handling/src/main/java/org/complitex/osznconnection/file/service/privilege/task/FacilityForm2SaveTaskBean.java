@@ -20,7 +20,7 @@ public class FacilityForm2SaveTaskBean extends AbstractSaveTaskBean implements I
 
     @Override
     protected List<FacilityForm2> getAbstractRequests(RequestFile requestFile) {
-        return facilityForm2Bean2.getFacilityForm2(requestFile.getId());
+        return facilityForm2Bean2.getFacilityForm2List(requestFile.getId());
     }
 
     @Override

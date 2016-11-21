@@ -41,7 +41,7 @@ public class FacilityLocalFileList extends TemplatePage{
 
             @Override
             protected Class<? extends WebPage> getItemListPageClass() {
-                return null; //todo list page
+                return FacilityLocalList.class;
             }
 
             @Override
