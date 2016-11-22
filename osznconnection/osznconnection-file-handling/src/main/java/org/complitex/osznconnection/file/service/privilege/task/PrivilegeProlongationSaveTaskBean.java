@@ -54,7 +54,7 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
 
         String district = null;
 
-        DomainObject organization = osznOrganizationStrategy.getDomainObject(requestFile.getOrganizationId());
+        DomainObject organization = osznOrganizationStrategy.getDomainObject(requestFile.getOrganizationId()); //todo move to organization strategy
 
         if (organization != null && organization.getAttribute(IOrganizationStrategy.DISTRICT) != null){
             DomainObject districtObject = districtStrategy.getDomainObject(organization.getAttribute(IOrganizationStrategy.DISTRICT).getValueId());

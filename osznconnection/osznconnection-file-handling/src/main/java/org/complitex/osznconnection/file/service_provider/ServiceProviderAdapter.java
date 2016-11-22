@@ -14,6 +14,7 @@ import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.organization.strategy.ServiceStrategy;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.privilege.FacilityForm2;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
@@ -187,9 +188,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     public void checkFacilityPerson(AbstractAccountRequest request, String accountNumber, Date date, String inn, String passport){
-        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(request.getUserOrganizationId());
-
-        Cursor<BenefitData> benefitDataCursor = getBenefitData(dataSource, accountNumber, date);
+        Cursor<BenefitData> benefitDataCursor = getBenefitData(request.getUserOrganizationId(), accountNumber, date);
 
         if (benefitDataCursor.isEmpty() && benefitDataCursor.getResultCode() == 1){
             warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.EMPTY_BENEFIT_DATA);
@@ -814,17 +813,12 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     public Cursor<BenefitData> getBenefitData(Long userOrganizationId, String accountNumber, Date date){
-        return getBenefitData(organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId), accountNumber, date);
-    }
-
-
-    public Cursor<BenefitData> getBenefitData(String dataSource, String accountNumber, Date date){
         Map<String, Object> params = newHashMap();
         params.put("accountNumber", accountNumber);
         params.put("dat1", date);
 
         try {
-            sqlSession(dataSource).selectOne(NS + ".getBenefitData", params);
+            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getBenefitData", params);
         }finally {
             log.info("getBenefitData getPrivs {}", params);
         }
@@ -1390,13 +1384,11 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     public Cursor<PaymentAndBenefitData> getPaymentAndBenefit(Long userOrganizationId, String accountNumber, Date date){
-        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
-
         Map<String, Object> params = newHashMap();
         params.put("accountNumber", accountNumber);
         params.put("dat1", date);
 
-        sqlSession(dataSource).selectOne(NS + ".processPaymentAndBenefit", params);
+        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".processPaymentAndBenefit", params);
 
         log.info("getPaymentAndBenefit. {}", params);
 
@@ -1405,8 +1397,6 @@ public class ServiceProviderAdapter extends AbstractBean {
 
     public Long createPrivilegeProlongationHeader(Long userOrganizationId, String district, String zheuCode, Date date, String fileName,
                                                   Integer recordsCount, boolean profit){
-        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
-
         Map<String, Object> map = new HashMap<>();
         map.put("pDistrName", district);
         map.put("pZheuCode", zheuCode);
@@ -1415,15 +1405,15 @@ public class ServiceProviderAdapter extends AbstractBean {
         map.put("pCnt", recordsCount);
         map.put("pProfit", profit ? 1 : 0);
 
-        sqlSession(dataSource).selectOne(NS + ".createPrivHeader", map);
+        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".createPrivHeader", map);
+
+        log.info("createPrivilegeProlongationHeader createPrivHeader {}", map);
 
         return (Long) map.get("collectionId");
     }
 
     public void exportPrivilegeProlongation(Long userOrganizationId, List<PrivilegeProlongation> privilegeProlongations){
-        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
-
-        try (SqlSession sqlSessionManager = sqlSessionManager(dataSource).openSession(ExecutorType.BATCH)) {
+        try (SqlSession sqlSessionManager = sqlSessionManager(getDataSource(userOrganizationId)).openSession(ExecutorType.BATCH)) {
             privilegeProlongations.forEach(p -> {
                 sqlSessionManager.insert(NS + ".insertPriv", Collections.singleton(p));
             });
@@ -1434,13 +1424,11 @@ public class ServiceProviderAdapter extends AbstractBean {
 
     @SuppressWarnings("unchecked")
     public Cursor<Lodger> getLodgers(Long userOrganizationId, String accountNumber, Date date){
-        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
-
         Map<String, Object> map = new HashMap<>();
         map.put("pAccCode", accountNumber);
         map.put("pDate", date);
 
-        sqlSession(dataSource).selectOne(NS + ".getLodgers", map);
+        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getLodgers", map);
 
         log.info("getLodgers {}", map);
 
@@ -1449,8 +1437,6 @@ public class ServiceProviderAdapter extends AbstractBean {
 
     public Long createSubsHeader(Long userOrganizationId, String district, String zheuCode, Date date, String fileName,
                                  Integer recordsCount){
-        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
-
         Map<String, Object> map = new HashMap<>();
         map.put("pDistrName", district);
         map.put("pZheuCode", zheuCode);
@@ -1458,18 +1444,17 @@ public class ServiceProviderAdapter extends AbstractBean {
         map.put("pFile", fileName);
         map.put("pCnt", recordsCount);
 
-        sqlSession(dataSource).selectOne(NS + ".createSubsHeader", map);
-//        map.put("collectionId", 1L); //todo test
+        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".createSubsHeader", map);
+
+        log.info("createSubsHeader {}", map);
 
         return (Long) map.get("collectionId");
     }
 
     public void exportSubsidy(Long userOrganizationId, List<Subsidy> subsidies){
-        String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
-
         Long serviceId = organizationStrategy.getDomainObject(userOrganizationId).getAttribute(OrganizationStrategy.SERVICE).getValueId();
 
-        try (SqlSession sqlSessionManager = sqlSessionManager(dataSource).openSession(ExecutorType.BATCH)) {
+        try (SqlSession sqlSessionManager = sqlSessionManager(getDataSource(userOrganizationId)).openSession(ExecutorType.BATCH)) {
             subsidies.forEach(s -> {
                 if (s.getAccountNumber() == null){
                     s.setAccountNumber(s.getPuAccountNumber());
@@ -1492,5 +1477,39 @@ public class ServiceProviderAdapter extends AbstractBean {
 
             sqlSessionManager.commit();
         }
+    }
+
+    /*Facility Form2*/
+
+    public Cursor<FacilityForm2> getFacilityForm2(Long userOrganizationId, String district, String zheuCode, Date date){
+        Map<String, Object> map = new HashMap<>();
+        map.put("pDistrName", district);
+        map.put("pZheuCode", zheuCode);
+        map.put("pDate", date);
+
+        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getPrivsF", map);
+
+        log.info("getFacilityForm2 getPrivsF {}", map);
+
+        return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("cur"));
+    }
+
+    /*Facility Local*/
+
+    public Cursor<FacilityForm2> getFacilityLocal(Long userOrganizationId, String district, String zheuCode, Date date){
+        Map<String, Object> map = new HashMap<>();
+        map.put("pDistrName", district);
+        map.put("pZheuCode", zheuCode);
+        map.put("pDate", date);
+
+        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getPrivsM", map);
+
+        log.info("getFacilityLocal getPrivsM {}", map);
+
+        return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("cur"));
+    }
+
+    private String getDataSource(Long userOrganizationId){
+        return organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
     }
 }

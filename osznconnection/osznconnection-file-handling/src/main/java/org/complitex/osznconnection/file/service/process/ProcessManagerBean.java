@@ -34,6 +34,7 @@ import javax.ejb.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.complitex.common.util.DateUtil.newDate;
 import static org.complitex.osznconnection.file.entity.FileHandlingConfig.*;
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
@@ -568,7 +569,16 @@ public class ProcessManagerBean {
     /*FacilityLocal*/
 
     public void loadFacilityLocal(Long userOrganizationId, Long organizationId, int year, int month){
-        //todo execute facility form 2 load process
+        List<RequestFile> requestFiles = new ArrayList<>();
+
+        RequestFile requestFile = new RequestFile();
+        requestFile.setUserOrganizationId(userOrganizationId);
+        requestFile.setOrganizationId(organizationId);
+        requestFile.setBeginDate(newDate(year, month));
+        requestFile.setType(RequestFileType.FACILITY_FORM2);
+
+        execute(LOAD_FACILITY_FORM2, FacilityForm2LoadTaskBean.class, requestFiles, null,
+                LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
     }
 
     public void saveFacilityLocal(List<Long> ids, Map processParameters) {
