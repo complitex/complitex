@@ -4,11 +4,6 @@
 
     <resultMap id="facilityForm2ResultMap" type="org.complitex.osznconnection.file.entity.privilege.FacilityForm2"
                 extends="org.complitex.osznconnection.file.service.AbstractRequestBean.abstractRequest">
-
-        <result column="last_name" property="lastName"/>
-        <result column="first_name" property="firstName"/>
-        <result column="middle_name" property="middleName"/>
-        
         <association property="dbfFields" javaType="map">
             <result column="CDPR" property="CDPR"/>
             <result column="IDCODE" property="IDCODE"/>
@@ -27,6 +22,7 @@
             <result column="FACT" property="FACT"/>
             <result column="TARIF" property="TARIF"/>
             <result column="FLAG" property="FLAG"/>
+            <result column="DEPART" property="DEPART"/>
         </association>
     </resultMap>
 
@@ -35,7 +31,7 @@
         INSERT INTO `facility_form2`
         (
         <trim suffixOverrides=",">
-            `request_file_id`, `last_name`, `first_name`, `middle_name`,
+            `request_file_id`, `DEPART`,
             <foreach collection="list[0].dbfFields.keys" item="key">
                 `${key}`,
             </foreach>
@@ -45,7 +41,7 @@
         <foreach collection="list" separator="," item="item">
             (
             <trim suffixOverrides=",">
-                #{item.requestFileId}, #{item.lastName}, #{item.firstName}, #{item.middleName},
+                #{item.requestFileId}, #{item.dbfFields.DEPART},
                 <foreach collection="item.dbfFields.keys" item="key">
                     #{item.dbfFields.${key}},
                 </foreach>
@@ -57,9 +53,17 @@
     <select id="selectFacilityForm2" resultMap="facilityForm2ResultMap" parameterType="long">
         SELECT * FROM `facility_form2` WHERE `request_file_id` = #{id}
     </select>
+
+    <select id="selectFacilityForm2List" resultMap="facilityForm2ResultMap" parameterType="org.complitex.common.entity.FilterWrapper">
+        select * from `facility_form2` where #{object.requestFileId} = `request_file_id`
+    </select>
+
+    <select id="selectFacilityForm2ListCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
+        select count(id) from `facility_form2` where #{object.requestFileId} = `request_file_id`
+    </select>
     
     <delete id="deleteFacilityForm2" parameterType="long">
-        DELETE FROM `facility_form2` WHERE `request_file_id` = #{id};
+        DELETE FROM `facility_form2` WHERE `request_file_id` = #{id}
     </delete>
     
 </mapper>

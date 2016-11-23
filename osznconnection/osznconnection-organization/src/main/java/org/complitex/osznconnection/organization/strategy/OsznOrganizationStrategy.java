@@ -2,6 +2,7 @@ package org.complitex.osznconnection.organization.strategy;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.*;
 import org.complitex.common.exception.ServiceRuntimeException;
 import org.complitex.common.strategy.StringCultureBean;
@@ -149,6 +150,9 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
 
     @EJB
     private OrganizationCorrectionBean organizationCorrectionBean;
+
+    @EJB
+    private DistrictStrategy districtStrategy;
 
     @Override
     public IValidator getValidator() {
@@ -304,5 +308,32 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
         }
 
         return serviceProviderId;
+    }
+
+    //todo correction vs attribute
+    public String getEdrpou(Long organizationId, Long userOrganizationId){
+        List<OrganizationCorrection> list = organizationCorrectionBean.getOrganizationCorrections(
+                FilterWrapper.of(new OrganizationCorrection(null, userOrganizationId, null,
+                        organizationId, userOrganizationId, null)));
+
+        if (!list.isEmpty()){
+            return list.get(0).getCorrection();
+        }
+
+        return null;
+    }
+
+    public String getDistrict(Long organizationId){
+        DomainObject organization = getDomainObject(organizationId);
+
+        if (organization != null && organization.getAttribute(IOrganizationStrategy.DISTRICT) != null){
+            DomainObject districtObject = districtStrategy.getDomainObject(organization.getAttribute(IOrganizationStrategy.DISTRICT).getValueId());
+
+            if (districtObject != null){
+                return districtObject.getStringValue(DistrictStrategy.NAME);
+            }
+        }
+
+        return null;
     }
 }

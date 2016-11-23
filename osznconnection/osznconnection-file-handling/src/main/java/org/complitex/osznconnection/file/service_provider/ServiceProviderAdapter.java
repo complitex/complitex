@@ -1491,7 +1491,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         log.info("getFacilityForm2 getPrivsF {}", map);
 
-        return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("cur"));
+        return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("data"));
     }
 
     /*Facility Local*/
@@ -1506,7 +1506,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         log.info("getFacilityLocal getPrivsM {}", map);
 
-        return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("cur"));
+        return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("data"));
     }
 
     private String getDataSource(Long userOrganizationId){

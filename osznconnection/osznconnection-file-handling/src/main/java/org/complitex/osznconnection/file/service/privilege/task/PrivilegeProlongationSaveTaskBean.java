@@ -1,10 +1,8 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.address.strategy.district.DistrictStrategy;
-import org.complitex.common.entity.DomainObject;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.executor.AbstractTaskBean;
-import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
@@ -52,17 +50,7 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
         requestFile.setStatus(RequestFileStatus.SAVING);
         requestFileBean.save(requestFile);
 
-        String district = null;
-
-        DomainObject organization = osznOrganizationStrategy.getDomainObject(requestFile.getOrganizationId()); //todo move to organization strategy
-
-        if (organization != null && organization.getAttribute(IOrganizationStrategy.DISTRICT) != null){
-            DomainObject districtObject = districtStrategy.getDomainObject(organization.getAttribute(IOrganizationStrategy.DISTRICT).getValueId());
-
-            if (districtObject != null){
-                district = districtObject.getStringValue(DistrictStrategy.NAME);
-            }
-        }
+        String district = osznOrganizationStrategy.getDistrict(requestFile.getOrganizationId());
 
         List<Long> ids = privilegeProlongationBean.getPrivilegeProlongationIds(requestFile.getId());
 
@@ -86,6 +74,9 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestF
             list.forEach(p -> p.getDbfFields().put("COLLECTION_ID", collectionId));
 
             serviceProviderAdapter.exportPrivilegeProlongation(requestFile.getUserOrganizationId(), list);
+
+            requestFile.setStatus(RequestFileStatus.SAVED);
+            requestFileBean.save(requestFile);
         }else {
             requestFile.setStatus(RequestFileStatus.SAVE_ERROR);
             requestFileBean.save(requestFile);

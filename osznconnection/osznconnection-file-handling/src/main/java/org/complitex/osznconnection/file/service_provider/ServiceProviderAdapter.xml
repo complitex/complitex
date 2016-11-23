@@ -249,7 +249,6 @@
     <!--facility form 2-->
     
     <resultMap id="privsFResultMap" type="org.complitex.osznconnection.file.entity.privilege.FacilityForm2">
-
         <association property="dbfFields" javaType="map">
             <result property="DEPART" column="DEPART"/>
             <result property="CDPR" column="CDPR"/>
@@ -277,7 +276,7 @@
           #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
           #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
           #{pDate, mode=IN, javaType=date, jdbcType=DATE},
-          #{cur, mode=OUT, jdbcType=CURSOR, resultMap=privsFResultMap}
+          #{data, mode=OUT, jdbcType=CURSOR, resultMap=privsFResultMap}
         )}
     </select>
     
@@ -329,7 +328,7 @@
           #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
           #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
           #{pDate, mode=IN, javaType=date, jdbcType=DATE},
-          #{cur, mode=OUT, jdbcType=CURSOR, resultMap=privsMResultMap}
+          #{data, mode=OUT, jdbcType=CURSOR, resultMap=privsMResultMap}
         )}
     </select>
 </mapper>

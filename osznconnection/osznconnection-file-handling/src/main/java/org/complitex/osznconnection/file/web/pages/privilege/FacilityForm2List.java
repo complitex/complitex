@@ -10,6 +10,7 @@ import org.complitex.osznconnection.file.service.privilege.FacilityForm2Bean;
 import org.complitex.template.web.template.ListTemplatePage;
 
 import javax.ejb.EJB;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public class FacilityForm2List extends ListTemplatePage<FacilityForm2>{
     private FacilityForm2Bean facilityForm2Bean;
 
     public FacilityForm2List(PageParameters pageParameters) {
-        super(pageParameters, ".dbfFields.", FacilityForm2FileList.class);
+        super(pageParameters, "dbfFields.", FacilityForm2FileList.class);
     }
 
     @Override
@@ -41,6 +42,11 @@ public class FacilityForm2List extends ListTemplatePage<FacilityForm2>{
 
     @Override
     protected List<String> getProperties() {
-        return StringUtil.asList(FacilityForm2DBF.class);
+        List<String> list = new ArrayList<>();
+
+        list.add("DEPART");
+        list.addAll(StringUtil.asList(FacilityForm2DBF.class));
+
+        return list;
     }
 }

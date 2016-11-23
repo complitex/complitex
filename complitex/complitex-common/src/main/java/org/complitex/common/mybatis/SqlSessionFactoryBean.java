@@ -1,14 +1,12 @@
 package org.complitex.common.mybatis;
 
 import org.apache.ibatis.builder.xml.XMLConfigBuilder;
-import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.exceptions.ExceptionFactory;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.session.SqlSessionManager;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,11 +14,8 @@ import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -71,15 +66,6 @@ public class SqlSessionFactoryBean {
             //Configuration
             Configuration configuration = parser.parse();
 
-            //Reflections
-            Reflections reflections = new Reflections("org.complitex", "ru.flexpay");
-
-            //FixedIdType
-            //addFixedIdTypeHandlers(reflections, configuration.getTypeHandlerRegistry());
-
-            //XmlMapper
-            addAnnotationMappers(reflections, configuration);
-
             return SqlSessionManager.newInstance(builder.build(configuration));
         } catch (Exception e) {
             throw ExceptionFactory.wrapException("Error building SqlSession.", e);
@@ -87,32 +73,4 @@ public class SqlSessionFactoryBean {
             ErrorContext.instance().reset();
         }
     }
-
-    private void addAnnotationMappers(Reflections reflections, Configuration configuration){
-        Set<Class<?>> set = reflections.getTypesAnnotatedWith(XmlMapper.class);
-
-        for (Class<?> c : set){
-            try {
-                String resource = c.getName().replace('.', '/') + ".xml";
-
-                ErrorContext.instance().resource(resource);
-                InputStream inputStream = Resources.getResourceAsStream(resource);
-                XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, resource,
-                        configuration.getSqlFragments());
-                mapperParser.parse();
-            } catch (IOException e) {
-                log.error("Ресурс не найден", e);
-            }
-        }
-    }
-
-//    todo search by interface
-//    @SuppressWarnings("unchecked")
-//    private void addFixedIdTypeHandlers(Reflections reflections, TypeHandlerRegistry typeHandlerRegistry){
-//        Set<Class<?>> set = reflections.getTypesAnnotatedWith(FixedIdTypeHandler.class);
-//
-//        for (Class<?> c : set){
-//            typeHandlerRegistry.register(c, new FixedIdBaseTypeHandler(c));
-//        }
-//    }
 }

@@ -558,7 +558,14 @@ public class ProcessManagerBean {
     /*FacilityForm2*/
 
     public void loadFacilityForm2(Long userOrganizationId, Long organizationId, int year, int month){
-        //todo execute facility form 2 load process
+        RequestFile requestFile = new RequestFile();
+        requestFile.setUserOrganizationId(userOrganizationId);
+        requestFile.setOrganizationId(organizationId);
+        requestFile.setBeginDate(newDate(year, month));
+        requestFile.setType(RequestFileType.FACILITY_FORM2);
+
+        execute(LOAD_FACILITY_FORM2, FacilityForm2LoadTaskBean.class, Collections.singletonList(requestFile), null,
+                LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
     }
 
     public void saveFacilityForm2(List<Long> ids, Map processParameters) {
@@ -569,16 +576,15 @@ public class ProcessManagerBean {
     /*FacilityLocal*/
 
     public void loadFacilityLocal(Long userOrganizationId, Long organizationId, int year, int month){
-        List<RequestFile> requestFiles = new ArrayList<>();
-
         RequestFile requestFile = new RequestFile();
         requestFile.setUserOrganizationId(userOrganizationId);
         requestFile.setOrganizationId(organizationId);
         requestFile.setBeginDate(newDate(year, month));
-        requestFile.setType(RequestFileType.FACILITY_FORM2);
+        requestFile.setType(RequestFileType.FACILITY_LOCAL);
 
-        execute(LOAD_FACILITY_FORM2, FacilityForm2LoadTaskBean.class, requestFiles, null,
+        execute(LOAD_FACILITY_LOCAL, FacilityLocalLoadTaskBean.class, Collections.singletonList(requestFile), null,
                 LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
+
     }
 
     public void saveFacilityLocal(List<Long> ids, Map processParameters) {

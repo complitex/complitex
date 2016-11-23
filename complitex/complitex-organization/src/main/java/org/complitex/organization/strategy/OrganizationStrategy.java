@@ -367,6 +367,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationObjectIdByCode", code);
     }
 
+    //todo move to oszn
     public Long getObjectIdByEdrpou(String edrpou) {
         return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationObjectIdByEdrpou", edrpou);
     }

@@ -13,4 +13,8 @@ public class LoadException extends ExecuteException {
     public LoadException(Throwable cause, RequestFile requestFile, int index, String fieldName) {
         super(cause, MESSAGE_PATTERN, requestFile.getAbsolutePath(), index, fieldName);
     }
+
+    public LoadException(String pattern, Object... arguments) {
+        super(pattern, arguments);
+    }
 }
