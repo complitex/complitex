@@ -4,8 +4,9 @@ import com.google.common.base.Strings;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.executor.AbstractTaskBean;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.correction.entity.ServiceCorrection;
 import org.complitex.correction.service.ServiceCorrectionBean;
@@ -15,7 +16,6 @@ import org.complitex.osznconnection.file.entity.privilege.*;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestFileStatus.FILL_ERROR;
-import static org.complitex.osznconnection.file.entity.RequestFileType.DWELLING_CHARACTERISTICS;
 import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_SERVICE_TYPE;
 import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 import static org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF.*;
@@ -218,8 +217,8 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
         }
 
         BenefitData benefitData = cursor.getData().stream()
-                .filter(bd -> facilityServiceType.getInn() != null &&
-                        facilityServiceType.getInn().equals(bd.getInn()) ||
+                .filter(bd -> (facilityServiceType.getInn() != null &&
+                        facilityServiceType.getInn().equals(bd.getInn())) ||
                         (facilityServiceType.getPassport() != null && facilityServiceType.getPassport()
                                 .matches(bd.getPassportSerial() + "\\s*" + bd.getPassportNumber())))
                 .findAny()
