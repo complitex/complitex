@@ -33,6 +33,7 @@ import javax.ejb.TransactionManagementType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Lists.newArrayList;
@@ -188,13 +189,13 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     public void checkFacilityPerson(AbstractAccountRequest request, String accountNumber, Date date, String inn, String passport){
-        Cursor<BenefitData> benefitDataCursor = getBenefitData(request.getUserOrganizationId(), accountNumber, date);
+        Cursor<BenefitData> cursor = getBenefitData(request.getUserOrganizationId(), accountNumber, date);
 
-        if (benefitDataCursor.isEmpty() && benefitDataCursor.getResultCode() == 1){
+        if (cursor.isEmpty() && cursor.getResultCode() == 1){
             warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.EMPTY_BENEFIT_DATA);
         }
 
-        for (BenefitData d : benefitDataCursor.getData()){
+        for (BenefitData d : cursor.getData()){
             if (inn != null && inn.equals(d.getInn())
                     || (passport != null && passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){
                 request.setAccountNumber(accountNumber);
@@ -204,7 +205,8 @@ public class ServiceProviderAdapter extends AbstractBean {
             }
         }
 
-        log.info("checkFacilityPerson BENEFIT_OWNER_NOT_ASSOCIATED accountNumber={}, inn='{}', passport='{}'", accountNumber, inn, passport);
+        log.info("checkFacilityPerson BENEFIT_OWNER_NOT_ASSOCIATED accountNumber={}, inn='{}', passport='{}', data={}",
+                accountNumber, inn, passport, cursor.getData());
 
         request.setStatus(RequestStatus.BENEFIT_OWNER_NOT_ASSOCIATED);
     }
@@ -1235,23 +1237,15 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     protected List<Benefit> findByPassportNumber(List<Benefit> benefits, final String passportNumber) {
-        return newArrayList(filter(benefits, new Predicate<Benefit>() {
-
-            @Override
-            public boolean apply(Benefit benefit) {
-                return passportNumber.equals(benefit.getStringField(BenefitDBF.PSP_NUM));
-            }
-        }));
+        return benefits.stream()
+                .filter(benefit -> passportNumber.equals(benefit.getStringField(BenefitDBF.PSP_NUM)))
+                .collect(Collectors.toList());
     }
 
     protected List<Benefit> findByINN(List<Benefit> benefits, final String inn) {
-        return newArrayList(filter(benefits, new Predicate<Benefit>() {
-
-            @Override
-            public boolean apply(Benefit benefit) {
-                return inn.equals(benefit.getStringField(BenefitDBF.IND_COD));
-            }
-        }));
+        return benefits.stream()
+                .filter(benefit -> inn.equals(benefit.getStringField(BenefitDBF.IND_COD)))
+                .collect(Collectors.toList());
     }
     private static final int OSZN_ACCOUNT_TYPE = 0;
     private static final int MEGABANK_ACCOUNT_TYPE = 1;
