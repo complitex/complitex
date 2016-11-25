@@ -10,7 +10,6 @@ import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
-import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongationDBF;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
@@ -98,14 +97,15 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
                 privilegeProlongation.getPassport());
 
         if (privilegeProlongation.getStatus() == ACCOUNT_NUMBER_RESOLVED) {
-            personAccountService.save(privilegeProlongation, privilegeProlongation.getInn());
+            personAccountService.save(privilegeProlongation, !Strings.isNullOrEmpty(privilegeProlongation.getPuAccountNumber())
+                    ? privilegeProlongation.getPuAccountNumber() : privilegeProlongation.getInn());
         }
 
         return privilegeProlongation.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
     public void bind(String serviceProviderCode, PrivilegeProlongation privilegeProlongation) throws MoreOneAccountException {
-        String puAccountNumber = privilegeProlongation.getStringField(PrivilegeProlongationDBF.RAH);
+        String puAccountNumber = privilegeProlongation.getPuAccountNumber();
 
         //resolve local account number
         personAccountService.localResolveAccountNumber(privilegeProlongation, puAccountNumber, true);

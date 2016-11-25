@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.service;
 
+import com.google.common.base.Strings;
 import org.complitex.address.util.AddressUtil;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
@@ -375,7 +376,8 @@ public class PersonAccountService extends AbstractBean {
                 requestFileBean.save(requestFile);
             }
 
-            save(privilegeProlongation, privilegeProlongation.getInn());
+            save(privilegeProlongation, !Strings.isNullOrEmpty(privilegeProlongation.getPuAccountNumber())
+                    ? privilegeProlongation.getPuAccountNumber() : privilegeProlongation.getInn());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
