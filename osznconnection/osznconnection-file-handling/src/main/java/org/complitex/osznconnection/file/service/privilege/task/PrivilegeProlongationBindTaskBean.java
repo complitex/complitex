@@ -108,9 +108,9 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
         String puAccountNumber = privilegeProlongation.getStringField(PrivilegeProlongationDBF.RAH);
 
         //resolve local account number
-        if (!Strings.isNullOrEmpty(puAccountNumber)){
-            personAccountService.localResolveAccountNumber(privilegeProlongation, puAccountNumber, true);
-        }else {
+        personAccountService.localResolveAccountNumber(privilegeProlongation, puAccountNumber, true);
+
+        if (!privilegeProlongation.getStatus().equals(ACCOUNT_NUMBER_RESOLVED)){
             personAccountService.localResolveAccountNumber(privilegeProlongation, privilegeProlongation.getInn(), true);
         }
 
