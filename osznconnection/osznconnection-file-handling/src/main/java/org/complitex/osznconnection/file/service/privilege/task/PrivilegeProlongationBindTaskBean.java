@@ -114,6 +114,10 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
             personAccountService.localResolveAccountNumber(privilegeProlongation, privilegeProlongation.getInn(), true);
         }
 
+        if (privilegeProlongation.getStatus().equals(ACCOUNT_NUMBER_RESOLVED)){
+
+        }
+
         //noinspection Duplicates
         if (privilegeProlongation.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
             //resolve address
