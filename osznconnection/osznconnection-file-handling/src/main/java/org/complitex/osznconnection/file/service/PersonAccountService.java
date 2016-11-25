@@ -300,7 +300,7 @@ public class PersonAccountService extends AbstractBean {
 
     public void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics, String accountNumber) {
         try {
-
+            dwellingCharacteristics.setAccountNumber(accountNumber);
             dwellingCharacteristicsBean.updateAccountNumber(dwellingCharacteristics);
             save(dwellingCharacteristics, dwellingCharacteristics.getInn());
 
@@ -328,6 +328,7 @@ public class PersonAccountService extends AbstractBean {
 
     public void updateAccountNumber(FacilityServiceType facilityServiceType, String accountNumber) {
         try {
+            facilityServiceType.setAccountNumber(accountNumber);
             facilityServiceTypeBean.updateAccountNumber(facilityServiceType);
             save(facilityServiceType, facilityServiceType.getInn());
 
@@ -354,6 +355,7 @@ public class PersonAccountService extends AbstractBean {
 
     public void updateAccountNumber(PrivilegeProlongation privilegeProlongation, String accountNumber) {
         try {
+            privilegeProlongation.setAccountNumber(accountNumber);
             privilegeProlongationBean.updatePrivilegeProlongationAccountNumber(privilegeProlongation);
             save(privilegeProlongation, !Strings.isNullOrEmpty(privilegeProlongation.getPuAccountNumber())
                     ? privilegeProlongation.getPuAccountNumber() : privilegeProlongation.getInn());
