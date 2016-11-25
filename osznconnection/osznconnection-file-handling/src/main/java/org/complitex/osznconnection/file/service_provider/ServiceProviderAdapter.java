@@ -196,7 +196,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
 
         for (BenefitData d : cursor.getData()){
-            if (inn == null || inn.equals(d.getInn())
+            if (d.getInn() == null || d.getInn().equals(inn)
                     && (passport == null || passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){
                 request.setAccountNumber(accountNumber);
                 request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
@@ -1505,5 +1505,9 @@ public class ServiceProviderAdapter extends AbstractBean {
 
     private String getDataSource(Long userOrganizationId){
         return organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("ММ 810881".matches("ММ" + "\\s*" + "810881"));
     }
 }
