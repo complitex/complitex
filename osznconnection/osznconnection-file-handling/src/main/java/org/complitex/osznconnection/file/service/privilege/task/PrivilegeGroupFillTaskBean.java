@@ -217,9 +217,8 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
         }
 
         BenefitData benefitData = cursor.getData().stream()
-                .filter(bd -> (facilityServiceType.getInn() != null &&
-                        facilityServiceType.getInn().equals(bd.getInn())) ||
-                        (facilityServiceType.getPassport() != null && facilityServiceType.getPassport()
+                .filter(bd -> (facilityServiceType.getInn() == null || facilityServiceType.getInn().equals(bd.getInn())) &&
+                        (facilityServiceType.getPassport() == null || facilityServiceType.getPassport()
                                 .matches(bd.getPassportSerial() + "\\s*" + bd.getPassportNumber())))
                 .findAny()
                 .orElse(null);

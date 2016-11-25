@@ -196,8 +196,8 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
 
         for (BenefitData d : cursor.getData()){
-            if (inn != null && inn.equals(d.getInn())
-                    || (passport != null && passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){
+            if (inn == null || inn.equals(d.getInn())
+                    && (passport == null || passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){
                 request.setAccountNumber(accountNumber);
                 request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 

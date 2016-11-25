@@ -186,8 +186,8 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
         }
 
         for (BenefitData bd : cursor.getData()){
-            if ((facilityServiceType.getInn() != null && facilityServiceType.getInn().equals(bd.getInn()))
-                    || (facilityServiceType.getPassport() != null &&
+            if ((facilityServiceType.getInn() == null || facilityServiceType.getInn().equals(bd.getInn()))
+                    && (facilityServiceType.getPassport() == null ||
                     facilityServiceType.getPassport().matches(bd.getPassportSerial() + "\\s*" + bd.getPassportNumber()))) {
                 BenefitData data = cursor.getData().get(0);
 
