@@ -324,7 +324,9 @@ public class PrivilegeProlongationList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        lookupPanel.open(target, privilegeProlongation, privilegeProlongation.getStringField(PrivilegeProlongationDBF.RAH));
+                        lookupPanel.open(target, privilegeProlongation,
+                                !com.google.common.base.Strings.isNullOrEmpty(privilegeProlongation.getPuAccountNumber())
+                                ? privilegeProlongation.getPuAccountNumber() : privilegeProlongation.getInn());
                     }
                 };
                 item.add(lookup);

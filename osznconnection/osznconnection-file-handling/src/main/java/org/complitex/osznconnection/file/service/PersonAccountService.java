@@ -355,7 +355,6 @@ public class PersonAccountService extends AbstractBean {
     public void updateAccountNumber(PrivilegeProlongation privilegeProlongation, String accountNumber) {
         try {
             privilegeProlongationBean.updatePrivilegeProlongationAccountNumber(privilegeProlongation);
-
             save(privilegeProlongation, !Strings.isNullOrEmpty(privilegeProlongation.getPuAccountNumber())
                     ? privilegeProlongation.getPuAccountNumber() : privilegeProlongation.getInn());
 
