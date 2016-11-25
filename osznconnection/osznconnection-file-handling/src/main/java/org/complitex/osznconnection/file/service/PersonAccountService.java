@@ -300,6 +300,10 @@ public class PersonAccountService extends AbstractBean {
 
     public void updateAccountNumber(DwellingCharacteristics dwellingCharacteristics, String accountNumber) {
         try {
+
+            dwellingCharacteristicsBean.updateAccountNumber(dwellingCharacteristics);
+            save(dwellingCharacteristics, dwellingCharacteristics.getInn());
+
             serviceProviderAdapter.checkFacilityPerson(dwellingCharacteristics, accountNumber, dwellingCharacteristics.getDate(),
                     dwellingCharacteristics.getInn(), dwellingCharacteristics.getPassport());
 
@@ -309,18 +313,13 @@ public class PersonAccountService extends AbstractBean {
                 return;
             }
 
-            dwellingCharacteristicsBean.updateAccountNumber(dwellingCharacteristics);
-
-            long dwellingCharacteristicsFileId = dwellingCharacteristics.getRequestFileId();
+            Long dwellingCharacteristicsFileId = dwellingCharacteristics.getRequestFileId();
             RequestFile dwellingCharacteristicsFile = requestFileBean.getRequestFile(dwellingCharacteristicsFileId);
 
             if (dwellingCharacteristicsBean.isDwellingCharacteristicsFileBound(dwellingCharacteristicsFileId)) {
                 dwellingCharacteristicsFile.setStatus(RequestFileStatus.BOUND);
                 requestFileBean.save(dwellingCharacteristicsFile);
             }
-
-
-            save(dwellingCharacteristics, dwellingCharacteristics.getInn());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -329,6 +328,9 @@ public class PersonAccountService extends AbstractBean {
 
     public void updateAccountNumber(FacilityServiceType facilityServiceType, String accountNumber) {
         try {
+            facilityServiceTypeBean.updateAccountNumber(facilityServiceType);
+            save(facilityServiceType, facilityServiceType.getInn());
+
             serviceProviderAdapter.checkFacilityPerson(facilityServiceType, accountNumber, facilityServiceType.getDate(),
                     facilityServiceType.getInn(), facilityServiceType.getPassport());
 
@@ -338,18 +340,13 @@ public class PersonAccountService extends AbstractBean {
                 return;
             }
 
-            facilityServiceTypeBean.updateAccountNumber(facilityServiceType);
-
-            long facilityServiceTypeFileId = facilityServiceType.getRequestFileId();
+            Long facilityServiceTypeFileId = facilityServiceType.getRequestFileId();
             RequestFile facilityServiceTypeFile = requestFileBean.getRequestFile(facilityServiceTypeFileId);
 
             if (facilityServiceTypeBean.isFacilityServiceTypeFileBound(facilityServiceTypeFileId)) {
                 facilityServiceTypeFile.setStatus(RequestFileStatus.BOUND);
                 requestFileBean.save(facilityServiceTypeFile);
             }
-
-
-            save(facilityServiceType, facilityServiceType.getInn());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -357,6 +354,11 @@ public class PersonAccountService extends AbstractBean {
 
     public void updateAccountNumber(PrivilegeProlongation privilegeProlongation, String accountNumber) {
         try {
+            privilegeProlongationBean.updatePrivilegeProlongationAccountNumber(privilegeProlongation);
+
+            save(privilegeProlongation, !Strings.isNullOrEmpty(privilegeProlongation.getPuAccountNumber())
+                    ? privilegeProlongation.getPuAccountNumber() : privilegeProlongation.getInn());
+
             serviceProviderAdapter.checkFacilityPerson(privilegeProlongation, accountNumber, privilegeProlongation.getDate(),
                     privilegeProlongation.getInn(), privilegeProlongation.getPassport());
 
@@ -366,8 +368,6 @@ public class PersonAccountService extends AbstractBean {
                 return;
             }
 
-            privilegeProlongationBean.updatePrivilegeProlongationAccountNumber(privilegeProlongation);
-
             Long requestFileId = privilegeProlongation.getRequestFileId();
             RequestFile requestFile = requestFileBean.getRequestFile(requestFileId);
 
@@ -375,9 +375,6 @@ public class PersonAccountService extends AbstractBean {
                 requestFile.setStatus(RequestFileStatus.BOUND);
                 requestFileBean.save(requestFile);
             }
-
-            save(privilegeProlongation, !Strings.isNullOrEmpty(privilegeProlongation.getPuAccountNumber())
-                    ? privilegeProlongation.getPuAccountNumber() : privilegeProlongation.getInn());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
