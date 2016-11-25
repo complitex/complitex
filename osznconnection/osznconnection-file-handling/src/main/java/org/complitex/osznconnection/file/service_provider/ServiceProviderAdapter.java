@@ -1483,7 +1483,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getPrivsF", map);
 
-        log.info("getFacilityForm2 getPrivsF {}", map);
+        //log.info("getFacilityForm2 getPrivsF {}", map);
 
         return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("data"));
     }
@@ -1498,7 +1498,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getPrivsM", map);
 
-        log.info("getFacilityLocal getPrivsM {}", map);
+        //log.info("getFacilityLocal getPrivsM {}", map);
 
         return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("data"));
     }
