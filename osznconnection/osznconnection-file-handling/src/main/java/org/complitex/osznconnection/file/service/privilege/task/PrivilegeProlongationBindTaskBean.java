@@ -114,9 +114,7 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
             personAccountService.localResolveAccountNumber(privilegeProlongation, privilegeProlongation.getInn(), true);
         }
 
-        if (privilegeProlongation.getStatus().equals(ACCOUNT_NUMBER_RESOLVED)){
-
-        }
+        boolean checkFacilityPerson = true;
 
         //noinspection Duplicates
         if (privilegeProlongation.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
@@ -124,17 +122,18 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
             resolveAddress(privilegeProlongation);
 
             if (privilegeProlongation.getStatus().isAddressResolved()) {
-                //resolve account number
-                if (!Strings.isNullOrEmpty(puAccountNumber)){
-                    personAccountService.resolveAccountNumber(privilegeProlongation, puAccountNumber, serviceProviderCode, false);
-                }else {
-                    resolveLocalAccount(privilegeProlongation);
-                }
+                resolveLocalAccount(privilegeProlongation);
 
                 if (privilegeProlongation.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, privilegeProlongation);
+                    checkFacilityPerson = false;
                 }
             }
+        }
+
+        if (checkFacilityPerson && privilegeProlongation.getAccountNumber() != null){
+            serviceProviderAdapter.checkFacilityPerson(privilegeProlongation, privilegeProlongation.getAccountNumber(),
+                    privilegeProlongation.getDate(), privilegeProlongation.getInn(), privilegeProlongation.getPassport());
         }
 
         // обновляем запись

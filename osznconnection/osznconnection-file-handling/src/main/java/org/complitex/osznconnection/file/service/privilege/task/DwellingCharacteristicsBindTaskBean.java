@@ -101,9 +101,12 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
         return dwellingCharacteristics.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
+    @SuppressWarnings("Duplicates") //todo extract abstract privilege bind
     public void bind(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws MoreOneAccountException {
         //resolve local account number
         personAccountService.localResolveAccountNumber(dwellingCharacteristics, dwellingCharacteristics.getInn(), true);
+
+        boolean checkFacilityPerson = true;
 
         //noinspection Duplicates
         if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
@@ -116,8 +119,14 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
 
                 if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, dwellingCharacteristics);
+                    checkFacilityPerson = false;
                 }
             }
+        }
+
+        if (checkFacilityPerson && dwellingCharacteristics.getAccountNumber() != null){
+            serviceProviderAdapter.checkFacilityPerson(dwellingCharacteristics, dwellingCharacteristics.getAccountNumber(),
+                    dwellingCharacteristics.getDate(), dwellingCharacteristics.getInn(), dwellingCharacteristics.getPassport());
         }
 
         // обновляем dwelling characteristics запись

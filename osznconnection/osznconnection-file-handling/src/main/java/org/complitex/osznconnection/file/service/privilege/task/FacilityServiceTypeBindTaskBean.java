@@ -108,6 +108,8 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
         //resolve local account number
         personAccountService.localResolveAccountNumber(facilityServiceType, facilityServiceType.getInn(), true);
 
+        boolean checkFacilityPerson = true;
+
         //noinspection Duplicates
         if (facilityServiceType.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
             //resolve address
@@ -119,8 +121,14 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
 
                 if (facilityServiceType.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, facilityServiceType);
+                    checkFacilityPerson = false;
                 }
             }
+        }
+
+        if (checkFacilityPerson && facilityServiceType.getAccountNumber() != null){
+            serviceProviderAdapter.checkFacilityPerson(facilityServiceType, facilityServiceType.getAccountNumber(),
+                    facilityServiceType.getDate(), facilityServiceType.getInn(), facilityServiceType.getPassport());
         }
 
         // обновляем facility service type запись
