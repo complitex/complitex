@@ -29,10 +29,7 @@ import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.web.component.AddressCorrectionDialog;
-import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.RequestFileStatus;
-import org.complitex.osznconnection.file.entity.RequestStatus;
-import org.complitex.osznconnection.file.entity.StatusDetailInfo;
+import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
@@ -63,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author inheaven on 29.06.16.
@@ -374,7 +372,16 @@ public class PrivilegeProlongationList extends TemplatePage {
         filterForm.add(new IndicatingAjaxButton("bind") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form form) {
-                Collection<PrivilegeProlongation> list = checkGroup.getModelObject();
+                Collection<PrivilegeProlongation> select = checkGroup.getModelObject();
+
+                select.forEach(p -> {
+                    privilegeProlongationBean.clearPrivilegeProlongationBound(p);
+                    requestWarningBean.delete(p);
+                });
+
+                List<PrivilegeProlongation> list = privilegeProlongationBean
+                        .getPrivilegeProlongationForOperation(requestFile.getId(),
+                                select.stream().map(AbstractRequest::getId).collect(Collectors.toList()));
 
                 list.forEach(privilegeProlongation -> {
                     //noinspection Duplicates
@@ -382,8 +389,6 @@ public class PrivilegeProlongationList extends TemplatePage {
                         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
-                        requestWarningBean.delete(privilegeProlongation);
-                        privilegeProlongationBean.clearPrivilegeProlongationBound(privilegeProlongation);
                         privilegeProlongationBindTaskBean.bind(serviceProviderCode, privilegeProlongation);
 
                         if (privilegeProlongation.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)) {

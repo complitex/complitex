@@ -180,6 +180,8 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
 
         for (AccountDetail accountDetail : cursor.getData()) {
+            request.setAccountNumber(accountDetail.getAccCode());
+
             checkFacilityPerson(request, accountDetail.getAccCode(), date, inn, passport);
 
             if (request.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
