@@ -3,10 +3,7 @@ package org.complitex.osznconnection.file.service.warning;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.osznconnection.file.entity.RequestFileType;
-import org.complitex.osznconnection.file.entity.RequestWarning;
-import org.complitex.osznconnection.file.entity.RequestWarningParameter;
-import org.complitex.osznconnection.file.entity.RequestWarningStatus;
+import org.complitex.osznconnection.file.entity.*;
 
 import javax.ejb.Stateless;
 import java.util.List;
@@ -47,6 +44,14 @@ public class RequestWarningBean extends AbstractBean {
         }
     }
 
+    public void delete(AbstractRequest request) {
+        List<Long> warningsIds = getWarningIdsByRequest(request);
+        for (Long warningId : warningsIds) {
+            sqlSession().delete(MAPPING_NAMESPACE + ".deleteParameter", warningId);
+            sqlSession().delete(MAPPING_NAMESPACE + ".deleteWarning", warningId);
+        }
+    }
+
     /**
      * Helper methods
      */
@@ -60,11 +65,18 @@ public class RequestWarningBean extends AbstractBean {
     }
 
 
-    protected List<Long> getWarningIdsByFile(RequestFileType requestFileType, long requestFileId) {
+    protected List<Long> getWarningIdsByFile(RequestFileType requestFileType, Long requestFileId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("requestFileId", requestFileId);
         params.put("requestFileType", requestFileType);
         params.put("requestTableName", requestFileType.name().toLowerCase());
         return sqlSession().selectList(MAPPING_NAMESPACE + ".getWarningIdsByFile", params);
+    }
+
+    protected List<Long> getWarningIdsByRequest(AbstractRequest request) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("requestId", request.getId());
+        params.put("requestFileType", request.getRequestFileType());
+        return sqlSession().selectList(MAPPING_NAMESPACE + ".getWarningIdsByRequest", params);
     }
 }

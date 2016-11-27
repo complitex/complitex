@@ -110,10 +110,6 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
         //resolve local account number
         personAccountService.localResolveAccountNumber(privilegeProlongation, puAccountNumber, true);
 
-        if (!privilegeProlongation.getStatus().equals(ACCOUNT_NUMBER_RESOLVED)){
-            personAccountService.localResolveAccountNumber(privilegeProlongation, privilegeProlongation.getInn(), true);
-        }
-
         boolean checkFacilityPerson = true;
 
         //noinspection Duplicates

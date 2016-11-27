@@ -95,7 +95,7 @@
         TO_CYRILLIC(r.`middle_name`) middle_name_cyr,
         TO_CYRILLIC(r.`last_name`) last_name_cyr,
 
-        TO_CYRILLIC(r.`FIOPIL`) FIO_CYR,
+        TO_CYRILLIC(r.`FIOPIL`) FIOPIL_CYR,
         TO_CYRILLIC(r.`HOUSE`) HOUSE_CYR,
         TO_CYRILLIC(r.`BUILD`) BUILD_CYR,
         TO_CYRILLIC(r.`APT`) APT_CYR,
@@ -128,7 +128,7 @@
         </if>
         <if test="count != 0">limit #{first},#{count}</if>
         ) t
-        LEFT JOIN `request_warning` w ON (w.`request_id` = t.`id` AND w.`request_file_type` = 6)
+        LEFT JOIN `request_warning` w ON (w.`request_id` = t.`id`)
         LEFT JOIN `request_warning_parameter` p ON w.`id` = p.`request_warning_id`
     </select>
 
@@ -153,7 +153,7 @@
         TO_CYRILLIC(r.`IDPIL`) IDPIL_CYR,
         TO_CYRILLIC(r.`PASPPIL`) PASPPIL_CYR,
 
-        TO_CYRILLIC(r.`FIOPIL`) FIO_CYR,
+        TO_CYRILLIC(r.`FIOPIL`) FIOPIL_CYR,
         TO_CYRILLIC(r.`HOUSE`) HOUSE_CYR,
         TO_CYRILLIC(r.`BUILD`) BUILD_CYR,
         TO_CYRILLIC(r.`APT`) APT_CYR,

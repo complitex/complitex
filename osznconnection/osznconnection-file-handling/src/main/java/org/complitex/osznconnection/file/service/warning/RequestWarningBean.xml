@@ -45,4 +45,8 @@
                     `request_id` IN (SELECT r.`id` FROM `${requestTableName}` r WHERE r.`request_file_id` = #{requestFileId})
     </select>
 
+    <select id="getWarningIdsByRequest" parameterType="map" resultType="long">
+        select w.id from `request_warning` w where `request_file_type` = #{requestFileType} and `request_id` = #{requestId}
+    </select>
+
 </mapper>

@@ -14,7 +14,7 @@ public class RequestWarningParameter implements Serializable {
 
     public RequestWarningParameter(Integer order, Object value) {
         this.order = order;
-        this.value = value.toString();
+        this.value = String.valueOf(value);
     }
 
     public RequestWarningParameter(Integer order, String type, Object value) {

@@ -205,6 +205,15 @@ public class ServiceProviderAdapter extends AbstractBean {
             }
         }
 
+        if (cursor.getData().size() == 1){
+            BenefitData d = cursor.getData().get(0);
+
+            warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.BENEFIT_OWNER_NOT_ASSOCIATED,
+                    new RequestWarningParameter(0, d.getInn()),
+                    new RequestWarningParameter(1, d.getPassportSerial()),
+                    new RequestWarningParameter(2, d.getPassportNumber()));
+        }
+
         log.info("checkFacilityPerson BENEFIT_OWNER_NOT_ASSOCIATED accountNumber={}, inn='{}', passport='{}', data={}",
                 accountNumber, inn, passport, cursor.getData());
 

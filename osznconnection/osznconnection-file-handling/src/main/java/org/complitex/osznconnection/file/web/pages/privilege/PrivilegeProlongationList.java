@@ -47,6 +47,7 @@ import org.complitex.osznconnection.file.service.privilege.task.PrivilegeProlong
 import org.complitex.osznconnection.file.service.status.details.PrivilegeExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.PrivilegeStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
+import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
@@ -96,6 +97,9 @@ public class PrivilegeProlongationList extends TemplatePage {
 
     @EJB
     private FacilityReferenceBookBean facilityReferenceBookBean;
+
+    @EJB
+    private RequestWarningBean requestWarningBean;
 
     private IModel<PrivilegeExample> example;
 
@@ -181,6 +185,7 @@ public class PrivilegeProlongationList extends TemplatePage {
         filterForm.add(new TextField<>("accountFilter", new PropertyModel<String>(example, "accountNumber")));
         filterForm.add(new TextField<>("spAccountFilter", new PropertyModel<String>(example, "spAccountNumber")));
         filterForm.add(new TextField<>("idCodeFilter", new PropertyModel<>(example, "inn")));
+        filterForm.add(new TextField<>("passportFilter", new PropertyModel<>(example, "passport")));
         filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<>(example, "firstName")));
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<>(example, "middleName")));
         filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<>(example, "lastName")));
@@ -282,6 +287,7 @@ public class PrivilegeProlongationList extends TemplatePage {
                 item.add(new Label("account", privilegeProlongation.getAccountNumber()));
                 item.add(new Label("spAccount", privilegeProlongation.getStringField(PrivilegeProlongationDBF.RAH)));
                 item.add(new Label("idCode", privilegeProlongation.getInn()));
+                item.add(new Label("passport", privilegeProlongation.getPassport()));
                 item.add(new Label("firstName", privilegeProlongation.getFirstName()));
                 item.add(new Label("middleName", privilegeProlongation.getMiddleName()));
                 item.add(new Label("lastName", privilegeProlongation.getLastName()));
@@ -338,6 +344,7 @@ public class PrivilegeProlongationList extends TemplatePage {
         filterForm.add(new ArrowOrderByBorder("accountHeader", "account_number", dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("spAccountHeader", "RAH", dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("idCodeHeader", "IDPIL", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("passportHeader", "PASPPIL", dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", "first_name", dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("middleNameHeader", "middle_name", dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("lastNameHeader", "last_name", dataProvider, data, content));
@@ -375,6 +382,8 @@ public class PrivilegeProlongationList extends TemplatePage {
                         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
+                        requestWarningBean.delete(privilegeProlongation);
+                        privilegeProlongationBean.clearPrivilegeProlongationBound(privilegeProlongation);
                         privilegeProlongationBindTaskBean.bind(serviceProviderCode, privilegeProlongation);
 
                         if (privilegeProlongation.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)) {

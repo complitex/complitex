@@ -114,6 +114,10 @@
             </foreach>
         </if>
         WHERE `request_file_id` = #{fileId}
+
+        <if test="id != null">
+            and `id` = #{id}
+        </if>
     </sql>
 
     <sql id="markPrivilegeCorrected">
