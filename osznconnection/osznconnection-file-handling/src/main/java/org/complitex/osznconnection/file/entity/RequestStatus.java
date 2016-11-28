@@ -179,6 +179,7 @@ public enum RequestStatus implements IFixedIdType {
                     .add(PROCESSING_INVALID_FORMAT)
                     .add(PROCESSING_INVALID_FORMAT)
                     .add(OWNERSHIP_NOT_FOUND)
+                    .add(PROCESSED_WITH_ERROR)
                     .build());
 
 
