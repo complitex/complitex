@@ -88,7 +88,9 @@ public enum RequestStatus implements IFixedIdType {
 
     SERVICE_NOT_FOUND(253),
     TARIF_NOT_FOUND(254),
-    OWNERSHIP_NOT_FOUND(256);
+    OWNERSHIP_NOT_FOUND(256),
+
+    PROCESSED_WITH_ERROR(257);
 
     private Integer id;
 
@@ -180,7 +182,7 @@ public enum RequestStatus implements IFixedIdType {
                     .build());
 
 
-    public boolean isNotIn(RequestStatus... statuses){
+    public boolean isNot(RequestStatus... statuses){
         for (RequestStatus s : statuses){
             if (this.equals(s)){
                 return false;
@@ -188,5 +190,15 @@ public enum RequestStatus implements IFixedIdType {
         }
 
         return true;
+    }
+
+    public boolean is(RequestStatus... statuses){
+        for (RequestStatus s : statuses){
+            if (this.equals(s)){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

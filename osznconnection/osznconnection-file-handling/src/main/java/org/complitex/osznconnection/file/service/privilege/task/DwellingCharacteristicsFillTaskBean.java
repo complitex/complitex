@@ -9,7 +9,6 @@ import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.PaymentAndBenefitData;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
-import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
 import org.complitex.osznconnection.file.service.RequestFileBean;
@@ -33,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestFileType.DWELLING_CHARACTERISTICS;
+import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 
 /**
  * inheaven on 25.02.2016.
@@ -119,7 +119,7 @@ public class DwellingCharacteristicsFillTaskBean extends AbstractTaskBean<Reques
                 dwellingCharacteristics.getAccountNumber(), dwellingCharacteristics.getDate());
 
         if (cursor.getResultCode() == -1){
-            dwellingCharacteristics.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
+            dwellingCharacteristics.setStatus(ACCOUNT_NUMBER_NOT_FOUND);
             dwellingCharacteristicsBean.update(dwellingCharacteristics);
 
             return;
@@ -131,30 +131,10 @@ public class DwellingCharacteristicsFillTaskBean extends AbstractTaskBean<Reques
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLZAG, data.getReducedArea());
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLOPAL, data.getHeatingArea());
 
-            dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
-
-//            String ownership = null;
-//            Long ownershipId = ownershipCorrectionBean.findInternalOwnership(data.getOwnership(), dwellingCharacteristics.getUserOrganizationId());
-//
-//            if (ownershipId != null){
-//                ownership = ownershipCorrectionBean.findOwnershipCode(ownershipId, dwellingCharacteristics.getOrganizationId(),
-//                        dwellingCharacteristics.getUserOrganizationId());
-//
-//                dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
-//            }
-//
-//            if (ownership == null){
-//                dwellingCharacteristics.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
-//                dwellingCharacteristicsBean.update(dwellingCharacteristics);
-//
-//                log.warn("Форма собственности не найдена {}", data.getOwnership());
-//
-//                return;
-//            }
-
-//            dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.VL, ownership);
+            dwellingCharacteristics.setStatus(dwellingCharacteristics.getStatus()
+                    .isNot(BENEFIT_OWNER_NOT_ASSOCIATED) ? PROCESSED : PROCESSED_WITH_ERROR);
         }else if(cursor.getData().size() > 1){
-            dwellingCharacteristics.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
+            dwellingCharacteristics.setStatus(MORE_ONE_ACCOUNTS);
         }
 
         dwellingCharacteristicsBean.update(dwellingCharacteristics);

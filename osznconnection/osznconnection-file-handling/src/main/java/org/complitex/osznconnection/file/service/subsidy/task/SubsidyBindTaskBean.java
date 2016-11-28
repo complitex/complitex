@@ -65,7 +65,7 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
         //resolve local account number
         personAccountService.localResolveAccountNumber(subsidy, puAccountNumber, true);
 
-        if (subsidy.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
+        if (subsidy.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
             //resolve address
             String city = subsidy.getCity();
 

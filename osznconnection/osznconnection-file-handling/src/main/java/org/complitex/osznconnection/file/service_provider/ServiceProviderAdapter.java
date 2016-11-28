@@ -1395,7 +1395,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".processPaymentAndBenefit", params);
 
-        log.info("getPaymentAndBenefit. {}", params);
+        log.info("getPaymentAndBenefit. GetChargeAndParams{}", params);
 
         return new Cursor<>((Integer) params.get("resultCode"), (List) params.get("data"));
     }

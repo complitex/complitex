@@ -111,7 +111,7 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
         boolean checkFacilityPerson = true;
 
         //noinspection Duplicates
-        if (facilityServiceType.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
+        if (facilityServiceType.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
             //resolve address
             resolveAddress(facilityServiceType);
 
@@ -119,7 +119,7 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
                 //resolve local account.
                 resolveLocalAccount(facilityServiceType);
 
-                if (facilityServiceType.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
+                if (facilityServiceType.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, facilityServiceType);
                     checkFacilityPerson = false;
                 }

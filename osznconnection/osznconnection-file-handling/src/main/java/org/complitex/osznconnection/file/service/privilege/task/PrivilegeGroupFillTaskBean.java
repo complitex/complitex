@@ -202,50 +202,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
             return;
         }
 
-        //benefit data
-        Cursor<BenefitData> cursor = serviceProviderAdapter.getBenefitData(dwellingCharacteristics.getUserOrganizationId(),
-                dwellingCharacteristics.getAccountNumber(), dwellingCharacteristics.getDate());
-
-        if (cursor.getResultCode() == -1){
-            dwellingCharacteristics.setStatus(ACCOUNT_NUMBER_NOT_FOUND);
-            dwellingCharacteristicsBean.update(dwellingCharacteristics);
-
-            facilityServiceType.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
-            facilityServiceTypeBean.update(facilityServiceType);
-
-            return;
-        }
-
-        BenefitData benefitData = cursor.getData().stream()
-                .filter(bd -> (bd.getInn() == null || bd.getInn().isEmpty() || bd.getInn().equals(facilityServiceType.getInn())) &&
-                        (facilityServiceType.getPassport() == null || facilityServiceType.getPassport()
-                                .matches(bd.getPassportSerial() + "\\s*" + bd.getPassportNumber())))
-                .findAny()
-                .orElse(null);
-
-        if (benefitData == null){
-            dwellingCharacteristics.setStatus(BENEFIT_OWNER_NOT_ASSOCIATED);
-            dwellingCharacteristicsBean.update(dwellingCharacteristics);
-
-            facilityServiceType.setStatus(BENEFIT_OWNER_NOT_ASSOCIATED);
-            facilityServiceTypeBean.update(facilityServiceType);
-
-            return;
-        }
-
-        //facilityServiceType
-        if ("Ф".equals(benefitData.getBudget())) {
-            facilityServiceType.putUpdateField(KAT, benefitData.getCode());
-        }
-
-        facilityServiceType.putUpdateField(YEARIN, DateUtil.getYear(benefitData.getDateIn()));
-        facilityServiceType.putUpdateField(MONTHIN, DateUtil.getMonth(benefitData.getDateIn()) + 1);
-
-        facilityServiceType.putUpdateField(YEAROUT, DateUtil.getYear(benefitData.getDateOut()));
-        facilityServiceType.putUpdateField(MONTHOUT, DateUtil.getMonth(benefitData.getDateOut()) + 1);
-
-        facilityServiceType.putUpdateField(RAH, facilityServiceType.getAccountNumber());
-
+        //payment and benefit data
         Cursor<PaymentAndBenefitData> paymentAndBenefitData = serviceProviderAdapter.getPaymentAndBenefit(facilityServiceType.getUserOrganizationId(),
                 facilityServiceType.getAccountNumber(), facilityServiceType.getDate());
 
@@ -256,26 +213,11 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLZAG, d.getReducedArea());
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLOPAL, d.getHeatingArea());
 
-            dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
-
-//            String ownership = null;
-//            Long ownershipId = ownershipCorrectionBean.findInternalOwnership(d.getOwnership(), dwellingCharacteristics.getUserOrganizationId());
-//
-//            if (ownershipId != null){
-//                ownership = ownershipCorrectionBean.findOwnershipCode(ownershipId, dwellingCharacteristics.getOrganizationId(),
-//                        dwellingCharacteristics.getUserOrganizationId());
-//
-//                dwellingCharacteristics.setStatus(RequestStatus.PROCESSED);
-//            }
-//
-//            if (ownership == null){
-//                dwellingCharacteristics.setStatus(RequestStatus.OWNERSHIP_NOT_FOUND);
-//                dwellingCharacteristicsBean.update(dwellingCharacteristics);
-//
-//                log.warn("Форма собственности не найдена {}", d.getOwnership());
-//            }
-
-//            dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.VL, ownership);
+            if (dwellingCharacteristics.getStatus().isNot(BENEFIT_OWNER_NOT_ASSOCIATED)){
+                dwellingCharacteristics.setStatus(PROCESSED);
+            }else{
+                dwellingCharacteristics.setStatus(PROCESSED_WITH_ERROR);
+            }
 
             //facilityServiceType
             BigDecimal tarif = null;
@@ -306,7 +248,8 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                     facilityServiceType.putUpdateField(TARIF, ft.getField(TAR_CODE));
                     facilityServiceType.putUpdateField(RIZN, ft.getField(TAR_SERV));
 
-                    facilityServiceType.setStatus(PROCESSED);
+                    facilityServiceType.setStatus(facilityServiceType.getStatus().isNot(BENEFIT_OWNER_NOT_ASSOCIATED)
+                            ? PROCESSED : PROCESSED_WITH_ERROR);
                 } else {
                     facilityServiceType.setStatus(TARIF_NOT_FOUND);
 
@@ -316,6 +259,39 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                     requestWarningBean.save(warning);
 
                     log.info("TARIF_NOT_FOUND serviceCode={}, tarif={}, date={}", serviceCode, tarif, facilityServiceType.getDate());
+                }
+            }
+        }
+
+        //benefit data
+        if (facilityServiceType.getStatus().is(PROCESSED, TARIF_NOT_FOUND)) {
+            Cursor<BenefitData> cursor = serviceProviderAdapter.getBenefitData(dwellingCharacteristics.getUserOrganizationId(),
+                    dwellingCharacteristics.getAccountNumber(), dwellingCharacteristics.getDate());
+
+            if (cursor.getResultCode() != -1){
+                BenefitData benefitData = cursor.getData().stream()
+                        .filter(bd -> (bd.getInn() == null || bd.getInn().isEmpty() || bd.getInn().equals(facilityServiceType.getInn())) &&
+                                (facilityServiceType.getPassport() == null || facilityServiceType.getPassport()
+                                        .matches(bd.getPassportSerial() + "\\s*" + bd.getPassportNumber())))
+                        .findAny()
+                        .orElse(null);
+
+                if (benefitData != null){
+                    if ("Ф".equals(benefitData.getBudget())) {
+                        facilityServiceType.putUpdateField(KAT, benefitData.getCode());
+                    }
+
+                    if (benefitData.getDateIn() != null) {
+                        facilityServiceType.putUpdateField(YEARIN, DateUtil.getYear(benefitData.getDateIn()));
+                        facilityServiceType.putUpdateField(MONTHIN, DateUtil.getMonth(benefitData.getDateIn()) + 1);
+                    }
+
+                    if (benefitData.getDateOut() != null) {
+                        facilityServiceType.putUpdateField(YEAROUT, DateUtil.getYear(benefitData.getDateOut()));
+                        facilityServiceType.putUpdateField(MONTHOUT, DateUtil.getMonth(benefitData.getDateOut()) + 1);
+                    }
+
+                    facilityServiceType.putUpdateField(RAH, facilityServiceType.getAccountNumber());
                 }
             }
         }

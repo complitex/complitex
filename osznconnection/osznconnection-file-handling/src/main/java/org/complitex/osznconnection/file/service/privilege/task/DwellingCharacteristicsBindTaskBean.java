@@ -109,7 +109,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
         boolean checkFacilityPerson = true;
 
         //noinspection Duplicates
-        if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
+        if (dwellingCharacteristics.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
             //resolve address
             resolveAddress(dwellingCharacteristics);
 
@@ -117,7 +117,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
                 //resolve local account.
                 resolveLocalAccount(dwellingCharacteristics);
 
-                if (dwellingCharacteristics.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
+                if (dwellingCharacteristics.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, dwellingCharacteristics);
                     checkFacilityPerson = false;
                 }

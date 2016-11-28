@@ -110,7 +110,7 @@ public class ActualPaymentBindTaskBean extends AbstractTaskBean<RequestFile> {
             //resolve local account.
             resolveLocalAccount(actualPayment);
 
-            if (actualPayment.getStatus().isNotIn(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
+            if (actualPayment.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                 resolveRemoteAccountNumber(serviceProviderCode, actualPayment, date, updatePuAccount);
             }
         }
