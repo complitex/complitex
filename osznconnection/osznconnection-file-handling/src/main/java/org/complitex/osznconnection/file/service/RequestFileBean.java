@@ -108,7 +108,6 @@ public class RequestFileBean extends AbstractBean {
         return sqlSession().selectOne(NS + ".selectRequestFilesCount", filter);
     }
 
-
     public void save(RequestFile requestFile) {
         if (requestFile.getId() == null) {
             sqlSession().insert(NS + ".insertRequestFile", requestFile);

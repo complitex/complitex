@@ -274,7 +274,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
         requestFileLoadPanel = new RequestFileLoadPanel("load_panel", new ResourceModel("load_panel_title"),
                 MonthParameterViewMode.EXACT) {
             @Override
-            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
+            protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
                 AbstractReferenceBookFileList.this.load(userOrganizationId, organizationId, year, monthFrom, monthTo);
 
                 messagesManager.resetCompletedStatus(getLoadProcessType());

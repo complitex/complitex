@@ -557,10 +557,11 @@ public class ProcessManagerBean {
 
     /*FacilityForm2*/
 
-    public void loadFacilityForm2(Long userOrganizationId, Long organizationId, int year, int month){
+    public void loadFacilityForm2(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int month){
         RequestFile requestFile = new RequestFile();
         requestFile.setUserOrganizationId(userOrganizationId);
         requestFile.setOrganizationId(organizationId);
+        requestFile.setServiceProviderId(serviceProviderId);
         requestFile.setBeginDate(newDate(year, month));
         requestFile.setType(RequestFileType.FACILITY_FORM2);
 

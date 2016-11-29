@@ -42,8 +42,8 @@ public final class FacilityForm2FileList extends TemplatePage {
             }
 
             @Override
-            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-                processManagerBean.loadFacilityForm2(userOrganizationId, organizationId, year, monthFrom);
+            protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+                processManagerBean.loadFacilityForm2(serviceProviderId, userOrganizationId, organizationId, year, monthFrom);
             }
 
             @Override

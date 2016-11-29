@@ -267,7 +267,7 @@ public class SubsidyTarifFileList extends TemplatePage {
         requestFileLoadPanel = new RequestFileLoadPanel("load_panel", new ResourceModel("load_panel_title"),
                 MonthParameterViewMode.HIDDEN) {
             @Override
-            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
+            protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
                 processManagerBean.loadSubsidyTarif(userOrganizationId, organizationId, year, monthFrom);
 
                 messagesManager.resetCompletedStatus(ProcessType.LOAD_SUBSIDY_TARIF);

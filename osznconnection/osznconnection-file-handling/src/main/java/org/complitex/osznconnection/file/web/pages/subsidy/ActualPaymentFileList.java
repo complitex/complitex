@@ -63,7 +63,7 @@ public class ActualPaymentFileList extends TemplatePage {
             }
 
             @Override
-            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+            protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
                 processManagerBean.loadActualPayment(userOrganizationId, organizationId, year, monthFrom, monthTo);
             }
 

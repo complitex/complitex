@@ -135,7 +135,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         init();
     }
 
-    protected abstract void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo);
+    protected abstract void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo);
 
     protected abstract void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters);
 
@@ -417,8 +417,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                                 rf.getOrganizationId(), rf.getUserOrganizationId());
 
                         if (organizationId != null){
-                            return organizationStrategy.displayShortNameAndCode(
-                                    organizationStrategy.getDomainObject(organizationId, true), getLocale());
+                            return organizationStrategy.displayDomainObject(
+                                    organizationStrategy.getDomainObject(organizationId), getLocale());
                         }else {
                             return rf.getEdrpou();
                         }
@@ -710,8 +710,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         requestFileLoadPanel = new RequestFileLoadPanel("load_panel", new ResourceModel("load_panel_title"),
                 getLoadMonthParameterViewMode()) {
             @Override
-            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
-                AbstractProcessableListPanel.this.load(userOrganizationId, organizationId, year, monthFrom, monthTo);
+            protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId,
+                                int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
+                AbstractProcessableListPanel.this.load(serviceProviderId, userOrganizationId, organizationId,
+                        year, monthFrom, monthTo);
             }
 
             @Override

@@ -144,7 +144,7 @@ public class GroupList extends TemplatePage {
         }
 
         @Override
-        protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+        protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
             processManagerBean.loadGroup(userOrganizationId, organizationId, year, monthFrom, monthTo);
         }
 

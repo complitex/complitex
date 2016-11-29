@@ -1,5 +1,7 @@
 -- create facility local table
 
+DROP TABLE IF EXISTS `facility_local`;
+
 CREATE TABLE `facility_local` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор объекта местной льготы',
   `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла запросов',

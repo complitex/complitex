@@ -85,7 +85,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     }
 
     @Override
-    protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+    protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
         processManagerBean.loadSubsidy(userOrganizationId, organizationId, year, monthFrom, monthTo);
     }
 

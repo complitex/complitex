@@ -82,7 +82,7 @@ public class PrivilegeProlongationFileList extends TemplatePage {
             }
 
             @Override
-            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+            protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
                 processManagerBean.loadPrivilegeProlongation(type, userOrganizationId, organizationId, year, monthFrom);
             }
 

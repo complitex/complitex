@@ -23,6 +23,9 @@ import org.odlabs.wiquery.ui.dialog.Dialog;
 
 import javax.ejb.EJB;
 
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.USER_ORGANIZATION_TYPE;
+
 public abstract class RequestFileLoadPanel extends Panel {
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
@@ -60,24 +63,21 @@ public abstract class RequestFileLoadPanel extends Panel {
         Form form = new Form("form");
         content.add(form);
 
+        //ПУ
+        IModel<Long> serviceProviderModel = new Model<>();
+        form.add(new OrganizationIdPicker("serviceProvider", serviceProviderModel, SERVICE_PROVIDER_TYPE));
+
         //ОСЗН
         IModel<Long> osznModel = new Model<>();
-        form.add(new OrganizationIdPicker("oszn",
-                osznModel,
-                getOsznOrganizationTypes()));
+        form.add(new OrganizationIdPicker("oszn", osznModel, getOsznOrganizationTypes()));
 
         //user organization
         final WebMarkupContainer userOrganizationContainer = new WebMarkupContainer("userOrganizationContainer");
         form.add(userOrganizationContainer);
 
         IModel<Long> userOrganizationModel = new Model<>();
-
-        userOrganizationContainer.add(new OrganizationIdPicker("userOrganization",
-                userOrganizationModel,
-                OsznOrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
-
-        Long currentUserOrganizationId = sessionBean.getCurrentUserOrganizationId(getSession());
-        //userOrganizationContainer.setVisible(currentUserOrganizationId == null);
+        userOrganizationContainer.add(new OrganizationIdPicker("userOrganization", userOrganizationModel, USER_ORGANIZATION_TYPE));
+        userOrganizationContainer.setVisible(sessionBean.getCurrentUserOrganizationId(getSession()) == null);
 
         IModel<Integer> yearModel = new Model<>();
         form.add(new YearDropDownChoice("year", yearModel).setRequired(true));
@@ -141,7 +141,7 @@ public abstract class RequestFileLoadPanel extends Panel {
                     monthTo = monthRange.getMonthTo();
                 }
 
-                load(currentUserOrganizationId, osznModel.getObject(), year, monthFrom, monthTo, target);
+                load(serviceProviderModel.getObject(), currentUserOrganizationId, osznModel.getObject(), year, monthFrom, monthTo, target);
 
                 target.add(messages);
                 dialog.close(target);
@@ -174,7 +174,8 @@ public abstract class RequestFileLoadPanel extends Panel {
         return (TemplateSession) super.getSession();
     }
 
-    protected abstract void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target);
+    protected abstract void load(Long serviceProviderId, Long userOrganizationId, Long organizationId,
+                                 int year, int monthFrom, int monthTo, AjaxRequestTarget target);
 
     protected Long[] getOsznOrganizationTypes(){
         return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,

@@ -2,6 +2,7 @@ package org.complitex.osznconnection.organization.strategy;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.*;
 import org.complitex.common.exception.ServiceRuntimeException;
@@ -310,8 +311,25 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
         return serviceProviderId;
     }
 
-    //todo correction vs attribute
     public String getEdrpou(Long organizationId, Long userOrganizationId){
+        List<OrganizationCorrection> list = organizationCorrectionBean.getOrganizationCorrections(
+                FilterWrapper.of(new OrganizationCorrection(null, userOrganizationId, null,
+                        organizationId, userOrganizationId, null)));
+
+        if (!list.isEmpty()){
+            return list.get(0).getCorrection();
+        }
+
+        return null;
+    }
+
+    public String getEdrpou(Long serviceProviderId, Long organizationId, Long userOrganizationId){
+        DomainObject serviceProvider = getDomainObject(serviceProviderId);
+
+        if (serviceProvider != null && !Strings.isEmpty(serviceProvider.getStringValue(EDRPOU))){
+            return serviceProvider.getStringValue(EDRPOU);
+        }
+
         List<OrganizationCorrection> list = organizationCorrectionBean.getOrganizationCorrections(
                 FilterWrapper.of(new OrganizationCorrection(null, userOrganizationId, null,
                         organizationId, userOrganizationId, null)));

@@ -69,7 +69,7 @@ public final class FacilityServiceTypeFileList extends ScrollListPage {
             }
 
             @Override
-            protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+            protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
                 processManagerBean.loadFacilityServiceType(userOrganizationId, organizationId, year, monthFrom);
             }
 
