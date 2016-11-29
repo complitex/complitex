@@ -13,6 +13,7 @@ import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.privilege.FacilityForm2;
+import org.complitex.osznconnection.file.entity.privilege.FacilityForm2DBF;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.LoadException;
 import org.complitex.osznconnection.file.service.privilege.FacilityForm2Bean;
@@ -100,7 +101,14 @@ public class FacilityForm2LoadTaskBean extends AbstractTaskBean<RequestFile>{
 
                     List<FacilityForm2> list = map.get(depart);
 
-                    list.forEach(f -> f.setRequestFileId(r.getId()));
+                    list.forEach(f -> {
+                        f.setRequestFileId(r.getId());
+
+                        //trim IDCODE
+                        if (StringUtil.emptyOnNull(f.getStringField(FacilityForm2DBF.IDCODE)).length() > 10){
+                            f.putField(FacilityForm2DBF.IDCODE, f.getStringField(FacilityForm2DBF.IDCODE).substring(0, 10));
+                        }
+                    });
 
                     facilityForm2Bean.save(list);
 
