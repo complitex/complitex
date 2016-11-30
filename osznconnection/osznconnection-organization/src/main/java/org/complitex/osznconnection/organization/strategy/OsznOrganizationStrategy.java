@@ -103,6 +103,8 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
      */
     public final static long SAVE_FACILITY_FORM2_DIR = 928;
 
+    public final static long SAVE_FACILITY_LOCAL_DIR = 929;
+
     public final static long ROOT_EXPORT_DIRECTORY = 930;
 
     /**
@@ -121,7 +123,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     public static final List<Long> LOAD_SAVE_FILE_DIR_PRIVILEGES_ATTRIBUTES =
             ImmutableList.of(LOAD_DWELLING_CHARACTERISTICS_DIR, SAVE_DWELLING_CHARACTERISTICS_DIR,
                     LOAD_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_SERVICE_TYPE_DIR, SAVE_FACILITY_FORM2_DIR,
-                    LOAD_PRIVILEGE_PROLONGATION_DIR);
+                    SAVE_FACILITY_LOCAL_DIR, LOAD_PRIVILEGE_PROLONGATION_DIR);
 
     private static final List<Long> CUSTOM_ATTRIBUTE_TYPES = ImmutableList.<Long>builder().
             add(DATA_SOURCE).

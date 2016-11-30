@@ -36,6 +36,6 @@ public class FacilityForm2SaveTaskBean extends AbstractSaveTaskBean implements I
 
     @Override
     protected RequestFileDirectoryType getSaveDirectoryType() {
-        return RequestFileDirectoryType.SAVE_FACILITY_FORM2_DIR;
+        return RequestFileDirectoryType.SAVE_FACILITY_LOCAL_DIR;
     }
 }
