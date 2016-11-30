@@ -36,13 +36,9 @@ import java.util.List;
 
 import static org.complitex.common.entity.PreferenceKey.CURRENT_PAGE;
 
-/**
- *
- * @author Artem
- */
 public class PagingNavigator extends Panel {
-    private static final int LEFT_OFFSET = 3;
-    private static final int RIGHT_OFFSET = 3;
+    private static final int LEFT_OFFSET = 5;
+    private static final int RIGHT_OFFSET = 5;
     private static final List<Long> SUPPORTED_PAGE_SIZES = Arrays.asList(10L, 20L, 30L, 50L, 100L);
     private DataView<?> dataView;
     private WebMarkupContainer pageBar;
@@ -155,7 +151,11 @@ public class PagingNavigator extends Panel {
                 List<Long> result = new ArrayList<>();
 
                 long currentPage = dataView.getCurrentPage();
-                for (long i = LEFT_OFFSET; i > 0; i--) {
+
+                long shift = currentPage + RIGHT_OFFSET - dataView.getPageCount() + 1;
+                shift = shift > 0 ? shift : 0;
+
+                for (long i = LEFT_OFFSET + shift; i > 0; i--) {
                     if ((currentPage - i) >= 0) {
                         result.add(currentPage - i);
                     }
@@ -173,7 +173,11 @@ public class PagingNavigator extends Panel {
                 List<Long> result = new ArrayList<>();
 
                 long currentPage = dataView.getCurrentPage();
-                for (int i = 1; i <= RIGHT_OFFSET; i++) {
+
+                long shift = LEFT_OFFSET - currentPage;
+                shift = shift > 0 ? shift : 0;
+
+                for (int i = 1; i <= RIGHT_OFFSET + shift; i++) {
                     if ((currentPage + i) < dataView.getPageCount()) {
                         result.add(currentPage + i);
                     }
