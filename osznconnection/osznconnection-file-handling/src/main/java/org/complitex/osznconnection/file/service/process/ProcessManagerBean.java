@@ -591,8 +591,8 @@ public class ProcessManagerBean {
     }
 
     public void saveFacilityLocal(List<Long> ids, Map processParameters) {
-        execute(SAVE_FACILITY_LOCAL, FacilityForm2SaveTaskBean.class,
-                getFacilityForm2Files(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+        execute(SAVE_FACILITY_LOCAL, FacilityLocalSaveTaskBean.class,
+                getFacilityLocalFiles(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
     /*FacilityTarifReferences*/

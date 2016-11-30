@@ -84,6 +84,7 @@ public class RequestFileBean extends AbstractBean {
             case DWELLING_CHARACTERISTICS:
             case FACILITY_SERVICE_TYPE:
             case FACILITY_FORM2:
+            case FACILITY_LOCAL:
             case PRIVILEGE_PROLONGATION:
                 return getProcessedRequestFiles(filter);
 

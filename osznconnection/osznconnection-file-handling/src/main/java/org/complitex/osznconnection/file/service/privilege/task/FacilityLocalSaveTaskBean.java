@@ -9,11 +9,13 @@ import org.complitex.osznconnection.file.service.process.AbstractSaveTaskBean;
 import org.complitex.osznconnection.file.service.process.RequestFileDirectoryType;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.util.List;
 
 /**
  * @author inheaven on 018 18.11.16.
  */
+@Stateless
 public class FacilityLocalSaveTaskBean extends AbstractSaveTaskBean implements ITaskBean<RequestFile> {
 
     @EJB
@@ -36,6 +38,6 @@ public class FacilityLocalSaveTaskBean extends AbstractSaveTaskBean implements I
 
     @Override
     protected RequestFileDirectoryType getSaveDirectoryType() {
-        return RequestFileDirectoryType.SAVE_FACILITY_FORM2_DIR; //todo facility local dir
+        return RequestFileDirectoryType.SAVE_FACILITY_LOCAL_DIR;
     }
 }

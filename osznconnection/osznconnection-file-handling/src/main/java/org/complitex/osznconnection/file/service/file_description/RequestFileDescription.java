@@ -7,10 +7,6 @@ import org.complitex.osznconnection.file.service.file_description.convert.Reques
 import java.io.Serializable;
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
 public class RequestFileDescription implements Serializable {
 
     private Long id;
@@ -54,12 +50,7 @@ public class RequestFileDescription implements Serializable {
     }
 
     public RequestFileFieldDescription getField(String fieldName) {
-        for (RequestFileFieldDescription field : fields) {
-            if (field.getName().equals(fieldName)) {
-                return field;
-            }
-        }
-        return null;
+        return fields.stream().filter(field -> field.getName().equals(fieldName)).findFirst().orElse(null);
     }
 
     public String getDatePattern() {

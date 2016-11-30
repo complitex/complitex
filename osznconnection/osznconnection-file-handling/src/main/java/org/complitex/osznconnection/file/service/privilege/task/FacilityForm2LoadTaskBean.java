@@ -16,13 +16,16 @@ import org.complitex.osznconnection.file.entity.privilege.FacilityForm2;
 import org.complitex.osznconnection.file.entity.privilege.FacilityForm2DBF;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.LoadException;
+import org.complitex.osznconnection.file.service.file_description.RequestFileDescription;
+import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
+import org.complitex.osznconnection.file.service.file_description.RequestFileFieldDescription;
 import org.complitex.osznconnection.file.service.privilege.FacilityForm2Bean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +36,8 @@ import java.util.stream.Collectors;
  */
 @Stateless
 public class FacilityForm2LoadTaskBean extends AbstractTaskBean<RequestFile>{
+    private Logger log = LoggerFactory.getLogger(FacilityForm2LoadTaskBean.class);
+
     private final static Class RESOURCE = FacilityForm2LoadTaskBean.class;
 
     @EJB
@@ -50,8 +55,8 @@ public class FacilityForm2LoadTaskBean extends AbstractTaskBean<RequestFile>{
     @EJB
     private FacilityForm2Bean facilityForm2Bean;
 
-    @Resource
-    private EJBContext context;
+    @EJB
+    private RequestFileDescriptionBean requestFileDescriptionBean;
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
@@ -74,6 +79,12 @@ public class FacilityForm2LoadTaskBean extends AbstractTaskBean<RequestFile>{
         if (Strings.isEmpty(district)){
             throw new LoadException("Район не найден для {0}", osznOrganizationStrategy
                     .displayDomainObject(requestFile.getOrganizationId(), Locales.getSystemLocale()));
+        }
+
+        RequestFileDescription description = requestFileDescriptionBean.getFileDescription(RequestFileType.FACILITY_FORM2);
+
+        if (description == null){
+            throw new LoadException("FACILITY_FORM2 file description not found");
         }
 
         Cursor<FacilityForm2> cursor = serviceProviderAdapter.getFacilityForm2(requestFile.getUserOrganizationId(),
@@ -101,12 +112,27 @@ public class FacilityForm2LoadTaskBean extends AbstractTaskBean<RequestFile>{
 
                     List<FacilityForm2> list = map.get(depart);
 
+
                     list.forEach(f -> {
                         f.setRequestFileId(r.getId());
 
-                        //trim IDCODE
-                        if (StringUtil.emptyOnNull(f.getStringField(FacilityForm2DBF.IDCODE)).length() > 10){
-                            f.putField(FacilityForm2DBF.IDCODE, f.getStringField(FacilityForm2DBF.IDCODE).substring(0, 10));
+                        for (FacilityForm2DBF k : FacilityForm2DBF.values()){
+                            RequestFileFieldDescription field = description.getField(k.name());
+
+                            //trim string
+                            if (String.class.equals(field.getFieldType())){
+                                String s = f.getStringField(k);
+
+                                if (s != null && s.length() > field.getLength()){
+                                    f.putField(k, s.substring(0, field.getLength()));
+
+                                    log.info("facility form-2 trim field {}", s);
+                                }
+                            }
+
+                            if (f.getField(k) == null){
+                                f.putField(k, null);
+                            }
                         }
                     });
 
@@ -115,8 +141,6 @@ public class FacilityForm2LoadTaskBean extends AbstractTaskBean<RequestFile>{
                     r.setStatus(RequestFileStatus.LOADED);
                     requestFileBean.save(r);
                 } catch (Exception e) {
-                    context.setRollbackOnly();
-
                     r.setStatus(RequestFileStatus.LOAD_ERROR);
                     requestFileBean.save(r);
 

@@ -12,11 +12,11 @@ public class RequestFileFieldDescription implements Serializable {
     private Long requestFileDescriptionId;
     private final String name;
     private final String type;
-    private final int length;
+    private final Integer length;
     private final Integer scale;
     private final Class fieldType;
 
-    public RequestFileFieldDescription(String name, String type, int length, Integer scale) {
+    public RequestFileFieldDescription(String name, String type, Integer length, Integer scale) {
         this.name = name;
         this.type = type;
         this.length = length;
@@ -42,7 +42,7 @@ public class RequestFileFieldDescription implements Serializable {
         return id;
     }
 
-    public int getLength() {
+    public Integer getLength() {
         return length;
     }
 

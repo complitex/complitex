@@ -26,83 +26,71 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.complitex.common.util.ResourceUtil.getFormatString;
 import static org.complitex.common.util.ResourceUtil.getString;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class RequestFileDescriptionBean extends AbstractBean {
     private final Logger log = LoggerFactory.getLogger(RequestFileDescriptionBean.class);
-    private static final String MAPPING_NAMESPACE = RequestFileDescriptionBean.class.getName();
+    private static final String NS = RequestFileDescriptionBean.class.getName();
     private static final String RESOURCE_BUNDLE = RequestFileDescriptionBean.class.getName();
-    private final static Map<RequestFileType, RequestFileDescription> cache = Collections.synchronizedMap(
+    private final static Map<RequestFileType, RequestFileDescription> cache = new ConcurrentHashMap<>(
             new EnumMap<RequestFileType, RequestFileDescription>(RequestFileType.class));
 
     private final static Map<RequestFileType, Class<? extends Enum<?>>> REQUEST_FILE_TYPE_MAP =
             ImmutableMap.<RequestFileType, Class<? extends Enum<?>>>builder().
-            put(RequestFileType.ACTUAL_PAYMENT, ActualPaymentDBF.class).
-            put(RequestFileType.PAYMENT, PaymentDBF.class).
-            put(RequestFileType.BENEFIT, BenefitDBF.class).
-            put(RequestFileType.SUBSIDY, SubsidyDBF.class).
-            put(RequestFileType.SUBSIDY_J_FILE, SubsidyJFileDBF.class).
-            put(RequestFileType.SUBSIDY_S_FILE, SubsidySFileDBF.class).
-            put(RequestFileType.SUBSIDY_TARIF, SubsidyTarifDBF.class).
-            put(RequestFileType.DWELLING_CHARACTERISTICS, DwellingCharacteristicsDBF.class).
-            put(RequestFileType.FACILITY_STREET_TYPE_REFERENCE, FacilityStreetTypeDBF.class).
-            put(RequestFileType.FACILITY_STREET_REFERENCE, FacilityStreetDBF.class).
-            put(RequestFileType.FACILITY_SERVICE_TYPE, FacilityServiceTypeDBF.class).
-            put(RequestFileType.FACILITY_TARIF_REFERENCE, FacilityTarifDBF.class).
-            put(RequestFileType.FACILITY_FORM2, FacilityForm2DBF.class).
-            build();
+                    put(RequestFileType.ACTUAL_PAYMENT, ActualPaymentDBF.class).
+                    put(RequestFileType.PAYMENT, PaymentDBF.class).
+                    put(RequestFileType.BENEFIT, BenefitDBF.class).
+                    put(RequestFileType.SUBSIDY, SubsidyDBF.class).
+                    put(RequestFileType.SUBSIDY_J_FILE, SubsidyJFileDBF.class).
+                    put(RequestFileType.SUBSIDY_S_FILE, SubsidySFileDBF.class).
+                    put(RequestFileType.SUBSIDY_TARIF, SubsidyTarifDBF.class).
+                    put(RequestFileType.DWELLING_CHARACTERISTICS, DwellingCharacteristicsDBF.class).
+                    put(RequestFileType.FACILITY_STREET_TYPE_REFERENCE, FacilityStreetTypeDBF.class).
+                    put(RequestFileType.FACILITY_STREET_REFERENCE, FacilityStreetDBF.class).
+                    put(RequestFileType.FACILITY_SERVICE_TYPE, FacilityServiceTypeDBF.class).
+                    put(RequestFileType.FACILITY_TARIF_REFERENCE, FacilityTarifDBF.class).
+                    put(RequestFileType.FACILITY_FORM2, FacilityForm2DBF.class).
+                    put(RequestFileType.FACILITY_LOCAL, FacilityLocalDBF.class).
+                    build();
 
     private final static String DATE_PATTERN = "dd.MM.yyyy";
 
 
     private void insert(RequestFileDescription fileDescription) {
-        sqlSession().insert(MAPPING_NAMESPACE + ".insertFileDescription", fileDescription);
+        sqlSession().insert(NS + ".insertFileDescription", fileDescription);
         if (!fileDescription.getFields().isEmpty()) {
             for (RequestFileFieldDescription field : fileDescription.getFields()) {
                 field.setRequestFileDescriptionId(fileDescription.getId());
-                sqlSession().insert(MAPPING_NAMESPACE + ".insertFileFieldDescription", field);
+                sqlSession().insert(NS + ".insertFileFieldDescription", field);
             }
         }
     }
 
 
     private void delete() {
-        sqlSession().delete(MAPPING_NAMESPACE + ".deleteFileFieldDescription");
-        sqlSession().delete(MAPPING_NAMESPACE + ".deleteFileDescription");
+        sqlSession().delete(NS + ".deleteFileFieldDescription");
+        sqlSession().delete(NS + ".deleteFileDescription");
     }
 
 
     public void update(List<RequestFileDescription> requestFileDescriptions) {
-        synchronized (cache) {
-            cache.clear();
-            delete();
+        cache.clear();
+        delete();
 
-            for (RequestFileDescription fileDescription : requestFileDescriptions) {
-                insert(fileDescription);
-                //prefill cache
-                getFileDescription(fileDescription.getRequestFileType());
-            }
+        for (RequestFileDescription fileDescription : requestFileDescriptions) {
+            insert(fileDescription);
+            //prefill cache
+            getFileDescription(fileDescription.getRequestFileType());
         }
     }
 
     public RequestFileDescription getFileDescription(RequestFileType requestFileType) {
-        synchronized (cache) {
-            RequestFileDescription fileDescription = cache.get(requestFileType);
-            if (fileDescription == null) {
-                fileDescription = sqlSession().selectOne(MAPPING_NAMESPACE + ".find", requestFileType.name());
-
-                cache.put(requestFileType, fileDescription);
-            }
-            return fileDescription;
-        }
+        return cache.computeIfAbsent(requestFileType, k -> sqlSession().selectOne(NS + ".find", k.name()));
     }
 
     public List<RequestFileDescription> getDescription(InputStream inputStream, Locale locale)

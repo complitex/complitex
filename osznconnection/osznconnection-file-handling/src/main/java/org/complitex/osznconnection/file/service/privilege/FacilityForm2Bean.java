@@ -18,8 +18,10 @@ public class FacilityForm2Bean extends AbstractRequestBean {
         }
 
         //noinspection ResultOfMethodCallIgnored
-        facilityForm2List.stream().collect(StreamUtils.batchCollector(1000, l -> {
-            sqlSession().insert(NS + ".insertFacilityForm2List", l);
+        facilityForm2List.stream().collect(StreamUtils.batchCollector(1, l -> {
+            if (l.size() > 0) {
+                sqlSession().insert(NS + ".insertFacilityForm2List", l);
+            }
         }));
     }
 

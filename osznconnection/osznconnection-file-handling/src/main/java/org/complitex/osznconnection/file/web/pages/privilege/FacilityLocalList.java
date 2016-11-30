@@ -21,7 +21,7 @@ public class FacilityLocalList extends ListTemplatePage<FacilityLocal>{
     private FacilityLocalBean facilityLocalBean;
 
     public FacilityLocalList(PageParameters pageParameters) {
-        super(pageParameters, ".dbfFields.", FacilityLocalFileList.class);
+        super(pageParameters, "dbfFields.", FacilityLocalFileList.class);
     }
 
     @Override

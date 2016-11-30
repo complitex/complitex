@@ -21,8 +21,10 @@ public class FacilityLocalBean extends AbstractRequestBean{
         }
 
         //noinspection ResultOfMethodCallIgnored
-        facilityLocalList.stream().collect(StreamUtils.batchCollector(1000, l -> {
-            sqlSession().insert(NS + ".insertFacilityLocalList", l);
+        facilityLocalList.stream().collect(StreamUtils.batchCollector(1, l -> {
+            if (l.size() > 0) {
+                sqlSession().insert(NS + ".insertFacilityLocalList", l);
+            }
         }));
     }
 

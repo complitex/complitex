@@ -13,7 +13,7 @@
             <constructor>
                 <arg column="field_name" javaType="string"/>
                 <arg column="field_type" javaType="string"/>
-                <arg column="field_length" javaType="_int"/>
+                <arg column="field_length" javaType="int"/>
                 <arg column="field_scale" javaType="int"/>
             </constructor>
             <id column="field_id" property="id"/>
@@ -27,7 +27,7 @@
                f.`id` field_id, f.`name` field_name, f.`type` field_type, f.`length` field_length, f.`scale` field_scale,
                f.`request_file_description_id` field_file_description_id
            FROM `request_file_description` d
-           JOIN `request_file_field_description` f ON d.`id` = f.`request_file_description_id`
+           LEFT JOIN `request_file_field_description` f ON d.`id` = f.`request_file_description_id`
            WHERE d.`request_file_type` = #{requestFileType}
     </select>
     

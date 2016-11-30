@@ -3,10 +3,7 @@ package org.complitex.osznconnection.file.entity;
 import com.google.common.collect.Lists;
 import org.complitex.common.entity.ILongId;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -28,8 +25,8 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
 
     private List<RequestWarning> warnings = Lists.newArrayList();
 
-    private Map<String, Object> dbfFields = new HashMap<>();
-    private Map<String, Object> updateFieldMap = new HashMap<>();
+    private Map<String, Object> dbfFields = new TreeMap<>();
+    private Map<String, Object> updateFieldMap = new TreeMap<>();
 
     private Date date;
 
