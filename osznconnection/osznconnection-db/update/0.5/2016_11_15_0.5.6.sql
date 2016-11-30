@@ -46,6 +46,8 @@ CREATE TABLE `facility_local` (
   `PSN` INTEGER(2) COMMENT 'Причина снятия льготы',
   `SUMM` DECIMAL(10,2) COMMENT 'Итоговая сумма (текущее возмещение и перерасчеты)',
 
+  `DEPART` INTEGER COMMENT 'Код участка',
+
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
   KEY `key_account_number` (`account_number`),

@@ -55,6 +55,9 @@ public class RequestFileBean extends AbstractBean {
     private FacilityForm2Bean facilityForm2Bean;
 
     @EJB
+    private FacilityLocalBean facilityLocalBean;
+
+    @EJB
     private FacilityReferenceBookBean facilityReferenceBookBean;
 
     @EJB
@@ -148,6 +151,9 @@ public class RequestFileBean extends AbstractBean {
                     break;
                 case FACILITY_FORM2:
                     facilityForm2Bean.delete(requestFile.getId());
+                    break;
+                case FACILITY_LOCAL:
+                    facilityLocalBean.delete(requestFile.getId());
                     break;
                 case FACILITY_STREET_TYPE_REFERENCE:
                 case FACILITY_STREET_REFERENCE:

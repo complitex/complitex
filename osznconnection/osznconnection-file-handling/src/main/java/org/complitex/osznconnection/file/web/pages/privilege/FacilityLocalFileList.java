@@ -46,7 +46,7 @@ public class FacilityLocalFileList extends TemplatePage{
 
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-                processManagerBean.loadFacilityLocal(userOrganizationId, organizationId, year, monthFrom);
+                processManagerBean.loadFacilityLocal(serviceProviderId, userOrganizationId, organizationId, year, monthFrom);
             }
 
             @Override

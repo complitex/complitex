@@ -1,6 +1,7 @@
 package org.complitex.osznconnection.file.service.privilege;
 
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.stream.StreamUtils;
 import org.complitex.osznconnection.file.entity.privilege.FacilityLocal;
 import org.complitex.osznconnection.file.service.AbstractRequestBean;
 
@@ -14,24 +15,27 @@ import java.util.List;
 public class FacilityLocalBean extends AbstractRequestBean{
     public static final String NS = FacilityLocalBean.class.getName();
 
+    public void save(List<FacilityLocal> facilityLocalList) {
+        if (facilityLocalList.isEmpty()) {
+            return;
+        }
+
+        //noinspection ResultOfMethodCallIgnored
+        facilityLocalList.stream().collect(StreamUtils.batchCollector(1000, l -> {
+            sqlSession().insert(NS + ".insertFacilityLocalList", l);
+        }));
+    }
+
     public List<FacilityLocal> getFacilityLocal(Long requestFileId) {
         return sqlSession().selectList(NS + ".selectFacilityLocal", requestFileId);
     }
 
-    public void save(List<FacilityLocal> facilityLocals) {
-        if (facilityLocals.isEmpty()) {
-            return;
-        }
-
-        sqlSession().insert(NS + ".insertFacilityLocalList", facilityLocals);
-    }
-
     public List<FacilityLocal> getFacilityLocals(FilterWrapper<FacilityLocal> filterWrapper){
-        return sqlSession().selectList(NS + ".selectFacilityLocals", filterWrapper);
+        return sqlSession().selectList(NS + ".selectFacilityLocalList", filterWrapper);
     }
 
     public Long getFacilityLocalsCount(FilterWrapper<FacilityLocal> filterWrapper){
-        return sqlSession().selectOne(NS + ".selectFacilityLocalsCount", filterWrapper);
+        return sqlSession().selectOne(NS + ".selectFacilityLocalListCount", filterWrapper);
     }
 
     public void delete(Long requestFileId) {

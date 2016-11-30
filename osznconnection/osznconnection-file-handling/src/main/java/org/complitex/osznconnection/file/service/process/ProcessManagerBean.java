@@ -576,8 +576,10 @@ public class ProcessManagerBean {
 
     /*FacilityLocal*/
 
-    public void loadFacilityLocal(Long userOrganizationId, Long organizationId, int year, int month){
+    public void loadFacilityLocal(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int month){
         RequestFile requestFile = new RequestFile();
+
+        requestFile.setServiceProviderId(serviceProviderId);
         requestFile.setUserOrganizationId(userOrganizationId);
         requestFile.setOrganizationId(organizationId);
         requestFile.setBeginDate(newDate(year, month));

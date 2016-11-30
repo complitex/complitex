@@ -15,6 +15,7 @@ import org.complitex.organization.strategy.ServiceStrategy;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.privilege.FacilityForm2;
+import org.complitex.osznconnection.file.entity.privilege.FacilityLocal;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
@@ -1501,7 +1502,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
     /*Facility Local*/
 
-    public Cursor<FacilityForm2> getFacilityLocal(Long userOrganizationId, String district, String zheuCode, Date date){
+    public Cursor<FacilityLocal> getFacilityLocal(Long userOrganizationId, String district, String zheuCode, Date date){
         Map<String, Object> map = new HashMap<>();
         map.put("pDistrName", district);
         map.put("pZheuCode", zheuCode);

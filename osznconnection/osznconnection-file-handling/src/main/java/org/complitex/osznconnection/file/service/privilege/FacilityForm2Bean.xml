@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.osznconnection.file.service.privilege.FacilityForm2Bean">
-
     <resultMap id="facilityForm2ResultMap" type="org.complitex.osznconnection.file.entity.privilege.FacilityForm2"
                 extends="org.complitex.osznconnection.file.service.AbstractRequestBean.abstractRequest">
         <association property="dbfFields" javaType="map">
@@ -22,6 +21,7 @@
             <result column="FACT" property="FACT"/>
             <result column="TARIF" property="TARIF"/>
             <result column="FLAG" property="FLAG"/>
+
             <result column="DEPART" property="DEPART"/>
         </association>
     </resultMap>
@@ -31,7 +31,7 @@
         INSERT INTO `facility_form2`
         (
         <trim suffixOverrides=",">
-            `request_file_id`, `DEPART`,
+            `request_file_id`,
             <foreach collection="list[0].dbfFields.keys" item="key">
                 `${key}`,
             </foreach>
@@ -41,7 +41,7 @@
         <foreach collection="list" separator="," item="item">
             (
             <trim suffixOverrides=",">
-                #{item.requestFileId}, #{item.dbfFields.DEPART},
+                #{item.requestFileId},
                 <foreach collection="item.dbfFields.keys" item="key">
                     #{item.dbfFields.${key}},
                 </foreach>
@@ -51,7 +51,7 @@
     </insert>
     
     <select id="selectFacilityForm2" resultMap="facilityForm2ResultMap" parameterType="long">
-        SELECT * FROM `facility_form2` WHERE `request_file_id` = #{id}
+        select * from `facility_form2` where `request_file_id` = #{id}
     </select>
 
     <select id="selectFacilityForm2List" resultMap="facilityForm2ResultMap" parameterType="org.complitex.common.entity.FilterWrapper">
@@ -63,7 +63,7 @@
     </select>
     
     <delete id="deleteFacilityForm2" parameterType="long">
-        DELETE FROM `facility_form2` WHERE `request_file_id` = #{id}
+        delete from `facility_form2` where `request_file_id` = #{id}
     </delete>
     
 </mapper>

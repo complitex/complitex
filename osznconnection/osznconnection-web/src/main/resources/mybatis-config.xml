@@ -102,6 +102,7 @@
         <mapper resource="org/complitex/osznconnection/file/service/privilege/DwellingCharacteristicsBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityServiceTypeBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityForm2Bean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityLocalBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityReferenceBookBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/privilege/OwnershipCorrectionBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/privilege/PrivilegeCorrectionBean.xml"/>
