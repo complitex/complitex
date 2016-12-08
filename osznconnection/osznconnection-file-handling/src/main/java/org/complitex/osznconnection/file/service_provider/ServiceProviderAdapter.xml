@@ -331,4 +331,22 @@
           #{data, mode=OUT, jdbcType=CURSOR, resultMap=privsMResultMap}
         )}
     </select>
+
+    <select id="getPrivsD" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.GetPrivsD(
+        #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
+        #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
+        #{pDate, mode=IN, javaType=date, jdbcType=DATE},
+        #{data, mode=OUT, jdbcType=CURSOR, resultMap=privsMResultMap}
+        )}
+    </select>
+
+    <select id="getPrivsK" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.GetPrivsK(
+        #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
+        #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
+        #{pDate, mode=IN, javaType=date, jdbcType=DATE},
+        #{data, mode=OUT, jdbcType=CURSOR, resultMap=privsMResultMap}
+        )}
+    </select>
 </mapper>

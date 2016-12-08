@@ -30,6 +30,8 @@ public abstract class AbstractRequestFile extends AbstractExecutorObject{
     private Date loaded = DateUtil.getCurrentDate();
 
     private RequestFileType type;
+    private RequestFileSubType subType;
+
     private RequestFileStatus status;
 
     private Long organizationId;
@@ -195,6 +197,14 @@ public abstract class AbstractRequestFile extends AbstractExecutorObject{
         this.type = type;
     }
 
+    public RequestFileSubType getSubType() {
+        return subType;
+    }
+
+    public void setSubType(RequestFileSubType subType) {
+        this.subType = subType;
+    }
+
     @Override
     public RequestFileStatus getStatus() {
         return status;
@@ -246,6 +256,7 @@ public abstract class AbstractRequestFile extends AbstractExecutorObject{
                 ", endDate=" + endDate +
                 ", loaded=" + loaded +
                 ", type=" + type +
+                ", subType=" + subType +
                 ", status=" + status +
                 ", organizationId=" + organizationId +
                 ", userOrganizationId=" + userOrganizationId +

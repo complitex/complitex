@@ -1485,34 +1485,33 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
     }
 
-    /*Facility Form2*/
+    /*Facility*/
 
-    public Cursor<FacilityForm2> getFacilityForm2(Long userOrganizationId, String district, String zheuCode, Date date){
+    private <T> Cursor<T> getFacility(String function, Long userOrganizationId, String district, String zheuCode, Date date){
         Map<String, Object> map = new HashMap<>();
         map.put("pDistrName", district);
         map.put("pZheuCode", zheuCode);
         map.put("pDate", date);
 
-        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getPrivsF", map);
-
-        //log.info("getFacilityForm2 getPrivsF {}", map);
+        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + "." + function, map);
 
         return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("data"));
     }
 
-    /*Facility Local*/
+    public Cursor<FacilityForm2> getFacilityForm2(Long userOrganizationId, String district, String zheuCode, Date date){
+        return getFacility("getPrivsF", userOrganizationId, district, zheuCode, date);
+    }
 
     public Cursor<FacilityLocal> getFacilityLocal(Long userOrganizationId, String district, String zheuCode, Date date){
-        Map<String, Object> map = new HashMap<>();
-        map.put("pDistrName", district);
-        map.put("pZheuCode", zheuCode);
-        map.put("pDate", date);
+        return getFacility("getPrivsM", userOrganizationId, district, zheuCode, date);
+    }
 
-        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getPrivsM", map);
+    public Cursor<FacilityLocal> getFacilityLocalJanitor(Long userOrganizationId, String district, String zheuCode, Date date){
+        return getFacility("getPrivsD", userOrganizationId, district, zheuCode, date);
+    }
 
-        //log.info("getFacilityLocal getPrivsM {}", map);
-
-        return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("data"));
+    public Cursor<FacilityLocal> getFacilityLocalCompensation(Long userOrganizationId, String district, String zheuCode, Date date){
+        return getFacility("getPrivsK", userOrganizationId, district, zheuCode, date);
     }
 
     private String getDataSource(Long userOrganizationId){
