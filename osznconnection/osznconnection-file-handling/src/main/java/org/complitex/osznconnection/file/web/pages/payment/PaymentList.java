@@ -41,6 +41,7 @@ import org.complitex.osznconnection.file.service.status.details.PaymentBenefitSt
 import org.complitex.osznconnection.file.service.status.details.PaymentExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
+import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.service.subsidy.task.GroupBindTaskBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
@@ -82,6 +83,9 @@ public final class PaymentList extends TemplatePage {
 
     @EJB
     private GroupBindTaskBean groupBindTaskBean;
+
+    @EJB
+    private RequestFileGroupBean requestFileGroupBean;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
@@ -322,6 +326,8 @@ public final class PaymentList extends TemplatePage {
                     } catch (Exception e) {
                         error(ExceptionUtil.getCauseMessage(e, true));
                     }
+
+                    requestFileGroupBean.updateIfBound(payment.getGroupId());
                 });
 
                 checkGroup.getModelObject().clear();
