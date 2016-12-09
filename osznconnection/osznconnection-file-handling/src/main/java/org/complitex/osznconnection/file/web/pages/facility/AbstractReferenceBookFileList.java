@@ -148,7 +148,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
         //Осзн
         form.add(new OrganizationIdPicker("organization",
                 new PropertyModel<>(model, "organizationId"),
-                getOsznOrganizationTypes()));
+                new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE}));
 
         // Организация пользователя
         form.add(new OrganizationIdPicker("userOrganization",
@@ -272,7 +272,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
 
         //Диалог загрузки
         requestFileLoadPanel = new RequestFileLoadPanel("load_panel", new ResourceModel("load_panel_title"),
-                MonthParameterViewMode.EXACT) {
+                MonthParameterViewMode.EXACT, new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE}) {
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
                 AbstractReferenceBookFileList.this.load(userOrganizationId, organizationId, year, monthFrom, monthTo);
@@ -282,11 +282,6 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
                 selectManager.clearSelection();
                 timerManager.addTimer();
                 target.add(form);
-            }
-
-            @Override
-            protected Long[] getOsznOrganizationTypes() {
-                return AbstractReferenceBookFileList.this.getOsznOrganizationTypes();
             }
         };
 
@@ -313,9 +308,5 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
                 requestFileLoadPanel.open(target);
             }
         });
-    }
-
-    protected Long[] getOsznOrganizationTypes() {
-        return new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
     }
 }

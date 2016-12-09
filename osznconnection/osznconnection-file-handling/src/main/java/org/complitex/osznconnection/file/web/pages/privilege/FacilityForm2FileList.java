@@ -29,7 +29,8 @@ public final class FacilityForm2FileList extends TemplatePage {
         add(new Label("title", new ResourceModel("title")));
 
         add(fileListPanel = new AbstractFileListPanel("fileListPanel", FACILITY_FORM2,
-                LOAD_FACILITY_FORM2, BIND_FACILITY_FORM2, FILL_FACILITY_FORM2, SAVE_FACILITY_FORM2) {
+                LOAD_FACILITY_FORM2, BIND_FACILITY_FORM2, FILL_FACILITY_FORM2, SAVE_FACILITY_FORM2,
+                new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE}) {
 
             @Override
             protected String getPreferencePage() {
@@ -62,11 +63,6 @@ public final class FacilityForm2FileList extends TemplatePage {
             @Override
             protected RequestFileLoadPanel.MonthParameterViewMode getLoadMonthParameterViewMode() {
                 return RequestFileLoadPanel.MonthParameterViewMode.EXACT;
-            }
-
-            @Override
-            protected Long[] getOsznOrganizationTypes() {
-                return new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
             }
 
             @Override

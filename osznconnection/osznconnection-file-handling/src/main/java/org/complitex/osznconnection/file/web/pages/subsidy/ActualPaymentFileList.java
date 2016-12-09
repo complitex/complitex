@@ -35,7 +35,8 @@ public class ActualPaymentFileList extends TemplatePage {
 
         add(new Label("title", new ResourceModel("title")));
         add(fileListPanel = new AbstractFileListPanel("fileListPanel", ACTUAL_PAYMENT, LOAD_ACTUAL_PAYMENT,
-                BIND_ACTUAL_PAYMENT, FILL_ACTUAL_PAYMENT, SAVE_ACTUAL_PAYMENT) {
+                BIND_ACTUAL_PAYMENT, FILL_ACTUAL_PAYMENT, SAVE_ACTUAL_PAYMENT,
+                new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE}) {
 
             @Override
             protected String getPreferencePage() {
@@ -63,13 +64,9 @@ public class ActualPaymentFileList extends TemplatePage {
             }
 
             @Override
-            protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+            protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId,
+                                int year, int monthFrom, int monthTo) {
                 processManagerBean.loadActualPayment(userOrganizationId, organizationId, year, monthFrom, monthTo);
-            }
-
-            @Override
-            protected Long[] getOsznOrganizationTypes() {
-                return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE};
             }
         });
     }

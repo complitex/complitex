@@ -52,7 +52,7 @@ public class GroupList extends TemplatePage {
     private class GroupListPanel extends AbstractProcessableListPanel<RequestFileGroup, RequestFileGroupFilter> {
 
         GroupListPanel(String id) {
-            super(id, LOAD_GROUP, BIND_GROUP, FILL_GROUP, SAVE_GROUP);
+            super(id, LOAD_GROUP, BIND_GROUP, FILL_GROUP, SAVE_GROUP, new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE});
 
             add(new Label("title", new ResourceModel("title")));
 
@@ -203,11 +203,6 @@ public class GroupList extends TemplatePage {
             for (RequestFile rf : processManagerBean.getLinkError(LOAD_GROUP, true)) {
                 error(getStringFormat("request_file.link_error", rf.getFullName()));
             }
-        }
-
-        @Override
-        protected Long[] getOsznOrganizationTypes() {
-            return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE};
         }
     }
     private final GroupListPanel groupListPanel;

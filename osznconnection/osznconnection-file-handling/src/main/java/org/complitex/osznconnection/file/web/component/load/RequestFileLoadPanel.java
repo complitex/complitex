@@ -34,12 +34,22 @@ public abstract class RequestFileLoadPanel extends Panel {
     private SessionBean sessionBean;
 
     private final Dialog dialog;
-    private static final String MONTH_COMPONENT_ID = "monthComponent";
 
+    private Long[] osznOrganizationTypes;
+
+    private static final String MONTH_COMPONENT_ID = "monthComponent";
     public enum MonthParameterViewMode { RANGE, EXACT, HIDDEN }
 
-    public RequestFileLoadPanel(String id, IModel<String> title, final MonthParameterViewMode monthParameterViewMode) {
+    public RequestFileLoadPanel(String id, IModel<String> title, final MonthParameterViewMode monthParameterViewMode,
+                                Long[] osznOrganizationTypes) {
         super(id);
+
+        if (osznOrganizationTypes != null){
+            this.osznOrganizationTypes = osznOrganizationTypes;
+        }else{
+            this.osznOrganizationTypes = new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
+                    OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
+        }
 
         dialog = new Dialog("dialog") {
 
@@ -69,7 +79,7 @@ public abstract class RequestFileLoadPanel extends Panel {
 
         //ОСЗН
         IModel<Long> osznModel = new Model<>();
-        form.add(new OrganizationIdPicker("oszn", osznModel, getOsznOrganizationTypes()));
+        form.add(new OrganizationIdPicker("oszn", osznModel, osznOrganizationTypes));
 
         //user organization
         final WebMarkupContainer userOrganizationContainer = new WebMarkupContainer("userOrganizationContainer");
@@ -176,9 +186,4 @@ public abstract class RequestFileLoadPanel extends Panel {
 
     protected abstract void load(Long serviceProviderId, Long userOrganizationId, Long organizationId,
                                  int year, int monthFrom, int monthTo, AjaxRequestTarget target);
-
-    protected Long[] getOsznOrganizationTypes(){
-        return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
-                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
-    }
 }

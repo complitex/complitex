@@ -123,14 +123,19 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     private ProcessType fillProcessType;
     private ProcessType saveProcessType;
 
+    private Long[] osznOrganizationTypes;
+
     public AbstractProcessableListPanel(String id, ProcessType loadProcessType, ProcessType bindProcessType,
-                                        ProcessType fillProcessType, ProcessType saveProcessType) {
+                                        ProcessType fillProcessType, ProcessType saveProcessType,
+                                        Long[] osznOrganizationTypes) {
         super(id);
 
         this.loadProcessType = loadProcessType;
         this.bindProcessType = bindProcessType;
         this.fillProcessType = fillProcessType;
         this.saveProcessType = saveProcessType;
+
+        this.osznOrganizationTypes = osznOrganizationTypes;
 
         init();
     }
@@ -241,6 +246,13 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     }
 
     private void init() {
+        if (osznOrganizationTypes == null){
+            osznOrganizationTypes = new Long[]{
+                    OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
+                    OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE
+            };
+        }
+
         add(new DataRowHoverBehavior());
 
         processingManager = new ProcessingManager(loadProcessType, bindProcessType, fillProcessType, saveProcessType);
@@ -337,7 +349,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         //ОСЗН
         form.add(new OrganizationIdPicker("organization",
                 new PropertyModel<>(model, "organizationId"),
-                getOsznOrganizationTypes()));
+                osznOrganizationTypes));
 
         // Организация пользователя
         form.add(new OrganizationIdPicker("userOrganization",
@@ -708,17 +720,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         //Диалог загрузки
         requestFileLoadPanel = new RequestFileLoadPanel("load_panel", new ResourceModel("load_panel_title"),
-                getLoadMonthParameterViewMode()) {
+                getLoadMonthParameterViewMode(), osznOrganizationTypes) {
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId,
                                 int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
                 AbstractProcessableListPanel.this.load(serviceProviderId, userOrganizationId, organizationId,
                         year, monthFrom, monthTo);
-            }
-
-            @Override
-            protected Long[] getOsznOrganizationTypes() {
-                return AbstractProcessableListPanel.this.getOsznOrganizationTypes();
             }
         };
         add(requestFileLoadPanel);
@@ -867,11 +874,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     public IModel<F> getModel() {
         return model;
-    }
-
-    protected Long[] getOsznOrganizationTypes(){
-        return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
-                OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
     }
 
     public RequestFileLoadPanel getRequestFileLoadPanel(){

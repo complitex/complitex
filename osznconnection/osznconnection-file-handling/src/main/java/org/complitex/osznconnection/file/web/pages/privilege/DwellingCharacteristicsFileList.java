@@ -4,15 +4,14 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
-import org.complitex.template.web.pages.ScrollListPage;
 import org.complitex.template.web.security.SecurityRole;
+import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -21,12 +20,8 @@ import java.util.Map;
 import static org.complitex.osznconnection.file.entity.RequestFileType.DWELLING_CHARACTERISTICS;
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
-/**
- *
- * @author Artem
- */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
-public final class DwellingCharacteristicsFileList extends ScrollListPage {
+public final class DwellingCharacteristicsFileList extends TemplatePage {
 
     @EJB
     private ProcessManagerBean processManagerBean;
@@ -36,12 +31,11 @@ public final class DwellingCharacteristicsFileList extends ScrollListPage {
 
     private final AbstractFileListPanel fileListPanel;
 
-    public DwellingCharacteristicsFileList(PageParameters parameters) {
-        super(parameters);
-
+    public DwellingCharacteristicsFileList() {
         add(new Label("title", new ResourceModel("title")));
         add(fileListPanel = new AbstractFileListPanel("fileListPanel", DWELLING_CHARACTERISTICS, LOAD_DWELLING_CHARACTERISTICS,
-                BIND_DWELLING_CHARACTERISTICS, FILL_DWELLING_CHARACTERISTICS, SAVE_DWELLING_CHARACTERISTICS) {
+                BIND_DWELLING_CHARACTERISTICS, FILL_DWELLING_CHARACTERISTICS, SAVE_DWELLING_CHARACTERISTICS,
+                new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE}) {
 
             @Override
             protected String getPreferencePage() {
@@ -76,11 +70,6 @@ public final class DwellingCharacteristicsFileList extends ScrollListPage {
             @Override
             protected MonthParameterViewMode getLoadMonthParameterViewMode() {
                 return MonthParameterViewMode.EXACT;
-            }
-
-            @Override
-            protected Long[] getOsznOrganizationTypes() {
-                return new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
             }
         });
     }

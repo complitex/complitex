@@ -41,7 +41,8 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     private SubsidyExportDialog subsidyExportDialog;
 
     public SubsidyFileListPanel(String id) {
-        super(id, SUBSIDY, LOAD_SUBSIDY, BIND_SUBSIDY, FILL_SUBSIDY, SAVE_SUBSIDY);
+        super(id, SUBSIDY, LOAD_SUBSIDY, BIND_SUBSIDY, FILL_SUBSIDY, SAVE_SUBSIDY,
+                new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE});
 
         add(subsidyExportDialog = new SubsidyExportDialog("subsidy_export_dialog"));
 
@@ -112,10 +113,5 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     @Override
     protected boolean isExportVisible() {
         return true;
-    }
-
-    @Override
-    protected Long[] getOsznOrganizationTypes() {
-        return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE};
     }
 }

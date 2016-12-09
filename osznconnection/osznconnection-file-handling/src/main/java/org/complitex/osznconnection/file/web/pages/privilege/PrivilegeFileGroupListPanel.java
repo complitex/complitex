@@ -40,7 +40,8 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
     private RequestFileBean requestFileBean;
 
     public PrivilegeFileGroupListPanel(String id) {
-        super(id, LOAD_PRIVILEGE_GROUP, BIND_PRIVILEGE_GROUP, FILL_PRIVILEGE_GROUP, SAVE_PRIVILEGE_GROUP);
+        super(id, LOAD_PRIVILEGE_GROUP, BIND_PRIVILEGE_GROUP, FILL_PRIVILEGE_GROUP, SAVE_PRIVILEGE_GROUP,
+                new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE});
 
         add(new Label("title", new ResourceModel("title")));
 
@@ -156,10 +157,5 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
     @Override
     protected RequestFile getRequestFile(PrivilegeFileGroup object) {
         return object.getDwellingCharacteristicsRequestFile();
-    }
-
-    @Override
-    protected Long[] getOsznOrganizationTypes() {
-        return new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
     }
 }

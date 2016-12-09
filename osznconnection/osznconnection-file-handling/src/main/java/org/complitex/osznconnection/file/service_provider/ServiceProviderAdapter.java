@@ -1517,8 +1517,4 @@ public class ServiceProviderAdapter extends AbstractBean {
     private String getDataSource(Long userOrganizationId){
         return organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
     }
-
-    public static void main(String[] args) {
-        System.out.println("ММ 810881".matches("ММ" + "\\s*" + "810881"));
-    }
 }

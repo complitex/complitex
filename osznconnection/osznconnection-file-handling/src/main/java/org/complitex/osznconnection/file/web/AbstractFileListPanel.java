@@ -35,8 +35,8 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     private RequestFileType requestFileType;
 
     public AbstractFileListPanel(String id, RequestFileType requestFileType, ProcessType loadProcessType, ProcessType bindProcessType,
-                                 ProcessType fillProcessType, ProcessType saveProcessType) {
-        super(id, loadProcessType, bindProcessType, fillProcessType, saveProcessType);
+                                 ProcessType fillProcessType, ProcessType saveProcessType, Long[] osznOrganizationTypes) {
+        super(id, loadProcessType, bindProcessType, fillProcessType, saveProcessType, osznOrganizationTypes);
 
         this.requestFileType = requestFileType;
 

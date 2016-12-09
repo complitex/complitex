@@ -55,7 +55,7 @@ public class PrivilegeProlongationFileList extends TemplatePage {
         add(new Label("title", new ResourceModel("title")));
         add(fileListPanel = new AbstractFileListPanel("fileListPanel", PRIVILEGE_PROLONGATION,
                 LOAD_PRIVILEGE_PROLONGATION, BIND_PRIVILEGE_PROLONGATION, FILL_PRIVILEGE_PROLONGATION,
-                SAVE_PRIVILEGE_PROLONGATION) {
+                SAVE_PRIVILEGE_PROLONGATION, new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE}) {
 
             @Override
             protected String getPreferencePage() {
@@ -89,11 +89,6 @@ public class PrivilegeProlongationFileList extends TemplatePage {
             @Override
             protected RequestFileLoadPanel.MonthParameterViewMode getLoadMonthParameterViewMode() {
                 return RequestFileLoadPanel.MonthParameterViewMode.EXACT;
-            }
-
-            @Override
-            protected Long[] getOsznOrganizationTypes() {
-                return new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
             }
 
             @Override

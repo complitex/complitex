@@ -40,8 +40,9 @@ public final class FacilityServiceTypeFileList extends ScrollListPage {
         super(parameters);
 
         add(new Label("title", new ResourceModel("title")));
-        add(fileListPanel = new AbstractFileListPanel("fileListPanel", FACILITY_SERVICE_TYPE, LOAD_FACILITY_SERVICE_TYPE,
-                BIND_FACILITY_SERVICE_TYPE, FILL_FACILITY_SERVICE_TYPE, SAVE_FACILITY_SERVICE_TYPE) {
+        add(fileListPanel = new AbstractFileListPanel("fileListPanel", FACILITY_SERVICE_TYPE,
+                LOAD_FACILITY_SERVICE_TYPE, BIND_FACILITY_SERVICE_TYPE, FILL_FACILITY_SERVICE_TYPE,
+                SAVE_FACILITY_SERVICE_TYPE, new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE}) {
 
             @Override
             protected String getPreferencePage() {
@@ -76,11 +77,6 @@ public final class FacilityServiceTypeFileList extends ScrollListPage {
             @Override
             protected MonthParameterViewMode getLoadMonthParameterViewMode() {
                 return MonthParameterViewMode.EXACT;
-            }
-
-            @Override
-            protected Long[] getOsznOrganizationTypes() {
-                return new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
             }
         });
     }

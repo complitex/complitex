@@ -265,7 +265,7 @@ public class SubsidyTarifFileList extends TemplatePage {
 
         //Диалог загрузки
         requestFileLoadPanel = new RequestFileLoadPanel("load_panel", new ResourceModel("load_panel_title"),
-                MonthParameterViewMode.HIDDEN) {
+                MonthParameterViewMode.HIDDEN, new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE}) {
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
                 processManagerBean.loadSubsidyTarif(userOrganizationId, organizationId, year, monthFrom);
@@ -275,11 +275,6 @@ public class SubsidyTarifFileList extends TemplatePage {
                 selectManager.clearSelection();
                 timerManager.addTimer();
                 target.add(form);
-            }
-
-            @Override
-            protected Long[] getOsznOrganizationTypes() {
-                return new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE};
             }
         };
 
