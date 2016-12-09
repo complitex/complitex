@@ -5,10 +5,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.osznconnection.file.web.pages.facility.FacilityStreetFileList;
 import org.complitex.osznconnection.file.web.pages.facility.FacilityStreetTypeFileList;
 import org.complitex.osznconnection.file.web.pages.facility.FacilityTarifFileList;
-import org.complitex.osznconnection.file.web.pages.privilege.FacilityForm2FileList;
-import org.complitex.osznconnection.file.web.pages.privilege.FacilityLocalFileList;
-import org.complitex.osznconnection.file.web.pages.privilege.PrivilegeFileGroupList;
-import org.complitex.osznconnection.file.web.pages.privilege.PrivilegeProlongationFileList;
+import org.complitex.osznconnection.file.web.pages.privilege.*;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
 import java.util.Locale;
@@ -19,6 +16,8 @@ public class PrivilegeRequestMenu extends ResourceTemplateMenu {
         add("privilege_list", PrivilegeFileGroupList.class, new String[]{"PRIVILEGE_GROUP"});
         add("facility_form2_list", FacilityForm2FileList.class, new String[]{"PRIVILEGE_FORM_2"});
         add("facility_local_list", FacilityLocalFileList.class, new String[]{"PRIVILEGE_LOCAL"});
+        add("facility_local__janitor_list", FacilityLocalJanitorFileList.class, new String[]{"PRIVILEGE_LOCAL"});
+        add("facility_local_compensation_list", FacilityLocalCompensationFileList.class, new String[]{"PRIVILEGE_LOCAL"});
         add("facility_street_type_file_list", FacilityStreetTypeFileList.class);
         add("facility_street_file_list", FacilityStreetFileList.class);
         add("facility_tarif_file_list", FacilityTarifFileList.class);
