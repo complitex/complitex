@@ -24,14 +24,14 @@ public class RequestFileFilter extends AbstractFilter {
     private String checkSum;
 
     private RequestFileType type;
+    private RequestFileSubType subType;
+
     private RequestFileStatus status;
 
     private BigDecimal sum;
 
     private String firstName;
     private String secondName;
-
-    private String subType;
 
     public String getRecordTable(){
         return type.name().toLowerCase();
@@ -165,11 +165,11 @@ public class RequestFileFilter extends AbstractFilter {
         this.secondName = secondName;
     }
 
-    public String getSubType() {
+    public RequestFileSubType getSubType() {
         return subType;
     }
 
-    public void setSubType(String subType) {
+    public void setSubType(RequestFileSubType subType) {
         this.subType = subType;
     }
 }

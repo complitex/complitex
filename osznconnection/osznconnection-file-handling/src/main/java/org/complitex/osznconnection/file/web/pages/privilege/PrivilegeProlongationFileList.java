@@ -6,9 +6,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.RequestFileFilter;
-import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
+import org.complitex.osznconnection.file.entity.RequestFileSubType;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
@@ -38,22 +36,19 @@ public class PrivilegeProlongationFileList extends TemplatePage {
     private AbstractFileListPanel fileListPanel;
 
     public PrivilegeProlongationFileList(PageParameters parameters) {
-        PrivilegeProlongation.TYPE type;
+        RequestFileSubType subType;
 
         switch (parameters.get("type").toString("s")){
-            case "s":
-                type = PrivilegeProlongation.TYPE.S;
-                break;
             case "p" :
-                type = PrivilegeProlongation.TYPE.P;
+                subType = RequestFileSubType.PRIVILEGE_PROLONGATION_P;
                 break;
 
             default:
-                type = PrivilegeProlongation.TYPE.S;
+                subType = RequestFileSubType.PRIVILEGE_PROLONGATION_S;
         }
 
         add(new Label("title", new ResourceModel("title")));
-        add(fileListPanel = new AbstractFileListPanel("fileListPanel", PRIVILEGE_PROLONGATION,
+        add(fileListPanel = new AbstractFileListPanel("fileListPanel", PRIVILEGE_PROLONGATION, subType,
                 LOAD_PRIVILEGE_PROLONGATION, BIND_PRIVILEGE_PROLONGATION, FILL_PRIVILEGE_PROLONGATION,
                 SAVE_PRIVILEGE_PROLONGATION, new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE}) {
 
@@ -83,26 +78,12 @@ public class PrivilegeProlongationFileList extends TemplatePage {
 
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-                processManagerBean.loadPrivilegeProlongation(type, userOrganizationId, organizationId, year, monthFrom);
+                processManagerBean.loadPrivilegeProlongation(subType, userOrganizationId, organizationId, year, monthFrom);
             }
 
             @Override
             protected RequestFileLoadPanel.MonthParameterViewMode getLoadMonthParameterViewMode() {
                 return RequestFileLoadPanel.MonthParameterViewMode.EXACT;
-            }
-
-            @Override
-            protected Long getCount(RequestFileFilter filter) {
-                filter.setSubType(type.name());
-
-                return super.getCount(filter);
-            }
-
-            @Override
-            protected List<RequestFile> getObjects(RequestFileFilter filter) {
-                filter.setSubType(type.name());
-
-                return super.getObjects(filter);
             }
 
             @Override

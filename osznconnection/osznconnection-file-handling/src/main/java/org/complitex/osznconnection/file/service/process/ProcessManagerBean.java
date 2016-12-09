@@ -10,12 +10,9 @@ import org.complitex.common.service.executor.ExecutorService;
 import org.complitex.common.service.executor.IExecutorListener;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
-import org.complitex.osznconnection.file.entity.ExportType;
+import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
-import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
-import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataFile;
 import org.complitex.osznconnection.file.service.RequestFileBean;
@@ -717,9 +714,9 @@ public class ProcessManagerBean {
 
     /*PrivilegeProlongation*/
 
-    public void loadPrivilegeProlongation(PrivilegeProlongation.TYPE type, Long userOrganizationId, Long organizationId, int year, int month) {
+    public void loadPrivilegeProlongation(RequestFileSubType subType, Long userOrganizationId, Long organizationId, int year, int month) {
         try {
-            List<RequestFile> list = LoadUtil.getPrivilegeProlongation(type, userOrganizationId, organizationId, month, year);
+            List<RequestFile> list = LoadUtil.getPrivilegeProlongation(subType, userOrganizationId, organizationId, month, year);
 
             execute(LOAD_PRIVILEGE_PROLONGATION, PrivilegeProlongationLoadTaskBean.class, list, null, LOAD_THREAD_SIZE,
                     LOAD_MAX_ERROR_COUNT, null);

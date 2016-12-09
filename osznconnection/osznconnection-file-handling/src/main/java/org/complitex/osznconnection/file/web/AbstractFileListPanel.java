@@ -15,6 +15,7 @@ import org.complitex.common.web.component.scroll.ScrollListBehavior;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
+import org.complitex.osznconnection.file.entity.RequestFileSubType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
@@ -33,12 +34,21 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     private LogBean logBean;
 
     private RequestFileType requestFileType;
+    private RequestFileSubType requestFileSubType;
 
     public AbstractFileListPanel(String id, RequestFileType requestFileType, ProcessType loadProcessType, ProcessType bindProcessType,
+                                 ProcessType fillProcessType, ProcessType saveProcessType, Long[] osznOrganizationTypes) {
+        this(id, requestFileType, null, loadProcessType, bindProcessType, fillProcessType, saveProcessType,
+                osznOrganizationTypes);
+    }
+
+    public AbstractFileListPanel(String id, RequestFileType requestFileType, RequestFileSubType requestFileSubType,
+                                 ProcessType loadProcessType, ProcessType bindProcessType,
                                  ProcessType fillProcessType, ProcessType saveProcessType, Long[] osznOrganizationTypes) {
         super(id, loadProcessType, bindProcessType, fillProcessType, saveProcessType, osznOrganizationTypes);
 
         this.requestFileType = requestFileType;
+        this.requestFileSubType = requestFileSubType;
 
         //Имя
         addColumn(new Column() {
@@ -87,6 +97,7 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     @Override
     protected Long getCount(RequestFileFilter filter) {
         filter.setType(requestFileType);
+        filter.setSubType(requestFileSubType);
 
         return requestFileBean.getCount(filter);
     }
@@ -94,6 +105,7 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     @Override
     protected List<RequestFile> getObjects(RequestFileFilter filter) {
         filter.setType(requestFileType);
+        filter.setSubType(requestFileSubType);
 
         return requestFileBean.getRequestFiles(filter);
     }

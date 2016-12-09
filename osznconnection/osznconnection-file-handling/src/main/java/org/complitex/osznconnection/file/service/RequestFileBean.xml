@@ -15,6 +15,7 @@
         <result column="length" property="length"/>
         <result column="check_sum" property="checkSum"/>
         <result column="type" property="type"/>
+        <result column="sub_type" property="subType"/>
         <result column="loaded_record_count" property="loadedRecordCount"/>
         <result column="binded_record_count" property="bindedRecordCount"/>
         <result column="filled_record_count" property="filledRecordCount"/>
@@ -29,10 +30,10 @@
             keyProperty="id" useGeneratedKeys="true">
         insert into `request_file`
             (`group_id`, `organization_id`, `name`, `directory`, `begin_date`, `end_date`, `dbf_record_count`,
-             `length`, `check_sum`, `type`, `loaded`, `status`, `user_organization_id`)
+             `length`, `check_sum`, `type`, `sub_type`, `loaded`, `status`, `user_organization_id`)
         values
             (#{groupId}, #{organizationId}, #{name}, #{directory}, #{beginDate}, #{endDate},
-             #{dbfRecordCount}, #{length}, #{checkSum}, #{type}, #{loaded}, #{status}, #{userOrganizationId});
+             #{dbfRecordCount}, #{length}, #{checkSum}, #{type}, #{subType}, #{loaded}, #{status}, #{userOrganizationId});
     </insert>
 
     <update id="updateRequestFile" parameterType="org.complitex.osznconnection.file.entity.RequestFile">
@@ -68,14 +69,12 @@
             <if test="month != null">and MONTH(`begin_date`) = #{month}</if>
             <if test="dbfRecordCount != null">and `dbf_record_count` like concat('%',#{dbfRecordCount},'%')</if>
             <if test="type != null">and `type` = #{type}</if>
+            <if test="subType != null">and `sub_type` = #{subType}</if>
             <if test="status != null">and `status` = #{status}</if>
             <if test="serviceProvider != null">
                 and `name` like concat(#{edrpou}, '%')
             </if>
 
-            <if test="subType != null">
-                and `name` like concat('%', #{subType}, '%')
-            </if>
             <include refid="permissionFilter"/>
         </where>
     </sql>

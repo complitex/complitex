@@ -5,9 +5,9 @@ import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileSubType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
-import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
 import org.complitex.osznconnection.file.service.process.RequestFileStorage.RequestFiles;
@@ -441,10 +441,10 @@ public class LoadUtil {
         return facilityTarifFiles;
     }
 
-    public static List<RequestFile> getPrivilegeProlongation(PrivilegeProlongation.TYPE type, Long userOrganizationId,
+    public static List<RequestFile> getPrivilegeProlongation(RequestFileSubType subType, Long userOrganizationId,
                                                              Long osznId, int month, int year)
             throws StorageNotFoundException {
-        FileHandlingConfig fileHandlingConfig = type.equals(PrivilegeProlongation.TYPE.S)
+        FileHandlingConfig fileHandlingConfig = subType.equals(RequestFileSubType.PRIVILEGE_PROLONGATION_S)
                 ? PRIVILEGE_PROLONGATION_S_FILENAME_MASK
                 : PRIVILEGE_PROLONGATION_P_FILENAME_MASK;
 
@@ -464,6 +464,7 @@ public class LoadUtil {
             requestFile.setUserOrganizationId(userOrganizationId);
             requestFile.setBeginDate(newDate(year, month));
             requestFile.setType(RequestFileType.PRIVILEGE_PROLONGATION);
+            requestFile.setSubType(subType);
 
             list.add(requestFile);
         }

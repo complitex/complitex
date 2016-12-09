@@ -8,21 +8,15 @@
     </settings>
 
     <typeHandlers>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
-                     javaType="org.complitex.address.entity.AddressEntity"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
-                     javaType="org.complitex.address.entity.SyncEntity"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
-                     javaType="org.complitex.address.entity.AddressSyncStatus"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.AddressEntity"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.SyncEntity"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.AddressSyncStatus"/>
 
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
-                     javaType="org.complitex.osznconnection.file.entity.RequestStatus"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
-                     javaType="org.complitex.osznconnection.file.entity.RequestFileStatus"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
-                     javaType="org.complitex.osznconnection.file.entity.RequestFileType"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"
-                     javaType="org.complitex.osznconnection.file.entity.RequestWarningStatus"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestStatus"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileStatus"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileType"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileSubType"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestWarningStatus"/>
     </typeHandlers>
 
     <plugins>
