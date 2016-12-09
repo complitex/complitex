@@ -6,6 +6,8 @@ import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractFileList;
 
 import javax.ejb.EJB;
+import java.util.List;
+import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_LOCAL;
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
@@ -27,5 +29,15 @@ public class FacilityLocalJanitorFileList extends AbstractFileList{
     @Override
     protected Class<? extends WebPage> getItemListPageClass() {
         return null;
+    }
+
+    @Override
+    protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
+        processManagerBean.loadFacilityJanitorLocal(serviceProviderId, userOrganizationId, organizationId, year, monthFrom);
+    }
+
+    @Override
+    protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+        processManagerBean.saveFacilityLocal(selectedFileIds, parameters);
     }
 }

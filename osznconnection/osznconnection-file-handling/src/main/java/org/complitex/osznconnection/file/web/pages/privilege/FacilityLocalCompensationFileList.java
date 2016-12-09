@@ -33,11 +33,11 @@ public class FacilityLocalCompensationFileList extends AbstractFileList {
 
     @Override
     protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-        //todo processManagerBean.loadFacilityLocal(serviceProviderId, userOrganizationId, organizationId, year, monthFrom);
+        processManagerBean.loadFacilityCompensationLocal(serviceProviderId, userOrganizationId, organizationId, year, monthFrom);
     }
 
     @Override
     protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-        //todo processManagerBean.saveFacilityLocal(selectedFileIds, parameters);
+        processManagerBean.saveFacilityLocal(selectedFileIds, parameters);
     }
 }

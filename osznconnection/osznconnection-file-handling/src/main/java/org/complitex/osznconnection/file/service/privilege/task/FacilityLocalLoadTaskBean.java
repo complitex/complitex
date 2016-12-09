@@ -11,6 +11,7 @@ import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
+import org.complitex.osznconnection.file.entity.RequestFileSubType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.privilege.FacilityLocal;
 import org.complitex.osznconnection.file.entity.privilege.FacilityLocalDBF;
@@ -63,39 +64,38 @@ public class FacilityLocalLoadTaskBean extends AbstractTaskBean<RequestFile> {
         String edrpou = osznOrganizationStrategy.getEdrpou(requestFile.getServiceProviderId(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
-        if (Strings.isEmpty(edrpou)){
+        if (Strings.isEmpty(edrpou)) {
             throw new LoadException("ЕДРПОУ не найден");
         }
 
-        String zheuCode =  osznOrganizationStrategy.getServiceProviderCode(edrpou, requestFile.getOrganizationId(),
+        String zheuCode = osznOrganizationStrategy.getServiceProviderCode(edrpou, requestFile.getOrganizationId(),
                 requestFile.getUserOrganizationId());
 
-        if (Strings.isEmpty(zheuCode)){
+        if (Strings.isEmpty(zheuCode)) {
             throw new LoadException("Код организации не найден по ЕДРПОУ {0}", edrpou);
         }
 
         String district = osznOrganizationStrategy.getDistrict(requestFile.getOrganizationId());
 
-        if (Strings.isEmpty(district)){
+        if (Strings.isEmpty(district)) {
             throw new LoadException("Район не найден для {0}", osznOrganizationStrategy
                     .displayDomainObject(requestFile.getOrganizationId(), Locales.getSystemLocale()));
         }
 
         RequestFileDescription description = requestFileDescriptionBean.getFileDescription(RequestFileType.FACILITY_LOCAL);
 
-        if (description == null){
+        if (description == null) {
             throw new LoadException("FACILITY_LOCAL file description not found");
         }
 
-        Cursor<FacilityLocal> cursor = serviceProviderAdapter.getFacilityLocal(requestFile.getUserOrganizationId(),
-                district, zheuCode, requestFile.getBeginDate());
+        Cursor<FacilityLocal> cursor = getCursor(requestFile, zheuCode, district);
 
-        if (cursor.getResultCode() > 0){
+        if (cursor.getResultCode() > 0) {
             //group by depart
             Map<String, List<FacilityLocal>> map = cursor.getData().stream()
                     .collect(Collectors.groupingBy(f -> StringUtil.emptyOnNull(f.getField("DEPART")), Collectors.toList()));
 
-            for (String depart : map.keySet()){
+            for (String depart : map.keySet()) {
                 RequestFile r = new RequestFile();
 
                 r.setUserOrganizationId(requestFile.getUserOrganizationId());
@@ -103,6 +103,7 @@ public class FacilityLocalLoadTaskBean extends AbstractTaskBean<RequestFile> {
                 r.setServiceProviderId(requestFile.getServiceProviderId());
                 r.setBeginDate(requestFile.getBeginDate());
                 r.setType(RequestFileType.FACILITY_LOCAL);
+                r.setSubType(getSubType());
                 r.setName(edrpou + depart + ".DBF");
                 r.setDirectory("");
 
@@ -116,21 +117,21 @@ public class FacilityLocalLoadTaskBean extends AbstractTaskBean<RequestFile> {
                         f.setRequestFileId(r.getId());
 
                         //keys
-                        for (FacilityLocalDBF k : FacilityLocalDBF.values()){
+                        for (FacilityLocalDBF k : FacilityLocalDBF.values()) {
                             RequestFileFieldDescription field = description.getField(k.name());
 
                             //trim string
-                            if (String.class.equals(field.getFieldType())){
+                            if (String.class.equals(field.getFieldType())) {
                                 String s = f.getStringField(k);
 
-                                if (s != null && s.length() > field.getLength()){
+                                if (s != null && s.length() > field.getLength()) {
                                     f.putField(k, s.substring(0, field.getLength()));
 
                                     log.info("facility local trim field {}", s);
                                 }
                             }
 
-                            if (f.getField(k) == null){
+                            if (f.getField(k) == null) {
                                 f.putField(k, null);
                             }
                         }
@@ -147,13 +148,15 @@ public class FacilityLocalLoadTaskBean extends AbstractTaskBean<RequestFile> {
                     throw new LoadException(ExceptionUtil.getCauseMessage(e));
                 }
             }
-        }else {
+        } else {
             //noinspection Duplicates
-            switch (cursor.getResultCode()){
+            switch (cursor.getResultCode()) {
                 case -1: //Не найден р-он
                     throw new LoadException(ResourceUtil.getString(RESOURCE, "error_district_not_found"), district);
                 case -5: //Не указан месяц файла
                     throw new LoadException(ResourceUtil.getString(RESOURCE, "error_null_month"));
+                case -6: //Не указан месяц файла
+                    throw new LoadException(ResourceUtil.getString(RESOURCE, "error_null_quarter"));
                 case -7: //Не определена организация
                     throw new LoadException(ResourceUtil.getString(RESOURCE, "error_organization_undefined"), zheuCode);
             }
@@ -161,5 +164,14 @@ public class FacilityLocalLoadTaskBean extends AbstractTaskBean<RequestFile> {
 
 
         return true;
+    }
+
+    protected Cursor<FacilityLocal> getCursor(RequestFile requestFile, String zheuCode, String district) {
+        return serviceProviderAdapter.getFacilityLocal(requestFile.getUserOrganizationId(),
+                district, zheuCode, requestFile.getBeginDate());
+    }
+
+    protected RequestFileSubType getSubType() {
+        return null;
     }
 }

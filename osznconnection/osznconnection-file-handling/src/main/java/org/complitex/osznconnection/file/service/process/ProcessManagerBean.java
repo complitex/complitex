@@ -592,6 +592,34 @@ public class ProcessManagerBean {
                 getFacilityLocalFiles(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
+    public void loadFacilityJanitorLocal(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int month){
+        RequestFile requestFile = new RequestFile();
+
+        requestFile.setServiceProviderId(serviceProviderId);
+        requestFile.setUserOrganizationId(userOrganizationId);
+        requestFile.setOrganizationId(organizationId);
+        requestFile.setBeginDate(newDate(year, month));
+        requestFile.setType(RequestFileType.FACILITY_LOCAL);
+        requestFile.setSubType(RequestFileSubType.FACILITY_LOCAL_JANITOR);
+
+        execute(LOAD_FACILITY_LOCAL, FacilityLocalJanitorLoadTaskBean.class, Collections.singletonList(requestFile), null,
+                LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
+    }
+
+    public void loadFacilityCompensationLocal(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int month){
+        RequestFile requestFile = new RequestFile();
+
+        requestFile.setServiceProviderId(serviceProviderId);
+        requestFile.setUserOrganizationId(userOrganizationId);
+        requestFile.setOrganizationId(organizationId);
+        requestFile.setBeginDate(newDate(year, month));
+        requestFile.setType(RequestFileType.FACILITY_LOCAL);
+        requestFile.setSubType(RequestFileSubType.FACILITY_LOCAL_COMPENSATION);
+
+        execute(LOAD_FACILITY_LOCAL, FacilityLocalCompensationLoadTaskBean.class, Collections.singletonList(requestFile), null,
+                LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
+    }
+
     /*FacilityTarifReferences*/
 
     public void loadFacilityStreetTypeReferences(Long userOrganizationId, Long organizationId, int year, int month) {
