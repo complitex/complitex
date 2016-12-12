@@ -9,6 +9,7 @@ import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
 
+import static org.complitex.osznconnection.file.entity.RequestFileSubType.FACILITY_LOCAL_JANITOR;
 import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_LOCAL;
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE;
@@ -22,13 +23,14 @@ public class FacilityLocalJanitorFileList extends AbstractFileList{
     private ProcessManagerBean processManagerBean;
 
     public FacilityLocalJanitorFileList() {
-        super(FACILITY_LOCAL, LOAD_FACILITY_LOCAL, BIND_FACILITY_LOCAL, FILL_FACILITY_LOCAL, SAVE_FACILITY_LOCAL,
+        super(FACILITY_LOCAL, FACILITY_LOCAL_JANITOR,
+                LOAD_FACILITY_LOCAL, BIND_FACILITY_LOCAL, FILL_FACILITY_LOCAL, SAVE_FACILITY_LOCAL,
                 new Long[]{PRIVILEGE_DEPARTMENT_TYPE});
     }
 
     @Override
     protected Class<? extends WebPage> getItemListPageClass() {
-        return null;
+        return FacilityLocalJanitorList.class;
     }
 
     @Override

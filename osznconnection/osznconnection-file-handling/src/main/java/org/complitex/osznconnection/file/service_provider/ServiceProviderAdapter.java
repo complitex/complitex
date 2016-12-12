@@ -1495,6 +1495,8 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         sqlSession(getDataSource(userOrganizationId)).selectOne(NS + "." + function, map);
 
+        log.info(function + ", size: {}", ((List) map.get("data")).size());
+
         return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("data"));
     }
 

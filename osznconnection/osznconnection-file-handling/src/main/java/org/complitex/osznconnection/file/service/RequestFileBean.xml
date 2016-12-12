@@ -70,6 +70,7 @@
             <if test="dbfRecordCount != null">and `dbf_record_count` like concat('%',#{dbfRecordCount},'%')</if>
             <if test="type != null">and `type` = #{type}</if>
             <if test="subType != null">and `sub_type` = #{subType}</if>
+            <if test="subType == null">and `sub_type` is null</if>
             <if test="status != null">and `status` = #{status}</if>
             <if test="serviceProvider != null">
                 and `name` like concat(#{edrpou}, '%')

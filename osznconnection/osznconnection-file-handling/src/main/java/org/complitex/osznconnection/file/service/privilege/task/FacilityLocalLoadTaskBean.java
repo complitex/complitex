@@ -91,6 +91,10 @@ public class FacilityLocalLoadTaskBean extends AbstractTaskBean<RequestFile> {
         Cursor<FacilityLocal> cursor = getCursor(requestFile, zheuCode, district);
 
         if (cursor.getResultCode() > 0) {
+            if (cursor.getData().isEmpty()){
+                return false;
+            }
+
             //group by depart
             Map<String, List<FacilityLocal>> map = cursor.getData().stream()
                     .collect(Collectors.groupingBy(f -> StringUtil.emptyOnNull(f.getField("DEPART")), Collectors.toList()));

@@ -22,7 +22,8 @@ public class FacilityLocalFileList extends AbstractFileList{
     private ProcessManagerBean processManagerBean;
 
     public FacilityLocalFileList() {
-        super(FACILITY_LOCAL, LOAD_FACILITY_LOCAL, BIND_FACILITY_LOCAL, FILL_FACILITY_LOCAL, SAVE_FACILITY_LOCAL,
+        super(FACILITY_LOCAL, null,
+                LOAD_FACILITY_LOCAL, BIND_FACILITY_LOCAL, FILL_FACILITY_LOCAL, SAVE_FACILITY_LOCAL,
                 new Long[]{PRIVILEGE_DEPARTMENT_TYPE});
     }
 

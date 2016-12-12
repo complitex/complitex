@@ -3,6 +3,7 @@ package org.complitex.osznconnection.file.web;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
+import org.complitex.osznconnection.file.entity.RequestFileSubType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
@@ -23,11 +24,12 @@ public abstract class AbstractFileList extends TemplatePage {
 
     private AbstractFileListPanel fileListPanel;
 
-    public AbstractFileList(RequestFileType requestFileType, ProcessType loadProcessType, ProcessType bindProcessType,
+    public AbstractFileList(RequestFileType requestFileType, RequestFileSubType requestFileSubType,
+                            ProcessType loadProcessType, ProcessType bindProcessType,
                             ProcessType fillProcessType, ProcessType saveProcessType, Long[] osznOrganizationTypes) {
         add(new Label("title", new ResourceModel("title")));
 
-        add(fileListPanel = new AbstractFileListPanel("fileListPanel", requestFileType,
+        add(fileListPanel = new AbstractFileListPanel("fileListPanel", requestFileType, requestFileSubType,
                 loadProcessType, bindProcessType, fillProcessType, saveProcessType, osznOrganizationTypes) {
 
             @Override
