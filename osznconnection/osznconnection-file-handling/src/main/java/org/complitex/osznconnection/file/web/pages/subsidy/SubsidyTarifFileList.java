@@ -187,7 +187,7 @@ public class SubsidyTarifFileList extends TemplatePage {
                 //Дата загрузки
                 item.add(new ItemDateLoadedLabel("loaded", item.getModelObject().getLoaded()));
 
-                item.add(new Label("name", item.getModelObject().getFullName()));
+                item.add(new Label("name", item.getModelObject().getFullName())); //todo add record list page
 
                 //ОСЗН
                 item.add(new ItemOrganizationLabel("organization", item.getModelObject().getOrganizationId()));

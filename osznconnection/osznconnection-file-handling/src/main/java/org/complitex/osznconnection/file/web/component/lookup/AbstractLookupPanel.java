@@ -429,7 +429,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     protected abstract boolean isInternalAddressCorrect(T request);
 
     public void open(AjaxRequestTarget target, T request, String serviceProviderAccountNumber) {
-        this.request = CloneUtil.cloneObject(request);
+        this.request = CloneUtil.cloneObject(request); //todo load
         initialRequestModel.setObject(request);;
 
         accountDetailModel.setObject(null);
