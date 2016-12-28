@@ -54,17 +54,17 @@
         </dependency>
 
         <!-- Oracle driver -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc14_g</artifactId>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>orai18n</artifactId>
-            <scope>test</scope>
-        </dependency>
+            <scope>provided</scope>
+        </dependency>-->
     </dependencies>
 
     <build>
