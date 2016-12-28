@@ -11,9 +11,11 @@
 */
 package com.linuxense.javadbf;
 
-import java.io.*;
-import java.util.*;
-import java.text.*;
+import java.io.DataInput;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Arrays;
 
 /**
 	Miscelaneous functions required by the JavaDBF package.
@@ -52,8 +54,7 @@ public final class Utils {
 
 		for( int i=0; i<arr.length; i++) {
 
-			if( arr[i] != ' ') {
-
+			if( arr[i] != ' ' && arr[i] != 0) {
 				t_sb.append( (char)arr[ i]);
 			}
 		}

@@ -195,7 +195,7 @@ public class LoadRequestFileBean {
             requestFile.setLoadedRecordCount(index + 1);
             requestFileBean.save(requestFile);
         } catch (Exception e) {
-            throw new LoadException(e, requestFile, index + 1, currentFieldName);
+            throw new LoadException(e, requestFile, index, currentFieldName);
         } finally {
             if (fileInputStream != null) {
                 try {
