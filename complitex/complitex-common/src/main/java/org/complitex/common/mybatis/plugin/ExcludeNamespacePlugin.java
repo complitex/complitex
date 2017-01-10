@@ -1,7 +1,7 @@
 package org.complitex.common.mybatis.plugin;
 
 import com.google.common.collect.Sets;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.plugin.Interceptor;
 
 import java.util.Properties;

@@ -1,6 +1,6 @@
 package org.complitex.common.web.component.datatable;
 
-import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -98,7 +98,7 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         }
 
         WebMarkupContainer radioGroup;
-        if (columns.stream().filter(c -> c.getClass().equals(RadioColumn.class)).findAny().isPresent()) {
+        if (columns.stream().anyMatch(c -> c.getClass().equals(RadioColumn.class))) {
             radioGroup = new RadioGroup<>("radioGroup", radioGroupModel);
             radioGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
                 @Override
@@ -111,7 +111,7 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
         form.add(radioGroup);
 
         WebMarkupContainer checkGroup;
-        if (columns.stream().filter(c -> c.getClass().equals(CheckColumn.class)).findAny().isPresent()){
+        if (columns.stream().anyMatch(c -> c.getClass().equals(CheckColumn.class))){
             checkGroup = new CheckGroup<>("checkGroup", checkGroupModel);
             checkGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
                 @Override

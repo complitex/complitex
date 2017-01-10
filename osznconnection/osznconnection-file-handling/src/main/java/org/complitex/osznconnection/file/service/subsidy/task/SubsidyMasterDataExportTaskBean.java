@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.linuxense.javadbf.DBFField;
 import com.linuxense.javadbf.DBFWriter;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.complitex.common.entity.Log;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.SessionBean;

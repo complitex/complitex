@@ -2,7 +2,7 @@ package org.complitex.correction.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.apartment.ApartmentStrategy;
