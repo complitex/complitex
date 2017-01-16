@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -25,7 +26,6 @@ import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.AbstractFilter;
 import org.complitex.common.service.ModuleBean;
@@ -406,11 +406,15 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         dataView = new DataView<R>("objects", dataProvider) {
             @Override
             protected Item<R> newItem(String id, int index, IModel<R> model) {
-                return super.newItem("item" + model.getObject().getId(), index, model);
+                Item<R> item =  super.newItem("item" + model.getObject().getId(), index, model);
+
+                item.setOutputMarkupId(true);
+
+                return item;
             }
 
             @Override
-            protected void populateItem(final Item<R> item) {
+            protected void populateItem(Item<R> item) {
                 R rf = item.getModelObject();
 
                 item.add(new ItemCheckBoxPanel<R>("itemCheckBoxPanel", processingManager, selectManager, item.getModel()));
@@ -483,16 +487,13 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 };
 
                 //Количество загруженных записей
-                item.add(new Label("loaded_record_count", new PropertyModel<String>(rfModel, "loadedRecordCount"))
-                        .setOutputMarkupId(true).setMarkupId("loaded_record_count" + rf.getId()));
+                item.add(new Label("loaded_record_count", new PropertyModel<String>(rfModel, "loadedRecordCount")));
 
                 //Количество связанных записей
-                item.add(new Label("binded_record_count", new PropertyModel<String>(rfModel, "bindedRecordCount"))
-                        .setOutputMarkupId(true).setMarkupId("binded_record_count" + rf.getId()));
+                item.add(new Label("binded_record_count", new PropertyModel<String>(rfModel, "bindedRecordCount")));
 
                 //Количество обработанных записей
-                item.add(new Label("filled_record_count", new PropertyModel<String>(rfModel, "filledRecordCount"))
-                        .setOutputMarkupId(true).setMarkupId("filled_record_count" + rf.getId()));
+                item.add(new Label("filled_record_count", new PropertyModel<String>(rfModel, "filledRecordCount")));
 
                 //Статус
                 AjaxLink history = new AjaxLink("history") {
@@ -556,10 +557,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         //Связать
-        buttons.add(new AjaxSubmitLink("bind") {
+        buttons.add(new SubmitLink("bind") {
 
             @Override
-            public void onSubmit(AjaxRequestTarget target, Form form) {
+            public void onSubmit() {
                 bind(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
             }
@@ -571,10 +572,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         //Обработать
-        buttons.add(new AjaxSubmitLink("process") {
+        buttons.add(new SubmitLink("process") {
 
             @Override
-            public void onSubmit(AjaxRequestTarget target, Form form) {
+            public void onSubmit() {
                 fill(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
             }
@@ -586,10 +587,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         //Выгрузить
-        buttons.add(new AjaxSubmitLink("save") {
+        buttons.add(new SubmitLink("save") {
 
             @Override
-            public void onSubmit(AjaxRequestTarget target, Form form) {
+            public void onSubmit() {
                 save(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
             }
@@ -765,20 +766,26 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     handler.add(messages, dataViewContainer, buttons);
                 }
 
-                if (payload instanceof IExecutorObject){
-                    IExecutorObject object = (IExecutorObject) payload;
+                if (payload instanceof AbstractRequestFile){
+                    AbstractRequestFile object = (AbstractRequestFile) payload;
 
                     switch (key){
                         case "onSuccess":
                         case "onSkip":
-                            handler.add(messages, dataViewContainer);
+                            handler.add(messages);
 
                             break;
                         case "onError":
                             error(time + object.getErrorMessage());
-                            handler.add(messages, dataViewContainer);
+                            handler.add(messages);
 
                             break;
+                    }
+
+                    MarkupContainer item = (MarkupContainer) dataView.get("item" + object.getId());
+
+                    if (item != null){
+                        handler.add(item);
                     }
                 }
             }
@@ -799,13 +806,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     MarkupContainer item = (MarkupContainer) dataView.get("item" + id);
 
                     if (item != null){
-                        item.visitChildren((o, v) -> {
-                            if (o.getOutputMarkupId()) {
-                                handler.add(o);
-                            }
-
-                            v.dontGoDeeper();
-                        });
+                        handler.add(item);
                     }
                 }
             }

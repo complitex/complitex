@@ -2,7 +2,7 @@ package ru.flexpay.eirc.dictionary.web;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.plugins.datepicker.DateRange;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;

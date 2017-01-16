@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.service.parse;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import ru.flexpay.eirc.registry.util.StringUtil;
 
 import java.util.List;

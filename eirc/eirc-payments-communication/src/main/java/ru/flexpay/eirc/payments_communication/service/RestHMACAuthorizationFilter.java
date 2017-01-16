@@ -2,7 +2,7 @@ package ru.flexpay.eirc.payments_communication.service;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.StringLocaleBean;

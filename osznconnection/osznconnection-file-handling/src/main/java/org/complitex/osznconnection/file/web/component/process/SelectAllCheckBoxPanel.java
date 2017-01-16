@@ -18,7 +18,8 @@ public final class SelectAllCheckBoxPanel extends Panel {
 
             @Override
             public boolean isEnabled() {
-                return !processingManager.isGlobalProcessing();
+                return true;
+                //return !processingManager.isGlobalProcessing(); todo update
             }
 
             @Override

@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.registry.service.handle.exchange;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.checkdigit.CheckDigitException;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.common.entity.DomainObject;

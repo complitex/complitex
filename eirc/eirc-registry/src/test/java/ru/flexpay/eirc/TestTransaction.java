@@ -1,7 +1,7 @@
 package ru.flexpay.eirc;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.complitex.common.EjbTestBeanLocator;
 import org.complitex.common.service.TestBean;
 import org.junit.Test;

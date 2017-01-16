@@ -84,7 +84,13 @@ public abstract class AbstractRequestFileGroup extends AbstractRequestFile{
     @Override
     public void cancel() {
         super.cancel();
-        firstRequestFile.cancel();
-        secondRequestFile.cancel();
+
+        if (firstRequestFile != null){
+            firstRequestFile.cancel();
+        }
+
+        if (secondRequestFile != null){
+            secondRequestFile.cancel();
+        }
     }
 }

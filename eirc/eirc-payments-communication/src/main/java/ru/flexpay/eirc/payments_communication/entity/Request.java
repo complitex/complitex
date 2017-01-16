@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.payments_communication.entity;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

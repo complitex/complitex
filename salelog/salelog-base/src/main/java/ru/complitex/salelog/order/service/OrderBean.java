@@ -2,7 +2,7 @@ package ru.complitex.salelog.order.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.strategy.SequenceBean;

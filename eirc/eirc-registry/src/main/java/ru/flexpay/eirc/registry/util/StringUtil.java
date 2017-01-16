@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.util;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Collections;

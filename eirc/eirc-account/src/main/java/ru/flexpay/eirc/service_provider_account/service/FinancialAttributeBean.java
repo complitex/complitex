@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.service_provider_account.service;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.util.StringUtil;

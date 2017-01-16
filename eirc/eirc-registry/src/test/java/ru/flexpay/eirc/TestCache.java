@@ -1,6 +1,6 @@
 package ru.flexpay.eirc;
 
-import org.apache.commons.lang.time.StopWatch;
+import org.apache.commons.lang3.time.StopWatch;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.common.EjbTestBeanLocator;
 import org.complitex.common.entity.Attribute;

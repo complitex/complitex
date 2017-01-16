@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.web.component;
 
 import com.google.common.collect.ImmutableList;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;

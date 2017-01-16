@@ -3,8 +3,8 @@ package ru.flexpay.eirc.registry.service;
 import ch.qos.cal10n.IMessageConveyor;
 import ch.qos.cal10n.MessageConveyor;
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ResourceUtil;
 

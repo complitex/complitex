@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.registry.service.handle.exchange;
 
-import org.apache.commons.lang.time.StopWatch;
+import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.HashMap;
 import java.util.Map;

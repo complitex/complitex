@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.service_provider_account.entity;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import ru.flexpay.eirc.dictionary.entity.DictionaryTemporalObject;
 
 /**

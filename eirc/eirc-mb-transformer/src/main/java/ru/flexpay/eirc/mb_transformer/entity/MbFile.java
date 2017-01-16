@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.mb_transformer.entity;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

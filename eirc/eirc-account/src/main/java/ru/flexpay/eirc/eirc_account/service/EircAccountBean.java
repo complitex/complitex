@@ -2,7 +2,7 @@ package ru.flexpay.eirc.eirc_account.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.validator.routines.checkdigit.CheckDigit;
 import org.apache.commons.validator.routines.checkdigit.CheckDigitException;
 import org.apache.commons.validator.routines.checkdigit.EAN13CheckDigit;

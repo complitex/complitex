@@ -104,7 +104,7 @@ public class StringUtil {
     }
 
     /**
-     * Copied from org.apache.commons.lang.WordUtils
+     * Copied from org.apache.commons.lang3.WordUtils
      */
     public static String wrap(String str, int wrapLength, String newLineStr, boolean wrapLongWords) {
         if (str == null) {

@@ -2,7 +2,7 @@ package ru.flexpay.eirc.registry.service.parse;
 
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.AtomicDouble;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.complitex.common.entity.DictionaryConfig;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;

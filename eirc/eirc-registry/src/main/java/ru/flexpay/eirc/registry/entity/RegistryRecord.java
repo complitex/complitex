@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.entity;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.correction.entity.LinkStatus;
 import ru.flexpay.eirc.dictionary.entity.Address;

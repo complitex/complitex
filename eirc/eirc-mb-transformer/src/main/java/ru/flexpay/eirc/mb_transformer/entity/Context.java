@@ -3,7 +3,7 @@ package ru.flexpay.eirc.mb_transformer.entity;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.complitex.common.entity.FilterWrapper;
 import ru.flexpay.eirc.mb_transformer.service.MbConverterException;
 import ru.flexpay.eirc.registry.entity.Registry;

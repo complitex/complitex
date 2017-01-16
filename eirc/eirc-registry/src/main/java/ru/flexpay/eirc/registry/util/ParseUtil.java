@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.registry.util;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.format.DateTimeFormatter;
 import ru.flexpay.eirc.registry.entity.*;
 import ru.flexpay.eirc.registry.service.parse.ParseRegistryConstants;

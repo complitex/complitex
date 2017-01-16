@@ -1,8 +1,8 @@
 package ru.flexpay.eirc.service.service;
 
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.StringLocale;
 import org.complitex.common.service.AbstractBean;
