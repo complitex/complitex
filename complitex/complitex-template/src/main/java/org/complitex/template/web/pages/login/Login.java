@@ -17,13 +17,8 @@ import org.complitex.resources.WebCommonResourceInitializer;
  *         Date: 22.07.2010 16:16:45
  */
 public final class Login extends WebPage {
-
-    public Login() {
-        init(false);
-    }
-
     public Login(PageParameters pageParameters) {
-        init(true);
+        init(!pageParameters.get("error").isNull());
     }
 
     private void init(boolean isError) {

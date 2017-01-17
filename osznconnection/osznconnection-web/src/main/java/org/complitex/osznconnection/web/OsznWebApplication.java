@@ -1,12 +1,15 @@
 package org.complitex.osznconnection.web;
 
 import org.complitex.address.web.sync.AddressSyncPage;
+import org.complitex.admin.web.UserEdit;
+import org.complitex.admin.web.UserList;
 import org.complitex.osznconnection.file.web.pages.actualpayment.ActualPaymentList;
 import org.complitex.osznconnection.file.web.pages.facility.*;
 import org.complitex.osznconnection.file.web.pages.payment.PaymentList;
 import org.complitex.osznconnection.file.web.pages.privilege.*;
 import org.complitex.osznconnection.file.web.pages.subsidy.*;
 import org.complitex.template.web.ComplitexWebApplication;
+import org.complitex.template.web.pages.login.Login;
 
 /**
  * @author inheaven on 001 01.10.15 17:01
@@ -71,5 +74,11 @@ public class OsznWebApplication extends ComplitexWebApplication{
         mountPage("/address-sync", AddressSyncPage.class);
 
         //admin
+        mountPage("/users", UserList.class);
+        mountPage("/users/${user_id}", UserEdit.class);
+
+        //login
+        mountPage("/login", Login.class);
+
     }
 }

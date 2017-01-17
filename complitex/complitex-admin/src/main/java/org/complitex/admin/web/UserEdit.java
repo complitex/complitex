@@ -69,15 +69,16 @@ public class UserEdit extends FormTemplatePage {
 
     public UserEdit() {
         super();
-        init(null, false, true);
+        init(null, false);
     }
 
     public UserEdit(PageParameters parameters) {
         super();
-        init(parameters.get("user_id").toOptionalLong(), "copy".equals(parameters.get("action").toString()), parameters.get("using_address").toBoolean(true));
+        init(parameters.get("user_id").toOptionalLong(), "copy".equals(parameters.get("action").toString()));
     }
 
-    private void init(Long userId, boolean copyUser, boolean usingAddress) {
+    @SuppressWarnings("Duplicates")
+    private void init(Long userId, boolean copyUser) {
         add(new Label("title", new ResourceModel("title")));
         final FeedbackPanel messages = new FeedbackPanel("messages");
         messages.setOutputMarkupId(true);
@@ -143,7 +144,7 @@ public class UserEdit extends FormTemplatePage {
         form.add(login);
 
         //Пароль
-        PasswordTextField password = new PasswordTextField("password", new PropertyModel<String>(userModel, "newPassword"));
+        PasswordTextField password = new PasswordTextField("password", new PropertyModel<>(userModel, "newPassword"));
         password.setEnabled(userId != null);
         password.setRequired(false);
         form.add(password);
@@ -224,8 +225,8 @@ public class UserEdit extends FormTemplatePage {
 
                 item.add(new Radio<>("radio", new Model<>(item.getIndex())));
                 item.add(new OrganizationIdPicker("organizationObjectId",
-                        new PropertyModel<Long>(userOrganization, "organizationObjectId"), USER_ORGANIZATION_TYPE));
-                item.add(new AjaxLink<Void>("delete") {
+                        new PropertyModel<>(userOrganization, "organizationObjectId"), USER_ORGANIZATION_TYPE));
+                item.add(new AjaxLink("delete") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -252,7 +253,7 @@ public class UserEdit extends FormTemplatePage {
         //Адрес по умолчанию
         final WebMarkupContainer addressContainer = new WebMarkupContainer("addressContainer");
         form.add(addressContainer);
-        addressContainer.setVisible(usingAddress);
+        addressContainer.setVisible(isDefaultAddressVisible());
 
         Boolean useDefaultAddressFlag;
         if (!copyUser) {
@@ -264,7 +265,7 @@ public class UserEdit extends FormTemplatePage {
         final Model<Boolean> useDefaultAddressModel = new Model<>(useDefaultAddressFlag);
         addressContainer.add(new CheckBox("use_default_address", useDefaultAddressModel));
 
-        addressContainer.add(usingAddress ?
+        addressContainer.add(isDefaultAddressVisible() ?
                         new WiQuerySearchComponent("searchComponent", searchComponentState, SEARCH_FILTERS, null, ShowMode.ACTIVE, true) :
                         new Label("searchComponent", "default_address")
         );
@@ -377,6 +378,7 @@ public class UserEdit extends FormTemplatePage {
         return new Model<>(new UserGroup(groupName));
     }
 
+    @SuppressWarnings("Duplicates")
     private List<LogChange> getLogChanges(User oldUser, User newUser) {
         List<LogChange> logChanges = new ArrayList<>();
 
@@ -440,7 +442,7 @@ public class UserEdit extends FormTemplatePage {
     private void back(Long userId) {
         if (userId != null) {
             PageParameters params = new PageParameters();
-            params.set(UserList.SCROLL_PARAMETER, userId);
+            //params.set(UserList.SCROLL_PARAMETER, userId);
             setResponsePage(getPageListClass(), params);
         } else {
             setResponsePage(getPageListClass());
@@ -449,5 +451,9 @@ public class UserEdit extends FormTemplatePage {
 
     protected Class<? extends TemplatePage> getPageListClass() {
         return UserList.class;
+    }
+
+    protected boolean isDefaultAddressVisible(){
+        return true;
     }
 }

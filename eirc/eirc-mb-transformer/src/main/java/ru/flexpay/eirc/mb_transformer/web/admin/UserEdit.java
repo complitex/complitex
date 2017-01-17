@@ -20,4 +20,9 @@ public class UserEdit extends org.complitex.admin.web.UserEdit {
     protected Class<? extends TemplatePage> getPageListClass() {
         return UserList.class;
     }
+
+    @Override
+    protected boolean isDefaultAddressVisible() {
+        return false;
+    }
 }

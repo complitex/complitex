@@ -7,11 +7,6 @@ import org.complitex.template.web.template.TemplatePage;
  */
 public class UserList extends org.complitex.admin.web.UserList {
     @Override
-    protected boolean isUsingAddress() {
-        return false;
-    }
-
-    @Override
     protected Class<? extends TemplatePage> getEditPageClass() {
         return UserEdit.class;
     }

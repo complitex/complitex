@@ -23,6 +23,7 @@ import org.complitex.admin.service.UserBean;
 import org.complitex.admin.service.UserFilter;
 import org.complitex.admin.strategy.UserInfoStrategy;
 import org.complitex.common.entity.*;
+import org.complitex.common.entity.UserGroup.GROUP_NAME;
 import org.complitex.common.strategy.EntityBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringUtil;
@@ -33,12 +34,12 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollListBehavior;
 import org.complitex.template.web.component.toolbar.AddUserButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
-import org.complitex.template.web.pages.ScrollListPage;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,7 +48,7 @@ import java.util.List;
  *         Date: 22.07.2010 15:03:45
  */
 @AuthorizeInstantiation(SecurityRole.ADMIN_MODULE_EDIT)
-public class UserList extends ScrollListPage {
+public class UserList extends TemplatePage {
     @EJB(name = "OrganizationStrategy")
     private IOrganizationStrategy organizationStrategy;
 
@@ -65,22 +66,18 @@ public class UserList extends ScrollListPage {
         init();
     }
 
-    public UserList(PageParameters params) {
-        super(params);
-        init();
-    }
-
+    @SuppressWarnings("Duplicates")
     private void init() {
         add(new Label("title", new ResourceModel("title")));
 
-        UserFilter filter = (UserFilter) getFilterObject(userBean.newUserFilter());
-        final IModel<UserFilter> filterModel = new Model<UserFilter>(filter);
+        UserFilter filter = getFilterObject(userBean.newUserFilter());
+        final IModel<UserFilter> filterModel = new Model<>(filter);
 
         final WebMarkupContainer content = new WebMarkupContainer("content");
         content.setOutputMarkupPlaceholderTag(true);
         add(content);
 
-        final Form<Void> filterForm = new Form<Void>("filter_form");
+        final Form<Void> filterForm = new Form<>("filter_form");
         content.add(filterForm);
 
         filterForm.add(new AjaxLink<Void>("reset") {
@@ -110,32 +107,39 @@ public class UserList extends ScrollListPage {
             }
         });
 
-        filterForm.add(new TextField<String>("login", new PropertyModel<String>(filterModel, "login")));
+        filterForm.add(new TextField<>("login", new PropertyModel<String>(filterModel, "login")));
         filterForm.add(new AttributeFiltersPanel("user_info", filter.getAttributeFilters()));
 
-        //todo string group
-        filterForm.add(new DropDownChoice<UserGroup.GROUP_NAME>("usergroups",
-                new PropertyModel<UserGroup.GROUP_NAME>(filterModel, "groupName"),
-                new ListModel<UserGroup.GROUP_NAME>(Arrays.asList(UserGroup.GROUP_NAME.values())),
-                new IChoiceRenderer<UserGroup.GROUP_NAME>() {
+        List<String> groupNames = new ArrayList<>();
+
+        for (GROUP_NAME groupName : GROUP_NAME.values()){
+            groupNames.add(groupName.name());
+        }
+
+        groupNames.addAll(getTemplateWebApplication().getTemplateLoader().getGroupNames());
+
+        filterForm.add(new DropDownChoice<>("usergroups",
+                new PropertyModel<>(filterModel, "groupName"),
+                new ListModel<>(groupNames),
+                new IChoiceRenderer<String>() {
 
                     @Override
-                    public Object getDisplayValue(UserGroup.GROUP_NAME object) {
-                        return getStringOrKey(object.name());
+                    public String getDisplayValue(String object) {
+                        return getStringOrKey(object);
                     }
 
                     @Override
-                    public String getIdValue(UserGroup.GROUP_NAME object, int index) {
-                        return object.name();
+                    public String getIdValue(String object, int index) {
+                        return object;
                     }
 
                     @Override
-                    public UserGroup.GROUP_NAME getObject(String id, IModel<? extends List<? extends UserGroup.GROUP_NAME>> choices) {
-                        return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().get();
+                    public String getObject(String id, IModel<? extends List<? extends String>> choices) {
+                        return choices.getObject().stream().filter(id::equals).findAny().orElse(null);
                     }
                 }).setNullValid(true));
         filterForm.add(new UserOrganizationPicker("organization",
-                new PropertyModel<Long>(filterModel, "organizationObjectId")));
+                new PropertyModel<>(filterModel, "organizationObjectId")));
 
         final DataProvider<User> dataProvider = new DataProvider<User>() {
 
@@ -199,11 +203,11 @@ public class UserList extends ScrollListPage {
 
                 item.add(new BookmarkablePageLinkPanel<User>("action_edit", getString("action_edit"),
                         ScrollListBehavior.SCROLL_PREFIX + String.valueOf(user.getId()),
-                        getEditPageClass(), new PageParameters().set("user_id", user.getId()).set("using_address", isUsingAddress())));
+                        getEditPageClass(), new PageParameters().set("user_id", user.getId())));
 
                 item.add(new BookmarkablePageLinkPanel<User>("action_copy", getString("action_copy"),
                         ScrollListBehavior.SCROLL_PREFIX + String.valueOf(user.getId()),
-                        getEditPageClass(), new PageParameters().set("user_id", user.getId()).set("action", "copy").set("using_address", isUsingAddress())));
+                        getEditPageClass(), new PageParameters().set("user_id", user.getId()).set("action", "copy")));
             }
         };
         filterForm.add(dataView);
@@ -222,7 +226,7 @@ public class UserList extends ScrollListPage {
      */
     private String getDisplayGroupNames(User user) {
         if (user.getUserGroups() == null || user.getUserGroups().isEmpty()) {
-            return getString("blocked");
+            return "";
         }
 
         StringBuilder sb = new StringBuilder();
@@ -238,20 +242,16 @@ public class UserList extends ScrollListPage {
 
     @Override
     protected List<ToolbarButton> getToolbarButtons(String id) {
-        return Arrays.asList((ToolbarButton) new AddUserButton(id) {
+        return Collections.singletonList(new AddUserButton(id) {
 
             @Override
             protected void onClick() {
-                setResponsePage(getEditPageClass(), new PageParameters().set("using_address", isUsingAddress()));
+                setResponsePage(getEditPageClass());
             }
         });
     }
 
     protected Class<? extends TemplatePage> getEditPageClass() {
         return UserEdit.class;
-    }
-
-    protected boolean isUsingAddress() {
-        return true;
     }
 }
