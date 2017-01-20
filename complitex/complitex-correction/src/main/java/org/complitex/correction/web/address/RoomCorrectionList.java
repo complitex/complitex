@@ -37,7 +37,7 @@ public class RoomCorrectionList extends AddressCorrectionList<RoomCorrection> {
 
     @Override
     protected List<RoomCorrection> getCorrections(FilterWrapper<RoomCorrection> filterWrapper) {
-        sessionBean.prepareFilterForPermissionCheck(filterWrapper);
+        sessionBean.authorize(filterWrapper);
 
         List<RoomCorrection> rooms = addressCorrectionBean.getRoomCorrections(filterWrapper);
 

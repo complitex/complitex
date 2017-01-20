@@ -7,7 +7,7 @@ import org.complitex.common.util.StringUtil;
 import org.complitex.osznconnection.file.entity.privilege.FacilityLocal;
 import org.complitex.osznconnection.file.entity.privilege.FacilityLocalDBF;
 import org.complitex.osznconnection.file.service.privilege.FacilityLocalBean;
-import org.complitex.template.web.template.ListTemplatePage;
+import org.complitex.osznconnection.file.web.AuthorizedListPage;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * @author inheaven on 021 21.11.16.
  */
 @AuthorizeInstantiation("PRIVILEGE_LOCAL")
-public class FacilityLocalList extends ListTemplatePage<FacilityLocal>{
+public class FacilityLocalList extends AuthorizedListPage<FacilityLocal> {
     @EJB
     private FacilityLocalBean facilityLocalBean;
 

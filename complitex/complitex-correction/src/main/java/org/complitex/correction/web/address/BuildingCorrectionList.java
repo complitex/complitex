@@ -55,7 +55,7 @@ public class BuildingCorrectionList extends AddressCorrectionList<BuildingCorrec
 
     @Override
     protected List<BuildingCorrection> getCorrections(FilterWrapper<BuildingCorrection> filterWrapper) {
-        sessionBean.prepareFilterForPermissionCheck(filterWrapper);
+        sessionBean.authorize(filterWrapper);
 
         List<BuildingCorrection> list = addressCorrectionBean.getBuildingCorrections(filterWrapper);
 

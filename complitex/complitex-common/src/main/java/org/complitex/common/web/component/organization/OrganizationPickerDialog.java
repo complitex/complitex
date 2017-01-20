@@ -79,7 +79,7 @@ public class OrganizationPickerDialog extends Panel {
                 example.setFirst(first);
                 example.setCount(count);
 
-                return organizationStrategy.getList(example);
+                return organizationStrategy.getList(example); //todo session bean filter
             }
 
             @Override

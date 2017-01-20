@@ -7,7 +7,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.osznconnection.file.entity.RequestFileSubType;
-import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
@@ -29,9 +28,6 @@ import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 public class PrivilegeProlongationFileList extends TemplatePage {
     @EJB
     private ProcessManagerBean processManagerBean;
-
-    @EJB
-    private RequestFileBean requestFileBean;
 
     private AbstractFileListPanel fileListPanel;
 

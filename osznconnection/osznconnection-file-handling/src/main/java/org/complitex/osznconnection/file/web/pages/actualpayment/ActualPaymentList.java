@@ -96,7 +96,7 @@ public final class ActualPaymentList extends TemplatePage {
         final RequestFile actualPaymentFile = requestFileBean.getRequestFile(fileId);
 
         //Проверка доступа к данным
-        if (!sessionBean.isAuthorized(actualPaymentFile.getOrganizationId(), actualPaymentFile.getUserOrganizationId())) {
+        if (!sessionBean.isAuthorized(actualPaymentFile.getUserOrganizationId())) {
             throw new UnauthorizedInstantiationException(this.getClass());
         }
 

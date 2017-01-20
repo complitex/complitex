@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @Stateless
 public class UserBean extends AbstractBean {
-    public static final String STATEMENT_PREFIX = UserBean.class.getCanonicalName();
+    public static final String NS = UserBean.class.getCanonicalName();
 
     @EJB
     private UserInfoStrategy userInfoStrategy;
@@ -39,7 +39,7 @@ public class UserBean extends AbstractBean {
     }
 
     public boolean isUniqueLogin(String login) {
-        return (Boolean) sqlSession().selectOne(STATEMENT_PREFIX + ".isUniqueLogin", login);
+        return (Boolean) sqlSession().selectOne(NS + ".isUniqueLogin", login);
     }
 
 
@@ -49,7 +49,7 @@ public class UserBean extends AbstractBean {
 
 
     public User getUser(Long id, boolean createUserInfo) {
-        User user = (User) sqlSession().selectOne(STATEMENT_PREFIX + ".selectUser", id);
+        User user = (User) sqlSession().selectOne(NS + ".selectUser", id);
 
         if (user.getUserInfoObjectId() != null) {
             user.setUserInfo(userInfoStrategy.getDomainObject(user.getUserInfoObjectId(), false));
@@ -87,24 +87,24 @@ public class UserBean extends AbstractBean {
 
             user.setPassword(DigestUtils.md5Hex(user.getLogin())); //md5 password
 
-            sqlSession().insert(STATEMENT_PREFIX + ".insertUser", user);
+            sqlSession().insert(NS + ".insertUser", user);
 
             //сохранение групп привилегий
             for (UserGroup userGroup : user.getUserGroups()) {
                 userGroup.setLogin(user.getLogin());
-                sqlSession().insert(STATEMENT_PREFIX + ".insertUserGroup", userGroup);
+                sqlSession().insert(NS + ".insertUserGroup", userGroup);
             }
 
             //сохранение организаций
             for (UserOrganization userOrganization : userOrganizationMap.values()) {
                 if (userOrganization.getOrganizationObjectId() != null) {
                     userOrganization.setUserId(user.getId());
-                    sqlSession().insert(STATEMENT_PREFIX + ".insertUserOrganization", userOrganization);
+                    sqlSession().insert(NS + ".insertUserOrganization", userOrganization);
                 }
             }
 
         } else { //Редактирование пользователя
-            User dbUser = (User) sqlSession().selectOne(STATEMENT_PREFIX + ".selectUser", user.getId());
+            User dbUser = (User) sqlSession().selectOne(NS + ".selectUser", user.getId());
 
             //удаление групп привилегий
             for (UserGroup dbUserGroup : dbUser.getUserGroups()) {
@@ -118,7 +118,7 @@ public class UserBean extends AbstractBean {
                 }
 
                 if (!contain) {
-                    sqlSession().delete(STATEMENT_PREFIX + ".deleteUserGroup", dbUserGroup.getId());
+                    sqlSession().delete(NS + ".deleteUserGroup", dbUserGroup.getId());
                 }
             }
 
@@ -135,7 +135,7 @@ public class UserBean extends AbstractBean {
 
                 if (!contain) {
                     userGroup.setLogin(user.getLogin());
-                    sqlSession().insert(STATEMENT_PREFIX + ".insertUserGroup", userGroup);
+                    sqlSession().insert(NS + ".insertUserGroup", userGroup);
                 }
             }
 
@@ -153,7 +153,7 @@ public class UserBean extends AbstractBean {
 
                         //обновление главной организации пользователя
                         if (dbUserOrganization.isMain() != userOrganization.isMain()) {
-                            sqlSession().update(STATEMENT_PREFIX + ".updateUserOrganization", userOrganization);
+                            sqlSession().update(NS + ".updateUserOrganization", userOrganization);
                             session.setMainUserOrganization(null);
                         }
 
@@ -162,7 +162,7 @@ public class UserBean extends AbstractBean {
                 }
 
                 if (!contain) {
-                    sqlSession().delete(STATEMENT_PREFIX + ".deleteUserOrganization", dbUserOrganization.getId());
+                    sqlSession().delete(NS + ".deleteUserOrganization", dbUserOrganization.getId());
                 }
             }
 
@@ -183,14 +183,14 @@ public class UserBean extends AbstractBean {
 
                 if (!contain) {
                     userOrganization.setUserId(user.getId());
-                    sqlSession().insert(STATEMENT_PREFIX + ".insertUserOrganization", userOrganization);
+                    sqlSession().insert(NS + ".insertUserOrganization", userOrganization);
                 }
             }
 
             //изменение пароля
             if (user.getNewPassword() != null) {
                 user.setPassword(DigestUtils.md5Hex(user.getNewPassword())); //md5 password
-                sqlSession().update(STATEMENT_PREFIX + ".updateUser", user);
+                sqlSession().update(NS + ".updateUser", user);
             } else {
                 user.setPassword(null); //не обновлять пароль
             }
@@ -202,14 +202,14 @@ public class UserBean extends AbstractBean {
             } else {
                 userInfoStrategy.insert(user.getUserInfo(), DateUtil.getCurrentDate());
                 user.setUserInfoObjectId(user.getUserInfo().getObjectId());
-                sqlSession().update(STATEMENT_PREFIX + ".updateUser", user);
+                sqlSession().update(NS + ".updateUser", user);
             }
         }
     }
 
 
     public List<User> getUsers(UserFilter filter) {
-        List<User> users = sqlSession().selectList(STATEMENT_PREFIX + ".selectUsers", filter);
+        List<User> users = sqlSession().selectList(NS + ".selectUsers", filter);
         for (User user : users) {
             if (user.getUserInfoObjectId() != null) {
                 user.setUserInfo(userInfoStrategy.getDomainObject(user.getUserInfoObjectId(), false));
@@ -221,7 +221,7 @@ public class UserBean extends AbstractBean {
 
 
     public Long getUsersCount(UserFilter filter) {
-        return sqlSession().selectOne(STATEMENT_PREFIX + ".selectUsersCount", filter);
+        return sqlSession().selectOne(NS + ".selectUsersCount", filter);
     }
 
     public UserFilter newUserFilter() {

@@ -131,8 +131,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         privilegeFileGroupModel = Model.of(privilegeFileGroupBean.getPrivilegeFileGroup(requestFile.getGroupId()));
 
         //Проверка доступа к данным
-        if (!sessionBean.isAuthorized(requestFile.getOrganizationId(),
-                requestFile.getUserOrganizationId())) {
+        if (!sessionBean.isAuthorized(requestFile.getUserOrganizationId())) {
             throw new UnauthorizedInstantiationException(this.getClass());
         }
 

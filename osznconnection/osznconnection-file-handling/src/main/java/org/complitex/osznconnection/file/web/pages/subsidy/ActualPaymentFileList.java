@@ -4,7 +4,6 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.pages.actualpayment.ActualPaymentList;
@@ -24,9 +23,6 @@ public class ActualPaymentFileList extends TemplatePage {
 
     @EJB
     private ProcessManagerBean processManagerBean;
-
-    @EJB
-    private RequestFileBean requestFileBean;
 
     private final AbstractFileListPanel fileListPanel;
 

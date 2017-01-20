@@ -42,7 +42,7 @@ public class StreetTypeCorrectionList extends AbstractCorrectionList<StreetTypeC
 
     @Override
     protected List<StreetTypeCorrection> getCorrections(FilterWrapper<StreetTypeCorrection> filterWrapper) {
-        sessionBean.prepareFilterForPermissionCheck(filterWrapper);
+        sessionBean.authorize(filterWrapper);
 
         List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(filterWrapper);
 

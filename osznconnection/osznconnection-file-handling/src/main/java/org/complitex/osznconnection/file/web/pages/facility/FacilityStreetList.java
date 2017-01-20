@@ -6,8 +6,8 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
 import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
+import org.complitex.osznconnection.file.web.AuthorizedListPage;
 import org.complitex.template.web.security.SecurityRole;
-import org.complitex.template.web.template.ListTemplatePage;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -19,7 +19,7 @@ import static org.complitex.common.util.StringUtil.asList;
  *         Date: 10.04.13 16:29
  */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
-public class FacilityStreetList extends ListTemplatePage<FacilityStreet>{
+public class FacilityStreetList extends AuthorizedListPage<FacilityStreet> {
     @EJB
     private FacilityReferenceBookBean facilityReferenceBookBean;
 

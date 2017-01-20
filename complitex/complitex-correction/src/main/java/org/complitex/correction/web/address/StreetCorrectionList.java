@@ -52,7 +52,7 @@ public class StreetCorrectionList extends AddressCorrectionList<StreetCorrection
 
     @Override
     protected List<StreetCorrection> getCorrections(FilterWrapper<StreetCorrection> filterWrapper) {
-        sessionBean.prepareFilterForPermissionCheck(filterWrapper);
+        sessionBean.authorize(filterWrapper);
 
         List<StreetCorrection> streets = addressCorrectionBean.getStreetCorrections(filterWrapper);
 

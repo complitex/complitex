@@ -42,7 +42,7 @@ public class ApartmentCorrectionList extends AddressCorrectionList<ApartmentCorr
 
     @Override
     protected List<ApartmentCorrection> getCorrections(FilterWrapper<ApartmentCorrection> filterWrapper) {
-        sessionBean.prepareFilterForPermissionCheck(filterWrapper);
+        sessionBean.authorize(filterWrapper);
 
         List<ApartmentCorrection> apartments = addressCorrectionBean.getApartmentCorrections(filterWrapper);
 

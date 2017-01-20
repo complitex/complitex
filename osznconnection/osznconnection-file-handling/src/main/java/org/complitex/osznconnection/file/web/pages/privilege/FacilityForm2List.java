@@ -7,7 +7,7 @@ import org.complitex.common.util.StringUtil;
 import org.complitex.osznconnection.file.entity.privilege.FacilityForm2;
 import org.complitex.osznconnection.file.entity.privilege.FacilityForm2DBF;
 import org.complitex.osznconnection.file.service.privilege.FacilityForm2Bean;
-import org.complitex.template.web.template.ListTemplatePage;
+import org.complitex.osznconnection.file.web.AuthorizedListPage;
 
 import javax.ejb.EJB;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
  * @author inheaven on 021 21.11.16.
  */
 @AuthorizeInstantiation("PRIVILEGE_FORM_2")
-public class FacilityForm2List extends ListTemplatePage<FacilityForm2>{
+public class FacilityForm2List extends AuthorizedListPage<FacilityForm2> {
     @EJB
     private FacilityForm2Bean facilityForm2Bean;
 

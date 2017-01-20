@@ -18,6 +18,7 @@ public final class AccessDeniedPage extends org.apache.wicket.markup.html.pages.
 
     private void init() {
         add(new Label("title", new ResourceModel("title")));
+        //todo back to previous page
     }
 
     @Override

@@ -115,7 +115,7 @@ public final class PaymentList extends TemplatePage {
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
         //Проверка доступа к данным
-        if (!osznSessionBean.isAuthorized(requestFile.getOrganizationId(), requestFile.getUserOrganizationId())) {
+        if (!osznSessionBean.isAuthorized(requestFile.getUserOrganizationId())) {
             throw new UnauthorizedInstantiationException(this.getClass());
         }
 

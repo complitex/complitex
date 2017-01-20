@@ -122,8 +122,7 @@ public class PrivilegeProlongationList extends TemplatePage {
         RequestFile requestFile = requestFileBean.getRequestFile(fileId);
 
         //Проверка доступа к данным
-        if (!sessionBean.isAuthorized(requestFile.getOrganizationId(),
-                requestFile.getUserOrganizationId())) {
+        if (!sessionBean.isAuthorized(requestFile.getUserOrganizationId())) {
             throw new UnauthorizedInstantiationException(this.getClass());
         }
 

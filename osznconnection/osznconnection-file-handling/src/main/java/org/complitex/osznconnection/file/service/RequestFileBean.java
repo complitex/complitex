@@ -71,7 +71,7 @@ public class RequestFileBean extends AbstractBean {
     }
 
     public List<RequestFile> getRequestFiles(RequestFileFilter filter) {
-        sessionBean.prepareFilterForPermissionCheck(filter);
+        sessionBean.authorize(filter);
 
         switch (filter.getType()) {
             case SUBSIDY_TARIF:
@@ -108,7 +108,7 @@ public class RequestFileBean extends AbstractBean {
     }
 
     public Long getCount(RequestFileFilter filter) {
-        sessionBean.prepareFilterForPermissionCheck(filter);
+        sessionBean.authorize(filter);
         return sqlSession().selectOne(NS + ".selectRequestFilesCount", filter);
     }
 

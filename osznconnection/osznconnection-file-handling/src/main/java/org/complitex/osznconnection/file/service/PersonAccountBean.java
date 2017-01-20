@@ -29,13 +29,13 @@ public class PersonAccountBean extends AbstractBean {
     }
 
     public List<PersonAccount> getPersonAccounts(FilterWrapper<PersonAccount> filterWrapper){
-        sessionBean.prepareFilterForPermissionCheck(filterWrapper);
+        sessionBean.authorize(filterWrapper);
 
         return sqlSession().selectList(NS + ".selectPersonAccounts", filterWrapper);
     }
 
     public Long getPersonAccountsCount(FilterWrapper<PersonAccount> filterWrapper){
-        sessionBean.prepareFilterForPermissionCheck(filterWrapper);
+        sessionBean.authorize(filterWrapper);
 
         return sqlSession().selectOne(NS + ".selectPersonAccountsCount", filterWrapper);
     }

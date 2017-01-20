@@ -36,12 +36,14 @@ public class RequestFileGroupBean extends AbstractBean {
 
     @SuppressWarnings({"unchecked"})
     public List<RequestFileGroup> getRequestFileGroups(RequestFileGroupFilter filter) {
-        sessionBean.prepareFilterForPermissionCheck(filter);
+        sessionBean.authorize(filter);
+
         return sqlSession().selectList(NS + ".selectRequestFilesGroups", filter);
     }
 
     public Long getRequestFileGroupsCount(RequestFileGroupFilter filter) {
-        sessionBean.prepareFilterForPermissionCheck(filter);
+        sessionBean.authorize(filter);
+
         return sqlSession().selectOne(NS + ".selectRequestFilesGroupsCount", filter);
     }
 

@@ -264,7 +264,7 @@ public class SessionBean extends AbstractBean {
         return objectIds;
     }
 
-    public boolean isAuthorized(Long outerOrganizationObjectId, Long userOrganizationId) {
+    public boolean isAuthorized(Long userOrganizationId) {
         return isAdmin() || isUserOrganizationVisibleToCurrentUser(userOrganizationId);
     }
 
@@ -282,7 +282,7 @@ public class SessionBean extends AbstractBean {
                 && mainUserOrganization.getObjectId() > 0 ? mainUserOrganization.getObjectId() : null;
     }
 
-    public void prepareFilterForPermissionCheck(AbstractFilter filter) {
+    public void authorize(AbstractFilter filter) { //todo dev secure rule
         filter.setAdmin(isAdmin());
 
         if (!isAdmin()) {
@@ -291,11 +291,11 @@ public class SessionBean extends AbstractBean {
         }
     }
 
-    public void prepareFilterForPermissionCheck(FilterWrapper filter) {
+    public void authorize(FilterWrapper filter) {
         filter.setAdmin(isAdmin());
 
         if (!isAdmin()) {
-            filter.setOuterOrganizationsString(getAllOuterOrganizationsString());
+//            filter.setOuterOrganizationsString(getAllOuterOrganizationsString());
             filter.setUserOrganizationsString(getCurrentUserOrganizationsString());
         }
     }

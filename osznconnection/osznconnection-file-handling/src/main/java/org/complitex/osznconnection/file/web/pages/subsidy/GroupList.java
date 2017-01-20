@@ -19,7 +19,6 @@ import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroupFilter;
-import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
@@ -46,8 +45,6 @@ public class GroupList extends TemplatePage {
     private ProcessManagerBean processManagerBean;
     @EJB
     private LogBean logBean;
-    @EJB
-    private RequestFileDescriptionBean requestFileDescriptionBean;
 
     private class GroupListPanel extends AbstractProcessableListPanel<RequestFileGroup, RequestFileGroupFilter> {
 

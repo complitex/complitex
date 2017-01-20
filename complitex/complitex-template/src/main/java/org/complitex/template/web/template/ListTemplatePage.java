@@ -61,6 +61,9 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
     protected void onPopulateData(ListItem<String> item){}
 
     public ListTemplatePage(final PageParameters pageParameters) {
+        //Authorize
+        authorize(pageParameters);
+
         //Title
         add(new Label("title", new ResourceModel("title")));
 
@@ -247,5 +250,9 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
 
     protected List<Component> getActionComponents(String id, T object){
         return new ArrayList<>();
+    }
+
+    protected void authorize(PageParameters pageParameters){
+
     }
 }

@@ -41,7 +41,7 @@ public class DistrictCorrectionList extends AddressCorrectionList<DistrictCorrec
 
     @Override
     protected List<DistrictCorrection> getCorrections(FilterWrapper<DistrictCorrection> filterWrapper) {
-        sessionBean.prepareFilterForPermissionCheck(filterWrapper);
+        sessionBean.authorize(filterWrapper);
 
         List<DistrictCorrection> districts = addressCorrectionBean.getDistrictCorrections(filterWrapper);
 
