@@ -119,7 +119,7 @@
     </sql>
 
     <sql id="sqlPermissionFilter">
-        <if test="not admin">
+        <if test="not admin and userPermissionString != null">
             AND (e.`permission_id` IN ${userPermissionString})
         </if>
     </sql>

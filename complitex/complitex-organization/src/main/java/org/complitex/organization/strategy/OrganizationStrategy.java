@@ -212,9 +212,9 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         }
 
         example.setEntityName(getEntityName());
-        if (!example.isAdmin()) {
-            prepareExampleForPermissionCheck(example);
-        }
+
+        prepareExampleForPermissionCheck(example);
+
         extendOrderBy(example);
 
         List<DomainObject> organizations = sqlSession().selectList(ORGANIZATION_NS + ".selectOrganizations", example);
@@ -234,6 +234,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
             return 0L;
         }
         example.setEntityName(getEntityName());
+
         prepareExampleForPermissionCheck(example);
 
         return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationCount", example);
@@ -392,6 +393,22 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         }
 
         return displayShortNameAndCode(getDomainObject(organizationId, true), locale);
+    }
+
+    public String displayNameAndCode(Long organizationId, Locale locale) {
+        if (organizationId == null){
+            return "";
+        }
+
+        DomainObject organization = getDomainObject(organizationId);
+
+        if (organization == null){
+            return "";
+        }
+
+        final String name = organization.getStringValue(NAME, locale);
+        final String code = getCode(organization);
+        return name + " (" + code + ")";
     }
 
     @Override

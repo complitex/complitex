@@ -494,7 +494,7 @@ public class WiQuerySearchComponent extends Panel {
         example.setLocaleId(stringLocaleBean.convert(getLocale()).getId());
         example.setComparisonType(comparisonType.name());
         example.setStatus(showMode.name());
-        example.setUserPermissionString(userPermissionString);
+//        example.setUserPermissionString(userPermissionString);
 
         return strategy.getList(example);
     }

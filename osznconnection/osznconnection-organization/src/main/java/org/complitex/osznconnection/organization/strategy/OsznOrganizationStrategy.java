@@ -279,7 +279,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
         if (attribute != null && attribute.getAttributeTypeId().equals(USER_ORGANIZATION_PARENT)){
-            return displayShortNameAndCode(attribute.getValueId(), locale);
+            return displayNameAndCode(attribute.getValueId(), locale);
         }
 
         return super.displayAttribute(attribute, locale);

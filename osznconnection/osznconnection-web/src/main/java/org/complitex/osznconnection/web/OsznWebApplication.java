@@ -3,12 +3,14 @@ package org.complitex.osznconnection.web;
 import org.complitex.address.web.sync.AddressSyncPage;
 import org.complitex.admin.web.UserEdit;
 import org.complitex.admin.web.UserList;
+import org.complitex.organization.strategy.web.edit.OrganizationEdit;
 import org.complitex.osznconnection.file.web.pages.actualpayment.ActualPaymentList;
 import org.complitex.osznconnection.file.web.pages.facility.*;
 import org.complitex.osznconnection.file.web.pages.payment.PaymentList;
 import org.complitex.osznconnection.file.web.pages.privilege.*;
 import org.complitex.osznconnection.file.web.pages.subsidy.*;
 import org.complitex.template.web.ComplitexWebApplication;
+import org.complitex.template.web.pages.DomainObjectList;
 import org.complitex.template.web.pages.login.Login;
 
 /**
@@ -76,6 +78,8 @@ public class OsznWebApplication extends ComplitexWebApplication{
         //admin
         mountPage("/users", UserList.class);
         mountPage("/users/${user_id}", UserEdit.class);
+        mountPage("/domains", DomainObjectList.class);
+        mountPage("/organizations/${object_id}", OrganizationEdit.class);
 
         //login
         mountPage("/login", Login.class);

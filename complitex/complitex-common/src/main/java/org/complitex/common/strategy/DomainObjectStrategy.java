@@ -339,9 +339,9 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     public void prepareExampleForPermissionCheck(DomainObjectFilter filter) {
         boolean isAdmin = sessionBean.isAdmin();
         filter.setAdmin(isAdmin);
-        if (!isAdmin) {
-            filter.setUserPermissionString(sessionBean.getPermissionString(getEntityName()));
-        }
+//        if (!isAdmin) { todo permission
+//            filter.setUserPermissionString(sessionBean.getPermissionString(getEntityName()));
+//        }
     }
 
     @Override

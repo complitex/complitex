@@ -17,6 +17,7 @@ import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.component.toolbar.search.CollapsibleSearchToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
+import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
 import java.util.Collections;
@@ -26,7 +27,7 @@ import java.util.List;
  * @author Artem
  */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
-public final class DomainObjectList extends ScrollListPage {
+public final class DomainObjectList extends TemplatePage {
 
     public static final String ENTITY = "entity";
     public static final String STRATEGY = "strategy";
@@ -37,8 +38,6 @@ public final class DomainObjectList extends ScrollListPage {
     private String strategyName;
 
     public DomainObjectList(PageParameters params) {
-        super(params);
-
         entity = params.get(ENTITY).toString();
         strategyName = params.get(STRATEGY).toString();
 
