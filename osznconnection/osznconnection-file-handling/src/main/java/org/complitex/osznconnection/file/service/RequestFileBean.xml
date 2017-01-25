@@ -20,6 +20,7 @@
         <result column="binded_record_count" property="bindedRecordCount"/>
         <result column="filled_record_count" property="filledRecordCount"/>
         <result column="sum" property="sum"/>
+        <result column="user_id" property="userId"/>
     </resultMap>
 
     <select id="selectAll" resultMap="requestFileResultMap">
@@ -30,10 +31,11 @@
             keyProperty="id" useGeneratedKeys="true">
         insert into `request_file`
             (`group_id`, `organization_id`, `name`, `directory`, `begin_date`, `end_date`, `dbf_record_count`,
-             `length`, `check_sum`, `type`, `sub_type`, `loaded`, `status`, `user_organization_id`)
+             `length`, `check_sum`, `type`, `sub_type`, `loaded`, `status`, `user_organization_id`, `user_id`)
         values
             (#{groupId}, #{organizationId}, #{name}, #{directory}, #{beginDate}, #{endDate},
-             #{dbfRecordCount}, #{length}, #{checkSum}, #{type}, #{subType}, #{loaded}, #{status}, #{userOrganizationId});
+             #{dbfRecordCount}, #{length}, #{checkSum}, #{type}, #{subType}, #{loaded}, #{status},
+             #{userOrganizationId}, #{userId});
     </insert>
 
     <update id="updateRequestFile" parameterType="org.complitex.osznconnection.file.entity.RequestFile">
