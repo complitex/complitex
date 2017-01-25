@@ -49,11 +49,10 @@ public class RoomEdit extends DomainObjectEdit {
 
     @Override
     protected DomainObjectEditPanel newEditPanel(String id, String entity, String strategy, Long objectId,
-            Long parentId, String parentEntity, String scrollListPageParameterName, String backInfoSessionKey) {
+            Long parentId, String parentEntity, String backInfoSessionKey) {
 
         if (objectId == null) { // new object
-            return new DomainObjectEditPanel(id, entity, strategy, objectId, parentId, parentEntity,
-                    scrollListPageParameterName, backInfoSessionKey) {
+            return new DomainObjectEditPanel(id, entity, strategy, objectId, parentId, parentEntity, backInfoSessionKey) {
 
                 NumbersList numbersList = new NumbersList();
                 RangeNumbersPanel rangeNumbersPanel;
@@ -147,8 +146,7 @@ public class RoomEdit extends DomainObjectEdit {
                 }
             };
         } else {
-            return super.newEditPanel(id, entity, strategy, objectId, parentId, parentEntity,
-                    scrollListPageParameterName, backInfoSessionKey);
+            return super.newEditPanel(id, entity, strategy, objectId, parentId, parentEntity, backInfoSessionKey);
         }
     }
     private static final String RESOURCE_BUNDLE = RoomEdit.class.getName();

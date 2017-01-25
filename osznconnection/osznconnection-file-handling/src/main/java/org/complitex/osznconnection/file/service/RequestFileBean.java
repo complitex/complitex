@@ -114,6 +114,8 @@ public class RequestFileBean extends AbstractBean {
 
     public void save(RequestFile requestFile) {
         if (requestFile.getId() == null) {
+            requestFile.setUserId(sessionBean.getCurrentUserId());
+
             sqlSession().insert(NS + ".insertRequestFile", requestFile);
 
             //history

@@ -140,7 +140,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         }
 
         DisableAwareListMultipleChoice<DomainObject> organizationType =
-                new DisableAwareListMultipleChoice<DomainObject>("organizationType", organizationTypesModel,
+                new DisableAwareListMultipleChoice<>("organizationType", organizationTypesModel,
                 allOrganizationTypes, renderer);
         organizationType.add(AttributeModifier.replace("size", allOrganizationTypes.size() > 8 ? "8"
                 : String.valueOf(allOrganizationTypes.size())));
@@ -194,7 +194,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
 
         //parent
         final Attribute parentAttribute = organization.getAttribute(IOrganizationStrategy.USER_ORGANIZATION_PARENT);
-        IModel<Long> parentModel = new Model<Long>();
+        IModel<Long> parentModel = new Model<>();
         if (parentAttribute != null) {
             parentModel = new Model<Long>() {
 
@@ -252,7 +252,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
             }
 
             DisableAwareDropDownChoice<RemoteDataSource> dataSource =
-                    new DisableAwareDropDownChoice<RemoteDataSource>("dataSource", dataSourceModel, allDataSources,
+                    new DisableAwareDropDownChoice<>("dataSource", dataSourceModel, allDataSources,
                             new IDisableAwareChoiceRenderer<RemoteDataSource>() {
 
                                 @Override

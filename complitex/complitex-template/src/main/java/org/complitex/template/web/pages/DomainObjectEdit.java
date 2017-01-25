@@ -43,14 +43,12 @@ public class DomainObjectEdit extends FormTemplatePage {
             throw new UnauthorizedInstantiationException(getClass());
         }
 
-        add(editPanel = newEditPanel("editPanel", entity, strategy, objectId, parentId, parentEntity,
-                DomainObjectList.SCROLL_PARAMETER, backInfoSessionKey));
+        add(editPanel = newEditPanel("editPanel", entity, strategy, objectId, parentId, parentEntity, backInfoSessionKey));
     }
 
     protected DomainObjectEditPanel newEditPanel(String id, String entity, String strategy, Long objectId, Long parentId,
-            String parentEntity, String scrollListPageParameterName, String backInfoSessionKey) {
-        return new DomainObjectEditPanel(id, entity, strategy, objectId, parentId, parentEntity,
-                scrollListPageParameterName, backInfoSessionKey);
+            String parentEntity, String backInfoSessionKey) {
+        return new DomainObjectEditPanel(id, entity, strategy, objectId, parentId, parentEntity, backInfoSessionKey);
     }
 
     @Override

@@ -23,9 +23,8 @@ public final class OrganizationEdit extends DomainObjectEdit {
 
     @Override
     protected DomainObjectEditPanel newEditPanel(String id, final String entity, final String strategy, Long objectId, Long parentId,
-            String parentEntity, String scrollListPageParameterName, String backInfoSessionKey) {
-        return new DomainObjectEditPanel(id, entity, strategy, objectId, parentId, parentEntity,
-                scrollListPageParameterName, backInfoSessionKey) {
+            String parentEntity, String backInfoSessionKey) {
+        return new DomainObjectEditPanel(id, entity, strategy, objectId, parentId, parentEntity, backInfoSessionKey) {
 
             @Override
             protected AbstractDomainObjectPermissionPanel newPermissionsPanel(String id, Set<Long> parentSubjectIds) {

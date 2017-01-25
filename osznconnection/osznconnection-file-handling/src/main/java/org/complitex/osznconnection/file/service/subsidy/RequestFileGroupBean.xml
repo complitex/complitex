@@ -73,10 +73,13 @@
     
     <sql id="permissionFilter">
         <if test="not admin">
-            AND ((p.`user_organization_id` IS NULL OR p.`user_organization_id` IN ${userOrganizationsString})
-            AND (b.`user_organization_id` IS NULL OR b.`user_organization_id` IN ${userOrganizationsString}))
+            and (
+              (p.`user_organization_id` is null or p.`user_organization_id` in ${userOrganizationsString})
+              and (b.`user_organization_id` is null or b.`user_organization_id` IN ${userOrganizationsString})
+            )
+
             <if test="outerOrganizationsString != null">
-                AND (p.`organization_id` IN ${outerOrganizationsString})
+                and (p.`organization_id` in ${outerOrganizationsString})
             </if>
         </if>
     </sql>

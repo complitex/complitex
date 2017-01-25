@@ -65,21 +65,19 @@ public class DomainObjectEditPanel extends Panel {
     private Long parentId;
     private String parentEntity;
     private DomainObjectInputPanel objectInputPanel;
-    private final String scrollListPageParameterName;
     private FeedbackPanel messages;
     private WebMarkupContainer permissionsPanelContainer;
     private Set<Long> parentSubjectIds;
     private final String backInfoSessionKey;
 
     public DomainObjectEditPanel(String id, String entity, String strategyName, Long objectId, Long parentId,
-            String parentEntity, String scrollListPageParameterName, String backInfoSessionKey) {
+            String parentEntity, String backInfoSessionKey) {
         super(id);
 
         this.entity = entity;
         this.strategyName = strategyName;
         this.parentId = parentId;
         this.parentEntity = parentEntity;
-        this.scrollListPageParameterName = scrollListPageParameterName;
         this.backInfoSessionKey = backInfoSessionKey;
 
         if (objectId == null) {
@@ -370,7 +368,6 @@ public class DomainObjectEditPanel extends Panel {
         if (isNew() || (parentId == null && Strings.isEmpty(parentEntity))) {
             //return to list page for current entity.
             PageParameters listPageParams = getStrategy().getListPageParams();
-            listPageParams.set(scrollListPageParameterName, newObject.getObjectId());
             setResponsePage(getStrategy().getListPage(), listPageParams);
         } else {
             //return to edit page for parent entity.

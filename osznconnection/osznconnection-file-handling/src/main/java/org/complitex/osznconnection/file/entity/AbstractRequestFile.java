@@ -38,6 +38,8 @@ public abstract class AbstractRequestFile extends AbstractExecutorObject{
     private Long userOrganizationId;
     private Long serviceProviderId;
 
+    private Long userId;
+
     public int getMonth(){
         return DateUtil.getMonth(beginDate) + 1;
     }
@@ -238,6 +240,14 @@ public abstract class AbstractRequestFile extends AbstractExecutorObject{
         this.serviceProviderId = serviceProviderId;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "AbstractRequestFile{" +
@@ -261,6 +271,7 @@ public abstract class AbstractRequestFile extends AbstractExecutorObject{
                 ", organizationId=" + organizationId +
                 ", userOrganizationId=" + userOrganizationId +
                 ", serviceProviderId=" + serviceProviderId +
+                ", userId=" + userId +
                 "} " + super.toString();
     }
 }

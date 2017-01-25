@@ -181,7 +181,8 @@ CREATE TABLE `request_file` (
     `type` INTEGER COMMENT 'Тип файла',
     `sub_type` INTEGER COMMENT 'Подтип файла',
     `status` INTEGER COMMENT 'Статус',
-    `user_organization_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор организации пользователя, который загрузил текущий файл',
+    `user_organization_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор организации пользователя',
+    `user_id` BIGINT(20) COMMENT 'Идентификатор пользователя',
     PRIMARY KEY (`id`),
     UNIQUE KEY `request_file_unique_id` (`name`, `organization_id`, `user_organization_id`, `begin_date`, `end_date`),
     KEY `key_group_id` (`group_id`),
@@ -193,6 +194,8 @@ CREATE TABLE `request_file` (
     KEY `key_type` (`type`),
     KEY `key_sub_type` (`sub_type`),
     KEY `key_user_organization_id` (`user_organization_id`),
+    KEY `key_user_id` (`user_id`),
+    CONSTRAINT `fk_request_file__user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
     CONSTRAINT `fk_request_file__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`),
     CONSTRAINT `fk_request_file__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Файл запросов';
