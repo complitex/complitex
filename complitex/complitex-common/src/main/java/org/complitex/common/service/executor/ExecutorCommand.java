@@ -2,7 +2,6 @@ package org.complitex.common.service.executor;
 
 import org.complitex.common.entity.IExecutorObject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -92,6 +91,10 @@ public class ExecutorCommand<T extends IExecutorObject> {
         }
 
         return object;
+    }
+
+    public void setMaxThread(int maxThread) {
+        this.maxThread = Math.min(maxThread, Runtime.getRuntime().availableProcessors() - 1);
     }
 
     public boolean isEmpty(){
@@ -192,10 +195,6 @@ public class ExecutorCommand<T extends IExecutorObject> {
 
     public int getMaxThread() {
         return maxThread;
-    }
-
-    public void setMaxThread(int maxThread) {
-        this.maxThread = maxThread;
     }
 
     public int getRunningThreadCount(){

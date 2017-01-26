@@ -1,12 +1,13 @@
 package org.complitex.osznconnection.file.web;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.datetime.PatternDateConverter;
+import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -187,7 +188,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     protected F newFilter() {
         try {
             F filter = getFilterClass().newInstance();
-            filter.setSortProperty("id");
+            filter.setSortProperty("loaded");
 
             return filter;
         } catch (Exception e) {
@@ -261,7 +262,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         add(messages);
 
         //Фильтр модель
-        F filter = getSession().getPreferenceObject(getPreferencePage(), PreferenceKey.FILTER_OBJECT, newFilter());
+        F filter = getSession().getPreferenceObject(getPreferencePage(), PreferenceKey.FILTER_OBJECT, newFilter()); //todo preference sort test
         model = new CompoundPropertyModel<>(filter);
 
         //Фильтр форма
@@ -415,20 +416,21 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             protected void populateItem(Item<R> item) {
-                R rf = item.getModelObject();
-
                 item.add(new ItemCheckBoxPanel<R>("itemCheckBoxPanel", processingManager, selectManager, item.getModel()));
 
                 //Идентификатор файла
-                item.add(new Label("id", StringUtil.valueOf(rf.getId())));
+                item.add(new Label("id", new PropertyModel<>(item.getModel(), "id")));
 
                 //Дата загрузки
-                item.add(new ItemDateLoadedLabel("loaded", rf.getLoaded()));
+                item.add(new DateLabel("loaded", new PropertyModel<>(item.getModel(), "loaded"),
+                        new PatternDateConverter("dd.MM.yy HH:mm:ss", true)));
 
                 //ПУ
                 item.add(new AjaxLinkLabel("service_provider", new LoadableDetachableModel<String>() {
                     @Override
                     protected String load() {
+                        R rf = item.getModelObject();
+
                         Long organizationId = organizationStrategy.getServiceProviderId(rf.getEdrpou(),
                                 rf.getOrganizationId(), rf.getUserOrganizationId());
 
@@ -443,7 +445,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         serviceProviderDialog.open(target);
-                        selectedRequestFileModel.setObject(rf);
+                        selectedRequestFileModel.setObject(item.getModelObject());
                     }
 
                     @Override
@@ -458,7 +460,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 item.add(new Label("organization", new LoadableDetachableModel<String>() {
                     @Override
                     protected String load() {
-                        return organizationStrategy.displayDomainObject(rf.getOrganizationId(), getLocale());
+                        return organizationStrategy.displayDomainObject(item.getModelObject().getOrganizationId(), getLocale());
                     }
                 }));
 
@@ -466,34 +468,32 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 item.add(new Label("userOrganization", new LoadableDetachableModel<String>() {
                     @Override
                     protected String load() {
-                        return organizationStrategy.displayDomainObject(rf.getUserOrganizationId(), getLocale());
+                        return organizationStrategy.displayDomainObject(item.getModelObject().getUserOrganizationId(), getLocale());
                     }
                 }));
 
-                item.add(new Label("month", DateUtil.displayMonth(rf.getMonth(), getLocale())));
-                item.add(new Label("year", StringUtil.valueOf(rf.getYear())));
+                item.add(new Label("month", new LoadableDetachableModel<String>() {
 
-                IModel<R> rfModel = new LoadableDetachableModel<R>() {
                     @Override
-                    protected R load() {
-                        F filter = newFilter();
-                        filter.setId(rf.getId());
-                        filter.setCount(1);
-
-                        List<R> list =  getObjects(filter);
-
-                        return list != null ? list.get(0) : null;
+                    protected String load() {
+                        return DateUtil.displayMonth(item.getModelObject().getMonth(), getLocale());
                     }
-                };
+                }));
+                item.add(new Label("year", new LoadableDetachableModel<String>() {
+                    @Override
+                    protected String load() {
+                        return StringUtil.valueOf(item.getModelObject().getYear());
+                    }
+                }));
 
                 //Количество загруженных записей
-                item.add(new Label("loaded_record_count", new PropertyModel<String>(rfModel, "loadedRecordCount")));
+                item.add(new Label("loaded_record_count", new PropertyModel<String>(item.getModel(), "loadedRecordCount")));
 
                 //Количество связанных записей
-                item.add(new Label("binded_record_count", new PropertyModel<String>(rfModel, "bindedRecordCount")));
+                item.add(new Label("binded_record_count", new PropertyModel<String>(item.getModel(), "bindedRecordCount")));
 
                 //Количество обработанных записей
-                item.add(new Label("filled_record_count", new PropertyModel<String>(rfModel, "filledRecordCount")));
+                item.add(new Label("filled_record_count", new PropertyModel<String>(item.getModel(), "filledRecordCount")));
 
                 //Статус
                 AjaxLink history = new AjaxLink("history") {
@@ -505,7 +505,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 };
                 item.add(history);
 
-                history.add(new ItemStatusLabel("status", processingManager).setOutputMarkupId(true).setMarkupId("status" + rf.getId()));
+                history.add(new ItemStatusLabel("status", processingManager));
 
                 //Дополнительные поля
                 for (Column column : columns) {
@@ -782,9 +782,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                             break;
                     }
 
-                    MarkupContainer item = (MarkupContainer) dataView.get("item" + object.getId());
+                    Item item = (Item) dataView.get("item" + object.getId());
 
                     if (item != null){
+                        //noinspection unchecked
+                        item.setModelObject(getRequestFile(object.getId())); //todo add service to update processed count
+
                         handler.add(item);
                     }
                 }
@@ -796,16 +799,19 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
-                if ("onRequest".equals(key) && System.currentTimeMillis() - lastUpdate.get() > 1000){
+                if ("onRequest".equals(key) && System.currentTimeMillis() - lastUpdate.get() > 250){
                     lastUpdate.set(System.currentTimeMillis());
 
                     AbstractRequest request = (AbstractRequest) payload;
 
                     Long id = request.getGroupId() != null ? request.getGroupId() : request.getRequestFileId();
 
-                    MarkupContainer item = (MarkupContainer) dataView.get("item" + id);
+                    Item item = (Item) dataView.get("item" + id);
 
                     if (item != null){
+                        //noinspection unchecked
+                        item.setModelObject(getRequestFile(id));
+
                         handler.add(item);
                     }
                 }
@@ -883,5 +889,15 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     private String getString(String key, Object... parameters) {
         return MessageFormat.format(getString(key), parameters);
+    }
+
+    private R getRequestFile(Long id){
+        F filter = newFilter();
+        filter.setId(id);
+        filter.setCount(1);
+
+        List<R> list =  getObjects(filter);
+
+        return list != null ? list.get(0) : null;
     }
 }

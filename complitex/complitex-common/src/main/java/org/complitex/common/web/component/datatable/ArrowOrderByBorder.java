@@ -26,9 +26,9 @@ public class ArrowOrderByBorder extends EnhancedOrderByBorder {
             @Override
             public String getObject() {
                 if (stateLocator.getSortState().getPropertySortOrder(property) == SortOrder.DESCENDING) {
-                    return UP;
-                } else if (stateLocator.getSortState().getPropertySortOrder(property) == SortOrder.ASCENDING) {
                     return DOWN;
+                } else if (stateLocator.getSortState().getPropertySortOrder(property) == SortOrder.ASCENDING) {
+                    return UP;
                 }
                 return null;
             }

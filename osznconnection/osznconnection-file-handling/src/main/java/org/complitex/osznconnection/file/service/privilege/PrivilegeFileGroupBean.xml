@@ -107,7 +107,7 @@
                 <when test="sortProperty == 'service_provider'">order by f.`name`</when>
                 <when test="sortProperty == 'month'">order by MONTH(f.`begin_date`)</when>
                 <when test="sortProperty == 'year'">order by YEAR(f.`begin_date`)</when>
-                <otherwise>order by f.`${sortProperty}`</otherwise>
+                <otherwise>order by if(f.`id` is not null, f.`${sortProperty}`, s.`${sortProperty}`)</otherwise>
             </choose>
             <choose>
                 <when test="ascending">asc</when>

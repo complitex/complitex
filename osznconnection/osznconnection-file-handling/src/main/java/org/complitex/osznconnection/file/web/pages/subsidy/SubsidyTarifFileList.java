@@ -4,6 +4,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.datetime.PatternDateConverter;
+import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -176,7 +178,7 @@ public class SubsidyTarifFileList extends TemplatePage {
 
             @Override
             protected void populateItem(final Item<RequestFile> item) {
-                final Long objectId = item.getModelObject().getId();
+                final Long objectId = item.getModelObject().getId(); //todo update to model
 
                 //Выбор файлов
                 item.add(new ItemCheckBoxPanel<RequestFile>("itemCheckBoxPanel", processingManager, selectManager, item.getModel()));
@@ -185,7 +187,8 @@ public class SubsidyTarifFileList extends TemplatePage {
                 item.add(new Label("id", StringUtil.valueOf(objectId)));
 
                 //Дата загрузки
-                item.add(new ItemDateLoadedLabel("loaded", item.getModelObject().getLoaded()));
+                item.add(new DateLabel("loaded", new PropertyModel<>(item.getModel(), "loaded"),
+                        new PatternDateConverter("dd.MM.yy HH:mm:ss", true)));
 
                 item.add(new Label("name", item.getModelObject().getFullName())); //todo add record list page
 
