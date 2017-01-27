@@ -206,14 +206,12 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
         final OrganizationIdPicker organization = new OrganizationIdPicker("organizationId",
                 new PropertyModel<>(correction, "organizationId"),
                 getOrganizationTypeIds());
-        organization.setEnabled(isNew()).add();
         form.add(organization);
 
         //User Organization
         form.add(new OrganizationIdPicker("userOrganizationId",
                 new PropertyModel<>(correction, "userOrganizationId"),
-                OrganizationTypeStrategy.USER_ORGANIZATION_TYPE).
-                setEnabled(isNew() && sessionBean.isAdmin()));
+                OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
         if (isNew()) {
             correction.setModuleId(moduleBean.getModuleId());
