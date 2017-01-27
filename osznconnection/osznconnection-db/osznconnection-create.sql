@@ -155,11 +155,12 @@ CREATE TABLE `privilege_string_culture` (
 DROP TABLE IF EXISTS `request_file_group`;
 
 CREATE TABLE `request_file_group` (
-    `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор группы фалов запросов',
+    `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор группы файлов',
+    `group_type` INTEGER COMMENT 'Тип группы',
     `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата создания',
-    `status` INTEGER COMMENT 'Код статуса. См. таблицу status_description и класс RequestFileStatus',
+    `status` INTEGER COMMENT 'Статус',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Группа файлов запросов (начисления + льготы)';
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Группа файлов';
 
 -- ------------------------------
 -- Request File

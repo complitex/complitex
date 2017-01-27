@@ -4,9 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
-import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.RequestFileSubType;
-import org.complitex.osznconnection.file.entity.RequestFileType;
+import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
@@ -139,6 +137,7 @@ public class LoadUtil {
                 File file = payments.get(i);
 
                 RequestFileGroup group = new RequestFileGroup();
+                group.setGroupType(RequestFileGroupType.SUBSIDY_GROUP);
 
                 group.setPaymentFile(newPaymentBenefitRequestFile(file, RequestFileType.PAYMENT,
                         RequestFileStorage.INSTANCE.getRelativeParent(file, requestFiles.getPath()),

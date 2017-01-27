@@ -9,7 +9,6 @@ import org.complitex.osznconnection.file.entity.RequestFile;
  *         Date: 29.09.2010 14:31:02
  */
 public class RequestFileGroup extends AbstractRequestFileGroup {
-
     @Override
     public LogChangeList getLogChangeList() {
         LogChangeList logChangeList = new LogChangeList();

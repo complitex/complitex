@@ -1,7 +1,7 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
 
 import javax.ejb.EJB;
@@ -29,6 +29,6 @@ public class PrivilegeGroupSaveTaskBean extends AbstractTaskBean<PrivilegeFileGr
             facilityServiceTypeSaveTaskBean.execute(group.getFacilityServiceTypeRequestFile(), commandParameters);
         }
 
-        return false;
+        return true;
     }
 }

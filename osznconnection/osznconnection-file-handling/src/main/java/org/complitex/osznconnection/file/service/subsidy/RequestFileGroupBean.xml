@@ -4,7 +4,9 @@
     <resultMap id="requestFileGroupResultMap" type="org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup">
         <id column="gid" property="id"/>
 
+        <result column="group_type" property="groupType"/>
         <result column="status" property="status"/>
+
         <association property="loadedRecordCount" column="p_id" select="loadedRecordCount"/>
         <association property="bindedRecordCount" column="p_id" select="bindedRecordCount"/>
         <association property="filledRecordCount" column="p_id" select="filledRecordCount"/>
@@ -45,7 +47,7 @@
 
     <insert id="insertRequestFileGroup"  parameterType="org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup"
             keyProperty="id" useGeneratedKeys="true">
-        insert into `request_file_group` (`status`) value (#{status})
+        insert into `request_file_group` (`group_type`, `status`) value (#{groupType}, #{status})
     </insert>
 
     <update id="updateRequestFileGroup"  parameterType="org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup">
@@ -86,6 +88,7 @@
         
     <sql id="requestFileGroupFilterWhere">
         <where>
+            g.group_type = 1
             and (p.`id` is not null or b.`id` is not null)
             <if test="id != null">and g.`id` = #{id}</if>
             <if test="loaded != null">and YEAR(p.`loaded`) = YEAR(#{loaded}) and DAYOFYEAR(p.`loaded`) = DAYOFYEAR(#{loaded})</if>
@@ -121,6 +124,7 @@
             resultMap="requestFileGroupResultMap">
         select
             g.id as gid,
+            g.group_type as group_type,
             g.status as status,
 
             b.id as b_id, b.loaded as b_loaded, b.name as b_name, b.directory as b_directory,
@@ -162,6 +166,7 @@
     <select id="selectRequestFilesGroup" parameterType="long" resultMap="requestFileGroupResultMap">
          select
             g.id as gid,
+            g.group_type as group_type,
             g.status as status,
 
             b.id as b_id, b.loaded as b_loaded, b.name as b_name, b.directory as b_directory, 

@@ -8,8 +8,18 @@ import java.util.Date;
  * inheaven on 04.04.2016.
  */
 public abstract class AbstractRequestFileGroup extends AbstractRequestFile{
+    private RequestFileGroupType groupType;
+
     private RequestFile firstRequestFile;
     private RequestFile secondRequestFile;
+
+    public RequestFileGroupType getGroupType() {
+        return groupType;
+    }
+
+    public void setGroupType(RequestFileGroupType groupType) {
+        this.groupType = groupType;
+    }
 
     public RequestFile getFirstRequestFile() {
         return firstRequestFile;

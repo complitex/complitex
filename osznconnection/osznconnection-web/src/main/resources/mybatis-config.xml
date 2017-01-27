@@ -16,19 +16,13 @@
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileStatus"/>
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileType"/>
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileSubType"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileGroupType"/>
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestWarningStatus"/>
     </typeHandlers>
 
     <plugins>
         <!--cursor plugin-->
         <plugin interceptor="org.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>
-
-        <!--cache plugin-->
-        <!--<plugin interceptor="org.complitex.common.mybatis.plugin.EhcacheExecutorPlugin">
-            <property name="excludeNamespaces" value="
-            org.complitex.common.entity.StringLocale,
-            org.complitex.common.entity.Entity"/>
-        </plugin>-->
     </plugins>
 
     <environments default="local">

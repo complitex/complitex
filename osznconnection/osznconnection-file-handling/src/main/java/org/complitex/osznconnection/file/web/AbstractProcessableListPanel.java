@@ -785,8 +785,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     Item item = (Item) dataView.get("item" + object.getId());
 
                     if (item != null){
-                        //noinspection unchecked
-                        item.setModelObject(getRequestFile(object.getId())); //todo add service to update processed count
+                        R rf = getRequestFile(object.getId()); //todo add service to update processed count
+
+                        if (rf != null){
+                            //noinspection unchecked
+                            item.setModelObject(rf);
+                        }
 
                         handler.add(item);
                     }
@@ -809,8 +813,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     Item item = (Item) dataView.get("item" + id);
 
                     if (item != null){
-                        //noinspection unchecked
-                        item.setModelObject(getRequestFile(id));
+                        R rf = getRequestFile(id);
+
+                        if (rf != null){
+                            //noinspection unchecked
+                            item.setModelObject(rf);
+                        }
 
                         handler.add(item);
                     }
@@ -898,6 +906,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         List<R> list =  getObjects(filter);
 
-        return list != null ? list.get(0) : null;
+        return list != null && !list.isEmpty() ? list.get(0) : null;
     }
 }
