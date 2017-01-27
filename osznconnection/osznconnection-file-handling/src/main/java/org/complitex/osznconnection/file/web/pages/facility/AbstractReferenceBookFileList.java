@@ -18,8 +18,10 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.DatePicker;
@@ -28,12 +30,14 @@ import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
+import org.complitex.common.wicket.BroadcastBehavior;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.LoadButton;
@@ -278,13 +282,13 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
                 MonthParameterViewMode.EXACT, new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE}) {
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
-                AbstractReferenceBookFileList.this.load(userOrganizationId, organizationId, year, monthFrom, monthTo);
-
                 messagesManager.resetCompletedStatus(getLoadProcessType());
 
                 selectManager.clearSelection();
                 timerManager.addTimer();
                 target.add(form);
+
+                AbstractReferenceBookFileList.this.load(userOrganizationId, organizationId, year, monthFrom, monthTo);
             }
         };
 
@@ -295,6 +299,17 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
 
         //Отобразить сообщения
         messagesManager.showMessages();
+
+        add(new BroadcastBehavior(ProcessManagerBean.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                if (payload instanceof Exception){
+                    error(ExceptionUtil.getCauseMessage((Exception) payload));
+
+                    handler.add(messages);
+                }
+            }
+        });
     }
 
     private RequestFileFilter newFilter() {

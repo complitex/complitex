@@ -389,7 +389,7 @@ public class ProcessManagerBean {
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
-            broadcastService.broadcast(getClass(), "error", e);
+            broadcastService.broadcast(getClass(), "onError", e);
         }
     }
 
@@ -424,7 +424,7 @@ public class ProcessManagerBean {
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
-            broadcastService.broadcast(getClass(), "error", e);
+            broadcastService.broadcast(getClass(), "onError", e);
         }
     }
 
@@ -476,7 +476,7 @@ public class ProcessManagerBean {
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
-            broadcastService.broadcast(getClass(), "error", e);
+            broadcastService.broadcast(getClass(), "onError", e);
         }
     }
 
@@ -497,7 +497,7 @@ public class ProcessManagerBean {
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
-            broadcastService.broadcast(getClass(), "error", e);
+            broadcastService.broadcast(getClass(), "onError", e);
         }
     }
 
@@ -533,7 +533,7 @@ public class ProcessManagerBean {
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
-            broadcastService.broadcast(getClass(), "error", e);
+            broadcastService.broadcast(getClass(), "onError", e);
         }
     }
 
@@ -636,6 +636,8 @@ public class ProcessManagerBean {
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "onError", e);
         }
     }
 
@@ -655,6 +657,8 @@ public class ProcessManagerBean {
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "onError", e);
         }
     }
 
@@ -673,6 +677,8 @@ public class ProcessManagerBean {
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "onError", e);
         }
     }
 
@@ -720,11 +726,11 @@ public class ProcessManagerBean {
         } catch (Exception e) {
             process.preprocessError();
 
-            broadcastService.broadcast(getClass(), "onError", e);
-
             log.error("Ошибка процесса загрузки файлов.", e);
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "onError", e);
         }
     }
 
@@ -753,7 +759,7 @@ public class ProcessManagerBean {
             logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
-            broadcastService.broadcast(getClass(), "error", e);
+            broadcastService.broadcast(getClass(), "onError", e);
         }
     }
 

@@ -15,8 +15,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Preference;
-import org.complitex.common.service.SessionBean;
 import org.complitex.common.exception.WrongCurrentPasswordException;
+import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.back.BackInfo;
@@ -65,13 +65,13 @@ public class ProfilePage extends FormTemplatePage {
         form.add(new LocalePicker("locale", localeModel, false));
 
         //Пароль
-        final PasswordTextField currentPassword = new PasswordTextField("current_password", new Model<String>(""));
+        final PasswordTextField currentPassword = new PasswordTextField("current_password", new Model<>(""));
         form.add(currentPassword.setRequired(false));
 
-        final PasswordTextField password = new PasswordTextField("password", new Model<String>(""));
+        final PasswordTextField password = new PasswordTextField("password", new Model<>(""));
         form.add(password.setRequired(false));
 
-        final PasswordTextField password2 = new PasswordTextField("password2", new Model<String>(""));
+        final PasswordTextField password2 = new PasswordTextField("password2", new Model<>(""));
         form.add(password2.setRequired(false));
 
         //Главная организация пользователя
