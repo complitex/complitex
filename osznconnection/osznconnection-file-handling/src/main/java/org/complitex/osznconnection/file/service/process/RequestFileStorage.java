@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
+import org.apache.commons.io.FilenameUtils;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -9,6 +10,8 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy.OSZN_ORGANIZATION_STRATEGY_NAME;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -47,6 +50,7 @@ public class RequestFileStorage {
             throw new StorageNotFoundException(dir.getAbsolutePath());
         }
         addFiles(files, dir, filter);
+
         return new RequestFiles(dir.getAbsolutePath(), files);
     }
 
@@ -112,17 +116,16 @@ public class RequestFileStorage {
     }
 
     public String getRelativeParent(File file, String subPath) {
-        File root = new File(subPath);
-        return file.getParent().substring(root.getAbsolutePath().length());
+        return file.getParent().substring( new File(subPath).getAbsolutePath().length());
     }
 
     public String getRequestFilesStorageDirectory(Long userOrganizationId, Long osznId, RequestFileDirectoryType fileDirectoryType)
             throws StorageNotFoundException {
-        OsznOrganizationStrategy osznOrganizationStrategy =
-                EjbBeanLocator.getBean(OsznOrganizationStrategy.OSZN_ORGANIZATION_STRATEGY_NAME);
+        OsznOrganizationStrategy osznOrganizationStrategy = EjbBeanLocator.getBean(OSZN_ORGANIZATION_STRATEGY_NAME);
 
         //root request files path:
         String rootRequestFilesPath = osznOrganizationStrategy.getRootRequestFilesStoragePath(userOrganizationId);
+
         if (rootRequestFilesPath == null) {
             throw new StorageNotFoundException(new NullPointerException("Корневой каталог к файлам запросов не задан."), "''");
         } else if (rootRequestFilesPath.endsWith(File.separator)) {
@@ -133,8 +136,7 @@ public class RequestFileStorage {
 
         //relative request files path:
         if (osznId != null) {
-            relativeRequestFilesPath = osznOrganizationStrategy.getRelativeRequestFilesPath(osznId,
-                    fileDirectoryType.getAttributeTypeId());
+            relativeRequestFilesPath = osznOrganizationStrategy.getRelativeRequestFilesPath(osznId, fileDirectoryType.getAttributeTypeId());
             if (relativeRequestFilesPath == null) {
                 throw new StorageNotFoundException(new NullPointerException("Относительный путь к файлам запросов не задан."), "''");
             } else if (relativeRequestFilesPath.startsWith(File.separator)) {
@@ -142,6 +144,7 @@ public class RequestFileStorage {
             }
         }
 
-        return rootRequestFilesPath + File.separator + relativeRequestFilesPath;
+        return FilenameUtils.separatorsToSystem(rootRequestFilesPath) + File.separator +
+                FilenameUtils.separatorsToSystem(relativeRequestFilesPath);
     }
 }

@@ -243,6 +243,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
      */
     public String getRelativeRequestFilesPath(long osznId, long fileTypeAttributeTypeId) {
         DomainObject oszn = getDomainObject(osznId, true);
+
         return AttributeUtil.getStringValue(oszn, fileTypeAttributeTypeId);
     }
 
@@ -253,11 +254,13 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
      */
     public String getRootRequestFilesStoragePath(long userOrganizationId) {
         DomainObject userOrganization = getDomainObject(userOrganizationId, true);
+
         return AttributeUtil.getStringValue(userOrganization, ROOT_REQUEST_FILE_DIRECTORY);
     }
 
     public String getRootExportStoragePath(long userOrganizationId) {
         DomainObject userOrganization = getDomainObject(userOrganizationId, true);
+
         return AttributeUtil.getStringValue(userOrganization, ROOT_EXPORT_DIRECTORY);
     }
 
