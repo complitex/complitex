@@ -6,7 +6,7 @@
         select `id` from `user` where `login` = #{login}
     </select>
 
-    <select id="selectOrganizationObjectIds" parameterType="string" resultType="long">
+    <select id="selectUserOrganizationObjectIds" parameterType="string" resultType="long">
         select uo.`organization_object_id` from `user_organization` uo left join `user` u on uo.`user_id` = u.`id`
             where u.`login` = #{login}
     </select>
@@ -38,10 +38,11 @@
         </choose>
     </select>
 
-    <select id="selectOrganizationChildrenObjectIds" parameterType="long" resultType="long">
-        select o.`object_id` from `organization` o left join organization_attribute oa
-            on oa.`object_id` = o.`object_id` and oa.`attribute_type_id` = 903
-            where oa.`value_id` = #{parentObjectId}
+    <select id="selectUserOrganizationChildrenObjectIds" parameterType="long" resultType="long">
+        select o.`object_id` from `organization` o
+          left join organization_attribute oa on oa.`object_id` = o.`object_id` and oa.`attribute_type_id` = 903
+          left join organization_attribute oat on oat.`object_id` = o.`object_id` and oat.`attribute_type_id` = 904
+            where oa.`value_id` = #{parentObjectId} and oat.`value_id` = 1
     </select>
 
     <select id="hasPermission" parameterType="map" resultType="boolean">

@@ -57,6 +57,10 @@
                 AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = 903
                 AND attr.`value_id` IS NOT NULL)
         </if>
+
+        <if test="userOrganizationsString != null">
+            and e.`object_id` in ${userOrganizationsString}
+        </if>
     </sql>
 
     <select id="selectOrganizationCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">

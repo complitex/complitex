@@ -19,6 +19,7 @@ import org.apache.wicket.model.Model;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.datatable.DataProvider;
@@ -43,6 +44,9 @@ public class OrganizationPickerDialog extends Panel {
     private WebMarkupContainer content;
 
     private IModel<DomainObject> organizationModel;
+
+    @EJB
+    private SessionBean sessionBean;
 
     public OrganizationPickerDialog(String id, IModel<DomainObject> organizationModel, Long... organizationTypeIds) {
         super(id);
@@ -71,6 +75,11 @@ public class OrganizationPickerDialog extends Panel {
 
         if (organizationTypeIds != null && organizationTypeIds.length > 0) {
             example.addAdditionalParam(ORGANIZATION_TYPE_PARAMETER, organizationTypeIds);
+
+            //user organization filter
+            if (organizationTypeIds.length == 1 && organizationTypeIds[0] == 1){
+                sessionBean.authorize(example);
+            }
         }
 
         final DataProvider<DomainObject> dataProvider = new DataProvider<DomainObject>() {
@@ -79,7 +88,7 @@ public class OrganizationPickerDialog extends Panel {
                 example.setFirst(first);
                 example.setCount(count);
 
-                return organizationStrategy.getList(example); //todo session bean filter
+                return organizationStrategy.getList(example);
             }
 
             @Override

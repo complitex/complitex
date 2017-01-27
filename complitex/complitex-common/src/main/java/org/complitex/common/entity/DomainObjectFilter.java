@@ -35,6 +35,8 @@ public class DomainObjectFilter implements Serializable {
 
     private Map<String, Object> additionalParams = new HashMap<>();
 
+    private String userOrganizationsString;
+
     public DomainObjectFilter() {
     }
 
@@ -247,5 +249,11 @@ public class DomainObjectFilter implements Serializable {
         this.additionalParams = additionalParams;
     }
 
+    public String getUserOrganizationsString() {
+        return userOrganizationsString;
+    }
 
+    public void setUserOrganizationsString(String userOrganizationsString) {
+        this.userOrganizationsString = userOrganizationsString;
+    }
 }

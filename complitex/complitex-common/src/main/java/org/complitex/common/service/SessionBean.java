@@ -3,6 +3,7 @@ package org.complitex.common.service;
 import com.google.common.collect.Sets;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.UserGroup.GROUP_NAME;
 import org.complitex.common.exception.WrongCurrentPasswordException;
@@ -78,29 +79,29 @@ public class SessionBean extends AbstractBean {
     }
 
     public List<Long> getUserOrganizationObjectIds() {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".selectOrganizationObjectIds", getCurrentUserLogin());
+        return sqlSession().selectList(MAPPING_NAMESPACE + ".selectUserOrganizationObjectIds", getCurrentUserLogin());
     }
 
-    private List<Long> getOrganizationChildrenObjectId(Long parentObjectId) {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".selectOrganizationChildrenObjectIds", parentObjectId);
+    private List<Long> getUserOrganizationChildrenObjectId(Long parentObjectId) {
+        return sqlSession().selectList(MAPPING_NAMESPACE + ".selectUserOrganizationChildrenObjectIds", parentObjectId);
     }
 
     public List<Long> getUserOrganizationTreeObjectIds() {
         List<Long> objectIds = new ArrayList<>();
 
         for (Long objectId : getUserOrganizationObjectIds()) {
-            addChildOrganizations(objectIds, objectId);
+            addChildUserOrganizations(objectIds, objectId);
         }
 
         return objectIds;
     }
 
-    private void addChildOrganizations(List<Long> objectIds, Long objectId) {
+    private void addChildUserOrganizations(List<Long> objectIds, Long objectId) {
         objectIds.add(objectId);
 
-        for (Long id : getOrganizationChildrenObjectId(objectId)) {
+        for (Long id : getUserOrganizationChildrenObjectId(objectId)) {
             if (!objectIds.contains(id)) {
-                addChildOrganizations(objectIds, id);
+                addChildUserOrganizations(objectIds, id);
             }
         }
     }
@@ -130,7 +131,7 @@ public class SessionBean extends AbstractBean {
         String d = "";
 
         List<Long> ids = new ArrayList<>();
-        addChildOrganizations(ids, organizationId);
+        addChildUserOrganizations(ids, organizationId);
 
         for (Long p : ids) {
             s += d + p;
@@ -286,7 +287,6 @@ public class SessionBean extends AbstractBean {
         filter.setAdmin(isAdmin());
 
         if (!isAdmin()) {
-            //filter.setOuterOrganizationsString(getAllOuterOrganizationsString());
             filter.setUserOrganizationsString(getCurrentUserOrganizationsString());
         }
     }
@@ -295,7 +295,14 @@ public class SessionBean extends AbstractBean {
         filter.setAdmin(isAdmin());
 
         if (!isAdmin()) {
-//            filter.setOuterOrganizationsString(getAllOuterOrganizationsString());
+            filter.setUserOrganizationsString(getCurrentUserOrganizationsString());
+        }
+    }
+
+    public void authorize(DomainObjectFilter filter) {
+        filter.setAdmin(isAdmin());
+
+        if (!isAdmin()) {
             filter.setUserOrganizationsString(getCurrentUserOrganizationsString());
         }
     }
@@ -316,7 +323,7 @@ public class SessionBean extends AbstractBean {
         return "(" + s + ")";
     }
 
-    private Set<Long> getUserOrganizationIdsVisibleToCurrentUser() {
+    public Set<Long> getUserOrganizationIdsVisibleToCurrentUser() {
         return sessionContext.isCallerInRole(SessionBean.CHILD_ORGANIZATION_VIEW_ROLE)
                 ? Sets.newHashSet(getUserOrganizationTreeObjectIds())
                 : Sets.newHashSet(getUserOrganizationObjectIds());
