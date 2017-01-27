@@ -89,13 +89,24 @@
         s.begin_date as s_begin_date, s.end_date as s_end_date, s.dbf_record_count as s_dbf_record_count,
         s.length as s_length, s.check_sum as s_check_sum, s.type as s_type, s.status as s_status,
 
-        (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id`) as loaded_record_count,
-        (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id` and `account_number` is not null) as binded_record_count,
-        (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id` and `status` = 215) as filled_record_count
+        if(f.`id` is not null,
+          (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id`),
+          (select count(1) from `facility_service_type` where `request_file_id` = s.`id`))
+        as loaded_record_count,
+
+        if(f.`id` is not null,
+          (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id` and `account_number` is not null),
+          (select count(1) from `facility_service_type` where `request_file_id` = s.`id` and `account_number` is not null))
+        as binded_record_count,
+
+        if(f.`id` is not null,
+          (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id` and `status` = 215),
+          (select count(1) from `facility_service_type` where `request_file_id` = s.`id` and `status` = 215))
+        as filled_record_count
 
         from (select group_id from request_file where type = 6 or type = 7 group by group_id) g
-        left join request_file f on (f.group_id = g.group_id and f.type = 6)
-        left join request_file s on (s.group_id = g.group_id and s.type = 7)
+            left join request_file f on (f.group_id = g.group_id and f.type = 6)
+            left join request_file s on (s.group_id = g.group_id and s.type = 7)
         
         <include refid="requestFileGroupFilterWhere"/>
         
@@ -143,9 +154,20 @@
             s.begin_date as s_begin_date, s.end_date as s_end_date, s.dbf_record_count as s_dbf_record_count,
             s.length as s_length, s.check_sum as s_check_sum, s.type as s_type, s.status as s_status,
 
-            (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id`) as loaded_record_count,
-            (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id` and `account_number` is not null) as binded_record_count,
-            (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id` and `status` = 215) as filled_record_count
+            if(f.`id` is not null,
+              (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id`),
+              (select count(1) from `facility_service_type` where `request_file_id` = s.`id`))
+            as loaded_record_count,
+
+            if(f.`id` is not null,
+              (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id` and `account_number` is not null),
+              (select count(1) from `facility_service_type` where `request_file_id` = s.`id` and `account_number` is not null))
+            as binded_record_count,
+
+            if(f.`id` is not null,
+              (select count(1) from `dwelling_characteristics` where `request_file_id` = f.`id` and `status` = 215),
+              (select count(1) from `facility_service_type` where `request_file_id` = s.`id` and `status` = 215))
+            as filled_record_count
 
         from (select group_id from request_file where type = 6 or type = 7 group by group_id) g
             left join request_file f on (f.group_id = g.group_id and f.type = 6)
