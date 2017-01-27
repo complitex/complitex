@@ -17,7 +17,10 @@ import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.FillException;
-import org.complitex.osznconnection.file.service.privilege.*;
+import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
+import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
+import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
+import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.slf4j.Logger;
@@ -80,9 +83,6 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
     @EJB
     private FacilityReferenceBookBean facilityReferenceBookBean;
 
-    @EJB
-    private OwnershipCorrectionBean ownershipCorrectionBean;
-
     @Override
     public boolean execute(PrivilegeFileGroup group, Map commandParameters) throws ExecuteException {
         try {
@@ -116,7 +116,8 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                     onRequest(p);
                 }
             } catch (Exception e) {
-                throw new FillException(e, false, dwellingCharacteristicsRequestFile);
+                throw new FillException(e, false, dwellingCharacteristicsRequestFile != null
+                        ? dwellingCharacteristicsRequestFile : facilityServiceTypeRequestFile);
             }
 
             //filled
