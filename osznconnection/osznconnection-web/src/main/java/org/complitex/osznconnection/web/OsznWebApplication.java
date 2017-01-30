@@ -3,14 +3,24 @@ package org.complitex.osznconnection.web;
 import org.complitex.address.web.sync.AddressSyncPage;
 import org.complitex.admin.web.UserEdit;
 import org.complitex.admin.web.UserList;
+import org.complitex.correction.web.address.*;
+import org.complitex.correction.web.organization.OrganizationCorrectionList;
+import org.complitex.correction.web.service.ServiceCorrectionList;
+import org.complitex.logging.web.LogList;
 import org.complitex.organization.strategy.web.edit.OrganizationEdit;
+import org.complitex.osznconnection.file.web.ImportPage;
+import org.complitex.osznconnection.file.web.file_description.RequestFileDescriptionPage;
+import org.complitex.osznconnection.file.web.pages.account.PersonAccountList;
 import org.complitex.osznconnection.file.web.pages.actualpayment.ActualPaymentList;
 import org.complitex.osznconnection.file.web.pages.facility.*;
+import org.complitex.osznconnection.file.web.pages.ownership.OwnershipCorrectionList;
 import org.complitex.osznconnection.file.web.pages.payment.PaymentList;
 import org.complitex.osznconnection.file.web.pages.privilege.*;
 import org.complitex.osznconnection.file.web.pages.subsidy.*;
 import org.complitex.template.web.ComplitexWebApplication;
+import org.complitex.template.web.pages.ConfigEdit;
 import org.complitex.template.web.pages.DomainObjectList;
+import org.complitex.template.web.pages.EntityDescription;
 import org.complitex.template.web.pages.login.Login;
 
 /**
@@ -65,24 +75,35 @@ public class OsznWebApplication extends ComplitexWebApplication{
         mountPage("/privilege/prolongation", PrivilegeProlongationFileList.class); //todo add types
         mountPage("/privilege/prolongation/${request_file_id}", PrivilegeProlongationList.class);
 
-
         //correction
+        mountPage("/correction/city", CityCorrectionList.class);
+        mountPage("/correction/district", DistrictCorrectionList.class);
+        mountPage("/correction/street", StreetCorrectionList.class);
+        mountPage("/correction/street-type", StreetTypeCorrectionList.class);
+        mountPage("/correction/building", BuildingCorrectionList.class);
+        mountPage("/correction/organization", OrganizationCorrectionList.class);
+        mountPage("/correction/ownership", OwnershipCorrectionList.class);
+        mountPage("/correction/account", PersonAccountList.class);
+        mountPage("/correction/privilege", PrivilegeCorrectionList.class);
+        mountPage("/correction/service", ServiceCorrectionList.class);
 
-        //address
-
-        //dictionary
+        //description
+        mountPage("/description/${entity}", EntityDescription.class);
 
         //sync
         mountPage("/address-sync", AddressSyncPage.class);
 
         //admin
-        mountPage("/users", UserList.class);
-        mountPage("/users/${user_id}", UserEdit.class);
-        mountPage("/domains", DomainObjectList.class);
-        mountPage("/organizations/${object_id}", OrganizationEdit.class);
+        mountPage("/user", UserList.class);
+        mountPage("/user/${user_id}", UserEdit.class);
+        mountPage("/domain", DomainObjectList.class);
+        mountPage("/organization/${object_id}", OrganizationEdit.class);
+        mountPage("/description/file", RequestFileDescriptionPage.class);
+        mountPage("/import", ImportPage.class);
+        mountPage("/log", LogList.class);
+        mountPage("/config", ConfigEdit.class);
 
         //login
         mountPage("/login", Login.class);
-
     }
 }
