@@ -39,17 +39,4 @@ public class RequestFileGroup extends AbstractRequestFileGroup {
     public void setBenefitFile(RequestFile benefitFile) {
         setSecondRequestFile(benefitFile);
     }
-
-    @Override
-    public String toString() {
-        return "RequestFileGroup{" +
-                "id=" + getId() +
-                ", paymentFile=" + getPaymentFile() +
-                ", benefitFile=" + getBenefitFile() +
-                ", loadedRecordCount=" + getLoadedRecordCount() +
-                ", bindedRecordCount=" + getBindedRecordCount() +
-                ", filledRecordCount=" + getFilledRecordCount() +
-                ", status=" + getStatus() +
-                '}';
-    }
 }

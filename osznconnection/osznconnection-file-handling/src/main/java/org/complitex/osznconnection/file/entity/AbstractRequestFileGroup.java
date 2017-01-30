@@ -103,4 +103,13 @@ public abstract class AbstractRequestFileGroup extends AbstractRequestFile{
             secondRequestFile.cancel();
         }
     }
+
+    @Override
+    public String toString() {
+        return "RequestFileGroup{" +
+                "groupType=" + groupType +
+                ", firstRequestFile=" + firstRequestFile +
+                ", secondRequestFile=" + secondRequestFile +
+                "} " + super.toString();
+    }
 }

@@ -98,13 +98,13 @@ public class ExecutorService {
 
                 broadcastService.broadcast(getClass(), "onSuccess", object);
 
-                log.debug("Задача {} завершена успешно.", task);
+                log.info("Задача {} завершена успешно {}", task, object);
             }else{
                 executorCommand.incrementSkippedCount();
 
                 broadcastService.broadcast(getClass(), "onSkip", object);
 
-                log.debug("Задача {} пропущена.", task);
+                log.info("Задача {} пропущена {}", task, object);
             }
         } catch (ExecuteException e) {
             executorCommand.incrementErrorCount();

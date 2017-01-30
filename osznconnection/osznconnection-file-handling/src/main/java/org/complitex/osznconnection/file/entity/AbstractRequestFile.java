@@ -250,7 +250,7 @@ public abstract class AbstractRequestFile extends AbstractExecutorObject{
 
     @Override
     public String toString() {
-        return "AbstractRequestFile{" +
+        return "RequestFile{" +
                 "id=" + id +
                 ", groupId=" + groupId +
                 ", name='" + name + '\'' +
