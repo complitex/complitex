@@ -67,7 +67,7 @@
             <if test="month != null">and MONTH(f.`begin_date`) = #{month}</if>
             <if test="status != null">and (f.`status` = #{status} or s.`status` = #{status})</if>
             <if test="edrpou != null">
-                and f.`name` like concat('%', #{edrpou}, '%')
+                and (f.`name` like concat('%', #{edrpou}, '%') or s.`name` like concat('%', #{edrpou}, '%'))
             </if>
 
             <include refid="permissionFilter"/>
