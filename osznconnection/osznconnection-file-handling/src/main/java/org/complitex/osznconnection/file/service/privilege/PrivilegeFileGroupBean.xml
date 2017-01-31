@@ -58,13 +58,20 @@
     <sql id="requestFileGroupFilterWhere">
         <where>            
             <if test="id != null">and g.group_id = #{id}</if>
-            <if test="loaded != null">and YEAR(f.`loaded`) = YEAR(#{loaded}) and DAYOFYEAR(f.`loaded`) = DAYOFYEAR(#{loaded})</if>
+            <if test="loaded != null">
+                and ((YEAR(f.`loaded`) = YEAR(#{loaded}) and DAYOFYEAR(f.`loaded`) = DAYOFYEAR(#{loaded})) or
+                  (YEAR(s.`loaded`) = YEAR(#{loaded}) and DAYOFYEAR(s.`loaded`) = DAYOFYEAR(#{loaded})))
+            </if>
             <if test="firstName != null">and f.`name` like CONCAT('%',#{firstName},'%')</if>
             <if test="secondName != null">and s.`name` like CONCAT('%',#{secondName},'%')</if>
-            <if test="organizationId != null">and f.`organization_id` = #{organizationId}</if>
-            <if test="userOrganizationId != null">and f.`user_organization_id` = #{userOrganizationId}</if>
-            <if test="year != null">and YEAR(f.`begin_date`) = #{year}</if>
-            <if test="month != null">and MONTH(f.`begin_date`) = #{month}</if>
+            <if test="organizationId != null">
+                and (f.`organization_id` = #{organizationId} or s.`organization_id` = #{organizationId})
+            </if>
+            <if test="userOrganizationId != null">
+                and (f.`user_organization_id` = #{userOrganizationId} or s.`user_organization_id` = #{userOrganizationId})
+            </if>
+            <if test="year != null">and (YEAR(f.`begin_date`) = #{year} or YEAR(s.`begin_date`) = #{year})</if>
+            <if test="month != null">and (MONTH(f.`begin_date`) = #{month} or MONTH(s.`begin_date`) = #{month})</if>
             <if test="status != null">and (f.`status` = #{status} or s.`status` = #{status})</if>
             <if test="edrpou != null">
                 and (f.`name` like concat('%', #{edrpou}, '%') or s.`name` like concat('%', #{edrpou}, '%'))
