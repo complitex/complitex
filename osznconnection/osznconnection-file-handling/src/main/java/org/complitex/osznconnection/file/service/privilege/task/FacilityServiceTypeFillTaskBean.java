@@ -239,20 +239,18 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                 if ((facilityServiceType.getInn() == null || facilityServiceType.getInn().equals(bd.getInn()))
                         && (facilityServiceType.getPassport() == null ||
                         facilityServiceType.getPassport().matches(bd.getPassportSerial() + "\\s*" + bd.getPassportNumber()))) {
-                    BenefitData data = cursor.getData().get(0);
-
-                    if ("Ф".equals(data.getBudget())) {
-                        facilityServiceType.putUpdateField(KAT, data.getCode());
+                    if ("Ф".equals(bd.getBudget())) {
+                        facilityServiceType.putUpdateField(KAT, bd.getCode());
                     }
 
                     if (bd.getDateIn() != null) {
-                        facilityServiceType.putUpdateField(YEARIN, DateUtil.getYear(data.getDateIn()));
-                        facilityServiceType.putUpdateField(MONTHIN, DateUtil.getMonth(data.getDateIn()) + 1);
+                        facilityServiceType.putUpdateField(YEARIN, DateUtil.getYear(bd.getDateIn()));
+                        facilityServiceType.putUpdateField(MONTHIN, DateUtil.getMonth(bd.getDateIn()) + 1);
                     }
 
                     if (bd.getDateOut() != null) {
-                        facilityServiceType.putUpdateField(YEAROUT, DateUtil.getYear(data.getDateOut()));
-                        facilityServiceType.putUpdateField(MONTHOUT, DateUtil.getMonth(data.getDateOut()) + 1);
+                        facilityServiceType.putUpdateField(YEAROUT, DateUtil.getYear(bd.getDateOut()));
+                        facilityServiceType.putUpdateField(MONTHOUT, DateUtil.getMonth(bd.getDateOut()) + 1);
                     }
 
                     facilityServiceType.putUpdateField(RAH, facilityServiceType.getAccountNumber());
