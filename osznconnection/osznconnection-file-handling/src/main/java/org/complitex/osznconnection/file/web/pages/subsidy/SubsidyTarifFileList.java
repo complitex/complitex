@@ -26,7 +26,7 @@ import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.LoadButton;
@@ -54,7 +54,7 @@ public class SubsidyTarifFileList extends TemplatePage {
     private static final int AJAX_TIMER = 4;
 
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
     @EJB
     private RequestFileDescriptionBean requestFileDescriptionBean;
     private RequestFileLoadPanel requestFileLoadPanel;
@@ -130,7 +130,7 @@ public class SubsidyTarifFileList extends TemplatePage {
         form.add(find);
 
         //Select all checkbox
-        form.add(new SelectAllCheckBoxPanel("selectAllCheckBoxPanel", processingManager));
+        form.add(new SelectAllCheckBoxPanel("selectAllCheckBoxPanel"));
 
         //Id
         form.add(new TextField<String>("id"));
@@ -181,7 +181,7 @@ public class SubsidyTarifFileList extends TemplatePage {
                 final Long objectId = item.getModelObject().getId(); //todo update to model
 
                 //Выбор файлов
-                item.add(new ItemCheckBoxPanel<RequestFile>("itemCheckBoxPanel", processingManager, selectManager, item.getModel()));
+                item.add(new ItemCheckBoxPanel<RequestFile>("itemCheckBoxPanel", selectManager, item.getModel()));
 
                 //Идентификатор файла
                 item.add(new Label("id", StringUtil.valueOf(objectId)));
@@ -212,7 +212,7 @@ public class SubsidyTarifFileList extends TemplatePage {
                 }));
 
                 //Статус
-                item.add(new ItemStatusLabel("status", processingManager));
+                item.add(new ItemStatusLabel("status"));
             }
         };
         dataViewContainer.add(dataView);
@@ -271,7 +271,7 @@ public class SubsidyTarifFileList extends TemplatePage {
                 MonthParameterViewMode.HIDDEN, new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE}) {
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
-                processManagerBean.loadSubsidyTarif(userOrganizationId, organizationId, year, monthFrom);
+                processManagerService.loadSubsidyTarif(userOrganizationId, organizationId, year, monthFrom);
 
                 messagesManager.resetCompletedStatus(ProcessType.LOAD_SUBSIDY_TARIF);
 

@@ -2,7 +2,7 @@ package org.complitex.osznconnection.file.web.pages.facility;
 
 import org.apache.wicket.Page;
 import org.complitex.osznconnection.file.entity.RequestFileType;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 
 import javax.ejb.EJB;
@@ -14,7 +14,7 @@ import javax.ejb.EJB;
 public final class FacilityTarifFileList extends AbstractReferenceBookFileList {
 
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
 
     public FacilityTarifFileList() {
     }
@@ -26,7 +26,7 @@ public final class FacilityTarifFileList extends AbstractReferenceBookFileList {
 
     @Override
     protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-        processManagerBean.loadFacilityTarifReferences(userOrganizationId, organizationId, year, monthFrom, getLocale());
+        processManagerService.loadFacilityTarifReferences(userOrganizationId, organizationId, year, monthFrom, getLocale());
     }
 
     @Override

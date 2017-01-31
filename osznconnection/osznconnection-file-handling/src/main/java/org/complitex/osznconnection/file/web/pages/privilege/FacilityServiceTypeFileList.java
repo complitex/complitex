@@ -6,7 +6,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
@@ -29,7 +29,7 @@ import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 public final class FacilityServiceTypeFileList extends ScrollListPage {
 
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -56,22 +56,22 @@ public final class FacilityServiceTypeFileList extends ScrollListPage {
 
             @Override
             protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.bindFacilityServiceType(selectedFileIds, parameters);
+                processManagerService.bindFacilityServiceType(selectedFileIds, parameters);
             }
 
             @Override
             protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.fillFacilityServiceType(selectedFileIds, parameters);
+                processManagerService.fillFacilityServiceType(selectedFileIds, parameters);
             }
 
             @Override
             protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.saveFacilityServiceType(selectedFileIds, parameters);
+                processManagerService.saveFacilityServiceType(selectedFileIds, parameters);
             }
 
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-                processManagerBean.loadFacilityServiceType(userOrganizationId, organizationId, year, monthFrom);
+                processManagerService.loadFacilityServiceType(userOrganizationId, organizationId, year, monthFrom);
             }
 
             @Override

@@ -1,7 +1,8 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
-import org.complitex.common.service.executor.AbstractTaskBean;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
@@ -11,7 +12,6 @@ import org.complitex.osznconnection.file.entity.privilege.PrivilegeGroup;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;
@@ -24,9 +24,6 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import java.util.List;
 import java.util.Map;
-
-import static org.complitex.osznconnection.file.entity.RequestFileType.DWELLING_CHARACTERISTICS;
-import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_SERVICE_TYPE;
 
 /**
  * inheaven on 05.04.2016.
@@ -121,12 +118,14 @@ public class PrivilegeGroupBindTaskBean extends AbstractTaskBean<PrivilegeFileGr
                     onRequest(p);
                 }
             } catch (Exception e) {
-                throw new BindException(e, false, dwellingCharacteristicsRequestFile);
+                throw new BindException(e, false, dwellingCharacteristicsRequestFile != null
+                        ? dwellingCharacteristicsRequestFile : facilityServiceTypeRequestFile);
             }
 
             if (dwellingCharacteristicsRequestFile != null){
                 if (!dwellingCharacteristicsBean.isDwellingCharacteristicsFileBound(dwellingCharacteristicsRequestFile.getId())) {
-                    throw new BindException(true, dwellingCharacteristicsRequestFile);
+                    throw new BindException(true, dwellingCharacteristicsRequestFile != null
+                            ? dwellingCharacteristicsRequestFile : facilityServiceTypeRequestFile);
                 }
 
                 dwellingCharacteristicsRequestFile.setStatus(RequestFileStatus.BOUND);

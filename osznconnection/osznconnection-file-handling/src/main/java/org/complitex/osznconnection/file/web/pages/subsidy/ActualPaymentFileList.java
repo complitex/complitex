@@ -4,7 +4,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.pages.actualpayment.ActualPaymentList;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
@@ -22,7 +22,7 @@ import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 public class ActualPaymentFileList extends TemplatePage {
 
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
 
     private final AbstractFileListPanel fileListPanel;
 
@@ -46,23 +46,23 @@ public class ActualPaymentFileList extends TemplatePage {
 
             @Override
             protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.bindActualPayment(selectedFileIds, parameters);
+                processManagerService.bindActualPayment(selectedFileIds, parameters);
             }
 
             @Override
             protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.fillActualPayment(selectedFileIds, parameters);
+                processManagerService.fillActualPayment(selectedFileIds, parameters);
             }
 
             @Override
             protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.saveActualPayment(selectedFileIds, parameters);
+                processManagerService.saveActualPayment(selectedFileIds, parameters);
             }
 
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId,
                                 int year, int monthFrom, int monthTo) {
-                processManagerBean.loadActualPayment(userOrganizationId, organizationId, year, monthFrom, monthTo);
+                processManagerService.loadActualPayment(userOrganizationId, organizationId, year, monthFrom, monthTo);
             }
         });
     }

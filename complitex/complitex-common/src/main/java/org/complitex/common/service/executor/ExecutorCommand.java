@@ -28,7 +28,7 @@ public class ExecutorCommand<T extends IExecutorObject> {
     private AtomicInteger errorCount = new AtomicInteger(0);
     protected AtomicBoolean stop = new AtomicBoolean(false);
 
-    protected List<IExecutorObject> processed = new CopyOnWriteArrayList<>();
+    protected List<T> processed = new CopyOnWriteArrayList<>();
 
     private AtomicInteger runningThread = new AtomicInteger(0);
 
@@ -36,7 +36,7 @@ public class ExecutorCommand<T extends IExecutorObject> {
     private Queue<T> processingQueue = new ConcurrentLinkedQueue<T>();
 
     private Class<? extends ITaskBean<T>> taskClass;
-    private IExecutorListener listener;
+    private IExecutorListener<T> listener;
     
     // параметры управления ходом выполнения комманды
     protected Map commandParameters;
@@ -71,10 +71,7 @@ public class ExecutorCommand<T extends IExecutorObject> {
     }
 
     public boolean isWaiting(IExecutorObject executorObject){
-        return queue.stream()
-                .filter(o -> executorObject.getId().equals(o.getId()))
-                .findAny()
-                .isPresent();
+        return queue.stream().anyMatch(o -> executorObject.getId().equals(o.getId()));
     }
 
     public void addObjects(List<T> objects){
@@ -133,7 +130,7 @@ public class ExecutorCommand<T extends IExecutorObject> {
         errorCount.incrementAndGet();
     }
 
-    public List<IExecutorObject> getProcessed() {
+    public List<T> getProcessed() {
         return processed;
     }
 
@@ -177,11 +174,11 @@ public class ExecutorCommand<T extends IExecutorObject> {
         this.taskClass = taskClass;
     }
 
-    public IExecutorListener getListener() {
+    public IExecutorListener<T> getListener() {
         return listener;
     }
 
-    public void setListener(IExecutorListener listener) {
+    public void setListener(IExecutorListener<T> listener) {
         this.listener = listener;
     }
 

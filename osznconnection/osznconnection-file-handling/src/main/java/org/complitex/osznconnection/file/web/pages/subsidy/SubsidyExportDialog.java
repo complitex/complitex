@@ -23,7 +23,7 @@ import org.complitex.organization.web.component.OrganizationMultiselectPanel;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.ExportType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.odlabs.wiquery.ui.datepicker.scope.DefaultJsScopeUiDatePickerDateTextEvent;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 
@@ -42,7 +42,7 @@ public class SubsidyExportDialog extends Panel {
     private static final TextTemplate CENTER_DIALOG_JS = new PackageTextTemplate(OrganizationPicker.class, "CenterDialog.js");
 
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
 
     private Dialog dialog;
 
@@ -258,15 +258,15 @@ public class SubsidyExportDialog extends Panel {
 
                 switch (model.getObject().getExportType()){
                     case BALANCE_HOLDER:
-                        processManagerBean.exportSubsidyMasterData(getIds(p.getBalanceHolders()), BALANCE_HOLDER,
+                        processManagerService.exportSubsidyMasterData(getIds(p.getBalanceHolders()), BALANCE_HOLDER,
                                 p.getRequestFileType(), p.getDate());
                         break;
                     case DISTRICT:
-                        processManagerBean.exportSubsidyMasterData(getIds(p.getDistricts()), DISTRICT,
+                        processManagerService.exportSubsidyMasterData(getIds(p.getDistricts()), DISTRICT,
                                 p.getRequestFileType(), p.getDate());
                         break;
                     case SERVICING_ORGANIZATION:
-                        processManagerBean.exportSubsidyMasterData(getIds(p.getServicingOrganizations()), SERVICING_ORGANIZATION,
+                        processManagerService.exportSubsidyMasterData(getIds(p.getServicingOrganizations()), SERVICING_ORGANIZATION,
                                 p.getRequestFileType(), p.getDate());
                         break;
                 }

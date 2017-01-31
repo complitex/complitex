@@ -1,9 +1,8 @@
 package org.complitex.osznconnection.file.web.component.process;
 
 import com.google.common.collect.ImmutableSet;
-import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 
 import java.io.Serializable;
@@ -16,27 +15,17 @@ public class ProcessingManager implements Serializable {
         this.supportedProcessTypes = ImmutableSet.copyOf(supportedProcessTypes);
     }
 
-    private ProcessManagerBean processManagerBean() {
-        return EjbBeanLocator.getBean(ProcessManagerBean.class);
+    private ProcessManagerService processManagerBean() {
+        return EjbBeanLocator.getBean(ProcessManagerService.class);
     }
 
     public boolean isGlobalProcessing() {
-        ProcessManagerBean processManagerBean = processManagerBean();
+        ProcessManagerService processManagerService = processManagerBean();
         boolean isGlobalProcessing = false;
         for (ProcessType processType : supportedProcessTypes) {
-            isGlobalProcessing |= processManagerBean.isGlobalProcessing(processType);
+            isGlobalProcessing |= processManagerService.isGlobalProcessing(processType);
         }
 
         return isGlobalProcessing;
-    }
-
-    public boolean isGlobalWaiting(IExecutorObject object) {
-        ProcessManagerBean processManagerBean = processManagerBean();
-        boolean isGlobalWaiting = false;
-        for (ProcessType processType : supportedProcessTypes) {
-            isGlobalWaiting |= processManagerBean.isGlobalWaiting(processType, object);
-        }
-
-        return isGlobalWaiting;
     }
 }

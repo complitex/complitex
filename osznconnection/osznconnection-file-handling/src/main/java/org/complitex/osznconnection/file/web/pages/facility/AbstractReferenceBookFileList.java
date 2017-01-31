@@ -37,7 +37,7 @@ import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.LoadButton;
@@ -140,7 +140,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
         form.add(find);
 
         //Select all checkbox
-        form.add(new SelectAllCheckBoxPanel("selectAllCheckBoxPanel", processingManager));
+        form.add(new SelectAllCheckBoxPanel("selectAllCheckBoxPanel"));
 
         //Id
         form.add(new TextField<String>("id"));
@@ -194,7 +194,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
                 final RequestFile requestFile = item.getModelObject();  //todo update to model
 
                 //Выбор файлов
-                item.add(new ItemCheckBoxPanel<>("itemCheckBoxPanel", processingManager, selectManager, item.getModel()));
+                item.add(new ItemCheckBoxPanel<>("itemCheckBoxPanel", selectManager, item.getModel()));
 
                 //Идентификатор файла
                 item.add(new Label("id", StringUtil.valueOf(requestFile.getId())));
@@ -221,7 +221,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
                 item.add(new Label("loaded_record_count", requestFile.getLoadedRecordCount()));
 
                 //Статус
-                item.add(new ItemStatusLabel("status", processingManager));
+                item.add(new ItemStatusLabel("status"));
             }
         };
         dataViewContainer.add(dataView);
@@ -300,7 +300,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
         //Отобразить сообщения
         messagesManager.showMessages();
 
-        add(new BroadcastBehavior(ProcessManagerBean.class) {
+        add(new BroadcastBehavior(ProcessManagerService.class) {
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
                 if (payload instanceof Exception){

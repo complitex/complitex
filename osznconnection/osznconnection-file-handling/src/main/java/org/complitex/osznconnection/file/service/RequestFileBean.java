@@ -6,12 +6,15 @@ import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.subsidy.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
+
+import static org.complitex.osznconnection.file.entity.RequestFileStatus.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -208,6 +211,31 @@ public class RequestFileBean extends AbstractBean {
         sqlSession().update(NS + ".fixBingingOnInit");
         sqlSession().update(NS + ".fixFillingOnInit");
         sqlSession().update(NS + ".fixSavingOnInit");
+        sqlSession().update(NS + ".fixExportingOnInit");
+    }
+
+    @SuppressWarnings("Duplicates")
+    public void fixProcessingOnError(RequestFile requestFile){
+        switch (requestFile.getStatus()){
+            case BIND_WAIT:
+            case BINDING:
+                requestFile.setStatus(BIND_ERROR);
+                break;
+            case FILL_WAIT:
+            case FILLING:
+                requestFile.setStatus(FILL_ERROR);
+                break;
+            case SAVE_WAIT:
+            case SAVING:
+                requestFile.setStatus(SAVE_ERROR);
+                break;
+            case EXPORT_WAIT:
+            case EXPORTING:
+                requestFile.setStatus(EXPORT_ERROR);
+                break;
+        }
+
+        save(requestFile);
     }
 
     private RequestFile getLastRequestFile(RequestFile requestFile){

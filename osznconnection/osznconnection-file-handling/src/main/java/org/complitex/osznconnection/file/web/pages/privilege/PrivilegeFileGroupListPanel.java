@@ -15,7 +15,7 @@ import org.complitex.osznconnection.file.entity.RequestFileFilter;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBean;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
@@ -31,7 +31,7 @@ import static org.complitex.osznconnection.file.service.process.ProcessType.*;
  */
 public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<PrivilegeFileGroup, RequestFileFilter>{
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
 
     @EJB
     private PrivilegeFileGroupBean privilegeFileGroupBean;
@@ -100,22 +100,22 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
 
     @Override
     protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-        processManagerBean.loadPrivilegeGroup(userOrganizationId, organizationId, year, monthFrom);
+        processManagerService.loadPrivilegeGroup(userOrganizationId, organizationId, year, monthFrom);
     }
 
     @Override
     protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-        processManagerBean.bindPrivilegeGroup(selectedFileIds, parameters);
+        processManagerService.bindPrivilegeGroup(selectedFileIds, parameters);
     }
 
     @Override
     protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-        processManagerBean.fillPrivilegeGroup(selectedFileIds, parameters);
+        processManagerService.fillPrivilegeGroup(selectedFileIds, parameters);
     }
 
     @Override
     protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-        processManagerBean.savePrivilegeGroup(selectedFileIds, parameters);
+        processManagerService.savePrivilegeGroup(selectedFileIds, parameters);
     }
 
     @Override

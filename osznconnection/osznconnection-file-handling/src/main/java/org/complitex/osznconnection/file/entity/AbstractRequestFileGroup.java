@@ -105,6 +105,18 @@ public abstract class AbstractRequestFileGroup extends AbstractRequestFile{
     }
 
     @Override
+    public boolean isProcessing() {
+        return (firstRequestFile != null && firstRequestFile.isProcessing()) ||
+                (secondRequestFile != null) && secondRequestFile.isProcessing();
+    }
+
+    @Override
+    public boolean isWaiting() {
+        return (firstRequestFile != null && firstRequestFile.isWaiting()) ||
+                (secondRequestFile != null) && secondRequestFile.isWaiting();
+    }
+
+    @Override
     public String toString() {
         return "RequestFileGroup{" +
                 "groupType=" + groupType +

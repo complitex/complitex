@@ -5,7 +5,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
@@ -24,7 +24,7 @@ import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 public final class DwellingCharacteristicsFileList extends TemplatePage {
 
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -49,22 +49,22 @@ public final class DwellingCharacteristicsFileList extends TemplatePage {
 
             @Override
             protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.bindDwellingCharacteristics(selectedFileIds, parameters);
+                processManagerService.bindDwellingCharacteristics(selectedFileIds, parameters);
             }
 
             @Override
             protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.fillDwellingCharacteristics(selectedFileIds, parameters);
+                processManagerService.fillDwellingCharacteristics(selectedFileIds, parameters);
             }
 
             @Override
             protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.saveDwellingCharacteristics(selectedFileIds, parameters);
+                processManagerService.saveDwellingCharacteristics(selectedFileIds, parameters);
             }
 
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-                processManagerBean.loadDwellingCharacteristics(userOrganizationId, organizationId, year, monthFrom);
+                processManagerService.loadDwellingCharacteristics(userOrganizationId, organizationId, year, monthFrom);
             }
 
             @Override

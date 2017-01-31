@@ -19,7 +19,7 @@ import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroupFilter;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
@@ -42,7 +42,7 @@ public class GroupList extends TemplatePage {
     @EJB
     private RequestFileGroupBean requestFileGroupBean;
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
     @EJB
     private LogBean logBean;
 
@@ -127,22 +127,22 @@ public class GroupList extends TemplatePage {
 
         @Override
         protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-            processManagerBean.bindGroup(selectedFileIds, parameters);
+            processManagerService.bindGroup(selectedFileIds, parameters);
         }
 
         @Override
         protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-            processManagerBean.fillGroup(selectedFileIds, parameters);
+            processManagerService.fillGroup(selectedFileIds, parameters);
         }
 
         @Override
         protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-            processManagerBean.saveGroup(selectedFileIds, parameters);
+            processManagerService.saveGroup(selectedFileIds, parameters);
         }
 
         @Override
         protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-            processManagerBean.loadGroup(userOrganizationId, organizationId, year, monthFrom, monthTo);
+            processManagerService.loadGroup(userOrganizationId, organizationId, year, monthFrom, monthTo);
         }
 
         @Override
@@ -197,7 +197,7 @@ public class GroupList extends TemplatePage {
 
         @Override
         protected void showMessages(AjaxRequestTarget target) {
-            for (RequestFile rf : processManagerBean.getLinkError(LOAD_GROUP, true)) {
+            for (RequestFile rf : processManagerService.getLinkError(LOAD_GROUP, true)) {
                 error(getStringFormat("request_file.link_error", rf.getFullName()));
             }
         }

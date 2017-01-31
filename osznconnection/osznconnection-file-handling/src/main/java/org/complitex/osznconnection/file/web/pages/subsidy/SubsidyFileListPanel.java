@@ -12,7 +12,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
@@ -32,7 +32,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     private BigDecimalConverter bigDecimalConverter = new BigDecimalConverter(2);
 
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
 
     public SubsidyFileListPanel(String id) {
         super(id, SUBSIDY, LOAD_SUBSIDY, BIND_SUBSIDY, FILL_SUBSIDY, SAVE_SUBSIDY,
@@ -79,27 +79,27 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
 
     @Override
     protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-        processManagerBean.loadSubsidy(userOrganizationId, organizationId, year, monthFrom, monthTo);
+        processManagerService.loadSubsidy(userOrganizationId, organizationId, year, monthFrom, monthTo);
     }
 
     @Override
     protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-        processManagerBean.bindSubsidy(selectedFileIds, parameters);
+        processManagerService.bindSubsidy(selectedFileIds, parameters);
     }
 
     @Override
     protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-        processManagerBean.fillSubsidy(selectedFileIds, parameters);
+        processManagerService.fillSubsidy(selectedFileIds, parameters);
     }
 
     @Override
     protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-        processManagerBean.saveSubsidy(selectedFileIds, parameters);
+        processManagerService.saveSubsidy(selectedFileIds, parameters);
     }
 
     @Override
     protected void export(AjaxRequestTarget target, List<Long> selectedFileIds) {
-        processManagerBean.exportSubsidy(selectedFileIds);
+        processManagerService.exportSubsidy(selectedFileIds);
     }
 
     @Override

@@ -19,14 +19,14 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
 
     private final static String IMAGE_AJAX_LOADER = "images/ajax-loader2.gif";
     private final static String IMAGE_AJAX_WAITING = "images/ajax-waiting.gif";
-    private final ProcessingManager processingManager;
+
     private final SelectManager selectManager;
 
     private IModel<? extends IExecutorObject> model;
 
-    public ItemCheckBoxPanel(String id, ProcessingManager processingManager, SelectManager selectManager, IModel<? extends IExecutorObject> model) {
+    public ItemCheckBoxPanel(String id, SelectManager selectManager, IModel<? extends IExecutorObject> model) {
         super(id);
-        this.processingManager = processingManager;
+
         this.selectManager = selectManager;
 
         this.model = model;
@@ -44,23 +44,11 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
 
-                boolean visible = !model.getObject().isProcessing() && !processingManager.isGlobalWaiting(model.getObject());
+                boolean visible = !model.getObject().isProcessing() && !model.getObject().isWaiting();
 
                 tag.getAttributes().put("style", "display: " + (visible ? "block" : "none"));
             }
-
-            @Override
-            public boolean isEnabled() {
-                return !processingManager.isGlobalWaiting(model.getObject());
-            }
-
-            @Override
-            public String getInputName() {
-                return "select" + model.getObject().getId();
-            }
         };
-
-        checkBox.setMarkupId("select" + model.getObject().getId());
 
         checkBox.add(new AjaxFormComponentUpdatingBehavior("change") {
 
@@ -78,15 +66,15 @@ public final class ItemCheckBoxPanel<M extends IExecutorObject> extends Panel {
             public boolean isVisible() {
                 return model.getObject().isProcessing();
             }
-        }.setOutputMarkupId(true));
+        });
 
         //Анимация ожидание
         add(new StaticImage("waiting", new SharedResourceReference(IMAGE_AJAX_WAITING)) {
 
             @Override
             public boolean isVisible() {
-                return processingManager.isGlobalWaiting(model.getObject()) && !model.getObject().isProcessing();
+                return model.getObject().isWaiting() && !model.getObject().isProcessing();
             }
-        }.setOutputMarkupId(true));
+        });
     }
 }

@@ -12,6 +12,7 @@ import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataFile;
@@ -33,17 +34,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static org.complitex.common.util.DateUtil.newDate;
 import static org.complitex.osznconnection.file.entity.FileHandlingConfig.*;
+import static org.complitex.osznconnection.file.entity.RequestFileStatus.*;
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 01.11.10 12:55
  */
-@Singleton(name = "ProcessManagerBean")
+@Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class ProcessManagerBean {
-    private final Logger log = LoggerFactory.getLogger(ProcessManagerBean.class);
+public class ProcessManagerService {
+    private final Logger log = LoggerFactory.getLogger(ProcessManagerService.class);
 
     @Resource
     private SessionContext sessionContext;
@@ -161,32 +163,6 @@ public class ProcessManagerBean {
         getProcess(processType).cancel();
     }
 
-    public boolean isGlobalWaiting(ProcessType processType, IExecutorObject executorObject) {
-        for (Process process : getAllUsersProcess(processType)) {
-            if (process.isRunning() && process.isWaiting(executorObject)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean isProcessing(IExecutorObject executorObject, ProcessType... processTypes) {
-        if (executorObject == null || executorObject.isProcessing()){
-            return true;
-        }
-
-        for (ProcessType processType : processTypes) {
-            for (Process process : getAllUsersProcess(processType)) {
-                if (process.isRunning() && process.isWaiting(executorObject)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     public boolean isGlobalProcessing(ProcessType processType) {
         for (Process process : getAllUsersProcess(processType)) {
             if (process.isProcessing()) {
@@ -198,7 +174,7 @@ public class ProcessManagerBean {
     }
 
     private <T extends IExecutorObject> void execute(ProcessType processType, Class<? extends ITaskBean<T>> taskClass,
-            List<T> list, IExecutorListener listener,
+            List<T> list, IExecutorListener<T> listener,
             FileHandlingConfig threadCount, FileHandlingConfig maxErrorCount, Map processParameters) {
         Process<T> process = getProcess(processType);
 
@@ -224,13 +200,17 @@ public class ProcessManagerBean {
         }
     }
 
-    private List<RequestFileGroup> getRequestFileGroups(List<Long> ids) {
+    private List<RequestFileGroup> updateAndGetRequestFileGroups(RequestFileStatus status, List<Long> ids) {
         List<RequestFileGroup> groups = new ArrayList<>();
 
         for (Long id : ids) {
             RequestFileGroup group = requestFileGroupBean.getRequestFileGroup(id);
 
-            if (!isProcessing(group, BIND_GROUP, FILL_GROUP, SAVE_GROUP)) {
+            if (!group.isWaiting() && !group.isProcessing()) {
+                group.setStatus(status);
+
+                requestFileGroupBean.save(group);
+
                 groups.add(group);
             }
         }
@@ -238,50 +218,44 @@ public class ProcessManagerBean {
         return groups;
     }
 
-    private List<RequestFile> getRequestFiles(List<Long> ids, ProcessType... processTypes) {
+    private List<RequestFile> updateAndGetRequestFiles(RequestFileStatus status, List<Long> ids) {
         List<RequestFile> requestFiles = new ArrayList<>();
 
         for (Long id : ids) {
             RequestFile requestFile = requestFileBean.getRequestFile(id);
 
-            if (!isProcessing(requestFile, processTypes)) { //todo check global processing
+            if (!requestFile.isWaiting() && !requestFile.isProcessing()) {
+                requestFile.setStatus(status);
+
+                requestFileBean.save(requestFile);
+
                 requestFiles.add(requestFile);
             }
         }
         return requestFiles;
     }
 
-    private List<RequestFile> getActualPaymentFiles(List<Long> ids) {
-        return getRequestFiles(ids, BIND_ACTUAL_PAYMENT, FILL_ACTUAL_PAYMENT, SAVE_ACTUAL_PAYMENT);
-    }
-
-    private List<RequestFile> getSubsidyFiles(List<Long> ids) {
-        return getRequestFiles(ids,  BIND_SUBSIDY, FILL_SUBSIDY, SAVE_SUBSIDY);
-    }
-
-    private List<RequestFile> getDwellingCharacteristicsFiles(List<Long> ids) {
-        return getRequestFiles(ids, BIND_DWELLING_CHARACTERISTICS, FILL_DWELLING_CHARACTERISTICS, SAVE_DWELLING_CHARACTERISTICS);
-    }
-
-    private List<RequestFile> getFacilityServiceTypeFiles(List<Long> ids) {
-        return getRequestFiles(ids, BIND_FACILITY_SERVICE_TYPE, FILL_FACILITY_SERVICE_TYPE, SAVE_FACILITY_SERVICE_TYPE);
-    }
-
-    private List<RequestFile> getFacilityForm2Files(List<Long> ids) {
-        return getRequestFiles(ids, SAVE_FACILITY_FORM2);
-    }
-
-    private List<RequestFile> getFacilityLocalFiles(List<Long> ids) {
-        return getRequestFiles(ids, SAVE_FACILITY_LOCAL);
-    }
-
-    private List<PrivilegeFileGroup> getPrivilegeFileGroups(List<Long> ids) {
+    private List<PrivilegeFileGroup> updateAndGetPrivilegeFileGroups(RequestFileStatus status, List<Long> ids) {
         List<PrivilegeFileGroup> groups = new ArrayList<>();
 
         for (Long id : ids) {
             PrivilegeFileGroup group = privilegeFileGroupBean.getPrivilegeFileGroup(id);
 
-            if (!isProcessing(group, BIND_GROUP, FILL_GROUP, SAVE_GROUP)) {
+            if (!group.isWaiting() && !group.isProcessing()) {
+                group.setStatus(status);
+
+                if (group.getDwellingCharacteristicsRequestFile() != null){
+                    group.getDwellingCharacteristicsRequestFile().setStatus(status);
+
+                    requestFileBean.save(group.getDwellingCharacteristicsRequestFile());
+                }
+
+                if (group.getFacilityServiceTypeRequestFile() != null){
+                    group.getFacilityServiceTypeRequestFile().setStatus(status);
+
+                    requestFileBean.save(group.getFacilityServiceTypeRequestFile());
+                }
+
                 groups.add(group);
             }
         }
@@ -314,7 +288,7 @@ public class ProcessManagerBean {
             process.addLinkError(linkError);
 
             for (RequestFile rf : linkError) {
-                logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null, rf.getId(),
+                logBean.error(Module.NAME, ProcessManagerService.class, RequestFileGroup.class, null, rf.getId(),
                         Log.EVENT.CREATE, rf.getLogChangeList(), "Связанный файл не найден для объекта {0}",
                         rf.getLogObjectName());
             }
@@ -342,36 +316,75 @@ public class ProcessManagerBean {
             broadcastService.broadcast(getClass(), "onError", e);
 
             log.error("Ошибка процесса загрузки файлов.", e);
-            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null,
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFileGroup.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
         }
     }
 
+
+    private IExecutorListener<RequestFileGroup> groupListener = new IExecutorListener<RequestFileGroup>() {
+        @Override
+        public void onComplete(List<RequestFileGroup> processed) {
+        }
+
+        @Override
+        public void onError(List<RequestFileGroup> unprocessed) {
+            unprocessed.forEach(group -> {
+                requestFileGroupBean.fixProcessingOnError(group);
+            });
+        }
+    };
+
     public void bindGroup(List<Long> ids, Map processParameters) {
-        execute(BIND_GROUP, GroupBindTaskBean.class, getRequestFileGroups(ids), null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+        execute(BIND_GROUP, GroupBindTaskBean.class, updateAndGetRequestFileGroups(BIND_WAIT, ids),
+                groupListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
     public void fillGroup(List<Long> ids, Map processParameters) {
-        execute(FILL_GROUP, GroupFillTaskBean.class, getRequestFileGroups(ids), null, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
+        execute(FILL_GROUP, GroupFillTaskBean.class, updateAndGetRequestFileGroups(FILL_WAIT, ids),
+                groupListener, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
     public void saveGroup(List<Long> ids, Map processParameters) {
-        IExecutorListener listener = new IExecutorListener() {
+        IExecutorListener<RequestFileGroup> listener = new IExecutorListener<RequestFileGroup>() {
 
             @Override
-            public void onComplete(List<IExecutorObject> processed) {
+            public void onComplete(List<RequestFileGroup> processed) {
                 try {
                     SaveUtil.createResult(processed, reportWarningRenderer);
                 } catch (StorageNotFoundException e) {
                     log.error("Ошибка создания файла Result.txt.", e);
-                    logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null,
+                    logBean.error(Module.NAME, ProcessManagerService.class, RequestFileGroup.class, null,
                             Log.EVENT.CREATE, "Ошибка создания файла Result.txt. Причина: {0}", e.getMessage());
                 }
             }
+
+            @Override
+            public void onError(List<RequestFileGroup> unprocessed) {
+                unprocessed.forEach(g ->{
+                    g.setStatus(SAVE_ERROR);
+                    requestFileGroupBean.save(g);
+                });
+
+            }
         };
 
-        execute(SAVE_GROUP, GroupSaveTaskBean.class, getRequestFileGroups(ids), listener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+        execute(SAVE_GROUP, GroupSaveTaskBean.class, updateAndGetRequestFileGroups(SAVE_WAIT, ids),
+                listener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
+
+    private IExecutorListener<RequestFile> requestFileListener = new IExecutorListener<RequestFile>() {
+        @Override
+        public void onComplete(List<RequestFile> processed) {
+        }
+
+        @Override
+        public void onError(List<RequestFile> unprocessed) {
+            unprocessed.forEach(requestFile -> {
+                requestFileBean.fixProcessingOnError(requestFile);
+            });
+        }
+    };
 
     /*ActualPayment*/
 
@@ -386,7 +399,7 @@ public class ProcessManagerBean {
             execute(LOAD_ACTUAL_PAYMENT, ActualPaymentLoadTaskBean.class, list, null, LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
         } catch (Exception e) {
             log.error("Ошибка процесса загрузки файлов.", e);
-            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
             broadcastService.broadcast(getClass(), "onError", e);
@@ -394,18 +407,18 @@ public class ProcessManagerBean {
     }
 
     public void bindActualPayment(List<Long> ids, Map processParameters) {
-        execute(BIND_ACTUAL_PAYMENT, ActualPaymentBindTaskBean.class, getActualPaymentFiles(ids), null, BIND_THREAD_SIZE,
-                BIND_MAX_ERROR_COUNT, processParameters);
+        execute(BIND_ACTUAL_PAYMENT, ActualPaymentBindTaskBean.class, updateAndGetRequestFiles(BIND_WAIT, ids),
+                requestFileListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
     public void fillActualPayment(List<Long> ids, Map processParameters) {
-        execute(FILL_ACTUAL_PAYMENT, ActualPaymentFillTaskBean.class, getActualPaymentFiles(ids), null, FILL_THREAD_SIZE,
-                FILL_MAX_ERROR_COUNT, processParameters);
+        execute(FILL_ACTUAL_PAYMENT, ActualPaymentFillTaskBean.class, updateAndGetRequestFiles(FILL_WAIT, ids),
+                requestFileListener, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
     public void saveActualPayment(List<Long> ids, Map processParameters) {
-        execute(SAVE_ACTUAL_PAYMENT, ActualPaymentSaveTaskBean.class, getActualPaymentFiles(ids), null, SAVE_THREAD_SIZE,
-                SAVE_MAX_ERROR_COUNT, processParameters);
+        execute(SAVE_ACTUAL_PAYMENT, ActualPaymentSaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
     /*Subsidy*/
@@ -421,7 +434,7 @@ public class ProcessManagerBean {
             execute(LOAD_SUBSIDY, SubsidyLoadTaskBean.class, list, null, LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
         } catch (Exception e) {
             log.error("Ошибка процесса загрузки файлов.", e);
-            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
             broadcastService.broadcast(getClass(), "onError", e);
@@ -429,18 +442,18 @@ public class ProcessManagerBean {
     }
 
     public void bindSubsidy(List<Long> ids, Map processParameters) {
-        execute(BIND_SUBSIDY, SubsidyBindTaskBean.class, getSubsidyFiles(ids), null, BIND_THREAD_SIZE,
-                BIND_MAX_ERROR_COUNT, processParameters);
+        execute(BIND_SUBSIDY, SubsidyBindTaskBean.class, updateAndGetRequestFiles(BIND_WAIT, ids),
+                requestFileListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
     public void fillSubsidy(List<Long> ids, Map processParameters) {
-        execute(FILL_SUBSIDY, SubsidyFillTaskBean.class, getSubsidyFiles(ids), null, FILL_THREAD_SIZE,
-                FILL_MAX_ERROR_COUNT, processParameters);
+        execute(FILL_SUBSIDY, SubsidyFillTaskBean.class, updateAndGetRequestFiles(FILL_WAIT, ids),
+                requestFileListener, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
     public void saveSubsidy(List<Long> ids, Map processParameters) {
-        execute(SAVE_SUBSIDY, SubsidySaveTaskBean.class, getSubsidyFiles(ids), null, SAVE_THREAD_SIZE,
-                SAVE_MAX_ERROR_COUNT, processParameters);
+        execute(SAVE_SUBSIDY, SubsidySaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
     public void exportSubsidyMasterData(List<Long> ids, ExportType type, RequestFileType requestFileType, Date date) {
@@ -451,13 +464,13 @@ public class ProcessManagerBean {
             f.setType(requestFileType);
         }
 
-        execute(EXPORT_SUBSIDY_MASTER_DATA, SubsidyMasterDataExportTaskBean.class, list, null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
+        execute(EXPORT_SUBSIDY_MASTER_DATA, SubsidyMasterDataExportTaskBean.class, list,
+                null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
     }
 
     public void exportSubsidy(List<Long> ids) {
-        execute(EXPORT_SUBSIDY, SubsidyExportTaskBean.class,
-                getRequestFiles(ids, EXPORT_SUBSIDY), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT,
-                null);
+        execute(EXPORT_SUBSIDY, SubsidyExportTaskBean.class, updateAndGetRequestFiles(EXPORT_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
     }
 
     /*SubsidyTarif*/
@@ -473,7 +486,7 @@ public class ProcessManagerBean {
             execute(LOAD_SUBSIDY_TARIF, SubsidyTarifLoadTaskBean.class, list, null, LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
         } catch (Exception e) {
             log.error("Ошибка процесса загрузки файлов.", e);
-            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
             broadcastService.broadcast(getClass(), "onError", e);
@@ -494,7 +507,7 @@ public class ProcessManagerBean {
                     LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
         } catch (Exception e) {
             log.error("Ошибка процесса загрузки файлов.", e);
-            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
             broadcastService.broadcast(getClass(), "onError", e);
@@ -502,18 +515,21 @@ public class ProcessManagerBean {
     }
 
     public void bindDwellingCharacteristics(List<Long> ids, Map processParameters) {
-        execute(BIND_DWELLING_CHARACTERISTICS, DwellingCharacteristicsBindTaskBean.class, getDwellingCharacteristicsFiles(ids),
-                null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+        execute(BIND_DWELLING_CHARACTERISTICS, DwellingCharacteristicsBindTaskBean.class,
+                updateAndGetRequestFiles(BIND_WAIT, ids),
+                requestFileListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
     public void fillDwellingCharacteristics(List<Long> ids, Map processParameters) {
-        execute(FILL_DWELLING_CHARACTERISTICS, DwellingCharacteristicsFillTaskBean.class, getDwellingCharacteristicsFiles(ids),
-                null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+        execute(FILL_DWELLING_CHARACTERISTICS, DwellingCharacteristicsFillTaskBean.class,
+                updateAndGetRequestFiles(FILL_WAIT, ids),
+                requestFileListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
     public void saveDwellingCharacteristics(List<Long> ids, Map processParameters) {
         execute(SAVE_DWELLING_CHARACTERISTICS, DwellingCharacteristicsSaveTaskBean.class,
-                getDwellingCharacteristicsFiles(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+                updateAndGetRequestFiles(SAVE_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
     /*FacilityServiceType*/
@@ -530,7 +546,7 @@ public class ProcessManagerBean {
                     LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
         } catch (Exception e) {
             log.error("Ошибка процесса загрузки файлов.", e);
-            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
             broadcastService.broadcast(getClass(), "onError", e);
@@ -538,18 +554,21 @@ public class ProcessManagerBean {
     }
 
     public void bindFacilityServiceType(List<Long> ids, Map processParameters) {
-        execute(BIND_FACILITY_SERVICE_TYPE, FacilityServiceTypeBindTaskBean.class, getFacilityServiceTypeFiles(ids),
-                null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+        execute(BIND_FACILITY_SERVICE_TYPE, FacilityServiceTypeBindTaskBean.class,
+                updateAndGetRequestFiles(BIND_WAIT, ids),
+                requestFileListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
     public void fillFacilityServiceType(List<Long> ids, Map processParameters) {
-        execute(FILL_FACILITY_SERVICE_TYPE, FacilityServiceTypeFillTaskBean.class, getFacilityServiceTypeFiles(ids),
-                null, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
+        execute(FILL_FACILITY_SERVICE_TYPE, FacilityServiceTypeFillTaskBean.class,
+                updateAndGetRequestFiles(FILL_WAIT, ids),
+                requestFileListener, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
     public void saveFacilityServiceType(List<Long> ids, Map processParameters) {
         execute(SAVE_FACILITY_SERVICE_TYPE, FacilityServiceTypeSaveTaskBean.class,
-                getFacilityServiceTypeFiles(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+                updateAndGetRequestFiles(SAVE_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
     /*FacilityForm2*/
@@ -567,8 +586,8 @@ public class ProcessManagerBean {
     }
 
     public void saveFacilityForm2(List<Long> ids, Map processParameters) {
-        execute(SAVE_FACILITY_FORM2, FacilityForm2SaveTaskBean.class,
-                getFacilityForm2Files(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+        execute(SAVE_FACILITY_FORM2, FacilityForm2SaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
     /*FacilityLocal*/
@@ -582,14 +601,14 @@ public class ProcessManagerBean {
         requestFile.setBeginDate(newDate(year, month));
         requestFile.setType(RequestFileType.FACILITY_LOCAL);
 
-        execute(LOAD_FACILITY_LOCAL, FacilityLocalLoadTaskBean.class, Collections.singletonList(requestFile), null,
-                LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
+        execute(LOAD_FACILITY_LOCAL, FacilityLocalLoadTaskBean.class, Collections.singletonList(requestFile),
+                null, LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
 
     }
 
     public void saveFacilityLocal(List<Long> ids, Map processParameters) {
-        execute(SAVE_FACILITY_LOCAL, FacilityLocalSaveTaskBean.class,
-                getFacilityLocalFiles(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+        execute(SAVE_FACILITY_LOCAL, FacilityLocalSaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
     public void loadFacilityJanitorLocal(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int month){
@@ -634,7 +653,7 @@ public class ProcessManagerBean {
                     LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
         } catch (StorageNotFoundException e) {
             log.error("Ошибка процесса загрузки файлов.", e);
-            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
             broadcastService.broadcast(getClass(), "onError", e);
@@ -655,7 +674,7 @@ public class ProcessManagerBean {
                     ImmutableMap.of(FacilityStreetLoadTaskBean.LOCALE_TASK_PARAMETER_KEY, locale));
         } catch (StorageNotFoundException e) {
             log.error("Ошибка процесса загрузки файлов.", e);
-            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
             broadcastService.broadcast(getClass(), "onError", e);
@@ -675,7 +694,7 @@ public class ProcessManagerBean {
                     LOAD_THREAD_SIZE, LOAD_MAX_ERROR_COUNT, null);
         } catch (StorageNotFoundException e) {
             log.error("Ошибка процесса загрузки файлов.", e);
-            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
             broadcastService.broadcast(getClass(), "onError", e);
@@ -701,7 +720,7 @@ public class ProcessManagerBean {
             process.addLinkError(linkError);
 
             for (RequestFile rf : linkError) {
-                logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null, rf.getId(),
+                logBean.error(Module.NAME, ProcessManagerService.class, RequestFileGroup.class, null, rf.getId(),
                         Log.EVENT.CREATE, rf.getLogChangeList(), "Связанный файл не найден для объекта {0}",
                         rf.getLogObjectName());
             }
@@ -727,23 +746,45 @@ public class ProcessManagerBean {
             process.preprocessError();
 
             log.error("Ошибка процесса загрузки файлов.", e);
-            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFileGroup.class, null,
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFileGroup.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
             broadcastService.broadcast(getClass(), "onError", e);
         }
     }
 
+    private IExecutorListener<PrivilegeFileGroup> privilegeFileGroupListener = new IExecutorListener<PrivilegeFileGroup>() {
+        @Override
+        public void onComplete(List<PrivilegeFileGroup> processed) {
+        }
+
+        @Override
+        public void onError(List<PrivilegeFileGroup> unprocessed) {
+            unprocessed.forEach(g -> {
+                if (g.getDwellingCharacteristicsRequestFile() != null){
+                    requestFileBean.fixProcessingOnError(g.getDwellingCharacteristicsRequestFile());
+                }
+
+                if (g.getFacilityServiceTypeRequestFile() != null){
+                    requestFileBean.fixProcessingOnError(g.getFacilityServiceTypeRequestFile());
+                }
+            });
+        }
+    };
+
     public void bindPrivilegeGroup(List<Long> ids, Map processParameters) {
-        execute(BIND_PRIVILEGE_GROUP, PrivilegeGroupBindTaskBean.class, getPrivilegeFileGroups(ids), null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+        execute(BIND_PRIVILEGE_GROUP, PrivilegeGroupBindTaskBean.class, updateAndGetPrivilegeFileGroups(BIND_WAIT, ids),
+                privilegeFileGroupListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
     public void fillPrivilegeGroup(List<Long> ids, Map processParameters) {
-        execute(FILL_PRIVILEGE_GROUP, PrivilegeGroupFillTaskBean.class, getPrivilegeFileGroups(ids), null, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
+        execute(FILL_PRIVILEGE_GROUP, PrivilegeGroupFillTaskBean.class, updateAndGetPrivilegeFileGroups(FILL_WAIT, ids),
+                privilegeFileGroupListener, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
     public void savePrivilegeGroup(List<Long> ids, Map processParameters) {
-        execute(SAVE_PRIVILEGE_GROUP, PrivilegeGroupSaveTaskBean.class, getPrivilegeFileGroups(ids), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+        execute(SAVE_PRIVILEGE_GROUP, PrivilegeGroupSaveTaskBean.class, updateAndGetPrivilegeFileGroups(SAVE_WAIT, ids),
+                privilegeFileGroupListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 
     /*PrivilegeProlongation*/
@@ -756,7 +797,7 @@ public class ProcessManagerBean {
                     LOAD_MAX_ERROR_COUNT, null);
         } catch (Exception e) {
             log.error("Ошибка процесса загрузки файлов.", e);
-            logBean.error(Module.NAME, ProcessManagerBean.class, RequestFile.class, null,
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
                     Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
 
             broadcastService.broadcast(getClass(), "onError", e);
@@ -765,13 +806,13 @@ public class ProcessManagerBean {
 
     public void bindPrivilegeProlongation(List<Long> ids, Map processParameters) {
         execute(BIND_PRIVILEGE_PROLONGATION, PrivilegeProlongationBindTaskBean.class,
-                getRequestFiles(ids, BIND_PRIVILEGE_PROLONGATION), null, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT,
-                processParameters);
+                updateAndGetRequestFiles(BIND_WAIT, ids),
+                requestFileListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
     public void exportPrivilegeProlongation(List<Long> ids, Map processParameters) {
         execute(EXPORT_PRIVILEGE_PROLONGATION, PrivilegeProlongationSaveTaskBean.class,
-                getRequestFiles(ids, EXPORT_PRIVILEGE_PROLONGATION), null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT,
-                processParameters);
+                updateAndGetRequestFiles(EXPORT_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
 }

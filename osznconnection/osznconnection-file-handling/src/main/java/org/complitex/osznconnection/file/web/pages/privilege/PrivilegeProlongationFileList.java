@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.osznconnection.file.entity.RequestFileSubType;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
@@ -27,7 +27,7 @@ import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 @AuthorizeInstantiation({"PRIVILEGE_PROLONGATION_S", "PRIVILEGE_PROLONGATION_P"})
 public class PrivilegeProlongationFileList extends TemplatePage {
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
 
     private AbstractFileListPanel fileListPanel;
 
@@ -60,7 +60,7 @@ public class PrivilegeProlongationFileList extends TemplatePage {
 
             @Override
             protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.bindPrivilegeProlongation(selectedFileIds, parameters);
+                processManagerService.bindPrivilegeProlongation(selectedFileIds, parameters);
             }
 
             @Override
@@ -74,7 +74,7 @@ public class PrivilegeProlongationFileList extends TemplatePage {
 
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-                processManagerBean.loadPrivilegeProlongation(subType, userOrganizationId, organizationId, year, monthFrom);
+                processManagerService.loadPrivilegeProlongation(subType, userOrganizationId, organizationId, year, monthFrom);
             }
 
             @Override
@@ -84,7 +84,7 @@ public class PrivilegeProlongationFileList extends TemplatePage {
 
             @Override
             protected void export(AjaxRequestTarget target, List<Long> selectedFileIds) {
-                processManagerBean.exportPrivilegeProlongation(selectedFileIds, null);
+                processManagerService.exportPrivilegeProlongation(selectedFileIds, null);
             }
 
             @Override

@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.complitex.common.service.executor.ExecutorCommand.STATUS.*;
 
@@ -42,6 +44,9 @@ public class ExecutorService {
         if (executorCommand.isStop()){
             if (executorCommand.isRunning()) {
                 executorCommand.setStatus(CANCELED);
+
+                //listener
+                unprocessed(executorCommand, null);
 
                 broadcastService.broadcast(getClass(), "onCancel", executorCommand);
 
@@ -119,8 +124,14 @@ public class ExecutorService {
         } catch (Exception e){
             executorCommand.clear();
 
-            executorCommand.incrementErrorCount();
             executorCommand.setStatus(CRITICAL_ERROR);
+
+            //listener
+            unprocessed(executorCommand, object);
+
+            //error
+            executorCommand.clear();
+            executorCommand.incrementErrorCount();
             executorCommand.setErrorMessage(ExceptionUtil.getCauseMessage(e));
 
             broadcastService.broadcast(getClass(), "onCriticalError", executorCommand);
@@ -130,6 +141,24 @@ public class ExecutorService {
             executorCommand.getProcessed().add(object);
             executorCommand.stopTask();
             executeNext(executorCommand);
+        }
+    }
+
+    private <T extends IExecutorObject> void unprocessed(ExecutorCommand<T> executorCommand, T object) {
+        List<T> unprocessed = new ArrayList<>();
+
+        if (object != null) {
+            unprocessed.add(object);
+        }
+
+        T o;
+
+        while ((o = executorCommand.pollObject()) != null){
+            unprocessed.add(o);
+        }
+
+        if (executorCommand.getListener() != null){
+            executorCommand.getListener().onError(unprocessed);
         }
     }
 

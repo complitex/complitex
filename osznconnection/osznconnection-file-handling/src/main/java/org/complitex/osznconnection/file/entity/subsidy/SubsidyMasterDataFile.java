@@ -7,6 +7,9 @@ import org.complitex.osznconnection.file.entity.RequestFileType;
 
 import java.util.List;
 
+import static org.complitex.osznconnection.file.entity.RequestFileStatus.EXPORTING;
+import static org.complitex.osznconnection.file.entity.RequestFileStatus.EXPORT_WAIT;
+
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 10.02.14 1:05
@@ -58,7 +61,12 @@ public class SubsidyMasterDataFile extends AbstractExecutorObject {
 
     @Override
     public boolean isProcessing() {
-        return RequestFileStatus.EXPORTING.equals(status);
+        return EXPORTING.equals(status);
+    }
+
+    @Override
+    public boolean isWaiting() {
+        return EXPORT_WAIT.equals(status);
     }
 
     public RequestFileStatus getStatus() {

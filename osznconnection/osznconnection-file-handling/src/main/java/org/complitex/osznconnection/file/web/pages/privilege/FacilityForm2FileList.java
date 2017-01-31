@@ -4,7 +4,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
@@ -21,7 +21,7 @@ import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 @AuthorizeInstantiation("PRIVILEGE_FORM_2")
 public final class FacilityForm2FileList extends TemplatePage {
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
 
     private AbstractFileListPanel fileListPanel;
 
@@ -44,7 +44,7 @@ public final class FacilityForm2FileList extends TemplatePage {
 
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-                processManagerBean.loadFacilityForm2(serviceProviderId, userOrganizationId, organizationId, year, monthFrom);
+                processManagerService.loadFacilityForm2(serviceProviderId, userOrganizationId, organizationId, year, monthFrom);
             }
 
             @Override
@@ -57,7 +57,7 @@ public final class FacilityForm2FileList extends TemplatePage {
 
             @Override
             protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
-                processManagerBean.saveFacilityForm2(selectedFileIds, parameters);
+                processManagerService.saveFacilityForm2(selectedFileIds, parameters);
             }
 
             @Override

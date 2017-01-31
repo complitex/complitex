@@ -74,6 +74,10 @@ public abstract class AbstractRequestFile extends AbstractExecutorObject{
         return status != null && status.isProcessing();
     }
 
+    public boolean isWaiting() {
+        return status != null && status.isWaiting();
+    }
+
     public String getEdrpou(){
         return null;
     }

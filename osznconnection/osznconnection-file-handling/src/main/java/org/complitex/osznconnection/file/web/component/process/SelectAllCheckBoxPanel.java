@@ -11,7 +11,7 @@ import org.complitex.common.web.component.css.CssAttributeBehavior;
  */
 public final class SelectAllCheckBoxPanel extends Panel {
 
-    public SelectAllCheckBoxPanel(String id, final ProcessingManager processingManager) {
+    public SelectAllCheckBoxPanel(String id) {
         super(id);
 
         CheckBox selectAll = new CheckBox("selectAll", new Model<>(false)) {

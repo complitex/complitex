@@ -13,6 +13,8 @@ import javax.ejb.Stateless;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.complitex.osznconnection.file.entity.RequestFileStatus.*;
+
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 29.09.2010 14:32:05
@@ -117,6 +119,30 @@ public class RequestFileGroupBean extends AbstractBean {
         sqlSession().update(NS + ".fixBingingOnInit");
         sqlSession().update(NS + ".fixFillingOnInit");
         sqlSession().update(NS + ".fixSavingOnInit");
+    }
+
+    @SuppressWarnings("Duplicates")
+    public void fixProcessingOnError(RequestFileGroup group){
+        switch (group.getStatus()){
+            case BIND_WAIT:
+            case BINDING:
+                group.setStatus(BIND_ERROR);
+                break;
+            case FILL_WAIT:
+            case FILLING:
+                group.setStatus(FILL_ERROR);
+                break;
+            case SAVE_WAIT:
+            case SAVING:
+                group.setStatus(SAVE_ERROR);
+                break;
+            case EXPORT_WAIT:
+            case EXPORTING:
+                group.setStatus(EXPORT_ERROR);
+                break;
+        }
+
+        save(group);
     }
 
     public void updateIfBound(Long groupId){

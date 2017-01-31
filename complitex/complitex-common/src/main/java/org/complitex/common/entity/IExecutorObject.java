@@ -6,10 +6,11 @@ package org.complitex.common.entity;
  */
 public interface IExecutorObject extends ILoggable{
     void cancel();
-    boolean isCanceled();
     String getErrorMessage();
     void setErrorMessage(String message);
-    boolean isProcessing();
     Enum getStatus();
     String getObjectName();
+    boolean isCanceled();
+    boolean isProcessing();
+    boolean isWaiting();
 }

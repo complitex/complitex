@@ -55,7 +55,7 @@ import org.complitex.osznconnection.file.entity.AbstractRequestFile;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
 import org.complitex.osznconnection.file.service.process.Process;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.LoadButton;
@@ -93,7 +93,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     }
 
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
 
 
     @EJB
@@ -107,7 +107,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     private RequestFileLoadPanel requestFileLoadPanel;
     private RequestFileHistoryPanel requestFileHistoryPanel;
-    private ProcessingManager processingManager;
     private Form<F> form;
     private DataView<R> dataView;
     private DataProvider<R> dataProvider;
@@ -256,8 +255,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
         add(new DataRowHoverBehavior());
 
-        processingManager = new ProcessingManager(loadProcessType, bindProcessType, fillProcessType, saveProcessType);
-
         messages = new AjaxFeedbackPanel("messages");
         add(messages);
 
@@ -296,7 +293,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         form.add(find);
 
         //Select all checkbox
-        form.add(new SelectAllCheckBoxPanel("selectAllCheckBoxPanel", processingManager).setOutputMarkupId(true));
+        form.add(new SelectAllCheckBoxPanel("selectAllCheckBoxPanel").setOutputMarkupId(true));
 
         //Id
         form.add(new TextField<String>("id"));
@@ -416,7 +413,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             protected void populateItem(Item<R> item) {
-                item.add(new ItemCheckBoxPanel<R>("itemCheckBoxPanel", processingManager, selectManager, item.getModel()));
+                item.add(new ItemCheckBoxPanel<R>("itemCheckBoxPanel", selectManager, item.getModel()));
 
                 //Идентификатор файла
                 item.add(new Label("id", new PropertyModel<>(item.getModel(), "id")));
@@ -505,7 +502,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 };
                 item.add(history);
 
-                history.add(new ItemStatusLabel("status", processingManager));
+                history.add(new ItemStatusLabel("status"));
 
                 //Дополнительные поля
                 for (Column column : columns) {
@@ -644,12 +641,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             public boolean isVisible() {
-                return processManagerBean.isProcessing(loadProcessType);
+                return processManagerService.isProcessing(loadProcessType);
             }
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                processManagerBean.cancel(loadProcessType);
+                processManagerService.cancel(loadProcessType);
                 info(getString("load_process.canceling"));
                 target.add(form);
             }
@@ -660,12 +657,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             public boolean isVisible() {
-                return processManagerBean.isProcessing(bindProcessType);
+                return processManagerService.isProcessing(bindProcessType);
             }
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                processManagerBean.cancel(bindProcessType);
+                processManagerService.cancel(bindProcessType);
                 info(getString("bind_process.canceling"));
                 target.add(form);
             }
@@ -676,12 +673,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             public boolean isVisible() {
-                return processManagerBean.isProcessing(fillProcessType);
+                return processManagerService.isProcessing(fillProcessType);
             }
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                processManagerBean.cancel(fillProcessType);
+                processManagerService.cancel(fillProcessType);
                 info(getString("fill_process.canceling"));
                 target.add(form);
             }
@@ -692,12 +689,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             public boolean isVisible() {
-                return processManagerBean.isProcessing(saveProcessType);
+                return processManagerService.isProcessing(saveProcessType);
             }
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                processManagerBean.cancel(saveProcessType);
+                processManagerService.cancel(saveProcessType);
                 info(getString("save_process.canceling"));
                 target.add(form);
             }
@@ -708,12 +705,12 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             public boolean isVisible() {
-                return processManagerBean.isProcessing(getExportProcessType());
+                return processManagerService.isProcessing(getExportProcessType());
             }
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                processManagerBean.cancel(getExportProcessType());
+                processManagerService.cancel(getExportProcessType());
                 info(getString("export_process.canceling"));
                 target.add(form);
             }
@@ -826,7 +823,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             }
         });
 
-        add(new BroadcastBehavior(ProcessManagerBean.class) {
+        add(new BroadcastBehavior(ProcessManagerService.class) {
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
                 if (payload instanceof Exception){

@@ -4,7 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import org.complitex.common.entity.IExecutorObject;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
@@ -35,7 +36,7 @@ public final class SaveUtil {
     private final static Set<RequestStatus> NOT_REPORTABLE_STATUSES = ImmutableSet.of(RequestStatus.PROCESSED,
             RequestStatus.ACCOUNT_NUMBER_RESOLVED, RequestStatus.ADDRESS_CORRECTED);
 
-    public static void createResult(List<IExecutorObject> processed, IWarningRenderer warningRenderer)
+    public static void createResult(List<RequestFileGroup> processed, IWarningRenderer warningRenderer)
             throws StorageNotFoundException {
         Map<String, List<RequestFileGroup>> catalog = new HashMap<String, List<RequestFileGroup>>();
 
@@ -43,12 +44,7 @@ public final class SaveUtil {
         for (IExecutorObject object : processed) {
             RequestFileGroup group = (RequestFileGroup) object;
 
-            List<RequestFileGroup> list = catalog.get(group.getDirectory());
-
-            if (list == null) {
-                list = new ArrayList<RequestFileGroup>();
-                catalog.put(group.getDirectory(), list);
-            }
+            List<RequestFileGroup> list = catalog.computeIfAbsent(group.getDirectory(), k -> new ArrayList<>());
 
             list.add(group);
         }

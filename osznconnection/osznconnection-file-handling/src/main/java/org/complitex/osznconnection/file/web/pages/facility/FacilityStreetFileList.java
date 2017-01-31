@@ -2,7 +2,7 @@ package org.complitex.osznconnection.file.web.pages.facility;
 
 import org.apache.wicket.Page;
 import org.complitex.osznconnection.file.entity.RequestFileType;
-import org.complitex.osznconnection.file.service.process.ProcessManagerBean;
+import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 
 import javax.ejb.EJB;
@@ -10,7 +10,7 @@ import javax.ejb.EJB;
 public final class FacilityStreetFileList extends AbstractReferenceBookFileList {
 
     @EJB
-    private ProcessManagerBean processManagerBean;
+    private ProcessManagerService processManagerService;
 
     public FacilityStreetFileList() {
     }
@@ -22,7 +22,7 @@ public final class FacilityStreetFileList extends AbstractReferenceBookFileList 
 
     @Override
     protected void load(Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
-        processManagerBean.loadFacilityStreetReferences(userOrganizationId, organizationId, year, monthFrom, getLocale());
+        processManagerService.loadFacilityStreetReferences(userOrganizationId, organizationId, year, monthFrom, getLocale());
     }
 
     @Override

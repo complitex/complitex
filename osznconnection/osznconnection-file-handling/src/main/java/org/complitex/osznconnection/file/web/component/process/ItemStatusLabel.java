@@ -8,11 +8,8 @@ import org.complitex.common.util.StringUtil;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 
 public class ItemStatusLabel extends Label {
-    private final ProcessingManager processingManager;
-
-    public ItemStatusLabel(String id, ProcessingManager processingManager) {
+    public ItemStatusLabel(String id) {
         super(id);
-        this.processingManager = processingManager;
     }
 
     @Override
@@ -22,14 +19,16 @@ public class ItemStatusLabel extends Label {
         final Item item = findParent(Item.class);
 
         setDefaultModel(new LoadableDetachableModel<String>() {
+            private int index;
+
             @Override
             protected String load() {
                 if (item.getModelObject() instanceof IExecutorObject) {
                     IExecutorObject object = (IExecutorObject) item.getModelObject();
 
                     String dots = "";
-                    if (object.isProcessing() && processingManager.isGlobalProcessing()) {
-                        dots += "...";
+                    if (object.isProcessing()) {
+                        dots += StringUtil.getDots(index++ % 4);
                     }
 
                     if (object.getStatus() instanceof RequestFileStatus) {
