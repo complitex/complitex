@@ -65,7 +65,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         authorize(pageParameters);
 
         //Title
-        add(new Label("title", new ResourceModel("title")));
+        add(new Label("title", new ResourceModel("title"))); //todo add file name
 
         //Feedback Panel
         final AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");

@@ -29,6 +29,13 @@
         </association>
     </resultMap>
 
+    <select id="selectTarifs" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="subsidyTarifResultMap">
+        select * from `subsidy_tarif` where `request_file_id` = #{object.requestFileId} ${limit}
+    </select>
+    <select id="selectTarifsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
+        select count(id) from `subsidy_tarif` where `request_file_id` = #{object.requestFileId}
+    </select>
+
     <insert id="insertTarif" parameterType="org.complitex.osznconnection.file.entity.subsidy.SubsidyTarif">
         INSERT INTO `subsidy_tarif`
         (

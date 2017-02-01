@@ -278,7 +278,7 @@ public class PrivilegeProlongationList extends TemplatePage {
 
             @Override
             protected void populateItem(Item<PrivilegeProlongation> item) {
-                final PrivilegeProlongation privilegeProlongation = item.getModelObject();
+                final PrivilegeProlongation privilegeProlongation = item.getModelObject(); //todo update to property label
 
                 item.add(new Check<>("check", Model.of(privilegeProlongation), checkGroup));
                 item.add(new Label("account", privilegeProlongation.getAccountNumber()));

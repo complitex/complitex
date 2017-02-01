@@ -78,16 +78,16 @@ public abstract class TemplatePage extends WebPage {
             }
         });
 
-        final boolean infoPanelAllowed = hasAnyRole(SecurityRole.INFO_PANEL_ALLOWED);
-        if (!infoPanelAllowed) {
-            MenuManager.hideMainMenu();
-        }
+//        final boolean infoPanelAllowed = hasAnyRole(SecurityRole.INFO_PANEL_ALLOWED);
+//        if (!infoPanelAllowed) {
+//            MenuManager.hideMainMenu();
+//        }
         WebMarkupContainer infoPanelButton = new WebMarkupContainer("infoPanelButton");
-        infoPanelButton.setVisibilityAllowed(infoPanelAllowed);
+//        infoPanelButton.setVisibilityAllowed(infoPanelAllowed);
         add(infoPanelButton);
 
         WebMarkupContainer infoPanel = new WebMarkupContainer("infoPanel");
-        infoPanel.setVisibilityAllowed(infoPanelAllowed);
+//        infoPanel.setVisibilityAllowed(infoPanelAllowed);
         add(infoPanel);
 
         //menu

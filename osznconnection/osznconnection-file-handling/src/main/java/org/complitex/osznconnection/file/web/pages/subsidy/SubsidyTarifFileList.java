@@ -14,7 +14,9 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.*;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.util.StringUtil;
+import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.DatePicker;
 import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
@@ -178,19 +180,18 @@ public class SubsidyTarifFileList extends TemplatePage {
 
             @Override
             protected void populateItem(final Item<RequestFile> item) {
-                final Long objectId = item.getModelObject().getId(); //todo update to model
-
                 //Выбор файлов
                 item.add(new ItemCheckBoxPanel<RequestFile>("itemCheckBoxPanel", selectManager, item.getModel()));
 
                 //Идентификатор файла
-                item.add(new Label("id", StringUtil.valueOf(objectId)));
+                item.add(new Label("id", new PropertyModel<>(item.getModel(), "id")));
 
                 //Дата загрузки
                 item.add(new DateLabel("loaded", new PropertyModel<>(item.getModel(), "loaded"),
                         new PatternDateConverter("dd.MM.yy HH:mm:ss", true)));
 
-                item.add(new Label("name", item.getModelObject().getFullName())); //todo add record list page
+                item.add(new BookmarkablePageLinkPanel("name", new PropertyModel<String>(item.getModel(), "fullName"),
+                        SubsidyTarifList.class, new PageParameters().add("request_file_id", item.getModelObject().getId()))); //todo page parameter model
 
                 //ОСЗН
                 item.add(new ItemOrganizationLabel("organization", item.getModelObject().getOrganizationId()));

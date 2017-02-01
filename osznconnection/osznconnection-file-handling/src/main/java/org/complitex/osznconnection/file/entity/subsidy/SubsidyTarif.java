@@ -14,4 +14,10 @@ public class SubsidyTarif extends AbstractRequest {
     public SubsidyTarif() {
         super(RequestFileType.SUBSIDY_TARIF);
     }
+
+    public SubsidyTarif(Long requestFileId) {
+        this();
+
+        setRequestFileId(requestFileId);
+    }
 }

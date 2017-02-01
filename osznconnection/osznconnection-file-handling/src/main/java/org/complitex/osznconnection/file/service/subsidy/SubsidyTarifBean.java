@@ -1,6 +1,7 @@
 package org.complitex.osznconnection.file.service.subsidy;
 
 import com.google.common.collect.Maps;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyTarif;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescription;
@@ -8,8 +9,6 @@ import org.complitex.osznconnection.file.service.file_description.RequestFileDes
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -24,20 +23,27 @@ import static org.complitex.osznconnection.file.entity.RequestFileType.SUBSIDY_T
  */
 @Stateless
 public class SubsidyTarifBean extends AbstractBean {
-    public static final String MAPPING_NAMESPACE = SubsidyTarifBean.class.getName();
+    public static final String NS = SubsidyTarifBean.class.getName();
+
     @EJB
     private RequestFileDescriptionBean requestFileDescriptionBean;
 
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void insert(List<SubsidyTarif> subsidyTarifList) {
+    public void save(List<SubsidyTarif> subsidyTarifList) {
         for (SubsidyTarif subsidyTarif : subsidyTarifList) {
-            sqlSession().insert(MAPPING_NAMESPACE + ".insertTarif", subsidyTarif);
+            sqlSession().insert(NS + ".insertTarif", subsidyTarif);
         }
     }
 
+    public List<SubsidyTarif> getSubsidyTarifs(FilterWrapper<SubsidyTarif> filter){
+        return sqlSession().selectList(NS + ".selectTarifs", filter);
+    }
+
+    public Long getSubsidyTarifsCount(FilterWrapper<SubsidyTarif> filter){
+        return sqlSession().selectOne(NS + ".selectTarifsCount", filter);
+    }
+
     public void delete(long requestFileId) {
-        sqlSession().delete(MAPPING_NAMESPACE + ".deleteTarifs", requestFileId);
+        sqlSession().delete(NS + ".deleteTarifs", requestFileId);
     }
 
     /**
@@ -56,7 +62,7 @@ public class SubsidyTarifBean extends AbstractBean {
         params.put("userOrganizationId", userOrganizationId);
         params.put("service", service);
 
-        return (String) sqlSession().selectOne(MAPPING_NAMESPACE + ".getCode2", params);
+        return (String) sqlSession().selectOne(NS + ".getCode2", params);
     }
 
     /**
@@ -75,6 +81,6 @@ public class SubsidyTarifBean extends AbstractBean {
         params.put("userOrganizationId", userOrganizationId);
         params.put("service", service);
 
-        return (String) sqlSession().selectOne(MAPPING_NAMESPACE + ".getCode3", params);
+        return (String) sqlSession().selectOne(NS + ".getCode3", params);
     }
 }

@@ -73,11 +73,11 @@
     </select>
 
     <select id="selectFacilityLocalList" resultMap="facilityLocalResultMap" parameterType="org.complitex.common.entity.FilterWrapper">
-        select * from `facility_local` where #{object.requestFileId} = `request_file_id`
+        select * from `facility_local` where `request_file_id` = #{object.requestFileId} ${limit}
     </select>
 
     <select id="selectFacilityLocalListCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
-        select count(id) from `facility_local` where #{object.requestFileId} = `request_file_id`
+        select count(id) from `facility_local` where `request_file_id` #{object.requestFileId}
     </select>
 
     <delete id="deleteFacilityLocal" parameterType="long">

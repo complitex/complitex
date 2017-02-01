@@ -14,10 +14,10 @@ import org.apache.wicket.util.string.Strings;
  *         Date: 15.01.2010 16:43:32
  */
 public class BookmarkablePageLinkPanel<T> extends Panel {
-    public BookmarkablePageLinkPanel(String id, IModel<String> model, Class<? extends Page> page, PageParameters parameters) {
+    public BookmarkablePageLinkPanel(String id, IModel<String> labelModel, Class<? extends Page> page, PageParameters parameters) {
         super(id);
         Link link = new BookmarkablePageLink<T>("link", page, parameters);
-        link.add(new Label("label", model));
+        link.add(new Label("label", labelModel));
         add(link);
     }
 

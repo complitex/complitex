@@ -57,7 +57,7 @@ public class SubsidyTarifLoadTaskBean extends AbstractTaskBean<RequestFile> {
 
                 @Override
                 public void save(List<SubsidyTarif> batch) {
-                    subsidyTarifBean.insert(batch);
+                    subsidyTarifBean.save(batch);
 
                     batch.forEach(r -> onRequest(r));
                 }
