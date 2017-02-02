@@ -9,10 +9,7 @@ import org.complitex.common.util.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
+import javax.ejb.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +21,7 @@ import static org.complitex.common.service.executor.ExecutorCommand.STATUS.*;
  */
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
+@TransactionManagement(TransactionManagementType.BEAN)
 public class ExecutorService {
     private final Logger log = LoggerFactory.getLogger(ExecutorService.class);
 
@@ -124,8 +122,6 @@ public class ExecutorService {
                 log.error(e.getMessage(), e);
             }
         } catch (Exception e){
-            executorCommand.clear();
-
             executorCommand.setStatus(CRITICAL_ERROR);
 
             //listener

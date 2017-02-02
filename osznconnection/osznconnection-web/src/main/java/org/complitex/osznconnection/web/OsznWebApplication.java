@@ -32,6 +32,7 @@ public class OsznWebApplication extends ComplitexWebApplication{
         super.init();
 
         getDebugSettings().setAjaxDebugModeEnabled(false);
+        getMarkupSettings().setStripWicketTags(true);
 
         //subsidy
         mountPage("/subsidy/request", GroupList.class);
