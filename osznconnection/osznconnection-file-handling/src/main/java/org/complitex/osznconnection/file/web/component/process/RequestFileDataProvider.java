@@ -58,6 +58,6 @@ public class RequestFileDataProvider extends DataProvider<RequestFile> {
 
     @Override
     protected Long getSize() {
-        return Long.valueOf(requestFileBean().getCount(model.getObject()));
+        return requestFileBean().getCount(model.getObject());
     }
 }

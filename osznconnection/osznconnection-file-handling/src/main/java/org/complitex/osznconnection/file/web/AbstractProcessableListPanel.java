@@ -736,7 +736,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
                 String time = LocalTime.now().toString() + " ";
 
-                if (payload instanceof Process){
+                if (payload instanceof Process){ //todo executor open page link
                     Process process = (Process) payload;
                     String prefix = process.getProcessType().name().split("_")[0].toLowerCase();
 
@@ -746,16 +746,19 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                             break;
                         case "onComplete":
-                            info(time + getString(prefix + "_process.completed", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
+                            info(time + getString(prefix + "_process.completed", process.getSuccessCount(),
+                                    process.getSkippedCount(), process.getErrorCount()));
 
                             break;
                         case "onCancel":
-                            info(time + getString(prefix + "_process.canceled", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
+                            info(time + getString(prefix + "_process.canceled", process.getSuccessCount(),
+                                    process.getSkippedCount(), process.getErrorCount()));
 
                             break;
                         case "onCriticalError":
                             error(process.getErrorMessage());
-                            info(time + getString(prefix + "_process.critical_error", process.getSuccessCount(), process.getSkippedCount(), process.getErrorCount()));
+                            info(time + getString(prefix + "_process.critical_error", process.getSuccessCount(),
+                                    process.getSkippedCount(), process.getErrorCount()));
 
                             break;
                     }

@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.util.StringUtil;
@@ -176,7 +177,7 @@ public class SubsidyTarifFileList extends TemplatePage {
         timerManager.addUpdateComponent(messages);
 
         //Таблица файлов запросов
-        final ProcessDataView<RequestFile> dataView = new ProcessDataView<RequestFile>("request_files", dataProvider) {
+        final DataView<RequestFile> dataView = new DataView<RequestFile>("request_files", dataProvider) { //todo websocket update
 
             @Override
             protected void populateItem(final Item<RequestFile> item) {

@@ -14,12 +14,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.common.service.executor.ExecutorService;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.StringUtil;
@@ -32,11 +34,13 @@ import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.wicket.BroadcastBehavior;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
+import org.complitex.osznconnection.file.entity.AbstractRequestFile;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
-import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
+import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
+import org.complitex.osznconnection.file.service.process.Process;
 import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
@@ -50,6 +54,7 @@ import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -61,9 +66,9 @@ import java.util.List;
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public abstract class AbstractReferenceBookFileList extends TemplatePage {
 
-    private static final int AJAX_TIMER = 1;
     @EJB
     private RequestFileDescriptionBean requestFileDescriptionBean;
+
     private RequestFileLoadPanel requestFileLoadPanel;
 
     protected AbstractReferenceBookFileList() {
@@ -89,17 +94,6 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
     }
 
     protected void init() {
-        final ProcessingManager processingManager = new ProcessingManager(getLoadProcessType());
-        final MessagesManager messagesManager = new MessagesManager(this) {
-
-            @Override
-            public void showMessages(AjaxRequestTarget target) {
-                addMessages("load_process", target, getLoadProcessType(),
-                        RequestFileStatus.LOADED, RequestFileStatus.LOAD_ERROR);
-                addCompetedMessages("load_process", getLoadProcessType());
-            }
-        };
-
         IModel<String> titleModel = new ResourceModel("title");
         add(new Label("title", titleModel));
         add(new Label("header", titleModel));
@@ -182,43 +176,37 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
         dataViewContainer.setOutputMarkupId(true);
         form.add(dataViewContainer);
 
-        final TimerManager timerManager = new TimerManager(AJAX_TIMER, messagesManager, processingManager, form,
-                dataViewContainer);
-        timerManager.addUpdateComponent(messages);
-
         //Таблица файлов запросов
-        final ProcessDataView<RequestFile> dataView = new ProcessDataView<RequestFile>("request_files", dataProvider) {
+        DataView<RequestFile> dataView = new DataView<RequestFile>("request_files", dataProvider) {
 
             @Override
             protected void populateItem(Item<RequestFile> item) {
-                final RequestFile requestFile = item.getModelObject();  //todo update to model
-
                 //Выбор файлов
                 item.add(new ItemCheckBoxPanel<>("itemCheckBoxPanel", selectManager, item.getModel()));
 
                 //Идентификатор файла
-                item.add(new Label("id", StringUtil.valueOf(requestFile.getId())));
+                item.add(new Label("id", new PropertyModel<>(item.getModel(), "id")));
 
                 //Дата загрузки
                 item.add(new DateLabel("loaded", new PropertyModel<>(item.getModel(), "loaded"),
                         new PatternDateConverter("dd.MM.yy HH:mm:ss", true)));
 
-                item.add(new BookmarkablePageLinkPanel<>("name", requestFile.getFullName(), getItemsPage(),
-                        new PageParameters().set("request_file_id", requestFile.getId())));
+                item.add(new BookmarkablePageLinkPanel<>("name", item.getModelObject().getFullName(), getItemsPage(),
+                        new PageParameters().set("request_file_id", item.getModelObject().getId()))); //todo model
 
                 //ОСЗН
-                item.add(new ItemOrganizationLabel("organization", requestFile.getOrganizationId()));
+                item.add(new ItemOrganizationLabel("organization", item.getModelObject().getOrganizationId()));
 
                 //Организация пользователя
-                item.add(new ItemOrganizationLabel("userOrganization", requestFile.getUserOrganizationId()));
+                item.add(new ItemOrganizationLabel("userOrganization", item.getModelObject().getUserOrganizationId()));
 
-                item.add(new Label("month", DateUtil.displayMonth(requestFile.getBeginDate(), getLocale())));
-                item.add(new Label("year", DateUtil.getYear(requestFile.getBeginDate()) + ""));
+                item.add(new Label("month", DateUtil.displayMonth(item.getModelObject().getBeginDate(), getLocale())));
+                item.add(new Label("year", DateUtil.getYear(item.getModelObject().getBeginDate()) + ""));
 
                 item.add(new Label("dbf_record_count", StringUtil.valueOf(item.getModelObject().getDbfRecordCount())));
 
                 //Количество загруженных записей
-                item.add(new Label("loaded_record_count", requestFile.getLoadedRecordCount()));
+                item.add(new Label("loaded_record_count", new PropertyModel<>(item.getModel(), "loadedRecordCount")));
 
                 //Статус
                 item.add(new ItemStatusLabel("status"));
@@ -244,8 +232,6 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
         WebMarkupContainer buttons = new WebMarkupContainer("buttons");
         buttons.setOutputMarkupId(true);
         form.add(buttons);
-
-        timerManager.addUpdateComponent(buttons);
 
         //Загрузить
         buttons.add(new AjaxLink<Void>("load") {
@@ -282,10 +268,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
                 MonthParameterViewMode.EXACT, new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE}) {
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
-                messagesManager.resetCompletedStatus(getLoadProcessType());
-
                 selectManager.clearSelection();
-                timerManager.addTimer();
                 target.add(form);
 
                 AbstractReferenceBookFileList.this.load(userOrganizationId, organizationId, year, monthFrom, monthTo);
@@ -294,11 +277,62 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
 
         add(requestFileLoadPanel);
 
-        //Запуск таймера
-        timerManager.startTimer();
+        //Messages
+        add(new BroadcastBehavior(ExecutorService.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                String time = LocalTime.now().toString() + " ";
 
-        //Отобразить сообщения
-        messagesManager.showMessages();
+                if (payload instanceof Process){
+                    Process process = (Process) payload;
+                    String prefix = process.getProcessType().name().split("_")[0].toLowerCase();
+
+                    switch (key){
+                        case "onBegin":
+                            info(time + getString(prefix + "_process.begin"));
+
+                            break;
+                        case "onComplete":
+                            info(time + getStringFormat(prefix + "_process.completed", process.getSuccessCount(),
+                                    process.getSkippedCount(), process.getErrorCount()));
+
+                            break;
+                        case "onCancel":
+                            info(time + getStringFormat(prefix + "_process.canceled", process.getSuccessCount(),
+                                    process.getSkippedCount(), process.getErrorCount()));
+
+                            break;
+                        case "onCriticalError":
+                            error(process.getErrorMessage());
+                            info(time + getStringFormat(prefix + "_process.critical_error", process.getSuccessCount(),
+                                    process.getSkippedCount(), process.getErrorCount()));
+
+                            break;
+                    }
+
+                    handler.add(messages, dataViewContainer, buttons);
+                }
+
+                if (payload instanceof AbstractRequestFile){
+                    AbstractRequestFile object = (AbstractRequestFile) payload;
+
+                    if ("onError".equals(key)){
+                        error(time + object.getErrorMessage());
+                    }
+
+                    handler.add(messages, dataViewContainer, buttons);
+                }
+            }
+        });
+
+        add(new BroadcastBehavior(LoadRequestFileBean.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                if ("onUpdate".equals(key)){
+                    handler.add(messages, dataViewContainer);
+                }
+            }
+        });
 
         add(new BroadcastBehavior(ProcessManagerService.class) {
             @Override

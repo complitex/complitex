@@ -10,7 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
-import javax.ejb.*;
+import javax.ejb.Asynchronous;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
+import javax.ejb.Singleton;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import java.util.concurrent.Callable;
 
@@ -18,7 +21,6 @@ import java.util.concurrent.Callable;
  * @author inheaven on 031 31.03.15 16:55
  */
 @Singleton
-@TransactionManagement(TransactionManagementType.BEAN)
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class BroadcastService {
     private Logger log = LoggerFactory.getLogger(BroadcastService.class);

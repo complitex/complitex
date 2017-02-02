@@ -9,7 +9,10 @@ import org.complitex.common.util.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.*;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
+import javax.ejb.EJB;
+import javax.ejb.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +23,6 @@ import static org.complitex.common.service.executor.ExecutorCommand.STATUS.*;
  *         Date: 01.11.10 12:50
  */
 @Singleton
-@TransactionManagement(TransactionManagementType.BEAN)
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class ExecutorService {
     private final Logger log = LoggerFactory.getLogger(ExecutorService.class);
