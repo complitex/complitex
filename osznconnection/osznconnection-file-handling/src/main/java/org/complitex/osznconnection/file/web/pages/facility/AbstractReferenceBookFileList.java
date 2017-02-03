@@ -278,6 +278,7 @@ public abstract class AbstractReferenceBookFileList extends TemplatePage {
         add(requestFileLoadPanel);
 
         //Messages
+        //noinspection Duplicates
         add(new BroadcastBehavior(ExecutorService.class) {
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {

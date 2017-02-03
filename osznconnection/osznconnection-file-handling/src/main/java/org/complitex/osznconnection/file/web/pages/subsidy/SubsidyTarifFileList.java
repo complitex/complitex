@@ -15,7 +15,10 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
+import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.common.service.executor.ExecutorService;
+import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.DatePicker;
@@ -23,12 +26,15 @@ import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
+import org.complitex.common.wicket.BroadcastBehavior;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
+import org.complitex.osznconnection.file.entity.AbstractRequestFile;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
-import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
+import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
+import org.complitex.osznconnection.file.service.process.Process;
 import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
@@ -42,24 +48,23 @@ import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import static org.complitex.common.util.DateUtil.getYear;
-import static org.complitex.osznconnection.file.service.process.ProcessType.LOAD_SUBSIDY_TARIF;
 
 /**
  */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class SubsidyTarifFileList extends TemplatePage {
-
-    private static final int AJAX_TIMER = 4;
-
     @EJB
     private ProcessManagerService processManagerService;
+
     @EJB
     private RequestFileDescriptionBean requestFileDescriptionBean;
+
     private RequestFileLoadPanel requestFileLoadPanel;
 
     public SubsidyTarifFileList() {
@@ -84,15 +89,6 @@ public class SubsidyTarifFileList extends TemplatePage {
 
     private void init() {
         final ProcessingManager processingManager = new ProcessingManager(ProcessType.LOAD_SUBSIDY_TARIF);
-        final MessagesManager messagesManager = new MessagesManager(this) {
-
-            @Override
-            public void showMessages(AjaxRequestTarget target) {
-                addMessages("load_process", target, LOAD_SUBSIDY_TARIF,
-                        RequestFileStatus.LOADED, RequestFileStatus.LOAD_ERROR);
-                addCompetedMessages("load_process", LOAD_SUBSIDY_TARIF);
-            }
-        };
 
         add(new Label("title", getString("title")));
 
@@ -172,12 +168,8 @@ public class SubsidyTarifFileList extends TemplatePage {
         dataViewContainer.setOutputMarkupId(true);
         form.add(dataViewContainer);
 
-        final TimerManager timerManager = new TimerManager(AJAX_TIMER, messagesManager, processingManager, form,
-                dataViewContainer);
-        timerManager.addUpdateComponent(messages);
-
         //Таблица файлов запросов
-        final DataView<RequestFile> dataView = new DataView<RequestFile>("request_files", dataProvider) { //todo websocket update
+        final DataView<RequestFile> dataView = new DataView<RequestFile>("request_files", dataProvider) {
 
             @Override
             protected void populateItem(final Item<RequestFile> item) {
@@ -236,8 +228,6 @@ public class SubsidyTarifFileList extends TemplatePage {
         buttons.setOutputMarkupId(true);
         form.add(buttons);
 
-        timerManager.addUpdateComponent(buttons);
-
         //Загрузить
         buttons.add(new AjaxLink<Void>("load") {
 
@@ -275,21 +265,81 @@ public class SubsidyTarifFileList extends TemplatePage {
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
                 processManagerService.loadSubsidyTarif(userOrganizationId, organizationId, year, monthFrom);
 
-                messagesManager.resetCompletedStatus(ProcessType.LOAD_SUBSIDY_TARIF);
-
                 selectManager.clearSelection();
-                timerManager.addTimer();
                 target.add(form);
             }
         };
 
         add(requestFileLoadPanel);
 
-        //Запуск таймера
-        timerManager.startTimer();
+        //Messages
+        //noinspection Duplicates
+        add(new BroadcastBehavior(ExecutorService.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                String time = LocalTime.now().toString() + " ";
 
-        //Отобразить сообщения
-        messagesManager.showMessages();
+                if (payload instanceof Process){
+                    Process process = (Process) payload;
+                    String prefix = process.getProcessType().name().split("_")[0].toLowerCase();
+
+                    switch (key){
+                        case "onBegin":
+                            info(time + getString(prefix + "_process.begin"));
+
+                            break;
+                        case "onComplete":
+                            info(time + getStringFormat(prefix + "_process.completed", process.getSuccessCount(),
+                                    process.getSkippedCount(), process.getErrorCount()));
+
+                            break;
+                        case "onCancel":
+                            info(time + getStringFormat(prefix + "_process.canceled", process.getSuccessCount(),
+                                    process.getSkippedCount(), process.getErrorCount()));
+
+                            break;
+                        case "onCriticalError":
+                            error(process.getErrorMessage());
+                            info(time + getStringFormat(prefix + "_process.critical_error", process.getSuccessCount(),
+                                    process.getSkippedCount(), process.getErrorCount()));
+
+                            break;
+                    }
+
+                    handler.add(messages, dataViewContainer, buttons);
+                }
+
+                if (payload instanceof AbstractRequestFile){
+                    AbstractRequestFile object = (AbstractRequestFile) payload;
+
+                    if ("onError".equals(key)){
+                        error(time + object.getErrorMessage());
+                    }
+
+                    handler.add(messages, dataViewContainer, buttons);
+                }
+            }
+        });
+
+        add(new BroadcastBehavior(LoadRequestFileBean.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                if ("onUpdate".equals(key)){
+                    handler.add(messages, dataViewContainer);
+                }
+            }
+        });
+
+        add(new BroadcastBehavior(ProcessManagerService.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+                if (payload instanceof Exception){
+                    error(ExceptionUtil.getCauseMessage((Exception) payload));
+
+                    handler.add(messages);
+                }
+            }
+        });
     }
 
     @Override
