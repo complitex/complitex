@@ -3,6 +3,7 @@ package org.complitex.common.util;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -196,5 +197,9 @@ public class StringUtil {
         }
 
         return 0;
+    }
+
+    public static String currentTime(){
+        return LocalTime.now().toString() + " ";
     }
 }

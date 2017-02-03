@@ -28,15 +28,12 @@ import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.wicket.BroadcastBehavior;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
-import org.complitex.osznconnection.file.entity.AbstractRequestFile;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileFilter;
-import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescriptionBean;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
 import org.complitex.osznconnection.file.service.process.Process;
 import org.complitex.osznconnection.file.service.process.ProcessManagerService;
-import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
 import org.complitex.osznconnection.file.web.component.LoadButton;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
@@ -48,12 +45,14 @@ import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
-import java.time.LocalTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import static org.complitex.common.util.DateUtil.getYear;
+import static org.complitex.common.util.StringUtil.currentTime;
+import static org.complitex.osznconnection.file.entity.RequestFileType.SUBSIDY_TARIF;
+import static org.complitex.osznconnection.file.service.process.ProcessType.LOAD_SUBSIDY_TARIF;
 
 /**
  */
@@ -72,12 +71,12 @@ public class SubsidyTarifFileList extends TemplatePage {
     }
 
     private boolean hasFieldDescription() {
-        return requestFileDescriptionBean.getFileDescription(RequestFileType.SUBSIDY_TARIF) != null;
+        return requestFileDescriptionBean.getFileDescription(SUBSIDY_TARIF) != null;
     }
 
     private RequestFileFilter newFilter() {
         final RequestFileFilter filter = new RequestFileFilter();
-        filter.setType(RequestFileType.SUBSIDY_TARIF);
+        filter.setType(SUBSIDY_TARIF);
         return filter;
     }
 
@@ -88,7 +87,7 @@ public class SubsidyTarifFileList extends TemplatePage {
     }
 
     private void init() {
-        final ProcessingManager processingManager = new ProcessingManager(ProcessType.LOAD_SUBSIDY_TARIF);
+        final ProcessingManager processingManager = new ProcessingManager(LOAD_SUBSIDY_TARIF);
 
         add(new Label("title", getString("title")));
 
@@ -170,6 +169,13 @@ public class SubsidyTarifFileList extends TemplatePage {
 
         //Таблица файлов запросов
         final DataView<RequestFile> dataView = new DataView<RequestFile>("request_files", dataProvider) {
+            @Override
+            protected Item<RequestFile> newItem(String id, int index, IModel<RequestFile> model) {
+                Item<RequestFile> item =  super.newItem("item" + model.getObject().getId(), index, model);
+                item.setOutputMarkupId(true);
+
+                return item;
+            }
 
             @Override
             protected void populateItem(final Item<RequestFile> item) {
@@ -274,70 +280,82 @@ public class SubsidyTarifFileList extends TemplatePage {
 
         //Messages
         //noinspection Duplicates
-        add(new BroadcastBehavior(ExecutorService.class) {
+        add(new BroadcastBehavior<Process>(ExecutorService.class, Process.class) {
             @Override
-            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
-                String time = LocalTime.now().toString() + " ";
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Process process) {
+                String prefix = process.getProcessType().name().split("_")[0].toLowerCase();
 
-                if (payload instanceof Process){
-                    Process process = (Process) payload;
-                    String prefix = process.getProcessType().name().split("_")[0].toLowerCase();
+                //noinspection Duplicates
+                switch (key){
+                    case "onBegin":
+                        info(currentTime() + getString(prefix + "_process.begin"));
 
-                    switch (key){
-                        case "onBegin":
-                            info(time + getString(prefix + "_process.begin"));
+                        break;
+                    case "onComplete":
+                        info(currentTime() + getStringFormat(prefix + "_process.completed", process.getSuccessCount(),
+                                process.getSkippedCount(), process.getErrorCount()));
 
-                            break;
-                        case "onComplete":
-                            info(time + getStringFormat(prefix + "_process.completed", process.getSuccessCount(),
-                                    process.getSkippedCount(), process.getErrorCount()));
+                        break;
+                    case "onCancel":
+                        info(currentTime() + getStringFormat(prefix + "_process.canceled", process.getSuccessCount(),
+                                process.getSkippedCount(), process.getErrorCount()));
 
-                            break;
-                        case "onCancel":
-                            info(time + getStringFormat(prefix + "_process.canceled", process.getSuccessCount(),
-                                    process.getSkippedCount(), process.getErrorCount()));
+                        break;
+                    case "onCriticalError":
+                        error(process.getErrorMessage());
+                        info(currentTime() + getStringFormat(prefix + "_process.critical_error", process.getSuccessCount(),
+                                process.getSkippedCount(), process.getErrorCount()));
 
-                            break;
-                        case "onCriticalError":
-                            error(process.getErrorMessage());
-                            info(time + getStringFormat(prefix + "_process.critical_error", process.getSuccessCount(),
-                                    process.getSkippedCount(), process.getErrorCount()));
-
-                            break;
-                    }
-
-                    handler.add(messages, dataViewContainer, buttons);
+                        break;
                 }
 
-                if (payload instanceof AbstractRequestFile){
-                    AbstractRequestFile object = (AbstractRequestFile) payload;
+                handler.add(messages, dataViewContainer, buttons);
+            }
 
-                    if ("onError".equals(key)){
-                        error(time + object.getErrorMessage());
-                    }
-
-                    handler.add(messages, dataViewContainer, buttons);
-                }
+            @Override
+            protected boolean filter(Process payload) {
+                return LOAD_SUBSIDY_TARIF.equals(payload.getProcessType());
             }
         });
 
-        add(new BroadcastBehavior(LoadRequestFileBean.class) {
+        //noinspection Duplicates
+        add(new BroadcastBehavior<RequestFile>(ExecutorService.class, RequestFile.class) {
             @Override
-            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, RequestFile requestFile) {
+                if ("onError".equals(key)){
+                    error(currentTime() + requestFile.getErrorMessage());
+                }
+
+                handler.add(messages, dataViewContainer, buttons);
+            }
+
+            @Override
+            protected boolean filter(RequestFile requestFile) {
+                return dataView.get("item" + requestFile.getId()) != null;
+            }
+        });
+
+        //noinspection Duplicates
+        add(new BroadcastBehavior<RequestFile>(LoadRequestFileBean.class, RequestFile.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, RequestFile requestFile) {
                 if ("onUpdate".equals(key)){
                     handler.add(messages, dataViewContainer);
                 }
             }
+            @Override
+            protected boolean filter(RequestFile requestFile) {
+                return SUBSIDY_TARIF.equals(requestFile.getType());
+            }
         });
 
-        add(new BroadcastBehavior(ProcessManagerService.class) {
+        //noinspection Duplicates
+        add(new BroadcastBehavior<Exception>(ProcessManagerService.class, Exception.class) {
             @Override
-            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
-                if (payload instanceof Exception){
-                    error(ExceptionUtil.getCauseMessage((Exception) payload));
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Exception e) {
+                error(ExceptionUtil.getCauseMessage(e));
 
-                    handler.add(messages);
-                }
+                handler.add(messages);
             }
         });
     }

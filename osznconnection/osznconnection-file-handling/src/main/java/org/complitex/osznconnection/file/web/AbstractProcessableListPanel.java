@@ -75,10 +75,10 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static org.complitex.common.util.StringUtil.currentTime;
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
 
 public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile, F extends AbstractFilter> extends Panel {
@@ -731,119 +731,129 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         add(requestFileHistoryPanel = new RequestFileHistoryPanel("history_panel"));
 
         //Messages
-        add(new BroadcastBehavior(ExecutorService.class) {
+        add(new BroadcastBehavior<Process>(ExecutorService.class, Process.class) {
             @Override
-            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
-                String time = LocalTime.now().toString() + " ";
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Process process) {
+                String prefix = process.getProcessType().name().split("_")[0].toLowerCase();
 
-                if (payload instanceof Process){ //todo executor open page link
-                    Process process = (Process) payload;
-                    String prefix = process.getProcessType().name().split("_")[0].toLowerCase();
+                switch (key){
+                    case "onBegin":
+                        info(currentTime() + getString(prefix + "_process.begin"));
 
-                    switch (key){
-                        case "onBegin":
-                            info(time + getString(prefix + "_process.begin"));
+                        break;
+                    case "onComplete":
+                        info(currentTime() + getString(prefix + "_process.completed", process.getSuccessCount(),
+                                process.getSkippedCount(), process.getErrorCount()));
 
-                            break;
-                        case "onComplete":
-                            info(time + getString(prefix + "_process.completed", process.getSuccessCount(),
-                                    process.getSkippedCount(), process.getErrorCount()));
+                        break;
+                    case "onCancel":
+                        info(currentTime() + getString(prefix + "_process.canceled", process.getSuccessCount(),
+                                process.getSkippedCount(), process.getErrorCount()));
 
-                            break;
-                        case "onCancel":
-                            info(time + getString(prefix + "_process.canceled", process.getSuccessCount(),
-                                    process.getSkippedCount(), process.getErrorCount()));
+                        break;
+                    case "onCriticalError":
+                        error(process.getErrorMessage());
+                        info(currentTime() + getString(prefix + "_process.critical_error", process.getSuccessCount(),
+                                process.getSkippedCount(), process.getErrorCount()));
 
-                            break;
-                        case "onCriticalError":
-                            error(process.getErrorMessage());
-                            info(time + getString(prefix + "_process.critical_error", process.getSuccessCount(),
-                                    process.getSkippedCount(), process.getErrorCount()));
-
-                            break;
-                    }
-
-                    handler.add(messages, dataViewContainer, buttons);
+                        break;
                 }
 
-                if (payload instanceof AbstractRequestFile){
-                    AbstractRequestFile object = (AbstractRequestFile) payload;
+                handler.add(messages, dataViewContainer, buttons);
+            }
 
-                    switch (key){
-                        case "onSuccess":
-                        case "onSkip":
-                            handler.add(messages);
-
-                            break;
-                        case "onError":
-                            error(time + object.getErrorMessage());
-                            handler.add(messages);
-
-                            break;
-                    }
-
-                    Item item = (Item) dataView.get("item" + object.getId());
-
-                    if (item != null){
-                        R rf = getRequestFile(object.getId()); //todo add service to update processed count
-
-                        if (rf != null){
-                            //noinspection unchecked
-                            item.setModelObject(rf);
-                        }
-
-                        handler.add(item);
-                    }
-                }
+            @Override
+            protected boolean filter(Process payload) {
+                return payload.getProcessType().equals(loadProcessType) ||
+                        payload.getProcessType().equals(bindProcessType) ||
+                        payload.getProcessType().equals(fillProcessType) ||
+                        payload.getProcessType().equals(saveProcessType);
             }
         });
 
-        add(new BroadcastBehavior(AbstractTaskBean.class) {
+        add(new BroadcastBehavior<RequestFile>(ExecutorService.class, RequestFile.class) {
+            @Override
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, RequestFile requestFile) {
+                switch (key){
+                    case "onSuccess":
+                    case "onSkip":
+                        handler.add(messages);
+
+                        break;
+                    case "onError":
+                        error(currentTime() + requestFile.getErrorMessage());
+                        handler.add(messages);
+
+                        break;
+                }
+
+                Item item = (Item) dataView.get("item" + requestFile.getId());
+
+                R rf = getRequestFile(requestFile.getId()); //todo add service to update processed count
+
+                if (rf != null){
+                    //noinspection unchecked
+                    item.setModelObject(rf);
+                }
+
+                handler.add(item);
+            }
+
+            @Override
+            protected boolean filter(RequestFile requestFile) {
+                return dataView.get("item" + requestFile.getId()) != null;
+            }
+        });
+
+        add(new BroadcastBehavior<AbstractRequest>(AbstractTaskBean.class, AbstractRequest.class) {
             private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());
 
             @Override
-            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, AbstractRequest request) {
                 if ("onRequest".equals(key) && System.currentTimeMillis() - lastUpdate.get() > 250){
                     lastUpdate.set(System.currentTimeMillis());
-
-                    AbstractRequest request = (AbstractRequest) payload;
 
                     Long id = request.getGroupId() != null ? request.getGroupId() : request.getRequestFileId();
 
                     Item item = (Item) dataView.get("item" + id);
 
-                    if (item != null){
-                        R rf = getRequestFile(id);
+                    R rf = getRequestFile(id);
 
-                        if (rf != null){
-                            //noinspection unchecked
-                            item.setModelObject(rf);
-                        }
-
-                        handler.add(item);
+                    if (rf != null){
+                        //noinspection unchecked
+                        item.setModelObject(rf);
                     }
+
+                    handler.add(item);
                 }
+            }
+
+            @Override
+            protected boolean filter(AbstractRequest request) {
+                Long id = request.getGroupId() != null ? request.getGroupId() : request.getRequestFileId();
+
+                return dataView.get("item" + id) != null;
             }
         });
 
-        add(new BroadcastBehavior(ProcessManagerService.class) {
+        add(new BroadcastBehavior<Exception>(ProcessManagerService.class, Exception.class) {
             @Override
-            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
-                if (payload instanceof Exception){
-                    error(ExceptionUtil.getCauseMessage((Exception) payload));
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, Exception e) {
+                error(ExceptionUtil.getCauseMessage(e));
 
-                    handler.add(messages);
-                }
+                handler.add(messages);
             }
         });
 
-        add(new BroadcastBehavior(LoadRequestFileBean.class) {
+        add(new BroadcastBehavior<RequestFile>(LoadRequestFileBean.class, RequestFile.class) {
             @Override
-            protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, RequestFile requestFile) {
                 if ("onUpdate".equals(key)){
                     handler.add(messages, dataViewContainer);
                 }
             }
+
+            //todo filter request file type
         });
     }
 
