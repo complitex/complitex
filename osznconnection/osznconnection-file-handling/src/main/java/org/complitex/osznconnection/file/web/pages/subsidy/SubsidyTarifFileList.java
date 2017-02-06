@@ -87,8 +87,6 @@ public class SubsidyTarifFileList extends TemplatePage {
     }
 
     private void init() {
-        final ProcessingManager processingManager = new ProcessingManager(LOAD_SUBSIDY_TARIF);
-
         add(new Label("title", getString("title")));
 
         final AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");

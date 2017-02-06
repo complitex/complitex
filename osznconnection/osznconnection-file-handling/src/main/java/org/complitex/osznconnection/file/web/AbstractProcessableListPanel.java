@@ -484,13 +484,16 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 }));
 
                 //Количество загруженных записей
-                item.add(new Label("loaded_record_count", new PropertyModel<String>(item.getModel(), "loadedRecordCount")));
+                item.add(new Label("loaded_record_count", new PropertyModel<String>(item.getModel(), "loadedRecordCount"))
+                        .setOutputMarkupId(true));
 
                 //Количество связанных записей
-                item.add(new Label("binded_record_count", new PropertyModel<String>(item.getModel(), "bindedRecordCount")));
+                item.add(new Label("binded_record_count", new PropertyModel<String>(item.getModel(), "bindedRecordCount"))
+                        .setOutputMarkupId(true));
 
                 //Количество обработанных записей
-                item.add(new Label("filled_record_count", new PropertyModel<String>(item.getModel(), "filledRecordCount")));
+                item.add(new Label("filled_record_count", new PropertyModel<String>(item.getModel(), "filledRecordCount"))
+                        .setOutputMarkupId(true));
 
                 //Статус
                 AjaxLink history = new AjaxLink("history") {
@@ -502,7 +505,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 };
                 item.add(history);
 
-                history.add(new ItemStatusLabel("status"));
+                history.add(new ItemStatusLabel("status").setOutputMarkupId(true));
 
                 //Дополнительные поля
                 for (Column column : columns) {
@@ -822,9 +825,13 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     if (rf != null){
                         //noinspection unchecked
                         item.setModelObject(rf);
-                    }
 
-                    handler.add(item);
+                        item.visitChildren(Label.class, (component, iVisit) -> {
+                            if (component.getOutputMarkupId()){
+                                handler.add(component);
+                            }
+                        });
+                    }
                 }
             }
 
