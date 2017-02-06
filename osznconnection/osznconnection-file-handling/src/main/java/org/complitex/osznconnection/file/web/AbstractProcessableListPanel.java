@@ -76,7 +76,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static org.complitex.common.util.StringUtil.currentTime;
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
@@ -404,8 +403,9 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         dataView = new DataView<R>("objects", dataProvider) {
             @Override
             protected Item<R> newItem(String id, int index, IModel<R> model) {
-                Item<R> item =  super.newItem("item" + model.getObject().getId(), index, model);
-
+                String itemObjectId = "item" + model.getObject().getId();
+                Item<R> item =  super.newItem(itemObjectId, index, model);
+                item.setMarkupId(itemObjectId);
                 item.setOutputMarkupId(true);
 
                 return item;
@@ -774,9 +774,9 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             }
         });
 
-        add(new BroadcastBehavior<RequestFile>(ExecutorService.class, RequestFile.class) {
+        add(new BroadcastBehavior<AbstractRequestFile>(ExecutorService.class, AbstractRequestFile.class) {
             @Override
-            protected void onBroadcast(WebSocketRequestHandler handler, String key, RequestFile requestFile) {
+            protected void onBroadcast(WebSocketRequestHandler handler, String key, AbstractRequestFile requestFile) {
                 switch (key){
                     case "onSuccess":
                     case "onSkip":
@@ -803,19 +803,15 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             }
 
             @Override
-            protected boolean filter(RequestFile requestFile) {
+            protected boolean filter(AbstractRequestFile requestFile) {
                 return dataView.get("item" + requestFile.getId()) != null;
             }
         });
 
         add(new BroadcastBehavior<AbstractRequest>(AbstractTaskBean.class, AbstractRequest.class) {
-            private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());
-
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, AbstractRequest request) {
-                if ("onRequest".equals(key) && System.currentTimeMillis() - lastUpdate.get() > 250){
-                    lastUpdate.set(System.currentTimeMillis());
-
+                if ("onRequest".equals(key)){
                     Long id = request.getGroupId() != null ? request.getGroupId() : request.getRequestFileId();
 
                     Item item = (Item) dataView.get("item" + id);

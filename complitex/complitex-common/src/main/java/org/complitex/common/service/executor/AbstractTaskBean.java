@@ -19,7 +19,7 @@ public abstract class AbstractTaskBean<T extends IExecutorObject> implements ITa
     private static AtomicLong lastOnRequest = new AtomicLong(System.currentTimeMillis());
 
     protected <R> void onRequest(R request){
-        if (System.currentTimeMillis() - lastOnRequest.get() > 1000) {
+        if (System.currentTimeMillis() - lastOnRequest.get() > 100) {
             broadcastService.broadcast(getClass(), "onRequest", request);
 
             lastOnRequest.set(System.currentTimeMillis());
