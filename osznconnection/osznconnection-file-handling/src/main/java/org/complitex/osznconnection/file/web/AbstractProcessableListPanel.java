@@ -17,7 +17,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -557,10 +556,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         //Связать
-        buttons.add(new SubmitLink("bind") {
+        buttons.add(new AjaxSubmitLink("bind") {
 
             @Override
-            public void onSubmit() {
+            public void onSubmit(AjaxRequestTarget target, Form form) {
                 bind(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
             }
@@ -572,10 +571,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         //Обработать
-        buttons.add(new SubmitLink("process") {
+        buttons.add(new AjaxSubmitLink("process") {
 
             @Override
-            public void onSubmit() {
+            public void onSubmit(AjaxRequestTarget target, Form form) {
                 fill(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
             }
@@ -587,10 +586,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         });
 
         //Выгрузить
-        buttons.add(new SubmitLink("save") {
+        buttons.add(new AjaxSubmitLink("save") {
 
             @Override
-            public void onSubmit() {
+            public void onSubmit(AjaxRequestTarget target, Form form) {
                 save(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
             }
@@ -819,6 +818,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     R rf = getRequestFile(id);
 
                     if (rf != null){
+                        if (!((AbstractRequestFile)item.getModelObject()).getStatus().equals(rf.getStatus())){
+                            handler.add(item.get("itemCheckBoxPanel"));
+                        }
+
                         //noinspection unchecked
                         item.setModelObject(rf);
 
