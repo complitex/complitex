@@ -92,7 +92,7 @@ public class SelectManager implements Serializable {
         }
     }
 
-    IModel<Boolean> newSelectCheckboxModel(final long objectId) {
+    IModel<Boolean> newSelectCheckboxModel(Long objectId) {
         return new Model<Boolean>() {
 
             @Override

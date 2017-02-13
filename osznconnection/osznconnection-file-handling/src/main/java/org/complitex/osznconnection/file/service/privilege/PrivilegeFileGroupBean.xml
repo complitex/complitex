@@ -112,7 +112,7 @@
           (select count(1) from `facility_service_type` where `request_file_id` = s.`id` and `status` = 215))
         as filled_record_count
 
-        from (select group_id from request_file where type = 6 or type = 7 group by group_id) g
+        from (select group_id from request_file where type in (6, 7) group by group_id) g
             left join request_file f on (f.group_id = g.group_id and f.type = 6)
             left join request_file s on (s.group_id = g.group_id and s.type = 7)
         
@@ -120,6 +120,7 @@
         
         <if test="sortProperty != null">
             <choose>
+                <when test="sortProperty == 'id'">order by  g.`group_id`</when>
                 <when test="sortProperty == 'status'">order by f.`status`</when>
                 <when test="sortProperty == 'firstName'">order by f.`name`</when>
                 <when test="sortProperty == 'secondName'">order by s.`name`</when>

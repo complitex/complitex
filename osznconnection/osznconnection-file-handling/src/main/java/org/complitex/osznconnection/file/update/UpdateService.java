@@ -37,6 +37,10 @@ public class UpdateService extends AbstractBean {
 
                 sqlSession().insert(RequestFileGroupBean.NS + ".insertRequestFileGroup", requestFileGroup);
 
+                if (requestFileGroup.getId() == null){
+                    throw new RuntimeException("update service error. request file group id is null");
+                }
+
                 if (g.getDwellingCharacteristicsRequestFile() != null){
                     g.getDwellingCharacteristicsRequestFile().setGroupId(requestFileGroup.getId());
 
