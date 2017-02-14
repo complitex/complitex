@@ -761,7 +761,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                         break;
                 }
 
-                handler.add(messages, dataViewContainer, buttons);
+                handler.add(messages, form);
             }
 
             @Override

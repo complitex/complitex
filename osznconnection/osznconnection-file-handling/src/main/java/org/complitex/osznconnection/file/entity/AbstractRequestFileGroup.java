@@ -106,14 +106,16 @@ public abstract class AbstractRequestFileGroup extends AbstractRequestFile{
 
     @Override
     public boolean isProcessing() {
-        return (firstRequestFile != null && firstRequestFile.isProcessing()) ||
-                (secondRequestFile != null) && secondRequestFile.isProcessing();
+        return (getStatus() != null && getStatus().isProcessing()) ||
+                (firstRequestFile != null && firstRequestFile.isProcessing()) ||
+                (secondRequestFile != null && secondRequestFile.isProcessing());
     }
 
     @Override
     public boolean isWaiting() {
-        return (firstRequestFile != null && firstRequestFile.isWaiting()) ||
-                (secondRequestFile != null) && secondRequestFile.isWaiting();
+        return (getStatus() != null && getStatus().isWaiting()) ||
+                (firstRequestFile != null && firstRequestFile.isWaiting()) ||
+                (secondRequestFile != null && secondRequestFile.isWaiting());
     }
 
     @Override
