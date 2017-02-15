@@ -1,8 +1,12 @@
 package org.complitex.osznconnection.file.service.status.details;
 
 import org.complitex.common.service.AbstractBean;
+import org.complitex.osznconnection.file.entity.StatusDetail;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
+import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
+import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
 
@@ -10,37 +14,63 @@ import java.util.List;
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 24.11.10 16:51
  */
-@Stateless(name = "StatusDetailBean")
+@Stateless
 public class StatusDetailBean extends AbstractBean {
+    public static final String NS = StatusDetailBean.class.getName();
 
-    public static final String MAPPING_NAMESPACE = StatusDetailBean.class.getName();
+    @EJB
+    private FacilityReferenceBookBean facilityReferenceBookBean;
 
     @SuppressWarnings("unchecked")
-    public List<StatusDetailInfo> getPaymentStatusDetails(long requestFileId) {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".getPaymentStatusDetailInfo", requestFileId);
+    public List<StatusDetailInfo> getPaymentStatusDetails(Long requestFileId) {
+        return sqlSession().selectList(NS + ".getPaymentStatusDetailInfo", requestFileId);
     }
 
-    public List<StatusDetailInfo> getBenefitStatusDetails(long requestFileId) {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".getBenefitStatusDetailInfo", requestFileId);
+    public List<StatusDetailInfo> getBenefitStatusDetails(Long requestFileId) {
+        return sqlSession().selectList(NS + ".getBenefitStatusDetailInfo", requestFileId);
     }
 
-    public List<StatusDetailInfo> getActualPaymentStatusDetails(long requestFileId) {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".getActualPaymentStatusDetailInfo", requestFileId);
+    public List<StatusDetailInfo> getActualPaymentStatusDetails(Long requestFileId) {
+        return sqlSession().selectList(NS + ".getActualPaymentStatusDetailInfo", requestFileId);
     }
 
-    public List<StatusDetailInfo> getSubsidyStatusDetails(long requestFileId) {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".getSubsidyStatusDetailInfo", requestFileId);
+    public List<StatusDetailInfo> getSubsidyStatusDetails(Long requestFileId) {
+        return sqlSession().selectList(NS + ".getSubsidyStatusDetailInfo", requestFileId);
     }
 
-    public List<StatusDetailInfo> getDwellingCharacteristicsStatusDetails(long requestFileId) {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".getDwellingCharacteristicsStatusDetailInfo", requestFileId);
+    //todo update load street
+    public List<StatusDetailInfo> getDwellingCharacteristicsStatusDetails(Long requestFileId) {
+        return sqlSession().selectList(NS + ".getDwellingCharacteristicsStatusDetailInfo", requestFileId);
     }
     
-    public List<StatusDetailInfo> getFacilityServiceTypeStatusDetails(long requestFileId) {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".getFacilityServiceTypeStatusDetailInfo", requestFileId);
+    public List<StatusDetailInfo> getFacilityServiceTypeStatusDetails(Long requestFileId) {
+        List<StatusDetailInfo> list = sqlSession().selectList(NS + ".getFacilityServiceTypeStatusDetailInfo", requestFileId);
+
+        loadFacilityStreet(requestFileId, list);
+
+        return list;
     }
 
-    public List<StatusDetailInfo> getPrivilegeProlongationStatusDetails(long requestFileId) {
-        return sqlSession().selectList(MAPPING_NAMESPACE + ".getPrivilegeProlongationStatusDetailInfo", requestFileId);
+    //todo update load street
+    public List<StatusDetailInfo> getPrivilegeProlongationStatusDetails(Long requestFileId) {
+        return sqlSession().selectList(NS + ".getPrivilegeProlongationStatusDetailInfo", requestFileId);
+    }
+
+    private void loadFacilityStreet(Long requestFileId, List<StatusDetailInfo> list){
+        for (StatusDetailInfo info : list){
+            for (StatusDetail detail : info.getStatusDetails()){
+                if (detail.getDetail("streetCode") != null && detail.getDetail("street") == null){
+                    FacilityStreet facilityStreet = facilityReferenceBookBean.getFacilityStreet(requestFileId, detail.getDetail("streetCode"));
+
+                    if (facilityStreet != null) {
+                        detail.putDetail("street", facilityStreet.getStreet());
+
+                        if (facilityStreet.getStreetType() != null) {
+                            detail.putDetail("streetType", facilityStreet.getStreetType().replace(".", ""));
+                        }
+                    }
+                }
+            }
+        }
     }
 }

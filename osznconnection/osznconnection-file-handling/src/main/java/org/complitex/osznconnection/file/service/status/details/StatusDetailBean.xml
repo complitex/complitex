@@ -501,7 +501,7 @@
     <select id="getFacilityServiceTypeStatusDetails" parameterType="map" resultMap="facilityServiceTypeStatusDetail">
         <choose>
             <!--account number -->
-            <when test="status == 212 or status == 213 or status == 217">
+            <when test="status == 212 or status == 213">
                 SELECT `FIO` `id`, COUNT(1) `count`,
                 TO_CYRILLIC(`first_name`) first_name,
                 TO_CYRILLIC(`middle_name`) middle_name,
