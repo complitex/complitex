@@ -456,6 +456,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
         passportModel.setObject(request.getPassport());
 
         //lookup by address
+        apartmentModel.detach();
         apartmentModel.setObject(request.getApartment());
 
         initSearchComponentState();

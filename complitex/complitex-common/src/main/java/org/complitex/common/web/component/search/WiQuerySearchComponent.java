@@ -218,7 +218,7 @@ public class WiQuerySearchComponent extends Panel {
                 item.add(filterComponent);
             }
         };
-        filters.setReuseItems(true);
+        //filters.setReuseItems(true);
         return filters;
     }
 
@@ -366,7 +366,7 @@ public class WiQuerySearchComponent extends Panel {
 
             @Override
             public DomainObject getObject(String id, IModel<? extends List<? extends DomainObject>> choices) {
-                return choices.getObject().stream().filter(c -> id.equals(String.valueOf(c.getObjectId()))).findAny().get();
+                return choices.getObject().stream().filter(c -> id.equals(String.valueOf(c.getObjectId()))).findAny().orElse(null);
             }
         };
     }
