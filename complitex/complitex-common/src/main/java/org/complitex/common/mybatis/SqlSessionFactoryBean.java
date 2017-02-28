@@ -42,14 +42,7 @@ public class SqlSessionFactoryBean {
     public SqlSessionManager getSqlSessionManager(String dataSource, String environment){
         JdbcEnvironment jdbcEnvironment = new JdbcEnvironment(dataSource, environment);
 
-        SqlSessionManager sqlSessionManager = sqlSessionManagerMap.get(jdbcEnvironment);
-
-        if (sqlSessionManager == null){
-            sqlSessionManager = newSqlSessionManager(jdbcEnvironment);
-            sqlSessionManagerMap.put(jdbcEnvironment, sqlSessionManager);
-        }
-
-        return sqlSessionManager;
+        return sqlSessionManagerMap.computeIfAbsent(jdbcEnvironment, this::newSqlSessionManager);
     }
 
     private SqlSessionManager newSqlSessionManager(JdbcEnvironment jdbcEnvironment){

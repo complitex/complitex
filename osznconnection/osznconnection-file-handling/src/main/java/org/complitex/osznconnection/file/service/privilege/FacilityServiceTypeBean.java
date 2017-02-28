@@ -10,7 +10,6 @@ import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -27,9 +26,6 @@ import static org.complitex.osznconnection.file.entity.privilege.FacilityService
 public class FacilityServiceTypeBean extends AbstractPrivilegeBean {
     public static final String NS = FacilityServiceTypeBean.class.getName();
     private static final Map<Long, Set<FacilityServiceTypeDBF>> UPDATE_FIELD_MAP = of();
-
-    @EJB
-    private FacilityReferenceBookBean facilityReferenceBookBean;
 
     public enum OrderBy {
 

@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.Log.EVENT;
+import org.complitex.common.exception.DBRuntimeException;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.strategy.StringLocaleBean;
@@ -198,23 +199,25 @@ public class ServiceProviderAdapter extends AbstractBean {
             warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.EMPTY_BENEFIT_DATA);
         }
 
-        for (BenefitData d : cursor.getData()){
-            if (d.getInn() == null || d.getInn().isEmpty() || d.getInn().equals(inn)
-                    && (passport == null || passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){
-                request.setAccountNumber(accountNumber);
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+        if (cursor.getData() != null) {
+            for (BenefitData d : cursor.getData()){
+                if (d.getInn() == null || d.getInn().isEmpty() || d.getInn().equals(inn)
+                        && (passport == null || passport.matches(d.getPassportSerial() + "\\s*" + d.getPassportNumber()))){
+                    request.setAccountNumber(accountNumber);
+                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
-                return;
+                    return;
+                }
             }
-        }
 
-        if (cursor.getData().size() == 1){
-            BenefitData d = cursor.getData().get(0);
+            if (cursor.getData().size() == 1){
+                BenefitData d = cursor.getData().get(0);
 
-            warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.BENEFIT_OWNER_NOT_ASSOCIATED,
-                    new RequestWarningParameter(0, d.getInn()),
-                    new RequestWarningParameter(1, d.getPassportSerial()),
-                    new RequestWarningParameter(2, d.getPassportNumber()));
+                warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.BENEFIT_OWNER_NOT_ASSOCIATED,
+                        new RequestWarningParameter(0, d.getInn()),
+                        new RequestWarningParameter(1, d.getPassportSerial()),
+                        new RequestWarningParameter(2, d.getPassportNumber()));
+            }
         }
 
         log.info("checkFacilityPerson BENEFIT_OWNER_NOT_ASSOCIATED accountNumber={}, inn='{}', passport='{}', data={}",
@@ -294,9 +297,13 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("pFlatNum", apartment);
         params.put("date", date);
 
-        sqlSession(dataSource).selectOne(NS + ".acquireAccountDetailsByAddress", params);
-
-        log.info("getAccountDetails getAccAttrs: {}", params);
+        try {
+            sqlSession(dataSource).selectOne(NS + ".acquireAccountDetailsByAddress", params);
+        } catch (Exception e) {
+            throw new DBRuntimeException(e);
+        } finally {
+            log.info("getAccountDetails getAccAttrs: {}", params);
+        }
 
         return new Cursor<>((Integer) params.get("resultCode"), (List<AccountDetail>) params.get("details"));
     }
@@ -318,6 +325,8 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         try {
             sqlSession(dataSource).selectOne(NS + ".getAttrsByAccCode", params);
+        }catch (Exception e){
+            throw new DBRuntimeException(e);
         } finally {
             log.info("acquireAccountDetailsByAccount getAttrsByAccCode {}", params);
         }
@@ -391,9 +400,13 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("passport", passport);
         params.put("date", date);
 
-        sqlSession(dataSource).selectOne(NS + ".getAttrsByPerson", params);
-
-        log.info("getAttrsByPerson GetAttrsByPerson {}", params);
+        try {
+            sqlSession(dataSource).selectOne(NS + ".getAttrsByPerson", params);
+        } catch (Exception e) {
+            throw new DBRuntimeException(e);
+        } finally {
+            log.info("getAttrsByPerson GetAttrsByPerson {}", params);
+        }
 
         return new Cursor<>((Integer) params.get("resultCode"), (List<AccountDetail>) params.get("accountDetails"));
     }
@@ -435,9 +448,13 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("accountNumber", payment.getAccountNumber());
         params.put("dat1", payment.getField(PaymentDBF.DAT1));
 
-        sqlSession(dataSource).selectOne(NS + ".processPaymentAndBenefit", params);
-
-        log.info("processPaymentAndBenefit getChargeAndParams {}", params);
+        try {
+            sqlSession(dataSource).selectOne(NS + ".processPaymentAndBenefit", params);
+        } catch (Exception e) {
+            throw new DBRuntimeException(e);
+        } finally {
+            log.info("processPaymentAndBenefit getChargeAndParams {}", params);
+        }
 
         Integer resultCode = (Integer) params.get("resultCode");
         if (resultCode == null) {
@@ -763,17 +780,12 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("accountNumber", benefit.getAccountNumber());
         params.put("dat1", dat1);
 
-        long startTime = 0;
-        if (log.isDebugEnabled()) {
-            startTime = System.nanoTime();
-        }
         try {
             sqlSession(dataSource).selectOne(NS + ".getBenefitData", params);
+        }catch (Exception e){
+            throw new DBRuntimeException(e);
         } finally {
             log.info("getBenefitData. Calculation center: {}, parameters : {}", dataSource, params);
-            if (log.isDebugEnabled()) {
-                log.debug("getBenefitData. Time of operation: {} sec.", (System.nanoTime() - startTime) / 1000000000F);
-            }
         }
 
         Integer resultCode = (Integer) params.get("resultCode");
@@ -833,6 +845,8 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         try {
             sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getBenefitData", params);
+        }catch (Exception e){
+            throw new DBRuntimeException(e);
         }finally {
             log.info("getBenefitData getPrivs {}", params);
         }
@@ -1072,6 +1086,8 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         try {
             sqlSession(dataSource).selectOne(NS + ".getBenefitData", params);
+        }catch (Exception e){
+            throw new DBRuntimeException(e);
         } finally {
             log.info("processBenefit getPrivs {}", params);
         }
@@ -1286,17 +1302,12 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("accountNumber", actualPayment.getAccountNumber());
         params.put("date", date);
 
-        long startTime = 0;
-        if (log.isDebugEnabled()) {
-            startTime = System.nanoTime();
-        }
         try {
             sqlSession(dataSource).selectOne(NS + ".processActualPayment", params);
+        }catch (Exception e){
+            throw new DBRuntimeException(e);
         } finally {
             log.info("processActualPayment. Calculation center: {}, parameters : {}", dataSource, params);
-            if (log.isDebugEnabled()) {
-                log.debug("processActualPayment. Time of operation: {} sec.", (System.nanoTime() - startTime) / 1000000000F);
-            }
         }
 
         Integer resultCode = (Integer) params.get("resultCode");
@@ -1394,9 +1405,13 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("accountNumber", accountNumber);
         params.put("dat1", date);
 
-        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".processPaymentAndBenefit", params);
-
-        log.info("getPaymentAndBenefit. GetChargeAndParams{}", params);
+        try {
+            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".processPaymentAndBenefit", params);
+        } catch (Exception e) {
+            throw new DBRuntimeException(e);
+        } finally {
+            log.info("getPaymentAndBenefit. GetChargeAndParams{}", params);
+        }
 
         return new Cursor<>((Integer) params.get("resultCode"), (List) params.get("data"));
     }
@@ -1411,9 +1426,13 @@ public class ServiceProviderAdapter extends AbstractBean {
         map.put("pCnt", recordsCount);
         map.put("pProfit", profit ? 1 : 0);
 
-        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".createPrivHeader", map);
-
-        log.info("createPrivilegeProlongationHeader createPrivHeader {}", map);
+        try {
+            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".createPrivHeader", map);
+        } catch (Exception e) {
+            throw new DBRuntimeException(e);
+        } finally {
+            log.info("createPrivilegeProlongationHeader createPrivHeader {}", map);
+        }
 
         return (Long) map.get("collectionId");
     }
@@ -1434,9 +1453,13 @@ public class ServiceProviderAdapter extends AbstractBean {
         map.put("pAccCode", accountNumber);
         map.put("pDate", date);
 
-        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getLodgers", map);
-
-        log.info("getLodgers {}", map);
+        try {
+            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getLodgers", map);
+        } catch (Exception e) {
+            throw new DBRuntimeException(e);
+        } finally {
+            log.info("getLodgers {}", map);
+        }
 
         return new Cursor<>((Integer) map.get("resultCode"), (List<Lodger>) map.get("data"));
     }
@@ -1450,9 +1473,13 @@ public class ServiceProviderAdapter extends AbstractBean {
         map.put("pFile", fileName);
         map.put("pCnt", recordsCount);
 
-        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".createSubsHeader", map);
-
-        log.info("createSubsHeader {}", map);
+        try {
+            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".createSubsHeader", map);
+        } catch (Exception e) {
+            throw new DBRuntimeException(e);
+        } finally {
+            log.info("createSubsHeader {}", map);
+        }
 
         return (Long) map.get("collectionId");
     }
@@ -1493,9 +1520,13 @@ public class ServiceProviderAdapter extends AbstractBean {
         map.put("pZheuCode", zheuCode);
         map.put("pDate", date);
 
-        sqlSession(getDataSource(userOrganizationId)).selectOne(NS + "." + function, map);
-
-        log.info(function + ", size: {}", ((List) map.get("data")).size());
+        try {
+            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + "." + function, map);
+        } catch (Exception e) {
+            throw new DBRuntimeException(e);
+        } finally {
+            log.info(function + ", size: {}", ((List) map.get("data")).size());
+        }
 
         return new Cursor<>((Integer) map.get("resultCode"), (List) map.get("data"));
     }

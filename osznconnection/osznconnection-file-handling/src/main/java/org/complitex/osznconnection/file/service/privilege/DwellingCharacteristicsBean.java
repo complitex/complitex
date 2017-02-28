@@ -10,7 +10,6 @@ import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -24,9 +23,6 @@ public class DwellingCharacteristicsBean extends AbstractPrivilegeBean {
     public static final String NS = DwellingCharacteristicsBean.class.getName();
 
     private static final Map<Long, Set<DwellingCharacteristicsDBF>> UPDATE_FIELD_MAP = of();
-
-    @EJB
-    private FacilityReferenceBookBean facilityReferenceBookBean;
 
     public enum OrderBy {
         IDPIL(DwellingCharacteristicsDBF.IDPIL.name()),
