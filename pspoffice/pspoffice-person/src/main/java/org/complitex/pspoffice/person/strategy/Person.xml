@@ -4,7 +4,7 @@
 <mapper namespace="org.complitex.pspoffice.person.strategy.Person">
 
     <resultMap id="Person" type="org.complitex.pspoffice.person.strategy.entity.Person"
-            extends="org.complitex.common.entity.DomainObject.DomainObject">
+            extends="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
     </resultMap>
 
     <resultMap id="PersonRegistration" type="org.complitex.pspoffice.person.strategy.PersonStrategy$PersonRegistration">
@@ -122,7 +122,7 @@
         <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
         WHERE
             e.`status` = 'ACTIVE'
-            <include refid="domainObjectPermissionFilter"/>
+            <!--<include refid="domainObjectPermissionFilter"/> todo-->
             AND (ln.`name` = #{additionalParams.last_name} OR sys_ln.`name` = #{additionalParams.last_name})
             <if test="additionalParams['first_name'] != null">
                 AND (fn.`name` LIKE CONCAT(#{additionalParams.first_name}, '%') OR
@@ -136,7 +136,7 @@
     </select>
 
     <select id="findPreviousDocumentAttributes" parameterType="map" 
-                    resultMap="org.complitex.common.entity.Attribute.Attribute">
+                    resultMap="org.complitex.common.strategy.DomainObjectStrategy.attributeResultMap">
         SELECT p.* FROM `person_attribute` p WHERE p.`status` = 'ARCHIVE' AND p.`attribute_type_id` = #{personDocumentAT} 
                     AND p.`object_id` = #{personId}
         ORDER BY p.`end_date`

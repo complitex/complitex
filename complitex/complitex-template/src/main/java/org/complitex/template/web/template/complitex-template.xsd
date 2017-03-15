@@ -8,7 +8,7 @@
             <xs:sequence>
                 <xs:element ref="web-components" minOccurs="0"/>
                 <xs:element ref="sidebar"/>
-                <xs:element ref="groups"/>
+                <xs:element ref="groups"  minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

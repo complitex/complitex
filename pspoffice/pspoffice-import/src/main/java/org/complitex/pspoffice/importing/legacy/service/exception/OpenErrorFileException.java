@@ -1,10 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.pspoffice.importing.legacy.service.exception;
 
-import org.complitex.common.service.exception.AbstractException;
+
+import org.complitex.common.exception.AbstractException;
 
 /**
  *

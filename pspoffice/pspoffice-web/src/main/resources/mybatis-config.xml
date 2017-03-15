@@ -23,21 +23,20 @@
         <mapper resource="org/complitex/common/service/NameBean.xml"/>
         <mapper resource="org/complitex/common/service/ConfigBean.xml"/>
 
-         <mapper resource="org/complitex/organization/strategy/Organization.xml"/>
+        <mapper resource="org/complitex/organization/strategy/OrganizationStrategy.xml"/>
 
-        <mapper resource="org/complitex/address/strategy/building/Building.xml"/>
-        <mapper resource="org/complitex/address/strategy/building_address/BuildingAddress.xml"/>
-        <mapper resource="org/complitex/address/strategy/street/Street.xml"/>
-        
-        <!-- Psp office custom "find" and "count" operations for streets -->
-        <mapper resource="org/complitex/pspoffice/address/street/Street.xml"/>
-        
-        <mapper resource="org/complitex/address/strategy/city/City.xml"/>
-        <mapper resource="org/complitex/address/strategy/district/District.xml"/>
+        <mapper resource="org/complitex/address/strategy/building/BuildingStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/building_address/BuildingAddressStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/street/StreetStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/city/CityStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/district/DistrictStrategy.xml"/>
 
         <mapper resource="org/complitex/admin/service/UserBean.xml"/>
         <mapper resource="org/complitex/admin/service/UserProfileBean.xml"/>
         <mapper resource="org/complitex/logging/service/LogListBean.xml"/>
+
+        <!-- Psp office custom "find" and "count" operations for streets -->
+        <mapper resource="org/complitex/pspoffice/address/street/Street.xml"/>
 
         <mapper resource="org/complitex/pspoffice/person/strategy/Person.xml"/>
         <mapper resource="org/complitex/pspoffice/person/strategy/ApartmentCard.xml"/>

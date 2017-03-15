@@ -8,7 +8,7 @@
             AND pa.`attribute_type_id` IN (2000,2001,2002) AND pa.`attribute_id` = #{localeId}
     </select>
 
-    <select id="findPreviousNames" parameterType="map" resultMap="org.complitex.common.entity.Attribute.Attribute">
+    <select id="findPreviousNames" parameterType="map" resultMap="org.complitex.common.strategy.DomainObjectStrategy.attributeResultMap">
         SELECT pa.* FROM `person_attribute` pa WHERE pa.`object_id` = #{personId}
             AND pa.`start_date` <![CDATA[ <= ]]> #{startDate} AND ((pa.`end_date` IS NULL ) OR (pa.`end_date` <![CDATA[ > ]]> #{startDate}))
             AND pa.`attribute_type_id` IN (2000,2001,2002) AND pa.`attribute_id` = #{localeId}

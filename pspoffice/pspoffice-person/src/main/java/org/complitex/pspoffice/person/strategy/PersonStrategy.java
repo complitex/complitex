@@ -200,7 +200,7 @@ public class PersonStrategy extends TemplateStrategy {
             loadAttributes(person);
             loadName(person);
             //load subject ids
-            person.setSubjectIds(loadSubjects(person.getPermissionId()));
+            //person.setSubjectIds(loadSubjects(person.getPermissionId()));
         }
         return persons;
     }

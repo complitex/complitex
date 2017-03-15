@@ -79,7 +79,3 @@ insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_
 insert into `user` (`id`, `login`, `password`, `user_info_object_id`) values(4,'2','c81e728d9d4c2f636f067f89cc14862c',4);
 insert into `user_organization` (`id`, `user_id`, `organization_object_id`, `main`) values(2,4,1,1);
 insert into `usergroup` (`id`, `login`, `group_name`) values(5,'2','EMPLOYEES_CHILD_VIEW');
-
---insert into config(`name`, `value`) values ('IMPORT_FILE_STORAGE_DIR', 'D:\\Artem\\Projects\\org.complitex\\storage\\import');
-insert into config(`name`, `value`) values ('DEFAULT_LEGACY_IMPORT_FILE_DIR', 'D:\\Artem\\Projects\\org.complitex\\pspoffice\\docs\\PSW_Rada');
-insert into config(`name`, `value`) values ('DEFAULT_LEGACY_IMPORT_FILE_ERRORS_DIR', 'D:\\Artem\\Projects\\org.complitex\\pspoffice\\docs\\PSW_Rada\\errors');

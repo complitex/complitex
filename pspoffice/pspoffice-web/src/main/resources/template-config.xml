@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <template xmlns="http://www.complitex.org/web/template">
-    <homepage-class>
-        org.complitex.pspoffice.web.template.PspWelcomePage
-    </homepage-class>
+
     <sidebar>
         <menu class="org.complitex.pspoffice.person.menu.OperationMenu"/>
         <menu class="org.complitex.pspoffice.person.menu.PersonMenu"/>

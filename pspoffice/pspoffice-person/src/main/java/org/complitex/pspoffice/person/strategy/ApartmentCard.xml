@@ -4,7 +4,7 @@
 <mapper namespace="org.complitex.pspoffice.person.strategy.ApartmentCard">
 
     <resultMap id="ApartmentCard" type="org.complitex.pspoffice.person.strategy.entity.ApartmentCard"
-            extends="org.complitex.common.entity.DomainObject.DomainObject">
+            extends="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
     </resultMap>
 
     <sql id="permissionFilter">

@@ -6,10 +6,10 @@
     <select id="selectStreets" resultMap="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap"
             parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT e.* FROM `street` e WHERE
-        <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
+        <include refid="org.complitex.address.strategy.street.StreetStrategy.streetFilter"/>
         <include refid="org.complitex.pspoffice.address.street.Street.pspStreetFilter"/>
-        <include refid="org.complitex.common.entity.DomainObject.orderBy"/>
-        <include refid="org.complitex.common.entity.DomainObject.limit"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlOrderBy"/>
+        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlLimit"/>
     </select>
     
     <sql id="pspStreetFilter">
@@ -24,7 +24,7 @@
 
     <select id="selectStreetCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT COUNT(1) FROM `street` e WHERE
-        <include refid="org.complitex.address.strategy.street.Street.streetFilter"/>
+        <include refid="org.complitex.address.strategy.street.StreetStrategy.streetFilter"/>
         <include refid="org.complitex.pspoffice.address.street.Street.pspStreetFilter"/>
     </select>
 

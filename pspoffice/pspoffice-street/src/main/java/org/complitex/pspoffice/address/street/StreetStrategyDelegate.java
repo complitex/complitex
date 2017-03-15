@@ -48,7 +48,7 @@ public class StreetStrategyDelegate extends StreetStrategy {
         for (DomainObject object : objects) {
             loadAttributes(object);
             //load subject ids
-            object.setSubjectIds(loadSubjects(object.getPermissionId()));
+            //object.setSubjectIds(loadSubjects(object.getPermissionId()));
         }
         return objects;
 

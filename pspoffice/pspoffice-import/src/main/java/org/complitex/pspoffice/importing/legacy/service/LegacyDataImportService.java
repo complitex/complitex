@@ -12,10 +12,10 @@ import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.exception.AbstractException;
-import org.complitex.common.service.exception.ImportCriticalException;
-import org.complitex.common.service.exception.ImportFileNotFoundException;
-import org.complitex.common.service.exception.ImportFileReadException;
+import org.complitex.common.exception.AbstractException;
+import org.complitex.common.exception.ImportCriticalException;
+import org.complitex.common.exception.ImportFileNotFoundException;
+import org.complitex.common.exception.ImportFileReadException;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.StringLocaleBean;
@@ -286,7 +286,7 @@ public class LegacyDataImportService {
         }
     }
 
-    private static Exception wrapLoadException(Exception e, String fileName, int recordIndex) {
+    private Exception wrapLoadException(Exception e, String fileName, int recordIndex) {
         final Class<?> exceptionClass = e.getClass();
         if (IOException.class == exceptionClass) {
             return new ImportFileReadException(e, fileName, recordIndex);

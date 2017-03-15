@@ -23,7 +23,6 @@ import org.complitex.pspoffice.person.strategy.entity.PersonAgeType;
 import org.complitex.pspoffice.person.strategy.web.edit.person.toolbar.DeathButton;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
-import org.complitex.template.web.pages.DomainObjectList;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
 
@@ -109,7 +108,7 @@ public class PersonEdit extends FormTemplatePage {
         }
 
         PageParameters listPageParams = personStrategy.getListPageParams();
-        listPageParams.set(DomainObjectList.SCROLL_PARAMETER, newPerson.getObjectId());
+        //listPageParams.set(DomainObjectList.SCROLL_PARAMETER, newPerson.getObjectId());
         setResponsePage(personStrategy.getListPage(), listPageParams);
     }
 
