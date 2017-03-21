@@ -41,7 +41,7 @@ public class PersonNameBean extends AbstractBean {
     public List<PersonName> find(PersonNameType personNameType, String filter, Locale locale, int size) {
         Long localeId = stringLocaleBean.convert(locale).getId();
         List<PersonName> personNames = sqlSession().selectList(MAPPING_NAMESPACE + ".find", of("personNameType", personNameType.name().toLowerCase(),
-                "filter", filter, "localeId", localeId, "size", size));
+                "filter", filter, "localeId", localeId, "count", size));
         for (PersonName personName : personNames) {
             personName.setPersonNameType(personNameType);
         }

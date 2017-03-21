@@ -37,7 +37,7 @@ public final class GenderPanel extends Panel {
 
             @Override
             public Gender getObject(String id, IModel<? extends List<? extends Gender>> choices) {
-                return null;
+                return choices.getObject().stream().filter(c -> id.equals(c.name())).findAny().orElse(null);
             }
         });
         gender.setSuffix("");

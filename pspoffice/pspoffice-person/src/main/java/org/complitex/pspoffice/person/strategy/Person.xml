@@ -44,7 +44,7 @@
     </sql>
 
     <sql id="filter">
-        <if test="id != null">
+        <if test="objectId != null">
             AND e.`object_id` = #{id}
         </if>
         <if test="additionalParams != null">
@@ -63,7 +63,7 @@
         </if>
     </sql>
 
-    <select id="find" resultMap="org.complitex.pspoffice.person.strategy.Person.Person"
+    <select id="selectPersons" resultMap="org.complitex.pspoffice.person.strategy.Person.Person"
             parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT e.* FROM `person` e
             <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
@@ -75,7 +75,7 @@
         <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlLimit"/>
     </select>
 
-    <select id="count" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
+    <select id="selectPersonCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
         SELECT COUNT(1) FROM `person` e
             <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
         WHERE

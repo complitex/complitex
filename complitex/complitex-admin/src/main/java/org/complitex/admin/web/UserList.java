@@ -116,7 +116,11 @@ public class UserList extends TemplatePage {
             groupNames.add(groupName.name());
         }
 
-        groupNames.addAll(getTemplateWebApplication().getTemplateLoader().getGroupNames());
+        List<String> templateGroupNames = getTemplateWebApplication().getTemplateLoader().getGroupNames();
+
+        if (templateGroupNames != null){
+            groupNames.addAll(templateGroupNames);
+        }
 
         filterForm.add(new DropDownChoice<>("usergroups",
                 new PropertyModel<>(filterModel, "groupName"),
