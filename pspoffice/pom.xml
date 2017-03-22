@@ -35,6 +35,7 @@
         <module>pspoffice-housing-rights</module>
         <module>pspoffice-import</module>
         <module>pspoffice-street</module>
+        <module>pspoffice-backend</module>
 
         <module>../complitex/complitex-common</module>
         <module>../complitex/complitex-template</module>
@@ -45,7 +46,9 @@
         <module>../complitex/complitex-images</module>
         <module>../complitex/complitex-organization-type</module>
         <module>../complitex/complitex-organization</module>
-    
+        <module>pspoffice-frontend</module>
+
+
     </modules>
 
     <dependencyManagement>
