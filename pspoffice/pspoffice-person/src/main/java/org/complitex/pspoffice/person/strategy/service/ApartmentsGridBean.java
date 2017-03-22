@@ -66,8 +66,8 @@ public class ApartmentsGridBean extends AbstractBean {
         params.put("number", filter.getNumber());
         params.put("apartmentPermissionString", filter.getApartmentPermissionString());
         params.put("roomPermissionString", filter.getRoomPermissionString());
-        params.put("start", filter.getStart());
-        params.put("size", filter.getSize());
+        params.put("first", filter.getStart());
+        params.put("count", filter.getSize());
         return params;
     }
 
