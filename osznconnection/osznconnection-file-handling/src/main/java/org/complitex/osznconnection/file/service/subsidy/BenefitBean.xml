@@ -116,6 +116,9 @@
         <if test="account != null">
             AND b.`OWN_NUM_SR` LIKE CONCAT('%',#{account},'%')
         </if>
+        <if test="puAccount != null">
+            AND b.`account_number` LIKE CONCAT('%',#{puAccount},'%')
+        </if>
         <if test="firstName != null">
             AND TO_CYRILLIC(b.`F_NAM`) LIKE CONCAT('%',#{firstName},'%')
         </if>
