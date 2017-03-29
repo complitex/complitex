@@ -45,7 +45,8 @@ public class BenefitBean extends AbstractRequestBean {
 
     public enum OrderBy {
 
-        ACCOUNT(BenefitDBF.OWN_NUM_SR.name()),
+        ACCOUNT("account_number"),
+        PU_ACCOUNT(BenefitDBF.OWN_NUM_SR.name()),
         FIRST_NAME(BenefitDBF.F_NAM.name()),
         MIDDLE_NAME(BenefitDBF.M_NAM.name()),
         LAST_NAME(BenefitDBF.SUR_NAM.name()),

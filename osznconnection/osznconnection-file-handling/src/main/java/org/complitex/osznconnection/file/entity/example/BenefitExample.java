@@ -20,6 +20,7 @@ public class BenefitExample extends AbstractRequestExample {
     private String orderByClause;
     private boolean asc;
     private String account;
+    private String puAccount;
 
     public String getAccount() {
         return account;
@@ -131,5 +132,13 @@ public class BenefitExample extends AbstractRequestExample {
 
     public void setPrivilege(String privilege) {
         this.privilege = privilege;
+    }
+
+    public String getPuAccount() {
+        return puAccount;
+    }
+
+    public void setPuAccount(String puAccount) {
+        this.puAccount = puAccount;
     }
 }

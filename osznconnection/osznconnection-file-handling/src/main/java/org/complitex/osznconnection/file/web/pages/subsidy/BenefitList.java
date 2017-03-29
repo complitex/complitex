@@ -142,6 +142,7 @@ public final class BenefitList extends TemplatePage {
         dataProvider.setSort("", SortOrder.ASCENDING);
 
         filterForm.add(new TextField<>("accountFilter", new PropertyModel<String>(example, "account")));
+        filterForm.add(new TextField<>("puAccountFilter", new PropertyModel<String>(example, "puAccount")));
         filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<String>(example, "firstName")));
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<String>(example, "middleName")));
         filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<String>(example, "lastName")));
@@ -151,7 +152,7 @@ public final class BenefitList extends TemplatePage {
         filterForm.add(new TextField<>("corpFilter", new PropertyModel<String>(example, "corp")));
         filterForm.add(new TextField<>("privFilter", new PropertyModel<String>(example, "privilege")));
         filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<String>(example, "apartment")));
-        filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<RequestStatus>(example, "status"),
+        filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<>(example, "status"),
                 Arrays.asList(RequestStatus.values()), new StatusRenderer()).setNullValid(true));
 
         AjaxLink<Void> reset = new AjaxLink<Void>("reset") {
@@ -194,7 +195,8 @@ public final class BenefitList extends TemplatePage {
             protected void populateItem(Item<Benefit> item) {
                 final Benefit benefit = item.getModelObject();
 
-                item.add(new Label("account", benefit.getStringField(BenefitDBF.OWN_NUM_SR)));
+                item.add(new Label("account", benefit.getAccountNumber()));
+                item.add(new Label("puAccount", benefit.getStringField(BenefitDBF.OWN_NUM_SR)));
                 item.add(new Label("firstName", benefit.getFirstName()));
                 item.add(new Label("middleName", benefit.getMiddleName()));
                 item.add(new Label("lastName", benefit.getLastName()));
@@ -225,6 +227,7 @@ public final class BenefitList extends TemplatePage {
         filterForm.add(data);
 
         filterForm.add(new ArrowOrderByBorder("accountHeader", BenefitBean.OrderBy.ACCOUNT.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("puAccountHeader", BenefitBean.OrderBy.PU_ACCOUNT.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", BenefitBean.OrderBy.FIRST_NAME.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("middleNameHeader", BenefitBean.OrderBy.MIDDLE_NAME.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("lastNameHeader", BenefitBean.OrderBy.LAST_NAME.getOrderBy(), dataProvider, data, content));
