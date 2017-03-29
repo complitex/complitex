@@ -39,7 +39,13 @@ public class PersonAccount implements Serializable {
     public PersonAccount() {
     }
 
-    public PersonAccount(AbstractAccountRequest request, String puAccountNumber, Long calculationCenterId, boolean addressNames) {
+    public PersonAccount(AbstractAccountRequest request, String puAccountNumber, Long calculationCenterId,
+                         boolean addressNames) {
+        this(request, puAccountNumber, calculationCenterId, addressNames, false);
+    }
+
+    public PersonAccount(AbstractAccountRequest request, String puAccountNumber, Long calculationCenterId,
+                         boolean addressNames, boolean useAccountNumber) {
         firstName = request.getFirstName();
         middleName = request.getMiddleName();
         lastName = request.getLastName();
@@ -60,7 +66,10 @@ public class PersonAccount implements Serializable {
         buildingId = request.getBuildingId();
         apartmentId = request.getApartmentId();
 
-        accountNumber = request.getAccountNumber();
+        if (useAccountNumber) {
+            accountNumber = request.getAccountNumber();
+        }
+
         organizationId = request.getOrganizationId();
         userOrganizationId = request.getUserOrganizationId();
 

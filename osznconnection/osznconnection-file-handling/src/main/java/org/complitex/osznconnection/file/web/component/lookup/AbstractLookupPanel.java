@@ -17,7 +17,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.*;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
@@ -30,6 +29,7 @@ import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
 import org.complitex.common.web.component.wiquery.ExtendedDialog;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.osznconnection.file.entity.AbstractAccountRequest;
 import org.complitex.osznconnection.file.entity.AccountDetail;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -67,7 +67,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     private StreetStrategy streetStrategy;
 
     @EJB
-    private BuildingStrategy buildingStrategy;
+    private CorrectionBean correctionBean;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
@@ -355,6 +355,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
                 if (accountDetailModel.getObject() != null && !isEmpty(accountDetailModel.getObject().getAccCode())) {
                     try {
                         updateAccountNumber(initialRequestModel.getObject(), accountDetailModel.getObject().getAccCode());
+
                         for (Component component : toUpdate) {
                             target.add(component);
                         }

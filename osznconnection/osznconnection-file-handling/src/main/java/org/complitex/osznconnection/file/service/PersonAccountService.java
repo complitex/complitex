@@ -106,7 +106,7 @@ public class PersonAccountService extends AbstractBean {
         Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
 
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(
-                new PersonAccount(request, puAccountNumber, billingId, true)).setNullable(true));
+                new PersonAccount(request, puAccountNumber, billingId, true, false)).setNullable(true));
 
         Set<String> accountNumberSet = personAccounts.stream().map(PersonAccount::getAccountNumber).collect(Collectors.toSet());
 
@@ -116,6 +116,8 @@ public class PersonAccountService extends AbstractBean {
             PersonAccount personAccount = personAccounts.get(0);
 
             if (!personAccount.getAccountNumber().equals(request.getAccountNumber())){
+                personAccount.setAccountNumber(request.getAccountNumber());
+
                 personAccountBean.save(personAccount);
             }
         }else{
