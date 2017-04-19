@@ -76,8 +76,8 @@
         <auth-method>FORM</auth-method>
         <realm-name>pspofficeRealm</realm-name>
         <form-login-config>
-            <form-login-page>/fake_login_resource.html</form-login-page>
-            <form-error-page>/fake_login_resource.html</form-error-page>
+            <form-login-page>/login/login.jsp</form-login-page>
+            <form-error-page>/login/error.jsp</form-error-page>
         </form-login-config>
     </login-config>
     

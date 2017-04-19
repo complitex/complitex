@@ -4,6 +4,18 @@
 INSERT INTO `update` (`version`) VALUE ('20170127_0.5.10');
 -- --------------------------------
 
+-- admin user --
+INSERT INTO `user_info` (`object_id`) VALUES (1);
+INSERT INTO `first_name`(`id`, `name`) VALUES (1,'admin');
+INSERT INTO `middle_name`(`id`, `name`) VALUES (1,'admin');
+INSERT INTO `last_name`(`id`, `name`) VALUES (1,'admin');
+INSERT INTO `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
+VALUES (1,1,1000,1,1000), (1,1,1001,1,1001), (1,1,1002,1,1002);
+INSERT INTO `user` (`id`, `login`, `password`, `user_info_object_id`) VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1);
+INSERT INTO `usergroup` (`id`, `login`, `group_name`) VALUES (1, 'admin', 'ADMINISTRATORS');
+INSERT INTO `usergroup` (`id`, `login`, `group_name`) VALUES (2, 'admin', 'EMPLOYEES');
+INSERT INTO `usergroup` (`id`, `login`, `group_name`) VALUES (3, 'admin', 'EMPLOYEES_CHILD_VIEW');
+
 -- --------------------------------
 -- Config
 -- --------------------------------

@@ -17,8 +17,8 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE  `user` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор пользователя',
-  `login` VARCHAR(45) NOT NULL COMMENT 'Имя пользователя',
-  `password` VARCHAR(45) NOT NULL COMMENT 'MD5 хэш пароля',
+  `login` VARCHAR(64) NOT NULL COMMENT 'Имя пользователя',
+  `password` VARCHAR(64) NOT NULL COMMENT 'Пароль',
   `user_info_object_id` BIGINT(20) COMMENT 'Идентификатор объекта информация о пользователе',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_key_login` (`login`),

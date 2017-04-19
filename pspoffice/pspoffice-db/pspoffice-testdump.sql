@@ -62,7 +62,7 @@ insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_
 insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) values(1,3,1001,3,1001);
 insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) values(1,3,1002,3,1002);
 
-insert into `user` (`id`, `login`, `password`, `user_info_object_id`) values(3,'1','c4ca4238a0b923820dcc509a6f75849b',3);
+insert into `user` (`id`, `login`, `password`, `user_info_object_id`) values(3,'1','6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b',3);
 insert into `user_organization` (`id`, `user_id`, `organization_object_id`, `main`) values(1,3,1,1);
 insert into `usergroup` (`id`, `login`, `group_name`) values(4,'1','EMPLOYEES');
 
@@ -76,6 +76,6 @@ insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_
 insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) values(1,4,1001,4,1001);
 insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) values(1,4,1002,4,1002);
 
-insert into `user` (`id`, `login`, `password`, `user_info_object_id`) values(4,'2','c81e728d9d4c2f636f067f89cc14862c',4);
+insert into `user` (`id`, `login`, `password`, `user_info_object_id`) values(4,'2','d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35',4);
 insert into `user_organization` (`id`, `user_id`, `organization_object_id`, `main`) values(2,4,1,1);
 insert into `usergroup` (`id`, `login`, `group_name`) values(5,'2','EMPLOYEES_CHILD_VIEW');
