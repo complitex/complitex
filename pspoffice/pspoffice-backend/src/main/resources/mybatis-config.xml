@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+        <environments default="local">
+        <environment id="local">
+            <transactionManager type="MANAGED"/>
+            <dataSource type="JNDI">
+                <property name="data_source" value="jdbc/pspofficeResource"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper resource="org/complitex/common/strategy/SequenceBean.xml"/>
+        <mapper resource="org/complitex/common/strategy/DomainObjectStrategy.xml"/>
+        <mapper resource="org/complitex/common/strategy/EntityBean.xml"/>
+        <mapper resource="org/complitex/common/strategy/PermissionBean.xml"/>
+
+        <mapper resource="org/complitex/common/service/LogBean.xml"/>
+        <mapper resource="org/complitex/common/service/SessionBean.xml"/>
+        <mapper resource="org/complitex/common/service/PreferenceBean.xml"/>
+        <mapper resource="org/complitex/common/service/NameBean.xml"/>
+        <mapper resource="org/complitex/common/service/ConfigBean.xml"/>
+
+        <mapper resource="org/complitex/organization/strategy/OrganizationStrategy.xml"/>
+
+        <!--
+        <mapper resource="org/complitex/admin/service/UserBean.xml"/>
+        <mapper resource="org/complitex/admin/service/UserProfileBean.xml"/>
+        <mapper resource="org/complitex/logging/service/LogListBean.xml"/>-->
+
+        <mapper resource="org/complitex/address/strategy/building/BuildingStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/building_address/BuildingAddressStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/street/StreetStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/city/CityStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/district/DistrictStrategy.xml"/>
+
+        <!-- Psp office custom "find" and "count" operations for streets -->
+        <mapper resource="org/complitex/pspoffice/address/street/Street.xml"/>
+
+        <mapper resource="org/complitex/pspoffice/person/strategy/Person.xml"/>
+        <mapper resource="org/complitex/pspoffice/person/strategy/ApartmentCard.xml"/>
+        <mapper resource="org/complitex/pspoffice/person/strategy/Registration.xml"/>
+        <mapper resource="org/complitex/pspoffice/person/strategy/service/BuildingsGridBean.xml"/>
+        <mapper resource="org/complitex/pspoffice/person/strategy/service/ApartmentsGridBean.xml"/>
+        <mapper resource="org/complitex/pspoffice/person/strategy/service/PersonNameBean.xml"/>
+        <mapper resource="org/complitex/pspoffice/person/report/service/RegistrationStopCouponBean.xml"/>
+
+        <!--
+        
+        &lt;!&ndash; legacy import &ndash;&gt;
+        <mapper resource="org/complitex/pspoffice/importing/legacy/service/StreetCorrectionBean.xml"/>
+        <mapper resource="org/complitex/pspoffice/importing/legacy/service/BuildingCorrectionBean.xml"/>
+        <mapper resource="org/complitex/pspoffice/importing/legacy/service/ReferenceDataCorrectionBean.xml"/>
+        <mapper resource="org/complitex/pspoffice/importing/legacy/service/PersonCorrectionBean.xml"/>
+        <mapper resource="org/complitex/pspoffice/importing/legacy/service/ApartmentCardCorrectionBean.xml"/>
+        <mapper resource="org/complitex/pspoffice/importing/legacy/service/RegistrationCorrectionBean.xml"/>
+
+        &lt;!&ndash;report html&ndash;&gt;
+        <mapper resource="org/complitex/pspoffice/report/html/service/ReportBean.xml"/>-->
+    </mappers>
+</configuration>

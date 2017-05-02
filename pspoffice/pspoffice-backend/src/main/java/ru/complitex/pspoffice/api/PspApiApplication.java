@@ -1,5 +1,6 @@
 package ru.complitex.pspoffice.api;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import ru.complitex.pspoffice.api.resource.AddressResource;
 
@@ -15,6 +16,10 @@ public class PspApiApplication extends ResourceConfig {
         //swagger
         register(io.swagger.jaxrs.listing.ApiListingResource.class);
         register(io.swagger.jaxrs.listing.SwaggerSerializers.class);
+
+        //jackson
+        register(ObjectMapperProvider.class);
+        register(JacksonFeature.class);
 
         register(AddressResource.class);
     }

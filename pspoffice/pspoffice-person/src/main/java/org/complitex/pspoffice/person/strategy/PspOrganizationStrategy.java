@@ -11,5 +11,5 @@ import javax.ejb.Stateless;
  */
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
 public class PspOrganizationStrategy extends OrganizationStrategy {
-
+//    todo move to common module
 }

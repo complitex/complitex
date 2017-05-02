@@ -6,12 +6,10 @@ import org.complitex.address.resource.CommonResources;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Locale;
@@ -23,13 +21,6 @@ import java.util.Map;
  */
 @Stateless
 public class CountryStrategy extends TemplateStrategy {
-
-    @EJB(beanName = "StringCultureBean")
-    private StringCultureBean stringBean;
-
-    /*
-     * Attribute type ids
-     */
     public static final long NAME = 800L;
 
     @Override

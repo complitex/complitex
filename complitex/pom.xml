@@ -359,13 +359,13 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.11</version>
+                <version>4.12</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
-                <version>6.10</version>
+                <version>6.11</version>
                 <scope>test</scope>
             </dependency>
 
@@ -431,20 +431,17 @@
                 <artifactId>swagger-jersey2-jaxrs</artifactId>
                 <version>1.5.13</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>1.5.13</version>
+            </dependency>
+
+            <!--jersey-->
+
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <!-- Tests -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>
