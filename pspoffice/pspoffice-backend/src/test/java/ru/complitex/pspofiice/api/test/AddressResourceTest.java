@@ -21,6 +21,7 @@ public class AddressResourceTest {
     @Before
     public void before(){
         Client client = ClientBuilder.newClient();
+
         target = client.target("http://localhost:8080").path("/pspoffice/api/");
     }
 

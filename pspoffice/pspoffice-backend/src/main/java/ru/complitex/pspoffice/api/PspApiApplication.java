@@ -20,6 +20,7 @@ public class PspApiApplication extends ResourceConfig {
         //jackson
         register(ObjectMapperProvider.class);
         register(JacksonFeature.class);
+        register(CharsetRequestFilter.class);
 
         register(AddressResource.class);
     }

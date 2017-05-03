@@ -1,5 +1,6 @@
 package ru.complitex.pspoffice.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -12,7 +13,7 @@ import javax.ws.rs.ext.Provider;
  */
 @Provider
 public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
-    final ObjectMapper defaultObjectMapper;
+    private final ObjectMapper defaultObjectMapper;
 
     public ObjectMapperProvider() {
         defaultObjectMapper = createDefaultMapper();
@@ -24,10 +25,11 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
     }
 
 
-    private static ObjectMapper createDefaultMapper() {
-        final ObjectMapper result = new ObjectMapper();
-        result.enable(SerializationFeature.INDENT_OUTPUT);
+    private ObjectMapper createDefaultMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        return result;
+        return objectMapper;
     }
 }

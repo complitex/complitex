@@ -3,6 +3,7 @@ package ru.complitex.pspoffice.api.resource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.complitex.address.strategy.country.CountryStrategy;
+import org.complitex.common.entity.DomainObject;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -23,10 +24,14 @@ public class AddressResource {
     private CountryStrategy countryStrategy;
 
     @GET
-    @Path("/country/${id}")
-    @ApiOperation("Get country by id")
+    @Path("/country/{id}")
+    @ApiOperation(value = "Get country by id", response = DomainObject.class)
     public Response getCountry(@PathParam("id") Long id){
-        return Response.ok().build();
+        DomainObject domainObject = countryStrategy.getDomainObject(id);
+
+        return domainObject != null
+                ? Response.ok(domainObject).build()
+                : Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @GET
