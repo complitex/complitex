@@ -19,13 +19,18 @@ public class Locales {
     private Locale alternativeLocale;
 
     private Map<Locale, Long> map = new ConcurrentHashMap<>();
+    private Map<Long, Locale> mapId = new ConcurrentHashMap<>();
+
     private static Locales instance = new Locales();
 
     public Locales() {
         StringLocaleBean stringLocaleBean = EjbBeanLocator.getBean(StringLocaleBean.class);
 
         for (StringLocale l : stringLocaleBean.getAllLocales()){
-            map.put(new Locale(l.getLanguage()), l.getId());
+            Locale locale = new Locale(l.getLanguage());
+
+            map.put(locale, l.getId());
+            mapId.put(l.getId(), locale);
 
             if (l.isSystem()){
                 systemLocaleId = l.getId();
@@ -43,22 +48,30 @@ public class Locales {
     }
 
     public static Locale getSystemLocale() {
-        return get().systemLocale;
+        return instance.systemLocale;
     }
 
     public static Long getSystemLocaleId() {
-        return get().systemLocaleId;
+        return instance.systemLocaleId;
     }
 
     public static Locale getAlternativeLocale() {
-        return get().alternativeLocale;
+        return instance.alternativeLocale;
     }
 
     public static Long getLocaleId(Locale locale){
-        return get().map.get(locale);
+        return instance.map.get(locale);
     }
 
     public static Collection<Long> getLocaleIds(){
-        return get().map.values();
+        return instance.map.values();
+    }
+
+    public static Locale getLocale(Long localeId){
+        return instance.mapId.get(localeId);
+    }
+
+    public static String getLanguage(Long localeId){
+        return instance.mapId.get(localeId).getLanguage();
     }
 }

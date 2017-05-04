@@ -159,7 +159,7 @@
             <if test="attributeFilter.valueId != null">
                 AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
                 AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
-                AND attr.`value_id` = #{valueId}
+                AND attr.`value_id` = #{attributeFilter.valueId}
                 )
             </if>
         </foreach>
