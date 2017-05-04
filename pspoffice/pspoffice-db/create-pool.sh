@@ -1,6 +1,6 @@
 #!/bin/sh
 
-GLASSFISH_ASADMIN=asadmin
+GLASSFISH_ASADMIN=/opt/glassfish4/bin/asadmin
 
 echo ---------------------------------------------------
 echo Local database and Realm
@@ -11,9 +11,9 @@ $GLASSFISH_ASADMIN create-jdbc-connection-pool --datasourceclassname="com.mysql.
 
 echo
 echo Create a JDBC resource with the specified JNDI name
-$GLASSFISH_ASADMIN create-jdbc-resource --connectionpoolid osznconnectionPool jdbc/pspofficeResource
+$GLASSFISH_ASADMIN create-jdbc-resource --connectionpoolid pspofficePool jdbc/pspofficeResource
 
 echo
 echo Add the named authentication realm
-$GLASSFISH_ASADMIN create-auth-realm --classname="com.sun.enterprise.security.ee.auth.realm.jdbc.JDBCRealm" --property="jaas-context=jdbcRealm:datasource-jndi=jdbc/osznconnectionResource:user-table=user:user-name-column=login:password-column=password:group-table=usergroup:group-name-column=group_name:charset=UTF-8" pspofficeRealm
+$GLASSFISH_ASADMIN create-auth-realm --classname="com.sun.enterprise.security.auth.realm.jdbc.JDBCRealm" --property="jaas-context=jdbcRealm:datasource-jndi=jdbc/pspofficeResource:user-table=user:user-name-column=login:password-column=password:group-table=usergroup:group-name-column=group_name:charset=UTF-8" pspofficeRealm
  
