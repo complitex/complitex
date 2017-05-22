@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.service.process;
 
+import com.linuxense.javadbf.DBFException;
 import com.linuxense.javadbf.DBFField;
 import com.linuxense.javadbf.DBFReader;
 import org.apache.commons.codec.digest.DigestUtils;

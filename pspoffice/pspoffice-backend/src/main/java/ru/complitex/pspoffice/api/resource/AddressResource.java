@@ -2,6 +2,8 @@ package ru.complitex.pspoffice.api.resource;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.complitex.address.strategy.building.BuildingStrategy;
+import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
 import org.complitex.address.strategy.country.CountryStrategy;
@@ -51,6 +53,9 @@ public class AddressResource {
 
     @EJB
     private StreetStrategy streetStrategy;
+
+    @EJB
+    private BuildingStrategy buildingStrategy;
 
     @GET
     @Path("/country/{id}")
@@ -247,6 +252,15 @@ public class AddressResource {
                 .map(d -> new AddressObject(d.getObjectId(), d.getParentId(), d.getValue(StreetStrategy.STREET_TYPE),
                         d.getStringValue(StreetStrategy.STREET_CODE), getAddressNames(d, StreetStrategy.NAME)))
                 .collect(Collectors.toList())).build();
+    }
+
+    @GET
+    @Path("building/{id}")
+    @ApiOperation(value = "Get building by id", response = AddressObject.class)
+    public Response getBuilding(@PathParam("id") Long id){
+        Building b = buildingStrategy.getDomainObject(id, true);
+
+        return null;
     }
 
 

@@ -171,13 +171,8 @@ public class BuildingStrategy extends TemplateStrategy {
                                 + ". Address base is in inconsistent state!";
                         throw new IllegalStateException(message);
                     } else {
-                        List<Long> buildingIds = Lists.newArrayList(Iterables.transform(result, new Function<Building, Long>() {
+                        List<Long> buildingIds = Lists.newArrayList(result.stream().map(DomainObject::getObjectId).collect(Collectors.toList()));
 
-                            @Override
-                            public Long apply(Building building) {
-                                return building.getObjectId();
-                            }
-                        }));
                         String message = "There are more than one building objects linked to one building address object. Building address object id = "
                                 + address.getObjectId() + ", building object's ids linked to specified building address object: " + buildingIds;
                         throw new IllegalStateException(message);
@@ -287,6 +282,12 @@ public class BuildingStrategy extends TemplateStrategy {
 
         return building;
     }
+
+    @Override
+    public Building getDomainObject(Long id){
+        return getDomainObject(id, true);
+    }
+
 
     @Override
     public Building newInstance() {

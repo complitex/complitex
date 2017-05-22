@@ -116,13 +116,9 @@ public class Building extends DomainObject {
     }
 
     public void enhanceAlternativeAddressAttributes() {
-        getAttributes().removeAll(Collections2.filter(getAttributes(), new Predicate<Attribute>() {
+        getAttributes().removeAll(Collections2.filter(getAttributes(),
+                attr -> attr.getAttributeTypeId().equals(BuildingStrategy.BUILDING_ADDRESS)));
 
-            @Override
-            public boolean apply(Attribute attr) {
-                return attr.getAttributeTypeId().equals(BuildingStrategy.BUILDING_ADDRESS);
-            }
-        }));
         long attributeId = 1;
         for (DomainObject alternativeAddress : alternativeAddresses) {
             addBuildingAddressAttribute(alternativeAddress.getObjectId(), attributeId++);
