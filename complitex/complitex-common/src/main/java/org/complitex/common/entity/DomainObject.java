@@ -109,22 +109,11 @@ public class DomainObject implements ILongId {
     }
 
     public void removeAttribute(Long attributeTypeId) {
-        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext();) {
-            Attribute attribute = i.next();
-            if (attribute.getAttributeTypeId().equals(attributeTypeId)) {
-                i.remove();
-            }
-        }
+        attributes.removeIf(attribute -> attribute.getAttributeTypeId().equals(attributeTypeId));
     }
 
     public void removeAttribute(Long attributeTypeId, Long attributeId){
-        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext();) {
-            Attribute a = i.next();
-
-            if (a.getAttributeTypeId().equals(attributeTypeId) && a.getAttributeId().equals(attributeId)) {
-                i.remove();
-            }
-        }
+        attributes.removeIf(a -> a.getAttributeTypeId().equals(attributeTypeId) && a.getAttributeId().equals(attributeId));
     }
 
     public String getStringValue(Long attributeTypeId){
@@ -147,7 +136,13 @@ public class DomainObject implements ILongId {
         setStringValue(attributeTypeId, value, Locales.getSystemLocale());
     }
 
-    public void setLongValue(Long attributeTypeId, Long value){
+    public Long getValue(Long attributeTypeId){
+        Attribute attribute =  getAttribute(attributeTypeId);
+
+        return attribute != null ? attribute.getValueId() : null;
+    }
+
+    public void setValue(Long attributeTypeId, Long value){
         getAttribute(attributeTypeId).setValueId(value);
     }
 

@@ -110,7 +110,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
             if (streetTypeId == null) {
                 throw new RuntimeException("StreetType not found: " + sync);
             }
-            newObject.setLongValue(StreetStrategy.STREET_TYPE, streetTypeId);
+            newObject.setValue(StreetStrategy.STREET_TYPE, streetTypeId);
 
             streetStrategy.insert(newObject, sync.getDate());
             addressSyncBean.delete(sync.getId());
@@ -130,7 +130,7 @@ public class StreetSyncHandler implements IAddressSyncHandler {
         if (streetTypeId == null) {
             throw new RuntimeException("StreetType not found: " + sync);
         }
-        newObject.setLongValue(StreetStrategy.STREET_TYPE, streetTypeId);
+        newObject.setValue(StreetStrategy.STREET_TYPE, streetTypeId);
 
         streetStrategy.update(oldObject, newObject, sync.getDate());
         addressSyncBean.delete(sync.getId());

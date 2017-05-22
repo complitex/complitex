@@ -49,6 +49,14 @@ public class AddressObject {
         this.names = names;
     }
 
+    public AddressObject(Long objectId, Long parentId, Long typeId, String code, List<AddressName> names) {
+        this.objectId = objectId;
+        this.parentId = parentId;
+        this.typeId = typeId;
+        this.code = code;
+        this.names = names;
+    }
+
     public Long getObjectId() {
         return objectId;
     }
