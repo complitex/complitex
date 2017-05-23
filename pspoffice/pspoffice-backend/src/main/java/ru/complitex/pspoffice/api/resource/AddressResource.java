@@ -34,7 +34,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
  * @author Anatoly A. Ivanov
  *         27.04.2017 19:07
  */
-@Path("/address")
+@Path("address")
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
 @Api(description = "Address Database API")
@@ -61,7 +61,7 @@ public class AddressResource {
     private BuildingStrategy buildingStrategy;
 
     @GET
-    @Path("/country/{id}")
+    @Path("country/{id}")
     @ApiOperation(value = "Get country by id", response = AddressObject.class)
     public Response getCountry(@PathParam("id") Long id){
         DomainObject d = countryStrategy.getDomainObject(id);
@@ -74,7 +74,8 @@ public class AddressResource {
     }
 
     private List<AddressName> getAddressNames(DomainObject domainObject, Long attributeTypeId){
-        if (domainObject.getAttribute(attributeTypeId).getStringCultures().isEmpty()){
+        if (domainObject.getAttribute(attributeTypeId) == null ||
+                domainObject.getAttribute(attributeTypeId).getStringCultures().isEmpty()){
             return null;
         }
 
@@ -85,8 +86,8 @@ public class AddressResource {
     }
 
     @GET
-    @Path("/country")
-    @ApiOperation(value = "Get county list by query string", response = AddressObject.class, responseContainer = "List")
+    @Path("country")
+    @ApiOperation(value = "Get county list by query", response = AddressObject.class, responseContainer = "List")
     public Response getCountries(@QueryParam("query") @NotNull String query,
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
@@ -105,7 +106,7 @@ public class AddressResource {
     }
 
     @GET
-    @Path("/region/{id}")
+    @Path("region/{id}")
     @ApiOperation(value = "Get region by id", response = AddressObject.class)
     public Response getRegion(@PathParam("id") Long id){
         DomainObject d = regionStrategy.getDomainObject(id);
@@ -118,8 +119,8 @@ public class AddressResource {
     }
 
     @GET
-    @Path("/region")
-    @ApiOperation(value = "Get region list by query string", response = AddressObject.class, responseContainer = "List")
+    @Path("region")
+    @ApiOperation(value = "Get region list by query", response = AddressObject.class, responseContainer = "List")
     public Response getRegion(@QueryParam("query") @NotNull String query,
                               @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
@@ -132,7 +133,7 @@ public class AddressResource {
     }
 
     @GET
-    @Path("/city-type/{id}")
+    @Path("city-type/{id}")
     @ApiOperation(value = "Get city type by id", response = AddressObject.class)
     public Response getCityType(@PathParam("id") Long id){
         DomainObject d = cityTypeStrategy.getDomainObject(id);
@@ -147,7 +148,7 @@ public class AddressResource {
     }
 
     @GET
-    @Path("/city-type")
+    @Path("city-type")
     @ApiOperation(value = "Get city types by query", response = AddressObject.class, responseContainer = "List")
     public Response getCityTypes(@QueryParam("query") @NotNull String query,
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
@@ -163,7 +164,7 @@ public class AddressResource {
     }
 
     @GET
-    @Path("/city/{id}")
+    @Path("city/{id}")
     @ApiOperation(value = "Get city by id", response = AddressObject.class)
     public Response getCity(@PathParam("id") Long id){
         DomainObject d = cityStrategy.getDomainObject(id);
@@ -178,8 +179,8 @@ public class AddressResource {
     }
 
     @GET
-    @Path("/city")
-    @ApiOperation(value = "Get city list by query string", response = AddressObject.class, responseContainer = "List")
+    @Path("city")
+    @ApiOperation(value = "Get city list by query", response = AddressObject.class, responseContainer = "List")
     public Response getCities(@QueryParam("query") @NotNull String query,
                               @QueryParam("parentId") Long parentId,
                               @QueryParam("typeId") Long typeId,
@@ -198,7 +199,7 @@ public class AddressResource {
     }
 
     @GET
-    @Path("/district/{id}")
+    @Path("district/{id}")
     @ApiOperation(value = "Get district by id", response = AddressObject.class)
     public Response getDistrict(@PathParam("id") Long id){
         DomainObject d = districtStrategy.getDomainObject(id);
@@ -213,8 +214,8 @@ public class AddressResource {
     }
 
     @GET
-    @Path("/district")
-    @ApiOperation(value = "Get district list by query string", response = AddressObject.class, responseContainer = "List")
+    @Path("district")
+    @ApiOperation(value = "Get district list by query", response = AddressObject.class, responseContainer = "List")
     public Response getDistricts(@QueryParam("query") @NotNull String query,
                                  @QueryParam("parentId") Long parentId,
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
@@ -231,7 +232,7 @@ public class AddressResource {
     }
 
     @GET
-    @Path("/street/{id}")
+    @Path("street/{id}")
     @ApiOperation(value = "Get street by id", response = AddressObject.class)
     public Response getStreet(@PathParam("id") Long id){
         DomainObject d = streetStrategy.getDomainObject(id);
@@ -245,8 +246,8 @@ public class AddressResource {
     }
 
     @GET
-    @Path("/street")
-    @ApiOperation(value = "Get street list by query string")
+    @Path("street")
+    @ApiOperation(value = "Get street list by query")
     public Response getStreets(@QueryParam("query") @NotNull String query,
                                @QueryParam("parentId") Long parentId,
                                @QueryParam("limit") @DefaultValue("10") @Max(1000) Integer limit){
@@ -261,12 +262,7 @@ public class AddressResource {
                 .collect(Collectors.toList())).build();
     }
 
-    @GET
-    @Path("building/{id}")
-    @ApiOperation(value = "Get building by id", response = BuildingObject.class)
-    public Response getBuilding(@PathParam("id") Long id){
-        Building building = buildingStrategy.getDomainObject(id, true);
-
+    private BuildingObject getBuildingObject(Building building){
         DomainObject a = building.getAccompaniedAddress();
 
         BuildingObject object = new BuildingObject(building.getObjectId(), a.getParentId(),
@@ -284,6 +280,32 @@ public class AddressResource {
             });
         }
 
-        return Response.ok(object).build();
+        return object;
+    }
+
+    @GET
+    @Path("building/{id}")
+    @ApiOperation(value = "Get building by id", response = BuildingObject.class)
+    public Response getBuilding(@PathParam("id") Long id){
+        Building building = buildingStrategy.getDomainObject(id, true);
+
+        if (building == null){
+            return Response.status(NOT_FOUND).build();
+        }
+
+        return Response.ok(getBuildingObject(building)).build();
+    }
+
+    @GET
+    @Path("building")
+    @ApiOperation(value = "Get building list by query")
+    public Response getBuildings(@QueryParam("query") String query,
+                                 @QueryParam("parentId") @NotNull Long parentId,
+                                 @QueryParam("limit") Integer limit){
+        DomainObjectFilter filter = new DomainObjectFilter();
+        filter.addAdditionalParam(BuildingStrategy.P_STREET, parentId);
+
+        return Response.ok(buildingStrategy.getList(filter).stream()
+                .map(this::getBuildingObject).collect(Collectors.toList())).build();
     }
 }
