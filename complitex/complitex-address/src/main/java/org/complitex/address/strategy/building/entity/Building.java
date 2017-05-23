@@ -16,7 +16,7 @@ import static org.complitex.address.strategy.building_address.BuildingAddressStr
 public class Building extends DomainObject {
 
     private DomainObject primaryAddress;
-    private List<DomainObject> alternativeAddresses = Lists.newArrayList();
+    private List<DomainObject> alternativeAddresses = new ArrayList<>();
     private DomainObject district;
     private DomainObject accompaniedAddress;
     private List<BuildingCode> buildingCodes = new ArrayList<>();

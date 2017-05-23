@@ -452,8 +452,8 @@ INSERT INTO `request_file_field_description` VALUES (380,14,'BUILD','java.lang.S
 INSERT INTO `request_file_field_description` VALUES (381,14,'APT','java.lang.String',4,NULL);
 INSERT INTO `request_file_field_description` VALUES (382,14,'KAT','java.lang.Integer',4,NULL);
 INSERT INTO `request_file_field_description` VALUES (383,14,'LGCODE','java.lang.Integer',4,NULL);
-INSERT INTO `request_file_field_description` VALUES (364,14,'DATEIN','java.util.Date',10,NULL);
-INSERT INTO `request_file_field_description` VALUES (365,14,'DATEOUT','java.util.Date',10,NULL);
+INSERT INTO `request_file_field_description` VALUES (384,14,'DATEIN','java.util.Date',10,NULL);
+INSERT INTO `request_file_field_description` VALUES (385,14,'DATEOUT','java.util.Date',10,NULL);
 INSERT INTO `request_file_field_description` VALUES (386,14,'RAH','java.lang.String',25,NULL);
 
 INSERT INTO `request_file_field_description` VALUES (387,15,'COD','java.lang.Integer',4,NULL);

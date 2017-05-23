@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.building.entity.Building;
+import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
 import org.complitex.address.strategy.country.CountryStrategy;
@@ -15,12 +16,14 @@ import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.util.Locales;
 import ru.complitex.pspoffice.api.model.AddressName;
 import ru.complitex.pspoffice.api.model.AddressObject;
+import ru.complitex.pspoffice.api.model.BuildingObject;
 
 import javax.ejb.EJB;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,6 +74,10 @@ public class AddressResource {
     }
 
     private List<AddressName> getAddressNames(DomainObject domainObject, Long attributeTypeId){
+        if (domainObject.getAttribute(attributeTypeId).getStringCultures().isEmpty()){
+            return null;
+        }
+
         return domainObject.getAttribute(attributeTypeId).getStringCultures().stream()
                 .filter(s -> s.getValue() != null)
                 .map(s -> new AddressName(Locales.getLanguage(s.getLocaleId()), s.getValue()))
@@ -256,13 +263,27 @@ public class AddressResource {
 
     @GET
     @Path("building/{id}")
-    @ApiOperation(value = "Get building by id", response = AddressObject.class)
+    @ApiOperation(value = "Get building by id", response = BuildingObject.class)
     public Response getBuilding(@PathParam("id") Long id){
-        Building b = buildingStrategy.getDomainObject(id, true);
+        Building building = buildingStrategy.getDomainObject(id, true);
 
-        return null;
+        DomainObject a = building.getAccompaniedAddress();
+
+        BuildingObject object = new BuildingObject(building.getObjectId(), a.getParentId(),
+                getAddressNames(a, BuildingAddressStrategy.NUMBER), getAddressNames(a, BuildingAddressStrategy.CORP),
+                getAddressNames(a, BuildingAddressStrategy.STRUCTURE));
+
+        if (!building.getAlternativeAddresses().isEmpty()){
+            List<BuildingObject> alternatives = new ArrayList<>();
+            object.setAlternatives(alternatives);
+
+            building.getAlternativeAddresses().forEach(alt -> {
+                alternatives.add(new BuildingObject(null, alt.getParentId(),
+                        getAddressNames(alt, BuildingAddressStrategy.NUMBER), getAddressNames(alt, BuildingAddressStrategy.CORP),
+                        getAddressNames(alt, BuildingAddressStrategy.STRUCTURE)));
+            });
+        }
+
+        return Response.ok(object).build();
     }
-
-
-
 }

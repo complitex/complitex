@@ -24,6 +24,11 @@ public class AddressObject {
     public AddressObject() {
     }
 
+    public AddressObject(Long objectId, Long parentId) {
+        this.objectId = objectId;
+        this.parentId = parentId;
+    }
+
     public AddressObject(Long objectId, List<AddressName> names) {
         this.objectId = objectId;
         this.names = names;

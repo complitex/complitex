@@ -1166,6 +1166,12 @@ CREATE TABLE `request_file_history` (
     ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'История файла запроса';
 
+-- ------------------------------
+-- Privilege Prolongation
+-- ------------------------------
+
+DROP TABLE IF EXISTS `privilege_prolongation`;
+
 CREATE TABLE `privilege_prolongation` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
   `request_file_id` BIGINT(20) NULL COMMENT 'Идентификатор файла запросов',
