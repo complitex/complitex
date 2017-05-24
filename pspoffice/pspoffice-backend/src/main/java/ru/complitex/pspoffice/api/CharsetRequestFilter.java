@@ -20,7 +20,7 @@ public class CharsetRequestFilter implements ContainerResponseFilter {
 
         if (type != null) {
             String contentType = type.toString();
-            if (!contentType.contains("charset")) {
+            if (contentType.contains("json") && !contentType.contains("charset")) {
                 contentType = contentType + "; charset=utf-8";
                 response.getHeaders().putSingle("Content-Type", contentType);
             }

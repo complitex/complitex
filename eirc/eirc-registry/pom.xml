@@ -78,7 +78,7 @@
         </dependency>
     </dependencies>
 
-    <build>
+    <!--<build>
         <plugins>
             <plugin>
                 <groupId>ch.qos.cal10n.plugins</groupId>
@@ -99,7 +99,7 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 
     <!--build>
         <plugins>

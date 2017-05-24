@@ -61,6 +61,12 @@ public class AddressResource {
     private BuildingStrategy buildingStrategy;
 
     @GET
+    @Path("ping")
+    public Response ping(){
+        return Response.ok("ping").build();
+    }
+
+    @GET
     @Path("country/{id}")
     @ApiOperation(value = "Get country by id", response = AddressObject.class)
     public Response getCountry(@PathParam("id") Long id){
@@ -97,12 +103,6 @@ public class AddressResource {
         return Response.ok(countryStrategy.getList(filter).stream()
                 .map(d -> new AddressObject(d.getObjectId(), getAddressNames(d, CountryStrategy.NAME)))
                 .collect(Collectors.toList())).build();
-    }
-
-    @GET
-    @Path("ping")
-    public Response ping(){
-        return Response.ok("ping").build();
     }
 
     @GET
@@ -303,6 +303,7 @@ public class AddressResource {
                                  @QueryParam("parentId") @NotNull Long parentId,
                                  @QueryParam("limit") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
+        filter.addAdditionalParam(BuildingStrategy.P_NUMBER, query);
         filter.addAdditionalParam(BuildingStrategy.P_STREET, parentId);
 
         return Response.ok(buildingStrategy.getList(filter).stream()
