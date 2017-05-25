@@ -13,8 +13,6 @@ import org.complitex.address.strategy.region.RegionStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.util.Locales;
-import ru.complitex.pspoffice.api.model.AddressName;
 import ru.complitex.pspoffice.api.model.AddressObject;
 import ru.complitex.pspoffice.api.model.BuildingObject;
 
@@ -38,7 +36,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
 @Api(description = "Address Database API")
-public class AddressResource {
+public class AddressResource extends AbstractResource {
     @EJB
     private CountryStrategy countryStrategy;
 
@@ -76,19 +74,7 @@ public class AddressResource {
             return Response.status(NOT_FOUND).build();
         }
 
-        return Response.ok(new AddressObject(d.getObjectId(), getAddressNames(d, CountryStrategy.NAME))).build();
-    }
-
-    private List<AddressName> getAddressNames(DomainObject domainObject, Long attributeTypeId){
-        if (domainObject.getAttribute(attributeTypeId) == null ||
-                domainObject.getAttribute(attributeTypeId).getStringCultures().isEmpty()){
-            return null;
-        }
-
-        return domainObject.getAttribute(attributeTypeId).getStringCultures().stream()
-                .filter(s -> s.getValue() != null)
-                .map(s -> new AddressName(Locales.getLanguage(s.getLocaleId()), s.getValue()))
-                .collect(Collectors.toList());
+        return Response.ok(new AddressObject(d.getObjectId(), getNames(d, CountryStrategy.NAME))).build();
     }
 
     @GET
@@ -101,7 +87,7 @@ public class AddressResource {
         filter.setCount(limit);
 
         return Response.ok(countryStrategy.getList(filter).stream()
-                .map(d -> new AddressObject(d.getObjectId(), getAddressNames(d, CountryStrategy.NAME)))
+                .map(d -> new AddressObject(d.getObjectId(), getNames(d, CountryStrategy.NAME)))
                 .collect(Collectors.toList())).build();
     }
 
@@ -115,7 +101,7 @@ public class AddressResource {
             return Response.status(NOT_FOUND).build();
         }
 
-        return Response.ok(new AddressObject(d.getObjectId(), getAddressNames(d, RegionStrategy.NAME))).build();
+        return Response.ok(new AddressObject(d.getObjectId(), getNames(d, RegionStrategy.NAME))).build();
     }
 
     @GET
@@ -128,7 +114,7 @@ public class AddressResource {
         filter.setCount(limit);
 
         return Response.ok(regionStrategy.getList(filter).stream()
-                .map(d -> new AddressObject(d.getObjectId(), getAddressNames(d, RegionStrategy.NAME)))
+                .map(d -> new AddressObject(d.getObjectId(), getNames(d, RegionStrategy.NAME)))
                 .collect(Collectors.toList())).build();
     }
 
@@ -143,8 +129,8 @@ public class AddressResource {
         }
 
         return Response.ok(new AddressObject(d.getObjectId(),
-                getAddressNames(d, CityTypeStrategy.NAME),
-                getAddressNames(d, CityTypeStrategy.SHORT_NAME))).build();
+                getNames(d, CityTypeStrategy.NAME),
+                getNames(d, CityTypeStrategy.SHORT_NAME))).build();
     }
 
     @GET
@@ -158,8 +144,8 @@ public class AddressResource {
 
         return Response.ok(cityTypeStrategy.getList(filter).stream()
                 .map(d -> new AddressObject(d.getObjectId(),
-                        getAddressNames(d, CityTypeStrategy.NAME),
-                        getAddressNames(d, CityTypeStrategy.SHORT_NAME)))
+                        getNames(d, CityTypeStrategy.NAME),
+                        getNames(d, CityTypeStrategy.SHORT_NAME)))
                 .collect(Collectors.toList())).build();
     }
 
@@ -175,7 +161,7 @@ public class AddressResource {
 
         return Response.ok(new AddressObject(d.getObjectId(), d.getParentId(),
                 d.getAttribute(CityStrategy.CITY_TYPE).getValueId(),
-                getAddressNames(d, CityStrategy.NAME))).build();
+                getNames(d, CityStrategy.NAME))).build();
     }
 
     @GET
@@ -194,7 +180,7 @@ public class AddressResource {
         return Response.ok(cityStrategy.getList(filter).stream()
                 .map(d -> new AddressObject(d.getObjectId(), d.getParentId(),
                         d.getAttribute(CityStrategy.CITY_TYPE).getValueId(),
-                        getAddressNames(d, CityStrategy.NAME)))
+                        getNames(d, CityStrategy.NAME)))
                 .collect(Collectors.toList())).build();
     }
 
@@ -210,7 +196,7 @@ public class AddressResource {
 
         return Response.ok(new AddressObject(d.getObjectId(), d.getParentId(),
                 d.getStringValue(DistrictStrategy.CODE),
-                getAddressNames(d, DistrictStrategy.NAME))).build();
+                getNames(d, DistrictStrategy.NAME))).build();
     }
 
     @GET
@@ -227,7 +213,7 @@ public class AddressResource {
         return Response.ok(districtStrategy.getList(filter).stream()
                 .map(d -> new AddressObject(d.getObjectId(), d.getParentId(),
                         d.getStringValue(DistrictStrategy.CODE),
-                        getAddressNames(d, DistrictStrategy.NAME)))
+                        getNames(d, DistrictStrategy.NAME)))
                 .collect(Collectors.toList())).build();
     }
 
@@ -241,8 +227,8 @@ public class AddressResource {
             return Response.status(NOT_FOUND).build();
         }
 
-        return Response.ok(new AddressObject(d.getObjectId(), d.getParentId(), d.getValue(StreetStrategy.STREET_TYPE),
-                d.getStringValue(StreetStrategy.STREET_CODE), getAddressNames(d, StreetStrategy.NAME))).build();
+        return Response.ok(new AddressObject(d.getObjectId(), d.getParentId(), d.getValueId(StreetStrategy.STREET_TYPE),
+                d.getStringValue(StreetStrategy.STREET_CODE), getNames(d, StreetStrategy.NAME))).build();
     }
 
     @GET
@@ -257,30 +243,30 @@ public class AddressResource {
         filter.setCount(limit);
 
         return Response.ok(streetStrategy.getList(filter).stream()
-                .map(d -> new AddressObject(d.getObjectId(), d.getParentId(), d.getValue(StreetStrategy.STREET_TYPE),
-                        d.getStringValue(StreetStrategy.STREET_CODE), getAddressNames(d, StreetStrategy.NAME)))
+                .map(d -> new AddressObject(d.getObjectId(), d.getParentId(), d.getValueId(StreetStrategy.STREET_TYPE),
+                        d.getStringValue(StreetStrategy.STREET_CODE), getNames(d, StreetStrategy.NAME)))
                 .collect(Collectors.toList())).build();
     }
 
-    private BuildingObject getBuildingObject(Building building){
-        DomainObject a = building.getAccompaniedAddress();
+    private BuildingObject getBuildingObject(Building b){
+        DomainObject a = b.getAccompaniedAddress();
 
-        BuildingObject object = new BuildingObject(building.getObjectId(), a.getParentId(),
-                getAddressNames(a, BuildingAddressStrategy.NUMBER), getAddressNames(a, BuildingAddressStrategy.CORP),
-                getAddressNames(a, BuildingAddressStrategy.STRUCTURE));
+        BuildingObject building = new BuildingObject(b.getObjectId(), a.getParentId(),
+                getNames(a, BuildingAddressStrategy.NUMBER), getNames(a, BuildingAddressStrategy.CORP),
+                getNames(a, BuildingAddressStrategy.STRUCTURE));
 
-        if (!building.getAlternativeAddresses().isEmpty()){
+        if (!b.getAlternativeAddresses().isEmpty()){
             List<BuildingObject> alternatives = new ArrayList<>();
-            object.setAlternatives(alternatives);
+            building.setAlternatives(alternatives);
 
-            building.getAlternativeAddresses().forEach(alt -> {
+            b.getAlternativeAddresses().forEach(alt -> {
                 alternatives.add(new BuildingObject(null, alt.getParentId(),
-                        getAddressNames(alt, BuildingAddressStrategy.NUMBER), getAddressNames(alt, BuildingAddressStrategy.CORP),
-                        getAddressNames(alt, BuildingAddressStrategy.STRUCTURE)));
+                        getNames(alt, BuildingAddressStrategy.NUMBER), getNames(alt, BuildingAddressStrategy.CORP),
+                        getNames(alt, BuildingAddressStrategy.STRUCTURE)));
             });
         }
 
-        return object;
+        return building;
     }
 
     @GET

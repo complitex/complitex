@@ -136,7 +136,7 @@ public class DomainObject implements ILongId {
         setStringValue(attributeTypeId, value, Locales.getSystemLocale());
     }
 
-    public Long getValue(Long attributeTypeId){
+    public Long getValueId(Long attributeTypeId){
         Attribute attribute =  getAttribute(attributeTypeId);
 
         return attribute != null ? attribute.getValueId() : null;

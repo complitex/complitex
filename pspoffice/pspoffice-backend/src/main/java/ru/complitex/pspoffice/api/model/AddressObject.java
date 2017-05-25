@@ -16,8 +16,8 @@ public class AddressObject {
 
     private String code;
 
-    private List<AddressName> names;
-    private List<AddressName> shortNames;
+    private List<Name> names;
+    private List<Name> shortNames;
 
     //date, history
 
@@ -29,32 +29,32 @@ public class AddressObject {
         this.parentId = parentId;
     }
 
-    public AddressObject(Long objectId, List<AddressName> names) {
+    public AddressObject(Long objectId, List<Name> names) {
         this.objectId = objectId;
         this.names = names;
     }
 
-    public AddressObject(Long objectId, List<AddressName> names, List<AddressName> shortNames) {
+    public AddressObject(Long objectId, List<Name> names, List<Name> shortNames) {
         this.objectId = objectId;
         this.names = names;
         this.shortNames = shortNames;
     }
 
-    public AddressObject(Long objectId, Long parentId, String code, List<AddressName> names) {
+    public AddressObject(Long objectId, Long parentId, String code, List<Name> names) {
         this.objectId = objectId;
         this.parentId = parentId;
         this.code = code;
         this.names = names;
     }
 
-    public AddressObject(Long objectId, Long parentId, Long typeId, List<AddressName> names) {
+    public AddressObject(Long objectId, Long parentId, Long typeId, List<Name> names) {
         this.objectId = objectId;
         this.parentId = parentId;
         this.typeId = typeId;
         this.names = names;
     }
 
-    public AddressObject(Long objectId, Long parentId, Long typeId, String code, List<AddressName> names) {
+    public AddressObject(Long objectId, Long parentId, Long typeId, String code, List<Name> names) {
         this.objectId = objectId;
         this.parentId = parentId;
         this.typeId = typeId;
@@ -94,19 +94,19 @@ public class AddressObject {
         this.code = code;
     }
 
-    public List<AddressName> getNames() {
+    public List<Name> getNames() {
         return names;
     }
 
-    public void setNames(List<AddressName> names) {
+    public void setNames(List<Name> names) {
         this.names = names;
     }
 
-    public List<AddressName> getShortNames() {
+    public List<Name> getShortNames() {
         return shortNames;
     }
 
-    public void setShortNames(List<AddressName> shortNames) {
+    public void setShortNames(List<Name> shortNames) {
         this.shortNames = shortNames;
     }
 }

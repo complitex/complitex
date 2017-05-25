@@ -3,6 +3,7 @@ package ru.complitex.pspoffice.api;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import ru.complitex.pspoffice.api.resource.AddressResource;
+import ru.complitex.pspoffice.api.resource.PersonResource;
 
 import javax.ws.rs.ApplicationPath;
 
@@ -23,5 +24,6 @@ public class PspApiApplication extends ResourceConfig {
         register(CharsetRequestFilter.class);
 
         register(AddressResource.class);
+        register(PersonResource.class);
     }
 }

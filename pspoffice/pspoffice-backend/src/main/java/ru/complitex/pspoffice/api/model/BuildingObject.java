@@ -7,13 +7,13 @@ import java.util.List;
  *         Date: 23.05.2017.
  */
 public class BuildingObject extends AddressObject{
-    private List<AddressName> numbers;
-    private List<AddressName> corps;
-    private List<AddressName> structures;
+    private List<Name> numbers;
+    private List<Name> corps;
+    private List<Name> structures;
 
     private List<BuildingObject> alternatives;
 
-    public BuildingObject(Long objectId, Long parentId, List<AddressName> numbers, List<AddressName> corps, List<AddressName> structures) {
+    public BuildingObject(Long objectId, Long parentId, List<Name> numbers, List<Name> corps, List<Name> structures) {
         super(objectId, parentId);
 
         this.numbers = numbers;
@@ -21,27 +21,27 @@ public class BuildingObject extends AddressObject{
         this.structures = structures;
     }
 
-    public List<AddressName> getNumbers() {
+    public List<Name> getNumbers() {
         return numbers;
     }
 
-    public void setNumbers(List<AddressName> numbers) {
+    public void setNumbers(List<Name> numbers) {
         this.numbers = numbers;
     }
 
-    public List<AddressName> getCorps() {
+    public List<Name> getCorps() {
         return corps;
     }
 
-    public void setCorps(List<AddressName> corps) {
+    public void setCorps(List<Name> corps) {
         this.corps = corps;
     }
 
-    public List<AddressName> getStructures() {
+    public List<Name> getStructures() {
         return structures;
     }
 
-    public void setStructures(List<AddressName> structures) {
+    public void setStructures(List<Name> structures) {
         this.structures = structures;
     }
 

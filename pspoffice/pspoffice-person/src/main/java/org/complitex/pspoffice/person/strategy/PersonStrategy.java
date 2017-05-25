@@ -46,7 +46,7 @@ import static com.google.common.collect.Lists.newArrayList;
 public class PersonStrategy extends TemplateStrategy {
 
     private static final String PERSON_NS = PersonStrategy.class.getPackage().getName() + ".Person";
-    public static final String RESOURCE_BUNDLE = PersonStrategy.class.getName();
+    private static final String RESOURCE_BUNDLE = PersonStrategy.class.getName();
     /**
      * Person kid-adult age threshold
      */
@@ -231,6 +231,11 @@ public class PersonStrategy extends TemplateStrategy {
     @Override
     public Person getDomainObject(Long id, boolean runAsAdmin) {
         return findById(id, runAsAdmin, true, true, true, true);
+    }
+
+    @Override
+    public Person getDomainObject(Long id) {
+        return getDomainObject(id, true);
     }
 
 

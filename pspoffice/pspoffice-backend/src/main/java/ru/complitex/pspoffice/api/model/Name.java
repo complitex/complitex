@@ -4,24 +4,24 @@ package ru.complitex.pspoffice.api.model;
  * @author Anatoly A. Ivanov
  *         04.05.2017 18:02
  */
-public class AddressName {
-    private String locale;
+public class Name {
+    private Long localeId;
     private String name;
 
-    public AddressName() {
+    public Name() {
     }
 
-    public AddressName(String locale, String name) {
-        this.locale = locale;
+    public Name(Long localeId, String name) {
+        this.localeId = localeId;
         this.name = name;
     }
 
-    public String getLocale() {
-        return locale;
+    public Long getLocaleId() {
+        return localeId;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
+    public void setLocaleId(Long localeId) {
+        this.localeId = localeId;
     }
 
     public String getName() {
