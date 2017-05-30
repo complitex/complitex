@@ -284,7 +284,7 @@ public class AddressResource extends AbstractResource {
 
     @GET
     @Path("building")
-    @ApiOperation(value = "Get building list by query")
+    @ApiOperation(value = "Get building list by query", response = BuildingObject.class, responseContainer = "List")
     public Response getBuildings(@QueryParam("query") String query,
                                  @QueryParam("parentId") @NotNull Long parentId,
                                  @QueryParam("limit") Integer limit){

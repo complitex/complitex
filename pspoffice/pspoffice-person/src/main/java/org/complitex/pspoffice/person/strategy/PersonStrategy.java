@@ -453,6 +453,9 @@ public class PersonStrategy extends TemplateStrategy {
         return new String[]{SecurityRole.PERSON_MODULE_DESCRIPTION_EDIT};
     }
 
+    public List<Person> getPersons(String lastName, String firstName, String middleName){
+        return findByName(PersonAgeType.ADULT, lastName, firstName, middleName, Locales.getSystemLocale());
+    }
 
     public List<Person> findByName(PersonAgeType personAgeType, String lastName, String firstName, String middleName,
             Locale locale) {

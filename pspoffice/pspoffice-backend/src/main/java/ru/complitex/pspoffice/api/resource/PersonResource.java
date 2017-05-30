@@ -12,10 +12,12 @@ import ru.complitex.pspoffice.api.model.DocumentObject;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
 import javax.ejb.EJB;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -39,17 +41,9 @@ public class PersonResource extends AbstractResource{
         return Response.ok("ping").build();
     }
 
-    @GET
-    @Path("{id}")
-    @ApiOperation(value = "Get person by id")
-    public Response getPerson(@PathParam("id") Long id){
-        Person p = personStrategy.getDomainObject(id);
-
-        if (p == null){
-            return Response.status(NOT_FOUND).build();
-        }
-
+    private PersonObject getPersonObject(Person p){
         PersonObject person = new PersonObject();
+
         person.setLastName(getNames(p, PersonStrategy.LAST_NAME));
         person.setFirstName(getNames(p, PersonStrategy.FIRST_NAME));
         person.setMiddleName(getNames(p, PersonStrategy.MIDDLE_NAME));
@@ -81,7 +75,30 @@ public class PersonResource extends AbstractResource{
         person.setUkraineCitizenship(AttributeUtil.getBooleanValue(p, PersonStrategy.UKRAINE_CITIZENSHIP) ? 1 : 0);
         person.setMilitaryServiceRelationId(p.getValueId(PersonStrategy.MILITARY_SERVICE_RELATION));
 
-        return Response.ok(person).build();
+        return person;
     }
+
+    @GET
+    @Path("{id}")
+    @ApiOperation(value = "Get person by id", response = PersonObject.class)
+    public Response getPerson(@PathParam("id") Long id){
+        Person p = personStrategy.getDomainObject(id);
+
+        if (p == null){
+            return Response.status(NOT_FOUND).build();
+        }
+
+        return Response.ok(getPersonObject(p)).build();
+    }
+
+    @GET
+    @ApiOperation(value = "Get persons by query", response = PersonObject.class, responseContainer = "List")
+    public Response getPersons(@QueryParam("firstName") String firstName,
+                               @QueryParam("lastName") @NotNull String lastName,
+                               @QueryParam("middleName") String middleName){
+        return Response.ok(personStrategy.getPersons(lastName, firstName, middleName).stream()
+                .map(this::getPersonObject).collect(Collectors.toList())).build();
+    }
+
 
 }
