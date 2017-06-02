@@ -1,15 +1,15 @@
 -- Set mysql user-defined variable - system locale id.
 -- Set mysql user-defined variable - system locale id.
-SELECT (@system_locale_id := `id`) FROM `locales` WHERE `system` = 1;
+SELECT (@system_locale_id := `id`) FROM `locale` WHERE `system` = 1;
 
 -- Oszns and calculation centers organizations
 insert into organization(object_id) values (1),(2);
-insert into organization_string_culture(id, locale_id, value) values 
+insert into organization_string_value(id, locale_id, value) values
 (3, 1, UPPER('ОСЗН 1')), (3,2,UPPER('ОСЗН 1')), (4,@system_locale_id, UPPER('1')),
 (5, 1, UPPER('Модуль начислений №1')), (5, 2, UPPER('Модуль начислений №1')), (6,@system_locale_id, UPPER('2')),
 (7,@system_locale_id, 'jdbc/osznconnectionRemoteResource');
 -- Request files paths attribute values:
-insert into organization_string_culture(id, locale_id, value) values 
+insert into organization_string_value(id, locale_id, value) values
 (8,@system_locale_id,'in\\subs_reqs'),(9,@system_locale_id,'out\\subs_reqs'),
 (10,@system_locale_id,'in\\fact'),(11,@system_locale_id,'out\\fact'),
 (12,@system_locale_id,'in\\subs'),(13,@system_locale_id,'out\\subs'),
@@ -34,7 +34,7 @@ insert into organization_attribute(attribute_id, object_id, attribute_type_id, v
 #   (9,1,2);
 
 insert into organization(object_id) values (3), (4);
-insert into organization_string_culture(id, locale_id, value) values
+insert into organization_string_value(id, locale_id, value) values
   (20,@system_locale_id, UPPER('КП "ЖИЛКОМСЕРВИС"')),
   (21,@system_locale_id, UPPER('12345')),
   (22,@system_locale_id,UPPER('ЛЕНИНСКИЙ ФИЛИАЛ КП "ЖИЛКОМСЕРВИС"')),

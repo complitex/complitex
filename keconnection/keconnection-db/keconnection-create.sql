@@ -45,7 +45,7 @@ CREATE TABLE `tarif_group_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 3200 - НАЗВАНИЕ, 3201 - КОД ТАРИФНОЙ ГРУППЫ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 3200 - STRING_CULTURE, 3201 - STRING',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 3200 - STRING_VALUE, 3201 - STRING',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия параметров атрибута',
   `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
@@ -65,9 +65,9 @@ CREATE TABLE `tarif_group_attribute` (
   REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта тарифная группа';
 
-DROP TABLE IF EXISTS `tarif_group_string_culture`;
+DROP TABLE IF EXISTS `tarif_group_string_value`;
 
-CREATE TABLE `tarif_group_string_culture` (
+CREATE TABLE `tarif_group_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор значения',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -76,7 +76,7 @@ CREATE TABLE `tarif_group_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_tarif_group_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_tarif_group_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута тарифной группы';
 
 -- ------------------------------
@@ -116,7 +116,7 @@ CREATE TABLE `tarif_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 3300 - НАЗВАНИЕ, 3301 - КОД ТАРИФА, 3302 - ССЫЛКА НА ТАРИФНУЮ ГРУППУ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 3300 - STRING_CULTURE, 3301 - STRING, 3302 - tarif_group',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 3300 - STRING_VALUE, 3301 - STRING, 3302 - tarif_group',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия параметров атрибута',
   `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
@@ -136,9 +136,9 @@ CREATE TABLE `tarif_attribute` (
   REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта тариф';
 
-DROP TABLE IF EXISTS `tarif_string_culture`;
+DROP TABLE IF EXISTS `tarif_string_value`;
 
-CREATE TABLE `tarif_string_culture` (
+CREATE TABLE `tarif_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор значения',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -147,7 +147,7 @@ CREATE TABLE `tarif_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_tarif_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_tarif_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута тарифа';
 
 -- ------------------------------
@@ -187,7 +187,7 @@ CREATE TABLE `heatmeter_type_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 3400 - НАЗВАНИЕ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 3400 - STRING_CULTURE',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 3400 - STRING_VALUE',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия параметров атрибута',
   `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
@@ -207,9 +207,9 @@ CREATE TABLE `heatmeter_type_attribute` (
   REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа теплосчетчика';
 
-DROP TABLE IF EXISTS `heatmeter_type_string_culture`;
+DROP TABLE IF EXISTS `heatmeter_type_string_value`;
 
-CREATE TABLE `heatmeter_type_string_culture` (
+CREATE TABLE `heatmeter_type_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор значения',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -218,7 +218,7 @@ CREATE TABLE `heatmeter_type_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_heatmeter_type_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_heatmeter_type_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута типа теплосчетчика';
 
 -- ------------------------------
@@ -258,7 +258,7 @@ CREATE TABLE `heatmeter_period_type_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 3500 - НАЗВАНИЕ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 3500 - STRING_CULTURE',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 3500 - STRING_VALUE',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия параметров атрибута',
   `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
@@ -278,9 +278,9 @@ CREATE TABLE `heatmeter_period_type_attribute` (
   REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа периода теплосчетчика';
 
-DROP TABLE IF EXISTS `heatmeter_period_type_string_culture`;
+DROP TABLE IF EXISTS `heatmeter_period_type_string_value`;
 
-CREATE TABLE `heatmeter_period_type_string_culture` (
+CREATE TABLE `heatmeter_period_type_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор значения',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -289,7 +289,7 @@ CREATE TABLE `heatmeter_period_type_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_heatmeter_period_type_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_heatmeter_period_type_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута типа периода теплосчетчика';
 
 -- ------------------------------

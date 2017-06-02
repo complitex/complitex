@@ -70,7 +70,7 @@ CREATE TABLE `apartment_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 100 - НАИМЕНОВАНИЕ КВАРТИРЫ',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - STRING_CULTURE',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - string_value',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -145,13 +145,13 @@ LOCK TABLES `apartment_correction` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `apartment_string_culture`
+-- Table structure for table `apartment_string_value`
 --
 
-DROP TABLE IF EXISTS `apartment_string_culture`;
+DROP TABLE IF EXISTS `apartment_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `apartment_string_culture` (
+CREATE TABLE `apartment_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -160,18 +160,18 @@ CREATE TABLE `apartment_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_apartment_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_apartment_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов квартиры';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `apartment_string_culture`
+-- Dumping data for table `apartment_string_value`
 --
 
-LOCK TABLES `apartment_string_culture` WRITE;
-/*!40000 ALTER TABLE `apartment_string_culture` DISABLE KEYS */;
-INSERT INTO `apartment_string_culture` VALUES (1,1,1,'1'),(2,2,1,'2'),(3,3,1,'3'),(4,4,1,'4'),(5,5,1,'5'),(6,6,1,'6'),(7,7,1,'7'),(8,8,1,'8'),(9,9,1,'9'),(10,10,1,'10'),(11,11,1,'11'),(12,12,1,'12'),(13,13,1,'13'),(14,14,1,'14'),(15,15,1,'15'),(16,16,1,'16'),(17,17,1,'17'),(18,18,1,'18'),(19,19,1,'19'),(20,20,1,'20'),(21,21,1,'21'),(22,22,1,'22'),(23,23,1,'23'),(24,24,1,'24'),(25,25,1,'25'),(26,26,1,'26'),(27,27,1,'27'),(28,28,1,'28'),(29,29,1,'29'),(30,30,1,'30'),(31,31,1,'31'),(32,32,1,'32'),(33,33,1,'33'),(34,34,1,'34'),(35,35,1,'35'),(36,36,1,'36');
-/*!40000 ALTER TABLE `apartment_string_culture` ENABLE KEYS */;
+LOCK TABLES `apartment_string_value` WRITE;
+/*!40000 ALTER TABLE `apartment_string_value` DISABLE KEYS */;
+INSERT INTO `apartment_string_value` VALUES (1,1,1,'1'),(2,2,1,'2'),(3,3,1,'3'),(4,4,1,'4'),(5,5,1,'5'),(6,6,1,'6'),(7,7,1,'7'),(8,8,1,'8'),(9,9,1,'9'),(10,10,1,'10'),(11,11,1,'11'),(12,12,1,'12'),(13,13,1,'13'),(14,14,1,'14'),(15,15,1,'15'),(16,16,1,'16'),(17,17,1,'17'),(18,18,1,'18'),(19,19,1,'19'),(20,20,1,'20'),(21,21,1,'21'),(22,22,1,'22'),(23,23,1,'23'),(24,24,1,'24'),(25,25,1,'25'),(26,26,1,'26'),(27,27,1,'27'),(28,28,1,'28'),(29,29,1,'29'),(30,30,1,'30'),(31,31,1,'31'),(32,32,1,'32'),(33,33,1,'33'),(34,34,1,'34'),(35,35,1,'35'),(36,36,1,'36');
+/*!40000 ALTER TABLE `apartment_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -271,7 +271,7 @@ CREATE TABLE `building_address_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 1500 - НОМЕР ДОМА, 1501 - КОРПУС, 1502 - СТРОЕНИЕ',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 1500 - STRING_CULTURE, 1501 - STRING_CULTURE, 1502 - STRING_CULTURE',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 1500 - string_value, 1501 - string_value, 1502 - string_value',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -301,13 +301,13 @@ INSERT INTO `building_address_attribute` VALUES (1,1,1,1500,1,1500,'2014-08-19 0
 UNLOCK TABLES;
 
 --
--- Table structure for table `building_address_string_culture`
+-- Table structure for table `building_address_string_value`
 --
 
-DROP TABLE IF EXISTS `building_address_string_culture`;
+DROP TABLE IF EXISTS `building_address_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `building_address_string_culture` (
+CREATE TABLE `building_address_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -316,18 +316,18 @@ CREATE TABLE `building_address_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_building_address_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_building_address_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов адреса дома';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `building_address_string_culture`
+-- Dumping data for table `building_address_string_value`
 --
 
-LOCK TABLES `building_address_string_culture` WRITE;
-/*!40000 ALTER TABLE `building_address_string_culture` DISABLE KEYS */;
-INSERT INTO `building_address_string_culture` VALUES (1,1,1,'2');
-/*!40000 ALTER TABLE `building_address_string_culture` ENABLE KEYS */;
+LOCK TABLES `building_address_string_value` WRITE;
+/*!40000 ALTER TABLE `building_address_string_value` DISABLE KEYS */;
+INSERT INTO `building_address_string_value` VALUES (1,1,1,'2');
+/*!40000 ALTER TABLE `building_address_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -495,13 +495,13 @@ LOCK TABLES `building_correction` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `building_string_culture`
+-- Table structure for table `building_string_value`
 --
 
-DROP TABLE IF EXISTS `building_string_culture`;
+DROP TABLE IF EXISTS `building_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `building_string_culture` (
+CREATE TABLE `building_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -510,17 +510,17 @@ CREATE TABLE `building_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_building_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_building_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов дома ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `building_string_culture`
+-- Dumping data for table `building_string_value`
 --
 
-LOCK TABLES `building_string_culture` WRITE;
-/*!40000 ALTER TABLE `building_string_culture` DISABLE KEYS */;
-/*!40000 ALTER TABLE `building_string_culture` ENABLE KEYS */;
+LOCK TABLES `building_string_value` WRITE;
+/*!40000 ALTER TABLE `building_string_value` DISABLE KEYS */;
+/*!40000 ALTER TABLE `building_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -677,7 +677,7 @@ CREATE TABLE `city_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 400 - НАИМЕНОВАНИЕ НАСЕЛЕННОГО ПУНКТА, 401 - ТИП НАСЕЛЕННОГО ПУНКТА',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 400 - STRING_CULTURE, 401 - city_type',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 400 - string_value, 401 - city_type',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -750,13 +750,13 @@ INSERT INTO `city_correction` VALUES (1,1,NULL,'','1970-01-01','2054-12-31',7,81
 UNLOCK TABLES;
 
 --
--- Table structure for table `city_string_culture`
+-- Table structure for table `city_string_value`
 --
 
-DROP TABLE IF EXISTS `city_string_culture`;
+DROP TABLE IF EXISTS `city_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `city_string_culture` (
+CREATE TABLE `city_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -765,18 +765,18 @@ CREATE TABLE `city_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_city_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_city_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов населенного пункта';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `city_string_culture`
+-- Dumping data for table `city_string_value`
 --
 
-LOCK TABLES `city_string_culture` WRITE;
-/*!40000 ALTER TABLE `city_string_culture` DISABLE KEYS */;
-INSERT INTO `city_string_culture` VALUES (1,1,1,'ХАРЬКОВ'),(2,2,1,'057');
-/*!40000 ALTER TABLE `city_string_culture` ENABLE KEYS */;
+LOCK TABLES `city_string_value` WRITE;
+/*!40000 ALTER TABLE `city_string_value` DISABLE KEYS */;
+INSERT INTO `city_string_value` VALUES (1,1,1,'ХАРЬКОВ'),(2,2,1,'057');
+/*!40000 ALTER TABLE `city_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -834,7 +834,7 @@ CREATE TABLE `city_type_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 1300 - КРАТКОЕ НАЗВАНИЕ, 1301 - НАЗВАНИЕ',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 1300 - STRING_CULTURE, 1301 - STRING_CULTURE',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 1300 - string_value, 1301 - string_value',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -906,13 +906,13 @@ LOCK TABLES `city_type_correction` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `city_type_string_culture`
+-- Table structure for table `city_type_string_value`
 --
 
-DROP TABLE IF EXISTS `city_type_string_culture`;
+DROP TABLE IF EXISTS `city_type_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `city_type_string_culture` (
+CREATE TABLE `city_type_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -921,18 +921,18 @@ CREATE TABLE `city_type_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_city_type_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_city_type_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов типа населенного пункта';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `city_type_string_culture`
+-- Dumping data for table `city_type_string_value`
 --
 
-LOCK TABLES `city_type_string_culture` WRITE;
-/*!40000 ALTER TABLE `city_type_string_culture` DISABLE KEYS */;
-INSERT INTO `city_type_string_culture` VALUES (1,1,1,'Г'),(2,2,1,'ГОРОД');
-/*!40000 ALTER TABLE `city_type_string_culture` ENABLE KEYS */;
+LOCK TABLES `city_type_string_value` WRITE;
+/*!40000 ALTER TABLE `city_type_string_value` DISABLE KEYS */;
+INSERT INTO `city_type_string_value` VALUES (1,1,1,'Г'),(2,2,1,'ГОРОД');
+/*!40000 ALTER TABLE `city_type_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1042,7 +1042,7 @@ CREATE TABLE `country_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 800 - НАИМЕНОВАНИЕ СТРАНЫ',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 800 - STRING_CULTURE',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 800 - string_value',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -1072,13 +1072,13 @@ INSERT INTO `country_attribute` VALUES (1,1,1,800,1,800,'2014-07-25 13:43:49',NU
 UNLOCK TABLES;
 
 --
--- Table structure for table `country_string_culture`
+-- Table structure for table `country_string_value`
 --
 
-DROP TABLE IF EXISTS `country_string_culture`;
+DROP TABLE IF EXISTS `country_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `country_string_culture` (
+CREATE TABLE `country_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -1087,18 +1087,18 @@ CREATE TABLE `country_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_country_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_country_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов страны';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `country_string_culture`
+-- Dumping data for table `country_string_value`
 --
 
-LOCK TABLES `country_string_culture` WRITE;
-/*!40000 ALTER TABLE `country_string_culture` DISABLE KEYS */;
-INSERT INTO `country_string_culture` VALUES (1,1,1,'УКРАИНА');
-/*!40000 ALTER TABLE `country_string_culture` ENABLE KEYS */;
+LOCK TABLES `country_string_value` WRITE;
+/*!40000 ALTER TABLE `country_string_value` DISABLE KEYS */;
+INSERT INTO `country_string_value` VALUES (1,1,1,'УКРАИНА');
+/*!40000 ALTER TABLE `country_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1156,7 +1156,7 @@ CREATE TABLE `district_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 600 - НАИМЕНОВАНИЕ РАЙОНА, 601 - КОД РАЙОНА',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 600 - STRING_CULTURE, 601 - STRING',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 600 - string_value, 601 - STRING',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -1231,13 +1231,13 @@ LOCK TABLES `district_correction` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `district_string_culture`
+-- Table structure for table `district_string_value`
 --
 
-DROP TABLE IF EXISTS `district_string_culture`;
+DROP TABLE IF EXISTS `district_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `district_string_culture` (
+CREATE TABLE `district_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -1246,18 +1246,18 @@ CREATE TABLE `district_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_district_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_district_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов района';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `district_string_culture`
+-- Dumping data for table `district_string_value`
 --
 
-LOCK TABLES `district_string_culture` WRITE;
-/*!40000 ALTER TABLE `district_string_culture` DISABLE KEYS */;
-INSERT INTO `district_string_culture` VALUES (1,1,1,'ДЗЕРЖИНСКИЙ'),(2,2,1,'DZ'),(3,3,1,'КИЕВСКИЙ'),(4,4,1,'KI'),(5,5,1,'КОМИНТЕРНОВСКИЙ'),(6,6,1,'KO'),(7,7,1,'ЛЕНИНСКИЙ'),(8,8,1,'LE'),(9,9,1,'МОСКОВСКИЙ'),(10,10,1,'MO'),(11,11,1,'ОКТЯБРЬСКИЙ'),(12,12,1,'OK'),(13,13,1,'ОРДЖОНИКИДЗЕВСКИЙ'),(14,14,1,'OR'),(15,15,1,'ФРУНЗЕНСКИЙ'),(16,16,1,'FR'),(17,17,1,'ЧЕРВОНОЗАВОДСКИЙ'),(18,18,1,'CH');
-/*!40000 ALTER TABLE `district_string_culture` ENABLE KEYS */;
+LOCK TABLES `district_string_value` WRITE;
+/*!40000 ALTER TABLE `district_string_value` DISABLE KEYS */;
+INSERT INTO `district_string_value` VALUES (1,1,1,'ДЗЕРЖИНСКИЙ'),(2,2,1,'DZ'),(3,3,1,'КИЕВСКИЙ'),(4,4,1,'KI'),(5,5,1,'КОМИНТЕРНОВСКИЙ'),(6,6,1,'KO'),(7,7,1,'ЛЕНИНСКИЙ'),(8,8,1,'LE'),(9,9,1,'МОСКОВСКИЙ'),(10,10,1,'MO'),(11,11,1,'ОКТЯБРЬСКИЙ'),(12,12,1,'OK'),(13,13,1,'ОРДЖОНИКИДЗЕВСКИЙ'),(14,14,1,'OR'),(15,15,1,'ФРУНЗЕНСКИЙ'),(16,16,1,'FR'),(17,17,1,'ЧЕРВОНОЗАВОДСКИЙ'),(18,18,1,'CH');
+/*!40000 ALTER TABLE `district_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1349,7 +1349,7 @@ CREATE TABLE `entity` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_entity_table` (`entity_table`),
   KEY `key_entity_name_id` (`entity_name_id`),
-  CONSTRAINT `fk_entity__string_culture` FOREIGN KEY (`entity_name_id`) REFERENCES `string_culture` (`id`)
+  CONSTRAINT `fk_entity__string_value` FOREIGN KEY (`entity_name_id`) REFERENCES `string_value` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6001 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Сущность';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1382,7 +1382,7 @@ CREATE TABLE `entity_attribute_type` (
   KEY `key_entity_id` (`entity_id`),
   KEY `key_attribute_type_name_id` (`attribute_type_name_id`),
   CONSTRAINT `fk_entity_attribute_type__entity` FOREIGN KEY (`entity_id`) REFERENCES `entity` (`id`),
-  CONSTRAINT `fk_entity_attribute_type__string_culture` FOREIGN KEY (`attribute_type_name_id`) REFERENCES `string_culture` (`id`)
+  CONSTRAINT `fk_entity_attribute_type__string_value` FOREIGN KEY (`attribute_type_name_id`) REFERENCES `string_value` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6006 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Тип атрибута сущности';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1419,7 +1419,7 @@ CREATE TABLE `entity_attribute_value_type` (
 
 LOCK TABLES `entity_attribute_value_type` WRITE;
 /*!40000 ALTER TABLE `entity_attribute_value_type` DISABLE KEYS */;
-INSERT INTO `entity_attribute_value_type` VALUES (100,100,'STRING_CULTURE'),(200,200,'STRING_CULTURE'),(300,300,'STRING_CULTURE'),(301,301,'street_type'),(400,400,'STRING_CULTURE'),(401,401,'city_type'),(402,402,'STRING'),(500,500,'district'),(501,501,'building_address'),(502,502,'building_organization_association'),(600,600,'STRING_CULTURE'),(601,601,'STRING'),(700,700,'STRING_CULTURE'),(800,800,'STRING_CULTURE'),(900,900,'STRING_CULTURE'),(901,901,'STRING'),(902,902,'district'),(903,903,'organization'),(904,904,'organization_type'),(906,906,'STRING_CULTURE'),(913,913,'STRING'),(914,914,'STRING'),(915,915,'STRING'),(916,916,'STRING'),(917,917,'STRING'),(918,918,'STRING'),(919,919,'service'),(1000,1000,'last_name'),(1001,1001,'first_name'),(1002,1002,'middle_name'),(1010,1010,'STRING'),(1011,1011,'STRING'),(1012,1012,'STRING'),(1013,1013,'STRING'),(1014,1014,'module_instance_type'),(1110,1110,'STRING_CULTURE'),(1300,1300,'STRING_CULTURE'),(1301,1301,'STRING_CULTURE'),(1400,1400,'STRING_CULTURE'),(1401,1401,'STRING_CULTURE'),(1500,1500,'STRING_CULTURE'),(1501,1501,'STRING_CULTURE'),(1502,1502,'STRING_CULTURE'),(2300,2300,'STRING_CULTURE'),(6001,6001,'STRING'),(6002,6002,'STRING'),(6003,6003,'STRING'),(6004,6004,'STRING'),(6005,6005,'STRING');
+INSERT INTO `entity_attribute_value_type` VALUES (100,100,'STRING_VALUE'),(200,200,'string_value'),(300,300,'STRING_VALUE'),(301,301,'street_type'),(400,400,'STRING_VALUE'),(401,401,'city_type'),(402,402,'STRING'),(500,500,'district'),(501,501,'building_address'),(502,502,'building_organization_association'),(600,600,'STRING_VALUE'),(601,601,'STRING'),(700,700,'STRING_VALUE'),(800,800,'STRING_VALUE'),(900,900,'STRING_VALUE'),(901,901,'STRING'),(902,902,'district'),(903,903,'organization'),(904,904,'organization_type'),(906,906,'STRING_VALUE'),(913,913,'STRING'),(914,914,'STRING'),(915,915,'STRING'),(916,916,'STRING'),(917,917,'STRING'),(918,918,'STRING'),(919,919,'service'),(1000,1000,'last_name'),(1001,1001,'first_name'),(1002,1002,'middle_name'),(1010,1010,'STRING'),(1011,1011,'STRING'),(1012,1012,'STRING'),(1013,1013,'STRING'),(1014,1014,'module_instance_type'),(1110,1110,'STRING_VALUE'),(1300,1300,'STRING_VALUE'),(1301,1301,'STRING_VALUE'),(1400,1400,'STRING_VALUE'),(1401,1401,'STRING_VALUE'),(1500,1500,'STRING_VALUE'),(1501,1501,'STRING_VALUE'),(1502,1502,'STRING_VALUE'),(2300,2300,'STRING_VALUE'),(6001,6001,'STRING'),(6002,6002,'STRING'),(6003,6003,'STRING'),(6004,6004,'STRING'),(6005,6005,'STRING');
 /*!40000 ALTER TABLE `entity_attribute_value_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1712,7 +1712,7 @@ CREATE TABLE `module_instance_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 100 - НАИМЕНОВАНИЕ МОДУЛЯ',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - STRING_CULTURE',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - string_value',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -1742,13 +1742,13 @@ INSERT INTO `module_instance_attribute` VALUES (1,1,1,1010,1,1010,'2014-07-25 13
 UNLOCK TABLES;
 
 --
--- Table structure for table `module_instance_string_culture`
+-- Table structure for table `module_instance_string_value`
 --
 
-DROP TABLE IF EXISTS `module_instance_string_culture`;
+DROP TABLE IF EXISTS `module_instance_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `module_instance_string_culture` (
+CREATE TABLE `module_instance_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -1757,18 +1757,18 @@ CREATE TABLE `module_instance_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_module_instance_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_module_instance_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов модуля';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `module_instance_string_culture`
+-- Dumping data for table `module_instance_string_value`
 --
 
-LOCK TABLES `module_instance_string_culture` WRITE;
-/*!40000 ALTER TABLE `module_instance_string_culture` DISABLE KEYS */;
-INSERT INTO `module_instance_string_culture` VALUES (1,1,1,'ЕИРЦ'),(2,2,1,'COMMON'),(3,3,1,'81'),(4,4,1,'ПЕЙМЕНТС 1'),(5,5,1,'PAYMENTS_1'),(6,6,1,'82');
-/*!40000 ALTER TABLE `module_instance_string_culture` ENABLE KEYS */;
+LOCK TABLES `module_instance_string_value` WRITE;
+/*!40000 ALTER TABLE `module_instance_string_value` DISABLE KEYS */;
+INSERT INTO `module_instance_string_value` VALUES (1,1,1,'ЕИРЦ'),(2,2,1,'COMMON'),(3,3,1,'81'),(4,4,1,'ПЕЙМЕНТС 1'),(5,5,1,'PAYMENTS_1'),(6,6,1,'82');
+/*!40000 ALTER TABLE `module_instance_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1826,7 +1826,7 @@ CREATE TABLE `module_instance_type_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 100 - НАИМЕНОВАНИЕ МОДУЛЯ',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - STRING_CULTURE',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - STRING_VALUE',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -1856,13 +1856,13 @@ INSERT INTO `module_instance_type_attribute` VALUES (1,1,1,1110,1,1110,'2014-07-
 UNLOCK TABLES;
 
 --
--- Table structure for table `module_instance_type_string_culture`
+-- Table structure for table `module_instance_type_string_value`
 --
 
-DROP TABLE IF EXISTS `module_instance_type_string_culture`;
+DROP TABLE IF EXISTS `module_instance_type_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `module_instance_type_string_culture` (
+CREATE TABLE `module_instance_type_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -1871,18 +1871,18 @@ CREATE TABLE `module_instance_type_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_module_instance_type_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_module_instance_type_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов типа модуля';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `module_instance_type_string_culture`
+-- Dumping data for table `module_instance_type_string_value`
 --
 
-LOCK TABLES `module_instance_type_string_culture` WRITE;
-/*!40000 ALTER TABLE `module_instance_type_string_culture` DISABLE KEYS */;
-INSERT INTO `module_instance_type_string_culture` VALUES (1,1,1,'МОДУЛЬ ЕИРЦ'),(2,1,2,'МОДУЛЬ ЕIРЦ'),(3,2,1,'МОДУЛЬ ПЛАТЕЖЕЙ'),(4,2,2,'МОДУЛЬ ПЛАТЕЖІВ');
-/*!40000 ALTER TABLE `module_instance_type_string_culture` ENABLE KEYS */;
+LOCK TABLES `module_instance_type_string_value` WRITE;
+/*!40000 ALTER TABLE `module_instance_type_string_value` DISABLE KEYS */;
+INSERT INTO `module_instance_type_string_value` VALUES (1,1,1,'МОДУЛЬ ЕИРЦ'),(2,1,2,'МОДУЛЬ ЕIРЦ'),(3,2,1,'МОДУЛЬ ПЛАТЕЖЕЙ'),(4,2,2,'МОДУЛЬ ПЛАТЕЖІВ');
+/*!40000 ALTER TABLE `module_instance_type_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1940,7 +1940,7 @@ CREATE TABLE `organization_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 900 - НАЗВАНИЕ, 901 - УНИКАЛЬНЫЙ КОД, 902 - РАЙОН, 903 - ПРИНАДЛЕЖИТ, 904  - ТИП ОРГАНИЗАЦИИ',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 900 - STRING_CULTURE, 901 - STRING, 902 - district, 903 - organization, 904 - organization_type',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 900 - STRING_VALUE, 901 - STRING, 902 - district, 903 - organization, 904 - organization_type',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -2042,13 +2042,13 @@ INSERT INTO `organization_import` VALUES (1,27575681,'ЧЕР','ЧЕРВОНОЗ�
 UNLOCK TABLES;
 
 --
--- Table structure for table `organization_string_culture`
+-- Table structure for table `organization_string_value`
 --
 
-DROP TABLE IF EXISTS `organization_string_culture`;
+DROP TABLE IF EXISTS `organization_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `organization_string_culture` (
+CREATE TABLE `organization_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -2057,18 +2057,18 @@ CREATE TABLE `organization_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_organization_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_organization_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=263 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов организации';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `organization_string_culture`
+-- Dumping data for table `organization_string_value`
 --
 
-LOCK TABLES `organization_string_culture` WRITE;
-/*!40000 ALTER TABLE `organization_string_culture` DISABLE KEYS */;
-INSERT INTO `organization_string_culture` VALUES (1,1,1,'МОДУЛЬ ЕИРЦ №1'),(2,1,2,'МОДУЛЬ ЕIРЦ №1'),(3,2,1,'ЦЕНТР НАЧИСЛЕНИЙ'),(4,3,1,'ЦН'),(5,4,1,'КП \"ХАРЬКОВСПЕЦСТРОЙ\"'),(6,5,1,'ХСС'),(7,6,1,'КП \"ХАРЬКОВСПЕЦСТРОЙ\"'),(8,7,1,'КП \"ЖИЛКОМСЕРВИС\"'),(9,8,1,'ЖКС'),(10,9,1,'ЖИЛКОМСЕРВИС'),(11,10,1,'ГУРТОЖИТКИ'),(12,11,1,'ГУРТ'),(13,12,1,'ГУРТОЖИТКИ'),(14,13,1,'ЧЕРВОНОЗАВОДСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(15,14,1,'ЧЕР'),(16,15,1,'ЧЕРВОНОЗАВОДСКИЙ Р-Н'),(17,16,1,'ФРУНЗЕНСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(18,17,1,'ФРУ'),(19,18,1,'ФРУНЗЕНСКИЙ Р-Н'),(20,19,1,'ЛЕНИНСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(21,20,1,'ЛЕН'),(22,21,1,'ЛЕНИНСКИЙ Р-Н'),(23,22,1,'МОСКОВСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(24,23,1,'МОС'),(25,24,1,'МОСКОВСКИЙ Р-Н'),(26,25,1,'КОМИНТЕРНОВСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(27,26,1,'КОМ'),(28,27,1,'КОМИНТЕРНОВСКИЙ Р-Н'),(29,28,1,'ОРДЖОНИКИДЗЕВСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(30,29,1,'ОРД'),(31,30,1,'ОРДЖОНИКИДЗЕВСКИЙ Р-Н'),(32,31,1,'ОКТЯБРЬСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(33,32,1,'ОКТ'),(34,33,1,'ОКТЯБРЬСКИЙ Р-Н'),(35,34,1,'КИЕВСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(36,35,1,'КИЕ'),(37,36,1,'КИЕВСКИЙ Р-Н'),(38,37,1,'ДЗЕРЖИНСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(39,38,1,'ДЗЕ'),(40,39,1,'ДЗЕРЖИНСКИЙ Р-Н'),(41,40,1,'ОКТЯБРЬСКИЙ Р-ОН'),(42,41,1,'OK'),(43,42,1,'ОКТЯБРЬСКИЙ Р-ОН'),(44,43,1,'УЧАСТОК № 59'),(45,44,1,'59У'),(46,45,1,'УЧАСТОК № 59'),(47,46,1,'УЧАСТОК № 60'),(48,47,1,'60У'),(49,48,1,'УЧАСТОК № 60'),(50,49,1,'УЧАСТОК № 58'),(51,50,1,'58У'),(52,51,1,'УЧАСТОК № 58'),(53,52,1,'УЧАСТОК № 61'),(54,53,1,'61У'),(55,54,1,'УЧАСТОК № 61'),(56,55,1,'УЧАСТОК № 52'),(57,56,1,'52У'),(58,57,1,'УЧАСТОК № 52'),(59,58,1,'УЧАСТОК № 56'),(60,59,1,'56У'),(61,60,1,'УЧАСТОК № 56'),(62,61,1,'УЧАСТОК № 54'),(63,62,1,'54У'),(64,63,1,'УЧАСТОК № 54'),(65,64,1,'УЧАСТОК № 53'),(66,65,1,'53У'),(67,66,1,'УЧАСТОК № 53'),(68,67,1,'УЧАСТОК № 57'),(69,68,1,'57У'),(70,69,1,'УЧАСТОК № 57'),(71,70,1,'УЧАСТОК № 55'),(72,71,1,'55У'),(73,72,1,'УЧАСТОК № 55'),(74,73,1,'УЧАСТОК № 28'),(75,74,1,'28У'),(76,75,1,'УЧАСТОК № 28'),(77,76,1,'УЧАСТОК № 63'),(78,77,1,'63У'),(79,78,1,'УЧАСТОК № 63'),(80,79,1,'УЧАСТОК № 26'),(81,80,1,'26У'),(82,81,1,'УЧАСТОК № 26'),(83,82,1,'УЧАСТОК № 29'),(84,83,1,'29У'),(85,84,1,'УЧАСТОК № 29'),(86,85,1,'УЧАСТОК № 27'),(87,86,1,'27У'),(88,87,1,'УЧАСТОК № 27'),(89,88,1,'УЧАСТОК № 62'),(90,89,1,'62У'),(91,90,1,'УЧАСТОК № 62'),(92,91,1,'УЧАСТОК № 34'),(93,92,1,'34У'),(94,93,1,'УЧАСТОК № 34'),(95,94,1,'УЧАСТОК № 41'),(96,95,1,'41У'),(97,96,1,'УЧАСТОК № 41'),(98,97,1,'УЧАСТОК № 39'),(99,98,1,'39У'),(100,99,1,'УЧАСТОК № 39'),(101,100,1,'УЧАСТОК № 40'),(102,101,1,'40У'),(103,102,1,'УЧАСТОК № 40'),(104,103,1,'УЧАСТОК № 38'),(105,104,1,'38У'),(106,105,1,'УЧАСТОК № 38'),(107,106,1,'УЧАСТОК № 31'),(108,107,1,'31У'),(109,108,1,'УЧАСТОК № 31'),(110,109,1,'УЧАСТОК № 30'),(111,110,1,'30У'),(112,111,1,'УЧАСТОК № 30'),(113,112,1,'УЧАСТОК № 32'),(114,113,1,'32У'),(115,114,1,'УЧАСТОК № 32'),(116,115,1,'УЧАСТОК № 33'),(117,116,1,'33У'),(118,117,1,'УЧАСТОК № 33'),(119,118,1,'УЧАСТОК № 35'),(120,119,1,'35У'),(121,120,1,'УЧАСТОК № 35'),(122,121,1,'УЧАСТОК № 36'),(123,122,1,'36У'),(124,123,1,'УЧАСТОК № 36'),(125,124,1,'УЧАСТОК № 37'),(126,125,1,'37У'),(127,126,1,'УЧАСТОК № 37'),(128,127,1,'УЧАСТОК № 24'),(129,128,1,'24У'),(130,129,1,'УЧАСТОК № 24'),(131,130,1,'УЧАСТОК № 22'),(132,131,1,'22У'),(133,132,1,'УЧАСТОК № 22'),(134,133,1,'УЧАСТОК № 25'),(135,134,1,'25У'),(136,135,1,'УЧАСТОК № 25'),(137,136,1,'УЧАСТОК № 21'),(138,137,1,'21У'),(139,138,1,'УЧАСТОК № 21'),(140,139,1,'УЧАСТОК № 23'),(141,140,1,'23У'),(142,141,1,'УЧАСТОК № 23'),(143,142,1,'УЧАСТОК № 20'),(144,143,1,'20У'),(145,144,1,'УЧАСТОК № 20'),(146,145,1,'УЧАСТОК № 46'),(147,146,1,'46У'),(148,147,1,'УЧАСТОК № 46'),(149,148,1,'УЧАСТОК № 49'),(150,149,1,'49У'),(151,150,1,'УЧАСТОК № 49'),(152,151,1,'УЧАСТОК № 47'),(153,152,1,'47У'),(154,153,1,'УЧАСТОК № 47'),(155,154,1,'УЧАСТОК № 51'),(156,155,1,'51У'),(157,156,1,'УЧАСТОК № 51'),(158,157,1,'УЧАСТОК № 48'),(159,158,1,'48У'),(160,159,1,'УЧАСТОК № 48'),(161,160,1,'УЧАСТОК № 50'),(162,161,1,'50У'),(163,162,1,'УЧАСТОК № 50'),(164,163,1,'УЧАСТОК № 42'),(165,164,1,'42У'),(166,165,1,'УЧАСТОК № 42'),(167,166,1,'УЧАСТОК № 43'),(168,167,1,'43У'),(169,168,1,'УЧАСТОК № 43'),(170,169,1,'УЧАСТОК № 44'),(171,170,1,'44У'),(172,171,1,'УЧАСТОК № 44'),(173,172,1,'УЧАСТОК № 65'),(174,173,1,'65У'),(175,174,1,'УЧАСТОК № 65'),(176,175,1,'УЧАСТОК № 45'),(177,176,1,'45У'),(178,177,1,'УЧАСТОК № 45'),(179,178,1,'УЧАСТОК № 66'),(180,179,1,'66У'),(181,180,1,'УЧАСТОК № 66'),(182,181,1,'УЧАСТОК № 16'),(183,182,1,'16У'),(184,183,1,'УЧАСТОК № 16'),(185,184,1,'УЧАСТОК № 18'),(186,185,1,'18У'),(187,186,1,'УЧАСТОК № 18'),(188,187,1,'УЧАСТОК № 19'),(189,188,1,'19У'),(190,189,1,'УЧАСТОК № 19'),(191,190,1,'УЧАСТОК № 17'),(192,191,1,'17У'),(193,192,1,'УЧАСТОК № 17'),(194,193,1,'УЧАСТОК № 64'),(195,194,1,'64У'),(196,195,1,'УЧАСТОК № 64'),(197,196,1,'УЧАСТОК № 12'),(198,197,1,'12У'),(199,198,1,'УЧАСТОК № 12'),(200,199,1,'УЧАСТОК № 11'),(201,200,1,'11У'),(202,201,1,'УЧАСТОК № 11'),(203,202,1,'УЧАСТОК № 13'),(204,203,1,'13У'),(205,204,1,'УЧАСТОК № 13'),(206,205,1,'УЧАСТОК № 14'),(207,206,1,'14У'),(208,207,1,'УЧАСТОК № 14'),(209,208,1,'УЧАСТОК № 15'),(210,209,1,'15У'),(211,210,1,'УЧАСТОК № 15'),(212,211,1,'УЧАСТОК № 3'),(213,212,1,'3У'),(214,213,1,'УЧАСТОК № 3'),(215,214,1,'УЧАСТОК № 6'),(216,215,1,'6У'),(217,216,1,'УЧАСТОК № 6'),(218,217,1,'УЧАСТОК № 7'),(219,218,1,'7У'),(220,219,1,'УЧАСТОК № 7'),(221,220,1,'УЧАСТОК № 1'),(222,221,1,'1У'),(223,222,1,'УЧАСТОК № 1'),(224,223,1,'УЧАСТОК № 9'),(225,224,1,'9У'),(226,225,1,'УЧАСТОК № 9'),(227,226,1,'УЧАСТОК № 8'),(228,227,1,'8У'),(229,228,1,'УЧАСТОК № 8'),(230,229,1,'УЧАСТОК № 10'),(231,230,1,'10У'),(232,231,1,'УЧАСТОК № 10'),(233,232,1,'УЧАСТОК № 2'),(234,233,1,'2У'),(235,234,1,'УЧАСТОК № 2'),(236,235,1,'УЧАСТОК № 4'),(237,236,1,'4У'),(238,237,1,'УЧАСТОК № 4'),(239,238,1,'УЧАСТОК № 5'),(240,239,1,'5У'),(241,240,1,'УЧАСТОК № 5'),(242,241,1,'ЕИРЦ-1'),(243,242,1,'ЕИРЦ-1'),(244,243,1,'ЕИРЦ-1'),(245,244,1,'111'),(246,245,1,'1111'),(247,246,1,'111'),(248,247,1,'111'),(249,248,1,'111'),(250,249,1,'111'),(251,250,1,'111'),(252,251,1,'111'),(253,252,1,'111'),(254,253,1,'111'),(255,254,1,'111'),(256,255,1,'ПЕЙМЕНТС 1'),(257,256,1,'П1'),(258,257,1,'1111'),(259,258,1,'1111'),(260,259,1,'1111'),(261,260,1,'1111'),(262,261,1,'11111');
-/*!40000 ALTER TABLE `organization_string_culture` ENABLE KEYS */;
+LOCK TABLES `organization_string_value` WRITE;
+/*!40000 ALTER TABLE `organization_string_value` DISABLE KEYS */;
+INSERT INTO `organization_string_value` VALUES (1,1,1,'МОДУЛЬ ЕИРЦ №1'),(2,1,2,'МОДУЛЬ ЕIРЦ №1'),(3,2,1,'ЦЕНТР НАЧИСЛЕНИЙ'),(4,3,1,'ЦН'),(5,4,1,'КП \"ХАРЬКОВСПЕЦСТРОЙ\"'),(6,5,1,'ХСС'),(7,6,1,'КП \"ХАРЬКОВСПЕЦСТРОЙ\"'),(8,7,1,'КП \"ЖИЛКОМСЕРВИС\"'),(9,8,1,'ЖКС'),(10,9,1,'ЖИЛКОМСЕРВИС'),(11,10,1,'ГУРТОЖИТКИ'),(12,11,1,'ГУРТ'),(13,12,1,'ГУРТОЖИТКИ'),(14,13,1,'ЧЕРВОНОЗАВОДСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(15,14,1,'ЧЕР'),(16,15,1,'ЧЕРВОНОЗАВОДСКИЙ Р-Н'),(17,16,1,'ФРУНЗЕНСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(18,17,1,'ФРУ'),(19,18,1,'ФРУНЗЕНСКИЙ Р-Н'),(20,19,1,'ЛЕНИНСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(21,20,1,'ЛЕН'),(22,21,1,'ЛЕНИНСКИЙ Р-Н'),(23,22,1,'МОСКОВСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(24,23,1,'МОС'),(25,24,1,'МОСКОВСКИЙ Р-Н'),(26,25,1,'КОМИНТЕРНОВСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(27,26,1,'КОМ'),(28,27,1,'КОМИНТЕРНОВСКИЙ Р-Н'),(29,28,1,'ОРДЖОНИКИДЗЕВСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(30,29,1,'ОРД'),(31,30,1,'ОРДЖОНИКИДЗЕВСКИЙ Р-Н'),(32,31,1,'ОКТЯБРЬСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(33,32,1,'ОКТ'),(34,33,1,'ОКТЯБРЬСКИЙ Р-Н'),(35,34,1,'КИЕВСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(36,35,1,'КИЕ'),(37,36,1,'КИЕВСКИЙ Р-Н'),(38,37,1,'ДЗЕРЖИНСКИЙ РАЙОН КП \"ЖИЛКОМСЕРВИС\"'),(39,38,1,'ДЗЕ'),(40,39,1,'ДЗЕРЖИНСКИЙ Р-Н'),(41,40,1,'ОКТЯБРЬСКИЙ Р-ОН'),(42,41,1,'OK'),(43,42,1,'ОКТЯБРЬСКИЙ Р-ОН'),(44,43,1,'УЧАСТОК № 59'),(45,44,1,'59У'),(46,45,1,'УЧАСТОК № 59'),(47,46,1,'УЧАСТОК № 60'),(48,47,1,'60У'),(49,48,1,'УЧАСТОК № 60'),(50,49,1,'УЧАСТОК № 58'),(51,50,1,'58У'),(52,51,1,'УЧАСТОК № 58'),(53,52,1,'УЧАСТОК № 61'),(54,53,1,'61У'),(55,54,1,'УЧАСТОК № 61'),(56,55,1,'УЧАСТОК № 52'),(57,56,1,'52У'),(58,57,1,'УЧАСТОК № 52'),(59,58,1,'УЧАСТОК № 56'),(60,59,1,'56У'),(61,60,1,'УЧАСТОК № 56'),(62,61,1,'УЧАСТОК № 54'),(63,62,1,'54У'),(64,63,1,'УЧАСТОК № 54'),(65,64,1,'УЧАСТОК № 53'),(66,65,1,'53У'),(67,66,1,'УЧАСТОК № 53'),(68,67,1,'УЧАСТОК № 57'),(69,68,1,'57У'),(70,69,1,'УЧАСТОК № 57'),(71,70,1,'УЧАСТОК № 55'),(72,71,1,'55У'),(73,72,1,'УЧАСТОК № 55'),(74,73,1,'УЧАСТОК № 28'),(75,74,1,'28У'),(76,75,1,'УЧАСТОК № 28'),(77,76,1,'УЧАСТОК № 63'),(78,77,1,'63У'),(79,78,1,'УЧАСТОК № 63'),(80,79,1,'УЧАСТОК № 26'),(81,80,1,'26У'),(82,81,1,'УЧАСТОК № 26'),(83,82,1,'УЧАСТОК № 29'),(84,83,1,'29У'),(85,84,1,'УЧАСТОК № 29'),(86,85,1,'УЧАСТОК № 27'),(87,86,1,'27У'),(88,87,1,'УЧАСТОК № 27'),(89,88,1,'УЧАСТОК № 62'),(90,89,1,'62У'),(91,90,1,'УЧАСТОК № 62'),(92,91,1,'УЧАСТОК № 34'),(93,92,1,'34У'),(94,93,1,'УЧАСТОК № 34'),(95,94,1,'УЧАСТОК № 41'),(96,95,1,'41У'),(97,96,1,'УЧАСТОК № 41'),(98,97,1,'УЧАСТОК № 39'),(99,98,1,'39У'),(100,99,1,'УЧАСТОК № 39'),(101,100,1,'УЧАСТОК № 40'),(102,101,1,'40У'),(103,102,1,'УЧАСТОК № 40'),(104,103,1,'УЧАСТОК № 38'),(105,104,1,'38У'),(106,105,1,'УЧАСТОК № 38'),(107,106,1,'УЧАСТОК № 31'),(108,107,1,'31У'),(109,108,1,'УЧАСТОК № 31'),(110,109,1,'УЧАСТОК № 30'),(111,110,1,'30У'),(112,111,1,'УЧАСТОК № 30'),(113,112,1,'УЧАСТОК № 32'),(114,113,1,'32У'),(115,114,1,'УЧАСТОК № 32'),(116,115,1,'УЧАСТОК № 33'),(117,116,1,'33У'),(118,117,1,'УЧАСТОК № 33'),(119,118,1,'УЧАСТОК № 35'),(120,119,1,'35У'),(121,120,1,'УЧАСТОК № 35'),(122,121,1,'УЧАСТОК № 36'),(123,122,1,'36У'),(124,123,1,'УЧАСТОК № 36'),(125,124,1,'УЧАСТОК № 37'),(126,125,1,'37У'),(127,126,1,'УЧАСТОК № 37'),(128,127,1,'УЧАСТОК № 24'),(129,128,1,'24У'),(130,129,1,'УЧАСТОК № 24'),(131,130,1,'УЧАСТОК № 22'),(132,131,1,'22У'),(133,132,1,'УЧАСТОК № 22'),(134,133,1,'УЧАСТОК № 25'),(135,134,1,'25У'),(136,135,1,'УЧАСТОК № 25'),(137,136,1,'УЧАСТОК № 21'),(138,137,1,'21У'),(139,138,1,'УЧАСТОК № 21'),(140,139,1,'УЧАСТОК № 23'),(141,140,1,'23У'),(142,141,1,'УЧАСТОК № 23'),(143,142,1,'УЧАСТОК № 20'),(144,143,1,'20У'),(145,144,1,'УЧАСТОК № 20'),(146,145,1,'УЧАСТОК № 46'),(147,146,1,'46У'),(148,147,1,'УЧАСТОК № 46'),(149,148,1,'УЧАСТОК № 49'),(150,149,1,'49У'),(151,150,1,'УЧАСТОК № 49'),(152,151,1,'УЧАСТОК № 47'),(153,152,1,'47У'),(154,153,1,'УЧАСТОК № 47'),(155,154,1,'УЧАСТОК № 51'),(156,155,1,'51У'),(157,156,1,'УЧАСТОК № 51'),(158,157,1,'УЧАСТОК № 48'),(159,158,1,'48У'),(160,159,1,'УЧАСТОК № 48'),(161,160,1,'УЧАСТОК № 50'),(162,161,1,'50У'),(163,162,1,'УЧАСТОК № 50'),(164,163,1,'УЧАСТОК № 42'),(165,164,1,'42У'),(166,165,1,'УЧАСТОК № 42'),(167,166,1,'УЧАСТОК № 43'),(168,167,1,'43У'),(169,168,1,'УЧАСТОК № 43'),(170,169,1,'УЧАСТОК № 44'),(171,170,1,'44У'),(172,171,1,'УЧАСТОК № 44'),(173,172,1,'УЧАСТОК № 65'),(174,173,1,'65У'),(175,174,1,'УЧАСТОК № 65'),(176,175,1,'УЧАСТОК № 45'),(177,176,1,'45У'),(178,177,1,'УЧАСТОК № 45'),(179,178,1,'УЧАСТОК № 66'),(180,179,1,'66У'),(181,180,1,'УЧАСТОК № 66'),(182,181,1,'УЧАСТОК № 16'),(183,182,1,'16У'),(184,183,1,'УЧАСТОК № 16'),(185,184,1,'УЧАСТОК № 18'),(186,185,1,'18У'),(187,186,1,'УЧАСТОК № 18'),(188,187,1,'УЧАСТОК № 19'),(189,188,1,'19У'),(190,189,1,'УЧАСТОК № 19'),(191,190,1,'УЧАСТОК № 17'),(192,191,1,'17У'),(193,192,1,'УЧАСТОК № 17'),(194,193,1,'УЧАСТОК № 64'),(195,194,1,'64У'),(196,195,1,'УЧАСТОК № 64'),(197,196,1,'УЧАСТОК № 12'),(198,197,1,'12У'),(199,198,1,'УЧАСТОК № 12'),(200,199,1,'УЧАСТОК № 11'),(201,200,1,'11У'),(202,201,1,'УЧАСТОК № 11'),(203,202,1,'УЧАСТОК № 13'),(204,203,1,'13У'),(205,204,1,'УЧАСТОК № 13'),(206,205,1,'УЧАСТОК № 14'),(207,206,1,'14У'),(208,207,1,'УЧАСТОК № 14'),(209,208,1,'УЧАСТОК № 15'),(210,209,1,'15У'),(211,210,1,'УЧАСТОК № 15'),(212,211,1,'УЧАСТОК № 3'),(213,212,1,'3У'),(214,213,1,'УЧАСТОК № 3'),(215,214,1,'УЧАСТОК № 6'),(216,215,1,'6У'),(217,216,1,'УЧАСТОК № 6'),(218,217,1,'УЧАСТОК № 7'),(219,218,1,'7У'),(220,219,1,'УЧАСТОК № 7'),(221,220,1,'УЧАСТОК № 1'),(222,221,1,'1У'),(223,222,1,'УЧАСТОК № 1'),(224,223,1,'УЧАСТОК № 9'),(225,224,1,'9У'),(226,225,1,'УЧАСТОК № 9'),(227,226,1,'УЧАСТОК № 8'),(228,227,1,'8У'),(229,228,1,'УЧАСТОК № 8'),(230,229,1,'УЧАСТОК № 10'),(231,230,1,'10У'),(232,231,1,'УЧАСТОК № 10'),(233,232,1,'УЧАСТОК № 2'),(234,233,1,'2У'),(235,234,1,'УЧАСТОК № 2'),(236,235,1,'УЧАСТОК № 4'),(237,236,1,'4У'),(238,237,1,'УЧАСТОК № 4'),(239,238,1,'УЧАСТОК № 5'),(240,239,1,'5У'),(241,240,1,'УЧАСТОК № 5'),(242,241,1,'ЕИРЦ-1'),(243,242,1,'ЕИРЦ-1'),(244,243,1,'ЕИРЦ-1'),(245,244,1,'111'),(246,245,1,'1111'),(247,246,1,'111'),(248,247,1,'111'),(249,248,1,'111'),(250,249,1,'111'),(251,250,1,'111'),(252,251,1,'111'),(253,252,1,'111'),(254,253,1,'111'),(255,254,1,'111'),(256,255,1,'ПЕЙМЕНТС 1'),(257,256,1,'П1'),(258,257,1,'1111'),(259,258,1,'1111'),(260,259,1,'1111'),(261,260,1,'1111'),(262,261,1,'11111');
+/*!40000 ALTER TABLE `organization_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2126,7 +2126,7 @@ CREATE TABLE `organization_type_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 2300 - НАИМЕНОВАНИЕ ТИПА ОРГАНИЗАЦИИ',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 2300 - STRING_CULTURE',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 2300 - STRING_VALUE',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -2156,13 +2156,13 @@ INSERT INTO `organization_type_attribute` VALUES (1,1,1,2300,1,2300,'2014-07-25 
 UNLOCK TABLES;
 
 --
--- Table structure for table `organization_type_string_culture`
+-- Table structure for table `organization_type_string_value`
 --
 
-DROP TABLE IF EXISTS `organization_type_string_culture`;
+DROP TABLE IF EXISTS `organization_type_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `organization_type_string_culture` (
+CREATE TABLE `organization_type_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -2171,18 +2171,18 @@ CREATE TABLE `organization_type_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_organization_type_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_organization_type_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов типа организации';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `organization_type_string_culture`
+-- Dumping data for table `organization_type_string_value`
 --
 
-LOCK TABLES `organization_type_string_culture` WRITE;
-/*!40000 ALTER TABLE `organization_type_string_culture` DISABLE KEYS */;
-INSERT INTO `organization_type_string_culture` VALUES (1,1,1,'ОРГАНИЗАЦИИ ПОЛЬЗОВАТЕЛЕЙ'),(2,1,2,'ОРГАНИЗАЦИИ ПОЛЬЗОВАТЕЛЕЙ'),(3,4,1,'ОБСЛУЖИВАЮЩАЯ ОРГАНИЗАЦИЯ'),(4,4,2,'ОБСЛУЖИВАЮЩАЯ ОРГАНИЗАЦИЯ'),(5,2,1,'ПОСТАВЩИК УСЛУГ'),(6,2,2,'ПОСТАЧАЛЬНИК ПОСЛУГ'),(7,3,1,'СБОРЩИК ПЛАТЕЖЕЙ'),(8,3,2,'ЗБИРАЧ ПЛАТЕЖІВ');
-/*!40000 ALTER TABLE `organization_type_string_culture` ENABLE KEYS */;
+LOCK TABLES `organization_type_string_value` WRITE;
+/*!40000 ALTER TABLE `organization_type_string_value` DISABLE KEYS */;
+INSERT INTO `organization_type_string_value` VALUES (1,1,1,'ОРГАНИЗАЦИИ ПОЛЬЗОВАТЕЛЕЙ'),(2,1,2,'ОРГАНИЗАЦИИ ПОЛЬЗОВАТЕЛЕЙ'),(3,4,1,'ОБСЛУЖИВАЮЩАЯ ОРГАНИЗАЦИЯ'),(4,4,2,'ОБСЛУЖИВАЮЩАЯ ОРГАНИЗАЦИЯ'),(5,2,1,'ПОСТАВЩИК УСЛУГ'),(6,2,2,'ПОСТАЧАЛЬНИК ПОСЛУГ'),(7,3,1,'СБОРЩИК ПЛАТЕЖЕЙ'),(8,3,2,'ЗБИРАЧ ПЛАТЕЖІВ');
+/*!40000 ALTER TABLE `organization_type_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2338,7 +2338,7 @@ CREATE TABLE `region_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 700 - НАИМЕНОВАНИЕ РЕГИОНА',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 700 - STRING_CULTURE',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 700 - STRING_VALUE',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -2368,13 +2368,13 @@ INSERT INTO `region_attribute` VALUES (1,1,1,700,1,700,'2014-07-25 13:43:49',NUL
 UNLOCK TABLES;
 
 --
--- Table structure for table `region_string_culture`
+-- Table structure for table `region_string_value`
 --
 
-DROP TABLE IF EXISTS `region_string_culture`;
+DROP TABLE IF EXISTS `region_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `region_string_culture` (
+CREATE TABLE `region_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -2383,18 +2383,18 @@ CREATE TABLE `region_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_region_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_region_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов региона';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `region_string_culture`
+-- Dumping data for table `region_string_value`
 --
 
-LOCK TABLES `region_string_culture` WRITE;
-/*!40000 ALTER TABLE `region_string_culture` DISABLE KEYS */;
-INSERT INTO `region_string_culture` VALUES (1,1,1,'ХАРЬКОВСКАЯ ОБЛАСТЬ');
-/*!40000 ALTER TABLE `region_string_culture` ENABLE KEYS */;
+LOCK TABLES `region_string_value` WRITE;
+/*!40000 ALTER TABLE `region_string_value` DISABLE KEYS */;
+INSERT INTO `region_string_value` VALUES (1,1,1,'ХАРЬКОВСКАЯ ОБЛАСТЬ');
+/*!40000 ALTER TABLE `region_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2777,7 +2777,7 @@ CREATE TABLE `room_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 200 - НАИМЕНОВАНИЕ КОМНАТЫ',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 200 - STRING_CULTURE',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 200 - STRING_VALUE',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -2854,13 +2854,13 @@ LOCK TABLES `room_correction` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `room_string_culture`
+-- Table structure for table `room_string_value`
 --
 
-DROP TABLE IF EXISTS `room_string_culture`;
+DROP TABLE IF EXISTS `room_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `room_string_culture` (
+CREATE TABLE `room_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -2869,17 +2869,17 @@ CREATE TABLE `room_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_room_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_room_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов комнаты';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `room_string_culture`
+-- Dumping data for table `room_string_value`
 --
 
-LOCK TABLES `room_string_culture` WRITE;
-/*!40000 ALTER TABLE `room_string_culture` DISABLE KEYS */;
-/*!40000 ALTER TABLE `room_string_culture` ENABLE KEYS */;
+LOCK TABLES `room_string_value` WRITE;
+/*!40000 ALTER TABLE `room_string_value` DISABLE KEYS */;
+/*!40000 ALTER TABLE `room_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2933,7 +2933,7 @@ CREATE TABLE `sequence` (
 
 LOCK TABLES `sequence` WRITE;
 /*!40000 ALTER TABLE `sequence` DISABLE KEYS */;
-INSERT INTO `sequence` VALUES ('057',169),('apartment',37),('apartment_string_culture',37),('building',2),('building_address',2),('building_address_string_culture',2),('building_string_culture',1),('city',2),('city_string_culture',3),('city_type',2),('city_type_string_culture',3),('country',2),('country_string_culture',2),('district',10),('district_string_culture',19),('eirc_account',191),('module_instance',3),('module_instance_string_culture',7),('organization',83),('organization_string_culture',262),('organization_type',5),('organization_type_string_culture',5),('permission',1),('region',2),('region_string_culture',2),('room',1),('room_string_culture',1),('service_provider_account',200),('service_provider_account_string_culture',145),('street',829),('street_string_culture',829),('street_type',18),('street_type_string_culture',35),('string_culture',6007),('user_info',5),('user_info_string_culture',1);
+INSERT INTO `sequence` VALUES ('057',169),('apartment',37),('apartment_string_value',37),('building',2),('building_address',2),('building_address_string_value',2),('building_string_value',1),('city',2),('city_string_value',3),('city_type',2),('city_type_string_value',3),('country',2),('country_string_value',2),('district',10),('district_string_value',19),('eirc_account',191),('module_instance',3),('module_instance_string_value',7),('organization',83),('organization_string_value',262),('organization_type',5),('organization_type_string_value',5),('permission',1),('region',2),('region_string_value',2),('room',1),('room_string_value',1),('service_provider_account',200),('service_provider_account_string_value',145),('street',829),('street_string_value',829),('street_type',18),('street_type_string_value',35),('string_value',6007),('user_info',5),('user_info_string_value',1);
 /*!40000 ALTER TABLE `sequence` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3062,7 +3062,7 @@ CREATE TABLE `service_provider_account_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - STRING_CULTURE',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - STRING_VALUE',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -3134,13 +3134,13 @@ LOCK TABLES `service_provider_account_correction` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `service_provider_account_string_culture`
+-- Table structure for table `service_provider_account_string_value`
 --
 
-DROP TABLE IF EXISTS `service_provider_account_string_culture`;
+DROP TABLE IF EXISTS `service_provider_account_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `service_provider_account_string_culture` (
+CREATE TABLE `service_provider_account_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -3149,28 +3149,28 @@ CREATE TABLE `service_provider_account_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_sp_account_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_sp_account_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов л/с ПУ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `service_provider_account_string_culture`
+-- Dumping data for table `service_provider_account_string_value`
 --
 
-LOCK TABLES `service_provider_account_string_culture` WRITE;
-/*!40000 ALTER TABLE `service_provider_account_string_culture` DISABLE KEYS */;
-INSERT INTO `service_provider_account_string_culture` VALUES (98,91,1,'63.1'),(99,92,1,'51.2'),(100,93,1,'20.0'),(101,94,1,'65.3'),(102,95,1,'50.2'),(103,96,1,'40.1'),(104,97,1,'63.1'),(105,98,1,'51.2'),(106,99,1,'20.0'),(107,100,1,'65.3'),(108,101,1,'50.2'),(109,102,1,'40.1'),(110,103,1,'63.1'),(111,104,1,'51.2'),(112,105,1,'20.0'),(113,106,1,'65.3'),(114,107,1,'50.2'),(115,108,1,'40.1'),(116,109,1,'63.1'),(117,110,1,'51.2'),(118,111,1,'20.0'),(119,112,1,'65.3'),(120,113,1,'50.2'),(121,114,1,'40.1'),(122,115,1,'63.1'),(123,116,1,'51.2'),(124,117,1,'20.0'),(125,118,1,'65.3'),(126,119,1,'50.2'),(127,120,1,'40.1'),(128,121,1,'63.1'),(129,122,1,'51.2'),(130,123,1,'20.0'),(131,124,1,'65.3'),(132,125,1,'50.2'),(133,126,1,'40.1'),(134,127,1,'63.1'),(135,128,1,'51.2'),(136,129,1,'20.0'),(137,130,1,'65.3'),(138,131,1,'50.2'),(139,132,1,'40.1'),(140,133,1,'63.1'),(141,134,1,'51.2'),(142,135,1,'20.0'),(143,136,1,'65.3'),(144,137,1,'50.2'),(145,138,1,'40.1'),(146,139,1,'63.1'),(147,140,1,'51.2'),(148,141,1,'20.0'),(149,142,1,'65.3'),(150,143,1,'50.2'),(151,144,1,'40.1');
-/*!40000 ALTER TABLE `service_provider_account_string_culture` ENABLE KEYS */;
+LOCK TABLES `service_provider_account_string_value` WRITE;
+/*!40000 ALTER TABLE `service_provider_account_string_value` DISABLE KEYS */;
+INSERT INTO `service_provider_account_string_value` VALUES (98,91,1,'63.1'),(99,92,1,'51.2'),(100,93,1,'20.0'),(101,94,1,'65.3'),(102,95,1,'50.2'),(103,96,1,'40.1'),(104,97,1,'63.1'),(105,98,1,'51.2'),(106,99,1,'20.0'),(107,100,1,'65.3'),(108,101,1,'50.2'),(109,102,1,'40.1'),(110,103,1,'63.1'),(111,104,1,'51.2'),(112,105,1,'20.0'),(113,106,1,'65.3'),(114,107,1,'50.2'),(115,108,1,'40.1'),(116,109,1,'63.1'),(117,110,1,'51.2'),(118,111,1,'20.0'),(119,112,1,'65.3'),(120,113,1,'50.2'),(121,114,1,'40.1'),(122,115,1,'63.1'),(123,116,1,'51.2'),(124,117,1,'20.0'),(125,118,1,'65.3'),(126,119,1,'50.2'),(127,120,1,'40.1'),(128,121,1,'63.1'),(129,122,1,'51.2'),(130,123,1,'20.0'),(131,124,1,'65.3'),(132,125,1,'50.2'),(133,126,1,'40.1'),(134,127,1,'63.1'),(135,128,1,'51.2'),(136,129,1,'20.0'),(137,130,1,'65.3'),(138,131,1,'50.2'),(139,132,1,'40.1'),(140,133,1,'63.1'),(141,134,1,'51.2'),(142,135,1,'20.0'),(143,136,1,'65.3'),(144,137,1,'50.2'),(145,138,1,'40.1'),(146,139,1,'63.1'),(147,140,1,'51.2'),(148,141,1,'20.0'),(149,142,1,'65.3'),(150,143,1,'50.2'),(151,144,1,'40.1');
+/*!40000 ALTER TABLE `service_provider_account_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `service_string_culture`
+-- Table structure for table `service_string_value`
 --
 
-DROP TABLE IF EXISTS `service_string_culture`;
+DROP TABLE IF EXISTS `service_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `service_string_culture` (
+CREATE TABLE `service_string_value` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `service_id` bigint(20) NOT NULL,
   `locale_id` bigint(20) NOT NULL,
@@ -3179,19 +3179,19 @@ CREATE TABLE `service_string_culture` (
   UNIQUE KEY `unique_id__locale` (`service_id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(255)),
-  CONSTRAINT `fk_service_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`),
-  CONSTRAINT `fk_service_string_culture__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_service_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`),
+  CONSTRAINT `fk_service_string_value__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `service_string_culture`
+-- Dumping data for table `service_string_value`
 --
 
-LOCK TABLES `service_string_culture` WRITE;
-/*!40000 ALTER TABLE `service_string_culture` DISABLE KEYS */;
-INSERT INTO `service_string_culture` VALUES (1,3,1,'TestService1'),(2,4,1,'Горячая вода');
-/*!40000 ALTER TABLE `service_string_culture` ENABLE KEYS */;
+LOCK TABLES `service_string_value` WRITE;
+/*!40000 ALTER TABLE `service_string_value` DISABLE KEYS */;
+INSERT INTO `service_string_value` VALUES (1,3,1,'TestService1'),(2,4,1,'Горячая вода');
+/*!40000 ALTER TABLE `service_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -3249,7 +3249,7 @@ CREATE TABLE `street_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 300 - НАИМЕНОВАНИЕ УЛИЦЫ, 301 - ТИП УЛИЦЫ',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 300 - STRING_CULTURE, 301 - street_type',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 300 - STRING_VALUE, 301 - street_type',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -3327,13 +3327,13 @@ LOCK TABLES `street_correction` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `street_string_culture`
+-- Table structure for table `street_string_value`
 --
 
-DROP TABLE IF EXISTS `street_string_culture`;
+DROP TABLE IF EXISTS `street_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `street_string_culture` (
+CREATE TABLE `street_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -3342,18 +3342,18 @@ CREATE TABLE `street_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_street_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_street_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=829 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов улицы';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `street_string_culture`
+-- Dumping data for table `street_string_value`
 --
 
-LOCK TABLES `street_string_culture` WRITE;
-/*!40000 ALTER TABLE `street_string_culture` DISABLE KEYS */;
-INSERT INTO `street_string_culture` VALUES (1,1,1,'АВИАЦИОННАЯ'),(2,2,1,'АВТОСТРАДНАЯ'),(3,3,1,'АВТОСТРАДНЫЙ'),(4,4,1,'АДЫГЕЙСКАЯ'),(5,5,1,'АДЫГЕЙСКИЙ'),(6,6,1,'АЗЕРБАЙДЖАНСКАЯ'),(7,7,1,'АЗЕРБАЙДЖАНСКИЙ'),(8,8,1,'АЗЕРБАЙДЖАНСКИЙ'),(9,9,1,'АЗОВСТАЛЬСКАЯ'),(10,10,1,'АКАДЕМИКА БОГОМОЛЬЦА'),(11,11,1,'АКАДЕМИКА ВАЛЬТЕРА'),(12,12,1,'АКАДЕМИКА КУРЧАТОВА'),(13,13,1,'АКАДЕМИКА ПАВЛОВА'),(14,14,1,'АКАДЕМИКА ПРОСКУРЫ'),(15,15,1,'АКАДЕМИКА СИНЕЛЬНИКОВА'),(16,16,1,'АКАДЕМИКА ФИЛИППОВА'),(17,17,1,'АЛЕКСАНДРА НЕВСКОГО'),(18,18,1,'АЛЕКСАНДРОВСКАЯ'),(19,19,1,'АЛЕКСЕЕВА ПЕТРА'),(20,20,1,'АЛЕКСЕЕВСКАЯ'),(21,21,1,'АНАДЫРСКАЯ'),(22,22,1,'АНАДЫРСКИЙ'),(23,23,1,'АНДРЕЕВСКИЙ'),(24,24,1,'АНРИ БАРБЮСА'),(25,25,1,'АНТОКОЛЬСКОГО'),(26,26,1,'АПТЕКАРСКИЙ'),(27,27,1,'АПТЕКАРСКИЙ'),(28,28,1,'АРМАТУРНАЯ'),(29,29,1,'АРМЕЙСКАЯ'),(30,30,1,'АРМЕЙСКИЙ'),(31,31,1,'АРМЯНСКИЙ'),(32,32,1,'АРСЕНАЛЬНАЯ'),(33,33,1,'АРТЕЛЬНАЯ'),(34,34,1,'АРТЕМА'),(35,35,1,'АРТЕМА'),(36,36,1,'АРХАНГЕЛЬСКАЯ'),(37,37,1,'АРХИТЕКТОРОВ'),(38,38,1,'АСКОЛЬДОВСКАЯ'),(39,39,1,'АСТРОНОМИЧЕСКАЯ'),(40,40,1,'АФАНАСЬЕВСКАЯ'),(41,41,1,'АХСАРОВА'),(42,42,1,'АШХАБАДСКАЯ'),(43,43,1,'АШХАБАДСКИЙ'),(44,44,1,'АЭРОФЛОТСКАЯ'),(45,45,1,'БАБУШКИНА'),(46,46,1,'БАВАРСКАЯ'),(47,47,1,'БАВАРСКИЙ'),(48,48,1,'БАГРАТИОНА'),(49,49,1,'БАЗАРНАЯ'),(50,50,1,'БАКУЛИНА'),(51,51,1,'БАЛАКИРЕВА'),(52,52,1,'БАЛАКИРЕВА'),(53,53,1,'БАЛАКЛЕЙСКИЙ'),(54,54,1,'БАЛКАНСКАЯ'),(55,55,1,'БАЛТИЙСКАЯ'),(56,56,1,'БАРАБАШОВА'),(57,57,1,'БАРРИКАДНАЯ'),(58,58,1,'БАТУРИНСКАЯ'),(59,59,1,'БАШКИРСКАЯ'),(60,60,1,'БЕЗЛЮДОВСКАЯ'),(61,61,1,'БЕКЕТОВА'),(62,62,1,'БЕЛОБРОВСКИЙ'),(63,63,1,'БЕЛОГОРСКАЯ'),(64,64,1,'БЕЛОСТОЦКИЙ'),(65,65,1,'БЕРЕЗОВСКАЯ'),(66,66,1,'БЕСКРАЙНЯЯ'),(67,67,1,'БЕСТУЖЕВА'),(68,68,1,'БИОЛОГИЧЕСКАЯ'),(69,69,1,'БИОЛОГИЧЕСКИЙ'),(70,70,1,'БЛАГОДАТНАЯ'),(71,71,1,'БЛЮХЕРА'),(72,72,1,'БОБРУЙСКАЯ'),(73,73,1,'БОГДАНА ХМЕЛЬНИЦКОГО'),(74,74,1,'БОГДАНА ХМЕЛЬНИЦКОГО'),(75,75,1,'БОЕВАЯ'),(76,76,1,'БОЛГАРСКАЯ'),(77,77,1,'БОЛГАРСКИЙ'),(78,78,1,'БОЛЬШАЯ ГОНЧАРОВСКАЯ'),(79,79,1,'БОЛЬШАЯ КОЛЬЦЕВАЯ'),(80,80,1,'БОЛЬШОЙ ДАНИЛОВСКИЙ'),(81,81,1,'БОНДАРЕВСКАЯ'),(82,82,1,'БОРЗЕНКО'),(83,83,1,'БОРЗЫЙ'),(84,84,1,'БОРОВАЯ'),(85,85,1,'БОРОДИНОВСКАЯ'),(86,86,1,'БОРЬБЫ'),(87,87,1,'БОТКИНА'),(88,88,1,'БРЕСТСКАЯ'),(89,89,1,'БРОНЕВАЯ'),(90,90,1,'БРОНЕНОСЦА ПОТЕМКИН'),(91,91,1,'БРЯНСКИЙ'),(92,92,1,'БУЛЬВАРНАЯ'),(93,93,1,'БУРСАЦКИЙ'),(94,94,1,'БУТОВСКИЙ'),(95,95,1,'ВАВИЛОВА'),(96,96,1,'ВАГОННАЯ'),(97,97,1,'ВАЛДАЙСКАЯ'),(98,98,1,'ВАЛЕРЬЯНОВСКАЯ'),(99,99,1,'ВАЩЕНКОВСКИЙ'),(100,100,1,'ВЕРХНЕ-ГИЕВСКАЯ'),(101,101,1,'ВЕРХОВСКИЙ'),(102,102,1,'ВЕСНИНА'),(103,103,1,'ВЕШЕНСКАЯ'),(104,104,1,'ВИННИЦКИЙ'),(105,105,1,'ВИНОГРАДНАЯ'),(106,106,1,'ВИНОГРАДНЫЙ'),(107,107,1,'ВИШНЕВЫЙ'),(108,108,1,'ВЛАДИМИРСКАЯ'),(109,109,1,'ВЛАСЕНКО'),(110,110,1,'ВОЕННАЯ'),(111,111,1,'ВОЗРОЖДЕНИЯ'),(112,112,1,'ВОЙКОВА'),(113,113,1,'ВОКЗАЛЬНАЯ'),(114,114,1,'ВОЛОГОДСКАЯ'),(115,115,1,'ВОЛОДАРСКОГО'),(116,116,1,'ВОЛОДАРСКОГО'),(117,117,1,'ВОЛОДАРСКОГО'),(118,118,1,'ВОЛОЖАНОВСКАЯ'),(119,119,1,'ВОЛОШИНСКИЙ'),(120,120,1,'ВОЛЫНСКАЯ'),(121,121,1,'ВОЛЫНСКИЙ'),(122,122,1,'ВОРОБЬЕВА'),(123,123,1,'ВОРОБЬЕВА'),(124,124,1,'ВОССТАНИЯ'),(125,125,1,'ВОСЬМОГО МАРТА'),(126,126,1,'ВТОРОЙ ПЯТИЛЕТКИ'),(127,127,1,'ВЫСОЧИНЕНКО'),(128,128,1,'ВЯТСКАЯ'),(129,129,1,'ГАГАРИНА'),(130,130,1,'ГАЛАНА'),(131,131,1,'ГАЛИНСКАЯ'),(132,132,1,'ГАЛУШКИНСКАЯ'),(133,133,1,'ГАМАРНИКА'),(134,134,1,'ГАННЫ'),(135,135,1,'ГАРИБАЛЬДИ'),(136,136,1,'ГАРКУШИ'),(137,137,1,'ГАРШИНА'),(138,138,1,'ГАЦЕВА'),(139,139,1,'ГВАРДЕЙЦЕВ-ЖЕЛЕЗНОДОРОЖНИКОВ'),(140,140,1,'ГВАРДЕЙЦЕВ-ШИРОНИНЦЕВ'),(141,141,1,'ГЕОРГИЕВСКАЯ'),(142,142,1,'ГЕОРГИЕВСКИЙ 1-Й'),(143,143,1,'ГЕРАСИМОВСКИЙ'),(144,144,1,'ГЕРОЕВ СТАЛИНГРАДА'),(145,145,1,'ГЕРОЕВ ТРУДА'),(146,146,1,'ГЕРЦЕНА'),(147,147,1,'ГИЕВСКАЯ'),(148,148,1,'ГИРШМАНА'),(149,149,1,'ГОГОЛЯ'),(150,150,1,'ГОРДИЕНКОВСКАЯ'),(151,151,1,'ГОРНАЯ'),(152,152,1,'ГОРНЫЙ'),(153,153,1,'ГОРСОВЕТОВСКАЯ'),(154,154,1,'ГОСТИННАЯ'),(155,155,1,'ГРАБОВСКОГО'),(156,156,1,'ГРАЖДАНСКАЯ'),(157,157,1,'ГРАЖДАНСКИЙ'),(158,158,1,'ГРАЙВОРОНСКАЯ'),(159,159,1,'ГРЕКОВСКАЯ'),(160,160,1,'ГРИБОЕДОВА'),(161,161,1,'ГРИГОРОВСКАЯ'),(162,162,1,'ГРИЦЕВЦА'),(163,163,1,'ГРИЦЕВЦА'),(164,164,1,'ГРОЗНЕНСКАЯ'),(165,165,1,'ГУБКОМОВСКАЯ'),(166,166,1,'ГУДАНОВА'),(167,167,1,'ГЮГО'),(168,168,1,'ДАНИЛЕВСКОГО'),(169,169,1,'ДАРВИНА'),(170,170,1,'ДАЦЬКО'),(171,171,1,'ДАЧНЫЙ'),(172,172,1,'ДВАДЦАТЬ ТРЕТЬЕГО АВГУСТА'),(173,173,1,'ДВАДЦАТЬ ТРЕТЬЕГО АВГУСТА'),(174,174,1,'ДВЕНАДЦАТОГО АПРЕЛЯ'),(175,175,1,'ДЕМЧЕНКО'),(176,176,1,'ДЕПОВСКАЯ'),(177,177,1,'ДЕРГАЧЕВСКАЯ'),(178,178,1,'ДЕРЕВЯНКО'),(179,179,1,'ДЕРЖАВИНСКАЯ'),(180,180,1,'ДЖЕРЕЛО'),(181,181,1,'ДЖУТОВЫЙ'),(182,182,1,'ДЗЮБЫ'),(183,183,1,'ДИЗЕЛЬНАЯ'),(184,184,1,'ДИНАМОВСКАЯ'),(185,185,1,'ДИСПЕТЧЕРСКАЯ'),(186,186,1,'ДМИТРИЕВСКАЯ'),(187,187,1,'ДНЕПРОВСКАЯ'),(188,188,1,'ДОБРОДЕЦКОГО'),(189,189,1,'ДОБРОЛЮБОВА'),(190,190,1,'ДОВАТОРА'),(191,191,1,'ДОВАТОРА'),(192,192,1,'ДОВГАЛЕВСКАЯ'),(193,193,1,'ДОКУЧАЕВА'),(194,194,1,'ДОЛГОЖДАННЫЙ'),(195,195,1,'ДОНБАССОВСКИЙ'),(196,196,1,'ДОНЕЦ-ЗАХАРЖЕВСКОГО'),(197,197,1,'ДОНСКОЙ'),(198,198,1,'ДОРОЖНАЯ'),(199,199,1,'ДОСВИДНЫЙ'),(200,200,1,'ДОСТОЕВСКОГО'),(201,201,1,'ДОСТОЕВСКОГО'),(202,202,1,'ДРУЖБЫ НАРОДОВ'),(203,203,1,'ДЫБЕНКО ПАВЛА'),(204,204,1,'ЕВПАТОРИЙСКИЙ'),(205,205,1,'ЕЛЕНИНСКАЯ'),(206,206,1,'ЕЛИЗАВЕТИНСКАЯ'),(207,207,1,'ЕЛИЗАРОВА'),(208,208,1,'ЕРЕМОВСКИЙ'),(209,209,1,'ЕРМАКОВСКАЯ'),(210,210,1,'ЕСЕНИНА'),(211,211,1,'ЖЕЛЕЗНОДОРОЖНАЯ'),(212,212,1,'ЖЕЛЕЗНЯКОВА'),(213,213,1,'ЖЕЛЯБОВА'),(214,214,1,'ЖИТНАЯ'),(215,215,1,'ЖУКОВСКОГО'),(216,216,1,'ЖУКОВСКОГО'),(217,217,1,'ЖУТОВСКАЯ'),(218,218,1,'ЗАБАЙКАЛЬСКИЙ'),(219,219,1,'ЗАВОДА КОМСОМОЛЕЦ'),(220,220,1,'ЗАВОДСКАЯ'),(221,221,1,'ЗАВОДСКОЙ'),(222,222,1,'ЗАЛЕССКАЯ'),(223,223,1,'ЗАЛЮТИНСКАЯ'),(224,224,1,'ЗАПАДНАЯ'),(225,225,1,'ЗАЧЕПИЛОВСКАЯ'),(226,226,1,'ЗВЕЗДНАЯ'),(227,227,1,'ЗДОРОВЬЯ'),(228,228,1,'ЗДОРОВЬЯ'),(229,229,1,'ЗЕЛЕНАЯ'),(230,230,1,'ЗЕМОВСКАЯ'),(231,231,1,'ЗЕМОВСКИЙ'),(232,232,1,'ЗЕРНОВАЯ'),(233,233,1,'ЗЕРНОВОЙ'),(234,234,1,'ЗЕРНОВОЙ 1-Й'),(235,235,1,'ЗОЛОТОЙ 2-Й'),(236,236,1,'ЗОЛОЧЕВСКАЯ'),(237,237,1,'ЗОЛОЧЕВСКИЙ 1-Й'),(238,238,1,'ЗУБАРЕВА'),(239,239,1,'ИВ. ДУБОВОГО'),(240,240,1,'ИВАНА КАРКАЧА'),(241,241,1,'ИВАНА КАРКАЧА'),(242,242,1,'ИВАНОВА'),(243,243,1,'ИВАНОВСКАЯ'),(244,244,1,'ИВАНОВСКИЙ'),(245,245,1,'ИЖЕВСКИЙ'),(246,246,1,'ИЛЬИНСКАЯ'),(247,247,1,'ИЛЬИЧА'),(248,248,1,'ИНИЦИАТИВНАЯ'),(249,249,1,'ИСАЕВСКАЯ'),(250,250,1,'ИСКРИНСКАЯ'),(251,251,1,'ИСКРИНСКИЙ'),(252,252,1,'ИСПОЛКОМОВСКАЯ'),(253,253,1,'КАЛИНИНА'),(254,254,1,'КАМСКАЯ'),(255,255,1,'КАМЫШЕВА ИВАНА'),(256,256,1,'КАНДАУРОВА'),(257,257,1,'КАРАЗИНА'),(258,258,1,'КАРАЧЕВСКОЕ'),(259,259,1,'КАРБЫШЕВА'),(260,260,1,'КАРЛА МАРКСА'),(261,261,1,'КАРПИНСКОГО'),(262,262,1,'КАРПОВСКАЯ'),(263,263,1,'КАРПОВСКИЙ'),(264,264,1,'КАТАЕВА'),(265,265,1,'КАЧАНОВСКАЯ'),(266,266,1,'КАШИРСКАЯ'),(267,267,1,'КАШТАНОВАЯ'),(268,268,1,'КАШУБЫ'),(269,269,1,'КВИТКИ-ОСНОВЬЯНЕНКО'),(270,270,1,'КВИТКИНСКАЯ'),(271,271,1,'КЕРЧЕНСКАЯ'),(272,272,1,'КИБАЛЬЧИЧА'),(273,273,1,'КИЕВСКАЯ'),(274,274,1,'КИРГИЗСКАЯ'),(275,275,1,'КИРГИЗСКИЙ'),(276,276,1,'КИРОВА'),(277,277,1,'КИСЛОВОДСКАЯ'),(278,278,1,'КИТАЕНКО'),(279,279,1,'КЛАПЦОВА'),(280,280,1,'КЛАССИЧЕСКИЙ'),(281,281,1,'КЛЕЩЕВСКИЙ'),(282,282,1,'КЛОЧКОВСКАЯ'),(283,283,1,'КЛОЧКОВСКИЙ'),(284,284,1,'КНЫШЕВСКИЙ'),(285,285,1,'КОВТУНА'),(286,286,1,'КОКСОВАЯ'),(287,287,1,'КОКСОВЫЙ'),(288,288,1,'КОКЧЕТАВСКАЯ'),(289,289,1,'КОЛЛЕКТИВНАЯ'),(290,290,1,'КОЛОДЕЗНАЯ'),(291,291,1,'КОЛОДЕЗНЫЙ'),(292,292,1,'КОЛОМЕНСКАЯ'),(293,293,1,'КОЛОННАЯ'),(294,294,1,'КОЛОННЫЙ 1-Й'),(295,295,1,'КОЛХОЗНАЯ'),(296,296,1,'КОЛЬЦЕВОЙ'),(297,297,1,'КОЛЬЦОВСКАЯ'),(298,298,1,'КОМАНДАРМА КОРКА'),(299,299,1,'КОМБАЙНОВСКАЯ'),(300,300,1,'КОММУНАЛЬНЫЙ'),(301,301,1,'КОМСОМОЛЬСКАЯ'),(302,302,1,'КОМСОМОЛЬСКОЕ'),(303,303,1,'КОНДУКТОРСКАЯ'),(304,304,1,'КОНЕВА'),(305,305,1,'КОНОВАЛОВА'),(306,306,1,'КОНОТОПСКАЯ'),(307,307,1,'КОНОТОПСКИЙ'),(308,308,1,'КОНСТИТУЦИИ'),(309,309,1,'КОНТОРСКИЙ'),(310,310,1,'КОНЮШЕННЫЙ'),(311,311,1,'КООПЕРАТИВНАЯ'),(312,312,1,'КОПЕРНИКА'),(313,313,1,'КОРОБЕЙНИЦКИЙ'),(314,314,1,'КОРОЛЕНКО'),(315,315,1,'КОРОЛЕНКО'),(316,316,1,'КОРОСТЕЛЬСКАЯ'),(317,317,1,'КОРСУНСКАЯ'),(318,318,1,'КОРЧАГИНЦЕВ'),(319,319,1,'КОСИОРА'),(320,320,1,'КОСМИЧЕСКАЯ'),(321,321,1,'КОСМОНАВТОВ'),(322,322,1,'КОСТОМАРОВСКАЯ'),(323,323,1,'КОСТЫЧЕВА'),(324,324,1,'КОСТЮРИНСКИЙ'),(325,325,1,'КОТЕЛЬНИКОВСКАЯ'),(326,326,1,'КОТЛАССКАЯ'),(327,327,1,'КОТЛОВА'),(328,328,1,'КОТЛЯРЕВСКОГО'),(329,329,1,'КОТОВСКОГО'),(330,330,1,'КОЦАРСКАЯ'),(331,331,1,'КОШКИНА'),(332,332,1,'КРАВЦОВА'),(333,333,1,'КРАМАТОРСКИЙ'),(334,334,1,'КРАСИНА'),(335,335,1,'КРАСНАЯ АЛЛЕЯ'),(336,336,1,'КРАСНОАРМЕЙСКАЯ'),(337,337,1,'КРАСНОГО ЛЕТЧИКА'),(338,338,1,'КРАСНОГО ОКТЯБРЯ'),(339,339,1,'КРАСНОДАРСКАЯ'),(340,340,1,'КРАСНОДОНСКАЯ'),(341,341,1,'КРАСНОДОНСКИЙ'),(342,342,1,'КРАСНОЗНАМЕННАЯ'),(343,343,1,'КРАСНОЗНАМЕННЫЙ'),(344,344,1,'КРАСНОЙ ЗВЕЗДЫ'),(345,345,1,'КРАСНОКУТСКИЙ'),(346,346,1,'КРАСНОМАЯЦКАЯ'),(347,347,1,'КРАСНООКТЯБРЬСКАЯ'),(348,348,1,'КРАСНОПОЛЬСКАЯ'),(349,349,1,'КРАСНОПОСЕЛКОВАЯ'),(350,350,1,'КРАСНОШКОЛЬНАЯ'),(351,351,1,'КРАХМАЛЕВСКИЙ'),(352,352,1,'КРИВОМАЗОВА'),(353,353,1,'КРИВОРОЖСКАЯ'),(354,354,1,'КРОПИВНИЦКОГО'),(355,355,1,'КРУПСКОЙ'),(356,356,1,'КРУПСКОЙ'),(357,357,1,'КРУТОГОРСКИЙ'),(358,358,1,'КРЫЛОВА'),(359,359,1,'КРЫМСКАЯ'),(360,360,1,'КУБАСОВА'),(361,361,1,'КУБРАКОВСКИЙ'),(362,362,1,'КУЗНЕЧНАЯ'),(363,363,1,'КУЙБЫШЕВА'),(364,364,1,'КУЙБЫШЕВА'),(365,365,1,'КУЛИКА ИВАНА'),(366,366,1,'КУЛЬБИЦКИЙ'),(367,367,1,'КУЛЬТУРЫ'),(368,368,1,'КУРЯЖАНСКАЯ'),(369,369,1,'КУТОВАЯ'),(370,370,1,'ЛАГЕРНАЯ'),(371,371,1,'ЛАДОЖСКИЙ'),(372,372,1,'ЛАДЫГИНА'),(373,373,1,'ЛАЗО'),(374,374,1,'ЛАЗЬКОВА-ЛУЖОК'),(375,375,1,'ЛЕБЕДЕВА ПАВЛА'),(376,376,1,'ЛЕБЕДИНСКАЯ'),(377,377,1,'ЛЕНИНА'),(378,378,1,'ЛЕНИНА'),(379,379,1,'ЛЕНИНГРАДСКАЯ'),(380,380,1,'ЛЕНИНГРАДСКИЙ'),(381,381,1,'ЛЕРМОНТОВСКАЯ'),(382,382,1,'ЛЕСИ УКРАИНКИ'),(383,383,1,'ЛЕСНАЯ'),(384,384,1,'ЛЕСОПАРКОВСКИЙ 1-Й'),(385,385,1,'ЛЕСОПАРКОВСКИЙ 2-Й'),(386,386,1,'ЛИНЕЙНАЯ'),(387,387,1,'ЛОКОМОТИВНАЯ'),(388,388,1,'ЛОМОНОСОВА'),(389,389,1,'ЛОПАНСКАЯ'),(390,390,1,'ЛОПАНСКИЙ'),(391,391,1,'ЛОПАТИНСКИЙ'),(392,392,1,'ЛУГАНСКАЯ'),(393,393,1,'ЛУИ ПАСТЕРА'),(394,394,1,'ЛУИ ПАСТЕРА 2-Й'),(395,395,1,'ЛУНАЧАРСКОГО'),(396,396,1,'ЛЫСАЯ'),(397,397,1,'ЛЫСЕНКО'),(398,398,1,'ЛЮДВИГА СВОБОДЫ'),(399,399,1,'ЛЮСИНСКАЯ'),(400,400,1,'ЛЮТОВСКАЯ'),(401,401,1,'ЛЯПУНОВА'),(402,402,1,'МАКЕЕВСКАЯ'),(403,403,1,'МАКОВСКОГО'),(404,404,1,'МАЛИНОВСКАЯ'),(405,405,1,'МАЛИНОВСКОГО'),(406,406,1,'МАЛО-ГОНЧАРОВСКАЯ'),(407,407,1,'МАЛО-ПАНАСОВСКАЯ'),(408,408,1,'МАЛОДЖАНКОЙСКАЯ'),(409,409,1,'МАЛЫШЕВА'),(410,410,1,'МАРИУПОЛЬСКИЙ'),(411,411,1,'МАРСЕЛЯ КАШЕНА'),(412,412,1,'МАРШАЛА БАЖАНОВА'),(413,413,1,'МАРШАЛА БАТИЦКОГО'),(414,414,1,'МАРШАЛА ЖУКОВА'),(415,415,1,'МАРЬИНСКАЯ'),(416,416,1,'МАРЬЯНЕНКО'),(417,417,1,'МАТЕРИАЛИСТИЧЕСКИЙ'),(418,418,1,'МАТРОСОВА'),(419,419,1,'МАТЮШЕНКО'),(420,420,1,'МАШИНИСТОВ'),(421,421,1,'МАЯКОВСКОГО'),(422,422,1,'МЕЖЛАУКА'),(423,423,1,'МЕЛЬНИКОВА'),(424,424,1,'МЕНДЕЛЕЕВА'),(425,425,1,'МЕРЕФЯНСКОЕ'),(426,426,1,'МЕТАЛЛИСТА'),(427,427,1,'МЕТИЗНЫЙ'),(428,428,1,'МЕТРОСТРОИТЕЛЕЙ'),(429,429,1,'МИНАЙЛЕНКО'),(430,430,1,'МИРА'),(431,431,1,'МИРА'),(432,432,1,'МИРА'),(433,433,1,'МИРГОРОДСКАЯ'),(434,434,1,'МИРНАЯ'),(435,435,1,'МИРОНОСИЦКАЯ'),(436,436,1,'МОЕЧНАЯ'),(437,437,1,'МОЛЧАНОВСКИЙ'),(438,438,1,'МОЛЧАНОВСКИЙ'),(439,439,1,'МОНТАЖНАЯ'),(440,440,1,'МОНЮШКО'),(441,441,1,'МОРОЗОВА'),(442,442,1,'МОРОЗОВА ПАВЛИКА'),(443,443,1,'МОСКОВСКИЙ'),(444,444,1,'МОТОРНАЯ'),(445,445,1,'МОХНАЧАНСКАЯ'),(446,446,1,'МУЗЫКАЛЬНАЯ'),(447,447,1,'МУРАНОВА'),(448,448,1,'НАБЕРЕЖНЫЙ'),(449,449,1,'НАРВСКАЯ'),(450,450,1,'НАРИМАНОВА'),(451,451,1,'НАРОФОМИНСКАЯ'),(452,452,1,'НЕВЕЛЬСКАЯ'),(453,453,1,'НЕЖИНСКАЯ'),(454,454,1,'НЕМАНСКИЙ 4-Й'),(455,455,1,'НЕМЫШЛЯНСКАЯ'),(456,456,1,'НЕСТЕРОВА'),(457,457,1,'НЕТЕЧЕНСКАЯ'),(458,458,1,'НЕТЕЧЕНСКИЙ'),(459,459,1,'НЕХАЕНКО'),(460,460,1,'НИЖНЕГИЕВСКАЯ'),(461,461,1,'НИКИТИНА'),(462,462,1,'НИКИТИНОЙ ГАЛИНЫ'),(463,463,1,'НИКИТИНСКИЙ'),(464,464,1,'НИКОНОВСКАЯ'),(465,465,1,'НОВАЯ БАВАРИЯ'),(466,466,1,'НОВГОРОДСКАЯ'),(467,467,1,'НОВОМЯСНИЦКАЯ'),(468,468,1,'НОВОПРУДНАЯ'),(469,469,1,'НОВОСЕЛОВСКАЯ'),(470,470,1,'НОВОХАРЬКОВСКАЯ'),(471,471,1,'НОВЫЙ БЫТ'),(472,472,1,'НОГИНА'),(473,473,1,'НОГИНА'),(474,474,1,'НЬЮТОНА'),(475,475,1,'ОБОЯНСКАЯ'),(476,476,1,'ОГАРЕВСКОГО'),(477,477,1,'ОДОЕВСКИЙ'),(478,478,1,'ОКТЯБРЬСКОЙ РЕВОЛЮЦИИ'),(479,479,1,'ОЛИМПИЙСКАЯ'),(480,480,1,'ОЛЬМИНСКОГО'),(481,481,1,'ОМСКАЯ'),(482,482,1,'ОРДЖОНИКИДЗЕ'),(483,483,1,'ОРЕНБУРГСКАЯ'),(484,484,1,'ОРСКИЙ'),(485,485,1,'ОСЕТИНСКАЯ'),(486,486,1,'ОСЕТИНСКИЙ'),(487,487,1,'ОСИПЕНКО'),(488,488,1,'ОСНОВЯНСКАЯ'),(489,489,1,'ОСНОВЯНСКИЙ'),(490,490,1,'ОСТРОВСКОГО'),(491,491,1,'ОСТРОГРАДСКИЙ'),(492,492,1,'ОТАКАРА ЯРОША'),(493,493,1,'ОТАКАРА ЯРОША'),(494,494,1,'ОЧАКОВСКАЯ'),(495,495,1,'ОЩЕПКОВА'),(496,496,1,'П. СВИСТУНА'),(497,497,1,'ПАВЛЕНКОВСКИЙ'),(498,498,1,'ПАНАСОВСКИЙ 2-Й'),(499,499,1,'ПАРНИКОВСКИЙ'),(500,500,1,'ПАРОВОЗНАЯ'),(501,501,1,'ПАРХОМЕНКО'),(502,502,1,'ПАХАРЯ'),(503,503,1,'ПАХАРЯ'),(504,504,1,'ПАЩЕНКОВСКАЯ'),(505,505,1,'ПЕРВОГО МАЯ'),(506,506,1,'ПЕРВОЙ КОННОЙ АРМИИ'),(507,507,1,'ПЕРЕЕЗДНАЯ'),(508,508,1,'ПЕРМСКАЯ'),(509,509,1,'ПЕРОВСКОЙ'),(510,510,1,'ПЕТРА ШИРОНИНА'),(511,511,1,'ПЕТРАШЕВСКОГО'),(512,512,1,'ПЕТРОВСКОГО'),(513,513,1,'ПИЛОТОВ'),(514,514,1,'ПИОНЕРСКАЯ'),(515,515,1,'ПИСАРЕВА'),(516,516,1,'ПЛАНОВАЯ'),(517,517,1,'ПЛАНОВЫЙ'),(518,518,1,'ПЛАСТИЧНЫЙ'),(519,519,1,'ПЛЕТНЕВСКИЙ'),(520,520,1,'ПЛЕХАНОВСКАЯ'),(521,521,1,'ПЛИТОЧНАЯ'),(522,522,1,'ПЛИТОЧНЫЙ'),(523,523,1,'ПЛИТОЧНЫЙ'),(524,524,1,'ПОБЕДА 2-Й'),(525,525,1,'ПОБЕДИТЕЛЕЙ'),(526,526,1,'ПОБЕДОНОСНАЯ'),(527,527,1,'ПОБЕДЫ'),(528,528,1,'ПОЖАРСКОГО'),(529,529,1,'ПОЗНАНСКАЯ'),(530,530,1,'ПОЛЕВАЯ'),(531,531,1,'ПОЛЕВОЙ 1-Й'),(532,532,1,'ПОЛЗУНОВА'),(533,533,1,'ПОЛТАВСКАЯ'),(534,534,1,'ПОЛТАВСКИЙ'),(535,535,1,'ПОЛТАВСКИЙ ШЛЯХ'),(536,536,1,'ПОМЕРКИ'),(537,537,1,'ПОНОМАРЕВСКАЯ'),(538,538,1,'ПОПЕРЕЧНАЯ 1-Я'),(539,539,1,'ПОСТЫШЕВА'),(540,540,1,'ПОТЕБНИ'),(541,541,1,'ПОЧТОВЫЙ'),(542,542,1,'ПРАВДЫ'),(543,543,1,'ПРИВОКЗАЛЬНАЯ'),(544,544,1,'ПРИВОКЗАЛЬНЫЙ'),(545,545,1,'ПРИМАКОВА'),(546,546,1,'ПРИМЕРОВСКАЯ'),(547,547,1,'ПРИХОДЬКОВСКИЙ'),(548,548,1,'ПРОГРЕСС'),(549,549,1,'ПРОДОЛЬНАЯ'),(550,550,1,'ПРОЕЗЖИЙ'),(551,551,1,'ПРОЕКТНЫЙ'),(552,552,1,'ПРОЛЕТАРСКАЯ'),(553,553,1,'ПРОРЕЗНАЯ'),(554,554,1,'ПРОФСОЮЗНЫЙ'),(555,555,1,'ПСАРЕВСКИЙ'),(556,556,1,'ПСКОВСКАЯ'),(557,557,1,'ПУШКАРЕВСКАЯ'),(558,558,1,'ПУШКИНСКАЯ'),(559,559,1,'ПУШКИНСКИЙ'),(560,560,1,'ПЯТИГОРСКИЙ'),(561,561,1,'ПЯТИДЕСЯТИЛЕТИЯ ВЛКСМ'),(562,562,1,'ПЯТИДЕСЯТИЛЕТИЯ СССР'),(563,563,1,'ПЯТИСОТНИЦКАЯ'),(564,564,1,'РАБКОРОВСКАЯ'),(565,565,1,'РАДИЩЕВА'),(566,566,1,'РАЙКОМОВСКАЯ'),(567,567,1,'РЕВКОМОВСКАЯ'),(568,568,1,'РЕВОЛЮЦИИ'),(569,569,1,'РЕВОЛЮЦИИ 1905 ГОДА'),(570,570,1,'РЕГИСТРАТОРСКАЯ'),(571,571,1,'РЕЗЕРВНАЯ'),(572,572,1,'РЕЗЕРВНЫЙ'),(573,573,1,'РЕЗНИКОВСКИЙ'),(574,574,1,'РЕЛЬЕФНАЯ'),(575,575,1,'РЕЧНОЙ'),(576,576,1,'РЕШЕТНИКОВСКИЙ'),(577,577,1,'РЖЕВСКИЙ'),(578,578,1,'РИЖСКИЙ'),(579,579,1,'РОВНЫЙ'),(580,580,1,'РОГАНСКАЯ'),(581,581,1,'РОГАТИНСКИЙ'),(582,582,1,'РОДНИКОВАЯ'),(583,583,1,'РОЗЫ ЛЮКСЕМБУРГ'),(584,584,1,'РОМАШКИНА'),(585,585,1,'РОМЕНА РОЛЛАНА'),(586,586,1,'РОСТОВСКАЯ'),(587,587,1,'РУБАНОВСКАЯ'),(588,588,1,'РУБЕЖАНСКИЙ'),(589,589,1,'РУДИКА'),(590,590,1,'РУДНЕВА'),(591,591,1,'РУДНИЧНАЯ'),(592,592,1,'РУДНИЧНЫЙ 1-Й'),(593,593,1,'РУСТАВЕЛИ'),(594,594,1,'РУСТАВЕЛИ'),(595,595,1,'РЫБАЛКО'),(596,596,1,'РЫБАСОВСКАЯ'),(597,597,1,'РЫБАСОВСКИЙ'),(598,598,1,'РЫЛЕЕВА'),(599,599,1,'РЫЛЕЕВА'),(600,600,1,'РЫМАРСКАЯ'),(601,601,1,'РЯЗАНСКАЯ'),(602,602,1,'С. ОРЕШКОВА'),(603,603,1,'САГАЙДАЧНОГО'),(604,604,1,'САДОВОПАРКОВАЯ'),(605,605,1,'САДОВЫЙ'),(606,606,1,'САЛТОВСКОЕ'),(607,607,1,'САМАРКАНДСКИЙ 2-Й'),(608,608,1,'САММЕРОВСКИЙ'),(609,609,1,'САМОДЕЯТЕЛЬНАЯ'),(610,610,1,'САМОКИША'),(611,611,1,'САМОЛЕТНАЯ'),(612,612,1,'САПЕРНАЯ'),(613,613,1,'САХАРОЗАВОДСКАЯ'),(614,614,1,'СВЕРДЛОВА'),(615,615,1,'СВЕТ ШАХТЕРА'),(616,616,1,'СВЕТ ШАХТЕРА'),(617,617,1,'СВЕТЛАНОВСКАЯ'),(618,618,1,'СВЕТЛАЯ'),(619,619,1,'СВИНАРЕНКО ПЕТРА'),(620,620,1,'СВИРСКАЯ'),(621,621,1,'СЕВЕРНЫЙ'),(622,622,1,'СЕВЕРО-КАВКАЗСКАЯ'),(623,623,1,'СЕЛЬКОРОВСКИЙ'),(624,624,1,'СЕЛЯНСКАЯ'),(625,625,1,'СЕЛЯНСКИЙ'),(626,626,1,'СЕМИГРАДСКАЯ'),(627,627,1,'СЕМИГРАДСКИЙ'),(628,628,1,'СЕМНАДЦАТОГО ПАРТСЪЕЗДА'),(629,629,1,'СЕМНАДЦАТОГО ПАРТСЪЕЗДА'),(630,630,1,'СЕРГИЕВСКАЯ'),(631,631,1,'СЕРИКОВСКАЯ'),(632,632,1,'СЕРП И МОЛОТ'),(633,633,1,'СЕЧЕНОВА'),(634,634,1,'СИДЕЛЬНИКОВСКИЙ'),(635,635,1,'СИДОРЕНКОВСКАЯ'),(636,636,1,'СИРЕНЕВЫЙ'),(637,637,1,'СКАДОВСКОГО'),(638,638,1,'СКОВОРОДИНОВСКАЯ'),(639,639,1,'СКОРОХОДА'),(640,640,1,'СКРЫПНИКА'),(641,641,1,'СЛАВЫ'),(642,642,1,'СЛАВЯНСКАЯ'),(643,643,1,'СЛЕСАРНЫЙ'),(644,644,1,'СЛИНЬКО'),(645,645,1,'СЛУЖЕБНАЯ'),(646,646,1,'СМОЛЬНАЯ'),(647,647,1,'СНЕГИРЕВСКИЙ'),(648,648,1,'СОВЕТСКИЙ'),(649,649,1,'СОВЕТСКИЙ'),(650,650,1,'СОИЧА'),(651,651,1,'СОКОЛОВА'),(652,652,1,'СОЛДАТСКАЯ'),(653,653,1,'СОЛДАТСКИЙ'),(654,654,1,'СОЛНЕЧНАЯ'),(655,655,1,'СОЛЯНИКОВСКИЙ'),(656,656,1,'СОМОВСКАЯ'),(657,657,1,'СОРЕВНОВАНИЯ'),(658,658,1,'СОРОЧИНСКАЯ'),(659,659,1,'СОФИЕВСКАЯ'),(660,660,1,'СОХОРА'),(661,661,1,'СОЦИАЛИСТИЧЕСКАЯ'),(662,662,1,'СОЦИАЛИСТИЧЕСКИЙ'),(663,663,1,'СОЧИНСКАЯ'),(664,664,1,'СПАРТАКА'),(665,665,1,'СПАРТАКОВСКИЙ'),(666,666,1,'СПИРИДОНОВСКАЯ'),(667,667,1,'СПОРТИВНАЯ'),(668,668,1,'СПОРТИВНЫЙ'),(669,669,1,'СТАДИОННЫЙ'),(670,670,1,'СТАНКОСТРОИТЕЛЬНАЯ'),(671,671,1,'СТАНЦИОННАЯ'),(672,672,1,'СТАРИЦКОГО'),(673,673,1,'СТАРО-КРЫМСКАЯ'),(674,674,1,'СТАРОДЕСЯТИСАЖЕННАЯ'),(675,675,1,'СТАРОМАЛООСНОВЯНСКАЯ'),(676,676,1,'СТАРОПРУДНАЯ'),(677,677,1,'СТАРОШИШКОВСКАЯ'),(678,678,1,'СТАРТОВАЯ'),(679,679,1,'СТАХАНОВСКАЯ'),(680,680,1,'СТЕПНАЯ'),(681,681,1,'СТЕПНОЙ'),(682,682,1,'СТЕФЕНСОНА'),(683,683,1,'СТОЛЯРНЫЙ'),(684,684,1,'СТРЕЛЕЦКИЙ'),(685,685,1,'СТРОИТЕЛЬНАЯ'),(686,686,1,'СТУДЕНЧЕСКАЯ'),(687,687,1,'СУМГАИТСКАЯ'),(688,688,1,'СУМСКАЯ'),(689,689,1,'СУХАРЕВСКАЯ'),(690,690,1,'СУЩЕНСКАЯ'),(691,691,1,'СЧАСТЛИВАЯ'),(692,692,1,'ТАГАНСКАЯ'),(693,693,1,'ТАГАНСКИЙ 1-Й'),(694,694,1,'ТАГАНСКИЙ 2-Й'),(695,695,1,'ТАГАНСКИЙ 3-Й'),(696,696,1,'ТАДЖИКСКАЯ'),(697,697,1,'ТАНКОПИЯ'),(698,698,1,'ТАРАСОВСКАЯ'),(699,699,1,'ТАРАСОВСКИЙ'),(700,700,1,'ТАРАСОВСКИЙ'),(701,701,1,'ТАРХОВА'),(702,702,1,'ТАХИАТАШСКАЯ'),(703,703,1,'ТАШКЕНТСКАЯ'),(704,704,1,'ТВЕРСКАЯ'),(705,705,1,'ТЕАТРАЛЬНАЯ'),(706,706,1,'ТЕАТРАЛЬНЫЙ'),(707,707,1,'ТЕЛЬМАНА'),(708,708,1,'ТЕПЛОВОЗНАЯ'),(709,709,1,'ТИМИРЯЗЕВА'),(710,710,1,'ТИМУРОВЦЕВ'),(711,711,1,'ТИНЯКОВА'),(712,712,1,'ТИНЯКОВСКИЙ 1-Й'),(713,713,1,'ТИНЯКОВСКИЙ 2-Й'),(714,714,1,'ТИТАРЕНКОВСКИЙ'),(715,715,1,'ТОБОЛЬСКАЯ'),(716,716,1,'ТОКАРЕВСКИЙ'),(717,717,1,'ТОРГОВАЯ'),(718,718,1,'ТОРГОВЫЙ'),(719,719,1,'ТРАКТОРОСТРОИТЕЛЕЙ'),(720,720,1,'ТРЕТЬЕГО ИНТЕРНАЦИОНАЛА'),(721,721,1,'ТРИНКЛЕРА'),(722,722,1,'ТРИНКЛЕРА'),(723,723,1,'ТРОФИМОВСКИЙ'),(724,724,1,'ТРУДА'),(725,725,1,'ТРУФАНОВА'),(726,726,1,'ТУРГЕНЕВСКАЯ'),(727,727,1,'ТУРГЕНЕВСКИЙ'),(728,728,1,'ТУРКЕСТАНСКАЯ'),(729,729,1,'ТУХАЧЕВСКОГО'),(730,730,1,'УБОРЕВИЧА'),(731,731,1,'УЖВИЙ НАТАЛЬИ'),(732,732,1,'УКРАИНСКАЯ'),(733,733,1,'УЛЬЯНОВА АЛЕКСАНДРА'),(734,734,1,'УМАНСКАЯ'),(735,735,1,'УНИВЕРСИТЕТСКАЯ'),(736,736,1,'УРАЛЬСКАЯ'),(737,737,1,'УРАЛЬСКИЙ'),(738,738,1,'УРИЦКОГО'),(739,739,1,'УРИЦКОГО'),(740,740,1,'УСОВСКИЙ'),(741,741,1,'УСОВСКИЙ 2-Й'),(742,742,1,'УССУРИЙСКАЯ'),(743,743,1,'УШАКОВА'),(744,744,1,'ФАБРИЦИУСА'),(745,745,1,'ФАНИНСКИЙ'),(746,746,1,'ФЕДОРОВСКАЯ'),(747,747,1,'ФЕЙЕРБАХА'),(748,748,1,'ФЕЙЕРБАХА'),(749,749,1,'ФЕЛЬДШЕРСКАЯ'),(750,750,1,'ФЕРГАНСКАЯ'),(751,751,1,'ФЕСЕНКОВСКАЯ'),(752,752,1,'ФЕСЕНКОВСКИЙ'),(753,753,1,'ФЕСТИВАЛЬНАЯ'),(754,754,1,'ФИЛИППОВСКАЯ'),(755,755,1,'ФИСАНОВИЧА'),(756,756,1,'ФОНВИЗИНА'),(757,757,1,'ФРАНКОВСКАЯ'),(758,758,1,'ФРАНТИШЕКА КРАЛА'),(759,759,1,'ФРОЛОВСКИЙ'),(760,760,1,'ФРУНЗЕ'),(761,761,1,'ФРУНЗЕ'),(762,762,1,'ХАЛТУРИНА'),(763,763,1,'ХАРЬКОВСКАЯ'),(764,764,1,'ХАРЬКОВСКАЯ'),(765,765,1,'ХАРЬКОВСКИХ ДИВИЗИЙ'),(766,766,1,'ХИМИЧЕСКИЙ'),(767,767,1,'ХЛЕБОРОБНАЯ'),(768,768,1,'ХОРОЛЬСКАЯ'),(769,769,1,'ХУТОРЯНСКАЯ'),(770,770,1,'ЦЕМЕНТНАЯ'),(771,771,1,'ЦЕПКОВСКАЯ'),(772,772,1,'ЦЫГАРЕВСКИЙ'),(773,773,1,'ЦЮРУПЫ'),(774,774,1,'ЧАЙКИНОЙ ЛИЗЫ'),(775,775,1,'ЧАЙКОВСКОГО'),(776,776,1,'ЧЕБОТАРСКАЯ'),(777,777,1,'ЧЕБОТАРСКИЙ 1-Й'),(778,778,1,'ЧЕБОТАРСКИЙ 2-Й'),(779,779,1,'ЧЕЛЮСКИНЦЕВ'),(780,780,1,'ЧЕРЕДНИЧЕНКОВСКИЙ'),(781,781,1,'ЧЕРЕПАНОВЫХ'),(782,782,1,'ЧЕРКАССКАЯ'),(783,783,1,'ЧЕРНИГОВСКАЯ'),(784,784,1,'ЧЕРНИГОВСКИЙ'),(785,785,1,'ЧЕРНИКОВА'),(786,786,1,'ЧЕРНОЗЕМНАЯ'),(787,787,1,'ЧЕРНОМОРСКАЯ'),(788,788,1,'ЧЕРНЫШЕВСКОГО'),(789,789,1,'ЧЕТВЕРТЫЙ'),(790,790,1,'ЧЕХОВА'),(791,791,1,'ЧИГИРИНА ЮЛИЯ'),(792,792,1,'ЧИЧИБАБИНА'),(793,793,1,'ЧКАЛОВА'),(794,794,1,'ЧУБАРЯ'),(795,795,1,'ЧУГУЕВСКАЯ'),(796,796,1,'ЧУГУЕВСКИЙ 3-Й'),(797,797,1,'ШАПОВАЛОВСКИЙ'),(798,798,1,'ШАРИКОВАЯ'),(799,799,1,'ШЕВЧЕНКО'),(800,800,1,'ШЕКСПИРА'),(801,801,1,'ШЕКСПИРА'),(802,802,1,'ШИЛОВСКИЙ'),(803,803,1,'ШИРЯЕВА'),(804,804,1,'ШИШКОВСКАЯ'),(805,805,1,'ШМИДТА ОТТО'),(806,806,1,'ШТУРМОВАЯ'),(807,807,1,'ШУБЕРТА'),(808,808,1,'ШУЛЬЖЕНКО КЛАВДИИ'),(809,809,1,'ЩИГРОВСКАЯ'),(810,810,1,'ЩОРСА'),(811,811,1,'ЭЙДЕМАНА РОБЕРТА'),(812,812,1,'ЭЛЕКТРОВОЗНАЯ'),(813,813,1,'ЭЛЕКТРОИНСТРУМЕНТАЛЬНЫЙ'),(814,814,1,'ЭЛЕКТРОИНСТРУМЕНТАЛЬНЫЙ'),(815,815,1,'ЭЛЕКТРОИНСТРУМЕНТАЛЬНЫЙ 1-Й'),(816,816,1,'ЭЛЬБРУССКИЙ'),(817,817,1,'ЭНГЕЛЬСА'),(818,818,1,'ЭНЕРГЕТИЧЕСКАЯ'),(819,819,1,'ЭСТАКАДНАЯ'),(820,820,1,'ЮЖНОПРОЕКТНАЯ'),(821,821,1,'ЮМАШЕВА'),(822,822,1,'ЮННАТОВ'),(823,823,1,'ЮРЬЕВА'),(824,824,1,'ЮРЬЕВСКАЯ'),(825,825,1,'ЮРЬЕВСКИЙ'),(826,826,1,'ЯКИРА'),(827,827,1,'ЯКУБОВСКИЙ'),(828,828,1,'ЯРОСЛАВСКАЯ');
-/*!40000 ALTER TABLE `street_string_culture` ENABLE KEYS */;
+LOCK TABLES `street_string_value` WRITE;
+/*!40000 ALTER TABLE `street_string_value` DISABLE KEYS */;
+INSERT INTO `street_string_value` VALUES (1,1,1,'АВИАЦИОННАЯ'),(2,2,1,'АВТОСТРАДНАЯ'),(3,3,1,'АВТОСТРАДНЫЙ'),(4,4,1,'АДЫГЕЙСКАЯ'),(5,5,1,'АДЫГЕЙСКИЙ'),(6,6,1,'АЗЕРБАЙДЖАНСКАЯ'),(7,7,1,'АЗЕРБАЙДЖАНСКИЙ'),(8,8,1,'АЗЕРБАЙДЖАНСКИЙ'),(9,9,1,'АЗОВСТАЛЬСКАЯ'),(10,10,1,'АКАДЕМИКА БОГОМОЛЬЦА'),(11,11,1,'АКАДЕМИКА ВАЛЬТЕРА'),(12,12,1,'АКАДЕМИКА КУРЧАТОВА'),(13,13,1,'АКАДЕМИКА ПАВЛОВА'),(14,14,1,'АКАДЕМИКА ПРОСКУРЫ'),(15,15,1,'АКАДЕМИКА СИНЕЛЬНИКОВА'),(16,16,1,'АКАДЕМИКА ФИЛИППОВА'),(17,17,1,'АЛЕКСАНДРА НЕВСКОГО'),(18,18,1,'АЛЕКСАНДРОВСКАЯ'),(19,19,1,'АЛЕКСЕЕВА ПЕТРА'),(20,20,1,'АЛЕКСЕЕВСКАЯ'),(21,21,1,'АНАДЫРСКАЯ'),(22,22,1,'АНАДЫРСКИЙ'),(23,23,1,'АНДРЕЕВСКИЙ'),(24,24,1,'АНРИ БАРБЮСА'),(25,25,1,'АНТОКОЛЬСКОГО'),(26,26,1,'АПТЕКАРСКИЙ'),(27,27,1,'АПТЕКАРСКИЙ'),(28,28,1,'АРМАТУРНАЯ'),(29,29,1,'АРМЕЙСКАЯ'),(30,30,1,'АРМЕЙСКИЙ'),(31,31,1,'АРМЯНСКИЙ'),(32,32,1,'АРСЕНАЛЬНАЯ'),(33,33,1,'АРТЕЛЬНАЯ'),(34,34,1,'АРТЕМА'),(35,35,1,'АРТЕМА'),(36,36,1,'АРХАНГЕЛЬСКАЯ'),(37,37,1,'АРХИТЕКТОРОВ'),(38,38,1,'АСКОЛЬДОВСКАЯ'),(39,39,1,'АСТРОНОМИЧЕСКАЯ'),(40,40,1,'АФАНАСЬЕВСКАЯ'),(41,41,1,'АХСАРОВА'),(42,42,1,'АШХАБАДСКАЯ'),(43,43,1,'АШХАБАДСКИЙ'),(44,44,1,'АЭРОФЛОТСКАЯ'),(45,45,1,'БАБУШКИНА'),(46,46,1,'БАВАРСКАЯ'),(47,47,1,'БАВАРСКИЙ'),(48,48,1,'БАГРАТИОНА'),(49,49,1,'БАЗАРНАЯ'),(50,50,1,'БАКУЛИНА'),(51,51,1,'БАЛАКИРЕВА'),(52,52,1,'БАЛАКИРЕВА'),(53,53,1,'БАЛАКЛЕЙСКИЙ'),(54,54,1,'БАЛКАНСКАЯ'),(55,55,1,'БАЛТИЙСКАЯ'),(56,56,1,'БАРАБАШОВА'),(57,57,1,'БАРРИКАДНАЯ'),(58,58,1,'БАТУРИНСКАЯ'),(59,59,1,'БАШКИРСКАЯ'),(60,60,1,'БЕЗЛЮДОВСКАЯ'),(61,61,1,'БЕКЕТОВА'),(62,62,1,'БЕЛОБРОВСКИЙ'),(63,63,1,'БЕЛОГОРСКАЯ'),(64,64,1,'БЕЛОСТОЦКИЙ'),(65,65,1,'БЕРЕЗОВСКАЯ'),(66,66,1,'БЕСКРАЙНЯЯ'),(67,67,1,'БЕСТУЖЕВА'),(68,68,1,'БИОЛОГИЧЕСКАЯ'),(69,69,1,'БИОЛОГИЧЕСКИЙ'),(70,70,1,'БЛАГОДАТНАЯ'),(71,71,1,'БЛЮХЕРА'),(72,72,1,'БОБРУЙСКАЯ'),(73,73,1,'БОГДАНА ХМЕЛЬНИЦКОГО'),(74,74,1,'БОГДАНА ХМЕЛЬНИЦКОГО'),(75,75,1,'БОЕВАЯ'),(76,76,1,'БОЛГАРСКАЯ'),(77,77,1,'БОЛГАРСКИЙ'),(78,78,1,'БОЛЬШАЯ ГОНЧАРОВСКАЯ'),(79,79,1,'БОЛЬШАЯ КОЛЬЦЕВАЯ'),(80,80,1,'БОЛЬШОЙ ДАНИЛОВСКИЙ'),(81,81,1,'БОНДАРЕВСКАЯ'),(82,82,1,'БОРЗЕНКО'),(83,83,1,'БОРЗЫЙ'),(84,84,1,'БОРОВАЯ'),(85,85,1,'БОРОДИНОВСКАЯ'),(86,86,1,'БОРЬБЫ'),(87,87,1,'БОТКИНА'),(88,88,1,'БРЕСТСКАЯ'),(89,89,1,'БРОНЕВАЯ'),(90,90,1,'БРОНЕНОСЦА ПОТЕМКИН'),(91,91,1,'БРЯНСКИЙ'),(92,92,1,'БУЛЬВАРНАЯ'),(93,93,1,'БУРСАЦКИЙ'),(94,94,1,'БУТОВСКИЙ'),(95,95,1,'ВАВИЛОВА'),(96,96,1,'ВАГОННАЯ'),(97,97,1,'ВАЛДАЙСКАЯ'),(98,98,1,'ВАЛЕРЬЯНОВСКАЯ'),(99,99,1,'ВАЩЕНКОВСКИЙ'),(100,100,1,'ВЕРХНЕ-ГИЕВСКАЯ'),(101,101,1,'ВЕРХОВСКИЙ'),(102,102,1,'ВЕСНИНА'),(103,103,1,'ВЕШЕНСКАЯ'),(104,104,1,'ВИННИЦКИЙ'),(105,105,1,'ВИНОГРАДНАЯ'),(106,106,1,'ВИНОГРАДНЫЙ'),(107,107,1,'ВИШНЕВЫЙ'),(108,108,1,'ВЛАДИМИРСКАЯ'),(109,109,1,'ВЛАСЕНКО'),(110,110,1,'ВОЕННАЯ'),(111,111,1,'ВОЗРОЖДЕНИЯ'),(112,112,1,'ВОЙКОВА'),(113,113,1,'ВОКЗАЛЬНАЯ'),(114,114,1,'ВОЛОГОДСКАЯ'),(115,115,1,'ВОЛОДАРСКОГО'),(116,116,1,'ВОЛОДАРСКОГО'),(117,117,1,'ВОЛОДАРСКОГО'),(118,118,1,'ВОЛОЖАНОВСКАЯ'),(119,119,1,'ВОЛОШИНСКИЙ'),(120,120,1,'ВОЛЫНСКАЯ'),(121,121,1,'ВОЛЫНСКИЙ'),(122,122,1,'ВОРОБЬЕВА'),(123,123,1,'ВОРОБЬЕВА'),(124,124,1,'ВОССТАНИЯ'),(125,125,1,'ВОСЬМОГО МАРТА'),(126,126,1,'ВТОРОЙ ПЯТИЛЕТКИ'),(127,127,1,'ВЫСОЧИНЕНКО'),(128,128,1,'ВЯТСКАЯ'),(129,129,1,'ГАГАРИНА'),(130,130,1,'ГАЛАНА'),(131,131,1,'ГАЛИНСКАЯ'),(132,132,1,'ГАЛУШКИНСКАЯ'),(133,133,1,'ГАМАРНИКА'),(134,134,1,'ГАННЫ'),(135,135,1,'ГАРИБАЛЬДИ'),(136,136,1,'ГАРКУШИ'),(137,137,1,'ГАРШИНА'),(138,138,1,'ГАЦЕВА'),(139,139,1,'ГВАРДЕЙЦЕВ-ЖЕЛЕЗНОДОРОЖНИКОВ'),(140,140,1,'ГВАРДЕЙЦЕВ-ШИРОНИНЦЕВ'),(141,141,1,'ГЕОРГИЕВСКАЯ'),(142,142,1,'ГЕОРГИЕВСКИЙ 1-Й'),(143,143,1,'ГЕРАСИМОВСКИЙ'),(144,144,1,'ГЕРОЕВ СТАЛИНГРАДА'),(145,145,1,'ГЕРОЕВ ТРУДА'),(146,146,1,'ГЕРЦЕНА'),(147,147,1,'ГИЕВСКАЯ'),(148,148,1,'ГИРШМАНА'),(149,149,1,'ГОГОЛЯ'),(150,150,1,'ГОРДИЕНКОВСКАЯ'),(151,151,1,'ГОРНАЯ'),(152,152,1,'ГОРНЫЙ'),(153,153,1,'ГОРСОВЕТОВСКАЯ'),(154,154,1,'ГОСТИННАЯ'),(155,155,1,'ГРАБОВСКОГО'),(156,156,1,'ГРАЖДАНСКАЯ'),(157,157,1,'ГРАЖДАНСКИЙ'),(158,158,1,'ГРАЙВОРОНСКАЯ'),(159,159,1,'ГРЕКОВСКАЯ'),(160,160,1,'ГРИБОЕДОВА'),(161,161,1,'ГРИГОРОВСКАЯ'),(162,162,1,'ГРИЦЕВЦА'),(163,163,1,'ГРИЦЕВЦА'),(164,164,1,'ГРОЗНЕНСКАЯ'),(165,165,1,'ГУБКОМОВСКАЯ'),(166,166,1,'ГУДАНОВА'),(167,167,1,'ГЮГО'),(168,168,1,'ДАНИЛЕВСКОГО'),(169,169,1,'ДАРВИНА'),(170,170,1,'ДАЦЬКО'),(171,171,1,'ДАЧНЫЙ'),(172,172,1,'ДВАДЦАТЬ ТРЕТЬЕГО АВГУСТА'),(173,173,1,'ДВАДЦАТЬ ТРЕТЬЕГО АВГУСТА'),(174,174,1,'ДВЕНАДЦАТОГО АПРЕЛЯ'),(175,175,1,'ДЕМЧЕНКО'),(176,176,1,'ДЕПОВСКАЯ'),(177,177,1,'ДЕРГАЧЕВСКАЯ'),(178,178,1,'ДЕРЕВЯНКО'),(179,179,1,'ДЕРЖАВИНСКАЯ'),(180,180,1,'ДЖЕРЕЛО'),(181,181,1,'ДЖУТОВЫЙ'),(182,182,1,'ДЗЮБЫ'),(183,183,1,'ДИЗЕЛЬНАЯ'),(184,184,1,'ДИНАМОВСКАЯ'),(185,185,1,'ДИСПЕТЧЕРСКАЯ'),(186,186,1,'ДМИТРИЕВСКАЯ'),(187,187,1,'ДНЕПРОВСКАЯ'),(188,188,1,'ДОБРОДЕЦКОГО'),(189,189,1,'ДОБРОЛЮБОВА'),(190,190,1,'ДОВАТОРА'),(191,191,1,'ДОВАТОРА'),(192,192,1,'ДОВГАЛЕВСКАЯ'),(193,193,1,'ДОКУЧАЕВА'),(194,194,1,'ДОЛГОЖДАННЫЙ'),(195,195,1,'ДОНБАССОВСКИЙ'),(196,196,1,'ДОНЕЦ-ЗАХАРЖЕВСКОГО'),(197,197,1,'ДОНСКОЙ'),(198,198,1,'ДОРОЖНАЯ'),(199,199,1,'ДОСВИДНЫЙ'),(200,200,1,'ДОСТОЕВСКОГО'),(201,201,1,'ДОСТОЕВСКОГО'),(202,202,1,'ДРУЖБЫ НАРОДОВ'),(203,203,1,'ДЫБЕНКО ПАВЛА'),(204,204,1,'ЕВПАТОРИЙСКИЙ'),(205,205,1,'ЕЛЕНИНСКАЯ'),(206,206,1,'ЕЛИЗАВЕТИНСКАЯ'),(207,207,1,'ЕЛИЗАРОВА'),(208,208,1,'ЕРЕМОВСКИЙ'),(209,209,1,'ЕРМАКОВСКАЯ'),(210,210,1,'ЕСЕНИНА'),(211,211,1,'ЖЕЛЕЗНОДОРОЖНАЯ'),(212,212,1,'ЖЕЛЕЗНЯКОВА'),(213,213,1,'ЖЕЛЯБОВА'),(214,214,1,'ЖИТНАЯ'),(215,215,1,'ЖУКОВСКОГО'),(216,216,1,'ЖУКОВСКОГО'),(217,217,1,'ЖУТОВСКАЯ'),(218,218,1,'ЗАБАЙКАЛЬСКИЙ'),(219,219,1,'ЗАВОДА КОМСОМОЛЕЦ'),(220,220,1,'ЗАВОДСКАЯ'),(221,221,1,'ЗАВОДСКОЙ'),(222,222,1,'ЗАЛЕССКАЯ'),(223,223,1,'ЗАЛЮТИНСКАЯ'),(224,224,1,'ЗАПАДНАЯ'),(225,225,1,'ЗАЧЕПИЛОВСКАЯ'),(226,226,1,'ЗВЕЗДНАЯ'),(227,227,1,'ЗДОРОВЬЯ'),(228,228,1,'ЗДОРОВЬЯ'),(229,229,1,'ЗЕЛЕНАЯ'),(230,230,1,'ЗЕМОВСКАЯ'),(231,231,1,'ЗЕМОВСКИЙ'),(232,232,1,'ЗЕРНОВАЯ'),(233,233,1,'ЗЕРНОВОЙ'),(234,234,1,'ЗЕРНОВОЙ 1-Й'),(235,235,1,'ЗОЛОТОЙ 2-Й'),(236,236,1,'ЗОЛОЧЕВСКАЯ'),(237,237,1,'ЗОЛОЧЕВСКИЙ 1-Й'),(238,238,1,'ЗУБАРЕВА'),(239,239,1,'ИВ. ДУБОВОГО'),(240,240,1,'ИВАНА КАРКАЧА'),(241,241,1,'ИВАНА КАРКАЧА'),(242,242,1,'ИВАНОВА'),(243,243,1,'ИВАНОВСКАЯ'),(244,244,1,'ИВАНОВСКИЙ'),(245,245,1,'ИЖЕВСКИЙ'),(246,246,1,'ИЛЬИНСКАЯ'),(247,247,1,'ИЛЬИЧА'),(248,248,1,'ИНИЦИАТИВНАЯ'),(249,249,1,'ИСАЕВСКАЯ'),(250,250,1,'ИСКРИНСКАЯ'),(251,251,1,'ИСКРИНСКИЙ'),(252,252,1,'ИСПОЛКОМОВСКАЯ'),(253,253,1,'КАЛИНИНА'),(254,254,1,'КАМСКАЯ'),(255,255,1,'КАМЫШЕВА ИВАНА'),(256,256,1,'КАНДАУРОВА'),(257,257,1,'КАРАЗИНА'),(258,258,1,'КАРАЧЕВСКОЕ'),(259,259,1,'КАРБЫШЕВА'),(260,260,1,'КАРЛА МАРКСА'),(261,261,1,'КАРПИНСКОГО'),(262,262,1,'КАРПОВСКАЯ'),(263,263,1,'КАРПОВСКИЙ'),(264,264,1,'КАТАЕВА'),(265,265,1,'КАЧАНОВСКАЯ'),(266,266,1,'КАШИРСКАЯ'),(267,267,1,'КАШТАНОВАЯ'),(268,268,1,'КАШУБЫ'),(269,269,1,'КВИТКИ-ОСНОВЬЯНЕНКО'),(270,270,1,'КВИТКИНСКАЯ'),(271,271,1,'КЕРЧЕНСКАЯ'),(272,272,1,'КИБАЛЬЧИЧА'),(273,273,1,'КИЕВСКАЯ'),(274,274,1,'КИРГИЗСКАЯ'),(275,275,1,'КИРГИЗСКИЙ'),(276,276,1,'КИРОВА'),(277,277,1,'КИСЛОВОДСКАЯ'),(278,278,1,'КИТАЕНКО'),(279,279,1,'КЛАПЦОВА'),(280,280,1,'КЛАССИЧЕСКИЙ'),(281,281,1,'КЛЕЩЕВСКИЙ'),(282,282,1,'КЛОЧКОВСКАЯ'),(283,283,1,'КЛОЧКОВСКИЙ'),(284,284,1,'КНЫШЕВСКИЙ'),(285,285,1,'КОВТУНА'),(286,286,1,'КОКСОВАЯ'),(287,287,1,'КОКСОВЫЙ'),(288,288,1,'КОКЧЕТАВСКАЯ'),(289,289,1,'КОЛЛЕКТИВНАЯ'),(290,290,1,'КОЛОДЕЗНАЯ'),(291,291,1,'КОЛОДЕЗНЫЙ'),(292,292,1,'КОЛОМЕНСКАЯ'),(293,293,1,'КОЛОННАЯ'),(294,294,1,'КОЛОННЫЙ 1-Й'),(295,295,1,'КОЛХОЗНАЯ'),(296,296,1,'КОЛЬЦЕВОЙ'),(297,297,1,'КОЛЬЦОВСКАЯ'),(298,298,1,'КОМАНДАРМА КОРКА'),(299,299,1,'КОМБАЙНОВСКАЯ'),(300,300,1,'КОММУНАЛЬНЫЙ'),(301,301,1,'КОМСОМОЛЬСКАЯ'),(302,302,1,'КОМСОМОЛЬСКОЕ'),(303,303,1,'КОНДУКТОРСКАЯ'),(304,304,1,'КОНЕВА'),(305,305,1,'КОНОВАЛОВА'),(306,306,1,'КОНОТОПСКАЯ'),(307,307,1,'КОНОТОПСКИЙ'),(308,308,1,'КОНСТИТУЦИИ'),(309,309,1,'КОНТОРСКИЙ'),(310,310,1,'КОНЮШЕННЫЙ'),(311,311,1,'КООПЕРАТИВНАЯ'),(312,312,1,'КОПЕРНИКА'),(313,313,1,'КОРОБЕЙНИЦКИЙ'),(314,314,1,'КОРОЛЕНКО'),(315,315,1,'КОРОЛЕНКО'),(316,316,1,'КОРОСТЕЛЬСКАЯ'),(317,317,1,'КОРСУНСКАЯ'),(318,318,1,'КОРЧАГИНЦЕВ'),(319,319,1,'КОСИОРА'),(320,320,1,'КОСМИЧЕСКАЯ'),(321,321,1,'КОСМОНАВТОВ'),(322,322,1,'КОСТОМАРОВСКАЯ'),(323,323,1,'КОСТЫЧЕВА'),(324,324,1,'КОСТЮРИНСКИЙ'),(325,325,1,'КОТЕЛЬНИКОВСКАЯ'),(326,326,1,'КОТЛАССКАЯ'),(327,327,1,'КОТЛОВА'),(328,328,1,'КОТЛЯРЕВСКОГО'),(329,329,1,'КОТОВСКОГО'),(330,330,1,'КОЦАРСКАЯ'),(331,331,1,'КОШКИНА'),(332,332,1,'КРАВЦОВА'),(333,333,1,'КРАМАТОРСКИЙ'),(334,334,1,'КРАСИНА'),(335,335,1,'КРАСНАЯ АЛЛЕЯ'),(336,336,1,'КРАСНОАРМЕЙСКАЯ'),(337,337,1,'КРАСНОГО ЛЕТЧИКА'),(338,338,1,'КРАСНОГО ОКТЯБРЯ'),(339,339,1,'КРАСНОДАРСКАЯ'),(340,340,1,'КРАСНОДОНСКАЯ'),(341,341,1,'КРАСНОДОНСКИЙ'),(342,342,1,'КРАСНОЗНАМЕННАЯ'),(343,343,1,'КРАСНОЗНАМЕННЫЙ'),(344,344,1,'КРАСНОЙ ЗВЕЗДЫ'),(345,345,1,'КРАСНОКУТСКИЙ'),(346,346,1,'КРАСНОМАЯЦКАЯ'),(347,347,1,'КРАСНООКТЯБРЬСКАЯ'),(348,348,1,'КРАСНОПОЛЬСКАЯ'),(349,349,1,'КРАСНОПОСЕЛКОВАЯ'),(350,350,1,'КРАСНОШКОЛЬНАЯ'),(351,351,1,'КРАХМАЛЕВСКИЙ'),(352,352,1,'КРИВОМАЗОВА'),(353,353,1,'КРИВОРОЖСКАЯ'),(354,354,1,'КРОПИВНИЦКОГО'),(355,355,1,'КРУПСКОЙ'),(356,356,1,'КРУПСКОЙ'),(357,357,1,'КРУТОГОРСКИЙ'),(358,358,1,'КРЫЛОВА'),(359,359,1,'КРЫМСКАЯ'),(360,360,1,'КУБАСОВА'),(361,361,1,'КУБРАКОВСКИЙ'),(362,362,1,'КУЗНЕЧНАЯ'),(363,363,1,'КУЙБЫШЕВА'),(364,364,1,'КУЙБЫШЕВА'),(365,365,1,'КУЛИКА ИВАНА'),(366,366,1,'КУЛЬБИЦКИЙ'),(367,367,1,'КУЛЬТУРЫ'),(368,368,1,'КУРЯЖАНСКАЯ'),(369,369,1,'КУТОВАЯ'),(370,370,1,'ЛАГЕРНАЯ'),(371,371,1,'ЛАДОЖСКИЙ'),(372,372,1,'ЛАДЫГИНА'),(373,373,1,'ЛАЗО'),(374,374,1,'ЛАЗЬКОВА-ЛУЖОК'),(375,375,1,'ЛЕБЕДЕВА ПАВЛА'),(376,376,1,'ЛЕБЕДИНСКАЯ'),(377,377,1,'ЛЕНИНА'),(378,378,1,'ЛЕНИНА'),(379,379,1,'ЛЕНИНГРАДСКАЯ'),(380,380,1,'ЛЕНИНГРАДСКИЙ'),(381,381,1,'ЛЕРМОНТОВСКАЯ'),(382,382,1,'ЛЕСИ УКРАИНКИ'),(383,383,1,'ЛЕСНАЯ'),(384,384,1,'ЛЕСОПАРКОВСКИЙ 1-Й'),(385,385,1,'ЛЕСОПАРКОВСКИЙ 2-Й'),(386,386,1,'ЛИНЕЙНАЯ'),(387,387,1,'ЛОКОМОТИВНАЯ'),(388,388,1,'ЛОМОНОСОВА'),(389,389,1,'ЛОПАНСКАЯ'),(390,390,1,'ЛОПАНСКИЙ'),(391,391,1,'ЛОПАТИНСКИЙ'),(392,392,1,'ЛУГАНСКАЯ'),(393,393,1,'ЛУИ ПАСТЕРА'),(394,394,1,'ЛУИ ПАСТЕРА 2-Й'),(395,395,1,'ЛУНАЧАРСКОГО'),(396,396,1,'ЛЫСАЯ'),(397,397,1,'ЛЫСЕНКО'),(398,398,1,'ЛЮДВИГА СВОБОДЫ'),(399,399,1,'ЛЮСИНСКАЯ'),(400,400,1,'ЛЮТОВСКАЯ'),(401,401,1,'ЛЯПУНОВА'),(402,402,1,'МАКЕЕВСКАЯ'),(403,403,1,'МАКОВСКОГО'),(404,404,1,'МАЛИНОВСКАЯ'),(405,405,1,'МАЛИНОВСКОГО'),(406,406,1,'МАЛО-ГОНЧАРОВСКАЯ'),(407,407,1,'МАЛО-ПАНАСОВСКАЯ'),(408,408,1,'МАЛОДЖАНКОЙСКАЯ'),(409,409,1,'МАЛЫШЕВА'),(410,410,1,'МАРИУПОЛЬСКИЙ'),(411,411,1,'МАРСЕЛЯ КАШЕНА'),(412,412,1,'МАРШАЛА БАЖАНОВА'),(413,413,1,'МАРШАЛА БАТИЦКОГО'),(414,414,1,'МАРШАЛА ЖУКОВА'),(415,415,1,'МАРЬИНСКАЯ'),(416,416,1,'МАРЬЯНЕНКО'),(417,417,1,'МАТЕРИАЛИСТИЧЕСКИЙ'),(418,418,1,'МАТРОСОВА'),(419,419,1,'МАТЮШЕНКО'),(420,420,1,'МАШИНИСТОВ'),(421,421,1,'МАЯКОВСКОГО'),(422,422,1,'МЕЖЛАУКА'),(423,423,1,'МЕЛЬНИКОВА'),(424,424,1,'МЕНДЕЛЕЕВА'),(425,425,1,'МЕРЕФЯНСКОЕ'),(426,426,1,'МЕТАЛЛИСТА'),(427,427,1,'МЕТИЗНЫЙ'),(428,428,1,'МЕТРОСТРОИТЕЛЕЙ'),(429,429,1,'МИНАЙЛЕНКО'),(430,430,1,'МИРА'),(431,431,1,'МИРА'),(432,432,1,'МИРА'),(433,433,1,'МИРГОРОДСКАЯ'),(434,434,1,'МИРНАЯ'),(435,435,1,'МИРОНОСИЦКАЯ'),(436,436,1,'МОЕЧНАЯ'),(437,437,1,'МОЛЧАНОВСКИЙ'),(438,438,1,'МОЛЧАНОВСКИЙ'),(439,439,1,'МОНТАЖНАЯ'),(440,440,1,'МОНЮШКО'),(441,441,1,'МОРОЗОВА'),(442,442,1,'МОРОЗОВА ПАВЛИКА'),(443,443,1,'МОСКОВСКИЙ'),(444,444,1,'МОТОРНАЯ'),(445,445,1,'МОХНАЧАНСКАЯ'),(446,446,1,'МУЗЫКАЛЬНАЯ'),(447,447,1,'МУРАНОВА'),(448,448,1,'НАБЕРЕЖНЫЙ'),(449,449,1,'НАРВСКАЯ'),(450,450,1,'НАРИМАНОВА'),(451,451,1,'НАРОФОМИНСКАЯ'),(452,452,1,'НЕВЕЛЬСКАЯ'),(453,453,1,'НЕЖИНСКАЯ'),(454,454,1,'НЕМАНСКИЙ 4-Й'),(455,455,1,'НЕМЫШЛЯНСКАЯ'),(456,456,1,'НЕСТЕРОВА'),(457,457,1,'НЕТЕЧЕНСКАЯ'),(458,458,1,'НЕТЕЧЕНСКИЙ'),(459,459,1,'НЕХАЕНКО'),(460,460,1,'НИЖНЕГИЕВСКАЯ'),(461,461,1,'НИКИТИНА'),(462,462,1,'НИКИТИНОЙ ГАЛИНЫ'),(463,463,1,'НИКИТИНСКИЙ'),(464,464,1,'НИКОНОВСКАЯ'),(465,465,1,'НОВАЯ БАВАРИЯ'),(466,466,1,'НОВГОРОДСКАЯ'),(467,467,1,'НОВОМЯСНИЦКАЯ'),(468,468,1,'НОВОПРУДНАЯ'),(469,469,1,'НОВОСЕЛОВСКАЯ'),(470,470,1,'НОВОХАРЬКОВСКАЯ'),(471,471,1,'НОВЫЙ БЫТ'),(472,472,1,'НОГИНА'),(473,473,1,'НОГИНА'),(474,474,1,'НЬЮТОНА'),(475,475,1,'ОБОЯНСКАЯ'),(476,476,1,'ОГАРЕВСКОГО'),(477,477,1,'ОДОЕВСКИЙ'),(478,478,1,'ОКТЯБРЬСКОЙ РЕВОЛЮЦИИ'),(479,479,1,'ОЛИМПИЙСКАЯ'),(480,480,1,'ОЛЬМИНСКОГО'),(481,481,1,'ОМСКАЯ'),(482,482,1,'ОРДЖОНИКИДЗЕ'),(483,483,1,'ОРЕНБУРГСКАЯ'),(484,484,1,'ОРСКИЙ'),(485,485,1,'ОСЕТИНСКАЯ'),(486,486,1,'ОСЕТИНСКИЙ'),(487,487,1,'ОСИПЕНКО'),(488,488,1,'ОСНОВЯНСКАЯ'),(489,489,1,'ОСНОВЯНСКИЙ'),(490,490,1,'ОСТРОВСКОГО'),(491,491,1,'ОСТРОГРАДСКИЙ'),(492,492,1,'ОТАКАРА ЯРОША'),(493,493,1,'ОТАКАРА ЯРОША'),(494,494,1,'ОЧАКОВСКАЯ'),(495,495,1,'ОЩЕПКОВА'),(496,496,1,'П. СВИСТУНА'),(497,497,1,'ПАВЛЕНКОВСКИЙ'),(498,498,1,'ПАНАСОВСКИЙ 2-Й'),(499,499,1,'ПАРНИКОВСКИЙ'),(500,500,1,'ПАРОВОЗНАЯ'),(501,501,1,'ПАРХОМЕНКО'),(502,502,1,'ПАХАРЯ'),(503,503,1,'ПАХАРЯ'),(504,504,1,'ПАЩЕНКОВСКАЯ'),(505,505,1,'ПЕРВОГО МАЯ'),(506,506,1,'ПЕРВОЙ КОННОЙ АРМИИ'),(507,507,1,'ПЕРЕЕЗДНАЯ'),(508,508,1,'ПЕРМСКАЯ'),(509,509,1,'ПЕРОВСКОЙ'),(510,510,1,'ПЕТРА ШИРОНИНА'),(511,511,1,'ПЕТРАШЕВСКОГО'),(512,512,1,'ПЕТРОВСКОГО'),(513,513,1,'ПИЛОТОВ'),(514,514,1,'ПИОНЕРСКАЯ'),(515,515,1,'ПИСАРЕВА'),(516,516,1,'ПЛАНОВАЯ'),(517,517,1,'ПЛАНОВЫЙ'),(518,518,1,'ПЛАСТИЧНЫЙ'),(519,519,1,'ПЛЕТНЕВСКИЙ'),(520,520,1,'ПЛЕХАНОВСКАЯ'),(521,521,1,'ПЛИТОЧНАЯ'),(522,522,1,'ПЛИТОЧНЫЙ'),(523,523,1,'ПЛИТОЧНЫЙ'),(524,524,1,'ПОБЕДА 2-Й'),(525,525,1,'ПОБЕДИТЕЛЕЙ'),(526,526,1,'ПОБЕДОНОСНАЯ'),(527,527,1,'ПОБЕДЫ'),(528,528,1,'ПОЖАРСКОГО'),(529,529,1,'ПОЗНАНСКАЯ'),(530,530,1,'ПОЛЕВАЯ'),(531,531,1,'ПОЛЕВОЙ 1-Й'),(532,532,1,'ПОЛЗУНОВА'),(533,533,1,'ПОЛТАВСКАЯ'),(534,534,1,'ПОЛТАВСКИЙ'),(535,535,1,'ПОЛТАВСКИЙ ШЛЯХ'),(536,536,1,'ПОМЕРКИ'),(537,537,1,'ПОНОМАРЕВСКАЯ'),(538,538,1,'ПОПЕРЕЧНАЯ 1-Я'),(539,539,1,'ПОСТЫШЕВА'),(540,540,1,'ПОТЕБНИ'),(541,541,1,'ПОЧТОВЫЙ'),(542,542,1,'ПРАВДЫ'),(543,543,1,'ПРИВОКЗАЛЬНАЯ'),(544,544,1,'ПРИВОКЗАЛЬНЫЙ'),(545,545,1,'ПРИМАКОВА'),(546,546,1,'ПРИМЕРОВСКАЯ'),(547,547,1,'ПРИХОДЬКОВСКИЙ'),(548,548,1,'ПРОГРЕСС'),(549,549,1,'ПРОДОЛЬНАЯ'),(550,550,1,'ПРОЕЗЖИЙ'),(551,551,1,'ПРОЕКТНЫЙ'),(552,552,1,'ПРОЛЕТАРСКАЯ'),(553,553,1,'ПРОРЕЗНАЯ'),(554,554,1,'ПРОФСОЮЗНЫЙ'),(555,555,1,'ПСАРЕВСКИЙ'),(556,556,1,'ПСКОВСКАЯ'),(557,557,1,'ПУШКАРЕВСКАЯ'),(558,558,1,'ПУШКИНСКАЯ'),(559,559,1,'ПУШКИНСКИЙ'),(560,560,1,'ПЯТИГОРСКИЙ'),(561,561,1,'ПЯТИДЕСЯТИЛЕТИЯ ВЛКСМ'),(562,562,1,'ПЯТИДЕСЯТИЛЕТИЯ СССР'),(563,563,1,'ПЯТИСОТНИЦКАЯ'),(564,564,1,'РАБКОРОВСКАЯ'),(565,565,1,'РАДИЩЕВА'),(566,566,1,'РАЙКОМОВСКАЯ'),(567,567,1,'РЕВКОМОВСКАЯ'),(568,568,1,'РЕВОЛЮЦИИ'),(569,569,1,'РЕВОЛЮЦИИ 1905 ГОДА'),(570,570,1,'РЕГИСТРАТОРСКАЯ'),(571,571,1,'РЕЗЕРВНАЯ'),(572,572,1,'РЕЗЕРВНЫЙ'),(573,573,1,'РЕЗНИКОВСКИЙ'),(574,574,1,'РЕЛЬЕФНАЯ'),(575,575,1,'РЕЧНОЙ'),(576,576,1,'РЕШЕТНИКОВСКИЙ'),(577,577,1,'РЖЕВСКИЙ'),(578,578,1,'РИЖСКИЙ'),(579,579,1,'РОВНЫЙ'),(580,580,1,'РОГАНСКАЯ'),(581,581,1,'РОГАТИНСКИЙ'),(582,582,1,'РОДНИКОВАЯ'),(583,583,1,'РОЗЫ ЛЮКСЕМБУРГ'),(584,584,1,'РОМАШКИНА'),(585,585,1,'РОМЕНА РОЛЛАНА'),(586,586,1,'РОСТОВСКАЯ'),(587,587,1,'РУБАНОВСКАЯ'),(588,588,1,'РУБЕЖАНСКИЙ'),(589,589,1,'РУДИКА'),(590,590,1,'РУДНЕВА'),(591,591,1,'РУДНИЧНАЯ'),(592,592,1,'РУДНИЧНЫЙ 1-Й'),(593,593,1,'РУСТАВЕЛИ'),(594,594,1,'РУСТАВЕЛИ'),(595,595,1,'РЫБАЛКО'),(596,596,1,'РЫБАСОВСКАЯ'),(597,597,1,'РЫБАСОВСКИЙ'),(598,598,1,'РЫЛЕЕВА'),(599,599,1,'РЫЛЕЕВА'),(600,600,1,'РЫМАРСКАЯ'),(601,601,1,'РЯЗАНСКАЯ'),(602,602,1,'С. ОРЕШКОВА'),(603,603,1,'САГАЙДАЧНОГО'),(604,604,1,'САДОВОПАРКОВАЯ'),(605,605,1,'САДОВЫЙ'),(606,606,1,'САЛТОВСКОЕ'),(607,607,1,'САМАРКАНДСКИЙ 2-Й'),(608,608,1,'САММЕРОВСКИЙ'),(609,609,1,'САМОДЕЯТЕЛЬНАЯ'),(610,610,1,'САМОКИША'),(611,611,1,'САМОЛЕТНАЯ'),(612,612,1,'САПЕРНАЯ'),(613,613,1,'САХАРОЗАВОДСКАЯ'),(614,614,1,'СВЕРДЛОВА'),(615,615,1,'СВЕТ ШАХТЕРА'),(616,616,1,'СВЕТ ШАХТЕРА'),(617,617,1,'СВЕТЛАНОВСКАЯ'),(618,618,1,'СВЕТЛАЯ'),(619,619,1,'СВИНАРЕНКО ПЕТРА'),(620,620,1,'СВИРСКАЯ'),(621,621,1,'СЕВЕРНЫЙ'),(622,622,1,'СЕВЕРО-КАВКАЗСКАЯ'),(623,623,1,'СЕЛЬКОРОВСКИЙ'),(624,624,1,'СЕЛЯНСКАЯ'),(625,625,1,'СЕЛЯНСКИЙ'),(626,626,1,'СЕМИГРАДСКАЯ'),(627,627,1,'СЕМИГРАДСКИЙ'),(628,628,1,'СЕМНАДЦАТОГО ПАРТСЪЕЗДА'),(629,629,1,'СЕМНАДЦАТОГО ПАРТСЪЕЗДА'),(630,630,1,'СЕРГИЕВСКАЯ'),(631,631,1,'СЕРИКОВСКАЯ'),(632,632,1,'СЕРП И МОЛОТ'),(633,633,1,'СЕЧЕНОВА'),(634,634,1,'СИДЕЛЬНИКОВСКИЙ'),(635,635,1,'СИДОРЕНКОВСКАЯ'),(636,636,1,'СИРЕНЕВЫЙ'),(637,637,1,'СКАДОВСКОГО'),(638,638,1,'СКОВОРОДИНОВСКАЯ'),(639,639,1,'СКОРОХОДА'),(640,640,1,'СКРЫПНИКА'),(641,641,1,'СЛАВЫ'),(642,642,1,'СЛАВЯНСКАЯ'),(643,643,1,'СЛЕСАРНЫЙ'),(644,644,1,'СЛИНЬКО'),(645,645,1,'СЛУЖЕБНАЯ'),(646,646,1,'СМОЛЬНАЯ'),(647,647,1,'СНЕГИРЕВСКИЙ'),(648,648,1,'СОВЕТСКИЙ'),(649,649,1,'СОВЕТСКИЙ'),(650,650,1,'СОИЧА'),(651,651,1,'СОКОЛОВА'),(652,652,1,'СОЛДАТСКАЯ'),(653,653,1,'СОЛДАТСКИЙ'),(654,654,1,'СОЛНЕЧНАЯ'),(655,655,1,'СОЛЯНИКОВСКИЙ'),(656,656,1,'СОМОВСКАЯ'),(657,657,1,'СОРЕВНОВАНИЯ'),(658,658,1,'СОРОЧИНСКАЯ'),(659,659,1,'СОФИЕВСКАЯ'),(660,660,1,'СОХОРА'),(661,661,1,'СОЦИАЛИСТИЧЕСКАЯ'),(662,662,1,'СОЦИАЛИСТИЧЕСКИЙ'),(663,663,1,'СОЧИНСКАЯ'),(664,664,1,'СПАРТАКА'),(665,665,1,'СПАРТАКОВСКИЙ'),(666,666,1,'СПИРИДОНОВСКАЯ'),(667,667,1,'СПОРТИВНАЯ'),(668,668,1,'СПОРТИВНЫЙ'),(669,669,1,'СТАДИОННЫЙ'),(670,670,1,'СТАНКОСТРОИТЕЛЬНАЯ'),(671,671,1,'СТАНЦИОННАЯ'),(672,672,1,'СТАРИЦКОГО'),(673,673,1,'СТАРО-КРЫМСКАЯ'),(674,674,1,'СТАРОДЕСЯТИСАЖЕННАЯ'),(675,675,1,'СТАРОМАЛООСНОВЯНСКАЯ'),(676,676,1,'СТАРОПРУДНАЯ'),(677,677,1,'СТАРОШИШКОВСКАЯ'),(678,678,1,'СТАРТОВАЯ'),(679,679,1,'СТАХАНОВСКАЯ'),(680,680,1,'СТЕПНАЯ'),(681,681,1,'СТЕПНОЙ'),(682,682,1,'СТЕФЕНСОНА'),(683,683,1,'СТОЛЯРНЫЙ'),(684,684,1,'СТРЕЛЕЦКИЙ'),(685,685,1,'СТРОИТЕЛЬНАЯ'),(686,686,1,'СТУДЕНЧЕСКАЯ'),(687,687,1,'СУМГАИТСКАЯ'),(688,688,1,'СУМСКАЯ'),(689,689,1,'СУХАРЕВСКАЯ'),(690,690,1,'СУЩЕНСКАЯ'),(691,691,1,'СЧАСТЛИВАЯ'),(692,692,1,'ТАГАНСКАЯ'),(693,693,1,'ТАГАНСКИЙ 1-Й'),(694,694,1,'ТАГАНСКИЙ 2-Й'),(695,695,1,'ТАГАНСКИЙ 3-Й'),(696,696,1,'ТАДЖИКСКАЯ'),(697,697,1,'ТАНКОПИЯ'),(698,698,1,'ТАРАСОВСКАЯ'),(699,699,1,'ТАРАСОВСКИЙ'),(700,700,1,'ТАРАСОВСКИЙ'),(701,701,1,'ТАРХОВА'),(702,702,1,'ТАХИАТАШСКАЯ'),(703,703,1,'ТАШКЕНТСКАЯ'),(704,704,1,'ТВЕРСКАЯ'),(705,705,1,'ТЕАТРАЛЬНАЯ'),(706,706,1,'ТЕАТРАЛЬНЫЙ'),(707,707,1,'ТЕЛЬМАНА'),(708,708,1,'ТЕПЛОВОЗНАЯ'),(709,709,1,'ТИМИРЯЗЕВА'),(710,710,1,'ТИМУРОВЦЕВ'),(711,711,1,'ТИНЯКОВА'),(712,712,1,'ТИНЯКОВСКИЙ 1-Й'),(713,713,1,'ТИНЯКОВСКИЙ 2-Й'),(714,714,1,'ТИТАРЕНКОВСКИЙ'),(715,715,1,'ТОБОЛЬСКАЯ'),(716,716,1,'ТОКАРЕВСКИЙ'),(717,717,1,'ТОРГОВАЯ'),(718,718,1,'ТОРГОВЫЙ'),(719,719,1,'ТРАКТОРОСТРОИТЕЛЕЙ'),(720,720,1,'ТРЕТЬЕГО ИНТЕРНАЦИОНАЛА'),(721,721,1,'ТРИНКЛЕРА'),(722,722,1,'ТРИНКЛЕРА'),(723,723,1,'ТРОФИМОВСКИЙ'),(724,724,1,'ТРУДА'),(725,725,1,'ТРУФАНОВА'),(726,726,1,'ТУРГЕНЕВСКАЯ'),(727,727,1,'ТУРГЕНЕВСКИЙ'),(728,728,1,'ТУРКЕСТАНСКАЯ'),(729,729,1,'ТУХАЧЕВСКОГО'),(730,730,1,'УБОРЕВИЧА'),(731,731,1,'УЖВИЙ НАТАЛЬИ'),(732,732,1,'УКРАИНСКАЯ'),(733,733,1,'УЛЬЯНОВА АЛЕКСАНДРА'),(734,734,1,'УМАНСКАЯ'),(735,735,1,'УНИВЕРСИТЕТСКАЯ'),(736,736,1,'УРАЛЬСКАЯ'),(737,737,1,'УРАЛЬСКИЙ'),(738,738,1,'УРИЦКОГО'),(739,739,1,'УРИЦКОГО'),(740,740,1,'УСОВСКИЙ'),(741,741,1,'УСОВСКИЙ 2-Й'),(742,742,1,'УССУРИЙСКАЯ'),(743,743,1,'УШАКОВА'),(744,744,1,'ФАБРИЦИУСА'),(745,745,1,'ФАНИНСКИЙ'),(746,746,1,'ФЕДОРОВСКАЯ'),(747,747,1,'ФЕЙЕРБАХА'),(748,748,1,'ФЕЙЕРБАХА'),(749,749,1,'ФЕЛЬДШЕРСКАЯ'),(750,750,1,'ФЕРГАНСКАЯ'),(751,751,1,'ФЕСЕНКОВСКАЯ'),(752,752,1,'ФЕСЕНКОВСКИЙ'),(753,753,1,'ФЕСТИВАЛЬНАЯ'),(754,754,1,'ФИЛИППОВСКАЯ'),(755,755,1,'ФИСАНОВИЧА'),(756,756,1,'ФОНВИЗИНА'),(757,757,1,'ФРАНКОВСКАЯ'),(758,758,1,'ФРАНТИШЕКА КРАЛА'),(759,759,1,'ФРОЛОВСКИЙ'),(760,760,1,'ФРУНЗЕ'),(761,761,1,'ФРУНЗЕ'),(762,762,1,'ХАЛТУРИНА'),(763,763,1,'ХАРЬКОВСКАЯ'),(764,764,1,'ХАРЬКОВСКАЯ'),(765,765,1,'ХАРЬКОВСКИХ ДИВИЗИЙ'),(766,766,1,'ХИМИЧЕСКИЙ'),(767,767,1,'ХЛЕБОРОБНАЯ'),(768,768,1,'ХОРОЛЬСКАЯ'),(769,769,1,'ХУТОРЯНСКАЯ'),(770,770,1,'ЦЕМЕНТНАЯ'),(771,771,1,'ЦЕПКОВСКАЯ'),(772,772,1,'ЦЫГАРЕВСКИЙ'),(773,773,1,'ЦЮРУПЫ'),(774,774,1,'ЧАЙКИНОЙ ЛИЗЫ'),(775,775,1,'ЧАЙКОВСКОГО'),(776,776,1,'ЧЕБОТАРСКАЯ'),(777,777,1,'ЧЕБОТАРСКИЙ 1-Й'),(778,778,1,'ЧЕБОТАРСКИЙ 2-Й'),(779,779,1,'ЧЕЛЮСКИНЦЕВ'),(780,780,1,'ЧЕРЕДНИЧЕНКОВСКИЙ'),(781,781,1,'ЧЕРЕПАНОВЫХ'),(782,782,1,'ЧЕРКАССКАЯ'),(783,783,1,'ЧЕРНИГОВСКАЯ'),(784,784,1,'ЧЕРНИГОВСКИЙ'),(785,785,1,'ЧЕРНИКОВА'),(786,786,1,'ЧЕРНОЗЕМНАЯ'),(787,787,1,'ЧЕРНОМОРСКАЯ'),(788,788,1,'ЧЕРНЫШЕВСКОГО'),(789,789,1,'ЧЕТВЕРТЫЙ'),(790,790,1,'ЧЕХОВА'),(791,791,1,'ЧИГИРИНА ЮЛИЯ'),(792,792,1,'ЧИЧИБАБИНА'),(793,793,1,'ЧКАЛОВА'),(794,794,1,'ЧУБАРЯ'),(795,795,1,'ЧУГУЕВСКАЯ'),(796,796,1,'ЧУГУЕВСКИЙ 3-Й'),(797,797,1,'ШАПОВАЛОВСКИЙ'),(798,798,1,'ШАРИКОВАЯ'),(799,799,1,'ШЕВЧЕНКО'),(800,800,1,'ШЕКСПИРА'),(801,801,1,'ШЕКСПИРА'),(802,802,1,'ШИЛОВСКИЙ'),(803,803,1,'ШИРЯЕВА'),(804,804,1,'ШИШКОВСКАЯ'),(805,805,1,'ШМИДТА ОТТО'),(806,806,1,'ШТУРМОВАЯ'),(807,807,1,'ШУБЕРТА'),(808,808,1,'ШУЛЬЖЕНКО КЛАВДИИ'),(809,809,1,'ЩИГРОВСКАЯ'),(810,810,1,'ЩОРСА'),(811,811,1,'ЭЙДЕМАНА РОБЕРТА'),(812,812,1,'ЭЛЕКТРОВОЗНАЯ'),(813,813,1,'ЭЛЕКТРОИНСТРУМЕНТАЛЬНЫЙ'),(814,814,1,'ЭЛЕКТРОИНСТРУМЕНТАЛЬНЫЙ'),(815,815,1,'ЭЛЕКТРОИНСТРУМЕНТАЛЬНЫЙ 1-Й'),(816,816,1,'ЭЛЬБРУССКИЙ'),(817,817,1,'ЭНГЕЛЬСА'),(818,818,1,'ЭНЕРГЕТИЧЕСКАЯ'),(819,819,1,'ЭСТАКАДНАЯ'),(820,820,1,'ЮЖНОПРОЕКТНАЯ'),(821,821,1,'ЮМАШЕВА'),(822,822,1,'ЮННАТОВ'),(823,823,1,'ЮРЬЕВА'),(824,824,1,'ЮРЬЕВСКАЯ'),(825,825,1,'ЮРЬЕВСКИЙ'),(826,826,1,'ЯКИРА'),(827,827,1,'ЯКУБОВСКИЙ'),(828,828,1,'ЯРОСЛАВСКАЯ');
+/*!40000 ALTER TABLE `street_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -3452,7 +3452,7 @@ CREATE TABLE `street_type_attribute` (
   `object_id` bigint(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 1400 - КРАТКОЕ НАЗВАНИЕ, 1401 - НАЗВАНИЕ',
   `value_id` bigint(20) DEFAULT NULL COMMENT 'Идентификатор значения',
-  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 1400 - STRING_CULTURE, 1401 - STRING_CULTURE',
+  `value_type_id` bigint(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 1400 - STRING_VALUE, 1401 - STRING_VALUE',
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` timestamp NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -3524,13 +3524,13 @@ LOCK TABLES `street_type_correction` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `street_type_string_culture`
+-- Table structure for table `street_type_string_value`
 --
 
-DROP TABLE IF EXISTS `street_type_string_culture`;
+DROP TABLE IF EXISTS `street_type_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `street_type_string_culture` (
+CREATE TABLE `street_type_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -3539,18 +3539,18 @@ CREATE TABLE `street_type_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_street_type_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_street_type_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов типа улицы';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `street_type_string_culture`
+-- Dumping data for table `street_type_string_value`
 --
 
-LOCK TABLES `street_type_string_culture` WRITE;
-/*!40000 ALTER TABLE `street_type_string_culture` DISABLE KEYS */;
-INSERT INTO `street_type_string_culture` VALUES (1,1,1,'Б-Р'),(2,2,1,'БУЛЬВАР'),(3,3,1,'В-Д'),(4,4,1,'ВЪЕЗД'),(5,5,1,'М'),(6,6,1,'МАГИСТРАЛЬ'),(7,7,1,'М-Н'),(8,8,1,'МИКРОРАЙОН'),(9,9,1,'НАБ'),(10,10,1,'НАБЕРЕЖНАЯ'),(11,11,1,'ПЕР'),(12,12,1,'ПЕРЕУЛОК'),(13,13,1,'ПЛ'),(14,14,1,'ПЛОЩАДЬ'),(15,15,1,'П'),(16,16,1,'ПОДЪЕМ'),(17,17,1,'ПОС'),(18,18,1,'ПОСЕЛОК'),(19,19,1,'ПР-Д'),(20,20,1,'ПРОЕЗД'),(21,21,1,'ПРОСП'),(22,22,1,'ПРОСПЕКТ'),(23,23,1,'СП'),(24,24,1,'СПУСК'),(25,25,1,'СТ'),(26,26,1,'СТАНЦИЯ'),(27,27,1,'Т'),(28,28,1,'ТЕРРИТОРИЯ'),(29,29,1,'ТУП'),(30,30,1,'ТУПИК'),(31,31,1,'УЛ'),(32,32,1,'УЛИЦА'),(33,33,1,'ШОССЕ'),(34,34,1,'ШОССЕ');
-/*!40000 ALTER TABLE `street_type_string_culture` ENABLE KEYS */;
+LOCK TABLES `street_type_string_value` WRITE;
+/*!40000 ALTER TABLE `street_type_string_value` DISABLE KEYS */;
+INSERT INTO `street_type_string_value` VALUES (1,1,1,'Б-Р'),(2,2,1,'БУЛЬВАР'),(3,3,1,'В-Д'),(4,4,1,'ВЪЕЗД'),(5,5,1,'М'),(6,6,1,'МАГИСТРАЛЬ'),(7,7,1,'М-Н'),(8,8,1,'МИКРОРАЙОН'),(9,9,1,'НАБ'),(10,10,1,'НАБЕРЕЖНАЯ'),(11,11,1,'ПЕР'),(12,12,1,'ПЕРЕУЛОК'),(13,13,1,'ПЛ'),(14,14,1,'ПЛОЩАДЬ'),(15,15,1,'П'),(16,16,1,'ПОДЪЕМ'),(17,17,1,'ПОС'),(18,18,1,'ПОСЕЛОК'),(19,19,1,'ПР-Д'),(20,20,1,'ПРОЕЗД'),(21,21,1,'ПРОСП'),(22,22,1,'ПРОСПЕКТ'),(23,23,1,'СП'),(24,24,1,'СПУСК'),(25,25,1,'СТ'),(26,26,1,'СТАНЦИЯ'),(27,27,1,'Т'),(28,28,1,'ТЕРРИТОРИЯ'),(29,29,1,'ТУП'),(30,30,1,'ТУПИК'),(31,31,1,'УЛ'),(32,32,1,'УЛИЦА'),(33,33,1,'ШОССЕ'),(34,34,1,'ШОССЕ');
+/*!40000 ALTER TABLE `street_type_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -3589,13 +3589,13 @@ LOCK TABLES `street_type_sync` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `string_culture`
+-- Table structure for table `string_value`
 --
 
-DROP TABLE IF EXISTS `string_culture`;
+DROP TABLE IF EXISTS `string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `string_culture` (
+CREATE TABLE `string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -3604,18 +3604,18 @@ CREATE TABLE `string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `string_culture`
+-- Dumping data for table `string_value`
 --
 
-LOCK TABLES `string_culture` WRITE;
-/*!40000 ALTER TABLE `string_culture` DISABLE KEYS */;
-INSERT INTO `string_culture` VALUES (1,100,1,'Квартира'),(2,100,2,'Квартира'),(3,101,1,'НОМЕР КВАРТИРЫ'),(4,101,2,'НОМЕР КВАРТИРИ'),(5,200,1,'Комната'),(6,200,2,'Кімната'),(7,201,1,'НОМЕР КОМНАТЫ'),(8,201,2,'НОМЕР КІМНАТИ'),(9,300,1,'Улица'),(10,300,2,'Вулиця'),(11,301,1,'НАИМЕНОВАНИЕ УЛИЦЫ'),(12,301,2,'НАЙМЕНУВАННЯ ВУЛИЦІ'),(13,302,1,'ТИП УЛИЦЫ'),(14,302,2,'ТИП УЛИЦЫ'),(15,1400,1,'Тип улицы'),(16,1400,2,'Тип улицы'),(17,1401,1,'КРАТКОЕ НАЗВАНИЕ'),(18,1401,2,'КРАТКОЕ НАЗВАНИЕ'),(19,1402,1,'НАЗВАНИЕ'),(20,1402,2,'НАЗВАНИЕ'),(21,400,1,'Населенный пункт'),(22,400,2,'Населений пункт'),(23,401,1,'НАИМЕНОВАНИЕ НАСЕЛЕННОГО ПУНКТА'),(24,401,2,'НАЙМЕНУВАННЯ НАСЕЛЕНОГО ПУНКТУ'),(25,402,1,'ТИП НАСЕЛЕННОГО ПУНКТА'),(26,402,2,'ТИП НАСЕЛЕННОГО ПУНКТА'),(27,1300,1,'Тип нас. пункта'),(28,1300,2,'Тип населенного пункта'),(29,1301,1,'КРАТКОЕ НАЗВАНИЕ'),(30,1301,2,'КРАТКОЕ НАЗВАНИЕ'),(31,1302,1,'НАЗВАНИЕ'),(32,1302,2,'НАЗВАНИЕ'),(33,500,1,'Дом'),(34,500,2,'Будинок'),(35,501,1,'РАЙОН'),(36,501,2,'РАЙОН'),(37,502,1,'АЛЬТЕРНАТИВНЫЙ АДРЕС'),(38,502,2,'АЛЬТЕРНАТИВНЫЙ АДРЕС'),(39,503,1,'СПИСОК КОДОВ ДОМА'),(40,503,2,'СПИСОК КОДОВ ДОМА'),(41,1500,1,'Адрес здания'),(42,1500,2,'Адрес здания'),(43,1501,1,'НОМЕР ДОМА'),(44,1501,2,'НОМЕР БУДИНКУ'),(45,1502,1,'КОРПУС'),(46,1502,2,'КОРПУС'),(47,1503,1,'СТРОЕНИЕ'),(48,1503,2,'БУДОВА'),(49,600,1,'Район'),(50,600,2,'Район'),(51,601,1,'НАИМЕНОВАНИЕ РАЙОНА'),(52,601,2,'НАЙМЕНУВАННЯ РАЙОНУ'),(53,602,1,'КОД РАЙОНА'),(54,602,2,'КОД РАЙОНУ'),(55,700,1,'Регион'),(56,700,2,'Регіон'),(57,701,1,'НАИМЕНОВАНИЕ РЕГИОНА'),(58,701,2,'НАЙМЕНУВАННЯ РЕГІОНУ'),(59,800,1,'Страна'),(60,800,2,'Країна'),(61,801,1,'НАИМЕНОВАНИЕ СТРАНЫ'),(62,801,2,'НАЙМЕНУВАННЯ КРАЇНИ'),(63,1000,1,'Пользователь'),(64,1000,2,'Користувач'),(65,1001,1,'ФАМИЛИЯ'),(66,1001,2,'ПРІЗВИЩЕ'),(67,1002,1,'ИМЯ'),(68,1002,2,'ІМ\'Я'),(69,1003,1,'ОТЧЕСТВО'),(70,1003,2,'ПО БАТЬКОВІ'),(71,2300,1,'Тип организации'),(72,2300,2,'Тип организации'),(73,2301,1,'ТИП ОРГАНИЗАЦИИ'),(74,2301,2,'ТИП ОРГАНИЗАЦИИ'),(75,900,1,'Организация'),(76,900,2,'Організація'),(77,901,1,'НАИМЕНОВАНИЕ ОРГАНИЗАЦИИ'),(78,901,2,'НАЙМЕНУВАННЯ ОРГАНІЗАЦІЇ'),(79,902,1,'УНИКАЛЬНЫЙ КОД ОРГАНИЗАЦИИ'),(80,902,2,'УНІКАЛЬНИЙ КОД ОРГАНІЗАЦІЇ'),(81,903,1,'РАЙОН'),(82,903,2,'РАЙОН'),(83,904,1,'РОДИТЕЛЬСКАЯ ОРГАНИЗАЦИЯ'),(84,904,2,'РОДИТЕЛЬСКАЯ ОРГАНИЗАЦИЯ'),(85,905,1,'ТИП ОРГАНИЗАЦИИ'),(86,905,2,'ТИП ОРГАНИЗАЦИИ'),(87,906,1,'КОРОТКОЕ НАИМЕНОВАНИЕ'),(88,906,2,'КОРОТКОЕ НАИМЕНОВАНИЕ'),(89,914,1,'КПП'),(90,914,2,'КПП'),(91,915,1,'ИНН'),(92,915,2,'ІПН'),(93,916,1,'ПРИМЕЧАНИЕ'),(94,916,2,'ПРИМІТКА'),(95,917,1,'ЮРИДИЧЕСКИЙ АДРЕС'),(96,917,2,'ЮРИДИЧНА АДРЕСА'),(97,918,1,'ПОЧТОВЫЙ АДРЕС'),(98,918,2,'ПОШТОВА АДРЕСА'),(99,919,1,'E-MAIL'),(100,919,2,'E-MAIL'),(101,921,1,'ДОПУСТИМЫЕ УСЛУГИ'),(102,921,2,'ДОПУСТИМI ПОСЛУГИ'),(103,403,1,'ПРЕФИКС Л/С ЕИРЦ'),(104,403,2,'ПРЕФІКС Л/Р ЄIРЦ'),(105,6000,1,'Л/c ПУ'),(106,6000,2,'Л/п ПП'),(107,6002,1,'КОЛ-ВО ПРОЖИВАЮЩИХ'),(108,6002,2,'КІЛЬКІСТЬ ПРОЖИВАЮЧИХ'),(109,6003,1,'ПЛОЩАДЬ ОБЩАЯ'),(110,6003,2,'ПЛОЩА ЗАГАЛЬНА'),(111,6004,1,'ПЛОЩАДЬ ЖИЛАЯ'),(112,6004,2,'ПЛОЩА ЖИТЛОВА'),(113,6005,1,'ПЛОЩАДЬ ОТАПЛИВАЕМАЯ'),(114,6005,2,'ПЛОЩА ОПАЛЮВАЛЬНА'),(115,6006,1,'ФИО ОСНОВНОГО КВАРТИРОСЪЕМЩИКА'),(116,6006,2,'ПIБ ОСНОВНОГО КВАРТИРОНАЙМАЧА'),(117,1010,1,'Модуль'),(118,1010,2,'Модуль'),(119,1110,1,'Тип модуля'),(120,1110,2,'Тип модуля'),(121,1111,1,'ТИП МОДУЛЯ'),(122,1111,2,'ТИП МОДУЛЯ'),(123,1011,1,'НАЗВАНИЕ'),(124,1011,2,'НАЗВА'),(125,1012,1,'СЕКРЕТНЫЙ КЛЮЧ'),(126,1012,2,'СЕКРЕТНИЙ КЛЮЧ'),(127,1013,1,'ИДЕНТИФИКАТОР'),(128,1013,2,'ІДЕНТИФІКАТОР'),(129,1014,1,'ОРГАНИЗАЦИЯ'),(130,1014,2,'ОРГАНИЗАЦІЯ'),(131,1015,1,'ТИП МОДУЛЯ'),(132,1015,2,'ТИП МОДУЛЯ');
-/*!40000 ALTER TABLE `string_culture` ENABLE KEYS */;
+LOCK TABLES `string_value` WRITE;
+/*!40000 ALTER TABLE `string_value` DISABLE KEYS */;
+INSERT INTO `string_value` VALUES (1,100,1,'Квартира'),(2,100,2,'Квартира'),(3,101,1,'НОМЕР КВАРТИРЫ'),(4,101,2,'НОМЕР КВАРТИРИ'),(5,200,1,'Комната'),(6,200,2,'Кімната'),(7,201,1,'НОМЕР КОМНАТЫ'),(8,201,2,'НОМЕР КІМНАТИ'),(9,300,1,'Улица'),(10,300,2,'Вулиця'),(11,301,1,'НАИМЕНОВАНИЕ УЛИЦЫ'),(12,301,2,'НАЙМЕНУВАННЯ ВУЛИЦІ'),(13,302,1,'ТИП УЛИЦЫ'),(14,302,2,'ТИП УЛИЦЫ'),(15,1400,1,'Тип улицы'),(16,1400,2,'Тип улицы'),(17,1401,1,'КРАТКОЕ НАЗВАНИЕ'),(18,1401,2,'КРАТКОЕ НАЗВАНИЕ'),(19,1402,1,'НАЗВАНИЕ'),(20,1402,2,'НАЗВАНИЕ'),(21,400,1,'Населенный пункт'),(22,400,2,'Населений пункт'),(23,401,1,'НАИМЕНОВАНИЕ НАСЕЛЕННОГО ПУНКТА'),(24,401,2,'НАЙМЕНУВАННЯ НАСЕЛЕНОГО ПУНКТУ'),(25,402,1,'ТИП НАСЕЛЕННОГО ПУНКТА'),(26,402,2,'ТИП НАСЕЛЕННОГО ПУНКТА'),(27,1300,1,'Тип нас. пункта'),(28,1300,2,'Тип населенного пункта'),(29,1301,1,'КРАТКОЕ НАЗВАНИЕ'),(30,1301,2,'КРАТКОЕ НАЗВАНИЕ'),(31,1302,1,'НАЗВАНИЕ'),(32,1302,2,'НАЗВАНИЕ'),(33,500,1,'Дом'),(34,500,2,'Будинок'),(35,501,1,'РАЙОН'),(36,501,2,'РАЙОН'),(37,502,1,'АЛЬТЕРНАТИВНЫЙ АДРЕС'),(38,502,2,'АЛЬТЕРНАТИВНЫЙ АДРЕС'),(39,503,1,'СПИСОК КОДОВ ДОМА'),(40,503,2,'СПИСОК КОДОВ ДОМА'),(41,1500,1,'Адрес здания'),(42,1500,2,'Адрес здания'),(43,1501,1,'НОМЕР ДОМА'),(44,1501,2,'НОМЕР БУДИНКУ'),(45,1502,1,'КОРПУС'),(46,1502,2,'КОРПУС'),(47,1503,1,'СТРОЕНИЕ'),(48,1503,2,'БУДОВА'),(49,600,1,'Район'),(50,600,2,'Район'),(51,601,1,'НАИМЕНОВАНИЕ РАЙОНА'),(52,601,2,'НАЙМЕНУВАННЯ РАЙОНУ'),(53,602,1,'КОД РАЙОНА'),(54,602,2,'КОД РАЙОНУ'),(55,700,1,'Регион'),(56,700,2,'Регіон'),(57,701,1,'НАИМЕНОВАНИЕ РЕГИОНА'),(58,701,2,'НАЙМЕНУВАННЯ РЕГІОНУ'),(59,800,1,'Страна'),(60,800,2,'Країна'),(61,801,1,'НАИМЕНОВАНИЕ СТРАНЫ'),(62,801,2,'НАЙМЕНУВАННЯ КРАЇНИ'),(63,1000,1,'Пользователь'),(64,1000,2,'Користувач'),(65,1001,1,'ФАМИЛИЯ'),(66,1001,2,'ПРІЗВИЩЕ'),(67,1002,1,'ИМЯ'),(68,1002,2,'ІМ\'Я'),(69,1003,1,'ОТЧЕСТВО'),(70,1003,2,'ПО БАТЬКОВІ'),(71,2300,1,'Тип организации'),(72,2300,2,'Тип организации'),(73,2301,1,'ТИП ОРГАНИЗАЦИИ'),(74,2301,2,'ТИП ОРГАНИЗАЦИИ'),(75,900,1,'Организация'),(76,900,2,'Організація'),(77,901,1,'НАИМЕНОВАНИЕ ОРГАНИЗАЦИИ'),(78,901,2,'НАЙМЕНУВАННЯ ОРГАНІЗАЦІЇ'),(79,902,1,'УНИКАЛЬНЫЙ КОД ОРГАНИЗАЦИИ'),(80,902,2,'УНІКАЛЬНИЙ КОД ОРГАНІЗАЦІЇ'),(81,903,1,'РАЙОН'),(82,903,2,'РАЙОН'),(83,904,1,'РОДИТЕЛЬСКАЯ ОРГАНИЗАЦИЯ'),(84,904,2,'РОДИТЕЛЬСКАЯ ОРГАНИЗАЦИЯ'),(85,905,1,'ТИП ОРГАНИЗАЦИИ'),(86,905,2,'ТИП ОРГАНИЗАЦИИ'),(87,906,1,'КОРОТКОЕ НАИМЕНОВАНИЕ'),(88,906,2,'КОРОТКОЕ НАИМЕНОВАНИЕ'),(89,914,1,'КПП'),(90,914,2,'КПП'),(91,915,1,'ИНН'),(92,915,2,'ІПН'),(93,916,1,'ПРИМЕЧАНИЕ'),(94,916,2,'ПРИМІТКА'),(95,917,1,'ЮРИДИЧЕСКИЙ АДРЕС'),(96,917,2,'ЮРИДИЧНА АДРЕСА'),(97,918,1,'ПОЧТОВЫЙ АДРЕС'),(98,918,2,'ПОШТОВА АДРЕСА'),(99,919,1,'E-MAIL'),(100,919,2,'E-MAIL'),(101,921,1,'ДОПУСТИМЫЕ УСЛУГИ'),(102,921,2,'ДОПУСТИМI ПОСЛУГИ'),(103,403,1,'ПРЕФИКС Л/С ЕИРЦ'),(104,403,2,'ПРЕФІКС Л/Р ЄIРЦ'),(105,6000,1,'Л/c ПУ'),(106,6000,2,'Л/п ПП'),(107,6002,1,'КОЛ-ВО ПРОЖИВАЮЩИХ'),(108,6002,2,'КІЛЬКІСТЬ ПРОЖИВАЮЧИХ'),(109,6003,1,'ПЛОЩАДЬ ОБЩАЯ'),(110,6003,2,'ПЛОЩА ЗАГАЛЬНА'),(111,6004,1,'ПЛОЩАДЬ ЖИЛАЯ'),(112,6004,2,'ПЛОЩА ЖИТЛОВА'),(113,6005,1,'ПЛОЩАДЬ ОТАПЛИВАЕМАЯ'),(114,6005,2,'ПЛОЩА ОПАЛЮВАЛЬНА'),(115,6006,1,'ФИО ОСНОВНОГО КВАРТИРОСЪЕМЩИКА'),(116,6006,2,'ПIБ ОСНОВНОГО КВАРТИРОНАЙМАЧА'),(117,1010,1,'Модуль'),(118,1010,2,'Модуль'),(119,1110,1,'Тип модуля'),(120,1110,2,'Тип модуля'),(121,1111,1,'ТИП МОДУЛЯ'),(122,1111,2,'ТИП МОДУЛЯ'),(123,1011,1,'НАЗВАНИЕ'),(124,1011,2,'НАЗВА'),(125,1012,1,'СЕКРЕТНЫЙ КЛЮЧ'),(126,1012,2,'СЕКРЕТНИЙ КЛЮЧ'),(127,1013,1,'ИДЕНТИФИКАТОР'),(128,1013,2,'ІДЕНТИФІКАТОР'),(129,1014,1,'ОРГАНИЗАЦИЯ'),(130,1014,2,'ОРГАНИЗАЦІЯ'),(131,1015,1,'ТИП МОДУЛЯ'),(132,1015,2,'ТИП МОДУЛЯ');
+/*!40000 ALTER TABLE `string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -3757,13 +3757,13 @@ INSERT INTO `user_info_attribute` VALUES (1,1,1,1000,1,1000,'2014-07-25 03:38:43
 UNLOCK TABLES;
 
 --
--- Table structure for table `user_info_string_culture`
+-- Table structure for table `user_info_string_value`
 --
 
-DROP TABLE IF EXISTS `user_info_string_culture`;
+DROP TABLE IF EXISTS `user_info_string_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_info_string_culture` (
+CREATE TABLE `user_info_string_value` (
   `pk_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` bigint(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` bigint(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -3772,17 +3772,17 @@ CREATE TABLE `user_info_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_user_info_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_user_info_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов информации о пользователе';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user_info_string_culture`
+-- Dumping data for table `user_info_string_value`
 --
 
-LOCK TABLES `user_info_string_culture` WRITE;
-/*!40000 ALTER TABLE `user_info_string_culture` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_info_string_culture` ENABLE KEYS */;
+LOCK TABLES `user_info_string_value` WRITE;
+/*!40000 ALTER TABLE `user_info_string_value` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_info_string_value` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

@@ -1,17 +1,17 @@
 -- Set mysql user-defined variable - system locale id.
-SELECT (@system_locale_id := `id`) FROM `locales` WHERE `system` = 1;
+SELECT (@system_locale_id := `id`) FROM `locale` WHERE `system` = 1;
 
 -- City Types
-INSERT INTO `city_type_string_culture`(`id`, `locale_id`, `value`) VALUES (10000,1,'Г'), (10000,2,'МIСТО'), (10001,1,'ДЕРЕВНЯ'), (10001,2,'СЕЛО');
+INSERT INTO `city_type_string_value`(`id`, `locale_id`, `value`) VALUES (10000,1,'Г'), (10000,2,'МIСТО'), (10001,1,'ДЕРЕВНЯ'), (10001,2,'СЕЛО');
 INSERT INTO `city_type` (`object_id`) VALUES (10000), (10001);
 INSERT INTO `city_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES (1,10000,1300,10000,1300),
 (1,10001,1300,10001,1300);
-INSERT INTO `city_type_string_culture`(`id`, `locale_id`, `value`) VALUES (10002,1,'ГОРОД'), (10002,2,'МIСТО'), (10003,1,'ДЕРЕВНЯ'), (10003,2,'СЕЛО');
+INSERT INTO `city_type_string_value`(`id`, `locale_id`, `value`) VALUES (10002,1,'ГОРОД'), (10002,2,'МIСТО'), (10003,1,'ДЕРЕВНЯ'), (10003,2,'СЕЛО');
 INSERT INTO `city_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
 (1,10000,1301,10002,1301),(1,10001,1301,10003,1301);
 
 -- Street Types
-INSERT INTO `street_type_string_culture`(`id`, `locale_id`, `value`) VALUES (10000,@system_locale_id,'Б-Р'), (10001,@system_locale_id,'М'), (10002,@system_locale_id,'М-Н'),
+INSERT INTO `street_type_string_value`(`id`, `locale_id`, `value`) VALUES (10000,@system_locale_id,'Б-Р'), (10001,@system_locale_id,'М'), (10002,@system_locale_id,'М-Н'),
 (10003,@system_locale_id,'ПЕР'), (10004,@system_locale_id,'ПЛ'), (10005,@system_locale_id,'П'), (10006,@system_locale_id,'ПОС'), (10007,@system_locale_id,'ПР-Д'), (10008,@system_locale_id,'ПРОСП'), (10009,@system_locale_id,'СП'),
 (10010,@system_locale_id,'Т'), (10011,@system_locale_id,'ТУП'), (10012,@system_locale_id,'УЛ'), (10013,@system_locale_id,'ШОССЕ'), (10014,@system_locale_id,'НАБ'), (10015,@system_locale_id,'В-Д'), (10016,@system_locale_id,'СТ');
 INSERT INTO `street_type` (`object_id`) VALUES (10000), (10001), (10002), (10003), (10004), (10005), (10006), (10007), (10008), (10009), (10010),
@@ -21,7 +21,7 @@ INSERT INTO `street_type_attribute`(`attribute_id`, `object_id`, `attribute_type
 (1,10006,1400,10006,1400), (1,10007,1400,10007,1400), (1,10008,1400,10008,1400), (1,10009,1400,10009,1400), (1,10010,1400,10010,1400),
 (1,10011,1400,10011,1400), (1,10012,1400,10012,1400), (1,10013,1400,10013,1400), (1,10014,1400,10014,1400), (1,10015,1400,10015,1400),
 (1,10016,1400,10016,1400);
-INSERT INTO `street_type_string_culture`(`id`, `locale_id`, `value`) VALUES (10017,@system_locale_id,'Б-Р'), (10018,@system_locale_id,'М'), (10019,@system_locale_id,'М-Н'),
+INSERT INTO `street_type_string_value`(`id`, `locale_id`, `value`) VALUES (10017,@system_locale_id,'Б-Р'), (10018,@system_locale_id,'М'), (10019,@system_locale_id,'М-Н'),
 (10020,@system_locale_id,'ПЕР'), (10021,@system_locale_id,'ПЛ'), (10022,@system_locale_id,'П'), (10023,@system_locale_id,'ПОС'), (10024,@system_locale_id,'ПР-Д'), (10025,@system_locale_id,'ПРОСП'), (10026,@system_locale_id,'СП'),
 (10027,@system_locale_id,'Т'), (10028,@system_locale_id,'ТУП'), (10029,@system_locale_id,'УЛ'), (10030,@system_locale_id,'ШОССЕ'), (10031,@system_locale_id,'НАБ'), (10032,@system_locale_id,'В-Д'), (10033,@system_locale_id,'СТ');
 INSERT INTO `street_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
@@ -32,13 +32,13 @@ INSERT INTO `street_type_attribute`(`attribute_id`, `object_id`, `attribute_type
 
 -- Rooms
 insert into room(object_id, parent_id, parent_entity_id) values (1,1,100), (2,1,100), (3,2,100), (4,2,100);
-insert into room_string_culture(id, locale_id, value) values (1,@system_locale_id, UPPER('1а')),(2,@system_locale_id, UPPER('1б')), (3,@system_locale_id, UPPER('2а')), (4,@system_locale_id, UPPER('2б'));
+insert into room_string_value(id, locale_id, value) values (1,@system_locale_id, UPPER('1а')),(2,@system_locale_id, UPPER('1б')), (3,@system_locale_id, UPPER('2а')), (4,@system_locale_id, UPPER('2б'));
 insert into room_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
 (1,1,200,1,200), (1,2,200,2,200), (1,3,200,3,200), (1,4,200,4,200);
 
 -- Apartments
 insert into apartment(object_id, parent_id, parent_entity_id) values (1,1,500), (2,1,500), (3,3,500), (4,2,500);
-insert into apartment_string_culture(id, locale_id, value) values (1,@system_locale_id, UPPER('10')), (2,@system_locale_id, UPPER('20')), (3,@system_locale_id,UPPER('18')), (4,1,UPPER('28'));
+insert into apartment_string_value(id, locale_id, value) values (1,@system_locale_id, UPPER('10')), (2,@system_locale_id, UPPER('20')), (3,@system_locale_id,UPPER('18')), (4,1,UPPER('28'));
 insert into apartment_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
 (1,1,100,1,100), (1,2,100,2,100), (1,3,100,3,100),(1,4,100,4,100);
 
@@ -46,7 +46,7 @@ insert into apartment_attribute(attribute_id, object_id, attribute_type_id, valu
 insert into building_address(object_id, parent_id, parent_entity_id) values (1,1,300), (2,3,300), (3,1,300), (4,1,300), (5,2,300), (6,2,300),
 (7,4,300), (8,5,300),
 (9,6,300);
-insert into building_address_string_culture(id, locale_id, value) values
+insert into building_address_string_value(id, locale_id, value) values
 (1, @system_locale_id, UPPER('8')), (2, @system_locale_id, UPPER('28')), (3,@system_locale_id,UPPER('18')), (4,@system_locale_id,UPPER('12')), (5,@system_locale_id,UPPER('21')), (6,@system_locale_id,UPPER('100')),
 (7,@system_locale_id,UPPER('154А')), (8,@system_locale_id,UPPER('25А')),
 (9,@system_locale_id,UPPER('26А'));
@@ -76,7 +76,7 @@ insert into building_attribute(attribute_id, object_id, attribute_type_id, value
 (1,8,500,3,500);
 
 -- Streets
-insert into street_string_culture(id, locale_id, value) values (1,@system_locale_id, UPPER('Терешковой')),
+insert into street_string_value(id, locale_id, value) values (1,@system_locale_id, UPPER('Терешковой')),
                                                             (2,@system_locale_id, UPPER('Ленина')),
                                                             (3,@system_locale_id, UPPER('Морской')),
                                                             (4,@system_locale_id, UPPER('КОСИОРА')),
@@ -93,7 +93,7 @@ insert into street_attribute(attribute_id, object_id, attribute_type_id, value_i
 (1,6,300,6,300),(1,6,301,10008,301);
 
 -- Districts
-insert into district_string_culture(id, locale_id, value) values (1,@system_locale_id, UPPER('Ленинский')),
+insert into district_string_value(id, locale_id, value) values (1,@system_locale_id, UPPER('Ленинский')),
                                                               (2,@system_locale_id, UPPER('Советский')),
                                                               (3,@system_locale_id, UPPER('Центральный')),
                                                               (4,@system_locale_id, UPPER('LE')), (5,@system_locale_id, UPPER('SO')), (6,@system_locale_id, UPPER('CE')),
@@ -107,7 +107,7 @@ insert into district_attribute(attribute_id, object_id, attribute_type_id, value
 
 
 -- Cities
-insert into city_string_culture(id, locale_id, value) values (1,@system_locale_id, UPPER('Новосибирск')),
+insert into city_string_value(id, locale_id, value) values (1,@system_locale_id, UPPER('Новосибирск')),
                                                           (2,@system_locale_id, UPPER('Москва')),
                                                           (3,@system_locale_id, UPPER('Харьков'));
 insert into city(object_id, parent_id, parent_entity_id) values (1,1,700), (2,2,700), (3,3,700);
@@ -117,7 +117,7 @@ insert into city_attribute(attribute_id, object_id, attribute_type_id, value_id,
 (1,3,400,3,400),(1,3,401,10000,401);
 
 -- Regions
-insert into region_string_culture(id, locale_id, value) values (1,@system_locale_id, UPPER('Новосибирская обл.')),
+insert into region_string_value(id, locale_id, value) values (1,@system_locale_id, UPPER('Новосибирская обл.')),
                                                             (2,@system_locale_id, UPPER('Московская обл.')),
                                                             (3,@system_locale_id, UPPER('Харьковская обл.(ТЕСТ)'));
 insert into region(object_id, parent_id, parent_entity_id) values (1,1,800), (2,1,800), (3,2,800);
@@ -127,7 +127,7 @@ insert into region_attribute(attribute_id, object_id, attribute_type_id, value_i
 (1,3,700,3,700);
 
 -- Countries
-insert into country_string_culture(id, locale_id, value) values (1,@system_locale_id, UPPER('Россия')),
+insert into country_string_value(id, locale_id, value) values (1,@system_locale_id, UPPER('Россия')),
                                                             (2,@system_locale_id, UPPER('Украина(ТЕСТ)'));
 insert into country(object_id) values (1), (2);
 insert into country_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values

@@ -39,8 +39,8 @@ CREATE TABLE `service` (
   CONSTRAINT `fk_parent_service` FOREIGN KEY (`parent_id`) REFERENCES `service` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `service_string_culture`;
-CREATE TABLE `service_string_culture` (
+DROP TABLE IF EXISTS `service_string_value`;
+CREATE TABLE `service_string_value` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `service_id` BIGINT(20) NOT NULL,
   `locale_id` BIGINT(20) NOT NULL,
@@ -49,8 +49,8 @@ CREATE TABLE `service_string_culture` (
   UNIQUE KEY `unique_id__locale` (`service_id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_service_string_culture__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_service_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_service_string_value__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_service_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -89,7 +89,7 @@ CREATE TABLE `service_provider_account_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - STRING_CULTURE',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - string_value',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -109,9 +109,9 @@ CREATE TABLE `service_provider_account_attribute` (
   REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Дополнительные атрибуты л/с ПУ (кол-во проживающих и т.п.)';
 
-DROP TABLE IF EXISTS `service_provider_account_string_culture`;
+DROP TABLE IF EXISTS `service_provider_account_string_value`;
 
-CREATE TABLE `service_provider_account_string_culture` (
+CREATE TABLE `service_provider_account_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -120,7 +120,7 @@ CREATE TABLE `service_provider_account_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_sp_account_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_sp_account_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация атрибутов л/с ПУ';
 
 DROP TABLE IF EXISTS `registry_changing`;
@@ -762,7 +762,7 @@ CREATE TABLE `module_instance_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 100 - НАИМЕНОВАНИЕ МОДУЛЯ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - STRING_CULTURE',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - string_value',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -782,9 +782,9 @@ CREATE TABLE `module_instance_attribute` (
   REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты модуля';
 
-DROP TABLE IF EXISTS `module_instance_string_culture`;
+DROP TABLE IF EXISTS `module_instance_string_value`;
 
-CREATE TABLE `module_instance_string_culture` (
+CREATE TABLE `module_instance_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -793,7 +793,7 @@ CREATE TABLE `module_instance_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_module_instance_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_module_instance_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация атрибутов модуля';
 
 -- ------------------------------
@@ -833,7 +833,7 @@ CREATE TABLE `module_instance_type_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 100 - НАИМЕНОВАНИЕ МОДУЛЯ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - STRING_CULTURE',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - string_value',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -853,9 +853,9 @@ CREATE TABLE `module_instance_type_attribute` (
   REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа модуля';
 
-DROP TABLE IF EXISTS `module_instance_type_string_culture`;
+DROP TABLE IF EXISTS `module_instance_type_string_value`;
 
-CREATE TABLE `module_instance_type_string_culture` (
+CREATE TABLE `module_instance_type_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -864,7 +864,7 @@ CREATE TABLE `module_instance_type_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_module_instance_type_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_module_instance_type_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация атрибутов типа модуля';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

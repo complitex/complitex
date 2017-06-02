@@ -1,7 +1,7 @@
-package org.complitex.common;
+package org.complitex.common.test;
 
-import com.beust.jcommander.internal.Maps;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.sun.org.apache.xerces.internal.dom.DeferredElementImpl;
 import org.apache.ibatis.io.Resources;
 import org.slf4j.Logger;

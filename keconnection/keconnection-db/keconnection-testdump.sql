@@ -1,9 +1,9 @@
 -- Set mysql user-defined variable - system locale id.
-SELECT (@system_locale_id := `id`) FROM `locales` WHERE `system` = 1;
+SELECT (@system_locale_id := `id`) FROM `locale` WHERE `system` = 1;
 
 -- Servicing organizations
 insert into organization(object_id) values (10),(11);
-insert into organization_string_culture(id, locale_id, `value`) values 
+insert into organization_string_value(id, locale_id, `value`) values
 (10,1,UPPER('Обсл. организация №1')), (10,2,UPPER('Обсл. организация №1')), (11,@system_locale_id, UPPER('10')), (12,@system_locale_id, UPPER('FALSE')),
 (13,1,UPPER('Обсл. организация №2')), (13,2,UPPER('Обсл. организация №2')), (14,@system_locale_id, UPPER('11')), (15,@system_locale_id, UPPER('TRUE'));
 insert into organization_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
@@ -12,7 +12,7 @@ insert into organization_attribute(attribute_id, object_id, attribute_type_id, v
 
 -- Service provider and calculation module organizations
 insert into organization(object_id) values (20),(21);
-insert into organization_string_culture(id, locale_id, value) values 
+insert into organization_string_value(id, locale_id, value) values
 (20, 1, UPPER('Service provider #1')), (20,2,UPPER('Service provider #1')), (21,@system_locale_id, UPPER('20')),
 (22, 1, UPPER('Calculation module #1')), (22, 2, UPPER('Calculation module #1')), (23,@system_locale_id, UPPER('21'));
 insert into organization_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
@@ -23,7 +23,7 @@ insert into organization_attribute(attribute_id, object_id, attribute_type_id, v
 
 -- User organizations
 insert into organization(object_id) values (30), (31);
-insert into organization_string_culture(id, locale_id, value) values 
+insert into organization_string_value(id, locale_id, value) values
 (30,@system_locale_id, UPPER('User organization #1')),(31,@system_locale_id, UPPER('30')),
 (32,@system_locale_id,UPPER('User organization #2')),(33,@system_locale_id, UPPER('31'));
 insert into organization_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values

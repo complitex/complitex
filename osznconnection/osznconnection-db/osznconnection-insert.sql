@@ -1,8 +1,8 @@
 -- --------------------------------
 -- Current database version
 -- --------------------------------
-INSERT INTO `update` (`version`) VALUE ('20170127_0.5.10');
--- --------------------------------
+INSERT INTO `update` (`version`) VALUE ('20170206_0.6.0');
+
 
 -- admin user --
 INSERT INTO `user_info` (`object_id`) VALUES (1);
@@ -52,24 +52,24 @@ INSERT INTO `config` (`name`,`value`) VALUES ('DEFAULT_REQUEST_FILE_CITY','');
 -- Sequence
 -- --------------------------------
 INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES
-('ownership',1), ('ownership_string_culture',1),
-('privilege',1), ('privilege_string_culture',1);
+('ownership',1), ('ownership_string_value',1),
+('privilege',1), ('privilege_string_value',1);
 -- --------------------------------
 -- Organization type
 -- --------------------------------
 # INSERT INTO `organization_type`(`object_id`) VALUES (2),(3);
-# INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`) VALUES (2, 1, UPPER('ОСЗН')), (2, 2,UPPER('ОСЗН')),
+# INSERT INTO `organization_type_string_value`(`id`, `locale_id`, `value`) VALUES (2, 1, UPPER('ОСЗН')), (2, 2,UPPER('ОСЗН')),
 # (3, 1, UPPER('Модуль начислений')), (3, 2,UPPER('Центр нарахувань'));
 # INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES (1,2,2300,2,2300),(1,3,2300,3,2300);
 
 INSERT INTO `organization_type`(`object_id`) VALUES (7);
-INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
+INSERT INTO `organization_type_string_value`(`id`, `locale_id`, `value`)
 VALUES (7, 1, UPPER('Отдел субсидий')), (7, 2, UPPER('Отдел субсидий'));
 INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
 VALUES (1, 7, 2300, 7, 2300);
 
 INSERT INTO `organization_type`(`object_id`) VALUES (8);
-INSERT INTO `organization_type_string_culture`(`id`, `locale_id`, `value`)
+INSERT INTO `organization_type_string_value`(`id`, `locale_id`, `value`)
 VALUES (8, 1, UPPER('Отдел льгот')), (8, 2, UPPER('Отдел льгот'));
 INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
 VALUES (1, 8, 2300, 8, 2300);
@@ -79,7 +79,7 @@ VALUES (1, 8, 2300, 8, 2300);
 -- --------------------------------
 
 -- Reference to `service_association` helper table. It is user organization only attribute. --
-# INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (915, 1, UPPER('Ассоцияции тип услуги - модуль начислений')), (915, 2, UPPER('Ассоцияции тип услуги - модуль начислений'));
+# INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (915, 1, UPPER('Ассоцияции тип услуги - модуль начислений')), (915, 2, UPPER('Ассоцияции тип услуги - модуль начислений'));
 # INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (914, 900, 1, 915, 1);
 # INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (914, 914, 'service_association');
 
@@ -88,104 +88,104 @@ VALUES (1, 8, 2300, 8, 2300);
 -- -------------------------------
 
 -- Load payments/benefits directory. It is OSZN only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (915, 1, UPPER('Директория входящих запросов на субсидию')), (915, 2, UPPER('Директория входящих запросов на субсидию'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (915, 1, UPPER('Директория входящих запросов на субсидию')), (915, 2, UPPER('Директория входящих запросов на субсидию'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (915, 900, 0, 915, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (915, 915, UPPER('string'));
 
 -- Save payments/benefits directory. It is OSZN only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (916, 1, UPPER('Директория исходящих ответов на запросы на субсидию')), (916, 2, UPPER('Директория исходящих ответов на запросы на субсидию'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (916, 1, UPPER('Директория исходящих ответов на запросы на субсидию')), (916, 2, UPPER('Директория исходящих ответов на запросы на субсидию'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (916, 900, 0, 916, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (916, 916, UPPER('string'));
 
 -- Load actual payments directory. It is OSZN only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (917, 1, UPPER('Директория входящих запросов фактического начисления')), (917, 2, UPPER('Директория входящих запросов фактического начисления'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (917, 1, UPPER('Директория входящих запросов фактического начисления')), (917, 2, UPPER('Директория входящих запросов фактического начисления'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (917, 900, 0, 917, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (917, 917, UPPER('string'));
 
 -- Save actual payments directory. It is OSZN only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (918, 1, UPPER('Директория исходящих ответов на запросы фактического начисления')), (918, 2, UPPER('Директория исходящих ответов на запросы фактического начисления'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (918, 1, UPPER('Директория исходящих ответов на запросы фактического начисления')), (918, 2, UPPER('Директория исходящих ответов на запросы фактического начисления'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (918, 900, 0, 918, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (918, 918, UPPER('string'));
 
 -- Load subsidies directory. It is OSZN only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (919, 1, UPPER('Директория входящих файлов субсидий')), (919, 2, UPPER('Директория входящих файлов субсидий'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (919, 1, UPPER('Директория входящих файлов субсидий')), (919, 2, UPPER('Директория входящих файлов субсидий'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (919, 900, 0, 919, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (919, 919, UPPER('string'));
 
 -- Save subsidies directory. It is OSZN only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (920, 1, UPPER('Директория исходящих файлов субсидий')), (920, 2, UPPER('Директория исходящих файлов субсидий'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (920, 1, UPPER('Директория исходящих файлов субсидий')), (920, 2, UPPER('Директория исходящих файлов субсидий'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (920, 900, 0, 920, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (920, 920, UPPER('string'));
 
 -- Load dwelling characteristics directory. It is OSZN only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (921, 1, UPPER('Директория входящих файлов характеристик жилья')), (921, 2, UPPER('Директория входящих файлов характеристик жилья'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (921, 1, UPPER('Директория входящих файлов характеристик жилья')), (921, 2, UPPER('Директория входящих файлов характеристик жилья'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (921, 900, 0, 921, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (921, 921, UPPER('string'));
 
 -- Save dwelling characteristics directory. It is OSZN only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (922, 1, UPPER('Директория исходящих файлов характеристик жилья')), (922, 2, UPPER('Директория исходящих файлов характеристик жилья'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (922, 1, UPPER('Директория исходящих файлов характеристик жилья')), (922, 2, UPPER('Директория исходящих файлов характеристик жилья'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (922, 900, 0, 922, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (922, 922, UPPER('string'));
 
 -- Load facility service type directory. It is OSZN only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (923, 1, UPPER('Директория входящих файлов-запросов видов услуг')), (923, 2, UPPER('Директория входящих файлов-запросов видов услуг'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (923, 1, UPPER('Директория входящих файлов-запросов видов услуг')), (923, 2, UPPER('Директория входящих файлов-запросов видов услуг'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (923, 900, 0, 923, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (923, 923, UPPER('string'));
 
 -- Save facility service type directory. It is OSZN only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (924, 1, UPPER('Директория исходящих файлов-запросов видов услуг')), (924, 2, UPPER('Директория исходящих файлов-запросов видов услуг'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (924, 1, UPPER('Директория исходящих файлов-запросов видов услуг')), (924, 2, UPPER('Директория исходящих файлов-запросов видов услуг'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (924, 900, 0, 924, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (924, 924, UPPER('string'));
 
 -- References directory. It is OSZN only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (925, 1, UPPER('Директория справочников')), (925, 2, UPPER('Директория справочников'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (925, 1, UPPER('Директория справочников')), (925, 2, UPPER('Директория справочников'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (925, 900, 0, 925, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (925, 925, UPPER('string'));
 
 -- EDRPOU(ЕДРПОУ) attribute. It is user organization only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (926, 1, UPPER('ЕДРПОУ')), (926, 2, UPPER('ЕДРПОУ'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (926, 1, UPPER('ЕДРПОУ')), (926, 2, UPPER('ЕДРПОУ'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (926, 900, 1, 926, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (926, 926, UPPER('string'));
 
 -- Root directory for loading and saving request files. It is user organization only attribute. --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (927, 1, UPPER('Корневой каталог для файлов запросов')), (927, 2, UPPER('Корневой каталог для файлов запросов'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (927, 1, UPPER('Корневой каталог для файлов запросов')), (927, 2, UPPER('Корневой каталог для файлов запросов'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (927, 900, 1, 927, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (927, 927, UPPER('string'));
 
 -- Save facility form2 directory --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (928, 1, UPPER('Директория исходящих файлов форма-2 льгота')), (928, 2, UPPER('Директория исходящих файлов форма-2 льгота'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (928, 1, UPPER('Директория исходящих файлов форма-2 льгота')), (928, 2, UPPER('Директория исходящих файлов форма-2 льгота'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (928, 900, 0, 928, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (928, 928, UPPER('string'));
 
 -- Save facility local directory
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (929, 1, UPPER('Директория исходящих файлов местной льготы')), (929, 2, UPPER('Директория исходящих файлов местной льготы'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (929, 1, UPPER('Директория исходящих файлов местной льготы')), (929, 2, UPPER('Директория исходящих файлов местной льготы'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (929, 900, 0, 929, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (929, 929, UPPER('string'));
 
 -- Export subsidy directory--
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (930, 1, UPPER('Корневой каталог для экспорта файлов'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (930, 1, UPPER('Корневой каталог для экспорта файлов'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (930, 900, 0, 930, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (930, 930, UPPER('string'));
 
 -- Load privilege prolongation directory --
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (931, 1, UPPER('Директория входящих файлов продления льгот')), (931, 2, UPPER('Директория входящих файлов продления льгот'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (931, 1, UPPER('Директория входящих файлов продления льгот')), (931, 2, UPPER('Директория входящих файлов продления льгот'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (931, 900, 0, 931, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (931, 931, UPPER('string'));
 
 -- --------------------------------
 -- Ownership
 -- --------------------------------
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (1100, 1, 'Форма собственности'), (1100, 2, 'Форма власності');
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (1100, 1, 'Форма собственности'), (1100, 2, 'Форма власності');
 INSERT INTO `entity`(`id`, `entity_table`, `entity_name_id`, `strategy_factory`) VALUES (1100, 'ownership', 1100, '');
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (1101, 1, UPPER('Название')), (1101, 2, UPPER('Назва'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (1101, 1, UPPER('Название')), (1101, 2, UPPER('Назва'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (1100, 1100, 1, 1101, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (1100, 1100, UPPER('string_culture'));
+INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (1100, 1100, UPPER('string_value'));
 
 -- --------------------------------
 -- Forms of ownerships
 -- --------------------------------
 INSERT INTO `ownership`(`object_id`) VALUES (1),(2),(3),(4),(5),(6);
-INSERT INTO `ownership_string_culture`(`id`, `locale_id`, `value`) VALUES (1, 1, UPPER('мiсцевих Рад')), (1, 2,UPPER('мiсцевих Рад')),
+INSERT INTO `ownership_string_value`(`id`, `locale_id`, `value`) VALUES (1, 1, UPPER('мiсцевих Рад')), (1, 2,UPPER('мiсцевих Рад')),
 (2, 1, UPPER('кооперативна')), (2, 2, UPPER('кооперативна')), (3, 1, UPPER('вiдомча')), (3, 2, UPPER('вiдомча')),
 (4, 1, UPPER('громадська')), (4, 2, UPPER('громадська')), (5, 1, UPPER('приватна')), (5, 2, UPPER('приватна')),
 (6, 1, UPPER('приватизована')), (6, 2, UPPER('приватизована'));
@@ -196,12 +196,12 @@ INSERT INTO `ownership_attribute`(`attribute_id`, `object_id`, `attribute_type_i
 -- Privilege
 -- --------------------------------
 
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (1200, 1, 'Льгота'), (1200, 2, 'Привілей');
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (1200, 1, 'Льгота'), (1200, 2, 'Привілей');
 INSERT INTO `entity`(`id`, `entity_table`, `entity_name_id`, `strategy_factory`) VALUES (1200, 'privilege', 1200, '');
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (1201, 1, UPPER('Название')), (1201, 2, UPPER('Назва'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (1201, 1, UPPER('Название')), (1201, 2, UPPER('Назва'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (1200, 1200, 1, 1201, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (1200, 1200, UPPER('string_culture'));
-INSERT INTO `string_culture`(`id`, `locale_id`, `value`) VALUES (1202, 1, UPPER('Код')), (1202, 2, UPPER('Код'));
+INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (1200, 1200, UPPER('string_value'));
+INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (1202, 1, UPPER('Код')), (1202, 2, UPPER('Код'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (1201, 1200, 1, 1202, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (1201, 1201, UPPER('string'));
 
@@ -211,111 +211,111 @@ INSERT INTO `privilege`(`object_id`) VALUES
 (31),(32),(33),(34),(35),(36),(37),(38),(39),(40),(41),(42),(43),(44),(45),(46),(47),(48),(49),(50),(51),(52),(53),(54),(55),(56),(57),(58),(59),(60),
 (61),(62),(63),(64),(65),(66),(67),(68),(69),(70),(71),(72),(73),(74),(75),(76),(77),(78),(79),(80),(81),(82),(83),(84),(85),(86),(87),(88),(89),(90),
 (91),(92),(93),(94),(95),(96),(97),(98),(99),(100),(101),(102),(103),(104);
-INSERT INTO `privilege_string_culture`(`id`, `locale_id`, `value`) VALUES
-(1,1,UPPER('УЧАСТНИК БОЕВЫХ ДЕЙСТВИЙ')), (1,2,UPPER('УЧАСТНИК БОЕВЫХ ДЕЙСТВИЙ')), (2,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('1')),
-(3,1,UPPER('УЧАСТНИК ВОЙНЫ')), (3,2,UPPER('УЧАСТНИК ВОЙНЫ')), (4,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('2')),
-(5,1,UPPER('ЧЛЕН СЕМЬИ ПОГИБШЕГО/УМЕРШЕГО ВЕТЕРАНА ВОЙНЫ')), (5,2,UPPER('ЧЛЕН СЕМЬИ ПОГИБШЕГО/УМЕРШЕГО ВЕТЕРАНА ВОЙНЫ')), (6,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('3')),
-(7,1,UPPER('ИНВАЛИД ВОЙНЫ ПЕРВОЙ ГРУППЫ')), (7,2,UPPER('ИНВАЛИД ВОЙНЫ ПЕРВОЙ ГРУППЫ')), (8,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('11')),
-(9,1,UPPER('ИНВАЛИД ВОЙНЫ ВТОРОЙ ГРУППЫ')), (9,2,UPPER('ИНВАЛИД ВОЙНЫ ВТОРОЙ ГРУППЫ')), (10,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('12')),
-(11,1,UPPER('ИНВАЛИД ВОЙНЫ ТРЕТЬЕЙ ГРУППЫ')), (11,2,UPPER('ИНВАЛИД ВОЙНЫ ТРЕТЬЕЙ ГРУППЫ')), (12,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('13')),
-(13,1,UPPER('РЕБЕНОК ВОЙНЫ')), (13,2,UPPER('РЕБЕНОК ВОЙНЫ')), (14,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('15')),
-(15,1,UPPER('ЛИЦО С ОСОБЫМИ ЗАСЛУГАМИ')), (15,2,UPPER('ЛИЦО С ОСОБЫМИ ЗАСЛУГАМИ')), (16,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('20')),
-(17,1,UPPER('РОДИТЕЛИ УМЕРШЕГО ЛИЦА С ОСОБЫМИ ЗАСЛУГАМИ')), (17,2,UPPER('РОДИТЕЛИ УМЕРШЕГО ЛИЦА С ОСОБЫМИ ЗАСЛУГАМИ')), (18,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('22')),
-(19,1,UPPER('ВДОВА/ВДОВЕЦ ЛИЦА С ОСОБЫМИ ЗАСЛУГАМИ')), (19,2,UPPER('ВДОВА/ВДОВЕЦ ЛИЦА С ОСОБЫМИ ЗАСЛУГАМИ')), (20,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('23')),
-(21,1,UPPER('ВДОВА/ВДОВЕЦ ЛИЦА С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (21,2,UPPER('ВДОВА/ВДОВЕЦ ЛИЦА С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (22,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('26')),
-(23,1,UPPER('ЛИЦО С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (23,2,UPPER('ЛИЦО С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (24,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('30')),
-(25,1,UPPER('РОДИТЕЛИ УМЕРШЕГО ЛИЦА С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (25,2,UPPER('РОДИТЕЛИ УМЕРШЕГО ЛИЦА С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (26,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('32')),
-(27,1,UPPER('ВЕТЕРАН ТРУДА')), (27,2,UPPER('ВЕТЕРАН ТРУДА')), (28,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('33')),
-(29,1,UPPER('ПЕНСИОНЕР ПО ВОЗРАСТУ')), (29,2,UPPER('ПЕНСИОНЕР ПО ВОЗРАСТУ')), (30,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('34')),
-(31,1,UPPER('МНОГОДЕТНЫЕ СЕМЬИ')), (31,2,UPPER('МНОГОДЕТНЫЕ СЕМЬИ')), (32,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('35')),
-(33,1,UPPER('ЧЛЕН  МНОГОДЕТНОЙ СЕМЬИ')), (33,2,UPPER('ЧЛЕН  МНОГОДЕТНОЙ СЕМЬИ')), (34,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('36')),
-(35,1,UPPER('ВЕТЕРАН СЛУЖБЫ ГРАЖДАНСКОЙ ЗИЩИТЫ')), (35,2,UPPER('ВЕТЕРАН СЛУЖБЫ ГРАЖДАНСКОЙ ЗИЩИТЫ')), (36,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('37')),
-(37,1,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ КРИМ.-ИСПОЛНИТЕЛЬНОЙ СЛУЖБЫ')), (37,2,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ КРИМ.-ИСПОЛНИТЕЛЬНОЙ СЛУЖБЫ')), (38,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('39')),
-(39,1,UPPER('СЕЛЬСКИЙ ПЕДАГОГ НА ПЕНСИИ')), (39,2,UPPER('СЕЛЬСКИЙ ПЕДАГОГ НА ПЕНСИИ')), (40,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('40')),
-(41,1,UPPER('СЕЛЬСКИЙ БИБЛИОТЕКАРЬ НА ПЕНСИИ')), (41,2,UPPER('СЕЛЬСКИЙ БИБЛИОТЕКАРЬ НА ПЕНСИИ')), (42,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('41')),
-(43,1,UPPER('СЕЛЬСКИЙ СПЕЦИАЛИСТ ПО ЗАЩИТЕ РАСТЕНИЙ НА ПЕНСИИ')), (43,2,UPPER('СЕЛЬСКИЙ СПЕЦИАЛИСТ ПО ЗАЩИТЕ РАСТЕНИЙ НА ПЕНСИИ')), (44,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('42')),
-(45,1,UPPER('СЕЛЬСКИЙ МЕДИК НА ПЕНСИИ')), (45,2,UPPER('СЕЛЬСКИЙ МЕДИК НА ПЕНСИИ')), (46,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('43')),
-(47,1,UPPER('СУДЬЯ В ОТСТАВКЕ')), (47,2,UPPER('СУДЬЯ В ОТСТАВКЕ')), (48,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('47')),
-(49,1,UPPER('СЛЕДОВАТЕЛЬ ПРОКУРАТУРЫ НА ПЕНСИИ')), (49,2,UPPER('СЛЕДОВАТЕЛЬ ПРОКУРАТУРЫ НА ПЕНСИИ')), (50,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('49')),
-(51,1,UPPER('НАЛОГОВЫЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (51,2,UPPER('НАЛОГОВЫЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (52,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('50')),
-(53,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО НАЛОГОВОГО МИЛИЦИОНЕРА')), (53,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО НАЛОГОВОГО МИЛИЦИОНЕРА')), (54,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('51')),
-(55,1,UPPER('СЕЛЬСКИЙ НАЛОГОВЫЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (55,2,UPPER('СЕЛЬСКИЙ НАЛОГОВЫЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (56,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('52')),
-(57,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ СЕЛЬСКОГО НАЛОГОВОГО МИЛИЦИОНЕРА')), (57,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ СЕЛЬСКОГО НАЛОГОВОГО МИЛИЦИОНЕРА')), (58,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('53')),
-(59,1,UPPER('ВОЕННОСЛУЖАЩИЙ СБУ НА ПЕНСИИ')), (59,2,UPPER('ВОЕННОСЛУЖАЩИЙ СБУ НА ПЕНСИИ')), (60,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('58')),
-(61,1,UPPER('ЛИЦО (ЧАЭС) - 1 КАТЕГОРИЯ')), (61,2,UPPER('ЛИЦО (ЧАЭС) - 1 КАТЕГОРИЯ')), (62,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('61')),
-(63,1,UPPER('ЛИЦО (ЧАЭС) - 2 КАТЕГОРИЯ - ЛИКВИДАТОР')), (63,2,UPPER('ЛИЦО (ЧАЭС) - 2 КАТЕГОРИЯ - ЛИКВИДАТОР')), (64,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('62')),
-(65,1,UPPER('ЛИЦО (ЧАЭС) - 2 КАТЕГОРИЯ - ПОТЕРПЕВШИЙ')), (65,2,UPPER('ЛИЦО (ЧАЭС) - 2 КАТЕГОРИЯ - ПОТЕРПЕВШИЙ')), (66,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('63')),
-(67,1,UPPER('ЛИЦО (ЧАЭС) - 3 КАТЕГОРИЯ')), (67,2,UPPER('ЛИЦО (ЧАЭС) - 3 КАТЕГОРИЯ')), (68,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('64')),
-(69,1,UPPER('ЛИЦО (ЧАЭС) - 4 КАТЕГОРИЯ')), (69,2,UPPER('ЛИЦО (ЧАЭС) - 4 КАТЕГОРИЯ')), (70,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('65')),
-(71,1,UPPER('ЖЕНА/МУЖ (ЧАЭС) УМЕРШЕГО ГРАЖДАНИНА')), (71,2,UPPER('ЖЕНА/МУЖ (ЧАЭС) УМЕРШЕГО ГРАЖДАНИНА')), (72,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('66')),
-(73,1,UPPER('РЕБЕНОК (ЧАЭС) УМЕРШЕГО ГРАЖДАНИНА')), (73,2,UPPER('РЕБЕНОК (ЧАЭС) УМЕРШЕГО ГРАЖДАНИНА')), (74,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('67')),
-(75,1,UPPER('РЕБЕНОК (ЧАЭС) ПОТЕРПЕВШЕГО')), (75,2,UPPER('РЕБЕНОК (ЧАЭС) ПОТЕРПЕВШЕГО')), (76,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('68')),
-(77,1,UPPER('РЕБЕНОК (ЧАЭС) - ИНВАЛИД')), (77,2,UPPER('РЕБЕНОК (ЧАЭС) - ИНВАЛИД')), (78,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('69')),
-(79,1,UPPER('ЛИЦО (ЧАЭС), РАБОТАВШЕЕ ЗА ПРЕДЕЛАМИ ЗОНЫ ОТЧУЖДЕНИЯ (ЛИКВИДАЦИЯ ПОСЛЕДСТВИЙ АВАРИИ)')), (79,2,UPPER('ЛИЦО (ЧАЭС), РАБОТАВШЕЕ ЗА ПРЕДЕЛАМИ ЗОНЫ ОТЧУЖДЕНИЯ (ЛИКВИДАЦИЯ ПОСЛЕДСТВИЙ АВАРИИ)')), (80,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('70')),
-(81,1,UPPER('СОТРУДНИК УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ НА ПЕНСИИ')), (81,2,UPPER('СОТРУДНИК УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ НА ПЕНСИИ')), (82,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('71')),
-(83,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СОТРУДНИКА УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ')), (83,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СОТРУДНИКА УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ')), (84,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('72')),
-(85,1,UPPER('СЕЛЬСКИЙ СОТРУДНИК УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ НА ПЕНСИИ')), (85,2,UPPER('СЕЛЬСКИЙ СОТРУДНИК УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ НА ПЕНСИИ')), (86,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('73')),
-(87,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СЕЛЬСКОГО СОТРУДНИКА УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ')), (87,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СЕЛЬСКОГО СОТРУДНИКА УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ')), (88,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('74')),
-(89,1,UPPER('МИЛИЦИОНЕР НА ПЕНСИИ')), (89,2,UPPER('МИЛИЦИОНЕР НА ПЕНСИИ')), (90,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('75')),
-(91,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО МИЛИЦИОНЕРА')), (91,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО МИЛИЦИОНЕРА')), (92,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('76')),
-(93,1,UPPER('СЕЛЬСКИЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (93,2,UPPER('СЕЛЬСКИЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (94,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('77')),
-(95,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СЕЛЬСКОГО МИЛИЦИОНЕРА')), (95,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СЕЛЬСКОГО МИЛИЦИОНЕРА')), (96,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('78')),
-(97,1,UPPER('ВЕТЕРАН ВОИНСКОЙ СЛУЖБЫ')), (97,2,UPPER('ВЕТЕРАН ВОИНСКОЙ СЛУЖБЫ')), (98,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('80')),
-(99,1,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ВОИНСКОЙ СЛУЖБЫ')), (99,2,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ВОИНСКОЙ СЛУЖБЫ')), (100,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('81')),
-(101,1,UPPER('ЧЛЕН СЕМЬИ ВОЕННОСЛУЖАЩЕГО, ПОГИБШЕГО, УМЕРШЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ ИЛИ СТАВШЕГО ИНВАЛИДОМ')), (101,2,UPPER('ЧЛЕН СЕМЬИ ВОЕННОСЛУЖАЩЕГО, ПОГИБШЕГО, УМЕРШЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ ИЛИ СТАВШЕГО ИНВАЛИДОМ')), (102,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('83')),
-(103,1,UPPER('РОДИТЕЛИ ВОЕННОСЛУЖАЩЕГО, СТАВШЕГО ИНВАЛИДОМ')), (103,2,UPPER('РОДИТЕЛИ ВОЕННОСЛУЖАЩЕГО, СТАВШЕГО ИНВАЛИДОМ')), (104,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('84')),
-(105,1,UPPER('ВДОВА/ВДОВЕЦ ВОЕННОСЛУЖАЩЕГО И ЕГО ДЕТИ')), (105,2,UPPER('ВДОВА/ВДОВЕЦ ВОЕННОСЛУЖАЩЕГО И ЕГО ДЕТИ')), (106,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('85')),
-(107,1,UPPER('ЖЕНА/МУЖ ВОЕННОСЛУЖАЩЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ')), (107,2,UPPER('ЖЕНА/МУЖ ВОЕННОСЛУЖАЩЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ')), (108,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('86')),
-(109,1,UPPER('РОДИТЕЛИ ПОГИБШЕГО ВОЕННОСЛУЖАЩЕГО')), (109,2,UPPER('РОДИТЕЛИ ПОГИБШЕГО ВОЕННОСЛУЖАЩЕГО')), (110,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('87')),
-(111,1,UPPER('ИНВАЛИД ВОИНСКОЙ СЛУЖБЫ')), (111,2,UPPER('ИНВАЛИД ВОИНСКОЙ СЛУЖБЫ')), (112,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('88')),
-(113,1,UPPER('ВЕТЕРАН ОРГАНОВ ВНУТРЕННИХ ДЕЛ')), (113,2,UPPER('ВЕТЕРАН ОРГАНОВ ВНУТРЕННИХ ДЕЛ')), (114,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('90')),
-(115,1,UPPER('ВДОВА/ВДОВЕЦ, ВЕТЕРАНА ОРГАНОВ ВНУТРЕННИХ ДЕЛ')), (115,2,UPPER('ВДОВА/ВДОВЕЦ, ВЕТЕРАНА ОРГАНОВ ВНУТРЕННИХ ДЕЛ')), (116,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('91')),
-(117,1,UPPER('ПОЖАРНЫЙ НА ПЕНСИИ')), (117,2,UPPER('ПОЖАРНЫЙ НА ПЕНСИИ')), (118,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('95')),
-(119,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО ПОЖАРНОГО')), (119,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО ПОЖАРНОГО')), (120,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('96')),
-(121,1,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ ПОЖАРНОЙ ОХРАНЫ')), (121,2,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ ПОЖАРНОЙ ОХРАНЫ')),(122,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('98')),
-(123,1,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ГОСУДАРСТВЕННОЙ ПОЖАРНОЙ ОХРАНЫ')), (123,2,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ГОСУДАРСТВЕННОЙ ПОЖАРНОЙ ОХРАНЫ')), (124,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('99')),
-(125,1,UPPER('РЕАБИЛИТИРОВАННЫЕ, СТАВШИЕ ИНВАЛИДАМИ ВСЛЕДСТВИИ РЕПРЕССИЙ, ЛИБО ЯВЛЯЮЩИЕСЯ ПЕНСИОНЕРАМИ, ИМЕЮЩИМИ П')), (125,2,UPPER('РЕАБИЛИТИРОВАННЫЕ, СТАВШИЕ ИНВАЛИДАМИ ВСЛЕДСТВИИ РЕПРЕССИЙ, ЛИБО ЯВЛЯЮЩИЕСЯ ПЕНСИОНЕРАМИ, ИМЕЮЩИМИ П')), (126,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('100')),
-(127,1,UPPER('РЕБЕНОК-ИНВАЛИД')), (127,2,UPPER('РЕБЕНОК-ИНВАЛИД')), (128,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('110')),
-(129,1,UPPER('ИНВАЛИД 1 ГРУППЫ ПО ЗРЕНИЮ ИЛИ С ВРАЖДЕННЫМ ОРА')), (129,2,UPPER('ИНВАЛИД 1 ГРУППЫ ПО ЗРЕНИЮ ИЛИ С ВРАЖДЕННЫМ ОРА')), (130,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('111')),
-(131,1,UPPER('ИНВАЛИД 2 ГРУППЫ ПО ЗРЕНИЮ ИЛИ С ВРАЖДЕННЫМ ОРА')), (131,2,UPPER('ИНВАЛИД 2 ГРУППЫ ПО ЗРЕНИЮ ИЛИ С ВРАЖДЕННЫМ ОРА')), (132,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('112')),
-(133,1,UPPER('ИНВАЛИД 1 ГРУППЫ, КРОМЕ ИНВАЛИДОВ ПО ЗРЕНИЮ ИЛИ С ВРОЖДЕННЫМ ОРА')), (133,2,UPPER('ИНВАЛИД 1 ГРУППЫ, КРОМЕ ИНВАЛИДОВ ПО ЗРЕНИЮ ИЛИ С ВРОЖДЕННЫМ ОРА')), (134,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('113')),
-(135,1,UPPER('ИНВАЛИД 2 ГРУППЫ, КРОМЕ ИНВАЛИДОВ ПО ЗРЕНИЮ ИЛИ С ВРОЖДЕННЫМ ОРА')), (135,2,UPPER('ИНВАЛИД 2 ГРУППЫ, КРОМЕ ИНВАЛИДОВ ПО ЗРЕНИЮ ИЛИ С ВРОЖДЕННЫМ ОРА')), (136,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('114')),
-(137,1,UPPER('ИНВАЛИД 3 ГРУППЫ')), (137,2,UPPER('ИНВАЛИД 3 ГРУППЫ')), (138,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('115')),
-(139,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(1)')), (139,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(1)')), (140,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('120')),
-(141,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 1 ГРУППЫ')), (141,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 1 ГРУППЫ')), (142,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('121')),
-(143,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 2 ГРУППЫ')), (143,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 2 ГРУППЫ')), (144,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('122')),
-(145,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 3 ГРУППЫ')), (145,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 3 ГРУППЫ')), (146,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('123')),
-(147,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(3)')), (147,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(3)')), (148,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('124')),
-(149,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(4)')), (149,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(4)')), (150,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('125')),
-(151,1,UPPER('ГОРНЯКИ - НЕТРУДОСПОСОБНЫЕ РАБОТНИКИ')), (151,2,UPPER('ГОРНЯКИ - НЕТРУДОСПОСОБНЫЕ РАБОТНИКИ')), (152,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('126')),
-(153,1,UPPER('ГОРНЯКИ - НЕРАБОТАЮЩИЕ ПЕНСИОНЕРЫ')), (153,2,UPPER('ГОРНЯКИ - НЕРАБОТАЮЩИЕ ПЕНСИОНЕРЫ')), (154,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('127')),
-(155,1,UPPER('ГОРНЯКИ - ИНВАЛИДЫ')), (155,2,UPPER('ГОРНЯКИ - ИНВАЛИДЫ')), (156,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('128')),
-(157,1,UPPER('ГОРНЯКИ - СЕМЬИ ПОГИБШИХ ТРУЖЕНИКОВ')), (157,2,UPPER('ГОРНЯКИ - СЕМЬИ ПОГИБШИХ ТРУЖЕНИКОВ')), (158,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('129')),
-(159,1,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (159,2,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (160,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('130')),
-(161,1,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (161,2,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (162,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('131')),
-(163,1,UPPER('РОДИТЕЛИ И ЧЛЕНЫ СЕМЬИ ПОГИБШЕГО/УМЕРШЕГО СОТРУДНИКА ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (163,2,UPPER('РОДИТЕЛИ И ЧЛЕНЫ СЕМЬИ ПОГИБШЕГО/УМЕРШЕГО СОТРУДНИКА ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (164,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('132')),
-(165,1,UPPER('РОДИТЕЛИ И ЧЛЕНЫ СЕМЬИ СОТРУДНИКА ГРАЖДАНСКОЙ ОБОРОНЫ, ПОГИБШЕГО, УМЕРШЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ ИЛИ')), (165,2,UPPER('РОДИТЕЛИ И ЧЛЕНЫ СЕМЬИ СОТРУДНИКА ГРАЖДАНСКОЙ ОБОРОНЫ, ПОГИБШЕГО, УМЕРШЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ ИЛИ')), (166,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('135')),
-(167,1,UPPER('МАТЕРИ-ГЕРОИНИ')), (167,2,UPPER('МАТЕРИ-ГЕРОИНИ')), (168,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('200')),
-(169,1,UPPER('ДЕТИ-ИНВАЛИДЫ, ПРИКОВАННЫЕ К КРОВАТИ')), (169,2,UPPER('ДЕТИ-ИНВАЛИДЫ, ПРИКОВАННЫЕ К КРОВАТИ')), (170,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('201')),
-(171,1,UPPER('ДЕТИ-ИНВАЛИДЫ ДО 18 ЛЕТ, ГДЕ ОБА РОДИТЕЛИ ИНВАЛИДЫ')), (171,2,UPPER('ДЕТИ-ИНВАЛИДЫ ДО 18 ЛЕТ, ГДЕ ОБА РОДИТЕЛИ ИНВАЛИДЫ')), (172,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('202')),
-(173,1,UPPER('МНОГОДЕТНЫЕ СЕМЬИ (3 И БОЛЕЕ ДЕТЕЙ ДО 18 ЛЕТ)')), (173,2,UPPER('МНОГОДЕТНЫЕ СЕМЬИ (3 И БОЛЕЕ ДЕТЕЙ ДО 18 ЛЕТ)')), (174,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('203')),
-(175,1,UPPER('МАТЕРИ-ОДИНОЧКИ (2 И БОЛЕЕ ДЕТЕЙ ДО 18 ЛЕТ)')), (175,2,UPPER('МАТЕРИ-ОДИНОЧКИ (2 И БОЛЕЕ ДЕТЕЙ ДО 18 ЛЕТ)')), (176,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('204')),
-(177,1,UPPER('ДЕТИ-ИНВАЛИДЫ С ОНКОЛОГИЧЕСКИМИ ЗАБОЛЕВАНИЯМИ ДО 18 ЛЕТ')), (177,2,UPPER('ДЕТИ-ИНВАЛИДЫ С ОНКОЛОГИЧЕСКИМИ ЗАБОЛЕВАНИЯМИ ДО 18 ЛЕТ')), (178,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('205')),
-(179,1,UPPER('ИНВАЛИДЫ 1 ГРУППЫ, ПОЛУЧАЮЩИЕ СОЦИАЛЬНУЮ ПЕНСИЮ ИЛИ ГОСУДАРСТВЕННУЮ ПОМОЩЬ')), (179,2,UPPER('ИНВАЛИДЫ 1 ГРУППЫ, ПОЛУЧАЮЩИЕ СОЦИАЛЬНУЮ ПЕНСИЮ ИЛИ ГОСУДАРСТВЕННУЮ ПОМОЩЬ')), (180,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('206')),
-(181,1,UPPER('НЕРАБОТАЮЩИЕ РОДИТЕЛИ, ОСУЩЕСТВЛЯЮЩИЕ УХОД ЗА РЕБЕНКОМ-ИНВАЛИДОМ ДО 18 ЛЕТ')), (181,2,UPPER('НЕРАБОТАЮЩИЕ РОДИТЕЛИ, ОСУЩЕСТВЛЯЮЩИЕ УХОД ЗА РЕБЕНКОМ-ИНВАЛИДОМ ДО 18 ЛЕТ')), (182,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('207')),
-(183,1,UPPER('ИНВАЛИДЫ 1, 2 ГРУППЫ ПО ЗРЕНИЮ')), (183,2,UPPER('ИНВАЛИДЫ 1, 2 ГРУППЫ ПО ЗРЕНИЮ')), (184,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('208')),
-(185,1,UPPER('СЕМЬИ ДЕТЕЙ ДО 18 ЛЕТ, БОЛЬНЫХ ДЦП')), (185,2,UPPER('СЕМЬИ ДЕТЕЙ ДО 18 ЛЕТ, БОЛЬНЫХ ДЦП')), (186,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('209')),
-(187,1,UPPER('ГРАЖДАНЕ, РЕАБИЛИТИРОВАННЫЕ СОГЛАСНО')), (187,2,UPPER('ГРАЖДАНЕ, РЕАБИЛИТИРОВАННЫЕ СОГЛАСНО')), (188,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('210')),
-(189,1,UPPER('СЕМЬИ ПОГИБШИХ (РЯДОВОЙ СОСТАВ) ПРИ ПРОХОЖДЕНИИ СРОЧНОЙ ВОИНСКОЙ СЛУЖБЫ, ИСПОЛНЯВШИХ СВОЙ ДОЛГ В МИ')), (189,2,UPPER('СЕМЬИ ПОГИБШИХ (РЯДОВОЙ СОСТАВ) ПРИ ПРОХОЖДЕНИИ СРОЧНОЙ ВОИНСКОЙ СЛУЖБЫ, ИСПОЛНЯВШИХ СВОЙ ДОЛГ В МИ')), (190,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('211')),
-(191,1,UPPER('ПРИЕМНЫЕ СЕМЬИ')), (191,2,UPPER('ПРИЕМНЫЕ СЕМЬИ')), (192,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('212')),
-(193,1,UPPER('ДВОРНИКИ')), (193,2,UPPER('ДВОРНИКИ')), (194,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('300')),
-(195,1,UPPER('АВАРИЙНО-ДИСПЕТЧЕРСКАЯ СЛУЖБА')), (195,2,UPPER('АВАРИЙНО-ДИСПЕТЧЕРСКАЯ СЛУЖБА')), (196,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('301')),
-(197,1,UPPER('ПРИЕМНЫЕ СЕМЬИ')), (197,2,UPPER('ПРИЕМНЫЕ СЕМЬИ')), (198,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('303')),
-(199,1,UPPER('СОЦИАЛЬНЫЕ РАБОЧИЕ')), (199,2,UPPER('СОЦИАЛЬНЫЕ РАБОЧИЕ')), (200,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('304')),
-(201,1,UPPER('УХОД ЗА ИНВАЛИДОМ 1 ГРУППЫ ВОВ')), (201,2,UPPER('УХОД ЗА ИНВАЛИДОМ 1 ГРУППЫ ВОВ')), (202,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('305')),
-(203,1,UPPER('РАБОТНИКИ ХКП "ГОРЭЛЕКТРОТРАНС"')), (203,2,UPPER('РАБОТНИКИ ХКП "ГОРЭЛЕКТРОТРАНС"')), (204,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('306')),
-(205,1,UPPER('АФГАНИСТАН')), (205,2,UPPER('АФГАНИСТАН')), (206,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('633')),
-(207,1,UPPER('ВЕТЕРАН НАЛОГОВОЙ МИЛИЦИИ')), (207,2,UPPER('ВЕТЕРАН НАЛОГОВОЙ МИЛИЦИИ')), (208,(SELECT `id` FROM `locales` WHERE `system` = 1),UPPER('45'));
+INSERT INTO `privilege_string_value`(`id`, `locale_id`, `value`) VALUES
+(1,1,UPPER('УЧАСТНИК БОЕВЫХ ДЕЙСТВИЙ')), (1,2,UPPER('УЧАСТНИК БОЕВЫХ ДЕЙСТВИЙ')), (2,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('1')),
+(3,1,UPPER('УЧАСТНИК ВОЙНЫ')), (3,2,UPPER('УЧАСТНИК ВОЙНЫ')), (4,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('2')),
+(5,1,UPPER('ЧЛЕН СЕМЬИ ПОГИБШЕГО/УМЕРШЕГО ВЕТЕРАНА ВОЙНЫ')), (5,2,UPPER('ЧЛЕН СЕМЬИ ПОГИБШЕГО/УМЕРШЕГО ВЕТЕРАНА ВОЙНЫ')), (6,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('3')),
+(7,1,UPPER('ИНВАЛИД ВОЙНЫ ПЕРВОЙ ГРУППЫ')), (7,2,UPPER('ИНВАЛИД ВОЙНЫ ПЕРВОЙ ГРУППЫ')), (8,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('11')),
+(9,1,UPPER('ИНВАЛИД ВОЙНЫ ВТОРОЙ ГРУППЫ')), (9,2,UPPER('ИНВАЛИД ВОЙНЫ ВТОРОЙ ГРУППЫ')), (10,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('12')),
+(11,1,UPPER('ИНВАЛИД ВОЙНЫ ТРЕТЬЕЙ ГРУППЫ')), (11,2,UPPER('ИНВАЛИД ВОЙНЫ ТРЕТЬЕЙ ГРУППЫ')), (12,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('13')),
+(13,1,UPPER('РЕБЕНОК ВОЙНЫ')), (13,2,UPPER('РЕБЕНОК ВОЙНЫ')), (14,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('15')),
+(15,1,UPPER('ЛИЦО С ОСОБЫМИ ЗАСЛУГАМИ')), (15,2,UPPER('ЛИЦО С ОСОБЫМИ ЗАСЛУГАМИ')), (16,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('20')),
+(17,1,UPPER('РОДИТЕЛИ УМЕРШЕГО ЛИЦА С ОСОБЫМИ ЗАСЛУГАМИ')), (17,2,UPPER('РОДИТЕЛИ УМЕРШЕГО ЛИЦА С ОСОБЫМИ ЗАСЛУГАМИ')), (18,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('22')),
+(19,1,UPPER('ВДОВА/ВДОВЕЦ ЛИЦА С ОСОБЫМИ ЗАСЛУГАМИ')), (19,2,UPPER('ВДОВА/ВДОВЕЦ ЛИЦА С ОСОБЫМИ ЗАСЛУГАМИ')), (20,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('23')),
+(21,1,UPPER('ВДОВА/ВДОВЕЦ ЛИЦА С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (21,2,UPPER('ВДОВА/ВДОВЕЦ ЛИЦА С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (22,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('26')),
+(23,1,UPPER('ЛИЦО С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (23,2,UPPER('ЛИЦО С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (24,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('30')),
+(25,1,UPPER('РОДИТЕЛИ УМЕРШЕГО ЛИЦА С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (25,2,UPPER('РОДИТЕЛИ УМЕРШЕГО ЛИЦА С ОСОБЫМИ ТРУДОВЫМИ ЗАСЛУГАМИ')), (26,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('32')),
+(27,1,UPPER('ВЕТЕРАН ТРУДА')), (27,2,UPPER('ВЕТЕРАН ТРУДА')), (28,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('33')),
+(29,1,UPPER('ПЕНСИОНЕР ПО ВОЗРАСТУ')), (29,2,UPPER('ПЕНСИОНЕР ПО ВОЗРАСТУ')), (30,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('34')),
+(31,1,UPPER('МНОГОДЕТНЫЕ СЕМЬИ')), (31,2,UPPER('МНОГОДЕТНЫЕ СЕМЬИ')), (32,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('35')),
+(33,1,UPPER('ЧЛЕН  МНОГОДЕТНОЙ СЕМЬИ')), (33,2,UPPER('ЧЛЕН  МНОГОДЕТНОЙ СЕМЬИ')), (34,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('36')),
+(35,1,UPPER('ВЕТЕРАН СЛУЖБЫ ГРАЖДАНСКОЙ ЗИЩИТЫ')), (35,2,UPPER('ВЕТЕРАН СЛУЖБЫ ГРАЖДАНСКОЙ ЗИЩИТЫ')), (36,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('37')),
+(37,1,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ КРИМ.-ИСПОЛНИТЕЛЬНОЙ СЛУЖБЫ')), (37,2,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ КРИМ.-ИСПОЛНИТЕЛЬНОЙ СЛУЖБЫ')), (38,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('39')),
+(39,1,UPPER('СЕЛЬСКИЙ ПЕДАГОГ НА ПЕНСИИ')), (39,2,UPPER('СЕЛЬСКИЙ ПЕДАГОГ НА ПЕНСИИ')), (40,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('40')),
+(41,1,UPPER('СЕЛЬСКИЙ БИБЛИОТЕКАРЬ НА ПЕНСИИ')), (41,2,UPPER('СЕЛЬСКИЙ БИБЛИОТЕКАРЬ НА ПЕНСИИ')), (42,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('41')),
+(43,1,UPPER('СЕЛЬСКИЙ СПЕЦИАЛИСТ ПО ЗАЩИТЕ РАСТЕНИЙ НА ПЕНСИИ')), (43,2,UPPER('СЕЛЬСКИЙ СПЕЦИАЛИСТ ПО ЗАЩИТЕ РАСТЕНИЙ НА ПЕНСИИ')), (44,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('42')),
+(45,1,UPPER('СЕЛЬСКИЙ МЕДИК НА ПЕНСИИ')), (45,2,UPPER('СЕЛЬСКИЙ МЕДИК НА ПЕНСИИ')), (46,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('43')),
+(47,1,UPPER('СУДЬЯ В ОТСТАВКЕ')), (47,2,UPPER('СУДЬЯ В ОТСТАВКЕ')), (48,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('47')),
+(49,1,UPPER('СЛЕДОВАТЕЛЬ ПРОКУРАТУРЫ НА ПЕНСИИ')), (49,2,UPPER('СЛЕДОВАТЕЛЬ ПРОКУРАТУРЫ НА ПЕНСИИ')), (50,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('49')),
+(51,1,UPPER('НАЛОГОВЫЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (51,2,UPPER('НАЛОГОВЫЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (52,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('50')),
+(53,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО НАЛОГОВОГО МИЛИЦИОНЕРА')), (53,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО НАЛОГОВОГО МИЛИЦИОНЕРА')), (54,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('51')),
+(55,1,UPPER('СЕЛЬСКИЙ НАЛОГОВЫЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (55,2,UPPER('СЕЛЬСКИЙ НАЛОГОВЫЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (56,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('52')),
+(57,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ СЕЛЬСКОГО НАЛОГОВОГО МИЛИЦИОНЕРА')), (57,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ СЕЛЬСКОГО НАЛОГОВОГО МИЛИЦИОНЕРА')), (58,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('53')),
+(59,1,UPPER('ВОЕННОСЛУЖАЩИЙ СБУ НА ПЕНСИИ')), (59,2,UPPER('ВОЕННОСЛУЖАЩИЙ СБУ НА ПЕНСИИ')), (60,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('58')),
+(61,1,UPPER('ЛИЦО (ЧАЭС) - 1 КАТЕГОРИЯ')), (61,2,UPPER('ЛИЦО (ЧАЭС) - 1 КАТЕГОРИЯ')), (62,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('61')),
+(63,1,UPPER('ЛИЦО (ЧАЭС) - 2 КАТЕГОРИЯ - ЛИКВИДАТОР')), (63,2,UPPER('ЛИЦО (ЧАЭС) - 2 КАТЕГОРИЯ - ЛИКВИДАТОР')), (64,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('62')),
+(65,1,UPPER('ЛИЦО (ЧАЭС) - 2 КАТЕГОРИЯ - ПОТЕРПЕВШИЙ')), (65,2,UPPER('ЛИЦО (ЧАЭС) - 2 КАТЕГОРИЯ - ПОТЕРПЕВШИЙ')), (66,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('63')),
+(67,1,UPPER('ЛИЦО (ЧАЭС) - 3 КАТЕГОРИЯ')), (67,2,UPPER('ЛИЦО (ЧАЭС) - 3 КАТЕГОРИЯ')), (68,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('64')),
+(69,1,UPPER('ЛИЦО (ЧАЭС) - 4 КАТЕГОРИЯ')), (69,2,UPPER('ЛИЦО (ЧАЭС) - 4 КАТЕГОРИЯ')), (70,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('65')),
+(71,1,UPPER('ЖЕНА/МУЖ (ЧАЭС) УМЕРШЕГО ГРАЖДАНИНА')), (71,2,UPPER('ЖЕНА/МУЖ (ЧАЭС) УМЕРШЕГО ГРАЖДАНИНА')), (72,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('66')),
+(73,1,UPPER('РЕБЕНОК (ЧАЭС) УМЕРШЕГО ГРАЖДАНИНА')), (73,2,UPPER('РЕБЕНОК (ЧАЭС) УМЕРШЕГО ГРАЖДАНИНА')), (74,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('67')),
+(75,1,UPPER('РЕБЕНОК (ЧАЭС) ПОТЕРПЕВШЕГО')), (75,2,UPPER('РЕБЕНОК (ЧАЭС) ПОТЕРПЕВШЕГО')), (76,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('68')),
+(77,1,UPPER('РЕБЕНОК (ЧАЭС) - ИНВАЛИД')), (77,2,UPPER('РЕБЕНОК (ЧАЭС) - ИНВАЛИД')), (78,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('69')),
+(79,1,UPPER('ЛИЦО (ЧАЭС), РАБОТАВШЕЕ ЗА ПРЕДЕЛАМИ ЗОНЫ ОТЧУЖДЕНИЯ (ЛИКВИДАЦИЯ ПОСЛЕДСТВИЙ АВАРИИ)')), (79,2,UPPER('ЛИЦО (ЧАЭС), РАБОТАВШЕЕ ЗА ПРЕДЕЛАМИ ЗОНЫ ОТЧУЖДЕНИЯ (ЛИКВИДАЦИЯ ПОСЛЕДСТВИЙ АВАРИИ)')), (80,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('70')),
+(81,1,UPPER('СОТРУДНИК УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ НА ПЕНСИИ')), (81,2,UPPER('СОТРУДНИК УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ НА ПЕНСИИ')), (82,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('71')),
+(83,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СОТРУДНИКА УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ')), (83,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СОТРУДНИКА УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ')), (84,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('72')),
+(85,1,UPPER('СЕЛЬСКИЙ СОТРУДНИК УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ НА ПЕНСИИ')), (85,2,UPPER('СЕЛЬСКИЙ СОТРУДНИК УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ НА ПЕНСИИ')), (86,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('73')),
+(87,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СЕЛЬСКОГО СОТРУДНИКА УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ')), (87,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СЕЛЬСКОГО СОТРУДНИКА УГОЛОВНО-ИСПОЛНИТЕЛЬНОЙ СИСТЕМЫ')), (88,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('74')),
+(89,1,UPPER('МИЛИЦИОНЕР НА ПЕНСИИ')), (89,2,UPPER('МИЛИЦИОНЕР НА ПЕНСИИ')), (90,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('75')),
+(91,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО МИЛИЦИОНЕРА')), (91,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО МИЛИЦИОНЕРА')), (92,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('76')),
+(93,1,UPPER('СЕЛЬСКИЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (93,2,UPPER('СЕЛЬСКИЙ МИЛИЦИОНЕР НА ПЕНСИИ')), (94,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('77')),
+(95,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СЕЛЬСКОГО МИЛИЦИОНЕРА')), (95,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО СЕЛЬСКОГО МИЛИЦИОНЕРА')), (96,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('78')),
+(97,1,UPPER('ВЕТЕРАН ВОИНСКОЙ СЛУЖБЫ')), (97,2,UPPER('ВЕТЕРАН ВОИНСКОЙ СЛУЖБЫ')), (98,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('80')),
+(99,1,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ВОИНСКОЙ СЛУЖБЫ')), (99,2,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ВОИНСКОЙ СЛУЖБЫ')), (100,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('81')),
+(101,1,UPPER('ЧЛЕН СЕМЬИ ВОЕННОСЛУЖАЩЕГО, ПОГИБШЕГО, УМЕРШЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ ИЛИ СТАВШЕГО ИНВАЛИДОМ')), (101,2,UPPER('ЧЛЕН СЕМЬИ ВОЕННОСЛУЖАЩЕГО, ПОГИБШЕГО, УМЕРШЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ ИЛИ СТАВШЕГО ИНВАЛИДОМ')), (102,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('83')),
+(103,1,UPPER('РОДИТЕЛИ ВОЕННОСЛУЖАЩЕГО, СТАВШЕГО ИНВАЛИДОМ')), (103,2,UPPER('РОДИТЕЛИ ВОЕННОСЛУЖАЩЕГО, СТАВШЕГО ИНВАЛИДОМ')), (104,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('84')),
+(105,1,UPPER('ВДОВА/ВДОВЕЦ ВОЕННОСЛУЖАЩЕГО И ЕГО ДЕТИ')), (105,2,UPPER('ВДОВА/ВДОВЕЦ ВОЕННОСЛУЖАЩЕГО И ЕГО ДЕТИ')), (106,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('85')),
+(107,1,UPPER('ЖЕНА/МУЖ ВОЕННОСЛУЖАЩЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ')), (107,2,UPPER('ЖЕНА/МУЖ ВОЕННОСЛУЖАЩЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ')), (108,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('86')),
+(109,1,UPPER('РОДИТЕЛИ ПОГИБШЕГО ВОЕННОСЛУЖАЩЕГО')), (109,2,UPPER('РОДИТЕЛИ ПОГИБШЕГО ВОЕННОСЛУЖАЩЕГО')), (110,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('87')),
+(111,1,UPPER('ИНВАЛИД ВОИНСКОЙ СЛУЖБЫ')), (111,2,UPPER('ИНВАЛИД ВОИНСКОЙ СЛУЖБЫ')), (112,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('88')),
+(113,1,UPPER('ВЕТЕРАН ОРГАНОВ ВНУТРЕННИХ ДЕЛ')), (113,2,UPPER('ВЕТЕРАН ОРГАНОВ ВНУТРЕННИХ ДЕЛ')), (114,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('90')),
+(115,1,UPPER('ВДОВА/ВДОВЕЦ, ВЕТЕРАНА ОРГАНОВ ВНУТРЕННИХ ДЕЛ')), (115,2,UPPER('ВДОВА/ВДОВЕЦ, ВЕТЕРАНА ОРГАНОВ ВНУТРЕННИХ ДЕЛ')), (116,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('91')),
+(117,1,UPPER('ПОЖАРНЫЙ НА ПЕНСИИ')), (117,2,UPPER('ПОЖАРНЫЙ НА ПЕНСИИ')), (118,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('95')),
+(119,1,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО ПОЖАРНОГО')), (119,2,UPPER('НЕТРУДОСПОСОБНЫЙ ЧЛЕН СЕМЬИ ПОГИБШЕГО ПОЖАРНОГО')), (120,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('96')),
+(121,1,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ ПОЖАРНОЙ ОХРАНЫ')), (121,2,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ ПОЖАРНОЙ ОХРАНЫ')),(122,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('98')),
+(123,1,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ГОСУДАРСТВЕННОЙ ПОЖАРНОЙ ОХРАНЫ')), (123,2,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ГОСУДАРСТВЕННОЙ ПОЖАРНОЙ ОХРАНЫ')), (124,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('99')),
+(125,1,UPPER('РЕАБИЛИТИРОВАННЫЕ, СТАВШИЕ ИНВАЛИДАМИ ВСЛЕДСТВИИ РЕПРЕССИЙ, ЛИБО ЯВЛЯЮЩИЕСЯ ПЕНСИОНЕРАМИ, ИМЕЮЩИМИ П')), (125,2,UPPER('РЕАБИЛИТИРОВАННЫЕ, СТАВШИЕ ИНВАЛИДАМИ ВСЛЕДСТВИИ РЕПРЕССИЙ, ЛИБО ЯВЛЯЮЩИЕСЯ ПЕНСИОНЕРАМИ, ИМЕЮЩИМИ П')), (126,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('100')),
+(127,1,UPPER('РЕБЕНОК-ИНВАЛИД')), (127,2,UPPER('РЕБЕНОК-ИНВАЛИД')), (128,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('110')),
+(129,1,UPPER('ИНВАЛИД 1 ГРУППЫ ПО ЗРЕНИЮ ИЛИ С ВРАЖДЕННЫМ ОРА')), (129,2,UPPER('ИНВАЛИД 1 ГРУППЫ ПО ЗРЕНИЮ ИЛИ С ВРАЖДЕННЫМ ОРА')), (130,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('111')),
+(131,1,UPPER('ИНВАЛИД 2 ГРУППЫ ПО ЗРЕНИЮ ИЛИ С ВРАЖДЕННЫМ ОРА')), (131,2,UPPER('ИНВАЛИД 2 ГРУППЫ ПО ЗРЕНИЮ ИЛИ С ВРАЖДЕННЫМ ОРА')), (132,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('112')),
+(133,1,UPPER('ИНВАЛИД 1 ГРУППЫ, КРОМЕ ИНВАЛИДОВ ПО ЗРЕНИЮ ИЛИ С ВРОЖДЕННЫМ ОРА')), (133,2,UPPER('ИНВАЛИД 1 ГРУППЫ, КРОМЕ ИНВАЛИДОВ ПО ЗРЕНИЮ ИЛИ С ВРОЖДЕННЫМ ОРА')), (134,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('113')),
+(135,1,UPPER('ИНВАЛИД 2 ГРУППЫ, КРОМЕ ИНВАЛИДОВ ПО ЗРЕНИЮ ИЛИ С ВРОЖДЕННЫМ ОРА')), (135,2,UPPER('ИНВАЛИД 2 ГРУППЫ, КРОМЕ ИНВАЛИДОВ ПО ЗРЕНИЮ ИЛИ С ВРОЖДЕННЫМ ОРА')), (136,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('114')),
+(137,1,UPPER('ИНВАЛИД 3 ГРУППЫ')), (137,2,UPPER('ИНВАЛИД 3 ГРУППЫ')), (138,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('115')),
+(139,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(1)')), (139,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(1)')), (140,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('120')),
+(141,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 1 ГРУППЫ')), (141,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 1 ГРУППЫ')), (142,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('121')),
+(143,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 2 ГРУППЫ')), (143,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 2 ГРУППЫ')), (144,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('122')),
+(145,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 3 ГРУППЫ')), (145,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(2) - ИНВАЛИД 3 ГРУППЫ')), (146,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('123')),
+(147,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(3)')), (147,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(3)')), (148,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('124')),
+(149,1,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(4)')), (149,2,UPPER('ЖЕРТВА НАЦИСТСКИХ ПРЕСЛЕДОВАНИЙ, СТ. 6(4)')), (150,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('125')),
+(151,1,UPPER('ГОРНЯКИ - НЕТРУДОСПОСОБНЫЕ РАБОТНИКИ')), (151,2,UPPER('ГОРНЯКИ - НЕТРУДОСПОСОБНЫЕ РАБОТНИКИ')), (152,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('126')),
+(153,1,UPPER('ГОРНЯКИ - НЕРАБОТАЮЩИЕ ПЕНСИОНЕРЫ')), (153,2,UPPER('ГОРНЯКИ - НЕРАБОТАЮЩИЕ ПЕНСИОНЕРЫ')), (154,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('127')),
+(155,1,UPPER('ГОРНЯКИ - ИНВАЛИДЫ')), (155,2,UPPER('ГОРНЯКИ - ИНВАЛИДЫ')), (156,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('128')),
+(157,1,UPPER('ГОРНЯКИ - СЕМЬИ ПОГИБШИХ ТРУЖЕНИКОВ')), (157,2,UPPER('ГОРНЯКИ - СЕМЬИ ПОГИБШИХ ТРУЖЕНИКОВ')), (158,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('129')),
+(159,1,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (159,2,UPPER('ВЕТЕРАН ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (160,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('130')),
+(161,1,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (161,2,UPPER('ВДОВА/ВДОВЕЦ ВЕТЕРАНА ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (162,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('131')),
+(163,1,UPPER('РОДИТЕЛИ И ЧЛЕНЫ СЕМЬИ ПОГИБШЕГО/УМЕРШЕГО СОТРУДНИКА ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (163,2,UPPER('РОДИТЕЛИ И ЧЛЕНЫ СЕМЬИ ПОГИБШЕГО/УМЕРШЕГО СОТРУДНИКА ГОСУДАРСТВЕННОЙ СЛУЖБЫ СПЕЦ.СВЯЗИ')), (164,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('132')),
+(165,1,UPPER('РОДИТЕЛИ И ЧЛЕНЫ СЕМЬИ СОТРУДНИКА ГРАЖДАНСКОЙ ОБОРОНЫ, ПОГИБШЕГО, УМЕРШЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ ИЛИ')), (165,2,UPPER('РОДИТЕЛИ И ЧЛЕНЫ СЕМЬИ СОТРУДНИКА ГРАЖДАНСКОЙ ОБОРОНЫ, ПОГИБШЕГО, УМЕРШЕГО, ПРОПАВШЕГО БЕЗ ВЕСТИ ИЛИ')), (166,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('135')),
+(167,1,UPPER('МАТЕРИ-ГЕРОИНИ')), (167,2,UPPER('МАТЕРИ-ГЕРОИНИ')), (168,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('200')),
+(169,1,UPPER('ДЕТИ-ИНВАЛИДЫ, ПРИКОВАННЫЕ К КРОВАТИ')), (169,2,UPPER('ДЕТИ-ИНВАЛИДЫ, ПРИКОВАННЫЕ К КРОВАТИ')), (170,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('201')),
+(171,1,UPPER('ДЕТИ-ИНВАЛИДЫ ДО 18 ЛЕТ, ГДЕ ОБА РОДИТЕЛИ ИНВАЛИДЫ')), (171,2,UPPER('ДЕТИ-ИНВАЛИДЫ ДО 18 ЛЕТ, ГДЕ ОБА РОДИТЕЛИ ИНВАЛИДЫ')), (172,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('202')),
+(173,1,UPPER('МНОГОДЕТНЫЕ СЕМЬИ (3 И БОЛЕЕ ДЕТЕЙ ДО 18 ЛЕТ)')), (173,2,UPPER('МНОГОДЕТНЫЕ СЕМЬИ (3 И БОЛЕЕ ДЕТЕЙ ДО 18 ЛЕТ)')), (174,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('203')),
+(175,1,UPPER('МАТЕРИ-ОДИНОЧКИ (2 И БОЛЕЕ ДЕТЕЙ ДО 18 ЛЕТ)')), (175,2,UPPER('МАТЕРИ-ОДИНОЧКИ (2 И БОЛЕЕ ДЕТЕЙ ДО 18 ЛЕТ)')), (176,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('204')),
+(177,1,UPPER('ДЕТИ-ИНВАЛИДЫ С ОНКОЛОГИЧЕСКИМИ ЗАБОЛЕВАНИЯМИ ДО 18 ЛЕТ')), (177,2,UPPER('ДЕТИ-ИНВАЛИДЫ С ОНКОЛОГИЧЕСКИМИ ЗАБОЛЕВАНИЯМИ ДО 18 ЛЕТ')), (178,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('205')),
+(179,1,UPPER('ИНВАЛИДЫ 1 ГРУППЫ, ПОЛУЧАЮЩИЕ СОЦИАЛЬНУЮ ПЕНСИЮ ИЛИ ГОСУДАРСТВЕННУЮ ПОМОЩЬ')), (179,2,UPPER('ИНВАЛИДЫ 1 ГРУППЫ, ПОЛУЧАЮЩИЕ СОЦИАЛЬНУЮ ПЕНСИЮ ИЛИ ГОСУДАРСТВЕННУЮ ПОМОЩЬ')), (180,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('206')),
+(181,1,UPPER('НЕРАБОТАЮЩИЕ РОДИТЕЛИ, ОСУЩЕСТВЛЯЮЩИЕ УХОД ЗА РЕБЕНКОМ-ИНВАЛИДОМ ДО 18 ЛЕТ')), (181,2,UPPER('НЕРАБОТАЮЩИЕ РОДИТЕЛИ, ОСУЩЕСТВЛЯЮЩИЕ УХОД ЗА РЕБЕНКОМ-ИНВАЛИДОМ ДО 18 ЛЕТ')), (182,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('207')),
+(183,1,UPPER('ИНВАЛИДЫ 1, 2 ГРУППЫ ПО ЗРЕНИЮ')), (183,2,UPPER('ИНВАЛИДЫ 1, 2 ГРУППЫ ПО ЗРЕНИЮ')), (184,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('208')),
+(185,1,UPPER('СЕМЬИ ДЕТЕЙ ДО 18 ЛЕТ, БОЛЬНЫХ ДЦП')), (185,2,UPPER('СЕМЬИ ДЕТЕЙ ДО 18 ЛЕТ, БОЛЬНЫХ ДЦП')), (186,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('209')),
+(187,1,UPPER('ГРАЖДАНЕ, РЕАБИЛИТИРОВАННЫЕ СОГЛАСНО')), (187,2,UPPER('ГРАЖДАНЕ, РЕАБИЛИТИРОВАННЫЕ СОГЛАСНО')), (188,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('210')),
+(189,1,UPPER('СЕМЬИ ПОГИБШИХ (РЯДОВОЙ СОСТАВ) ПРИ ПРОХОЖДЕНИИ СРОЧНОЙ ВОИНСКОЙ СЛУЖБЫ, ИСПОЛНЯВШИХ СВОЙ ДОЛГ В МИ')), (189,2,UPPER('СЕМЬИ ПОГИБШИХ (РЯДОВОЙ СОСТАВ) ПРИ ПРОХОЖДЕНИИ СРОЧНОЙ ВОИНСКОЙ СЛУЖБЫ, ИСПОЛНЯВШИХ СВОЙ ДОЛГ В МИ')), (190,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('211')),
+(191,1,UPPER('ПРИЕМНЫЕ СЕМЬИ')), (191,2,UPPER('ПРИЕМНЫЕ СЕМЬИ')), (192,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('212')),
+(193,1,UPPER('ДВОРНИКИ')), (193,2,UPPER('ДВОРНИКИ')), (194,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('300')),
+(195,1,UPPER('АВАРИЙНО-ДИСПЕТЧЕРСКАЯ СЛУЖБА')), (195,2,UPPER('АВАРИЙНО-ДИСПЕТЧЕРСКАЯ СЛУЖБА')), (196,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('301')),
+(197,1,UPPER('ПРИЕМНЫЕ СЕМЬИ')), (197,2,UPPER('ПРИЕМНЫЕ СЕМЬИ')), (198,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('303')),
+(199,1,UPPER('СОЦИАЛЬНЫЕ РАБОЧИЕ')), (199,2,UPPER('СОЦИАЛЬНЫЕ РАБОЧИЕ')), (200,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('304')),
+(201,1,UPPER('УХОД ЗА ИНВАЛИДОМ 1 ГРУППЫ ВОВ')), (201,2,UPPER('УХОД ЗА ИНВАЛИДОМ 1 ГРУППЫ ВОВ')), (202,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('305')),
+(203,1,UPPER('РАБОТНИКИ ХКП "ГОРЭЛЕКТРОТРАНС"')), (203,2,UPPER('РАБОТНИКИ ХКП "ГОРЭЛЕКТРОТРАНС"')), (204,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('306')),
+(205,1,UPPER('АФГАНИСТАН')), (205,2,UPPER('АФГАНИСТАН')), (206,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('633')),
+(207,1,UPPER('ВЕТЕРАН НАЛОГОВОЙ МИЛИЦИИ')), (207,2,UPPER('ВЕТЕРАН НАЛОГОВОЙ МИЛИЦИИ')), (208,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('45'));
 INSERT INTO `privilege_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
 (1,1,1200,1,1200),(1,1,1201,2,1201),
 (1,2,1200,3,1200),(1,2,1201,4,1201),
@@ -457,8 +457,8 @@ INSERT INTO `type_description`(`code`, `name`) VALUES
 
 -- Itself organization
 INSERT INTO `organization`(`object_id`) VALUES (0);
-INSERT INTO `organization_string_culture`(`id`, `locale_id`, `value`) VALUES
-(1, 1, UPPER('Модуль №1')), (1,2,UPPER('Модуль №1')), (2, (SELECT `id` FROM `locales` WHERE `system` = 1), UPPER('0'));
+INSERT INTO `organization_string_value`(`id`, `locale_id`, `value`) VALUES
+(1, 1, UPPER('Модуль №1')), (1,2,UPPER('Модуль №1')), (2, (SELECT `id` FROM `locale` WHERE `system` = 1), UPPER('0'));
 INSERT INTO `organization_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
 (1,0,900,1,900), (1,0,901,2,901);
 

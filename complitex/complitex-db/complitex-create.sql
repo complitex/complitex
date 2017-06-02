@@ -1,7 +1,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 
-DROP TABLE IF EXISTS `locales`;
-CREATE TABLE `locales` (
+DROP TABLE IF EXISTS `locale`;
+CREATE TABLE `locale` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор локали',
   `locale` VARCHAR(2) NOT NULL COMMENT 'Код локали',
   `system` TINYINT(1) NOT NULL default 0 COMMENT 'Является ли локаль системной',
