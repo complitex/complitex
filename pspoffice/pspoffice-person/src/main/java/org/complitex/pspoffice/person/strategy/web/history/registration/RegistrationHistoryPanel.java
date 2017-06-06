@@ -25,8 +25,8 @@ import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Entity;
 import org.complitex.common.service.IUserProfileBean;
-import org.complitex.common.strategy.StringCultureBean;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.strategy.StringValueBean;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.css.CssAttributeBehavior;
@@ -66,7 +66,7 @@ final class RegistrationHistoryPanel extends Panel {
     @EJB
     private PersonStrategy personStrategy;
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
     @EJB
     private RegistrationTypeStrategy registrationTypeStrategy;
     @EJB
@@ -293,7 +293,7 @@ final class RegistrationHistoryPanel extends Panel {
         Attribute attribute = registration.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setStringCultures(StringCultures.newStringCultures());
+            attribute.setStringValues(StringValueUtil.newStringValues());
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }

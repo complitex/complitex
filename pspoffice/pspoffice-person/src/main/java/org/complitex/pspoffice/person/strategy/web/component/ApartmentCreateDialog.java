@@ -9,7 +9,7 @@ import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.apartment.web.edit.ApartmentEdit;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Log;
-import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.DateUtil;
@@ -52,9 +52,9 @@ public abstract class ApartmentCreateDialog extends AbstractAddressCreateDialog 
     }
 
     @Override
-    protected DomainObject initObject(List<StringCulture> number) {
+    protected DomainObject initObject(List<StringValue> number) {
         DomainObject apartment = apartmentStrategy.newInstance();
-        apartment.getAttribute(ApartmentStrategy.NAME).setStringCultures(number);
+        apartment.getAttribute(ApartmentStrategy.NAME).setStringValues(number);
         apartment.setParentEntityId(ApartmentStrategy.PARENT_ENTITY_ID);
         apartment.setParentId(getParentObject().getObjectId());
         return apartment;

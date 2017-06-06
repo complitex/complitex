@@ -8,7 +8,7 @@
 
         join `room_attribute` num on (num.`object_id` = a.`object_id` and num.`status` = 'ACTIVE'
         and num.`attribute_type_id` = 200)
-        join `room_string_culture` num_sc on (num_sc.`id` = num.`value_id`)
+        join `room_string_value` num_sc on (num_sc.`id` = num.`value_id`)
 
         where a.`status` = 'ACTIVE' and num_sc.`value` = #{number}
         <choose>

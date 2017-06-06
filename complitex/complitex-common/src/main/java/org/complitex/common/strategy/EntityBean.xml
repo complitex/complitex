@@ -6,7 +6,7 @@
 
         <result column="entity_table" property="table"/>
 
-        <collection property="names" ofType="StringCulture" column="entity_name_id" select="findNames"/>
+        <collection property="names" ofType="StringValue" column="entity_name_id" select="findNames"/>
 
         <collection property="attributeTypes" ofType="org.complitex.common.entity.AttributeType">
             <id column="attribute_type_id" property="id"/>
@@ -45,8 +45,8 @@
     </select>
 
     <select id="findNames" parameterType="long"
-            resultMap="org.complitex.common.strategy.DomainObjectStrategy.stringCultureResultMap">
-        SELECT sc.* FROM `string_culture` sc WHERE sc.`id` = #{value}
+            resultMap="org.complitex.common.strategy.DomainObjectStrategy.stringValueResultMap">
+        SELECT sc.* FROM `string_value` sc WHERE sc.`id` = #{value}
     </select>
 
     <insert id="insertAttributeType" useGeneratedKeys="true" keyProperty="id"

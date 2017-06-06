@@ -16,7 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.web.component.RangeNumbersPanel;
 import org.complitex.common.web.component.RangeNumbersPanel.NumbersList;
 import org.odlabs.wiquery.core.javascript.JsStatement;
@@ -137,7 +137,7 @@ public abstract class AbstractAddressCreateDialog extends Panel {
                 try {
                     if (rangeNumbersPanel.validate()) {
                         final String numbersAsString = numbersList.asString();
-                        final List<List<StringCulture>> numbers = numbersList.getNumbers();
+                        final List<List<StringValue>> numbers = numbersList.getNumbers();
 
                         if (numbers.size() == 1) {
                             DomainObject object = initObject(numbers.get(0));
@@ -152,7 +152,7 @@ public abstract class AbstractAddressCreateDialog extends Panel {
                         } else {
                             beforeBulkSave(numbersAsString);
                             boolean bulkOperationSuccess = true;
-                            for (List<StringCulture> number : numbers) {
+                            for (List<StringValue> number : numbers) {
                                 DomainObject object = initObject(number);
                                 object.setSubjectIds(subjectIds);
                                 if (AbstractAddressCreateDialog.this.validate(object)) {
@@ -231,7 +231,7 @@ public abstract class AbstractAddressCreateDialog extends Panel {
         return getTitle();
     }
 
-    protected abstract DomainObject initObject(List<StringCulture> number);
+    protected abstract DomainObject initObject(List<StringValue> number);
 
     protected abstract boolean validate(DomainObject object);
 

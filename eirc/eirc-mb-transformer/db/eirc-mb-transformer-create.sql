@@ -7,8 +7,8 @@ CREATE TABLE `sequence`(
   PRIMARY KEY (`sequence_name`)
 )ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Последовательность генерации идентификаторов объектов';
 
-DROP TABLE IF EXISTS `string_culture`;
-CREATE TABLE `string_culture` (
+DROP TABLE IF EXISTS `string_value`;
+CREATE TABLE `string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -17,7 +17,7 @@ CREATE TABLE `string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`, `locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация';
 
 DROP TABLE IF EXISTS `entity`;
@@ -30,7 +30,7 @@ CREATE TABLE `entity` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `unique_entity_table` (`entity_table`),
   KEY `key_entity_name_id` (`entity_name_id`),
-  CONSTRAINT `fk_entity__string_culture` FOREIGN KEY (`entity_name_id`) REFERENCES `string_culture` (`id`)
+  CONSTRAINT `fk_entity__string_value` FOREIGN KEY (`entity_name_id`) REFERENCES `string_value` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Сущность';
 
 DROP TABLE IF EXISTS `entity_attribute_type`;
@@ -47,7 +47,7 @@ CREATE TABLE `entity_attribute_type` (
   KEY `key_entity_id` (`entity_id`),
   KEY `key_attribute_type_name_id` (`attribute_type_name_id`),
   CONSTRAINT `fk_entity_attribute_type__entity` FOREIGN KEY (`entity_id`) REFERENCES `entity` (`id`),
-  CONSTRAINT `fk_entity_attribute_type__string_culture` FOREIGN KEY (`attribute_type_name_id`) REFERENCES `string_culture` (`id`)
+  CONSTRAINT `fk_entity_attribute_type__string_value` FOREIGN KEY (`attribute_type_name_id`) REFERENCES `string_value` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Тип атрибута сущности';
 
 DROP TABLE IF EXISTS `entity_attribute_value_type`;
@@ -100,7 +100,7 @@ CREATE TABLE `organization_type_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 2300 - НАИМЕНОВАНИЕ ТИПА ОРГАНИЗАЦИИ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 2300 - STRING_CULTURE',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 2300 - STRING_VALUE',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -120,9 +120,9 @@ CREATE TABLE `organization_type_attribute` (
   REFERENCES `entity_attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа организации';
 
-DROP TABLE IF EXISTS `organization_type_string_culture`;
+DROP TABLE IF EXISTS `organization_type_string_value`;
 
-CREATE TABLE `organization_type_string_culture` (
+CREATE TABLE `organization_type_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT  COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -131,7 +131,7 @@ CREATE TABLE `organization_type_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_organization_type_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_organization_type_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация атрибутов типа организации';
 
 -- ------------------------------
@@ -171,7 +171,7 @@ CREATE TABLE `organization_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 900 - НАЗВАНИЕ, 901 - УНИКАЛЬНЫЙ КОД, 902 - РАЙОН, 903 - ПРИНАДЛЕЖИТ, 904  - ТИП ОРГАНИЗАЦИИ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 900 - STRING_CULTURE, 901 - STRING, 902 - district, 903 - organization, 904 - organization_type',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута: 900 - STRING_VALUE, 901 - STRING, 902 - district, 903 - organization, 904 - organization_type',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
@@ -191,9 +191,9 @@ CREATE TABLE `organization_attribute` (
   REFERENCES `entity_attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты организации';
 
-DROP TABLE IF EXISTS `organization_string_culture`;
+DROP TABLE IF EXISTS `organization_string_value`;
 
-CREATE TABLE `organization_string_culture` (
+CREATE TABLE `organization_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT  COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -202,7 +202,7 @@ CREATE TABLE `organization_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_organization_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_organization_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация атрибутов организации';
 
 
@@ -263,9 +263,9 @@ CREATE TABLE `user_info_attribute` (
   REFERENCES `entity_attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты информации о пользователе';
 
-DROP TABLE IF EXISTS `user_info_string_culture`;
+DROP TABLE IF EXISTS `user_info_string_value`;
 
-CREATE TABLE `user_info_string_culture` (
+CREATE TABLE `user_info_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT  COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -274,7 +274,7 @@ CREATE TABLE `user_info_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_user_info_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_user_info_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация атрибутов информации о пользователе';
 
 

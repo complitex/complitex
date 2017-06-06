@@ -2,10 +2,10 @@ package ru.flexpay.eirc.service_provider_account.strategy;
 
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.*;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.Numbers;
-import org.complitex.common.util.StringCultures;
 import org.complitex.common.util.StringUtil;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute;
@@ -40,7 +40,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     public static final long TO_CLOSE = 6006L;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @Override
     public Long getObjectId(String externalId) {
@@ -102,10 +102,10 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
                         if (SimpleTypes.isSimpleType(attributeValueType)) {
                             SimpleTypes simpleType = SimpleTypes.valueOf(attributeValueType.toUpperCase());
                             switch (simpleType) {
-                                case STRING_CULTURE: {
+                                case STRING_VALUE: {
                                     boolean valueChanged = false;
-                                    for (StringCulture oldString : oldAttr.getStringCultures()) {
-                                        for (StringCulture newString : newAttr.getStringCultures()) {
+                                    for (StringValue oldString : oldAttr.getStringValues()) {
+                                        for (StringValue newString : newAttr.getStringValues()) {
                                             //compare strings
                                             if (oldString.getLocaleId().equals(newString.getLocaleId())) {
                                                 if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
@@ -129,8 +129,8 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
                                 case MASKED_DATE:
                                 case DOUBLE:
                                 case INTEGER: {
-                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getStringCultures()).getValue();
-                                    String newString = StringCultures.getSystemStringCulture(newAttr.getStringCultures()).getValue();
+                                    String oldString = StringValueUtil.getSystemStringValue(oldAttr.getStringValues()).getValue();
+                                    String newString = StringValueUtil.getSystemStringValue(newAttr.getStringValues()).getValue();
                                     if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }
@@ -139,8 +139,8 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
 
                                 case BIG_STRING:
                                 case STRING: {
-                                    String oldString = StringCultures.getSystemStringCulture(oldAttr.getStringCultures()).getValue();
-                                    String newString = StringCultures.getSystemStringCulture(newAttr.getStringCultures()).getValue();
+                                    String oldString = StringValueUtil.getSystemStringValue(oldAttr.getStringValues()).getValue();
+                                    String newString = StringValueUtil.getSystemStringValue(newAttr.getStringValues()).getValue();
                                     if (!Strings.isEqual(oldString, newString)) {
                                         needToUpdateAttribute = true;
                                     }

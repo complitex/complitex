@@ -1,7 +1,7 @@
 package org.complitex.common.entity;
 
 import org.complitex.common.util.Locales;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,7 +20,7 @@ public class Attribute implements Serializable {
 
     private StatusType status = StatusType.ACTIVE;
 
-    private List<StringCulture> stringCultures;
+    private List<StringValue> stringValues;
 
     public Attribute() {
     }
@@ -32,9 +32,9 @@ public class Attribute implements Serializable {
         this.valueTypeId = attributeTypeId;
     }
 
-    public StringCulture getStringCulture(Long localeId){
-        if (stringCultures != null){
-            for (StringCulture sc: stringCultures){
+    public StringValue getStringValue(Long localeId){
+        if (stringValues != null){
+            for (StringValue sc: stringValues){
                 if (sc.getLocaleId().equals(localeId)){
                     return sc;
                 }
@@ -45,23 +45,23 @@ public class Attribute implements Serializable {
     }
 
     public String getStringValue(){
-        StringCulture stringCulture = getStringCulture(Locales.getSystemLocaleId());
+        StringValue stringValue = getStringValue(Locales.getSystemLocaleId());
 
-        return stringCulture != null ? stringCulture.getValue() : null;
+        return stringValue != null ? stringValue.getValue() : null;
     }
 
     public String getStringValue(java.util.Locale locale){
-        StringCulture stringCulture = getStringCulture(Locales.getLocaleId(locale));
+        StringValue stringValue = getStringValue(Locales.getLocaleId(locale));
 
-        return stringCulture != null ? stringCulture.getValue() : null;
+        return stringValue != null ? stringValue.getValue() : null;
     }
 
     public void setStringValue(String value, long localeId){
-        if (stringCultures == null){
-            stringCultures = StringCultures.newStringCultures();
+        if (stringValues == null){
+            stringValues = StringValueUtil.newStringValues();
         }
 
-        stringCultures.stream()
+        stringValues.stream()
                 .filter(s -> s.getLocaleId().equals(localeId) || (s.isSystemLocale() && s.getValue() == null))
                 .forEach(s -> s.setValue(value));
     }
@@ -138,12 +138,12 @@ public class Attribute implements Serializable {
         this.valueId = valueId;
     }
 
-    public List<StringCulture> getStringCultures() {
-        return stringCultures;
+    public List<StringValue> getStringValues() {
+        return stringValues;
     }
 
-    public void setStringCultures(List<StringCulture> stringCultures) {
-        this.stringCultures = stringCultures;
+    public void setStringValues(List<StringValue> stringValues) {
+        this.stringValues = stringValues;
     }
 
     public Long getValueTypeId() {

@@ -7,9 +7,9 @@ import org.complitex.common.exception.ImportFileNotFoundException;
 import org.complitex.common.exception.ImportFileReadException;
 import org.complitex.common.service.AbstractImportService;
 import org.complitex.common.service.IImportListener;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.DateUtil;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class PrivilegeImportService extends AbstractImportService{
     private PrivilegeStrategy privilegeStrategy;
 
     @EJB
-    private StringCultureBean stringCultureBean;
+    private StringValueBean stringValueBean;
 
     /**
      * PRIVILEGE_ID	Код	Короткое наименование	Название привилегии
@@ -61,14 +61,14 @@ public class PrivilegeImportService extends AbstractImportService{
 
                 //Код
                 Attribute code = domainObject.getAttribute(PrivilegeStrategy.CODE);
-                StringCultures.getSystemStringCulture(code.getStringCultures()).setValue(line[1].trim());
+                StringValueUtil.getSystemStringValue(code.getStringValues()).setValue(line[1].trim());
 
                 //Короткое наименование
 
 
                 //Название привилегии
                 Attribute name = domainObject.getAttribute(PrivilegeStrategy.NAME);
-                StringCultures.getSystemStringCulture(name.getStringCultures()).setValue(line[3].trim());
+                StringValueUtil.getSystemStringValue(name.getStringValues()).setValue(line[3].trim());
 
                 privilegeStrategy.insert(domainObject, DateUtil.getCurrentDate());
 

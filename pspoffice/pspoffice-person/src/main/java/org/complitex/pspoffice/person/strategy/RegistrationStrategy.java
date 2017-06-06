@@ -14,9 +14,9 @@ import org.complitex.common.entity.AttributeValueType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.DomainObjectStrategy;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.DateUtil;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.pspoffice.ownerrelationship.strategy.OwnerRelationshipStrategy;
 import org.complitex.pspoffice.person.strategy.entity.ModificationType;
 import org.complitex.pspoffice.person.strategy.entity.Person;
@@ -77,7 +77,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
     @EJB
     private ApartmentCardStrategy apartmentCardStrategy;
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
     @EJB
     private SessionBean sessionBean;
 
@@ -155,7 +155,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
 
     private void setEditedByUserId(DomainObject registration) {
         long userId = sessionBean.getCurrentUserId();
-        StringCultures.getSystemStringCulture(registration.getAttribute(EDITED_BY_USER_ID).getStringCultures()).
+        StringValueUtil.getSystemStringValue(registration.getAttribute(EDITED_BY_USER_ID).getStringValues()).
                 setValue(String.valueOf(userId));
     }
 
@@ -209,7 +209,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
                             attribute.setAttributeId(1L);
 
                             if (isSimpleAttributeType(attributeType)) {
-                                attribute.setStringCultures(StringCultures.newStringCultures());
+                                attribute.setStringValues(StringValueUtil.newStringValues());
                             }
                             toAdd.add(attribute);
                         } else {
@@ -231,8 +231,8 @@ public class RegistrationStrategy extends DomainObjectStrategy {
         registration.removeAttribute(EXPLANATION);
 
         Attribute explAttribute = new Attribute();
-        explAttribute.setStringCultures(StringCultures.newStringCultures());
-        StringCultures.getSystemStringCulture(explAttribute.getStringCultures()).setValue(explanation);
+        explAttribute.setStringValues(StringValueUtil.newStringValues());
+        StringValueUtil.getSystemStringValue(explAttribute.getStringValues()).setValue(explanation);
         explAttribute.setAttributeTypeId(EXPLANATION);
         explAttribute.setValueTypeId(EXPLANATION);
         explAttribute.setAttributeId(1L);

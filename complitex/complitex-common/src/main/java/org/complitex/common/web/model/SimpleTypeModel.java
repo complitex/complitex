@@ -3,7 +3,7 @@ package org.complitex.common.web.model;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.converter.IConverter;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 
@@ -27,8 +27,8 @@ public class SimpleTypeModel<T extends Serializable> implements IModel<T> {
 
     @Override
     public T getObject() {
-        if (!isEmpty(getStringCulture().getValue())) {
-            return converter.toObject(getStringCulture().getValue());
+        if (!isEmpty(getStringValue().getValue())) {
+            return converter.toObject(getStringValue().getValue());
         }
         return null;
     }
@@ -36,12 +36,12 @@ public class SimpleTypeModel<T extends Serializable> implements IModel<T> {
     @Override
     public void setObject(T object) {
         if (object != null) {
-            getStringCulture().setValue(converter.toString(object));
+            getStringValue().setValue(converter.toString(object));
         }
     }
 
-    private StringCulture getStringCulture(){
-        return attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId());
+    private StringValue getStringValue(){
+        return attribute.getStringValue(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId());
     }
 
     @Override

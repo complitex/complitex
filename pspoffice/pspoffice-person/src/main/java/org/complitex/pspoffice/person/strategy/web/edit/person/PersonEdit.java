@@ -13,7 +13,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.web.component.back.BackInfo;
 import org.complitex.common.web.component.back.BackInfoManager;
@@ -39,7 +39,7 @@ public class PersonEdit extends FormTemplatePage {
     @EJB
     private PersonStrategy personStrategy;
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
     private Person oldPerson;
     private Person newPerson;
     private PersonDeathDialog personDeathDialog;

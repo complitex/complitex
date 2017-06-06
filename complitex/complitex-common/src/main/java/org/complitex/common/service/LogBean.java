@@ -4,8 +4,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.*;
 import org.complitex.common.strategy.IStrategy;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.Numbers;
 import org.complitex.common.util.StringUtil;
@@ -40,7 +40,7 @@ public class LogBean extends AbstractBean {
     private SessionContext sessionContext;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
     
     /**
      * Records user log in action. Should be invoked from within user log in code. 
@@ -222,8 +222,8 @@ public class LogBean extends AbstractBean {
                 String attributeValueType = attributeType.getAttributeValueType(na.getValueTypeId()).getValueType();
 
                 if (SimpleTypes.isSimpleType(attributeValueType)) {
-                    if (SimpleTypes.STRING_CULTURE.name().equals(attributeValueType.toUpperCase())) {
-                        for (StringCulture newString : na.getStringCultures()) {
+                    if (SimpleTypes.STRING_VALUE.name().equals(attributeValueType.toUpperCase())) {
+                        for (StringValue newString : na.getStringValues()) {
                             if (!Strings.isEqual(newString.getValue(), null)) {
                                 logChanges.add(new LogChange(na.getAttributeId(), null,
                                         strategy.getAttributeLabel(na, systemLocale), null, newString.getValue(),
@@ -253,10 +253,10 @@ public class LogBean extends AbstractBean {
                         String newAttributeValueType = newAttributeType.getAttributeValueType(na.getValueTypeId()).getValueType();
 
                         if (SimpleTypes.isSimpleType(newAttributeValueType) && SimpleTypes.isSimpleType(oldAttributeValueType)) {
-                            if (SimpleTypes.STRING_CULTURE.name().equals(newAttributeValueType.toUpperCase())
-                                    || SimpleTypes.STRING_CULTURE.name().equals(oldAttributeValueType.toUpperCase())) {
-                                for (StringCulture oldString : oa.getStringCultures()) {
-                                    for (StringCulture newString : na.getStringCultures()) {
+                            if (SimpleTypes.STRING_VALUE.name().equals(newAttributeValueType.toUpperCase())
+                                    || SimpleTypes.STRING_VALUE.name().equals(oldAttributeValueType.toUpperCase())) {
+                                for (StringValue oldString : oa.getStringValues()) {
+                                    for (StringValue newString : na.getStringValues()) {
                                         if (oldString.getLocaleId().equals(newString.getLocaleId())) {
                                             //compare strings
                                             if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
@@ -291,8 +291,8 @@ public class LogBean extends AbstractBean {
 
                 if (removed) {
                     if (SimpleTypes.isSimpleType(oldAttributeValueType)) {
-                        if (SimpleTypes.STRING_CULTURE.name().equals(oldAttributeValueType.toUpperCase())) {
-                            for (StringCulture oldString : oa.getStringCultures()) {
+                        if (SimpleTypes.STRING_VALUE.name().equals(oldAttributeValueType.toUpperCase())) {
+                            for (StringValue oldString : oa.getStringValues()) {
                                 if (!Strings.isEqual(oldString.getValue(), null)) {
                                     logChanges.add(new LogChange(oa.getAttributeId(), null,
                                             strategy.getAttributeLabel(oa, systemLocale),
@@ -328,8 +328,8 @@ public class LogBean extends AbstractBean {
 
                 if (added) {
                     if (SimpleTypes.isSimpleType(newAttributeValueType)) {
-                        if (SimpleTypes.STRING_CULTURE.name().equals(newAttributeValueType.toUpperCase())) {
-                            for (StringCulture newString : na.getStringCultures()) {
+                        if (SimpleTypes.STRING_VALUE.name().equals(newAttributeValueType.toUpperCase())) {
+                            for (StringValue newString : na.getStringValues()) {
                                 if (!Strings.isEqual(newString.getValue(), null)) {
                                     logChanges.add(new LogChange(na.getAttributeId(), null,
                                             strategy.getAttributeLabel(na, systemLocale),

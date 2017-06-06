@@ -24,8 +24,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
@@ -59,7 +59,7 @@ public final class PersonList extends ScrollListPage {
     private StringLocaleBean stringLocaleBean;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     private CollapsibleSearchPanel searchPanel;
 

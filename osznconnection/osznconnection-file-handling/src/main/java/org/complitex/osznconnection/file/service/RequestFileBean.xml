@@ -113,10 +113,10 @@
     <sql id="fromFilterSort">
         FROM `request_file` rf
             <if test="sortProperty == 'service_provider'">
-              left join `organization_string_culture` sc on (sc.`value` = SUBSTRING(rf.`name`, 1, LENGTH(rf.`name`)-8))
+              left join `organization_string_value` sc on (sc.`value` = SUBSTRING(rf.`name`, 1, LENGTH(rf.`name`)-8))
               left join `organization_attribute` oa on  sc.`id` = oa.`value_id`
               left join `organization_attribute` oa_name on oa_name.`object_id` = oa.`object_id`
-              left join `organization_string_culture` sc_name on sc_name.`id` = oa_name.`value_id`
+              left join `organization_string_value` sc_name on sc_name.`id` = oa_name.`value_id`
             </if>
 
             <include refid="org.complitex.osznconnection.file.service.RequestFileBean.requestFilesFilterWhere"/>

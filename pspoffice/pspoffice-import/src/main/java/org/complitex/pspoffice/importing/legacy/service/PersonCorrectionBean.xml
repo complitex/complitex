@@ -61,7 +61,7 @@
         <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
         JOIN `person_attribute` pid ON (pid.`object_id` = e.`object_id` AND pid.`attribute_type_id` = #{personIdAT}
             AND pid.`status` = 'ACTIVE')
-        JOIN `person_string_culture` pid_value ON (pid_value.`id` = pid.`value_id` AND pid_value.`locale_id` = sys.`id`)
+        JOIN `person_string_value` pid_value ON (pid_value.`id` = pid.`value_id` AND pid_value.`locale_id` = sys.`id`)
         
         AND (ln.`name` = #{lastName} OR sys_ln.`name` = #{lastName})
         AND (fn.`name` = #{firstName} OR sys_fn.`name` = #{firstName})

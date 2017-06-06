@@ -21,9 +21,9 @@ import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Entity;
 import org.complitex.common.service.IUserProfileBean;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.strategy.StringValueBean;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.css.CssAttributeBehavior;
@@ -69,7 +69,7 @@ final class PersonHistoryPanel extends Panel {
     private PersonNameBean personNameBean;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private DocumentStrategy documentStrategy;
@@ -369,7 +369,7 @@ final class PersonHistoryPanel extends Panel {
         Attribute attribute = person.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setStringCultures(StringCultures.newStringCultures());
+            attribute.setStringValues(StringValueUtil.newStringValues());
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }

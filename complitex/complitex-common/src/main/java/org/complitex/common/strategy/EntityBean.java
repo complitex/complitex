@@ -6,7 +6,7 @@ import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.AttributeValueType;
 import org.complitex.common.entity.Entity;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
@@ -20,7 +20,7 @@ public class EntityBean extends AbstractBean {
     private static final String NS = EntityBean.class.getName();
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private StrategyFactory strategyFactory;
@@ -80,7 +80,7 @@ public class EntityBean extends AbstractBean {
     public AttributeType newAttributeType() {
         AttributeType attributeType = new AttributeType();
 
-        attributeType.setAttributeNames(StringCultures.newStringCultures());
+        attributeType.setAttributeNames(StringValueUtil.newStringValues());
         attributeType.setAttributeValueTypes(new ArrayList<AttributeValueType>());
 
         return attributeType;

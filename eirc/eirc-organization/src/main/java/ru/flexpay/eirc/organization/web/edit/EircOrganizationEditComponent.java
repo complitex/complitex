@@ -6,9 +6,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.organization.strategy.web.edit.OrganizationEditComponent;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
@@ -28,7 +28,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
     private EircOrganizationStrategy organizationStrategy;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     private WebMarkupContainer emailContainer;
     private WebMarkupContainer serviceContainer;
@@ -87,7 +87,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
             attribute.setAttributeTypeId(attributeTypeId);
             attribute.setObjectId(organization.getObjectId());
             attribute.setAttributeId(1L);
-            attribute.setStringCultures(StringCultures.newStringCultures());
+            attribute.setStringValues(StringValueUtil.newStringValues());
         }
         final AttributeType attributeType =
                 organizationStrategy.getEntity().getAttributeType(attributeTypeId);
@@ -114,7 +114,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
             attribute.setAttributeTypeId(attributeTypeId);
             attribute.setObjectId(organization.getObjectId());
             attribute.setAttributeId(1L);
-            attribute.setStringCultures(StringCultures.newStringCultures());
+            attribute.setStringValues(StringValueUtil.newStringValues());
         }
         final AttributeType attributeType =
                 organizationStrategy.getEntity().getAttributeType(attributeTypeId);

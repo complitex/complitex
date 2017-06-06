@@ -80,3 +80,5 @@ ALTER TABLE `privilege_string_culture` RENAME `privilege_string_value`;
 ALTER TABLE `privilege_string_value` DROP FOREIGN KEY `fk_privilege_string_culture__locales`;
 ALTER TABLE `privilege_string_value` ADD CONSTRAINT `fk_privilege_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`);
 
+UPDATE `attribute_value_type` t SET  `attribute_value_type` = 'STRING_VALUE' where `attribute_value_type` = 'STRING_CULTURE';
+

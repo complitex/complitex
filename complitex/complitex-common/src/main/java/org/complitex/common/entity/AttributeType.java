@@ -1,6 +1,6 @@
 package org.complitex.common.entity;
 
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,7 +15,7 @@ public class AttributeType implements Serializable {
     private Date endDate;
     private Long attributeNameId;
 
-    private List<StringCulture> attributeNames;
+    private List<StringValue> attributeNames;
 
     private List<AttributeValueType> attributeValueTypes;
 
@@ -31,14 +31,14 @@ public class AttributeType implements Serializable {
     }
 
     public String getAttributeName(Locale locale){
-        return StringCultures.getValue(attributeNames, locale);
+        return StringValueUtil.getValue(attributeNames, locale);
     }
 
-    public List<StringCulture> getAttributeNames() {
+    public List<StringValue> getAttributeNames() {
         return attributeNames;
     }
 
-    public void setAttributeNames(List<StringCulture> attributeNames) {
+    public void setAttributeNames(List<StringValue> attributeNames) {
         this.attributeNames = attributeNames;
     }
 

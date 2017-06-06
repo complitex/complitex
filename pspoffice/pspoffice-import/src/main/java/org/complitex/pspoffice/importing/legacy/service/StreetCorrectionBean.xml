@@ -44,7 +44,7 @@
         SELECT DISTINCT e.`object_id` FROM `street_type` e 
             JOIN `street_type_attribute` namea ON (e.`object_id` = namea.`object_id` 
                     AND namea.`attribute_type_id` = #{streetTypeShortNameAT} AND namea.`status` = 'ACTIVE')
-            LEFT JOIN `street_type_string_culture` name ON (namea.`value_id` = name.`id` AND name.`locale_id` = #{localeId})
+            LEFT JOIN `street_type_string_value` name ON (namea.`value_id` = name.`id` AND name.`locale_id` = #{localeId})
         WHERE e.`status` IN ('ACTIVE', 'INACTIVE') AND
             name.`value` = #{name} 
     </select>
@@ -55,7 +55,7 @@
                 AND t.`attribute_type_id` = #{streetTypeAT} AND t.`status` = 'ACTIVE')
             JOIN `street_attribute` n ON (e.`object_id` = n.`object_id` 
                 AND n.`attribute_type_id` = #{streetNameAT} AND n.`status` = 'ACTIVE')
-            LEFT JOIN `street_string_culture` name ON (n.`value_id` = name.`id` AND name.`locale_id` = #{localeId})
+            LEFT JOIN `street_string_value` name ON (n.`value_id` = name.`id` AND name.`locale_id` = #{localeId})
             WHERE e.`status` IN ('ACTIVE', 'INACTIVE') AND
                 t.`value_id` = #{streetTypeId} AND name.`value` = #{name}
                 AND e.`parent_id` = #{cityId}

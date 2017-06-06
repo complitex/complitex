@@ -25,11 +25,11 @@ import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.converter.DateConverter;
 import org.complitex.common.entity.*;
 import org.complitex.common.service.LogBean;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.Numbers;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.dateinput.MaskedDateInput;
@@ -98,7 +98,7 @@ public class RegistrationEdit extends FormTemplatePage {
     @EJB
     private ApartmentCardStrategy apartmentCardStrategy;
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
     @EJB
     private LogBean logBean;
     @EJB
@@ -185,7 +185,7 @@ public class RegistrationEdit extends FormTemplatePage {
             initSystemAttributeInput(form, "registrationDate", REGISTRATION_DATE, true);
             if (!isInactive()) {
                 if (newRegistration.getRegistrationDate() == null) {
-                    StringCultures.getSystemStringCulture(newRegistration.getAttribute(REGISTRATION_DATE).getStringCultures()).
+                    StringValueUtil.getSystemStringValue(newRegistration.getAttribute(REGISTRATION_DATE).getStringValues()).
                             setValue(new DateConverter().toString(DateUtil.getCurrentDate()));
                 }
                 if (!isNew()) {
@@ -467,7 +467,7 @@ public class RegistrationEdit extends FormTemplatePage {
         Attribute attribute = newRegistration.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setStringCultures(StringCultures.newStringCultures());
+            attribute.setStringValues(StringValueUtil.newStringValues());
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }

@@ -6,9 +6,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.keconnection.organization.strategy.KeOrganizationStrategy;
 import org.complitex.keconnection.organization.strategy.entity.KeOrganization;
@@ -23,7 +23,7 @@ public class KeOrganizationEditComponent extends OrganizationEditComponent {
     private KeOrganizationStrategy organizationStrategy;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
     private WebMarkupContainer readyCloseOmSection;
     private WebMarkupContainer omSection;
 
@@ -57,7 +57,7 @@ public class KeOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setAttributeTypeId(attributeTypeId);
                 attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
-                attribute.setStringCultures(StringCultures.newStringCultures());
+                attribute.setStringValues(StringValueUtil.newStringValues());
             }
             final AttributeType attributeType =
                     organizationStrategy.getEntity().getAttributeType(attributeTypeId);

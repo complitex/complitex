@@ -50,7 +50,7 @@ CREATE TABLE `service_string_value` (
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
   CONSTRAINT `fk_service_string_value__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_service_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_service_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -120,7 +120,7 @@ CREATE TABLE `service_provider_account_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_sp_account_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_sp_account_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация атрибутов л/с ПУ';
 
 DROP TABLE IF EXISTS `registry_changing`;
@@ -793,7 +793,7 @@ CREATE TABLE `module_instance_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_module_instance_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_module_instance_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация атрибутов модуля';
 
 -- ------------------------------
@@ -864,7 +864,7 @@ CREATE TABLE `module_instance_type_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_module_instance_type_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_module_instance_type_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация атрибутов типа модуля';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

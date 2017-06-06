@@ -35,9 +35,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import static org.complitex.address.util.AddressUtil.replaceApartmentSymbol;
-import static org.complitex.address.util.AddressUtil.replaceBuildingCorpSymbol;
-import static org.complitex.address.util.AddressUtil.replaceBuildingNumberSymbol;
+import static org.complitex.address.util.AddressUtil.*;
 import static org.complitex.common.util.StringUtil.removeWhiteSpaces;
 
 @Stateless(name = "OsznAddressService")
@@ -637,7 +635,7 @@ public class AddressService extends AbstractBean {
         streetStrategy.getStreetIds(request.getCityId(), request.getStreetTypeId(), request.getStreet())
                 .forEach(id -> streetStrategy.getDomainObject(id)
                         .getAttribute(StreetStrategy.NAME)
-                        .getStringCultures()
+                        .getStringValues()
                         .forEach(s -> streetNames.add(s.getValue().toUpperCase())));
 
         if (streetNames.isEmpty()){
@@ -645,7 +643,7 @@ public class AddressService extends AbstractBean {
                     request.getStreet(), request.getOrganizationId(), request.getUserOrganizationId())
                     .forEach(c -> streetStrategy.getDomainObject(c.getObjectId())
                             .getAttribute(StreetStrategy.NAME)
-                            .getStringCultures()
+                            .getStringValues()
                             .forEach(s -> streetNames.add(s.getValue().toUpperCase())));
         }
 

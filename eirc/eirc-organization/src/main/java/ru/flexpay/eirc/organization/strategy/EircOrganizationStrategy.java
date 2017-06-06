@@ -6,10 +6,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.*;
 import org.complitex.common.exception.DeleteException;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.organization.strategy.OrganizationStrategy;
@@ -98,7 +98,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
     private StringLocaleBean stringLocaleBean;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @Override
     public IValidator getValidator() {
@@ -205,22 +205,22 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
         super.fillAttributes(dataSource, object);
 
         for (long attributeTypeId : ALL_ATTRIBUTE_TYPES) {
-            if (object.getAttribute(attributeTypeId).getStringCultures() == null) {
-                object.getAttribute(attributeTypeId).setStringCultures(StringCultures.newStringCultures());
+            if (object.getAttribute(attributeTypeId).getStringValues() == null) {
+                object.getAttribute(attributeTypeId).setStringValues(StringValueUtil.newStringValues());
             }
         }
     }
 
     @Override
-    protected void loadStringCultures(List<Attribute> attributes) {
-        super.loadStringCultures(attributes);
+    protected void loadStringValues(List<Attribute> attributes) {
+        super.loadStringValues(attributes);
 
         for (Attribute attribute : attributes) {
             if (ALL_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())) {
                 if (attribute.getValueId() != null) {
-                    loadStringCultures(attribute);
+                    loadStringValues(attribute);
                 } else {
-                    attribute.setStringCultures(StringCultures.newStringCultures());
+                    attribute.setStringValues(StringValueUtil.newStringValues());
                 }
             }
         }
@@ -290,7 +290,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    protected Long insertStrings(Long attributeTypeId, List<StringCulture> strings) {
+    protected Long insertStrings(Long attributeTypeId, List<StringValue> strings) {
         /* if it's data source or one of load/save request file directory attributes 
          * or root directory for loading and saving request files
          * then string value should be inserted as is and not upper cased. */

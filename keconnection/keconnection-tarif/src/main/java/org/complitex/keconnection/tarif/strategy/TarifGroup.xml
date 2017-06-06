@@ -8,8 +8,8 @@
         SELECT DISTINCT tg.`object_id` FROM `tarif_group` tg
                                     JOIN `tarif_group_attribute` a ON (tg.`object_id` = a.`object_id` AND a.`status` = 'ACTIVE'
                                         AND a.`attribute_type_id` = ${codeAT})
-                                    JOIN `tarif_group_string_culture` sc ON (a.`value_id` = sc.`id` AND sc.`value` = #{code} AND
-                                        sc.`locale_id` = (SELECT l.`id` FROM `locales` l WHERE l.`system` = 1))
+                                    JOIN `tarif_group_string_value` sc ON (a.`value_id` = sc.`id` AND sc.`value` = #{code} AND
+                                        sc.`locale_id` = (SELECT l.`id` FROM `locale` l WHERE l.`system` = 1))
             WHERE tg.`status` IN ('ACTIVE', 'INACTIVE')
     </select>
 

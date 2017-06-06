@@ -12,7 +12,7 @@ import org.complitex.address.strategy.apartment.web.edit.ApartmentEdit;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.domain.DomainObjectListPanel;
@@ -36,7 +36,7 @@ public class ApartmentStrategy extends TemplateStrategy {
     public static final String APARTMENT_NS = ApartmentStrategy.class.getName();
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     /*
      * Attribute type ids

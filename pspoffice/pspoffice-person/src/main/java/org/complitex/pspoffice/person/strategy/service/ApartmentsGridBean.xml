@@ -6,10 +6,10 @@
     <sql id="apartmentsJoin">
         JOIN `apartment_attribute` aa ON (aa.`status` = 'ACTIVE' AND aa.`attribute_type_id` = ${apartmentNameAT}
             AND aa.`object_id` = a.`object_id`)
-        JOIN `apartment_string_culture` ap_name ON (ap_name.`id` = aa.`value_id`)
+        JOIN `apartment_string_value` ap_name ON (ap_name.`id` = aa.`value_id`)
         
         <if test="sortLocaleId != null">
-            LEFT JOIN `apartment_string_culture` ap_sort_name ON (ap_sort_name.`id` = aa.`value_id` 
+            LEFT JOIN `apartment_string_value` ap_sort_name ON (ap_sort_name.`id` = aa.`value_id`
                 AND ap_sort_name.`locale_id` = #{sortLocaleId})
         </if>
     </sql>
@@ -17,10 +17,10 @@
     <sql id="roomsJoin">
         JOIN `room_attribute` ra ON (ra.`status` = 'ACTIVE' AND ra.`attribute_type_id` = ${roomNameAT}
             AND ra.`object_id` = r.`object_id`)
-        JOIN `room_string_culture` room_name ON (room_name.`id` = ra.`value_id`)
+        JOIN `room_string_value` room_name ON (room_name.`id` = ra.`value_id`)
         
         <if test="sortLocaleId != null">
-            LEFT JOIN `room_string_culture` room_sort_name ON (room_sort_name.`id` = ra.`value_id` 
+            LEFT JOIN `room_string_value` room_sort_name ON (room_sort_name.`id` = ra.`value_id`
                 AND room_sort_name.`locale_id` = #{sortLocaleId})
         </if>
     </sql>

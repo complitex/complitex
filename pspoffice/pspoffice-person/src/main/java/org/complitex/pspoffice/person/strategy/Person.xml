@@ -20,7 +20,7 @@
     </resultMap>
 
     <sql id="join">
-        JOIN `locales` sys ON sys.`system` = 1
+        JOIN `locale` sys ON sys.`system` = 1
         JOIN `person_attribute` sys_lna ON (sys_lna.`status` = 'ACTIVE' AND sys_lna.`object_id` = e.`object_id` AND sys_lna.`attribute_type_id` = 2000
             AND sys_lna.`attribute_id` = sys.`id`)
         JOIN `person_last_name` sys_ln ON sys_ln.`id` = sys_lna.`value_id`

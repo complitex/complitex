@@ -130,7 +130,7 @@ public class RestHMACAuthorizationFilter implements ContainerRequestFilter {
             return false;
         }
 
-        String secretKey = attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue();
+        String secretKey = attribute.getStringValue(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue();
         if (StringUtils.isEmpty(secretKey)) {
             log.warn("Module '{}' have empty private key");
             return false;

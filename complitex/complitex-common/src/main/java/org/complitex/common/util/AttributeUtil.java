@@ -19,7 +19,7 @@ public final class AttributeUtil {
         Attribute attribute = object.getAttribute(attributeTypeId);
         T value = null;
         if (attribute != null) {
-            String attributeValue = StringCultures.getSystemStringCulture(attribute.getStringCultures()).getValue();
+            String attributeValue = StringValueUtil.getSystemStringValue(attribute.getStringValues()).getValue();
             value = attributeValue != null ? converter.toObject(attributeValue) : null;
         }
         return value;

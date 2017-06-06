@@ -30,9 +30,9 @@ import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.StatusType;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.DateUtil;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
@@ -77,7 +77,7 @@ import static org.complitex.pspoffice.person.strategy.PersonStrategy.*;
 public class PersonInputPanel extends Panel {
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
     @EJB
     private PersonStrategy personStrategy;
     @EJB
@@ -296,7 +296,7 @@ public class PersonInputPanel extends Panel {
         Attribute attribute = person.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setStringCultures(StringCultures.newStringCultures());
+            attribute.setStringValues(StringValueUtil.newStringValues());
             attribute.setAttributeTypeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }

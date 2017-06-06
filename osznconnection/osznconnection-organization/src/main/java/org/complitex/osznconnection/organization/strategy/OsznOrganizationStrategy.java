@@ -6,11 +6,11 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.*;
 import org.complitex.common.exception.ServiceRuntimeException;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.AttributeUtil;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.correction.entity.OrganizationCorrection;
@@ -149,7 +149,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     private StringLocaleBean stringLocaleBean;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private OrganizationCorrectionBean organizationCorrectionBean;
@@ -204,22 +204,22 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
         super.fillAttributes(null, object);
 
         for (long attributeTypeId : CUSTOM_ATTRIBUTE_TYPES) {
-            if (object.getAttribute(attributeTypeId).getStringCultures() == null) {
-                object.getAttribute(attributeTypeId).setStringCultures(StringCultures.newStringCultures());
+            if (object.getAttribute(attributeTypeId).getStringValues() == null) {
+                object.getAttribute(attributeTypeId).setStringValues(StringValueUtil.newStringValues());
             }
         }
     }
 
     @Override
-    protected void loadStringCultures(List<Attribute> attributes) {
-        super.loadStringCultures(attributes);
+    protected void loadStringValues(List<Attribute> attributes) {
+        super.loadStringValues(attributes);
 
         for (Attribute attribute : attributes) {
             if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())) {
                 if (attribute.getValueId() != null) {
-                    loadStringCultures(attribute);
+                    loadStringValues(attribute);
                 } else {
-                    attribute.setStringCultures(StringCultures.newStringCultures());
+                    attribute.setStringValues(StringValueUtil.newStringValues());
                 }
             }
         }
@@ -228,7 +228,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     @Override
     protected void insertAttribute(Attribute attribute) {
         if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())){
-            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringCultures());
+            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringValues());
             attribute.setValueId(generatedStringId);
         }
 
@@ -265,7 +265,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    protected Long insertStrings(Long attributeTypeId, List<StringCulture> strings) {
+    protected Long insertStrings(Long attributeTypeId, List<StringValue> strings) {
         return ATTRIBUTE_TYPES_WITH_CUSTOM_STRING_PROCESSING.contains(attributeTypeId)
                 ? stringBean.save(strings, getEntityName(), false)
                 : stringBean.save(strings, getEntityName(), true);

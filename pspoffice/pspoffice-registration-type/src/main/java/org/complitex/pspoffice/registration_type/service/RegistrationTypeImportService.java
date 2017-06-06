@@ -2,7 +2,7 @@ package org.complitex.pspoffice.registration_type.service;
 
 import au.com.bytecode.opencsv.CSVReader;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.exception.ImportFileNotFoundException;
 import org.complitex.common.exception.ImportFileReadException;
 import org.complitex.common.service.AbstractImportService;
@@ -46,7 +46,7 @@ public class RegistrationTypeImportService extends AbstractImportService {
         try {
             String[] line;
 
-            final Collection<StringCulture> reservedObjectNames = strategy.reservedNames();
+            final Collection<StringValue> reservedObjectNames = strategy.reservedNames();
 
             while ((line = reader.readNext()) != null) {
                 recordIndex++;
@@ -56,7 +56,7 @@ public class RegistrationTypeImportService extends AbstractImportService {
 
                 // Сначала ищем среди предопределенных системой объектов.
                 boolean isReserved = false;
-                for (StringCulture string : reservedObjectNames) {
+                for (StringValue string : reservedObjectNames) {
                     final String reservedName = string.getValue();
                     if (reservedName != null && reservedName.equalsIgnoreCase(name)) {
                         // нашли

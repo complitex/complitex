@@ -8,9 +8,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.*;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.DomainObjectListPanel;
 import org.complitex.common.web.component.search.ISearchCallback;
@@ -35,7 +35,7 @@ import java.util.Map;
 public class ModuleInstanceStrategy extends TemplateStrategy {
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     /*
      * Attribute type ids
@@ -179,29 +179,29 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
         super.fillAttributes(dataSource, object);
 
         for (long attributeTypeId : CUSTOM_ATTRIBUTES) {
-            if (object.getAttribute(attributeTypeId).getStringCultures() == null) {
-                object.getAttribute(attributeTypeId).setStringCultures(StringCultures.newStringCultures());
+            if (object.getAttribute(attributeTypeId).getStringValues() == null) {
+                object.getAttribute(attributeTypeId).setStringValues(StringValueUtil.newStringValues());
             }
         }
     }
 
     @Override
-    protected void loadStringCultures(List<Attribute> attributes) {
-        super.loadStringCultures(attributes);
+    protected void loadStringValues(List<Attribute> attributes) {
+        super.loadStringValues(attributes);
 
         for (Attribute attribute : attributes) {
             if (CUSTOM_ATTRIBUTES.contains(attribute.getAttributeTypeId())) {
                 if (attribute.getValueId() != null) {
-                    loadStringCultures(attribute);
+                    loadStringValues(attribute);
                 } else {
-                    attribute.setStringCultures(StringCultures.newStringCultures());
+                    attribute.setStringValues(StringValueUtil.newStringValues());
                 }
             }
         }
     }
 
     @Override
-    protected Long insertStrings(Long attributeTypeId, List<StringCulture> strings) {
+    protected Long insertStrings(Long attributeTypeId, List<StringValue> strings) {
         return CUSTOM_ATTRIBUTES.contains(attributeTypeId)
                 ? stringBean.save(strings, getEntityName(), false)
                 : super.insertStrings(attributeTypeId, strings);

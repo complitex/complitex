@@ -24,10 +24,10 @@ import org.complitex.common.entity.*;
 import org.complitex.common.strategy.EntityBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
-import org.complitex.common.web.component.type.StringCulturePanel;
+import org.complitex.common.web.component.type.StringValuePanel;
 
 import javax.ejb.EJB;
 import java.text.SimpleDateFormat;
@@ -45,7 +45,7 @@ public class EntityDescriptionPanel extends Panel {
     private StrategyFactory strategyFactory;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private EntityBean entityBean;
@@ -186,7 +186,7 @@ public class EntityDescriptionPanel extends Panel {
                     mandatoryInput.setVisible(false);
                 } else {
                     //new attribute
-                    item.add(new StringCulturePanel("name", new PropertyModel<List<StringCulture>>(attributeType, "attributeNames"), true,
+                    item.add(new StringValuePanel("name", new PropertyModel<List<StringValue>>(attributeType, "attributeNames"), true,
                             new ResourceModel("attribute_name"), true, new MarkupContainer[0]));
 
                     valueType.setVisible(false);

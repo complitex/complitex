@@ -10,8 +10,8 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.strategy.StringValueBean;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -31,7 +31,7 @@ public class EntityTypePanel extends Panel {
     private StringLocaleBean stringLocaleBean;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     private String entityType;
     private long entityTypeDisplayAttributeTypeId;

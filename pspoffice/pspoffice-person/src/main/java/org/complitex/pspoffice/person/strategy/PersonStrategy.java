@@ -11,8 +11,8 @@ import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.converter.DateConverter;
 import org.complitex.common.entity.*;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.*;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
@@ -99,7 +99,7 @@ public class PersonStrategy extends TemplateStrategy {
     public static final long DEFAULT_ORDER_BY_ID = -1;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private PersonNameBean personNameBean;
@@ -368,15 +368,15 @@ public class PersonStrategy extends TemplateStrategy {
                         attribute.setAttributeId(1L);
 
                         if (isSimpleAttributeType(attributeType)) {
-                            attribute.setStringCultures(StringCultures.newStringCultures());
+                            attribute.setStringValues(StringValueUtil.newStringValues());
                         }
                         toAdd.add(attribute);
 
                         //by default UKRAINE_CITIZENSHIP attribute set to TRUE.
                         if (attributeType.getId().equals(UKRAINE_CITIZENSHIP)) {
-                            StringCulture systemLocaleStringCulture =
-                                    StringCultures.getSystemStringCulture(attribute.getStringCultures());
-                            systemLocaleStringCulture.setValue(new BooleanConverter().toString(Boolean.TRUE));
+                            StringValue systemLocaleStringValue =
+                                    StringValueUtil.getSystemStringValue(attribute.getStringValues());
+                            systemLocaleStringValue.setValue(new BooleanConverter().toString(Boolean.TRUE));
                         }
                     }
                 }
@@ -539,7 +539,7 @@ public class PersonStrategy extends TemplateStrategy {
 
     private void setEditedByUserId(DomainObject person) {
         long userId = sessionBean.getCurrentUserId();
-        StringCultures.getSystemStringCulture(person.getAttribute(EDITED_BY_USER_ID).getStringCultures()).
+        StringValueUtil.getSystemStringValue(person.getAttribute(EDITED_BY_USER_ID).getStringValues()).
                 setValue(String.valueOf(userId));
     }
 
@@ -547,8 +547,8 @@ public class PersonStrategy extends TemplateStrategy {
         person.removeAttribute(EXPLANATION);
 
         Attribute explAttribute = new Attribute();
-        explAttribute.setStringCultures(StringCultures.newStringCultures());
-        StringCultures.getSystemStringCulture(explAttribute.getStringCultures()).setValue(explanation);
+        explAttribute.setStringValues(StringValueUtil.newStringValues());
+        StringValueUtil.getSystemStringValue(explAttribute.getStringValues()).setValue(explanation);
         explAttribute.setAttributeTypeId(EXPLANATION);
         explAttribute.setValueTypeId(EXPLANATION);
         explAttribute.setAttributeId(1L);
@@ -788,10 +788,10 @@ public class PersonStrategy extends TemplateStrategy {
                 final Registration oldRegistration = personRegistration.getRegistration();
                 final Registration newRegistration = CloneUtil.cloneObject(oldRegistration);
                 //departure reason
-                StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_REASON).getStringCultures()).
+                StringValueUtil.getSystemStringValue(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_REASON).getStringValues()).
                         setValue(ResourceUtil.getString(RESOURCE_BUNDLE, "death_departure_reason", locale));
                 //departure date
-                StringCultures.getSystemStringCulture(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_DATE).getStringCultures()).
+                StringValueUtil.getSystemStringValue(newRegistration.getAttribute(RegistrationStrategy.DEPARTURE_DATE).getStringValues()).
                         setValue(new DateConverter().toString(deathDate));
                 registrationStrategy.update(oldRegistration, newRegistration, updateDate);
                 registrationStrategy.disable(newRegistration, updateDate);
@@ -801,7 +801,7 @@ public class PersonStrategy extends TemplateStrategy {
         removeKidFromParent(person.getObjectId(), updateDate);
 
         Person newPerson = CloneUtil.cloneObject(person);
-        StringCultures.getSystemStringCulture(newPerson.getAttribute(PersonStrategy.DEATH_DATE).getStringCultures()).
+        StringValueUtil.getSystemStringValue(newPerson.getAttribute(PersonStrategy.DEATH_DATE).getStringValues()).
                 setValue(new DateConverter().toString(deathDate));
         update(person, newPerson, updateDate);
 

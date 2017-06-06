@@ -160,7 +160,7 @@ CREATE TABLE `apartment_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_apartment_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_apartment_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов квартиры';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -316,7 +316,7 @@ CREATE TABLE `building_address_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_building_address_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_building_address_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов адреса дома';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -510,7 +510,7 @@ CREATE TABLE `building_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_building_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_building_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов дома ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -765,7 +765,7 @@ CREATE TABLE `city_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_city_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_city_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов населенного пункта';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -921,7 +921,7 @@ CREATE TABLE `city_type_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_city_type_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_city_type_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов типа населенного пункта';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1087,7 +1087,7 @@ CREATE TABLE `country_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_country_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_country_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов страны';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1246,7 +1246,7 @@ CREATE TABLE `district_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_district_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_district_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов района';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1534,13 +1534,13 @@ INSERT INTO `last_name` VALUES (1,'admin'),(2,'ANONYMOUS'),(3,'Test');
 UNLOCK TABLES;
 
 --
--- Table structure for table `locales`
+-- Table structure for table `locale`
 --
 
-DROP TABLE IF EXISTS `locales`;
+DROP TABLE IF EXISTS `locale`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `locales` (
+CREATE TABLE `locale` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор локали',
   `locale` varchar(2) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Код локали',
   `system` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Является ли локаль системной',
@@ -1550,13 +1550,13 @@ CREATE TABLE `locales` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `locales`
+-- Dumping data for table `locale`
 --
 
-LOCK TABLES `locales` WRITE;
-/*!40000 ALTER TABLE `locales` DISABLE KEYS */;
-INSERT INTO `locales` VALUES (1,'ru',1),(2,'uk',0);
-/*!40000 ALTER TABLE `locales` ENABLE KEYS */;
+LOCK TABLES `locale` WRITE;
+/*!40000 ALTER TABLE `locale` DISABLE KEYS */;
+INSERT INTO `locale` VALUES (1,'ru',1),(2,'uk',0);
+/*!40000 ALTER TABLE `locale` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1757,7 +1757,7 @@ CREATE TABLE `module_instance_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_module_instance_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_module_instance_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов модуля';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1871,7 +1871,7 @@ CREATE TABLE `module_instance_type_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_module_instance_type_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_module_instance_type_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов типа модуля';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2057,7 +2057,7 @@ CREATE TABLE `organization_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_organization_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_organization_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=263 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов организации';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2171,7 +2171,7 @@ CREATE TABLE `organization_type_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_organization_type_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_organization_type_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов типа организации';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2383,7 +2383,7 @@ CREATE TABLE `region_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_region_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_region_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов региона';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2869,7 +2869,7 @@ CREATE TABLE `room_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_room_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_room_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов комнаты';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3149,7 +3149,7 @@ CREATE TABLE `service_provider_account_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_sp_account_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_sp_account_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов л/с ПУ';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3179,7 +3179,7 @@ CREATE TABLE `service_string_value` (
   UNIQUE KEY `unique_id__locale` (`service_id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(255)),
-  CONSTRAINT `fk_service_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`),
+  CONSTRAINT `fk_service_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`),
   CONSTRAINT `fk_service_string_value__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -3342,7 +3342,7 @@ CREATE TABLE `street_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_street_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_street_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=829 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов улицы';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3539,7 +3539,7 @@ CREATE TABLE `street_type_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_street_type_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_street_type_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов типа улицы';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3604,7 +3604,7 @@ CREATE TABLE `string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3772,7 +3772,7 @@ CREATE TABLE `user_info_string_value` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_user_info_string_value__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_user_info_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Локализация атрибутов информации о пользователе';
 /*!40101 SET character_set_client = @saved_cs_client */;
 

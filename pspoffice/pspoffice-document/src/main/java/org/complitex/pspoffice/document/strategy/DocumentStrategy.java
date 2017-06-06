@@ -5,8 +5,8 @@
 package org.complitex.pspoffice.document.strategy;
 
 import org.complitex.common.entity.*;
-import org.complitex.common.strategy.StringCultureBean;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.strategy.StringValueBean;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -36,7 +36,7 @@ public class DocumentStrategy extends TemplateStrategy {
     public static final long ORGANIZATION_ISSUED = 2803;
     public static final long DATE_ISSUED = 2804;
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @Override
     public DomainObject newInstance() {
@@ -89,7 +89,7 @@ public class DocumentStrategy extends TemplateStrategy {
                 attribute.setAttributeId(1L);
 
                 if (isSimpleAttributeType(attributeType)) {
-                    attribute.setStringCultures(StringCultures.newStringCultures());
+                    attribute.setStringValues(StringValueUtil.newStringValues());
                 }
                 toAdd.add(attribute);
             }

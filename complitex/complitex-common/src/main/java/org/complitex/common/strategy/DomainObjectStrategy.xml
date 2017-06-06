@@ -26,10 +26,10 @@
         <result column="end_date" property="endDate"/>
         <result column="value_type_id" property="valueTypeId"/>
 
-        <collection property="stringCultures" resultMap="stringCultureResultMap" columnPrefix="str__"/>
+        <collection property="stringValues" resultMap="stringValueResultMap" columnPrefix="str__"/>
     </resultMap>
 
-    <resultMap id="stringCultureResultMap" type="org.complitex.common.entity.StringCulture">
+    <resultMap id="stringValueResultMap" type="org.complitex.common.entity.StringValue">
         <id column="pk_id" property="pkId"/>
         <result column="id" property="id"/>
         <result column="locale_id" property="localeId"/>
@@ -78,7 +78,7 @@
         from ${entityName} obj
         left join ${entityName}_attribute attr on (obj.object_id = attr.object_id and attr.end_date is null)
         left join entity_attribute_value_type val on val.id = attr.value_type_id
-        left join ${entityName}_string_culture str on (str.id = attr.value_id and val.attribute_value_type = 'STRING_CULTURE')
+        left join ${entityName}_string_value str on (str.id = attr.value_id and val.attribute_value_type = 'STRING_VALUE')
         where obj.end_date is null and obj.object_id = ${objectId}
     </select>
 
@@ -87,7 +87,7 @@
     </select>
 
     <sql id="sqlOrderByAttributeTypeId">
-        SELECT sc.`value` FROM `${entityName}_string_culture` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
+        SELECT sc.`value` FROM `${entityName}_string_value` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
         (SELECT orderByAttr.`value_id` FROM `${entityName}_attribute` orderByAttr WHERE orderByAttr.`object_id` = e.`object_id`
         AND orderByAttr.`status` = 'ACTIVE' AND orderByAttr.`attribute_type_id` = #{orderByAttributeTypeId}
         )
@@ -143,7 +143,7 @@
             <if test="attributeFilter.value != null">
                 AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
                 AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
-                AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_culture` sc WHERE sc.`value`
+                AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc WHERE sc.`value`
                 <choose>
                     <when test="comparisonType == 'LIKE'">
                         LIKE CONCAT('%', #{attributeFilter.value}, '%')
@@ -202,7 +202,7 @@
     <select id="defaultValidation" resultType="long" parameterType="map">
         SELECT DISTINCT e.`object_id` FROM `${entity}` e
         JOIN `${entity}_attribute` a ON (e.`object_id` = a.`object_id` AND a.`status` = 'ACTIVE')
-        JOIN `${entity}_string_culture` sc ON (a.`value_id` = sc.`id`)
+        JOIN `${entity}_string_value` sc ON (a.`value_id` = sc.`id`)
         WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND sc.`locale_id` = #{localeId} AND a.`attribute_type_id` = #{attributeTypeId}
         AND sc.`value` = #{text}
         <choose>
@@ -353,26 +353,26 @@
     <!--StringLocale-->
 
     <select id="loadAllLocales" resultMap="localeResultMap">
-        SELECT l.* FROM `locales` l
+        SELECT l.* FROM `locale` l
     </select>
 
-    <!--StringCulture-->
+    <!--StringValue-->
 
-    <insert id="insertStringCulture" parameterType="org.complitex.common.entity.StringCulture">
-        insert into `${entityName}_string_culture`(`id`, `locale_id`, `value`)
+    <insert id="insertStringValue" parameterType="org.complitex.common.entity.StringValue">
+        insert into `${entityName}_string_value`(`id`, `locale_id`, `value`)
           values (#{id}, #{localeId}, #{value})
     </insert>
 
-    <select id="selectStringCultures" parameterType="map" resultMap="stringCultureResultMap">
-        SELECT sc.* FROM `${entityName}_string_culture` sc WHERE sc.`id` = #{id} order by `locale_id`
+    <select id="selectStringValues" parameterType="map" resultMap="stringValueResultMap">
+        SELECT sc.* FROM `${entityName}_string_value` sc WHERE sc.`id` = #{id} order by `locale_id`
     </select>
 
-    <insert id="insertDescriptionData" parameterType="org.complitex.common.entity.StringCulture">
-        insert into `string_culture`(`id`, `locale_id`, `value`) values (#{id}, #{localeId}, #{value})
+    <insert id="insertDescriptionData" parameterType="org.complitex.common.entity.StringValue">
+        insert into `string_value`(`id`, `locale_id`, `value`) values (#{id}, #{localeId}, #{value})
     </insert>
 
-    <delete id="deleteStringCulture" parameterType="map">
-        DELETE FROM `${entityName}_string_culture` WHERE `id` IN
+    <delete id="deleteStringValue" parameterType="map">
+        DELETE FROM `${entityName}_string_value` WHERE `id` IN
         (SELECT a.`value_id` FROM `${entityName}_attribute` a WHERE a.`object_id` = #{objectId}
         AND a.`value_type_id` IN
         <foreach open="(" separator="," close=")" collection="localizedValueTypeIds" item="id">

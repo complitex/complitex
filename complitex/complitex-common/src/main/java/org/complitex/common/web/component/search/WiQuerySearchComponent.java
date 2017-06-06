@@ -20,8 +20,8 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.wiquery.autocomplete.AbstractAutocompleteComponent;
 import org.complitex.common.web.component.wiquery.autocomplete.AutocompleteAjaxComponent;
@@ -88,7 +88,7 @@ public class WiQuerySearchComponent extends Panel {
         }
     }
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private StrategyFactory strategyFactory;

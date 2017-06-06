@@ -13,8 +13,8 @@ import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.Numbers;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.util.StringCultures;
 import org.complitex.common.util.StringUtil;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.common.web.component.search.ISearchCallback;
@@ -47,7 +47,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     private SequenceBean sequenceBean;
 
     @EJB
-    private StringCultureBean stringCultureBean;
+    private StringValueBean stringValueBean;
 
     @EJB
     private EntityBean entityBean;
@@ -185,9 +185,9 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
         //protected override
         if (dataSource == null) {
-            loadStringCultures(attributes);
+            loadStringValues(attributes);
         }else{
-            loadStringCultures(dataSource, attributes);
+            loadStringValues(dataSource, attributes);
         }
 
         object.setAttributes(attributes);
@@ -197,32 +197,32 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return NS + ".selectAttributes";
     }
 
-    protected void loadStringCultures(List<Attribute> attributes) {
-        loadStringCultures(null, attributes);
+    protected void loadStringValues(List<Attribute> attributes) {
+        loadStringValues(null, attributes);
     }
 
-    protected void loadStringCultures(String dataSource, List<Attribute> attributes) {
+    protected void loadStringValues(String dataSource, List<Attribute> attributes) {
         attributes.stream()
                 .filter(this::isSimpleAttribute)
                 .forEach(attribute -> {
                     if (attribute.getValueId() != null) {
                         if (dataSource == null) {
-                            loadStringCultures(attribute);
+                            loadStringValues(attribute);
                         } else {
-                            loadStringCultures(dataSource, attribute);
+                            loadStringValues(dataSource, attribute);
                         }
                     } else {
-                        attribute.setStringCultures(StringCultures.newStringCultures());
+                        attribute.setStringValues(StringValueUtil.newStringValues());
                     }
                 });
     }
 
-    protected void loadStringCultures(Attribute attribute) {
-        loadStringCultures(null, attribute);
+    protected void loadStringValues(Attribute attribute) {
+        loadStringValues(null, attribute);
     }
 
-    protected void loadStringCultures(String dataSource, Attribute attribute) {
-        attribute.setStringCultures(stringCultureBean.getStringCultures(dataSource, attribute.getValueId(), getEntityName()));
+    protected void loadStringValues(String dataSource, Attribute attribute) {
+        attribute.setStringValues(stringValueBean.getStringValues(dataSource, attribute.getValueId(), getEntityName()));
     }
 
 
@@ -289,8 +289,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected void updateStringsForNewLocales(DomainObject object) {
         object.getAttributes().stream()
                 .filter(this::isSimpleAttribute)
-                .map(Attribute::getStringCultures)
-                .forEach(StringCultures::updateForNewLocales);
+                .map(Attribute::getStringValues)
+                .forEach(StringValueUtil::updateForNewLocales);
     }
 
     protected void fillAttributes(String dataSource, DomainObject object) {
@@ -309,7 +309,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                         attribute.setAttributeId(1L);
 
                         if (isSimpleAttributeType(attributeType)) {
-                            attribute.setStringCultures(StringCultures.newStringCultures());
+                            attribute.setStringValues(StringValueUtil.newStringValues());
                         }
                         toAdd.add(attribute);
                     } else {
@@ -413,7 +413,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void insertAttribute(Attribute attribute) {
         if (isSimpleAttribute(attribute)) {
-            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringCultures());
+            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringValues());
             attribute.setValueId(generatedStringId);
         }
 
@@ -429,8 +429,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
 
-    protected Long insertStrings(Long attributeTypeId, List<StringCulture> strings) {
-        return stringCultureBean.save(strings, getEntityName());
+    protected Long insertStrings(Long attributeTypeId, List<StringValue> strings) {
+        return stringValueBean.save(strings, getEntityName());
     }
 
 
@@ -517,10 +517,10 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                     if (SimpleTypes.isSimpleType(attributeValueType)) {
                         SimpleTypes simpleType = SimpleTypes.valueOf(attributeValueType.toUpperCase());
                         switch (simpleType) {
-                            case STRING_CULTURE: {
+                            case STRING_VALUE: {
                                 boolean valueChanged = false;
-                                for (StringCulture oldString : oldAttribute.getStringCultures()) {
-                                    for (StringCulture newString : newAttribute.getStringCultures()) {
+                                for (StringValue oldString : oldAttribute.getStringValues()) {
+                                    for (StringValue newString : newAttribute.getStringValues()) {
                                         //compare strings
                                         if (oldString.getLocaleId().equals(newString.getLocaleId())) {
                                             if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
@@ -931,7 +931,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         }
 
         List<Attribute> historyAttributes = loadHistoryAttributes(objectId, date);
-        loadStringCultures(historyAttributes);
+        loadStringValues(historyAttributes);
         object.setAttributes(historyAttributes);
         updateStringsForNewLocales(object);
 
@@ -1014,12 +1014,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             throw new IllegalStateException("Domain object(entity = " + getEntityName() + ", id = " + object.getObjectId()
                     + ") has no attribute with attribute type id = " + attributeTypeId + "!");
         }
-        if (attribute.getStringCultures() == null) {
+        if (attribute.getStringValues() == null) {
             throw new IllegalStateException("Attribute of domain object(entity = " + getEntityName() + ", id = " + object.getObjectId()
                     + ") with attribute type id = " + attributeTypeId + " and attribute id = " + attribute.getAttributeId()
                     + " has null lozalized values.");
         }
-        String text = StringCultures.getValue(attribute.getStringCultures(), locale);
+        String text = StringValueUtil.getValue(attribute.getStringValues(), locale);
 
         Map<String, Object> params = new HashMap<>();
 
@@ -1177,7 +1177,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         AttributeType attributeType = entityBean.getAttributeType(attribute.getAttributeTypeId());
 
         switch (attributeType.getAttributeValueTypes().get(0).getValueType().toUpperCase()) {
-            case "STRING_CULTURE":
+            case "STRING_VALUE":
                 return attribute.getStringValue(locale);
             case "STRING":
             case "DOUBLE":
@@ -1201,7 +1201,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                 return strategy.displayDomainObject(strategy.getDomainObject(attribute.getValueId(), true), locale);
         }
 
-        return StringCultures.getValue(attribute.getStringCultures(), locale);
+        return StringValueUtil.getValue(attribute.getStringValues(), locale);
     }
 
 
@@ -1223,7 +1223,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected void deleteStrings(Long objectId) {
         Set<Long> localizedValueTypeIds = getLocalizedValueTypeIds();
         if (localizedValueTypeIds != null && !localizedValueTypeIds.isEmpty()) {
-            stringCultureBean.delete(getEntityName(), objectId, localizedValueTypeIds);
+            stringValueBean.delete(getEntityName(), objectId, localizedValueTypeIds);
         }
     }
 
@@ -1315,7 +1315,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     public void setSqlSessionFactoryBean(SqlSessionFactoryBean sqlSessionFactoryBean) {
         super.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         sequenceBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
-        stringCultureBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
+        stringValueBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         entityBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         stringLocaleBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
         sessionBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
