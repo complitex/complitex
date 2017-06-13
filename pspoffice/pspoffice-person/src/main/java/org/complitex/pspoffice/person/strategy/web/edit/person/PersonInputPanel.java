@@ -29,7 +29,7 @@ import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StatusType;
+import org.complitex.common.entity.Status;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.StringValueUtil;
@@ -121,7 +121,7 @@ public class PersonInputPanel extends Panel {
     }
 
     private boolean isInactive() {
-        return person.getStatus() != StatusType.ACTIVE;
+        return person.getStatus() != Status.ACTIVE;
     }
 
     @Override

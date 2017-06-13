@@ -184,7 +184,7 @@ public class DistrictStrategy extends TemplateStrategy {
         Map<String, Object> params = Maps.newHashMap();
         params.put("enabled", enabled);
         params.put("streetIds", streetIds);
-        params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
+        params.put("status", enabled ? Status.INACTIVE : Status.ACTIVE);
         sqlSession().update(DISTRICT_NS + ".updateChildrenActivity", params);
     }
 

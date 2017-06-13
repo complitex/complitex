@@ -20,7 +20,7 @@
         <foreach item="attrExample" collection="attributeExamples">
             <if test="attrExample.value != null">
                 AND EXISTS(SELECT 1 FROM `module_instance_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attrExample.attributeTypeId}
+                AND attr.`status` = 1 AND attr.`attribute_type_id` = #{attrExample.attributeTypeId}
                 AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc WHERE sc.`value`
                 <choose>
                     <when test="comparisonType == 'LIKE'">
@@ -36,7 +36,7 @@
         </foreach>
         <if test="additionalParams != null and additionalParams['moduleInstanceTypeIds'] != null">
             AND EXISTS(SELECT 1 FROM `module_instance_attribute` attr WHERE attr.`object_id` = e.`object_id`
-            AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = 1014
+            AND attr.`status` = 1 AND attr.`attribute_type_id` = 1014
             AND attr.`value_id` IN
             <foreach open="(" close=")" separator="," item="id" collection="additionalParams['moduleInstanceTypeIds']">
                 #{id}
@@ -55,11 +55,11 @@
     <select id="selectModuleInstanceId" parameterType="map" resultType="long">
         select distinct a.`object_id` from `module_instance` a
 
-        join `module_instance_attribute` n on (n.`object_id` = a.`object_id` and n.`status` = 'ACTIVE'
+        join `module_instance_attribute` n on (n.`object_id` = a.`object_id` and n.`status` = 1
         and n.`attribute_type_id` = 1012)
         join `module_instance_string_value` n_sc on (n_sc.`id` = n.`value_id`)
 
-        where a.`status` = 'ACTIVE' and n_sc.`value` = #{uniqueIndex}
+        where a.`status` = 1 and n_sc.`value` = #{uniqueIndex}
     </select>
 
 </mapper>

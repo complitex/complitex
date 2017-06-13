@@ -62,7 +62,7 @@
     <select id="selectDomainObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="domainObjectResultMap">
         SELECT e.*
-        FROM `${entityName}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
+        FROM `${entityName}` e WHERE (e.`status` IN (1, 0)) AND e.`object_id` = #{objectId}
         <include refid="sqlPermissionFilter"/>
     </select>
 
@@ -89,7 +89,7 @@
     <sql id="sqlOrderByAttributeTypeId">
         SELECT sc.`value` FROM `${entityName}_string_value` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
         (SELECT orderByAttr.`value_id` FROM `${entityName}_attribute` orderByAttr WHERE orderByAttr.`object_id` = e.`object_id`
-        AND orderByAttr.`status` = 'ACTIVE' AND orderByAttr.`attribute_type_id` = #{orderByAttributeTypeId}
+        AND orderByAttr.`status` = 1 AND orderByAttr.`attribute_type_id` = #{orderByAttributeTypeId}
         )
     </sql>
 
@@ -126,8 +126,14 @@
 
     <sql id="sqlStatusFilter">
         <choose>
+            <when test="status == 'INACTIVE'">
+                (e.`status` = 0)
+            </when>
+            <when test="status == 'ACTIVE'">
+                (e.`status` = 1)
+            </when>
             <when test="status == 'ALL'">
-                (e.`status` IN ('ACTIVE', 'INACTIVE'))
+                (e.`status` IN (1, 0))
             </when>
             <otherwise>
                 e.`status` = #{status}
@@ -142,7 +148,7 @@
         <foreach item="attributeFilter" collection="attributeFilters">
             <if test="attributeFilter.value != null">
                 AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
+                AND attr.`status` = 1 AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
                 AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc WHERE sc.`value`
                 <choose>
                     <when test="comparisonType == 'LIKE'">
@@ -158,7 +164,7 @@
 
             <if test="attributeFilter.valueId != null">
                 AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 'ACTIVE' AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
+                AND attr.`status` = 1 AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
                 AND attr.`value_id` = #{attributeFilter.valueId}
                 )
             </if>
@@ -201,9 +207,9 @@
 
     <select id="defaultValidation" resultType="long" parameterType="map">
         SELECT DISTINCT e.`object_id` FROM `${entity}` e
-        JOIN `${entity}_attribute` a ON (e.`object_id` = a.`object_id` AND a.`status` = 'ACTIVE')
+        JOIN `${entity}_attribute` a ON (e.`object_id` = a.`object_id` AND a.`status` = 1)
         JOIN `${entity}_string_value` sc ON (a.`value_id` = sc.`id`)
-        WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND sc.`locale_id` = #{localeId} AND a.`attribute_type_id` = #{attributeTypeId}
+        WHERE (e.`status` IN (1, 0)) AND sc.`locale_id` = #{localeId} AND a.`attribute_type_id` = #{attributeTypeId}
         AND sc.`value` = #{text}
         <choose>
             <when test="parentEntityId != null and parentId != null">
@@ -226,7 +232,7 @@
                 (SELECT MAX(e1.`start_date`) FROM `${entityName}` e1 WHERE e1.`object_id` = #{objectId} AND e1.`start_date` <![CDATA[ <= ]]> #{startDate})
             </when>
             <otherwise>
-                AND (e.`status` IN ('ACTIVE', 'INACTIVE'))
+                AND (e.`status` IN (1, 0))
             </otherwise>
         </choose>
     </select>
@@ -255,7 +261,7 @@
     </select>
 
     <select id="selectChildrenPermissionInfo" parameterType="map" resultMap="permissionInfoResultMap">
-        SELECT e.`object_id`, e.`permission_id` FROM `${entity}` e WHERE e.`status` IN ('ACTIVE', 'INACTIVE')
+        SELECT e.`object_id`, e.`permission_id` FROM `${entity}` e WHERE e.`status` IN (1, 0)
         AND e.`parent_id` = #{parentId} AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent
           WHERE ent.`entity_table` = #{parentEntity})
           ORDER BY e.`object_id`
@@ -263,7 +269,7 @@
     </select>
 
     <update id="updatePermissionId" parameterType="map">
-        UPDATE `${entity}` e SET e.`permission_id` = #{permissionId} WHERE e.`status` IN ('ACTIVE', 'INACTIVE')
+        UPDATE `${entity}` e SET e.`permission_id` = #{permissionId} WHERE e.`status` IN (1, 0)
           AND e.`object_id` = #{objectId}
     </update>
 
@@ -280,10 +286,10 @@
         AND
         <choose>
             <when test="enabled">
-                e.`status` = 'ACTIVE'
+                e.`status` = 1
             </when>
             <otherwise>
-                e.`status` = 'INACTIVE'
+                e.`status` = 0
             </otherwise>
         </choose>
     </update>
@@ -318,8 +324,8 @@
     </update>
 
     <update id="archiveAttributes" parameterType="map">
-        UPDATE `${entityName}_attribute` SET `end_date` = #{endDate}, `status` = 'ARCHIVE' WHERE
-        `status` IN ('ACTIVE', 'INACTIVE') AND
+        UPDATE `${entityName}_attribute` SET `end_date` = #{endDate}, `status` = 2 WHERE
+        `status` IN (1, 0) AND
         `attribute_type_id` IN
         <foreach item="id" collection="attributeTypeIds" open="(" separator="," close=")">
             #{id}
@@ -327,13 +333,13 @@
     </update>
 
     <update id="archiveObjectAttributes" parameterType="map">
-        UPDATE `${entityName}_attribute` SET `end_date` = #{endDate}, `status` = 'ARCHIVE' WHERE
-        `object_id` = #{objectId} AND `status` IN ('ACTIVE', 'INACTIVE')
+        UPDATE `${entityName}_attribute` SET `end_date` = #{endDate}, `status` = 2 WHERE
+        `object_id` = #{objectId} AND `status` IN (1, 0)
     </update>
 
     <select id="selectAttributes" parameterType="map" resultMap="attributeResultMap">
         SELECT a.* FROM `${entityName}_attribute` a
-          WHERE  a.`object_id` = #{objectId} AND a.`status` = 'ACTIVE'
+          WHERE  a.`object_id` = #{objectId} AND a.`status` = 1
           ORDER BY a.`attribute_type_id`, a.`attribute_id`
     </select>
 

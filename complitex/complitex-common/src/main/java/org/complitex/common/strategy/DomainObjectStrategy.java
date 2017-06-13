@@ -108,7 +108,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected void changeActivity(DomainObject object, boolean enable) {
-        object.setStatus(enable ? StatusType.ACTIVE : StatusType.INACTIVE);
+        object.setStatus(enable ? Status.ACTIVE : Status.INACTIVE);
         object.setEntityName(getEntityName());
 
         sqlSession().update(NS + ".updateDomainObject", object);
@@ -604,7 +604,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         if (!Objects.equals(oldObject.getParentId(), newObject.getParentId())
                 || !Objects.equals(oldObject.getParentEntityId(), newObject.getParentEntityId())
                 || (!Objects.equals(oldObject.getExternalId(), newObject.getExternalId()))) {
-            oldObject.setStatus(StatusType.ARCHIVE);
+            oldObject.setStatus(Status.ARCHIVE);
             oldObject.setEndDate(updateDate);
             oldObject.setEntityName(getEntityName());
 
@@ -616,7 +616,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void archiveAttribute(Attribute attribute, Date archiveDate) {
         attribute.setEndDate(archiveDate);
-        attribute.setStatus(StatusType.ARCHIVE);
+        attribute.setStatus(Status.ARCHIVE);
         attribute.setEntityName(getEntityName());
 
         sqlSession().update(NS + ".updateAttribute", attribute);
@@ -746,7 +746,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public void archive(DomainObject object, Date endDate) {
-        object.setStatus(StatusType.ARCHIVE);
+        object.setStatus(Status.ARCHIVE);
         object.setEndDate(endDate);
         object.setEntityName(getEntityName());
 
@@ -1158,7 +1158,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         params.put("parentId", parentId);
         params.put("parentEntity", getEntityName());
         params.put("enabled", enabled);
-        params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
+        params.put("status", enabled ? Status.INACTIVE : Status.ACTIVE);
 
         sqlSession().update(NS + ".updateChildrenActivity", params);
     }

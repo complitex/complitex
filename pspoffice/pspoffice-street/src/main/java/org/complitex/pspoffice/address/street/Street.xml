@@ -15,7 +15,7 @@
     <sql id="pspStreetFilter">
         <if test="additionalParams != null and additionalParams['building_address_permission_string'] != null">
             AND EXISTS(
-                SELECT 1 FROM `building_address` addr WHERE addr.`status` IN ('ACTIVE', 'INACTIVE') AND 
+                SELECT 1 FROM `building_address` addr WHERE addr.`status` IN (1, 0) AND
                     addr.`parent_id` = e.`object_id` AND addr.`parent_entity_id` = 300
                     AND addr.`permission_id` IN ${additionalParams.building_address_permission_string}
             )

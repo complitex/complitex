@@ -27,7 +27,7 @@
     </delete>
 
     <select id="selectServiceProviderAccountAttribute" parameterType="hashmap" resultMap="serviceProviderAccountAttributeResultMap">
-        SELECT aa.* FROM `${entityName}_attribute` aa WHERE  aa.`object_id` = #{id} AND aa.`status` = 'ACTIVE'
+        SELECT aa.* FROM `${entityName}_attribute` aa WHERE  aa.`object_id` = #{id} AND aa.`status` = 1
           ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
     </select>
 

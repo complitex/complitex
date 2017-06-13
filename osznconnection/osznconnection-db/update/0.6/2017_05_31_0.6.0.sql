@@ -1,5 +1,3 @@
-INSERT INTO `update` (`version`) VALUE ('20170206_0.6.0');
-
 ALTER TABLE `locales` RENAME `locale`;
 
 ALTER TABLE `string_culture` RENAME `string_value`;
@@ -82,3 +80,4 @@ ALTER TABLE `privilege_string_value` ADD CONSTRAINT `fk_privilege_string_value__
 
 UPDATE `attribute_value_type` t SET  `attribute_value_type` = 'STRING_VALUE' where `attribute_value_type` = 'STRING_CULTURE';
 
+INSERT INTO `update` (`version`) VALUE ('20170206_0.6.0');

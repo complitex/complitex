@@ -684,7 +684,7 @@ public class BuildingStrategy extends TemplateStrategy {
         Map<String, Object> params = Maps.newHashMap();
         params.put("buildingId", buildingId);
         params.put("enabled", enabled);
-        params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
+        params.put("status", enabled ? Status.INACTIVE : Status.ACTIVE);
         sqlSession().update(BUILDING_NS + ".updateBuildingActivity", params);
     }
 

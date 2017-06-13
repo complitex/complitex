@@ -6,7 +6,7 @@ package org.complitex.pspoffice.person.strategy.entity;
 
 import java.util.Date;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StatusType;
+import org.complitex.common.entity.Status;
 import static org.complitex.pspoffice.person.strategy.RegistrationStrategy.*;
 import static org.complitex.common.util.AttributeUtil.*;
 
@@ -124,7 +124,7 @@ public class Registration extends DomainObject {
     }
 
     public boolean isFinished() {
-        return getStatus() != StatusType.ACTIVE;
+        return getStatus() != Status.ACTIVE;
     }
 
     public DomainObject getOwnerRelationship() {

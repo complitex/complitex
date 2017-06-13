@@ -14,7 +14,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.converter.GenderConverter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Gender;
-import org.complitex.common.entity.StatusType;
+import org.complitex.common.entity.Status;
 import static org.complitex.common.util.DateUtil.*;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import static org.complitex.common.util.AttributeUtil.*;
@@ -155,7 +155,7 @@ public class Person extends DomainObject {
     }
 
     public boolean isDead() {
-        return getStatus() == StatusType.INACTIVE && getDeathDate() != null;
+        return getStatus() == Status.INACTIVE && getDeathDate() != null;
     }
 
     public long getEditedByUserId() {

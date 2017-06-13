@@ -121,14 +121,14 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
             DomainObject defaultOrganizationType = null;
             for (DomainObject organizationType : allOrganizationTypes) {
                 if (organizationType.getObjectId().equals(OrganizationTypeStrategy.USER_ORGANIZATION_TYPE)
-                        && (organizationType.getStatus() == StatusType.ACTIVE)) {
+                        && (organizationType.getStatus() == Status.ACTIVE)) {
                     defaultOrganizationType = organizationType;
                     break;
                 }
             }
             if (defaultOrganizationType == null) {
                 for (DomainObject organizationType : allOrganizationTypes) {
-                    if (organizationType.getStatus() == StatusType.ACTIVE) {
+                    if (organizationType.getStatus() == Status.ACTIVE) {
                         defaultOrganizationType = organizationType;
                         break;
                     }

@@ -2,7 +2,7 @@ package ru.flexpay.eirc.registry.service.handle.exchange;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.entity.StatusType;
+import org.complitex.common.entity.Status;
 import org.complitex.common.exception.AbstractException;
 import org.complitex.common.util.CloneUtil;
 import ru.flexpay.eirc.eirc_account.service.EircAccountBean;
@@ -90,7 +90,7 @@ public class CloseAccountOperation extends GeneralAccountOperation {
                 // old attribute set active
                 ServiceProviderAccountAttribute oldAttribute = serviceProviderAccountStrategy.findByPkId(changing.getOldPkId());
                 oldAttribute.setEndDate(null);
-                oldAttribute.setStatus(StatusType.ACTIVE);
+                oldAttribute.setStatus(Status.ACTIVE);
                 serviceProviderAccountStrategy.updateAttribute(oldAttribute);
             }
             // delete new attribute

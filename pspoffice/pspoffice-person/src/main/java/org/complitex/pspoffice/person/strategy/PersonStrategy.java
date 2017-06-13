@@ -463,7 +463,7 @@ public class PersonStrategy extends TemplateStrategy {
             throw new IllegalArgumentException("Last name is null or empty.");
         }
         DomainObjectFilter example = new DomainObjectFilter();
-        example.setStatus(StatusType.ACTIVE.name());
+        example.setStatus(Status.ACTIVE.name());
         example.addAdditionalParam("last_name", lastName);
         example.setLocaleId(stringLocaleBean.convert(locale).getId());
 

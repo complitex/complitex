@@ -115,15 +115,15 @@
           IFNULL(user_value.`value`, user_sys_value.`value`) user_organization_name,
           IFNULL(calc_value.`value`, calc_sys_value.`value`) calculation_center_name
         FROM `person_account` pa
-            JOIN `organization_attribute` oszn_a ON (oszn_a.`object_id` = pa.`organization_id` AND oszn_a.`status` = 'ACTIVE' AND oszn_a.`attribute_type_id` = 900)
+            JOIN `organization_attribute` oszn_a ON (oszn_a.`object_id` = pa.`organization_id` AND oszn_a.`status` = 1 AND oszn_a.`attribute_type_id` = 900)
             LEFT JOIN `organization_string_value` oszn_value ON (oszn_value.`id` = oszn_a.`value_id` AND oszn_value.`locale_id` = #{stringLocale.id})
             JOIN `organization_string_value` oszn_sys_value ON (oszn_sys_value.`id` = oszn_a.`value_id` AND oszn_sys_value.`locale_id` = (SELECT l.`id` FROM `locale` l WHERE l.`system` = 1))
 
-            JOIN `organization_attribute` calc_a ON (calc_a.`object_id` = pa.`calc_center_id` AND calc_a.`status` = 'ACTIVE' AND calc_a.`attribute_type_id` = 900)
+            JOIN `organization_attribute` calc_a ON (calc_a.`object_id` = pa.`calc_center_id` AND calc_a.`status` = 1 AND calc_a.`attribute_type_id` = 900)
             LEFT JOIN `organization_string_value` calc_value ON (calc_value.`id` = calc_a.`value_id` AND calc_value.`locale_id` = #{stringLocale.id})
             JOIN `organization_string_value` calc_sys_value ON (calc_sys_value.`id` = calc_a.`value_id` AND calc_sys_value.`locale_id` = (SELECT l.`id` FROM `locale` l WHERE l.`system` = 1))
             
-            LEFT JOIN `organization_attribute` user_a ON (user_a.`object_id` = pa.`user_organization_id` AND user_a.`status` = 'ACTIVE' AND user_a.`attribute_type_id` = 900)
+            LEFT JOIN `organization_attribute` user_a ON (user_a.`object_id` = pa.`user_organization_id` AND user_a.`status` = 1 AND user_a.`attribute_type_id` = 900)
             LEFT JOIN `organization_string_value` user_value ON (user_value.`id` = user_a.`value_id` AND user_value.`locale_id` = #{stringLocale.id})
             JOIN `organization_string_value` user_sys_value ON (user_sys_value.`id` = user_a.`value_id` AND user_sys_value.`locale_id` = (SELECT l.`id` FROM `locale` l WHERE l.`system` = 1))
 

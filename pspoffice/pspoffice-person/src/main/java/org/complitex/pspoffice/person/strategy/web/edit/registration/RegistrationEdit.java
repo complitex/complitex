@@ -134,7 +134,7 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private boolean isInactive() {
-        return newRegistration.getStatus() != StatusType.ACTIVE;
+        return newRegistration.getStatus() != Status.ACTIVE;
     }
 
     @Override

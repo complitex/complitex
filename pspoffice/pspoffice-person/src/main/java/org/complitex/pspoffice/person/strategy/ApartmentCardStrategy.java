@@ -823,7 +823,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
                 long registrationId = registrationAttribute.getValueId();
                 Registration registration = registrationStrategy.getHistoryRegistration(registrationId, date);
                 if (registration.isFinished() && registration.getEndDate().after(date)) {
-                    registration.setStatus(StatusType.ACTIVE);
+                    registration.setStatus(Status.ACTIVE);
                     registration.removeAttribute(RegistrationStrategy.DEPARTURE_DATE);
                 }
                 registrations.add(registration);

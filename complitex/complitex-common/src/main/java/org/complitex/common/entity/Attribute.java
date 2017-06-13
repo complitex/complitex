@@ -18,7 +18,7 @@ public class Attribute implements Serializable {
     private Date startDate;
     private Date endDate;
 
-    private StatusType status = StatusType.ACTIVE;
+    private Status status = Status.ACTIVE;
 
     private List<StringValue> stringValues;
 
@@ -122,11 +122,11 @@ public class Attribute implements Serializable {
         this.startDate = startDate;
     }
 
-    public StatusType getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(StatusType status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
