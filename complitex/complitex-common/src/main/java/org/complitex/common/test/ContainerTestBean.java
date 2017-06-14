@@ -1,12 +1,11 @@
-package org.complitex.common.service;
+package org.complitex.common.test;
+
+import org.complitex.common.service.AbstractBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * @author Pavel Sknar
@@ -58,4 +57,16 @@ public class ContainerTestBean extends AbstractBean {
         assertFalse("Value is exists", testBean.isExistInCurrentTransaction("test3"));
         assertFalse("Value is exists", testBean.isExistInCurrentTransaction("test4"));
     }
+
+    private void assertTrue(String message, boolean condition){
+        if (!condition){
+            throw new RuntimeException(message);
+        }
+    }
+
+    private void assertFalse(String message, boolean condition){
+        assertTrue(message, !condition);
+    }
+
+
 }

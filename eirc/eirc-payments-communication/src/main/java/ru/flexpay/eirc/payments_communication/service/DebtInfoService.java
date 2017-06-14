@@ -119,7 +119,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
         Attribute attribute = eircModule.getAttribute(ModuleInstanceStrategy.ORGANIZATION);
         final Long eircOrganizationId;
         if (attribute == null ||
-                (eircOrganizationId = Long.parseLong(attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue())) == null) {
+                (eircOrganizationId = Long.parseLong(attribute.getStringValue(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue())) == null) {
             logger.error("Inner error: EIRC module '{}' did not content own organization", eircModuleId);
             return buildResponseContent(ResponseStatus.INTERNAL_ERROR);
         }
@@ -309,7 +309,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
             logger.error("Inner error: Module '{}' did not content organization", moduleId);
             return null;
         }
-        Long organizationId = Long.parseLong(attribute.getStringCulture(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue());
+        Long organizationId = Long.parseLong(attribute.getStringValue(EjbBeanLocator.getBean(StringLocaleBean.class).getSystemLocaleId()).getValue());
         EircOrganization organization = organizationStrategy.getDomainObject(organizationId, true);
         if (organization == null) {
             logger.error("Inner error: organization not found by id {}", organizationId);

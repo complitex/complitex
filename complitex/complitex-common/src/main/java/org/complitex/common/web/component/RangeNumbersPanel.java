@@ -23,12 +23,12 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.RangeValidator;
-import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.util.Locales;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.DomainObjectEditPanel;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
-import org.complitex.common.web.component.type.StringCulturePanel;
+import org.complitex.common.web.component.type.StringValuePanel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -48,10 +48,10 @@ public class RangeNumbersPanel extends Panel {
 
     private static class Entry implements Serializable {
 
-        final List<StringCulture> number;
+        final List<StringValue> number;
         final Range range;
 
-        Entry(List<StringCulture> number) {
+        Entry(List<StringValue> number) {
             this.number = number;
             this.range = null;
         }
@@ -76,9 +76,9 @@ public class RangeNumbersPanel extends Panel {
         }
 
         private void addNumber(String number) {
-            List<StringCulture> strings = StringCultures.newStringCultures();
+            List<StringValue> strings = StringValueUtil.newStringValues();
 
-            StringCultures.getSystemStringCulture(strings).setValue(number);
+            StringValueUtil.getSystemStringValue(strings).setValue(number);
 
             entries.add(new Entry(strings));
         }
@@ -87,20 +87,20 @@ public class RangeNumbersPanel extends Panel {
             entries.add(new Entry(new Range()));
         }
 
-        public List<List<StringCulture>> getNumbers() {
-            final Map<String, List<StringCulture>> numbersMap = Maps.newLinkedHashMap();
+        public List<List<StringValue>> getNumbers() {
+            final Map<String, List<StringValue>> numbersMap = Maps.newLinkedHashMap();
 
             for (Entry entry : entries) {
                 if (entry.number != null) {
-                    final String systemNumber = StringCultures.getSystemStringCulture(entry.number).getValue();
+                    final String systemNumber = StringValueUtil.getSystemStringValue(entry.number).getValue();
                     numbersMap.put(systemNumber, entry.number);
                 } else {
                     for (int number = entry.range.from, to = entry.range.to; number <= to; number++) {
                         final String systemNumber = String.valueOf(number);
                         if (!numbersMap.containsKey(systemNumber)) {
-                            final List<StringCulture> strings = StringCultures.newStringCultures();
+                            final List<StringValue> strings = StringValueUtil.newStringValues();
 
-                            StringCultures.getSystemStringCulture(strings).setValue(systemNumber);
+                            StringValueUtil.getSystemStringValue(strings).setValue(systemNumber);
 
                             numbersMap.put(systemNumber, strings);
                         }
@@ -110,13 +110,13 @@ public class RangeNumbersPanel extends Panel {
             return ImmutableList.copyOf(numbersMap.values());
         }
 
-        public String asString(List<StringCulture> strings) {
+        public String asString(List<StringValue> strings) {
 
 
-            final StringBuilder builder = new StringBuilder(StringCultures.getSystemStringCulture(strings).getValue());
+            final StringBuilder builder = new StringBuilder(StringValueUtil.getSystemStringValue(strings).getValue());
 
             final List<String> otherLanguageValues = Lists.newLinkedList();
-            for (StringCulture string : strings) {
+            for (StringValue string : strings) {
                 if (!Locales.getSystemLocaleId().equals(string.getLocaleId())
                         && !Strings.isEmpty(string.getValue())) {
                     otherLanguageValues.add(string.getValue());
@@ -163,10 +163,10 @@ public class RangeNumbersPanel extends Panel {
 
     private class NumberPanel extends Panel {
 
-        NumberPanel(String id, IModel<List<StringCulture>> numberModel, IModel<String> labelModel) {
+        NumberPanel(String id, IModel<List<StringValue>> numberModel, IModel<String> labelModel) {
             super(id);
             add(new Label("label", labelModel));
-            add(new StringCulturePanel("input", numberModel, true, labelModel, true));
+            add(new StringValuePanel("input", numberModel, true, labelModel, true));
         }
     }
 

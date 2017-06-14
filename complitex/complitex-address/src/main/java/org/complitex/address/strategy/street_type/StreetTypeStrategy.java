@@ -4,7 +4,7 @@ import org.complitex.address.resource.CommonResources;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -26,7 +26,7 @@ import static org.apache.wicket.util.string.Strings.isEmpty;
 public class StreetTypeStrategy extends TemplateStrategy {
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
     /*
      * Attribute type ids
      */

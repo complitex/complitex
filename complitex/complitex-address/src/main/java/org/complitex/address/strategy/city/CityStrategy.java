@@ -12,7 +12,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
@@ -37,7 +37,7 @@ public class CityStrategy extends TemplateStrategy {
     private static final String CITY_NS = CityStrategy.class.getName();
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private StrategyFactory strategyFactory;

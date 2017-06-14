@@ -1,7 +1,8 @@
-package org.complitex.common.service;
+package org.complitex.common.test;
 
-import com.beust.jcommander.internal.Maps;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import org.complitex.common.service.AbstractBean;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;

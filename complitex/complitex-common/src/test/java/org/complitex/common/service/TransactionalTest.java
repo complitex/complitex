@@ -1,7 +1,10 @@
 package org.complitex.common.service;
 
 import junit.framework.TestCase;
-import org.complitex.common.EjbTestBeanLocator;
+import org.complitex.common.test.ContainerTestBean;
+import org.complitex.common.test.EjbTestBeanLocator;
+import org.complitex.common.test.TestBean;
+import org.complitex.common.test.TestUserBean;
 import org.junit.Before;
 import org.junit.Test;
 

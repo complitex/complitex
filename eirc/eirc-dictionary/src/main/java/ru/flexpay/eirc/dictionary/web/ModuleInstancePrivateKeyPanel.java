@@ -14,8 +14,8 @@ import org.apache.wicket.model.Model;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.strategy.StringCultureBean;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.strategy.StringValueBean;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
@@ -37,7 +37,7 @@ import java.util.List;
 public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPanel {
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private ModuleInstanceStrategy moduleInstanceStrategy;
@@ -152,7 +152,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
             attribute.setAttributeTypeId(attributeTypeId);
             attribute.setObjectId(moduleInstance.getObjectId());
             attribute.setAttributeId(1L);
-            attribute.setStringCultures(StringCultures.newStringCultures());
+            attribute.setStringValues(StringValueUtil.newStringValues());
         }
         final AttributeStringModel attributeModel = new AttributeStringModel(attribute);
         final AttributeType attributeType =

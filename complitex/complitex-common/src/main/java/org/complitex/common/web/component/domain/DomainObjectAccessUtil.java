@@ -4,7 +4,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authorization.strategies.role.IRoleCheckingStrategy;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StatusType;
+import org.complitex.common.entity.Status;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.util.EjbBeanLocator;
@@ -40,17 +40,17 @@ public final class DomainObjectAccessUtil {
     }
 
     public static boolean canEdit(String strategyName, String entity, DomainObject object) {
-        return (isNew(object) || object.getStatus() == StatusType.ACTIVE)
+        return (isNew(object) || object.getStatus() == Status.ACTIVE)
                 && getApplication().hasAnyRole(new Roles(getEditRoles(strategyName, entity)));
     }
 
     public static boolean canDisable(String strategyName, String entity, DomainObject object) {
-        return !isNew(object) && (object.getStatus() == StatusType.ACTIVE)
+        return !isNew(object) && (object.getStatus() == Status.ACTIVE)
                 && getApplication().hasAnyRole(new Roles(getEditRoles(strategyName, entity)));
     }
 
     public static boolean canEnable(String strategyName, String entity, DomainObject object){
-        return !isNew(object) && (object.getStatus() == StatusType.INACTIVE)
+        return !isNew(object) && (object.getStatus() == Status.INACTIVE)
                 && getApplication().hasAnyRole(new Roles(getEditRoles(strategyName, entity)));
     }
 

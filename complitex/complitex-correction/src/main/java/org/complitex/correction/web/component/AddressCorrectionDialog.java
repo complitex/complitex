@@ -39,7 +39,7 @@ import org.odlabs.wiquery.ui.dialog.Dialog;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class AddressCorrectionDialog<T> extends Panel {
@@ -116,8 +116,7 @@ public class AddressCorrectionDialog<T> extends Panel {
 
         DomainObjectFilter example = new DomainObjectFilter();
         List<? extends DomainObject> streetTypes = streetTypeStrategy.getList(example);
-        Collections.sort(streetTypes, (o1, o2) -> streetTypeStrategy.getName(o1, getLocale())
-                .compareTo(streetTypeStrategy.getName(o2, getLocale())));
+        streetTypes.sort(Comparator.comparing(o -> streetTypeStrategy.getName(o, getLocale())));
 
         streetTypeModel = new Model<>();
         DomainObjectDisableAwareRenderer renderer = new DomainObjectDisableAwareRenderer() {

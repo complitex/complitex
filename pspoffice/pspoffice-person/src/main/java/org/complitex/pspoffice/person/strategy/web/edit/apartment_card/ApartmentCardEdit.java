@@ -32,7 +32,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.*;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
@@ -104,7 +104,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     private ApartmentCardStrategy apartmentCardStrategy;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private LogBean logBean;

@@ -19,7 +19,7 @@ CREATE TABLE `ownership` (
   `parent_entity_id` BIGINT(20) COMMENT 'Не используется',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров объекта',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата завершения периода действия параметров объекта',
-  `status` varchar(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус объекта: ACTIVE, INACTIVE или ARCHIVE',
+  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус объекта: INACTIVE(0), ACTIVE(1), или ARCHIVE(2)',
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0 COMMENT 'Ключ прав доступа к объекту',
   `external_id` BIGINT(20) COMMENT 'Внешний идентификатор импорта записи',
   PRIMARY KEY  (`pk_id`),
@@ -44,10 +44,10 @@ CREATE TABLE `ownership_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 1100 - НАЗВАНИЕ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 1100 - STRING_CULTURE',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 1100 - STRING_VALUE',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия параметров атрибута',
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
+  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус атрибута: INACTIVE(0), ACTIVE(1), или ARCHIVE(2)',
   PRIMARY KEY  (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -64,9 +64,9 @@ CREATE TABLE `ownership_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта формы собственности';
 
-DROP TABLE IF EXISTS `ownership_string_culture`;
+DROP TABLE IF EXISTS `ownership_string_value`;
 
-CREATE TABLE `ownership_string_culture` (
+CREATE TABLE `ownership_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор значения',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -75,7 +75,7 @@ CREATE TABLE `ownership_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_ownership_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_ownership_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута формы собственности';
 
 -- ------------------------------
@@ -90,7 +90,7 @@ CREATE TABLE `privilege` (
   `parent_entity_id` BIGINT(20) COMMENT 'Не используется',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров объекта',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия параметров объекта',
-  `status` varchar(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус объекта: ACTIVE, INACTIVE или ARCHIVE',
+  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус объекта: INACTIVE(0), ACTIVE(1), или ARCHIVE(2)',
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0 COMMENT 'Ключ прав доступа к объекту',
   `external_id` BIGINT(20) COMMENT 'Внешний идентификатор импорта записи',
   PRIMARY KEY  (`pk_id`),
@@ -115,10 +115,10 @@ CREATE TABLE `privilege_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 1200 - НАЗВАНИЕ, 1201 - КОД',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значения: 1200 - STRING_CULTURE, 1201 - STRING',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значения: 1200 - STRING_VALUE, 1201 - STRING',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия значений атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата завершения периода действия значений атрибута',
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
+  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус атрибута: INACTIVE(0), ACTIVE(1), или ARCHIVE(2)',
   PRIMARY KEY  (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -135,9 +135,9 @@ CREATE TABLE `privilege_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта привилегии';
 
-DROP TABLE IF EXISTS `privilege_string_culture`;
+DROP TABLE IF EXISTS `privilege_string_value`;
 
-CREATE TABLE `privilege_string_culture` (
+CREATE TABLE `privilege_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор значения',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -146,7 +146,7 @@ CREATE TABLE `privilege_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_privilege_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_privilege_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута привилегий';
 
 -- ------------------------------

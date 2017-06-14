@@ -311,7 +311,7 @@ public class BuildingAddressStrategy extends TemplateStrategy {
         Map<String, Object> params = Maps.newHashMap();
         params.put("addressId", addressId);
         params.put("enabled", enabled);
-        params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
+        params.put("status", enabled ? Status.INACTIVE : Status.ACTIVE);
         sqlSession().update(BUILDING_ADDRESS_NS + ".updateBuildingAddressActivity", params);
     }
 

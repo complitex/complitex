@@ -5,7 +5,7 @@
 package org.complitex.pspoffice.importing.legacy.service;
 
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 
@@ -34,21 +34,21 @@ public class Utils {
         return DATE_FORMATTER.format(date);
     }
 
-    public static void setValue(List<StringCulture> values, long localeId, String value) {
-        for (StringCulture culture : values) {
-            if (culture.getLocaleId().equals(localeId)) {
-                culture.setValue(value);
+    public static void setValue(List<StringValue> values, long localeId, String value) {
+        for (StringValue v : values) {
+            if (v.getLocaleId().equals(localeId)) {
+                v.setValue(value);
             }
         }
     }
 
     public static void setValue(Attribute attribute, long localeId, String value) {
-        setValue(attribute.getStringCultures(), localeId, value);
+        setValue(attribute.getStringValues(), localeId, value);
     }
 
     public static void setValue(Attribute attribute, String value) {
-        for (StringCulture culture : attribute.getStringCultures()) {
-            culture.setValue(value);
+        for (StringValue v : attribute.getStringValues()) {
+            v.setValue(value);
         }
     }
 

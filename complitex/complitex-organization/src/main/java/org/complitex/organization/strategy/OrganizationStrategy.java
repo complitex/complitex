@@ -330,7 +330,7 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         Map<String, Object> params = Maps.newHashMap();
         params.put("childrenIds", childrenIds);
         params.put("enabled", enabled);
-        params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
+        params.put("status", enabled ? Status.INACTIVE : Status.ACTIVE);
 
         sqlSession().update(ORGANIZATION_NS + ".updateChildrenActivity", params);
     }

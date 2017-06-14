@@ -25,7 +25,7 @@ import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.converter.DateConverter;
 import org.complitex.common.entity.*;
 import org.complitex.common.strategy.*;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
@@ -48,7 +48,7 @@ public class DomainObjectListPanel extends Panel {
     private StrategyFactory strategyFactory;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private StringLocaleBean stringLocaleBean;
@@ -248,7 +248,7 @@ public class DomainObjectListPanel extends Panel {
 
                     @Override
                     public String getObject() {
-                        return Strings.capitalize(StringCultures.getValue(attributeType.getAttributeNames(), getLocale()).
+                        return Strings.capitalize(StringValueUtil.getValue(attributeType.getAttributeNames(), getLocale()).
                                 toLowerCase(getLocale()));
                     }
                 }));
@@ -289,7 +289,7 @@ public class DomainObjectListPanel extends Panel {
                     switch (SimpleTypes.valueOf(name)) {
                         case STRING:
                         case BIG_STRING:
-                        case STRING_CULTURE:
+                        case STRING_VALUE:
                         case INTEGER:
                         case DOUBLE: {
                             filter = new StringPanel("filter", filterModel, false, null, true);

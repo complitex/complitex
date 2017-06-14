@@ -16,7 +16,7 @@ import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.EntityBean;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.ShowMode;
@@ -41,7 +41,7 @@ public class AddressCorrectionInputPanel extends Panel {
     private AddressCorrectionBean addressCorrectionBean;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private EntityBean entityBean;

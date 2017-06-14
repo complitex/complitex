@@ -11,7 +11,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.History;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 
 import javax.ejb.EJB;
@@ -31,7 +31,7 @@ public class HistoryPanel extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
     private String entity;
     private String strategyName;
     private long objectId;

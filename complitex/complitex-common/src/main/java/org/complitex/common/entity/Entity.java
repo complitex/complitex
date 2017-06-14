@@ -1,6 +1,6 @@
 package org.complitex.common.entity;
 
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 
 import java.util.List;
 import java.util.Locale;
@@ -8,7 +8,7 @@ import java.util.Locale;
 public class Entity implements ILongId {
     private Long id;
     private String table;
-    private List<StringCulture> names;
+    private List<StringValue> names;
     private List<AttributeType> attributeTypes;
 
     public AttributeType getAttributeType(Long attributeTypeId) {
@@ -21,11 +21,11 @@ public class Entity implements ILongId {
     }
 
     public String getName(Locale locale){
-        return StringCultures.getValue(names, locale);
+        return StringValueUtil.getValue(names, locale);
     }
 
     public String getName(Long attributeTypeId, Locale locale){
-        return StringCultures.getValue(getAttributeType(attributeTypeId).getAttributeNames(), locale);
+        return StringValueUtil.getValue(getAttributeType(attributeTypeId).getAttributeNames(), locale);
     }
 
     public String getEntityName() {
@@ -52,11 +52,11 @@ public class Entity implements ILongId {
         this.attributeTypes = attributeTypes;
     }
 
-    public List<StringCulture> getNames() {
+    public List<StringValue> getNames() {
         return names;
     }
 
-    public void setNames(List<StringCulture> names) {
+    public void setNames(List<StringValue> names) {
         this.names = names;
     }
 

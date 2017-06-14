@@ -1,6 +1,7 @@
-package org.complitex.common.service;
+package org.complitex.common.test;
 
 import com.google.common.collect.Maps;
+import org.complitex.common.service.AbstractBean;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class TestUserBean extends AbstractBean{
+public class TestUserBean extends AbstractBean {
     private static final String NS = TestBean.class.getName();
 
     @Resource

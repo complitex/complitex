@@ -17,7 +17,7 @@ CREATE TABLE `person` (
   `parent_entity_id` BIGINT(20),
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0,
   `external_id` BIGINT(20),
   PRIMARY KEY  (`pk_id`),
@@ -44,7 +44,7 @@ CREATE TABLE `person_attribute` (
   `value_type_id` BIGINT(20) NOT NULL,
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -61,8 +61,8 @@ CREATE TABLE `person_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `person_string_culture`;
-CREATE TABLE `person_string_culture` (
+DROP TABLE IF EXISTS `person_string_value`;
+CREATE TABLE `person_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `id` BIGINT(20) NOT NULL,
   `locale_id` BIGINT(20) NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE `person_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_person_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_person_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Apartment Card --
@@ -83,7 +83,7 @@ CREATE TABLE `apartment_card` (
   `parent_entity_id` BIGINT(20),
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0,
   `external_id` BIGINT(20),
   PRIMARY KEY  (`pk_id`),
@@ -110,7 +110,7 @@ CREATE TABLE `apartment_card_attribute` (
   `value_type_id` BIGINT(20) NOT NULL,
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -127,8 +127,8 @@ CREATE TABLE `apartment_card_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `apartment_card_string_culture`;
-CREATE TABLE `apartment_card_string_culture` (
+DROP TABLE IF EXISTS `apartment_card_string_value`;
+CREATE TABLE `apartment_card_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `id` BIGINT(20) NOT NULL,
   `locale_id` BIGINT(20) NOT NULL,
@@ -137,7 +137,7 @@ CREATE TABLE `apartment_card_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_apartment_card_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_apartment_card_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `registration`;
@@ -148,7 +148,7 @@ CREATE TABLE `registration` (
   `parent_entity_id` BIGINT(20),
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0,
   `external_id` BIGINT(20),
   PRIMARY KEY  (`pk_id`),
@@ -175,7 +175,7 @@ CREATE TABLE `registration_attribute` (
   `value_type_id` BIGINT(20) NOT NULL,
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -192,8 +192,8 @@ CREATE TABLE `registration_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `registration_string_culture`;
-CREATE TABLE `registration_string_culture` (
+DROP TABLE IF EXISTS `registration_string_value`;
+CREATE TABLE `registration_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `id` BIGINT(20) NOT NULL,
   `locale_id` BIGINT(20) NOT NULL,
@@ -202,7 +202,7 @@ CREATE TABLE `registration_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_registration_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_registration_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Owner relationship --
@@ -214,7 +214,7 @@ CREATE TABLE `owner_relationship` (
   `parent_entity_id` BIGINT(20),
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0,
   `external_id` BIGINT(20),
   PRIMARY KEY  (`pk_id`),
@@ -241,7 +241,7 @@ CREATE TABLE `owner_relationship_attribute` (
   `value_type_id` BIGINT(20) NOT NULL,
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -258,8 +258,8 @@ CREATE TABLE `owner_relationship_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `owner_relationship_string_culture`;
-CREATE TABLE `owner_relationship_string_culture` (
+DROP TABLE IF EXISTS `owner_relationship_string_value`;
+CREATE TABLE `owner_relationship_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `id` BIGINT(20) NOT NULL,
   `locale_id` BIGINT(20) NOT NULL,
@@ -268,7 +268,7 @@ CREATE TABLE `owner_relationship_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_owner_relationship_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_owner_relationship_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Form of ownership
@@ -281,7 +281,7 @@ CREATE TABLE `ownership_form` (
   `parent_entity_id` BIGINT(20) COMMENT 'Не используется',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров объекта',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата завершения периода действия параметров объекта',
-  `status` varchar(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус объекта: ACTIVE, INACTIVE или ARCHIVE',
+  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус объекта: ACTIVE, INACTIVE или ARCHIVE',
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0 COMMENT 'Ключ прав доступа к объекту',
   `external_id` BIGINT(20) COMMENT 'Внешний идентификатор импорта записи',
   PRIMARY KEY  (`pk_id`),
@@ -306,10 +306,10 @@ CREATE TABLE `ownership_form_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 2500 - НАЗВАНИЕ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 2500 - STRING_CULTURE',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 2500 - STRING_VALUE',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия параметров атрибута',
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
+  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
   PRIMARY KEY  (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -326,9 +326,9 @@ CREATE TABLE `ownership_form_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта формы собственности';
 
-DROP TABLE IF EXISTS `ownership_form_string_culture`;
+DROP TABLE IF EXISTS `ownership_form_string_value`;
 
-CREATE TABLE `ownership_form_string_culture` (
+CREATE TABLE `ownership_form_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор значения',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -337,7 +337,7 @@ CREATE TABLE `ownership_form_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_ownership_form_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_ownership_form_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута формы собственности';
 
 -- Registration type
@@ -350,7 +350,7 @@ CREATE TABLE `registration_type` (
   `parent_entity_id` BIGINT(20) COMMENT 'Не используется',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров объекта',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата завершения периода действия параметров объекта',
-  `status` varchar(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус объекта: ACTIVE, INACTIVE или ARCHIVE',
+  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус объекта: ACTIVE, INACTIVE или ARCHIVE',
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0 COMMENT 'Ключ прав доступа к объекту',
   `external_id` BIGINT(20) COMMENT 'Внешний идентификатор импорта записи',
   PRIMARY KEY  (`pk_id`),
@@ -375,10 +375,10 @@ CREATE TABLE `registration_type_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 2600 - НАЗВАНИЕ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 2600 - STRING_CULTURE',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 2600 - STRING_VALUE',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия параметров атрибута',
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
+  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
   PRIMARY KEY  (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -395,9 +395,9 @@ CREATE TABLE `registration_type_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта тип регистрации';
 
-DROP TABLE IF EXISTS `registration_type_string_culture`;
+DROP TABLE IF EXISTS `registration_type_string_value`;
 
-CREATE TABLE `registration_type_string_culture` (
+CREATE TABLE `registration_type_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор значения',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -406,7 +406,7 @@ CREATE TABLE `registration_type_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_registration_type_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_registration_type_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута типа регистрации';
 
 -- Document type
@@ -419,7 +419,7 @@ CREATE TABLE `document_type` (
   `parent_entity_id` BIGINT(20) COMMENT 'Не используется',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров объекта',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата завершения периода действия параметров объекта',
-  `status` varchar(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус объекта: ACTIVE, INACTIVE или ARCHIVE',
+  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус объекта: ACTIVE, INACTIVE или ARCHIVE',
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0 COMMENT 'Ключ прав доступа к объекту',
   `external_id` BIGINT(20) COMMENT 'Внешний идентификатор импорта записи',
   PRIMARY KEY  (`pk_id`),
@@ -444,10 +444,10 @@ CREATE TABLE `document_type_attribute` (
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 2700 - НАЗВАНИЕ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 2700 - STRING_CULTURE',
+  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 2700 - STRING_VALUE',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия параметров атрибута',
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
+  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус атрибута: ACTIVE, INACTIVE или ARCHIVE',
   PRIMARY KEY  (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -464,9 +464,9 @@ CREATE TABLE `document_type_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта тип документа';
 
-DROP TABLE IF EXISTS `document_type_string_culture`;
+DROP TABLE IF EXISTS `document_type_string_value`;
 
-CREATE TABLE `document_type_string_culture` (
+CREATE TABLE `document_type_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор значения',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -475,7 +475,7 @@ CREATE TABLE `document_type_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_document_type_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_document_type_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута типа документа';
 
 -- Document
@@ -488,7 +488,7 @@ CREATE TABLE `document` (
   `parent_entity_id` BIGINT(20),
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0,
   `external_id` BIGINT(20),
   PRIMARY KEY  (`pk_id`),
@@ -516,7 +516,7 @@ CREATE TABLE `document_attribute` (
   `value_type_id` BIGINT(20) NOT NULL,
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY  (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -533,9 +533,9 @@ CREATE TABLE `document_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта документ';
 
-DROP TABLE IF EXISTS `document_string_culture`;
+DROP TABLE IF EXISTS `document_string_value`;
 
-CREATE TABLE `document_string_culture` (
+CREATE TABLE `document_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `id` BIGINT(20) NOT NULL,
   `locale_id` BIGINT(20) NOT NULL,
@@ -544,7 +544,7 @@ CREATE TABLE `document_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_document_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_document_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута документа';
 
 -- Military service relation
@@ -557,7 +557,7 @@ CREATE TABLE `military_service_relation` (
   `parent_entity_id` BIGINT(20),
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0,
   `external_id` BIGINT(20),
   PRIMARY KEY  (`pk_id`),
@@ -585,7 +585,7 @@ CREATE TABLE `military_service_relation_attribute` (
   `value_type_id` BIGINT(20) NOT NULL,
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY  (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -602,9 +602,9 @@ CREATE TABLE `military_service_relation_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты отношения к воинской обязанности';
 
-DROP TABLE IF EXISTS `military_service_relation_string_culture`;
+DROP TABLE IF EXISTS `military_service_relation_string_value`;
 
-CREATE TABLE `military_service_relation_string_culture` (
+CREATE TABLE `military_service_relation_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `id` BIGINT(20) NOT NULL,
   `locale_id` BIGINT(20) NOT NULL,
@@ -613,7 +613,7 @@ CREATE TABLE `military_service_relation_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_military_service_relation_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_military_service_relation_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута отношения к воинской обязанности';
 
 -- Departure reason
@@ -626,7 +626,7 @@ CREATE TABLE `departure_reason` (
   `parent_entity_id` BIGINT(20),
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0,
   `external_id` BIGINT(20),
   PRIMARY KEY  (`pk_id`),
@@ -654,7 +654,7 @@ CREATE TABLE `departure_reason_attribute` (
   `value_type_id` BIGINT(20) NOT NULL,
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY  (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -671,9 +671,9 @@ CREATE TABLE `departure_reason_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты причины выбытия';
 
-DROP TABLE IF EXISTS `departure_reason_string_culture`;
+DROP TABLE IF EXISTS `departure_reason_string_value`;
 
-CREATE TABLE `departure_reason_string_culture` (
+CREATE TABLE `departure_reason_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `id` BIGINT(20) NOT NULL,
   `locale_id` BIGINT(20) NOT NULL,
@@ -682,7 +682,7 @@ CREATE TABLE `departure_reason_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_departure_reason_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_departure_reason_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута причины выбытия';
 
 -- Housing rights
@@ -695,7 +695,7 @@ CREATE TABLE `housing_rights` (
   `parent_entity_id` BIGINT(20),
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   `permission_id` BIGINT(20) NOT NULL DEFAULT 0,
   `external_id` BIGINT(20),
   PRIMARY KEY  (`pk_id`),
@@ -723,7 +723,7 @@ CREATE TABLE `housing_rights_attribute` (
   `value_type_id` BIGINT(20) NOT NULL,
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` TIMESTAMP NULL DEFAULT NULL,
-  `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  `status` INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY  (`pk_id`),
   UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
@@ -740,9 +740,9 @@ CREATE TABLE `housing_rights_attribute` (
     REFERENCES `attribute_value_type` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты документа права на жилплощадь';
 
-DROP TABLE IF EXISTS `housing_rights_string_culture`;
+DROP TABLE IF EXISTS `housing_rights_string_value`;
 
-CREATE TABLE `housing_rights_string_culture` (
+CREATE TABLE `housing_rights_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `id` BIGINT(20) NOT NULL,
   `locale_id` BIGINT(20) NOT NULL,
@@ -751,7 +751,7 @@ CREATE TABLE `housing_rights_string_culture` (
   UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_housing_rights_string_culture__locales` FOREIGN KEY (`locale_id`) REFERENCES `locales` (`id`)
+  CONSTRAINT `fk_housing_rights_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализированное значение атрибута документа права на жилплощадь';
 
 

@@ -9,7 +9,7 @@ public class DomainObject implements ILongId {
     private Long pkId;
     private String entityName;
     private Long objectId;
-    private StatusType status = StatusType.ACTIVE;
+    private Status status = Status.ACTIVE;
     private Date startDate;
     private Date endDate;
     private Long parentId;
@@ -175,11 +175,11 @@ public class DomainObject implements ILongId {
         this.objectId = objectId;
     }
 
-    public StatusType getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(StatusType status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

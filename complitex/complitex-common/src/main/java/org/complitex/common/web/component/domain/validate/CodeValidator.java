@@ -7,7 +7,7 @@ import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.DomainObjectEditPanel;
 
 import java.util.Locale;
@@ -40,14 +40,14 @@ public abstract class CodeValidator implements IValidator {
             throw new IllegalStateException("Domain object(entity = " + entity + ", id = " + object.getObjectId()
                     + ") has no attribute with attribute type id = " + codeAttributeTypeId + "!");
         }
-        if (codeAttribute.getStringCultures() == null) {
+        if (codeAttribute.getStringValues() == null) {
             throw new IllegalStateException("Attribute of domain object(entity = " + entity + ", id = " + object.getObjectId()
                     + ") with attribute type id = " + codeAttribute + " and attribute id = " + codeAttribute.getAttributeId()
                     + " has null lozalized values.");
         }
 
         StringLocaleBean stringLocaleBean = EjbBeanLocator.getBean(StringLocaleBean.class);
-        String code = StringCultures.getValue(codeAttribute.getStringCultures(), stringLocaleBean.getSystemLocale());
+        String code = StringValueUtil.getValue(codeAttribute.getStringValues(), stringLocaleBean.getSystemLocale());
 
         Long existingId = validateCode(object.getObjectId(), code);
         if (existingId != null) {
@@ -59,7 +59,7 @@ public abstract class CodeValidator implements IValidator {
 
     protected String getErrorMessage(Long existingId, String code, Locale locale) {
         IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(strategyName, entity);
-        String entityName = StringCultures.getValue(strategy.getEntity().getNames(), locale);
+        String entityName = StringValueUtil.getValue(strategy.getEntity().getNames(), locale);
         return ResourceUtil.getFormatString(RESOURCE_BUNDLE, "code_validation_error", locale, entityName, existingId);
     }
 

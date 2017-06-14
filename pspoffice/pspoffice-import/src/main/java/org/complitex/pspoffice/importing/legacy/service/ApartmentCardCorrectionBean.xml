@@ -51,20 +51,20 @@
     <select id="findSystemApartment" parameterType="map" resultType="long">
         SELECT DISTINCT e.`object_id` FROM `apartment` e 
             JOIN `apartment_attribute` n ON (e.`object_id` = n.`object_id` 
-                AND n.`attribute_type_id` = #{apartmentNameAT} AND n.`status` = 'ACTIVE')
-            LEFT JOIN `apartment_string_culture` name ON (n.`value_id` = name.`id` AND name.`locale_id` = #{localeId})
-            WHERE e.`status` IN ('ACTIVE', 'INACTIVE') AND name.`value` = #{name}
+                AND n.`attribute_type_id` = #{apartmentNameAT} AND n.`status` = 1)
+            LEFT JOIN `apartment_string_value` name ON (n.`value_id` = name.`id` AND name.`locale_id` = #{localeId})
+            WHERE e.`status` IN (1, 0) AND name.`value` = #{name}
                 AND e.`parent_id` = #{buildingId}
     </select>
     
     <select id="findSystemApartmentCard" parameterType="map" resultType="long">
         SELECT e.`object_id` FROM `apartment_card` e
-        JOIN `locales` sys ON sys.`system` = 1
+        JOIN `locale` sys ON sys.`system` = 1
         JOIN `apartment_card_attribute` kv ON (kv.`object_id` = e.`object_id` AND kv.`attribute_type_id` = #{apartmentCardAddressAT}
-            AND kv.`value_type_id` = #{apartmentCardApartmentATID} AND kv.`status` = 'ACTIVE')
+            AND kv.`value_type_id` = #{apartmentCardApartmentATID} AND kv.`status` = 1)
         JOIN `apartment_card_attribute` acid ON (acid.`object_id` = e.`object_id` AND acid.`attribute_type_id` = #{apartmentCardIdAT}
-            AND acid.`status` = 'ACTIVE')
-        JOIN `apartment_card_string_culture` acid_value ON (acid_value.`id` = acid.`value_id` AND acid_value.`locale_id` = sys.`id`)
+            AND acid.`status` = 1)
+        JOIN `apartment_card_string_value` acid_value ON (acid_value.`id` = acid.`value_id` AND acid_value.`locale_id` = sys.`id`)
         AND kv.`value_id` = #{apartmentId} AND acid_value.`value` = #{apartmentCardId}
     </select>
     

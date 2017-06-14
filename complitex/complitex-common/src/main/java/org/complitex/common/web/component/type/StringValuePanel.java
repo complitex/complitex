@@ -8,7 +8,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.strategy.StringLocaleBean;
 
 import javax.ejb.EJB;
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Artem
  */
-public final class StringCulturePanel extends Panel {
+public final class StringValuePanel extends Panel {
     @EJB
     private StringLocaleBean stringLocaleBean;
 
@@ -30,8 +30,8 @@ public final class StringCulturePanel extends Panel {
      * @param labelModel
      * @param enabled
      */
-    public StringCulturePanel(String id, IModel<List<StringCulture>> model, final boolean required, final IModel<String> labelModel,
-            final boolean enabled) {
+    public StringValuePanel(String id, IModel<List<StringValue>> model, final boolean required, final IModel<String> labelModel,
+                            final boolean enabled) {
         super(id);
         init(model, required, labelModel, enabled, null);
     }
@@ -44,19 +44,19 @@ public final class StringCulturePanel extends Panel {
      * @param labelModel
      * @param enabled
      */
-    public StringCulturePanel(String id, IModel<List<StringCulture>> model, final boolean required, final IModel<String> labelModel,
-            final boolean enabled, MarkupContainer[] toUpdate) {
+    public StringValuePanel(String id, IModel<List<StringValue>> model, final boolean required, final IModel<String> labelModel,
+                            final boolean enabled, MarkupContainer[] toUpdate) {
         super(id);
         init(model, required, labelModel, enabled, toUpdate);
     }
 
-    private void init(IModel<List<StringCulture>> model, final boolean required, final IModel<String> labelModel, final boolean enabled,
-            final MarkupContainer[] toUpdate) {
-        add(new ListView<StringCulture>("strings", model) {
+    private void init(IModel<List<StringValue>> model, final boolean required, final IModel<String> labelModel, final boolean enabled,
+                      final MarkupContainer[] toUpdate) {
+        add(new ListView<StringValue>("strings", model) {
 
             @Override
-            protected void populateItem(ListItem<StringCulture> item) {
-                StringCulture string = item.getModelObject();
+            protected void populateItem(ListItem<StringValue> item) {
+                StringValue string = item.getModelObject();
 
                 Label language = new Label("language", stringLocaleBean.convert(stringLocaleBean.getLocaleObject(string.getLocaleId())).getDisplayLanguage(getLocale()));
                 item.add(language);

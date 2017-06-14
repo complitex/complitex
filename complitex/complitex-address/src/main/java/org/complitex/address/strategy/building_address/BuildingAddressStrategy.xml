@@ -3,27 +3,27 @@
 
 <mapper namespace="org.complitex.address.strategy.building_address.BuildingAddressStrategy">
     <sql id="selectByParent">
-        FROM `building` e WHERE e.`status` IN ('ACTIVE', 'INACTIVE') AND e.`parent_id` = #{addressId}
+        FROM `building` e WHERE e.`status` IN (1, 0) AND e.`parent_id` = #{addressId}
     </sql>
 
     <sql id="selectByReference">
         FROM `building` e
-        JOIN `building_attribute` ref ON (ref.`status` = 'ACTIVE' AND ref.`object_id` = e.`object_id`
+        JOIN `building_attribute` ref ON (ref.`status` = 1 AND ref.`object_id` = e.`object_id`
           AND ref.`attribute_type_id` = 501 AND ref.`value_id` = #{addressId})
-        WHERE e.`status` IN ('ACTIVE', 'INACTIVE')
+        WHERE e.`status` IN (1, 0)
     </sql>
 
     <sql id="selectReferenceAddress">
         FROM `building_address` e
-        JOIN `building_attribute` ba ON (ba.`status` = 'ACTIVE' AND ba.`attribute_type_id` = 501
+        JOIN `building_attribute` ba ON (ba.`status` = 1 AND ba.`attribute_type_id` = 501
             AND ba.`object_id` = #{buildingId} AND e.`object_id` = ba.`value_id`)
-        WHERE e.`status` IN ('ACTIVE', 'INACTIVE')
+        WHERE e.`status` IN (1, 0)
     </sql>
 
     <sql id="selectParentAddress">
         FROM `building_address` e
-        JOIN `building` b ON ((b.`status` IN ('ACTIVE', 'INACTIVE')) AND b.`object_id` = #{buildingId} AND b.`parent_id` = e.`object_id`)
-        WHERE e.`status` IN ('ACTIVE', 'INACTIVE')
+        JOIN `building` b ON ((b.`status` IN (1, 0)) AND b.`object_id` = #{buildingId} AND b.`parent_id` = e.`object_id`)
+        WHERE e.`status` IN (1, 0)
     </sql>
 
     <!-- permissions -->
@@ -77,10 +77,10 @@
                 AND
                 <choose>
                     <when test="enabled">
-                        e.`status` = 'ACTIVE'
+                        e.`status` = 1
                     </when>
                     <otherwise>
-                        e.`status` = 'INACTIVE'
+                        e.`status` = 0
                     </otherwise>
                 </choose>
     </update>
@@ -91,9 +91,9 @@
                 <when test="orderByAttributeTypeId > 0">
                     <if test="orderByAttributeTypeId == 1500 or orderByAttributeTypeId == 1501 or orderByAttributeTypeId == 1502">
                         ORDER BY LPAD(
-                            (SELECT sc.`value` FROM `${entityName}_string_culture` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
+                            (SELECT sc.`value` FROM `${entityName}_string_value` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
                                 (SELECT orderByAttr.`value_id` FROM `${entityName}_attribute` orderByAttr WHERE orderByAttr.`object_id` = e.`object_id`
-                                    AND orderByAttr.`status` = 'ACTIVE' AND orderByAttr.`attribute_type_id` = #{orderByAttributeTypeId}
+                                    AND orderByAttr.`status` = 1 AND orderByAttr.`attribute_type_id` = #{orderByAttributeTypeId}
                                 )
                             ), 15, ' ')
                         <choose>
@@ -110,19 +110,19 @@
                     <if test="localeId != null">
                         ORDER BY
                             LPAD(
-                                (SELECT num_sc.`value` FROM `building_address_string_culture` num_sc
+                                (SELECT num_sc.`value` FROM `building_address_string_value` num_sc
                                     WHERE num_sc.`locale_id` = #{localeId} AND EXISTS(
-                                    SELECT 1 FROM `building_address_attribute` num WHERE num.`status` = 'ACTIVE'
+                                    SELECT 1 FROM `building_address_attribute` num WHERE num.`status` = 1
                                         AND num.`object_id` = e.`object_id` AND num.`attribute_type_id` = 1500 AND num.`value_id` = num_sc.`id`)
                                 ), 15, ' '),
-                            LPAD(IFNULL((SELECT corp_sc.`value` FROM `building_address_string_culture` corp_sc
+                            LPAD(IFNULL((SELECT corp_sc.`value` FROM `building_address_string_value` corp_sc
                                     WHERE corp_sc.`locale_id` = #{localeId} AND EXISTS(
-                                        SELECT 1 FROM `building_address_attribute` corp WHERE corp.`status` = 'ACTIVE'
+                                        SELECT 1 FROM `building_address_attribute` corp WHERE corp.`status` = 1
                                             AND corp.`object_id` = e.`object_id` AND corp.`attribute_type_id` = 1501 AND corp.`value_id` = corp_sc.`id`)
                                     ),''), 15, ' '),
-                            LPAD(IFNULL((SELECT structure_sc.`value` FROM `building_address_string_culture` structure_sc
+                            LPAD(IFNULL((SELECT structure_sc.`value` FROM `building_address_string_value` structure_sc
                                     WHERE structure_sc.`locale_id` = #{localeId} AND EXISTS(
-                                        SELECT 1 FROM `building_address_attribute` structure WHERE structure.`status` = 'ACTIVE'
+                                        SELECT 1 FROM `building_address_attribute` structure WHERE structure.`status` = 1
                                             AND structure.`object_id` = e.`object_id` AND structure.`attribute_type_id` = 1502 AND structure.`value_id` = structure_sc.`id`)
                                     ),''), 15, ' ')
                     </if>
@@ -138,10 +138,10 @@
         SELECT e.*
         FROM `building_address` e
         <if test="additionalParams.districtId != null">
-            left join `building_attribute` ba on (ba.`status` = 'ACTIVE' and ba.`attribute_type_id` = 501
+            left join `building_attribute` ba on (ba.`status` = 1 and ba.`attribute_type_id` = 501
               and ba.`value_id` = e.`object_id`)
             left join `building` b on (b.`object_id` = ba.`object_id`)
-            left join `building_attribute` d on (d.`status` = 'ACTIVE' and d.`attribute_type_id` = 500)
+            left join `building_attribute` d on (d.`status` = 1 and d.`attribute_type_id` = 500)
         </if>
 
 

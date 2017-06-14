@@ -1,3 +1,5 @@
+DELIMITER /
+
 DROP FUNCTION IF EXISTS `TO_CYRILLIC`/
 
 CREATE FUNCTION `TO_CYRILLIC`(str VARCHAR(1000)) RETURNS VARCHAR(1000) CHARSET utf8 COLLATE utf8_unicode_ci
@@ -8,3 +10,5 @@ NO SQL
       'x', 'х'), 'X', 'Х'), 'k', 'к'), 'K', 'К'), 'M', 'М'), 'e', 'е'), 'E', 'Е'), 'o', 'о'), 'O', 'О'), 'p', 'р'), 'P', 'Р'),
       'c', 'с'), 'C', 'С'), 'B', 'В'), 'i', 'і'), 'I', 'І'), 'Ї', 'Є'), 'Ў', 'І'), 'ў', 'і'), '∙', 'ї'), '°', 'Ї');
   END/
+
+DELIMITER ;

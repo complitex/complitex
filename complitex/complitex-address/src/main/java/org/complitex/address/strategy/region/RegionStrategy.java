@@ -9,7 +9,7 @@ import org.complitex.address.resource.CommonResources;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.domain.DomainObjectListPanel;
@@ -32,7 +32,7 @@ import java.util.Map;
 public class RegionStrategy extends TemplateStrategy {
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     /*
      * Attribute type ids

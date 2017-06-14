@@ -2,7 +2,7 @@ package org.complitex.common.web.component;
 
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StatusType;
+import org.complitex.common.entity.Status;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public abstract class DomainObjectDisableAwareRenderer implements IDisableAwareC
 
     @Override
     public boolean isDisabled(DomainObject object) {
-        return object.getStatus() == StatusType.INACTIVE;
+        return object.getStatus() == Status.INACTIVE;
     }
 
     @Override

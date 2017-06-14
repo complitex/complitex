@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableMap;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.exception.DeleteException;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.template.strategy.TemplateStrategy;
@@ -109,13 +109,13 @@ public class OwnerRelationshipStrategy extends TemplateStrategy {
         super.deleteChecks(objectId, locale);
     }
 
-    public Collection<StringCulture> reservedNames() {
-        final Collection<StringCulture> reservedNames = newArrayList();
+    public Collection<StringValue> reservedNames() {
+        final Collection<StringValue> reservedNames = newArrayList();
 
         for (long id : RESERVED_INSTANCE_IDS) {
             final DomainObject o = getDomainObject(id, true);
             if (o != null) {
-                reservedNames.addAll(ImmutableList.copyOf(o.getAttribute(NAME).getStringCultures()));
+                reservedNames.addAll(ImmutableList.copyOf(o.getAttribute(NAME).getStringValues()));
             }
         }
 

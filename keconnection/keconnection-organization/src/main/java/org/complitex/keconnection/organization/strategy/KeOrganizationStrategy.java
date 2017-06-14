@@ -9,10 +9,10 @@ import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.keconnection.organization.strategy.entity.KeOrganization;
 import org.complitex.keconnection.organization.strategy.web.edit.KeOrganizationEditComponent;
@@ -60,7 +60,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
     private StringLocaleBean stringLocaleBean;
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @Override
     public PageParameters getEditPageParams(Long objectId, Long parentId, String parentEntity) {
@@ -232,22 +232,22 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
         super.fillAttributes(null, object);
 
         for (long attributeTypeId : CUSTOM_ATTRIBUTE_TYPES) {
-            if (object.getAttribute(attributeTypeId).getStringCultures() == null) {
-                object.getAttribute(attributeTypeId).setStringCultures(StringCultures.newStringCultures());
+            if (object.getAttribute(attributeTypeId).getStringValues() == null) {
+                object.getAttribute(attributeTypeId).setStringValues(StringValueUtil.newStringValues());
             }
         }
     }
 
     @Override
-    protected void loadStringCultures(List<Attribute> attributes) {
-        super.loadStringCultures(attributes);
+    protected void loadStringValues(List<Attribute> attributes) {
+        super.loadStringValues(attributes);
 
         for (Attribute attribute : attributes) {
             if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())) {
                 if (attribute.getValueId() != null) {
-                    loadStringCultures(attribute);
+                    loadStringValues(attribute);
                 } else {
-                    attribute.setStringCultures(StringCultures.newStringCultures());
+                    attribute.setStringValues(StringValueUtil.newStringValues());
                 }
             }
         }
@@ -256,7 +256,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
     @Override
     protected void insertAttribute(Attribute attribute) {
         if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())){
-            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringCultures());
+            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringValues());
             attribute.setValueId(generatedStringId);
         }
 

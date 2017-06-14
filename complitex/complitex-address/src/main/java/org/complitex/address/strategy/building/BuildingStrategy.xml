@@ -16,35 +16,35 @@
         <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
 
         AND (e.`parent_id` = #{additionalParams.buildingAddressId} OR EXISTS
-            (SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = e.`object_id` AND ba.`status` = 'ACTIVE'
+            (SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = e.`object_id` AND ba.`status` = 1
               AND ba.`attribute_type_id` = 501 AND ba.`value_id` = #{additionalParams.buildingAddressId}))
     </select>
 
     <select id="selectBuildingById" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="buildingResultMap">
-        SELECT e.* FROM `${entityName}` e WHERE (e.`status` IN ('ACTIVE', 'INACTIVE')) AND e.`object_id` = #{objectId}
+        SELECT e.* FROM `${entityName}` e WHERE (e.`status` IN (1, 0)) AND e.`object_id` = #{objectId}
             <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
     </select>
 
     <select id="checkBuildingAddress" parameterType="map" resultType="long">
         SELECT DISTINCT b.`object_id` FROM `building` b
-            JOIN `building_address` addr ON (addr.`status` IN ('ACTIVE', 'INACTIVE') AND ((b.`parent_id` = addr.`object_id`) OR
-                EXISTS(SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = b.`object_id` AND ba.`status` = 'ACTIVE'
+            JOIN `building_address` addr ON (addr.`status` IN (1, 0) AND ((b.`parent_id` = addr.`object_id`) OR
+                EXISTS(SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = b.`object_id` AND ba.`status` = 1
                     AND ba.`attribute_type_id` = ${additionalAddressAT} AND ba.`value_id` = addr.`object_id`)))
-            JOIN `building_address_attribute` num ON (num.`object_id` = addr.`object_id` AND num.`status` = 'ACTIVE'
+            JOIN `building_address_attribute` num ON (num.`object_id` = addr.`object_id` AND num.`status` = 1
                     AND num.`attribute_type_id` = ${buildingAddressNumberAT})
-            LEFT JOIN `building_address_attribute` corp ON (corp.`object_id` = addr.`object_id` AND corp.`status` = 'ACTIVE'
+            LEFT JOIN `building_address_attribute` corp ON (corp.`object_id` = addr.`object_id` AND corp.`status` = 1
                     AND corp.`attribute_type_id` = ${buildingAddressCorpAT})
-            LEFT JOIN `building_address_attribute` struc ON (struc.`object_id` = addr.`object_id` AND struc.`status` = 'ACTIVE'
+            LEFT JOIN `building_address_attribute` struc ON (struc.`object_id` = addr.`object_id` AND struc.`status` = 1
                     AND struc.`attribute_type_id` = ${buildingAddressStructureAT})
-        WHERE b.`status` IN ('ACTIVE', 'INACTIVE') AND
-            num.`value_id` IN (SELECT sc.`id` FROM `building_address_string_culture` sc WHERE sc.`value` = #{number} AND sc.`locale_id` = #{localeId}) AND
+        WHERE b.`status` IN (1, 0) AND
+            num.`value_id` IN (SELECT sc.`id` FROM `building_address_string_value` sc WHERE sc.`value` = #{number} AND sc.`locale_id` = #{localeId}) AND
             <choose>
                 <when test="corp == null">
                     corp.`value_id` IS NULL
                 </when>
                 <otherwise>
-                    corp.`value_id` IN (SELECT sc.`id` FROM `building_address_string_culture` sc WHERE sc.`value` = #{corp} AND sc.`locale_id` = #{localeId})
+                    corp.`value_id` IN (SELECT sc.`id` FROM `building_address_string_value` sc WHERE sc.`value` = #{corp} AND sc.`locale_id` = #{localeId})
                 </otherwise>
             </choose>
             AND
@@ -53,7 +53,7 @@
                     struc.`value_id` IS NULL
                 </when>
                 <otherwise>
-                    struc.`value_id` IN (SELECT sc.`id` FROM `building_address_string_culture` sc WHERE sc.`value` = #{structure} AND sc.`locale_id` = #{localeId})
+                    struc.`value_id` IN (SELECT sc.`id` FROM `building_address_string_value` sc WHERE sc.`value` = #{structure} AND sc.`locale_id` = #{localeId})
                 </otherwise>
             </choose>
             AND
@@ -81,10 +81,10 @@
                 AND
                 <choose>
                     <when test="enabled">
-                        e.`status` = 'ACTIVE'
+                        e.`status` = 1
                     </when>
                     <otherwise>
-                        e.`status` = 'INACTIVE'
+                        e.`status` = 0
                     </otherwise>
                 </choose>
     </update>
@@ -92,15 +92,15 @@
     <select id="selectBuildingObjectIds" parameterType="map" resultType="long">
         select distinct b.`object_id` from `building` b
           join `building_address` addr on (((b.`parent_id` = addr.`object_id`) or
-            exists(select 1 from `building_attribute` ba where ba.`object_id` = b.`object_id` and ba.`status` = 'ACTIVE'
-              and ba.`attribute_type_id` = 501 and ba.`value_id` = addr.`object_id`)) and addr.`status` = 'ACTIVE')
-          join `building_address_attribute` num on (num.`object_id` = addr.`object_id` and num.`status` = 'ACTIVE'
+            exists(select 1 from `building_attribute` ba where ba.`object_id` = b.`object_id` and ba.`status` = 1
+              and ba.`attribute_type_id` = 501 and ba.`value_id` = addr.`object_id`)) and addr.`status` = 1)
+          join `building_address_attribute` num on (num.`object_id` = addr.`object_id` and num.`status` = 1
             and num.`attribute_type_id` = 1500)
-          join `building_address_string_culture` num_sc on (num_sc.`id` = num.`value_id`)
-          left join `building_address_attribute` corp on (corp.`object_id` = addr.`object_id` and corp.`status` = 'ACTIVE'
+          join `building_address_string_value` num_sc on (num_sc.`id` = num.`value_id`)
+          left join `building_address_attribute` corp on (corp.`object_id` = addr.`object_id` and corp.`status` = 1
             and corp.`attribute_type_id` = 1501)
-          left join `building_address_string_culture` corp_sc on (corp_sc.`id` = corp.`value_id`)
-        where b.`status` = 'ACTIVE' and num_sc.`value` = #{number}
+          left join `building_address_string_value` corp_sc on (corp_sc.`id` = corp.`value_id`)
+        where b.`status` = 1 and num_sc.`value` = #{number}
         and
         <choose>
             <when test="corp == null">
@@ -153,7 +153,7 @@
     <select id="selectBuildingCodeByOrganizationCode" parameterType="map" resultMap="buildingCodeResultMap">
         select bc.* from building_code bc
             left join organization_attribute oa on oa.object_id = bc.organization_id
-            left join organization_string_culture osc on osc.id = oa.value_id
+            left join organization_string_value osc on osc.id = oa.value_id
         where bc.building_id = #{buildingId} and oa.attribute_type_id = 901 and oa.end_date is null
               and osc.value = #{organizationCode}
     </select>

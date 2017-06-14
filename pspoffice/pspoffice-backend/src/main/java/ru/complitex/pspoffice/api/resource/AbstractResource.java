@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 abstract class AbstractResource {
     List<Name> getNames(DomainObject domainObject, Long attributeTypeId){
         if (domainObject.getAttribute(attributeTypeId) == null ||
-                domainObject.getAttribute(attributeTypeId).getStringCultures().isEmpty()){
+                domainObject.getAttribute(attributeTypeId).getStringValues().isEmpty()){
             return null;
         }
 
-        return domainObject.getAttribute(attributeTypeId).getStringCultures().stream()
+        return domainObject.getAttribute(attributeTypeId).getStringValues().stream()
                 .filter(s -> s.getValue() != null)
                 .map(s -> new Name(s.getLocaleId(), s.getValue()))
                 .collect(Collectors.toList());

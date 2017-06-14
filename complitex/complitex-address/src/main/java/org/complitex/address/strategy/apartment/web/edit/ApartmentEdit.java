@@ -11,7 +11,7 @@ import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Log;
-import org.complitex.common.entity.StringCulture;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.DateUtil;
@@ -94,15 +94,15 @@ public final class ApartmentEdit extends DomainObjectEdit {
                 @Override
                 protected void save(boolean propagate) {
                     final String numbersAsString = numbersList.asString();
-                    final List<List<StringCulture>> numbers = numbersList.getNumbers();
+                    final List<List<StringValue>> numbers = numbersList.getNumbers();
                     if (numbers.size() > 1) {
                         bulkSaveFlag = true;
                         onInsert();
                         beforeBulkSave(Module.NAME, DomainObjectEditPanel.class, numbersAsString, getLocale());
                         boolean bulkOperationSuccess = true;
-                        for (List<StringCulture> number : numbers) {
+                        for (List<StringValue> number : numbers) {
                             final DomainObject currentObject = CloneUtil.cloneObject(getNewObject());
-                            currentObject.getAttribute(ApartmentStrategy.NAME).setStringCultures(number);
+                            currentObject.getAttribute(ApartmentStrategy.NAME).setStringValues(number);
                             if (performDefaultValidation(currentObject)) {
                                 try {
                                     getStrategy().insert(currentObject, DateUtil.getCurrentDate());
@@ -122,7 +122,7 @@ public final class ApartmentEdit extends DomainObjectEdit {
                     } else {
                         onInsert();
                         final DomainObject object = getNewObject();
-                        object.getAttribute(ApartmentStrategy.NAME).setStringCultures(numbers.get(0));
+                        object.getAttribute(ApartmentStrategy.NAME).setStringValues(numbers.get(0));
                         getStrategy().insert(getNewObject(), DateUtil.getCurrentDate());
                     }
 

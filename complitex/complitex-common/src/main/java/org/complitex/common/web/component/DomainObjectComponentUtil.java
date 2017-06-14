@@ -9,7 +9,7 @@ import org.complitex.common.converter.*;
 import org.complitex.common.entity.*;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.type.*;
 import org.complitex.common.web.model.AttributeStringModel;
 import org.complitex.common.web.model.SimpleTypeModel;
@@ -28,12 +28,12 @@ import static org.complitex.common.web.component.domain.DomainObjectAccessUtil.c
 public class DomainObjectComponentUtil {
     public static final String INPUT_COMPONENT_ID = "input";
 
-    public static IModel<String> labelModel(final List<StringCulture> attributeNames, final Locale locale) {
+    public static IModel<String> labelModel(final List<StringValue> attributeNames, final Locale locale) {
         return new AbstractReadOnlyModel<String>() {
 
             @Override
             public String getObject() {
-                return Strings.capitalize(StringCultures.getValue(attributeNames, locale).toLowerCase(locale));
+                return Strings.capitalize(StringValueUtil.getValue(attributeNames, locale).toLowerCase(locale));
             }
         };
     }
@@ -61,9 +61,9 @@ public class DomainObjectComponentUtil {
                         labelModel, !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
-            case STRING_CULTURE: {
-                IModel<List<StringCulture>> model = new PropertyModel<>(attribute, "stringCultures");
-                input = new StringCulturePanel(INPUT_COMPONENT_ID, model, attributeType.isMandatory(), labelModel,
+            case STRING_VALUE: {
+                IModel<List<StringValue>> model = new PropertyModel<>(attribute, "stringValues");
+                input = new StringValuePanel(INPUT_COMPONENT_ID, model, attributeType.isMandatory(), labelModel,
                         !isHistory && canEdit(strategyName, entityName, object));
             }
             break;

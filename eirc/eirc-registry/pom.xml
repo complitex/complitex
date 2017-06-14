@@ -5,7 +5,7 @@
     <parent>
         <groupId>ru.flexpay.eirc</groupId>
         <artifactId>eirc</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>eirc-registry</artifactId>
@@ -69,13 +69,13 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.complitex</groupId>
             <artifactId>complitex-common</artifactId>
             <version>${complitex.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <!--<build>

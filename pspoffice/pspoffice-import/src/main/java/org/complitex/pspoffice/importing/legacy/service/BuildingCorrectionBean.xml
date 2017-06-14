@@ -59,16 +59,16 @@
         SELECT DISTINCT b.`object_id` FROM `building` b
                 JOIN `building_address` addr ON (((b.`parent_id` = addr.`object_id`) OR
                     EXISTS(SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = b.`object_id` 
-                            AND ba.`status` = 'ACTIVE' AND ba.`attribute_type_id` = #{buildingBuildingAddressAT}
-                            AND ba.`value_id` = addr.`object_id`)) AND addr.`status` = 'ACTIVE')
-                JOIN `building_address_attribute` num ON (num.`object_id` = addr.`object_id` AND num.`status` = 'ACTIVE' 
+                            AND ba.`status` = 1 AND ba.`attribute_type_id` = #{buildingBuildingAddressAT}
+                            AND ba.`value_id` = addr.`object_id`)) AND addr.`status` = 1)
+                JOIN `building_address_attribute` num ON (num.`object_id` = addr.`object_id` AND num.`status` = 1
                         AND num.`attribute_type_id` = #{buildingAddressNumberAT})
-                JOIN `building_address_string_culture` num_sc ON (num_sc.`id` = num.`value_id`)
-                LEFT JOIN `building_address_attribute` corp ON (corp.`object_id` = addr.`object_id` AND corp.`status` = 'ACTIVE' 
+                JOIN `building_address_string_value` num_sc ON (num_sc.`id` = num.`value_id`)
+                LEFT JOIN `building_address_attribute` corp ON (corp.`object_id` = addr.`object_id` AND corp.`status` = 1
                         AND corp.`attribute_type_id` = #{buildingAddressCorpAT})
-                LEFT JOIN `building_address_string_culture` corp_sc ON (corp_sc.`id` = corp.`value_id`)
+                LEFT JOIN `building_address_string_value` corp_sc ON (corp_sc.`id` = corp.`value_id`)
 
-            WHERE b.`status` IN ('ACTIVE', 'INACTIVE')
+            WHERE b.`status` IN (1, 0)
             AND num_sc.`value` = #{dom}
             AND
                 <choose>

@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.service.handle.exchange;
 
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.StatusType;
+import org.complitex.common.entity.Status;
 import org.complitex.common.exception.AbstractException;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.CloneUtil;
@@ -73,7 +73,7 @@ public abstract class ServiceProviderAccountAttrOperation extends GeneralAccount
             // old attribute set active
             ServiceProviderAccountAttribute oldAttribute = serviceProviderAccountStrategy.findByPkId(changing.getOldPkId());
             oldAttribute.setEndDate(null);
-            oldAttribute.setStatus(StatusType.ACTIVE);
+            oldAttribute.setStatus(Status.ACTIVE);
             serviceProviderAccountStrategy.updateAttribute(oldAttribute);
         }
         // delete new attribute

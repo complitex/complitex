@@ -13,7 +13,7 @@ import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.Numbers;
 import org.complitex.common.web.component.domain.DomainObjectEditPanel;
@@ -207,7 +207,7 @@ public class BuildingValidator implements IValidator {
         List<DomainObject> addresses = building.getAllAddresses();
 
         BuildingStrategy buildingStrategy = EjbBeanLocator.getBean("BuildingStrategy");
-        StringCultureBean stringBean = EjbBeanLocator.getBean(StringCultureBean.class);
+        StringValueBean stringBean = EjbBeanLocator.getBean(StringValueBean.class);
 
         boolean valid = true;
 

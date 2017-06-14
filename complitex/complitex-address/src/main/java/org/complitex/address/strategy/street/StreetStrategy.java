@@ -13,11 +13,11 @@ import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.BuildingNumberConverter;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.DomainObjectListPanel;
@@ -50,7 +50,7 @@ public class StreetStrategy extends TemplateStrategy {
     private static final String STREET_NS = StreetStrategy.class.getName();
 
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private StrategyFactory strategyFactory;
@@ -315,8 +315,8 @@ public class StreetStrategy extends TemplateStrategy {
     }
 
     public String getName(DomainObject street, Locale locale) {
-        return StringCultures.getValue(street.getAttributes().stream()
-                .filter(attr -> attr.getAttributeTypeId().equals(NAME)).findFirst().get().getStringCultures(), locale);
+        return StringValueUtil.getValue(street.getAttributes().stream()
+                .filter(attr -> attr.getAttributeTypeId().equals(NAME)).findFirst().get().getStringValues(), locale);
     }
 
     @Override

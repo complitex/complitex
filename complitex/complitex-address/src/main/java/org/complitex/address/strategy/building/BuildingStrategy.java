@@ -1,6 +1,5 @@
 package org.complitex.address.strategy.building;
 
-import com.google.common.base.Function;
 import com.google.common.collect.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -18,11 +17,11 @@ import org.complitex.common.entity.*;
 import org.complitex.common.exception.DeleteException;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.strategy.StringCultureBean;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.BuildingNumberConverter;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.util.StringCultures;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.DomainObjectEditPanel;
 import org.complitex.common.web.component.domain.DomainObjectListPanel;
@@ -81,7 +80,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
     public static final long PARENT_ENTITY_ID = 1500L;
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
 
     @EJB
     private StringLocaleBean stringLocaleBean;
@@ -482,7 +481,7 @@ public class BuildingStrategy extends TemplateStrategy {
                         attribute.setAttributeId(1L);
 
                         if (isSimpleAttributeType(attributeType)) {
-                            attribute.setStringCultures(StringCultures.newStringCultures());
+                            attribute.setStringValues(StringValueUtil.newStringValues());
                         }
                         toAdd.add(attribute);
                     }
@@ -650,7 +649,7 @@ public class BuildingStrategy extends TemplateStrategy {
         }
 
         List<Attribute> historyAttributes = loadHistoryAttributes(objectId, date);
-        loadStringCultures(historyAttributes);
+        loadStringValues(historyAttributes);
         building.setAttributes(historyAttributes);
         DomainObject primaryAddress = getBuildingAddress(building.getParentId(), date);
         building.setPrimaryAddress(primaryAddress);
@@ -685,7 +684,7 @@ public class BuildingStrategy extends TemplateStrategy {
         Map<String, Object> params = Maps.newHashMap();
         params.put("buildingId", buildingId);
         params.put("enabled", enabled);
-        params.put("status", enabled ? StatusType.INACTIVE : StatusType.ACTIVE);
+        params.put("status", enabled ? Status.INACTIVE : Status.ACTIVE);
         sqlSession().update(BUILDING_NS + ".updateBuildingActivity", params);
     }
 

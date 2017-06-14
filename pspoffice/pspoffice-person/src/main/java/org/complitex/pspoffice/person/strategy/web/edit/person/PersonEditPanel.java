@@ -16,7 +16,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.strategy.StringCultureBean;
+import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.web.component.scroll.ScrollToElementUtil;
 import org.complitex.pspoffice.person.Module;
@@ -49,7 +49,7 @@ public abstract class PersonEditPanel extends Panel {
 
     private final Logger log = LoggerFactory.getLogger(PersonEditPanel.class);
     @EJB
-    private StringCultureBean stringBean;
+    private StringValueBean stringBean;
     @EJB
     private LogBean logBean;
     @EJB

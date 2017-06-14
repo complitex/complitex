@@ -2,9 +2,9 @@ package ru.flexpay.eirc;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.ibatis.io.Resources;
-import org.complitex.common.EjbTestBeanLocator;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.test.EjbTestBeanLocator;
 import ru.flexpay.eirc.registry.entity.Registry;
 import ru.flexpay.eirc.registry.entity.RegistryStatus;
 import ru.flexpay.eirc.registry.service.AbstractFinishCallback;

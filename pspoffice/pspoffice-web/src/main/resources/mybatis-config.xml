@@ -2,7 +2,15 @@
 
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-        <environments default="local">
+    <typeHandlers>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.common.entity.Status"/>
+
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.AddressEntity"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.SyncEntity"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.AddressSyncStatus"/>
+    </typeHandlers>
+
+    <environments default="local">
         <environment id="local">
             <transactionManager type="MANAGED"/>
             <dataSource type="JNDI">
@@ -45,7 +53,7 @@
         <mapper resource="org/complitex/pspoffice/person/strategy/service/ApartmentsGridBean.xml"/>
         <mapper resource="org/complitex/pspoffice/person/strategy/service/PersonNameBean.xml"/>
         <mapper resource="org/complitex/pspoffice/person/report/service/RegistrationStopCouponBean.xml"/>
-        
+
         <!-- legacy import -->
         <mapper resource="org/complitex/pspoffice/importing/legacy/service/StreetCorrectionBean.xml"/>
         <mapper resource="org/complitex/pspoffice/importing/legacy/service/BuildingCorrectionBean.xml"/>

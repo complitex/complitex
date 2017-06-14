@@ -4,17 +4,17 @@ import org.complitex.common.util.Locales;
 
 import java.io.Serializable;
 
-public class StringCulture implements Serializable {
+public class StringValue implements Serializable {
     private Long pkId;
     private String entityName;
     private Long id;
     private Long localeId;
     private String value;
 
-    public StringCulture() {
+    public StringValue() {
     }
 
-    public StringCulture(Long localeId) {
+    public StringValue(Long localeId) {
         this.localeId = localeId;
     }
 
