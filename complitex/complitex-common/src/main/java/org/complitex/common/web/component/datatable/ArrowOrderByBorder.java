@@ -18,7 +18,7 @@ public class ArrowOrderByBorder extends EnhancedOrderByBorder {
 
     private static final String DOWN = "&#8595";
 
-    public ArrowOrderByBorder(String id, final String property, final ISortStateLocator stateLocator, DataView<?> dataView, Component refreshComponent) {
+    public ArrowOrderByBorder(String id, final String property, final ISortStateLocator<String> stateLocator, DataView<?> dataView, Component refreshComponent) {
         super(id, property, stateLocator, dataView, refreshComponent);
 
         IModel<String> arrowModel = new AbstractReadOnlyModel<String>() {

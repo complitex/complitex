@@ -29,11 +29,37 @@
         </association>
     </resultMap>
 
+    <sql id="selectTarifsWhere">
+        <where>
+            `request_file_id` = #{object.requestFileId}
+            <if test="object.dbfFields.T11_DATA_T != null">and `T11_DATA_T` = #{object.dbfFields.T11_DATA_T}</if>
+            <if test="object.dbfFields.T11_DATA_E != null">and `T11_DATA_E` = #{object.dbfFields.T11_DATA_E}</if>
+            <if test="object.dbfFields.T11_DATA_R != null">and `T11_DATA_R` = #{object.dbfFields.T11_DATA_R}</if>
+            <if test="object.dbfFields.T11_MARK != null">and `T11_MARK` = #{object.dbfFields.T11_MARK}</if>
+            <if test="object.dbfFields.T11_TARN != null">and `T11_TARN` = #{object.dbfFields.T11_TARN}</if>
+            <if test="object.dbfFields.T11_CODE1 != null">and `T11_CODE1` = #{object.dbfFields.T11_CODE1}</if>
+            <if test="object.dbfFields.T11_CODE2 != null">and `T11_CODE2` = #{object.dbfFields.T11_CODE2}</if>
+            <if test="object.dbfFields.T11_COD_NA != null">and `T11_COD_NA` = #{object.dbfFields.T11_COD_NA}</if>
+            <if test="object.dbfFields.T11_CODE3 != null">and `T11_CODE3` = #{object.dbfFields.T11_CODE3}</if>
+            <if test="object.dbfFields.T11_NORM_U != null">and `T11_NORM_U` = #{object.dbfFields.T11_NORM_U}</if>
+            <if test="object.dbfFields.T11_NOR_US != null">and `T11_NOR_US` = #{object.dbfFields.T11_NOR_US}</if>
+            <if test="object.dbfFields.T11_CODE_N != null">and `T11_CODE_N` = #{object.dbfFields.T11_CODE_N}</if>
+            <if test="object.dbfFields.T11_COD_ND != null">and `T11_COD_ND` = #{object.dbfFields.T11_COD_ND}</if>
+            <if test="object.dbfFields.T11_CD_UNI != null">and `T11_CD_UNI` = #{object.dbfFields.T11_CD_UNI}</if>
+            <if test="object.dbfFields.T11_CS_UNI != null">and `T11_CS_UNI` = #{object.dbfFields.T11_CS_UNI}</if>
+            <if test="object.dbfFields.T11_NORM != null">and `T11_NORM` = #{object.dbfFields.T11_NORM}</if>
+            <if test="object.dbfFields.T11_NRM_DO != null">and `T11_NRM_DO` = #{object.dbfFields.T11_NRM_DO}</if>
+            <if test="object.dbfFields.T11_NRM_MA != null">and `T11_NRM_MA` = #{object.dbfFields.T11_NRM_MA}</if>
+            <if test="object.dbfFields.T11_K_NADL != null">and `T11_K_NADL` = #{object.dbfFields.T11_K_NADL}</if>
+        </where>
+    </sql>
+
     <select id="selectTarifs" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="subsidyTarifResultMap">
-        select * from `subsidy_tarif` where `request_file_id` = #{object.requestFileId} ${limit}
+        select * from `subsidy_tarif` <include refid="selectTarifsWhere"/> ${limit}
     </select>
+
     <select id="selectTarifsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
-        select count(id) from `subsidy_tarif` where `request_file_id` = #{object.requestFileId}
+        select count(id) from `subsidy_tarif` <include refid="selectTarifsWhere"/>
     </select>
 
     <insert id="insertTarif" parameterType="org.complitex.osznconnection.file.entity.subsidy.SubsidyTarif">
@@ -65,17 +91,25 @@
         SELECT DISTINCT t.`T11_CODE2` FROM `subsidy_tarif` t
                 JOIN `request_file` f ON (f.`id` = t.`request_file_id` AND f.`type` = 3)
             WHERE CONVERT(t.`T11_CS_UNI`, DECIMAL(10,4)) = CONVERT(#{T11_CS_UNI}, DECIMAL(10,4))
-                  AND t.`T11_CODE1` = #{service} AND f.`organization_id` = #{osznId}
+                  AND t.`T11_CODE1` = #{service} AND f.`organization_id` = #{organizationId}
             AND f.`user_organization_id` = #{userOrganizationId}
-        LIMIT 0,1
+        LIMIT 1
+    </select>
+
+    <select id="getCode2Apartment" parameterType="map" resultType="int">
+        SELECT DISTINCT t.`T11_CODE2` FROM `subsidy_tarif` t
+          JOIN `request_file` f ON (f.`id` = t.`request_file_id` AND f.`type` = 3)
+        WHERE  f.`organization_id` = #{organizationId} AND f.`user_organization_id` = #{userOrganizationId}
+          AND lower(t.T11_COD_NA) like '%оплата житла%'
+        LIMIT 1
     </select>
 
     <select id="getCode3" parameterType="map" resultType="string">
         SELECT DISTINCT t.`T11_CODE3` FROM `subsidy_tarif` t
                 JOIN `request_file` f ON (f.`id` = t.`request_file_id` AND f.`type` = 3)
             WHERE CONVERT(t.`T11_CS_UNI`, DECIMAL(10,4)) = CONVERT(#{T11_CS_UNI}, DECIMAL(10,4))
-            AND t.`T11_CODE1` = #{service} AND f.`organization_id` = #{osznId}
+            AND t.`T11_CODE1` = #{service} AND f.`organization_id` = #{organizationId}
             AND f.`user_organization_id` = #{userOrganizationId}
-        LIMIT 0,1
+        LIMIT 1
     </select>
 </mapper>
