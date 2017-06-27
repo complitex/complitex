@@ -37,7 +37,7 @@ public class PSPOfficeFontendWebApplication extends WebApplication{
     private void configureBootstrap() {
         final IBootstrapSettings settings = new BootstrapSettings();
         Bootstrap.builder().withBootstrapSettings(settings).install(this);
-        final ThemeProvider themeProvider = new BootswatchThemeProvider(BootswatchTheme.Flatly);
+        final ThemeProvider themeProvider = new BootswatchThemeProvider(BootswatchTheme.Simplex);
 
         settings.setJsResourceFilterName("footer-container")
                 .setThemeProvider(themeProvider)

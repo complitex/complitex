@@ -1,20 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html wicket:id="html" xmlns:wicket="http://wicket.apache.org">
+<html>
 <head>
     <meta charset="utf-8"/>
-    <title>PSPOffice Login</title>
+    <title>Паспортный стол</title>
 </head>
 
 <body>
 <div class="container">
-    <form>
-        <h2>Вход</h2>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default" style="margin-top: 100px">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Паспортный стол</h2>
+                </div>
+                <div class="panel-body">
+                    <form method="POST" action="j_security_check">
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Имя пользователя" name="j_username">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Пароль" name="j_password" type="password">
+                            </div>
 
-
-    </form>
+                            <input class="btn btn-lg btn-default btn-block" type="submit" value="Вход"/>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-
 </body>
 </html>
