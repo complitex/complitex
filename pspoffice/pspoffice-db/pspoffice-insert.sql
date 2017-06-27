@@ -1,7 +1,7 @@
 -- --------------------------------
 -- Current database version
 -- --------------------------------
-INSERT INTO `update` (`version`) VALUE ('20170127_0.5.10');
+INSERT INTO `update` (`version`) VALUE ('20170613_0.6.1');
 -- --------------------------------
 
 -- admin user --
@@ -342,6 +342,3 @@ INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (3102, 1, UPPER('Ð
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (3101, 3100, 1, 3102, 1);
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (3100, 3100, UPPER('string_value'));
 INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (3101, 3101, UPPER('integer'));
-
--- Current database version
- INSERT INTO `update` (`version`) VALUE ('20120704_420_0.0.2');

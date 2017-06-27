@@ -1,9 +1,11 @@
-package ru.complitex.pspoffice.api;
+package ru.complitex.pspoffice.backend;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-import ru.complitex.pspoffice.api.resource.AddressResource;
-import ru.complitex.pspoffice.api.resource.PersonResource;
+import ru.complitex.pspoffice.api.json.CharsetRequestFilter;
+import ru.complitex.pspoffice.api.json.ObjectMapperProvider;
+import ru.complitex.pspoffice.backend.resource.AddressResource;
+import ru.complitex.pspoffice.backend.resource.PersonResource;
 
 import javax.ws.rs.ApplicationPath;
 
@@ -12,8 +14,8 @@ import javax.ws.rs.ApplicationPath;
  *         27.04.2017 19:54
  */
 @ApplicationPath("api")
-public class PspApiApplication extends ResourceConfig {
-    public PspApiApplication() {
+public class PSPOfficeBackendApplication extends ResourceConfig {
+    public PSPOfficeBackendApplication() {
         //swagger
         register(io.swagger.jaxrs.listing.ApiListingResource.class);
         register(io.swagger.jaxrs.listing.SwaggerSerializers.class);

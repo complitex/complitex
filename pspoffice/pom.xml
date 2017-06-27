@@ -35,6 +35,7 @@
         <module>pspoffice-housing-rights</module>
         <module>pspoffice-import</module>
         <module>pspoffice-street</module>
+        <module>pspoffice-api</module>
         <module>pspoffice-backend</module>
         <module>pspoffice-frontend</module>
 
@@ -180,6 +181,12 @@
             <dependency>
                 <groupId>org.complitex.pspoffice</groupId>
                 <artifactId>pspoffice-street</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             

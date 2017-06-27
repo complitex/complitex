@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.api;
+package ru.complitex.pspoffice.api.json;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;

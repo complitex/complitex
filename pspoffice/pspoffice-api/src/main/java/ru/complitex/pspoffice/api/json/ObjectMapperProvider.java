@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.api;
+package ru.complitex.pspoffice.api.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;

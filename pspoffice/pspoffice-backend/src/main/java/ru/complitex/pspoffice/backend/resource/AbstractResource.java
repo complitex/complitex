@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.api.resource;
+package ru.complitex.pspoffice.backend.resource;
 
 import org.complitex.common.entity.DomainObject;
 import ru.complitex.pspoffice.api.model.Name;

@@ -459,9 +459,6 @@ public class PersonStrategy extends TemplateStrategy {
 
     public List<Person> findByName(PersonAgeType personAgeType, String lastName, String firstName, String middleName,
             Locale locale) {
-        if (Strings.isEmpty(lastName)) {
-            throw new IllegalArgumentException("Last name is null or empty.");
-        }
         DomainObjectFilter example = new DomainObjectFilter();
         example.setStatus(Status.ACTIVE.name());
         example.addAdditionalParam("last_name", lastName);

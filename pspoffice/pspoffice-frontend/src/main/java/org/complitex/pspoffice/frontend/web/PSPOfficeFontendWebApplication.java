@@ -10,7 +10,9 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.RoleAuthorizationStrategy;
+import org.apache.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.complitex.pspoffice.frontend.web.person.PersonsPage;
 
 /**
  * @author Anatoly A. Ivanov
@@ -30,6 +32,8 @@ public class PSPOfficeFontendWebApplication extends WebApplication{
         getDebugSettings().setAjaxDebugModeEnabled(false);
         getSecuritySettings().setAuthorizationStrategy(new RoleAuthorizationStrategy(new ServletRoleCheckingStrategy()));
 
+        new CdiConfiguration().configure(this);
+
         configureBootstrap();
         configureMount();
     }
@@ -48,5 +52,6 @@ public class PSPOfficeFontendWebApplication extends WebApplication{
 
     private void configureMount(){
         mountPage("login", LoginPage.class);
+        mountPage("persons", PersonsPage.class);
     }
 }

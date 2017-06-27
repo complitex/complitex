@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.api.resource;
+package ru.complitex.pspoffice.backend.resource;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +12,6 @@ import ru.complitex.pspoffice.api.model.DocumentObject;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
 import javax.ejb.EJB;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -94,7 +93,7 @@ public class PersonResource extends AbstractResource{
     @GET
     @ApiOperation(value = "Get persons by query", response = PersonObject.class, responseContainer = "List")
     public Response getPersons(@QueryParam("firstName") String firstName,
-                               @QueryParam("lastName") @NotNull String lastName,
+                               @QueryParam("lastName") String lastName,
                                @QueryParam("middleName") String middleName){
         return Response.ok(personStrategy.getPersons(lastName, firstName, middleName).stream()
                 .map(this::getPersonObject).collect(Collectors.toList())).build();

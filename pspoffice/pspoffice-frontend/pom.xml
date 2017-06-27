@@ -15,6 +15,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.complitex.pspoffice</groupId>
+            <artifactId>pspoffice-api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
@@ -89,6 +94,13 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>2.25.1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

@@ -123,11 +123,15 @@
         WHERE
             e.`status` = 1
             <!--<include refid="domainObjectPermissionFilter"/> todo-->
-            AND (ln.`name` = #{additionalParams.last_name} OR sys_ln.`name` = #{additionalParams.last_name})
+            <if test="additionalParams['last_name'] != null">
+                AND (ln.`name` = #{additionalParams.last_name} OR sys_ln.`name` = #{additionalParams.last_name})
+            </if>
+
             <if test="additionalParams['first_name'] != null">
                 AND (fn.`name` LIKE CONCAT(#{additionalParams.first_name}, '%') OR
                         sys_fn.`name` LIKE CONCAT(#{additionalParams.first_name}, '%'))
             </if>
+
             <if test="additionalParams['middle_name'] != null">
                 AND (mn.`name` LIKE CONCAT(#{additionalParams.middle_name}, '%') OR
                         sys_mn.`name` LIKE CONCAT(#{additionalParams.middle_name}, '%'))

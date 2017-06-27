@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.api.resource;
+package ru.complitex.pspoffice.backend.resource;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
