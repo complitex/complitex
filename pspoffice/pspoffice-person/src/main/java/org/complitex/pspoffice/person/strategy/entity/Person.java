@@ -4,20 +4,23 @@
  */
 package org.complitex.pspoffice.person.strategy.entity;
 
-import static com.google.common.collect.Maps.*;
-import java.util.Date;
-import static com.google.common.collect.Lists.*;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.converter.GenderConverter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Gender;
 import org.complitex.common.entity.Status;
-import static org.complitex.common.util.DateUtil.*;
 import org.complitex.pspoffice.document.strategy.entity.Document;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMap;
 import static org.complitex.common.util.AttributeUtil.*;
+import static org.complitex.common.util.DateUtil.getCurrentDate;
+import static org.complitex.common.util.DateUtil.isValidDateInterval;
 import static org.complitex.pspoffice.person.strategy.PersonStrategy.*;
 
 /**
@@ -115,6 +118,18 @@ public class Person extends DomainObject {
 
     public boolean isUkraineCitizen() {
         return getBooleanValue(this, UKRAINE_CITIZENSHIP);
+    }
+
+    public Map<Locale, String> getFirstNames() {
+        return firstNames;
+    }
+
+    public Map<Locale, String> getLastNames() {
+        return lastNames;
+    }
+
+    public Map<Locale, String> getMiddleNames() {
+        return middleNames;
     }
 
     public String getFirstName(Locale locale, Locale systemLocale) {

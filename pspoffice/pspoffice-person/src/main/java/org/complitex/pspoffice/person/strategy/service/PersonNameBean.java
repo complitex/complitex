@@ -32,7 +32,7 @@ public class PersonNameBean extends AbstractBean {
         if (id == null) {
             return null;
         }
-        PersonName personName = (PersonName) sqlSession().selectOne(MAPPING_NAMESPACE + ".findById", of("personNameType",
+        PersonName personName = sqlSession().selectOne(MAPPING_NAMESPACE + ".findById", of("personNameType",
                 personNameType.name().toLowerCase(), "id", id));
         personName.setPersonNameType(personNameType);
         return personName;
@@ -54,7 +54,7 @@ public class PersonNameBean extends AbstractBean {
             throw new IllegalArgumentException("Name must be not null");
         }
         Long localeId = stringLocaleBean.convert(locale).getId();
-        PersonName personName = (PersonName) sqlSession().selectOne(MAPPING_NAMESPACE + ".findByName",
+        PersonName personName = sqlSession().selectOne(MAPPING_NAMESPACE + ".findByName",
                 of("personNameType", personNameType.name().toLowerCase(), "name", name, "localeId", localeId));
         if (personName != null) {
             personName.setPersonNameType(personNameType);

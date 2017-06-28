@@ -4,11 +4,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.complitex.common.entity.Gender;
 import org.complitex.common.util.AttributeUtil;
+import org.complitex.common.util.Locales;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
 import ru.complitex.pspoffice.api.model.DocumentObject;
+import ru.complitex.pspoffice.api.model.Name;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
 import javax.ejb.EJB;
@@ -16,6 +18,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -40,12 +44,16 @@ public class PersonResource extends AbstractResource{
         return Response.ok("ping").build();
     }
 
+    private List<Name> getPersonNames(Map<Locale, String> map){
+        return map.entrySet().stream().map(e -> new Name(Locales.getLocaleId(e.getKey()), e.getValue())).collect(Collectors.toList());
+    }
+
     private PersonObject getPersonObject(Person p){
         PersonObject person = new PersonObject();
 
-        person.setLastName(getNames(p, PersonStrategy.LAST_NAME));
-        person.setFirstName(getNames(p, PersonStrategy.FIRST_NAME));
-        person.setMiddleName(getNames(p, PersonStrategy.MIDDLE_NAME));
+        person.setLastName(getPersonNames(p.getLastNames()));
+        person.setFirstName(getPersonNames(p.getFirstNames()));
+        person.setMiddleName(getPersonNames(p.getMiddleNames()));
         person.setIdentityCode(p.getIdentityCode());
         person.setBirthDate(p.getStringValue(PersonStrategy.BIRTH_DATE));
         person.setBirthCountry(p.getBirthCountry());
@@ -94,7 +102,9 @@ public class PersonResource extends AbstractResource{
     @ApiOperation(value = "Get persons by query", response = PersonObject.class, responseContainer = "List")
     public Response getPersons(@QueryParam("firstName") String firstName,
                                @QueryParam("lastName") String lastName,
-                               @QueryParam("middleName") String middleName){
+                               @QueryParam("middleName") String middleName,
+                               @QueryParam("offset") Long offset,
+                               @QueryParam("count") Long count){
         return Response.ok(personStrategy.getPersons(lastName, firstName, middleName).stream()
                 .map(this::getPersonObject).collect(Collectors.toList())).build();
     }

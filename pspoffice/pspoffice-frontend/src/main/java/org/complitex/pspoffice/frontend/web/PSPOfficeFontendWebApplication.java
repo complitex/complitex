@@ -39,7 +39,7 @@ public class PSPOfficeFontendWebApplication extends WebApplication{
     }
 
     private void configureBootstrap() {
-        final IBootstrapSettings settings = new BootstrapSettings();
+        IBootstrapSettings settings = new BootstrapSettings();
         Bootstrap.builder().withBootstrapSettings(settings).install(this);
         ThemeProvider themeProvider = new BootswatchThemeProvider(BootswatchTheme.Cerulean);
 
