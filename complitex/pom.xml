@@ -37,6 +37,7 @@
         <module>complitex-resources</module>
         <module>complitex-template</module>
         <module>complitex-organization-type</module>
+        <module>complitex-ui</module>
     </modules>
 
     <properties>
@@ -152,6 +153,11 @@
             <dependency>
                 <groupId>org.complitex</groupId>
                 <artifactId>complitex-template</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.complitex</groupId>
+                <artifactId>complitex-ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -20,6 +20,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.complitex</groupId>
+            <artifactId>complitex-ui</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>

@@ -158,7 +158,7 @@ public final class ApartmentsGrid extends TemplatePage {
 
         //Filters
         //number
-        filterForm.add(new TextField<String>("numberFilter", new PropertyModel<String>(filter, "number")));
+        filterForm.add(new TextField<String>("numberFilter", new PropertyModel<>(filter, "number")));
 
         //Data View
         DataView<ApartmentsGridEntity> apartments = new DataView<ApartmentsGridEntity>("apartments", dataProvider, 1) {
