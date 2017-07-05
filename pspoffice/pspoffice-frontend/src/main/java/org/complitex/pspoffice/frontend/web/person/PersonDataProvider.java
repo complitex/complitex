@@ -18,7 +18,7 @@ import java.util.List;
  * @author Anatoly A. Ivanov
  * 05.07.2017 16:15
  */
-public class PersonsDataProvider extends TableDataProvider<PersonObject>{
+public class PersonDataProvider extends TableDataProvider<PersonObject>{
     private static final String API_URI = "http://localhost:8080/pspoffice-backend/api"; //todo server config
 
     private PersonObject personObject;
