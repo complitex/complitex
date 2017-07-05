@@ -51,6 +51,7 @@ public class PersonResource extends AbstractResource{
     private PersonObject getPersonObject(Person p){
         PersonObject person = new PersonObject();
 
+        person.setObjectId(p.getObjectId());
         person.setLastName(getPersonNames(p.getLastNames()));
         person.setFirstName(getPersonNames(p.getFirstNames()));
         person.setMiddleName(getPersonNames(p.getMiddleNames()));
@@ -107,6 +108,15 @@ public class PersonResource extends AbstractResource{
                                @QueryParam("count") Long count){
         return Response.ok(personStrategy.getPersons(lastName, firstName, middleName).stream()
                 .map(this::getPersonObject).collect(Collectors.toList())).build();
+    }
+
+    @GET
+    @Path("size")
+    @ApiOperation(value = "Get persons count by query", response = Long.class)
+    public Response getPersonsCount(@QueryParam("firstName") String firstName,
+                               @QueryParam("lastName") String lastName,
+                               @QueryParam("middleName") String middleName){
+        return Response.ok(10).build(); //todo count
     }
 
 

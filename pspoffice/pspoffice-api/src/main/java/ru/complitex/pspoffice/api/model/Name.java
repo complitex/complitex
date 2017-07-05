@@ -1,10 +1,12 @@
 package ru.complitex.pspoffice.api.model;
 
+import java.io.Serializable;
+
 /**
  * @author Anatoly A. Ivanov
  *         04.05.2017 18:02
  */
-public class Name {
+public class Name implements Serializable{
     private Long localeId;
     private String name;
 

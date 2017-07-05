@@ -1,10 +1,12 @@
 package ru.complitex.pspoffice.api.model;
 
+import java.io.Serializable;
+
 /**
  * @author Anatoly A. Ivanov
  *         25.05.2017 17:03
  */
-public class DocumentObject {
+public class DocumentObject implements Serializable{
     private Long objectId;
     private Long type;
     private String series;

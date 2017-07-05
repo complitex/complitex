@@ -1,12 +1,15 @@
 package ru.complitex.pspoffice.api.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Anatoly A. Ivanov
  *         25.05.2017 16:55
  */
-public class PersonObject {
+public class PersonObject implements Serializable{
+    private Long objectId;
+
     private List<Name> lastName;
     private List<Name> firstName;
     private List<Name> middleName;
@@ -28,6 +31,14 @@ public class PersonObject {
     private Long militaryServiceRelationId;
 
     private List<PersonObject> children;
+
+    public Long getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(Long objectId) {
+        this.objectId = objectId;
+    }
 
     public List<Name> getLastName() {
         return lastName;
