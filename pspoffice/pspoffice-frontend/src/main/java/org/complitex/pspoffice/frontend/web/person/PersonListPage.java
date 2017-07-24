@@ -10,9 +10,10 @@ import java.util.Arrays;
  * @author Anatoly A. Ivanov
  * 27.06.2017 16:26
  */
-public class PersonsPage extends BasePage{
-    public PersonsPage() {
-       add(new TablePanel<>("persons", PersonObject.class, Arrays.asList("lastName[0].name", "firstName[0].name", "middleName[0].name"),
+public class PersonListPage extends BasePage{
+    public PersonListPage() {
+       add(new TablePanel<>("persons", PersonObject.class,
+               Arrays.asList("lastName[0].name", "firstName[0].name", "middleName[0].name"),
                new PersonDataProvider(), 10));
     }
 }

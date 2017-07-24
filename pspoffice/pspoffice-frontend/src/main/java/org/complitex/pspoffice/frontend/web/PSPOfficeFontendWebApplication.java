@@ -12,7 +12,8 @@ import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.RoleAuthorizationStrategy;
 import org.apache.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.complitex.pspoffice.frontend.web.person.PersonsPage;
+import org.complitex.pspoffice.frontend.web.person.PersonListPage;
+import org.complitex.pspoffice.frontend.web.person.PersonPage;
 
 /**
  * @author Anatoly A. Ivanov
@@ -52,6 +53,7 @@ public class PSPOfficeFontendWebApplication extends WebApplication{
 
     private void configureMount(){
         mountPage("login", LoginPage.class);
-        mountPage("persons", PersonsPage.class);
+        mountPage("persons", PersonListPage.class);
+        mountPage("person", PersonPage.class);
     }
 }
