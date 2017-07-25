@@ -14,8 +14,8 @@ import javax.ws.rs.ApplicationPath;
  *         27.04.2017 19:54
  */
 @ApplicationPath("api")
-public class PSPOfficeBackendApplication extends ResourceConfig {
-    public PSPOfficeBackendApplication() {
+public class PspOfficeBackendApplication extends ResourceConfig {
+    public PspOfficeBackendApplication() {
         //swagger
         register(io.swagger.jaxrs.listing.ApiListingResource.class);
         register(io.swagger.jaxrs.listing.SwaggerSerializers.class);

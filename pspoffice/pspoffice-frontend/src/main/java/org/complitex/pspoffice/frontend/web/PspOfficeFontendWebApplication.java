@@ -19,7 +19,7 @@ import org.complitex.pspoffice.frontend.web.person.PersonPage;
  * @author Anatoly A. Ivanov
  * 26.06.2017 13:41
  */
-public class PSPOfficeFontendWebApplication extends WebApplication{
+public class PspOfficeFontendWebApplication extends WebApplication{
 
     @Override
     public Class<? extends Page> getHomePage() {
