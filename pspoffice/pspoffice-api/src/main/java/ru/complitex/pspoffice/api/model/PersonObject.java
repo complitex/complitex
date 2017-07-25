@@ -10,9 +10,9 @@ import java.util.List;
 public class PersonObject implements Serializable{
     private Long objectId;
 
-    private List<Name> lastName;
-    private List<Name> firstName;
-    private List<Name> middleName;
+    private List<Name> lastNames;
+    private List<Name> firstNames;
+    private List<Name> middleNames;
 
     private String identityCode;
 
@@ -40,28 +40,28 @@ public class PersonObject implements Serializable{
         this.objectId = objectId;
     }
 
-    public List<Name> getLastName() {
-        return lastName;
+    public List<Name> getLastNames() {
+        return lastNames;
     }
 
-    public void setLastName(List<Name> lastName) {
-        this.lastName = lastName;
+    public void setLastNames(List<Name> lastNames) {
+        this.lastNames = lastNames;
     }
 
-    public List<Name> getFirstName() {
-        return firstName;
+    public List<Name> getFirstNames() {
+        return firstNames;
     }
 
-    public void setFirstName(List<Name> firstName) {
-        this.firstName = firstName;
+    public void setFirstNames(List<Name> firstNames) {
+        this.firstNames = firstNames;
     }
 
-    public List<Name> getMiddleName() {
-        return middleName;
+    public List<Name> getMiddleNames() {
+        return middleNames;
     }
 
-    public void setMiddleName(List<Name> middleName) {
-        this.middleName = middleName;
+    public void setMiddleNames(List<Name> middleNames) {
+        this.middleNames = middleNames;
     }
 
     public String getIdentityCode() {

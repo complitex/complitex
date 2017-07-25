@@ -52,9 +52,9 @@ public class PersonResource extends AbstractResource{
         PersonObject person = new PersonObject();
 
         person.setObjectId(p.getObjectId());
-        person.setLastName(getPersonNames(p.getLastNames()));
-        person.setFirstName(getPersonNames(p.getFirstNames()));
-        person.setMiddleName(getPersonNames(p.getMiddleNames()));
+        person.setLastNames(getPersonNames(p.getLastNames()));
+        person.setFirstNames(getPersonNames(p.getFirstNames()));
+        person.setMiddleNames(getPersonNames(p.getMiddleNames()));
         person.setIdentityCode(p.getIdentityCode());
         person.setBirthDate(p.getStringValue(PersonStrategy.BIRTH_DATE));
         person.setBirthCountry(p.getBirthCountry());
