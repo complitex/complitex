@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class PersonListPage extends BasePage{
     public PersonListPage() {
        add(new TablePanel<>("persons", PersonObject.class,
-               Arrays.asList("lastName[0].name", "firstName[0].name", "middleName[0].name"),
+               Arrays.asList("lastNames[0].name", "firstNames[0].name", "middleNames[0].name"),
                new PersonDataProvider(), 10));
     }
 }
