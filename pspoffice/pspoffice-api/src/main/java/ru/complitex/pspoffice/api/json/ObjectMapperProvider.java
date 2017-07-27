@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
+import java.text.SimpleDateFormat;
 
 /**
  * @author Anatoly A. Ivanov
@@ -27,9 +28,11 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
     private ObjectMapper createDefaultMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
+
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        objectMapper.setDateFormat(new SimpleDateFormat("dd.MM.yyyy"));
 
         return objectMapper;
     }

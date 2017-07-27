@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import org.complitex.common.entity.Gender;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.Locales;
-import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
@@ -56,7 +55,7 @@ public class PersonResource extends AbstractResource{
         person.setFirstNames(getPersonNames(p.getFirstNames()));
         person.setMiddleNames(getPersonNames(p.getMiddleNames()));
         person.setIdentityCode(p.getIdentityCode());
-        person.setBirthDate(p.getStringValue(PersonStrategy.BIRTH_DATE));
+        person.setBirthDate(p.getBirthDate());
         person.setBirthCountry(p.getBirthCountry());
         person.setBirthRegion(p.getBirthRegion());
         person.setBirthCity(p.getBirthCity());
@@ -71,16 +70,16 @@ public class PersonResource extends AbstractResource{
 
             DocumentObject document = new DocumentObject();
             document.setObjectId(d.getObjectId());
-            document.setType(d.getValueId(d.getDocumentTypeId()));
+            document.setTypeId(d.getDocumentTypeId());
             document.setSeries(d.getSeries());
             document.setNumber(d.getNumber());
-            document.setOrganizationIssued(d.getOrganizationIssued());
-            document.setDateIssued(d.getStringValue(DocumentStrategy.DATE_ISSUED));
+            document.setOrganization(d.getOrganizationIssued());
+            document.setDate(d.getDateIssued());
 
             documents.add(document);
         }
 
-        person.setUkraineCitizenship(AttributeUtil.getBooleanValue(p, PersonStrategy.UKRAINE_CITIZENSHIP) ? 1 : 0);
+        person.setCitizenshipId(AttributeUtil.getBooleanValue(p, PersonStrategy.UKRAINE_CITIZENSHIP) ? 2L : null);
         person.setMilitaryServiceRelationId(p.getValueId(PersonStrategy.MILITARY_SERVICE_RELATION));
 
         return person;

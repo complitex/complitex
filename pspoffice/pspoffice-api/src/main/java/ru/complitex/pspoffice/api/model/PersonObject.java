@@ -1,6 +1,7 @@
 package ru.complitex.pspoffice.api.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class PersonObject implements Serializable{
 
     private String identityCode;
 
-    private String birthDate;
+    private Date birthDate;
 
     private String birthCountry;
     private String birthRegion;
@@ -27,7 +28,7 @@ public class PersonObject implements Serializable{
 
     private List<DocumentObject> documents;
 
-    private Integer ukraineCitizenship;
+    private Long citizenshipId;
     private Long militaryServiceRelationId;
 
     private List<PersonObject> children;
@@ -72,11 +73,11 @@ public class PersonObject implements Serializable{
         this.identityCode = identityCode;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -128,12 +129,12 @@ public class PersonObject implements Serializable{
         this.documents = documents;
     }
 
-    public Integer getUkraineCitizenship() {
-        return ukraineCitizenship;
+    public Long getCitizenshipId() {
+        return citizenshipId;
     }
 
-    public void setUkraineCitizenship(Integer ukraineCitizenship) {
-        this.ukraineCitizenship = ukraineCitizenship;
+    public void setCitizenshipId(Long citizenshipId) {
+        this.citizenshipId = citizenshipId;
     }
 
     public Long getMilitaryServiceRelationId() {

@@ -11,14 +11,18 @@ import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisitor;
 import org.complitex.pspoffice.frontend.web.BasePage;
+import ru.complitex.pspoffice.api.model.DocumentObject;
 import ru.complitex.pspoffice.api.model.Name;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +39,8 @@ public class PersonPage extends BasePage{
         form.setOutputMarkupId(true);
         add(form);
 
+        //Основные
+
         form.add(new TextField<String>("lastNameRu", new PropertyModel<>(personModel, "lastNames[0].name")));
         form.add(new TextField<String>("firstNameRu", new PropertyModel<>(personModel, "firstNames[0].name")));
         form.add(new TextField<String>("middleNameRu", new PropertyModel<>(personModel, "middleNames[0].name")));
@@ -43,7 +49,7 @@ public class PersonPage extends BasePage{
         form.add(new TextField<String>("firstNameUk", new PropertyModel<>(personModel, "firstNames[1].name")));
         form.add(new TextField<String>("middleNameUk", new PropertyModel<>(personModel, "middleNames[1].name")));
 
-        form.add(new DateTextField("birthDate", new PropertyModel<>(personModel, "birthDate")));
+        form.add(new DateTextField("birthDate", new PropertyModel<>(personModel, "birthDate"), "dd.MM.yyyy"));
 
         form.add(new DropDownChoice<>("gender", new PropertyModel<>(personModel, "gender"),
                 Arrays.asList(0, 1), new IChoiceRenderer<Integer>() {
@@ -63,10 +69,62 @@ public class PersonPage extends BasePage{
             }
         }).setRequired(true));
 
+        form.add(new DropDownChoice<>("citizenship", new PropertyModel<>(personModel, "citizenshipId"),
+                Collections.singletonList(2L), new IChoiceRenderer<Long>() {
+            @Override
+            public Object getDisplayValue(Long object) {
+                return object == 1 ? "Российское" : object == 2 ? "Украинское" : "Другое";
+            }
+
+            @Override
+            public String getIdValue(Long object, int index) {
+                return object.toString();
+            }
+
+            @Override
+            public Long getObject(String id, IModel<? extends List<? extends Long>> choices) {
+                return !Strings.isEmpty(id) ? Long.valueOf(id) : null;
+            }
+        }).setNullValid(true));
+
+        //Место рождения
+
+        form.add(new TextField<>("birthCountry", new PropertyModel<>(personModel, "birthCountry")));
+        form.add(new TextField<>("birthRegion", new PropertyModel<>(personModel, "birthRegion")));
+        form.add(new TextField<>("birthCity", new PropertyModel<>(personModel, "birthCity")));
+        form.add(new TextField<>("birthDistrict", new PropertyModel<>(personModel, "birthDistrict")));
+
+        //Документ
+
+        form.add(new DropDownChoice<>("documentTypeId", new PropertyModel<>(personModel, "documents[0].typeId"),
+                Arrays.asList(1L, 2L, 3L, 4L), new IChoiceRenderer<Long>() {
+            @Override
+            public Object getDisplayValue(Long object) {
+                return object == 1 ? "Паспорт"
+                        : object == 2 ? "Свидетельство о рождении"
+                        : object == 3 ? "Военный билет"
+                        : object == 4 ? "Водительское удостоверение"
+                        : null;
+            }
+
+            @Override
+            public String getIdValue(Long object, int index) {
+                return object.toString();
+            }
+
+            @Override
+            public Long getObject(String id, IModel<? extends List<? extends Long>> choices) {
+                return !Strings.isEmpty(id) ? Long.valueOf(id) : null;
+            }
+        }).setNullValid(true));
+
+        form.add(new TextField<>("documentSeries", new PropertyModel<>(personModel, "documents[0].series")));
+        form.add(new TextField<>("documentNumbers", new PropertyModel<>(personModel, "documents[0].number")));
+        form.add(new TextField<>("documentOrganization", new PropertyModel<>(personModel, "documents[0].organization")));
+        form.add(new DateTextField("documentDate", new PropertyModel<>(personModel, "documents[0].date"), "dd.MM.yyyy"));
+
 
         form.add(new AjaxSubmitLink("save") {
-
-
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                validate(form, target);
@@ -85,6 +143,11 @@ public class PersonPage extends BasePage{
                 validate(form, target);
             }
         });
+    }
+
+    @Override
+    protected IModel<String> getTitleModel() {
+        return new ResourceModel("title");
     }
 
     private void validate(Form<?> form, AjaxRequestTarget target){
@@ -107,6 +170,9 @@ public class PersonPage extends BasePage{
         personObject.setMiddleNames(newNames());
 
         personObject.setGender(0);
+
+        personObject.setDocuments(new ArrayList<>());
+        personObject.getDocuments().add(new DocumentObject());
 
         return Model.of(personObject);
     }

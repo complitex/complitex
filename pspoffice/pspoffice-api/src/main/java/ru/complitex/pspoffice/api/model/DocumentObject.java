@@ -1,6 +1,7 @@
 package ru.complitex.pspoffice.api.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author Anatoly A. Ivanov
@@ -8,11 +9,11 @@ import java.io.Serializable;
  */
 public class DocumentObject implements Serializable{
     private Long objectId;
-    private Long type;
+    private Long typeId;
     private String series;
     private String number;
-    private String organizationIssued;
-    private String dateIssued;
+    private String organization;
+    private Date date;
 
     public Long getObjectId() {
         return objectId;
@@ -22,12 +23,12 @@ public class DocumentObject implements Serializable{
         this.objectId = objectId;
     }
 
-    public Long getType() {
-        return type;
+    public Long getTypeId() {
+        return typeId;
     }
 
-    public void setType(Long type) {
-        this.type = type;
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
     }
 
     public String getSeries() {
@@ -46,19 +47,19 @@ public class DocumentObject implements Serializable{
         this.number = number;
     }
 
-    public String getOrganizationIssued() {
-        return organizationIssued;
+    public String getOrganization() {
+        return organization;
     }
 
-    public void setOrganizationIssued(String organizationIssued) {
-        this.organizationIssued = organizationIssued;
+    public void setOrganization(String organization) {
+        this.organization = organization;
     }
 
-    public String getDateIssued() {
-        return dateIssued;
+    public Date getDate() {
+        return date;
     }
 
-    public void setDateIssued(String dateIssued) {
-        this.dateIssued = dateIssued;
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
