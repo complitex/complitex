@@ -22,7 +22,6 @@ import ru.complitex.pspoffice.api.model.Name;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
 import javax.inject.Inject;
-import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -189,10 +188,7 @@ public class PersonPage extends BasePage{
     }
 
     private PersonObject getPersonObject(Long objectId){
-        return pspOfficeClient.target().path("person")
-                .queryParam("id", objectId)
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .get(PersonObject.class);
+        return pspOfficeClient.request("person/" + objectId).get(PersonObject.class);
     }
 
     private List<Name> newNames(){

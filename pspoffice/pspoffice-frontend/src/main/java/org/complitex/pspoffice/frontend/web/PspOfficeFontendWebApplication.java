@@ -54,6 +54,6 @@ public class PspOfficeFontendWebApplication extends WebApplication{
     private void configureMount(){
         mountPage("login", LoginPage.class);
         mountPage("persons", PersonListPage.class);
-        mountPage("person", PersonPage.class);
+        mountPage("person/${id}", PersonPage.class);
     }
 }
