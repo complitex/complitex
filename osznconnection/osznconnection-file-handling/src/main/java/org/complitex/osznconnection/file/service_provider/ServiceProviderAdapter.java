@@ -443,7 +443,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             }
         }
         payment.putField(PaymentDBF.OPP, String.valueOf(opp));
-        payment.putField(PaymentDBF.OPP_SERV, String.valueOf(opp));
+//        payment.putField(PaymentDBF.OPP_SERV, String.valueOf(opp));
 
         Map<String, Object> params = newHashMap();
         params.put("accountNumber", payment.getAccountNumber());
@@ -529,7 +529,8 @@ public class ServiceProviderAdapter extends AbstractBean {
         payment.putField(PaymentDBF.DEBT, data.getSaldo());
         payment.putField(PaymentDBF.NUMB, data.getLodgerCount());
         payment.putField(PaymentDBF.MARK, data.getUserCount());
-        payment.putField(PaymentDBF.NORM_F_1, data.getApartmentFeeTarif());
+        payment.putField(PaymentDBF.NORM_F_1, data.getReducedArea());
+//        payment.putField(PaymentDBF.NORM_F_1, data.getApartmentFeeTarif());
 
         /*
          * Если модуль начислений предоставляет более одной услуги, то возможна ситуация, когда 
@@ -550,15 +551,15 @@ public class ServiceProviderAdapter extends AbstractBean {
                 tarifHandled = false;
                 errorTarif = data.getApartmentFeeTarif();
 
-                Integer code = subsidyTarifBean.getCode2Apartment(payment.getOrganizationId(), payment.getUserOrganizationId());
-
-                if (code != null){
-                    payment.putField(PaymentDBF.CODE2_1, code);
-                    payment.putField(PaymentDBF.CODE3_1, 1);
-                }else{
-                    payment.putField(PaymentDBF.CODE2_1, 0);
-                    payment.putField(PaymentDBF.CODE3_1, 0);
-                }
+//                Integer code = subsidyTarifBean.getCode2Apartment(payment.getOrganizationId(), payment.getUserOrganizationId());
+//
+//                if (code != null){
+//                    payment.putField(PaymentDBF.CODE2_1, code);
+//                    payment.putField(PaymentDBF.CODE3_1, 1);
+//                }else{
+//                    payment.putField(PaymentDBF.CODE2_1, 0);
+//                    payment.putField(PaymentDBF.CODE3_1, 0);
+//                }
             }
         }
         //heating
