@@ -15,11 +15,14 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisitor;
+import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.pspoffice.frontend.web.BasePage;
 import ru.complitex.pspoffice.api.model.DocumentObject;
 import ru.complitex.pspoffice.api.model.Name;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
+import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,10 +35,17 @@ import java.util.List;
 public class PersonPage extends BasePage{
     private static final MetaDataKey<Boolean> ERROR = new MetaDataKey<Boolean>() {};
 
-    public PersonPage(PageParameters pageParameters) {
-        IModel<PersonObject> personModel = newPersonModel();
+    @Inject
+    private PspOfficeClient pspOfficeClient;
 
-        Form<PersonObject> form = new Form<>("form", personModel);
+    private IModel<PersonObject> personModel;
+
+    public PersonPage(PageParameters pageParameters) {
+        Long personObjectId = pageParameters.get("id").toOptionalLong();
+
+        personModel = Model.of(personObjectId != null ? getPersonObject(personObjectId) : newPersonObject());
+
+        Form<PersonObject> form = new Form<>("form");
         form.setOutputMarkupId(true);
         add(form);
 
@@ -123,6 +133,7 @@ public class PersonPage extends BasePage{
         form.add(new TextField<>("documentOrganization", new PropertyModel<>(personModel, "documents[0].organization")));
         form.add(new DateTextField("documentDate", new PropertyModel<>(personModel, "documents[0].date"), "dd.MM.yyyy"));
 
+        form.add(new TextField<>("identityCode", new PropertyModel<>(personModel, "identityCode")));
 
         form.add(new AjaxSubmitLink("save") {
             @Override
@@ -147,7 +158,7 @@ public class PersonPage extends BasePage{
 
     @Override
     protected IModel<String> getTitleModel() {
-        return new ResourceModel("title");
+        return new ResourceModel(personModel.getObject().getObjectId() == null ? "titleNew" : "titleEdit");
     }
 
     private void validate(Form<?> form, AjaxRequestTarget target){
@@ -162,7 +173,7 @@ public class PersonPage extends BasePage{
         });
     }
 
-    private IModel<PersonObject> newPersonModel(){
+    private PersonObject newPersonObject(){
         PersonObject personObject = new PersonObject();
 
         personObject.setLastNames(newNames());
@@ -174,7 +185,14 @@ public class PersonPage extends BasePage{
         personObject.setDocuments(new ArrayList<>());
         personObject.getDocuments().add(new DocumentObject());
 
-        return Model.of(personObject);
+        return personObject;
+    }
+
+    private PersonObject getPersonObject(Long objectId){
+        return pspOfficeClient.target().path("person")
+                .queryParam("id", objectId)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get(PersonObject.class);
     }
 
     private List<Name> newNames(){

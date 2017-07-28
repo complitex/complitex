@@ -11,7 +11,12 @@ import org.apache.wicket.model.Model;
  */
 public abstract class BasePage extends WebPage{
     protected BasePage() {
-        add(new Label("title", getTitleModel()));
+        add(new Label("title"){
+            @Override
+            protected void onConfigure() {
+                setDefaultModel(getTitleModel());
+            }
+        });
     }
 
     protected IModel<String> getTitleModel(){
