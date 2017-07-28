@@ -125,7 +125,7 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
 
     @Override
     protected String getPreferencePage() {
-        return PrivilegeProlongationFileList.class.getName();
+        return PrivilegeFileGroupList.class.getName();
     }
 
     @Override
