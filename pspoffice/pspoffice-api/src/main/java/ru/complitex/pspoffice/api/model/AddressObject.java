@@ -2,6 +2,7 @@ package ru.complitex.pspoffice.api.model;
 
 import io.swagger.annotations.ApiModel;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  *         04.05.2017 17:59
  */
 @ApiModel("Address object")
-public class AddressObject {
+public class AddressObject implements Serializable{
     private Long objectId;
     private Long parentId;
     private Long typeId;

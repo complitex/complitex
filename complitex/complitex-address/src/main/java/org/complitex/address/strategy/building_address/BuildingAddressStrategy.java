@@ -98,8 +98,8 @@ public class BuildingAddressStrategy extends TemplateStrategy {
                 filter.setParentId(cityId);
                 filter.setParentEntity("city");
             } else {
-                filter.setParentId(-1L);
-                filter.setParentEntity("");
+                filter.setParentId(null);
+                filter.setParentEntity(null);
             }
         }
     }

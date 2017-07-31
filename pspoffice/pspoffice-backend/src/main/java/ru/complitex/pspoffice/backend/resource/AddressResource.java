@@ -18,7 +18,6 @@ import ru.complitex.pspoffice.api.model.BuildingObject;
 
 import javax.ejb.EJB;
 import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -79,16 +78,28 @@ public class AddressResource extends AbstractResource {
 
     @GET
     @Path("country")
-    @ApiOperation(value = "Get county list by query", response = AddressObject.class, responseContainer = "List")
-    public Response getCountries(@QueryParam("query") @NotNull String query,
+    @ApiOperation(value = "Get country list by query", response = AddressObject.class, responseContainer = "List")
+    public Response getCountries(@QueryParam("query") String query,
+                                 @QueryParam("offset") Integer offset,
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.addAttribute(CountryStrategy.NAME, query);
+        filter.setFirst(offset);
         filter.setCount(limit);
 
         return Response.ok(countryStrategy.getList(filter).stream()
                 .map(d -> new AddressObject(d.getObjectId(), getNames(d, CountryStrategy.NAME)))
                 .collect(Collectors.toList())).build();
+    }
+
+    @GET
+    @Path("country/size")
+    @ApiOperation(value = "Get country count by query", response = Long.class)
+    public Response getCountriesCount(@QueryParam("query") String query){
+        DomainObjectFilter filter = new DomainObjectFilter();
+        filter.addAttribute(CountryStrategy.NAME, query);
+
+        return Response.ok(countryStrategy.getCount(filter)).build();
     }
 
     @GET
@@ -107,15 +118,27 @@ public class AddressResource extends AbstractResource {
     @GET
     @Path("region")
     @ApiOperation(value = "Get region list by query", response = AddressObject.class, responseContainer = "List")
-    public Response getRegion(@QueryParam("query") @NotNull String query,
+    public Response getRegions(@QueryParam("query") String query,
+                               @QueryParam("offset") Integer offset,
                               @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.addAttribute(RegionStrategy.NAME, query);
+        filter.setFirst(offset);
         filter.setCount(limit);
 
         return Response.ok(regionStrategy.getList(filter).stream()
                 .map(d -> new AddressObject(d.getObjectId(), getNames(d, RegionStrategy.NAME)))
                 .collect(Collectors.toList())).build();
+    }
+
+    @GET
+    @Path("region/size")
+    @ApiOperation(value = "Get region count by query", response = Long.class)
+    public Response getRegionsCount(@QueryParam("query") String query){
+        DomainObjectFilter filter = new DomainObjectFilter();
+        filter.addAttribute(RegionStrategy.NAME, query);
+
+        return Response.ok(regionStrategy.getCount(filter)).build();
     }
 
     @GET
@@ -135,11 +158,13 @@ public class AddressResource extends AbstractResource {
 
     @GET
     @Path("city-type")
-    @ApiOperation(value = "Get city types by query", response = AddressObject.class, responseContainer = "List")
-    public Response getCityTypes(@QueryParam("query") @NotNull String query,
+    @ApiOperation(value = "Get city types list by query", response = AddressObject.class, responseContainer = "List")
+    public Response getCityTypes(@QueryParam("query") String query,
+                                 @QueryParam("offset") Integer offset,
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.addAttribute(CityTypeStrategy.NAME, query);
+        filter.setFirst(offset);
         filter.setCount(limit);
 
         return Response.ok(cityTypeStrategy.getList(filter).stream()
@@ -147,6 +172,16 @@ public class AddressResource extends AbstractResource {
                         getNames(d, CityTypeStrategy.NAME),
                         getNames(d, CityTypeStrategy.SHORT_NAME)))
                 .collect(Collectors.toList())).build();
+    }
+
+    @GET
+    @Path("city-type/size")
+    @ApiOperation(value = "Get city types count by query", response = Long.class)
+    public Response getCityTypesCount(@QueryParam("query") String query){
+        DomainObjectFilter filter = new DomainObjectFilter();
+        filter.addAttribute(CityTypeStrategy.NAME, query);
+
+        return Response.ok(cityTypeStrategy.getCount(filter)).build();
     }
 
     @GET
@@ -167,14 +202,16 @@ public class AddressResource extends AbstractResource {
     @GET
     @Path("city")
     @ApiOperation(value = "Get city list by query", response = AddressObject.class, responseContainer = "List")
-    public Response getCities(@QueryParam("query") @NotNull String query,
+    public Response getCities(@QueryParam("query") String query,
                               @QueryParam("parentId") Long parentId,
                               @QueryParam("typeId") Long typeId,
+                              @QueryParam("offset") Integer offset,
                               @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.setParent("region", parentId);
         filter.addAttribute(CityStrategy.CITY_TYPE, typeId);
         filter.addAttribute(CityStrategy.NAME, query);
+        filter.setFirst(offset);
         filter.setCount(limit);
 
         return Response.ok(cityStrategy.getList(filter).stream()
@@ -182,6 +219,20 @@ public class AddressResource extends AbstractResource {
                         d.getAttribute(CityStrategy.CITY_TYPE).getValueId(),
                         getNames(d, CityStrategy.NAME)))
                 .collect(Collectors.toList())).build();
+    }
+
+    @GET
+    @Path("city/size")
+    @ApiOperation(value = "Get cities count by query", response = Long.class)
+    public Response getCitiesCount(@QueryParam("query") String query,
+                              @QueryParam("parentId") Long parentId,
+                              @QueryParam("typeId") Long typeId){
+        DomainObjectFilter filter = new DomainObjectFilter();
+        filter.setParent("region", parentId);
+        filter.addAttribute(CityStrategy.CITY_TYPE, typeId);
+        filter.addAttribute(CityStrategy.NAME, query);
+
+        return Response.ok(cityStrategy.getCount(filter)).build();
     }
 
     @GET
@@ -202,12 +253,14 @@ public class AddressResource extends AbstractResource {
     @GET
     @Path("district")
     @ApiOperation(value = "Get district list by query", response = AddressObject.class, responseContainer = "List")
-    public Response getDistricts(@QueryParam("query") @NotNull String query,
+    public Response getDistricts(@QueryParam("query") String query,
                                  @QueryParam("parentId") Long parentId,
+                                 @QueryParam("offset") Integer offset,
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.setParent("city", parentId);
         filter.addAttribute(DistrictStrategy.NAME, query);
+        filter.setFirst(offset);
         filter.setCount(limit);
 
         return Response.ok(districtStrategy.getList(filter).stream()
@@ -215,6 +268,18 @@ public class AddressResource extends AbstractResource {
                         d.getStringValue(DistrictStrategy.CODE),
                         getNames(d, DistrictStrategy.NAME)))
                 .collect(Collectors.toList())).build();
+    }
+
+    @GET
+    @Path("district/size")
+    @ApiOperation(value = "Get districts count by query", response = Long.class)
+    public Response getDistrictsCount(@QueryParam("query") String query,
+                                 @QueryParam("parentId") Long parentId){
+        DomainObjectFilter filter = new DomainObjectFilter();
+        filter.setParent("city", parentId);
+        filter.addAttribute(DistrictStrategy.NAME, query);
+
+        return Response.ok(districtStrategy.getCount(filter)).build();
     }
 
     @GET
@@ -234,18 +299,32 @@ public class AddressResource extends AbstractResource {
     @GET
     @Path("street")
     @ApiOperation(value = "Get street list by query")
-    public Response getStreets(@QueryParam("query") @NotNull String query,
+    public Response getStreets(@QueryParam("query") String query,
                                @QueryParam("parentId") Long parentId,
+                               @QueryParam("offset") Integer offset,
                                @QueryParam("limit") @DefaultValue("10") @Max(1000) Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.setParent("city", parentId);
         filter.addAttribute(StreetStrategy.NAME, query);
+        filter.setFirst(offset);
         filter.setCount(limit);
 
         return Response.ok(streetStrategy.getList(filter).stream()
                 .map(d -> new AddressObject(d.getObjectId(), d.getParentId(), d.getValueId(StreetStrategy.STREET_TYPE),
                         d.getStringValue(StreetStrategy.STREET_CODE), getNames(d, StreetStrategy.NAME)))
                 .collect(Collectors.toList())).build();
+    }
+
+    @GET
+    @Path("street/size")
+    @ApiOperation(value = "Get streets count by query")
+    public Response getStreetsCount(@QueryParam("query") String query,
+                               @QueryParam("parentId") Long parentId){
+        DomainObjectFilter filter = new DomainObjectFilter();
+        filter.setParent("city", parentId);
+        filter.addAttribute(StreetStrategy.NAME, query);
+
+        return Response.ok(streetStrategy.getCount(filter)).build();
     }
 
     private BuildingObject getBuildingObject(Building b){
@@ -286,13 +365,30 @@ public class AddressResource extends AbstractResource {
     @Path("building")
     @ApiOperation(value = "Get building list by query", response = BuildingObject.class, responseContainer = "List")
     public Response getBuildings(@QueryParam("query") String query,
-                                 @QueryParam("parentId") @NotNull Long parentId,
+                                 @QueryParam("parentId") Long parentId,
+                                 @QueryParam("offset") Integer offset,
                                  @QueryParam("limit") Integer limit){
+        DomainObjectFilter filter = new DomainObjectFilter();
+
+        filter.addAdditionalParam(BuildingStrategy.P_NUMBER, query);
+        filter.addAdditionalParam(BuildingStrategy.P_STREET, parentId);
+
+        filter.setFirst(offset);
+        filter.setCount(limit);
+
+        return Response.ok(buildingStrategy.getList(filter).stream()
+                .map(this::getBuildingObject).collect(Collectors.toList())).build();
+    }
+
+    @GET
+    @Path("building/size")
+    @ApiOperation(value = "Get building list by query", response = Long.class)
+    public Response getBuildingsCount(@QueryParam("query") String query,
+                                 @QueryParam("parentId") Long parentId){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.addAdditionalParam(BuildingStrategy.P_NUMBER, query);
         filter.addAdditionalParam(BuildingStrategy.P_STREET, parentId);
 
-        return Response.ok(buildingStrategy.getList(filter).stream()
-                .map(this::getBuildingObject).collect(Collectors.toList())).build();
+        return Response.ok(buildingStrategy.getCount(filter)).build();
     }
 }

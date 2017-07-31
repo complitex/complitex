@@ -12,6 +12,8 @@ import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.RoleAuthorizationStrategy;
 import org.apache.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.complitex.pspoffice.frontend.web.address.AddressListPage;
+import org.complitex.pspoffice.frontend.web.address.building.BuildingListPage;
 import org.complitex.pspoffice.frontend.web.person.PersonListPage;
 import org.complitex.pspoffice.frontend.web.person.PersonPage;
 
@@ -55,5 +57,7 @@ public class PspOfficeFontendWebApplication extends WebApplication{
         mountPage("login", LoginPage.class);
         mountPage("persons", PersonListPage.class);
         mountPage("person/${id}", PersonPage.class);
+        mountPage("address/${entity}", AddressListPage.class);
+        mountPage("address/building", BuildingListPage.class);
     }
 }

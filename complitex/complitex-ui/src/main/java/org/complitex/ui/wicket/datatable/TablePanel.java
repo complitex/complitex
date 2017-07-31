@@ -21,15 +21,14 @@ import java.util.List;
  * 03.07.2017 16:59
  */
 public class TablePanel<T extends Serializable> extends Panel {
-    public TablePanel(String id, Class<T> modelClass, List<String> modelFields, TableDataProvider<T> dataProvider,
-                      long rowsPerPage) {
+    public TablePanel(String id, Class<T> modelClass, List<String> modelFields, TableDataProvider<T> dataProvider) {
         super(id);
 
         FilterForm<T> filterForm = new FilterForm<>("filterForm", dataProvider);
         add(filterForm);
 
         DataTable<T, String> dataTable = new DataTable<>("dataTable", getColumns(modelClass, modelFields),
-                dataProvider, rowsPerPage);
+                dataProvider, 10);
         dataTable.addTopToolbar(new AjaxFallbackHeadersToolbar<>(dataTable, dataProvider));
         dataTable.addTopToolbar(new FilterToolbar(dataTable, filterForm){
             @Override

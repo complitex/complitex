@@ -29,7 +29,7 @@ public class PersonListPage extends BasePage{
     public PersonListPage() {
        add(new TablePanel<PersonObject>("persons", PersonObject.class,
                Arrays.asList("lastNames[0].name", "firstNames[0].name", "middleNames[0].name", "edit"),
-               new PersonDataProvider(), 10){
+               new PersonDataProvider()){
            @Override
            protected IColumn<PersonObject, String> getColumn(String field) {
                if ("edit".equals(field)){

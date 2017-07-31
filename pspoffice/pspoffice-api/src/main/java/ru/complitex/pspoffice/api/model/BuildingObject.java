@@ -13,6 +13,9 @@ public class BuildingObject extends AddressObject{
 
     private List<BuildingObject> alternatives;
 
+    public BuildingObject() {
+    }
+
     public BuildingObject(Long objectId, Long parentId, List<Name> numbers, List<Name> corps, List<Name> structures) {
         super(objectId, parentId);
 
