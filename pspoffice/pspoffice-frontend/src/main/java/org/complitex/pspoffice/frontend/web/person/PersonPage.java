@@ -1,7 +1,6 @@
 package org.complitex.pspoffice.frontend.web.person;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.jquery.JQuery;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -22,10 +21,15 @@ import ru.complitex.pspoffice.api.model.Name;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
 import javax.inject.Inject;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.OK;
 
 /**
  * @author Anatoly A. Ivanov
@@ -139,13 +143,20 @@ public class PersonPage extends BasePage{
             protected void onSubmit(AjaxRequestTarget target) {
                validate(form, target);
 
-                ObjectMapper mapper = new ObjectMapper();
+               Response response = PspOfficeClient.get()
+                       .request("person")
+                       .put(Entity.json(personModel.getObject()));
 
-                try {
-                    System.out.println(mapper.writeValueAsString(personModel.getObject()));
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
+               if (response.getStatus() == CREATED.getStatusCode()){
+                   getSession().info("Запись добавлена");
+                   setResponsePage(PersonListPage.class);
+               } else if (response.getStatus() == OK.getStatusCode()){
+                   getSession().info("Запись обновлена");
+                   setResponsePage(PersonListPage.class);
+               }else {
+                   error(response.readEntity(String.class));
+                   target.add(form.get("feedback"));
+               }
             }
 
             @Override
@@ -153,6 +164,8 @@ public class PersonPage extends BasePage{
                 validate(form, target);
             }
         });
+
+        form.add(new NotificationPanel("feedback").setOutputMarkupId(true));
     }
 
     @Override
@@ -187,10 +200,6 @@ public class PersonPage extends BasePage{
         return personObject;
     }
 
-    private PersonObject getPersonObject(Long objectId){
-        return pspOfficeClient.request("person/" + objectId).get(PersonObject.class);
-    }
-
     private List<Name> newNames(){
         List<Name> names = new ArrayList<>(2);
 
@@ -198,5 +207,24 @@ public class PersonPage extends BasePage{
         names.add(new Name(2L, ""));
 
         return names;
+    }
+
+    private PersonObject getPersonObject(Long objectId){
+        PersonObject personObject =  pspOfficeClient.request("person/" + objectId).get(PersonObject.class);
+
+        updateNames(personObject.getLastNames());
+        updateNames(personObject.getFirstNames());
+        updateNames(personObject.getMiddleNames());
+
+        return personObject;
+    }
+
+    private void updateNames(List<Name> names){
+        List<Name> list = new ArrayList<>(names);
+
+        names.clear();
+
+        names.add(list.stream().filter(n -> n.getLocaleId() == 1L).findFirst().orElse(new Name(1L, "")));
+        names.add(list.stream().filter(n -> n.getLocaleId() == 2L).findFirst().orElse(new Name(2L, "")));
     }
 }

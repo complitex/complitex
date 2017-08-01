@@ -24,6 +24,8 @@ public abstract class BasePage extends WebPage{
             }
         });
 
+        add(new BookmarkablePageLink("headerLink", HomePage.class));
+
         add(new BookmarkablePageLink("personsLink", PersonListPage.class));
         add(new BookmarkablePageLink("person", PersonPage.class));
 

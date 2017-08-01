@@ -241,11 +241,11 @@ public class PersonStrategy extends TemplateStrategy {
 
     public Person findById(long id, boolean runAsAdmin, boolean loadName, boolean loadChildren,
             boolean loadDocument, boolean loadMilitaryServiceRelation) {
-        DomainObject personObject = super.getDomainObject(id, runAsAdmin);
-        if (personObject == null) {
+        DomainObject domainObject = super.getDomainObject(id, runAsAdmin);
+        if (domainObject == null) {
             return null;
         }
-        Person person = new Person(personObject);
+        Person person = new Person(domainObject);
         if (loadName) {
             loadName(person);
         }
@@ -294,9 +294,12 @@ public class PersonStrategy extends TemplateStrategy {
 
     public void loadDocument(Person person) {
         if (person.getDocument() == null) {
-            long documentId = person.getAttribute(DOCUMENT).getValueId();
-            Document document = documentStrategy.findById(documentId);
-            person.setDocument(document);
+            Long documentId = person.getAttribute(DOCUMENT).getValueId();
+
+            if (documentId != null) {
+                Document document = documentStrategy.findById(documentId);
+                person.setDocument(document);
+            }
         }
     }
 
@@ -417,18 +420,14 @@ public class PersonStrategy extends TemplateStrategy {
             }
         }
         final long systemLocaleId = stringLocaleBean.getSystemStringLocale().getId();
-        Collections.sort(nameAttributes, new Comparator<Attribute>() {
-
-            @Override
-            public int compare(Attribute o1, Attribute o2) {
-                if (o1.getAttributeId().equals(systemLocaleId)) {
-                    return -1;
-                }
-                if (o2.getAttributeId().equals(systemLocaleId)) {
-                    return 1;
-                }
-                return o1.getAttributeId().compareTo(o2.getAttributeId());
+        nameAttributes.sort((o1, o2) -> {
+            if (o1.getAttributeId().equals(systemLocaleId)) {
+                return -1;
             }
+            if (o2.getAttributeId().equals(systemLocaleId)) {
+                return 1;
+            }
+            return o1.getAttributeId().compareTo(o2.getAttributeId());
         });
         person.getAttributes().addAll(nameAttributes);
     }
@@ -487,7 +486,9 @@ public class PersonStrategy extends TemplateStrategy {
                     || (personAgeType == PersonAgeType.ADULT && !person.isKid());
             if (eligiblePerson) {
                 loadName(person);
-                loadDocument(person);
+                if (person.getDocument() != null) {
+                    loadDocument(person);
+                }
                 results.add(person);
             }
         }
@@ -498,9 +499,13 @@ public class PersonStrategy extends TemplateStrategy {
     @Override
     protected void insertDomainObject(DomainObject object, Date insertDate) {
         Person person = (Person) object;
-        person.getDocument().setSubjectIds(person.getSubjectIds());
-        documentStrategy.insert(person.getDocument(), insertDate);
-        updateDocumentAttribute(null, person);
+//        person.getDocument().setSubjectIds(person.getSubjectIds());
+
+        if (person.getDocument() != null) {
+            documentStrategy.insert(person.getDocument(), insertDate);
+            updateDocumentAttribute(null, person);
+        }
+
         prepareForSaveNameAttributes(person);
         super.insertDomainObject(object, insertDate);
     }
@@ -560,7 +565,7 @@ public class PersonStrategy extends TemplateStrategy {
 
         setEditedByUserId(newPerson);
 
-        //handle explanation attribute: 
+        //handle explanation attribute:
         // 1. archive old explanation if it is existed.
 
         final Attribute newExplAttribute = newPerson.getAttribute(EXPLANATION);
@@ -573,12 +578,12 @@ public class PersonStrategy extends TemplateStrategy {
 
         //document altering
         if (newPerson.getDocument() != null) {
-            newPerson.getDocument().setSubjectIds(newPerson.getSubjectIds());
+//            newPerson.getDocument().setSubjectIds(newPerson.getSubjectIds());
             documentStrategy.update(oldPerson.getDocument(), newPerson.getDocument(), updateDate);
 
             if (newPerson.getReplacedDocument() != null) {
                 documentStrategy.disable(newPerson.getDocument(), updateDate);
-                newPerson.getReplacedDocument().setSubjectIds(newPerson.getSubjectIds());
+//                newPerson.getReplacedDocument().setSubjectIds(newPerson.getSubjectIds());
                 documentStrategy.insert(newPerson.getReplacedDocument(), updateDate);
             }
 
@@ -595,7 +600,7 @@ public class PersonStrategy extends TemplateStrategy {
 
         super.update(oldPerson, newPerson, updateDate);
 
-        //handle explanation attribute: 
+        //handle explanation attribute:
         // 2. insert new one
         if (newExplAttribute != null && newExplAttribute.getStartDate() == null) {
             newExplAttribute.setObjectId(newPerson.getObjectId());

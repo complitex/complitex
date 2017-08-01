@@ -3,6 +3,7 @@ package org.complitex.pspoffice.frontend.web.person;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapBookmarkablePageLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -27,35 +28,37 @@ import java.util.Arrays;
  */
 public class PersonListPage extends BasePage{
     public PersonListPage() {
-       add(new TablePanel<PersonObject>("persons", PersonObject.class,
-               Arrays.asList("lastNames[0].name", "firstNames[0].name", "middleNames[0].name", "edit"),
-               new PersonDataProvider()){
-           @Override
-           protected IColumn<PersonObject, String> getColumn(String field) {
-               if ("edit".equals(field)){
-                   return new FilteredAbstractColumn<PersonObject, String>(Model.of("")){
-                       @Override
-                       public Component getFilter(String componentId, FilterForm<?> form) {
-                           return new LinkPanel(componentId, new BootstrapLink<Void>(LinkPanel.LINK_COMPONENT_ID, Buttons.Type.Default) {
-                               @Override
-                               public void onClick() {
+        add(new NotificationPanel("feedback"));
 
-                               }
-                           }.setSize(Buttons.Size.Small).setBlock(true).setIconType(GlyphIconType.search));
-                       }
+        add(new TablePanel<PersonObject>("persons", PersonObject.class,
+                Arrays.asList("lastNames[0].name", "firstNames[0].name", "middleNames[0].name", "edit"),
+                new PersonDataProvider()){
+            @Override
+            protected IColumn<PersonObject, String> getColumn(String field) {
+                if ("edit".equals(field)){
+                    return new FilteredAbstractColumn<PersonObject, String>(Model.of("")){
+                        @Override
+                        public Component getFilter(String componentId, FilterForm<?> form) {
+                            return new LinkPanel(componentId, new BootstrapLink<Void>(LinkPanel.LINK_COMPONENT_ID, Buttons.Type.Default) {
+                                @Override
+                                public void onClick() {
 
-                       @Override
-                       public void populateItem(Item<ICellPopulator<PersonObject>> cellItem, String componentId, IModel<PersonObject> rowModel) {
-                           cellItem.add(new LinkPanel(componentId, new BootstrapBookmarkablePageLink(LinkPanel.LINK_COMPONENT_ID, PersonPage.class,
-                                   new PageParameters().add("id", rowModel.getObject().getObjectId()), Buttons.Type.Link)
-                                   .setIconType(GlyphIconType.edit).setSize(Buttons.Size.Small)));
-                       }
-                   };
-               }
+                                }
+                            }.setSize(Buttons.Size.Small).setBlock(true).setIconType(GlyphIconType.search));
+                        }
 
-               return super.getColumn(field);
-           }
-       });
+                        @Override
+                        public void populateItem(Item<ICellPopulator<PersonObject>> cellItem, String componentId, IModel<PersonObject> rowModel) {
+                            cellItem.add(new LinkPanel(componentId, new BootstrapBookmarkablePageLink(LinkPanel.LINK_COMPONENT_ID, PersonPage.class,
+                                    new PageParameters().add("id", rowModel.getObject().getObjectId()), Buttons.Type.Link)
+                                    .setIconType(GlyphIconType.edit).setSize(Buttons.Size.Small)));
+                        }
+                    };
+                }
+
+                return super.getColumn(field);
+            }
+        });
     }
 
     @Override

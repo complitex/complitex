@@ -8,6 +8,8 @@ import org.complitex.common.util.Locales;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
+import org.complitex.pspoffice.person.strategy.entity.PersonName;
+import org.complitex.pspoffice.person.strategy.service.PersonNameBean;
 import ru.complitex.pspoffice.api.model.DocumentObject;
 import ru.complitex.pspoffice.api.model.Name;
 import ru.complitex.pspoffice.api.model.PersonObject;
@@ -15,14 +17,11 @@ import ru.complitex.pspoffice.api.model.PersonObject;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.*;
 
 /**
  * @author Anatoly A. Ivanov
@@ -36,6 +35,9 @@ public class PersonResource extends AbstractResource{
 
     @EJB
     private PersonStrategy personStrategy;
+
+    @EJB
+    private PersonNameBean personNameBean;
 
     @GET
     @Path("ping")
@@ -116,6 +118,54 @@ public class PersonResource extends AbstractResource{
                                @QueryParam("lastName") String lastName,
                                @QueryParam("middleName") String middleName){
         return Response.ok(10).build(); //todo count
+    }
+
+    @PUT
+    @ApiOperation(value = "Put person")
+    public Response putPerson(PersonObject personObject){
+        Long objectId = personObject.getObjectId();
+
+        if (objectId != null){
+            Person person = personStrategy.getDomainObject(objectId);
+
+            if (person != null){
+
+                return Response.status(NOT_IMPLEMENTED).entity("Not implemented").build();
+            }else {
+                return Response.status(NOT_FOUND).build();
+            }
+        }else{
+            Person person = personStrategy.newInstance();
+
+            updateNames(personObject, person);
+
+            personStrategy.insert(person, new Date());
+
+            return Response.status(CREATED).build();
+        }
+    }
+
+    private void updateNames(PersonObject personObject, Person person){
+        person.getAttribute(PersonStrategy.LAST_NAME, 1L)
+                .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
+                        personObject.getLastNames().get(0).getName(), Locales.getLocale(1L), true).getId());
+        person.getAttribute(PersonStrategy.LAST_NAME, 2L)
+                .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
+                        personObject.getLastNames().get(1).getName(), Locales.getLocale(2L), true).getId());
+
+        person.getAttribute(PersonStrategy.FIRST_NAME, 1L)
+                .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.FIRST_NAME,
+                        personObject.getFirstNames().get(0).getName(), Locales.getLocale(1L), true).getId());
+        person.getAttribute(PersonStrategy.FIRST_NAME, 2L)
+                .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.FIRST_NAME,
+                        personObject.getFirstNames().get(1).getName(), Locales.getLocale(2L), true).getId());
+
+        person.getAttribute(PersonStrategy.MIDDLE_NAME, 1L)
+                .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.MIDDLE_NAME,
+                        personObject.getMiddleNames().get(0).getName(), Locales.getLocale(1L), true).getId());
+        person.getAttribute(PersonStrategy.MIDDLE_NAME, 2L)
+                .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.MIDDLE_NAME,
+                        personObject.getMiddleNames().get(1).getName(), Locales.getLocale(2L), true).getId());
     }
 
 
