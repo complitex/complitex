@@ -4,14 +4,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.complitex.common.entity.Gender;
 import org.complitex.common.util.AttributeUtil;
-import org.complitex.common.util.Locales;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
 import org.complitex.pspoffice.person.strategy.entity.PersonName;
 import org.complitex.pspoffice.person.strategy.service.PersonNameBean;
 import ru.complitex.pspoffice.api.model.DocumentObject;
-import ru.complitex.pspoffice.api.model.Name;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
 import javax.ejb.EJB;
@@ -22,6 +20,8 @@ import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.*;
+import static org.complitex.common.util.Locales.getLanguage;
+import static org.complitex.common.util.Locales.getLocale;
 
 /**
  * @author Anatoly A. Ivanov
@@ -45,17 +45,17 @@ public class PersonResource extends AbstractResource{
         return Response.ok("ping").build();
     }
 
-    private List<Name> getPersonNames(Map<Locale, String> map){
-        return map.entrySet().stream().map(e -> new Name(Locales.getLocaleId(e.getKey()), e.getValue())).collect(Collectors.toList());
+    private Map<String, String> getPersonNames(Map<Locale, String> map){
+        return map.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getLanguage(), Map.Entry::getValue));
     }
 
     private PersonObject getPersonObject(Person p){
         PersonObject person = new PersonObject();
 
         person.setObjectId(p.getObjectId());
-        person.setLastNames(getPersonNames(p.getLastNames()));
-        person.setFirstNames(getPersonNames(p.getFirstNames()));
-        person.setMiddleNames(getPersonNames(p.getMiddleNames()));
+        person.setLastName(getPersonNames(p.getLastNames()));
+        person.setFirstName(getPersonNames(p.getFirstNames()));
+        person.setMiddleName(getPersonNames(p.getMiddleNames()));
         person.setIdentityCode(p.getIdentityCode());
         person.setBirthDate(p.getBirthDate());
         person.setBirthCountry(p.getBirthCountry());
@@ -107,7 +107,7 @@ public class PersonResource extends AbstractResource{
                                @QueryParam("middleName") String middleName,
                                @QueryParam("offset") Long offset,
                                @QueryParam("count") Long count){
-        return Response.ok(personStrategy.getPersons(lastName, firstName, middleName).stream()
+        return Response.ok(personStrategy.getPersons(lastName, firstName, middleName).stream() //todo order
                 .map(this::getPersonObject).collect(Collectors.toList())).build();
     }
 
@@ -148,24 +148,24 @@ public class PersonResource extends AbstractResource{
     private void updateNames(PersonObject personObject, Person person){
         person.getAttribute(PersonStrategy.LAST_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
-                        personObject.getLastNames().get(0).getName(), Locales.getLocale(1L), true).getId());
+                        personObject.getLastName().get(getLanguage(1L)), getLocale(1L), true).getId());
         person.getAttribute(PersonStrategy.LAST_NAME, 2L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
-                        personObject.getLastNames().get(1).getName(), Locales.getLocale(2L), true).getId());
+                        personObject.getLastName().get(getLanguage(2L)), getLocale(2L), true).getId());
 
         person.getAttribute(PersonStrategy.FIRST_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.FIRST_NAME,
-                        personObject.getFirstNames().get(0).getName(), Locales.getLocale(1L), true).getId());
+                        personObject.getFirstName().get(getLanguage(1L)), getLocale(1L), true).getId());
         person.getAttribute(PersonStrategy.FIRST_NAME, 2L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.FIRST_NAME,
-                        personObject.getFirstNames().get(1).getName(), Locales.getLocale(2L), true).getId());
+                        personObject.getFirstName().get(getLanguage(2L)), getLocale(2L), true).getId());
 
         person.getAttribute(PersonStrategy.MIDDLE_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.MIDDLE_NAME,
-                        personObject.getMiddleNames().get(0).getName(), Locales.getLocale(1L), true).getId());
+                        personObject.getMiddleName().get(getLanguage(1L)), getLocale(1L), true).getId());
         person.getAttribute(PersonStrategy.MIDDLE_NAME, 2L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.MIDDLE_NAME,
-                        personObject.getMiddleNames().get(1).getName(), Locales.getLocale(2L), true).getId());
+                        personObject.getMiddleName().get(getLanguage(2L)), getLocale(2L), true).getId());
     }
 
 

@@ -3,6 +3,7 @@ package ru.complitex.pspoffice.api.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Anatoly A. Ivanov
@@ -11,9 +12,9 @@ import java.util.List;
 public class PersonObject implements Serializable{
     private Long objectId;
 
-    private List<Name> lastNames;
-    private List<Name> firstNames;
-    private List<Name> middleNames;
+    private Map<String, String> lastName;
+    private Map<String, String> firstName;
+    private Map<String, String> middleName;
 
     private String identityCode;
 
@@ -41,28 +42,28 @@ public class PersonObject implements Serializable{
         this.objectId = objectId;
     }
 
-    public List<Name> getLastNames() {
-        return lastNames;
+    public Map<String, String> getLastName() {
+        return lastName;
     }
 
-    public void setLastNames(List<Name> lastNames) {
-        this.lastNames = lastNames;
+    public void setLastName(Map<String, String> lastName) {
+        this.lastName = lastName;
     }
 
-    public List<Name> getFirstNames() {
-        return firstNames;
+    public Map<String, String> getFirstName() {
+        return firstName;
     }
 
-    public void setFirstNames(List<Name> firstNames) {
-        this.firstNames = firstNames;
+    public void setFirstName(Map<String, String> firstName) {
+        this.firstName = firstName;
     }
 
-    public List<Name> getMiddleNames() {
-        return middleNames;
+    public Map<String, String> getMiddleName() {
+        return middleName;
     }
 
-    public void setMiddleNames(List<Name> middleNames) {
-        this.middleNames = middleNames;
+    public void setMiddleName(Map<String, String> middleName) {
+        this.middleName = middleName;
     }
 
     public String getIdentityCode() {

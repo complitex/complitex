@@ -3,7 +3,7 @@ package ru.complitex.pspoffice.api.model;
 import io.swagger.annotations.ApiModel;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author Anatoly A. Ivanov
@@ -17,8 +17,8 @@ public class AddressObject implements Serializable{
 
     private String code;
 
-    private List<Name> names;
-    private List<Name> shortNames;
+    private Map<String, String> name;
+    private Map<String, String> shortName;
 
     //date, history
 
@@ -30,37 +30,37 @@ public class AddressObject implements Serializable{
         this.parentId = parentId;
     }
 
-    public AddressObject(Long objectId, List<Name> names) {
+    public AddressObject(Long objectId, Map<String, String> name) {
         this.objectId = objectId;
-        this.names = names;
+        this.name = name;
     }
 
-    public AddressObject(Long objectId, List<Name> names, List<Name> shortNames) {
+    public AddressObject(Long objectId, Map<String, String> name, Map<String, String> shortName) {
         this.objectId = objectId;
-        this.names = names;
-        this.shortNames = shortNames;
+        this.name = name;
+        this.shortName = shortName;
     }
 
-    public AddressObject(Long objectId, Long parentId, String code, List<Name> names) {
+    public AddressObject(Long objectId, Long parentId, String code, Map<String, String> name) {
         this.objectId = objectId;
         this.parentId = parentId;
         this.code = code;
-        this.names = names;
+        this.name = name;
     }
 
-    public AddressObject(Long objectId, Long parentId, Long typeId, List<Name> names) {
+    public AddressObject(Long objectId, Long parentId, Long typeId, Map<String, String> name) {
         this.objectId = objectId;
         this.parentId = parentId;
         this.typeId = typeId;
-        this.names = names;
+        this.name = name;
     }
 
-    public AddressObject(Long objectId, Long parentId, Long typeId, String code, List<Name> names) {
+    public AddressObject(Long objectId, Long parentId, Long typeId, String code, Map<String, String> names) {
         this.objectId = objectId;
         this.parentId = parentId;
         this.typeId = typeId;
         this.code = code;
-        this.names = names;
+        this.name = name;
     }
 
     public Long getObjectId() {
@@ -95,19 +95,19 @@ public class AddressObject implements Serializable{
         this.code = code;
     }
 
-    public List<Name> getNames() {
-        return names;
+    public Map<String, String> getName() {
+        return name;
     }
 
-    public void setNames(List<Name> names) {
-        this.names = names;
+    public void setName(Map<String, String> name) {
+        this.name = name;
     }
 
-    public List<Name> getShortNames() {
-        return shortNames;
+    public Map<String, String> getShortName() {
+        return shortName;
     }
 
-    public void setShortNames(List<Name> shortNames) {
-        this.shortNames = shortNames;
+    public void setShortName(Map<String, String> shortName) {
+        this.shortName = shortName;
     }
 }

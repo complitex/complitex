@@ -17,16 +17,12 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.pspoffice.frontend.web.BasePage;
 import ru.complitex.pspoffice.api.model.DocumentObject;
-import ru.complitex.pspoffice.api.model.Name;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -54,13 +50,13 @@ public class PersonPage extends BasePage{
 
         //Основные
 
-        form.add(new TextField<String>("lastNameRu", new PropertyModel<>(personModel, "lastNames[0].name")));
-        form.add(new TextField<String>("firstNameRu", new PropertyModel<>(personModel, "firstNames[0].name")));
-        form.add(new TextField<String>("middleNameRu", new PropertyModel<>(personModel, "middleNames[0].name")));
+        form.add(new TextField<String>("lastNameRu", new PropertyModel<>(personModel, "lastName.ru")));
+        form.add(new TextField<String>("firstNameRu", new PropertyModel<>(personModel, "firstName.ru")));
+        form.add(new TextField<String>("middleNameRu", new PropertyModel<>(personModel, "middleName.ru")));
 
-        form.add(new TextField<String>("lastNameUk", new PropertyModel<>(personModel, "lastNames[1].name")));
-        form.add(new TextField<String>("firstNameUk", new PropertyModel<>(personModel, "firstNames[1].name")));
-        form.add(new TextField<String>("middleNameUk", new PropertyModel<>(personModel, "middleNames[1].name")));
+        form.add(new TextField<String>("lastNameUk", new PropertyModel<>(personModel, "lastName.uk")));
+        form.add(new TextField<String>("firstNameUk", new PropertyModel<>(personModel, "firstName.uk")));
+        form.add(new TextField<String>("middleNameUk", new PropertyModel<>(personModel, "middleName.uk")));
 
         form.add(new DateTextField("birthDate", new PropertyModel<>(personModel, "birthDate"), "dd.MM.yyyy"));
 
@@ -188,9 +184,9 @@ public class PersonPage extends BasePage{
     private PersonObject newPersonObject(){
         PersonObject personObject = new PersonObject();
 
-        personObject.setLastNames(newNames());
-        personObject.setFirstNames(newNames());
-        personObject.setMiddleNames(newNames());
+        personObject.setLastName(new HashMap<>());
+        personObject.setFirstName(new HashMap<>());
+        personObject.setMiddleName(new HashMap<>());
 
         personObject.setGender(0);
 
@@ -200,31 +196,8 @@ public class PersonPage extends BasePage{
         return personObject;
     }
 
-    private List<Name> newNames(){
-        List<Name> names = new ArrayList<>(2);
-
-        names.add(new Name(1L, ""));
-        names.add(new Name(2L, ""));
-
-        return names;
-    }
 
     private PersonObject getPersonObject(Long objectId){
-        PersonObject personObject =  pspOfficeClient.request("person/" + objectId).get(PersonObject.class);
-
-        updateNames(personObject.getLastNames());
-        updateNames(personObject.getFirstNames());
-        updateNames(personObject.getMiddleNames());
-
-        return personObject;
-    }
-
-    private void updateNames(List<Name> names){
-        List<Name> list = new ArrayList<>(names);
-
-        names.clear();
-
-        names.add(list.stream().filter(n -> n.getLocaleId() == 1L).findFirst().orElse(new Name(1L, "")));
-        names.add(list.stream().filter(n -> n.getLocaleId() == 2L).findFirst().orElse(new Name(2L, "")));
+        return pspOfficeClient.request("person/" + objectId).get(PersonObject.class);
     }
 }
