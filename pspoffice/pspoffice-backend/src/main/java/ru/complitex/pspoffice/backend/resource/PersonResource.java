@@ -31,7 +31,7 @@ import static org.complitex.common.util.Locales.getLocale;
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
 @Api(description = "Person API")
-public class PersonResource extends AbstractResource{
+public class PersonResource {
 
     @EJB
     private PersonStrategy personStrategy;
@@ -42,7 +42,7 @@ public class PersonResource extends AbstractResource{
     @GET
     @Path("ping")
     public Response ping(){
-        return Response.ok("ping").build();
+        return Response.ok("pong").build();
     }
 
     private Map<String, String> getPersonNames(Map<Locale, String> map){
@@ -149,23 +149,39 @@ public class PersonResource extends AbstractResource{
         person.getAttribute(PersonStrategy.LAST_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
                         personObject.getLastName().get(getLanguage(1L)), getLocale(1L), true).getId());
-        person.getAttribute(PersonStrategy.LAST_NAME, 2L)
-                .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
-                        personObject.getLastName().get(getLanguage(2L)), getLocale(2L), true).getId());
+
+        if (personObject.getLastName().get(getLanguage(2L)) != null) {
+            person.getAttribute(PersonStrategy.LAST_NAME, 2L)
+                    .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
+                            personObject.getLastName().get(getLanguage(2L)), getLocale(2L), true).getId());
+        }else{
+            person.getAttribute(PersonStrategy.LAST_NAME, 2L).setValueId(null);
+        }
 
         person.getAttribute(PersonStrategy.FIRST_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.FIRST_NAME,
                         personObject.getFirstName().get(getLanguage(1L)), getLocale(1L), true).getId());
-        person.getAttribute(PersonStrategy.FIRST_NAME, 2L)
-                .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.FIRST_NAME,
-                        personObject.getFirstName().get(getLanguage(2L)), getLocale(2L), true).getId());
+
+
+        if (personObject.getFirstName().get(getLanguage(2L)) != null) {
+            person.getAttribute(PersonStrategy.FIRST_NAME, 2L)
+                    .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.FIRST_NAME,
+                            personObject.getFirstName().get(getLanguage(2L)), getLocale(2L), true).getId());
+        }else{
+            person.getAttribute(PersonStrategy.FIRST_NAME, 2L).setValueId(null);
+        }
 
         person.getAttribute(PersonStrategy.MIDDLE_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.MIDDLE_NAME,
                         personObject.getMiddleName().get(getLanguage(1L)), getLocale(1L), true).getId());
-        person.getAttribute(PersonStrategy.MIDDLE_NAME, 2L)
-                .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.MIDDLE_NAME,
-                        personObject.getMiddleName().get(getLanguage(2L)), getLocale(2L), true).getId());
+
+        if (personObject.getMiddleName().get(getLanguage(2L)) != null) {
+            person.getAttribute(PersonStrategy.MIDDLE_NAME, 2L)
+                    .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.MIDDLE_NAME,
+                            personObject.getMiddleName().get(getLanguage(2L)), getLocale(2L), true).getId());
+        }else{
+            person.getAttribute(PersonStrategy.MIDDLE_NAME, 2L).setValueId(null);
+        }
     }
 
 

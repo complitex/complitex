@@ -486,9 +486,7 @@ public class PersonStrategy extends TemplateStrategy {
                     || (personAgeType == PersonAgeType.ADULT && !person.isKid());
             if (eligiblePerson) {
                 loadName(person);
-                if (person.getDocument() != null) {
-                    loadDocument(person);
-                }
+                loadDocument(person);
                 results.add(person);
             }
         }

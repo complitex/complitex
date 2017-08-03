@@ -35,7 +35,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
 @Api(description = "Address Database API")
-public class AddressResource extends AbstractResource {
+public class AddressResource {
     @EJB
     private CountryStrategy countryStrategy;
 
@@ -60,7 +60,7 @@ public class AddressResource extends AbstractResource {
     @GET
     @Path("ping")
     public Response ping(){
-        return Response.ok("ping").build();
+        return Response.ok("pong").build();
     }
 
     @GET
