@@ -5,12 +5,16 @@
 <body>
 <div class="container">
     <header class="page-header">
-        <h1>Паспортный стол</h1>
+        <h1>
+            <a wicket:id="headerLink" style="text-decoration: none">
+                Паспортный стол
+            </a>
+        </h1>
     </header>
 
     <div class="row">
         <div class="col-sm-3 col-md-3">
-            <div class="panel-group" id="accordion">
+            <div class="panel-group">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
@@ -20,7 +24,7 @@
                     <div id="collapseOne" class="panel-collapse collapse in">
                         <div class="panel-body">
                             <table class="table">
-                                <tr><td><a href="persons">Персона</a></td></tr>
+                                <tr><td><a wicket:id="personsLink">Персоны</a></td></tr>
                                 <tr><td><a href="#">Регистрация</a></td></tr>
                             </table>
                         </div>
@@ -33,16 +37,15 @@
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Адресный справочник</a>
                         </h4>
                     </div>
-                    <div id="collapseTwo" class="panel-collapse collapse">
+                    <div id="collapseTwo" class="panel-collapse collapse in">
                         <div class="panel-body">
                             <table class="table">
-                                <tr><td><a href="#">Страна</a></td></tr>
-                                <tr><td><a href="#">Регион</a></td></tr>
-                                <tr><td><a href="#">Город</a></td></tr>
-                                <tr><td><a href="#">Район</a></td></tr>
-                                <tr><td><a href="#">Улица</a></td></tr>
-                                <tr><td><a href="#">Дом</a></td></tr>
-                                <tr><td><a href="#">Квартира</a></td></tr>
+                                <tr><td><a wicket:id="country">Страна</a></td></tr>
+                                <tr><td><a wicket:id="region">Регион</a></td></tr>
+                                <tr><td><a wicket:id="city">Город</a></td></tr>
+                                <tr><td><a wicket:id="district">Район</a></td></tr>
+                                <tr><td><a wicket:id="street">Улица</a></td></tr>
+                                <tr><td><a wicket:id="building">Дом</a></td></tr>
                             </table>
                         </div>
                     </div>
@@ -50,8 +53,13 @@
             </div>
         </div>
         <div class="col-sm-9 col-md-9">
-            <div class="well">
-                <wicket:child/>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 wicket:id="title" class="panel-title"></h3>
+                </div>
+                <div class="panel-body">
+                    <wicket:child/>
+                </div>
             </div>
         </div>
     </div>

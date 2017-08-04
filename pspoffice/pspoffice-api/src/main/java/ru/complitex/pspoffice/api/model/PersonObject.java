@@ -1,22 +1,24 @@
 package ru.complitex.pspoffice.api.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Anatoly A. Ivanov
  *         25.05.2017 16:55
  */
 public class PersonObject implements Serializable{
-    private Long objectId;
+    private Long id;
 
-    private List<Name> lastName;
-    private List<Name> firstName;
-    private List<Name> middleName;
+    private Map<String, String> lastName;
+    private Map<String, String> firstName;
+    private Map<String, String> middleName;
 
     private String identityCode;
 
-    private String birthDate;
+    private Date birthDate;
 
     private String birthCountry;
     private String birthRegion;
@@ -27,40 +29,40 @@ public class PersonObject implements Serializable{
 
     private List<DocumentObject> documents;
 
-    private Integer ukraineCitizenship;
+    private Long citizenshipId;
     private Long militaryServiceRelationId;
 
     private List<PersonObject> children;
 
-    public Long getObjectId() {
-        return objectId;
+    public Long getId() {
+        return id;
     }
 
-    public void setObjectId(Long objectId) {
-        this.objectId = objectId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public List<Name> getLastName() {
+    public Map<String, String> getLastName() {
         return lastName;
     }
 
-    public void setLastName(List<Name> lastName) {
+    public void setLastName(Map<String, String> lastName) {
         this.lastName = lastName;
     }
 
-    public List<Name> getFirstName() {
+    public Map<String, String> getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(List<Name> firstName) {
+    public void setFirstName(Map<String, String> firstName) {
         this.firstName = firstName;
     }
 
-    public List<Name> getMiddleName() {
+    public Map<String, String> getMiddleName() {
         return middleName;
     }
 
-    public void setMiddleName(List<Name> middleName) {
+    public void setMiddleName(Map<String, String> middleName) {
         this.middleName = middleName;
     }
 
@@ -72,11 +74,11 @@ public class PersonObject implements Serializable{
         this.identityCode = identityCode;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -128,12 +130,12 @@ public class PersonObject implements Serializable{
         this.documents = documents;
     }
 
-    public Integer getUkraineCitizenship() {
-        return ukraineCitizenship;
+    public Long getCitizenshipId() {
+        return citizenshipId;
     }
 
-    public void setUkraineCitizenship(Integer ukraineCitizenship) {
-        this.ukraineCitizenship = ukraineCitizenship;
+    public void setCitizenshipId(Long citizenshipId) {
+        this.citizenshipId = citizenshipId;
     }
 
     public Long getMilitaryServiceRelationId() {

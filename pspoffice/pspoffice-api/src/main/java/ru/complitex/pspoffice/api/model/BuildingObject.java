@@ -1,48 +1,52 @@
 package ru.complitex.pspoffice.api.model;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Anatoly A. Ivanov
  *         Date: 23.05.2017.
  */
 public class BuildingObject extends AddressObject{
-    private List<Name> numbers;
-    private List<Name> corps;
-    private List<Name> structures;
+    private Map<String, String> number;
+    private Map<String, String> corp;
+    private Map<String, String> structure;
 
     private List<BuildingObject> alternatives;
 
-    public BuildingObject(Long objectId, Long parentId, List<Name> numbers, List<Name> corps, List<Name> structures) {
+    public BuildingObject() {
+    }
+
+    public BuildingObject(Long objectId, Long parentId, Map<String, String> number, Map<String, String> corp, Map<String, String> structure) {
         super(objectId, parentId);
 
-        this.numbers = numbers;
-        this.corps = corps;
-        this.structures = structures;
+        this.number = number;
+        this.corp = corp;
+        this.structure = structure;
     }
 
-    public List<Name> getNumbers() {
-        return numbers;
+    public Map<String, String> getNumber() {
+        return number;
     }
 
-    public void setNumbers(List<Name> numbers) {
-        this.numbers = numbers;
+    public void setNumber(Map<String, String> number) {
+        this.number = number;
     }
 
-    public List<Name> getCorps() {
-        return corps;
+    public Map<String, String> getCorp() {
+        return corp;
     }
 
-    public void setCorps(List<Name> corps) {
-        this.corps = corps;
+    public void setCorp(Map<String, String> corp) {
+        this.corp = corp;
     }
 
-    public List<Name> getStructures() {
-        return structures;
+    public Map<String, String> getStructure() {
+        return structure;
     }
 
-    public void setStructures(List<Name> structures) {
-        this.structures = structures;
+    public void setStructure(Map<String, String> structure) {
+        this.structure = structure;
     }
 
     public List<BuildingObject> getAlternatives() {

@@ -4,10 +4,8 @@
  */
 package org.complitex.pspoffice.document_type.strategy;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
@@ -20,6 +18,7 @@ import org.complitex.template.web.security.SecurityRole;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.google.common.collect.ImmutableSet.of;
 import static com.google.common.collect.Lists.newArrayList;
@@ -94,24 +93,12 @@ public class DocumentTypeStrategy extends TemplateStrategy {
 
 
     public List<DomainObject> getKidDocumentTypes() {
-        return newArrayList(Iterables.filter(getAll(null), new Predicate<DomainObject>() {
-
-            @Override
-            public boolean apply(DomainObject documentType) {
-                return isKidDocumentType(documentType.getObjectId());
-            }
-        }));
+        return newArrayList(getAll(null).stream().filter(documentType -> isKidDocumentType(documentType.getObjectId())).collect(Collectors.toList()));
     }
 
 
     public List<DomainObject> getAdultDocumentTypes() {
-        return newArrayList(Iterables.filter(getAll(null), new Predicate<DomainObject>() {
-
-            @Override
-            public boolean apply(DomainObject documentType) {
-                return isAdultDocumentType(documentType.getObjectId());
-            }
-        }));
+        return newArrayList(getAll(null).stream().filter(documentType -> isAdultDocumentType(documentType.getObjectId())).collect(Collectors.toList()));
     }
 
     @Override

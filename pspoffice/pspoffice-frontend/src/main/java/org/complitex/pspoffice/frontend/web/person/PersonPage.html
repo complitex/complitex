@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head></head>
+<body>
+<wicket:extend>
+    <div wicket:id="feedback"></div>
+
+    <form wicket:id="form" class="form-horizontal">
+        <div class="form-group">
+            <label for="lastNameRu" class="col-sm-2 control-label">Фамилия</label>
+            <div class="col-sm-5">
+                <input wicket:id="lastNameRu" id="lastNameRu" class="form-control" placeholder="русский"/>
+                <span class="help-block"></span>
+            </div>
+            <div class="col-sm-5">
+                <input wicket:id="lastNameUk" id="lastNameUk" class="form-control" placeholder="украинский"/>
+                <span class="help-block"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="firstNameRu" class="col-sm-2 control-label">Имя</label>
+            <div class="col-sm-5">
+                <input wicket:id="firstNameRu" id="firstNameRu" class="form-control" placeholder="русский"/>
+                <span class="help-block"></span>
+            </div>
+            <div class="col-sm-5">
+                <input wicket:id="firstNameUk" id="firstNameUk" class="form-control" placeholder="украинский"/>
+                <span class="help-block"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="middleNameRu" class="col-sm-2 control-label">Отчество</label>
+            <div class="col-sm-5">
+                <input wicket:id="middleNameRu" id="middleNameRu" class="form-control" placeholder="русский"/>
+                <span class="help-block"></span>
+            </div>
+            <div class="col-sm-5">
+                <input wicket:id="middleNameUk" id="middleNameUk" class="form-control" placeholder="украинский"/>
+                <span class="help-block"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="birthDate" class="col-sm-2 control-label">Дата рождения</label>
+            <div class="col-sm-10">
+                <input wicket:id="birthDate" type="text" class="form-control" id="birthDate" placeholder="дд.мм.гггг"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="gender" class="col-sm-2 control-label">Пол</label>
+            <div class="col-sm-10">
+                <select wicket:id="gender" id="gender" class="form-control"></select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="citizenship" class="col-sm-2 control-label">Гражданство</label>
+            <div class="col-sm-10">
+                <select wicket:id="citizenship" id="citizenship" class="form-control"></select>
+            </div>
+        </div>
+
+        <h4>Место рождения</h4>
+
+        <div class="form-group">
+            <label for="birthCountry" class="col-sm-2 control-label">Страна</label>
+            <div class="col-sm-10">
+                <input wicket:id="birthCountry" class="form-control" id="birthCountry">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="birthRegion" class="col-sm-2 control-label">Регион</label>
+            <div class="col-sm-10">
+                <input wicket:id="birthRegion" class="form-control" id="birthRegion">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="birthCity" class="col-sm-2 control-label text-nowrap">Населенный пункт</label>
+            <div class="col-sm-10">
+                <input wicket:id="birthCity" class="form-control" id="birthCity">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="birthDistrict" class="col-sm-2 control-label">Район</label>
+            <div class="col-sm-10">
+                <input wicket:id="birthDistrict" class="form-control" id="birthDistrict">
+            </div>
+        </div>
+
+        <h4>Документ</h4>
+
+        <div class="form-group">
+            <label for="documentType" class="col-sm-2 control-label">Тип документа</label>
+            <div class="col-sm-10">
+                <select wicket:id="documentTypeId" class="form-control" id="documentType"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="documentSeries" class="col-sm-2 control-label">Серия</label>
+            <div class="col-sm-10">
+                <input wicket:id="documentSeries" class="form-control" id="documentSeries">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="documentNumbers" class="col-sm-2 control-label">Номер</label>
+            <div class="col-sm-10">
+                <input wicket:id="documentNumbers" class="form-control" id="documentNumbers">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="documentOrganization" class="col-sm-2 control-label">Кем выдан</label>
+            <div class="col-sm-10">
+                <input wicket:id="documentOrganization" class="form-control" id="documentOrganization">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="documentDate" class="col-sm-2 control-label">Дата выдачи</label>
+            <div class="col-sm-10">
+                <input wicket:id="documentDate" type="text"  class="form-control" id="documentDate" placeholder="дд.мм.гггг">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="identityCode" class="col-sm-2 control-label">ИНН</label>
+            <div class="col-sm-10">
+                <input wicket:id="identityCode" class="form-control" id="identityCode">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button wicket:id="save" class="btn btn-primary">Сохранить</button>
+                <button wicket:id="cancel" class="btn btn-default">Отмена</button>
+            </div>
+        </div>
+    </form>
+</wicket:extend>
+</body>
+</html>

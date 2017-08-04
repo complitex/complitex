@@ -5,6 +5,8 @@ import org.complitex.common.util.Locales;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.complitex.common.util.Locales.getLanguage;
+
 public class DomainObject implements ILongId {
     private Long pkId;
     private String entityName;
@@ -134,6 +136,16 @@ public class DomainObject implements ILongId {
 
     public void setStringValue(Long attributeTypeId, String value){
         setStringValue(attributeTypeId, value, Locales.getSystemLocale());
+    }
+
+    public Map<String, String> getStringMap(Long attributeTypeId){
+        if (getAttribute(attributeTypeId) == null || getAttribute(attributeTypeId).getStringValues().isEmpty()){
+            return null;
+        }
+
+        return getAttribute(attributeTypeId).getStringValues().stream()
+                .filter(s -> s.getValue() != null)
+                .collect(Collectors.toMap(s -> getLanguage(s.getLocaleId()), StringValue::getValue));
     }
 
     public Long getValueId(Long attributeTypeId){
