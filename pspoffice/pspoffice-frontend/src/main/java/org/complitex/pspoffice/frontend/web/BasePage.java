@@ -9,7 +9,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.pspoffice.frontend.web.address.AddressListPage;
 import org.complitex.pspoffice.frontend.web.address.building.BuildingListPage;
 import org.complitex.pspoffice.frontend.web.person.PersonListPage;
-import org.complitex.pspoffice.frontend.web.person.PersonPage;
 
 /**
  * @author Anatoly A. Ivanov
@@ -27,7 +26,6 @@ public abstract class BasePage extends WebPage{
         add(new BookmarkablePageLink("headerLink", HomePage.class));
 
         add(new BookmarkablePageLink("personsLink", PersonListPage.class));
-        add(new BookmarkablePageLink("person", PersonPage.class));
 
         add(new BookmarkablePageLink("country", AddressListPage.class, new PageParameters().add("entity", "country")));
         add(new BookmarkablePageLink("region", AddressListPage.class, new PageParameters().add("entity", "region")));

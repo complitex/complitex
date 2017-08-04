@@ -103,7 +103,7 @@ public class PersonPage extends BasePage{
             public Long getObject(String id, IModel<? extends List<? extends Long>> choices) {
                 return !Strings.isEmpty(id) ? Long.valueOf(id) : null;
             }
-        }).setNullValid(true).setRequired(true));
+        }).setNullValid(true));
 
         //Место рождения
 
@@ -206,7 +206,7 @@ public class PersonPage extends BasePage{
         personObject.setFirstName(new HashMap<>());
         personObject.setMiddleName(new HashMap<>());
 
-        personObject.setGender(0);
+        personObject.setGender(1);
 
         personObject.setDocuments(new ArrayList<>());
         personObject.getDocuments().add(new DocumentObject());

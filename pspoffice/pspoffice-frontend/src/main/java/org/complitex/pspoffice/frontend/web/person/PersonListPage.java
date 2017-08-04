@@ -28,6 +28,14 @@ import java.util.Arrays;
  */
 public class PersonListPage extends BasePage{
     public PersonListPage() {
+        add(new BootstrapLink<Void>("addPerson", Buttons.Type.Default) {
+            @Override
+            public void onClick() {
+                setResponsePage(PersonPage.class);
+
+            }
+        }.setLabel(new ResourceModel("addPerson")).setIconType(GlyphIconType.user));
+
         add(new NotificationPanel("feedback"));
 
         add(new TablePanel<PersonObject>("persons", PersonObject.class,
