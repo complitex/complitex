@@ -2,11 +2,14 @@ package org.complitex.pspoffice.frontend.web.person;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.jquery.JQuery;
+import de.agilecoders.wicket.jquery.function.Function;
+import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -41,10 +44,14 @@ public class PersonPage extends BasePage{
 
     private IModel<PersonObject> personModel;
 
+    private Component feedback;
+
     public PersonPage(PageParameters pageParameters) {
         Long personObjectId = pageParameters.get("id").toOptionalLong();
 
         personModel = Model.of(personObjectId != null ? getPersonObject(personObjectId) : newPersonObject());
+
+        add(feedback = new NotificationPanel("feedback").setOutputMarkupId(true));
 
         Form<PersonObject> form = new Form<>("form");
         form.setOutputMarkupId(true);
@@ -60,7 +67,7 @@ public class PersonPage extends BasePage{
         form.add(new TextField<String>("firstNameUk", new PropertyModel<>(personModel, "firstName.uk")));
         form.add(new TextField<String>("middleNameUk", new PropertyModel<>(personModel, "middleName.uk")));
 
-        form.add(new DateTextField("birthDate", new PropertyModel<>(personModel, "birthDate"), "dd.MM.yyyy"));
+        form.add(new DateTextField("birthDate", new PropertyModel<>(personModel, "birthDate"), "dd.MM.yyyy").setRequired(true));
 
         form.add(new DropDownChoice<>("gender", new PropertyModel<>(personModel, "gender"),
                 Arrays.asList(0, 1), new IChoiceRenderer<Integer>() {
@@ -96,7 +103,7 @@ public class PersonPage extends BasePage{
             public Long getObject(String id, IModel<? extends List<? extends Long>> choices) {
                 return !Strings.isEmpty(id) ? Long.valueOf(id) : null;
             }
-        }).setNullValid(true));
+        }).setNullValid(true).setRequired(true));
 
         //Место рождения
 
@@ -131,10 +138,10 @@ public class PersonPage extends BasePage{
 
                 documentTypes,
                 new ChoiceRenderer<>("name.ru", "id")
-        ).setNullValid(true));
+        ).setNullValid(true).setRequired(true));
 
-        form.add(new TextField<>("documentSeries", new PropertyModel<>(personModel, "documents[0].series")));
-        form.add(new TextField<>("documentNumbers", new PropertyModel<>(personModel, "documents[0].number")));
+        form.add(new TextField<>("documentSeries", new PropertyModel<>(personModel, "documents[0].series")).setRequired(true));
+        form.add(new TextField<>("documentNumbers", new PropertyModel<>(personModel, "documents[0].number")).setRequired(true));
         form.add(new TextField<>("documentOrganization", new PropertyModel<>(personModel, "documents[0].organization")));
         form.add(new DateTextField("documentDate", new PropertyModel<>(personModel, "documents[0].date"), "dd.MM.yyyy"));
 
@@ -157,7 +164,7 @@ public class PersonPage extends BasePage{
                    setResponsePage(PersonListPage.class);
                }else {
                    error(response.readEntity(String.class));
-                   target.add(form.get("feedback"));
+                   target.add(feedback);
                }
             }
 
@@ -167,7 +174,12 @@ public class PersonPage extends BasePage{
             }
         });
 
-        form.add(new NotificationPanel("feedback").setOutputMarkupId(true));
+        form.add(new Link<Void>("cancel") {
+            @Override
+            public void onClick() {
+                setResponsePage(PersonListPage.class);
+            }
+        });
     }
 
     @Override
@@ -177,12 +189,12 @@ public class PersonPage extends BasePage{
 
     private void validate(Form<?> form, AjaxRequestTarget target){
         form.visitFormComponents((IVisitor<FormComponent<?>, Void>) (component, iVisit) -> {
-            if (component.hasErrorMessage()){
+            if (!component.isValid()){
                 component.setMetaData(ERROR, true);
-                target.appendJavaScript(JQuery.$(component).closest(".form-group").chain("addClass('has-error')").build());
+                target.appendJavaScript(JQuery.$(component).closest(".form-group").chain(new Function("addClass", "has-error")).build());
             } else if (component.getMetaData(ERROR) != null && component.getMetaData(ERROR)){
                 component.setMetaData(ERROR, false);
-                target.appendJavaScript(JQuery.$(component).closest(".form-group").chain("removeClass('has-error')").build());
+                target.appendJavaScript(JQuery.$(component).closest(".form-group").chain(new Function("addClass", "has-error")).build());
             }
         });
     }

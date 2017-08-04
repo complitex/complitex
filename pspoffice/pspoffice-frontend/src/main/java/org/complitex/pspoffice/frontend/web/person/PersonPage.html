@@ -4,32 +4,40 @@
 <head></head>
 <body>
 <wicket:extend>
+    <div wicket:id="feedback"></div>
+
     <form wicket:id="form" class="form-horizontal">
         <div class="form-group">
             <label for="lastNameRu" class="col-sm-2 control-label">Фамилия</label>
             <div class="col-sm-5">
                 <input wicket:id="lastNameRu" id="lastNameRu" class="form-control" placeholder="русский"/>
+                <span class="help-block"></span>
             </div>
             <div class="col-sm-5">
                 <input wicket:id="lastNameUk" id="lastNameUk" class="form-control" placeholder="украинский"/>
+                <span class="help-block"></span>
             </div>
         </div>
         <div class="form-group">
             <label for="firstNameRu" class="col-sm-2 control-label">Имя</label>
             <div class="col-sm-5">
                 <input wicket:id="firstNameRu" id="firstNameRu" class="form-control" placeholder="русский"/>
+                <span class="help-block"></span>
             </div>
             <div class="col-sm-5">
                 <input wicket:id="firstNameUk" id="firstNameUk" class="form-control" placeholder="украинский"/>
+                <span class="help-block"></span>
             </div>
         </div>
         <div class="form-group">
             <label for="middleNameRu" class="col-sm-2 control-label">Отчество</label>
             <div class="col-sm-5">
                 <input wicket:id="middleNameRu" id="middleNameRu" class="form-control" placeholder="русский"/>
+                <span class="help-block"></span>
             </div>
             <div class="col-sm-5">
                 <input wicket:id="middleNameUk" id="middleNameUk" class="form-control" placeholder="украинский"/>
+                <span class="help-block"></span>
             </div>
         </div>
 
@@ -123,11 +131,10 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button wicket:id="save" class="btn btn-default">Сохранить</button>
+                <button wicket:id="save" class="btn btn-primary">Сохранить</button>
+                <button wicket:id="cancel" class="btn btn-default">Отмена</button>
             </div>
         </div>
-
-        <div wicket:id="feedback"></div>
     </form>
 </wicket:extend>
 </body>
