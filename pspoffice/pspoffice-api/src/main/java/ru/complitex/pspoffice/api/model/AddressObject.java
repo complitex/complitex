@@ -11,7 +11,7 @@ import java.util.Map;
  */
 @ApiModel("Address object")
 public class AddressObject implements Serializable{
-    private Long objectId;
+    private Long id;
     private Long parentId;
     private Long typeId;
 
@@ -25,50 +25,51 @@ public class AddressObject implements Serializable{
     public AddressObject() {
     }
 
-    public AddressObject(Long objectId, Long parentId) {
-        this.objectId = objectId;
+    public AddressObject(Long id, Long parentId) {
+        this.id = id;
         this.parentId = parentId;
     }
 
-    public AddressObject(Long objectId, Map<String, String> name) {
-        this.objectId = objectId;
+    public AddressObject(Long id, Map<String, String> name) {
+        this.id = id;
         this.name = name;
     }
 
-    public AddressObject(Long objectId, Map<String, String> name, Map<String, String> shortName) {
-        this.objectId = objectId;
+    public AddressObject(Long id, Map<String, String> name, Map<String, String> shortName) {
+        this.id = id;
         this.name = name;
         this.shortName = shortName;
     }
 
-    public AddressObject(Long objectId, Long parentId, String code, Map<String, String> name) {
-        this.objectId = objectId;
+    public AddressObject(Long id, Long parentId, String code, Map<String, String> name) {
+        this.id = id;
         this.parentId = parentId;
         this.code = code;
         this.name = name;
     }
 
-    public AddressObject(Long objectId, Long parentId, Long typeId, Map<String, String> name) {
-        this.objectId = objectId;
+    public AddressObject(Long id, Long parentId, Long typeId, Map<String, String> name) {
+        this.id = id;
         this.parentId = parentId;
         this.typeId = typeId;
         this.name = name;
     }
 
-    public AddressObject(Long objectId, Long parentId, Long typeId, String code, Map<String, String> names) {
-        this.objectId = objectId;
+    public AddressObject(Long id, Long parentId, Long typeId, String code, Map<String, String> name) {
+        this.id = id;
         this.parentId = parentId;
         this.typeId = typeId;
         this.code = code;
         this.name = name;
     }
 
-    public Long getObjectId() {
-        return objectId;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setObjectId(Long objectId) {
-        this.objectId = objectId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getParentId() {

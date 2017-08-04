@@ -8,23 +8,23 @@ import java.util.Map;
  * 03.08.2017 17:42
  */
 public class NameObject implements Serializable{
-    private Long objectId;
+    private Long id;
     private Map<String, String> name;
 
     public NameObject() {
     }
 
-    public NameObject(Long objectId, Map<String, String> name) {
-        this.objectId = objectId;
+    public NameObject(Long id, Map<String, String> name) {
+        this.id = id;
         this.name = name;
     }
 
-    public Long getObjectId() {
-        return objectId;
+    public Long getId() {
+        return id;
     }
 
-    public void setObjectId(Long objectId) {
-        this.objectId = objectId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Map<String, String> getName() {

@@ -14,7 +14,7 @@ import java.util.Arrays;
  */
 public class BuildingListPage extends BasePage{
     public BuildingListPage() {
-        add(new TablePanel<>("buildings", BuildingObject.class, Arrays.asList("objectId", "number.ru"),
+        add(new TablePanel<>("buildings", BuildingObject.class, Arrays.asList("id", "number.ru"),
                 new BuildingDataProvider()));
     }
 

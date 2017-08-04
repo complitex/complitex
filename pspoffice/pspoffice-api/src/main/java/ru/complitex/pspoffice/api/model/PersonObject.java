@@ -10,7 +10,7 @@ import java.util.Map;
  *         25.05.2017 16:55
  */
 public class PersonObject implements Serializable{
-    private Long objectId;
+    private Long id;
 
     private Map<String, String> lastName;
     private Map<String, String> firstName;
@@ -34,12 +34,12 @@ public class PersonObject implements Serializable{
 
     private List<PersonObject> children;
 
-    public Long getObjectId() {
-        return objectId;
+    public Long getId() {
+        return id;
     }
 
-    public void setObjectId(Long objectId) {
-        this.objectId = objectId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Map<String, String> getLastName() {

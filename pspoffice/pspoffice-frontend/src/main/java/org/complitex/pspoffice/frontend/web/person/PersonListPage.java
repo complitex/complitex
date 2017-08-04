@@ -50,7 +50,7 @@ public class PersonListPage extends BasePage{
                         @Override
                         public void populateItem(Item<ICellPopulator<PersonObject>> cellItem, String componentId, IModel<PersonObject> rowModel) {
                             cellItem.add(new LinkPanel(componentId, new BootstrapBookmarkablePageLink(LinkPanel.LINK_COMPONENT_ID, PersonPage.class,
-                                    new PageParameters().add("id", rowModel.getObject().getObjectId()), Buttons.Type.Link)
+                                    new PageParameters().add("id", rowModel.getObject().getId()), Buttons.Type.Link)
                                     .setIconType(GlyphIconType.edit).setSize(Buttons.Size.Small)));
                         }
                     };

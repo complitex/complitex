@@ -114,14 +114,14 @@ public class PersonPage extends BasePage{
                     @Override
                     public NameObject getObject() {
                         return documentTypes.stream()
-                                .filter(o -> o.getObjectId().equals(getDocumentObject().getTypeId()))
+                                .filter(o -> o.getId().equals(getDocumentObject().getTypeId()))
                                 .findAny()
                                 .orElse(null);
                     }
 
                     @Override
                     public void setObject(NameObject nameObject) {
-                        getDocumentObject().setTypeId(nameObject.getObjectId());
+                        getDocumentObject().setTypeId(nameObject.getId());
                     }
 
                     private DocumentObject getDocumentObject(){
@@ -130,7 +130,7 @@ public class PersonPage extends BasePage{
                 },
 
                 documentTypes,
-                new ChoiceRenderer<>("name.ru", "objectId")
+                new ChoiceRenderer<>("name.ru", "id")
         ).setNullValid(true));
 
         form.add(new TextField<>("documentSeries", new PropertyModel<>(personModel, "documents[0].series")));
@@ -172,7 +172,7 @@ public class PersonPage extends BasePage{
 
     @Override
     protected IModel<String> getTitleModel() {
-        return new ResourceModel(personModel.getObject().getObjectId() == null ? "titleNew" : "titleEdit");
+        return new ResourceModel(personModel.getObject().getId() == null ? "titleNew" : "titleEdit");
     }
 
     private void validate(Form<?> form, AjaxRequestTarget target){

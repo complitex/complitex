@@ -8,19 +8,19 @@ import java.util.Date;
  *         25.05.2017 17:03
  */
 public class DocumentObject implements Serializable{
-    private Long objectId;
+    private Long id;
     private Long typeId;
     private String series;
     private String number;
     private String organization;
     private Date date;
 
-    public Long getObjectId() {
-        return objectId;
+    public Long getId() {
+        return id;
     }
 
-    public void setObjectId(Long objectId) {
-        this.objectId = objectId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getTypeId() {

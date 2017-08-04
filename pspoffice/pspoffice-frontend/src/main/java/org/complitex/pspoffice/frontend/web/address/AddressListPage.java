@@ -29,7 +29,7 @@ public class AddressListPage extends BasePage{
             throw new RuntimeException("wrong address entity");
         }
 
-        add(new TablePanel<>("addresses", AddressObject.class, Arrays.asList("objectId", "name.ru"),
+        add(new TablePanel<>("addresses", AddressObject.class, Arrays.asList("id", "name.ru"),
                 new AddressDataProvider(entity)));
     }
 

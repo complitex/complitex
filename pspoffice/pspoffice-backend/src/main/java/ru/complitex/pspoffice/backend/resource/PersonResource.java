@@ -52,7 +52,7 @@ public class PersonResource {
     private PersonObject getPersonObject(Person p){
         PersonObject person = new PersonObject();
 
-        person.setObjectId(p.getObjectId());
+        person.setId(p.getObjectId());
         person.setLastName(getPersonNames(p.getLastNames()));
         person.setFirstName(getPersonNames(p.getFirstNames()));
         person.setMiddleName(getPersonNames(p.getMiddleNames()));
@@ -71,7 +71,7 @@ public class PersonResource {
             Document d = p.getDocument();
 
             DocumentObject document = new DocumentObject();
-            document.setObjectId(d.getObjectId());
+            document.setId(d.getObjectId());
             document.setTypeId(d.getDocumentTypeId());
             document.setSeries(d.getSeries());
             document.setNumber(d.getNumber());
@@ -123,10 +123,10 @@ public class PersonResource {
     @PUT
     @ApiOperation(value = "Put person")
     public Response putPerson(PersonObject personObject){
-        Long objectId = personObject.getObjectId();
+        Long id = personObject.getId();
 
-        if (objectId != null){
-            Person person = personStrategy.getDomainObject(objectId);
+        if (id != null){
+            Person person = personStrategy.getDomainObject(id);
 
             if (person != null){
 
