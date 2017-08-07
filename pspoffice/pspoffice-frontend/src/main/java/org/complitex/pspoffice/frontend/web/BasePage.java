@@ -1,11 +1,14 @@
 package org.complitex.pspoffice.frontend.web;
 
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.pspoffice.frontend.web.address.AddressListPage;
 import org.complitex.pspoffice.frontend.web.address.building.BuildingListPage;
 import org.complitex.pspoffice.frontend.web.person.PersonListPage;
@@ -37,5 +40,12 @@ public abstract class BasePage extends WebPage{
 
     protected IModel<String> getTitleModel(){
         return Model.of("");
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        response.render(CssHeaderItem.forReference(new PackageResourceReference(BasePage.class, "/css/pspoffice.css")));
     }
 }

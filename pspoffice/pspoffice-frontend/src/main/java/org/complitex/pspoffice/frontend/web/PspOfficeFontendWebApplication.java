@@ -2,12 +2,10 @@ package org.complitex.pspoffice.frontend.web;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
-import de.agilecoders.wicket.core.settings.CookieThemeProvider;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
-import de.agilecoders.wicket.core.settings.ThemeProvider;
+import de.agilecoders.wicket.core.settings.SingleThemeProvider;
 import de.agilecoders.wicket.less.BootstrapLess;
-import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
-import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
+import de.agilecoders.wicket.themes.markup.html.material_design.MaterialDesignTheme;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.RoleAuthorizationStrategy;
 import org.apache.wicket.cdi.CdiConfiguration;
@@ -44,11 +42,9 @@ public class PspOfficeFontendWebApplication extends WebApplication{
     private void configureBootstrap() {
         IBootstrapSettings settings = new BootstrapSettings();
         Bootstrap.builder().withBootstrapSettings(settings).install(this);
-        ThemeProvider themeProvider = new BootswatchThemeProvider(BootswatchTheme.Cerulean);
 
-        settings.setJsResourceFilterName("footer-container")
-                .setThemeProvider(themeProvider)
-                .setActiveThemeProvider(new CookieThemeProvider());
+        settings.setThemeProvider(new SingleThemeProvider(new MaterialDesignTheme()));
+
 
         BootstrapLess.install(this);
     }

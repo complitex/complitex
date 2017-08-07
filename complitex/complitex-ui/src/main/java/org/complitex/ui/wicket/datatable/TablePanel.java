@@ -36,7 +36,7 @@ public class TablePanel<T extends Serializable> extends Panel {
                 super.onBeforeRender();
 
                 visitChildren(TextField.class, (component, visit) ->
-                        component.add(new AttributeModifier("class", "form-control input-sm")));
+                        component.add(new AttributeModifier("class", "form-control")));
             }
         });
         dataTable.addBottomToolbar(new BootstrapNavigationToolbar(dataTable));

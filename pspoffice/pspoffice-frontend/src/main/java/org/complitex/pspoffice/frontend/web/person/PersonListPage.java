@@ -28,13 +28,13 @@ import java.util.Arrays;
  */
 public class PersonListPage extends BasePage{
     public PersonListPage() {
-        add(new BootstrapLink<Void>("addPerson", Buttons.Type.Default) {
+        add(new BootstrapLink<Void>("addPerson", Buttons.Type.Primary) {
             @Override
             public void onClick() {
                 setResponsePage(PersonPage.class);
 
             }
-        }.setLabel(new ResourceModel("addPerson")).setIconType(GlyphIconType.user));
+        }.setLabel(new ResourceModel("addPerson")));
 
         add(new NotificationPanel("feedback"));
 
@@ -47,18 +47,18 @@ public class PersonListPage extends BasePage{
                     return new FilteredAbstractColumn<PersonObject, String>(Model.of("")){
                         @Override
                         public Component getFilter(String componentId, FilterForm<?> form) {
-                            return new LinkPanel(componentId, new BootstrapLink<Void>(LinkPanel.LINK_COMPONENT_ID, Buttons.Type.Default) {
+                            return new LinkPanel(componentId, new BootstrapLink<Void>(LinkPanel.LINK_COMPONENT_ID, Buttons.Type.Menu) {
                                 @Override
                                 public void onClick() {
 
                                 }
-                            }.setSize(Buttons.Size.Small).setBlock(true).setIconType(GlyphIconType.search));
+                            }.setSize(Buttons.Size.Small).setIconType(GlyphIconType.search));
                         }
 
                         @Override
                         public void populateItem(Item<ICellPopulator<PersonObject>> cellItem, String componentId, IModel<PersonObject> rowModel) {
                             cellItem.add(new LinkPanel(componentId, new BootstrapBookmarkablePageLink(LinkPanel.LINK_COMPONENT_ID, PersonPage.class,
-                                    new PageParameters().add("id", rowModel.getObject().getId()), Buttons.Type.Link)
+                                    new PageParameters().add("id", rowModel.getObject().getId()), Buttons.Type.Menu)
                                     .setIconType(GlyphIconType.edit).setSize(Buttons.Size.Small)));
                         }
                     };

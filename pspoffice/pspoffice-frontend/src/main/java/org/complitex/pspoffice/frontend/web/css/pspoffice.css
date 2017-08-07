@@ -1,0 +1,16 @@
+.filter-td{
+    vertical-align: middle !important;
+}
+
+.form-group{
+    margin: 0;
+    padding: 0;
+}
+
+.form-group .form-control {
+    margin-bottom: 0;
+}
+
+.filter-td .form-control{
+    height: 20px;
+}
