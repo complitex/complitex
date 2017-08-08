@@ -117,7 +117,7 @@ public class PersonResource {
     public Response getPersonsCount(@QueryParam("firstName") String firstName,
                                @QueryParam("lastName") String lastName,
                                @QueryParam("middleName") String middleName){
-        return Response.ok(10).build(); //todo count
+        return Response.ok(personStrategy.getPersonsCount(lastName, firstName, middleName)).build();
     }
 
     @PUT
