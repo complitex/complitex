@@ -2,15 +2,12 @@
     vertical-align: middle !important;
 }
 
-.form-group{
+.filter-td .form-group{
     margin: 0;
     padding: 0;
 }
 
-.form-group .form-control {
+.filter-td .form-group .form-control {
     margin-bottom: 0;
-}
-
-.filter-td .form-control{
     height: 20px;
 }
