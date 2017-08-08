@@ -436,18 +436,14 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public void insert(DomainObject object, Date insertDate){
-        try {
-            object.setObjectId(sequenceBean.nextId(getEntityName()));
-            object.setPermissionId(getNewPermissionId(object.getSubjectIds()));
-            insertDomainObject(object, insertDate);
+        object.setObjectId(sequenceBean.nextId(getEntityName()));
+        object.setPermissionId(getNewPermissionId(object.getSubjectIds()));
+        insertDomainObject(object, insertDate);
 
-            for (Attribute attribute : object.getAttributes()) {
-                attribute.setObjectId(object.getObjectId());
-                attribute.setStartDate(insertDate);
-                insertAttribute(attribute);
-            }
-        } catch (Exception e) {
-            log.error("error insert domain object", e);
+        for (Attribute attribute : object.getAttributes()) {
+            attribute.setObjectId(object.getObjectId());
+            attribute.setStartDate(insertDate);
+            insertAttribute(attribute);
         }
     }
 

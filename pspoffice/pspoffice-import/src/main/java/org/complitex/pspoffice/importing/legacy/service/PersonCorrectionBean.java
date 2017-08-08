@@ -5,10 +5,6 @@
 package org.complitex.pspoffice.importing.legacy.service;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Date;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.converter.DateConverter;
@@ -28,6 +24,11 @@ import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
 import org.complitex.pspoffice.person.strategy.entity.PersonName.PersonNameType;
 import org.complitex.pspoffice.person.strategy.service.PersonNameBean;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -139,7 +140,7 @@ public class PersonCorrectionBean extends AbstractBean {
 
         //Документ
         Document d = documentStrategy.newInstance(documentTypeId);
-        Utils.setSystemLocaleValue(d.getAttribute(DocumentStrategy.DOCUMENT_SERIA), pc.getDokseria());
+        Utils.setSystemLocaleValue(d.getAttribute(DocumentStrategy.DOCUMENT_SERIES), pc.getDokseria());
         Utils.setSystemLocaleValue(d.getAttribute(DocumentStrategy.DOCUMENT_NUMBER), pc.getDoknom());
         Utils.setSystemLocaleValue(d.getAttribute(DocumentStrategy.ORGANIZATION_ISSUED), pc.getDokvidan());
 

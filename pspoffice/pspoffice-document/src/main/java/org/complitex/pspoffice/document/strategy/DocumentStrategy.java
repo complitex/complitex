@@ -5,6 +5,7 @@
 package org.complitex.pspoffice.document.strategy;
 
 import org.complitex.common.entity.*;
+import org.complitex.common.strategy.PermissionBean;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.StringValueUtil;
 import org.complitex.pspoffice.document.strategy.entity.Document;
@@ -13,10 +14,7 @@ import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -31,7 +29,7 @@ public class DocumentStrategy extends TemplateStrategy {
      * Common attribute type ids
      */
     public static final long DOCUMENT_TYPE = 2800;
-    public static final long DOCUMENT_SERIA = 2801;
+    public static final long DOCUMENT_SERIES = 2801;
     public static final long DOCUMENT_NUMBER = 2802;
     public static final long ORGANIZATION_ISSUED = 2803;
     public static final long DATE_ISSUED = 2804;
@@ -61,13 +59,17 @@ public class DocumentStrategy extends TemplateStrategy {
 
     public Document newInstance(long documentTypeId) {
         Document document = new Document();
+
         Attribute documentTypeAttribute = new Attribute();
         documentTypeAttribute.setAttributeId(1L);
         documentTypeAttribute.setAttributeTypeId(DOCUMENT_TYPE);
         documentTypeAttribute.setValueId(documentTypeId);
         documentTypeAttribute.setValueTypeId(DOCUMENT_TYPE);
         document.addAttribute(documentTypeAttribute);
+
         fillAttributes(null, document);
+
+        document.setSubjectIds(new HashSet<>(Collections.singletonList(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)));
 
         return document;
     }

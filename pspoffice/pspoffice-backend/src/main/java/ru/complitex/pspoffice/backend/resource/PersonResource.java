@@ -4,6 +4,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.complitex.common.entity.Gender;
 import org.complitex.common.util.AttributeUtil;
+import org.complitex.common.util.DateUtil;
+import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
@@ -15,11 +17,15 @@ import ru.complitex.pspoffice.api.model.PersonObject;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.*;
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static org.complitex.common.util.Locales.getLanguage;
 import static org.complitex.common.util.Locales.getLocale;
 
@@ -35,6 +41,9 @@ public class PersonResource {
 
     @EJB
     private PersonStrategy personStrategy;
+
+    @EJB
+    private DocumentStrategy documentStrategy;
 
     @EJB
     private PersonNameBean personNameBean;
@@ -129,23 +138,30 @@ public class PersonResource {
             Person person = personStrategy.getDomainObject(id);
 
             if (person != null){
+                updateNames(person, personObject);
+                updateInfo(person, personObject);
+                updateDocument(person, personObject);
 
-                return Response.status(NOT_IMPLEMENTED).entity("Not implemented").build();
+                personStrategy.update(personStrategy.getDomainObject(id), person, DateUtil.getCurrentDate());
+
+                return Response.ok().build();
             }else {
                 return Response.status(NOT_FOUND).build();
             }
         }else{
             Person person = personStrategy.newInstance();
 
-            updateNames(personObject, person);
+            updateNames(person, personObject);
+            updateInfo(person, personObject);
+            updateDocument(person, personObject);
 
-            personStrategy.insert(person, new Date());
+            personStrategy.insert(person, DateUtil.getCurrentDate());
 
             return Response.status(CREATED).build();
         }
     }
 
-    private void updateNames(PersonObject personObject, Person person){
+    private void updateNames(Person person, PersonObject personObject){
         person.getAttribute(PersonStrategy.LAST_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
                         personObject.getLastName().get(getLanguage(1L)), getLocale(1L), true).getId());
@@ -182,6 +198,38 @@ public class PersonResource {
         }else{
             person.getAttribute(PersonStrategy.MIDDLE_NAME, 2L).setValueId(null);
         }
+    }
+
+    private void updateInfo(Person person, PersonObject personObject){
+        person.setDateValue(PersonStrategy.BIRTH_DATE, personObject.getBirthDate());
+        person.setStringValue(PersonStrategy.GENDER, personObject.getGender() == 1 ? Gender.MALE.name() : Gender.FEMALE.name());
+        person.setBooleanValue(PersonStrategy.UKRAINE_CITIZENSHIP, personObject.getCitizenshipId() == 2);
+        person.setStringValue(PersonStrategy.IDENTITY_CODE, person.getIdentityCode());
+
+        person.setStringValue(PersonStrategy.BIRTH_COUNTRY, personObject.getBirthCountry());
+        person.setStringValue(PersonStrategy.BIRTH_REGION, personObject.getBirthRegion());
+        person.setStringValue(PersonStrategy.BIRTH_CITY, personObject.getBirthCity());
+        person.setStringValue(PersonStrategy.BIRTH_DISTRICT, personObject.getBirthDistrict());
+    }
+
+    private void updateDocument(Person person, PersonObject personObject){
+        if (personObject.getDocuments() == null){
+            return;
+        }
+
+        Document document = person.getDocument();
+        DocumentObject documentObject = personObject.getDocuments().get(0);
+
+        if (document == null){
+            document = documentStrategy.newInstance(documentObject.getTypeId());
+            person.setDocument(document);
+        }
+
+        document.setValue(DocumentStrategy.DOCUMENT_TYPE, documentObject.getTypeId());
+        document.setStringValue(DocumentStrategy.DOCUMENT_SERIES, documentObject.getSeries());
+        document.setStringValue(DocumentStrategy.DOCUMENT_NUMBER, documentObject.getNumber());
+        document.setStringValue(DocumentStrategy.ORGANIZATION_ISSUED, documentObject.getOrganization());
+        document.setDateValue(DocumentStrategy.DATE_ISSUED, documentObject.getDate());
     }
 
 

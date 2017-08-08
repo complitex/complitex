@@ -1,5 +1,8 @@
 package org.complitex.common.entity;
 
+import org.complitex.common.converter.BooleanConverter;
+import org.complitex.common.converter.DateConverter;
+import org.complitex.common.converter.IConverter;
 import org.complitex.common.util.Locales;
 
 import java.util.*;
@@ -156,6 +159,18 @@ public class DomainObject implements ILongId {
 
     public void setValue(Long attributeTypeId, Long value){
         getAttribute(attributeTypeId).setValueId(value);
+    }
+
+    public <T> void setValue(Long attributeTypeId, T value, IConverter<T> converter){
+        setStringValue(attributeTypeId, converter.toString(value));
+    }
+
+    public void setDateValue(Long attributeTypeId, Date value){
+        setValue(attributeTypeId, value, new DateConverter());
+    }
+
+    public void setBooleanValue(Long attributeTypeId, Boolean value){
+        setValue(attributeTypeId, value, new BooleanConverter());
     }
 
     @Override

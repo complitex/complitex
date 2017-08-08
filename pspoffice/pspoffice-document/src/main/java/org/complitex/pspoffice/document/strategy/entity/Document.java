@@ -52,7 +52,7 @@ public class Document extends DomainObject {
     }
 
     public String getSeries() {
-        return getStringValue(DocumentStrategy.DOCUMENT_SERIA);
+        return getStringValue(DocumentStrategy.DOCUMENT_SERIES);
     }
 
     public String getNumber() {

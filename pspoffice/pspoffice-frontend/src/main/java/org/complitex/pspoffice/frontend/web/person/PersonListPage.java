@@ -39,7 +39,7 @@ public class PersonListPage extends BasePage{
         add(new NotificationPanel("feedback"));
 
         add(new TablePanel<PersonObject>("persons", PersonObject.class,
-                Arrays.asList("lastName.ru", "firstName.ru", "middleName.ru", "edit"),
+                Arrays.asList("lastName.ru", "firstName.ru", "middleName.ru", "birthDate", "edit"),
                 new PersonDataProvider()){
             @Override
             protected IColumn<PersonObject, String> getColumn(String field) {

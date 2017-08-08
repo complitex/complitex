@@ -596,12 +596,15 @@ public class PersonStrategy extends TemplateStrategy {
 
         //document altering
         if (newPerson.getDocument() != null) {
-//            newPerson.getDocument().setSubjectIds(newPerson.getSubjectIds());
-            documentStrategy.update(oldPerson.getDocument(), newPerson.getDocument(), updateDate);
+            if (oldPerson.getDocument() != null){
+                documentStrategy.update(oldPerson.getDocument(), newPerson.getDocument(), updateDate);
+            }else{
+                documentStrategy.insert(newPerson.getDocument(), updateDate);
+            }
+
 
             if (newPerson.getReplacedDocument() != null) {
                 documentStrategy.disable(newPerson.getDocument(), updateDate);
-//                newPerson.getReplacedDocument().setSubjectIds(newPerson.getSubjectIds());
                 documentStrategy.insert(newPerson.getReplacedDocument(), updateDate);
             }
 
