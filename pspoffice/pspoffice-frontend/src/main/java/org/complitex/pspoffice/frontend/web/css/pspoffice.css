@@ -21,5 +21,9 @@
 }
 
 .filter-td-id{
-    width: 10%;
+    width: 56px;
+}
+
+.filter-td-edit{
+    width: 28px;
 }
