@@ -7,6 +7,7 @@ import org.complitex.ui.wicket.datatable.TableDataProvider;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
 import javax.ws.rs.core.GenericType;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,6 +19,14 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
  */
 public class PersonDataProvider extends TableDataProvider<PersonObject>{
     private PersonObject personObject;
+
+    public PersonDataProvider() {
+        personObject = new PersonObject();
+
+        personObject.setLastName(new HashMap<>());
+        personObject.setFirstName(new HashMap<>());
+        personObject.setMiddleName(new HashMap<>());
+    }
 
     @Override
     public PersonObject getFilterState() {

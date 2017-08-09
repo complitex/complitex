@@ -1,6 +1,6 @@
 package org.complitex.ui.wicket.link;
 
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.Panel;
 
 /**
@@ -10,7 +10,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 public class LinkPanel extends Panel{
     public static String LINK_COMPONENT_ID = "link";
 
-    public LinkPanel(String id, Link link) {
+    public LinkPanel(String id, Component link) {
         super(id);
 
         add(link);

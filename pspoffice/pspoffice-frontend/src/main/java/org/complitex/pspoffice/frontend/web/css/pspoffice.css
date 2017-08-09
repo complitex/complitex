@@ -1,14 +1,18 @@
-.filter-td{
-    vertical-align: middle !important;
+.form-group .form-control {
+    margin-bottom: 0;
+    font-size: 14px;
 }
 
-.filter-td .form-group{
+.form-group{
     margin: 0;
     padding: 0;
 }
 
+.filter-td{
+    vertical-align: middle !important;
+}
+
 .filter-td .form-group .form-control {
-    margin-bottom: 0;
     height: 20px;
 }
 
