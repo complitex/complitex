@@ -2,6 +2,7 @@ package ru.complitex.pspoffice.backend.resource;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.entity.Gender;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.DateUtil;
@@ -11,6 +12,8 @@ import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.entity.Person;
 import org.complitex.pspoffice.person.strategy.entity.PersonName;
 import org.complitex.pspoffice.person.strategy.service.PersonNameBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.complitex.pspoffice.api.model.DocumentObject;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
@@ -24,8 +27,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.*;
 import static org.complitex.common.util.Locales.getLanguage;
 import static org.complitex.common.util.Locales.getLocale;
 
@@ -38,6 +40,7 @@ import static org.complitex.common.util.Locales.getLocale;
 @Produces(APPLICATION_JSON)
 @Api(description = "Person API")
 public class PersonResource {
+    private Logger log = LoggerFactory.getLogger(PersonResource.class);
 
     @EJB
     private PersonStrategy personStrategy;
@@ -116,7 +119,7 @@ public class PersonResource {
                                @QueryParam("middleName") String middleName,
                                @QueryParam("offset") Long offset,
                                @QueryParam("count") Long count){
-        return Response.ok(personStrategy.getPersons(lastName, firstName, middleName).stream() //todo order
+        return Response.ok(personStrategy.getList(new DomainObjectFilter()).stream()
                 .map(this::getPersonObject).collect(Collectors.toList())).build();
     }
 
@@ -126,38 +129,46 @@ public class PersonResource {
     public Response getPersonsCount(@QueryParam("firstName") String firstName,
                                @QueryParam("lastName") String lastName,
                                @QueryParam("middleName") String middleName){
-        return Response.ok(personStrategy.getPersonsCount(lastName, firstName, middleName)).build();
+        return Response.ok(personStrategy.getCount(new DomainObjectFilter())).build();
     }
 
     @PUT
     @ApiOperation(value = "Put person")
     public Response putPerson(PersonObject personObject){
-        Long id = personObject.getId();
+        try {
+            Long id = personObject.getId();
 
-        if (id != null){
-            Person person = personStrategy.getDomainObject(id);
+            if (id != null){
+                Person person = personStrategy.getDomainObject(id);
 
-            if (person != null){
+                if (person != null){
+                    updateNames(person, personObject);
+                    updateInfo(person, personObject);
+                    updateDocument(person, personObject);
+
+                    personStrategy.update(personStrategy.getDomainObject(id), person, DateUtil.getCurrentDate());
+
+                    return Response.ok().build();
+                }else {
+                    return Response.status(NOT_FOUND).build();
+                }
+            }else{
+                Person person = personStrategy.newInstance();
+
                 updateNames(person, personObject);
                 updateInfo(person, personObject);
                 updateDocument(person, personObject);
 
-                personStrategy.update(personStrategy.getDomainObject(id), person, DateUtil.getCurrentDate());
+                personStrategy.insert(person, DateUtil.getCurrentDate());
 
-                return Response.ok().build();
-            }else {
-                return Response.status(NOT_FOUND).build();
+                return Response.status(CREATED).build();
             }
-        }else{
-            Person person = personStrategy.newInstance();
+        } catch (Exception e) {
+            log.error("put person error", e);
 
-            updateNames(person, personObject);
-            updateInfo(person, personObject);
-            updateDocument(person, personObject);
-
-            personStrategy.insert(person, DateUtil.getCurrentDate());
-
-            return Response.status(CREATED).build();
+            return Response.status(INTERNAL_SERVER_ERROR)
+                    .entity(INTERNAL_SERVER_ERROR.getReasonPhrase() + ": " + e.getMessage())
+                    .build();
         }
     }
 
@@ -203,7 +214,7 @@ public class PersonResource {
     private void updateInfo(Person person, PersonObject personObject){
         person.setDateValue(PersonStrategy.BIRTH_DATE, personObject.getBirthDate());
         person.setStringValue(PersonStrategy.GENDER, personObject.getGender() == 1 ? Gender.MALE.name() : Gender.FEMALE.name());
-        person.setBooleanValue(PersonStrategy.UKRAINE_CITIZENSHIP, personObject.getCitizenshipId() == 2);
+        person.setBooleanValue(PersonStrategy.UKRAINE_CITIZENSHIP, personObject.getCitizenshipId() != null && personObject.getCitizenshipId() == 2);
         person.setStringValue(PersonStrategy.IDENTITY_CODE, person.getIdentityCode());
 
         person.setStringValue(PersonStrategy.BIRTH_COUNTRY, personObject.getBirthCountry());

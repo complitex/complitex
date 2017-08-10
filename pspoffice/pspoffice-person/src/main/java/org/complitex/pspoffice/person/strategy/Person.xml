@@ -139,27 +139,6 @@
         ORDER BY IFNULL(ln.`name`, sys_ln.`name`), IFNULL(fn.`name`, sys_fn.`name`), IFNULL(mn.`name`, sys_mn.`name`)
     </select>
 
-    <select id="findByNameCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
-        SELECT count(*) FROM `person` e
-        <include refid="org.complitex.pspoffice.person.strategy.Person.join"/>
-        WHERE
-        e.`status` = 1
-        <!--<include refid="domainObjectPermissionFilter"/> todo-->
-        <if test="additionalParams['last_name'] != null">
-            AND (ln.`name` = #{additionalParams.last_name} OR sys_ln.`name` = #{additionalParams.last_name})
-        </if>
-
-        <if test="additionalParams['first_name'] != null">
-            AND (fn.`name` LIKE CONCAT(#{additionalParams.first_name}, '%') OR
-            sys_fn.`name` LIKE CONCAT(#{additionalParams.first_name}, '%'))
-        </if>
-
-        <if test="additionalParams['middle_name'] != null">
-            AND (mn.`name` LIKE CONCAT(#{additionalParams.middle_name}, '%') OR
-            sys_mn.`name` LIKE CONCAT(#{additionalParams.middle_name}, '%'))
-        </if>
-    </select>
-
     <select id="findPreviousDocumentAttributes" parameterType="map" 
                     resultMap="org.complitex.common.strategy.DomainObjectStrategy.attributeResultMap">
         SELECT p.* FROM `person_attribute` p WHERE p.`status` = 2 AND p.`attribute_type_id` = #{personDocumentAT}

@@ -493,27 +493,6 @@ public class PersonStrategy extends TemplateStrategy {
         return results;
     }
 
-    public Long getPersonsCount(String lastName, String firstName, String middleName){
-        DomainObjectFilter example = new DomainObjectFilter();
-        example.setStatus(Status.ACTIVE.name());
-        example.addAdditionalParam("last_name", lastName);
-
-        firstName = firstName != null ? firstName.trim() : null;
-        if (Strings.isEmpty(firstName)) {
-            firstName = null;
-        }
-        example.addAdditionalParam("first_name", firstName);
-
-        middleName = middleName != null ? middleName.trim() : null;
-        if (Strings.isEmpty(middleName)) {
-            middleName = null;
-        }
-        example.addAdditionalParam("middle_name", middleName);
-
-        return sqlSession().selectOne(PERSON_NS + ".findByNameCount", example);
-    }
-
-
     @Override
     protected void insertDomainObject(DomainObject object, Date insertDate) {
         Person person = (Person) object;
