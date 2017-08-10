@@ -29,8 +29,8 @@ public class CountryPage extends FormPage{
 
         addressModel = Model.of(addressObjectId != null ? getAddressObject(addressObjectId) : newAddressObject());
 
-        form().add(new TextField<String>("nameRu", new PropertyModel<>(addressModel, "name.ru")).setRequired(true));
-        form().add(new TextField<String>("nameUk", new PropertyModel<>(addressModel, "name.uk")));
+        getForm().add(new TextField<String>("nameRu", new PropertyModel<>(addressModel, "name.ru")).setRequired(true));
+        getForm().add(new TextField<String>("nameUk", new PropertyModel<>(addressModel, "name.uk")));
 
         setReturnPage(AddressListPage.class, new PageParameters().add("entity", "country"));
     }

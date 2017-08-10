@@ -55,7 +55,7 @@ public abstract class FormPage extends BasePage{
         });
     }
 
-    public Form form() {
+    public Form getForm() {
         return form;
     }
 
