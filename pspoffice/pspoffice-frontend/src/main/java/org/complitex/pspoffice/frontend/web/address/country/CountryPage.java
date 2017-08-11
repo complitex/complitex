@@ -57,6 +57,5 @@ public class CountryPage extends FormPage{
     @Override
     protected Response put() {
         return pspOfficeClient.request("address/country").put(Entity.json(addressModel.getObject()));
-
     }
 }

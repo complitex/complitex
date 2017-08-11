@@ -54,7 +54,7 @@ public abstract class FormPage extends BasePage{
                         getSession().info("Запись обновлена");
                     }else {
                         error = true;
-                        getSession().error(response.readEntity(String.class));
+                        getSession().error(response.getStatusInfo().getReasonPhrase() + ": " + response.readEntity(String.class));
                         target.add(feedback);
                     }
                 }

@@ -11,10 +11,7 @@ import org.complitex.common.mybatis.SqlSessionFactoryBean;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.util.Numbers;
-import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.util.StringUtil;
-import org.complitex.common.util.StringValueUtil;
+import org.complitex.common.util.*;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.common.web.component.search.ISearchCallback;
@@ -433,6 +430,9 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return stringValueBean.save(strings, getEntityName());
     }
 
+    public void insert(DomainObject domainObject){
+        insert(domainObject, DateUtil.getCurrentDate());
+    }
 
     @Override
     public void insert(DomainObject object, Date insertDate){
@@ -479,6 +479,10 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                     build();
             sqlSession().update(NS + ".archiveAttributes", params);
         }
+    }
+
+    public void update(DomainObject domainObject){
+        update(getDomainObject(domainObject.getObjectId()), domainObject, DateUtil.getCurrentDate());
     }
 
 

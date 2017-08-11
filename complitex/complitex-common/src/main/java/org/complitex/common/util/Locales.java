@@ -23,6 +23,9 @@ public class Locales {
 
     private static Locales instance = new Locales();
 
+    public static final Locale RU = new Locale("ru");
+    public static final Locale UA = new Locale("uk");
+
     public Locales() {
         StringLocaleBean stringLocaleBean = EjbBeanLocator.getBean(StringLocaleBean.class);
 

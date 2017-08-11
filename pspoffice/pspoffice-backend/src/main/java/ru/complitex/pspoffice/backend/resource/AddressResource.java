@@ -13,6 +13,8 @@ import org.complitex.address.strategy.region.RegionStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.complitex.pspoffice.api.model.AddressObject;
 import ru.complitex.pspoffice.api.model.BuildingObject;
 
@@ -25,7 +27,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.*;
+import static org.complitex.common.util.Locales.RU;
+import static org.complitex.common.util.Locales.UA;
 
 /**
  * @author Anatoly A. Ivanov
@@ -36,6 +40,8 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 @Produces(APPLICATION_JSON)
 @Api(description = "Address Database API")
 public class AddressResource {
+    private Logger log = LoggerFactory.getLogger(AddressResource.class);
+
     @EJB
     private CountryStrategy countryStrategy;
 
@@ -100,6 +106,43 @@ public class AddressResource {
         filter.addAttribute(CountryStrategy.NAME, query);
 
         return Response.ok(countryStrategy.getCount(filter)).build();
+    }
+
+    @PUT
+    @Path("country")
+    @ApiOperation(value = "Put country")
+    public Response putCountry(AddressObject addressObject){
+        try {
+            Long id = addressObject.getId();
+
+            if (id != null){
+                DomainObject country = countryStrategy.getDomainObject(id);
+
+                if (country != null){
+                    country.setStringValue(CountryStrategy.NAME, addressObject.getName().get(RU.getLanguage()), RU);
+                    country.setStringValue(CountryStrategy.NAME, addressObject.getName().get(UA.getLanguage()), UA);
+
+                    countryStrategy.update(country);
+
+                    return Response.ok().build();
+                }else{
+                    return Response.status(NOT_FOUND).build();
+                }
+            }else{
+                DomainObject country = countryStrategy.newInstance();
+
+                country.setStringValue(CountryStrategy.NAME, addressObject.getName().get(RU.getLanguage()), RU);
+                country.setStringValue(CountryStrategy.NAME, addressObject.getName().get(UA.getLanguage()), UA);
+
+                countryStrategy.insert(country);
+
+                return Response.status(CREATED).build();
+            }
+        } catch (Exception e) {
+            log.error("put country error", e);
+
+            return Response.status(INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
     }
 
     @GET

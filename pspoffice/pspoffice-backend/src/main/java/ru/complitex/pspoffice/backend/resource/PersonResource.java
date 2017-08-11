@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.entity.Gender;
 import org.complitex.common.util.AttributeUtil;
-import org.complitex.common.util.DateUtil;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
@@ -28,8 +27,8 @@ import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.*;
-import static org.complitex.common.util.Locales.getLanguage;
-import static org.complitex.common.util.Locales.getLocale;
+import static org.complitex.common.util.Locales.RU;
+import static org.complitex.common.util.Locales.UA;
 
 /**
  * @author Anatoly A. Ivanov
@@ -146,7 +145,7 @@ public class PersonResource {
                     updateInfo(person, personObject);
                     updateDocument(person, personObject);
 
-                    personStrategy.update(personStrategy.getDomainObject(id), person, DateUtil.getCurrentDate());
+                    personStrategy.update(person);
 
                     return Response.ok().build();
                 }else {
@@ -159,53 +158,51 @@ public class PersonResource {
                 updateInfo(person, personObject);
                 updateDocument(person, personObject);
 
-                personStrategy.insert(person, DateUtil.getCurrentDate());
+                personStrategy.insert(person);
 
                 return Response.status(CREATED).build();
             }
         } catch (Exception e) {
             log.error("put person error", e);
 
-            return Response.status(INTERNAL_SERVER_ERROR)
-                    .entity(INTERNAL_SERVER_ERROR.getReasonPhrase() + ": " + e.getMessage())
-                    .build();
+            return Response.status(INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
 
     private void updateNames(Person person, PersonObject personObject){
         person.getAttribute(PersonStrategy.LAST_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
-                        personObject.getLastName().get(getLanguage(1L)), getLocale(1L), true).getId());
+                        personObject.getLastName().get(RU.getLanguage()), RU, true).getId());
 
-        if (personObject.getLastName().get(getLanguage(2L)) != null) {
+        if (personObject.getLastName().get(UA.getLanguage()) != null) {
             person.getAttribute(PersonStrategy.LAST_NAME, 2L)
                     .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
-                            personObject.getLastName().get(getLanguage(2L)), getLocale(2L), true).getId());
+                            personObject.getLastName().get(UA.getLanguage()), UA, true).getId());
         }else{
             person.getAttribute(PersonStrategy.LAST_NAME, 2L).setValueId(null);
         }
 
         person.getAttribute(PersonStrategy.FIRST_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.FIRST_NAME,
-                        personObject.getFirstName().get(getLanguage(1L)), getLocale(1L), true).getId());
+                        personObject.getFirstName().get(RU.getLanguage()), RU, true).getId());
 
 
-        if (personObject.getFirstName().get(getLanguage(2L)) != null) {
+        if (personObject.getFirstName().get(UA.getLanguage()) != null) {
             person.getAttribute(PersonStrategy.FIRST_NAME, 2L)
                     .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.FIRST_NAME,
-                            personObject.getFirstName().get(getLanguage(2L)), getLocale(2L), true).getId());
+                            personObject.getFirstName().get(UA.getLanguage()), UA, true).getId());
         }else{
             person.getAttribute(PersonStrategy.FIRST_NAME, 2L).setValueId(null);
         }
 
         person.getAttribute(PersonStrategy.MIDDLE_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.MIDDLE_NAME,
-                        personObject.getMiddleName().get(getLanguage(1L)), getLocale(1L), true).getId());
+                        personObject.getMiddleName().get(RU.getLanguage()), RU, true).getId());
 
-        if (personObject.getMiddleName().get(getLanguage(2L)) != null) {
+        if (personObject.getMiddleName().get(UA.getLanguage()) != null) {
             person.getAttribute(PersonStrategy.MIDDLE_NAME, 2L)
                     .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.MIDDLE_NAME,
-                            personObject.getMiddleName().get(getLanguage(2L)), getLocale(2L), true).getId());
+                            personObject.getMiddleName().get(UA.getLanguage()), UA, true).getId());
         }else{
             person.getAttribute(PersonStrategy.MIDDLE_NAME, 2L).setValueId(null);
         }
