@@ -1,15 +1,22 @@
 package org.complitex.pspoffice.frontend.web;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.jquery.JQuery;
+import de.agilecoders.wicket.jquery.function.Function;
 import org.apache.wicket.Component;
+import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.visit.IVisitor;
 
 public abstract class FormPage extends BasePage{
+    private static final MetaDataKey<Boolean> ERROR = new MetaDataKey<Boolean>() {};
+
     private Component feedback;
 
     private Class<? extends IRequestablePage> returnPage;
@@ -27,17 +34,18 @@ public abstract class FormPage extends BasePage{
         form.add(new AjaxSubmitLink("save") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                getSession().warn("todo extract validate");
+                validate(form, target);
+
+                FormPage.this.onSubmit(target);
 
                 if (returnPage != null) {
                     setResponsePage(returnPage, returnPageParameters);
                 }
-
-                FormPage.this.onSubmit(target);
             }
 
             @Override
             protected void onError(AjaxRequestTarget target) {
+                validate(form, target);
 
                 FormPage.this.onError(target);
             }
@@ -59,10 +67,27 @@ public abstract class FormPage extends BasePage{
         return form;
     }
 
-    protected void setReturnPage(Class<? extends IRequestablePage> returnPage, PageParameters returnPageParameters){
+    public void setReturnPage(Class<? extends IRequestablePage> returnPage) {
+        this.returnPage = returnPage;
+    }
+
+    public void setReturnPage(Class<? extends IRequestablePage> returnPage, PageParameters returnPageParameters){
         this.returnPage = returnPage;
         this.returnPageParameters = returnPageParameters;
+    }
 
+
+
+    private void validate(Form<?> form, AjaxRequestTarget target){
+        form.visitFormComponents((IVisitor<FormComponent<?>, Void>) (component, iVisit) -> {
+            if (!component.isValid()){
+                component.setMetaData(ERROR, true);
+                target.appendJavaScript(JQuery.$(component).closest(".form-group").chain(new Function("addClass", "has-error")).build());
+            } else if (component.getMetaData(ERROR) != null && component.getMetaData(ERROR)){
+                component.setMetaData(ERROR, false);
+                target.appendJavaScript(JQuery.$(component).closest(".form-group").chain(new Function("addClass", "has-error")).build());
+            }
+        });
     }
 
     protected void onSubmit(AjaxRequestTarget target){
