@@ -12,6 +12,8 @@ import org.complitex.pspoffice.frontend.web.address.AddressListPage;
 import ru.complitex.pspoffice.api.model.AddressObject;
 
 import javax.inject.Inject;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
 import java.util.HashMap;
 
 /**
@@ -52,7 +54,9 @@ public class CountryPage extends FormPage{
         return pspOfficeClient.request("address/country/" + addressObjectId).get(AddressObject.class);
     }
 
+    @Override
+    protected Response put() {
+        return pspOfficeClient.request("address/country").put(Entity.json(addressModel.getObject()));
 
-
-
+    }
 }

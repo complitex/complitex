@@ -1,6 +1,5 @@
 package org.complitex.pspoffice.frontend.web.person;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -23,9 +22,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.util.*;
-
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.OK;
 
 /**
  * @author Anatoly A. Ivanov
@@ -136,16 +132,8 @@ public class PersonPage extends FormPage{
     }
 
     @Override
-    protected void onSubmit(AjaxRequestTarget target) {
-        Response response = pspOfficeClient.request("person").put(Entity.json(personModel.getObject()));
-
-        if (response.getStatus() == CREATED.getStatusCode()){
-            getSession().info("Запись добавлена");
-        } else if (response.getStatus() == OK.getStatusCode()){
-            getSession().info("Запись обновлена");
-        }else {
-            getSession().error(response.readEntity(String.class));
-        }
+    protected Response put() {
+        return pspOfficeClient.request("person").put(Entity.json(personModel.getObject()));
     }
 
     @Override

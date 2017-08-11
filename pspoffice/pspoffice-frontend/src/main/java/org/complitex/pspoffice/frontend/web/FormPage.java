@@ -14,6 +14,11 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.visit.IVisitor;
 
+import javax.ws.rs.core.Response;
+
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.OK;
+
 public abstract class FormPage extends BasePage{
     private static final MetaDataKey<Boolean> ERROR = new MetaDataKey<Boolean>() {};
 
@@ -38,7 +43,23 @@ public abstract class FormPage extends BasePage{
 
                 FormPage.this.onSubmit(target);
 
-                if (returnPage != null) {
+                Response response = put();
+
+                boolean error = false;
+
+                if (response != null){
+                    if (response.getStatus() == CREATED.getStatusCode()){
+                        getSession().info("Запись добавлена");
+                    } else if (response.getStatus() == OK.getStatusCode()){
+                        getSession().info("Запись обновлена");
+                    }else {
+                        error = true;
+                        getSession().error(response.readEntity(String.class));
+                        target.add(feedback);
+                    }
+                }
+
+                if (returnPage != null && !error) {
                     setResponsePage(returnPage, returnPageParameters);
                 }
             }
@@ -76,8 +97,6 @@ public abstract class FormPage extends BasePage{
         this.returnPageParameters = returnPageParameters;
     }
 
-
-
     private void validate(Form<?> form, AjaxRequestTarget target){
         form.visitFormComponents((IVisitor<FormComponent<?>, Void>) (component, iVisit) -> {
             if (!component.isValid()){
@@ -88,6 +107,10 @@ public abstract class FormPage extends BasePage{
                 target.appendJavaScript(JQuery.$(component).closest(".form-group").chain(new Function("addClass", "has-error")).build());
             }
         });
+    }
+
+    protected Response put(){
+        return null;
     }
 
     protected void onSubmit(AjaxRequestTarget target){
