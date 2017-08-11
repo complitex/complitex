@@ -2,6 +2,7 @@ package org.complitex.pspoffice.frontend.web.address;
 
 import com.google.common.collect.Sets;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapBookmarkablePageLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
@@ -20,6 +21,7 @@ import org.complitex.ui.wicket.datatable.column.EditColumn;
 import org.complitex.ui.wicket.link.LinkPanel;
 import ru.complitex.pspoffice.api.model.AddressObject;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -34,6 +36,9 @@ public class AddressListPage extends BasePage{
 
     private String entity;
 
+    @Inject
+    private AddressDataProvider addressDataProvider;
+
     public AddressListPage(PageParameters pageParameters) {
         entity = pageParameters.get("entity").toString();
 
@@ -43,8 +48,10 @@ public class AddressListPage extends BasePage{
 
         add(new NotificationPanel("feedback").setOutputMarkupId(true));
 
+        addressDataProvider.setEntity(entity);
+
         add(new TablePanel<AddressObject>("addresses", AddressObject.class, Arrays.asList("id", "name.ru", "edit"),
-                new AddressDataProvider(entity)){
+                addressDataProvider){
             @Override
             protected IColumn<AddressObject, String> getColumn(String field) {
                 if ("id".equals(field)){
@@ -81,6 +88,15 @@ public class AddressListPage extends BasePage{
                 return super.getColumn(field);
             }
         });
+
+        add(new BootstrapLink<Void>("addAddress", Buttons.Type.Primary) {
+            @Override
+            public void onClick() {
+                if ("country".equals(entity)){
+                    setResponsePage(CountryPage.class);
+                }
+            }
+        }.setLabel(new ResourceModel("addAddress")));
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.ui.wicket.datatable.TableDataProvider;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,6 +19,9 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
  * 05.07.2017 16:15
  */
 public class PersonDataProvider extends TableDataProvider<PersonObject>{
+    @Inject
+    private PspOfficeClient pspOfficeClient;
+
     private PersonObject personObject;
 
     public PersonDataProvider() {
@@ -40,7 +44,7 @@ public class PersonDataProvider extends TableDataProvider<PersonObject>{
 
     @Override
     public Iterator<? extends PersonObject> iterator(long first, long count) {
-        return PspOfficeClient.get().target()
+        return pspOfficeClient.target()
                 .path("person")
                 .queryParam("offset", first)
                 .queryParam("limit", count)
@@ -50,7 +54,7 @@ public class PersonDataProvider extends TableDataProvider<PersonObject>{
 
     @Override
     public long size() {
-        return PspOfficeClient.get().request("person/size").get(Long.class);
+        return pspOfficeClient.request("person/size").get(Long.class);
     }
 
     @Override

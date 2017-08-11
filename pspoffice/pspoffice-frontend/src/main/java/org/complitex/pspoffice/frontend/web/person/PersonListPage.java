@@ -17,6 +17,7 @@ import org.complitex.ui.wicket.datatable.column.EditColumn;
 import org.complitex.ui.wicket.link.LinkPanel;
 import ru.complitex.pspoffice.api.model.PersonObject;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 
 /**
@@ -24,20 +25,14 @@ import java.util.Arrays;
  * 27.06.2017 16:26
  */
 public class PersonListPage extends BasePage{
+    @Inject
+    private PersonDataProvider personDataProvider;
+
     public PersonListPage() {
-        add(new BootstrapLink<Void>("addPerson", Buttons.Type.Primary) {
-            @Override
-            public void onClick() {
-                setResponsePage(PersonPage.class);
-
-            }
-        }.setLabel(new ResourceModel("addPerson")));
-
         add(new NotificationPanel("feedback"));
 
         add(new TablePanel<PersonObject>("persons", PersonObject.class,
-                Arrays.asList("lastName.ru", "firstName.ru", "middleName.ru", "birthDate", "edit"),
-                new PersonDataProvider()){
+                Arrays.asList("lastName.ru", "firstName.ru", "middleName.ru", "birthDate", "edit"), personDataProvider){
             @Override
             protected IColumn<PersonObject, String> getColumn(String field) {
                 if ("edit".equals(field)){
@@ -54,6 +49,14 @@ public class PersonListPage extends BasePage{
                 return super.getColumn(field);
             }
         });
+
+        add(new BootstrapLink<Void>("addPerson", Buttons.Type.Primary) {
+            @Override
+            public void onClick() {
+                setResponsePage(PersonPage.class);
+
+            }
+        }.setLabel(new ResourceModel("addPerson")));
     }
 
     @Override

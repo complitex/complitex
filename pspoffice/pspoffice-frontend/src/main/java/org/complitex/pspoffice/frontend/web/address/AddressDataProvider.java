@@ -7,6 +7,7 @@ import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.ui.wicket.datatable.TableDataProvider;
 import ru.complitex.pspoffice.api.model.AddressObject;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
 import java.util.Iterator;
 import java.util.List;
@@ -18,10 +19,17 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
  * 20.07.2017 14:36
  */
 public class AddressDataProvider extends TableDataProvider<AddressObject> {
+    @Inject
+    private PspOfficeClient pspOfficeClient;
+
     private String entity;
     private AddressObject addressObject;
 
-    public AddressDataProvider(String entity) {
+    public String getEntity() {
+        return entity;
+    }
+
+    public void setEntity(String entity) {
         this.entity = entity;
     }
 
@@ -37,7 +45,7 @@ public class AddressDataProvider extends TableDataProvider<AddressObject> {
 
     @Override
     public Iterator<? extends AddressObject> iterator(long first, long count) {
-        return PspOfficeClient.get().target()
+        return pspOfficeClient.target()
                 .path("address")
                 .path(entity)
                 .queryParam("offset", first)
@@ -48,7 +56,7 @@ public class AddressDataProvider extends TableDataProvider<AddressObject> {
 
     @Override
     public long size() {
-        return PspOfficeClient.get().target()
+        return pspOfficeClient.target()
                 .path("address")
                 .path(entity)
                 .path("size")

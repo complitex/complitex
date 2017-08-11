@@ -6,6 +6,7 @@ import org.complitex.pspoffice.frontend.web.BasePage;
 import org.complitex.ui.wicket.datatable.TablePanel;
 import ru.complitex.pspoffice.api.model.BuildingObject;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 
 /**
@@ -13,9 +14,11 @@ import java.util.Arrays;
  * 21.07.2017 16:31
  */
 public class BuildingListPage extends BasePage{
+    @Inject
+    private BuildingDataProvider buildingDataProvider;
+
     public BuildingListPage() {
-        add(new TablePanel<>("buildings", BuildingObject.class, Arrays.asList("id", "number.ru"),
-                new BuildingDataProvider()));
+        add(new TablePanel<>("buildings", BuildingObject.class, Arrays.asList("id", "number.ru"), buildingDataProvider));
     }
 
     @Override

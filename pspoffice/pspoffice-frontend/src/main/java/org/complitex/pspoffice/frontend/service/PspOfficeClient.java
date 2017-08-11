@@ -3,7 +3,6 @@ package org.complitex.pspoffice.frontend.service;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import ru.complitex.pspoffice.api.json.ObjectMapperProvider;
 
-import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.ws.rs.client.ClientBuilder;
@@ -19,10 +18,6 @@ import java.io.Serializable;
 public class PspOfficeClient implements Serializable{
     @Inject
     private ServletContext servletContext;
-
-    public static PspOfficeClient get(){
-        return CDI.current().select(PspOfficeClient.class).get();
-    }
 
     public WebTarget target(){
         return ClientBuilder.newClient()

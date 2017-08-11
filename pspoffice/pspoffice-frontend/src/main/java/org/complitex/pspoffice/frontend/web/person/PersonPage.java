@@ -137,9 +137,7 @@ public class PersonPage extends FormPage{
 
     @Override
     protected void onSubmit(AjaxRequestTarget target) {
-        Response response = PspOfficeClient.get()
-                .request("person")
-                .put(Entity.json(personModel.getObject()));
+        Response response = pspOfficeClient.request("person").put(Entity.json(personModel.getObject()));
 
         if (response.getStatus() == CREATED.getStatusCode()){
             getSession().info("Запись добавлена");
