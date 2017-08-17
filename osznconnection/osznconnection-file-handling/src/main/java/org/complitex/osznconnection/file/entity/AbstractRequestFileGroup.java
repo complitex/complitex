@@ -48,9 +48,9 @@ public abstract class AbstractRequestFileGroup extends AbstractRequestFile{
     }
 
     public Date getLoaded(){
-        if (firstRequestFile != null && secondRequestFile != null){
-            return DateUtil.getMax(firstRequestFile.getLoaded(), secondRequestFile.getLoaded());
-        }
+//        if (firstRequestFile != null && secondRequestFile != null){
+//            return DateUtil.getMax(firstRequestFile.getLoaded(), secondRequestFile.getLoaded());
+//        }
 
         return firstRequestFile != null ? firstRequestFile.getLoaded() : secondRequestFile != null ? secondRequestFile.getLoaded() : null;
     }

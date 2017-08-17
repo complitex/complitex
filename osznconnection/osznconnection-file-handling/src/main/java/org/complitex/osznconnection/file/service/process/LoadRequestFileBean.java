@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.service.process;
 
-import com.linuxense.javadbf.DBFException;
 import com.linuxense.javadbf.DBFField;
 import com.linuxense.javadbf.DBFReader;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -8,7 +7,6 @@ import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.service.ConfigBean;
-import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -70,7 +68,7 @@ public class LoadRequestFileBean {
 
             //Начало загрузки
             requestFile.setDbfRecordCount(reader.getRecordCount());
-            requestFile.setLoaded(DateUtil.getCurrentDate());
+//            requestFile.setLoaded(DateUtil.getCurrentDate());
 
             //check sum
             try {
