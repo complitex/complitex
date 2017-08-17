@@ -206,16 +206,16 @@
     </select>
 
     <update id="fixLoadingOnInit">
-        update `request_file_group` set `status` = 111 where `status` = 112;
+        update `request_file_group` set `status` = 111 where `status` in (112, 113) ;
     </update>
     <update id="fixBingingOnInit">
-        update `request_file_group` set `status` = 121 where `status` = 122;
+        update `request_file_group` set `status` = 121 where `status` in (122, 123);
     </update>
     <update id="fixFillingOnInit">
-        update `request_file_group` set `status` = 131 where `status` = 132;
+        update `request_file_group` set `status` = 131 where `status` in (132, 133);
     </update>
     <update id="fixSavingOnInit">
-        update `request_file_group` set `status` = 141 where `status` = 142;
+        update `request_file_group` set `status` = 141 where `status` in (142, 143);
     </update>
 
 </mapper>

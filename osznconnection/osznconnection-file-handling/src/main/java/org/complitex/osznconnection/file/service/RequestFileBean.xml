@@ -212,19 +212,19 @@
     </select>
 
     <update id="fixLoadingOnInit">
-        update `request_file` set `status` = 111 where `status` = 112 or `status` = 113;
+        update `request_file` set `status` = 111 where `status` in (112, 113);
     </update>
     <update id="fixBingingOnInit">
-        update `request_file` set `status` = 121 where `status` = 122 or `status` = 123;
+        update `request_file` set `status` = 121 where `status` in (122, 123);
     </update>
     <update id="fixFillingOnInit">
-        update `request_file` set `status` = 131 where `status` = 132 or `status` = 133;
+        update `request_file` set `status` = 131 where `status` in (132, 133);
     </update>
     <update id="fixSavingOnInit">
-        update `request_file` set `status` = 141 where `status` = 142 or `status` = 143;
+        update `request_file` set `status` = 141 where `status` in (142, 143);
     </update>
     <update id="fixExportingOnInit">
-        update `request_file` set `status` = 151 where `status` = 152 or `status` = 153;
+        update `request_file` set `status` = 151 where `status` in (152, 153);
     </update>
 
     <select id="selectLastRequestFile" parameterType="org.complitex.osznconnection.file.entity.RequestFile"
