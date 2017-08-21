@@ -16,11 +16,11 @@
             <result column="attr_end_date" property="endDate"/>
             <result column="system" property="system"/>
 
-            <collection property="names" column="attribute_type_name_id" select="findNames"/>
+            <collection property="names" column="name_id" select="findNames"/>
 
             <collection property="valueTypes" ofType="org.complitex.common.entity.ValueType">
-                <id column="attribute_value_type_id" property="id"/>
-                <result column="attribute_value_type" property="valueType"/>
+                <id column="entity_attribute_value_type_id" property="id"/>
+                <result column="entity_attribute_value_type" property="valueType"/>
             </collection>
         </collection>
     </resultMap>
@@ -34,13 +34,13 @@
         eat.`mandatory`,
         eat.`start_date` as attr_start_date,
         eat.`end_date` as attr_end_date,
-        eat.`attribute_type_name_id`,
+        eat.`name_id`,
         eat.`system`,
-        eavt.`id` as attribute_value_type_id,
-        eavt.`attribute_value_type`
+        eavt.`id` as entity_value_type_id,
+        eavt.`value_type`
         FROM `entity` e
-        JOIN `attribute_type` eat ON eat.`entity_id` = e.`id`
-        JOIN `attribute_value_type` eavt ON eavt.`entity_attribute_id` = eat.`id`
+        JOIN `entity_attribute` eat ON eat.`entity_id` = e.`id`
+        JOIN `entity_attribute_value_type` eavt ON eavt.`entity_attribute_id` = eat.`id`
         WHERE e.`entity_table` = #{entity}
     </select>
 
@@ -51,11 +51,11 @@
 
     <insert id="insertAttributeType" useGeneratedKeys="true" keyProperty="id"
             parameterType="org.complitex.common.entity.EntityAttribute">
-        INSERT INTO `attribute_type`(`entity_id`, `mandatory`, `attribute_type_name_id`, `start_date`) VALUES (#{entityId}, #{mandatory}, #{nameId}, #{startDate})
+        INSERT INTO `entity_attribute`(`entity_id`, `mandatory`, `name_id`, `start_date`) VALUES (#{entityId}, #{mandatory}, #{nameId}, #{startDate})
     </insert>
 
     <insert id="insertValueType">
-        INSERT INTO `attribute_value_type`(`entity_attribute_id`, `attribute_value_type`) VALUES (#{attributeTypeId}, #{valueType})
+        INSERT INTO `entity_attribute_value_type`(`entity_attribute_id`, `value_type`) VALUES (#{attributeTypeId}, #{valueType})
     </insert>
 
     <select id="allEntities" resultType="string">
@@ -63,7 +63,7 @@
     </select>
 
     <update id="removeAttributeTypes" parameterType="map">
-        UPDATE `attribute_type` SET `end_date` = #{endDate} WHERE `id` IN
+        UPDATE `entity_attribute` SET `end_date` = #{endDate} WHERE `id` IN
         <foreach item="id" collection="attributeTypeIds" open="(" close=")" separator=",">
             #{id}
         </foreach>
