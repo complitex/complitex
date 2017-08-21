@@ -194,9 +194,9 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public boolean isSimpleAttributeType(AttributeType attributeType) {
-        return !CUSTOM_ATTRIBUTE_TYPES.contains(attributeType.getId()) &&
-                super.isSimpleAttributeType(attributeType);
+    public boolean isSimpleAttributeType(EntityAttribute entityAttribute) {
+        return !CUSTOM_ATTRIBUTE_TYPES.contains(entityAttribute.getId()) &&
+                super.isSimpleAttributeType(entityAttribute);
     }
 
     @Override

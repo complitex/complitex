@@ -74,16 +74,16 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     @Override
-    public boolean isSimpleAttributeType(AttributeType attributeType) {
-        return attributeType.getAttributeValueTypes().size() == 1
-                && SimpleTypes.isSimpleType(attributeType.getAttributeValueTypes().get(0).getValueType());
+    public boolean isSimpleAttributeType(EntityAttribute entityAttribute) {
+        return entityAttribute.getValueTypes().size() == 1
+                && SimpleTypes.isSimpleType(entityAttribute.getValueTypes().get(0).getValueType());
     }
 
     @Override
     public boolean isSimpleAttribute(Attribute attribute) {
-        AttributeType attributeType = getEntity().getAttributeType(attribute.getAttributeTypeId());
+        EntityAttribute entityAttribute = getEntity().getAttributeType(attribute.getAttributeTypeId());
 
-        return attributeType != null && isSimpleAttributeType(attributeType);
+        return entityAttribute != null && isSimpleAttributeType(entityAttribute);
     }
 
     @Override
@@ -293,15 +293,15 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = new ArrayList<>();
 
-        getEntity(dataSource).getAttributeTypes().stream()
+        getEntity(dataSource).getEntityAttributes().stream()
                 .filter(attributeType -> !attributeType.isObsolete())
                 .filter(attributeType -> object.getAttributes(attributeType.getId()).isEmpty())
                 .forEach(attributeType -> {
-                    if (attributeType.getAttributeValueTypes().size() == 1) {
+                    if (attributeType.getValueTypes().size() == 1) {
                         Attribute attribute = getNewAttributeInstance();
 
                         attribute.setAttributeTypeId(attributeType.getId());
-                        attribute.setValueTypeId(attributeType.getAttributeValueTypes().get(0).getId());
+                        attribute.setValueTypeId(attributeType.getValueTypes().get(0).getId());
                         attribute.setObjectId(object.getObjectId());
                         attribute.setAttributeId(1L);
 
@@ -325,7 +325,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return new Attribute();
     }
 
-    protected Attribute fillManyValueTypesAttribute(AttributeType attributeType, Long objectId) {
+    protected Attribute fillManyValueTypesAttribute(EntityAttribute entityAttribute, Long objectId) {
         return null;
     }
 
@@ -789,7 +789,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
      * @return Сортированный список идентификаторов атрибутов, которые должны выводиться в качестве колонок на странице записей.
      */
     public List<Long> getColumnAttributeTypeIds() {
-        return getEntity().getAttributeTypes().stream().map(AttributeType::getId).collect(Collectors.toList());
+        return getEntity().getEntityAttributes().stream().map(EntityAttribute::getId).collect(Collectors.toList());
     }
 
     @Override
@@ -1174,9 +1174,9 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             return "";
         }
 
-        AttributeType attributeType = entityBean.getAttributeType(attribute.getAttributeTypeId());
+        EntityAttribute entityAttribute = entityBean.getAttributeType(attribute.getAttributeTypeId());
 
-        switch (attributeType.getAttributeValueTypes().get(0).getValueType().toUpperCase()) {
+        switch (entityAttribute.getValueTypes().get(0).getValueType().toUpperCase()) {
             case "STRING_VALUE":
                 return attribute.getStringValue(locale);
             case "STRING":
@@ -1270,10 +1270,10 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected Set<Long> getLocalizedValueTypeIds() {
         Set<Long> localizedValueTypeIds = new HashSet<>();
 
-        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
-            localizedValueTypeIds.addAll(attributeType.getAttributeValueTypes().stream()
+        for (EntityAttribute entityAttribute : getEntity().getEntityAttributes()) {
+            localizedValueTypeIds.addAll(entityAttribute.getValueTypes().stream()
                     .filter(valueType -> SimpleTypes.isSimpleType(valueType.getValueType()))
-                    .map(AttributeValueType::getId)
+                    .map(ValueType::getId)
                     .collect(Collectors.toList()));
         }
 
@@ -1284,11 +1284,11 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected void referenceExistCheck(Long objectId, Locale locale) throws DeleteException {
         for (String entityName : entityBean.getEntityNames()) {
             Entity entity = entityBean.getEntity(entityName);
-            for (AttributeType attributeType : entity.getAttributeTypes()) {
-                for (AttributeValueType attributeValueType : attributeType.getAttributeValueTypes()) {
-                    if (getEntityName().equals(attributeValueType.getValueType())) {
+            for (EntityAttribute entityAttribute : entity.getEntityAttributes()) {
+                for (ValueType valueType : entityAttribute.getValueTypes()) {
+                    if (getEntityName().equals(valueType.getValueType())) {
                         String referenceEntity = entity.getEntityName();
-                        long attributeTypeId = attributeType.getId();
+                        long attributeTypeId = entityAttribute.getId();
 
                         Map<String, Object> params = new HashMap<>();
                         params.put("referenceEntity", referenceEntity);

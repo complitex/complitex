@@ -9,9 +9,9 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
-import org.complitex.common.entity.AttributeValueType;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.EntityAttribute;
+import org.complitex.common.entity.ValueType;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.DomainObjectStrategy;
 import org.complitex.common.strategy.StringValueBean;
@@ -196,24 +196,24 @@ public class RegistrationStrategy extends DomainObjectStrategy {
     protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = newArrayList();
 
-        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
-            if (!attributeType.isObsolete()) {
-                if (object.getAttributes(attributeType.getId()).isEmpty()) {
-                    if (!attributeType.getId().equals(EXPLANATION)) {
-                        if (attributeType.getAttributeValueTypes().size() == 1) {
+        for (EntityAttribute entityAttribute : getEntity().getEntityAttributes()) {
+            if (!entityAttribute.isObsolete()) {
+                if (object.getAttributes(entityAttribute.getId()).isEmpty()) {
+                    if (!entityAttribute.getId().equals(EXPLANATION)) {
+                        if (entityAttribute.getValueTypes().size() == 1) {
                             Attribute attribute = new Attribute();
-                            AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
-                            attribute.setAttributeTypeId(attributeType.getId());
-                            attribute.setValueTypeId(attributeValueType.getId());
+                            ValueType valueType = entityAttribute.getValueTypes().get(0);
+                            attribute.setAttributeTypeId(entityAttribute.getId());
+                            attribute.setValueTypeId(valueType.getId());
                             attribute.setObjectId(object.getObjectId());
                             attribute.setAttributeId(1L);
 
-                            if (isSimpleAttributeType(attributeType)) {
+                            if (isSimpleAttributeType(entityAttribute)) {
                                 attribute.setStringValues(StringValueUtil.newStringValues());
                             }
                             toAdd.add(attribute);
                         } else {
-                            Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(attributeType, object.getObjectId());
+                            Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(entityAttribute, object.getObjectId());
                             if (manyValueTypesAttribute != null) {
                                 toAdd.add(manyValueTypesAttribute);
                             }

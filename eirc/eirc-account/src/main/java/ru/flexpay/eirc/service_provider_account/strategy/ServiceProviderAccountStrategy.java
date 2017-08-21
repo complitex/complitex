@@ -90,7 +90,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
                     removed = false;
                     boolean needToUpdateAttribute = false;
 
-                    AttributeType attributeType = getEntity().getAttributeType(oldAttr.getAttributeTypeId());
+                    EntityAttribute entityAttribute = getEntity().getAttributeType(oldAttr.getAttributeTypeId());
 
                     Long oldValueTypeId = oldAttr.getValueTypeId();
                     Long newValueTypeId = newAttr.getValueTypeId();
@@ -98,7 +98,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
                     if (!Numbers.isEqual(oldValueTypeId, newValueTypeId)) {
                         needToUpdateAttribute = true;
                     } else {
-                        String attributeValueType = attributeType.getAttributeValueType(oldAttr.getValueTypeId()).getValueType();
+                        String attributeValueType = entityAttribute.getAttributeValueType(oldAttr.getValueTypeId()).getValueType();
                         if (SimpleTypes.isSimpleType(attributeValueType)) {
                             SimpleTypes simpleType = SimpleTypes.valueOf(attributeValueType.toUpperCase());
                             switch (simpleType) {

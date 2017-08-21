@@ -224,25 +224,25 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     @Override
     protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = newArrayList();
-        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
-            if (!attributeType.isObsolete()) {
-                if (object.getAttributes(attributeType.getId()).isEmpty()) {
-                    if (!attributeType.getId().equals(REGISTRATIONS)
-                            && !attributeType.getId().equals(EXPLANATION)) {
-                        if (attributeType.getAttributeValueTypes().size() == 1) {
+        for (EntityAttribute entityAttribute : getEntity().getEntityAttributes()) {
+            if (!entityAttribute.isObsolete()) {
+                if (object.getAttributes(entityAttribute.getId()).isEmpty()) {
+                    if (!entityAttribute.getId().equals(REGISTRATIONS)
+                            && !entityAttribute.getId().equals(EXPLANATION)) {
+                        if (entityAttribute.getValueTypes().size() == 1) {
                             Attribute attribute = new Attribute();
-                            AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
-                            attribute.setAttributeTypeId(attributeType.getId());
-                            attribute.setValueTypeId(attributeValueType.getId());
+                            ValueType valueType = entityAttribute.getValueTypes().get(0);
+                            attribute.setAttributeTypeId(entityAttribute.getId());
+                            attribute.setValueTypeId(valueType.getId());
                             attribute.setObjectId(object.getObjectId());
                             attribute.setAttributeId(1L);
 
-                            if (isSimpleAttributeType(attributeType)) {
+                            if (isSimpleAttributeType(entityAttribute)) {
                                 attribute.setStringValues(StringValueUtil.newStringValues());
                             }
                             toAdd.add(attribute);
                         } else {
-                            Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(attributeType, object.getObjectId());
+                            Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(entityAttribute, object.getObjectId());
                             if (manyValueTypesAttribute != null) {
                                 toAdd.add(manyValueTypesAttribute);
                             }
@@ -257,14 +257,14 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     }
 
     @Override
-    protected Attribute fillManyValueTypesAttribute(AttributeType attributeType, Long objectId) {
+    protected Attribute fillManyValueTypesAttribute(EntityAttribute entityAttribute, Long objectId) {
         Attribute attribute = new Attribute();
-        attribute.setAttributeTypeId(attributeType.getId());
+        attribute.setAttributeTypeId(entityAttribute.getId());
         attribute.setObjectId(objectId);
         attribute.setAttributeId(1L);
 
         Long attributeValueTypeId = null;
-        if (attributeType.getId().equals(ADDRESS)) {
+        if (entityAttribute.getId().equals(ADDRESS)) {
             attributeValueTypeId = ADDRESS_APARTMENT;
         }
         attribute.setValueTypeId(attributeValueTypeId);

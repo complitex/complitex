@@ -27,8 +27,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.entity.Status;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.DateUtil;
@@ -235,18 +235,18 @@ public class PersonInputPanel extends Panel {
     }
 
     private Component initUserAttributes() {
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getAttributeTypes(),
-                new Predicate<AttributeType>() {
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getEntityAttributes(),
+                new Predicate<EntityAttribute>() {
 
                     @Override
-                    public boolean apply(AttributeType attributeType) {
+                    public boolean apply(EntityAttribute attributeType) {
                         return !attributeType.isSystem();
                     }
                 }),
-                new Function<AttributeType, Long>() {
+                new Function<EntityAttribute, Long>() {
 
                     @Override
-                    public Long apply(AttributeType attributeType) {
+                    public Long apply(EntityAttribute attributeType) {
                         return attributeType.getId();
                     }
                 }));
@@ -282,14 +282,14 @@ public class PersonInputPanel extends Panel {
     }
 
     private void initAttributeInput(MarkupContainer parent, long attributeTypeId, boolean showIfMissing) {
-        final AttributeType attributeType = personStrategy.getEntity().getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute = personStrategy.getEntity().getAttributeType(attributeTypeId);
 
         //label
-        parent.add(new Label("label", labelModel(attributeType.getAttributeNames(), getLocale())));
+        parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(attributeType.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isMandatory());
         parent.add(requiredContainer);
 
         //input component
@@ -418,7 +418,7 @@ public class PersonInputPanel extends Panel {
 
     private Component initChildren() {
         CollapsibleFieldset childrenFieldset = new CollapsibleFieldset("childrenFieldset",
-                labelModel(personStrategy.getEntity().getAttributeType(CHILDREN).getAttributeNames(), getLocale()));
+                labelModel(personStrategy.getEntity().getAttributeType(CHILDREN).getNames(), getLocale()));
         add(childrenFieldset);
         final WebMarkupContainer childrenContainer = new WebMarkupContainer("childrenContainer");
         childrenContainer.setOutputMarkupId(true);
@@ -508,13 +508,13 @@ public class PersonInputPanel extends Panel {
         documentInputPanelWrapper.add(documentInputPanelContainer);
 
         //document type
-        final AttributeType documentTypeAttributeType =
+        final EntityAttribute documentTypeEntityAttribute =
                 documentStrategy.getEntity().getAttributeType(DocumentStrategy.DOCUMENT_TYPE);
         //label
-        IModel<String> labelModel = labelModel(documentTypeAttributeType.getAttributeNames(), getLocale());
+        IModel<String> labelModel = labelModel(documentTypeEntityAttribute.getNames(), getLocale());
         documentForm.add(new Label("label", labelModel));
         //required
-        documentForm.add(new WebMarkupContainer("required").setVisible(documentTypeAttributeType.isMandatory()));
+        documentForm.add(new WebMarkupContainer("required").setVisible(documentTypeEntityAttribute.isMandatory()));
         documentTypeModel = new Model<>();
         documentTypesModel = Model.ofList(null);
         if (!isNew()) {
@@ -774,9 +774,9 @@ public class PersonInputPanel extends Panel {
         militaryServiceRelationHead.setOutputMarkupPlaceholderTag(true);
         militaryServiceRelationContainer.add(militaryServiceRelationHead);
 
-        AttributeType militaryAttruibuteType = personStrategy.getEntity().getAttributeType(MILITARY_SERVICE_RELATION);
+        EntityAttribute militaryAttruibuteType = personStrategy.getEntity().getAttributeType(MILITARY_SERVICE_RELATION);
         //label
-        final IModel<String> labelModel = labelModel(militaryAttruibuteType.getAttributeNames(), getLocale());
+        final IModel<String> labelModel = labelModel(militaryAttruibuteType.getNames(), getLocale());
         militaryServiceRelationHead.add(new Label("label", labelModel));
 
         //required container

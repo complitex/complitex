@@ -106,7 +106,7 @@ public interface IStrategy {
 
     boolean isSimpleAttribute(final Attribute attribute);
 
-    boolean isSimpleAttributeType(AttributeType attributeType);
+    boolean isSimpleAttributeType(EntityAttribute entityAttribute);
 
     DomainObject newInstance();
     

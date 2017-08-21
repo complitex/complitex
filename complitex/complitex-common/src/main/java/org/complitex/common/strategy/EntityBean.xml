@@ -8,7 +8,7 @@
 
         <collection property="names" ofType="StringValue" column="entity_name_id" select="findNames"/>
 
-        <collection property="attributeTypes" ofType="org.complitex.common.entity.AttributeType">
+        <collection property="entityAttributes" ofType="org.complitex.common.entity.EntityAttribute">
             <id column="attribute_type_id" property="id"/>
 
             <result column="mandatory" property="mandatory"/>
@@ -16,9 +16,9 @@
             <result column="attr_end_date" property="endDate"/>
             <result column="system" property="system"/>
 
-            <collection property="attributeNames" column="attribute_type_name_id" select="findNames"/>
+            <collection property="names" column="attribute_type_name_id" select="findNames"/>
 
-            <collection property="attributeValueTypes" ofType="org.complitex.common.entity.AttributeValueType">
+            <collection property="valueTypes" ofType="org.complitex.common.entity.ValueType">
                 <id column="attribute_value_type_id" property="id"/>
                 <result column="attribute_value_type" property="valueType"/>
             </collection>
@@ -50,8 +50,8 @@
     </select>
 
     <insert id="insertAttributeType" useGeneratedKeys="true" keyProperty="id"
-            parameterType="org.complitex.common.entity.AttributeType">
-        INSERT INTO `attribute_type`(`entity_id`, `mandatory`, `attribute_type_name_id`, `start_date`) VALUES (#{entityId}, #{mandatory}, #{attributeNameId}, #{startDate})
+            parameterType="org.complitex.common.entity.EntityAttribute">
+        INSERT INTO `attribute_type`(`entity_id`, `mandatory`, `attribute_type_name_id`, `start_date`) VALUES (#{entityId}, #{mandatory}, #{nameId}, #{startDate})
     </insert>
 
     <insert id="insertValueType">

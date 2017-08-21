@@ -227,8 +227,8 @@ public class UserBean extends AbstractBean {
     public UserFilter newUserFilter() {
         UserFilter userFilter = new UserFilter();
 
-        for (AttributeType attributeType : entityBean.getEntity(userInfoStrategy.getEntityName()).getAttributeTypes()) {
-            userFilter.getAttributeFilters().add(new AttributeFilter(attributeType.getId()));
+        for (EntityAttribute entityAttribute : entityBean.getEntity(userInfoStrategy.getEntityName()).getEntityAttributes()) {
+            userFilter.getAttributeFilters().add(new AttributeFilter(entityAttribute.getId()));
         }
 
         return userFilter;
@@ -239,12 +239,12 @@ public class UserBean extends AbstractBean {
             return userInfoStrategy.newInstance().getAttributes();
         }
 
-        List<AttributeType> attributeTypes = entityBean.getEntity(userInfoStrategy.getEntityName()).getAttributeTypes();
-        List<Attribute> attributeColumns = new ArrayList<>(attributeTypes.size());
+        List<EntityAttribute> entityAttributes = entityBean.getEntity(userInfoStrategy.getEntityName()).getEntityAttributes();
+        List<Attribute> attributeColumns = new ArrayList<>(entityAttributes.size());
 
-        for (AttributeType attributeType : attributeTypes) {
+        for (EntityAttribute entityAttribute : entityAttributes) {
             for (Attribute attribute : object.getAttributes()) {
-                if (attribute.getAttributeTypeId().equals(attributeType.getId())) {
+                if (attribute.getAttributeTypeId().equals(entityAttribute.getId())) {
                     attributeColumns.add(attribute);
                 }
             }

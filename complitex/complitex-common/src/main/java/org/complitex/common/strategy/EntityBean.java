@@ -2,9 +2,9 @@ package org.complitex.common.strategy;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import org.complitex.common.entity.AttributeType;
-import org.complitex.common.entity.AttributeValueType;
 import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttribute;
+import org.complitex.common.entity.ValueType;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.util.StringValueUtil;
 
@@ -26,7 +26,7 @@ public class EntityBean extends AbstractBean {
     private StrategyFactory strategyFactory;
 
     private Map<String, Entity> entityMap = new ConcurrentHashMap<>();
-    private Map<Long, AttributeType> attributeTypeMap = new ConcurrentHashMap<>();
+    private Map<Long, EntityAttribute> attributeTypeMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init(){
@@ -36,8 +36,8 @@ public class EntityBean extends AbstractBean {
             Entity entity = loadFromDb(null, entityName);
             entityMap.put(entityName, entity);
 
-            for (AttributeType attributeType : entity.getAttributeTypes()){
-                attributeTypeMap.put(attributeType.getId(), attributeType);
+            for (EntityAttribute entityAttribute : entity.getEntityAttributes()){
+                attributeTypeMap.put(entityAttribute.getId(), entityAttribute);
             }
         }
     }
@@ -50,17 +50,17 @@ public class EntityBean extends AbstractBean {
         return entityMap.get(entityName);
     }
 
-    public List<AttributeType> getAttributeTypes(List<Long> attributeTypeIds){
-        List<AttributeType> attributeTypes = new ArrayList<>(attributeTypeIds.size());
+    public List<EntityAttribute> getAttributeTypes(List<Long> attributeTypeIds){
+        List<EntityAttribute> entityAttributes = new ArrayList<>(attributeTypeIds.size());
 
         for (Long attributeTypeId : attributeTypeIds){
-            attributeTypes.add(attributeTypeMap.get(attributeTypeId));
+            entityAttributes.add(attributeTypeMap.get(attributeTypeId));
         }
 
-        return attributeTypes;
+        return entityAttributes;
     }
 
-    public AttributeType getAttributeType(Long attributeTypeId){
+    public EntityAttribute getAttributeType(Long attributeTypeId){
         return attributeTypeMap.get(attributeTypeId);
     }
 
@@ -77,13 +77,13 @@ public class EntityBean extends AbstractBean {
         return getEntity(entityName).getAttributeType(attributeTypeId).getAttributeName(locale);
     }
 
-    public AttributeType newAttributeType() {
-        AttributeType attributeType = new AttributeType();
+    public EntityAttribute newAttributeType() {
+        EntityAttribute entityAttribute = new EntityAttribute();
 
-        attributeType.setAttributeNames(StringValueUtil.newStringValues());
-        attributeType.setAttributeValueTypes(new ArrayList<AttributeValueType>());
+        entityAttribute.setNames(StringValueUtil.newStringValues());
+        entityAttribute.setValueTypes(new ArrayList<ValueType>());
 
-        return attributeType;
+        return entityAttribute;
     }
 
     public void save(Entity oldEntity, Entity newEntity) {
@@ -94,25 +94,25 @@ public class EntityBean extends AbstractBean {
         //attributes
         Set<Long> toDeleteAttributeIds = Sets.newHashSet();
 
-        for (AttributeType oldAttributeType : oldEntity.getAttributeTypes()) {
+        for (EntityAttribute oldEntityAttribute : oldEntity.getEntityAttributes()) {
             boolean removed = true;
-            for (AttributeType newAttributeType : newEntity.getAttributeTypes()) {
-                if (oldAttributeType.getId().equals(newAttributeType.getId())) {
+            for (EntityAttribute newEntityAttribute : newEntity.getEntityAttributes()) {
+                if (oldEntityAttribute.getId().equals(newEntityAttribute.getId())) {
                     removed = false;
                     break;
                 }
             }
             if (removed) {
                 changed = true;
-                toDeleteAttributeIds.add(oldAttributeType.getId());
+                toDeleteAttributeIds.add(oldEntityAttribute.getId());
             }
         }
         removeAttributeTypes(oldEntity.getEntityName(), toDeleteAttributeIds, updateDate);
 
-        for (AttributeType attributeType : newEntity.getAttributeTypes()) {
-            if (attributeType.getId() == null) {
+        for (EntityAttribute entityAttribute : newEntity.getEntityAttributes()) {
+            if (entityAttribute.getId() == null) {
                 changed = true;
-                insertAttributeType(attributeType, newEntity.getId(), updateDate);
+                insertAttributeType(entityAttribute, newEntity.getId(), updateDate);
             }
         }
 
@@ -121,18 +121,18 @@ public class EntityBean extends AbstractBean {
         }
     }
 
-    private void insertAttributeType(AttributeType attributeType, long entityId, Date startDate) {
-        attributeType.setStartDate(startDate);
-        attributeType.setEntityId(entityId);
+    private void insertAttributeType(EntityAttribute entityAttribute, long entityId, Date startDate) {
+        entityAttribute.setStartDate(startDate);
+        entityAttribute.setEntityId(entityId);
 
-        Long stringId = stringBean.save(attributeType.getAttributeNames(), null);
+        Long stringId = stringBean.save(entityAttribute.getNames(), null);
 
-        attributeType.setAttributeNameId(stringId);
+        entityAttribute.setNameId(stringId);
 
-        sqlSession().insert(NS + ".insertAttributeType", attributeType);
+        sqlSession().insert(NS + ".insertAttributeType", entityAttribute);
 
-        AttributeValueType valueType = attributeType.getAttributeValueTypes().get(0);
-        valueType.setAttributeTypeId(attributeType.getId());
+        ValueType valueType = entityAttribute.getValueTypes().get(0);
+        valueType.setAttributeTypeId(entityAttribute.getId());
 
         sqlSession().insert(NS + ".insertValueType", valueType);
     }

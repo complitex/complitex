@@ -356,27 +356,27 @@ public class PersonStrategy extends TemplateStrategy {
     @Override
     protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = newArrayList();
-        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
-            if (!attributeType.isObsolete()) {
-                if (object.getAttributes(attributeType.getId()).isEmpty()) {
-                    if ((attributeType.getAttributeValueTypes().size() == 1)
-                            && !attributeType.getId().equals(CHILDREN)
-                            && !attributeType.getId().equals(EXPLANATION)
-                            && !NAME_ATTRIBUTE_IDS.contains(attributeType.getId())) {
+        for (EntityAttribute entityAttribute : getEntity().getEntityAttributes()) {
+            if (!entityAttribute.isObsolete()) {
+                if (object.getAttributes(entityAttribute.getId()).isEmpty()) {
+                    if ((entityAttribute.getValueTypes().size() == 1)
+                            && !entityAttribute.getId().equals(CHILDREN)
+                            && !entityAttribute.getId().equals(EXPLANATION)
+                            && !NAME_ATTRIBUTE_IDS.contains(entityAttribute.getId())) {
                         Attribute attribute = new Attribute();
-                        AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
-                        attribute.setAttributeTypeId(attributeType.getId());
-                        attribute.setValueTypeId(attributeValueType.getId());
+                        ValueType valueType = entityAttribute.getValueTypes().get(0);
+                        attribute.setAttributeTypeId(entityAttribute.getId());
+                        attribute.setValueTypeId(valueType.getId());
                         attribute.setObjectId(object.getObjectId());
                         attribute.setAttributeId(1L);
 
-                        if (isSimpleAttributeType(attributeType)) {
+                        if (isSimpleAttributeType(entityAttribute)) {
                             attribute.setStringValues(StringValueUtil.newStringValues());
                         }
                         toAdd.add(attribute);
 
                         //by default UKRAINE_CITIZENSHIP attribute set to TRUE.
-                        if (attributeType.getId().equals(UKRAINE_CITIZENSHIP)) {
+                        if (entityAttribute.getId().equals(UKRAINE_CITIZENSHIP)) {
                             StringValue systemLocaleStringValue =
                                     StringValueUtil.getSystemStringValue(attribute.getStringValues());
                             systemLocaleStringValue.setValue(new BooleanConverter().toString(Boolean.TRUE));

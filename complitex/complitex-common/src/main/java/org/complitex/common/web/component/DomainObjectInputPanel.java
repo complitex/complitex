@@ -173,9 +173,9 @@ public class DomainObjectInputPanel extends Panel {
     protected ListView<Attribute> newSimpleAttributeListView(String id) {
         final List<Attribute> simpleAttributes = getSimpleAttributes(object.getAttributes());
 
-        final Map<Attribute, AttributeType> attrToTypeMap = newLinkedHashMap();
+        final Map<Attribute, EntityAttribute> attrToTypeMap = newLinkedHashMap();
         for (Attribute attr : simpleAttributes) {
-            AttributeType attrType = description.getAttributeType(attr.getAttributeTypeId());
+            EntityAttribute attrType = description.getAttributeType(attr.getAttributeTypeId());
             attrToTypeMap.put(attr, attrType);
         }
 
@@ -184,11 +184,11 @@ public class DomainObjectInputPanel extends Panel {
             @Override
             protected void populateItem(ListItem<Attribute> item) {
                 Attribute attr = item.getModelObject();
-                final AttributeType attributeType = attrToTypeMap.get(attr);
-                item.add(new Label("label", DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
+                final EntityAttribute entityAttribute = attrToTypeMap.get(attr);
+                item.add(new Label("label", DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
                 WebMarkupContainer required = new WebMarkupContainer("required");
                 item.add(required);
-                required.setVisible(attributeType.isMandatory());
+                required.setVisible(entityAttribute.isMandatory());
 
                 item.add(DomainObjectComponentUtil.newInputComponent(entity, strategyName, object, attr,
                         getLocale(), isHistory()));
@@ -200,7 +200,7 @@ public class DomainObjectInputPanel extends Panel {
         final List<Attribute> attributes = newArrayList();
 
         for (Attribute attribute : allAttributes) {
-            AttributeType attrType = description.getAttributeType(attribute.getAttributeTypeId());
+            EntityAttribute attrType = description.getAttributeType(attribute.getAttributeTypeId());
 
             if (getStrategy().isSimpleAttributeType(attrType)) {
                 attributes.add(attribute);

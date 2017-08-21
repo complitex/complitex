@@ -123,9 +123,9 @@ public class DomainObjectListPanel extends Panel {
         searchPanel.initialize();
 
         //Column List
-        final List<AttributeType> columnAttributeTypes = entityBean.getAttributeTypes(getStrategy().getColumnAttributeTypeIds());
+        final List<EntityAttribute> columnEntityAttributes = entityBean.getAttributeTypes(getStrategy().getColumnAttributeTypeIds());
 
-        for (AttributeType eat : columnAttributeTypes) {
+        for (EntityAttribute eat : columnEntityAttributes) {
             filter.addAttributeFilter(new AttributeFilter(eat.getId()));
         }
 
@@ -209,9 +209,9 @@ public class DomainObjectListPanel extends Panel {
                 item.add(new Label("object_id", Model.of(object.getObjectId())));
                 item.add(new Label("external_id", Model.of(object.getExternalId())));
 
-                ListView<AttributeType> dataColumns = new ListView<AttributeType>("dataColumns", columnAttributeTypes) {
+                ListView<EntityAttribute> dataColumns = new ListView<EntityAttribute>("dataColumns", columnEntityAttributes) {
                     @Override
-                    protected void populateItem(ListItem<AttributeType> item) {
+                    protected void populateItem(ListItem<EntityAttribute> item) {
                         item.add(new Label("dataColumn", getStrategy().displayAttribute(
                                 object.getAttribute(item.getModelObject().getId()), getLocale())));
                     }
@@ -237,18 +237,18 @@ public class DomainObjectListPanel extends Panel {
         radioGroup.add(dataView);
 
         //Filter Form Columns
-        ListView<AttributeType> columns = new ListView<AttributeType>("columns", columnAttributeTypes) {
+        ListView<EntityAttribute> columns = new ListView<EntityAttribute>("columns", columnEntityAttributes) {
 
             @Override
-            protected void populateItem(ListItem<AttributeType> item) {
-                final AttributeType attributeType = item.getModelObject();
-                ArrowOrderByBorder column = new ArrowOrderByBorder("column", String.valueOf(attributeType.getId()),
+            protected void populateItem(ListItem<EntityAttribute> item) {
+                final EntityAttribute entityAttribute = item.getModelObject();
+                ArrowOrderByBorder column = new ArrowOrderByBorder("column", String.valueOf(entityAttribute.getId()),
                         dataProvider, dataView, content);
                 column.add(new Label("columnName", new AbstractReadOnlyModel<String>() {
 
                     @Override
                     public String getObject() {
-                        return Strings.capitalize(StringValueUtil.getValue(attributeType.getAttributeNames(), getLocale()).
+                        return Strings.capitalize(StringValueUtil.getValue(entityAttribute.getNames(), getLocale()).
                                 toLowerCase(getLocale()));
                     }
                 }));
@@ -259,12 +259,12 @@ public class DomainObjectListPanel extends Panel {
         filterForm.add(columns);
 
         //Filters
-        ListView<AttributeType> filters = new ListView<AttributeType>("filters", columnAttributeTypes) {
+        ListView<EntityAttribute> filters = new ListView<EntityAttribute>("filters", columnEntityAttributes) {
 
             @Override
-            protected void populateItem(ListItem<AttributeType> item) {
-                AttributeType attributeType = item.getModelObject();
-                final AttributeFilter attributeFilter = filter.getAttributeExample(attributeType.getId());
+            protected void populateItem(ListItem<EntityAttribute> item) {
+                EntityAttribute entityAttribute = item.getModelObject();
+                final AttributeFilter attributeFilter = filter.getAttributeExample(entityAttribute.getId());
 
                 final IModel<String> filterModel = new Model<String>() {
 
@@ -283,7 +283,7 @@ public class DomainObjectListPanel extends Panel {
 
                 Component filter = new StringPanel("filter", Model.of(""), false, null, true);
 
-                String name = attributeType.getAttributeValueTypes().get(0).getValueType().toUpperCase();
+                String name = entityAttribute.getValueTypes().get(0).getValueType().toUpperCase();
 
                 if (SimpleTypes.isSimpleType(name)) {
                     switch (SimpleTypes.valueOf(name)) {
@@ -381,7 +381,7 @@ public class DomainObjectListPanel extends Panel {
                 filterForm.clearInput();
 
                 filter.setObjectId(null);
-                for (AttributeType attrType : columnAttributeTypes) {
+                for (EntityAttribute attrType : columnEntityAttributes) {
                     AttributeFilter attrExample = filter.getAttributeExample(attrType.getId());
                     attrExample.setValue(null);
                 }

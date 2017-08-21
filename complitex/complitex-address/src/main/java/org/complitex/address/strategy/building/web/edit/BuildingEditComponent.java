@@ -99,7 +99,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
 
         Label districtLabel = new Label("districtLabel",
                 DomainObjectComponentUtil.labelModel(buildingStrategy.getEntity().getAttributeType(BuildingStrategy.DISTRICT).
-                        getAttributeNames(), getLocale()));
+                        getNames(), getLocale()));
         districtContainer.add(districtLabel);
         districtSearchComponentState = new SearchComponentState() {
 

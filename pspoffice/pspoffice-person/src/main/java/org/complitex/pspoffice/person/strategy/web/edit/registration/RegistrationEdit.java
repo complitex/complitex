@@ -172,11 +172,11 @@ public class RegistrationEdit extends FormTemplatePage {
 
         //person
         WebMarkupContainer personContainer = new WebMarkupContainer("personContainer");
-        final AttributeType personAttributeType = ENTITY.getAttributeType(PERSON);
-        personContainer.add(new WebMarkupContainer("required").setVisible(personAttributeType.isMandatory()));
+        final EntityAttribute personEntityAttribute = ENTITY.getAttributeType(PERSON);
+        personContainer.add(new WebMarkupContainer("required").setVisible(personEntityAttribute.isMandatory()));
 
         PersonPicker person = new PersonPicker("person", PersonAgeType.ANY, new PropertyModel<Person>(newRegistration, "person"),
-                true, labelModel(personAttributeType.getAttributeNames(), getLocale()), isNew() && canEdit());
+                true, labelModel(personEntityAttribute.getNames(), getLocale()), isNew() && canEdit());
         personContainer.add(person);
         form.add(personContainer);
 
@@ -229,18 +229,18 @@ public class RegistrationEdit extends FormTemplatePage {
         form.add(initOwnerRelationship());
 
         //user attributes:
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributeTypes(),
-                new Predicate<AttributeType>() {
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getEntityAttributes(),
+                new Predicate<EntityAttribute>() {
 
                     @Override
-                    public boolean apply(AttributeType attributeType) {
+                    public boolean apply(EntityAttribute attributeType) {
                         return !attributeType.isSystem();
                     }
                 }),
-                new Function<AttributeType, Long>() {
+                new Function<EntityAttribute, Long>() {
 
                     @Override
-                    public Long apply(AttributeType attributeType) {
+                    public Long apply(EntityAttribute attributeType) {
                         return attributeType.getId();
                     }
                 }));
@@ -344,16 +344,16 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private Component initOwnerRelationship() {
-        final AttributeType ownerRelationshipAttributeType = registrationStrategy.getEntity().getAttributeType(OWNER_RELATIONSHIP);
+        final EntityAttribute ownerRelationshipEntityAttribute = registrationStrategy.getEntity().getAttributeType(OWNER_RELATIONSHIP);
 
         WebMarkupContainer ownerRelationshipContainer = new WebMarkupContainer("ownerRelationshipContainer");
 
         //label
-        IModel<String> labelModel = labelModel(ownerRelationshipAttributeType.getAttributeNames(), getLocale());
+        IModel<String> labelModel = labelModel(ownerRelationshipEntityAttribute.getNames(), getLocale());
         ownerRelationshipContainer.add(new Label("label", labelModel));
 
         //required
-        ownerRelationshipContainer.add(new WebMarkupContainer("required").setVisible(ownerRelationshipAttributeType.isMandatory()));
+        ownerRelationshipContainer.add(new WebMarkupContainer("required").setVisible(ownerRelationshipEntityAttribute.isMandatory()));
 
         //owner relationship
         final List<DomainObject> allOwnerRelationships = ownerRelationshipStrategy.getAll(getLocale());
@@ -389,7 +389,7 @@ public class RegistrationEdit extends FormTemplatePage {
 
         ownerRelationship.setEnabled(canEdit());
         ownerRelationship.setNullValid(true).
-                setRequired(ownerRelationshipAttributeType.isMandatory()).
+                setRequired(ownerRelationshipEntityAttribute.isMandatory()).
                 setLabel(labelModel);
         ownerRelationshipContainer.add(ownerRelationship);
 
@@ -397,16 +397,16 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private Component initRegistrationType() {
-        final AttributeType registrationTypeAttributeType = registrationStrategy.getEntity().getAttributeType(REGISTRATION_TYPE);
+        final EntityAttribute registrationTypeEntityAttribute = registrationStrategy.getEntity().getAttributeType(REGISTRATION_TYPE);
 
         WebMarkupContainer registrationTypeContainer = new WebMarkupContainer("registrationTypeContainer");
 
         //label
-        IModel<String> labelModel = labelModel(registrationTypeAttributeType.getAttributeNames(), getLocale());
+        IModel<String> labelModel = labelModel(registrationTypeEntityAttribute.getNames(), getLocale());
         registrationTypeContainer.add(new Label("label", labelModel));
 
         //required
-        registrationTypeContainer.add(new WebMarkupContainer("required").setVisible(registrationTypeAttributeType.isMandatory()));
+        registrationTypeContainer.add(new WebMarkupContainer("required").setVisible(registrationTypeEntityAttribute.isMandatory()));
 
         //registration type
         final List<DomainObject> allRegistrationTypes = registrationTypeStrategy.getAll();
@@ -439,7 +439,7 @@ public class RegistrationEdit extends FormTemplatePage {
                 return registrationTypeStrategy.displayDomainObject(object, getLocale());
             }
         });
-        registrationType.setRequired(registrationTypeAttributeType.isMandatory());
+        registrationType.setRequired(registrationTypeEntityAttribute.isMandatory());
         registrationType.setLabel(labelModel);
         registrationType.setEnabled(canEdit());
         registrationTypeContainer.add(registrationType);
@@ -453,14 +453,14 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private void initAttributeInput(MarkupContainer parent, long attributeTypeId, boolean showIfMissing) {
-        final AttributeType attributeType = registrationStrategy.getEntity().getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute = registrationStrategy.getEntity().getAttributeType(attributeTypeId);
 
         //label
-        parent.add(new Label("label", labelModel(attributeType.getAttributeNames(), getLocale())));
+        parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(attributeType.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isMandatory());
         parent.add(requiredContainer);
 
         //input component
@@ -539,7 +539,7 @@ public class RegistrationEdit extends FormTemplatePage {
         Set<String> modifiedAttributes = newHashSet();
         //registration type
         if (!oldRegistration.getRegistrationType().getObjectId().equals(newRegistration.getRegistrationType().getObjectId())) {
-            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(REGISTRATION_TYPE).getAttributeNames(), getLocale()).getObject());
+            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(REGISTRATION_TYPE).getNames(), getLocale()).getObject());
         }
         //owner relationship
         final Long oldOwnerRelationshipId = oldRegistration.getOwnerRelationship() != null
@@ -547,7 +547,7 @@ public class RegistrationEdit extends FormTemplatePage {
         final Long newOwnerRelationshipId = newRegistration.getOwnerRelationship() != null
                 ? newRegistration.getOwnerRelationship().getObjectId() : null;
         if (!Numbers.isEqual(oldOwnerRelationshipId, newOwnerRelationshipId)) {
-            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(OWNER_RELATIONSHIP).getAttributeNames(), getLocale()).getObject());
+            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(OWNER_RELATIONSHIP).getNames(), getLocale()).getObject());
         }
 
         if (modifiedAttributes.isEmpty()) {

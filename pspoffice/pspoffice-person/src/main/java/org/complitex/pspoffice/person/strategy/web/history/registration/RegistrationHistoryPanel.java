@@ -21,9 +21,9 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.service.IUserProfileBean;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.StringValueUtil;
@@ -117,8 +117,8 @@ final class RegistrationHistoryPanel extends Panel {
 
         //person
         WebMarkupContainer personContainer = new WebMarkupContainer("personContainer");
-        final AttributeType personAttributeType = ENTITY.getAttributeType(PERSON);
-        personContainer.add(new WebMarkupContainer("required").setVisible(personAttributeType.isMandatory()));
+        final EntityAttribute personEntityAttribute = ENTITY.getAttributeType(PERSON);
+        personContainer.add(new WebMarkupContainer("required").setVisible(personEntityAttribute.isMandatory()));
         Component person = new Label("person", personStrategy.displayDomainObject(registration.getPerson(), getLocale()));
         person.add(new CssAttributeBehavior(modification.getAttributeModificationType(PERSON).getCssClass()));
         personContainer.add(person);
@@ -129,10 +129,10 @@ final class RegistrationHistoryPanel extends Panel {
 
         //registration type
         {
-            final AttributeType registrationTypeAttributeType = ENTITY.getAttributeType(REGISTRATION_TYPE);
+            final EntityAttribute registrationTypeEntityAttribute = ENTITY.getAttributeType(REGISTRATION_TYPE);
             WebMarkupContainer registrationTypeContainer = new WebMarkupContainer("registrationTypeContainer");
-            registrationTypeContainer.add(new Label("label", labelModel(registrationTypeAttributeType.getAttributeNames(), getLocale())));
-            registrationTypeContainer.add(new WebMarkupContainer("required").setVisible(registrationTypeAttributeType.isMandatory()));
+            registrationTypeContainer.add(new Label("label", labelModel(registrationTypeEntityAttribute.getNames(), getLocale())));
+            registrationTypeContainer.add(new WebMarkupContainer("required").setVisible(registrationTypeEntityAttribute.isMandatory()));
             final List<DomainObject> allRegistrationTypes = registrationTypeStrategy.getAll();
             IModel<DomainObject> registrationTypeModel = new Model<DomainObject>();
             if (registration.getRegistrationType() != null) {
@@ -158,11 +158,11 @@ final class RegistrationHistoryPanel extends Panel {
         }
 
         //owner relationship
-        final AttributeType ownerRelationshipAttributeType = ENTITY.getAttributeType(OWNER_RELATIONSHIP);
+        final EntityAttribute ownerRelationshipEntityAttribute = ENTITY.getAttributeType(OWNER_RELATIONSHIP);
         WebMarkupContainer ownerRelationshipContainer = new WebMarkupContainer("ownerRelationshipContainer");
         final DomainObject ownerRelationshipObject = registration.getOwnerRelationship();
-        ownerRelationshipContainer.add(new Label("label", labelModel(ownerRelationshipAttributeType.getAttributeNames(), getLocale())));
-        ownerRelationshipContainer.add(new WebMarkupContainer("required").setVisible(ownerRelationshipAttributeType.isMandatory()));
+        ownerRelationshipContainer.add(new Label("label", labelModel(ownerRelationshipEntityAttribute.getNames(), getLocale())));
+        ownerRelationshipContainer.add(new WebMarkupContainer("required").setVisible(ownerRelationshipEntityAttribute.isMandatory()));
         final String ownerRelationshipValue = ownerRelationshipObject != null
                 ? ownerRelationshipStrategy.displayDomainObject(ownerRelationshipObject, getLocale())
                 : null;
@@ -206,18 +206,18 @@ final class RegistrationHistoryPanel extends Panel {
         initSystemAttributeInput(registration, modification, departureAddressContainer, "departureReason", DEPARTURE_REASON, true);
 
         //user attributes
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributeTypes(),
-                new Predicate<AttributeType>() {
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getEntityAttributes(),
+                new Predicate<EntityAttribute>() {
 
                     @Override
-                    public boolean apply(AttributeType attributeType) {
+                    public boolean apply(EntityAttribute attributeType) {
                         return !attributeType.isSystem();
                     }
                 }),
-                new Function<AttributeType, Long>() {
+                new Function<EntityAttribute, Long>() {
 
                     @Override
-                    public Long apply(AttributeType attributeType) {
+                    public Long apply(EntityAttribute attributeType) {
                         return attributeType.getId();
                     }
                 }));
@@ -279,14 +279,14 @@ final class RegistrationHistoryPanel extends Panel {
 
     private void initAttributeInput(Registration registration, RegistrationModification modification,
             MarkupContainer parent, long attributeTypeId, boolean showIfMissing) {
-        final AttributeType attributeType = ENTITY.getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute = ENTITY.getAttributeType(attributeTypeId);
 
         //label
-        parent.add(new Label("label", labelModel(attributeType.getAttributeNames(), getLocale())));
+        parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(attributeType.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isMandatory());
         parent.add(requiredContainer);
 
         //input component

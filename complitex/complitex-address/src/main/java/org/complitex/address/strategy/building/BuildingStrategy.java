@@ -469,18 +469,18 @@ public class BuildingStrategy extends TemplateStrategy {
     protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = Lists.newArrayList();
 
-        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
-            if (!attributeType.isObsolete()) {
-                if (object.getAttributes(attributeType.getId()).isEmpty()) {
-                    if ((attributeType.getAttributeValueTypes().size() == 1) && !attributeType.getId().equals(BUILDING_ADDRESS)) {
+        for (EntityAttribute entityAttribute : getEntity().getEntityAttributes()) {
+            if (!entityAttribute.isObsolete()) {
+                if (object.getAttributes(entityAttribute.getId()).isEmpty()) {
+                    if ((entityAttribute.getValueTypes().size() == 1) && !entityAttribute.getId().equals(BUILDING_ADDRESS)) {
                         Attribute attribute = new Attribute();
-                        AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
-                        attribute.setAttributeTypeId(attributeType.getId());
-                        attribute.setValueTypeId(attributeValueType.getId());
+                        ValueType valueType = entityAttribute.getValueTypes().get(0);
+                        attribute.setAttributeTypeId(entityAttribute.getId());
+                        attribute.setValueTypeId(valueType.getId());
                         attribute.setObjectId(object.getObjectId());
                         attribute.setAttributeId(1L);
 
-                        if (isSimpleAttributeType(attributeType)) {
+                        if (isSimpleAttributeType(entityAttribute)) {
                             attribute.setStringValues(StringValueUtil.newStringValues());
                         }
                         toAdd.add(attribute);

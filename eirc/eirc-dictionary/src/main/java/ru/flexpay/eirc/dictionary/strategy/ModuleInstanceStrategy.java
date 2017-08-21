@@ -169,9 +169,9 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     }
 
     @Override
-    public boolean isSimpleAttributeType(AttributeType attributeType) {
-        return !CUSTOM_ATTRIBUTES.contains(attributeType.getId()) && attributeType.getId() != MODULE_INSTANCE_TYPE &&
-                super.isSimpleAttributeType(attributeType);
+    public boolean isSimpleAttributeType(EntityAttribute entityAttribute) {
+        return !CUSTOM_ATTRIBUTES.contains(entityAttribute.getId()) && entityAttribute.getId() != MODULE_INSTANCE_TYPE &&
+                super.isSimpleAttributeType(entityAttribute);
     }
 
     @Override

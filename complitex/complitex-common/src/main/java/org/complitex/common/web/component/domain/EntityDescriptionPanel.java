@@ -88,12 +88,12 @@ public class EntityDescriptionPanel extends Panel {
             }
         }));
 
-        ListView<AttributeType> attributes = new AjaxRemovableListView<AttributeType>("attributes", description.getAttributeTypes()) {
+        ListView<EntityAttribute> attributes = new AjaxRemovableListView<EntityAttribute>("attributes", description.getEntityAttributes()) {
 
             @Override
-            protected void populateItem(ListItem<AttributeType> item) {
-                final AttributeType attributeType = item.getModelObject();
-                final List<AttributeValueType> valueTypes = attributeType.getAttributeValueTypes();
+            protected void populateItem(ListItem<EntityAttribute> item) {
+                final EntityAttribute entityAttribute = item.getModelObject();
+                final List<ValueType> valueTypes = entityAttribute.getValueTypes();
 
                 WebMarkupContainer valueTypesContainer = new WebMarkupContainer("valueTypesContainer");
                 item.add(valueTypesContainer);
@@ -109,7 +109,7 @@ public class EntityDescriptionPanel extends Panel {
                 item.add(valueType);
 
                 DropDownChoice<String> valueTypeSelect = new DropDownChoice<String>("valueTypeSelect",
-                        new PropertyModel<String>(attributeType.getAttributeValueTypes().get(0), "valueType"), supportedValueTypes);
+                        new PropertyModel<String>(entityAttribute.getValueTypes().get(0), "valueType"), supportedValueTypes);
                 valueTypeSelect.setRequired(true);
                 valueTypeSelect.setLabel(new ResourceModel("attribute_value_type"));
                 valueTypeSelect.add(new AjaxFormComponentUpdatingBehavior("change") {
@@ -121,10 +121,10 @@ public class EntityDescriptionPanel extends Panel {
                 });
                 item.add(valueTypeSelect);
 
-                Label mandatoryLabel = new Label("mandatoryLabel", new ResourceModel(attributeType.isMandatory() ? "yes" : "no"));
+                Label mandatoryLabel = new Label("mandatoryLabel", new ResourceModel(entityAttribute.isMandatory() ? "yes" : "no"));
                 item.add(mandatoryLabel);
 
-                CheckBox mandatoryInput = new CheckBox("mandatoryInput", new PropertyModel<Boolean>(attributeType, "mandatory"));
+                CheckBox mandatoryInput = new CheckBox("mandatoryInput", new PropertyModel<Boolean>(entityAttribute, "mandatory"));
                 mandatoryInput.add(new AjaxFormComponentUpdatingBehavior("change") {
 
                     @Override
@@ -138,10 +138,10 @@ public class EntityDescriptionPanel extends Panel {
 
                     @Override
                     public String getObject() {
-                        if (attributeType.isSystem()) {
+                        if (entityAttribute.isSystem()) {
                             return getString("built-in");
-                        } else if (attributeType.getId() != null) {
-                            return new SimpleDateFormat(DATE_FORMAT, getLocale()).format(attributeType.getStartDate());
+                        } else if (entityAttribute.getId() != null) {
+                            return new SimpleDateFormat(DATE_FORMAT, getLocale()).format(entityAttribute.getStartDate());
                         } else {
                             return null;
                         }
@@ -151,20 +151,20 @@ public class EntityDescriptionPanel extends Panel {
 
                     @Override
                     public String getObject() {
-                        if (attributeType.getEndDate() == null) {
+                        if (entityAttribute.getEndDate() == null) {
                             return null;
                         } else {
-                            return new SimpleDateFormat(DATE_FORMAT, getLocale()).format(attributeType.getEndDate());
+                            return new SimpleDateFormat(DATE_FORMAT, getLocale()).format(entityAttribute.getEndDate());
                         }
                     }
                 }));
 
-                if (attributeType.getId() != null) { // old attribute
+                if (entityAttribute.getId() != null) { // old attribute
                     item.add(new Label("name", new AbstractReadOnlyModel<String>() {
 
                         @Override
                         public String getObject() {
-                            return attributeType.getAttributeName(getLocale());
+                            return entityAttribute.getAttributeName(getLocale());
                         }
                     }));
 
@@ -172,7 +172,7 @@ public class EntityDescriptionPanel extends Panel {
                         valueTypesContainer.setVisible(false);
                     } else {
                         valueType.setVisible(false);
-                        for (final AttributeValueType currentValueType : valueTypes) {
+                        for (final ValueType currentValueType : valueTypes) {
                             valueTypeItem.add(new Label(String.valueOf(currentValueType.getId()), new AbstractReadOnlyModel<String>() {
 
                                 @Override
@@ -186,7 +186,7 @@ public class EntityDescriptionPanel extends Panel {
                     mandatoryInput.setVisible(false);
                 } else {
                     //new attribute
-                    item.add(new StringValuePanel("name", new PropertyModel<List<StringValue>>(attributeType, "attributeNames"), true,
+                    item.add(new StringValuePanel("name", new PropertyModel<List<StringValue>>(entityAttribute, "attributeNames"), true,
                             new ResourceModel("attribute_name"), true, new MarkupContainer[0]));
 
                     valueType.setVisible(false);
@@ -194,7 +194,7 @@ public class EntityDescriptionPanel extends Panel {
                     mandatoryLabel.setVisible(false);
                 }
 
-                addRemoveLink("remove", item, null, attributesContainer).setVisible(!attributeType.isSystem() && (attributeType.getEndDate() == null));
+                addRemoveLink("remove", item, null, attributesContainer).setVisible(!entityAttribute.isSystem() && (entityAttribute.getEndDate() == null));
             }
         };
         attributes.setReuseItems(true);
@@ -204,9 +204,9 @@ public class EntityDescriptionPanel extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                AttributeType attributeType = entityBean.newAttributeType();
-                attributeType.getAttributeValueTypes().add(new AttributeValueType());
-                description.getAttributeTypes().add(attributeType);
+                EntityAttribute entityAttribute = entityBean.newAttributeType();
+                entityAttribute.getValueTypes().add(new ValueType());
+                description.getEntityAttributes().add(entityAttribute);
                 target.add(attributesContainer);
             }
         };

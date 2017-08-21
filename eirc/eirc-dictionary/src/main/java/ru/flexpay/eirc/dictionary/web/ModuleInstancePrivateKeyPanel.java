@@ -12,8 +12,8 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
@@ -81,20 +81,20 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
 
         Attribute attribute = moduleInstance.getAttribute(ModuleInstanceStrategy.ORGANIZATION);
 
-        final AttributeType attributeType =
+        final EntityAttribute entityAttribute =
                 moduleInstanceStrategy.getEntity().getAttributeType(ModuleInstanceStrategy.ORGANIZATION);
 
         OrganizationIdPicker picker = new OrganizationIdPicker("organization",
                 new LongModel(new AttributeStringModel(attribute)),
                 Long.valueOf(OrganizationType.USER_ORGANIZATION.getId()));
-        //picker.setRequired(attributeType.isMandatory());
+        //picker.setRequired(entityAttribute.isMandatory());
         //picker.setLabel(new Model<>(getString("organization")));
 
         container.add(picker);
 
         container.add(new Label("label",
-                DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
-        container.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
+        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
     }
 
     private void addModuleInstanceTypeContainer(final DomainObject moduleInstance, String name) {
@@ -134,11 +134,11 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
             )
         );
 
-        final AttributeType attributeType =
+        final EntityAttribute entityAttribute =
                 moduleInstanceStrategy.getEntity().getAttributeType(ModuleInstanceStrategy.MODULE_INSTANCE_TYPE);
         container.add(new Label("label",
-                DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
-        container.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
+        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
     }
 
     private WebMarkupContainer addPrivateKeyContainer(final long attributeTypeId, boolean disabled,
@@ -155,11 +155,11 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
             attribute.setStringValues(StringValueUtil.newStringValues());
         }
         final AttributeStringModel attributeModel = new AttributeStringModel(attribute);
-        final AttributeType attributeType =
+        final EntityAttribute entityAttribute =
                 moduleInstanceStrategy.getEntity().getAttributeType(attributeTypeId);
         container.add(new Label("label",
-                DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
-        container.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
+        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
 
         final Component key =
                 DomainObjectComponentUtil.newInputComponent("module_instance", getStrategyName(),

@@ -7,22 +7,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class AttributeType implements Serializable {
+public class EntityAttribute implements Serializable {
     private Long id;
     private Long entityId;
     private boolean mandatory;
     private Date startDate;
     private Date endDate;
-    private Long attributeNameId;
+    private Long nameId;
 
-    private List<StringValue> attributeNames;
+    private List<StringValue> names;
 
-    private List<AttributeValueType> attributeValueTypes;
+    private List<ValueType> valueTypes;
 
     private boolean system;
 
-    public AttributeValueType getAttributeValueType(long attributeValueTypeId){
-        for(AttributeValueType valueType : getAttributeValueTypes()){
+    public ValueType getAttributeValueType(long attributeValueTypeId){
+        for(ValueType valueType : getValueTypes()){
             if(valueType.getId().equals(attributeValueTypeId)){
                 return valueType;
             }
@@ -31,23 +31,23 @@ public class AttributeType implements Serializable {
     }
 
     public String getAttributeName(Locale locale){
-        return StringValueUtil.getValue(attributeNames, locale);
+        return StringValueUtil.getValue(names, locale);
     }
 
-    public List<StringValue> getAttributeNames() {
-        return attributeNames;
+    public List<StringValue> getNames() {
+        return names;
     }
 
-    public void setAttributeNames(List<StringValue> attributeNames) {
-        this.attributeNames = attributeNames;
+    public void setNames(List<StringValue> names) {
+        this.names = names;
     }
 
-    public List<AttributeValueType> getAttributeValueTypes() {
-        return attributeValueTypes;
+    public List<ValueType> getValueTypes() {
+        return valueTypes;
     }
 
-    public void setAttributeValueTypes(List<AttributeValueType> attributeValueTypes) {
-        this.attributeValueTypes = attributeValueTypes;
+    public void setValueTypes(List<ValueType> valueTypes) {
+        this.valueTypes = valueTypes;
     }
 
     public Long getId() {
@@ -74,12 +74,12 @@ public class AttributeType implements Serializable {
         this.entityId = entityId;
     }
 
-    public Long getAttributeNameId() {
-        return attributeNameId;
+    public Long getNameId() {
+        return nameId;
     }
 
-    public void setAttributeNameId(Long attributeNameId) {
-        this.attributeNameId = attributeNameId;
+    public void setNameId(Long nameId) {
+        this.nameId = nameId;
     }
 
     public Date getEndDate() {

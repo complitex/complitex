@@ -17,9 +17,9 @@ import org.apache.wicket.model.*;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.service.IUserProfileBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.StringValueBean;
@@ -118,8 +118,8 @@ final class PersonHistoryPanel extends Panel {
         add(new Label("editedByUser", !Strings.isEmpty(editedByUserName) ? editedByUserName : "[N/A]"));
 
         //last name
-        final AttributeType lastNameAttributeType = ENTITY.getAttributeType(LAST_NAME);
-        add(new Label("lastNameLabel", labelModel(lastNameAttributeType.getAttributeNames(), getLocale())));
+        final EntityAttribute lastNameEntityAttribute = ENTITY.getAttributeType(LAST_NAME);
+        add(new Label("lastNameLabel", labelModel(lastNameEntityAttribute.getNames(), getLocale())));
         WebMarkupContainer lastNameTable = new WebMarkupContainer("lastNameTable");
         lastNameTable.add(new ListView<Attribute>("lastNames", person.getAttributes(PersonStrategy.LAST_NAME)) {
 
@@ -132,8 +132,8 @@ final class PersonHistoryPanel extends Panel {
         add(lastNameTable);
 
         //first name
-        final AttributeType firstNameAttributeType = ENTITY.getAttributeType(FIRST_NAME);
-        add(new Label("firstNameLabel", labelModel(firstNameAttributeType.getAttributeNames(), getLocale())));
+        final EntityAttribute firstNameEntityAttribute = ENTITY.getAttributeType(FIRST_NAME);
+        add(new Label("firstNameLabel", labelModel(firstNameEntityAttribute.getNames(), getLocale())));
         WebMarkupContainer firstNameTable = new WebMarkupContainer("firstNameTable");
         firstNameTable.add(new ListView<Attribute>("firstNames", person.getAttributes(PersonStrategy.FIRST_NAME)) {
 
@@ -146,8 +146,8 @@ final class PersonHistoryPanel extends Panel {
         add(firstNameTable);
 
         //middle name
-        final AttributeType middleNameAttributeType = ENTITY.getAttributeType(MIDDLE_NAME);
-        add(new Label("middleNameLabel", labelModel(middleNameAttributeType.getAttributeNames(), getLocale())));
+        final EntityAttribute middleNameEntityAttribute = ENTITY.getAttributeType(MIDDLE_NAME);
+        add(new Label("middleNameLabel", labelModel(middleNameEntityAttribute.getNames(), getLocale())));
         WebMarkupContainer middleNameTable = new WebMarkupContainer("middleNameTable");
         middleNameTable.add(new ListView<Attribute>("middleNames", person.getAttributes(PersonStrategy.MIDDLE_NAME)) {
 
@@ -182,15 +182,15 @@ final class PersonHistoryPanel extends Panel {
         //military service relation
         {
             WebMarkupContainer militaryServiceRelationContainer = new WebMarkupContainer("militaryServiceRelationContainer");
-            final AttributeType militaryServiceRelationAttributeType = ENTITY.getAttributeType(MILITARY_SERVICE_RELATION);
+            final EntityAttribute militaryServiceRelationEntityAttribute = ENTITY.getAttributeType(MILITARY_SERVICE_RELATION);
 
             //label
             militaryServiceRelationContainer.add(new Label("label",
-                    labelModel(militaryServiceRelationAttributeType.getAttributeNames(), getLocale())));
+                    labelModel(militaryServiceRelationEntityAttribute.getNames(), getLocale())));
 
             //required container
             WebMarkupContainer militaryServiceRelationRequiredContainer = new WebMarkupContainer("required");
-            militaryServiceRelationRequiredContainer.setVisible(militaryServiceRelationAttributeType.isMandatory());
+            militaryServiceRelationRequiredContainer.setVisible(militaryServiceRelationEntityAttribute.isMandatory());
             militaryServiceRelationContainer.add(militaryServiceRelationRequiredContainer);
 
             final List<DomainObject> allMilitaryServiceRelations = militaryServiceRelationStrategy.getAll(getLocale());
@@ -235,18 +235,18 @@ final class PersonHistoryPanel extends Panel {
         add(deathDateContainer);
 
         //user attributes
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getAttributeTypes(),
-                new Predicate<AttributeType>() {
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getEntityAttributes(),
+                new Predicate<EntityAttribute>() {
 
                     @Override
-                    public boolean apply(AttributeType attributeType) {
+                    public boolean apply(EntityAttribute attributeType) {
                         return !attributeType.isSystem();
                     }
                 }),
-                new Function<AttributeType, Long>() {
+                new Function<EntityAttribute, Long>() {
 
                     @Override
-                    public Long apply(AttributeType attributeType) {
+                    public Long apply(EntityAttribute attributeType) {
                         return attributeType.getId();
                     }
                 }));
@@ -295,11 +295,11 @@ final class PersonHistoryPanel extends Panel {
             add(documentContainer);
             WebMarkupContainer documentTypeContainer = new WebMarkupContainer("documentTypeContainer");
             documentContainer.add(documentTypeContainer);
-            final AttributeType documentTypeAttributeType = documentStrategy.getEntity().
+            final EntityAttribute documentTypeEntityAttribute = documentStrategy.getEntity().
                     getAttributeType(DocumentStrategy.DOCUMENT_TYPE);
-            IModel<String> documentTyleLabelModel = labelModel(documentTypeAttributeType.getAttributeNames(), getLocale());
+            IModel<String> documentTyleLabelModel = labelModel(documentTypeEntityAttribute.getNames(), getLocale());
             documentTypeContainer.add(new Label("label", documentTyleLabelModel));
-            documentTypeContainer.add(new WebMarkupContainer("required").setVisible(documentTypeAttributeType.isMandatory()));
+            documentTypeContainer.add(new WebMarkupContainer("required").setVisible(documentTypeEntityAttribute.isMandatory()));
             final List<DomainObject> documentTypes = documentTypeStrategy.getAll(null);
             IModel<DomainObject> documentTypeModel = new Model<DomainObject>();
             documentTypeModel.setObject(find(documentTypes, new Predicate<DomainObject>() {
@@ -327,7 +327,7 @@ final class PersonHistoryPanel extends Panel {
         ModificationType childRemovedModification = modification.isChildRemoved() ? ModificationType.REMOVE : ModificationType.NONE;
         childrenFieldset.add(new CssAttributeBehavior(childRemovedModification.getCssClass()));
         add(childrenFieldset);
-        childrenFieldset.add(new Label("childrenLabel", labelModel(ENTITY.getAttributeType(CHILDREN).getAttributeNames(), getLocale())));
+        childrenFieldset.add(new Label("childrenLabel", labelModel(ENTITY.getAttributeType(CHILDREN).getNames(), getLocale())));
         childrenFieldset.add(new ListView<Person>("children", person.getChildren()) {
 
             @Override
@@ -355,14 +355,14 @@ final class PersonHistoryPanel extends Panel {
 
     private void initAttributeInput(Person person, PersonModification modification, MarkupContainer parent,
             long attributeTypeId, boolean showIfMissing) {
-        final AttributeType attributeType = ENTITY.getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute = ENTITY.getAttributeType(attributeTypeId);
 
         //label
-        parent.add(new Label("label", labelModel(attributeType.getAttributeNames(), getLocale())));
+        parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(attributeType.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isMandatory());
         parent.add(requiredContainer);
 
         //input component

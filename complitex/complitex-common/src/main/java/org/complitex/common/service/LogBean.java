@@ -218,8 +218,8 @@ public class LogBean extends AbstractBean {
 
         if (oldDomainObject == null) {
             for (Attribute na : newDomainObject.getAttributes()) {
-                AttributeType attributeType = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
-                String attributeValueType = attributeType.getAttributeValueType(na.getValueTypeId()).getValueType();
+                EntityAttribute entityAttribute = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
+                String attributeValueType = entityAttribute.getAttributeValueType(na.getValueTypeId()).getValueType();
 
                 if (SimpleTypes.isSimpleType(attributeValueType)) {
                     if (SimpleTypes.STRING_VALUE.name().equals(attributeValueType.toUpperCase())) {
@@ -241,16 +241,16 @@ public class LogBean extends AbstractBean {
             }
         } else {
             for (Attribute oa : oldDomainObject.getAttributes()) {
-                AttributeType oldAttributeType = strategy.getEntity().getAttributeType(oa.getAttributeTypeId());
-                String oldAttributeValueType = oldAttributeType.getAttributeValueType(oa.getValueTypeId()).getValueType();
+                EntityAttribute oldEntityAttribute = strategy.getEntity().getAttributeType(oa.getAttributeTypeId());
+                String oldAttributeValueType = oldEntityAttribute.getAttributeValueType(oa.getValueTypeId()).getValueType();
 
                 boolean removed = true;
                 for (Attribute na : newDomainObject.getAttributes()) {
                     if (oa.getAttributeTypeId().equals(na.getAttributeTypeId()) && oa.getAttributeId().equals(na.getAttributeId())) {
                         //the same attribute_type and the same attribute_id
 
-                        AttributeType newAttributeType = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
-                        String newAttributeValueType = newAttributeType.getAttributeValueType(na.getValueTypeId()).getValueType();
+                        EntityAttribute newEntityAttribute = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
+                        String newAttributeValueType = newEntityAttribute.getAttributeValueType(na.getValueTypeId()).getValueType();
 
                         if (SimpleTypes.isSimpleType(newAttributeValueType) && SimpleTypes.isSimpleType(oldAttributeValueType)) {
                             if (SimpleTypes.STRING_VALUE.name().equals(newAttributeValueType.toUpperCase())
@@ -314,8 +314,8 @@ public class LogBean extends AbstractBean {
             }
 
             for (Attribute na : newDomainObject.getAttributes()) {
-                AttributeType newAttributeType = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
-                String newAttributeValueType = newAttributeType.getAttributeValueType(na.getValueTypeId()).getValueType();
+                EntityAttribute newEntityAttribute = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
+                String newAttributeValueType = newEntityAttribute.getAttributeValueType(na.getValueTypeId()).getValueType();
 
                 boolean added = true;
                 for (Attribute oa : oldDomainObject.getAttributes()) {

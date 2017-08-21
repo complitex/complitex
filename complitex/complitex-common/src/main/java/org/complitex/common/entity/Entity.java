@@ -9,12 +9,12 @@ public class Entity implements ILongId {
     private Long id;
     private String table;
     private List<StringValue> names;
-    private List<AttributeType> attributeTypes;
+    private List<EntityAttribute> entityAttributes;
 
-    public AttributeType getAttributeType(Long attributeTypeId) {
-        for (AttributeType attributeType : getAttributeTypes()) {
-            if (attributeType.getId().equals(attributeTypeId)) {
-                return attributeType;
+    public EntityAttribute getAttributeType(Long attributeTypeId) {
+        for (EntityAttribute entityAttribute : getEntityAttributes()) {
+            if (entityAttribute.getId().equals(attributeTypeId)) {
+                return entityAttribute;
             }
         }
         throw new IllegalArgumentException("attributeTypeId = " + attributeTypeId + " not found");
@@ -25,7 +25,7 @@ public class Entity implements ILongId {
     }
 
     public String getName(Long attributeTypeId, Locale locale){
-        return StringValueUtil.getValue(getAttributeType(attributeTypeId).getAttributeNames(), locale);
+        return StringValueUtil.getValue(getAttributeType(attributeTypeId).getNames(), locale);
     }
 
     public String getEntityName() {
@@ -44,12 +44,12 @@ public class Entity implements ILongId {
         this.id = id;
     }
 
-    public List<AttributeType> getAttributeTypes() {
-        return attributeTypes;
+    public List<EntityAttribute> getEntityAttributes() {
+        return entityAttributes;
     }
 
-    public void setAttributeType(List<AttributeType> attributeTypes) {
-        this.attributeTypes = attributeTypes;
+    public void setAttributeType(List<EntityAttribute> entityAttributes) {
+        this.entityAttributes = entityAttributes;
     }
 
     public List<StringValue> getNames() {

@@ -78,19 +78,19 @@ public class DocumentStrategy extends TemplateStrategy {
     protected void fillAttributes(String dataSource, DomainObject document) {
         List<Attribute> toAdd = newArrayList();
 
-        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
-            if (document.getAttributes(attributeType.getId()).isEmpty()
-                    && (attributeType.getAttributeValueTypes().size() == 1)
-                    && !attributeType.isObsolete()
-                    && !attributeType.getId().equals(DOCUMENT_TYPE)) {
+        for (EntityAttribute entityAttribute : getEntity().getEntityAttributes()) {
+            if (document.getAttributes(entityAttribute.getId()).isEmpty()
+                    && (entityAttribute.getValueTypes().size() == 1)
+                    && !entityAttribute.isObsolete()
+                    && !entityAttribute.getId().equals(DOCUMENT_TYPE)) {
                 Attribute attribute = new Attribute();
-                AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
-                attribute.setAttributeTypeId(attributeType.getId());
-                attribute.setValueTypeId(attributeValueType.getId());
+                ValueType valueType = entityAttribute.getValueTypes().get(0);
+                attribute.setAttributeTypeId(entityAttribute.getId());
+                attribute.setValueTypeId(valueType.getId());
                 attribute.setObjectId(document.getObjectId());
                 attribute.setAttributeId(1L);
 
-                if (isSimpleAttributeType(attributeType)) {
+                if (isSimpleAttributeType(entityAttribute)) {
                     attribute.setStringValues(StringValueUtil.newStringValues());
                 }
                 toAdd.add(attribute);
