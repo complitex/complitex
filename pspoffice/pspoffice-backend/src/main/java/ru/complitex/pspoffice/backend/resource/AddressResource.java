@@ -86,7 +86,7 @@ public class AddressResource {
     @Path("country")
     @ApiOperation(value = "Get country list by query", response = AddressObject.class, responseContainer = "List")
     public Response getCountries(@QueryParam("query") String query,
-                                 @QueryParam("offset") Integer offset,
+                                 @QueryParam("offset") @DefaultValue("0") Integer offset,
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.addAttribute(CountryStrategy.NAME, query);
@@ -162,7 +162,7 @@ public class AddressResource {
     @Path("region")
     @ApiOperation(value = "Get region list by query", response = AddressObject.class, responseContainer = "List")
     public Response getRegions(@QueryParam("query") String query,
-                               @QueryParam("offset") Integer offset,
+                               @QueryParam("offset") @DefaultValue("0") Integer offset,
                               @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.addAttribute(RegionStrategy.NAME, query);
@@ -203,7 +203,7 @@ public class AddressResource {
     @Path("city-type")
     @ApiOperation(value = "Get city types list by query", response = AddressObject.class, responseContainer = "List")
     public Response getCityTypes(@QueryParam("query") String query,
-                                 @QueryParam("offset") Integer offset,
+                                 @QueryParam("offset") @DefaultValue("0") Integer offset,
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.addAttribute(CityTypeStrategy.NAME, query);
@@ -248,7 +248,7 @@ public class AddressResource {
     public Response getCities(@QueryParam("query") String query,
                               @QueryParam("parentId") Long parentId,
                               @QueryParam("typeId") Long typeId,
-                              @QueryParam("offset") Integer offset,
+                              @QueryParam("offset") @DefaultValue("0") Integer offset,
                               @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.setParent("region", parentId);
@@ -298,7 +298,7 @@ public class AddressResource {
     @ApiOperation(value = "Get district list by query", response = AddressObject.class, responseContainer = "List")
     public Response getDistricts(@QueryParam("query") String query,
                                  @QueryParam("parentId") Long parentId,
-                                 @QueryParam("offset") Integer offset,
+                                 @QueryParam("offset") @DefaultValue("0") Integer offset,
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.setParent("city", parentId);
@@ -344,7 +344,7 @@ public class AddressResource {
     @ApiOperation(value = "Get street list by query")
     public Response getStreets(@QueryParam("query") String query,
                                @QueryParam("parentId") Long parentId,
-                               @QueryParam("offset") Integer offset,
+                               @QueryParam("offset") @DefaultValue("0") Integer offset,
                                @QueryParam("limit") @DefaultValue("10") @Max(1000) Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.setParent("city", parentId);
@@ -409,8 +409,8 @@ public class AddressResource {
     @ApiOperation(value = "Get building list by query", response = BuildingObject.class, responseContainer = "List")
     public Response getBuildings(@QueryParam("query") String query,
                                  @QueryParam("parentId") Long parentId,
-                                 @QueryParam("offset") Integer offset,
-                                 @QueryParam("limit") Integer limit){
+                                 @QueryParam("offset") @DefaultValue("0") Integer offset,
+                                 @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
 
         filter.addAdditionalParam(BuildingStrategy.P_NUMBER, query);
