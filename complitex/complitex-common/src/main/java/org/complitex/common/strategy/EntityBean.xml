@@ -36,7 +36,7 @@
         eat.`end_date` as attr_end_date,
         eat.`name_id`,
         eat.`system`,
-        eavt.`id` as entity_value_type_id,
+        eavt.`id` as entity_attribute_value_type,
         eavt.`value_type`
         FROM `entity` e
         JOIN `entity_attribute` eat ON eat.`entity_id` = e.`id`
