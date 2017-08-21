@@ -105,7 +105,7 @@ CREATE TABLE `service_provider_account_attribute` (
   CONSTRAINT `fk_sp_account_attribute__sp_account` FOREIGN KEY (`object_id`) REFERENCES `service_provider_account`(`object_id`),
   CONSTRAINT `fk_sp_account_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
-  CONSTRAINT `fk_sp_account_attribute__entity_value_type` FOREIGN KEY (`value_type_id`)
+  CONSTRAINT `fk_sp_account_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
   REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Дополнительные атрибуты л/с ПУ (кол-во проживающих и т.п.)';
 
@@ -778,7 +778,7 @@ CREATE TABLE `module_instance_attribute` (
   CONSTRAINT `fk_module_instance_attribute__module_instance` FOREIGN KEY (`object_id`) REFERENCES `module_instance`(`object_id`),
   CONSTRAINT `fk_module_instance_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
-  CONSTRAINT `fk_module_instance_attribute__entity_value_type` FOREIGN KEY (`value_type_id`)
+  CONSTRAINT `fk_module_instance_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
   REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты модуля';
 
@@ -849,7 +849,7 @@ CREATE TABLE `module_instance_type_attribute` (
   CONSTRAINT `fk_module_instance_type_attribute__module_instance_type` FOREIGN KEY (`object_id`) REFERENCES `module_instance_type`(`object_id`),
   CONSTRAINT `fk_module_instance_type_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
-  CONSTRAINT `fk_module_instance_type_attribute__entity_value_type` FOREIGN KEY (`value_type_id`)
+  CONSTRAINT `fk_module_instance_type_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
   REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа модуля';
 
