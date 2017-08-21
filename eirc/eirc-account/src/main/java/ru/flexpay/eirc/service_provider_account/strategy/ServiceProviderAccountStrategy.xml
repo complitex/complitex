@@ -16,7 +16,7 @@
     <!-- insert - generate pkId -->
     <insert id="insertServiceProviderAccountAttribute" parameterType="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute"
             keyProperty="object.pkId" useGeneratedKeys="true">
-        INSERT INTO `${entityName}_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `status`, `start_date`,
+        INSERT INTO `${entityName}_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `status`, `start_date`,
                                                 `end_date`, `value_id`, `value_type_id`)
           VALUES (#{attributeId}, #{objectId}, #{attributeTypeId}, #{status}, #{startDate}, #{endDate}, #{valueId}, #{valueTypeId})
     </insert>
@@ -28,7 +28,7 @@
 
     <select id="selectServiceProviderAccountAttribute" parameterType="hashmap" resultMap="serviceProviderAccountAttributeResultMap">
         SELECT aa.* FROM `${entityName}_attribute` aa WHERE  aa.`object_id` = #{id} AND aa.`status` = 1
-          ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
+          ORDER BY aa.`entity_attribute_id`, aa.`attribute_id`
     </select>
 
 </mapper>

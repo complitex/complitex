@@ -21,24 +21,24 @@
 
     <sql id="join">
         JOIN `locale` sys ON sys.`system` = 1
-        JOIN `person_attribute` sys_lna ON (sys_lna.`status` = 1 AND sys_lna.`object_id` = e.`object_id` AND sys_lna.`attribute_type_id` = 2000
+        JOIN `person_attribute` sys_lna ON (sys_lna.`status` = 1 AND sys_lna.`object_id` = e.`object_id` AND sys_lna.`entity_attribute_id` = 2000
             AND sys_lna.`attribute_id` = sys.`id`)
         JOIN `person_last_name` sys_ln ON sys_ln.`id` = sys_lna.`value_id`
-        LEFT JOIN `person_attribute` lna ON (lna.`status` = 1 AND lna.`object_id` = e.`object_id` AND lna.`attribute_type_id` = 2000
+        LEFT JOIN `person_attribute` lna ON (lna.`status` = 1 AND lna.`object_id` = e.`object_id` AND lna.`entity_attribute_id` = 2000
             AND lna.`attribute_id` = #{localeId})
         LEFT JOIN `person_last_name` ln ON ln.`id` = lna.`value_id`
 
-        JOIN `person_attribute` sys_fna ON (sys_fna.`status` = 1 AND sys_fna.`object_id` = e.`object_id` AND sys_fna.`attribute_type_id` = 2001
+        JOIN `person_attribute` sys_fna ON (sys_fna.`status` = 1 AND sys_fna.`object_id` = e.`object_id` AND sys_fna.`entity_attribute_id` = 2001
             AND sys_fna.`attribute_id` = sys.`id`)
         JOIN `person_first_name` sys_fn ON sys_fn.`id` = sys_fna.`value_id`
-        LEFT JOIN `person_attribute` fna ON (fna.`status` = 1 AND fna.`object_id` = e.`object_id` AND fna.`attribute_type_id` = 2001
+        LEFT JOIN `person_attribute` fna ON (fna.`status` = 1 AND fna.`object_id` = e.`object_id` AND fna.`entity_attribute_id` = 2001
             AND fna.`attribute_id` = #{localeId})
         LEFT JOIN `person_first_name` fn ON fn.`id` = fna.`value_id`
         
-        JOIN `person_attribute` sys_mna ON (sys_mna.`status` = 1 AND sys_mna.`object_id` = e.`object_id` AND sys_mna.`attribute_type_id` = 2002
+        JOIN `person_attribute` sys_mna ON (sys_mna.`status` = 1 AND sys_mna.`object_id` = e.`object_id` AND sys_mna.`entity_attribute_id` = 2002
             AND sys_mna.`attribute_id` = sys.`id`)
         JOIN `person_middle_name` sys_mn ON sys_mn.`id` = sys_mna.`value_id`
-        LEFT JOIN `person_attribute` mna ON (mna.`status` = 1 AND mna.`object_id` = e.`object_id` AND mna.`attribute_type_id` = 2002
+        LEFT JOIN `person_attribute` mna ON (mna.`status` = 1 AND mna.`object_id` = e.`object_id` AND mna.`entity_attribute_id` = 2002
             AND mna.`attribute_id` = #{localeId})
         LEFT JOIN `person_middle_name` mn ON mn.`id` = mna.`value_id`
     </sql>
@@ -141,7 +141,7 @@
 
     <select id="findPreviousDocumentAttributes" parameterType="map" 
                     resultMap="org.complitex.common.strategy.DomainObjectStrategy.attributeResultMap">
-        SELECT p.* FROM `person_attribute` p WHERE p.`status` = 2 AND p.`attribute_type_id` = #{personDocumentAT}
+        SELECT p.* FROM `person_attribute` p WHERE p.`status` = 2 AND p.`entity_attribute_id` = #{personDocumentAT}
                     AND p.`object_id` = #{personId}
         ORDER BY p.`end_date`
     </select>
@@ -152,9 +152,9 @@
             JOIN `apartment_card_attribute` ar ON (r.`object_id` = ar.`value_id` AND ar.`status` = 1)
             JOIN `apartment_card` a ON (a.`object_id` = ar.`object_id` AND a.`status` = 1)
             JOIN `apartment_card_attribute` address ON (address.`object_id` = a.`object_id` AND address.`status` = 1)
-            WHERE ra.`attribute_type_id` = #{registrationPersonAT}
-                    AND ar.`attribute_type_id` = #{apartmentCardRegistrationAT}
-                    AND address.`attribute_type_id` = #{apartmentCardAddressAT}
+            WHERE ra.`entity_attribute_id` = #{registrationPersonAT}
+                    AND ar.`entity_attribute_id` = #{apartmentCardRegistrationAT}
+                    AND address.`entity_attribute_id` = #{apartmentCardAddressAT}
                     AND ra.`value_id` = #{personId}
     </sql>
 
@@ -184,7 +184,7 @@
     <select id="findParents" parameterType="map" resultType="long">
         SELECT DISTINCT p.`object_id` FROM `person` p
             JOIN `person_attribute` child_attr ON (p.`object_id` = child_attr.`object_id` AND
-                child_attr.`attribute_type_id` = #{personChildrenAT} AND child_attr.`status` = 1 AND
+                child_attr.`entity_attribute_id` = #{personChildrenAT} AND child_attr.`status` = 1 AND
                 child_attr.`value_id` = #{childId})
             WHERE p.`status` IN (1, 0)
     </select>
@@ -198,10 +198,10 @@
             JOIN `apartment_card_attribute` ar ON (r.`object_id` = ar.`value_id` AND ar.`status` = 1)
             JOIN `apartment_card` a ON (a.`object_id` = ar.`object_id` AND a.`status` = 1)
             JOIN `apartment_card_attribute` address ON (address.`object_id` = a.`object_id` AND address.`status` = 1)
-            WHERE ra.`attribute_type_id` = #{registrationPersonAT}
-                    AND rt.`attribute_type_id` = #{registrationTypeAT}
-                    AND ar.`attribute_type_id` = #{apartmentCardRegistrationAT}
-                    AND address.`attribute_type_id` = #{apartmentCardAddressAT}
+            WHERE ra.`entity_attribute_id` = #{registrationPersonAT}
+                    AND rt.`entity_attribute_id` = #{registrationTypeAT}
+                    AND ar.`entity_attribute_id` = #{apartmentCardRegistrationAT}
+                    AND address.`entity_attribute_id` = #{apartmentCardAddressAT}
                     AND ra.`value_id` = #{personId}
                     AND ra.`status` = 1
                     AND rt.`value_id` = #{permanentRegistrationTypeId}
@@ -211,7 +211,7 @@
     
     <sql id="nontraceblaAttributesSql">
         <if test="nontraceableAttributes != null and !nontraceableAttributes.isEmpty()">
-            AND a.`attribute_type_id` NOT IN 
+            AND a.`entity_attribute_id` NOT IN
             <foreach open="(" close=")" separator="," item="item" collection="nontraceableAttributes">
                 #{item}
             </foreach>
@@ -233,7 +233,7 @@
             UNION
             SELECT da.`start_date` FROM `document_attribute` da WHERE da.`start_date` <![CDATA[ < ]]> #{date}
                 AND da.`object_id` IN (SELECT pa.`value_id` FROM `person_attribute` pa WHERE pa.`object_id` = #{personId}
-                    AND pa.`start_date` <![CDATA[ < ]]> #{date} AND pa.`attribute_type_id` = #{personDocumentAT})
+                    AND pa.`start_date` <![CDATA[ < ]]> #{date} AND pa.`entity_attribute_id` = #{personDocumentAT})
         ) d
     </select>
     
@@ -252,7 +252,7 @@
             UNION
             SELECT da.`start_date` FROM `document_attribute` da WHERE da.`start_date` <![CDATA[ > ]]> #{date}
                 AND da.`object_id` IN (SELECT pa.`value_id` FROM `person_attribute` pa WHERE pa.`object_id` = #{personId}
-                    AND pa.`attribute_type_id` = #{personDocumentAT})
+                    AND pa.`entity_attribute_id` = #{personDocumentAT})
         ) d
     </select>
 

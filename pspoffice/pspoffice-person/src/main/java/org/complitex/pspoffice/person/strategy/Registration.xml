@@ -6,10 +6,10 @@
     <select id="validateDuplicatePerson" parameterType="map" resultType="long">
         SELECT r.`object_id` FROM `apartment_card` a
             JOIN `apartment_card_attribute` reg ON (a.`object_id` = reg.`object_id`
-                AND reg.`attribute_type_id` = #{apartmentCardRegistrationAT} AND reg.`status` = 1)
+                AND reg.`entity_attribute_id` = #{apartmentCardRegistrationAT} AND reg.`status` = 1)
             JOIN `registration` r ON (r.`object_id` = reg.`value_id` AND r.`status` = 1)
             JOIN `registration_attribute` pers ON (r.`object_id` = pers.`object_id` AND
-                pers.`attribute_type_id` = #{registrationPersonAT} AND pers.`status` = 1
+                pers.`entity_attribute_id` = #{registrationPersonAT} AND pers.`status` = 1
                 AND pers.`value_id` = #{personId})
              WHERE a.`status` = 1 AND a.`object_id` = #{apartmentCardId}
              LIMIT 0,1
@@ -19,7 +19,7 @@
     
     <sql id="nontraceblaAttributesSql">
         <if test="nontraceableAttributes != null and !nontraceableAttributes.isEmpty()">
-            AND a.`attribute_type_id` NOT IN 
+            AND a.`entity_attribute_id` NOT IN
             <foreach open="(" close=")" separator="," item="item" collection="nontraceableAttributes">
                 #{item}
             </foreach>

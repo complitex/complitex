@@ -381,7 +381,7 @@
           left join `request_file` rf on rf.`id` = s.`request_file_id`
 
         <if test="type == 'DISTRICT'">
-            left join `organization_attribute` oa on (oa.`object_id` = rf.`organization_id` and oa.`attribute_type_id` = 902)
+            left join `organization_attribute` oa on (oa.`object_id` = rf.`organization_id` and oa.`entity_attribute_id` = 902)
             where oa.`value_id` in
         </if>
         <if test="type == 'SERVICING_ORGANIZATION' or type == 'BALANCE_HOLDER'">

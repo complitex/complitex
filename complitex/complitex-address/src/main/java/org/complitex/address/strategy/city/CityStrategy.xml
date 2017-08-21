@@ -7,8 +7,8 @@
                                     JOIN `city_attribute` a_name ON (c.`object_id` = a_name.`object_id` AND a_name.`status` = 1)
                                     JOIN `city_attribute` a_type ON (c.`object_id` = a_type.`object_id` AND a_type.`status` = 1)
                                     JOIN `city_string_value` sc ON (a_name.`value_id` = sc.`id`)
-            WHERE (c.`status` IN (1, 0)) AND sc.`locale_id` = #{localeId} AND a_name.`attribute_type_id` = 400
-            AND a_type.`attribute_type_id` = 401
+            WHERE (c.`status` IN (1, 0)) AND sc.`locale_id` = #{localeId} AND a_name.`entity_attribute_id` = 400
+            AND a_type.`entity_attribute_id` = 401
             AND sc.`value` = #{text}
             <choose>
                 <when test="parentEntityId != null and parentId != null">

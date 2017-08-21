@@ -91,8 +91,8 @@
                  where r.`object_id` = #{id} and ra.`end_date` is null and aa.`end_date` is null and
              </when>
          </choose>baa.`end_date` is null and
-                  sa.`end_date`  is null and sa.`attribute_type_id` = 300 and
-                  sta.`end_date` is null and sta.`attribute_type_id` = 1400
+                  sa.`end_date`  is null and sa.`entity_attribute_id` = 300 and
+                  sta.`end_date` is null and sta.`entity_attribute_id` = 1400
     </select>
 
     <sql id="roomJoin">

@@ -40,8 +40,8 @@
 
     <select id="selectUserOrganizationChildrenObjectIds" parameterType="long" resultType="long">
         select o.`object_id` from `organization` o
-          left join organization_attribute oa on oa.`object_id` = o.`object_id` and oa.`attribute_type_id` = 903
-          left join organization_attribute oat on oat.`object_id` = o.`object_id` and oat.`attribute_type_id` = 904
+          left join organization_attribute oa on oa.`object_id` = o.`object_id` and oa.`entity_attribute_id` = 903
+          left join organization_attribute oat on oat.`object_id` = o.`object_id` and oat.`entity_attribute_id` = 904
             where oa.`value_id` = #{parentObjectId} and oat.`value_id` = 1
     </select>
 

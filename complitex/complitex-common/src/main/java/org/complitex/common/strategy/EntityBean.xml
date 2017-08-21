@@ -9,7 +9,7 @@
         <collection property="names" ofType="StringValue" column="entity_name_id" select="findNames"/>
 
         <collection property="entityAttributes" ofType="org.complitex.common.entity.EntityAttribute">
-            <id column="attribute_type_id" property="id"/>
+            <id column="entity_attribute_id" property="id"/>
 
             <result column="mandatory" property="mandatory"/>
             <result column="attr_start_date" property="startDate"/>
@@ -30,7 +30,7 @@
         e.`id` as entity_id,
         e.`entity_table`,
         e.`entity_name_id`,
-        eat.`id` as attribute_type_id,
+        eat.`id` as entity_attribute_id,
         eat.`mandatory`,
         eat.`start_date` as attr_start_date,
         eat.`end_date` as attr_end_date,
@@ -40,7 +40,7 @@
         eavt.`attribute_value_type`
         FROM `entity` e
         JOIN `attribute_type` eat ON eat.`entity_id` = e.`id`
-        JOIN `attribute_value_type` eavt ON eavt.`attribute_type_id` = eat.`id`
+        JOIN `attribute_value_type` eavt ON eavt.`entity_attribute_id` = eat.`id`
         WHERE e.`entity_table` = #{entity}
     </select>
 
@@ -55,7 +55,7 @@
     </insert>
 
     <insert id="insertValueType">
-        INSERT INTO `attribute_value_type`(`attribute_type_id`, `attribute_value_type`) VALUES (#{attributeTypeId}, #{valueType})
+        INSERT INTO `attribute_value_type`(`entity_attribute_id`, `attribute_value_type`) VALUES (#{attributeTypeId}, #{valueType})
     </insert>
 
     <select id="allEntities" resultType="string">

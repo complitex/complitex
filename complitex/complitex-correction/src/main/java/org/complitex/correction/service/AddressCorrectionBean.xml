@@ -41,7 +41,7 @@
         select distinct e.`object_id` from `${entity}` e
             left join `${entity}_attribute` attr on (attr.`status` = 1 and e.`object_id` = attr.`object_id`)
             left join `${entity}_string_value` sc on (sc.`id` = attr.`value_id`)
-        where e.`status` = 1 and attr.`attribute_type_id` = #{attributeTypeId} and upper(sc.`value`) = upper(#{correction})
+        where e.`status` = 1 and attr.`entity_attribute_id` = #{attributeTypeId} and upper(sc.`value`) = upper(#{correction})
     </select>
 
     <!--City-->
@@ -218,12 +218,12 @@
         select count(b.`object_id`) > 0 from `building` b
         join `building_address` addr on (((b.`parent_id` = addr.`object_id`) or
           exists(select 1 from `building_attribute` ba where ba.`object_id` = b.`object_id` and ba.`status` = 1
-            and ba.`attribute_type_id` = 501 and ba.`value_id` = addr.`object_id`)) and addr.`status` = 1)
+            and ba.`entity_attribute_id` = 501 and ba.`value_id` = addr.`object_id`)) and addr.`status` = 1)
         join `building_address_attribute` num on (num.`object_id` = addr.`object_id` and num.`status` = 1
-          and num.`attribute_type_id` = 1500)
+          and num.`entity_attribute_id` = 1500)
         join `building_address_string_value` num_sc on (num_sc.`id` = num.`value_id`)
         left join `building_address_attribute` corp on (corp.`object_id` = addr.`object_id` AND corp.`status` = 1
-          and corp.`attribute_type_id` = 1501)
+          and corp.`entity_attribute_id` = 1501)
         left join `building_address_string_value` corp_sc on (corp_sc.`id` = corp.`value_id`)
         where b.`status` = 1
         and TO_CYRILLIC(num_sc.`value`) = #{buildingNumber}
@@ -298,24 +298,24 @@
 
     <sql id="buildingJoin">
         left join `organization_attribute` oa on (oa.`object_id` = c.`organization_id`
-        and oa.`status` = 1 and oa.`attribute_type_id` = 900)
+        and oa.`status` = 1 and oa.`entity_attribute_id` = 900)
         left join `organization_string_value` osc on (osc.`id` = oa.`value_id` and osc.`locale_id` = #{localeId})
         LEFT JOIN `organization_string_value` osc_sys ON (osc_sys.`id` = oa.`value_id` and osc_sys.`locale_id` = (SELECT l.`id` FROM `locale` l WHERE l.`system` = 1))
 
         left join `organization_attribute` oa_i on (oa_i.`object_id` = c.`module_id`
-        and oa_i.`status` = 1 and oa_i.`attribute_type_id` = 900)
+        and oa_i.`status` = 1 and oa_i.`entity_attribute_id` = 900)
         left join `organization_string_value` osc_i on (osc_i.`id` = oa_i.`value_id` and osc_i.`locale_id` = #{localeId})
         LEFT JOIN `organization_string_value` osc_i_sys ON (osc_i_sys.`id` = oa_i.`value_id` and osc_i_sys.`locale_id` = (SELECT l.`id` FROM `locale` l WHERE l.`system` = 1))
 
         left join `organization_attribute` uoa on (uoa.`object_id` = c.`user_organization_id`
-        and uoa.`status` = 1 and uoa.`attribute_type_id` = 900)
+        and uoa.`status` = 1 and uoa.`entity_attribute_id` = 900)
         left join `organization_string_value` uosc on (uosc.`id` = uoa.`value_id` and uosc.`locale_id` = #{localeId})
         LEFT JOIN `organization_string_value` uosc_sys ON (uosc_sys.`id` = uoa.`value_id` and uosc_sys.`locale_id` = (SELECT l.`id` FROM `locale` l WHERE l.`system` = 1))
 
         <if test="orderByClause == 'object' or internalObject != null">
             left join `building` b on (b.`object_id` = c.`object_id`)
             left join `building_address` ba on (ba.`object_id` = b.`parent_id`)
-            left join `building_address_attribute` baa on (baa.`object_id` = ba.`object_id` and baa.`attribute_type_id` = 1500)
+            left join `building_address_attribute` baa on (baa.`object_id` = ba.`object_id` and baa.`entity_attribute_id` = 1500)
             left join `building_address_string_value` basc on (basc.`id` = baa.`value_id` and basc.`locale_id` = #{localeId})
 
             left join `street` s on (s.`object_id` = ba.`parent_id`)
