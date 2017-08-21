@@ -21,11 +21,11 @@ FOREIGN KEY (name_id) REFERENCES entity_string_value (`id`);
 -- entity_value_type
 
 ALTER TABLE `attribute_value_type` RENAME `entity_value_type`;
-ALTER TABLE `entity_value_type` CHANGE `attribute_type_id` `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута';
-ALTER TABLE `entity_value_type` CHANGE `attribute_value_type` `value_type` VARCHAR(100) NOT NULL COMMENT 'Тип значения атрибута';
-ALTER TABLE `entity_value_type` RENAME INDEX `key_attribute_type_id` TO `key_entity_attribute_id`;
-ALTER TABLE `entity_value_type` DROP FOREIGN KEY `fk_attribute_value_type`;
-ALTER TABLE `entity_value_type` ADD CONSTRAINT `fk_entity_value_type__entity_attribute`
+ALTER TABLE entity_attribute_value_type CHANGE `attribute_type_id` `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута';
+ALTER TABLE entity_attribute_value_type CHANGE `attribute_value_type` `value_type` VARCHAR(100) NOT NULL COMMENT 'Тип значения атрибута';
+ALTER TABLE entity_attribute_value_type RENAME INDEX `key_attribute_type_id` TO `key_entity_attribute_id`;
+ALTER TABLE entity_attribute_value_type DROP FOREIGN KEY `fk_attribute_value_type`;
+ALTER TABLE entity_attribute_value_type ADD CONSTRAINT `fk_entity_value_type__entity_attribute`
 FOREIGN KEY (`entity_attribute_id`) REFERENCES entity_attribute (`id`);
 
 -- organization_type_attribute
@@ -38,7 +38,7 @@ ALTER TABLE organization_type_attribute ADD CONSTRAINT fk_organization_type_attr
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE organization_type_attribute DROP FOREIGN KEY fk_organization_type_attribute__attribute_value_type;
 ALTER TABLE organization_type_attribute ADD CONSTRAINT fk_organization_type_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- ######################
 ALTER TABLE ? CHANGE attribute_type_id entity_attribute_id BIGINT(20) NOT NULL
@@ -62,7 +62,7 @@ ALTER TABLE organization_attribute ADD CONSTRAINT fk_organization_attribute__ent
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE organization_attribute DROP FOREIGN KEY fk_organization_attribute__attribute_value_type;
 ALTER TABLE organization_attribute ADD CONSTRAINT fk_organization_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- country_attribute
 
@@ -74,7 +74,7 @@ ALTER TABLE country_attribute ADD CONSTRAINT fk_country_attribute__entity_attrib
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE country_attribute DROP FOREIGN KEY fk_country_attribute__attribute_value_type;
 ALTER TABLE country_attribute ADD CONSTRAINT fk_country_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- region_attribute
 
@@ -86,7 +86,7 @@ ALTER TABLE region_attribute ADD CONSTRAINT fk_region_attribute__entity_attribut
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE region_attribute DROP FOREIGN KEY fk_region_attribute__attribute_value_type;
 ALTER TABLE region_attribute ADD CONSTRAINT fk_region_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- city_type_attribute
 
@@ -98,7 +98,7 @@ ALTER TABLE city_type_attribute ADD CONSTRAINT fk_city_type_attribute__entity_at
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE city_type_attribute DROP FOREIGN KEY fk_city_type_attribute__attribute_value_type;
 ALTER TABLE city_type_attribute ADD CONSTRAINT fk_city_type_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- city_attribute
 
@@ -110,7 +110,7 @@ ALTER TABLE city_attribute ADD CONSTRAINT fk_city_attribute__entity_attribute
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE city_attribute DROP FOREIGN KEY fk_city_attribute__attribute_value_type;
 ALTER TABLE city_attribute ADD CONSTRAINT fk_city_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- district_attribute
 
@@ -122,7 +122,7 @@ ALTER TABLE district_attribute ADD CONSTRAINT fk_district_attribute__entity_attr
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE district_attribute DROP FOREIGN KEY fk_district_attribute__attribute_value_type;
 ALTER TABLE district_attribute ADD CONSTRAINT fk_district_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- street_type_attribute
 
@@ -134,7 +134,7 @@ ALTER TABLE street_type_attribute ADD CONSTRAINT fk_street_type_attribute__entit
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE street_type_attribute DROP FOREIGN KEY fk_street_type_attribute__attribute_value_type;
 ALTER TABLE street_type_attribute ADD CONSTRAINT fk_street_type_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- street_attribute
 
@@ -146,7 +146,7 @@ ALTER TABLE street_attribute ADD CONSTRAINT fk_street_attribute__entity_attribut
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE street_attribute DROP FOREIGN KEY fk_street_attribute__attribute_value_type;
 ALTER TABLE street_attribute ADD CONSTRAINT fk_street_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- building_attribute
 
@@ -158,7 +158,7 @@ ALTER TABLE building_attribute ADD CONSTRAINT fk_building_attribute__entity_attr
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE building_attribute DROP FOREIGN KEY fk_building_attribute__attribute_value_type;
 ALTER TABLE building_attribute ADD CONSTRAINT fk_building_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- building_address_attribute
 
@@ -170,7 +170,7 @@ ALTER TABLE building_address_attribute ADD CONSTRAINT fk_building_address_attrib
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE building_address_attribute DROP FOREIGN KEY fk_building_address_attribute__attribute_value_type;
 ALTER TABLE building_address_attribute ADD CONSTRAINT fk_building_address_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 
 -- apartment_attribute
@@ -183,7 +183,7 @@ ALTER TABLE apartment_attribute ADD CONSTRAINT fk_apartment_attribute__entity_at
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE apartment_attribute DROP FOREIGN KEY fk_apartment_attribute__attribute_value_type;
 ALTER TABLE apartment_attribute ADD CONSTRAINT fk_apartment_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- room_attribute
 
@@ -195,7 +195,7 @@ ALTER TABLE room_attribute ADD CONSTRAINT fk_room_attribute__entity_attribute
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE room_attribute DROP FOREIGN KEY fk_room_attribute__attribute_value_type;
 ALTER TABLE room_attribute ADD CONSTRAINT fk_room_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- user_info_attribute
 
@@ -207,7 +207,7 @@ ALTER TABLE user_info_attribute ADD CONSTRAINT fk_user_info_attribute__entity_at
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE user_info_attribute DROP FOREIGN KEY fk_user_info__attribute_value_type;
 ALTER TABLE user_info_attribute ADD CONSTRAINT fk_user_info_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- service_attribute
 
@@ -219,7 +219,7 @@ ALTER TABLE service_attribute ADD CONSTRAINT fk_service_attribute__entity_attrib
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE service_attribute DROP FOREIGN KEY fk_service_attribute__attribute_value_type;
 ALTER TABLE service_attribute ADD CONSTRAINT fk_service_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- ownership_attribute
 
@@ -231,7 +231,7 @@ ALTER TABLE ownership_attribute ADD CONSTRAINT fk_ownership_attribute__entity_at
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE ownership_attribute DROP FOREIGN KEY fk_ownership_attribute__attribute_value_type;
 ALTER TABLE ownership_attribute ADD CONSTRAINT fk_ownership_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 -- privilege_attribute
 
@@ -243,7 +243,7 @@ ALTER TABLE privilege_attribute ADD CONSTRAINT fk_privilege_attribute__entity_at
 FOREIGN KEY (entity_attribute_id) REFERENCES entity_attribute (id);
 ALTER TABLE privilege_attribute DROP FOREIGN KEY fk_privilege_attribute__attribute_value_type;
 ALTER TABLE privilege_attribute ADD CONSTRAINT fk_privilege_attribute__entity_value_type
-FOREIGN KEY (value_type_id) REFERENCES entity_value_type (id);
+FOREIGN KEY (value_type_id) REFERENCES entity_attribute_value_type (id);
 
 
 

@@ -106,7 +106,7 @@ CREATE TABLE `service_provider_account_attribute` (
   CONSTRAINT `fk_sp_account_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
   CONSTRAINT `fk_sp_account_attribute__entity_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_value_type` (`id`)
+  REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Дополнительные атрибуты л/с ПУ (кол-во проживающих и т.п.)';
 
 DROP TABLE IF EXISTS `service_provider_account_string_value`;
@@ -779,7 +779,7 @@ CREATE TABLE `module_instance_attribute` (
   CONSTRAINT `fk_module_instance_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
   CONSTRAINT `fk_module_instance_attribute__entity_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_value_type` (`id`)
+  REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты модуля';
 
 DROP TABLE IF EXISTS `module_instance_string_value`;
@@ -850,7 +850,7 @@ CREATE TABLE `module_instance_type_attribute` (
   CONSTRAINT `fk_module_instance_type_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
   CONSTRAINT `fk_module_instance_type_attribute__entity_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_value_type` (`id`)
+  REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа модуля';
 
 DROP TABLE IF EXISTS `module_instance_type_string_value`;

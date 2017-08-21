@@ -62,7 +62,7 @@ CREATE TABLE `tarif_group_attribute` (
   CONSTRAINT `fk_tarif_group_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
   CONSTRAINT `fk_tarif_group_attribute__entity_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_value_type` (`id`)
+  REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта тарифная группа';
 
 DROP TABLE IF EXISTS `tarif_group_string_value`;
@@ -133,7 +133,7 @@ CREATE TABLE `tarif_attribute` (
   CONSTRAINT `fk_tarif_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
   CONSTRAINT `fk_tarif_attribute__entity_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_value_type` (`id`)
+  REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта тариф';
 
 DROP TABLE IF EXISTS `tarif_string_value`;
@@ -204,7 +204,7 @@ CREATE TABLE `heatmeter_type_attribute` (
   CONSTRAINT `fk_heatmeter_type_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
   CONSTRAINT `fk_heatmeter_type_attribute__entity_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_value_type` (`id`)
+  REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа теплосчетчика';
 
 DROP TABLE IF EXISTS `heatmeter_type_string_value`;
@@ -275,7 +275,7 @@ CREATE TABLE `heatmeter_period_type_attribute` (
   CONSTRAINT `fk_heatmeter_period_type_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
   CONSTRAINT `fk_heatmeter_period_type_attribute__entity_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `entity_value_type` (`id`)
+  REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа периода теплосчетчика';
 
 DROP TABLE IF EXISTS `heatmeter_period_type_string_value`;

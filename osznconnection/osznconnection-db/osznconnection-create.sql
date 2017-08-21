@@ -59,7 +59,7 @@ CREATE TABLE `ownership_attribute` (
   KEY `key_status` (`status`),
   CONSTRAINT `fk_ownership_attribute__ownership` FOREIGN KEY (`object_id`) REFERENCES `ownership`(`object_id`),
   CONSTRAINT `fk_ownership_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`) REFERENCES `entity_attribute` (`id`),
-  CONSTRAINT `fk_ownership_attribute__entity_value_type` FOREIGN KEY (`value_type_id`) REFERENCES `entity_value_type` (`id`)
+  CONSTRAINT `fk_ownership_attribute__entity_value_type` FOREIGN KEY (`value_type_id`) REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта формы собственности';
 
 DROP TABLE IF EXISTS `ownership_string_value`;
@@ -130,7 +130,7 @@ CREATE TABLE `privilege_attribute` (
   CONSTRAINT `fk_privilege_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
     REFERENCES `entity_attribute` (`id`),
   CONSTRAINT `fk_privilege_attribute__entity_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `entity_value_type` (`id`)
+    REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта привилегии';
 
 DROP TABLE IF EXISTS `privilege_string_value`;
