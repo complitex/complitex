@@ -107,7 +107,7 @@ public class EntityBean extends AbstractBean {
                 toDeleteAttributeIds.add(oldEntityAttribute.getId());
             }
         }
-        removeAttributeTypes(oldEntity.getEntityName(), toDeleteAttributeIds, updateDate);
+        removeAttributeTypes(oldEntity.getEntity(), toDeleteAttributeIds, updateDate);
 
         for (EntityAttribute entityAttribute : newEntity.getEntityAttributes()) {
             if (entityAttribute.getId() == null) {
@@ -117,7 +117,7 @@ public class EntityBean extends AbstractBean {
         }
 
         if (changed) {
-            updateCache(oldEntity.getEntityName());
+            updateCache(oldEntity.getEntity());
         }
     }
 

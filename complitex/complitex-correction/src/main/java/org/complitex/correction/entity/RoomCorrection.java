@@ -22,7 +22,7 @@ public class RoomCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return AddressEntity.ROOM.getEntityName();
+        return AddressEntity.ROOM.getEntity();
     }
 
     public Long getBuildingId() {

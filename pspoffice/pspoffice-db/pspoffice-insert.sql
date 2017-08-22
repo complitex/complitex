@@ -32,7 +32,8 @@ INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (2000
 /* ФИО */
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2001, 1, UPPER('Фамилия')), (2001, 2, UPPER('Прізвище'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (2000, 2000, 1, 2001, 1);
-INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2002, 1, UPPER('Имя')), (2002, 2, UPPER('Ім\'я'));
+INSERT INTO `entity_string_value` (`id`, `locale_id`, `value`) VALUES (2002, 1, UPPER('Имя')), (2002, 2, UPPER('Ім\'я'));
+
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (2001, 2000, 1, 2002, 1);
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2003, 1, UPPER('Отчество')), (2003, 2, UPPER('По батькові'));
 INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (2002, 2000, 1, 2003, 1);

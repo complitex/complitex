@@ -15,11 +15,11 @@ public enum AddressEntity implements IFixedIdType{
     CITY_TYPE(1300, "city_type"), STREET_TYPE(1400, "street_type"), BUILDING_ADDRESS(1500, "building_address");
 
     private Integer id;
-    private String entityName;
+    private String entity;
 
-    AddressEntity(Integer id, String entityName) {
+    AddressEntity(Integer id, String entity) {
         this.id = id;
-        this.entityName = entityName;
+        this.entity = entity;
     }
 
     @Override
@@ -27,13 +27,13 @@ public enum AddressEntity implements IFixedIdType{
         return id;
     }
 
-    public String getEntityName() {
-        return entityName;
+    public String getEntity() {
+        return entity;
     }
 
     public static AddressEntity getValue(String entityName){
         for (AddressEntity addressEntity : AddressEntity.values()){
-            if (addressEntity.getEntityName().equals(entityName)){
+            if (addressEntity.getEntity().equals(entityName)){
                 return addressEntity;
             }
         }

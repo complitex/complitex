@@ -7,7 +7,7 @@ import java.util.Locale;
 
 public class Entity implements ILongId {
     private Long id;
-    private String table;
+    private String entity;
     private List<StringValue> names;
     private List<EntityAttribute> entityAttributes;
 
@@ -28,12 +28,12 @@ public class Entity implements ILongId {
         return StringValueUtil.getValue(getAttributeType(attributeTypeId).getNames(), locale);
     }
 
-    public String getEntityName() {
-        return table;
+    public String getEntity() {
+        return entity;
     }
 
-    public void setTable(String table) {
-        this.table = table;
+    public void setEntity(String table) {
+        this.entity = table;
     }
 
     public Long getId() {

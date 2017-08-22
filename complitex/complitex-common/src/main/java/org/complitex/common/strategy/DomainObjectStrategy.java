@@ -337,7 +337,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         boolean isAdmin = sessionBean.isAdmin();
         filter.setAdmin(isAdmin);
 //        if (!isAdmin) { todo permission
-//            filter.setUserPermissionString(sessionBean.getPermissionString(getEntityName()));
+//            filter.setUserPermissionString(sessionBean.getPermissionString(getEntity()));
 //        }
     }
 
@@ -1287,7 +1287,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             for (EntityAttribute entityAttribute : entity.getEntityAttributes()) {
                 for (ValueType valueType : entityAttribute.getValueTypes()) {
                     if (getEntityName().equals(valueType.getValueType())) {
-                        String referenceEntity = entity.getEntityName();
+                        String referenceEntity = entity.getEntity();
                         long attributeTypeId = entityAttribute.getId();
 
                         Map<String, Object> params = new HashMap<>();

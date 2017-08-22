@@ -4,7 +4,7 @@
     <resultMap id="entityResultMap" type="org.complitex.common.entity.Entity">
         <id column="entity_id" property="id"/>
 
-        <result column="entity" property="table"/>
+        <result column="entity" property="entity"/>
 
         <collection property="names" ofType="StringValue" column="name_id" select="findNames"/>
 
@@ -19,8 +19,8 @@
             <collection property="names" column="name_id" select="findNames"/>
 
             <collection property="valueTypes" ofType="org.complitex.common.entity.ValueType">
-                <id column="entity_attribute_value_type_id" property="id"/>
-                <result column="entity_attribute_value_type" property="valueType"/>
+                <id column="value_type_id" property="id"/>
+                <result column="value_type" property="valueType"/>
             </collection>
         </collection>
     </resultMap>
@@ -36,8 +36,8 @@
         eat.`end_date` as attr_end_date,
         eat.`name_id`,
         eat.`system`,
-        eavt.`id` as entity_attribute_value_type,
-        eavt.`value_type`
+        eavt.`id` as value_type_id,
+        eavt.`value_type` value_type
         FROM `entity` e
         JOIN `entity_attribute` eat ON eat.`entity_id` = e.`id`
         JOIN `entity_attribute_value_type` eavt ON eavt.`entity_attribute_id` = eat.`id`
