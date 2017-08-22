@@ -7,8 +7,8 @@ CREATE TABLE `sequence`(
   PRIMARY KEY (`sequence_name`)
 )ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Последовательность генерации идентификаторов объектов';
 
-DROP TABLE IF EXISTS `string_value`;
-CREATE TABLE `string_value` (
+DROP TABLE IF EXISTS `entity_string_value`;
+CREATE TABLE `entity_string_value` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации',
   `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
@@ -24,13 +24,13 @@ DROP TABLE IF EXISTS `entity`;
 
 CREATE TABLE `entity` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор сущности',
-  `entity_table` VARCHAR(100) NOT NULL COMMENT 'Название таблицы сущности',
-  `entity_name_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации названия сущности',
+  `entity` VARCHAR(100) NOT NULL COMMENT 'Название таблицы сущности',
+  `name_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации названия сущности',
   `strategy_factory` VARCHAR(100) NOT NULL COMMENT 'Не используется',
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `unique_entity_table` (`entity_table`),
-  KEY `key_entity_name_id` (`entity_name_id`),
-  CONSTRAINT `fk_entity__string_value` FOREIGN KEY (`entity_name_id`) REFERENCES `string_value` (`id`)
+  UNIQUE KEY `unique_entity` (`entity`),
+  KEY `key_name_id` (`name_id`),
+  CONSTRAINT `fk_entity__string_value` FOREIGN KEY (`name_id`) REFERENCES `entity_string_value` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Сущность';
 
 DROP TABLE IF EXISTS `entity_attribute_type`;
@@ -47,7 +47,7 @@ CREATE TABLE `entity_attribute_type` (
   KEY `key_entity_id` (`entity_id`),
   KEY `key_attribute_type_name_id` (`attribute_type_name_id`),
   CONSTRAINT `fk_entity_attribute_type__entity` FOREIGN KEY (`entity_id`) REFERENCES `entity` (`id`),
-  CONSTRAINT `fk_entity_attribute_type__string_value` FOREIGN KEY (`attribute_type_name_id`) REFERENCES `string_value` (`id`)
+  CONSTRAINT `fk_entity_attribute_type__string_value` FOREIGN KEY (`attribute_type_name_id`) REFERENCES `entity_string_value` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Тип атрибута сущности';
 
 DROP TABLE IF EXISTS `entity_attribute_value_type`;

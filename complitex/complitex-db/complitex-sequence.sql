@@ -1,4 +1,4 @@
-update sequence set sequence_value = (select IFNULL(max(`id`), 0) from `string_value`)+1 where sequence_name = 'string_value';
+update sequence set sequence_value = (select IFNULL(max(`id`), 0) from `entity_string_value`)+1 where sequence_name = 'string_value';
 update sequence set sequence_value = (select IFNULL(max(`object_id`), 0) from `room`)+1 where sequence_name = 'room';
 update sequence set sequence_value = (select IFNULL(max(`id`), 0) from `room_string_value`)+1 where sequence_name = 'room_string_value';
 update sequence set sequence_value = (select IFNULL(max(`object_id`), 0) from `apartment`)+1 where sequence_name = 'apartment';

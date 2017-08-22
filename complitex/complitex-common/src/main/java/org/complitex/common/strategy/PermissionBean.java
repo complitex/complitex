@@ -21,7 +21,7 @@ import java.util.Set;
 @Stateless
 public class PermissionBean extends AbstractBean {
     private static final String MAPPING_NAMESPACE = PermissionBean.class.getName();
-    private static final String ENTITY_TABLE = "permission";
+    private static final String ENTITY = "permission";
 
     public static final Long VISIBLE_BY_ALL_PERMISSION_ID = 0L;
     
@@ -87,7 +87,7 @@ public class PermissionBean extends AbstractBean {
         }
 
         //Создаем новый ключ
-        Long permissionId = sequenceBean.nextId(ENTITY_TABLE);
+        Long permissionId = sequenceBean.nextId(ENTITY);
 
         sqlSession().insert(MAPPING_NAMESPACE + ".insertPermission",
                 new Permission(permissionId, table, entity, objectId));
@@ -140,7 +140,7 @@ public class PermissionBean extends AbstractBean {
         }
 
         //Создаем новый ключ
-        Long permissionId = sequenceBean.nextId(ENTITY_TABLE);
+        Long permissionId = sequenceBean.nextId(ENTITY);
 
         for (Subject subject : subjects) {
             sqlSession().insert(MAPPING_NAMESPACE + ".insertPermission",

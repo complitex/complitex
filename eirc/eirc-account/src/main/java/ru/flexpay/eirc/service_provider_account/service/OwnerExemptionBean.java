@@ -18,7 +18,7 @@ import java.util.List;
 public class OwnerExemptionBean extends AbstractBean {
 
     private static final String NS = OwnerExemptionBean.class.getPackage().getName() + ".OwnerExemptionBean";
-    public static final String ENTITY_TABLE = "owner_exemption";
+    public static final String ENTITY = "owner_exemption";
 
     @EJB
     private SequenceBean sequenceBean;
@@ -56,7 +56,7 @@ public class OwnerExemptionBean extends AbstractBean {
     }
 
     private void saveNew(OwnerExemption ownerExemption) {
-        ownerExemption.setId(sequenceBean.nextId(ENTITY_TABLE));
+        ownerExemption.setId(sequenceBean.nextId(ENTITY));
         sqlSession().insert(NS + ".insertOwnerExemption", ownerExemption);
     }
 

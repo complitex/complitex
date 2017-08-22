@@ -4,9 +4,9 @@
     <resultMap id="entityResultMap" type="org.complitex.common.entity.Entity">
         <id column="entity_id" property="id"/>
 
-        <result column="entity_table" property="table"/>
+        <result column="entity" property="table"/>
 
-        <collection property="names" ofType="StringValue" column="entity_name_id" select="findNames"/>
+        <collection property="names" ofType="StringValue" column="name_id" select="findNames"/>
 
         <collection property="entityAttributes" ofType="org.complitex.common.entity.EntityAttribute">
             <id column="entity_attribute_id" property="id"/>
@@ -28,8 +28,8 @@
     <select id="load" parameterType="map" resultMap="entityResultMap">
         SELECT
         e.`id` as entity_id,
-        e.`entity_table`,
-        e.`entity_name_id`,
+        e.`entity`,
+        e.`name_id`,
         eat.`id` as entity_attribute_id,
         eat.`mandatory`,
         eat.`start_date` as attr_start_date,
@@ -41,12 +41,12 @@
         FROM `entity` e
         JOIN `entity_attribute` eat ON eat.`entity_id` = e.`id`
         JOIN `entity_attribute_value_type` eavt ON eavt.`entity_attribute_id` = eat.`id`
-        WHERE e.`entity_table` = #{entity}
+        WHERE e.`entity` = #{entity}
     </select>
 
     <select id="findNames" parameterType="long"
             resultMap="org.complitex.common.strategy.DomainObjectStrategy.stringValueResultMap">
-        SELECT sc.* FROM `string_value` sc WHERE sc.`id` = #{value}
+        SELECT sc.* FROM `entity_string_value` sc WHERE sc.`id` = #{value}
     </select>
 
     <insert id="insertAttributeType" useGeneratedKeys="true" keyProperty="id"
@@ -59,7 +59,7 @@
     </insert>
 
     <select id="allEntities" resultType="string">
-        SELECT e.`entity_table` FROM `entity` e
+        SELECT e.`entity` FROM `entity` e
     </select>
 
     <update id="removeAttributeTypes" parameterType="map">

@@ -170,7 +170,7 @@
             </if>
         </foreach>
         <if test="parentId != null and parentEntity != null">
-            AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity_table` = #{parentEntity}) AND e.`parent_id` = #{parentId}
+            AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity` = #{parentEntity}) AND e.`parent_id` = #{parentId}
         </if>
     </sql>
 
@@ -224,7 +224,7 @@
     <!-- SearchComponent -->
 
     <select id="selectParentInSearchComponent" parameterType="map" resultType="map">
-        SELECT (SELECT ent.`entity_table` FROM `entity` ent WHERE ent.`id` = e.`parent_entity_id`) parentEntity,
+        SELECT (SELECT ent.`entity` FROM `entity` ent WHERE ent.`id` = e.`parent_entity_id`) parentEntity,
         e.`parent_id` parentId FROM `${entityName}` e WHERE e.`object_id` = #{objectId}
         <choose>
             <when test="startDate != null">
@@ -263,7 +263,7 @@
     <select id="selectChildrenPermissionInfo" parameterType="map" resultMap="permissionInfoResultMap">
         SELECT e.`object_id`, e.`permission_id` FROM `${entity}` e WHERE e.`status` IN (1, 0)
         AND e.`parent_id` = #{parentId} AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent
-          WHERE ent.`entity_table` = #{parentEntity})
+          WHERE ent.`entity` = #{parentEntity})
           ORDER BY e.`object_id`
         <include refid="sqlLimit"/>
     </select>
@@ -275,14 +275,14 @@
 
     <select id="selectChildrenActivityInfo" parameterType="map" resultType="long">
         SELECT e.`object_id` FROM `${entity}` e WHERE e.`parent_id` = #{parentId} AND
-        e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity_table` = #{parentEntity})
+        e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity` = #{parentEntity})
         ORDER BY e.`object_id`
         <include refid="sqlLimit"/>
     </select>
 
     <update id="updateChildrenActivity" parameterType="map">
         UPDATE `${entity}` e SET e.`status` = #{status} WHERE e.`parent_id` = #{parentId} AND
-        e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity_table` = #{parentEntity})
+        e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity` = #{parentEntity})
         AND
         <choose>
             <when test="enabled">
@@ -374,7 +374,7 @@
     </select>
 
     <insert id="insertDescriptionData" parameterType="org.complitex.common.entity.StringValue">
-        insert into `string_value`(`id`, `locale_id`, `value`) values (#{id}, #{localeId}, #{value})
+        insert into `entity_string_value`(`id`, `locale_id`, `value`) values (#{id}, #{localeId}, #{value})
     </insert>
 
     <delete id="deleteStringValue" parameterType="map">
