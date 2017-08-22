@@ -17,7 +17,7 @@ insert into organization_string_value(id, locale_id, value) values
 (16,@system_locale_id,'in\\service'),(17,@system_locale_id,'out\\service'),
 (18,@system_locale_id,'sprav'), (19,@system_locale_id,'out\\form2');
 
-insert into organization_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
+insert into organization_attribute(attribute_id, object_id, entity_attribute_id, value_id, value_type_id) values
 -- oszn:
 (1,1,900,3,900), (1,1,901,4,901), (1,1,902,3,902), (1,1,904,7,904), (2,1,904,8,904),
 -- Request files paths attributes:
@@ -46,7 +46,7 @@ insert into organization_string_value(id, locale_id, value) values
   (26,@system_locale_id,'1'),
   (27,@system_locale_id,'2');
 
-insert into organization_attribute(attribute_id, object_id, attribute_type_id, value_id, value_type_id) values
+insert into organization_attribute(attribute_id, object_id, entity_attribute_id, value_id, value_type_id) values
 (1,3,900,20,900), (1,3,901,21,901), (1,3,904,1,904), (1,3,926,26,926), (1,3,927,24,927),
 (1,4,900,22,900), (1,4,901,23,901), (1,4,903,3,903), (1,4,904,1,904), (1,4,926,27,926), (1,4,927,25,927);
 
@@ -602,9 +602,9 @@ insert into `last_name` (`id`, `name`) values('3','1');
 insert into `middle_name` (`id`, `name`) values('3','1');
 
 insert into `user_info` (`object_id`) values(3);
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) values('1','3','1000','3','1000');
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) values('1','3','1001','3','1001');
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) values('1','3','1002','3','1002');
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','3','1000','3','1000');
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','3','1001','3','1001');
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','3','1002','3','1002');
 
 insert into `user` (`id`, `login`, `password`, `user_info_object_id`) values('3','1','c4ca4238a0b923820dcc509a6f75849b','3');
 insert into `user_organization` (`id`, `user_id`, `organization_object_id`, `main`) values('1','3','3','1');
@@ -616,9 +616,9 @@ insert into `last_name` (`id`, `name`) values('4','2');
 insert into `middle_name` (`id`, `name`) values('4','2');
 
 insert into `user_info` (`object_id`) values(4);
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) values('1','4','1000','4','1000');
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) values('1','4','1001','4','1001');
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) values('1','4','1002','4','1002');
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','4','1000','4','1000');
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','4','1001','4','1001');
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','4','1002','4','1002');
 
 insert into `user` (`id`, `login`, `password`, `user_info_object_id`) values('4','2','c81e728d9d4c2f636f067f89cc14862c','4');
 insert into `user_organization` (`id`, `user_id`, `organization_object_id`, `main`) values('2','4','4','1');

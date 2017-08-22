@@ -53,13 +53,13 @@ CREATE TABLE entity_attribute (
 
 DROP TABLE IF EXISTS entity_attribute_value_type;
 
-CREATE TABLE `entity_value_type` (
+CREATE TABLE `entity_attribute_value_type` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор типа значения атрибута',
   `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута',
   `value_type` VARCHAR(100) NOT NULL COMMENT 'Тип значения атрибута',
   PRIMARY KEY  (`id`),
   KEY `key_entity_attribute_id` (`entity_attribute_id`),
-  CONSTRAINT `fk_entity_value_type__entity_attribute` FOREIGN KEY (`entity_attribute_id`) REFERENCES entity_attribute (`id`)
+  CONSTRAINT `fk_entity_attribute_value_type__entity_attribute` FOREIGN KEY (`entity_attribute_id`) REFERENCES entity_attribute (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Тип значения атрибута';
 
 /* Entities */
