@@ -18,9 +18,9 @@ ALTER TABLE `entity_attribute` DROP FOREIGN KEY `fk_attribute_type__string_value
 ALTER TABLE `entity_attribute` ADD CONSTRAINT `fk_entity_attribute__entity_string_value`
 FOREIGN KEY (name_id) REFERENCES entity_string_value (`id`);
 
--- entity_value_type
+-- entity_attribute_value_type
 
-ALTER TABLE `attribute_value_type` RENAME `entity_value_type`;
+ALTER TABLE `attribute_value_type` RENAME `entity_attribute_value_type`;
 ALTER TABLE entity_attribute_value_type CHANGE `attribute_type_id` `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута';
 ALTER TABLE entity_attribute_value_type CHANGE `attribute_value_type` `value_type` VARCHAR(100) NOT NULL COMMENT 'Тип значения атрибута';
 ALTER TABLE entity_attribute_value_type RENAME INDEX `key_attribute_type_id` TO `key_entity_attribute_id`;
