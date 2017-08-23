@@ -78,7 +78,7 @@ public class DocumentStrategy extends TemplateStrategy {
     protected void fillAttributes(String dataSource, DomainObject document) {
         List<Attribute> toAdd = newArrayList();
 
-        for (EntityAttribute entityAttribute : getEntity().getEntityAttributes()) {
+        for (EntityAttribute entityAttribute : getEntity().getAttributes()) {
             if (document.getAttributes(entityAttribute.getId()).isEmpty()
                     && (entityAttribute.getValueTypes().size() == 1)
                     && !entityAttribute.isObsolete()

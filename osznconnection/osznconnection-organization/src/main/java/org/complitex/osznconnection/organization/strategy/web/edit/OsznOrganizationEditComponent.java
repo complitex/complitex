@@ -56,7 +56,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 protected void populateItem(ListItem<Long> item) {
                     final long attributeTypeId = item.getModelObject();
                     final EntityAttribute entityAttribute =
-                            osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
+                            osznOrganizationStrategy.getEntity().getAttribute(attributeTypeId);
                     item.add(new Label("label",
                             DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
                     item.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
@@ -89,7 +89,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 protected void populateItem(ListItem<Long> item) {
                     final long attributeTypeId = item.getModelObject();
                     final EntityAttribute entityAttribute =
-                            osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
+                            osznOrganizationStrategy.getEntity().getAttribute(attributeTypeId);
                     item.add(new Label("label",
                             DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
                     item.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
@@ -124,7 +124,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setStringValues(StringValueUtil.newStringValues());
             }
             final EntityAttribute entityAttribute =
-                    osznOrganizationStrategy.getEntity().getAttributeType(OsznOrganizationStrategy.EDRPOU);
+                    osznOrganizationStrategy.getEntity().getAttribute(OsznOrganizationStrategy.EDRPOU);
             edrpouContainer.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
             edrpouContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
@@ -152,7 +152,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setStringValues(StringValueUtil.newStringValues());
             }
             final EntityAttribute entityAttribute =
-                    osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
+                    osznOrganizationStrategy.getEntity().getAttribute(attributeTypeId);
             rootDirectoryContainer.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
             rootDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
@@ -180,7 +180,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setStringValues(StringValueUtil.newStringValues());
             }
             final EntityAttribute entityAttribute =
-                    osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
+                    osznOrganizationStrategy.getEntity().getAttribute(attributeTypeId);
             rootExportDirectoryContainer.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
             rootExportDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
@@ -207,7 +207,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setAttributeId(1L);
                 attribute.setStringValues(StringValueUtil.newStringValues());
             }
-            EntityAttribute entityAttribute = osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
+            EntityAttribute entityAttribute = osznOrganizationStrategy.getEntity().getAttribute(attributeTypeId);
             referencesDirectoryContainer.add(new Label("label", DomainObjectComponentUtil.labelModel(
                     entityAttribute.getNames(), getLocale())));
             referencesDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));

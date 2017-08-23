@@ -325,12 +325,12 @@ public abstract class PersonEditPanel extends Panel {
         for (final long nameAttributeTypeId : NAME_ATTRIBUTE_IDS) {
             if (personStrategy.isNameAttributeModified(oldPerson, newPerson, nameAttributeTypeId)) {
                 modifiedAttributes.add(labelModel(personStrategy.getEntity().
-                        getAttributeType(nameAttributeTypeId).getNames(), getLocale()).getObject());
+                        getAttribute(nameAttributeTypeId).getNames(), getLocale()).getObject());
             }
         }
 
         if (newPerson.getReplacedDocument() != null) {
-            modifiedAttributes.add(labelModel(personStrategy.getEntity().getAttributeType(DOCUMENT).getNames(),
+            modifiedAttributes.add(labelModel(personStrategy.getEntity().getAttribute(DOCUMENT).getNames(),
                     getLocale()).getObject());
         }
 

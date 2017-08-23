@@ -218,7 +218,7 @@ public class LogBean extends AbstractBean {
 
         if (oldDomainObject == null) {
             for (Attribute na : newDomainObject.getAttributes()) {
-                EntityAttribute entityAttribute = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
+                EntityAttribute entityAttribute = strategy.getEntity().getAttribute(na.getAttributeTypeId());
                 String attributeValueType = entityAttribute.getAttributeValueType(na.getValueTypeId()).getValueType();
 
                 if (SimpleTypes.isSimpleType(attributeValueType)) {
@@ -241,7 +241,7 @@ public class LogBean extends AbstractBean {
             }
         } else {
             for (Attribute oa : oldDomainObject.getAttributes()) {
-                EntityAttribute oldEntityAttribute = strategy.getEntity().getAttributeType(oa.getAttributeTypeId());
+                EntityAttribute oldEntityAttribute = strategy.getEntity().getAttribute(oa.getAttributeTypeId());
                 String oldAttributeValueType = oldEntityAttribute.getAttributeValueType(oa.getValueTypeId()).getValueType();
 
                 boolean removed = true;
@@ -249,7 +249,7 @@ public class LogBean extends AbstractBean {
                     if (oa.getAttributeTypeId().equals(na.getAttributeTypeId()) && oa.getAttributeId().equals(na.getAttributeId())) {
                         //the same attribute_type and the same attribute_id
 
-                        EntityAttribute newEntityAttribute = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
+                        EntityAttribute newEntityAttribute = strategy.getEntity().getAttribute(na.getAttributeTypeId());
                         String newAttributeValueType = newEntityAttribute.getAttributeValueType(na.getValueTypeId()).getValueType();
 
                         if (SimpleTypes.isSimpleType(newAttributeValueType) && SimpleTypes.isSimpleType(oldAttributeValueType)) {
@@ -314,7 +314,7 @@ public class LogBean extends AbstractBean {
             }
 
             for (Attribute na : newDomainObject.getAttributes()) {
-                EntityAttribute newEntityAttribute = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
+                EntityAttribute newEntityAttribute = strategy.getEntity().getAttribute(na.getAttributeTypeId());
                 String newAttributeValueType = newEntityAttribute.getAttributeValueType(na.getValueTypeId()).getValueType();
 
                 boolean added = true;

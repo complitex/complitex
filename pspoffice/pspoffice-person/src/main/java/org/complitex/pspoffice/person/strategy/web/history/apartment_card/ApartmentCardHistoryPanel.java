@@ -111,7 +111,7 @@ final class ApartmentCardHistoryPanel extends Panel {
 
         //address
         WebMarkupContainer addressContainer = new WebMarkupContainer("addressContainer");
-        final EntityAttribute addressEntityAttribute = ENTITY.getAttributeType(ADDRESS);
+        final EntityAttribute addressEntityAttribute = ENTITY.getAttribute(ADDRESS);
         addressContainer.add(new Label("label", labelModel(addressEntityAttribute.getNames(), getLocale())));
         addressContainer.add(new WebMarkupContainer("required").setVisible(addressEntityAttribute.isMandatory()));
         final Component address = new CollapsibleSearchComponent("address",
@@ -123,7 +123,7 @@ final class ApartmentCardHistoryPanel extends Panel {
 
         //owner
         WebMarkupContainer ownerContainer = new WebMarkupContainer("ownerContainer");
-        final EntityAttribute ownerEntityAttribute = ENTITY.getAttributeType(OWNER);
+        final EntityAttribute ownerEntityAttribute = ENTITY.getAttribute(OWNER);
         IModel<String> ownerLabelModel = labelModel(ownerEntityAttribute.getNames(), getLocale());
         ownerContainer.add(new Label("label", ownerLabelModel));
         ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerEntityAttribute.isMandatory()));
@@ -133,7 +133,7 @@ final class ApartmentCardHistoryPanel extends Panel {
         add(ownerContainer);
 
         //form of ownership
-        final EntityAttribute formOfOwnershipEntityAttribute = apartmentCardStrategy.getEntity().getAttributeType(FORM_OF_OWNERSHIP);
+        final EntityAttribute formOfOwnershipEntityAttribute = apartmentCardStrategy.getEntity().getAttribute(FORM_OF_OWNERSHIP);
         WebMarkupContainer formOfOwnershipContainer = new WebMarkupContainer("formOfOwnershipContainer");
         IModel<String> labelModel = labelModel(formOfOwnershipEntityAttribute.getNames(), getLocale());
         formOfOwnershipContainer.add(new Label("label", labelModel));
@@ -221,7 +221,7 @@ final class ApartmentCardHistoryPanel extends Panel {
         add(registrations);
 
         //user attributes and housing rights:
-        List<Long> restAttributeTypeIds = newArrayList(transform(filter(ENTITY.getEntityAttributes(),
+        List<Long> restAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributes(),
                 new Predicate<EntityAttribute>() {
 
                     @Override
@@ -270,7 +270,7 @@ final class ApartmentCardHistoryPanel extends Panel {
 
     private void initAttributeInput(ApartmentCard card, ApartmentCardModification modification, MarkupContainer parent,
             long attributeTypeId) {
-        final EntityAttribute entityAttribute = ENTITY.getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute = ENTITY.getAttribute(attributeTypeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));

@@ -1,5 +1,7 @@
 package org.complitex.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
 /**
@@ -7,5 +9,6 @@ import java.io.Serializable;
  *         Date: 29.10.10 15:37
  */
 public interface ILongId extends Serializable {
+    @JsonIgnore
     public Long getId();
 }

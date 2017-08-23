@@ -1,31 +1,30 @@
 package org.complitex.common.entity;
 
-import org.complitex.common.util.StringValueUtil;
-
 import java.util.List;
 import java.util.Locale;
+
+import static org.complitex.common.util.StringValueUtil.getValue;
 
 public class Entity implements ILongId {
     private Long id;
     private String entity;
     private List<StringValue> names;
-    private List<EntityAttribute> entityAttributes;
+    private List<EntityAttribute> attributes;
 
-    public EntityAttribute getAttributeType(Long attributeTypeId) {
-        for (EntityAttribute entityAttribute : getEntityAttributes()) {
-            if (entityAttribute.getId().equals(attributeTypeId)) {
-                return entityAttribute;
-            }
-        }
-        throw new IllegalArgumentException("attributeTypeId = " + attributeTypeId + " not found");
+    public EntityAttribute getAttribute(Long entityAttributeId) {
+        return attributes.stream().filter(a -> entityAttributeId.equals(a.getId()))
+                .findFirst()
+                .orElseGet(() -> {
+                    throw new IllegalArgumentException("entityAttributeId = " + entityAttributeId + " not found");
+                });
     }
 
     public String getName(Locale locale){
-        return StringValueUtil.getValue(names, locale);
+        return getValue(names, locale);
     }
 
     public String getName(Long attributeTypeId, Locale locale){
-        return StringValueUtil.getValue(getAttributeType(attributeTypeId).getNames(), locale);
+        return getValue(getAttribute(attributeTypeId).getNames(), locale);
     }
 
     public String getEntity() {
@@ -44,12 +43,12 @@ public class Entity implements ILongId {
         this.id = id;
     }
 
-    public List<EntityAttribute> getEntityAttributes() {
-        return entityAttributes;
+    public List<EntityAttribute> getAttributes() {
+        return attributes;
     }
 
-    public void setAttributeType(List<EntityAttribute> entityAttributes) {
-        this.entityAttributes = entityAttributes;
+    public void setEntityAttribute(List<EntityAttribute> entityAttributes) {
+        this.attributes = entityAttributes;
     }
 
     public List<StringValue> getNames() {

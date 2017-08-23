@@ -88,7 +88,7 @@ public class EntityDescriptionPanel extends Panel {
             }
         }));
 
-        ListView<EntityAttribute> attributes = new AjaxRemovableListView<EntityAttribute>("attributes", description.getEntityAttributes()) {
+        ListView<EntityAttribute> attributes = new AjaxRemovableListView<EntityAttribute>("attributes", description.getAttributes()) {
 
             @Override
             protected void populateItem(ListItem<EntityAttribute> item) {
@@ -206,7 +206,7 @@ public class EntityDescriptionPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 EntityAttribute entityAttribute = entityBean.newAttributeType();
                 entityAttribute.getValueTypes().add(new ValueType());
-                description.getEntityAttributes().add(entityAttribute);
+                description.getAttributes().add(entityAttribute);
                 target.add(attributesContainer);
             }
         };

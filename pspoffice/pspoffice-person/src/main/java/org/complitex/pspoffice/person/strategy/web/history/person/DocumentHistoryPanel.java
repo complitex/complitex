@@ -48,7 +48,7 @@ final class DocumentHistoryPanel extends Panel {
             @Override
             protected void populateItem(ListItem<Attribute> item) {
                 Attribute attr = item.getModelObject();
-                final EntityAttribute entityAttribute = documentStrategy.getEntity().getAttributeType(attr.getAttributeTypeId());
+                final EntityAttribute entityAttribute = documentStrategy.getEntity().getAttribute(attr.getAttributeTypeId());
                 item.add(new Label("label", DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
                 WebMarkupContainer required = new WebMarkupContainer("required");
                 item.add(required);

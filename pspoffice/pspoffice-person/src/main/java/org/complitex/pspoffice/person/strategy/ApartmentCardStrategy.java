@@ -224,7 +224,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     @Override
     protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = newArrayList();
-        for (EntityAttribute entityAttribute : getEntity().getEntityAttributes()) {
+        for (EntityAttribute entityAttribute : getEntity().getAttributes()) {
             if (!entityAttribute.isObsolete()) {
                 if (object.getAttributes(entityAttribute.getId()).isEmpty()) {
                     if (!entityAttribute.getId().equals(REGISTRATIONS)

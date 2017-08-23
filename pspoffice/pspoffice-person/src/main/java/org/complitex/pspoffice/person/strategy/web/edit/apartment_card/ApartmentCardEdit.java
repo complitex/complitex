@@ -292,7 +292,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         //address
         WebMarkupContainer addressContainer = new WebMarkupContainer("addressContainer");
-        final EntityAttribute addressEntityAttribute = ENTITY.getAttributeType(ADDRESS);
+        final EntityAttribute addressEntityAttribute = ENTITY.getAttribute(ADDRESS);
         addressContainer.add(new Label("label", labelModel(addressEntityAttribute.getNames(), getLocale())));
         addressContainer.add(new WebMarkupContainer("required").setVisible(addressEntityAttribute.isMandatory()));
 
@@ -319,7 +319,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         //owner
         WebMarkupContainer ownerContainer = new WebMarkupContainer("ownerContainer");
-        final EntityAttribute ownerEntityAttribute = ENTITY.getAttributeType(OWNER);
+        final EntityAttribute ownerEntityAttribute = ENTITY.getAttribute(OWNER);
         IModel<String> ownerLabelModel = labelModel(ownerEntityAttribute.getNames(), getLocale());
         ownerContainer.add(new Label("label", ownerLabelModel));
         ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerEntityAttribute.isMandatory()));
@@ -568,7 +568,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         initSystemAttributeInput(form, "housingRights", HOUSING_RIGHTS);
 
         //user attributes:
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getEntityAttributes(),
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributes(),
                 new Predicate<EntityAttribute>() {
 
                     @Override
@@ -700,7 +700,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     }
 
     private void initAttributeInput(MarkupContainer parent, long attributeTypeId) {
-        final EntityAttribute entityAttribute = apartmentCardStrategy.getEntity().getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute = apartmentCardStrategy.getEntity().getAttribute(attributeTypeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
@@ -856,7 +856,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     }
 
     private Component initFormOfOwnership() {
-        final EntityAttribute formOfOwnershipEntityAttribute = apartmentCardStrategy.getEntity().getAttributeType(FORM_OF_OWNERSHIP);
+        final EntityAttribute formOfOwnershipEntityAttribute = apartmentCardStrategy.getEntity().getAttribute(FORM_OF_OWNERSHIP);
 
         WebMarkupContainer formOfOwnershipContainer = new WebMarkupContainer("formOfOwnershipContainer");
 
@@ -931,13 +931,13 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         Set<String> modifiedAttributes = newHashSet();
         if (!oldApartmentCard.getOwner().getObjectId().equals(newApartmentCard.getOwner().getObjectId())) {
-            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(OWNER).getNames(), getLocale()).getObject());
+            modifiedAttributes.add(labelModel(ENTITY.getAttribute(OWNER).getNames(), getLocale()).getObject());
         }
         if (!oldApartmentCard.getOwnershipForm().getObjectId().equals(newApartmentCard.getOwnershipForm().getObjectId())) {
-            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(FORM_OF_OWNERSHIP).getNames(), getLocale()).getObject());
+            modifiedAttributes.add(labelModel(ENTITY.getAttribute(FORM_OF_OWNERSHIP).getNames(), getLocale()).getObject());
         }
         if (!Strings.isEqual(oldApartmentCard.getHousingRights(), newApartmentCard.getHousingRights())) {
-            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(HOUSING_RIGHTS).getNames(), getLocale()).getObject());
+            modifiedAttributes.add(labelModel(ENTITY.getAttribute(HOUSING_RIGHTS).getNames(), getLocale()).getObject());
         }
 
         if (modifiedAttributes.isEmpty()) {

@@ -235,7 +235,7 @@ public class PersonInputPanel extends Panel {
     }
 
     private Component initUserAttributes() {
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getEntityAttributes(),
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getAttributes(),
                 new Predicate<EntityAttribute>() {
 
                     @Override
@@ -282,7 +282,7 @@ public class PersonInputPanel extends Panel {
     }
 
     private void initAttributeInput(MarkupContainer parent, long attributeTypeId, boolean showIfMissing) {
-        final EntityAttribute entityAttribute = personStrategy.getEntity().getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute = personStrategy.getEntity().getAttribute(attributeTypeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
@@ -418,7 +418,7 @@ public class PersonInputPanel extends Panel {
 
     private Component initChildren() {
         CollapsibleFieldset childrenFieldset = new CollapsibleFieldset("childrenFieldset",
-                labelModel(personStrategy.getEntity().getAttributeType(CHILDREN).getNames(), getLocale()));
+                labelModel(personStrategy.getEntity().getAttribute(CHILDREN).getNames(), getLocale()));
         add(childrenFieldset);
         final WebMarkupContainer childrenContainer = new WebMarkupContainer("childrenContainer");
         childrenContainer.setOutputMarkupId(true);
@@ -509,7 +509,7 @@ public class PersonInputPanel extends Panel {
 
         //document type
         final EntityAttribute documentTypeEntityAttribute =
-                documentStrategy.getEntity().getAttributeType(DocumentStrategy.DOCUMENT_TYPE);
+                documentStrategy.getEntity().getAttribute(DocumentStrategy.DOCUMENT_TYPE);
         //label
         IModel<String> labelModel = labelModel(documentTypeEntityAttribute.getNames(), getLocale());
         documentForm.add(new Label("label", labelModel));
@@ -774,7 +774,7 @@ public class PersonInputPanel extends Panel {
         militaryServiceRelationHead.setOutputMarkupPlaceholderTag(true);
         militaryServiceRelationContainer.add(militaryServiceRelationHead);
 
-        EntityAttribute militaryAttruibuteType = personStrategy.getEntity().getAttributeType(MILITARY_SERVICE_RELATION);
+        EntityAttribute militaryAttruibuteType = personStrategy.getEntity().getAttribute(MILITARY_SERVICE_RELATION);
         //label
         final IModel<String> labelModel = labelModel(militaryAttruibuteType.getNames(), getLocale());
         militaryServiceRelationHead.add(new Label("label", labelModel));

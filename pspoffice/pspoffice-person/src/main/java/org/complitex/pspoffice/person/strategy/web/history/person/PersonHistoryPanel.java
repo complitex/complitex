@@ -118,7 +118,7 @@ final class PersonHistoryPanel extends Panel {
         add(new Label("editedByUser", !Strings.isEmpty(editedByUserName) ? editedByUserName : "[N/A]"));
 
         //last name
-        final EntityAttribute lastNameEntityAttribute = ENTITY.getAttributeType(LAST_NAME);
+        final EntityAttribute lastNameEntityAttribute = ENTITY.getAttribute(LAST_NAME);
         add(new Label("lastNameLabel", labelModel(lastNameEntityAttribute.getNames(), getLocale())));
         WebMarkupContainer lastNameTable = new WebMarkupContainer("lastNameTable");
         lastNameTable.add(new ListView<Attribute>("lastNames", person.getAttributes(PersonStrategy.LAST_NAME)) {
@@ -132,7 +132,7 @@ final class PersonHistoryPanel extends Panel {
         add(lastNameTable);
 
         //first name
-        final EntityAttribute firstNameEntityAttribute = ENTITY.getAttributeType(FIRST_NAME);
+        final EntityAttribute firstNameEntityAttribute = ENTITY.getAttribute(FIRST_NAME);
         add(new Label("firstNameLabel", labelModel(firstNameEntityAttribute.getNames(), getLocale())));
         WebMarkupContainer firstNameTable = new WebMarkupContainer("firstNameTable");
         firstNameTable.add(new ListView<Attribute>("firstNames", person.getAttributes(PersonStrategy.FIRST_NAME)) {
@@ -146,7 +146,7 @@ final class PersonHistoryPanel extends Panel {
         add(firstNameTable);
 
         //middle name
-        final EntityAttribute middleNameEntityAttribute = ENTITY.getAttributeType(MIDDLE_NAME);
+        final EntityAttribute middleNameEntityAttribute = ENTITY.getAttribute(MIDDLE_NAME);
         add(new Label("middleNameLabel", labelModel(middleNameEntityAttribute.getNames(), getLocale())));
         WebMarkupContainer middleNameTable = new WebMarkupContainer("middleNameTable");
         middleNameTable.add(new ListView<Attribute>("middleNames", person.getAttributes(PersonStrategy.MIDDLE_NAME)) {
@@ -182,7 +182,7 @@ final class PersonHistoryPanel extends Panel {
         //military service relation
         {
             WebMarkupContainer militaryServiceRelationContainer = new WebMarkupContainer("militaryServiceRelationContainer");
-            final EntityAttribute militaryServiceRelationEntityAttribute = ENTITY.getAttributeType(MILITARY_SERVICE_RELATION);
+            final EntityAttribute militaryServiceRelationEntityAttribute = ENTITY.getAttribute(MILITARY_SERVICE_RELATION);
 
             //label
             militaryServiceRelationContainer.add(new Label("label",
@@ -235,7 +235,7 @@ final class PersonHistoryPanel extends Panel {
         add(deathDateContainer);
 
         //user attributes
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getEntityAttributes(),
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getAttributes(),
                 new Predicate<EntityAttribute>() {
 
                     @Override
@@ -296,7 +296,7 @@ final class PersonHistoryPanel extends Panel {
             WebMarkupContainer documentTypeContainer = new WebMarkupContainer("documentTypeContainer");
             documentContainer.add(documentTypeContainer);
             final EntityAttribute documentTypeEntityAttribute = documentStrategy.getEntity().
-                    getAttributeType(DocumentStrategy.DOCUMENT_TYPE);
+                    getAttribute(DocumentStrategy.DOCUMENT_TYPE);
             IModel<String> documentTyleLabelModel = labelModel(documentTypeEntityAttribute.getNames(), getLocale());
             documentTypeContainer.add(new Label("label", documentTyleLabelModel));
             documentTypeContainer.add(new WebMarkupContainer("required").setVisible(documentTypeEntityAttribute.isMandatory()));
@@ -327,7 +327,7 @@ final class PersonHistoryPanel extends Panel {
         ModificationType childRemovedModification = modification.isChildRemoved() ? ModificationType.REMOVE : ModificationType.NONE;
         childrenFieldset.add(new CssAttributeBehavior(childRemovedModification.getCssClass()));
         add(childrenFieldset);
-        childrenFieldset.add(new Label("childrenLabel", labelModel(ENTITY.getAttributeType(CHILDREN).getNames(), getLocale())));
+        childrenFieldset.add(new Label("childrenLabel", labelModel(ENTITY.getAttribute(CHILDREN).getNames(), getLocale())));
         childrenFieldset.add(new ListView<Person>("children", person.getChildren()) {
 
             @Override
@@ -355,7 +355,7 @@ final class PersonHistoryPanel extends Panel {
 
     private void initAttributeInput(Person person, PersonModification modification, MarkupContainer parent,
             long attributeTypeId, boolean showIfMissing) {
-        final EntityAttribute entityAttribute = ENTITY.getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute = ENTITY.getAttribute(attributeTypeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));

@@ -117,7 +117,7 @@ final class RegistrationHistoryPanel extends Panel {
 
         //person
         WebMarkupContainer personContainer = new WebMarkupContainer("personContainer");
-        final EntityAttribute personEntityAttribute = ENTITY.getAttributeType(PERSON);
+        final EntityAttribute personEntityAttribute = ENTITY.getAttribute(PERSON);
         personContainer.add(new WebMarkupContainer("required").setVisible(personEntityAttribute.isMandatory()));
         Component person = new Label("person", personStrategy.displayDomainObject(registration.getPerson(), getLocale()));
         person.add(new CssAttributeBehavior(modification.getAttributeModificationType(PERSON).getCssClass()));
@@ -129,7 +129,7 @@ final class RegistrationHistoryPanel extends Panel {
 
         //registration type
         {
-            final EntityAttribute registrationTypeEntityAttribute = ENTITY.getAttributeType(REGISTRATION_TYPE);
+            final EntityAttribute registrationTypeEntityAttribute = ENTITY.getAttribute(REGISTRATION_TYPE);
             WebMarkupContainer registrationTypeContainer = new WebMarkupContainer("registrationTypeContainer");
             registrationTypeContainer.add(new Label("label", labelModel(registrationTypeEntityAttribute.getNames(), getLocale())));
             registrationTypeContainer.add(new WebMarkupContainer("required").setVisible(registrationTypeEntityAttribute.isMandatory()));
@@ -158,7 +158,7 @@ final class RegistrationHistoryPanel extends Panel {
         }
 
         //owner relationship
-        final EntityAttribute ownerRelationshipEntityAttribute = ENTITY.getAttributeType(OWNER_RELATIONSHIP);
+        final EntityAttribute ownerRelationshipEntityAttribute = ENTITY.getAttribute(OWNER_RELATIONSHIP);
         WebMarkupContainer ownerRelationshipContainer = new WebMarkupContainer("ownerRelationshipContainer");
         final DomainObject ownerRelationshipObject = registration.getOwnerRelationship();
         ownerRelationshipContainer.add(new Label("label", labelModel(ownerRelationshipEntityAttribute.getNames(), getLocale())));
@@ -206,7 +206,7 @@ final class RegistrationHistoryPanel extends Panel {
         initSystemAttributeInput(registration, modification, departureAddressContainer, "departureReason", DEPARTURE_REASON, true);
 
         //user attributes
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getEntityAttributes(),
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributes(),
                 new Predicate<EntityAttribute>() {
 
                     @Override
@@ -279,7 +279,7 @@ final class RegistrationHistoryPanel extends Panel {
 
     private void initAttributeInput(Registration registration, RegistrationModification modification,
             MarkupContainer parent, long attributeTypeId, boolean showIfMissing) {
-        final EntityAttribute entityAttribute = ENTITY.getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute = ENTITY.getAttribute(attributeTypeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));

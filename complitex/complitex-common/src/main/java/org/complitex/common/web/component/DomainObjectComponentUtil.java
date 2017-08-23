@@ -44,7 +44,7 @@ public class DomainObjectComponentUtil {
         IStrategy strategy = strategyFactory.getStrategy(strategyName, entityName);
 
         Entity entity = strategy.getEntity();
-        EntityAttribute entityAttribute = entity.getAttributeType(attribute.getAttributeTypeId());
+        EntityAttribute entityAttribute = entity.getAttribute(attribute.getAttributeTypeId());
         IModel<String> labelModel = labelModel(entityAttribute.getNames(), locale);
         String valueType = entityAttribute.getValueTypes().get(0).getValueType();
         SimpleTypes type = SimpleTypes.valueOf(valueType.toUpperCase());

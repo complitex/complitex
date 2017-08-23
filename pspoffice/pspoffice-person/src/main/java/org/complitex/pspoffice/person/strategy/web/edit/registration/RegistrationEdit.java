@@ -172,7 +172,7 @@ public class RegistrationEdit extends FormTemplatePage {
 
         //person
         WebMarkupContainer personContainer = new WebMarkupContainer("personContainer");
-        final EntityAttribute personEntityAttribute = ENTITY.getAttributeType(PERSON);
+        final EntityAttribute personEntityAttribute = ENTITY.getAttribute(PERSON);
         personContainer.add(new WebMarkupContainer("required").setVisible(personEntityAttribute.isMandatory()));
 
         PersonPicker person = new PersonPicker("person", PersonAgeType.ANY, new PropertyModel<Person>(newRegistration, "person"),
@@ -229,7 +229,7 @@ public class RegistrationEdit extends FormTemplatePage {
         form.add(initOwnerRelationship());
 
         //user attributes:
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getEntityAttributes(),
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributes(),
                 new Predicate<EntityAttribute>() {
 
                     @Override
@@ -344,7 +344,7 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private Component initOwnerRelationship() {
-        final EntityAttribute ownerRelationshipEntityAttribute = registrationStrategy.getEntity().getAttributeType(OWNER_RELATIONSHIP);
+        final EntityAttribute ownerRelationshipEntityAttribute = registrationStrategy.getEntity().getAttribute(OWNER_RELATIONSHIP);
 
         WebMarkupContainer ownerRelationshipContainer = new WebMarkupContainer("ownerRelationshipContainer");
 
@@ -397,7 +397,7 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private Component initRegistrationType() {
-        final EntityAttribute registrationTypeEntityAttribute = registrationStrategy.getEntity().getAttributeType(REGISTRATION_TYPE);
+        final EntityAttribute registrationTypeEntityAttribute = registrationStrategy.getEntity().getAttribute(REGISTRATION_TYPE);
 
         WebMarkupContainer registrationTypeContainer = new WebMarkupContainer("registrationTypeContainer");
 
@@ -453,7 +453,7 @@ public class RegistrationEdit extends FormTemplatePage {
     }
 
     private void initAttributeInput(MarkupContainer parent, long attributeTypeId, boolean showIfMissing) {
-        final EntityAttribute entityAttribute = registrationStrategy.getEntity().getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute = registrationStrategy.getEntity().getAttribute(attributeTypeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
@@ -539,7 +539,7 @@ public class RegistrationEdit extends FormTemplatePage {
         Set<String> modifiedAttributes = newHashSet();
         //registration type
         if (!oldRegistration.getRegistrationType().getObjectId().equals(newRegistration.getRegistrationType().getObjectId())) {
-            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(REGISTRATION_TYPE).getNames(), getLocale()).getObject());
+            modifiedAttributes.add(labelModel(ENTITY.getAttribute(REGISTRATION_TYPE).getNames(), getLocale()).getObject());
         }
         //owner relationship
         final Long oldOwnerRelationshipId = oldRegistration.getOwnerRelationship() != null
@@ -547,7 +547,7 @@ public class RegistrationEdit extends FormTemplatePage {
         final Long newOwnerRelationshipId = newRegistration.getOwnerRelationship() != null
                 ? newRegistration.getOwnerRelationship().getObjectId() : null;
         if (!Numbers.isEqual(oldOwnerRelationshipId, newOwnerRelationshipId)) {
-            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(OWNER_RELATIONSHIP).getNames(), getLocale()).getObject());
+            modifiedAttributes.add(labelModel(ENTITY.getAttribute(OWNER_RELATIONSHIP).getNames(), getLocale()).getObject());
         }
 
         if (modifiedAttributes.isEmpty()) {

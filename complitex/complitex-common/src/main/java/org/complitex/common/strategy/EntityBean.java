@@ -36,7 +36,7 @@ public class EntityBean extends AbstractBean {
             Entity entity = loadFromDb(null, entityName);
             entityMap.put(entityName, entity);
 
-            for (EntityAttribute entityAttribute : entity.getEntityAttributes()){
+            for (EntityAttribute entityAttribute : entity.getAttributes()){
                 attributeTypeMap.put(entityAttribute.getId(), entityAttribute);
             }
         }
@@ -74,7 +74,7 @@ public class EntityBean extends AbstractBean {
     }
 
     public String getAttributeLabel(String entityName, long attributeTypeId, Locale locale) {
-        return getEntity(entityName).getAttributeType(attributeTypeId).getAttributeName(locale);
+        return getEntity(entityName).getAttribute(attributeTypeId).getAttributeName(locale);
     }
 
     public EntityAttribute newAttributeType() {
@@ -94,9 +94,9 @@ public class EntityBean extends AbstractBean {
         //attributes
         Set<Long> toDeleteAttributeIds = Sets.newHashSet();
 
-        for (EntityAttribute oldEntityAttribute : oldEntity.getEntityAttributes()) {
+        for (EntityAttribute oldEntityAttribute : oldEntity.getAttributes()) {
             boolean removed = true;
-            for (EntityAttribute newEntityAttribute : newEntity.getEntityAttributes()) {
+            for (EntityAttribute newEntityAttribute : newEntity.getAttributes()) {
                 if (oldEntityAttribute.getId().equals(newEntityAttribute.getId())) {
                     removed = false;
                     break;
@@ -109,7 +109,7 @@ public class EntityBean extends AbstractBean {
         }
         removeAttributeTypes(oldEntity.getEntity(), toDeleteAttributeIds, updateDate);
 
-        for (EntityAttribute entityAttribute : newEntity.getEntityAttributes()) {
+        for (EntityAttribute entityAttribute : newEntity.getAttributes()) {
             if (entityAttribute.getId() == null) {
                 changed = true;
                 insertAttributeType(entityAttribute, newEntity.getId(), updateDate);
