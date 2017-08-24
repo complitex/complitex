@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static org.complitex.common.util.Locales.getSystemLocaleId;
+
 public class Attribute implements Serializable {
     private Long pkId;
     private String entityName;
@@ -45,7 +47,7 @@ public class Attribute implements Serializable {
     }
 
     public String getStringValue(){
-        StringValue stringValue = getStringValue(Locales.getSystemLocaleId());
+        StringValue stringValue = getStringValue(getSystemLocaleId());
 
         return stringValue != null ? stringValue.getValue() : null;
     }
@@ -62,7 +64,7 @@ public class Attribute implements Serializable {
         }
 
         stringValues.stream()
-                .filter(s -> s.getLocaleId().equals(localeId) || (s.isSystemLocale() && s.getValue() == null))
+                .filter(s -> s.getLocaleId().equals(localeId) || (getSystemLocaleId().equals(s.getLocaleId()) && s.getValue() == null))
                 .forEach(s -> s.setValue(value));
     }
 

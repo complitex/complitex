@@ -65,7 +65,7 @@ public class StringValueBean extends AbstractBean {
         if (Strings.isEmpty(entityName)) {
             sqlSession().insert(NS + ".insertDescriptionData", stringValue);
         } else {
-            stringValue.setEntityName(entityName);
+            stringValue.setEntity(entityName);
 
             sqlSession().insert(NS + ".insertStringValue", stringValue);
         }

@@ -3,6 +3,7 @@ package org.complitex.common.entity;
 import java.io.Serializable;
 
 public class ValueType implements Serializable {
+    //todo add value type enum
 
     private Long id;
 

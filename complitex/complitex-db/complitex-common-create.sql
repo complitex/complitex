@@ -34,9 +34,9 @@ CREATE TABLE `entity` (
   CONSTRAINT `fk_entity__entity_string_value` FOREIGN KEY (name_id) REFERENCES entity_string_value (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Сущность';
 
-DROP TABLE IF EXISTS entity_attribute;
+DROP TABLE IF EXISTS `entity_attribute`;
 
-CREATE TABLE entity_attribute (
+CREATE TABLE `entity_attribute` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор типа атрибута',
   `entity_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор сущности',
   `mandatory` TINYINT(1) default 0 NOT NULL COMMENT 'Является ли атрибут обязательным',
@@ -50,6 +50,7 @@ CREATE TABLE entity_attribute (
   CONSTRAINT `fk_attribute_type__entity` FOREIGN KEY (`entity_id`) REFERENCES `entity` (`id`),
   CONSTRAINT `fk_entity_attribute__entity_string_value` FOREIGN KEY (`name_id`) REFERENCES entity_string_value (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Тип атрибута сущности';
+
 
 DROP TABLE IF EXISTS entity_attribute_value_type;
 
