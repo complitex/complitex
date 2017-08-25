@@ -44,6 +44,8 @@ CREATE TABLE `entity_attribute` (
   `start_date` TIMESTAMP NOT NULL default CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия типа атрибута',
   `end_date` TIMESTAMP NULL default NULL COMMENT 'Дата окончания периода действия типа атрибута',
   `system` TINYINT(1) default 0 NOT NULL COMMENT 'Является ли тип атрибута системным',
+  `value_type_id` BIGINT(20) COMMENT  'Тип значения атрибута',
+  `reference_id` BIGINT(20) COMMENT  'Внешний ключ',
   PRIMARY KEY (`id`),
   KEY `key_entity_id` (`entity_id`),
   KEY `key_name_id` (`name_id`),
@@ -55,7 +57,7 @@ CREATE TABLE `entity_attribute` (
 DROP TABLE IF EXISTS entity_attribute_value_type;
 
 CREATE TABLE `entity_attribute_value_type` (
-  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор типа значения атрибута',
+  `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута',
   `entity_attribute_id` BIGINT(20) COMMENT 'Идентификатор типа атрибута',
   `value_type` VARCHAR(100) NOT NULL COMMENT 'Тип значения атрибута',
   PRIMARY KEY  (`id`)

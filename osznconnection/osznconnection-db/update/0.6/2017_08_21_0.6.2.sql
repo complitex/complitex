@@ -209,5 +209,12 @@ INSERT INTO entity_attribute_value_type (id, value_type) VALUE (5, 'date');
 
 INSERT INTO entity_attribute_value_type (id, value_type) VALUE (10, 'entity');
 
+INSERT INTO entity_attribute_value_type (id, value_type) VALUE (20, 'building_code');
+INSERT INTO entity_attribute_value_type (id, value_type) VALUE (21, 'last_name');
+INSERT INTO entity_attribute_value_type (id, value_type) VALUE (22, 'first_name');
+INSERT INTO entity_attribute_value_type (id, value_type) VALUE (23, 'middle_name');
+
+
+
 
 INSERT INTO `update` (`version`) VALUE ('20170821_0.6.2');

@@ -17,16 +17,16 @@ insert into organization_string_value(id, locale_id, value) values
 (16,@system_locale_id,'in\\service'),(17,@system_locale_id,'out\\service'),
 (18,@system_locale_id,'sprav'), (19,@system_locale_id,'out\\form2');
 
-insert into organization_attribute(attribute_id, object_id, entity_attribute_id, value_id, value_type_id) values
+insert into organization_attribute(attribute_id, object_id, entity_attribute_id, value_id) values
 -- oszn:
-(1,1,900,3,900), (1,1,901,4,901), (1,1,902,3,902), (1,1,904,7,904), (2,1,904,8,904),
+(1,1,900,3), (1,1,901,4), (1,1,902,3), (1,1,904,7), (2,1,904,8),
 -- Request files paths attributes:
-(1,1,915,8,915),(1,1,916,9,916),(1,1,917,10,917),(1,1,918,11,918),(1,1,919,12,919),(1,1,920,13,920),
-(1,1,921,14,921),(1,1,922,15,922),
-(1,1,923,16,923),(1,1,924,17,924),
-(1,1,925,18,925), (1,1,928,19,928),
+(1,1,915,8),(1,1,916,9),(1,1,917,10),(1,1,918,11),(1,1,919,12),(1,1,920,13),
+(1,1,921,14),(1,1,922,15),
+(1,1,923,16),(1,1,924,17),
+(1,1,925,18), (1,1,928,19),
 -- calculation center:
-(1,2,900,5,900), (1,2,901,6,901), (1,2,904,2,904), (1,2,913,7,913);
+(1,2,900,5), (1,2,901,6), (1,2,904,2), (1,2,913,7);
 
 -- User organizations
 # insert into service_association (pk_id, service_provider_type_id, calculation_center_id) values (1,1,2),
@@ -46,9 +46,9 @@ insert into organization_string_value(id, locale_id, value) values
   (26,@system_locale_id,'1'),
   (27,@system_locale_id,'2');
 
-insert into organization_attribute(attribute_id, object_id, entity_attribute_id, value_id, value_type_id) values
-(1,3,900,20,900), (1,3,901,21,901), (1,3,904,1,904), (1,3,926,26,926), (1,3,927,24,927),
-(1,4,900,22,900), (1,4,901,23,901), (1,4,903,3,903), (1,4,904,1,904), (1,4,926,27,926), (1,4,927,25,927);
+insert into organization_attribute(attribute_id, object_id, entity_attribute_id, value_id) values
+(1,3,900,20), (1,3,901,21), (1,3,904,1), (1,3,926,26), (1,3,927,24), (1,4,900,22), (1,4,901,23), (1,4,903,3),
+  (1,4,904,1), (1,4,926,27), (1,4,927,25);
 
 -- Request File Descriptions --
 INSERT INTO `request_file_description` VALUES (1,'ACTUAL_PAYMENT','dd.MM.yyyy');
@@ -602,9 +602,9 @@ insert into `last_name` (`id`, `name`) values('3','1');
 insert into `middle_name` (`id`, `name`) values('3','1');
 
 insert into `user_info` (`object_id`) values(3);
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','3','1000','3','1000');
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','3','1001','3','1001');
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','3','1002','3','1002');
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`) values(1,3,1000,3);
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`) values(1,3,1001,3);
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`) values(1,3,1002,3);
 
 insert into `user` (`id`, `login`, `password`, `user_info_object_id`) values('3','1','c4ca4238a0b923820dcc509a6f75849b','3');
 insert into `user_organization` (`id`, `user_id`, `organization_object_id`, `main`) values('1','3','3','1');
@@ -616,9 +616,9 @@ insert into `last_name` (`id`, `name`) values('4','2');
 insert into `middle_name` (`id`, `name`) values('4','2');
 
 insert into `user_info` (`object_id`) values(4);
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','4','1000','4','1000');
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','4','1001','4','1001');
-insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) values('1','4','1002','4','1002');
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`) values(1,4,1000,4);
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`) values(1,4,1001,4);
+insert into `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`) values(1,4,1002,4);
 
 insert into `user` (`id`, `login`, `password`, `user_info_object_id`) values('4','2','c81e728d9d4c2f636f067f89cc14862c','4');
 insert into `user_organization` (`id`, `user_id`, `organization_object_id`, `main`) values('2','4','4','1');
