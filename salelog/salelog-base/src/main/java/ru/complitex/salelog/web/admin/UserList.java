@@ -207,7 +207,7 @@ public class UserList extends ScrollListPage {
         filterForm.add(dataView);
 
         filterForm.add(new ArrowOrderByBorder("header.login", "login", dataProvider, dataView, content));
-        filterForm.add(new AttributeHeadersPanel("header.user_info", entityBean.getEntity(userInfoStrategy.getEntityName()).getEntityAttributes(),
+        filterForm.add(new AttributeHeadersPanel("header.user_info", entityBean.getEntity(userInfoStrategy.getEntityName()).getAttributes(),
                 dataProvider, dataView, content));
 
         content.add(new PagingNavigator("navigator", dataView, getPreferencesPage(), content));

@@ -82,7 +82,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
         Attribute attribute = moduleInstance.getAttribute(ModuleInstanceStrategy.ORGANIZATION);
 
         final EntityAttribute entityAttribute =
-                moduleInstanceStrategy.getEntity().getAttributeType(ModuleInstanceStrategy.ORGANIZATION);
+                moduleInstanceStrategy.getEntity().getAttribute(ModuleInstanceStrategy.ORGANIZATION);
 
         OrganizationIdPicker picker = new OrganizationIdPicker("organization",
                 new LongModel(new AttributeStringModel(attribute)),
@@ -135,7 +135,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
         );
 
         final EntityAttribute entityAttribute =
-                moduleInstanceStrategy.getEntity().getAttributeType(ModuleInstanceStrategy.MODULE_INSTANCE_TYPE);
+                moduleInstanceStrategy.getEntity().getAttribute(ModuleInstanceStrategy.MODULE_INSTANCE_TYPE);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
         container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
@@ -156,7 +156,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
         }
         final AttributeStringModel attributeModel = new AttributeStringModel(attribute);
         final EntityAttribute entityAttribute =
-                moduleInstanceStrategy.getEntity().getAttributeType(attributeTypeId);
+                moduleInstanceStrategy.getEntity().getAttribute(attributeTypeId);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
         container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));

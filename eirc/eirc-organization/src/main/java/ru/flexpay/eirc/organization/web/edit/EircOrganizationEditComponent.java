@@ -90,7 +90,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
             attribute.setStringValues(StringValueUtil.newStringValues());
         }
         final EntityAttribute entityAttribute =
-                organizationStrategy.getEntity().getAttributeType(attributeTypeId);
+                organizationStrategy.getEntity().getAttribute(attributeTypeId);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
         container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
@@ -117,7 +117,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
             attribute.setStringValues(StringValueUtil.newStringValues());
         }
         final EntityAttribute entityAttribute =
-                organizationStrategy.getEntity().getAttributeType(attributeTypeId);
+                organizationStrategy.getEntity().getAttribute(attributeTypeId);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
         container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));

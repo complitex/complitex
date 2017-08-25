@@ -60,7 +60,7 @@ public class KeOrganizationEditComponent extends OrganizationEditComponent {
                 attribute.setStringValues(StringValueUtil.newStringValues());
             }
             final EntityAttribute entityAttribute =
-                    organizationStrategy.getEntity().getAttributeType(attributeTypeId);
+                    organizationStrategy.getEntity().getAttribute(attributeTypeId);
             readyCloseOmSection.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
             readyCloseOmSection.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));

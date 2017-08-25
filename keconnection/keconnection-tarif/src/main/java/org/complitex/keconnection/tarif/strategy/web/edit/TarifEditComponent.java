@@ -38,7 +38,7 @@ public final class TarifEditComponent extends AbstractComplexAttributesPanel {
         final boolean enabled = !isDisabled() && DomainObjectAccessUtil.canEdit(null, "tarif", tarif);
 
         final EntityAttribute tarifGroupEntityAttribute =
-                tarifStrategy.getEntity().getAttributeType(TarifStrategy.TARIF_GROUP);
+                tarifStrategy.getEntity().getAttribute(TarifStrategy.TARIF_GROUP);
         final IModel<String> tarifGroupLabelModel =
                 DomainObjectComponentUtil.labelModel(tarifGroupEntityAttribute.getNames(), getLocale());
         add(new Label("tarifGroupLabel", tarifGroupLabelModel));
