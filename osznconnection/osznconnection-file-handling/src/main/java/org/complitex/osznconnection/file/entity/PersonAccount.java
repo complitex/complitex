@@ -41,7 +41,7 @@ public class PersonAccount implements Serializable {
 
     public PersonAccount(AbstractAccountRequest request, String puAccountNumber, Long calculationCenterId,
                          boolean addressNames) {
-        this(request, puAccountNumber, calculationCenterId, addressNames, false);
+        this(request, puAccountNumber, calculationCenterId, addressNames, true);
     }
 
     public PersonAccount(AbstractAccountRequest request, String puAccountNumber, Long calculationCenterId,
