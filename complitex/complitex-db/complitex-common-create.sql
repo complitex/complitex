@@ -54,11 +54,10 @@ CREATE TABLE `entity_attribute` (
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Тип атрибута сущности';
 
 
-DROP TABLE IF EXISTS entity_attribute_value_type;
+DROP TABLE IF EXISTS entity_value_type;
 
-CREATE TABLE `entity_attribute_value_type` (
+CREATE TABLE `entity_value_type` (
   `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута',
-  `entity_attribute_id` BIGINT(20) COMMENT 'Идентификатор типа атрибута',
   `value_type` VARCHAR(100) NOT NULL COMMENT 'Тип значения атрибута',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Тип значения атрибута';

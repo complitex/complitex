@@ -11,11 +11,11 @@ ALTER TABLE `entity` ADD CONSTRAINT `fk_entity__entity_string_value` FOREIGN KEY
 
 -- entity_attribute_value_type
 
-ALTER TABLE `attribute_value_type` RENAME `entity_attribute_value_type`;
-ALTER TABLE entity_attribute_value_type CHANGE `attribute_type_id` `entity_attribute_id` BIGINT(20) COMMENT 'Идентификатор типа атрибута';
-ALTER TABLE entity_attribute_value_type CHANGE `attribute_value_type` `value_type` VARCHAR(100) NOT NULL COMMENT 'Тип значения атрибута';
-ALTER TABLE entity_attribute_value_type RENAME INDEX `key_attribute_type_id` TO `key_entity_attribute_id`;
-ALTER TABLE entity_attribute_value_type DROP FOREIGN KEY `fk_attribute_value_type`;
+ALTER TABLE `attribute_value_type` RENAME `entity_value_type`;
+ALTER TABLE entity_value_type CHANGE `attribute_type_id` `entity_attribute_id` BIGINT(20) COMMENT 'Идентификатор типа атрибута';
+ALTER TABLE entity_value_type CHANGE `attribute_value_type` `value_type` VARCHAR(100) NOT NULL COMMENT 'Тип значения атрибута';
+ALTER TABLE entity_value_type RENAME INDEX `key_attribute_type_id` TO `key_entity_attribute_id`;
+ALTER TABLE entity_value_type DROP FOREIGN KEY `fk_attribute_value_type`;
 
 -- entity_attribute
 
@@ -24,8 +24,10 @@ ALTER TABLE `entity_attribute` CHANGE `attribute_type_name_id` `name_id` BIGINT(
 ALTER TABLE `entity_attribute` RENAME INDEX `key_attribute_type_name_id` TO `key_name_id`;
 ALTER TABLE `entity_attribute` DROP FOREIGN KEY `fk_attribute_type__string_value`;
 ALTER TABLE `entity_attribute` ADD CONSTRAINT `fk_entity_attribute__entity_string_value`
-FOREIGN KEY (name_id) REFERENCES entity_string_value (`id`);
+  FOREIGN KEY (name_id) REFERENCES entity_string_value (`id`);
 ALTER TABLE entity_attribute ADD COLUMN value_type_id BIGINT(20) COMMENT  'Тип значения атрибута';
+ALTER TABLE entity_attribute ADD CONSTRAINT `fk_entity_attribute__entity_value_type`
+  FOREIGN KEY (value_type_id) REFERENCES entity_value_type (`id`);
 ALTER TABLE entity_attribute ADD COLUMN reference_id BIGINT(20) COMMENT  'Внешний ключ';
 
 -- organization_type_attribute
@@ -217,20 +219,21 @@ ALTER TABLE privilege_attribute DROP FOREIGN KEY  fk_privilege_attribute__attrib
 ALTER TABLE privilege_attribute DROP COLUMN value_type_id;
 
 -- value type
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (0, 'string_value');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (1, 'string');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (2, 'boolean');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (3, 'decimal');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (4, 'integer');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (5, 'date');
+DELETE FROM entity_value_type where id >= 100;
 
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (10, 'entity');
+INSERT INTO entity_value_type (id, value_type) VALUE (0, 'string_value');
+INSERT INTO entity_value_type (id, value_type) VALUE (1, 'string');
+INSERT INTO entity_value_type (id, value_type) VALUE (2, 'boolean');
+INSERT INTO entity_value_type (id, value_type) VALUE (3, 'decimal');
+INSERT INTO entity_value_type (id, value_type) VALUE (4, 'integer');
+INSERT INTO entity_value_type (id, value_type) VALUE (5, 'date');
 
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (20, 'building_code');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (21, 'last_name');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (22, 'first_name');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (23, 'middle_name');
+INSERT INTO entity_value_type (id, value_type) VALUE (10, 'entity');
 
+INSERT INTO entity_value_type (id, value_type) VALUE (20, 'building_code');
+INSERT INTO entity_value_type (id, value_type) VALUE (21, 'last_name');
+INSERT INTO entity_value_type (id, value_type) VALUE (22, 'first_name');
+INSERT INTO entity_value_type (id, value_type) VALUE (23, 'middle_name');
 
 UPDATE entity_attribute SET value_type_id = 0 WHERE id = 100;
 UPDATE entity_attribute SET value_type_id = 0 WHERE id = 200;
