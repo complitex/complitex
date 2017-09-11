@@ -1,5 +1,4 @@
 -- entity
-
 ALTER TABLE `string_value` RENAME `entity_string_value`;
 
 ALTER TABLE `entity` CHANGE `entity_table` `entity` VARCHAR(100) NOT NULL COMMENT 'Название сущности';
@@ -10,12 +9,9 @@ ALTER TABLE `entity` DROP FOREIGN KEY `fk_entity__string_value`;
 ALTER TABLE `entity` ADD CONSTRAINT `fk_entity__entity_string_value` FOREIGN KEY (name_id) REFERENCES entity_string_value (`id`);
 
 -- entity_attribute_value_type
-
 ALTER TABLE `attribute_value_type` RENAME `entity_value_type`;
-ALTER TABLE entity_value_type CHANGE `attribute_type_id` `entity_attribute_id` BIGINT(20) COMMENT 'Идентификатор типа атрибута';
-ALTER TABLE entity_value_type CHANGE `attribute_value_type` `value_type` VARCHAR(100) NOT NULL COMMENT 'Тип значения атрибута';
-ALTER TABLE entity_value_type RENAME INDEX `key_attribute_type_id` TO `key_entity_attribute_id`;
 ALTER TABLE entity_value_type DROP FOREIGN KEY `fk_attribute_value_type`;
+ALTER TABLE entity_value_type CHANGE `attribute_value_type` `value_type` VARCHAR(100) NOT NULL COMMENT 'Тип значения атрибута';
 
 -- entity_attribute
 
@@ -219,7 +215,9 @@ ALTER TABLE privilege_attribute DROP FOREIGN KEY  fk_privilege_attribute__attrib
 ALTER TABLE privilege_attribute DROP COLUMN value_type_id;
 
 -- value type
-DELETE FROM entity_value_type where id >= 100;
+ALTER TABLE entity_value_type DROP COLUMN `attribute_type_id`;
+SET FOREIGN_KEY_CHECKS=0;
+ALTER TABLE entity_value_type MODIFY id BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения атрибута';
 
 INSERT INTO entity_value_type (id, value_type) VALUE (0, 'string_value');
 INSERT INTO entity_value_type (id, value_type) VALUE (1, 'string');
@@ -293,5 +291,6 @@ UPDATE entity_attribute SET value_type_id = 0 WHERE id = 2300;
 UPDATE entity_attribute SET value_type_id = 10, reference_id = 1600 WHERE id = 4914;
 UPDATE entity_attribute SET value_type_id = 10, reference_id = 900 WHERE id = 4915;
 
+DELETE FROM entity_value_type where id >= 100;
 
-INSERT INTO `update` (`version`) VALUE ('20170821_0.6.2');
+INSERT INTO `update` (`version`) VALUE ('20170911_0.6.3');
