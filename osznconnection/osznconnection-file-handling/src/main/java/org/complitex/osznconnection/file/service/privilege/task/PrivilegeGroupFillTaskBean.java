@@ -215,11 +215,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLZAG, d.getReducedArea());
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLOPAL, d.getHeatingArea());
 
-            if (dwellingCharacteristics.getStatus().isNot(BENEFIT_OWNER_NOT_ASSOCIATED)){
-                dwellingCharacteristics.setStatus(PROCESSED);
-            }else{
-                dwellingCharacteristics.setStatus(PROCESSED_WITH_ERROR);
-            }
+            dwellingCharacteristics.setStatus(PROCESSED);
 
             //facilityServiceType
             BigDecimal tarif = null;
@@ -250,8 +246,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                     facilityServiceType.putUpdateField(TARIF, ft.getField(TAR_CODE));
                     facilityServiceType.putUpdateField(RIZN, ft.getField(TAR_SERV));
 
-                    facilityServiceType.setStatus(facilityServiceType.getStatus().isNot(BENEFIT_OWNER_NOT_ASSOCIATED)
-                            ? PROCESSED : PROCESSED_WITH_ERROR);
+                    facilityServiceType.setStatus(PROCESSED);
                 } else {
                     facilityServiceType.setStatus(TARIF_NOT_FOUND);
 
@@ -264,9 +259,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                 }
             }
         }else {
-            RequestWarning warning = new RequestWarning(facilityServiceType.getId(), FACILITY_SERVICE_TYPE,
-                    RequestWarningStatus.EMPTY_BENEFIT_DATA);
-            requestWarningBean.save(warning);
+            facilityServiceType.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
         }
 
         //benefit data
@@ -298,11 +291,13 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                     }
 
                     facilityServiceType.putUpdateField(RAH, facilityServiceType.getAccountNumber());
+                }else{
+                    RequestWarning warning = new RequestWarning(facilityServiceType.getId(), DWELLING_CHARACTERISTICS,
+                            RequestWarningStatus.EMPTY_BENEFIT_DATA);
+                    requestWarningBean.save(warning);
                 }
             }else {
-                RequestWarning warning = new RequestWarning(dwellingCharacteristics.getId(), DWELLING_CHARACTERISTICS,
-                        RequestWarningStatus.EMPTY_BENEFIT_DATA);
-                requestWarningBean.save(warning);
+                facilityServiceType.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
             }
         }
 

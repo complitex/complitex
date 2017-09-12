@@ -344,7 +344,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         checkGroup.add(data);
 
         filterForm.add(new CheckGroupSelector("checkAll", checkGroup));
-        filterForm.add(new ArrowOrderByBorder("accountHeader", FacilityServiceTypeBean.OrderBy.RAH.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("accountHeader", DwellingCharacteristicsBean.OrderBy.ACCOUNT_NUMBER.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("idCodeHeader", DwellingCharacteristicsBean.OrderBy.IDPIL.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", DwellingCharacteristicsBean.OrderBy.FIRST_NAME.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("middleNameHeader", DwellingCharacteristicsBean.OrderBy.MIDDLE_NAME.getOrderBy(), dataProvider, data, content));
