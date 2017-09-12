@@ -16,7 +16,6 @@ public class Attribute implements Serializable {
     private Long objectId;
     private Long attributeTypeId;
     private Long valueId;
-    private Long valueTypeId;
     private Date startDate;
     private Date endDate;
 
@@ -30,8 +29,6 @@ public class Attribute implements Serializable {
     public Attribute(Long attributeTypeId, Long attributeId) {
         this.attributeTypeId = attributeTypeId;
         this.attributeId = attributeId;
-
-        this.valueTypeId = attributeTypeId;
     }
 
     public StringValue getStringValue(Long localeId){
@@ -146,13 +143,5 @@ public class Attribute implements Serializable {
 
     public void setStringValues(List<StringValue> stringValues) {
         this.stringValues = stringValues;
-    }
-
-    public Long getValueTypeId() {
-        return valueTypeId;
-    }
-
-    public void setValueTypeId(Long valueTypeId) {
-        this.valueTypeId = valueTypeId;
     }
 }

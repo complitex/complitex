@@ -1221,12 +1221,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected void deleteStrings(Long objectId) {
-        Set<Long> localizedValueTypeIds = getLocalizedValueTypeIds();
-        if (localizedValueTypeIds != null && !localizedValueTypeIds.isEmpty()) {
-            stringValueBean.delete(getEntityName(), objectId, localizedValueTypeIds);
-        }
+        stringValueBean.delete(getEntityName(), objectId);
     }
-
 
     protected void deleteAttributes(Long objectId) {
         Map<String, Object> params = new HashMap<>();
@@ -1266,40 +1262,23 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return sqlSession().selectOne(NS + ".childrenExistCheck", params) != null;
     }
 
-
-    protected Set<Long> getLocalizedValueTypeIds() {
-        Set<Long> localizedValueTypeIds = new HashSet<>();
-
-        for (EntityAttribute entityAttribute : getEntity().getAttributes()) {
-            localizedValueTypeIds.addAll(entityAttribute.getValueTypes().stream()
-                    .filter(valueType -> SimpleTypes.isSimpleType(valueType.getValueType()))
-                    .map(ValueType::getId)
-                    .collect(Collectors.toList()));
-        }
-
-        return localizedValueTypeIds;
-    }
-
-
     protected void referenceExistCheck(Long objectId, Locale locale) throws DeleteException {
         for (String entityName : entityBean.getEntityNames()) {
             Entity entity = entityBean.getEntity(entityName);
             for (EntityAttribute entityAttribute : entity.getAttributes()) {
-                for (ValueType valueType : entityAttribute.getValueTypes()) {
-                    if (getEntityName().equals(valueType.getValueType())) {
-                        String referenceEntity = entity.getEntity();
-                        long attributeTypeId = entityAttribute.getId();
+                if (getEntityName().equals(entityAttribute.getValueType())) {
+                    String referenceEntity = entity.getEntity();
+                    long attributeTypeId = entityAttribute.getId();
 
-                        Map<String, Object> params = new HashMap<>();
-                        params.put("referenceEntity", referenceEntity);
-                        params.put("objectId", objectId);
-                        params.put("attributeTypeId", attributeTypeId);
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("referenceEntity", referenceEntity);
+                    params.put("objectId", objectId);
+                    params.put("attributeTypeId", attributeTypeId);
 
-                        Object result = sqlSession().selectOne(NS + ".referenceExistCheck", params);
+                    Object result = sqlSession().selectOne(NS + ".referenceExistCheck", params);
 
-                        if (result != null) {
-                            throw new DeleteException(ResourceUtil.getString(RESOURCE_BUNDLE, "delete_error", locale));
-                        }
+                    if (result != null) {
+                        throw new DeleteException(ResourceUtil.getString(RESOURCE_BUNDLE, "delete_error", locale));
                     }
                 }
             }

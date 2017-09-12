@@ -24,7 +24,6 @@
         <result column="start_date" property="startDate"/>
         <result column="status" property="status"/>
         <result column="end_date" property="endDate"/>
-        <result column="value_type_id" property="valueTypeId"/>
 
         <collection property="stringValues" resultMap="stringValueResultMap" columnPrefix="str__"/>
     </resultMap>
@@ -379,12 +378,9 @@
 
     <delete id="deleteStringValue" parameterType="map">
         DELETE FROM `${entityName}_string_value` WHERE `id` IN
-        (SELECT a.`value_id` FROM `${entityName}_attribute` a WHERE a.`object_id` = #{objectId}
-        AND a.`value_type_id` IN
-        <foreach open="(" separator="," close=")" collection="localizedValueTypeIds" item="id">
-            #{id}
-        </foreach>
-        )
+          (SELECT a.`value_id` FROM `${entityName}_attribute` a
+            LEFT JOIN entity_attribute ea ON a.entity_attribute_id = ea.id
+          WHERE a.`object_id` = #{objectId} AND ea.value_type_id IN (0, 1, 3, 5))
     </delete>
 
     <select id="selectExternalId" parameterType="map" resultType="string">

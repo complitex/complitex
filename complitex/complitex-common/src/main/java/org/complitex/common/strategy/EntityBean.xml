@@ -16,12 +16,10 @@
             <result column="attr_end_date" property="endDate"/>
             <result column="system" property="system"/>
 
-            <collection property="names" column="name_id" select="findNames"/>
+            <result column="value_type_id" property="valueType"/>
+            <result column="reference_id" property="referenceId"/>
 
-            <collection property="valueTypes" ofType="org.complitex.common.entity.ValueType">
-                <id column="value_type_id" property="id"/>
-                <result column="value_type" property="valueType"/>
-            </collection>
+            <collection property="names" column="name_id" select="findNames"/>
         </collection>
     </resultMap>
 

@@ -1,37 +1,29 @@
 package org.complitex.common.entity;
 
-import java.io.Serializable;
+import org.complitex.common.mybatis.IFixedIdType;
 
-public class ValueType implements Serializable {
-    //todo add value type enum
+public enum ValueType implements IFixedIdType {
+    STRING_VALUE(0),
+    STRING(1),
+    BOOLEAN(2),
+    DECIMAL(3),
+    INTEGER(4),
+    DATE(5),
 
-    private Long id;
+    ENTITY(10),
 
-    private Long attributeTypeId;
+    BUILDING_CODE(20),
+    LAST_NAME(21),
+    FIRST_NAME(22),
+    MIDDLE_NAME(23);
 
-    private String valueType;
+    private Integer id;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    ValueType(Integer id) {
         this.id = id;
     }
 
-    public String getValueType() {
-        return valueType;
-    }
-
-    public void setValueType(String valueType) {
-        this.valueType = valueType;
-    }
-
-    public Long getAttributeTypeId() {
-        return attributeTypeId;
-    }
-
-    public void setAttributeTypeId(Long attributeTypeId) {
-        this.attributeTypeId = attributeTypeId;
+    public Integer getId() {
+        return id;
     }
 }

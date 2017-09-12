@@ -34,7 +34,7 @@ public class AttributeHeadersPanel extends Panel {
                         stateLocator, dataView, refreshComponent);
                 item.add(header);
 
-                header.add(new Label("header_name", Strings.capitalize(entityAttribute.getAttributeName(getLocale()))));
+                header.add(new Label("header_name", Strings.capitalize(entityAttribute.getName(getLocale()))));
             }
         };
 

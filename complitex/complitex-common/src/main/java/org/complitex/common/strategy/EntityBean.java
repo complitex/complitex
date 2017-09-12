@@ -74,7 +74,7 @@ public class EntityBean extends AbstractBean {
     }
 
     public String getAttributeLabel(String entityName, long attributeTypeId, Locale locale) {
-        return getEntity(entityName).getAttribute(attributeTypeId).getAttributeName(locale);
+        return getEntity(entityName).getAttribute(attributeTypeId).getName(locale);
     }
 
     public EntityAttribute newAttributeType() {
