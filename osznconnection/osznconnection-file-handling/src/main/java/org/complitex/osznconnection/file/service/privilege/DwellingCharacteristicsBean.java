@@ -25,6 +25,7 @@ public class DwellingCharacteristicsBean extends AbstractPrivilegeBean {
     private static final Map<Long, Set<DwellingCharacteristicsDBF>> UPDATE_FIELD_MAP = of();
 
     public enum OrderBy {
+        ACCOUNT_NUMBER("account_number"),
         IDPIL(DwellingCharacteristicsDBF.IDPIL.name()),
         FIRST_NAME("first_name"),
         MIDDLE_NAME("middle_name"),

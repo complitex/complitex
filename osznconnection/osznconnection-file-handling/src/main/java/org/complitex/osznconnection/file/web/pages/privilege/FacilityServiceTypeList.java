@@ -21,6 +21,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.ExceptionUtil;
@@ -32,18 +33,11 @@ import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
-import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
-import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF;
-import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
-import org.complitex.osznconnection.file.entity.privilege.PrivilegeGroup;
-import org.complitex.osznconnection.file.service.AddressService;
+import org.complitex.osznconnection.file.entity.privilege.*;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
-import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
-import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
+import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean.OrderBy;
-import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBean;
-import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;
 import org.complitex.osznconnection.file.service.privilege.task.DwellingCharacteristicsBindTaskBean;
 import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceTypeBindTaskBean;
 import org.complitex.osznconnection.file.service.status.details.PrivilegeExampleConfigurator;
@@ -88,9 +82,6 @@ public final class FacilityServiceTypeList extends TemplatePage {
     private StatusDetailBean statusDetailBean;
 
     @EJB
-    private AddressService addressService;
-
-    @EJB
     private SessionBean sessionBean;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
@@ -107,6 +98,9 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
     @EJB
     private PrivilegeGroupService privilegeGroupService;
+
+    @EJB
+    private FacilityReferenceBookBean facilityReferenceBookBean;
 
     private IModel<PrivilegeExample> example;
     private long fileId;
@@ -196,7 +190,37 @@ public final class FacilityServiceTypeList extends TemplatePage {
         filterForm.add(new TextField<>("firstNameFilter", new PropertyModel<String>(example, "firstName")));
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<String>(example, "middleName")));
         filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<String>(example, "lastName")));
-        filterForm.add(new TextField<>("streetReferenceFilter", new PropertyModel<String>(example, "street")));
+
+        filterForm.add(new TextField<>("streetReferenceFilter", new Model<String>(){
+            @Override
+            public String getObject() {
+                String streetCode = example.getObject().getStreetCode();
+
+                if (streetCode != null) {
+                    FacilityStreet facilityStreet = facilityReferenceBookBean.getFacilityStreet(streetCode,
+                            requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
+                    if (facilityStreet != null){
+                        return facilityStreet.getStreet();
+                    }
+                }
+
+                return null;
+            }
+
+            @Override
+            public void setObject(String object) {
+                FacilityStreet facilityStreet = new FacilityStreet();
+                facilityStreet.putField(FacilityStreetDBF.KL_NAME, object);
+
+                List<FacilityStreet> facilityStreets = facilityReferenceBookBean.getFacilityStreets(FilterWrapper.of(facilityStreet));
+
+                if (!facilityStreets.isEmpty()){
+                    example.getObject().setStreetCode(facilityStreets.get(0).getStreetCode());
+                }
+            }
+        }, String.class));
+
         filterForm.add(new TextField<>("buildingFilter", new PropertyModel<String>(example, "building")));
         filterForm.add(new TextField<>("corpFilter", new PropertyModel<String>(example, "corp")));
         filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<String>(example, "apartment")));

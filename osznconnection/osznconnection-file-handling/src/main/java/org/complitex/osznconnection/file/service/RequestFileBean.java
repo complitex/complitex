@@ -6,7 +6,6 @@ import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.service.privilege.*;
 import org.complitex.osznconnection.file.service.subsidy.*;
 
@@ -238,8 +237,8 @@ public class RequestFileBean extends AbstractBean {
         save(requestFile);
     }
 
-    private RequestFile getLastRequestFile(RequestFile requestFile){
-        return sqlSession().selectOne(NS + ".selectLastRequestFile", requestFile);
+    private List<RequestFile> getLastRequestFiles(RequestFile requestFile){
+        return sqlSession().selectList(NS + ".selectLastRequestFile", requestFile);
     }
 
     private RequestFile getFirstRequestFile(RequestFile requestFile){
@@ -247,12 +246,15 @@ public class RequestFileBean extends AbstractBean {
     }
 
     public void updateDateRange(RequestFile requestFile) throws ExecuteException {
-        RequestFile last = getLastRequestFile(requestFile);
+        List<RequestFile> last = getLastRequestFiles(requestFile);
 
-        if (last != null){
-            last.setEndDate(requestFile.getBeginDate());
+        if (!last.isEmpty()){
+            last.forEach(l -> {
+                l.setEndDate(requestFile.getBeginDate());
 
-            save(last);
+                save(l);
+            });
+
         }else {
             RequestFile first = getFirstRequestFile(requestFile);
 
