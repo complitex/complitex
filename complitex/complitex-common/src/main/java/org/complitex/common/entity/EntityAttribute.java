@@ -17,20 +17,13 @@ public class EntityAttribute implements Serializable {
 
     private List<StringValue> names;
 
-    private List<ValueType> valueTypes;
-
     private boolean system;
 
-    public ValueType getAttributeValueType(long attributeValueTypeId){
-        for(ValueType valueType : getValueTypes()){
-            if(valueType.getId().equals(attributeValueTypeId)){
-                return valueType;
-            }
-        }
-        return null;
-    }
+    private ValueType valueType;
 
-    public String getAttributeName(Locale locale){
+    private Long referenceId;
+
+    public String getName(Locale locale){
         return StringValueUtil.getValue(names, locale);
     }
 
@@ -42,12 +35,12 @@ public class EntityAttribute implements Serializable {
         this.names = names;
     }
 
-    public List<ValueType> getValueTypes() {
-        return valueTypes;
+    public ValueType getValueType() {
+        return valueType;
     }
 
-    public void setValueTypes(List<ValueType> valueTypes) {
-        this.valueTypes = valueTypes;
+    public void setValueType(ValueType valueType) {
+        this.valueType = valueType;
     }
 
     public Long getId() {
@@ -108,5 +101,13 @@ public class EntityAttribute implements Serializable {
 
     public boolean isObsolete() {
         return endDate != null;
+    }
+
+    public Long getReferenceId() {
+        return referenceId;
+    }
+
+    public void setReferenceId(Long referenceId) {
+        this.referenceId = referenceId;
     }
 }

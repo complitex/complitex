@@ -164,7 +164,7 @@ public class EntityDescriptionPanel extends Panel {
 
                         @Override
                         public String getObject() {
-                            return entityAttribute.getAttributeName(getLocale());
+                            return entityAttribute.getName(getLocale());
                         }
                     }));
 
