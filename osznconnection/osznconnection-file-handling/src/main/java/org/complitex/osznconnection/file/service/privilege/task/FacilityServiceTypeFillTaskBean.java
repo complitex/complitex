@@ -208,8 +208,7 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                     facilityServiceType.putUpdateField(TARIF, ft.getField(TAR_CODE));
                     facilityServiceType.putUpdateField(RIZN, ft.getField(TAR_SERV));
 
-                    facilityServiceType.setStatus(facilityServiceType.getStatus()
-                            .isNot(BENEFIT_OWNER_NOT_ASSOCIATED) ? PROCESSED : PROCESSED_WITH_ERROR);
+                    facilityServiceType.setStatus(PROCESSED);
                 } else {
                     facilityServiceType.setStatus(TARIF_NOT_FOUND);
 

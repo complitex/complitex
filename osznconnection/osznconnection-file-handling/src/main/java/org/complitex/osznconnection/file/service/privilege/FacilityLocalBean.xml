@@ -77,7 +77,7 @@
     </select>
 
     <select id="selectFacilityLocalListCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
-        select count(id) from `facility_local` where `request_file_id` #{object.requestFileId}
+        select count(id) from `facility_local` where `request_file_id` = #{object.requestFileId}
     </select>
 
     <delete id="deleteFacilityLocal" parameterType="long">

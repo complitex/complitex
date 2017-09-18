@@ -124,8 +124,7 @@ public class PrivilegeGroupBindTaskBean extends AbstractTaskBean<PrivilegeFileGr
 
             if (dwellingCharacteristicsRequestFile != null){
                 if (!dwellingCharacteristicsBean.isDwellingCharacteristicsFileBound(dwellingCharacteristicsRequestFile.getId())) {
-                    throw new BindException(true, dwellingCharacteristicsRequestFile != null
-                            ? dwellingCharacteristicsRequestFile : facilityServiceTypeRequestFile);
+                    throw new BindException(true, dwellingCharacteristicsRequestFile);
                 }
 
                 dwellingCharacteristicsRequestFile.setStatus(RequestFileStatus.BOUND);

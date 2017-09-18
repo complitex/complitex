@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestFileStatus.FILL_ERROR;
+import static org.complitex.osznconnection.file.entity.RequestFileType.DWELLING_CHARACTERISTICS;
 import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_SERVICE_TYPE;
 import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 import static org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF.*;
@@ -214,11 +215,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLZAG, d.getReducedArea());
             dwellingCharacteristics.putUpdateField(DwellingCharacteristicsDBF.PLOPAL, d.getHeatingArea());
 
-            if (dwellingCharacteristics.getStatus().isNot(BENEFIT_OWNER_NOT_ASSOCIATED)){
-                dwellingCharacteristics.setStatus(PROCESSED);
-            }else{
-                dwellingCharacteristics.setStatus(PROCESSED_WITH_ERROR);
-            }
+            dwellingCharacteristics.setStatus(PROCESSED);
 
             //facilityServiceType
             BigDecimal tarif = null;
@@ -249,8 +246,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                     facilityServiceType.putUpdateField(TARIF, ft.getField(TAR_CODE));
                     facilityServiceType.putUpdateField(RIZN, ft.getField(TAR_SERV));
 
-                    facilityServiceType.setStatus(facilityServiceType.getStatus().isNot(BENEFIT_OWNER_NOT_ASSOCIATED)
-                            ? PROCESSED : PROCESSED_WITH_ERROR);
+                    facilityServiceType.setStatus(PROCESSED);
                 } else {
                     facilityServiceType.setStatus(TARIF_NOT_FOUND);
 
@@ -262,6 +258,8 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                     log.info("TARIF_NOT_FOUND serviceCode={}, tarif={}, date={}", serviceCode, tarif, facilityServiceType.getDate());
                 }
             }
+        }else {
+            facilityServiceType.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
         }
 
         //benefit data
@@ -293,7 +291,13 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                     }
 
                     facilityServiceType.putUpdateField(RAH, facilityServiceType.getAccountNumber());
+                }else{
+                    RequestWarning warning = new RequestWarning(facilityServiceType.getId(), DWELLING_CHARACTERISTICS,
+                            RequestWarningStatus.EMPTY_BENEFIT_DATA);
+                    requestWarningBean.save(warning);
                 }
+            }else {
+                facilityServiceType.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
             }
         }
 

@@ -185,7 +185,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     protected F newFilter() {
         try {
             F filter = getFilterClass().newInstance();
-            filter.setSortProperty("loaded");
+            filter.setSortProperty("id");
 
             return filter;
         } catch (Exception e) {
@@ -257,7 +257,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         add(messages);
 
         //Фильтр модель
-        F filter = getSession().getPreferenceObject(getPreferencePage(), PreferenceKey.FILTER_OBJECT, newFilter()); //todo preference sort test
+        F filter = getSession().getPreferenceObject(getPreferencePage(), PreferenceKey.FILTER_OBJECT, newFilter());
         model = new CompoundPropertyModel<>(filter);
 
         //Фильтр форма
