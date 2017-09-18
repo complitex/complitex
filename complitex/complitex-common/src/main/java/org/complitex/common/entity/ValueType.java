@@ -26,4 +26,8 @@ public enum ValueType implements IFixedIdType {
     public Integer getId() {
         return id;
     }
+
+    public boolean isSimple(){
+        return id <= 5;
+    }
 }

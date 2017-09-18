@@ -74,19 +74,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     @Override
-    public boolean isSimpleAttributeType(EntityAttribute entityAttribute) {
-        return entityAttribute.getValueTypes().size() == 1
-                && SimpleTypes.isSimpleType(entityAttribute.getValueTypes().get(0).getValueType());
-    }
-
-    @Override
-    public boolean isSimpleAttribute(Attribute attribute) {
-        EntityAttribute entityAttribute = getEntity().getAttribute(attribute.getAttributeTypeId());
-
-        return entityAttribute != null && isSimpleAttributeType(entityAttribute);
-    }
-
-    @Override
     @Asynchronous
     public void disable(final DomainObject object) {
         long start = System.currentTimeMillis();
@@ -200,7 +187,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void loadStringValues(String dataSource, List<Attribute> attributes) {
         attributes.stream()
-                .filter(this::isSimpleAttribute)
+                .filter(attribute -> getEntity().getAttribute(attribute.getAttributeTypeId()).getValueType().isSimple())
                 .forEach(attribute -> {
                     if (attribute.getValueId() != null) {
                         if (dataSource == null) {
@@ -285,7 +272,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void updateStringsForNewLocales(DomainObject object) {
         object.getAttributes().stream()
-                .filter(this::isSimpleAttribute)
+                .filter(a -> getEntity().getAttribute(a.getAttributeTypeId()).getValueType().isSimple())
                 .map(Attribute::getStringValues)
                 .forEach(StringValueUtil::updateForNewLocales);
     }
@@ -294,27 +281,19 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         List<Attribute> toAdd = new ArrayList<>();
 
         getEntity(dataSource).getAttributes().stream()
-                .filter(attributeType -> !attributeType.isObsolete())
-                .filter(attributeType -> object.getAttributes(attributeType.getId()).isEmpty())
-                .forEach(attributeType -> {
-                    if (attributeType.getValueTypes().size() == 1) {
-                        Attribute attribute = getNewAttributeInstance();
+                .filter(ea -> !ea.isObsolete())
+                .filter(ea -> object.getAttributes(ea.getId()).isEmpty())
+                .forEach(ea -> {
+                    Attribute attribute = getNewAttributeInstance();
 
-                        attribute.setAttributeTypeId(attributeType.getId());
-                        attribute.setValueTypeId(attributeType.getValueTypes().get(0).getId());
-                        attribute.setObjectId(object.getObjectId());
-                        attribute.setAttributeId(1L);
+                    attribute.setAttributeTypeId(ea.getId());
+                    attribute.setObjectId(object.getObjectId());
+                    attribute.setAttributeId(1L);
 
-                        if (isSimpleAttributeType(attributeType)) {
-                            attribute.setStringValues(StringValueUtil.newStringValues());
-                        }
-                        toAdd.add(attribute);
-                    } else {
-                        Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(attributeType, object.getObjectId());
-                        if (manyValueTypesAttribute != null) {
-                            toAdd.add(manyValueTypesAttribute);
-                        }
+                    if (ea.getValueType().isSimple()) {
+                        attribute.setStringValues(StringValueUtil.newStringValues());
                     }
+                    toAdd.add(attribute);
                 });
         if (!toAdd.isEmpty()) {
             object.getAttributes().addAll(toAdd);
@@ -409,12 +388,14 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected void insertAttribute(Attribute attribute) {
-        if (isSimpleAttribute(attribute)) {
+        EntityAttribute entityAttribute = getEntity().getAttribute(attribute.getAttributeTypeId());
+
+        if (entityAttribute.getValueType().isSimple()) {
             Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringValues());
             attribute.setValueId(generatedStringId);
         }
 
-        if (attribute.getValueId() != null || getEntity().getAttribute(attribute.getAttributeTypeId()).isMandatory()) {
+        if (attribute.getValueId() != null || entityAttribute.isMandatory()) {
             attribute.setEntityName(getEntityName());
 
             sqlSession().insert(getInsertAttributeStatement(), attribute);
@@ -504,6 +485,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
             if (newAttribute != null) {
                 boolean update = false;
+
+                //todo update value type
 
                 String attributeValueType = getEntity().getAttribute(oldAttribute.getAttributeTypeId())
                         .getAttributeValueType(oldAttribute.getValueTypeId()).getValueType();

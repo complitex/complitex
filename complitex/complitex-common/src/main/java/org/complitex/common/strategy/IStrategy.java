@@ -104,10 +104,6 @@ public interface IStrategy {
 
     void insert(DomainObject object, Date insertDate);
 
-    boolean isSimpleAttribute(final Attribute attribute);
-
-    boolean isSimpleAttributeType(EntityAttribute entityAttribute);
-
     DomainObject newInstance();
     
     Long performDefaultValidation(DomainObject object, Locale locale);

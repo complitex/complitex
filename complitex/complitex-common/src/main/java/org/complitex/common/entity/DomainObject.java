@@ -72,7 +72,6 @@ public class DomainObject implements ILongId {
         Attribute attribute = new Attribute();
         attribute.setAttributeId(attributeId);
         attribute.setAttributeTypeId(attributeTypeId);
-        attribute.setValueTypeId(attributeTypeId);
         attribute.setValueId(valueId);
     }
 
