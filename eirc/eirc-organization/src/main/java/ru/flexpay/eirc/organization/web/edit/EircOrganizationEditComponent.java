@@ -84,7 +84,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
         Attribute attribute = organization.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setAttributeTypeId(attributeTypeId);
+            attribute.setEntityAttributeId(attributeTypeId);
             attribute.setObjectId(organization.getObjectId());
             attribute.setAttributeId(1L);
             attribute.setStringValues(StringValueUtil.newStringValues());
@@ -111,7 +111,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
         Attribute attribute = organization.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setAttributeTypeId(attributeTypeId);
+            attribute.setEntityAttributeId(attributeTypeId);
             attribute.setObjectId(organization.getObjectId());
             attribute.setAttributeId(1L);
             attribute.setStringValues(StringValueUtil.newStringValues());

@@ -18,7 +18,7 @@
             keyProperty="object.pkId" useGeneratedKeys="true">
         INSERT INTO `${entityName}_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `status`, `start_date`,
                                                 `end_date`, `value_id`, `value_type_id`)
-          VALUES (#{attributeId}, #{objectId}, #{attributeTypeId}, #{status}, #{startDate}, #{endDate}, #{valueId}, #{valueTypeId})
+          VALUES (#{attributeId}, #{objectId}, #{entityAttributeId}, #{status}, #{startDate}, #{endDate}, #{valueId}, #{valueTypeId})
     </insert>
 
     <!-- deletion -->

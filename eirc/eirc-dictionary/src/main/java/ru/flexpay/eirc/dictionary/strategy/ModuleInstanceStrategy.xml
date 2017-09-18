@@ -20,7 +20,7 @@
         <foreach item="attrExample" collection="attributeExamples">
             <if test="attrExample.value != null">
                 AND EXISTS(SELECT 1 FROM `module_instance_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attrExample.attributeTypeId}
+                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attrExample.entityAttributeId}
                 AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc WHERE sc.`value`
                 <choose>
                     <when test="comparisonType == 'LIKE'">

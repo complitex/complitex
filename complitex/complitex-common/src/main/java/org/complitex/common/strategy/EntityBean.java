@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import org.complitex.common.entity.Entity;
 import org.complitex.common.entity.EntityAttribute;
-import org.complitex.common.entity.ValueType;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.util.StringValueUtil;
 
@@ -81,7 +80,6 @@ public class EntityBean extends AbstractBean {
         EntityAttribute entityAttribute = new EntityAttribute();
 
         entityAttribute.setNames(StringValueUtil.newStringValues());
-        entityAttribute.setValueTypes(new ArrayList<ValueType>());
 
         return entityAttribute;
     }
@@ -130,11 +128,6 @@ public class EntityBean extends AbstractBean {
         entityAttribute.setNameId(stringId);
 
         sqlSession().insert(NS + ".insertAttributeType", entityAttribute);
-
-        ValueType valueType = entityAttribute.getValueTypes().get(0);
-        valueType.setAttributeTypeId(entityAttribute.getId());
-
-        sqlSession().insert(NS + ".insertValueType", valueType);
     }
 
     private void removeAttributeTypes(String entityName, Collection<Long> attributeTypeIds, Date endDate) {

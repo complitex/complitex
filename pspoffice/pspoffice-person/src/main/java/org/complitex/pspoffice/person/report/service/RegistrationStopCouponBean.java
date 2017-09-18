@@ -102,7 +102,7 @@ public class RegistrationStopCouponBean extends AbstractBean {
             //first name
             String firstName = null;
             for (Attribute a : nameAttributes) {
-                if (a.getAttributeTypeId().equals(PersonStrategy.FIRST_NAME)) {
+                if (a.getEntityAttributeId().equals(PersonStrategy.FIRST_NAME)) {
                     Long nameId = a.getValueId();
                     if (nameId != null) {
                         firstName = personNameBean.findById(PersonNameType.FIRST_NAME, nameId).getName();
@@ -114,7 +114,7 @@ public class RegistrationStopCouponBean extends AbstractBean {
             //last name
             String lastName = null;
             for (Attribute a : nameAttributes) {
-                if (a.getAttributeTypeId().equals(PersonStrategy.LAST_NAME)) {
+                if (a.getEntityAttributeId().equals(PersonStrategy.LAST_NAME)) {
                     Long nameId = a.getValueId();
                     if (nameId != null) {
                         lastName = personNameBean.findById(PersonNameType.LAST_NAME, nameId).getName();
@@ -126,7 +126,7 @@ public class RegistrationStopCouponBean extends AbstractBean {
             //middle name
             String middleName = null;
             for (Attribute a : nameAttributes) {
-                if (a.getAttributeTypeId().equals(PersonStrategy.MIDDLE_NAME)) {
+                if (a.getEntityAttributeId().equals(PersonStrategy.MIDDLE_NAME)) {
                     Long nameId = a.getValueId();
                     if (nameId != null) {
                         middleName = personNameBean.findById(PersonNameType.MIDDLE_NAME, nameId).getName();

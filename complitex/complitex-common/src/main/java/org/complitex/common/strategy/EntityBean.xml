@@ -49,11 +49,12 @@
 
     <insert id="insertAttributeType" useGeneratedKeys="true" keyProperty="id"
             parameterType="org.complitex.common.entity.EntityAttribute">
-        INSERT INTO `entity_attribute`(`entity_id`, `mandatory`, `name_id`, `start_date`) VALUES (#{entityId}, #{mandatory}, #{nameId}, #{startDate})
+        INSERT INTO `entity_attribute`(`entity_id`, `mandatory`, `name_id`, `start_date`, `value_type_id`, `reference_id`)
+          VALUES (#{entityId}, #{mandatory}, #{nameId}, #{startDate}, #{valueTypeId}, #{referenceId})
     </insert>
 
     <insert id="insertValueType">
-        INSERT INTO `entity_attribute_value_type`(`entity_attribute_id`, `value_type`) VALUES (#{attributeTypeId}, #{valueType})
+        INSERT INTO `entity_attribute_value_type`(`entity_attribute_id`, `value_type`) VALUES (#{entityAttributeId}, #{valueType})
     </insert>
 
     <select id="allEntities" resultType="string">

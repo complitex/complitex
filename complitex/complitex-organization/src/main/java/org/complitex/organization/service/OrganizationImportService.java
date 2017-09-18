@@ -165,8 +165,7 @@ public class OrganizationImportService extends AbstractImportService {
     private Attribute newOrganizationTypeAttribute(long attributeId, long organizationTypeId) {
         Attribute a = new Attribute();
         a.setAttributeId(attributeId);
-        a.setAttributeTypeId(ORGANIZATION_TYPE);
-        a.setValueTypeId(ORGANIZATION_TYPE);
+        a.setEntityAttributeId(ORGANIZATION_TYPE);
         a.setValueId(organizationTypeId);
         return a;
     }

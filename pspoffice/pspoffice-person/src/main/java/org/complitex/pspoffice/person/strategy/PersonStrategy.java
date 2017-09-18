@@ -359,18 +359,15 @@ public class PersonStrategy extends TemplateStrategy {
         for (EntityAttribute entityAttribute : getEntity().getAttributes()) {
             if (!entityAttribute.isObsolete()) {
                 if (object.getAttributes(entityAttribute.getId()).isEmpty()) {
-                    if ((entityAttribute.getValueTypes().size() == 1)
-                            && !entityAttribute.getId().equals(CHILDREN)
+                    if (!entityAttribute.getId().equals(CHILDREN)
                             && !entityAttribute.getId().equals(EXPLANATION)
                             && !NAME_ATTRIBUTE_IDS.contains(entityAttribute.getId())) {
                         Attribute attribute = new Attribute();
-                        ValueType valueType = entityAttribute.getValueTypes().get(0);
-                        attribute.setAttributeTypeId(entityAttribute.getId());
-                        attribute.setValueTypeId(valueType.getId());
+                        attribute.setEntityAttributeId(entityAttribute.getId());
                         attribute.setObjectId(object.getObjectId());
                         attribute.setAttributeId(1L);
 
-                        if (isSimpleAttributeType(entityAttribute)) {
+                        if (entityAttribute.getValueType().isSimple()) {
                             attribute.setStringValues(StringValueUtil.newStringValues());
                         }
                         toAdd.add(attribute);
@@ -412,8 +409,7 @@ public class PersonStrategy extends TemplateStrategy {
             }
             if (!found) {
                 Attribute attribute = new Attribute();
-                attribute.setAttributeTypeId(nameAttributeTypeId);
-                attribute.setValueTypeId(nameAttributeTypeId);
+                attribute.setEntityAttributeId(nameAttributeTypeId);
                 attribute.setObjectId(person.getObjectId());
                 attribute.setAttributeId(stringLocale.getId());
                 nameAttributes.add(attribute);
@@ -548,8 +544,7 @@ public class PersonStrategy extends TemplateStrategy {
         Attribute explAttribute = new Attribute();
         explAttribute.setStringValues(StringValueUtil.newStringValues());
         StringValueUtil.getSystemStringValue(explAttribute.getStringValues()).setValue(explanation);
-        explAttribute.setAttributeTypeId(EXPLANATION);
-        explAttribute.setValueTypeId(EXPLANATION);
+        explAttribute.setEntityAttributeId(EXPLANATION);
         explAttribute.setAttributeId(1L);
         person.addAttribute(explAttribute);
     }
@@ -873,8 +868,8 @@ public class PersonStrategy extends TemplateStrategy {
                 : getHistoryPerson(historyPerson.getObjectId(), previousStartDate);
         if (previousPerson == null) {
             for (Attribute current : historyPerson.getAttributes()) {
-                if (!current.getAttributeTypeId().equals(CHILDREN)) {
-                    m.addAttributeModification(current.getAttributeTypeId(), ModificationType.ADD);
+                if (!current.getEntityAttributeId().equals(CHILDREN)) {
+                    m.addAttributeModification(current.getEntityAttributeId(), ModificationType.ADD);
                 }
             }
             for (Person child : historyPerson.getChildren()) {
@@ -885,12 +880,12 @@ public class PersonStrategy extends TemplateStrategy {
             //changes
             for (Attribute current : historyPerson.getAttributes()) {
                 for (Attribute prev : previousPerson.getAttributes()) {
-                    if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())
-                            && !current.getAttributeTypeId().equals(CHILDREN)
-                            && !current.getAttributeTypeId().equals(EXPLANATION)
-                            && !NAME_ATTRIBUTE_IDS.contains(current.getAttributeTypeId())) {
+                    if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())
+                            && !current.getEntityAttributeId().equals(CHILDREN)
+                            && !current.getEntityAttributeId().equals(EXPLANATION)
+                            && !NAME_ATTRIBUTE_IDS.contains(current.getEntityAttributeId())) {
 
-                        m.addAttributeModification(current.getAttributeTypeId(),
+                        m.addAttributeModification(current.getEntityAttributeId(),
                                 !current.getValueId().equals(prev.getValueId()) ? ModificationType.CHANGE
                                 : ModificationType.NONE);
                     }
@@ -899,36 +894,36 @@ public class PersonStrategy extends TemplateStrategy {
 
             //added
             for (Attribute current : historyPerson.getAttributes()) {
-                if (!current.getAttributeTypeId().equals(CHILDREN)
-                        && !current.getAttributeTypeId().equals(EXPLANATION)
-                        && !NAME_ATTRIBUTE_IDS.contains(current.getAttributeTypeId())) {
+                if (!current.getEntityAttributeId().equals(CHILDREN)
+                        && !current.getEntityAttributeId().equals(EXPLANATION)
+                        && !NAME_ATTRIBUTE_IDS.contains(current.getEntityAttributeId())) {
                     boolean added = true;
                     for (Attribute prev : previousPerson.getAttributes()) {
-                        if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                        if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                             added = false;
                             break;
                         }
                     }
                     if (added) {
-                        m.addAttributeModification(current.getAttributeTypeId(), ModificationType.ADD);
+                        m.addAttributeModification(current.getEntityAttributeId(), ModificationType.ADD);
                     }
                 }
             }
 
             //removed
             for (Attribute prev : previousPerson.getAttributes()) {
-                if (!prev.getAttributeTypeId().equals(CHILDREN)
-                        && !prev.getAttributeTypeId().equals(EXPLANATION)
-                        && !NAME_ATTRIBUTE_IDS.contains(prev.getAttributeTypeId())) {
+                if (!prev.getEntityAttributeId().equals(CHILDREN)
+                        && !prev.getEntityAttributeId().equals(EXPLANATION)
+                        && !NAME_ATTRIBUTE_IDS.contains(prev.getEntityAttributeId())) {
                     boolean removed = true;
                     for (Attribute current : historyPerson.getAttributes()) {
-                        if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                        if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                             removed = false;
                             break;
                         }
                     }
                     if (removed) {
-                        m.addAttributeModification(prev.getAttributeTypeId(), ModificationType.REMOVE);
+                        m.addAttributeModification(prev.getEntityAttributeId(), ModificationType.REMOVE);
                     }
                 }
             }
@@ -1018,17 +1013,17 @@ public class PersonStrategy extends TemplateStrategy {
         if (previousDocument == null) {
             m = new DocumentModification(true);
             for (Attribute current : historyDocument.getAttributes()) {
-                m.addAttributeModification(current.getAttributeTypeId(), ModificationType.NONE);
+                m.addAttributeModification(current.getEntityAttributeId(), ModificationType.NONE);
             }
         } else {
             //changes
             for (Attribute current : historyDocument.getAttributes()) {
                 for (Attribute prev : previousDocument.getAttributes()) {
-                    if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                    if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                         if (!current.getValueId().equals(prev.getValueId())) {
-                            m.addAttributeModification(current.getAttributeTypeId(), ModificationType.CHANGE);
+                            m.addAttributeModification(current.getEntityAttributeId(), ModificationType.CHANGE);
                         } else {
-                            m.addAttributeModification(current.getAttributeTypeId(), ModificationType.NONE);
+                            m.addAttributeModification(current.getEntityAttributeId(), ModificationType.NONE);
                         }
                         break;
                     }
@@ -1039,13 +1034,13 @@ public class PersonStrategy extends TemplateStrategy {
             for (Attribute current : historyDocument.getAttributes()) {
                 boolean added = true;
                 for (Attribute prev : previousDocument.getAttributes()) {
-                    if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                    if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                         added = false;
                         break;
                     }
                 }
                 if (added) {
-                    m.addAttributeModification(current.getAttributeTypeId(), ModificationType.ADD);
+                    m.addAttributeModification(current.getEntityAttributeId(), ModificationType.ADD);
                 }
             }
 
@@ -1053,21 +1048,21 @@ public class PersonStrategy extends TemplateStrategy {
             for (Attribute prev : previousDocument.getAttributes()) {
                 boolean removed = true;
                 for (Attribute current : historyDocument.getAttributes()) {
-                    if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                    if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                         removed = false;
                         break;
                     }
                 }
                 if (removed) {
-                    m.addAttributeModification(prev.getAttributeTypeId(), ModificationType.REMOVE);
+                    m.addAttributeModification(prev.getEntityAttributeId(), ModificationType.REMOVE);
 
                 }
             }
         }
 
         for (Attribute current : historyDocument.getAttributes()) {
-            if (m.getAttributeModificationType(current.getAttributeTypeId()) == null) {
-                m.addAttributeModification(current.getAttributeTypeId(), ModificationType.NONE);
+            if (m.getAttributeModificationType(current.getEntityAttributeId()) == null) {
+                m.addAttributeModification(current.getEntityAttributeId(), ModificationType.NONE);
             }
         }
         return m;

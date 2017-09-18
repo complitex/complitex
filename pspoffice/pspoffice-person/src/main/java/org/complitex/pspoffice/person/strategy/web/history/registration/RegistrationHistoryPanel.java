@@ -234,7 +234,7 @@ final class RegistrationHistoryPanel extends Panel {
 
             @Override
             protected void populateItem(ListItem<Attribute> item) {
-                long userAttributeTypeId = item.getModelObject().getAttributeTypeId();
+                long userAttributeTypeId = item.getModelObject().getEntityAttributeId();
                 initAttributeInput(registration, modification, item, userAttributeTypeId, false);
             }
         };
@@ -294,7 +294,7 @@ final class RegistrationHistoryPanel extends Panel {
         if (attribute == null) {
             attribute = new Attribute();
             attribute.setStringValues(StringValueUtil.newStringValues());
-            attribute.setAttributeTypeId(attributeTypeId);
+            attribute.setEntityAttributeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }
         Component inputComponent = newInputComponent(registrationStrategy.getEntityName(), null, registration,

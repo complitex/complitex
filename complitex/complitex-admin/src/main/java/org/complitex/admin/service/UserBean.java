@@ -244,7 +244,7 @@ public class UserBean extends AbstractBean {
 
         for (EntityAttribute entityAttribute : entityAttributes) {
             for (Attribute attribute : object.getAttributes()) {
-                if (attribute.getAttributeTypeId().equals(entityAttribute.getId())) {
+                if (attribute.getEntityAttributeId().equals(entityAttribute.getId())) {
                     attributeColumns.add(attribute);
                 }
             }

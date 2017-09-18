@@ -316,7 +316,7 @@ public class StreetStrategy extends TemplateStrategy {
 
     public String getName(DomainObject street, Locale locale) {
         return StringValueUtil.getValue(street.getAttributes().stream()
-                .filter(attr -> attr.getAttributeTypeId().equals(NAME)).findFirst().get().getStringValues(), locale);
+                .filter(attr -> attr.getEntityAttributeId().equals(NAME)).findFirst().get().getStringValues(), locale);
     }
 
     @Override

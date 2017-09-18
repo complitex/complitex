@@ -257,7 +257,7 @@ public class RegistrationEdit extends FormTemplatePage {
 
             @Override
             protected void populateItem(ListItem<Attribute> item) {
-                long userAttributeTypeId = item.getModelObject().getAttributeTypeId();
+                long userAttributeTypeId = item.getModelObject().getEntityAttributeId();
                 initAttributeInput(item, userAttributeTypeId, false);
             }
         };
@@ -468,7 +468,7 @@ public class RegistrationEdit extends FormTemplatePage {
         if (attribute == null) {
             attribute = new Attribute();
             attribute.setStringValues(StringValueUtil.newStringValues());
-            attribute.setAttributeTypeId(attributeTypeId);
+            attribute.setEntityAttributeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }
         parent.add(newInputComponent(registrationStrategy.getEntityName(), null, newRegistration, attribute,

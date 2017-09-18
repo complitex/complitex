@@ -596,7 +596,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
             @Override
             protected void populateItem(ListItem<Attribute> item) {
-                long userAttributeTypeId = item.getModelObject().getAttributeTypeId();
+                long userAttributeTypeId = item.getModelObject().getEntityAttributeId();
                 initAttributeInput(item, userAttributeTypeId);
             }
         };
@@ -715,21 +715,18 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         parent.add(newInputComponent(apartmentCardStrategy.getEntityName(), null, newApartmentCard, attribute, getLocale(), false));
     }
 
-    private void beforePersist() {
+    private void beforePersist() { //todo add attributes
         // address
         if (isNew()) {
             Attribute addressAttribute = newApartmentCard.getAttribute(ADDRESS);
             if (addressSearchComponentState.get("room") != null
                     && addressSearchComponentState.get("room").getObjectId() > 0) {
-                addressAttribute.setValueTypeId(ADDRESS_ROOM);
                 addressAttribute.setValueId(addressSearchComponentState.get("room").getObjectId());
             } else if (addressSearchComponentState.get("apartment") != null
                     && addressSearchComponentState.get("apartment").getObjectId() > 0) {
-                addressAttribute.setValueTypeId(ADDRESS_APARTMENT);
                 addressAttribute.setValueId(addressSearchComponentState.get("apartment").getObjectId());
             } else if (addressSearchComponentState.get("building") != null
                     && addressSearchComponentState.get("building").getObjectId() > 0) {
-                addressAttribute.setValueTypeId(ADDRESS_BUILDING);
                 addressAttribute.setValueId(addressSearchComponentState.get("building").getObjectId());
             } else {
                 throw new IllegalStateException("All building, apartment and room parts of address have not been filled in.");
@@ -741,14 +738,12 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         DomainObject owner = newApartmentCard.getOwner();
         Long ownerId = owner != null ? owner.getObjectId() : null;
         ownerAttribute.setValueId(ownerId);
-        ownerAttribute.setValueTypeId(OWNER_TYPE);
 
         // form of ownership
         Attribute formOfOwnershipAttribute = newApartmentCard.getAttribute(FORM_OF_OWNERSHIP);
         DomainObject ownershipForm = newApartmentCard.getOwnershipForm();
         Long ownershipFormId = ownershipForm != null ? ownershipForm.getObjectId() : null;
         formOfOwnershipAttribute.setValueId(ownershipFormId);
-        formOfOwnershipAttribute.setValueTypeId(FORM_OF_OWNERSHIP_TYPE);
     }
 
     private boolean validate() {

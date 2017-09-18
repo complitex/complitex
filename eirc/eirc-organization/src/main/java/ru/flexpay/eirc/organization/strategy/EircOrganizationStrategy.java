@@ -192,13 +192,6 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
         return getList(example);
     }
 
-    @Override
-    public boolean isSimpleAttributeType(EntityAttribute entityAttribute) {
-        if (ALL_ATTRIBUTE_TYPES.contains(entityAttribute.getId())) {
-            return false;
-        }
-        return super.isSimpleAttributeType(entityAttribute);
-    }
 
     @Override
     protected void fillAttributes(String dataSource, DomainObject object) {
@@ -216,7 +209,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
         super.loadStringValues(attributes);
 
         for (Attribute attribute : attributes) {
-            if (ALL_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())) {
+            if (ALL_ATTRIBUTE_TYPES.contains(attribute.getEntityAttributeId())) {
                 if (attribute.getValueId() != null) {
                     loadStringValues(attribute);
                 } else {
@@ -301,7 +294,7 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
 
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
-        if (attribute.getAttributeTypeId().equals(USER_ORGANIZATION_PARENT)){
+        if (attribute.getEntityAttributeId().equals(USER_ORGANIZATION_PARENT)){
             return displayShortNameAndCode(attribute.getValueId(), locale);
         }
 

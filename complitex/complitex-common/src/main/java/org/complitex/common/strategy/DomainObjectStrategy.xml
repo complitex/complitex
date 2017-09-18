@@ -20,7 +20,7 @@
         <result column="value_id" property="valueId"/>
         <result column="attribute_id" property="attributeId"/>
         <result column="object_id" property="objectId"/>
-        <result column="entity_attribute_id" property="attributeTypeId"/>
+        <result column="entity_attribute_id" property="entityAttributeId"/>
         <result column="start_date" property="startDate"/>
         <result column="status" property="status"/>
         <result column="end_date" property="endDate"/>
@@ -147,7 +147,7 @@
         <foreach item="attributeFilter" collection="attributeFilters">
             <if test="attributeFilter.value != null">
                 AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.attributeTypeId}
+                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
                 AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc WHERE sc.`value`
                 <choose>
                     <when test="comparisonType == 'LIKE'">
@@ -163,7 +163,7 @@
 
             <if test="attributeFilter.valueId != null">
                 AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.attributeTypeId}
+                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
                 AND attr.`value_id` = #{attributeFilter.valueId}
                 )
             </if>
@@ -208,7 +208,7 @@
         SELECT DISTINCT e.`object_id` FROM `${entity}` e
         JOIN `${entity}_attribute` a ON (e.`object_id` = a.`object_id` AND a.`status` = 1)
         JOIN `${entity}_string_value` sc ON (a.`value_id` = sc.`id`)
-        WHERE (e.`status` IN (1, 0)) AND sc.`locale_id` = #{localeId} AND a.`entity_attribute_id` = #{attributeTypeId}
+        WHERE (e.`status` IN (1, 0)) AND sc.`locale_id` = #{localeId} AND a.`entity_attribute_id` = #{entityAttributeId}
         AND sc.`value` = #{text}
         <choose>
             <when test="parentEntityId != null and parentId != null">
@@ -304,7 +304,7 @@
 
     <select id="referenceExistCheck" parameterType="map" resultType="int">
         SELECT 1 FROM DUAL WHERE EXISTS(SELECT a.`object_id` FROM `${referenceEntity}_attribute` a
-          WHERE a.`value_id` = #{objectId} AND a.`entity_attribute_id` = #{attributeTypeId})
+          WHERE a.`value_id` = #{objectId} AND a.`entity_attribute_id` = #{entityAttributeId})
     </select>
 
     <!--Attribute-->
@@ -312,13 +312,13 @@
     <insert id="insertAttribute" parameterType="org.complitex.common.entity.Attribute">
         INSERT INTO `${entityName}_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `status`,
           `start_date`, `end_date`, `value_id`, `value_type_id`)
-        VALUES (#{attributeId}, #{objectId}, #{attributeTypeId}, #{status}, #{startDate}, #{endDate}, #{valueId},
+        VALUES (#{attributeId}, #{objectId}, #{entityAttributeId}, #{status}, #{startDate}, #{endDate}, #{valueId},
           #{valueTypeId})
     </insert>
 
     <update id="updateAttribute" parameterType="org.complitex.common.entity.Attribute">
         UPDATE `${entityName}_attribute` SET `end_date` = #{endDate}, `status` = #{status}
-        WHERE `attribute_id` = #{attributeId} AND `object_id` = #{objectId} AND `entity_attribute_id` = #{attributeTypeId}
+        WHERE `attribute_id` = #{attributeId} AND `object_id` = #{objectId} AND `entity_attribute_id` = #{entityAttributeId}
           AND `start_date` = #{startDate}
     </update>
 

@@ -68,13 +68,13 @@
             <foreach collection="attributeFilters" item="item" index="index">
                 <if test="item.value != null">
                     <choose>
-                        <when test="item.attributeTypeId == '1000'">
+                        <when test="item.entityAttributeId == '1000'">
                             and ln.`name` like concat('%', #{item.value}, '%')
                         </when>
-                        <when test="item.attributeTypeId == '1001'">
+                        <when test="item.entityAttributeId == '1001'">
                             and fn.`name` like concat('%', #{item.value}, '%')
                         </when>
-                        <when test="item.attributeTypeId == '1002'">
+                        <when test="item.entityAttributeId == '1002'">
                             and mn.`name` like concat('%', #{item.value}, '%')
                         </when>
                     </choose>

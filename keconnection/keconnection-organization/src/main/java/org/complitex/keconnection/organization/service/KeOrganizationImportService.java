@@ -181,8 +181,7 @@ public class KeOrganizationImportService extends AbstractImportService {
     private Attribute newOrganizationTypeAttribute(long attributeId, long organizationTypeId) {
         Attribute a = new Attribute();
         a.setAttributeId(attributeId);
-        a.setAttributeTypeId(KeOrganizationStrategy.ORGANIZATION_TYPE);
-        a.setValueTypeId(KeOrganizationStrategy.ORGANIZATION_TYPE);
+        a.setEntityAttributeId(KeOrganizationStrategy.ORGANIZATION_TYPE);
         a.setValueId(organizationTypeId);
         return a;
     }

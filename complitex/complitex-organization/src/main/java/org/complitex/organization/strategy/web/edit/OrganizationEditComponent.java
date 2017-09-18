@@ -30,6 +30,7 @@ import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 
 import javax.ejb.EJB;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -312,7 +313,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
                     item.add(new AjaxLink("remove") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
-                            organization.removeAttribute(attribute.getAttributeTypeId(), attribute.getAttributeId());
+                            organization.removeAttribute(attribute.getEntityAttributeId(), attribute.getAttributeId());
                             target.add(serviceBillingContainer);
                         }
                     });
@@ -465,13 +466,12 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         getDomainObject().removeAttribute(ORGANIZATION_TYPE);
         List<DomainObject> organizationTypes = getOrganizationTypesModel().getObject();
         if (organizationTypes != null && !organizationTypes.isEmpty()) {
-            Collections.sort(organizationTypes, (o1, o2) -> o1.getObjectId().compareTo(o2.getObjectId()));
+            organizationTypes.sort(Comparator.comparing(DomainObject::getObjectId));
             long attributeId = 1;
             for (DomainObject organizationType : getOrganizationTypesModel().getObject()) {
                 Attribute attribute = new Attribute();
                 attribute.setAttributeId(attributeId++);
-                attribute.setAttributeTypeId(ORGANIZATION_TYPE);
-                attribute.setValueTypeId(ORGANIZATION_TYPE);
+                attribute.setEntityAttributeId(ORGANIZATION_TYPE);
                 attribute.setValueId(organizationType.getObjectId());
                 getDomainObject().addAttribute(attribute);
             }

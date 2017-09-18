@@ -38,7 +38,7 @@ final class DocumentHistoryPanel extends Panel {
         //simple attributes
         List<Attribute> simpleAttributes = newArrayList();
         for (Attribute attribute : document.getAttributes()) {
-            if (documentStrategy.isSimpleAttribute(attribute)) {
+            if (documentStrategy.getEntity().getAttribute(attribute.getEntityAttributeId()).getValueType().isSimple()) {
                 simpleAttributes.add(attribute);
             }
         }
@@ -48,14 +48,14 @@ final class DocumentHistoryPanel extends Panel {
             @Override
             protected void populateItem(ListItem<Attribute> item) {
                 Attribute attr = item.getModelObject();
-                final EntityAttribute entityAttribute = documentStrategy.getEntity().getAttribute(attr.getAttributeTypeId());
+                final EntityAttribute entityAttribute = documentStrategy.getEntity().getAttribute(attr.getEntityAttributeId());
                 item.add(new Label("label", DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
                 WebMarkupContainer required = new WebMarkupContainer("required");
                 item.add(required);
                 required.setVisible(entityAttribute.isMandatory());
 
                 Component input = DomainObjectComponentUtil.newInputComponent(documentStrategy.getEntityName(), null, document, attr, getLocale(), true);
-                input.add(new CssAttributeBehavior(modification.getAttributeModificationType(attr.getAttributeTypeId()).getCssClass()));
+                input.add(new CssAttributeBehavior(modification.getAttributeModificationType(attr.getEntityAttributeId()).getCssClass()));
                 item.add(input);
             }
         });

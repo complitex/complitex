@@ -41,7 +41,7 @@
         select distinct e.`object_id` from `${entity}` e
             left join `${entity}_attribute` attr on (attr.`status` = 1 and e.`object_id` = attr.`object_id`)
             left join `${entity}_string_value` sc on (sc.`id` = attr.`value_id`)
-        where e.`status` = 1 and attr.`entity_attribute_id` = #{attributeTypeId} and upper(sc.`value`) = upper(#{correction})
+        where e.`status` = 1 and attr.`entity_attribute_id` = #{entityAttributeId} and upper(sc.`value`) = upper(#{correction})
     </select>
 
     <!--City-->

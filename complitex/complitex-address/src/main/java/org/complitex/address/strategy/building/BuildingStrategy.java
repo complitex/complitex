@@ -242,7 +242,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
     private void setAlternativeAddresses(Building building, Date date) {
         for (Attribute attr : building.getAttributes()) {
-            if (attr.getAttributeTypeId().equals(BUILDING_ADDRESS)) {
+            if (attr.getEntityAttributeId().equals(BUILDING_ADDRESS)) {
                 DomainObject alternativeAddress = getBuildingAddress(attr.getValueId(), date);
                 if (alternativeAddress != null) {
                     building.addAlternativeAddress(alternativeAddress);
@@ -472,15 +472,13 @@ public class BuildingStrategy extends TemplateStrategy {
         for (EntityAttribute entityAttribute : getEntity().getAttributes()) {
             if (!entityAttribute.isObsolete()) {
                 if (object.getAttributes(entityAttribute.getId()).isEmpty()) {
-                    if ((entityAttribute.getValueTypes().size() == 1) && !entityAttribute.getId().equals(BUILDING_ADDRESS)) {
+                    if ( !entityAttribute.getId().equals(BUILDING_ADDRESS)) {
                         Attribute attribute = new Attribute();
-                        ValueType valueType = entityAttribute.getValueTypes().get(0);
-                        attribute.setAttributeTypeId(entityAttribute.getId());
-                        attribute.setValueTypeId(valueType.getId());
+                        attribute.setEntityAttributeId(entityAttribute.getId());
                         attribute.setObjectId(object.getObjectId());
                         attribute.setAttributeId(1L);
 
-                        if (isSimpleAttributeType(entityAttribute)) {
+                        if (entityAttribute.getValueType().isSimple()) {
                             attribute.setStringValues(StringValueUtil.newStringValues());
                         }
                         toAdd.add(attribute);
@@ -813,9 +811,8 @@ public class BuildingStrategy extends TemplateStrategy {
 
     private Attribute newBuildingCodeAttribute(long attributeId, long buildingCodeId) {
         Attribute a = new Attribute();
-        a.setAttributeTypeId(BUILDING_CODE);
+        a.setEntityAttributeId(BUILDING_CODE);
         a.setValueId(buildingCodeId);
-        a.setValueTypeId(BUILDING_CODE);
         a.setAttributeId(attributeId);
 
         return a;

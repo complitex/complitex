@@ -194,12 +194,6 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public boolean isSimpleAttributeType(EntityAttribute entityAttribute) {
-        return !CUSTOM_ATTRIBUTE_TYPES.contains(entityAttribute.getId()) &&
-                super.isSimpleAttributeType(entityAttribute);
-    }
-
-    @Override
     protected void fillAttributes(String dataSource, DomainObject object) {
         super.fillAttributes(null, object);
 
@@ -215,7 +209,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
         super.loadStringValues(attributes);
 
         for (Attribute attribute : attributes) {
-            if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())) {
+            if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getEntityAttributeId())) {
                 if (attribute.getValueId() != null) {
                     loadStringValues(attribute);
                 } else {
@@ -227,8 +221,8 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
 
     @Override
     protected void insertAttribute(Attribute attribute) {
-        if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())){
-            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringValues());
+        if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getEntityAttributeId())){
+            Long generatedStringId = insertStrings(attribute.getEntityAttributeId(), attribute.getStringValues());
             attribute.setValueId(generatedStringId);
         }
 
@@ -281,7 +275,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
 
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
-        if (attribute != null && attribute.getAttributeTypeId().equals(USER_ORGANIZATION_PARENT)){
+        if (attribute != null && attribute.getEntityAttributeId().equals(USER_ORGANIZATION_PARENT)){
             return displayNameAndCode(attribute.getValueId(), locale);
         }
 

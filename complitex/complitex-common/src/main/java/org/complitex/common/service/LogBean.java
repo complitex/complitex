@@ -218,7 +218,7 @@ public class LogBean extends AbstractBean {
 
         if (oldDomainObject == null) {
             for (Attribute na : newDomainObject.getAttributes()) {
-                EntityAttribute entityAttribute = strategy.getEntity().getAttribute(na.getAttributeTypeId());
+                EntityAttribute entityAttribute = strategy.getEntity().getAttribute(na.getEntityAttributeId());
                 ValueType attributeValueType = entityAttribute.getValueType();
 
                 if (attributeValueType.isSimple()) {
@@ -230,15 +230,15 @@ public class LogBean extends AbstractBean {
             }
         } else {
             for (Attribute oa : oldDomainObject.getAttributes()) {
-                EntityAttribute oldEntityAttribute = strategy.getEntity().getAttribute(oa.getAttributeTypeId());
+                EntityAttribute oldEntityAttribute = strategy.getEntity().getAttribute(oa.getEntityAttributeId());
                 ValueType oldAttributeValueType = oldEntityAttribute.getValueType();
 
                 boolean removed = true;
                 for (Attribute na : newDomainObject.getAttributes()) {
-                    if (oa.getAttributeTypeId().equals(na.getAttributeTypeId()) && oa.getAttributeId().equals(na.getAttributeId())) {
+                    if (oa.getEntityAttributeId().equals(na.getEntityAttributeId()) && oa.getAttributeId().equals(na.getAttributeId())) {
                         //the same attribute_type and the same attribute_id
 
-                        EntityAttribute newEntityAttribute = strategy.getEntity().getAttribute(na.getAttributeTypeId());
+                        EntityAttribute newEntityAttribute = strategy.getEntity().getAttribute(na.getEntityAttributeId());
                         ValueType newAttributeValueType = newEntityAttribute.getValueType();
 
                         if (newAttributeValueType.isSimple() && oldAttributeValueType.isSimple()) {
@@ -302,12 +302,12 @@ public class LogBean extends AbstractBean {
             }
 
             for (Attribute na : newDomainObject.getAttributes()) {
-                EntityAttribute newEntityAttribute = strategy.getEntity().getAttribute(na.getAttributeTypeId());
+                EntityAttribute newEntityAttribute = strategy.getEntity().getAttribute(na.getEntityAttributeId());
                 ValueType newAttributeValueType = newEntityAttribute.getValueType();
 
                 boolean added = true;
                 for (Attribute oa : oldDomainObject.getAttributes()) {
-                    if (oa.getAttributeTypeId().equals(na.getAttributeTypeId()) && oa.getAttributeId().equals(na.getAttributeId())) {
+                    if (oa.getEntityAttributeId().equals(na.getEntityAttributeId()) && oa.getAttributeId().equals(na.getAttributeId())) {
                         //the same attribute_type and the same attribute_id
                         added = false;
                         break;

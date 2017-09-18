@@ -11,7 +11,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.EntityAttribute;
-import org.complitex.common.entity.ValueType;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.DomainObjectStrategy;
 import org.complitex.common.strategy.StringValueBean;
@@ -200,24 +199,15 @@ public class RegistrationStrategy extends DomainObjectStrategy {
             if (!entityAttribute.isObsolete()) {
                 if (object.getAttributes(entityAttribute.getId()).isEmpty()) {
                     if (!entityAttribute.getId().equals(EXPLANATION)) {
-                        if (entityAttribute.getValueTypes().size() == 1) {
-                            Attribute attribute = new Attribute();
-                            ValueType valueType = entityAttribute.getValueTypes().get(0);
-                            attribute.setAttributeTypeId(entityAttribute.getId());
-                            attribute.setValueTypeId(valueType.getId());
-                            attribute.setObjectId(object.getObjectId());
-                            attribute.setAttributeId(1L);
+                        Attribute attribute = new Attribute();
+                        attribute.setEntityAttributeId(entityAttribute.getId());
+                        attribute.setObjectId(object.getObjectId());
+                        attribute.setAttributeId(1L);
 
-                            if (isSimpleAttributeType(entityAttribute)) {
-                                attribute.setStringValues(StringValueUtil.newStringValues());
-                            }
-                            toAdd.add(attribute);
-                        } else {
-                            Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(entityAttribute, object.getObjectId());
-                            if (manyValueTypesAttribute != null) {
-                                toAdd.add(manyValueTypesAttribute);
-                            }
+                        if (entityAttribute.getValueType().isSimple()) {
+                            attribute.setStringValues(StringValueUtil.newStringValues());
                         }
+                        toAdd.add(attribute);
                     }
                 }
             }
@@ -233,8 +223,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
         Attribute explAttribute = new Attribute();
         explAttribute.setStringValues(StringValueUtil.newStringValues());
         StringValueUtil.getSystemStringValue(explAttribute.getStringValues()).setValue(explanation);
-        explAttribute.setAttributeTypeId(EXPLANATION);
-        explAttribute.setValueTypeId(EXPLANATION);
+        explAttribute.setEntityAttributeId(EXPLANATION);
         explAttribute.setAttributeId(1L);
         registration.addAttribute(explAttribute);
     }
@@ -351,19 +340,19 @@ public class RegistrationStrategy extends DomainObjectStrategy {
             //changes
             for (Attribute current : historyRegistration.getAttributes()) {
                 for (Attribute prev : previousRegistration.getAttributes()) {
-                    if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                    if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                         if (!current.getValueId().equals(prev.getValueId())
-                                && !current.getAttributeTypeId().equals(EXPLANATION)) {
+                                && !current.getEntityAttributeId().equals(EXPLANATION)) {
                             m.setEditedByUserId(historyRegistration.getEditedByUserId());
                             m.setExplanation(historyRegistration.getExplanation());
-                            if (DISTINGUISH_ATTRIBUTES.contains(current.getAttributeTypeId())) {
-                                m.addAttributeModification(current.getAttributeTypeId(), ModificationType.CHANGE);
+                            if (DISTINGUISH_ATTRIBUTES.contains(current.getEntityAttributeId())) {
+                                m.addAttributeModification(current.getEntityAttributeId(), ModificationType.CHANGE);
                                 m.setModificationType(ModificationType.NONE);
                             } else if (m.getModificationType() == null) {
                                 m.setModificationType(ModificationType.CHANGE);
                             }
                         } else {
-                            m.addAttributeModification(current.getAttributeTypeId(), ModificationType.NONE);
+                            m.addAttributeModification(current.getEntityAttributeId(), ModificationType.NONE);
                         }
                         break;
                     }
@@ -372,10 +361,10 @@ public class RegistrationStrategy extends DomainObjectStrategy {
 
             //added
             for (Attribute current : historyRegistration.getAttributes()) {
-                if (!current.getAttributeTypeId().equals(EXPLANATION)) {
+                if (!current.getEntityAttributeId().equals(EXPLANATION)) {
                     boolean added = true;
                     for (Attribute prev : previousRegistration.getAttributes()) {
-                        if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                        if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                             added = false;
                             break;
                         }
@@ -383,8 +372,8 @@ public class RegistrationStrategy extends DomainObjectStrategy {
                     if (added) {
                         m.setEditedByUserId(historyRegistration.getEditedByUserId());
                         m.setExplanation(historyRegistration.getExplanation());
-                        if (DISTINGUISH_ATTRIBUTES.contains(current.getAttributeTypeId())) {
-                            m.addAttributeModification(current.getAttributeTypeId(), ModificationType.ADD);
+                        if (DISTINGUISH_ATTRIBUTES.contains(current.getEntityAttributeId())) {
+                            m.addAttributeModification(current.getEntityAttributeId(), ModificationType.ADD);
                             m.setModificationType(ModificationType.NONE);
                         } else if (m.getModificationType() == null) {
                             m.setModificationType(ModificationType.CHANGE);
@@ -396,10 +385,10 @@ public class RegistrationStrategy extends DomainObjectStrategy {
 
             //removed
             for (Attribute prev : previousRegistration.getAttributes()) {
-                if (!prev.getAttributeTypeId().equals(EXPLANATION)) {
+                if (!prev.getEntityAttributeId().equals(EXPLANATION)) {
                     boolean removed = true;
                     for (Attribute current : historyRegistration.getAttributes()) {
-                        if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                        if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                             removed = false;
                             break;
                         }
@@ -407,8 +396,8 @@ public class RegistrationStrategy extends DomainObjectStrategy {
                     if (removed) {
                         m.setEditedByUserId(historyRegistration.getEditedByUserId());
                         m.setExplanation(historyRegistration.getExplanation());
-                        if (DISTINGUISH_ATTRIBUTES.contains(prev.getAttributeTypeId())) {
-                            m.addAttributeModification(prev.getAttributeTypeId(), ModificationType.REMOVE);
+                        if (DISTINGUISH_ATTRIBUTES.contains(prev.getEntityAttributeId())) {
+                            m.addAttributeModification(prev.getEntityAttributeId(), ModificationType.REMOVE);
                             m.setModificationType(ModificationType.NONE);
                         } else if (m.getModificationType() == null) {
                             m.setModificationType(ModificationType.CHANGE);
@@ -430,14 +419,14 @@ public class RegistrationStrategy extends DomainObjectStrategy {
                 : getHistoryRegistration(historyRegistration.getObjectId(), previousStartDate);
         if (previousRegistration == null) {
             for (Attribute current : historyRegistration.getAttributes()) {
-                m.addAttributeModification(current.getAttributeTypeId(), ModificationType.ADD);
+                m.addAttributeModification(current.getEntityAttributeId(), ModificationType.ADD);
             }
         } else {
             //changes
             for (Attribute current : historyRegistration.getAttributes()) {
                 for (Attribute prev : previousRegistration.getAttributes()) {
-                    if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
-                        m.addAttributeModification(current.getAttributeTypeId(),
+                    if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
+                        m.addAttributeModification(current.getEntityAttributeId(),
                                 !current.getValueId().equals(prev.getValueId()) ? ModificationType.CHANGE
                                 : ModificationType.NONE);
                     }
@@ -448,13 +437,13 @@ public class RegistrationStrategy extends DomainObjectStrategy {
             for (Attribute current : historyRegistration.getAttributes()) {
                 boolean added = true;
                 for (Attribute prev : previousRegistration.getAttributes()) {
-                    if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                    if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                         added = false;
                         break;
                     }
                 }
                 if (added) {
-                    m.addAttributeModification(current.getAttributeTypeId(), ModificationType.ADD);
+                    m.addAttributeModification(current.getEntityAttributeId(), ModificationType.ADD);
                 }
             }
 
@@ -462,13 +451,13 @@ public class RegistrationStrategy extends DomainObjectStrategy {
             for (Attribute prev : previousRegistration.getAttributes()) {
                 boolean removed = true;
                 for (Attribute current : historyRegistration.getAttributes()) {
-                    if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                    if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                         removed = false;
                         break;
                     }
                 }
                 if (removed) {
-                    m.addAttributeModification(prev.getAttributeTypeId(), ModificationType.REMOVE);
+                    m.addAttributeModification(prev.getEntityAttributeId(), ModificationType.REMOVE);
                 }
             }
         }

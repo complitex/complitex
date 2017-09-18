@@ -263,7 +263,7 @@ public class PersonInputPanel extends Panel {
 
             @Override
             protected void populateItem(ListItem<Attribute> item) {
-                long userAttributeTypeId = item.getModelObject().getAttributeTypeId();
+                long userAttributeTypeId = item.getModelObject().getEntityAttributeId();
                 initAttributeInput(item, userAttributeTypeId, false);
             }
         };
@@ -297,7 +297,7 @@ public class PersonInputPanel extends Panel {
         if (attribute == null) {
             attribute = new Attribute();
             attribute.setStringValues(StringValueUtil.newStringValues());
-            attribute.setAttributeTypeId(attributeTypeId);
+            attribute.setEntityAttributeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }
         parent.add(newInputComponent(personStrategy.getEntityName(), null, person, attribute, getLocale(), isInactive()));
@@ -310,8 +310,7 @@ public class PersonInputPanel extends Panel {
         if (militaryServiceRelation != null) {
             Attribute militaryServiceRelationAttribute = new Attribute();
             militaryServiceRelationAttribute.setAttributeId(1L);
-            militaryServiceRelationAttribute.setAttributeTypeId(MILITARY_SERVICE_RELATION);
-            militaryServiceRelationAttribute.setValueTypeId(MILITARY_SERVICE_RELATION);
+            militaryServiceRelationAttribute.setEntityAttributeId(MILITARY_SERVICE_RELATION);
             militaryServiceRelationAttribute.setValueId(militaryServiceRelation.getObjectId());
             person.addAttribute(militaryServiceRelationAttribute);
         }
@@ -321,7 +320,7 @@ public class PersonInputPanel extends Panel {
 
             @Override
             public boolean apply(Attribute attr) {
-                return attr.getAttributeTypeId().equals(CHILDREN);
+                return attr.getEntityAttributeId().equals(CHILDREN);
             }
         }));
         if (!person.isKid()) {
@@ -329,8 +328,7 @@ public class PersonInputPanel extends Panel {
             for (Person child : person.getChildren()) {
                 Attribute childrenAttribute = new Attribute();
                 childrenAttribute.setAttributeId(attributeId++);
-                childrenAttribute.setAttributeTypeId(CHILDREN);
-                childrenAttribute.setValueTypeId(CHILDREN);
+                childrenAttribute.setEntityAttributeId(CHILDREN);
                 childrenAttribute.setValueId(child.getObjectId());
                 person.addAttribute(childrenAttribute);
             }

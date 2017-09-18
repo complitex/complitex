@@ -1,6 +1,5 @@
 package org.complitex.address.strategy.building.entity;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.complitex.address.strategy.building.BuildingStrategy;
@@ -117,7 +116,7 @@ public class Building extends DomainObject {
 
     public void enhanceAlternativeAddressAttributes() {
         getAttributes().removeAll(Collections2.filter(getAttributes(),
-                attr -> attr.getAttributeTypeId().equals(BuildingStrategy.BUILDING_ADDRESS)));
+                attr -> attr.getEntityAttributeId().equals(BuildingStrategy.BUILDING_ADDRESS)));
 
         long attributeId = 1;
         for (DomainObject alternativeAddress : alternativeAddresses) {
@@ -135,8 +134,7 @@ public class Building extends DomainObject {
     private void addBuildingAddressAttribute(long valueId, long attributeId) {
         Attribute buildingAddressAttr = new Attribute();
         buildingAddressAttr.setAttributeId(attributeId);
-        buildingAddressAttr.setAttributeTypeId(BuildingStrategy.BUILDING_ADDRESS);
-        buildingAddressAttr.setValueTypeId(BuildingStrategy.BUILDING_ADDRESS);
+        buildingAddressAttr.setEntityAttributeId(BuildingStrategy.BUILDING_ADDRESS);
         buildingAddressAttr.setValueId(valueId);
         addAttribute(buildingAddressAttr);
     }

@@ -217,8 +217,8 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     }
 
     public String getAddressEntity(ApartmentCard apartmentCard) {
-        long valueTypeId = apartmentCard.getAttribute(ADDRESS).getValueTypeId();
-        return getAddressEntity(valueTypeId);
+//        long valueTypeId = apartmentCard.getAttribute(ADDRESS).getValueTypeId();
+        return getAddressEntity(0); //todo add attribute
     }
 
     @Override
@@ -229,24 +229,15 @@ public class ApartmentCardStrategy extends TemplateStrategy {
                 if (object.getAttributes(entityAttribute.getId()).isEmpty()) {
                     if (!entityAttribute.getId().equals(REGISTRATIONS)
                             && !entityAttribute.getId().equals(EXPLANATION)) {
-                        if (entityAttribute.getValueTypes().size() == 1) {
-                            Attribute attribute = new Attribute();
-                            ValueType valueType = entityAttribute.getValueTypes().get(0);
-                            attribute.setAttributeTypeId(entityAttribute.getId());
-                            attribute.setValueTypeId(valueType.getId());
-                            attribute.setObjectId(object.getObjectId());
-                            attribute.setAttributeId(1L);
+                        Attribute attribute = new Attribute();
+                        attribute.setEntityAttributeId(entityAttribute.getId());
+                        attribute.setObjectId(object.getObjectId());
+                        attribute.setAttributeId(1L);
 
-                            if (isSimpleAttributeType(entityAttribute)) {
-                                attribute.setStringValues(StringValueUtil.newStringValues());
-                            }
-                            toAdd.add(attribute);
-                        } else {
-                            Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(entityAttribute, object.getObjectId());
-                            if (manyValueTypesAttribute != null) {
-                                toAdd.add(manyValueTypesAttribute);
-                            }
+                        if (entityAttribute.getValueType().isSimple()) {
+                            attribute.setStringValues(StringValueUtil.newStringValues());
                         }
+                        toAdd.add(attribute);
                     }
                 }
             }
@@ -259,7 +250,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     @Override
     protected Attribute fillManyValueTypesAttribute(EntityAttribute entityAttribute, Long objectId) {
         Attribute attribute = new Attribute();
-        attribute.setAttributeTypeId(entityAttribute.getId());
+        attribute.setEntityAttributeId(entityAttribute.getId());
         attribute.setObjectId(objectId);
         attribute.setAttributeId(1L);
 
@@ -267,7 +258,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         if (entityAttribute.getId().equals(ADDRESS)) {
             attributeValueTypeId = ADDRESS_APARTMENT;
         }
-        attribute.setValueTypeId(attributeValueTypeId);
+
         return attribute;
     }
 
@@ -457,8 +448,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         Attribute registrationAttribute = new Attribute();
         registrationAttribute.setObjectId(apartmentCard.getObjectId());
         registrationAttribute.setAttributeId(attributeId);
-        registrationAttribute.setAttributeTypeId(REGISTRATIONS);
-        registrationAttribute.setValueTypeId(REGISTRATIONS_TYPE);
+        registrationAttribute.setEntityAttributeId(REGISTRATIONS);
         registrationAttribute.setValueId(registrationId);
         registrationAttribute.setStartDate(insertDate);
         insertAttribute(registrationAttribute);
@@ -659,8 +649,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         Attribute explAttribute = new Attribute();
         explAttribute.setStringValues(StringValueUtil.newStringValues());
         StringValueUtil.getSystemStringValue(explAttribute.getStringValues()).setValue(explanation);
-        explAttribute.setAttributeTypeId(EXPLANATION);
-        explAttribute.setValueTypeId(EXPLANATION_TYPE);
+        explAttribute.setEntityAttributeId(EXPLANATION);
         explAttribute.setAttributeId(1L);
         apartmentCard.addAttribute(explAttribute);
     }
@@ -697,8 +686,8 @@ public class ApartmentCardStrategy extends TemplateStrategy {
                 : getHistoryApartmentCard(historyCard.getObjectId(), previousStartDate);
         if (previousCard == null) {
             for (Attribute current : historyCard.getAttributes()) {
-                if (!current.getAttributeTypeId().equals(REGISTRATIONS)) {
-                    m.addAttributeModification(current.getAttributeTypeId(), ModificationType.ADD);
+                if (!current.getEntityAttributeId().equals(REGISTRATIONS)) {
+                    m.addAttributeModification(current.getEntityAttributeId(), ModificationType.ADD);
                 }
             }
             for (Registration reg : historyCard.getRegistrations()) {
@@ -710,9 +699,9 @@ public class ApartmentCardStrategy extends TemplateStrategy {
             //changes
             for (Attribute current : historyCard.getAttributes()) {
                 for (Attribute prev : previousCard.getAttributes()) {
-                    if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())
-                            && !current.getAttributeTypeId().equals(REGISTRATIONS)
-                            && !current.getAttributeTypeId().equals(EXPLANATION)) {
+                    if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())
+                            && !current.getEntityAttributeId().equals(REGISTRATIONS)
+                            && !current.getEntityAttributeId().equals(EXPLANATION)) {
 
                         ModificationType modificationType = ModificationType.NONE;
                         if (!current.getValueId().equals(prev.getValueId())) {
@@ -720,24 +709,24 @@ public class ApartmentCardStrategy extends TemplateStrategy {
                             m.setEditedByUserId(historyCard.getEditedByUserId());
                             m.setExplanation(historyCard.getExplanation());
                         }
-                        m.addAttributeModification(current.getAttributeTypeId(), modificationType);
+                        m.addAttributeModification(current.getEntityAttributeId(), modificationType);
                     }
                 }
             }
 
             //added
             for (Attribute current : historyCard.getAttributes()) {
-                if (!current.getAttributeTypeId().equals(REGISTRATIONS)
-                        && !current.getAttributeTypeId().equals(EXPLANATION)) {
+                if (!current.getEntityAttributeId().equals(REGISTRATIONS)
+                        && !current.getEntityAttributeId().equals(EXPLANATION)) {
                     boolean added = true;
                     for (Attribute prev : previousCard.getAttributes()) {
-                        if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                        if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                             added = false;
                             break;
                         }
                     }
                     if (added) {
-                        m.addAttributeModification(current.getAttributeTypeId(), ModificationType.ADD);
+                        m.addAttributeModification(current.getEntityAttributeId(), ModificationType.ADD);
                         m.setEditedByUserId(historyCard.getEditedByUserId());
                         m.setExplanation(historyCard.getExplanation());
                     }
@@ -746,17 +735,17 @@ public class ApartmentCardStrategy extends TemplateStrategy {
 
             //removed
             for (Attribute prev : previousCard.getAttributes()) {
-                if (!prev.getAttributeTypeId().equals(REGISTRATIONS)
-                        && !prev.getAttributeTypeId().equals(EXPLANATION)) {
+                if (!prev.getEntityAttributeId().equals(REGISTRATIONS)
+                        && !prev.getEntityAttributeId().equals(EXPLANATION)) {
                     boolean removed = true;
                     for (Attribute current : historyCard.getAttributes()) {
-                        if (current.getAttributeTypeId().equals(prev.getAttributeTypeId())) {
+                        if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                             removed = false;
                             break;
                         }
                     }
                     if (removed) {
-                        m.addAttributeModification(prev.getAttributeTypeId(), ModificationType.REMOVE);
+                        m.addAttributeModification(prev.getEntityAttributeId(), ModificationType.REMOVE);
                         m.setEditedByUserId(historyCard.getEditedByUserId());
                         m.setExplanation(historyCard.getExplanation());
                     }

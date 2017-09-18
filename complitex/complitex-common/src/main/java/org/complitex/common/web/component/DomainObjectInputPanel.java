@@ -175,7 +175,7 @@ public class DomainObjectInputPanel extends Panel {
 
         final Map<Attribute, EntityAttribute> attrToTypeMap = newLinkedHashMap();
         for (Attribute attr : simpleAttributes) {
-            EntityAttribute attrType = description.getAttribute(attr.getAttributeTypeId());
+            EntityAttribute attrType = description.getAttribute(attr.getEntityAttributeId());
             attrToTypeMap.put(attr, attrType);
         }
 
@@ -200,15 +200,15 @@ public class DomainObjectInputPanel extends Panel {
         final List<Attribute> attributes = newArrayList();
 
         for (Attribute attribute : allAttributes) {
-            EntityAttribute attrType = description.getAttribute(attribute.getAttributeTypeId());
+            EntityAttribute entityAttribute = description.getAttribute(attribute.getEntityAttributeId());
 
-            if (getStrategy().isSimpleAttributeType(attrType)) {
+            if (entityAttribute.getValueType().isSimple()) {
                 attributes.add(attribute);
             }
         }
 
-        attributes.sort((a1, a2) -> description.getAttribute(a2.getAttributeTypeId()).getId()
-                .compareTo(description.getAttribute(a1.getAttributeTypeId()).getId()));
+        attributes.sort((a1, a2) -> description.getAttribute(a2.getEntityAttributeId()).getId()
+                .compareTo(description.getAttribute(a1.getEntityAttributeId()).getId()));
 
         return attributes;
     }

@@ -248,7 +248,7 @@ final class ApartmentCardHistoryPanel extends Panel {
 
             @Override
             protected void populateItem(ListItem<Attribute> item) {
-                long restAttributeTypeId = item.getModelObject().getAttributeTypeId();
+                long restAttributeTypeId = item.getModelObject().getEntityAttributeId();
                 initAttributeInput(card, modification, item, restAttributeTypeId);
             }
         };

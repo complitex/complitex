@@ -263,7 +263,7 @@ final class PersonHistoryPanel extends Panel {
 
             @Override
             protected void populateItem(ListItem<Attribute> item) {
-                long userAttributeTypeId = item.getModelObject().getAttributeTypeId();
+                long userAttributeTypeId = item.getModelObject().getEntityAttributeId();
                 initAttributeInput(person, modification, item, userAttributeTypeId, false);
             }
         };
@@ -370,7 +370,7 @@ final class PersonHistoryPanel extends Panel {
         if (attribute == null) {
             attribute = new Attribute();
             attribute.setStringValues(StringValueUtil.newStringValues());
-            attribute.setAttributeTypeId(attributeTypeId);
+            attribute.setEntityAttributeId(attributeTypeId);
             parent.setVisible(showIfMissing);
         }
         Component inputComponent = newInputComponent(personStrategy.getEntityName(), null, person, attribute,

@@ -62,9 +62,8 @@ public class DocumentStrategy extends TemplateStrategy {
 
         Attribute documentTypeAttribute = new Attribute();
         documentTypeAttribute.setAttributeId(1L);
-        documentTypeAttribute.setAttributeTypeId(DOCUMENT_TYPE);
+        documentTypeAttribute.setEntityAttributeId(DOCUMENT_TYPE);
         documentTypeAttribute.setValueId(documentTypeId);
-        documentTypeAttribute.setValueTypeId(DOCUMENT_TYPE);
         document.addAttribute(documentTypeAttribute);
 
         fillAttributes(null, document);
@@ -80,17 +79,14 @@ public class DocumentStrategy extends TemplateStrategy {
 
         for (EntityAttribute entityAttribute : getEntity().getAttributes()) {
             if (document.getAttributes(entityAttribute.getId()).isEmpty()
-                    && (entityAttribute.getValueTypes().size() == 1)
                     && !entityAttribute.isObsolete()
                     && !entityAttribute.getId().equals(DOCUMENT_TYPE)) {
                 Attribute attribute = new Attribute();
-                ValueType valueType = entityAttribute.getValueTypes().get(0);
-                attribute.setAttributeTypeId(entityAttribute.getId());
-                attribute.setValueTypeId(valueType.getId());
+                attribute.setEntityAttributeId(entityAttribute.getId());
                 attribute.setObjectId(document.getObjectId());
                 attribute.setAttributeId(1L);
 
-                if (isSimpleAttributeType(entityAttribute)) {
+                if (entityAttribute.getValueType().isSimple()) {
                     attribute.setStringValues(StringValueUtil.newStringValues());
                 }
                 toAdd.add(attribute);

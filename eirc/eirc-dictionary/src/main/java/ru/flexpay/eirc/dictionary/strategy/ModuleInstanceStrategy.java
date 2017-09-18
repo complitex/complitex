@@ -169,12 +169,6 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     }
 
     @Override
-    public boolean isSimpleAttributeType(EntityAttribute entityAttribute) {
-        return !CUSTOM_ATTRIBUTES.contains(entityAttribute.getId()) && entityAttribute.getId() != MODULE_INSTANCE_TYPE &&
-                super.isSimpleAttributeType(entityAttribute);
-    }
-
-    @Override
     protected void fillAttributes(String dataSource, DomainObject object) {
         super.fillAttributes(dataSource, object);
 
@@ -190,7 +184,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
         super.loadStringValues(attributes);
 
         for (Attribute attribute : attributes) {
-            if (CUSTOM_ATTRIBUTES.contains(attribute.getAttributeTypeId())) {
+            if (CUSTOM_ATTRIBUTES.contains(attribute.getEntityAttributeId())) {
                 if (attribute.getValueId() != null) {
                     loadStringValues(attribute);
                 } else {

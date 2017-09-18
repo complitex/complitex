@@ -19,15 +19,15 @@
         </if>
         <foreach item="attributeFilter" collection="attributeFilters">
             <choose>
-                <when test="attributeFilter.attributeTypeId == 903 and attributeFilter.value != null">
+                <when test="attributeFilter.entityAttributeId == 903 and attributeFilter.value != null">
                     AND EXISTS(SELECT 1 FROM `organization_attribute` parent_attr WHERE parent_attr.`object_id` = e.`object_id`
-                            AND parent_attr.`status` = 1 AND parent_attr.`entity_attribute_id` = #{attributeFilter.attributeTypeId}
+                            AND parent_attr.`status` = 1 AND parent_attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
                             AND parent_attr.`value_id` = #{attributeFilter.value})
                 </when>
                 <otherwise>
                     <if test="attributeFilter.value != null">
                         AND EXISTS(SELECT 1 FROM `organization_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                            AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.attributeTypeId}
+                            AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
                             AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc WHERE sc.`value`
                                 <choose>
                                     <when test="comparisonType == 'LIKE'">

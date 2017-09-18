@@ -53,7 +53,7 @@ public class DomainObject implements ILongId {
 
     public void addAttributePair(Long attributeTypeId1, Long attributeTypeId2){
         Long attributeId = attributes.stream()
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId1))
+                .filter(a -> a.getEntityAttributeId().equals(attributeTypeId1))
                 .mapToLong(Attribute::getAttributeId)
                 .max()
                 .orElse(0) + 1;
@@ -64,20 +64,20 @@ public class DomainObject implements ILongId {
 
     public void addAttribute(Long attributeTypeId, Long valueId){
         Long attributeId = attributes.stream()
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEntityAttributeId().equals(attributeTypeId))
                 .mapToLong(Attribute::getAttributeId)
                 .max()
                 .orElse(0) + 1;
 
         Attribute attribute = new Attribute();
         attribute.setAttributeId(attributeId);
-        attribute.setAttributeTypeId(attributeTypeId);
+        attribute.setEntityAttributeId(attributeTypeId);
         attribute.setValueId(valueId);
     }
 
     public Attribute getAttribute(Long attributeTypeId) {
         return attributes.stream()
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEntityAttributeId().equals(attributeTypeId))
                 .filter(a -> a.getEndDate() == null)
                 .findAny()
                 .orElse(null);
@@ -86,38 +86,38 @@ public class DomainObject implements ILongId {
     public Attribute getAttribute(Long attributeTypeId, Long attributeId){
         return attributes.stream()
                 .filter(a -> a.getEndDate() == null)
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEntityAttributeId().equals(attributeTypeId))
                 .filter(a -> a.getAttributeId().equals(attributeId))
                 .findAny()
                 .orElse(null);
     }
 
     public Attribute getAttribute(Attribute attribute){
-        return getAttribute(attribute.getAttributeTypeId(), attribute.getAttributeId());
+        return getAttribute(attribute.getEntityAttributeId(), attribute.getAttributeId());
     }
 
 
     public List<Attribute> getAttributes(Long attributeTypeId) {
         return attributes.stream()
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEntityAttributeId().equals(attributeTypeId))
                 .filter(a -> a.getEndDate() == null)
                 .collect(Collectors.toList());
     }
 
     public List<Long> getValueIds(Long attributeTypeId){
         return attributes.stream()
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEntityAttributeId().equals(attributeTypeId))
                 .filter(a -> a.getEndDate() == null)
                 .map(Attribute::getValueId)
                 .collect(Collectors.toList());
     }
 
     public void removeAttribute(Long attributeTypeId) {
-        attributes.removeIf(attribute -> attribute.getAttributeTypeId().equals(attributeTypeId));
+        attributes.removeIf(attribute -> attribute.getEntityAttributeId().equals(attributeTypeId));
     }
 
     public void removeAttribute(Long attributeTypeId, Long attributeId){
-        attributes.removeIf(a -> a.getAttributeTypeId().equals(attributeTypeId) && a.getAttributeId().equals(attributeId));
+        attributes.removeIf(a -> a.getEntityAttributeId().equals(attributeTypeId) && a.getAttributeId().equals(attributeId));
     }
 
     public String getStringValue(Long attributeTypeId){

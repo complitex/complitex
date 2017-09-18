@@ -264,6 +264,7 @@ public class DomainObjectListPanel extends Panel {
             @Override
             protected void populateItem(ListItem<EntityAttribute> item) {
                 EntityAttribute entityAttribute = item.getModelObject();
+
                 final AttributeFilter attributeFilter = filter.getAttributeExample(entityAttribute.getId());
 
                 final IModel<String> filterModel = new Model<String>() {
@@ -283,21 +284,16 @@ public class DomainObjectListPanel extends Panel {
 
                 Component filter = new StringPanel("filter", Model.of(""), false, null, true);
 
-                String name = entityAttribute.getValueTypes().get(0).getValueType().toUpperCase();
-
-                if (SimpleTypes.isSimpleType(name)) {
-                    switch (SimpleTypes.valueOf(name)) {
+                if (entityAttribute.getValueType().isSimple()) {
+                    switch (entityAttribute.getValueType()) {
                         case STRING:
-                        case BIG_STRING:
                         case STRING_VALUE:
                         case INTEGER:
-                        case DOUBLE: {
+                        case DECIMAL: {
                             filter = new StringPanel("filter", filterModel, false, null, true);
                         }
                         break;
-                        case DATE:
-                        case DATE2:
-                        case MASKED_DATE: {
+                        case DATE: {
                             IModel<Date> dateModel = new Model<Date>() {
 
                                 DateConverter dateConverter = new DateConverter();
@@ -344,7 +340,7 @@ public class DomainObjectListPanel extends Panel {
                         }
                         break;
                     }
-                }else if ("ORGANIZATION".equals(name)){
+                }else if (ValueType.ENTITY.equals(entityAttribute.getValueType()) && entityAttribute.getReferenceId() == 900){
                     filter = new OrganizationIdPicker("filter", new IModel<Long>() {
                         @Override
                         public Long getObject() {

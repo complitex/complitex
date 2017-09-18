@@ -149,7 +149,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
         Attribute attribute = moduleInstance.getAttribute(attributeTypeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setAttributeTypeId(attributeTypeId);
+            attribute.setEntityAttributeId(attributeTypeId);
             attribute.setObjectId(moduleInstance.getObjectId());
             attribute.setAttributeId(1L);
             attribute.setStringValues(StringValueUtil.newStringValues());

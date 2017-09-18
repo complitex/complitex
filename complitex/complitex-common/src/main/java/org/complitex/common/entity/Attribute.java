@@ -14,7 +14,7 @@ public class Attribute implements Serializable {
     private String entityName;
     private Long attributeId;
     private Long objectId;
-    private Long attributeTypeId;
+    private Long entityAttributeId;
     private Long valueId;
     private Date startDate;
     private Date endDate;
@@ -26,8 +26,8 @@ public class Attribute implements Serializable {
     public Attribute() {
     }
 
-    public Attribute(Long attributeTypeId, Long attributeId) {
-        this.attributeTypeId = attributeTypeId;
+    public Attribute(Long entityAttributeId, Long attributeId) {
+        this.entityAttributeId = entityAttributeId;
         this.attributeId = attributeId;
     }
 
@@ -89,12 +89,12 @@ public class Attribute implements Serializable {
         this.attributeId = attributeId;
     }
 
-    public Long getAttributeTypeId() {
-        return attributeTypeId;
+    public Long getEntityAttributeId() {
+        return entityAttributeId;
     }
 
-    public void setAttributeTypeId(Long attributeTypeId) {
-        this.attributeTypeId = attributeTypeId;
+    public void setEntityAttributeId(Long entityAttributeId) {
+        this.entityAttributeId = entityAttributeId;
     }
 
     public Date getEndDate() {
