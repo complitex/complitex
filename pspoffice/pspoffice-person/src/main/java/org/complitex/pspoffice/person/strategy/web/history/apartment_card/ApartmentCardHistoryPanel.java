@@ -210,9 +210,9 @@ final class ApartmentCardHistoryPanel extends Panel {
                 item.add(new CssAttributeBehavior(rowCss));
             }
 
-            private void addRegistrationAttributeCss(Component component, long attributeTypeId,
+            private void addRegistrationAttributeCss(Component component, long entityAttributeId,
                     RegistrationModification registrationModification) {
-                ModificationType attributeModificationType = registrationModification.getAttributeModificationType(attributeTypeId);
+                ModificationType attributeModificationType = registrationModification.getAttributeModificationType(entityAttributeId);
                 if (attributeModificationType != null) {
                     component.add(new CssAttributeBehavior(attributeModificationType.getCssClass()));
                 }
@@ -238,8 +238,8 @@ final class ApartmentCardHistoryPanel extends Panel {
                 }));
 
         List<Attribute> restAttributes = newArrayList();
-        for (Long attributeTypeId : restAttributeTypeIds) {
-            Attribute userAttribute = card.getAttribute(attributeTypeId);
+        for (Long entityAttributeId : restAttributeTypeIds) {
+            Attribute userAttribute = card.getAttribute(entityAttributeId);
             if (userAttribute != null) {
                 restAttributes.add(userAttribute);
             }
@@ -269,8 +269,8 @@ final class ApartmentCardHistoryPanel extends Panel {
     }
 
     private void initAttributeInput(ApartmentCard card, ApartmentCardModification modification, MarkupContainer parent,
-            long attributeTypeId) {
-        final EntityAttribute entityAttribute = ENTITY.getAttribute(attributeTypeId);
+            long entityAttributeId) {
+        final EntityAttribute entityAttribute = ENTITY.getAttribute(entityAttributeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
@@ -281,10 +281,10 @@ final class ApartmentCardHistoryPanel extends Panel {
         parent.add(requiredContainer);
 
         //input component
-        Attribute attribute = card.getAttribute(attributeTypeId);
+        Attribute attribute = card.getAttribute(entityAttributeId);
         Component inputComponent = newInputComponent(apartmentCardStrategy.getEntityName(), null, card, attribute,
                 getLocale(), true);
-        inputComponent.add(new CssAttributeBehavior(modification.getModificationType(attributeTypeId).getCssClass()));
+        inputComponent.add(new CssAttributeBehavior(modification.getModificationType(entityAttributeId).getCssClass()));
         parent.add(inputComponent);
     }
 

@@ -252,8 +252,8 @@ public class PersonInputPanel extends Panel {
                 }));
 
         List<Attribute> userAttributes = newArrayList();
-        for (Long attributeTypeId : userAttributeTypeIds) {
-            Attribute userAttribute = person.getAttribute(attributeTypeId);
+        for (Long entityAttributeId : userAttributeTypeIds) {
+            Attribute userAttribute = person.getAttribute(entityAttributeId);
             if (userAttribute != null) {
                 userAttributes.add(userAttribute);
             }
@@ -270,10 +270,10 @@ public class PersonInputPanel extends Panel {
         return userAttributesView;
     }
 
-    private void initSystemAttributeInput(MarkupContainer parent, String id, long attributeTypeId, boolean showIfMissing) {
+    private void initSystemAttributeInput(MarkupContainer parent, String id, long entityAttributeId, boolean showIfMissing) {
         WebMarkupContainer container = new WebMarkupContainer(id + "Container");
         parent.add(container);
-        initAttributeInput(container, attributeTypeId, showIfMissing);
+        initAttributeInput(container, entityAttributeId, showIfMissing);
     }
 
     private boolean isBirthPlaceFieldsetVisible() {
@@ -281,8 +281,8 @@ public class PersonInputPanel extends Panel {
                 || (person.getAttribute(BIRTH_REGION) != null) || (person.getAttribute(BIRTH_CITY) != null);
     }
 
-    private void initAttributeInput(MarkupContainer parent, long attributeTypeId, boolean showIfMissing) {
-        final EntityAttribute entityAttribute = personStrategy.getEntity().getAttribute(attributeTypeId);
+    private void initAttributeInput(MarkupContainer parent, long entityAttributeId, boolean showIfMissing) {
+        final EntityAttribute entityAttribute = personStrategy.getEntity().getAttribute(entityAttributeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
@@ -293,11 +293,11 @@ public class PersonInputPanel extends Panel {
         parent.add(requiredContainer);
 
         //input component
-        Attribute attribute = person.getAttribute(attributeTypeId);
+        Attribute attribute = person.getAttribute(entityAttributeId);
         if (attribute == null) {
             attribute = new Attribute();
             attribute.setStringValues(StringValueUtil.newStringValues());
-            attribute.setEntityAttributeId(attributeTypeId);
+            attribute.setEntityAttributeId(entityAttributeId);
             parent.setVisible(showIfMissing);
         }
         parent.add(newInputComponent(personStrategy.getEntityName(), null, person, attribute, getLocale(), isInactive()));

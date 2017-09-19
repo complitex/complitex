@@ -252,8 +252,8 @@ final class PersonHistoryPanel extends Panel {
                 }));
 
         List<Attribute> userAttributes = newArrayList();
-        for (Long attributeTypeId : userAttributeTypeIds) {
-            Attribute userAttribute = person.getAttribute(attributeTypeId);
+        for (Long entityAttributeId : userAttributeTypeIds) {
+            Attribute userAttribute = person.getAttribute(entityAttributeId);
             if (userAttribute != null) {
                 userAttributes.add(userAttribute);
             }
@@ -354,8 +354,8 @@ final class PersonHistoryPanel extends Panel {
     }
 
     private void initAttributeInput(Person person, PersonModification modification, MarkupContainer parent,
-            long attributeTypeId, boolean showIfMissing) {
-        final EntityAttribute entityAttribute = ENTITY.getAttribute(attributeTypeId);
+            long entityAttributeId, boolean showIfMissing) {
+        final EntityAttribute entityAttribute = ENTITY.getAttribute(entityAttributeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
@@ -366,16 +366,16 @@ final class PersonHistoryPanel extends Panel {
         parent.add(requiredContainer);
 
         //input component
-        Attribute attribute = person.getAttribute(attributeTypeId);
+        Attribute attribute = person.getAttribute(entityAttributeId);
         if (attribute == null) {
             attribute = new Attribute();
             attribute.setStringValues(StringValueUtil.newStringValues());
-            attribute.setEntityAttributeId(attributeTypeId);
+            attribute.setEntityAttributeId(entityAttributeId);
             parent.setVisible(showIfMissing);
         }
         Component inputComponent = newInputComponent(personStrategy.getEntityName(), null, person, attribute,
                 getLocale(), true);
-        ModificationType modificationType = modification.getModificationType(attributeTypeId);
+        ModificationType modificationType = modification.getModificationType(entityAttributeId);
         if (modificationType == null) {
             modificationType = ModificationType.NONE;
         }

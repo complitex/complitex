@@ -585,8 +585,8 @@ public final class ApartmentCardEdit extends FormTemplatePage {
                 }));
 
         List<Attribute> userAttributes = newArrayList();
-        for (Long attributeTypeId : userAttributeTypeIds) {
-            Attribute userAttribute = newApartmentCard.getAttribute(attributeTypeId);
+        for (Long entityAttributeId : userAttributeTypeIds) {
+            Attribute userAttribute = newApartmentCard.getAttribute(entityAttributeId);
             if (userAttribute != null) {
                 userAttributes.add(userAttribute);
             }
@@ -693,14 +693,14 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         add(apartmentCardExplanationDialog);
     }
 
-    private void initSystemAttributeInput(MarkupContainer parent, String id, long attributeTypeId) {
+    private void initSystemAttributeInput(MarkupContainer parent, String id, long entityAttributeId) {
         WebMarkupContainer container = new WebMarkupContainer(id + "Container");
         parent.add(container);
-        initAttributeInput(container, attributeTypeId);
+        initAttributeInput(container, entityAttributeId);
     }
 
-    private void initAttributeInput(MarkupContainer parent, long attributeTypeId) {
-        final EntityAttribute entityAttribute = apartmentCardStrategy.getEntity().getAttribute(attributeTypeId);
+    private void initAttributeInput(MarkupContainer parent, long entityAttributeId) {
+        final EntityAttribute entityAttribute = apartmentCardStrategy.getEntity().getAttribute(entityAttributeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
@@ -711,7 +711,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         parent.add(requiredContainer);
 
         //input component
-        Attribute attribute = newApartmentCard.getAttribute(attributeTypeId);
+        Attribute attribute = newApartmentCard.getAttribute(entityAttributeId);
         parent.add(newInputComponent(apartmentCardStrategy.getEntityName(), null, newApartmentCard, attribute, getLocale(), false));
     }
 

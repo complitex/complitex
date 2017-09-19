@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableList;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.district.DistrictStrategy;
-import org.complitex.common.entity.*;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.exception.ServiceRuntimeException;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.StringValueBean;
@@ -197,9 +200,9 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     protected void fillAttributes(String dataSource, DomainObject object) {
         super.fillAttributes(null, object);
 
-        for (long attributeTypeId : CUSTOM_ATTRIBUTE_TYPES) {
-            if (object.getAttribute(attributeTypeId).getStringValues() == null) {
-                object.getAttribute(attributeTypeId).setStringValues(StringValueUtil.newStringValues());
+        for (long entityAttributeId : CUSTOM_ATTRIBUTE_TYPES) {
+            if (object.getAttribute(entityAttributeId).getStringValues() == null) {
+                object.getAttribute(entityAttributeId).setStringValues(StringValueUtil.newStringValues());
             }
         }
     }
@@ -259,8 +262,8 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    protected Long insertStrings(Long attributeTypeId, List<StringValue> strings) {
-        return ATTRIBUTE_TYPES_WITH_CUSTOM_STRING_PROCESSING.contains(attributeTypeId)
+    protected Long insertStrings(Long entityAttributeId, List<StringValue> strings) {
+        return ATTRIBUTE_TYPES_WITH_CUSTOM_STRING_PROCESSING.contains(entityAttributeId)
                 ? stringBean.save(strings, getEntityName(), false)
                 : stringBean.save(strings, getEntityName(), true);
     }

@@ -141,22 +141,22 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
         container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
     }
 
-    private WebMarkupContainer addPrivateKeyContainer(final long attributeTypeId, boolean disabled,
+    private WebMarkupContainer addPrivateKeyContainer(final long entityAttributeId, boolean disabled,
                                                       DomainObject moduleInstance, String name, final CallbackButton callbackButton) {
         WebMarkupContainer container = new WebMarkupContainer(name);
         container.setOutputMarkupPlaceholderTag(true);
         add(container);
-        Attribute attribute = moduleInstance.getAttribute(attributeTypeId);
+        Attribute attribute = moduleInstance.getAttribute(entityAttributeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setEntityAttributeId(attributeTypeId);
+            attribute.setEntityAttributeId(entityAttributeId);
             attribute.setObjectId(moduleInstance.getObjectId());
             attribute.setAttributeId(1L);
             attribute.setStringValues(StringValueUtil.newStringValues());
         }
         final AttributeStringModel attributeModel = new AttributeStringModel(attribute);
         final EntityAttribute entityAttribute =
-                moduleInstanceStrategy.getEntity().getAttribute(attributeTypeId);
+                moduleInstanceStrategy.getEntity().getAttribute(entityAttributeId);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
         container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));

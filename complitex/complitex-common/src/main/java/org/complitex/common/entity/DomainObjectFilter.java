@@ -59,8 +59,8 @@ public class DomainObjectFilter implements Serializable {
         this.startDate = startDate;
     }
 
-    public DomainObjectFilter addAttributes(Long... attributeTypeIds){
-        for (Long a : attributeTypeIds){
+    public DomainObjectFilter addAttributes(Long... entityAttributeIds){
+        for (Long a : entityAttributeIds){
             attributeFilters.add(new AttributeFilter(a));
         }
 
@@ -74,21 +74,21 @@ public class DomainObjectFilter implements Serializable {
         return this;
     }
 
-    public DomainObjectFilter addAttribute(Long attributeTypeId, String value){
-        attributeFilters.add(new AttributeFilter(attributeTypeId, value));
+    public DomainObjectFilter addAttribute(Long entityAttributeId, String value){
+        attributeFilters.add(new AttributeFilter(entityAttributeId, value));
 
         return this;
     }
 
-    public DomainObjectFilter addAttribute(Long attributeTypeId, Long valueId){
-        attributeFilters.add(new AttributeFilter(attributeTypeId, valueId));
+    public DomainObjectFilter addAttribute(Long entityAttributeId, Long valueId){
+        attributeFilters.add(new AttributeFilter(entityAttributeId, valueId));
 
         return this;
     }
 
-    public AttributeFilter getAttributeExample(long attributeTypeId) {
+    public AttributeFilter getAttributeExample(long entityAttributeId) {
         for (AttributeFilter attrExample : attributeFilters) {
-            if (attrExample.getEntityAttributeId().equals(attributeTypeId)) {
+            if (attrExample.getEntityAttributeId().equals(entityAttributeId)) {
                 return attrExample;
             }
         }

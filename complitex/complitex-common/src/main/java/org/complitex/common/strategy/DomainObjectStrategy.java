@@ -406,7 +406,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
 
-    protected Long insertStrings(Long attributeTypeId, List<StringValue> strings) {
+    protected Long insertStrings(Long entityAttributeId, List<StringValue> strings) {
         return stringValueBean.save(strings, getEntityName());
     }
 
@@ -450,12 +450,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     @Override
-    public void archiveAttributes(Collection<Long> attributeTypeIds, Date endDate) {
-        if (attributeTypeIds != null && !attributeTypeIds.isEmpty()) {
+    public void archiveAttributes(Collection<Long> entityAttributeIds, Date endDate) {
+        if (entityAttributeIds != null && !entityAttributeIds.isEmpty()) {
             Map<String, Object> params = ImmutableMap.<String, Object>builder().
                     put("entityName", getEntityName()).
                     put("endDate", endDate).
-                    put("attributeTypeIds", attributeTypeIds).
+                    put("attributeTypeIds", entityAttributeIds).
                     build();
             sqlSession().update(NS + ".archiveAttributes", params);
         }
@@ -1238,12 +1238,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             for (EntityAttribute entityAttribute : entity.getAttributes()) {
                 if (getEntityName().equals(entityAttribute.getValueType())) {
                     String referenceEntity = entity.getEntity();
-                    long attributeTypeId = entityAttribute.getId();
+                    long entityAttributeId = entityAttribute.getId();
 
                     Map<String, Object> params = new HashMap<>();
                     params.put("referenceEntity", referenceEntity);
                     params.put("objectId", objectId);
-                    params.put("attributeTypeId", attributeTypeId);
+                    params.put("attributeTypeId", entityAttributeId);
 
                     Object result = sqlSession().selectOne(NS + ".referenceExistCheck", params);
 

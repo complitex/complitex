@@ -49,18 +49,18 @@ public class EntityBean extends AbstractBean {
         return entityMap.get(entityName);
     }
 
-    public List<EntityAttribute> getAttributeTypes(List<Long> attributeTypeIds){
-        List<EntityAttribute> entityAttributes = new ArrayList<>(attributeTypeIds.size());
+    public List<EntityAttribute> getAttributeTypes(List<Long> entityAttributeIds){
+        List<EntityAttribute> entityAttributes = new ArrayList<>(entityAttributeIds.size());
 
-        for (Long attributeTypeId : attributeTypeIds){
-            entityAttributes.add(attributeTypeMap.get(attributeTypeId));
+        for (Long entityAttributeId : entityAttributeIds){
+            entityAttributes.add(attributeTypeMap.get(entityAttributeId));
         }
 
         return entityAttributes;
     }
 
-    public EntityAttribute getAttributeType(Long attributeTypeId){
-        return attributeTypeMap.get(attributeTypeId);
+    public EntityAttribute getAttributeType(Long entityAttributeId){
+        return attributeTypeMap.get(entityAttributeId);
     }
 
     private Entity loadFromDb(String dataSource, String entity) {
@@ -72,8 +72,8 @@ public class EntityBean extends AbstractBean {
         entityMap.put(entity, loadFromDb(null, entity));
     }
 
-    public String getAttributeLabel(String entityName, long attributeTypeId, Locale locale) {
-        return getEntity(entityName).getAttribute(attributeTypeId).getName(locale);
+    public String getAttributeLabel(String entityName, long entityAttributeId, Locale locale) {
+        return getEntity(entityName).getAttribute(entityAttributeId).getName(locale);
     }
 
     public EntityAttribute newAttributeType() {
@@ -130,15 +130,15 @@ public class EntityBean extends AbstractBean {
         sqlSession().insert(NS + ".insertAttributeType", entityAttribute);
     }
 
-    private void removeAttributeTypes(String entityName, Collection<Long> attributeTypeIds, Date endDate) {
-        if (attributeTypeIds != null && !attributeTypeIds.isEmpty()) {
+    private void removeAttributeTypes(String entityName, Collection<Long> entityAttributeIds, Date endDate) {
+        if (entityAttributeIds != null && !entityAttributeIds.isEmpty()) {
             Map<String, Object> params = ImmutableMap.<String, Object>builder().
                     put("endDate", endDate).
-                    put("attributeTypeIds", attributeTypeIds).
+                    put("attributeTypeIds", entityAttributeIds).
                     build();
             sqlSession().update(NS + ".removeAttributeTypes", params);
 
-            strategyFactory.getStrategy(entityName).archiveAttributes(attributeTypeIds, endDate);
+            strategyFactory.getStrategy(entityName).archiveAttributes(entityAttributeIds, endDate);
         }
     }
 

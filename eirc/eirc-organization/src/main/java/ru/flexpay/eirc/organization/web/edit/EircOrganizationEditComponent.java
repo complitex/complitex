@@ -76,21 +76,21 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
         }
     }
 
-    private WebMarkupContainer addAttributeContainer(final long attributeTypeId, boolean disabled,
+    private WebMarkupContainer addAttributeContainer(final long entityAttributeId, boolean disabled,
                                                      EircOrganization organization, String name) {
         WebMarkupContainer container = new WebMarkupContainer(name);
         container.setOutputMarkupPlaceholderTag(true);
         add(container);
-        Attribute attribute = organization.getAttribute(attributeTypeId);
+        Attribute attribute = organization.getAttribute(entityAttributeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setEntityAttributeId(attributeTypeId);
+            attribute.setEntityAttributeId(entityAttributeId);
             attribute.setObjectId(organization.getObjectId());
             attribute.setAttributeId(1L);
             attribute.setStringValues(StringValueUtil.newStringValues());
         }
         final EntityAttribute entityAttribute =
-                organizationStrategy.getEntity().getAttribute(attributeTypeId);
+                organizationStrategy.getEntity().getAttribute(entityAttributeId);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
         container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
@@ -103,21 +103,21 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
     }
 
     private WebMarkupContainer addServiceContainer(EircOrganization organization, String name) {
-        Long attributeTypeId = EircOrganizationStrategy.SERVICE;
+        Long entityAttributeId = EircOrganizationStrategy.SERVICE;
 
         WebMarkupContainer container = new WebMarkupContainer(name);
         container.setOutputMarkupPlaceholderTag(true);
         add(container);
-        Attribute attribute = organization.getAttribute(attributeTypeId);
+        Attribute attribute = organization.getAttribute(entityAttributeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setEntityAttributeId(attributeTypeId);
+            attribute.setEntityAttributeId(entityAttributeId);
             attribute.setObjectId(organization.getObjectId());
             attribute.setAttributeId(1L);
             attribute.setStringValues(StringValueUtil.newStringValues());
         }
         final EntityAttribute entityAttribute =
-                organizationStrategy.getEntity().getAttribute(attributeTypeId);
+                organizationStrategy.getEntity().getAttribute(entityAttributeId);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
         container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));

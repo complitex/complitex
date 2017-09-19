@@ -856,7 +856,7 @@ public class LegacyDataImportService {
         private static final String FAIL_PROCESSING_KEY_SUFFIX = "_fail_finish_processing";
         private static final String SUCCESS_PROCESSING_KEY_SUFFIX = "_success_finish_processing";
         private final String entityName;
-        private final long attributeTypeId;
+        private final long entityAttributeId;
         private final String correctionTable;
         private final ProcessItem item;
         private final String beginProcessingMessageKey;
@@ -867,10 +867,10 @@ public class LegacyDataImportService {
         private BufferedWriter errorFile;
         protected BufferedWriter errorDescriptionFile;
 
-        ReferenceDataProcessor(String entityName, long attributeTypeId, String correctionTable,
+        ReferenceDataProcessor(String entityName, long entityAttributeId, String correctionTable,
                 ProcessItem item, LegacyDataImportFile importFile) {
             this.entityName = entityName;
-            this.attributeTypeId = attributeTypeId;
+            this.entityAttributeId = entityAttributeId;
             this.correctionTable = correctionTable;
             this.item = item;
             this.importFile = importFile;
@@ -880,9 +880,9 @@ public class LegacyDataImportService {
             this.successProcessingMessageKey = correctionTable + SUCCESS_PROCESSING_KEY_SUFFIX;
         }
 
-        ReferenceDataProcessor(String entityName, long attributeTypeId, ProcessItem item,
+        ReferenceDataProcessor(String entityName, long entityAttributeId, ProcessItem item,
                 LegacyDataImportFile importFile) {
-            this(entityName, attributeTypeId, entityName, item, importFile);
+            this(entityName, entityAttributeId, entityName, item, importFile);
         }
 
         protected final IStrategy strategy() {
@@ -948,7 +948,7 @@ public class LegacyDataImportService {
                                 if (systemObjectId == null) {
                                     IStrategy strategy = strategy();
                                     DomainObject systemObject = strategy.newInstance();
-                                    Utils.setValue(systemObject.getAttribute(attributeTypeId), correction.getNkod());
+                                    Utils.setValue(systemObject.getAttribute(entityAttributeId), correction.getNkod());
                                     strategy.insert(systemObject, DateUtil.getCurrentDate());
                                     systemObjectId = systemObject.getObjectId();
                                 }

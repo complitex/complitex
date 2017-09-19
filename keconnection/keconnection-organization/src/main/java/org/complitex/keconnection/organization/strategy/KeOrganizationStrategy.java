@@ -223,9 +223,9 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
     protected void fillAttributes(String dataSource, DomainObject object) {
         super.fillAttributes(null, object);
 
-        for (long attributeTypeId : CUSTOM_ATTRIBUTE_TYPES) {
-            if (object.getAttribute(attributeTypeId).getStringValues() == null) {
-                object.getAttribute(attributeTypeId).setStringValues(StringValueUtil.newStringValues());
+        for (long entityAttributeId : CUSTOM_ATTRIBUTE_TYPES) {
+            if (object.getAttribute(entityAttributeId).getStringValues() == null) {
+                object.getAttribute(entityAttributeId).setStringValues(StringValueUtil.newStringValues());
             }
         }
     }

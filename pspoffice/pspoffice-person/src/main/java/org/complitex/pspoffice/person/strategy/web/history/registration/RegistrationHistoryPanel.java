@@ -223,8 +223,8 @@ final class RegistrationHistoryPanel extends Panel {
                 }));
 
         List<Attribute> userAttributes = newArrayList();
-        for (Long attributeTypeId : userAttributeTypeIds) {
-            Attribute userAttribute = registration.getAttribute(attributeTypeId);
+        for (Long entityAttributeId : userAttributeTypeIds) {
+            Attribute userAttribute = registration.getAttribute(entityAttributeId);
             if (userAttribute != null) {
                 userAttributes.add(userAttribute);
             }
@@ -271,15 +271,15 @@ final class RegistrationHistoryPanel extends Panel {
     }
 
     private void initSystemAttributeInput(Registration registration, RegistrationModification modification,
-            MarkupContainer parent, String id, long attributeTypeId, boolean showIfMissing) {
+            MarkupContainer parent, String id, long entityAttributeId, boolean showIfMissing) {
         WebMarkupContainer container = new WebMarkupContainer(id + "Container");
         parent.add(container);
-        initAttributeInput(registration, modification, container, attributeTypeId, showIfMissing);
+        initAttributeInput(registration, modification, container, entityAttributeId, showIfMissing);
     }
 
     private void initAttributeInput(Registration registration, RegistrationModification modification,
-            MarkupContainer parent, long attributeTypeId, boolean showIfMissing) {
-        final EntityAttribute entityAttribute = ENTITY.getAttribute(attributeTypeId);
+            MarkupContainer parent, long entityAttributeId, boolean showIfMissing) {
+        final EntityAttribute entityAttribute = ENTITY.getAttribute(entityAttributeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
@@ -290,16 +290,16 @@ final class RegistrationHistoryPanel extends Panel {
         parent.add(requiredContainer);
 
         //input component
-        Attribute attribute = registration.getAttribute(attributeTypeId);
+        Attribute attribute = registration.getAttribute(entityAttributeId);
         if (attribute == null) {
             attribute = new Attribute();
             attribute.setStringValues(StringValueUtil.newStringValues());
-            attribute.setEntityAttributeId(attributeTypeId);
+            attribute.setEntityAttributeId(entityAttributeId);
             parent.setVisible(showIfMissing);
         }
         Component inputComponent = newInputComponent(registrationStrategy.getEntityName(), null, registration,
                 attribute, getLocale(), true);
-        ModificationType modificationType = modification.getAttributeModificationType(attributeTypeId);
+        ModificationType modificationType = modification.getAttributeModificationType(entityAttributeId);
         if (modificationType == null) {
             modificationType = ModificationType.NONE;
         }

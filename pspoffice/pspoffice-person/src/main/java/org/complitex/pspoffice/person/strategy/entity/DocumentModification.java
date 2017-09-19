@@ -4,9 +4,10 @@
  */
 package org.complitex.pspoffice.person.strategy.entity;
 
-import java.util.Map;
 import java.io.Serializable;
-import static com.google.common.collect.Maps.*;
+import java.util.Map;
+
+import static com.google.common.collect.Maps.newHashMap;
 
 /**
  *
@@ -29,11 +30,11 @@ public class DocumentModification implements Serializable {
         return modificationType;
     }
 
-    public ModificationType getAttributeModificationType(long attributeTypeId) {
-        return attributeModificationMap.get(attributeTypeId);
+    public ModificationType getAttributeModificationType(long entityAttributeId) {
+        return attributeModificationMap.get(entityAttributeId);
     }
 
-    public void addAttributeModification(long attributeTypeId, ModificationType modificationType) {
-        attributeModificationMap.put(attributeTypeId, modificationType);
+    public void addAttributeModification(long entityAttributeId, ModificationType modificationType) {
+        attributeModificationMap.put(entityAttributeId, modificationType);
     }
 }

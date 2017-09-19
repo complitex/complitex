@@ -16,7 +16,7 @@ public interface IStrategy {
     
     void archive(DomainObject object, Date endDate);
     
-    void archiveAttributes(Collection<Long> attributeTypeIds, Date endDate);
+    void archiveAttributes(Collection<Long> entityAttributeIds, Date endDate);
 
     void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput);
     

@@ -23,8 +23,8 @@ public class Entity implements ILongId {
         return getValue(names, locale);
     }
 
-    public String getName(Long attributeTypeId, Locale locale){
-        return getValue(getAttribute(attributeTypeId).getNames(), locale);
+    public String getName(Long entityAttributeId, Locale locale){
+        return getValue(getAttribute(entityAttributeId).getNames(), locale);
     }
 
     public String getEntity() {

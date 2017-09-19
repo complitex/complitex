@@ -50,17 +50,17 @@ public class KeOrganizationEditComponent extends OrganizationEditComponent {
             readyCloseOmSection.setOutputMarkupPlaceholderTag(true);
             add(readyCloseOmSection);
 
-            final long attributeTypeId = KeOrganizationStrategy.READY_CLOSE_OPER_MONTH;
-            Attribute attribute = organization.getAttribute(attributeTypeId);
+            final long entityAttributeId = KeOrganizationStrategy.READY_CLOSE_OPER_MONTH;
+            Attribute attribute = organization.getAttribute(entityAttributeId);
             if (attribute == null) {
                 attribute = new Attribute();
-                attribute.setEntityAttributeId(attributeTypeId);
+                attribute.setEntityAttributeId(entityAttributeId);
                 attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
                 attribute.setStringValues(StringValueUtil.newStringValues());
             }
             final EntityAttribute entityAttribute =
-                    organizationStrategy.getEntity().getAttribute(attributeTypeId);
+                    organizationStrategy.getEntity().getAttribute(entityAttributeId);
             readyCloseOmSection.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
             readyCloseOmSection.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));

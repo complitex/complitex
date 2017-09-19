@@ -3,7 +3,10 @@ package ru.flexpay.eirc.organization.strategy;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.*;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.exception.DeleteException;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
 import org.complitex.common.strategy.StringLocaleBean;
@@ -197,9 +200,9 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
     protected void fillAttributes(String dataSource, DomainObject object) {
         super.fillAttributes(dataSource, object);
 
-        for (long attributeTypeId : ALL_ATTRIBUTE_TYPES) {
-            if (object.getAttribute(attributeTypeId).getStringValues() == null) {
-                object.getAttribute(attributeTypeId).setStringValues(StringValueUtil.newStringValues());
+        for (long entityAttributeId : ALL_ATTRIBUTE_TYPES) {
+            if (object.getAttribute(entityAttributeId).getStringValues() == null) {
+                object.getAttribute(entityAttributeId).setStringValues(StringValueUtil.newStringValues());
             }
         }
     }
@@ -283,13 +286,13 @@ public class EircOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    protected Long insertStrings(Long attributeTypeId, List<StringValue> strings) {
+    protected Long insertStrings(Long entityAttributeId, List<StringValue> strings) {
         /* if it's data source or one of load/save request file directory attributes 
          * or root directory for loading and saving request files
          * then string value should be inserted as is and not upper cased. */
-        return ALL_ATTRIBUTE_TYPES.contains(attributeTypeId)
+        return ALL_ATTRIBUTE_TYPES.contains(entityAttributeId)
                 ? stringBean.save(strings, getEntityName(), false)
-                : super.insertStrings(attributeTypeId, strings);
+                : super.insertStrings(entityAttributeId, strings);
     }
 
     @Override
