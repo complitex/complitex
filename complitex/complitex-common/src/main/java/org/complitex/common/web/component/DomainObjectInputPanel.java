@@ -21,10 +21,11 @@ import org.complitex.common.web.component.search.SearchComponentState;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.complitex.common.web.component.domain.DomainObjectAccessUtil.canEdit;
 
 public class DomainObjectInputPanel extends Panel {
@@ -189,18 +190,17 @@ public class DomainObjectInputPanel extends Panel {
     }
 
     protected List<Attribute> getSimpleAttributes(List<Attribute> allAttributes) {
-        final List<Attribute> attributes = newArrayList();
+        List<Attribute> attributes = new ArrayList<>();
 
         for (Attribute attribute : allAttributes) {
             EntityAttribute entityAttribute = description.getAttribute(attribute.getEntityAttributeId());
 
-            if (entityAttribute.getValueType().isSimple()) {
+            if (entityAttribute.getValueType().isSimple() && entityAttribute.getReferenceId() == null) {
                 attributes.add(attribute);
             }
         }
 
-        attributes.sort((a1, a2) -> description.getAttribute(a2.getEntityAttributeId()).getId()
-                .compareTo(description.getAttribute(a1.getEntityAttributeId()).getId()));
+        attributes.sort(Comparator.comparing(a -> description.getAttribute(a.getEntityAttributeId()).getId()));
 
         return attributes;
     }
