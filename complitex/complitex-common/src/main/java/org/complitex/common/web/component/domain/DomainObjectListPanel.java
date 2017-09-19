@@ -24,7 +24,10 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.converter.DateConverter;
 import org.complitex.common.entity.*;
-import org.complitex.common.strategy.*;
+import org.complitex.common.strategy.EntityBean;
+import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.common.web.component.ShowMode;
@@ -46,9 +49,6 @@ import java.util.Map;
 public class DomainObjectListPanel extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
-
-    @EJB
-    private StringValueBean stringBean;
 
     @EJB
     private StringLocaleBean stringLocaleBean;

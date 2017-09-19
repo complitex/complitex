@@ -88,7 +88,7 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
 //                    removed = false;
 //                    boolean needToUpdateAttribute = false;
 //
-//                    EntityAttribute entityAttribute = getEntity().getAttribute(oldAttr.getEntityAttributeId());
+//                    EntityAttribute entityAttribute = getEntityName().getAttribute(oldAttr.getEntityAttributeId());
 //
 //                    Long oldValueTypeId = oldAttr.getValueTypeId();
 //                    Long newValueTypeId = newAttr.getValueTypeId();

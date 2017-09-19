@@ -5,23 +5,23 @@ import java.io.Serializable;
 public class AttributeFilter implements Serializable {
     private Long attributeId;
 
-    private Long attributeTypeId;
+    private Long entityAttributeId;
 
     private String value;
 
     private Long valueId;
 
-    public AttributeFilter(Long attributeTypeId) {
-        this.attributeTypeId = attributeTypeId;
+    public AttributeFilter(Long entityAttributeId) {
+        this.entityAttributeId = entityAttributeId;
     }
 
-    public AttributeFilter(Long attributeTypeId, String value) {
-        this.attributeTypeId = attributeTypeId;
+    public AttributeFilter(Long entityAttributeId, String value) {
+        this.entityAttributeId = entityAttributeId;
         this.value = value;
     }
 
-    public AttributeFilter(Long attributeTypeId, Long valueId) {
-        this.attributeTypeId = attributeTypeId;
+    public AttributeFilter(Long entityAttributeId, Long valueId) {
+        this.entityAttributeId = entityAttributeId;
         this.valueId = valueId;
     }
 
@@ -33,12 +33,12 @@ public class AttributeFilter implements Serializable {
         this.attributeId = attributeId;
     }
 
-    public Long getAttributeTypeId() {
-        return attributeTypeId;
+    public Long getEntityAttributeId() {
+        return entityAttributeId;
     }
 
-    public void setAttributeTypeId(Long attributeTypeId) {
-        this.attributeTypeId = attributeTypeId;
+    public void setEntityAttributeId(Long entityAttributeId) {
+        this.entityAttributeId = entityAttributeId;
     }
 
     public String getValue() {

@@ -88,7 +88,7 @@ public class DomainObjectFilter implements Serializable {
 
     public AttributeFilter getAttributeExample(long attributeTypeId) {
         for (AttributeFilter attrExample : attributeFilters) {
-            if (attrExample.getAttributeTypeId().equals(attributeTypeId)) {
+            if (attrExample.getEntityAttributeId().equals(attributeTypeId)) {
                 return attrExample;
             }
         }

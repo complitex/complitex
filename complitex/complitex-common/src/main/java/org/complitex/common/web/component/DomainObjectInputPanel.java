@@ -23,10 +23,8 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.newLinkedHashMap;
 import static org.complitex.common.web.component.domain.DomainObjectAccessUtil.canEdit;
 
 public class DomainObjectInputPanel extends Panel {
@@ -171,20 +169,14 @@ public class DomainObjectInputPanel extends Panel {
     }
 
     protected ListView<Attribute> newSimpleAttributeListView(String id) {
-        final List<Attribute> simpleAttributes = getSimpleAttributes(object.getAttributes());
-
-        final Map<Attribute, EntityAttribute> attrToTypeMap = newLinkedHashMap();
-        for (Attribute attr : simpleAttributes) {
-            EntityAttribute attrType = description.getAttribute(attr.getEntityAttributeId());
-            attrToTypeMap.put(attr, attrType);
-        }
-
-        return new ListView<Attribute>(id, simpleAttributes) {
+        return new ListView<Attribute>(id, getSimpleAttributes(object.getAttributes())) {
 
             @Override
             protected void populateItem(ListItem<Attribute> item) {
                 Attribute attr = item.getModelObject();
-                final EntityAttribute entityAttribute = attrToTypeMap.get(attr);
+
+                EntityAttribute entityAttribute = description.getAttribute(attr.getEntityAttributeId());
+
                 item.add(new Label("label", DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
                 WebMarkupContainer required = new WebMarkupContainer("required");
                 item.add(required);

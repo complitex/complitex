@@ -96,15 +96,15 @@ public class WiQuerySearchComponent extends Panel {
     @EJB
     private StringLocaleBean stringLocaleBean;
 
-    private final List<String> searchFilters;
-    private final List<SearchFilterSettings> searchFilterSettings;
-    private final ISearchCallback callback;
-    private final SearchComponentState searchComponentState;
-    private final boolean enabled;
+    private List<String> searchFilters;
+    private List<SearchFilterSettings> searchFilterSettings;
+    private transient ISearchCallback callback;
+    private SearchComponentState searchComponentState;
+    private boolean enabled;
     private List<IModel<DomainObject>> filterModels;
-    private final ShowMode showMode;
-    private final WebMarkupContainer searchContainer = new WebMarkupContainer("searchContainer");
-    private final Map<String, Component> filterInputFieldMap = newHashMap();
+    private ShowMode showMode;
+    private WebMarkupContainer searchContainer = new WebMarkupContainer("searchContainer");
+    private Map<String, Component> filterInputFieldMap = newHashMap();
 
     private boolean showColumns = true;
 

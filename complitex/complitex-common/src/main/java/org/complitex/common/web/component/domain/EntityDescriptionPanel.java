@@ -252,7 +252,7 @@ public class EntityDescriptionPanel extends Panel {
 //            if (referenceEntityStrategy == null) {
 //                return new StringResourceModel("reference_table", this, Model.of(valueType.toUpperCase())).getObject();
 //            } else {
-//                return new StringResourceModel("reference", this, Model.of(referenceEntityStrategy.getEntity()
+//                return new StringResourceModel("reference", this, Model.of(referenceEntityStrategy.getEntityName()
 //                        .getName(getLocale()))).getObject();
 //            }
         }

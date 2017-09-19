@@ -2,42 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.common.strategy.EntityBean">
     <resultMap id="entityResultMap" type="org.complitex.common.entity.Entity">
-        <id column="entity_id" property="id"/>
-
+        <id column="e_id" property="id"/>
         <result column="entity" property="entity"/>
-
-        <collection property="names" ofType="StringValue" column="name_id" select="findNames"/>
+        <collection property="names" ofType="StringValue" column="e_name_id" select="findNames"/>
 
         <collection property="attributes" ofType="org.complitex.common.entity.EntityAttribute">
-            <id column="entity_attribute_id" property="id"/>
-
+            <id column="ea_id" property="id"/>
             <result column="mandatory" property="mandatory"/>
-            <result column="attr_start_date" property="startDate"/>
-            <result column="attr_end_date" property="endDate"/>
+            <result column="ea_start_date" property="startDate"/>
+            <result column="ea_end_date" property="endDate"/>
             <result column="system" property="system"/>
-
             <result column="value_type_id" property="valueType"/>
             <result column="reference_id" property="referenceId"/>
-
-            <collection property="names" column="name_id" select="findNames"/>
+            <collection property="names" column="ea_name_id" select="findNames"/>
         </collection>
     </resultMap>
 
     <select id="load" parameterType="map" resultMap="entityResultMap">
         SELECT
-        e.`id` as entity_id,
+        e.`id` e_id,
         e.`entity`,
-        e.`name_id`,
-        eat.`id` as entity_attribute_id,
-        eat.`mandatory`,
-        eat.`start_date` as attr_start_date,
-        eat.`end_date` as attr_end_date,
-        eat.`name_id`,
-        eat.`system`,
-        eat.`value_type_id`,
-        eat.`reference_id`
+        e.`name_id` e_name_id,
+        ea.`id` ea_id,
+        ea.`mandatory`,
+        ea.`start_date` ea_start_date,
+        ea.`end_date` ea_end_date,
+        ea.`name_id` ea_name_id,
+        ea.`system`,
+        ea.`value_type_id`,
+        ea.`reference_id`
         FROM `entity` e
-        JOIN `entity_attribute` eat ON eat.`entity_id` = e.`id`
+        JOIN `entity_attribute` ea ON ea.`entity_id` = e.`id`
         WHERE e.`entity` = #{entity}
     </select>
 

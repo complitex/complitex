@@ -8,7 +8,7 @@ public class StringValue implements Serializable {
     @JsonIgnore
     private Long pkId;
 
-    private String entity;
+    private String entityName;
     private Long id;
     private Long localeId;
     private String value;
@@ -28,12 +28,12 @@ public class StringValue implements Serializable {
         this.pkId = pkId;
     }
 
-    public String getEntity() {
-        return entity;
+    public String getEntityName() {
+        return entityName;
     }
 
-    public void setEntity(String entityName) {
-        this.entity = entityName;
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public Long getId() {

@@ -315,7 +315,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         boolean isAdmin = sessionBean.isAdmin();
         filter.setAdmin(isAdmin);
 //        if (!isAdmin) { todo permission
-//            filter.setUserPermissionString(sessionBean.getPermissionString(getEntity()));
+//            filter.setUserPermissionString(sessionBean.getPermissionString(getEntityName()));
 //        }
     }
 
@@ -360,7 +360,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     /**
-     * Simple wrapper around EntityBean.getEntity for convenience.
+     * Simple wrapper around EntityBean.getEntityName for convenience.
      * @return Entity description
      */
     @Override
