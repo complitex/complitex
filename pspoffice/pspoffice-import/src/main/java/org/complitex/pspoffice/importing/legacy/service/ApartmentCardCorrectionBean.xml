@@ -61,7 +61,7 @@
         SELECT e.`object_id` FROM `apartment_card` e
         JOIN `locale` sys ON sys.`system` = 1
         JOIN `apartment_card_attribute` kv ON (kv.`object_id` = e.`object_id` AND kv.`entity_attribute_id` = #{apartmentCardAddressAT}
-            AND kv.`value_type_id` = #{apartmentCardApartmentATID} AND kv.`status` = 1)
+             AND kv.`status` = 1)
         JOIN `apartment_card_attribute` acid ON (acid.`object_id` = e.`object_id` AND acid.`entity_attribute_id` = #{apartmentCardIdAT}
             AND acid.`status` = 1)
         JOIN `apartment_card_string_value` acid_value ON (acid_value.`id` = acid.`value_id` AND acid_value.`locale_id` = sys.`id`)

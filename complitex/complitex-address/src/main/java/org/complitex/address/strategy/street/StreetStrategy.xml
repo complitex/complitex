@@ -67,9 +67,9 @@
     <select id="selectStreetIds" parameterType="map" resultType="long">
         select distinct s.`object_id` from `street` s
           join `street_attribute` a_st on (a_st.`status` = 1
-            and s.`object_id` = a_st.`object_id` and a_st.`value_type_id` = 301)
+            and s.`object_id` = a_st.`object_id` and a_st.`entity_attribute_id` = 301)
           join `street_attribute` a on (a.`status` = 1
-            and s.`object_id` = a.`object_id` and a.`value_type_id` = 300)
+            and s.`object_id` = a.`object_id` and a.`entity_attribute_id` = 300)
           join `street_string_value` sc on (sc.`id` = a.`value_id`)
         where s.`status` = 1 and s.`parent_entity_id` = 400
           <if test="cityId != null">and s.`parent_id` = #{cityId}</if>

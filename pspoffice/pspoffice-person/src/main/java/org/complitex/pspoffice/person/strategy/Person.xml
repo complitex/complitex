@@ -160,7 +160,7 @@
 
     <select id="findPersonRegistrations" parameterType="map"
                 resultMap="org.complitex.pspoffice.person.strategy.Person.PersonRegistration">
-        SELECT r.`object_id` registrationId, address.`value_id` addressId, address.`value_type_id` addressTypeId
+        SELECT r.`object_id` registrationId, address.`value_id` addressId
         <include refid="org.complitex.pspoffice.person.strategy.Person.findPersonRegistrationsSql"/>
         ORDER BY 
                 CASE ra.`status`
@@ -176,7 +176,7 @@
 
     <select id="findPersonApartmentCardAddresses" parameterType="map"
                 resultMap="org.complitex.pspoffice.person.strategy.Person.PersonApartmentCardAddress">
-        SELECT ar.`object_id` apartmentCardId, address.`value_id` addressId, address.`value_type_id` addressTypeId
+        SELECT ar.`object_id` apartmentCardId, address.`value_id` addressId
         <include refid="org.complitex.pspoffice.person.strategy.Person.findPersonRegistrationsSql"/>
             AND r.`status` = 1
     </select>
@@ -191,7 +191,7 @@
 
     <select id="findPermanentRegistrationAddress" parameterType="map"
                 resultMap="org.complitex.pspoffice.person.strategy.Person.PersonRegistration">
-        SELECT r.`object_id` registrationId, address.`value_id` addressId, address.`value_type_id` addressTypeId
+        SELECT r.`object_id` registrationId, address.`value_id` addressId
         FROM `registration_attribute` ra
             JOIN `registration` r ON (ra.`object_id` = r.`object_id` AND r.`status` = 1)
             JOIN `registration_attribute` rt ON (rt.`object_id` = r.`object_id` AND rt.`status` = 1)

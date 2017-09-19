@@ -71,13 +71,12 @@
             attr.pk_id as attr__pk_id, attr.value_id as attr__value_id, attr.attribute_id as attr__attribute_id,
             attr.object_id as attr__object_id, attr.entity_attribute_id as attr__entity_attribute_id,
             attr.start_date as attr__start_date, attr.status as attr__status, attr.end_date as attr__end_date,
-            attr.value_type_id as attr__value_type_id,
 
             str.pk_id as str__pk_id, str.id as str__id, str.locale_id as str__locale_id, str.value as str__value
         from ${entityName} obj
         left join ${entityName}_attribute attr on (obj.object_id = attr.object_id and attr.end_date is null)
-        left join entity_attribute_value_type val on val.id = attr.value_type_id
-        left join ${entityName}_string_value str on (str.id = attr.value_id and val.attribute_value_type = 'STRING_VALUE')
+        left join entity_attribute ea on ea.id = attr.entity_attribute_id
+        left join ${entityName}_string_value str on (str.id = attr.value_id and ea.value_type_id = 0)
         where obj.end_date is null and obj.object_id = ${objectId}
     </select>
 
@@ -311,9 +310,8 @@
 
     <insert id="insertAttribute" parameterType="org.complitex.common.entity.Attribute">
         INSERT INTO `${entityName}_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `status`,
-          `start_date`, `end_date`, `value_id`, `value_type_id`)
-        VALUES (#{attributeId}, #{objectId}, #{entityAttributeId}, #{status}, #{startDate}, #{endDate}, #{valueId},
-          #{valueTypeId})
+          `start_date`, `end_date`, `value_id`)
+        VALUES (#{attributeId}, #{objectId}, #{entityAttributeId}, #{status}, #{startDate}, #{endDate}, #{valueId})
     </insert>
 
     <update id="updateAttribute" parameterType="org.complitex.common.entity.Attribute">
@@ -380,7 +378,7 @@
         DELETE FROM `${entityName}_string_value` WHERE `id` IN
           (SELECT a.`value_id` FROM `${entityName}_attribute` a
             LEFT JOIN entity_attribute ea ON a.entity_attribute_id = ea.id
-          WHERE a.`object_id` = #{objectId} AND ea.value_type_id IN (0, 1, 3, 5))
+          WHERE a.`object_id` = #{objectId} AND ea.value_type_id IN (0, 1, 2, 3, 4, 5))
     </delete>
 
     <select id="selectExternalId" parameterType="map" resultType="string">

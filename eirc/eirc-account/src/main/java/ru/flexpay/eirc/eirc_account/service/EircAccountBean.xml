@@ -289,26 +289,26 @@
 
         left join `street_attribute` sa1 on
             ((sa1.`object_id` = street1.`object_id` or sa1.`object_id` = street2.`object_id` or
-              sa1.`object_id` = street3.`object_id` or sa1.`object_id` = street4.`object_id`) and sa1.`value_type_id` = 300)
+              sa1.`object_id` = street3.`object_id` or sa1.`object_id` = street4.`object_id`) and sa1.`entity_attribute_id` = 300)
         left join `street_string_value` sc on (sc.`id` = sa1.`value_id` and sc.`locale_id`  = #{locale.id})
 
         left join `street_attribute` sa2 on
             ((sa2.`object_id` = street1.`object_id` or sa2.`object_id` = street2.`object_id` or
-             sa2.`object_id` = street3.`object_id` or sa2.`object_id` = street4.`object_id`) and sa2.`value_type_id` = 301)
+             sa2.`object_id` = street3.`object_id` or sa2.`object_id` = street4.`object_id`) and sa2.`entity_attribute_id` = 301)
         left join `street_type` st on st.`object_id` = sa2.`value_id`
-        left join `street_type_attribute` sta on (sta.`object_id` = st.`object_id` and sta.`value_type_id` = 1400)
+        left join `street_type_attribute` sta on (sta.`object_id` = st.`object_id` and sta.`entity_attribute_id` = 1400)
         left join `street_type_string_value` stc on (stc.`id` = sta.`value_id` and stc.`locale_id`  = #{locale.id})
 
         left join `city_attribute` ca1 on
             ((ca1.`object_id` = city1.`object_id` or ca1.`object_id` = city2.`object_id` or
-             ca1.`object_id` = city3.`object_id` or ca1.`object_id` = city4.`object_id`) and ca1.`value_type_id` = 400)
+             ca1.`object_id` = city3.`object_id` or ca1.`object_id` = city4.`object_id`) and ca1.`entity_attribute_id` = 400)
         left join `city_string_value` cc on (cc.`id` = ca1.`value_id` and cc.`locale_id`  = #{locale.id})
 
         left join `city_attribute` ca2 on
             ((ca2.`object_id` = city1.`object_id` or ca2.`object_id` = city2.`object_id` or
-             ca2.`object_id` = city3.`object_id` or ca2.`object_id` = city4.`object_id`) and ca2.`value_type_id` = 401)
+             ca2.`object_id` = city3.`object_id` or ca2.`object_id` = city4.`object_id`) and ca2.`entity_attribute_id` = 401)
         left join `city_type` ct on ct.`object_id` = ca2.`value_id`
-        left join `city_type_attribute` cta on (cta.`object_id` = ct.`object_id` and cta.`value_type_id` = 1300)
+        left join `city_type_attribute` cta on (cta.`object_id` = ct.`object_id` and cta.`entity_attribute_id` = 1300)
         left join `city_type_string_value` ctc on (ctc.`id` = cta.`value_id` and ctc.`locale_id`  = #{locale.id})
     </sql>
 

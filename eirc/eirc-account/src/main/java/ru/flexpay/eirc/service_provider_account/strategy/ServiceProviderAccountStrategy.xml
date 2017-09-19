@@ -17,8 +17,8 @@
     <insert id="insertServiceProviderAccountAttribute" parameterType="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute"
             keyProperty="object.pkId" useGeneratedKeys="true">
         INSERT INTO `${entityName}_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `status`, `start_date`,
-                                                `end_date`, `value_id`, `value_type_id`)
-          VALUES (#{attributeId}, #{objectId}, #{entityAttributeId}, #{status}, #{startDate}, #{endDate}, #{valueId}, #{valueTypeId})
+                                                `end_date`, `value_id`)
+          VALUES (#{attributeId}, #{objectId}, #{entityAttributeId}, #{status}, #{startDate}, #{endDate}, #{valueId})
     </insert>
 
     <!-- deletion -->

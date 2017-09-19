@@ -17,7 +17,7 @@
         AND e.`status` = 1
     </sql>
 
-    <sql id="findByApartmentSql">
+    <sql id="findByApartmentSql"> <!--todo add attributes-->
         LEFT JOIN `apartment_card_attribute` apartment_a ON (apartment_a.`object_id` = e.`object_id` AND apartment_a.`status` = 1
             AND apartment_a.`entity_attribute_id` = ${apartmentCardAddressAT}
             AND apartment_a.`value_type_id` = ${apartmentCardApartmentVT})

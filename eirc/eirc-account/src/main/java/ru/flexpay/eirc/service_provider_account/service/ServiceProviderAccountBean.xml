@@ -89,7 +89,7 @@
     </sql>
 
     <sql id="generalSPAJoin">
-        left join `organization_attribute` oa on oa.`object_id` = spa.`organization_id` and oa.`value_type_id` = 900
+        left join `organization_attribute` oa on oa.`object_id` = spa.`organization_id` and oa.`entity_attribute_id` = 900
         left join `organization_string_value` oc on oc.`id` = oa.`value_id` and oc.`locale_id` = #{locale.id}
         left join `service` s on s.`id` = spa.`service_id`
         <include refid="ru.flexpay.eirc.service.service.ServiceBean.serviceJoin"/>

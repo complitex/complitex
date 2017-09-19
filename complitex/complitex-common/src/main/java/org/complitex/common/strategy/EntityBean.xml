@@ -34,11 +34,10 @@
         eat.`end_date` as attr_end_date,
         eat.`name_id`,
         eat.`system`,
-        eavt.`id` as value_type_id,
-        eavt.`value_type` value_type
+        eat.`value_type_id`,
+        eat.`reference_id`
         FROM `entity` e
         JOIN `entity_attribute` eat ON eat.`entity_id` = e.`id`
-        JOIN `entity_attribute_value_type` eavt ON eavt.`entity_attribute_id` = eat.`id`
         WHERE e.`entity` = #{entity}
     </select>
 
