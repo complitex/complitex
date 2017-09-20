@@ -181,7 +181,7 @@ public class DomainObjectInputPanel extends Panel {
                 item.add(new Label("label", DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
                 WebMarkupContainer required = new WebMarkupContainer("required");
                 item.add(required);
-                required.setVisible(entityAttribute.isMandatory());
+                required.setVisible(entityAttribute.isRequired());
 
                 item.add(DomainObjectComponentUtil.newInputComponent(entity, strategyName, object, attr,
                         getLocale(), isHistory()));

@@ -190,7 +190,7 @@ final class PersonHistoryPanel extends Panel {
 
             //required container
             WebMarkupContainer militaryServiceRelationRequiredContainer = new WebMarkupContainer("required");
-            militaryServiceRelationRequiredContainer.setVisible(militaryServiceRelationEntityAttribute.isMandatory());
+            militaryServiceRelationRequiredContainer.setVisible(militaryServiceRelationEntityAttribute.isRequired());
             militaryServiceRelationContainer.add(militaryServiceRelationRequiredContainer);
 
             final List<DomainObject> allMilitaryServiceRelations = militaryServiceRelationStrategy.getAll(getLocale());
@@ -299,7 +299,7 @@ final class PersonHistoryPanel extends Panel {
                     getAttribute(DocumentStrategy.DOCUMENT_TYPE);
             IModel<String> documentTyleLabelModel = labelModel(documentTypeEntityAttribute.getNames(), getLocale());
             documentTypeContainer.add(new Label("label", documentTyleLabelModel));
-            documentTypeContainer.add(new WebMarkupContainer("required").setVisible(documentTypeEntityAttribute.isMandatory()));
+            documentTypeContainer.add(new WebMarkupContainer("required").setVisible(documentTypeEntityAttribute.isRequired()));
             final List<DomainObject> documentTypes = documentTypeStrategy.getAll(null);
             IModel<DomainObject> documentTypeModel = new Model<DomainObject>();
             documentTypeModel.setObject(find(documentTypes, new Predicate<DomainObject>() {
@@ -362,7 +362,7 @@ final class PersonHistoryPanel extends Panel {
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(entityAttribute.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isRequired());
         parent.add(requiredContainer);
 
         //input component

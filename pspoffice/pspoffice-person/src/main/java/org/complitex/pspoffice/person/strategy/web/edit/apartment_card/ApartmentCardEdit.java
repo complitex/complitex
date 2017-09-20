@@ -294,7 +294,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         WebMarkupContainer addressContainer = new WebMarkupContainer("addressContainer");
         final EntityAttribute addressEntityAttribute = ENTITY.getAttribute(ADDRESS);
         addressContainer.add(new Label("label", labelModel(addressEntityAttribute.getNames(), getLocale())));
-        addressContainer.add(new WebMarkupContainer("required").setVisible(addressEntityAttribute.isMandatory()));
+        addressContainer.add(new WebMarkupContainer("required").setVisible(addressEntityAttribute.isRequired()));
 
         addressSearchComponentState = apartmentCardStrategy.initAddressSearchComponentState(getAddressEntity(), getAddressId());
         ApartmentCardAddressSearchPanel address = null;
@@ -322,7 +322,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         final EntityAttribute ownerEntityAttribute = ENTITY.getAttribute(OWNER);
         IModel<String> ownerLabelModel = labelModel(ownerEntityAttribute.getNames(), getLocale());
         ownerContainer.add(new Label("label", ownerLabelModel));
-        ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerEntityAttribute.isMandatory()));
+        ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerEntityAttribute.isRequired()));
 
         PersonPicker owner = isNew()
                 ? new PersonPicker("owner", PersonAgeType.ADULT, new PropertyModel<Person>(newApartmentCard, "owner"),
@@ -707,7 +707,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(entityAttribute.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isRequired());
         parent.add(requiredContainer);
 
         //input component
@@ -860,7 +860,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         formOfOwnershipContainer.add(new Label("label", labelModel));
 
         //required
-        formOfOwnershipContainer.add(new WebMarkupContainer("required").setVisible(formOfOwnershipEntityAttribute.isMandatory()));
+        formOfOwnershipContainer.add(new WebMarkupContainer("required").setVisible(formOfOwnershipEntityAttribute.isRequired()));
 
         //form of ownership
         final List<DomainObject> allOwnershipForms = ownershipFormStrategy.getAll();
@@ -893,7 +893,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
                 return ownershipFormStrategy.displayDomainObject(object, getLocale());
             }
         });
-        formOfOwnership.setRequired(formOfOwnershipEntityAttribute.isMandatory());
+        formOfOwnership.setRequired(formOfOwnershipEntityAttribute.isRequired());
         formOfOwnership.setLabel(labelModel);
         formOfOwnership.setEnabled(canEdit(null, apartmentCardStrategy.getEntityName(), newApartmentCard));
         formOfOwnershipContainer.add(formOfOwnership);

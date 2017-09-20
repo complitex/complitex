@@ -39,13 +39,13 @@ DROP TABLE IF EXISTS `entity_attribute`;
 CREATE TABLE `entity_attribute` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор типа атрибута',
   `entity_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор сущности',
-  `mandatory` TINYINT(1) default 0 NOT NULL COMMENT 'Является ли атрибут обязательным',
   `name_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации названия атрибута',
   `start_date` TIMESTAMP NOT NULL default CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия типа атрибута',
   `end_date` TIMESTAMP NULL default NULL COMMENT 'Дата окончания периода действия типа атрибута',
-  `system` TINYINT(1) default 0 NOT NULL COMMENT 'Является ли тип атрибута системным',
   `value_type_id` BIGINT(20) COMMENT  'Тип значения атрибута',
   `reference_id` BIGINT(20) COMMENT  'Внешний ключ',
+  `system` TINYINT(1) default 0 NOT NULL COMMENT 'Является ли тип атрибута системным',
+  `required` TINYINT(1) default 0 NOT NULL COMMENT 'Является ли атрибут обязательным'
   PRIMARY KEY (`id`),
   KEY `key_entity_id` (`entity_id`),
   KEY `key_name_id` (`name_id`),

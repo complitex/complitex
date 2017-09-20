@@ -117,7 +117,7 @@ public class EntityDescriptionPanel extends Panel {
                 });
                 item.add(valueTypeSelect);
 
-                Label mandatoryLabel = new Label("mandatoryLabel", new ResourceModel(entityAttribute.isMandatory() ? "yes" : "no"));
+                Label mandatoryLabel = new Label("mandatoryLabel", new ResourceModel(entityAttribute.isRequired() ? "yes" : "no"));
                 item.add(mandatoryLabel);
 
                 CheckBox mandatoryInput = new CheckBox("mandatoryInput", new PropertyModel<Boolean>(entityAttribute, "mandatory"));

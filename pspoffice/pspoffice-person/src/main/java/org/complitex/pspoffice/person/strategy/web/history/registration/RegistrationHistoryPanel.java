@@ -118,7 +118,7 @@ final class RegistrationHistoryPanel extends Panel {
         //person
         WebMarkupContainer personContainer = new WebMarkupContainer("personContainer");
         final EntityAttribute personEntityAttribute = ENTITY.getAttribute(PERSON);
-        personContainer.add(new WebMarkupContainer("required").setVisible(personEntityAttribute.isMandatory()));
+        personContainer.add(new WebMarkupContainer("required").setVisible(personEntityAttribute.isRequired()));
         Component person = new Label("person", personStrategy.displayDomainObject(registration.getPerson(), getLocale()));
         person.add(new CssAttributeBehavior(modification.getAttributeModificationType(PERSON).getCssClass()));
         personContainer.add(person);
@@ -132,7 +132,7 @@ final class RegistrationHistoryPanel extends Panel {
             final EntityAttribute registrationTypeEntityAttribute = ENTITY.getAttribute(REGISTRATION_TYPE);
             WebMarkupContainer registrationTypeContainer = new WebMarkupContainer("registrationTypeContainer");
             registrationTypeContainer.add(new Label("label", labelModel(registrationTypeEntityAttribute.getNames(), getLocale())));
-            registrationTypeContainer.add(new WebMarkupContainer("required").setVisible(registrationTypeEntityAttribute.isMandatory()));
+            registrationTypeContainer.add(new WebMarkupContainer("required").setVisible(registrationTypeEntityAttribute.isRequired()));
             final List<DomainObject> allRegistrationTypes = registrationTypeStrategy.getAll();
             IModel<DomainObject> registrationTypeModel = new Model<DomainObject>();
             if (registration.getRegistrationType() != null) {
@@ -162,11 +162,11 @@ final class RegistrationHistoryPanel extends Panel {
         WebMarkupContainer ownerRelationshipContainer = new WebMarkupContainer("ownerRelationshipContainer");
         final DomainObject ownerRelationshipObject = registration.getOwnerRelationship();
         ownerRelationshipContainer.add(new Label("label", labelModel(ownerRelationshipEntityAttribute.getNames(), getLocale())));
-        ownerRelationshipContainer.add(new WebMarkupContainer("required").setVisible(ownerRelationshipEntityAttribute.isMandatory()));
+        ownerRelationshipContainer.add(new WebMarkupContainer("required").setVisible(ownerRelationshipEntityAttribute.isRequired()));
         final String ownerRelationshipValue = ownerRelationshipObject != null
                 ? ownerRelationshipStrategy.displayDomainObject(ownerRelationshipObject, getLocale())
                 : null;
-        TextField<String> ownerRelationship = new TextField<String>("input", new Model<String>(ownerRelationshipValue));
+        TextField<String> ownerRelationship = new TextField<String>("input", new Model<>(ownerRelationshipValue));
         ownerRelationship.setEnabled(false);
 
         final ModificationType ownerRelationModificationType = modification.getAttributeModificationType(OWNER_RELATIONSHIP);
@@ -286,7 +286,7 @@ final class RegistrationHistoryPanel extends Panel {
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(entityAttribute.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isRequired());
         parent.add(requiredContainer);
 
         //input component

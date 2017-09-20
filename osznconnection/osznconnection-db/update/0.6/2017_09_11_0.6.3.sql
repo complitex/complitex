@@ -17,6 +17,7 @@ ALTER TABLE entity_value_type CHANGE `attribute_value_type` `value_type` VARCHAR
 
 ALTER TABLE `attribute_type` RENAME `entity_attribute`;
 ALTER TABLE `entity_attribute` CHANGE `attribute_type_name_id` `name_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации названия атрибута';
+ALTER TABLE `entity_attribute` CHANGE `mandatory` `required`  TINYINT(1) default 0 NOT NULL COMMENT 'Является ли атрибут обязательным';
 ALTER TABLE `entity_attribute` RENAME INDEX `key_attribute_type_name_id` TO `key_name_id`;
 ALTER TABLE `entity_attribute` DROP FOREIGN KEY `fk_attribute_type__string_value`;
 ALTER TABLE `entity_attribute` ADD CONSTRAINT `fk_entity_attribute__entity_string_value`

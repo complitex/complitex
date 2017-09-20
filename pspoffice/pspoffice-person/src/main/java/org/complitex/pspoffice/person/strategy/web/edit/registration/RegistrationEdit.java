@@ -46,7 +46,6 @@ import org.complitex.pspoffice.person.strategy.ApartmentCardStrategy;
 import org.complitex.pspoffice.person.strategy.PersonStrategy;
 import org.complitex.pspoffice.person.strategy.RegistrationStrategy;
 import org.complitex.pspoffice.person.strategy.entity.ApartmentCard;
-import org.complitex.pspoffice.person.strategy.entity.Person;
 import org.complitex.pspoffice.person.strategy.entity.PersonAgeType;
 import org.complitex.pspoffice.person.strategy.entity.Registration;
 import org.complitex.pspoffice.person.strategy.web.component.ExplanationDialog;
@@ -173,9 +172,9 @@ public class RegistrationEdit extends FormTemplatePage {
         //person
         WebMarkupContainer personContainer = new WebMarkupContainer("personContainer");
         final EntityAttribute personEntityAttribute = ENTITY.getAttribute(PERSON);
-        personContainer.add(new WebMarkupContainer("required").setVisible(personEntityAttribute.isMandatory()));
+        personContainer.add(new WebMarkupContainer("required").setVisible(personEntityAttribute.isRequired()));
 
-        PersonPicker person = new PersonPicker("person", PersonAgeType.ANY, new PropertyModel<Person>(newRegistration, "person"),
+        PersonPicker person = new PersonPicker("person", PersonAgeType.ANY, new PropertyModel<>(newRegistration, "person"),
                 true, labelModel(personEntityAttribute.getNames(), getLocale()), isNew() && canEdit());
         personContainer.add(person);
         form.add(personContainer);
@@ -353,7 +352,7 @@ public class RegistrationEdit extends FormTemplatePage {
         ownerRelationshipContainer.add(new Label("label", labelModel));
 
         //required
-        ownerRelationshipContainer.add(new WebMarkupContainer("required").setVisible(ownerRelationshipEntityAttribute.isMandatory()));
+        ownerRelationshipContainer.add(new WebMarkupContainer("required").setVisible(ownerRelationshipEntityAttribute.isRequired()));
 
         //owner relationship
         final List<DomainObject> allOwnerRelationships = ownerRelationshipStrategy.getAll(getLocale());
@@ -389,7 +388,7 @@ public class RegistrationEdit extends FormTemplatePage {
 
         ownerRelationship.setEnabled(canEdit());
         ownerRelationship.setNullValid(true).
-                setRequired(ownerRelationshipEntityAttribute.isMandatory()).
+                setRequired(ownerRelationshipEntityAttribute.isRequired()).
                 setLabel(labelModel);
         ownerRelationshipContainer.add(ownerRelationship);
 
@@ -406,7 +405,7 @@ public class RegistrationEdit extends FormTemplatePage {
         registrationTypeContainer.add(new Label("label", labelModel));
 
         //required
-        registrationTypeContainer.add(new WebMarkupContainer("required").setVisible(registrationTypeEntityAttribute.isMandatory()));
+        registrationTypeContainer.add(new WebMarkupContainer("required").setVisible(registrationTypeEntityAttribute.isRequired()));
 
         //registration type
         final List<DomainObject> allRegistrationTypes = registrationTypeStrategy.getAll();
@@ -439,7 +438,7 @@ public class RegistrationEdit extends FormTemplatePage {
                 return registrationTypeStrategy.displayDomainObject(object, getLocale());
             }
         });
-        registrationType.setRequired(registrationTypeEntityAttribute.isMandatory());
+        registrationType.setRequired(registrationTypeEntityAttribute.isRequired());
         registrationType.setLabel(labelModel);
         registrationType.setEnabled(canEdit());
         registrationTypeContainer.add(registrationType);
@@ -460,7 +459,7 @@ public class RegistrationEdit extends FormTemplatePage {
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(entityAttribute.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isRequired());
         parent.add(requiredContainer);
 
         //input component

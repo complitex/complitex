@@ -394,7 +394,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             attribute.setValueId(generatedStringId);
         }
 
-        if (attribute.getValueId() != null || entityAttribute.isMandatory()) {
+        if (attribute.getValueId() != null || entityAttribute.isRequired()) {
             attribute.setEntityName(getEntityName());
 
             sqlSession().insert(getInsertAttributeStatement(), attribute);

@@ -52,7 +52,7 @@ final class DocumentHistoryPanel extends Panel {
                 item.add(new Label("label", DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
                 WebMarkupContainer required = new WebMarkupContainer("required");
                 item.add(required);
-                required.setVisible(entityAttribute.isMandatory());
+                required.setVisible(entityAttribute.isRequired());
 
                 Component input = DomainObjectComponentUtil.newInputComponent(documentStrategy.getEntityName(), null, document, attr, getLocale(), true);
                 input.add(new CssAttributeBehavior(modification.getAttributeModificationType(attr.getEntityAttributeId()).getCssClass()));

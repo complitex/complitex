@@ -8,8 +8,12 @@ public class StringValue implements Serializable {
     @JsonIgnore
     private Long pkId;
 
-    private String entityName;
+    @JsonIgnore
     private Long id;
+
+    @JsonIgnore
+    private String entityName;
+
     private Long localeId;
     private String value;
 

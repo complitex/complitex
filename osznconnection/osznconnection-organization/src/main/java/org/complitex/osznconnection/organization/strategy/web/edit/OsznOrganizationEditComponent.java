@@ -59,7 +59,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                             osznOrganizationStrategy.getEntity().getAttribute(entityAttributeId);
                     item.add(new Label("label",
                             DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
-                    item.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+                    item.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
                     Attribute attribute = organization.getAttribute(entityAttributeId);
                     if (attribute == null) {
@@ -92,7 +92,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                             osznOrganizationStrategy.getEntity().getAttribute(entityAttributeId);
                     item.add(new Label("label",
                             DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
-                    item.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+                    item.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
                     Attribute attribute = organization.getAttribute(entityAttributeId);
                     if (attribute == null) {
@@ -127,7 +127,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     osznOrganizationStrategy.getEntity().getAttribute(OsznOrganizationStrategy.EDRPOU);
             edrpouContainer.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
-            edrpouContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+            edrpouContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
             edrpouContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
@@ -155,7 +155,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     osznOrganizationStrategy.getEntity().getAttribute(entityAttributeId);
             rootDirectoryContainer.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
-            rootDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+            rootDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
             rootDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
@@ -183,7 +183,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     osznOrganizationStrategy.getEntity().getAttribute(entityAttributeId);
             rootExportDirectoryContainer.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
-            rootExportDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+            rootExportDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
             rootExportDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
@@ -210,7 +210,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             EntityAttribute entityAttribute = osznOrganizationStrategy.getEntity().getAttribute(entityAttributeId);
             referencesDirectoryContainer.add(new Label("label", DomainObjectComponentUtil.labelModel(
                     entityAttribute.getNames(), getLocale())));
-            referencesDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+            referencesDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
             referencesDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));

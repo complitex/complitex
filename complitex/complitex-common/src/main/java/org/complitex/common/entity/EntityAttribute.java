@@ -1,5 +1,6 @@
 package org.complitex.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.complitex.common.util.StringValueUtil;
 
 import java.io.Serializable;
@@ -10,18 +11,24 @@ import java.util.Locale;
 public class EntityAttribute implements Serializable {
     private Long id;
     private Long entityId;
-    private boolean mandatory;
     private Date startDate;
     private Date endDate;
     private Long nameId;
+
+    private boolean required;
 
     private List<StringValue> names;
 
     private boolean system;
 
+    @JsonIgnore
     private ValueType valueType;
 
     private Long referenceId;
+
+    public Integer getValueTypeId(){
+        return valueType.getId();
+    }
 
     public String getName(Locale locale){
         return StringValueUtil.getValue(names, locale);
@@ -51,12 +58,12 @@ public class EntityAttribute implements Serializable {
         this.id = id;
     }
 
-    public boolean isMandatory() {
-        return mandatory;
+    public boolean isRequired() {
+        return required;
     }
 
-    public void setMandatory(boolean mandatory) {
-        this.mandatory = mandatory;
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
     public Long getEntityId() {
@@ -99,6 +106,7 @@ public class EntityAttribute implements Serializable {
         this.system = system;
     }
 
+    @JsonIgnore
     public boolean isObsolete() {
         return endDate != null;
     }

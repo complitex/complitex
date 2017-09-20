@@ -113,7 +113,7 @@ final class ApartmentCardHistoryPanel extends Panel {
         WebMarkupContainer addressContainer = new WebMarkupContainer("addressContainer");
         final EntityAttribute addressEntityAttribute = ENTITY.getAttribute(ADDRESS);
         addressContainer.add(new Label("label", labelModel(addressEntityAttribute.getNames(), getLocale())));
-        addressContainer.add(new WebMarkupContainer("required").setVisible(addressEntityAttribute.isMandatory()));
+        addressContainer.add(new WebMarkupContainer("required").setVisible(addressEntityAttribute.isRequired()));
         final Component address = new CollapsibleSearchComponent("address",
                 apartmentCardStrategy.initAddressSearchComponentState(apartmentCardStrategy.getAddressEntity(card), card.getAddressId()),
                 of("city", "street", "building", "apartment", "room"), null, ShowMode.ALL, false);
@@ -126,7 +126,7 @@ final class ApartmentCardHistoryPanel extends Panel {
         final EntityAttribute ownerEntityAttribute = ENTITY.getAttribute(OWNER);
         IModel<String> ownerLabelModel = labelModel(ownerEntityAttribute.getNames(), getLocale());
         ownerContainer.add(new Label("label", ownerLabelModel));
-        ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerEntityAttribute.isMandatory()));
+        ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerEntityAttribute.isRequired()));
         final Component owner = new Label("owner", personStrategy.displayDomainObject(card.getOwner(), getLocale()));
         owner.add(new CssAttributeBehavior(modification.getModificationType(OWNER).getCssClass()));
         ownerContainer.add(owner);
@@ -137,7 +137,7 @@ final class ApartmentCardHistoryPanel extends Panel {
         WebMarkupContainer formOfOwnershipContainer = new WebMarkupContainer("formOfOwnershipContainer");
         IModel<String> labelModel = labelModel(formOfOwnershipEntityAttribute.getNames(), getLocale());
         formOfOwnershipContainer.add(new Label("label", labelModel));
-        formOfOwnershipContainer.add(new WebMarkupContainer("required").setVisible(formOfOwnershipEntityAttribute.isMandatory()));
+        formOfOwnershipContainer.add(new WebMarkupContainer("required").setVisible(formOfOwnershipEntityAttribute.isRequired()));
         final List<DomainObject> allOwnershipForms = ownershipFormStrategy.getAll();
         IModel<DomainObject> ownershipFormModel = new Model<DomainObject>();
         if (card.getOwnershipForm() != null) {
@@ -277,7 +277,7 @@ final class ApartmentCardHistoryPanel extends Panel {
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(entityAttribute.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isRequired());
         parent.add(requiredContainer);
 
         //input component

@@ -289,7 +289,7 @@ public class PersonInputPanel extends Panel {
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(entityAttribute.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isRequired());
         parent.add(requiredContainer);
 
         //input component
@@ -512,7 +512,7 @@ public class PersonInputPanel extends Panel {
         IModel<String> labelModel = labelModel(documentTypeEntityAttribute.getNames(), getLocale());
         documentForm.add(new Label("label", labelModel));
         //required
-        documentForm.add(new WebMarkupContainer("required").setVisible(documentTypeEntityAttribute.isMandatory()));
+        documentForm.add(new WebMarkupContainer("required").setVisible(documentTypeEntityAttribute.isRequired()));
         documentTypeModel = new Model<>();
         documentTypesModel = Model.ofList(null);
         if (!isNew()) {
@@ -779,7 +779,7 @@ public class PersonInputPanel extends Panel {
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(militaryAttruibuteType.isMandatory());
+        requiredContainer.setVisible(militaryAttruibuteType.isRequired());
         militaryServiceRelationHead.add(requiredContainer);
 
         militaryServiceRelationBody = new WebMarkupContainer("militaryServiceRelationBody");
@@ -819,7 +819,7 @@ public class PersonInputPanel extends Panel {
         });
         militaryServiceRelation.setNullValid(true);
         militaryServiceRelation.setLabel(labelModel);
-        militaryServiceRelation.setRequired(militaryAttruibuteType.isMandatory());
+        militaryServiceRelation.setRequired(militaryAttruibuteType.isRequired());
         militaryServiceRelation.setEnabled(canEdit());
         militaryServiceRelationBody.add(militaryServiceRelation);
 

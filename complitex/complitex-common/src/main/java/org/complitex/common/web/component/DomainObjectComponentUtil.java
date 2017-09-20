@@ -5,7 +5,10 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.converter.*;
+import org.complitex.common.converter.BooleanConverter;
+import org.complitex.common.converter.DateConverter;
+import org.complitex.common.converter.DoubleConverter;
+import org.complitex.common.converter.IntegerConverter;
 import org.complitex.common.entity.*;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
@@ -51,7 +54,7 @@ public class DomainObjectComponentUtil {
 
         switch (entityAttribute.getValueType()) {
             case STRING: {
-                input = new StringPanel(INPUT_COMPONENT_ID, new AttributeStringModel(attribute), entityAttribute.isMandatory(),
+                input = new StringPanel(INPUT_COMPONENT_ID, new AttributeStringModel(attribute), entityAttribute.isRequired(),
                         labelModel, !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
@@ -62,19 +65,19 @@ public class DomainObjectComponentUtil {
 //            break;
             case STRING_VALUE: {
                 IModel<List<StringValue>> model = new PropertyModel<>(attribute, "stringValues");
-                input = new StringValuePanel(INPUT_COMPONENT_ID, model, entityAttribute.isMandatory(), labelModel,
+                input = new StringValuePanel(INPUT_COMPONENT_ID, model, entityAttribute.isRequired(), labelModel,
                         !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
             case INTEGER: {
                 IModel<Integer> model = new SimpleTypeModel<>(attribute, new IntegerConverter());
-                input = new IntegerPanel(INPUT_COMPONENT_ID, model, entityAttribute.isMandatory(), labelModel,
+                input = new IntegerPanel(INPUT_COMPONENT_ID, model, entityAttribute.isRequired(), labelModel,
                         !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
             case DATE: {
                 IModel<Date> model = new SimpleTypeModel<>(attribute, new DateConverter());
-                input = new DatePanel(INPUT_COMPONENT_ID, model, entityAttribute.isMandatory(), labelModel,
+                input = new DatePanel(INPUT_COMPONENT_ID, model, entityAttribute.isRequired(), labelModel,
                         !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
@@ -98,7 +101,7 @@ public class DomainObjectComponentUtil {
             break;
             case DECIMAL: {
                 IModel<Double> model = new SimpleTypeModel<>(attribute, new DoubleConverter());
-                input = new DoublePanel(INPUT_COMPONENT_ID, model, entityAttribute.isMandatory(), labelModel,
+                input = new DoublePanel(INPUT_COMPONENT_ID, model, entityAttribute.isRequired(), labelModel,
                         !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
