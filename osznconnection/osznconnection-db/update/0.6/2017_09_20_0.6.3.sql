@@ -294,4 +294,4 @@ UPDATE entity_attribute SET value_type_id = 10, reference_id = 900 WHERE id = 49
 
 DELETE FROM entity_value_type where id >= 100;
 
-INSERT INTO `update` (`version`) VALUE ('20170911_0.6.3');
+INSERT INTO `update` (`version`) VALUE ('20170920_0.6.3');
