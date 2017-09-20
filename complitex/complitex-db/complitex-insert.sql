@@ -39,19 +39,19 @@ INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES
 -- Value type
 -- --------------------------------
 
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (0, 'string_value');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (1, 'string');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (2, 'boolean');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (3, 'decimal');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (4, 'integer');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (5, 'date');
+INSERT INTO entity_value_type (id, value_type) VALUE (0, 'string_value');
+INSERT INTO entity_value_type (id, value_type) VALUE (1, 'string');
+INSERT INTO entity_value_type (id, value_type) VALUE (2, 'boolean');
+INSERT INTO entity_value_type (id, value_type) VALUE (3, 'decimal');
+INSERT INTO entity_value_type (id, value_type) VALUE (4, 'integer');
+INSERT INTO entity_value_type (id, value_type) VALUE (5, 'date');
 
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (10, 'entity');
+INSERT INTO entity_value_type (id, value_type) VALUE (10, 'entity');
 
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (20, 'building_code');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (21, 'last_name');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (22, 'first_name');
-INSERT INTO entity_attribute_value_type (id, value_type) VALUE (23, 'middle_name');
+INSERT INTO entity_value_type (id, value_type) VALUE (20, 'building_code');
+INSERT INTO entity_value_type (id, value_type) VALUE (21, 'last_name');
+INSERT INTO entity_value_type (id, value_type) VALUE (22, 'first_name');
+INSERT INTO entity_value_type (id, value_type) VALUE (23, 'middle_name');
 
 -- Permission
 INSERT INTO `permission` (`permission_id`, `table`, `entity`, `object_id`) VALUES (0, 'ALL', 'ALL', 0);
