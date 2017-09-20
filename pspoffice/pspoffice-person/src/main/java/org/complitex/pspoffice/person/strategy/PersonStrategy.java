@@ -533,9 +533,7 @@ public class PersonStrategy extends TemplateStrategy {
     }
 
     private void setEditedByUserId(DomainObject person) {
-        long userId = sessionBean.getCurrentUserId();
-        StringValueUtil.getSystemStringValue(person.getAttribute(EDITED_BY_USER_ID).getStringValues()).
-                setValue(String.valueOf(userId));
+        person.setValue(EDITED_BY_USER_ID, sessionBean.getCurrentUserId());
     }
 
     public void setExplanation(Person person, String explanation) {
