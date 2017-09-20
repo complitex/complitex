@@ -1138,10 +1138,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
-        if (attribute == null){
-            return "";
-        }
-
         EntityAttribute entityAttribute = getEntity().getAttribute(attribute.getEntityAttributeId());
 
         switch (entityAttribute.getValueType()) {

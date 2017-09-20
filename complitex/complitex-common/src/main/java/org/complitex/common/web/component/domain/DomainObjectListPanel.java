@@ -212,8 +212,9 @@ public class DomainObjectListPanel extends Panel {
                 ListView<EntityAttribute> dataColumns = new ListView<EntityAttribute>("dataColumns", columnEntityAttributes) {
                     @Override
                     protected void populateItem(ListItem<EntityAttribute> item) {
-                        item.add(new Label("dataColumn", getStrategy().displayAttribute(
-                                object.getAttribute(item.getModelObject().getId()), getLocale())));
+                        Attribute a = object.getAttribute(item.getModelObject().getId());
+
+                        item.add(new Label("dataColumn", a != null ? getStrategy().displayAttribute(a, getLocale()) : ""));
                     }
                 };
                 item.add(dataColumns);
