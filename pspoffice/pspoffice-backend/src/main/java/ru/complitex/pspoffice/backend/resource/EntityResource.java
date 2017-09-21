@@ -2,6 +2,7 @@ package ru.complitex.pspoffice.backend.resource;
 
 import io.swagger.annotations.Api;
 import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.EntityBean;
 
 import javax.ejb.EJB;
@@ -39,7 +40,18 @@ public class EntityResource {
         }
 
         return Response.ok(e).build();
+    }
 
+    @GET
+    public Response getEntities(@QueryParam("offset")  @DefaultValue("0") Long offset,
+                                @QueryParam("limit")  @DefaultValue("10") Long limit){
+        return Response.ok(entityBean.getEntities(new FilterWrapper<>(offset, limit))).build();
+    }
+
+    @GET
+    @Path("size")
+    public Response getEntitiesCount(){
+        return Response.ok(entityBean.getEntitiesCount(new FilterWrapper<>())).build();
     }
 
 }

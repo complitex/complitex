@@ -13,8 +13,8 @@ import java.util.Map;
 public class FilterWrapper<T extends Serializable> implements Serializable{
     private T object;
 
-    private long first = 0;
-    private long count = 0;
+    private Long first = 0L;
+    private Long count = 0L;
     private String sortProperty = "id";
     private boolean ascending = false;
 
@@ -41,8 +41,13 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
         this.object = object;
     }
 
-    public FilterWrapper(T object, long first, long count) {
+    public FilterWrapper(T object, Long first, Long count) {
         this.object = object;
+        this.first = first;
+        this.count = count;
+    }
+
+    public FilterWrapper(Long first, Long count) {
         this.first = first;
         this.count = count;
     }
@@ -66,7 +71,7 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
     }
 
     public String getLimit(){
-        return count > 0 ? " limit " + first + ", " + count : "";
+        return count != null && count > 0 ? " limit " + first + ", " + count : "";
     }
 
     public String getOrderLimit(){
