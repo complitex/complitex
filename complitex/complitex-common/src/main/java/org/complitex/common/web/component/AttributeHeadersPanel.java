@@ -8,8 +8,8 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
+import org.complitex.entity.EntityAttribute;
 
 import java.util.List;
 

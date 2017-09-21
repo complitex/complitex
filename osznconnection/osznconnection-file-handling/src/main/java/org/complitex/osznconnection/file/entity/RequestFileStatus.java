@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.entity;
 
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.entity.IFixedIdType;
 
 import java.util.Arrays;
 import java.util.HashSet;

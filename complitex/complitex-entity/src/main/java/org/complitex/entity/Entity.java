@@ -1,15 +1,25 @@
-package org.complitex.common.entity;
+package org.complitex.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import static org.complitex.common.util.StringValueUtil.getValue;
-
-public class Entity implements ILongId {
+public class Entity implements Serializable{
     private Long id;
     private String entity;
+
+    @JsonIgnore
     private List<StringValue> names;
+
     private List<EntityAttribute> attributes;
+
+    public Map<Long, String> getLabels(){
+        return names.stream().collect(Collectors.toMap(StringValue::getLocaleId, StringValue::getValue));
+    }
 
     public EntityAttribute getAttribute(Long entityAttributeId) {
         return attributes.stream().filter(a -> entityAttributeId.equals(a.getId()))
@@ -20,11 +30,11 @@ public class Entity implements ILongId {
     }
 
     public String getName(Locale locale){
-        return getValue(names, locale);
+        return StringValueUtil.getValue(names, locale);
     }
 
     public String getName(Long entityAttributeId, Locale locale){
-        return getValue(getAttribute(entityAttributeId).getNames(), locale);
+        return StringValueUtil.getValue(getAttribute(entityAttributeId).getNames(), locale);
     }
 
     public String getEntity() {

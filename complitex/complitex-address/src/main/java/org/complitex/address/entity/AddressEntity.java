@@ -1,7 +1,7 @@
 package org.complitex.address.entity;
 
 import com.google.common.collect.ImmutableList;
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.entity.IFixedIdType;
 
 import java.util.List;
 

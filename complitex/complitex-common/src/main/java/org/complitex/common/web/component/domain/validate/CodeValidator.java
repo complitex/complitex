@@ -7,8 +7,8 @@ import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.DomainObjectEditPanel;
+import org.complitex.entity.StringValueUtil;
 
 import java.util.Locale;
 

@@ -2,8 +2,8 @@ package org.complitex.common.web.model;
 
 import org.apache.wicket.model.IModel;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.StringValue;
 import org.complitex.common.util.Locales;
+import org.complitex.entity.StringValue;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

@@ -2,9 +2,9 @@ package org.complitex.common.strategy;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.StringValue;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
 import org.complitex.common.service.AbstractBean;
+import org.complitex.entity.StringValue;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

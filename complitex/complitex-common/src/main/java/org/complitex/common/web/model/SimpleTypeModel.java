@@ -3,9 +3,9 @@ package org.complitex.common.web.model;
 import org.apache.wicket.model.IModel;
 import org.complitex.common.converter.IConverter;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.StringValue;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.entity.StringValue;
 
 import java.io.Serializable;
 

@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.entity;
 
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.entity.IFixedIdType;
 
 public enum RequestWarningStatus implements IFixedIdType {
     SUBSIDY_TARIF_NOT_FOUND(300),

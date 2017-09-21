@@ -1,4 +1,4 @@
-package org.complitex.common.entity;
+package org.complitex.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

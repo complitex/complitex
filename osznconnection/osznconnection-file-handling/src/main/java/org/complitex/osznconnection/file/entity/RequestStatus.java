@@ -2,7 +2,7 @@ package org.complitex.osznconnection.file.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.entity.IFixedIdType;
 
 import java.util.Set;
 

@@ -1,6 +1,6 @@
 package org.complitex.osznconnection.file.entity;
 
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.entity.IFixedIdType;
 
 /**
  * @author inheaven on 008 08.12.16.

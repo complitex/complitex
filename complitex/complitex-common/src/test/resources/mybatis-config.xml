@@ -4,7 +4,7 @@
 <configuration>
     <typeAliases>
         <typeAlias type="org.complitex.common.entity.StringLocale" alias="Locale"/>
-        <typeAlias type="org.complitex.common.entity.StringValue" alias="StringValue"/>
+        <typeAlias type="org.complitex.entity.StringValue" alias="StringValue"/>
         <typeAlias type="org.complitex.common.entity.Parameter" alias="Parameter"/>
         <typeAlias type="org.complitex.common.entity.DomainObject" alias="DomainObject"/>
         <typeAlias type="org.complitex.common.entity.Attribute" alias="Attribute"/>

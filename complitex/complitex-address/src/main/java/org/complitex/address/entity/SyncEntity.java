@@ -1,6 +1,6 @@
 package org.complitex.address.entity;
 
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.entity.IFixedIdType;
 
 /**
  * @author inheaven on 22.01.2016 12:54.

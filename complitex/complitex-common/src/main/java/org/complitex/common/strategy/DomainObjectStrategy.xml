@@ -28,7 +28,7 @@
         <collection property="stringValues" resultMap="stringValueResultMap" columnPrefix="str__"/>
     </resultMap>
 
-    <resultMap id="stringValueResultMap" type="org.complitex.common.entity.StringValue">
+    <resultMap id="stringValueResultMap" type="org.complitex.entity.StringValue">
         <id column="pk_id" property="pkId"/>
         <result column="id" property="id"/>
         <result column="locale_id" property="localeId"/>
@@ -361,7 +361,7 @@
 
     <!--StringValue-->
 
-    <insert id="insertStringValue" parameterType="org.complitex.common.entity.StringValue">
+    <insert id="insertStringValue" parameterType="org.complitex.entity.StringValue">
         insert into `${entityName}_string_value`(`id`, `locale_id`, `value`)
           values (#{id}, #{localeId}, #{value})
     </insert>
@@ -370,7 +370,7 @@
         SELECT sc.* FROM `${entityName}_string_value` sc WHERE sc.`id` = #{id} order by `locale_id`
     </select>
 
-    <insert id="insertDescriptionData" parameterType="org.complitex.common.entity.StringValue">
+    <insert id="insertDescriptionData" parameterType="org.complitex.entity.StringValue">
         insert into `entity_string_value`(`id`, `locale_id`, `value`) values (#{id}, #{localeId}, #{value})
     </insert>
 

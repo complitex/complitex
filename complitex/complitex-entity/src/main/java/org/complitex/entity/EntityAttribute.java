@@ -1,7 +1,6 @@
-package org.complitex.common.entity;
+package org.complitex.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.complitex.common.util.StringValueUtil;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -38,8 +38,8 @@ public class PersonDataProvider extends TableDataProvider<PersonObject>{
     }
 
     @Override
-    public void setFilterState(PersonObject state) {
-        personObject = state;
+    public void setFilterState(PersonObject personObject) {
+        personObject = personObject;
     }
 
     @Override
@@ -49,7 +49,8 @@ public class PersonDataProvider extends TableDataProvider<PersonObject>{
                 .queryParam("offset", first)
                 .queryParam("limit", count)
                 .request(APPLICATION_JSON_TYPE)
-                .get(new GenericType<List<PersonObject>>(){}).iterator();
+                .get(new GenericType<List<PersonObject>>(){})
+                .iterator();
     }
 
     @Override
@@ -58,7 +59,7 @@ public class PersonDataProvider extends TableDataProvider<PersonObject>{
     }
 
     @Override
-    public IModel<PersonObject> model(PersonObject object) {
-        return new CompoundPropertyModel<>(object);
+    public IModel<PersonObject> model(PersonObject personObject) {
+        return new CompoundPropertyModel<>(personObject);
     }
 }

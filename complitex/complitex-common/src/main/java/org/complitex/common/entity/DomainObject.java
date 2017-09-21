@@ -4,6 +4,7 @@ import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.converter.DateConverter;
 import org.complitex.common.converter.IConverter;
 import org.complitex.common.util.Locales;
+import org.complitex.entity.StringValue;
 
 import java.util.*;
 import java.util.stream.Collectors;

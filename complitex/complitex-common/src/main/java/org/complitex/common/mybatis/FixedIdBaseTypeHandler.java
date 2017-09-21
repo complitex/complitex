@@ -2,6 +2,7 @@ package org.complitex.common.mybatis;
 
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
+import org.complitex.entity.IFixedIdType;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
