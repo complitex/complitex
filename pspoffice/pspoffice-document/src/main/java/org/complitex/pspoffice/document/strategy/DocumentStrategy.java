@@ -4,10 +4,13 @@
  */
 package org.complitex.pspoffice.document.strategy;
 
-import org.complitex.common.entity.*;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.PermissionBean;
 import org.complitex.common.strategy.StringValueBean;
-import org.complitex.common.util.StringValueUtil;
+import org.complitex.entity.EntityAttribute;
+import org.complitex.entity.StringValueUtil;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;

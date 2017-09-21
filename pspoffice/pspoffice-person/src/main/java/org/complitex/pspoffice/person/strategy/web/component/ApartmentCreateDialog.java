@@ -9,10 +9,10 @@ import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.apartment.web.edit.ApartmentEdit;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Log;
-import org.complitex.common.entity.StringValue;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.DateUtil;
+import org.complitex.entity.StringValue;
 import org.complitex.pspoffice.person.Module;
 
 import javax.ejb.EJB;

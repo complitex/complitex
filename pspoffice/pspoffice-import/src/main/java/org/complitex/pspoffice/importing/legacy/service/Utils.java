@@ -5,9 +5,9 @@
 package org.complitex.pspoffice.importing.legacy.service;
 
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.StringValue;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.entity.StringValue;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
