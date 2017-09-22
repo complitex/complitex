@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class EntityAttribute implements Serializable {
     private Long id;
@@ -16,6 +18,7 @@ public class EntityAttribute implements Serializable {
 
     private boolean required;
 
+    @JsonIgnore
     private List<StringValue> names;
 
     private boolean system;
@@ -24,6 +27,10 @@ public class EntityAttribute implements Serializable {
     private ValueType valueType;
 
     private Long referenceId;
+
+    public Map<Long, String> getLabels(){
+        return names.stream().collect(Collectors.toMap(StringValue::getLocaleId, StringValue::getValue));
+    }
 
     public Integer getValueTypeId(){
         return valueType.getId();
