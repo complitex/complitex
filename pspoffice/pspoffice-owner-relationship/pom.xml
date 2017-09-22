@@ -16,10 +16,5 @@
             <groupId>org.complitex</groupId>
             <artifactId>complitex-template</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.complitex</groupId>
-            <artifactId>complitex-entity</artifactId>
-        </dependency>
     </dependencies>
 </project>

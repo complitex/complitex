@@ -25,11 +25,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.complitex</groupId>
-            <artifactId>complitex-entity</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>

@@ -3,11 +3,11 @@ package org.complitex.common.strategy;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import org.apache.ibatis.session.RowBounds;
+import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.entity.Entity;
-import org.complitex.entity.EntityAttribute;
-import org.complitex.entity.StringValueUtil;
+import org.complitex.common.util.StringValueUtil;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;

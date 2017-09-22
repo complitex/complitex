@@ -1,4 +1,6 @@
-package org.complitex.entity;
+package org.complitex.common.util;
+
+import org.complitex.common.entity.StringValue;
 
 import java.util.ArrayList;
 import java.util.List;

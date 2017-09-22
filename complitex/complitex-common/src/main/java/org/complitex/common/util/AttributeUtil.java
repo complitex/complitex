@@ -3,7 +3,6 @@ package org.complitex.common.util;
 import org.complitex.common.converter.*;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.entity.StringValueUtil;
 
 import java.util.Date;
 

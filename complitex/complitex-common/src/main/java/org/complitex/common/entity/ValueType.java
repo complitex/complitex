@@ -1,4 +1,4 @@
-package org.complitex.entity;
+package org.complitex.common.entity;
 
 public enum ValueType implements IFixedIdType {
     STRING_VALUE(0),

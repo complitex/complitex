@@ -1,9 +1,9 @@
 package ru.complitex.pspoffice.backend.resource;
 
 import io.swagger.annotations.Api;
+import org.complitex.common.entity.Entity;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.EntityBean;
-import org.complitex.entity.Entity;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;

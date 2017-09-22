@@ -10,9 +10,9 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.exception.DeleteException;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.entity.StringValue;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 

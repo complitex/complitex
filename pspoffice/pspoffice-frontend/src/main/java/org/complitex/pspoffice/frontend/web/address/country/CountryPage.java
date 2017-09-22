@@ -9,7 +9,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.pspoffice.frontend.web.FormPage;
 import org.complitex.pspoffice.frontend.web.address.AddressListPage;
-import ru.complitex.pspoffice.api.model.AddressObject;
+import ru.complitex.pspoffice.api.model.AddressModel;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
@@ -24,7 +24,7 @@ public class CountryPage extends FormPage{
     @Inject
     private PspOfficeClient pspOfficeClient;
 
-    private IModel<AddressObject> addressModel;
+    private IModel<AddressModel> addressModel;
 
     public CountryPage(PageParameters pageParameters) {
         Long addressObjectId = pageParameters.get("id").toOptionalLong();
@@ -42,16 +42,16 @@ public class CountryPage extends FormPage{
         return new ResourceModel(addressModel.getObject().getId() == null ? "titleNew" : "titleEdit");
     }
 
-    private AddressObject newAddressObject() {
-        AddressObject addressObject = new AddressObject();
+    private AddressModel newAddressObject() {
+        AddressModel addressModel = new AddressModel();
 
-        addressObject.setName(new HashMap<>());
+        addressModel.setName(new HashMap<>());
 
-        return addressObject;
+        return addressModel;
     }
 
-    private AddressObject getAddressObject(Long addressObjectId) {
-        return pspOfficeClient.request("address/country/" + addressObjectId).get(AddressObject.class);
+    private AddressModel getAddressObject(Long addressObjectId) {
+        return pspOfficeClient.request("address/country/" + addressObjectId).get(AddressModel.class);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package org.complitex.address.entity;
 
-import org.complitex.entity.IFixedIdType;
+import org.complitex.common.entity.IFixedIdType;
 
 /**
  * @author inheaven on 22.01.2016 12:54.

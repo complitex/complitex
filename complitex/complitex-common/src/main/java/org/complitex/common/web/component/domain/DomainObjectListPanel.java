@@ -28,6 +28,7 @@ import org.complitex.common.strategy.EntityBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
@@ -38,9 +39,6 @@ import org.complitex.common.web.component.search.CollapsibleSearchPanel;
 import org.complitex.common.web.component.type.BooleanPanel;
 import org.complitex.common.web.component.type.DatePanel;
 import org.complitex.common.web.component.type.StringPanel;
-import org.complitex.entity.EntityAttribute;
-import org.complitex.entity.StringValueUtil;
-import org.complitex.entity.ValueType;
 
 import javax.ejb.EJB;
 import java.util.Date;

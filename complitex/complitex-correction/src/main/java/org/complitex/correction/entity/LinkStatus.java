@@ -1,6 +1,6 @@
 package org.complitex.correction.entity;
 
-import org.complitex.entity.IFixedIdType;
+import org.complitex.common.entity.IFixedIdType;
 
 /**
  * @author Pavel Sknar

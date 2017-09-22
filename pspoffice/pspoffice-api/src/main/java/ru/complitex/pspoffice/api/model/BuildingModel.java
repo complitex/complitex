@@ -7,17 +7,17 @@ import java.util.Map;
  * @author Anatoly A. Ivanov
  *         Date: 23.05.2017.
  */
-public class BuildingObject extends AddressObject{
+public class BuildingModel extends AddressModel {
     private Map<String, String> number;
     private Map<String, String> corp;
     private Map<String, String> structure;
 
-    private List<BuildingObject> alternatives;
+    private List<BuildingModel> alternatives;
 
-    public BuildingObject() {
+    public BuildingModel() {
     }
 
-    public BuildingObject(Long objectId, Long parentId, Map<String, String> number, Map<String, String> corp, Map<String, String> structure) {
+    public BuildingModel(Long objectId, Long parentId, Map<String, String> number, Map<String, String> corp, Map<String, String> structure) {
         super(objectId, parentId);
 
         this.number = number;
@@ -49,11 +49,11 @@ public class BuildingObject extends AddressObject{
         this.structure = structure;
     }
 
-    public List<BuildingObject> getAlternatives() {
+    public List<BuildingModel> getAlternatives() {
         return alternatives;
     }
 
-    public void setAlternatives(List<BuildingObject> alternatives) {
+    public void setAlternatives(List<BuildingModel> alternatives) {
         this.alternatives = alternatives;
     }
 }

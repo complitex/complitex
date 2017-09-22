@@ -9,7 +9,7 @@ import org.complitex.common.service.AbstractImportService;
 import org.complitex.common.service.IImportListener;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.DateUtil;
-import org.complitex.entity.StringValueUtil;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

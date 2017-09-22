@@ -49,7 +49,6 @@
         <module>../complitex/complitex-organization-type</module>
         <module>../complitex/complitex-organization</module>
         <module>../complitex/complitex-ui</module>
-        <module>../complitex/complitex-entity</module>
     </modules>
 
     <dependencyManagement>
@@ -103,11 +102,6 @@
             <dependency>
                 <groupId>org.complitex</groupId>
                 <artifactId>complitex-ui</artifactId>
-                <version>${complitex.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.complitex</groupId>
-                <artifactId>complitex-entity</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
 

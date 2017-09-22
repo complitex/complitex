@@ -23,12 +23,12 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.RangeValidator;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.util.Locales;
+import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.DomainObjectEditPanel;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
 import org.complitex.common.web.component.type.StringValuePanel;
-import org.complitex.entity.StringValue;
-import org.complitex.entity.StringValueUtil;
 
 import java.io.Serializable;
 import java.util.List;

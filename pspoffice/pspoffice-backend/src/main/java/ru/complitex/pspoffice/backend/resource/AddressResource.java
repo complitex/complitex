@@ -15,8 +15,8 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.complitex.pspoffice.api.model.AddressObject;
-import ru.complitex.pspoffice.api.model.BuildingObject;
+import ru.complitex.pspoffice.api.model.AddressModel;
+import ru.complitex.pspoffice.api.model.BuildingModel;
 
 import javax.ejb.EJB;
 import javax.validation.constraints.Max;
@@ -71,7 +71,7 @@ public class AddressResource {
 
     @GET
     @Path("country/{id}")
-    @ApiOperation(value = "Get country by id", response = AddressObject.class)
+    @ApiOperation(value = "Get country by id", response = AddressModel.class)
     public Response getCountry(@PathParam("id") Long id){
         DomainObject d = countryStrategy.getDomainObject(id);
 
@@ -79,12 +79,12 @@ public class AddressResource {
             return Response.status(NOT_FOUND).build();
         }
 
-        return Response.ok(new AddressObject(d.getObjectId(), d.getStringMap(CountryStrategy.NAME))).build();
+        return Response.ok(new AddressModel(d.getObjectId(), d.getStringMap(CountryStrategy.NAME))).build();
     }
 
     @GET
     @Path("country")
-    @ApiOperation(value = "Get country list by query", response = AddressObject.class, responseContainer = "List")
+    @ApiOperation(value = "Get country list by query", response = AddressModel.class, responseContainer = "List")
     public Response getCountries(@QueryParam("query") String query,
                                  @QueryParam("offset") @DefaultValue("0") Integer offset,
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
@@ -94,7 +94,7 @@ public class AddressResource {
         filter.setCount(limit);
 
         return Response.ok(countryStrategy.getList(filter).stream()
-                .map(d -> new AddressObject(d.getObjectId(), d.getStringMap(CountryStrategy.NAME)))
+                .map(d -> new AddressModel(d.getObjectId(), d.getStringMap(CountryStrategy.NAME)))
                 .collect(Collectors.toList())).build();
     }
 
@@ -111,16 +111,16 @@ public class AddressResource {
     @PUT
     @Path("country")
     @ApiOperation(value = "Put country")
-    public Response putCountry(AddressObject addressObject){
+    public Response putCountry(AddressModel addressModel){
         try {
-            Long id = addressObject.getId();
+            Long id = addressModel.getId();
 
             if (id != null){
                 DomainObject country = countryStrategy.getDomainObject(id);
 
                 if (country != null){
-                    country.setStringValue(CountryStrategy.NAME, addressObject.getName().get(RU.getLanguage()), RU);
-                    country.setStringValue(CountryStrategy.NAME, addressObject.getName().get(UA.getLanguage()), UA);
+                    country.setStringValue(CountryStrategy.NAME, addressModel.getName().get(RU.getLanguage()), RU);
+                    country.setStringValue(CountryStrategy.NAME, addressModel.getName().get(UA.getLanguage()), UA);
 
                     countryStrategy.update(country);
 
@@ -131,8 +131,8 @@ public class AddressResource {
             }else{
                 DomainObject country = countryStrategy.newInstance();
 
-                country.setStringValue(CountryStrategy.NAME, addressObject.getName().get(RU.getLanguage()), RU);
-                country.setStringValue(CountryStrategy.NAME, addressObject.getName().get(UA.getLanguage()), UA);
+                country.setStringValue(CountryStrategy.NAME, addressModel.getName().get(RU.getLanguage()), RU);
+                country.setStringValue(CountryStrategy.NAME, addressModel.getName().get(UA.getLanguage()), UA);
 
                 countryStrategy.insert(country);
 
@@ -147,7 +147,7 @@ public class AddressResource {
 
     @GET
     @Path("region/{id}")
-    @ApiOperation(value = "Get region by id", response = AddressObject.class)
+    @ApiOperation(value = "Get region by id", response = AddressModel.class)
     public Response getRegion(@PathParam("id") Long id){
         DomainObject d = regionStrategy.getDomainObject(id);
 
@@ -155,12 +155,12 @@ public class AddressResource {
             return Response.status(NOT_FOUND).build();
         }
 
-        return Response.ok(new AddressObject(d.getObjectId(), d.getStringMap(RegionStrategy.NAME))).build();
+        return Response.ok(new AddressModel(d.getObjectId(), d.getStringMap(RegionStrategy.NAME))).build();
     }
 
     @GET
     @Path("region")
-    @ApiOperation(value = "Get region list by query", response = AddressObject.class, responseContainer = "List")
+    @ApiOperation(value = "Get region list by query", response = AddressModel.class, responseContainer = "List")
     public Response getRegions(@QueryParam("query") String query,
                                @QueryParam("offset") @DefaultValue("0") Integer offset,
                               @QueryParam("limit") @DefaultValue("10") Integer limit){
@@ -170,7 +170,7 @@ public class AddressResource {
         filter.setCount(limit);
 
         return Response.ok(regionStrategy.getList(filter).stream()
-                .map(d -> new AddressObject(d.getObjectId(), d.getStringMap(RegionStrategy.NAME)))
+                .map(d -> new AddressModel(d.getObjectId(), d.getStringMap(RegionStrategy.NAME)))
                 .collect(Collectors.toList())).build();
     }
 
@@ -186,7 +186,7 @@ public class AddressResource {
 
     @GET
     @Path("city-type/{id}")
-    @ApiOperation(value = "Get city type by id", response = AddressObject.class)
+    @ApiOperation(value = "Get city type by id", response = AddressModel.class)
     public Response getCityType(@PathParam("id") Long id){
         DomainObject d = cityTypeStrategy.getDomainObject(id);
 
@@ -194,14 +194,14 @@ public class AddressResource {
             return Response.status(NOT_FOUND).build();
         }
 
-        return Response.ok(new AddressObject(d.getObjectId(),
+        return Response.ok(new AddressModel(d.getObjectId(),
                 d.getStringMap(CityTypeStrategy.NAME),
                 d.getStringMap(CityTypeStrategy.SHORT_NAME))).build();
     }
 
     @GET
     @Path("city-type")
-    @ApiOperation(value = "Get city types list by query", response = AddressObject.class, responseContainer = "List")
+    @ApiOperation(value = "Get city types list by query", response = AddressModel.class, responseContainer = "List")
     public Response getCityTypes(@QueryParam("query") String query,
                                  @QueryParam("offset") @DefaultValue("0") Integer offset,
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
@@ -211,7 +211,7 @@ public class AddressResource {
         filter.setCount(limit);
 
         return Response.ok(cityTypeStrategy.getList(filter).stream()
-                .map(d -> new AddressObject(d.getObjectId(),
+                .map(d -> new AddressModel(d.getObjectId(),
                         d.getStringMap(CityTypeStrategy.NAME),
                         d.getStringMap(CityTypeStrategy.SHORT_NAME)))
                 .collect(Collectors.toList())).build();
@@ -229,7 +229,7 @@ public class AddressResource {
 
     @GET
     @Path("city/{id}")
-    @ApiOperation(value = "Get city by id", response = AddressObject.class)
+    @ApiOperation(value = "Get city by id", response = AddressModel.class)
     public Response getCity(@PathParam("id") Long id){
         DomainObject d = cityStrategy.getDomainObject(id);
 
@@ -237,14 +237,14 @@ public class AddressResource {
             return Response.status(NOT_FOUND).build();
         }
 
-        return Response.ok(new AddressObject(d.getObjectId(), d.getParentId(),
+        return Response.ok(new AddressModel(d.getObjectId(), d.getParentId(),
                 d.getAttribute(CityStrategy.CITY_TYPE).getValueId(),
                 d.getStringMap(CityStrategy.NAME))).build();
     }
 
     @GET
     @Path("city")
-    @ApiOperation(value = "Get city list by query", response = AddressObject.class, responseContainer = "List")
+    @ApiOperation(value = "Get city list by query", response = AddressModel.class, responseContainer = "List")
     public Response getCities(@QueryParam("query") String query,
                               @QueryParam("parentId") Long parentId,
                               @QueryParam("typeId") Long typeId,
@@ -258,7 +258,7 @@ public class AddressResource {
         filter.setCount(limit);
 
         return Response.ok(cityStrategy.getList(filter).stream()
-                .map(d -> new AddressObject(d.getObjectId(), d.getParentId(),
+                .map(d -> new AddressModel(d.getObjectId(), d.getParentId(),
                         d.getAttribute(CityStrategy.CITY_TYPE).getValueId(),
                         d.getStringMap(CityStrategy.NAME)))
                 .collect(Collectors.toList())).build();
@@ -280,7 +280,7 @@ public class AddressResource {
 
     @GET
     @Path("district/{id}")
-    @ApiOperation(value = "Get district by id", response = AddressObject.class)
+    @ApiOperation(value = "Get district by id", response = AddressModel.class)
     public Response getDistrict(@PathParam("id") Long id){
         DomainObject d = districtStrategy.getDomainObject(id);
 
@@ -288,14 +288,14 @@ public class AddressResource {
             return Response.status(NOT_FOUND).build();
         }
 
-        return Response.ok(new AddressObject(d.getObjectId(), d.getParentId(),
+        return Response.ok(new AddressModel(d.getObjectId(), d.getParentId(),
                 d.getStringValue(DistrictStrategy.CODE),
                 d.getStringMap(DistrictStrategy.NAME))).build();
     }
 
     @GET
     @Path("district")
-    @ApiOperation(value = "Get district list by query", response = AddressObject.class, responseContainer = "List")
+    @ApiOperation(value = "Get district list by query", response = AddressModel.class, responseContainer = "List")
     public Response getDistricts(@QueryParam("query") String query,
                                  @QueryParam("parentId") Long parentId,
                                  @QueryParam("offset") @DefaultValue("0") Integer offset,
@@ -307,7 +307,7 @@ public class AddressResource {
         filter.setCount(limit);
 
         return Response.ok(districtStrategy.getList(filter).stream()
-                .map(d -> new AddressObject(d.getObjectId(), d.getParentId(),
+                .map(d -> new AddressModel(d.getObjectId(), d.getParentId(),
                         d.getStringValue(DistrictStrategy.CODE),
                         d.getStringMap(DistrictStrategy.NAME)))
                 .collect(Collectors.toList())).build();
@@ -327,7 +327,7 @@ public class AddressResource {
 
     @GET
     @Path("street/{id}")
-    @ApiOperation(value = "Get street by id", response = AddressObject.class)
+    @ApiOperation(value = "Get street by id", response = AddressModel.class)
     public Response getStreet(@PathParam("id") Long id){
         DomainObject d = streetStrategy.getDomainObject(id);
 
@@ -335,7 +335,7 @@ public class AddressResource {
             return Response.status(NOT_FOUND).build();
         }
 
-        return Response.ok(new AddressObject(d.getObjectId(), d.getParentId(), d.getValueId(StreetStrategy.STREET_TYPE),
+        return Response.ok(new AddressModel(d.getObjectId(), d.getParentId(), d.getValueId(StreetStrategy.STREET_TYPE),
                 d.getStringValue(StreetStrategy.STREET_CODE), d.getStringMap(StreetStrategy.NAME))).build();
     }
 
@@ -353,7 +353,7 @@ public class AddressResource {
         filter.setCount(limit);
 
         return Response.ok(streetStrategy.getList(filter).stream()
-                .map(d -> new AddressObject(d.getObjectId(), d.getParentId(), d.getValueId(StreetStrategy.STREET_TYPE),
+                .map(d -> new AddressModel(d.getObjectId(), d.getParentId(), d.getValueId(StreetStrategy.STREET_TYPE),
                         d.getStringValue(StreetStrategy.STREET_CODE), d.getStringMap(StreetStrategy.NAME)))
                 .collect(Collectors.toList())).build();
     }
@@ -370,19 +370,19 @@ public class AddressResource {
         return Response.ok(streetStrategy.getCount(filter)).build();
     }
 
-    private BuildingObject getBuildingObject(Building b){
+    private BuildingModel getBuildingObject(Building b){
         DomainObject a = b.getAccompaniedAddress();
 
-        BuildingObject building = new BuildingObject(b.getObjectId(), a.getParentId(),
+        BuildingModel building = new BuildingModel(b.getObjectId(), a.getParentId(),
                 a.getStringMap(BuildingAddressStrategy.NUMBER), a.getStringMap(BuildingAddressStrategy.CORP),
                 a.getStringMap(BuildingAddressStrategy.STRUCTURE));
 
         if (!b.getAlternativeAddresses().isEmpty()){
-            List<BuildingObject> alternatives = new ArrayList<>();
+            List<BuildingModel> alternatives = new ArrayList<>();
             building.setAlternatives(alternatives);
 
             b.getAlternativeAddresses().forEach(alt -> {
-                alternatives.add(new BuildingObject(null, alt.getParentId(),
+                alternatives.add(new BuildingModel(null, alt.getParentId(),
                         alt.getStringMap(BuildingAddressStrategy.NUMBER), alt.getStringMap(BuildingAddressStrategy.CORP),
                         alt.getStringMap(BuildingAddressStrategy.STRUCTURE)));
             });
@@ -393,7 +393,7 @@ public class AddressResource {
 
     @GET
     @Path("building/{id}")
-    @ApiOperation(value = "Get building by id", response = BuildingObject.class)
+    @ApiOperation(value = "Get building by id", response = BuildingModel.class)
     public Response getBuilding(@PathParam("id") Long id){
         Building building = buildingStrategy.getDomainObject(id, true);
 
@@ -406,7 +406,7 @@ public class AddressResource {
 
     @GET
     @Path("building")
-    @ApiOperation(value = "Get building list by query", response = BuildingObject.class, responseContainer = "List")
+    @ApiOperation(value = "Get building list by query", response = BuildingModel.class, responseContainer = "List")
     public Response getBuildings(@QueryParam("query") String query,
                                  @QueryParam("parentId") Long parentId,
                                  @QueryParam("offset") @DefaultValue("0") Integer offset,

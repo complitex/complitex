@@ -16,11 +16,6 @@
     <dependencies>
         <dependency>
             <groupId>org.complitex</groupId>
-            <artifactId>complitex-entity</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.complitex</groupId>
             <artifactId>complitex-resources</artifactId>
         </dependency>
 

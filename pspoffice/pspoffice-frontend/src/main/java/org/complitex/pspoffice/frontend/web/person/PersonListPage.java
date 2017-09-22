@@ -15,7 +15,7 @@ import org.complitex.pspoffice.frontend.web.BasePage;
 import org.complitex.ui.wicket.datatable.TablePanel;
 import org.complitex.ui.wicket.datatable.column.EditColumn;
 import org.complitex.ui.wicket.link.LinkPanel;
-import ru.complitex.pspoffice.api.model.PersonObject;
+import ru.complitex.pspoffice.api.model.PersonModel;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -31,14 +31,14 @@ public class PersonListPage extends BasePage{
     public PersonListPage() {
         add(new NotificationPanel("feedback"));
 
-        add(new TablePanel<PersonObject>("persons", PersonObject.class,
+        add(new TablePanel<PersonModel>("persons", PersonModel.class,
                 Arrays.asList("lastName.ru", "firstName.ru", "middleName.ru", "birthDate", "edit"), personDataProvider){
             @Override
-            protected IColumn<PersonObject, String> getColumn(String field) {
+            protected IColumn<PersonModel, String> getColumn(String field) {
                 if ("edit".equals(field)){
-                    return new EditColumn<PersonObject>(){
+                    return new EditColumn<PersonModel>(){
                         @Override
-                        public void populateItem(Item<ICellPopulator<PersonObject>> cellItem, String componentId, IModel<PersonObject> rowModel) {
+                        public void populateItem(Item<ICellPopulator<PersonModel>> cellItem, String componentId, IModel<PersonModel> rowModel) {
                             cellItem.add(new LinkPanel(componentId, new BootstrapBookmarkablePageLink(LinkPanel.LINK_COMPONENT_ID, PersonPage.class,
                                     new PageParameters().add("id", rowModel.getObject().getId()), Buttons.Type.Menu)
                                     .setIconType(GlyphIconType.edit).setSize(Buttons.Size.Small)));

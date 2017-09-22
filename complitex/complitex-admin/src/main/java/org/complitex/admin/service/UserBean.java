@@ -7,7 +7,6 @@ import org.complitex.common.service.AbstractBean;
 import org.complitex.common.strategy.EntityBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.web.DictionaryFwSession;
-import org.complitex.entity.EntityAttribute;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

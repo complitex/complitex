@@ -38,7 +38,6 @@
         <module>complitex-template</module>
         <module>complitex-organization-type</module>
         <module>complitex-ui</module>
-        <module>complitex-entity</module>
     </modules>
 
     <properties>
@@ -121,13 +120,6 @@
             </dependency>
             <dependency>
                 <groupId>org.complitex</groupId>
-                <artifactId>complitex-common</artifactId>
-                <version>${project.version}</version>
-                <scope>test</scope>
-                <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.complitex</groupId>
                 <artifactId>complitex-images</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -159,11 +151,6 @@
             <dependency>
                 <groupId>org.complitex</groupId>
                 <artifactId>complitex-ui</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.complitex</groupId>
-                <artifactId>complitex-entity</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

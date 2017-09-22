@@ -5,7 +5,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.ui.wicket.datatable.TableDataProvider;
-import ru.complitex.pspoffice.api.model.AddressObject;
+import ru.complitex.pspoffice.api.model.AddressModel;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
@@ -18,12 +18,12 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
  * @author Anatoly A. Ivanov
  * 20.07.2017 14:36
  */
-public class AddressDataProvider extends TableDataProvider<AddressObject> {
+public class AddressDataProvider extends TableDataProvider<AddressModel> {
     @Inject
     private PspOfficeClient pspOfficeClient;
 
     private String entity;
-    private AddressObject addressObject;
+    private AddressModel addressModel;
 
     public String getEntity() {
         return entity;
@@ -34,24 +34,24 @@ public class AddressDataProvider extends TableDataProvider<AddressObject> {
     }
 
     @Override
-    public AddressObject getFilterState() {
-        return addressObject;
+    public AddressModel getFilterState() {
+        return addressModel;
     }
 
     @Override
-    public void setFilterState(AddressObject addressObject) {
-        this.addressObject = addressObject;
+    public void setFilterState(AddressModel addressModel) {
+        this.addressModel = addressModel;
     }
 
     @Override
-    public Iterator<? extends AddressObject> iterator(long first, long count) {
+    public Iterator<? extends AddressModel> iterator(long first, long count) {
         return pspOfficeClient.target()
                 .path("address")
                 .path(entity)
                 .queryParam("offset", first)
                 .queryParam("limit", count)
                 .request(APPLICATION_JSON_TYPE)
-                .get(new GenericType<List<AddressObject>>(){}).iterator();
+                .get(new GenericType<List<AddressModel>>(){}).iterator();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class AddressDataProvider extends TableDataProvider<AddressObject> {
     }
 
     @Override
-    public IModel<AddressObject> model(AddressObject addressObject) {
-        return new CompoundPropertyModel<>(addressObject);
+    public IModel<AddressModel> model(AddressModel addressModel) {
+        return new CompoundPropertyModel<>(addressModel);
     }
 }

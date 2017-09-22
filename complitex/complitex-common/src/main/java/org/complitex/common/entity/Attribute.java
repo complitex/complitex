@@ -1,8 +1,7 @@
 package org.complitex.common.entity;
 
 import org.complitex.common.util.Locales;
-import org.complitex.entity.StringValue;
-import org.complitex.entity.StringValueUtil;
+import org.complitex.common.util.StringValueUtil;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -7,14 +7,14 @@ import java.util.Map;
  * @author Anatoly A. Ivanov
  * 03.08.2017 17:42
  */
-public class NameObject implements Serializable{
+public class NameModel implements Serializable{
     private Long id;
     private Map<String, String> name;
 
-    public NameObject() {
+    public NameModel() {
     }
 
-    public NameObject(Long id, Map<String, String> name) {
+    public NameModel(Long id, Map<String, String> name) {
         this.id = id;
         this.name = name;
     }

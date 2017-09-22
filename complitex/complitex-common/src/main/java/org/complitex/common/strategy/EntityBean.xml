@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.common.strategy.EntityBean">
-    <resultMap id="entityResultMap" type="org.complitex.entity.Entity">
+    <resultMap id="entityResultMap" type="org.complitex.common.entity.Entity">
         <id column="e_id" property="id"/>
         <result column="entity" property="entity"/>
         <collection property="names" ofType="StringValue" column="e_name_id" select="findNames"/>
 
-        <collection property="attributes" ofType="org.complitex.entity.EntityAttribute">
+        <collection property="attributes" ofType="org.complitex.common.entity.EntityAttribute">
             <id column="ea_id" property="id"/>
             <result column="required" property="required"/>
             <result column="ea_start_date" property="startDate"/>
@@ -42,7 +42,7 @@
     </select>
 
     <insert id="insertAttributeType" useGeneratedKeys="true" keyProperty="id"
-            parameterType="org.complitex.entity.EntityAttribute">
+            parameterType="org.complitex.common.entity.EntityAttribute">
         INSERT INTO `entity_attribute`(`entity_id`, `required`, `name_id`, `start_date`, `value_type_id`, `reference_id`)
           VALUES (#{entityId}, #{required}, #{nameId}, #{startDate}, #{valueTypeId}, #{referenceId})
     </insert>

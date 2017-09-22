@@ -1,7 +1,5 @@
 package org.complitex.common.entity;
 
-import org.complitex.entity.IFixedIdType;
-
 public enum Status implements IFixedIdType{
     INACTIVE(0), ACTIVE(1),  ARCHIVE(2);
 
