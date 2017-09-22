@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import org.complitex.common.entity.Entity;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.EntityBean;
+import ru.complitex.pspoffice.backend.adapter.EntityAdapter;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -39,13 +40,13 @@ public class EntityResource {
             return Response.status(NOT_FOUND).build();
         }
 
-        return Response.ok(e).build();
+        return Response.ok(EntityAdapter.adapt(e)).build();
     }
 
     @GET
     public Response getEntities(@QueryParam("offset")  @DefaultValue("0") Long offset,
                                 @QueryParam("limit")  @DefaultValue("10") Long limit){
-        return Response.ok(entityBean.getEntities(new FilterWrapper<>(offset, limit))).build();
+        return Response.ok(EntityAdapter.adapt(entityBean.getEntities(new FilterWrapper<>(offset, limit)))).build();
     }
 
     @GET

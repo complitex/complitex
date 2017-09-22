@@ -21,16 +21,16 @@ public class EntityDataProvider extends TableDataProvider<EntityModel>{
     @Inject
     private PspOfficeClient pspOfficeClient;
 
-    private EntityModel entity = new EntityModel();
+    private EntityModel entityModel = new EntityModel();
 
     @Override
     public EntityModel getFilterState() {
-        return entity;
+        return entityModel;
     }
 
     @Override
-    public void setFilterState(EntityModel entity) {
-        this.entity = entity;
+    public void setFilterState(EntityModel entityModel) {
+        this.entityModel = entityModel;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class EntityDataProvider extends TableDataProvider<EntityModel>{
     }
 
     @Override
-    public IModel<EntityModel> model(EntityModel entity) {
-        return new CompoundPropertyModel<>(entity);
+    public IModel<EntityModel> model(EntityModel entityModel) {
+        return new CompoundPropertyModel<>(entityModel);
     }
 }

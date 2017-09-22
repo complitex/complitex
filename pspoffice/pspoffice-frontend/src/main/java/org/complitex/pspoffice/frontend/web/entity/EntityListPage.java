@@ -22,7 +22,7 @@ public class EntityListPage extends BasePage{
         add(new NotificationPanel("feedback"));
 
         add(new TablePanel<>("entities", EntityModel.class,
-                Arrays.asList("id", "entity", "labels.1", "labels.2"), entityDataProvider));
+                Arrays.asList("id", "entity", "names.1", "names.2"), entityDataProvider));
     }
 
     protected IModel<String> getTitleModel() {
