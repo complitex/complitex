@@ -23,11 +23,10 @@ public class EntityListPage extends BasePage{
         add(new NotificationPanel("feedback"));
 
         add(new TablePanel<EntityModel>("entities", EntityModel.class,
-                Arrays.asList("id", "entity", "names.1", "names.2"), entityDataProvider, EntityEditPage.class){
+                Arrays.asList("id", "entity", "names.1", "names.2"), entityDataProvider, EntityPage.class){
             @Override
             protected void populateEdit(IModel<EntityModel> rowModel, PageParameters pageParameters) {
                 pageParameters.add("id", rowModel.getObject().getId());
-                pageParameters.add("entity", rowModel.getObject().getEntity());
             }
         });
     }

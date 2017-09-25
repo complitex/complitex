@@ -44,15 +44,19 @@ public class TablePanel<T extends Serializable> extends Panel {
         DataTable<T, String> dataTable = new DataTable<>("dataTable", getColumns(modelClass, modelFields),
                 dataProvider, 10);
         dataTable.addTopToolbar(new AjaxFallbackHeadersToolbar<>(dataTable, dataProvider));
-        dataTable.addTopToolbar(new FilterToolbar(dataTable, filterForm){
-            @Override
-            protected void onBeforeRender() {
-                super.onBeforeRender();
 
-                visitChildren(TextField.class, (component, visit) ->
-                        component.add(new AttributeModifier("class", "form-control")));
-            }
-        });
+        if (isShowFilter()) {
+            dataTable.addTopToolbar(new FilterToolbar(dataTable, filterForm){
+                @Override
+                protected void onBeforeRender() {
+                    super.onBeforeRender();
+
+                    visitChildren(TextField.class, (component, visit) ->
+                            component.add(new AttributeModifier("class", "form-control")));
+                }
+            });
+        }
+
         dataTable.addBottomToolbar(new BootstrapNavigationToolbar(dataTable));
 
         filterForm.add(dataTable);
@@ -100,5 +104,9 @@ public class TablePanel<T extends Serializable> extends Panel {
 
     protected void populateEdit(IModel<T> rowModel, PageParameters pageParameters){
 
+    }
+
+    protected boolean isShowFilter(){
+        return true;
     }
 }

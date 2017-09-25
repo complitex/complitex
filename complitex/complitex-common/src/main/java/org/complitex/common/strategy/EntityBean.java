@@ -51,6 +51,10 @@ public class EntityBean extends AbstractBean {
         return entityMap.get(entityName);
     }
 
+    public Entity getEntity(Long id) {
+        return entityMap.values().stream().filter(e -> e.getId().equals(id)).findAny().orElse(null);
+    }
+
     public List<EntityAttribute> getAttributeTypes(List<Long> entityAttributeIds){
         List<EntityAttribute> entityAttributes = new ArrayList<>(entityAttributeIds.size());
 

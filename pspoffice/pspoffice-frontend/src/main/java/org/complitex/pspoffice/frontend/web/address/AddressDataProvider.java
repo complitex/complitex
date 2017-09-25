@@ -23,7 +23,6 @@ public class AddressDataProvider extends TableDataProvider<AddressModel> {
     private PspOfficeClient pspOfficeClient;
 
     private String entity;
-    private AddressModel addressModel;
 
     public String getEntity() {
         return entity;
@@ -31,16 +30,6 @@ public class AddressDataProvider extends TableDataProvider<AddressModel> {
 
     public void setEntity(String entity) {
         this.entity = entity;
-    }
-
-    @Override
-    public AddressModel getFilterState() {
-        return addressModel;
-    }
-
-    @Override
-    public void setFilterState(AddressModel addressModel) {
-        this.addressModel = addressModel;
     }
 
     @Override

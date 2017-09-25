@@ -34,9 +34,9 @@ public class PersonPage extends FormPage{
     private IModel<PersonModel> personModel;
 
     public PersonPage(PageParameters pageParameters) {
-        Long personObjectId = pageParameters.get("id").toOptionalLong();
+        Long personModelId = pageParameters.get("id").toOptionalLong();
 
-        personModel = Model.of(personObjectId != null ? getPersonObject(personObjectId) : newPersonObject());
+        personModel = Model.of(personModelId != null ? getPersonModel(personModelId) : newPersonModel());
 
         //Основные
 
@@ -141,7 +141,7 @@ public class PersonPage extends FormPage{
         return new ResourceModel(personModel.getObject().getId() == null ? "titleNew" : "titleEdit");
     }
 
-    private PersonModel newPersonObject(){
+    private PersonModel newPersonModel(){
         PersonModel personModel = new PersonModel();
 
         personModel.setLastName(new HashMap<>());
@@ -157,7 +157,7 @@ public class PersonPage extends FormPage{
     }
 
 
-    private PersonModel getPersonObject(Long objectId){
+    private PersonModel getPersonModel(Long objectId){
         PersonModel personModel = pspOfficeClient.request("person/" + objectId).get(PersonModel.class);
 
         if (personModel.getDocuments() == null){

@@ -46,10 +46,6 @@ public class EntityAdapter {
     }
 
     public static Entity adapt(EntityModel entityModel){
-        Entity entity = new Entity();
-
-        //todo adapt
-
-        return entity;
+        throw new IllegalStateException("todo adapt");
     }
 }

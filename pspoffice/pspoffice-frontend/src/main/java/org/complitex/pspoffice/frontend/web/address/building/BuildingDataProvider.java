@@ -21,18 +21,6 @@ public class BuildingDataProvider extends TableDataProvider<BuildingModel> {
     @Inject
     private PspOfficeClient pspOfficeClient;
 
-    private BuildingModel buildingObject;
-
-    @Override
-    public BuildingModel getFilterState() {
-        return buildingObject;
-    }
-
-    @Override
-    public void setFilterState(BuildingModel buildingObject) {
-        this.buildingObject = buildingObject;
-    }
-
     @Override
     public Iterator<? extends BuildingModel> iterator(long first, long count) {
         return pspOfficeClient.target()

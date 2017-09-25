@@ -32,15 +32,15 @@ public class EntityResource {
     }
 
     @GET
-    @Path("{entity}")
-    public Response getEntity(@PathParam("entity") String entity){
-        Entity e = entityBean.getEntity(entity);
+    @Path("{id}")
+    public Response getEntity(@PathParam("id") Long id){
+        Entity entity = entityBean.getEntity(id);
 
         if (entity == null){
             return Response.status(NOT_FOUND).build();
         }
 
-        return Response.ok(EntityAdapter.adapt(e)).build();
+        return Response.ok(EntityAdapter.adapt(entity)).build();
     }
 
     @GET

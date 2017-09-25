@@ -13,6 +13,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.complitex.pspoffice.frontend.web.address.AddressListPage;
 import org.complitex.pspoffice.frontend.web.address.building.BuildingListPage;
 import org.complitex.pspoffice.frontend.web.entity.EntityListPage;
+import org.complitex.pspoffice.frontend.web.entity.EntityPage;
 import org.complitex.pspoffice.frontend.web.person.PersonListPage;
 import org.complitex.pspoffice.frontend.web.person.PersonPage;
 
@@ -58,5 +59,6 @@ public class PspOfficeFontendWebApplication extends WebApplication{
         mountPage("address/${entity}", AddressListPage.class);
         mountPage("address/building", BuildingListPage.class);
         mountPage("entities", EntityListPage.class);
+        mountPage("entity/${id}", EntityPage.class);
     }
 }

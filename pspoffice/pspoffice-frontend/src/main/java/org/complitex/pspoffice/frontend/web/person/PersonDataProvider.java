@@ -22,24 +22,14 @@ public class PersonDataProvider extends TableDataProvider<PersonModel>{
     @Inject
     private PspOfficeClient pspOfficeClient;
 
-    private PersonModel personModel;
-
     public PersonDataProvider() {
-        personModel = new PersonModel();
+        PersonModel personModel = new PersonModel();
 
         personModel.setLastName(new HashMap<>());
         personModel.setFirstName(new HashMap<>());
         personModel.setMiddleName(new HashMap<>());
-    }
 
-    @Override
-    public PersonModel getFilterState() {
-        return personModel;
-    }
-
-    @Override
-    public void setFilterState(PersonModel personModel) {
-        personModel = personModel;
+        setFilterState(personModel);
     }
 
     @Override

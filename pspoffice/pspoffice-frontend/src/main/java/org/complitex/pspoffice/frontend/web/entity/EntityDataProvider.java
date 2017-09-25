@@ -21,18 +21,6 @@ public class EntityDataProvider extends TableDataProvider<EntityModel>{
     @Inject
     private PspOfficeClient pspOfficeClient;
 
-    private EntityModel entityModel = new EntityModel();
-
-    @Override
-    public EntityModel getFilterState() {
-        return entityModel;
-    }
-
-    @Override
-    public void setFilterState(EntityModel entityModel) {
-        this.entityModel = entityModel;
-    }
-
     @Override
     public Iterator<? extends EntityModel> iterator(long first, long count) {
         return pspOfficeClient.target()
