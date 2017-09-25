@@ -9,7 +9,7 @@ import java.util.Map;
  * @author Anatoly A. Ivanov
  *         25.05.2017 16:55
  */
-public class PersonModel implements Serializable{
+public class PersonModel implements Serializable {
     private Long id;
 
     private Map<String, String> lastName;

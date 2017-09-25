@@ -1,8 +1,13 @@
 package org.complitex.ui.wicket.datatable;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapBookmarkablePageLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.table.toolbars.BootstrapNavigationToolbar;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Page;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
@@ -10,7 +15,12 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.Filte
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextFilteredPropertyColumn;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.ui.wicket.datatable.column.EditColumn;
+import org.complitex.ui.wicket.link.LinkPanel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,8 +31,12 @@ import java.util.List;
  * 03.07.2017 16:59
  */
 public class TablePanel<T extends Serializable> extends Panel {
-    public TablePanel(String id, Class<T> modelClass, List<String> modelFields, TableDataProvider<T> dataProvider) {
+    private Class<? extends Page> editPageClass;
+
+    public TablePanel(String id, Class<T> modelClass, List<String> modelFields, TableDataProvider<T> dataProvider, Class<? extends Page> editPageClass) {
         super(id);
+
+        this.editPageClass = editPageClass;
 
         FilterForm<T> filterForm = new FilterForm<>("filterForm", dataProvider);
         add(filterForm);
@@ -44,6 +58,10 @@ public class TablePanel<T extends Serializable> extends Panel {
         filterForm.add(dataTable);
     }
 
+    public TablePanel(String id, Class<T> modelClass, List<String> modelFields, TableDataProvider<T> dataProvider){
+        this(id, modelClass, modelFields, dataProvider, null);
+    }
+
     protected IColumn<T, String> getColumn(String field){
         return null;
     }
@@ -61,6 +79,26 @@ public class TablePanel<T extends Serializable> extends Panel {
             columns.add(column);
         });
 
+        if (editPageClass != null){
+            columns.add(new EditColumn<T>(){
+                @Override
+                public void populateItem(Item<ICellPopulator<T>> cellItem, String componentId, IModel<T> rowModel) {
+                    PageParameters pageParameters = new PageParameters();
+
+                    populateEdit(rowModel, pageParameters);
+
+                    cellItem.add(new LinkPanel(componentId, new BootstrapBookmarkablePageLink(LinkPanel.LINK_COMPONENT_ID,
+                            editPageClass,pageParameters, Buttons.Type.Menu)
+                            .setIconType(GlyphIconType.edit).setSize(Buttons.Size.Small)));
+                }
+            });
+
+        }
+
         return columns;
+    }
+
+    protected void populateEdit(IModel<T> rowModel, PageParameters pageParameters){
+
     }
 }
