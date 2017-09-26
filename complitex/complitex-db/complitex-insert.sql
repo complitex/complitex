@@ -64,7 +64,7 @@ INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES ('permission',
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (100, 1, 'Квартира'), (100, 2, 'Квартира');
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (100, 'apartment', 100, '');
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (101, 1, UPPER('Номер квартиры')), (101, 2, UPPER('Номер квартири'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (100, 100, 1, 101, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (100, 100, 1, 101, 1, 0);
 
 -- --------------------------------
 -- Room
@@ -73,7 +73,7 @@ INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `syste
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (200, 1, 'Комната'), (200, 2, 'Кімната');
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (200, 'room', 200, '');
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (201, 1, UPPER('Номер комнаты')), (201, 2, UPPER('Номер кімнати'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (200, 200, 1, 201, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (200, 200, 1, 201, 1, 0);
 
 -- --------------------------------
 -- Street
@@ -83,13 +83,13 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (300, 1, '�
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (300, 'street', 300, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (301, 1, UPPER('Наименование улицы')), (301, 2, UPPER('Найменування вулиці'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (300, 300, 1, 301, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (300, 300, 1, 301, 1, 0);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (302, 1, UPPER('Тип улицы')),(302, 2, UPPER('Тип улицы'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (301, 300, 1, 302, 1, 10, 1400);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (301, 300, 1, 302, 1, 10, 1400);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (303, 1, UPPER('Код улицы')),(303, 2, UPPER('Код улицы'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (303, 300, 0, 303, 1, 1);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (303, 300, 0, 303, 1, 1);
 
 -- --------------------------------
 -- Street Type
@@ -99,10 +99,10 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1400, 1, '
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (1400, 'street_type', 1400, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1401, 1, UPPER('Краткое название')), (1401, 2, UPPER('Краткое название'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1400, 1400, 1, 1401, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1400, 1400, 1, 1401, 1, 0);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1402, 1, UPPER('Название')), (1402, 2, UPPER('Название'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1401, 1400, 1, 1402, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1401, 1400, 1, 1402, 1, 0);
 
 -- --------------------------------
 -- City
@@ -112,10 +112,10 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (400, 1, '�
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (400, 'city', 400, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (401, 1, UPPER('Наименование населенного пункта')), (401, 2, UPPER('Найменування населеного пункту'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (400, 400, 1, 401, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (400, 400, 1, 401, 1, 0);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (402, 1, UPPER('Тип населенного пункта')), (402, 2, UPPER('Тип населенного пункта'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (401, 400, 1, 402, 1, 10, 1300);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (401, 400, 1, 402, 1, 10, 1300);
 
 -- --------------------------------
 -- City Type
@@ -125,10 +125,10 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1300, 1, '
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (1300, 'city_type', 1300, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1301, 1, UPPER('Краткое название')), (1301, 2, UPPER('Краткое название'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1300, 1300, 1, 1301, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1300, 1300, 1, 1301, 1, 0);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1302, 1, UPPER('Название')), (1302, 2, UPPER('Название'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1301, 1300, 1, 1302, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1301, 1300, 1, 1302, 1, 0);
 
 -- --------------------------------
 -- Building
@@ -138,13 +138,13 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (500, 1, '�
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (500, 'building', 500, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (501, 1, UPPER('Район')), (501, 2, UPPER('Район'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (500, 500, 0, 501, 1, 10, 600);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (500, 500, 0, 501, 1, 10, 600);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (502, 1, UPPER('Альтернативный адрес')), (502, 2, UPPER('Альтернативный адрес'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (501, 500, 0, 502, 1, 10, 1500);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (501, 500, 0, 502, 1, 10, 1500);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (503, 1, UPPER('Список кодов дома')), (503, 2, UPPER('Список кодов дома'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (502, 500, 0, 503, 1, 20);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (502, 500, 0, 503, 1, 20);
 
 -- --------------------------------
 -- Building Address
@@ -154,13 +154,13 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1500, 1, '
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (1500, 'building_address', 1500, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1501, 1, UPPER('Номер дома')), (1501, 2, UPPER('Номер будинку'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1500, 1500, 1, 1501, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1500, 1500, 1, 1501, 1, 0);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1502, 1, UPPER('Корпус')), (1502, 2, UPPER('Корпус'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1501, 1500, 0, 1502, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1501, 1500, 0, 1502, 1, 0);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1503, 1, UPPER('Строение')), (1503, 2, UPPER('Будова'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1502, 1500, 0, 1503, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1502, 1500, 0, 1503, 1, 0);
 
 -- --------------------------------
 -- District
@@ -170,10 +170,10 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (600, 1, '�
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (600, 'district', 600, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (601, 1, UPPER('Наименование района')), (601, 2, UPPER('Найменування району'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (600, 600, 1, 601, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (600, 600, 1, 601, 1, 0);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (602, 1, UPPER('Код района')), (602, 2, UPPER('Код району'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (601, 600, 1, 602, 1, 1);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (601, 600, 1, 602, 1, 1);
 
 -- --------------------------------
 -- Region
@@ -183,7 +183,7 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (700, 1, '�
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (700, 'region', 700, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (701, 1, UPPER('Наименование региона')), (701, 2, UPPER('Найменування регіону'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (700, 700, 1, 701, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (700, 700, 1, 701, 1, 0);
 
 -- --------------------------------
 -- Country
@@ -193,7 +193,7 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (800, 1, '�
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (800, 'country', 800, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (801, 1, UPPER('Наименование страны')), (801, 2, UPPER('Найменування країни'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (800, 800, 1, 801, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (800, 800, 1, 801, 1, 0);
 
 
 -- --------------------------------
@@ -204,13 +204,13 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1000, 1, '
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (1000, 'user_info', 1000, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1001, 1, UPPER('Фамилия')), (1001, 2, UPPER('Прізвище'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, value_type_id) VALUES (1000, 1000, 1, 1001, 1, 21);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, value_type_id) VALUES (1000, 1000, 1, 1001, 1, 21);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1002, 1, UPPER('Имя')), (1002, 2, UPPER('Ім\'я'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1001, 1000, 1, 1002, 1, 22);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1001, 1000, 1, 1002, 1, 22);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1003, 1, UPPER('Отчество')), (1003, 2, UPPER('По батькові'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1002, 1000, 1, 1003, 1, 23);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1002, 1000, 1, 1003, 1, 23);
 
 -- anonymous user --
 INSERT INTO `user_info` (`object_id`) VALUES (2);
@@ -230,7 +230,7 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2300, 1, '
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (2300, 'organization_type', 2300, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2301, 1, UPPER('Тип организации')), (2301, 2, UPPER('Тип организации'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (2300, 2300, 1, 2301, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (2300, 2300, 1, 2301, 1, 0);
 
 INSERT INTO `organization_type`(`object_id`) VALUES (1);
 INSERT INTO `organization_type_string_value`(`id`, `locale_id`, `value`) VALUES (1, 1, UPPER('Организации пользователей')),
@@ -271,34 +271,34 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (900, 1, '�
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (900, 'organization', 900, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (901, 1, UPPER('Наименование организации')), (901, 2, UPPER('Найменування організації'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (900, 900, 1, 901, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (900, 900, 1, 901, 1, 0);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (902, 1, UPPER('Уникальный код организации')), (902, 2, UPPER('Унікальний код організації'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (901, 900, 1, 902, 1, 1);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (901, 900, 1, 902, 1, 1);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (903, 1, UPPER('Район')), (903, 2, UPPER('Район'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (902, 900, 0, 903, 1, 10, 600);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (902, 900, 0, 903, 1, 10, 600);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (904, 1, UPPER('Родительская организация')), (904, 2, UPPER('Родительская организация'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (903, 900, 0, 904, 1, 10, 900);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (903, 900, 0, 904, 1, 10, 900);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (905, 1, UPPER('Тип организации')), (905, 2, UPPER('Тип организации'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (904, 900, 0, 905, 1, 10, 2300);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (904, 900, 0, 905, 1, 10, 2300);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (906, 1, UPPER('Короткое наименование')), (906, 2, UPPER('Короткое наименование'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (906, 900, 0, 906, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (906, 900, 0, 906, 1, 0);
 
 -- Reference to jdbc data source. It is calculation center only attribute. --
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (913, 1, UPPER('Ресурс доступа к МН')), (913, 2, UPPER('Ресурс доступа к МН'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (913, 900, 0, 913, 1, 1);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (913, 900, 0, 913, 1, 1);
 
 -- Service --
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (4914, 1, UPPER('Услуга')), (4914, 2, UPPER('Услуга'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (4914, 900, 1, 4914, 1, 10, 1600);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (4914, 900, 1, 4914, 1, 10, 1600);
 
 -- Billing --
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (4915, 1, UPPER('Модуль начислений')), (4915, 2, UPPER('Модуль начислений'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (4915, 900, 1, 4915, 1, 10, 900);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (4915, 900, 1, 4915, 1, 10, 900);
 
 -- ------------------------------
 -- Service
@@ -307,13 +307,13 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1600, 1, '
 INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (1600, 'service', 1600, '');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1601, 1, UPPER('Название')), (1601, 2, UPPER('Название'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1601, 1600, 1, 1601, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1601, 1600, 1, 1601, 1, 0);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1602, 1, UPPER('Короткое название')), (1602, 2, UPPER('Короткое название'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1602, 1600, 1, 1602, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1602, 1600, 1, 1602, 1, 0);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1603, 1, UPPER('Код')), (1603, 2, UPPER('Код'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `mandatory`, `name_id`, `system`, `value_type_id`) VALUES (1603, 1600, 1, 1603, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1603, 1600, 1, 1603, 1, 0);
 
 INSERT INTO `service`(`object_id`) VALUES (1),(2),(3),(4),(5),(6),(7),(8);
 INSERT INTO `service_string_value`(`id`, `locale_id`, `value`) VALUES

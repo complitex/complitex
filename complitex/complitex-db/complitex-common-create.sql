@@ -45,7 +45,7 @@ CREATE TABLE `entity_attribute` (
   `value_type_id` BIGINT(20) COMMENT  'Тип значения атрибута',
   `reference_id` BIGINT(20) COMMENT  'Внешний ключ',
   `system` TINYINT(1) default 0 NOT NULL COMMENT 'Является ли тип атрибута системным',
-  `required` TINYINT(1) default 0 NOT NULL COMMENT 'Является ли атрибут обязательным'
+  `required` TINYINT(1) default 0 NOT NULL COMMENT 'Является ли атрибут обязательным',
   PRIMARY KEY (`id`),
   KEY `key_entity_id` (`entity_id`),
   KEY `key_name_id` (`name_id`),
