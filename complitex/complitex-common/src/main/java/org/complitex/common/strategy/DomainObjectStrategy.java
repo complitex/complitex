@@ -3,7 +3,6 @@ package org.complitex.common.strategy;
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.converter.DateConverter;
-import org.complitex.common.converter.GenderConverter;
 import org.complitex.common.entity.*;
 import org.complitex.common.entity.Log.STATUS;
 import org.complitex.common.exception.DeleteException;
@@ -71,19 +70,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         DomainObject domainObject = getDomainObject(objectId, true);
 
         return domainObject != null ? displayDomainObject(domainObject, locale) : "[" + objectId + "]";
-    }
-
-    @Override
-    public boolean isSimpleAttributeType(AttributeType attributeType) {
-        return attributeType.getAttributeValueTypes().size() == 1
-                && SimpleTypes.isSimpleType(attributeType.getAttributeValueTypes().get(0).getValueType());
-    }
-
-    @Override
-    public boolean isSimpleAttribute(Attribute attribute) {
-        AttributeType attributeType = getEntity().getAttributeType(attribute.getAttributeTypeId());
-
-        return attributeType != null && isSimpleAttributeType(attributeType);
     }
 
     @Override
@@ -200,7 +186,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void loadStringValues(String dataSource, List<Attribute> attributes) {
         attributes.stream()
-                .filter(this::isSimpleAttribute)
+                .filter(attribute -> getEntity().getAttribute(attribute.getEntityAttributeId()).getValueType().isSimple())
                 .forEach(attribute -> {
                     if (attribute.getValueId() != null) {
                         if (dataSource == null) {
@@ -285,7 +271,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     protected void updateStringsForNewLocales(DomainObject object) {
         object.getAttributes().stream()
-                .filter(this::isSimpleAttribute)
+                .filter(a -> getEntity().getAttribute(a.getEntityAttributeId()).getValueType().isSimple())
                 .map(Attribute::getStringValues)
                 .forEach(StringValueUtil::updateForNewLocales);
     }
@@ -293,28 +279,20 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = new ArrayList<>();
 
-        getEntity(dataSource).getAttributeTypes().stream()
-                .filter(attributeType -> !attributeType.isObsolete())
-                .filter(attributeType -> object.getAttributes(attributeType.getId()).isEmpty())
-                .forEach(attributeType -> {
-                    if (attributeType.getAttributeValueTypes().size() == 1) {
-                        Attribute attribute = getNewAttributeInstance();
+        getEntity(dataSource).getAttributes().stream()
+                .filter(ea -> !ea.isObsolete())
+                .filter(ea -> object.getAttributes(ea.getId()).isEmpty())
+                .forEach(ea -> {
+                    Attribute attribute = getNewAttributeInstance();
 
-                        attribute.setAttributeTypeId(attributeType.getId());
-                        attribute.setValueTypeId(attributeType.getAttributeValueTypes().get(0).getId());
-                        attribute.setObjectId(object.getObjectId());
-                        attribute.setAttributeId(1L);
+                    attribute.setEntityAttributeId(ea.getId());
+                    attribute.setObjectId(object.getObjectId());
+                    attribute.setAttributeId(1L);
 
-                        if (isSimpleAttributeType(attributeType)) {
-                            attribute.setStringValues(StringValueUtil.newStringValues());
-                        }
-                        toAdd.add(attribute);
-                    } else {
-                        Attribute manyValueTypesAttribute = fillManyValueTypesAttribute(attributeType, object.getObjectId());
-                        if (manyValueTypesAttribute != null) {
-                            toAdd.add(manyValueTypesAttribute);
-                        }
+                    if (ea.getValueType().isSimple()) {
+                        attribute.setStringValues(StringValueUtil.newStringValues());
                     }
+                    toAdd.add(attribute);
                 });
         if (!toAdd.isEmpty()) {
             object.getAttributes().addAll(toAdd);
@@ -325,7 +303,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return new Attribute();
     }
 
-    protected Attribute fillManyValueTypesAttribute(AttributeType attributeType, Long objectId) {
+    protected Attribute fillManyValueTypesAttribute(EntityAttribute entityAttribute, Long objectId) {
         return null;
     }
 
@@ -382,7 +360,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     /**
-     * Simple wrapper around EntityBean.getEntity for convenience.
+     * Simple wrapper around EntityBean.getEntityName for convenience.
      * @return Entity description
      */
     @Override
@@ -409,12 +387,14 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected void insertAttribute(Attribute attribute) {
-        if (isSimpleAttribute(attribute)) {
-            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringValues());
+        EntityAttribute entityAttribute = getEntity().getAttribute(attribute.getEntityAttributeId());
+
+        if (entityAttribute.getValueType().isSimple()) {
+            Long generatedStringId = insertStrings(attribute.getEntityAttributeId(), attribute.getStringValues());
             attribute.setValueId(generatedStringId);
         }
 
-        if (attribute.getValueId() != null || getEntity().getAttributeType(attribute.getAttributeTypeId()).isMandatory()) {
+        if (attribute.getValueId() != null || entityAttribute.isRequired()) {
             attribute.setEntityName(getEntityName());
 
             sqlSession().insert(getInsertAttributeStatement(), attribute);
@@ -426,7 +406,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
 
-    protected Long insertStrings(Long attributeTypeId, List<StringValue> strings) {
+    protected Long insertStrings(Long entityAttributeId, List<StringValue> strings) {
         return stringValueBean.save(strings, getEntityName());
     }
 
@@ -470,12 +450,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     @Override
-    public void archiveAttributes(Collection<Long> attributeTypeIds, Date endDate) {
-        if (attributeTypeIds != null && !attributeTypeIds.isEmpty()) {
+    public void archiveAttributes(Collection<Long> entityAttributeIds, Date endDate) {
+        if (entityAttributeIds != null && !entityAttributeIds.isEmpty()) {
             Map<String, Object> params = ImmutableMap.<String, Object>builder().
                     put("entityName", getEntityName()).
                     put("endDate", endDate).
-                    put("attributeTypeIds", attributeTypeIds).
+                    put("attributeTypeIds", entityAttributeIds).
                     build();
             sqlSession().update(NS + ".archiveAttributes", params);
         }
@@ -500,79 +480,67 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         Set<Attribute> updatedAttributes = new HashSet<>();
 
         oldObject.getAttributes().forEach(oldAttribute -> {
+            EntityAttribute entityAttribute = getEntity().getAttribute(oldAttribute.getEntityAttributeId());
+
             Attribute newAttribute = newObject.getAttribute(oldAttribute);
 
             if (newAttribute != null) {
                 boolean update = false;
 
-                String attributeValueType = getEntity().getAttributeType(oldAttribute.getAttributeTypeId())
-                        .getAttributeValueType(oldAttribute.getValueTypeId()).getValueType();
-
-                Long oldValueTypeId = oldAttribute.getValueTypeId();
-                Long newValueTypeId = newAttribute.getValueTypeId();
-
-                if (!Numbers.isEqual(oldValueTypeId, newValueTypeId)) {
-                    update = true;
-                } else {
-                    if (SimpleTypes.isSimpleType(attributeValueType)) {
-                        SimpleTypes simpleType = SimpleTypes.valueOf(attributeValueType.toUpperCase());
-                        switch (simpleType) {
-                            case STRING_VALUE: {
-                                boolean valueChanged = false;
-                                for (StringValue oldString : oldAttribute.getStringValues()) {
-                                    for (StringValue newString : newAttribute.getStringValues()) {
-                                        //compare strings
-                                        if (oldString.getLocaleId().equals(newString.getLocaleId())) {
-                                            if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
-                                                valueChanged = true;
-                                                break;
-                                            }
+                if (entityAttribute.getValueType().isSimple()) {
+                    switch (entityAttribute.getValueType()) {
+                        case STRING_VALUE: {
+                            boolean valueChanged = false;
+                            for (StringValue oldString : oldAttribute.getStringValues()) {
+                                for (StringValue newString : newAttribute.getStringValues()) {
+                                    //compare strings
+                                    if (oldString.getLocaleId().equals(newString.getLocaleId())) {
+                                        if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
+                                            valueChanged = true;
+                                            break;
                                         }
                                     }
                                 }
-
-                                if (valueChanged) {
-                                    update = true;
-                                }
                             }
-                            break;
 
-                            case GENDER:
-                            case BOOLEAN:
-                            case DATE:
-                            case DATE2:
-                            case MASKED_DATE:
-                            case DOUBLE:
-                            case INTEGER: {
-                                String oldString = oldAttribute.getStringValue();
-                                String newString = newAttribute.getStringValue();
-
-                                if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
-                                    update = true;
-                                }
+                            if (valueChanged) {
+                                update = true;
                             }
-                            break;
-
-                            case BIG_STRING:
-                            case STRING: {
-                                String oldString = oldAttribute.getStringValue();
-                                String newString = newAttribute.getStringValue();
-
-                                if (!Strings.isEqual(oldString, newString)) {
-                                    update = true;
-                                }
-                            }
-                            break;
                         }
-                    } else {
-                        //reference object ids
-                        Long oldValueId = oldAttribute.getValueId();
-                        Long newValueId = newAttribute.getValueId();
-                        if (!Numbers.isEqual(oldValueId, newValueId)) {
-                            update = true;
+                        break;
+
+                        case BOOLEAN:
+                        case DATE:
+                        case DECIMAL:
+                        case INTEGER: {
+                            String oldString = oldAttribute.getStringValue();
+                            String newString = newAttribute.getStringValue();
+
+                            if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
+                                update = true;
+                            }
                         }
+                        break;
+
+                        case STRING: {
+                            String oldString = oldAttribute.getStringValue();
+                            String newString = newAttribute.getStringValue();
+
+                            if (!Strings.isEqual(oldString, newString)) {
+                                update = true;
+                            }
+                        }
+                        break;
+                    }
+                } else {
+                    //reference object ids
+                    Long oldValueId = oldAttribute.getValueId();
+                    Long newValueId = newAttribute.getValueId();
+                    if (!Numbers.isEqual(oldValueId, newValueId)) {
+                        update = true;
                     }
                 }
+
 
                 if (update) {
                     archiveAttribute(oldAttribute, updateDate);
@@ -789,7 +757,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
      * @return Сортированный список идентификаторов атрибутов, которые должны выводиться в качестве колонок на странице записей.
      */
     public List<Long> getColumnAttributeTypeIds() {
-        return getEntity().getAttributeTypes().stream().map(AttributeType::getId).collect(Collectors.toList());
+        return getEntity().getAttributes().stream().map(EntityAttribute::getId).collect(Collectors.toList());
     }
 
     @Override
@@ -966,7 +934,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public String getAttributeLabel(Attribute attribute, Locale locale) {
-        return entityBean.getAttributeLabel(getEntityName(), attribute.getAttributeTypeId(), locale);
+        return entityBean.getAttributeLabel(getEntityName(), attribute.getEntityAttributeId(), locale);
     }
 
     @Override
@@ -1170,35 +1138,33 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
-        if (attribute == null){
-            return "";
-        }
+        EntityAttribute entityAttribute = getEntity().getAttribute(attribute.getEntityAttributeId());
 
-        AttributeType attributeType = entityBean.getAttributeType(attribute.getAttributeTypeId());
-
-        switch (attributeType.getAttributeValueTypes().get(0).getValueType().toUpperCase()) {
-            case "STRING_VALUE":
+        switch (entityAttribute.getValueType()) {
+            case STRING_VALUE:
                 return attribute.getStringValue(locale);
-            case "STRING":
-            case "DOUBLE":
-            case "INTEGER":
+            case STRING:
+            case DECIMAL:
+            case INTEGER:
                 return attribute.getStringValue();
-            case "BOOLEAN":
+            case BOOLEAN:
                 return ResourceUtil.getString(RESOURCE_BUNDLE, Boolean.valueOf(attribute.getStringValue()) ? "yes" : "no",
                         stringLocaleBean.getSystemLocale());
-            case "DATE":
-            case "DATE2":
-            case "MASKED_DATE":
+            case DATE:
                 DateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy", locale);
                 return dateFormatter.format(new DateConverter().toObject(attribute.getStringValue()));
-            case "GENDER":
-                return ResourceUtil.getString(RESOURCE_BUNDLE,
-                        new GenderConverter().toObject(attribute.getStringValue()).equals(Gender.MALE) ? "male" : "female",
-                        stringLocaleBean.getSystemLocale());
-            case "STREET_TYPE":
-                IStrategy strategy = strategyFactory.getStrategy("street_type");
+//            case "GENDER":
+//                return ResourceUtil.getString(RESOURCE_BUNDLE,
+//                        new GenderConverter().toObject(attribute.getStringValue()).equals(Gender.MALE) ? "male" : "female",
+//                        stringLocaleBean.getSystemLocale());
+            case ENTITY:
+                if (entityAttribute.getReferenceId() == 1400) {
+                    IStrategy strategy = strategyFactory.getStrategy("street_type");
 
-                return strategy.displayDomainObject(strategy.getDomainObject(attribute.getValueId(), true), locale);
+                    return strategy.displayDomainObject(strategy.getDomainObject(attribute.getValueId(), true), locale);
+                }else{
+                    return "entity[" + entityAttribute.getReferenceId() + "]";
+                }
         }
 
         return StringValueUtil.getValue(attribute.getStringValues(), locale);
@@ -1221,12 +1187,8 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
 
     protected void deleteStrings(Long objectId) {
-        Set<Long> localizedValueTypeIds = getLocalizedValueTypeIds();
-        if (localizedValueTypeIds != null && !localizedValueTypeIds.isEmpty()) {
-            stringValueBean.delete(getEntityName(), objectId, localizedValueTypeIds);
-        }
+        stringValueBean.delete(getEntityName(), objectId);
     }
-
 
     protected void deleteAttributes(Long objectId) {
         Map<String, Object> params = new HashMap<>();
@@ -1266,40 +1228,23 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return sqlSession().selectOne(NS + ".childrenExistCheck", params) != null;
     }
 
-
-    protected Set<Long> getLocalizedValueTypeIds() {
-        Set<Long> localizedValueTypeIds = new HashSet<>();
-
-        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
-            localizedValueTypeIds.addAll(attributeType.getAttributeValueTypes().stream()
-                    .filter(valueType -> SimpleTypes.isSimpleType(valueType.getValueType()))
-                    .map(AttributeValueType::getId)
-                    .collect(Collectors.toList()));
-        }
-
-        return localizedValueTypeIds;
-    }
-
-
     protected void referenceExistCheck(Long objectId, Locale locale) throws DeleteException {
         for (String entityName : entityBean.getEntityNames()) {
             Entity entity = entityBean.getEntity(entityName);
-            for (AttributeType attributeType : entity.getAttributeTypes()) {
-                for (AttributeValueType attributeValueType : attributeType.getAttributeValueTypes()) {
-                    if (getEntityName().equals(attributeValueType.getValueType())) {
-                        String referenceEntity = entity.getEntityName();
-                        long attributeTypeId = attributeType.getId();
+            for (EntityAttribute entityAttribute : entity.getAttributes()) {
+                if (getEntityName().equals(entityAttribute.getValueType())) {
+                    String referenceEntity = entity.getEntity();
+                    long entityAttributeId = entityAttribute.getId();
 
-                        Map<String, Object> params = new HashMap<>();
-                        params.put("referenceEntity", referenceEntity);
-                        params.put("objectId", objectId);
-                        params.put("attributeTypeId", attributeTypeId);
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("referenceEntity", referenceEntity);
+                    params.put("objectId", objectId);
+                    params.put("attributeTypeId", entityAttributeId);
 
-                        Object result = sqlSession().selectOne(NS + ".referenceExistCheck", params);
+                    Object result = sqlSession().selectOne(NS + ".referenceExistCheck", params);
 
-                        if (result != null) {
-                            throw new DeleteException(ResourceUtil.getString(RESOURCE_BUNDLE, "delete_error", locale));
-                        }
+                    if (result != null) {
+                        throw new DeleteException(ResourceUtil.getString(RESOURCE_BUNDLE, "delete_error", locale));
                     }
                 }
             }

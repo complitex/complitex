@@ -21,7 +21,7 @@ public class DistrictCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return AddressEntity.DISTRICT.getEntityName();
+        return AddressEntity.DISTRICT.getEntity();
     }
 
     public Long getCityId() {

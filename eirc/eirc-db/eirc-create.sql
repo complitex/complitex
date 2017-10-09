@@ -87,26 +87,26 @@ CREATE TABLE `service_provider_account_attribute` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор атрибута',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
-  `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута',
+  `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
   `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - string_value',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
   PRIMARY KEY (`pk_id`),
-  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
+  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`entity_attribute_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
-  KEY `key_attribute_type_id` (`attribute_type_id`),
+  KEY `key_entity_attribute_id` (`entity_attribute_id`),
   KEY `key_value_id` (`value_id`),
   KEY `key_value_type_id` (`value_type_id`),
   KEY `key_start_date` (`start_date`),
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_sp_account_attribute__sp_account` FOREIGN KEY (`object_id`) REFERENCES `service_provider_account`(`object_id`),
-  CONSTRAINT `fk_sp_account_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
-  REFERENCES `attribute_type` (`id`),
-  CONSTRAINT `fk_sp_account_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `attribute_value_type` (`id`)
+  CONSTRAINT `fk_sp_account_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
+  REFERENCES `entity_attribute` (`id`),
+  CONSTRAINT `fk_sp_account_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
+  REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Дополнительные атрибуты л/с ПУ (кол-во проживающих и т.п.)';
 
 DROP TABLE IF EXISTS `service_provider_account_string_value`;
@@ -760,26 +760,26 @@ CREATE TABLE `module_instance_attribute` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор атрибута',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
-  `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 100 - НАИМЕНОВАНИЕ МОДУЛЯ',
+  `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 100 - НАИМЕНОВАНИЕ МОДУЛЯ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
   `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - string_value',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
   PRIMARY KEY (`pk_id`),
-  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
+  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`entity_attribute_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
-  KEY `key_attribute_type_id` (`attribute_type_id`),
+  KEY `key_entity_attribute_id` (`entity_attribute_id`),
   KEY `key_value_id` (`value_id`),
   KEY `key_value_type_id` (`value_type_id`),
   KEY `key_start_date` (`start_date`),
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_module_instance_attribute__module_instance` FOREIGN KEY (`object_id`) REFERENCES `module_instance`(`object_id`),
-  CONSTRAINT `fk_module_instance_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
-  REFERENCES `attribute_type` (`id`),
-  CONSTRAINT `fk_module_instance_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `attribute_value_type` (`id`)
+  CONSTRAINT `fk_module_instance_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
+  REFERENCES `entity_attribute` (`id`),
+  CONSTRAINT `fk_module_instance_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
+  REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты модуля';
 
 DROP TABLE IF EXISTS `module_instance_string_value`;
@@ -831,26 +831,26 @@ CREATE TABLE `module_instance_type_attribute` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор атрибута',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
-  `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 100 - НАИМЕНОВАНИЕ МОДУЛЯ',
+  `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 100 - НАИМЕНОВАНИЕ МОДУЛЯ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
   `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа значения: 100 - string_value',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
   `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус: ACTIVE, INACTIVE, ARCHIVE',
   PRIMARY KEY (`pk_id`),
-  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
+  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`entity_attribute_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
-  KEY `key_attribute_type_id` (`attribute_type_id`),
+  KEY `key_entity_attribute_id` (`entity_attribute_id`),
   KEY `key_value_id` (`value_id`),
   KEY `key_value_type_id` (`value_type_id`),
   KEY `key_start_date` (`start_date`),
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_module_instance_type_attribute__module_instance_type` FOREIGN KEY (`object_id`) REFERENCES `module_instance_type`(`object_id`),
-  CONSTRAINT `fk_module_instance_type_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
-  REFERENCES `attribute_type` (`id`),
-  CONSTRAINT `fk_module_instance_type_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES `attribute_value_type` (`id`)
+  CONSTRAINT `fk_module_instance_type_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
+  REFERENCES `entity_attribute` (`id`),
+  CONSTRAINT `fk_module_instance_type_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
+  REFERENCES entity_attribute_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа модуля';
 
 DROP TABLE IF EXISTS `module_instance_type_string_value`;

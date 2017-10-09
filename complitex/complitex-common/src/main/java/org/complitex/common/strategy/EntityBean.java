@@ -2,9 +2,10 @@ package org.complitex.common.strategy;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import org.complitex.common.entity.AttributeType;
-import org.complitex.common.entity.AttributeValueType;
+import org.apache.ibatis.session.RowBounds;
 import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttribute;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.util.StringValueUtil;
 
@@ -26,7 +27,7 @@ public class EntityBean extends AbstractBean {
     private StrategyFactory strategyFactory;
 
     private Map<String, Entity> entityMap = new ConcurrentHashMap<>();
-    private Map<Long, AttributeType> attributeTypeMap = new ConcurrentHashMap<>();
+    private Map<Long, EntityAttribute> attributeTypeMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init(){
@@ -36,8 +37,8 @@ public class EntityBean extends AbstractBean {
             Entity entity = loadFromDb(null, entityName);
             entityMap.put(entityName, entity);
 
-            for (AttributeType attributeType : entity.getAttributeTypes()){
-                attributeTypeMap.put(attributeType.getId(), attributeType);
+            for (EntityAttribute entityAttribute : entity.getAttributes()){
+                attributeTypeMap.put(entityAttribute.getId(), entityAttribute);
             }
         }
     }
@@ -50,18 +51,22 @@ public class EntityBean extends AbstractBean {
         return entityMap.get(entityName);
     }
 
-    public List<AttributeType> getAttributeTypes(List<Long> attributeTypeIds){
-        List<AttributeType> attributeTypes = new ArrayList<>(attributeTypeIds.size());
-
-        for (Long attributeTypeId : attributeTypeIds){
-            attributeTypes.add(attributeTypeMap.get(attributeTypeId));
-        }
-
-        return attributeTypes;
+    public Entity getEntity(Long id) {
+        return entityMap.values().stream().filter(e -> e.getId().equals(id)).findAny().orElse(null);
     }
 
-    public AttributeType getAttributeType(Long attributeTypeId){
-        return attributeTypeMap.get(attributeTypeId);
+    public List<EntityAttribute> getAttributeTypes(List<Long> entityAttributeIds){
+        List<EntityAttribute> entityAttributes = new ArrayList<>(entityAttributeIds.size());
+
+        for (Long entityAttributeId : entityAttributeIds){
+            entityAttributes.add(attributeTypeMap.get(entityAttributeId));
+        }
+
+        return entityAttributes;
+    }
+
+    public EntityAttribute getAttributeType(Long entityAttributeId){
+        return attributeTypeMap.get(entityAttributeId);
     }
 
     private Entity loadFromDb(String dataSource, String entity) {
@@ -73,17 +78,16 @@ public class EntityBean extends AbstractBean {
         entityMap.put(entity, loadFromDb(null, entity));
     }
 
-    public String getAttributeLabel(String entityName, long attributeTypeId, Locale locale) {
-        return getEntity(entityName).getAttributeType(attributeTypeId).getAttributeName(locale);
+    public String getAttributeLabel(String entityName, long entityAttributeId, Locale locale) {
+        return getEntity(entityName).getAttribute(entityAttributeId).getName(locale);
     }
 
-    public AttributeType newAttributeType() {
-        AttributeType attributeType = new AttributeType();
+    public EntityAttribute newAttributeType() {
+        EntityAttribute entityAttribute = new EntityAttribute();
 
-        attributeType.setAttributeNames(StringValueUtil.newStringValues());
-        attributeType.setAttributeValueTypes(new ArrayList<AttributeValueType>());
+        entityAttribute.setNames(StringValueUtil.newStringValues());
 
-        return attributeType;
+        return entityAttribute;
     }
 
     public void save(Entity oldEntity, Entity newEntity) {
@@ -94,62 +98,66 @@ public class EntityBean extends AbstractBean {
         //attributes
         Set<Long> toDeleteAttributeIds = Sets.newHashSet();
 
-        for (AttributeType oldAttributeType : oldEntity.getAttributeTypes()) {
+        for (EntityAttribute oldEntityAttribute : oldEntity.getAttributes()) {
             boolean removed = true;
-            for (AttributeType newAttributeType : newEntity.getAttributeTypes()) {
-                if (oldAttributeType.getId().equals(newAttributeType.getId())) {
+            for (EntityAttribute newEntityAttribute : newEntity.getAttributes()) {
+                if (oldEntityAttribute.getId().equals(newEntityAttribute.getId())) {
                     removed = false;
                     break;
                 }
             }
             if (removed) {
                 changed = true;
-                toDeleteAttributeIds.add(oldAttributeType.getId());
+                toDeleteAttributeIds.add(oldEntityAttribute.getId());
             }
         }
-        removeAttributeTypes(oldEntity.getEntityName(), toDeleteAttributeIds, updateDate);
+        removeAttributeTypes(oldEntity.getEntity(), toDeleteAttributeIds, updateDate);
 
-        for (AttributeType attributeType : newEntity.getAttributeTypes()) {
-            if (attributeType.getId() == null) {
+        for (EntityAttribute entityAttribute : newEntity.getAttributes()) {
+            if (entityAttribute.getId() == null) {
                 changed = true;
-                insertAttributeType(attributeType, newEntity.getId(), updateDate);
+                insertAttributeType(entityAttribute, newEntity.getId(), updateDate);
             }
         }
 
         if (changed) {
-            updateCache(oldEntity.getEntityName());
+            updateCache(oldEntity.getEntity());
         }
     }
 
-    private void insertAttributeType(AttributeType attributeType, long entityId, Date startDate) {
-        attributeType.setStartDate(startDate);
-        attributeType.setEntityId(entityId);
+    private void insertAttributeType(EntityAttribute entityAttribute, long entityId, Date startDate) {
+        entityAttribute.setStartDate(startDate);
+        entityAttribute.setEntityId(entityId);
 
-        Long stringId = stringBean.save(attributeType.getAttributeNames(), null);
+        Long stringId = stringBean.save(entityAttribute.getNames(), null);
 
-        attributeType.setAttributeNameId(stringId);
+        entityAttribute.setNameId(stringId);
 
-        sqlSession().insert(NS + ".insertAttributeType", attributeType);
-
-        AttributeValueType valueType = attributeType.getAttributeValueTypes().get(0);
-        valueType.setAttributeTypeId(attributeType.getId());
-
-        sqlSession().insert(NS + ".insertValueType", valueType);
+        sqlSession().insert(NS + ".insertAttributeType", entityAttribute);
     }
 
-    private void removeAttributeTypes(String entityName, Collection<Long> attributeTypeIds, Date endDate) {
-        if (attributeTypeIds != null && !attributeTypeIds.isEmpty()) {
+    private void removeAttributeTypes(String entityName, Collection<Long> entityAttributeIds, Date endDate) {
+        if (entityAttributeIds != null && !entityAttributeIds.isEmpty()) {
             Map<String, Object> params = ImmutableMap.<String, Object>builder().
                     put("endDate", endDate).
-                    put("attributeTypeIds", attributeTypeIds).
+                    put("attributeTypeIds", entityAttributeIds).
                     build();
             sqlSession().update(NS + ".removeAttributeTypes", params);
 
-            strategyFactory.getStrategy(entityName).archiveAttributes(attributeTypeIds, endDate);
+            strategyFactory.getStrategy(entityName).archiveAttributes(entityAttributeIds, endDate);
         }
     }
 
     public List<String> getEntityNames() {
         return sqlSession().selectList(NS + ".allEntities");
+    }
+
+    public List<Entity> getEntities(FilterWrapper<Entity> filterWrapper) {
+        return sqlSession().selectList(NS + ".selectEntities", filterWrapper,
+                new RowBounds((int)filterWrapper.getFirst(), (int)filterWrapper.getCount()));
+    }
+
+    public Long getEntitiesCount(FilterWrapper<Entity> filterWrapper) {
+        return sqlSession().selectOne(NS + ".selectEntitiesCount", filterWrapper);
     }
 }

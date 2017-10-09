@@ -27,8 +27,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.address.service.AddressRendererBean;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.entity.Status;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.DateUtil;
@@ -235,25 +235,25 @@ public class PersonInputPanel extends Panel {
     }
 
     private Component initUserAttributes() {
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getAttributeTypes(),
-                new Predicate<AttributeType>() {
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(personStrategy.getEntity().getAttributes(),
+                new Predicate<EntityAttribute>() {
 
                     @Override
-                    public boolean apply(AttributeType attributeType) {
+                    public boolean apply(EntityAttribute attributeType) {
                         return !attributeType.isSystem();
                     }
                 }),
-                new Function<AttributeType, Long>() {
+                new Function<EntityAttribute, Long>() {
 
                     @Override
-                    public Long apply(AttributeType attributeType) {
+                    public Long apply(EntityAttribute attributeType) {
                         return attributeType.getId();
                     }
                 }));
 
         List<Attribute> userAttributes = newArrayList();
-        for (Long attributeTypeId : userAttributeTypeIds) {
-            Attribute userAttribute = person.getAttribute(attributeTypeId);
+        for (Long entityAttributeId : userAttributeTypeIds) {
+            Attribute userAttribute = person.getAttribute(entityAttributeId);
             if (userAttribute != null) {
                 userAttributes.add(userAttribute);
             }
@@ -263,17 +263,17 @@ public class PersonInputPanel extends Panel {
 
             @Override
             protected void populateItem(ListItem<Attribute> item) {
-                long userAttributeTypeId = item.getModelObject().getAttributeTypeId();
+                long userAttributeTypeId = item.getModelObject().getEntityAttributeId();
                 initAttributeInput(item, userAttributeTypeId, false);
             }
         };
         return userAttributesView;
     }
 
-    private void initSystemAttributeInput(MarkupContainer parent, String id, long attributeTypeId, boolean showIfMissing) {
+    private void initSystemAttributeInput(MarkupContainer parent, String id, long entityAttributeId, boolean showIfMissing) {
         WebMarkupContainer container = new WebMarkupContainer(id + "Container");
         parent.add(container);
-        initAttributeInput(container, attributeTypeId, showIfMissing);
+        initAttributeInput(container, entityAttributeId, showIfMissing);
     }
 
     private boolean isBirthPlaceFieldsetVisible() {
@@ -281,23 +281,23 @@ public class PersonInputPanel extends Panel {
                 || (person.getAttribute(BIRTH_REGION) != null) || (person.getAttribute(BIRTH_CITY) != null);
     }
 
-    private void initAttributeInput(MarkupContainer parent, long attributeTypeId, boolean showIfMissing) {
-        final AttributeType attributeType = personStrategy.getEntity().getAttributeType(attributeTypeId);
+    private void initAttributeInput(MarkupContainer parent, long entityAttributeId, boolean showIfMissing) {
+        final EntityAttribute entityAttribute = personStrategy.getEntity().getAttribute(entityAttributeId);
 
         //label
-        parent.add(new Label("label", labelModel(attributeType.getAttributeNames(), getLocale())));
+        parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(attributeType.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isRequired());
         parent.add(requiredContainer);
 
         //input component
-        Attribute attribute = person.getAttribute(attributeTypeId);
+        Attribute attribute = person.getAttribute(entityAttributeId);
         if (attribute == null) {
             attribute = new Attribute();
             attribute.setStringValues(StringValueUtil.newStringValues());
-            attribute.setAttributeTypeId(attributeTypeId);
+            attribute.setEntityAttributeId(entityAttributeId);
             parent.setVisible(showIfMissing);
         }
         parent.add(newInputComponent(personStrategy.getEntityName(), null, person, attribute, getLocale(), isInactive()));
@@ -310,8 +310,7 @@ public class PersonInputPanel extends Panel {
         if (militaryServiceRelation != null) {
             Attribute militaryServiceRelationAttribute = new Attribute();
             militaryServiceRelationAttribute.setAttributeId(1L);
-            militaryServiceRelationAttribute.setAttributeTypeId(MILITARY_SERVICE_RELATION);
-            militaryServiceRelationAttribute.setValueTypeId(MILITARY_SERVICE_RELATION);
+            militaryServiceRelationAttribute.setEntityAttributeId(MILITARY_SERVICE_RELATION);
             militaryServiceRelationAttribute.setValueId(militaryServiceRelation.getObjectId());
             person.addAttribute(militaryServiceRelationAttribute);
         }
@@ -321,7 +320,7 @@ public class PersonInputPanel extends Panel {
 
             @Override
             public boolean apply(Attribute attr) {
-                return attr.getAttributeTypeId().equals(CHILDREN);
+                return attr.getEntityAttributeId().equals(CHILDREN);
             }
         }));
         if (!person.isKid()) {
@@ -329,8 +328,7 @@ public class PersonInputPanel extends Panel {
             for (Person child : person.getChildren()) {
                 Attribute childrenAttribute = new Attribute();
                 childrenAttribute.setAttributeId(attributeId++);
-                childrenAttribute.setAttributeTypeId(CHILDREN);
-                childrenAttribute.setValueTypeId(CHILDREN);
+                childrenAttribute.setEntityAttributeId(CHILDREN);
                 childrenAttribute.setValueId(child.getObjectId());
                 person.addAttribute(childrenAttribute);
             }
@@ -418,7 +416,7 @@ public class PersonInputPanel extends Panel {
 
     private Component initChildren() {
         CollapsibleFieldset childrenFieldset = new CollapsibleFieldset("childrenFieldset",
-                labelModel(personStrategy.getEntity().getAttributeType(CHILDREN).getAttributeNames(), getLocale()));
+                labelModel(personStrategy.getEntity().getAttribute(CHILDREN).getNames(), getLocale()));
         add(childrenFieldset);
         final WebMarkupContainer childrenContainer = new WebMarkupContainer("childrenContainer");
         childrenContainer.setOutputMarkupId(true);
@@ -508,13 +506,13 @@ public class PersonInputPanel extends Panel {
         documentInputPanelWrapper.add(documentInputPanelContainer);
 
         //document type
-        final AttributeType documentTypeAttributeType =
-                documentStrategy.getEntity().getAttributeType(DocumentStrategy.DOCUMENT_TYPE);
+        final EntityAttribute documentTypeEntityAttribute =
+                documentStrategy.getEntity().getAttribute(DocumentStrategy.DOCUMENT_TYPE);
         //label
-        IModel<String> labelModel = labelModel(documentTypeAttributeType.getAttributeNames(), getLocale());
+        IModel<String> labelModel = labelModel(documentTypeEntityAttribute.getNames(), getLocale());
         documentForm.add(new Label("label", labelModel));
         //required
-        documentForm.add(new WebMarkupContainer("required").setVisible(documentTypeAttributeType.isMandatory()));
+        documentForm.add(new WebMarkupContainer("required").setVisible(documentTypeEntityAttribute.isRequired()));
         documentTypeModel = new Model<>();
         documentTypesModel = Model.ofList(null);
         if (!isNew()) {
@@ -774,14 +772,14 @@ public class PersonInputPanel extends Panel {
         militaryServiceRelationHead.setOutputMarkupPlaceholderTag(true);
         militaryServiceRelationContainer.add(militaryServiceRelationHead);
 
-        AttributeType militaryAttruibuteType = personStrategy.getEntity().getAttributeType(MILITARY_SERVICE_RELATION);
+        EntityAttribute militaryAttruibuteType = personStrategy.getEntity().getAttribute(MILITARY_SERVICE_RELATION);
         //label
-        final IModel<String> labelModel = labelModel(militaryAttruibuteType.getAttributeNames(), getLocale());
+        final IModel<String> labelModel = labelModel(militaryAttruibuteType.getNames(), getLocale());
         militaryServiceRelationHead.add(new Label("label", labelModel));
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(militaryAttruibuteType.isMandatory());
+        requiredContainer.setVisible(militaryAttruibuteType.isRequired());
         militaryServiceRelationHead.add(requiredContainer);
 
         militaryServiceRelationBody = new WebMarkupContainer("militaryServiceRelationBody");
@@ -821,7 +819,7 @@ public class PersonInputPanel extends Panel {
         });
         militaryServiceRelation.setNullValid(true);
         militaryServiceRelation.setLabel(labelModel);
-        militaryServiceRelation.setRequired(militaryAttruibuteType.isMandatory());
+        militaryServiceRelation.setRequired(militaryAttruibuteType.isRequired());
         militaryServiceRelation.setEnabled(canEdit());
         militaryServiceRelationBody.add(militaryServiceRelation);
 

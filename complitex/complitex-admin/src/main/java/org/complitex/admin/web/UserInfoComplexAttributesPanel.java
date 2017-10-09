@@ -24,17 +24,17 @@ public class UserInfoComplexAttributesPanel extends AbstractComplexAttributesPan
                 linkModel(userInfo, MIDDLE_NAME), linkModel(userInfo, LAST_NAME)));
     }
 
-    private IModel<Long> linkModel(final DomainObject domainObject, final Long attributeTypeId){
+    private IModel<Long> linkModel(final DomainObject domainObject, final Long entityAttributeId){
         return new IModel<Long>(){
 
             @Override
             public Long getObject() {
-                return domainObject.getAttribute(attributeTypeId).getValueId();
+                return domainObject.getAttribute(entityAttributeId).getValueId();
             }
 
             @Override
             public void setObject(Long object) {
-                domainObject.getAttribute(attributeTypeId).setValueId(object);
+                domainObject.getAttribute(entityAttributeId).setValueId(object);
             }
 
             @Override

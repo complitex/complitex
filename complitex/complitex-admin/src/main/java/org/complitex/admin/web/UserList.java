@@ -217,7 +217,7 @@ public class UserList extends TemplatePage {
         filterForm.add(dataView);
 
         filterForm.add(new ArrowOrderByBorder("header.login", "login", dataProvider, dataView, content));
-        filterForm.add(new AttributeHeadersPanel("header.user_info", entityBean.getEntity(userInfoStrategy.getEntityName()).getAttributeTypes(),
+        filterForm.add(new AttributeHeadersPanel("header.user_info", entityBean.getEntity(userInfoStrategy.getEntityName()).getAttributes(),
                 dataProvider, dataView, content));
 
         content.add(new PagingNavigator("navigator", dataView, getPreferencesPage(), content));

@@ -17,12 +17,12 @@
         AND e.`status` = 1
     </sql>
 
-    <sql id="findByApartmentSql">
+    <sql id="findByApartmentSql"> <!--todo add attributes-->
         LEFT JOIN `apartment_card_attribute` apartment_a ON (apartment_a.`object_id` = e.`object_id` AND apartment_a.`status` = 1
-            AND apartment_a.`attribute_type_id` = ${apartmentCardAddressAT} 
+            AND apartment_a.`entity_attribute_id` = ${apartmentCardAddressAT}
             AND apartment_a.`value_type_id` = ${apartmentCardApartmentVT})
         LEFT JOIN `apartment_card_attribute` room_a ON (room_a.`object_id` = e.`object_id` AND room_a.`status` = 1
-            AND room_a.`attribute_type_id` = ${apartmentCardAddressAT} 
+            AND room_a.`entity_attribute_id` = ${apartmentCardAddressAT}
             AND room_a.`value_type_id` = ${apartmentCardRoomVT})
             
         LEFT JOIN `room` room ON (room.`object_id` = room_a.`value_id` AND room.`status` = 1)
@@ -50,13 +50,13 @@
 
     <sql id="findByBuildingSql">
         LEFT JOIN `apartment_card_attribute` building_a ON (building_a.`object_id` = e.`object_id` AND building_a.`status` = 1
-            AND building_a.`attribute_type_id` = ${apartmentCardAddressAT} 
+            AND building_a.`entity_attribute_id` = ${apartmentCardAddressAT}
             AND building_a.`value_type_id` = ${apartmentCardBuildingVT})
         LEFT JOIN `apartment_card_attribute` apartment_a ON (apartment_a.`object_id` = e.`object_id` AND apartment_a.`status` = 1
-            AND apartment_a.`attribute_type_id` = ${apartmentCardAddressAT} 
+            AND apartment_a.`entity_attribute_id` = ${apartmentCardAddressAT}
             AND apartment_a.`value_type_id` = ${apartmentCardApartmentVT})
         LEFT JOIN `apartment_card_attribute` room_a ON (room_a.`object_id` = e.`object_id` AND room_a.`status` = 1
-            AND room_a.`attribute_type_id` = ${apartmentCardAddressAT} 
+            AND room_a.`entity_attribute_id` = ${apartmentCardAddressAT}
             AND room_a.`value_type_id` = ${apartmentCardRoomVT})
 
         LEFT JOIN `room` room1 ON (room1.`object_id` = room_a.`value_id` AND room1.`status` = 1)
@@ -94,10 +94,10 @@
     <select id="validateOwnerAddressUniqueness" parameterType="map" resultType="long">
         SELECT e.`object_id` FROM `apartment_card` e
             JOIN `apartment_card_attribute` address ON (address.`object_id` = e.`object_id`
-                AND address.`attribute_type_id` = #{apartmentCardAddressAT} AND address.`status` = 1
+                AND address.`entity_attribute_id` = #{apartmentCardAddressAT} AND address.`status` = 1
                 AND address.`value_id` = #{addressId} AND address.`value_type_id` = #{addressTypeId})
             JOIN `apartment_card_attribute` owner ON (owner.`object_id` = e.`object_id`
-                AND owner.`attribute_type_id` = #{apartmentCardOwnerAT} AND owner.`status` = 1
+                AND owner.`entity_attribute_id` = #{apartmentCardOwnerAT} AND owner.`status` = 1
                 AND owner.`value_id` = #{ownerId})
                 WHERE e.`status` = 1
                 <if test="apartmentCardId != null">
@@ -110,7 +110,7 @@
     
     <sql id="nontraceblaAttributesSql">
         <if test="nontraceableAttributes != null and !nontraceableAttributes.isEmpty()">
-            AND a.`attribute_type_id` NOT IN 
+            AND a.`entity_attribute_id` NOT IN
             <foreach open="(" close=")" separator="," item="item" collection="nontraceableAttributes">
                 #{item}
             </foreach>
@@ -119,7 +119,7 @@
     
     <sql id="registrationNontraceblaAttributesSql">
         <if test="registrationNontraceableAttributes != null and !registrationNontraceableAttributes.isEmpty()">
-            AND ra.`attribute_type_id` NOT IN 
+            AND ra.`entity_attribute_id` NOT IN
             <foreach open="(" close=")" separator="," item="item" collection="registrationNontraceableAttributes">
                 #{item}
             </foreach>
@@ -134,17 +134,17 @@
             UNION 
             SELECT ra.`start_date` FROM `registration_attribute` ra WHERE ra.`start_date` <![CDATA[ < ]]> #{date}
                 AND ra.`object_id` IN (SELECT aca.`value_id` FROM `apartment_card_attribute` aca WHERE aca.`object_id` = #{apartmentCardId}
-                    AND aca.`start_date` <![CDATA[ < ]]> #{date} AND aca.`attribute_type_id` = #{apartmentCardRegisrationAT})
+                    AND aca.`start_date` <![CDATA[ < ]]> #{date} AND aca.`entity_attribute_id` = #{apartmentCardRegisrationAT})
                 <include refid="org.complitex.pspoffice.person.strategy.ApartmentCard.registrationNontraceblaAttributesSql"/>
             UNION
             SELECT ra.`end_date` `date` FROM `registration_attribute` ra WHERE ra.`end_date` <![CDATA[ < ]]> #{date}
                 AND ra.`object_id` IN (SELECT aca.`value_id` FROM `apartment_card_attribute` aca WHERE aca.`object_id` = #{apartmentCardId}
-                    AND aca.`start_date` <![CDATA[ < ]]> #{date} AND aca.`attribute_type_id` = #{apartmentCardRegisrationAT})
+                    AND aca.`start_date` <![CDATA[ < ]]> #{date} AND aca.`entity_attribute_id` = #{apartmentCardRegisrationAT})
                 <include refid="org.complitex.pspoffice.person.strategy.ApartmentCard.registrationNontraceblaAttributesSql"/>
             UNION
             SELECT r.`end_date` FROM `registration` r WHERE r.`end_date` <![CDATA[ < ]]> #{date} 
                 AND r.`object_id` IN (SELECT aca.`value_id` FROM `apartment_card_attribute` aca WHERE aca.`object_id` = #{apartmentCardId}
-                    AND aca.`start_date` <![CDATA[ < ]]> #{date} AND aca.`attribute_type_id` = #{apartmentCardRegisrationAT})
+                    AND aca.`start_date` <![CDATA[ < ]]> #{date} AND aca.`entity_attribute_id` = #{apartmentCardRegisrationAT})
         ) d
     </select>
     
@@ -156,17 +156,17 @@
             UNION 
             SELECT ra.`start_date` FROM `registration_attribute` ra WHERE ra.`start_date` <![CDATA[ > ]]> #{date}
                 AND ra.`object_id` IN (SELECT aca.`value_id` FROM `apartment_card_attribute` aca WHERE aca.`object_id` = #{apartmentCardId}
-                    AND aca.`attribute_type_id` = #{apartmentCardRegisrationAT})
+                    AND aca.`entity_attribute_id` = #{apartmentCardRegisrationAT})
                 <include refid="org.complitex.pspoffice.person.strategy.ApartmentCard.registrationNontraceblaAttributesSql"/>
             UNION
             SELECT ra.`end_date` `date` FROM `registration_attribute` ra WHERE ra.`end_date` <![CDATA[ > ]]> #{date}
                 AND ra.`object_id` IN (SELECT aca.`value_id` FROM `apartment_card_attribute` aca WHERE aca.`object_id` = #{apartmentCardId}
-                    AND aca.`attribute_type_id` = #{apartmentCardRegisrationAT})
+                    AND aca.`entity_attribute_id` = #{apartmentCardRegisrationAT})
                 <include refid="org.complitex.pspoffice.person.strategy.ApartmentCard.registrationNontraceblaAttributesSql"/>
             UNION
             SELECT r.`end_date` FROM `registration` r WHERE r.`end_date` <![CDATA[ > ]]> #{date} 
                 AND r.`object_id` IN (SELECT aca.`value_id` FROM `apartment_card_attribute` aca WHERE aca.`object_id` = #{apartmentCardId}
-                    AND aca.`attribute_type_id` = #{apartmentCardRegisrationAT})
+                    AND aca.`entity_attribute_id` = #{apartmentCardRegisrationAT})
         ) d
     </select>
 </mapper>

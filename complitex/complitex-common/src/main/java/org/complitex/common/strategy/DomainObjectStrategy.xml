@@ -20,11 +20,10 @@
         <result column="value_id" property="valueId"/>
         <result column="attribute_id" property="attributeId"/>
         <result column="object_id" property="objectId"/>
-        <result column="attribute_type_id" property="attributeTypeId"/>
+        <result column="entity_attribute_id" property="entityAttributeId"/>
         <result column="start_date" property="startDate"/>
         <result column="status" property="status"/>
         <result column="end_date" property="endDate"/>
-        <result column="value_type_id" property="valueTypeId"/>
 
         <collection property="stringValues" resultMap="stringValueResultMap" columnPrefix="str__"/>
     </resultMap>
@@ -70,15 +69,14 @@
         select obj.*,
 
             attr.pk_id as attr__pk_id, attr.value_id as attr__value_id, attr.attribute_id as attr__attribute_id,
-            attr.object_id as attr__object_id, attr.attribute_type_id as attr__attribute_type_id,
+            attr.object_id as attr__object_id, attr.entity_attribute_id as attr__entity_attribute_id,
             attr.start_date as attr__start_date, attr.status as attr__status, attr.end_date as attr__end_date,
-            attr.value_type_id as attr__value_type_id,
 
             str.pk_id as str__pk_id, str.id as str__id, str.locale_id as str__locale_id, str.value as str__value
         from ${entityName} obj
         left join ${entityName}_attribute attr on (obj.object_id = attr.object_id and attr.end_date is null)
-        left join entity_attribute_value_type val on val.id = attr.value_type_id
-        left join ${entityName}_string_value str on (str.id = attr.value_id and val.attribute_value_type = 'STRING_VALUE')
+        left join entity_attribute ea on ea.id = attr.entity_attribute_id
+        left join ${entityName}_string_value str on (str.id = attr.value_id and ea.value_type_id = 0)
         where obj.end_date is null and obj.object_id = ${objectId}
     </select>
 
@@ -89,7 +87,7 @@
     <sql id="sqlOrderByAttributeTypeId">
         SELECT sc.`value` FROM `${entityName}_string_value` sc WHERE sc.`locale_id` = #{localeId} AND sc.`id` =
         (SELECT orderByAttr.`value_id` FROM `${entityName}_attribute` orderByAttr WHERE orderByAttr.`object_id` = e.`object_id`
-        AND orderByAttr.`status` = 1 AND orderByAttr.`attribute_type_id` = #{orderByAttributeTypeId}
+        AND orderByAttr.`status` = 1 AND orderByAttr.`entity_attribute_id` = #{orderByAttributeTypeId}
         )
     </sql>
 
@@ -148,7 +146,7 @@
         <foreach item="attributeFilter" collection="attributeFilters">
             <if test="attributeFilter.value != null">
                 AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 1 AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
+                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
                 AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc WHERE sc.`value`
                 <choose>
                     <when test="comparisonType == 'LIKE'">
@@ -164,13 +162,13 @@
 
             <if test="attributeFilter.valueId != null">
                 AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 1 AND attr.`attribute_type_id` = #{attributeFilter.attributeTypeId}
+                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
                 AND attr.`value_id` = #{attributeFilter.valueId}
                 )
             </if>
         </foreach>
         <if test="parentId != null and parentEntity != null">
-            AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity_table` = #{parentEntity}) AND e.`parent_id` = #{parentId}
+            AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity` = #{parentEntity}) AND e.`parent_id` = #{parentId}
         </if>
     </sql>
 
@@ -209,7 +207,7 @@
         SELECT DISTINCT e.`object_id` FROM `${entity}` e
         JOIN `${entity}_attribute` a ON (e.`object_id` = a.`object_id` AND a.`status` = 1)
         JOIN `${entity}_string_value` sc ON (a.`value_id` = sc.`id`)
-        WHERE (e.`status` IN (1, 0)) AND sc.`locale_id` = #{localeId} AND a.`attribute_type_id` = #{attributeTypeId}
+        WHERE (e.`status` IN (1, 0)) AND sc.`locale_id` = #{localeId} AND a.`entity_attribute_id` = #{entityAttributeId}
         AND sc.`value` = #{text}
         <choose>
             <when test="parentEntityId != null and parentId != null">
@@ -224,7 +222,7 @@
     <!-- SearchComponent -->
 
     <select id="selectParentInSearchComponent" parameterType="map" resultType="map">
-        SELECT (SELECT ent.`entity_table` FROM `entity` ent WHERE ent.`id` = e.`parent_entity_id`) parentEntity,
+        SELECT (SELECT ent.`entity` FROM `entity` ent WHERE ent.`id` = e.`parent_entity_id`) parentEntity,
         e.`parent_id` parentId FROM `${entityName}` e WHERE e.`object_id` = #{objectId}
         <choose>
             <when test="startDate != null">
@@ -263,7 +261,7 @@
     <select id="selectChildrenPermissionInfo" parameterType="map" resultMap="permissionInfoResultMap">
         SELECT e.`object_id`, e.`permission_id` FROM `${entity}` e WHERE e.`status` IN (1, 0)
         AND e.`parent_id` = #{parentId} AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent
-          WHERE ent.`entity_table` = #{parentEntity})
+          WHERE ent.`entity` = #{parentEntity})
           ORDER BY e.`object_id`
         <include refid="sqlLimit"/>
     </select>
@@ -275,14 +273,14 @@
 
     <select id="selectChildrenActivityInfo" parameterType="map" resultType="long">
         SELECT e.`object_id` FROM `${entity}` e WHERE e.`parent_id` = #{parentId} AND
-        e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity_table` = #{parentEntity})
+        e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity` = #{parentEntity})
         ORDER BY e.`object_id`
         <include refid="sqlLimit"/>
     </select>
 
     <update id="updateChildrenActivity" parameterType="map">
         UPDATE `${entity}` e SET e.`status` = #{status} WHERE e.`parent_id` = #{parentId} AND
-        e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity_table` = #{parentEntity})
+        e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity` = #{parentEntity})
         AND
         <choose>
             <when test="enabled">
@@ -305,28 +303,27 @@
 
     <select id="referenceExistCheck" parameterType="map" resultType="int">
         SELECT 1 FROM DUAL WHERE EXISTS(SELECT a.`object_id` FROM `${referenceEntity}_attribute` a
-          WHERE a.`value_id` = #{objectId} AND a.`attribute_type_id` = #{attributeTypeId})
+          WHERE a.`value_id` = #{objectId} AND a.`entity_attribute_id` = #{entityAttributeId})
     </select>
 
     <!--Attribute-->
 
     <insert id="insertAttribute" parameterType="org.complitex.common.entity.Attribute">
-        INSERT INTO `${entityName}_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `status`,
-          `start_date`, `end_date`, `value_id`, `value_type_id`)
-        VALUES (#{attributeId}, #{objectId}, #{attributeTypeId}, #{status}, #{startDate}, #{endDate}, #{valueId},
-          #{valueTypeId})
+        INSERT INTO `${entityName}_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `status`,
+          `start_date`, `end_date`, `value_id`)
+        VALUES (#{attributeId}, #{objectId}, #{entityAttributeId}, #{status}, #{startDate}, #{endDate}, #{valueId})
     </insert>
 
     <update id="updateAttribute" parameterType="org.complitex.common.entity.Attribute">
         UPDATE `${entityName}_attribute` SET `end_date` = #{endDate}, `status` = #{status}
-        WHERE `attribute_id` = #{attributeId} AND `object_id` = #{objectId} AND `attribute_type_id` = #{attributeTypeId}
+        WHERE `attribute_id` = #{attributeId} AND `object_id` = #{objectId} AND `entity_attribute_id` = #{entityAttributeId}
           AND `start_date` = #{startDate}
     </update>
 
     <update id="archiveAttributes" parameterType="map">
         UPDATE `${entityName}_attribute` SET `end_date` = #{endDate}, `status` = 2 WHERE
         `status` IN (1, 0) AND
-        `attribute_type_id` IN
+        `entity_attribute_id` IN
         <foreach item="id" collection="attributeTypeIds" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -340,7 +337,7 @@
     <select id="selectAttributes" parameterType="map" resultMap="attributeResultMap">
         SELECT a.* FROM `${entityName}_attribute` a
           WHERE  a.`object_id` = #{objectId} AND a.`status` = 1
-          ORDER BY a.`attribute_type_id`, a.`attribute_id`
+          ORDER BY a.`entity_attribute_id`, a.`attribute_id`
     </select>
 
     <select id="selectHistoryAttributes" parameterType="org.complitex.common.entity.DomainObjectFilter"
@@ -349,7 +346,7 @@
         FROM `${entityName}_attribute` aa
         WHERE aa.`object_id` = #{objectId}
         AND aa.`start_date` <![CDATA[ <= ]]> #{startDate} AND ((aa.`end_date` IS NULL) OR (aa.`end_date` <![CDATA[ > ]]> #{startDate}))
-        ORDER BY aa.`attribute_type_id`, aa.`attribute_id`
+        ORDER BY aa.`entity_attribute_id`, aa.`attribute_id`
     </select>
 
     <delete id="deleteAttributes" parameterType="map">
@@ -374,17 +371,14 @@
     </select>
 
     <insert id="insertDescriptionData" parameterType="org.complitex.common.entity.StringValue">
-        insert into `string_value`(`id`, `locale_id`, `value`) values (#{id}, #{localeId}, #{value})
+        insert into `entity_string_value`(`id`, `locale_id`, `value`) values (#{id}, #{localeId}, #{value})
     </insert>
 
     <delete id="deleteStringValue" parameterType="map">
         DELETE FROM `${entityName}_string_value` WHERE `id` IN
-        (SELECT a.`value_id` FROM `${entityName}_attribute` a WHERE a.`object_id` = #{objectId}
-        AND a.`value_type_id` IN
-        <foreach open="(" separator="," close=")" collection="localizedValueTypeIds" item="id">
-            #{id}
-        </foreach>
-        )
+          (SELECT a.`value_id` FROM `${entityName}_attribute` a
+            LEFT JOIN entity_attribute ea ON a.entity_attribute_id = ea.id
+          WHERE a.`object_id` = #{objectId} AND ea.value_type_id IN (0, 1, 2, 3, 4, 5))
     </delete>
 
     <select id="selectExternalId" parameterType="map" resultType="string">

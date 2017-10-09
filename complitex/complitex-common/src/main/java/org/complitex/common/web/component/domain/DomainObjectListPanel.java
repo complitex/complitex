@@ -24,7 +24,10 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.converter.DateConverter;
 import org.complitex.common.entity.*;
-import org.complitex.common.strategy.*;
+import org.complitex.common.strategy.EntityBean;
+import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.common.web.component.ShowMode;
@@ -46,9 +49,6 @@ import java.util.Map;
 public class DomainObjectListPanel extends Panel {
     @EJB
     private StrategyFactory strategyFactory;
-
-    @EJB
-    private StringValueBean stringBean;
 
     @EJB
     private StringLocaleBean stringLocaleBean;
@@ -123,9 +123,9 @@ public class DomainObjectListPanel extends Panel {
         searchPanel.initialize();
 
         //Column List
-        final List<AttributeType> columnAttributeTypes = entityBean.getAttributeTypes(getStrategy().getColumnAttributeTypeIds());
+        final List<EntityAttribute> columnEntityAttributes = entityBean.getAttributeTypes(getStrategy().getColumnAttributeTypeIds());
 
-        for (AttributeType eat : columnAttributeTypes) {
+        for (EntityAttribute eat : columnEntityAttributes) {
             filter.addAttributeFilter(new AttributeFilter(eat.getId()));
         }
 
@@ -209,11 +209,12 @@ public class DomainObjectListPanel extends Panel {
                 item.add(new Label("object_id", Model.of(object.getObjectId())));
                 item.add(new Label("external_id", Model.of(object.getExternalId())));
 
-                ListView<AttributeType> dataColumns = new ListView<AttributeType>("dataColumns", columnAttributeTypes) {
+                ListView<EntityAttribute> dataColumns = new ListView<EntityAttribute>("dataColumns", columnEntityAttributes) {
                     @Override
-                    protected void populateItem(ListItem<AttributeType> item) {
-                        item.add(new Label("dataColumn", getStrategy().displayAttribute(
-                                object.getAttribute(item.getModelObject().getId()), getLocale())));
+                    protected void populateItem(ListItem<EntityAttribute> item) {
+                        Attribute a = object.getAttribute(item.getModelObject().getId());
+
+                        item.add(new Label("dataColumn", a != null ? getStrategy().displayAttribute(a, getLocale()) : ""));
                     }
                 };
                 item.add(dataColumns);
@@ -237,18 +238,18 @@ public class DomainObjectListPanel extends Panel {
         radioGroup.add(dataView);
 
         //Filter Form Columns
-        ListView<AttributeType> columns = new ListView<AttributeType>("columns", columnAttributeTypes) {
+        ListView<EntityAttribute> columns = new ListView<EntityAttribute>("columns", columnEntityAttributes) {
 
             @Override
-            protected void populateItem(ListItem<AttributeType> item) {
-                final AttributeType attributeType = item.getModelObject();
-                ArrowOrderByBorder column = new ArrowOrderByBorder("column", String.valueOf(attributeType.getId()),
+            protected void populateItem(ListItem<EntityAttribute> item) {
+                final EntityAttribute entityAttribute = item.getModelObject();
+                ArrowOrderByBorder column = new ArrowOrderByBorder("column", String.valueOf(entityAttribute.getId()),
                         dataProvider, dataView, content);
                 column.add(new Label("columnName", new AbstractReadOnlyModel<String>() {
 
                     @Override
                     public String getObject() {
-                        return Strings.capitalize(StringValueUtil.getValue(attributeType.getAttributeNames(), getLocale()).
+                        return Strings.capitalize(StringValueUtil.getValue(entityAttribute.getNames(), getLocale()).
                                 toLowerCase(getLocale()));
                     }
                 }));
@@ -259,12 +260,13 @@ public class DomainObjectListPanel extends Panel {
         filterForm.add(columns);
 
         //Filters
-        ListView<AttributeType> filters = new ListView<AttributeType>("filters", columnAttributeTypes) {
+        ListView<EntityAttribute> filters = new ListView<EntityAttribute>("filters", columnEntityAttributes) {
 
             @Override
-            protected void populateItem(ListItem<AttributeType> item) {
-                AttributeType attributeType = item.getModelObject();
-                final AttributeFilter attributeFilter = filter.getAttributeExample(attributeType.getId());
+            protected void populateItem(ListItem<EntityAttribute> item) {
+                EntityAttribute entityAttribute = item.getModelObject();
+
+                final AttributeFilter attributeFilter = filter.getAttributeExample(entityAttribute.getId());
 
                 final IModel<String> filterModel = new Model<String>() {
 
@@ -283,21 +285,16 @@ public class DomainObjectListPanel extends Panel {
 
                 Component filter = new StringPanel("filter", Model.of(""), false, null, true);
 
-                String name = attributeType.getAttributeValueTypes().get(0).getValueType().toUpperCase();
-
-                if (SimpleTypes.isSimpleType(name)) {
-                    switch (SimpleTypes.valueOf(name)) {
+                if (entityAttribute.getValueType().isSimple()) {
+                    switch (entityAttribute.getValueType()) {
                         case STRING:
-                        case BIG_STRING:
                         case STRING_VALUE:
                         case INTEGER:
-                        case DOUBLE: {
+                        case DECIMAL: {
                             filter = new StringPanel("filter", filterModel, false, null, true);
                         }
                         break;
-                        case DATE:
-                        case DATE2:
-                        case MASKED_DATE: {
+                        case DATE: {
                             IModel<Date> dateModel = new Model<Date>() {
 
                                 DateConverter dateConverter = new DateConverter();
@@ -344,7 +341,7 @@ public class DomainObjectListPanel extends Panel {
                         }
                         break;
                     }
-                }else if ("ORGANIZATION".equals(name)){
+                }else if (ValueType.ENTITY.equals(entityAttribute.getValueType()) && entityAttribute.getReferenceId() == 900){
                     filter = new OrganizationIdPicker("filter", new IModel<Long>() {
                         @Override
                         public Long getObject() {
@@ -381,7 +378,7 @@ public class DomainObjectListPanel extends Panel {
                 filterForm.clearInput();
 
                 filter.setObjectId(null);
-                for (AttributeType attrType : columnAttributeTypes) {
+                for (EntityAttribute attrType : columnEntityAttributes) {
                     AttributeFilter attrExample = filter.getAttributeExample(attrType.getId());
                     attrExample.setValue(null);
                 }

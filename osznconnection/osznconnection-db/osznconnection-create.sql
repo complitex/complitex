@@ -42,26 +42,21 @@ CREATE TABLE `ownership_attribute` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор атрибута',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
-  `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 1100 - НАЗВАНИЕ',
+  `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 1100 - НАЗВАНИЕ',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значение: 1100 - STRING_VALUE',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия параметров атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия параметров атрибута',
   `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус атрибута: INACTIVE(0), ACTIVE(1), или ARCHIVE(2)',
   PRIMARY KEY  (`pk_id`),
-  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
+  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`entity_attribute_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
-  KEY `key_attribute_type_id` (`attribute_type_id`),
+  KEY `key_entity_attribute_id` (`entity_attribute_id`),
   KEY `key_value_id` (`value_id`),
-  KEY `key_value_type_id` (`value_type_id`),
   KEY `key_start_date` (`start_date`),
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_ownership_attribute__ownership` FOREIGN KEY (`object_id`) REFERENCES `ownership`(`object_id`),
-  CONSTRAINT `fk_ownership_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `attribute_type` (`id`),
-  CONSTRAINT `fk_ownership_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `attribute_value_type` (`id`)
+  CONSTRAINT `fk_ownership_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`) REFERENCES `entity_attribute` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта формы собственности';
 
 DROP TABLE IF EXISTS `ownership_string_value`;
@@ -113,26 +108,21 @@ CREATE TABLE `privilege_attribute` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Суррогатный ключ',
   `attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор атрибута',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
-  `attribute_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 1200 - НАЗВАНИЕ, 1201 - КОД',
+  `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута. Возможные значения: 1200 - НАЗВАНИЕ, 1201 - КОД',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `value_type_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа. Возможные значения: 1200 - STRING_VALUE, 1201 - STRING',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия значений атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата завершения периода действия значений атрибута',
   `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус атрибута: INACTIVE(0), ACTIVE(1), или ARCHIVE(2)',
   PRIMARY KEY  (`pk_id`),
-  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`attribute_type_id`, `start_date`),
+  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`entity_attribute_id`, `start_date`),
   KEY `key_object_id` (`object_id`),
-  KEY `key_attribute_type_id` (`attribute_type_id`),
+  KEY `key_entity_attribute_id` (`entity_attribute_id`),
   KEY `key_value_id` (`value_id`),
-  KEY `key_value_type_id` (`value_type_id`),
   KEY `key_start_date` (`start_date`),
   KEY `key_end_date` (`end_date`),
   KEY `key_status` (`status`),
   CONSTRAINT `fk_privilege_attribute__privilege` FOREIGN KEY (`object_id`) REFERENCES `privilege`(`object_id`),
-  CONSTRAINT `fk_privilege_attribute__attribute_type` FOREIGN KEY (`attribute_type_id`)
-    REFERENCES `attribute_type` (`id`),
-  CONSTRAINT `fk_privilege_attribute__attribute_value_type` FOREIGN KEY (`value_type_id`)
-    REFERENCES `attribute_value_type` (`id`)
+  CONSTRAINT `fk_privilege_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`) REFERENCES `entity_attribute` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты объекта привилегии';
 
 DROP TABLE IF EXISTS `privilege_string_value`;

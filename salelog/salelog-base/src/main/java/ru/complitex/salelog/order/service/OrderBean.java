@@ -21,7 +21,7 @@ import java.util.List;
 @Stateless
 public class OrderBean extends AbstractBean {
     private static final String NS = OrderBean.class.getName();
-    public static final String ENTITY_TABLE = "order";
+    public static final String ENTITY = "order";
 
     @EJB
     private SequenceBean sequenceBean;
@@ -86,7 +86,7 @@ public class OrderBean extends AbstractBean {
     }
 
     private void create(Order order) {
-        order.setId(sequenceBean.nextId(ENTITY_TABLE));
+        order.setId(sequenceBean.nextId(ENTITY));
         order.setCreateDate(DateUtil.getCurrentDate());
         sqlSession().insert(NS + ".insertOrder", order);
 

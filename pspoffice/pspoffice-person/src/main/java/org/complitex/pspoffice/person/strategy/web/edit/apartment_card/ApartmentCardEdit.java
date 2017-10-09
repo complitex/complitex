@@ -292,9 +292,9 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         //address
         WebMarkupContainer addressContainer = new WebMarkupContainer("addressContainer");
-        final AttributeType addressAttributeType = ENTITY.getAttributeType(ADDRESS);
-        addressContainer.add(new Label("label", labelModel(addressAttributeType.getAttributeNames(), getLocale())));
-        addressContainer.add(new WebMarkupContainer("required").setVisible(addressAttributeType.isMandatory()));
+        final EntityAttribute addressEntityAttribute = ENTITY.getAttribute(ADDRESS);
+        addressContainer.add(new Label("label", labelModel(addressEntityAttribute.getNames(), getLocale())));
+        addressContainer.add(new WebMarkupContainer("required").setVisible(addressEntityAttribute.isRequired()));
 
         addressSearchComponentState = apartmentCardStrategy.initAddressSearchComponentState(getAddressEntity(), getAddressId());
         ApartmentCardAddressSearchPanel address = null;
@@ -319,10 +319,10 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         //owner
         WebMarkupContainer ownerContainer = new WebMarkupContainer("ownerContainer");
-        final AttributeType ownerAttributeType = ENTITY.getAttributeType(OWNER);
-        IModel<String> ownerLabelModel = labelModel(ownerAttributeType.getAttributeNames(), getLocale());
+        final EntityAttribute ownerEntityAttribute = ENTITY.getAttribute(OWNER);
+        IModel<String> ownerLabelModel = labelModel(ownerEntityAttribute.getNames(), getLocale());
         ownerContainer.add(new Label("label", ownerLabelModel));
-        ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerAttributeType.isMandatory()));
+        ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerEntityAttribute.isRequired()));
 
         PersonPicker owner = isNew()
                 ? new PersonPicker("owner", PersonAgeType.ADULT, new PropertyModel<Person>(newApartmentCard, "owner"),
@@ -568,25 +568,25 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         initSystemAttributeInput(form, "housingRights", HOUSING_RIGHTS);
 
         //user attributes:
-        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributeTypes(),
-                new Predicate<AttributeType>() {
+        List<Long> userAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributes(),
+                new Predicate<EntityAttribute>() {
 
                     @Override
-                    public boolean apply(AttributeType attributeType) {
+                    public boolean apply(EntityAttribute attributeType) {
                         return !attributeType.isSystem();
                     }
                 }),
-                new Function<AttributeType, Long>() {
+                new Function<EntityAttribute, Long>() {
 
                     @Override
-                    public Long apply(AttributeType attributeType) {
+                    public Long apply(EntityAttribute attributeType) {
                         return attributeType.getId();
                     }
                 }));
 
         List<Attribute> userAttributes = newArrayList();
-        for (Long attributeTypeId : userAttributeTypeIds) {
-            Attribute userAttribute = newApartmentCard.getAttribute(attributeTypeId);
+        for (Long entityAttributeId : userAttributeTypeIds) {
+            Attribute userAttribute = newApartmentCard.getAttribute(entityAttributeId);
             if (userAttribute != null) {
                 userAttributes.add(userAttribute);
             }
@@ -596,7 +596,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
             @Override
             protected void populateItem(ListItem<Attribute> item) {
-                long userAttributeTypeId = item.getModelObject().getAttributeTypeId();
+                long userAttributeTypeId = item.getModelObject().getEntityAttributeId();
                 initAttributeInput(item, userAttributeTypeId);
             }
         };
@@ -693,43 +693,40 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         add(apartmentCardExplanationDialog);
     }
 
-    private void initSystemAttributeInput(MarkupContainer parent, String id, long attributeTypeId) {
+    private void initSystemAttributeInput(MarkupContainer parent, String id, long entityAttributeId) {
         WebMarkupContainer container = new WebMarkupContainer(id + "Container");
         parent.add(container);
-        initAttributeInput(container, attributeTypeId);
+        initAttributeInput(container, entityAttributeId);
     }
 
-    private void initAttributeInput(MarkupContainer parent, long attributeTypeId) {
-        final AttributeType attributeType = apartmentCardStrategy.getEntity().getAttributeType(attributeTypeId);
+    private void initAttributeInput(MarkupContainer parent, long entityAttributeId) {
+        final EntityAttribute entityAttribute = apartmentCardStrategy.getEntity().getAttribute(entityAttributeId);
 
         //label
-        parent.add(new Label("label", labelModel(attributeType.getAttributeNames(), getLocale())));
+        parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(attributeType.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isRequired());
         parent.add(requiredContainer);
 
         //input component
-        Attribute attribute = newApartmentCard.getAttribute(attributeTypeId);
+        Attribute attribute = newApartmentCard.getAttribute(entityAttributeId);
         parent.add(newInputComponent(apartmentCardStrategy.getEntityName(), null, newApartmentCard, attribute, getLocale(), false));
     }
 
-    private void beforePersist() {
+    private void beforePersist() { //todo add attributes
         // address
         if (isNew()) {
             Attribute addressAttribute = newApartmentCard.getAttribute(ADDRESS);
             if (addressSearchComponentState.get("room") != null
                     && addressSearchComponentState.get("room").getObjectId() > 0) {
-                addressAttribute.setValueTypeId(ADDRESS_ROOM);
                 addressAttribute.setValueId(addressSearchComponentState.get("room").getObjectId());
             } else if (addressSearchComponentState.get("apartment") != null
                     && addressSearchComponentState.get("apartment").getObjectId() > 0) {
-                addressAttribute.setValueTypeId(ADDRESS_APARTMENT);
                 addressAttribute.setValueId(addressSearchComponentState.get("apartment").getObjectId());
             } else if (addressSearchComponentState.get("building") != null
                     && addressSearchComponentState.get("building").getObjectId() > 0) {
-                addressAttribute.setValueTypeId(ADDRESS_BUILDING);
                 addressAttribute.setValueId(addressSearchComponentState.get("building").getObjectId());
             } else {
                 throw new IllegalStateException("All building, apartment and room parts of address have not been filled in.");
@@ -741,14 +738,12 @@ public final class ApartmentCardEdit extends FormTemplatePage {
         DomainObject owner = newApartmentCard.getOwner();
         Long ownerId = owner != null ? owner.getObjectId() : null;
         ownerAttribute.setValueId(ownerId);
-        ownerAttribute.setValueTypeId(OWNER_TYPE);
 
         // form of ownership
         Attribute formOfOwnershipAttribute = newApartmentCard.getAttribute(FORM_OF_OWNERSHIP);
         DomainObject ownershipForm = newApartmentCard.getOwnershipForm();
         Long ownershipFormId = ownershipForm != null ? ownershipForm.getObjectId() : null;
         formOfOwnershipAttribute.setValueId(ownershipFormId);
-        formOfOwnershipAttribute.setValueTypeId(FORM_OF_OWNERSHIP_TYPE);
     }
 
     private boolean validate() {
@@ -856,16 +851,16 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     }
 
     private Component initFormOfOwnership() {
-        final AttributeType formOfOwnershipAttributeType = apartmentCardStrategy.getEntity().getAttributeType(FORM_OF_OWNERSHIP);
+        final EntityAttribute formOfOwnershipEntityAttribute = apartmentCardStrategy.getEntity().getAttribute(FORM_OF_OWNERSHIP);
 
         WebMarkupContainer formOfOwnershipContainer = new WebMarkupContainer("formOfOwnershipContainer");
 
         //label
-        IModel<String> labelModel = labelModel(formOfOwnershipAttributeType.getAttributeNames(), getLocale());
+        IModel<String> labelModel = labelModel(formOfOwnershipEntityAttribute.getNames(), getLocale());
         formOfOwnershipContainer.add(new Label("label", labelModel));
 
         //required
-        formOfOwnershipContainer.add(new WebMarkupContainer("required").setVisible(formOfOwnershipAttributeType.isMandatory()));
+        formOfOwnershipContainer.add(new WebMarkupContainer("required").setVisible(formOfOwnershipEntityAttribute.isRequired()));
 
         //form of ownership
         final List<DomainObject> allOwnershipForms = ownershipFormStrategy.getAll();
@@ -898,7 +893,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
                 return ownershipFormStrategy.displayDomainObject(object, getLocale());
             }
         });
-        formOfOwnership.setRequired(formOfOwnershipAttributeType.isMandatory());
+        formOfOwnership.setRequired(formOfOwnershipEntityAttribute.isRequired());
         formOfOwnership.setLabel(labelModel);
         formOfOwnership.setEnabled(canEdit(null, apartmentCardStrategy.getEntityName(), newApartmentCard));
         formOfOwnershipContainer.add(formOfOwnership);
@@ -931,13 +926,13 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         Set<String> modifiedAttributes = newHashSet();
         if (!oldApartmentCard.getOwner().getObjectId().equals(newApartmentCard.getOwner().getObjectId())) {
-            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(OWNER).getAttributeNames(), getLocale()).getObject());
+            modifiedAttributes.add(labelModel(ENTITY.getAttribute(OWNER).getNames(), getLocale()).getObject());
         }
         if (!oldApartmentCard.getOwnershipForm().getObjectId().equals(newApartmentCard.getOwnershipForm().getObjectId())) {
-            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(FORM_OF_OWNERSHIP).getAttributeNames(), getLocale()).getObject());
+            modifiedAttributes.add(labelModel(ENTITY.getAttribute(FORM_OF_OWNERSHIP).getNames(), getLocale()).getObject());
         }
         if (!Strings.isEqual(oldApartmentCard.getHousingRights(), newApartmentCard.getHousingRights())) {
-            modifiedAttributes.add(labelModel(ENTITY.getAttributeType(HOUSING_RIGHTS).getAttributeNames(), getLocale()).getObject());
+            modifiedAttributes.add(labelModel(ENTITY.getAttribute(HOUSING_RIGHTS).getNames(), getLocale()).getObject());
         }
 
         if (modifiedAttributes.isEmpty()) {

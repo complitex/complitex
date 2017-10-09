@@ -17,6 +17,6 @@ public class StreetTypeCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return AddressEntity.STREET_TYPE.getEntityName();
+        return AddressEntity.STREET_TYPE.getEntity();
     }
 }

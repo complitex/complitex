@@ -51,126 +51,125 @@ public class DomainObject implements ILongId {
         }
     }
 
-    public void addAttributePair(Long attributeTypeId1, Long attributeTypeId2){
+    public void addAttributePair(Long entityAttributeId1, Long entityAttributeId2){
         Long attributeId = attributes.stream()
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId1))
+                .filter(a -> a.getEntityAttributeId().equals(entityAttributeId1))
                 .mapToLong(Attribute::getAttributeId)
                 .max()
                 .orElse(0) + 1;
 
-        attributes.add(new Attribute(attributeTypeId1, attributeId));
-        attributes.add(new Attribute(attributeTypeId2, attributeId));
+        attributes.add(new Attribute(entityAttributeId1, attributeId));
+        attributes.add(new Attribute(entityAttributeId2, attributeId));
     }
 
-    public void addAttribute(Long attributeTypeId, Long valueId){
+    public void addAttribute(Long entityAttributeId, Long valueId){
         Long attributeId = attributes.stream()
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEntityAttributeId().equals(entityAttributeId))
                 .mapToLong(Attribute::getAttributeId)
                 .max()
                 .orElse(0) + 1;
 
         Attribute attribute = new Attribute();
         attribute.setAttributeId(attributeId);
-        attribute.setAttributeTypeId(attributeTypeId);
-        attribute.setValueTypeId(attributeTypeId);
+        attribute.setEntityAttributeId(entityAttributeId);
         attribute.setValueId(valueId);
     }
 
-    public Attribute getAttribute(Long attributeTypeId) {
+    public Attribute getAttribute(Long entityAttributeId) {
         return attributes.stream()
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEntityAttributeId().equals(entityAttributeId))
                 .filter(a -> a.getEndDate() == null)
                 .findAny()
                 .orElse(null);
     }
 
-    public Attribute getAttribute(Long attributeTypeId, Long attributeId){
+    public Attribute getAttribute(Long entityAttributeId, Long attributeId){
         return attributes.stream()
                 .filter(a -> a.getEndDate() == null)
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEntityAttributeId().equals(entityAttributeId))
                 .filter(a -> a.getAttributeId().equals(attributeId))
                 .findAny()
                 .orElse(null);
     }
 
     public Attribute getAttribute(Attribute attribute){
-        return getAttribute(attribute.getAttributeTypeId(), attribute.getAttributeId());
+        return getAttribute(attribute.getEntityAttributeId(), attribute.getAttributeId());
     }
 
 
-    public List<Attribute> getAttributes(Long attributeTypeId) {
+    public List<Attribute> getAttributes(Long entityAttributeId) {
         return attributes.stream()
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEntityAttributeId().equals(entityAttributeId))
                 .filter(a -> a.getEndDate() == null)
                 .collect(Collectors.toList());
     }
 
-    public List<Long> getValueIds(Long attributeTypeId){
+    public List<Long> getValueIds(Long entityAttributeId){
         return attributes.stream()
-                .filter(a -> a.getAttributeTypeId().equals(attributeTypeId))
+                .filter(a -> a.getEntityAttributeId().equals(entityAttributeId))
                 .filter(a -> a.getEndDate() == null)
                 .map(Attribute::getValueId)
                 .collect(Collectors.toList());
     }
 
-    public void removeAttribute(Long attributeTypeId) {
-        attributes.removeIf(attribute -> attribute.getAttributeTypeId().equals(attributeTypeId));
+    public void removeAttribute(Long entityAttributeId) {
+        attributes.removeIf(attribute -> attribute.getEntityAttributeId().equals(entityAttributeId));
     }
 
-    public void removeAttribute(Long attributeTypeId, Long attributeId){
-        attributes.removeIf(a -> a.getAttributeTypeId().equals(attributeTypeId) && a.getAttributeId().equals(attributeId));
+    public void removeAttribute(Long entityAttributeId, Long attributeId){
+        attributes.removeIf(a -> a.getEntityAttributeId().equals(entityAttributeId) && a.getAttributeId().equals(attributeId));
     }
 
-    public String getStringValue(Long attributeTypeId){
-        Attribute attribute = getAttribute(attributeTypeId);
+    public String getStringValue(Long entityAttributeId){
+        Attribute attribute = getAttribute(entityAttributeId);
 
         return attribute != null? attribute.getStringValue() : null;
     }
 
-    public String getStringValue(Long attributeTypeId, Locale locale){
-        Attribute attribute = getAttribute(attributeTypeId);
+    public String getStringValue(Long entityAttributeId, Locale locale){
+        Attribute attribute = getAttribute(entityAttributeId);
 
         return attribute != null ? attribute.getStringValue(locale) : null;
     }
 
-    public void setStringValue(Long attributeTypeId, String value, Locale locale){
-        getAttribute(attributeTypeId).setStringValue(value, Locales.getLocaleId(locale));
+    public void setStringValue(Long entityAttributeId, String value, Locale locale){
+        getAttribute(entityAttributeId).setStringValue(value, Locales.getLocaleId(locale));
     }
 
-    public void setStringValue(Long attributeTypeId, String value){
-        setStringValue(attributeTypeId, value, Locales.getSystemLocale());
+    public void setStringValue(Long entityAttributeId, String value){
+        setStringValue(entityAttributeId, value, Locales.getSystemLocale());
     }
 
-    public Map<String, String> getStringMap(Long attributeTypeId){
-        if (getAttribute(attributeTypeId) == null || getAttribute(attributeTypeId).getStringValues().isEmpty()){
+    public Map<String, String> getStringMap(Long entityAttributeId){
+        if (getAttribute(entityAttributeId) == null || getAttribute(entityAttributeId).getStringValues().isEmpty()){
             return null;
         }
 
-        return getAttribute(attributeTypeId).getStringValues().stream()
+        return getAttribute(entityAttributeId).getStringValues().stream()
                 .filter(s -> s.getValue() != null)
                 .collect(Collectors.toMap(s -> getLanguage(s.getLocaleId()), StringValue::getValue));
     }
 
-    public Long getValueId(Long attributeTypeId){
-        Attribute attribute =  getAttribute(attributeTypeId);
+    public Long getValueId(Long entityAttributeId){
+        Attribute attribute =  getAttribute(entityAttributeId);
 
         return attribute != null ? attribute.getValueId() : null;
     }
 
-    public void setValue(Long attributeTypeId, Long value){
-        getAttribute(attributeTypeId).setValueId(value);
+    public void setValue(Long entityAttributeId, Long value){
+        getAttribute(entityAttributeId).setValueId(value);
     }
 
-    public <T> void setValue(Long attributeTypeId, T value, IConverter<T> converter){
-        setStringValue(attributeTypeId, converter.toString(value));
+    public <T> void setValue(Long entityAttributeId, T value, IConverter<T> converter){
+        setStringValue(entityAttributeId, converter.toString(value));
     }
 
-    public void setDateValue(Long attributeTypeId, Date value){
-        setValue(attributeTypeId, value, new DateConverter());
+    public void setDateValue(Long entityAttributeId, Date value){
+        setValue(entityAttributeId, value, new DateConverter());
     }
 
-    public void setBooleanValue(Long attributeTypeId, Boolean value){
-        setValue(attributeTypeId, value, new BooleanConverter());
+    public void setBooleanValue(Long entityAttributeId, Boolean value){
+        setValue(entityAttributeId, value, new BooleanConverter());
     }
 
     @Override

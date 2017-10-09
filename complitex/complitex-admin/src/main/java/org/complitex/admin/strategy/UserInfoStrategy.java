@@ -54,11 +54,11 @@ public class UserInfoStrategy extends TemplateStrategy {
 
     @Override
     public String displayAttribute(Attribute attribute, Locale locale) {
-        if (FIRST_NAME.equals(attribute.getAttributeTypeId())){
+        if (FIRST_NAME.equals(attribute.getEntityAttributeId())){
             return StringUtil.valueOf(nameBean.getFirstName(attribute.getValueId()));
-        }else if (MIDDLE_NAME.equals(attribute.getAttributeTypeId())){
+        }else if (MIDDLE_NAME.equals(attribute.getEntityAttributeId())){
             return StringUtil.valueOf(nameBean.getMiddleName(attribute.getValueId()));
-        }else if (LAST_NAME.equals(attribute.getAttributeTypeId())){
+        }else if (LAST_NAME.equals(attribute.getEntityAttributeId())){
             return StringUtil.valueOf(nameBean.getLastName(attribute.getValueId()));
         }
 

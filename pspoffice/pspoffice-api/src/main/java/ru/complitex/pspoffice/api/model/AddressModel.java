@@ -10,7 +10,7 @@ import java.util.Map;
  *         04.05.2017 17:59
  */
 @ApiModel("Address object")
-public class AddressObject implements Serializable{
+public class AddressModel implements Serializable{
     private Long id;
     private Long parentId;
     private Long typeId;
@@ -22,40 +22,40 @@ public class AddressObject implements Serializable{
 
     //date, history
 
-    public AddressObject() {
+    public AddressModel() {
     }
 
-    public AddressObject(Long id, Long parentId) {
+    public AddressModel(Long id, Long parentId) {
         this.id = id;
         this.parentId = parentId;
     }
 
-    public AddressObject(Long id, Map<String, String> name) {
+    public AddressModel(Long id, Map<String, String> name) {
         this.id = id;
         this.name = name;
     }
 
-    public AddressObject(Long id, Map<String, String> name, Map<String, String> shortName) {
+    public AddressModel(Long id, Map<String, String> name, Map<String, String> shortName) {
         this.id = id;
         this.name = name;
         this.shortName = shortName;
     }
 
-    public AddressObject(Long id, Long parentId, String code, Map<String, String> name) {
+    public AddressModel(Long id, Long parentId, String code, Map<String, String> name) {
         this.id = id;
         this.parentId = parentId;
         this.code = code;
         this.name = name;
     }
 
-    public AddressObject(Long id, Long parentId, Long typeId, Map<String, String> name) {
+    public AddressModel(Long id, Long parentId, Long typeId, Map<String, String> name) {
         this.id = id;
         this.parentId = parentId;
         this.typeId = typeId;
         this.name = name;
     }
 
-    public AddressObject(Long id, Long parentId, Long typeId, String code, Map<String, String> name) {
+    public AddressModel(Long id, Long parentId, Long typeId, String code, Map<String, String> name) {
         this.id = id;
         this.parentId = parentId;
         this.typeId = typeId;

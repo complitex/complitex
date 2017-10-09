@@ -195,7 +195,7 @@ public class AddressSyncService {
         //коды улиц
         if (syncEntity.equals(STREET)){
             objects.parallelStream().forEach(o -> o.getAttributes().parallelStream()
-                    .filter(a -> a.getAttributeTypeId() == StreetStrategy.STREET_CODE)
+                    .filter(a -> a.getEntityAttributeId() == StreetStrategy.STREET_CODE)
                     .forEach(a -> objectMap.put(String.valueOf(a.getValueId()), o)));
         }
 

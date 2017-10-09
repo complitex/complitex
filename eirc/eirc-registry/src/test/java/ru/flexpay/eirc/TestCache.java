@@ -71,7 +71,7 @@ public class TestCache {
                 EircOrganization oldOrganization = CloneUtil.cloneObject(organization);
                 Attribute serviceAttribute = services.get(0);
                 serviceAttribute.setValueId(service.getId());
-                serviceAttribute.setAttributeTypeId(EircOrganizationStrategy.SERVICE);
+                serviceAttribute.setEntityAttributeId(EircOrganizationStrategy.SERVICE);
                 serviceAttribute.setObjectId(organizationId);
 
                 eircOrganizationStrategy.update(oldOrganization, organization, new Date());

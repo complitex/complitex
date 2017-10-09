@@ -25,13 +25,13 @@ public enum RequestFileDirectoryType {
     REFERENCES_DIR(OsznOrganizationStrategy.REFERENCES_DIR),
     LOAD_PRIVILEGE_PROLONGATION_DIR(OsznOrganizationStrategy.LOAD_PRIVILEGE_PROLONGATION_DIR);
     
-    private long attributeTypeId;
+    private long entityAttributeId;
 
-    private RequestFileDirectoryType(long attributeTypeId) {
-        this.attributeTypeId = attributeTypeId;
+    private RequestFileDirectoryType(long entityAttributeId) {
+        this.entityAttributeId = entityAttributeId;
     }
 
     public long getAttributeTypeId() {
-        return attributeTypeId;
+        return entityAttributeId;
     }
 }

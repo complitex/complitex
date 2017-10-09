@@ -82,7 +82,7 @@ class PersonFullNamePanel extends Panel {
     }
 
     private IModel<String> newLabelModel(long nameAttributeTypeId) {
-        return DomainObjectComponentUtil.labelModel(personStrategy.getEntity().getAttributeType(nameAttributeTypeId).getAttributeNames(),
+        return DomainObjectComponentUtil.labelModel(personStrategy.getEntity().getAttribute(nameAttributeTypeId).getNames(),
                 getLocale());
     }
 

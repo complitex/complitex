@@ -1,13 +1,19 @@
 package org.complitex.common.entity;
 
-import org.complitex.common.util.Locales;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 
 public class StringValue implements Serializable {
+    @JsonIgnore
     private Long pkId;
-    private String entityName;
+
+    @JsonIgnore
     private Long id;
+
+    @JsonIgnore
+    private String entityName;
+
     private Long localeId;
     private String value;
 
@@ -16,10 +22,6 @@ public class StringValue implements Serializable {
 
     public StringValue(Long localeId) {
         this.localeId = localeId;
-    }
-
-    public boolean isSystemLocale(){
-        return Locales.getSystemLocaleId().equals(localeId);
     }
 
     public Long getPkId() {

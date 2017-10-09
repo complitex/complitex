@@ -169,18 +169,12 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     }
 
     @Override
-    public boolean isSimpleAttributeType(AttributeType attributeType) {
-        return !CUSTOM_ATTRIBUTES.contains(attributeType.getId()) && attributeType.getId() != MODULE_INSTANCE_TYPE &&
-                super.isSimpleAttributeType(attributeType);
-    }
-
-    @Override
     protected void fillAttributes(String dataSource, DomainObject object) {
         super.fillAttributes(dataSource, object);
 
-        for (long attributeTypeId : CUSTOM_ATTRIBUTES) {
-            if (object.getAttribute(attributeTypeId).getStringValues() == null) {
-                object.getAttribute(attributeTypeId).setStringValues(StringValueUtil.newStringValues());
+        for (long entityAttributeId : CUSTOM_ATTRIBUTES) {
+            if (object.getAttribute(entityAttributeId).getStringValues() == null) {
+                object.getAttribute(entityAttributeId).setStringValues(StringValueUtil.newStringValues());
             }
         }
     }
@@ -190,7 +184,7 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
         super.loadStringValues(attributes);
 
         for (Attribute attribute : attributes) {
-            if (CUSTOM_ATTRIBUTES.contains(attribute.getAttributeTypeId())) {
+            if (CUSTOM_ATTRIBUTES.contains(attribute.getEntityAttributeId())) {
                 if (attribute.getValueId() != null) {
                     loadStringValues(attribute);
                 } else {
@@ -201,10 +195,10 @@ public class ModuleInstanceStrategy extends TemplateStrategy {
     }
 
     @Override
-    protected Long insertStrings(Long attributeTypeId, List<StringValue> strings) {
-        return CUSTOM_ATTRIBUTES.contains(attributeTypeId)
+    protected Long insertStrings(Long entityAttributeId, List<StringValue> strings) {
+        return CUSTOM_ATTRIBUTES.contains(entityAttributeId)
                 ? stringBean.save(strings, getEntityName(), false)
-                : super.insertStrings(attributeTypeId, strings);
+                : super.insertStrings(entityAttributeId, strings);
     }
 
     @Override

@@ -1,8 +1,5 @@
 package org.complitex.common.web.component.domain;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -20,7 +17,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.*;
+import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttribute;
+import org.complitex.common.entity.StringValue;
+import org.complitex.common.entity.ValueType;
 import org.complitex.common.strategy.EntityBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
@@ -38,6 +38,8 @@ import java.util.List;
  *
  * @author Artem
  */
+
+//todo value type refactoring
 public class EntityDescriptionPanel extends Panel {
     private static final String DATE_FORMAT = "HH:mm dd.MM.yyyy";
 
@@ -80,20 +82,14 @@ public class EntityDescriptionPanel extends Panel {
         attributesContainer.setOutputMarkupId(true);
         form.add(attributesContainer);
 
-        final List<String> supportedValueTypes = Lists.newArrayList(Iterables.transform(Arrays.asList(SimpleTypes.values()), new Function<SimpleTypes, String>() {
+        final List<ValueType> supportedValueTypes = Arrays.asList(ValueType.STRING_VALUE, ValueType.STRING,
+                ValueType.BOOLEAN, ValueType.DATE, ValueType.DECIMAL, ValueType.INTEGER);
+
+        ListView<EntityAttribute> attributes = new AjaxRemovableListView<EntityAttribute>("attributes", description.getAttributes()) {
 
             @Override
-            public String apply(SimpleTypes valueType) {
-                return valueType.name();
-            }
-        }));
-
-        ListView<AttributeType> attributes = new AjaxRemovableListView<AttributeType>("attributes", description.getAttributeTypes()) {
-
-            @Override
-            protected void populateItem(ListItem<AttributeType> item) {
-                final AttributeType attributeType = item.getModelObject();
-                final List<AttributeValueType> valueTypes = attributeType.getAttributeValueTypes();
+            protected void populateItem(ListItem<EntityAttribute> item) {
+                final EntityAttribute entityAttribute = item.getModelObject();
 
                 WebMarkupContainer valueTypesContainer = new WebMarkupContainer("valueTypesContainer");
                 item.add(valueTypesContainer);
@@ -103,13 +99,13 @@ public class EntityDescriptionPanel extends Panel {
 
                     @Override
                     public String getObject() {
-                        return displayValueType(valueTypes.get(0).getValueType());
+                        return displayValueType(entityAttribute.getValueType());
                     }
                 });
                 item.add(valueType);
 
-                DropDownChoice<String> valueTypeSelect = new DropDownChoice<String>("valueTypeSelect",
-                        new PropertyModel<String>(attributeType.getAttributeValueTypes().get(0), "valueType"), supportedValueTypes);
+                DropDownChoice<ValueType> valueTypeSelect = new DropDownChoice<>("valueTypeSelect",
+                        new PropertyModel<>(entityAttribute.getValueType(), "valueType"), supportedValueTypes);
                 valueTypeSelect.setRequired(true);
                 valueTypeSelect.setLabel(new ResourceModel("attribute_value_type"));
                 valueTypeSelect.add(new AjaxFormComponentUpdatingBehavior("change") {
@@ -121,10 +117,10 @@ public class EntityDescriptionPanel extends Panel {
                 });
                 item.add(valueTypeSelect);
 
-                Label mandatoryLabel = new Label("mandatoryLabel", new ResourceModel(attributeType.isMandatory() ? "yes" : "no"));
+                Label mandatoryLabel = new Label("mandatoryLabel", new ResourceModel(entityAttribute.isRequired() ? "yes" : "no"));
                 item.add(mandatoryLabel);
 
-                CheckBox mandatoryInput = new CheckBox("mandatoryInput", new PropertyModel<Boolean>(attributeType, "mandatory"));
+                CheckBox mandatoryInput = new CheckBox("mandatoryInput", new PropertyModel<Boolean>(entityAttribute, "mandatory"));
                 mandatoryInput.add(new AjaxFormComponentUpdatingBehavior("change") {
 
                     @Override
@@ -138,10 +134,10 @@ public class EntityDescriptionPanel extends Panel {
 
                     @Override
                     public String getObject() {
-                        if (attributeType.isSystem()) {
+                        if (entityAttribute.isSystem()) {
                             return getString("built-in");
-                        } else if (attributeType.getId() != null) {
-                            return new SimpleDateFormat(DATE_FORMAT, getLocale()).format(attributeType.getStartDate());
+                        } else if (entityAttribute.getId() != null) {
+                            return new SimpleDateFormat(DATE_FORMAT, getLocale()).format(entityAttribute.getStartDate());
                         } else {
                             return null;
                         }
@@ -151,42 +147,29 @@ public class EntityDescriptionPanel extends Panel {
 
                     @Override
                     public String getObject() {
-                        if (attributeType.getEndDate() == null) {
+                        if (entityAttribute.getEndDate() == null) {
                             return null;
                         } else {
-                            return new SimpleDateFormat(DATE_FORMAT, getLocale()).format(attributeType.getEndDate());
+                            return new SimpleDateFormat(DATE_FORMAT, getLocale()).format(entityAttribute.getEndDate());
                         }
                     }
                 }));
 
-                if (attributeType.getId() != null) { // old attribute
+                if (entityAttribute.getId() != null) { // old attribute
                     item.add(new Label("name", new AbstractReadOnlyModel<String>() {
 
                         @Override
                         public String getObject() {
-                            return attributeType.getAttributeName(getLocale());
+                            return entityAttribute.getName(getLocale());
                         }
                     }));
 
-                    if (valueTypes.size() == 1) {
-                        valueTypesContainer.setVisible(false);
-                    } else {
-                        valueType.setVisible(false);
-                        for (final AttributeValueType currentValueType : valueTypes) {
-                            valueTypeItem.add(new Label(String.valueOf(currentValueType.getId()), new AbstractReadOnlyModel<String>() {
-
-                                @Override
-                                public String getObject() {
-                                    return displayValueType(currentValueType.getValueType());
-                                }
-                            }));
-                        }
-                    }
+                    valueTypesContainer.setVisible(false);
                     valueTypeSelect.setVisible(false);
                     mandatoryInput.setVisible(false);
                 } else {
                     //new attribute
-                    item.add(new StringValuePanel("name", new PropertyModel<List<StringValue>>(attributeType, "attributeNames"), true,
+                    item.add(new StringValuePanel("name", new PropertyModel<List<StringValue>>(entityAttribute, "attributeNames"), true,
                             new ResourceModel("attribute_name"), true, new MarkupContainer[0]));
 
                     valueType.setVisible(false);
@@ -194,7 +177,7 @@ public class EntityDescriptionPanel extends Panel {
                     mandatoryLabel.setVisible(false);
                 }
 
-                addRemoveLink("remove", item, null, attributesContainer).setVisible(!attributeType.isSystem() && (attributeType.getEndDate() == null));
+                addRemoveLink("remove", item, null, attributesContainer).setVisible(!entityAttribute.isSystem() && (entityAttribute.getEndDate() == null));
             }
         };
         attributes.setReuseItems(true);
@@ -204,9 +187,8 @@ public class EntityDescriptionPanel extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                AttributeType attributeType = entityBean.newAttributeType();
-                attributeType.getAttributeValueTypes().add(new AttributeValueType());
-                description.getAttributeTypes().add(attributeType);
+                EntityAttribute entityAttribute = entityBean.newAttributeType();
+                description.getAttributes().add(entityAttribute);
                 target.add(attributesContainer);
             }
         };
@@ -260,17 +242,19 @@ public class EntityDescriptionPanel extends Panel {
         return parentsLabel.toString();
     }
 
-    private String displayValueType(String valueType) {
-        if (SimpleTypes.isSimpleType(valueType)) {
-            return valueType;
+    private String displayValueType(ValueType valueType) {
+        if (valueType.isSimple()) {
+            return valueType.name();
         } else {
-            IStrategy referenceEntityStrategy = strategyFactory.getStrategy(valueType, true);
-            if (referenceEntityStrategy == null) {
-                return new StringResourceModel("reference_table", this, Model.of(valueType.toUpperCase())).getObject();
-            } else {
-                return new StringResourceModel("reference", this, Model.of(referenceEntityStrategy.getEntity()
-                        .getName(getLocale()))).getObject();
-            }
+            return "[entity]";
+
+//            IStrategy referenceEntityStrategy = strategyFactory.getStrategy(valueType, true);
+//            if (referenceEntityStrategy == null) {
+//                return new StringResourceModel("reference_table", this, Model.of(valueType.toUpperCase())).getObject();
+//            } else {
+//                return new StringResourceModel("reference", this, Model.of(referenceEntityStrategy.getEntityName()
+//                        .getName(getLocale()))).getObject();
+//            }
         }
     }
 }

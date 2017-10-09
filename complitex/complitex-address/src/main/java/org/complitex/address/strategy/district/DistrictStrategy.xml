@@ -9,15 +9,15 @@
         SELECT e.`object_id`, e.`permission_id` FROM `street` e
                 JOIN `building_address` addr ON (addr.`parent_id` = e.`object_id` AND addr.`status` IN (1, 0) AND addr.`parent_entity_id` = 300)
                 JOIN `building` b ON (b.`parent_id` = addr.`object_id` AND b.`status` IN (1, 0))
-                JOIN `building_attribute` district_attr ON (b.`object_id` = district_attr.`object_id` AND district_attr.`status` = 1 AND district_attr.`attribute_type_id` = 500
+                JOIN `building_attribute` district_attr ON (b.`object_id` = district_attr.`object_id` AND district_attr.`status` = 1 AND district_attr.`entity_attribute_id` = 500
                     AND district_attr.`value_id` = #{parentId})
             WHERE e.`status` IN (1, 0)
         UNION
         SELECT e.`object_id`, e.`permission_id` FROM `street` e
                 JOIN `building_address` addr ON (addr.`parent_id` = e.`object_id` AND addr.`status` IN (1, 0) AND addr.`parent_entity_id` = 300)
-                JOIN `building_attribute` district_attr ON (district_attr.`status` = 1 AND district_attr.`attribute_type_id` = 500
+                JOIN `building_attribute` district_attr ON (district_attr.`status` = 1 AND district_attr.`entity_attribute_id` = 500
                     AND district_attr.`value_id` = #{parentId})
-                JOIN `building_attribute` ref_attr ON (ref_attr.`status` = 1 AND ref_attr.`attribute_type_id` = 501
+                JOIN `building_attribute` ref_attr ON (ref_attr.`status` = 1 AND ref_attr.`entity_attribute_id` = 501
                     AND ref_attr.`value_id` = addr.`object_id`)
                 JOIN `building` b ON (b.`status` IN (1, 0) AND b.`object_id` = district_attr.`object_id` AND b.`object_id` = ref_attr.`object_id`)
             WHERE e.`status` IN (1, 0)
@@ -31,15 +31,15 @@
         SELECT e.`object_id` FROM `street` e
                 JOIN `building_address` addr ON (addr.`parent_id` = e.`object_id` AND addr.`status` IN (1, 0) AND addr.`parent_entity_id` = 300)
                 JOIN `building` b ON (b.`parent_id` = addr.`object_id` AND b.`status` IN (1, 0))
-                JOIN `building_attribute` district_attr ON (b.`object_id` = district_attr.`object_id` AND district_attr.`status` = 1 AND district_attr.`attribute_type_id` = 500
+                JOIN `building_attribute` district_attr ON (b.`object_id` = district_attr.`object_id` AND district_attr.`status` = 1 AND district_attr.`entity_attribute_id` = 500
                     AND district_attr.`value_id` = #{districtId})
             WHERE e.`status` IN (1, 0)
         UNION
         SELECT e.`object_id` FROM `street` e
                 JOIN `building_address` addr ON (addr.`parent_id` = e.`object_id` AND addr.`status` IN (1, 0) AND addr.`parent_entity_id` = 300)
-                JOIN `building_attribute` district_attr ON (district_attr.`status` = 1 AND district_attr.`attribute_type_id` = 500
+                JOIN `building_attribute` district_attr ON (district_attr.`status` = 1 AND district_attr.`entity_attribute_id` = 500
                     AND district_attr.`value_id` = #{districtId})
-                JOIN `building_attribute` ref_attr ON (ref_attr.`status` = 1 AND ref_attr.`attribute_type_id` = 501
+                JOIN `building_attribute` ref_attr ON (ref_attr.`status` = 1 AND ref_attr.`entity_attribute_id` = 501
                     AND ref_attr.`value_id` = addr.`object_id`)
                 JOIN `building` b ON (b.`status` IN (1, 0) AND b.`object_id` = district_attr.`object_id` AND b.`object_id` = ref_attr.`object_id`)
             WHERE e.`status` IN (1, 0)

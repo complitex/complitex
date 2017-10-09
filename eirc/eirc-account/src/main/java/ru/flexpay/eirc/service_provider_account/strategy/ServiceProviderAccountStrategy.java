@@ -1,11 +1,9 @@
 package ru.flexpay.eirc.service_provider_account.strategy;
 
-import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.*;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.StringValueBean;
-import org.complitex.common.util.Numbers;
-import org.complitex.common.util.StringUtil;
-import org.complitex.common.util.StringValueUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute;
@@ -78,115 +76,115 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
         }
     }
 
-    @Override
-    public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
-
-        //attributes comparison
-        for (Attribute oldAttr : oldObject.getAttributes()) {
-            boolean removed = true;
-            for (Attribute newAttr : newObject.getAttributes()) {
-                if (oldAttr.getAttributeTypeId().equals(newAttr.getAttributeTypeId()) && oldAttr.getAttributeId().equals(newAttr.getAttributeId())) {
-                    //the same attribute_type and the same attribute_id
-                    removed = false;
-                    boolean needToUpdateAttribute = false;
-
-                    AttributeType attributeType = getEntity().getAttributeType(oldAttr.getAttributeTypeId());
-
-                    Long oldValueTypeId = oldAttr.getValueTypeId();
-                    Long newValueTypeId = newAttr.getValueTypeId();
-
-                    if (!Numbers.isEqual(oldValueTypeId, newValueTypeId)) {
-                        needToUpdateAttribute = true;
-                    } else {
-                        String attributeValueType = attributeType.getAttributeValueType(oldAttr.getValueTypeId()).getValueType();
-                        if (SimpleTypes.isSimpleType(attributeValueType)) {
-                            SimpleTypes simpleType = SimpleTypes.valueOf(attributeValueType.toUpperCase());
-                            switch (simpleType) {
-                                case STRING_VALUE: {
-                                    boolean valueChanged = false;
-                                    for (StringValue oldString : oldAttr.getStringValues()) {
-                                        for (StringValue newString : newAttr.getStringValues()) {
-                                            //compare strings
-                                            if (oldString.getLocaleId().equals(newString.getLocaleId())) {
-                                                if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
-                                                    valueChanged = true;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    if (valueChanged) {
-                                        needToUpdateAttribute = true;
-                                    }
-                                }
-                                break;
-
-                                case GENDER:
-                                case BOOLEAN:
-                                case DATE:
-                                case DATE2:
-                                case MASKED_DATE:
-                                case DOUBLE:
-                                case INTEGER: {
-                                    String oldString = StringValueUtil.getSystemStringValue(oldAttr.getStringValues()).getValue();
-                                    String newString = StringValueUtil.getSystemStringValue(newAttr.getStringValues()).getValue();
-                                    if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
-                                        needToUpdateAttribute = true;
-                                    }
-                                }
-                                break;
-
-                                case BIG_STRING:
-                                case STRING: {
-                                    String oldString = StringValueUtil.getSystemStringValue(oldAttr.getStringValues()).getValue();
-                                    String newString = StringValueUtil.getSystemStringValue(newAttr.getStringValues()).getValue();
-                                    if (!Strings.isEqual(oldString, newString)) {
-                                        needToUpdateAttribute = true;
-                                    }
-                                }
-                                break;
-                            }
-                        } else {
-                            //reference object ids
-                            Long oldValueId = oldAttr.getValueId();
-                            Long newValueId = newAttr.getValueId();
-                            if (!Numbers.isEqual(oldValueId, newValueId)) {
-                                needToUpdateAttribute = true;
-                            }
-                        }
-                    }
-
-                    if (needToUpdateAttribute) {
-                        archiveAttribute(oldAttr, updateDate);
-                        newAttr.setStartDate(updateDate);
-                        newAttr.setObjectId(newObject.getObjectId());
-                        insertAttribute(newAttr);
-                    }
-                }
-            }
-            if (removed) {
-                archiveAttribute(oldAttr, updateDate);
-            }
-        }
-
-        for (Attribute newAttr : newObject.getAttributes()) {
-            boolean added = true;
-            for (Attribute oldAttr : oldObject.getAttributes()) {
-                if (oldAttr.getAttributeTypeId().equals(newAttr.getAttributeTypeId()) && oldAttr.getAttributeId().equals(newAttr.getAttributeId())) {
-                    //the same attribute_type and the same attribute_id
-                    added = false;
-                    break;
-                }
-            }
-
-            if (added) {
-                newAttr.setStartDate(updateDate);
-                newAttr.setObjectId(newObject.getObjectId());
-                insertAttribute(newAttr);
-            }
-        }
-    }
+//    @Override
+//    public void update(DomainObject oldObject, DomainObject newObject, Date updateDate) {
+//
+//        //attributes comparison
+//        for (Attribute oldAttr : oldObject.getAttributes()) {
+//            boolean removed = true;
+//            for (Attribute newAttr : newObject.getAttributes()) {
+//                if (oldAttr.getEntityAttributeId().equals(newAttr.getEntityAttributeId()) && oldAttr.getAttributeId().equals(newAttr.getAttributeId())) {
+//                    //the same attribute_type and the same attribute_id
+//                    removed = false;
+//                    boolean needToUpdateAttribute = false;
+//
+//                    EntityAttribute entityAttribute = getEntityName().getAttribute(oldAttr.getEntityAttributeId());
+//
+//                    Long oldValueTypeId = oldAttr.getValueTypeId();
+//                    Long newValueTypeId = newAttr.getValueTypeId();
+//
+//                    if (!Numbers.isEqual(oldValueTypeId, newValueTypeId)) {
+//                        needToUpdateAttribute = true;
+//                    } else {
+//                        String attributeValueType = entityAttribute.getAttributeValueType(oldAttr.getValueTypeId()).getValueType();
+//                        if (SimpleTypes.isSimpleType(attributeValueType)) {
+//                            SimpleTypes simpleType = SimpleTypes.valueOf(attributeValueType.toUpperCase());
+//                            switch (simpleType) {
+//                                case STRING_VALUE: {
+//                                    boolean valueChanged = false;
+//                                    for (StringValue oldString : oldAttr.getStringValues()) {
+//                                        for (StringValue newString : newAttr.getStringValues()) {
+//                                            //compare strings
+//                                            if (oldString.getLocaleId().equals(newString.getLocaleId())) {
+//                                                if (!Strings.isEqual(oldString.getValue(), newString.getValue())) {
+//                                                    valueChanged = true;
+//                                                    break;
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//
+//                                    if (valueChanged) {
+//                                        needToUpdateAttribute = true;
+//                                    }
+//                                }
+//                                break;
+//
+//                                case GENDER:
+//                                case BOOLEAN:
+//                                case DATE:
+//                                case DATE2:
+//                                case MASKED_DATE:
+//                                case DOUBLE:
+//                                case INTEGER: {
+//                                    String oldString = StringValueUtil.getSystemStringValue(oldAttr.getStringValues()).getValue();
+//                                    String newString = StringValueUtil.getSystemStringValue(newAttr.getStringValues()).getValue();
+//                                    if (!StringUtil.isEqualIgnoreCase(oldString, newString)) {
+//                                        needToUpdateAttribute = true;
+//                                    }
+//                                }
+//                                break;
+//
+//                                case BIG_STRING:
+//                                case STRING: {
+//                                    String oldString = StringValueUtil.getSystemStringValue(oldAttr.getStringValues()).getValue();
+//                                    String newString = StringValueUtil.getSystemStringValue(newAttr.getStringValues()).getValue();
+//                                    if (!Strings.isEqual(oldString, newString)) {
+//                                        needToUpdateAttribute = true;
+//                                    }
+//                                }
+//                                break;
+//                            }
+//                        } else {
+//                            //reference object ids
+//                            Long oldValueId = oldAttr.getValueId();
+//                            Long newValueId = newAttr.getValueId();
+//                            if (!Numbers.isEqual(oldValueId, newValueId)) {
+//                                needToUpdateAttribute = true;
+//                            }
+//                        }
+//                    }
+//
+//                    if (needToUpdateAttribute) {
+//                        archiveAttribute(oldAttr, updateDate);
+//                        newAttr.setStartDate(updateDate);
+//                        newAttr.setObjectId(newObject.getObjectId());
+//                        insertAttribute(newAttr);
+//                    }
+//                }
+//            }
+//            if (removed) {
+//                archiveAttribute(oldAttr, updateDate);
+//            }
+//        }
+//
+//        for (Attribute newAttr : newObject.getAttributes()) {
+//            boolean added = true;
+//            for (Attribute oldAttr : oldObject.getAttributes()) {
+//                if (oldAttr.getEntityAttributeId().equals(newAttr.getEntityAttributeId()) && oldAttr.getAttributeId().equals(newAttr.getAttributeId())) {
+//                    //the same attribute_type and the same attribute_id
+//                    added = false;
+//                    break;
+//                }
+//            }
+//
+//            if (added) {
+//                newAttr.setStartDate(updateDate);
+//                newAttr.setObjectId(newObject.getObjectId());
+//                insertAttribute(newAttr);
+//            }
+//        }
+//    }
 
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {

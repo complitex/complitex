@@ -5,7 +5,7 @@
     <parent>
         <artifactId>complitex</artifactId>
         <groupId>org.complitex</groupId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>7.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,13 +15,13 @@
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-core</artifactId>
-            <version>8.0.0-M6</version>
+            <version>8.0.0-M7</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-extensions</artifactId>
-            <version>8.0.0-M6</version>
+            <version>8.0.0-M7</version>
         </dependency>
 
         <dependency>

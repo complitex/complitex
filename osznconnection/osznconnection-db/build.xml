@@ -15,13 +15,13 @@
             <transaction src="osznconnection-create.sql"/>
         </sql>
 
-        <sql driver="com.mysql.jdbc.Driver" encoding="UTF-8" url="${url}" userid="${username}" password="${password}" delimiter="/">
+       <!-- <sql driver="com.mysql.jdbc.Driver" encoding="UTF-8" url="${url}" userid="${username}" password="${password}" delimiter="/">
             <classpath>
                 <pathelement location="${jdbc}"/>
             </classpath>
 
             <transaction src="osznconnection-functions.sql"/>
-        </sql>
+        </sql>-->
 
         <sql driver="com.mysql.jdbc.Driver" encoding="UTF-8" url="${url}" userid="${username}" password="${password}">
             <classpath>

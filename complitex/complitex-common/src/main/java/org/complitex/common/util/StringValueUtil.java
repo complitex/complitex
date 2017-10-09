@@ -1,9 +1,8 @@
 package org.complitex.common.util;
 
-import com.google.common.collect.Lists;
 import org.complitex.common.entity.StringValue;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -11,29 +10,6 @@ import java.util.Locale;
  * @author inheaven on 015 15.12.14 16:37.
  */
 public class StringValueUtil {
-    private static class StringValueComparator implements Comparator<StringValue> {
-
-        private final Long systemLocaleId;
-
-        StringValueComparator(Long systemLocaleId) {
-            this.systemLocaleId = systemLocaleId;
-        }
-
-        @Override
-        public int compare(StringValue o1, StringValue o2) {
-            if (o1.getLocaleId().equals(systemLocaleId)) {
-                return -1;
-            }
-
-            if (o2.getLocaleId().equals(systemLocaleId)) {
-                return 1;
-            }
-
-            return o1.getLocaleId().compareTo(o2.getLocaleId());
-        }
-    }
-
-    private static StringValueComparator stringValueComparator = new StringValueComparator(Locales.getSystemLocaleId());
 
     public static StringValue getSystemStringValue(List<StringValue> strings) {
         Long systemLocaleId = Locales.getSystemLocaleId();
@@ -60,13 +36,11 @@ public class StringValueUtil {
     }
 
     public static List<StringValue> newStringValues() {
-        List<StringValue> stringValues = Lists.newArrayList();
+        List<StringValue> stringValues = new ArrayList<>();
 
         for (Long localeId : Locales.getLocaleIds()){
             stringValues.add(new StringValue(localeId));
         }
-
-        //Collections.sort(stringValues, stringValueComparator);
 
         return stringValues;
     }
@@ -86,7 +60,5 @@ public class StringValueUtil {
                 stringValues.add(new StringValue(localeId));
             }
         }
-
-        //Collections.sort(stringValues, stringValueComparator);
     }
 }

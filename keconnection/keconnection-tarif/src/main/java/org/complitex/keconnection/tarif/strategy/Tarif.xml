@@ -7,7 +7,7 @@
     <select id="validateCode" resultType="long" parameterType="string">
         SELECT DISTINCT t.`object_id` FROM `tarif` t
                                     JOIN `tarif_attribute` a ON (t.`object_id` = a.`object_id` AND a.`status` = 1
-                                        AND a.`attribute_type_id` = ${codeAT})
+                                        AND a.`entity_attribute_id` = ${codeAT})
                                     JOIN `tarif_string_value` sc ON (a.`value_id` = sc.`id` AND sc.`value` = #{code} AND
                                         sc.`locale_id` = (SELECT l.`id` FROM `locale` l WHERE l.`system` = 1))
             WHERE t.`status` IN (1, 0)

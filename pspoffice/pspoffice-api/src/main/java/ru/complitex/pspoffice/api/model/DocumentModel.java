@@ -7,7 +7,7 @@ import java.util.Date;
  * @author Anatoly A. Ivanov
  *         25.05.2017 17:03
  */
-public class DocumentObject implements Serializable{
+public class DocumentModel implements Serializable{
     private Long id;
     private Long typeId;
     private String series;

@@ -107,18 +107,15 @@ public class ApartmentCardCorrectionBean extends AbstractBean {
 
         //address
         Attribute addressAttribute = c.getAttribute(ApartmentCardStrategy.ADDRESS);
-        addressAttribute.setValueTypeId(ApartmentCardStrategy.ADDRESS_APARTMENT);
         addressAttribute.setValueId(apartmentId);
 
         //owner
         Attribute ownerAttribute = c.getAttribute(ApartmentCardStrategy.OWNER);
         ownerAttribute.setValueId(ownerId);
-        ownerAttribute.setValueTypeId(ApartmentCardStrategy.OWNER_TYPE);
 
         //ownership form
         Attribute ownershipFormAttribute = c.getAttribute(ApartmentCardStrategy.FORM_OF_OWNERSHIP);
         ownershipFormAttribute.setValueId(ownershipFromId);
-        ownershipFormAttribute.setValueTypeId(ApartmentCardStrategy.FORM_OF_OWNERSHIP_TYPE);
 
         //permissions
         c.setSubjectIds(Sets.newHashSet(jekId));

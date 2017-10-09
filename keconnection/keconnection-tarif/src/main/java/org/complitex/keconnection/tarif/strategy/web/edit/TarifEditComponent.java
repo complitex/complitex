@@ -4,8 +4,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
@@ -37,14 +37,14 @@ public final class TarifEditComponent extends AbstractComplexAttributesPanel {
         final DomainObject tarif = getDomainObject();
         final boolean enabled = !isDisabled() && DomainObjectAccessUtil.canEdit(null, "tarif", tarif);
 
-        final AttributeType tarifGroupAttributeType =
-                tarifStrategy.getEntity().getAttributeType(TarifStrategy.TARIF_GROUP);
+        final EntityAttribute tarifGroupEntityAttribute =
+                tarifStrategy.getEntity().getAttribute(TarifStrategy.TARIF_GROUP);
         final IModel<String> tarifGroupLabelModel =
-                DomainObjectComponentUtil.labelModel(tarifGroupAttributeType.getAttributeNames(), getLocale());
+                DomainObjectComponentUtil.labelModel(tarifGroupEntityAttribute.getNames(), getLocale());
         add(new Label("tarifGroupLabel", tarifGroupLabelModel));
 
         WebMarkupContainer tarifGroupRequiredContainer = new WebMarkupContainer("tarifGroupRequiredContainer");
-        tarifGroupRequiredContainer.setVisible(tarifGroupAttributeType.isMandatory());
+        tarifGroupRequiredContainer.setVisible(tarifGroupEntityAttribute.isMandatory());
         add(tarifGroupRequiredContainer);
 
         final List<DomainObject> allTarifGroups = tarifGroupStrategy.getAll();

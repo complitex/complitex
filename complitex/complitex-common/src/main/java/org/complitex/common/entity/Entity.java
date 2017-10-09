@@ -2,38 +2,39 @@ package org.complitex.common.entity;
 
 import org.complitex.common.util.StringValueUtil;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
-public class Entity implements ILongId {
+public class Entity implements Serializable{
     private Long id;
-    private String table;
+    private String entity;
     private List<StringValue> names;
-    private List<AttributeType> attributeTypes;
 
-    public AttributeType getAttributeType(Long attributeTypeId) {
-        for (AttributeType attributeType : getAttributeTypes()) {
-            if (attributeType.getId().equals(attributeTypeId)) {
-                return attributeType;
-            }
-        }
-        throw new IllegalArgumentException("attributeTypeId = " + attributeTypeId + " not found");
+    private List<EntityAttribute> attributes;
+
+    public EntityAttribute getAttribute(Long entityAttributeId) {
+        return attributes.stream().filter(a -> entityAttributeId.equals(a.getId()))
+                .findFirst()
+                .orElseGet(() -> {
+                    throw new IllegalArgumentException("entityAttributeId = " + entityAttributeId + " not found");
+                });
     }
 
     public String getName(Locale locale){
         return StringValueUtil.getValue(names, locale);
     }
 
-    public String getName(Long attributeTypeId, Locale locale){
-        return StringValueUtil.getValue(getAttributeType(attributeTypeId).getAttributeNames(), locale);
+    public String getName(Long entityAttributeId, Locale locale){
+        return StringValueUtil.getValue(getAttribute(entityAttributeId).getNames(), locale);
     }
 
-    public String getEntityName() {
-        return table;
+    public String getEntity() {
+        return entity;
     }
 
-    public void setTable(String table) {
-        this.table = table;
+    public void setEntity(String table) {
+        this.entity = table;
     }
 
     public Long getId() {
@@ -44,12 +45,12 @@ public class Entity implements ILongId {
         this.id = id;
     }
 
-    public List<AttributeType> getAttributeTypes() {
-        return attributeTypes;
+    public List<EntityAttribute> getAttributes() {
+        return attributes;
     }
 
-    public void setAttributeType(List<AttributeType> attributeTypes) {
-        this.attributeTypes = attributeTypes;
+    public void setEntityAttribute(List<EntityAttribute> entityAttributes) {
+        this.attributes = entityAttributes;
     }
 
     public List<StringValue> getNames() {

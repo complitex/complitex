@@ -2,70 +2,84 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.common.strategy.EntityBean">
     <resultMap id="entityResultMap" type="org.complitex.common.entity.Entity">
-        <id column="entity_id" property="id"/>
+        <id column="e_id" property="id"/>
+        <result column="entity" property="entity"/>
+        <collection property="names" ofType="StringValue" column="e_name_id" select="findNames"/>
 
-        <result column="entity_table" property="table"/>
-
-        <collection property="names" ofType="StringValue" column="entity_name_id" select="findNames"/>
-
-        <collection property="attributeTypes" ofType="org.complitex.common.entity.AttributeType">
-            <id column="attribute_type_id" property="id"/>
-
-            <result column="mandatory" property="mandatory"/>
-            <result column="attr_start_date" property="startDate"/>
-            <result column="attr_end_date" property="endDate"/>
+        <collection property="attributes" ofType="org.complitex.common.entity.EntityAttribute">
+            <id column="ea_id" property="id"/>
+            <result column="required" property="required"/>
+            <result column="ea_start_date" property="startDate"/>
+            <result column="ea_end_date" property="endDate"/>
             <result column="system" property="system"/>
-
-            <collection property="attributeNames" column="attribute_type_name_id" select="findNames"/>
-
-            <collection property="attributeValueTypes" ofType="org.complitex.common.entity.AttributeValueType">
-                <id column="attribute_value_type_id" property="id"/>
-                <result column="attribute_value_type" property="valueType"/>
-            </collection>
+            <result column="value_type_id" property="valueType"/>
+            <result column="reference_id" property="referenceId"/>
+            <collection property="names" column="ea_name_id" select="findNames"/>
         </collection>
     </resultMap>
 
     <select id="load" parameterType="map" resultMap="entityResultMap">
         SELECT
-        e.`id` as entity_id,
-        e.`entity_table`,
-        e.`entity_name_id`,
-        eat.`id` as attribute_type_id,
-        eat.`mandatory`,
-        eat.`start_date` as attr_start_date,
-        eat.`end_date` as attr_end_date,
-        eat.`attribute_type_name_id`,
-        eat.`system`,
-        eavt.`id` as attribute_value_type_id,
-        eavt.`attribute_value_type`
+        e.`id` e_id,
+        e.`entity`,
+        e.`name_id` e_name_id,
+        ea.`id` ea_id,
+        ea.`required`,
+        ea.`start_date` ea_start_date,
+        ea.`end_date` ea_end_date,
+        ea.`name_id` ea_name_id,
+        ea.`system`,
+        ea.`value_type_id`,
+        ea.`reference_id`
         FROM `entity` e
-        JOIN `attribute_type` eat ON eat.`entity_id` = e.`id`
-        JOIN `attribute_value_type` eavt ON eavt.`attribute_type_id` = eat.`id`
-        WHERE e.`entity_table` = #{entity}
+        JOIN `entity_attribute` ea ON ea.`entity_id` = e.`id`
+        WHERE e.`entity` = #{entity}
     </select>
 
     <select id="findNames" parameterType="long"
             resultMap="org.complitex.common.strategy.DomainObjectStrategy.stringValueResultMap">
-        SELECT sc.* FROM `string_value` sc WHERE sc.`id` = #{value}
+        SELECT sc.* FROM `entity_string_value` sc WHERE sc.`id` = #{value}
     </select>
 
     <insert id="insertAttributeType" useGeneratedKeys="true" keyProperty="id"
-            parameterType="org.complitex.common.entity.AttributeType">
-        INSERT INTO `attribute_type`(`entity_id`, `mandatory`, `attribute_type_name_id`, `start_date`) VALUES (#{entityId}, #{mandatory}, #{attributeNameId}, #{startDate})
+            parameterType="org.complitex.common.entity.EntityAttribute">
+        INSERT INTO `entity_attribute`(`entity_id`, `required`, `name_id`, `start_date`, `value_type_id`, `reference_id`)
+          VALUES (#{entityId}, #{required}, #{nameId}, #{startDate}, #{valueTypeId}, #{referenceId})
     </insert>
 
     <insert id="insertValueType">
-        INSERT INTO `attribute_value_type`(`attribute_type_id`, `attribute_value_type`) VALUES (#{attributeTypeId}, #{valueType})
+        INSERT INTO `entity_attribute_value_type`(`entity_attribute_id`, `value_type`) VALUES (#{entityAttributeId}, #{valueType})
     </insert>
 
     <select id="allEntities" resultType="string">
-        SELECT e.`entity_table` FROM `entity` e
+        SELECT e.`entity` FROM `entity` e
     </select>
 
     <update id="removeAttributeTypes" parameterType="map">
-        UPDATE `attribute_type` SET `end_date` = #{endDate} WHERE `id` IN
+        UPDATE `entity_attribute` SET `end_date` = #{endDate} WHERE `id` IN
         <foreach item="id" collection="attributeTypeIds" open="(" close=")" separator=",">
             #{id}
         </foreach>
     </update>
+
+    <select id="selectEntities" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="entityResultMap">
+        SELECT
+            e.`id` e_id,
+            e.`entity`,
+            e.`name_id` e_name_id,
+            ea.`id` ea_id,
+            ea.`required`,
+            ea.`start_date` ea_start_date,
+            ea.`end_date` ea_end_date,
+            ea.`name_id` ea_name_id,
+            ea.`system`,
+            ea.`value_type_id`,
+            ea.`reference_id`
+        FROM `entity` e
+        JOIN `entity_attribute` ea ON ea.`entity_id` = e.`id`
+    </select>
+
+    <select id="selectEntitiesCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
+        select count(id) from `entity`
+    </select>
 </mapper>

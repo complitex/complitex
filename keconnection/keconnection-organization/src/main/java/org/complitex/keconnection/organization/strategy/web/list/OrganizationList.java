@@ -35,7 +35,6 @@ import org.complitex.keconnection.organization.strategy.entity.KeOrganization;
 import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.component.toolbar.search.CollapsibleSearchToolbarButton;
-import org.complitex.template.web.pages.DomainObjectList;
 import org.complitex.template.web.pages.ScrollListPage;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -333,7 +332,7 @@ public class OrganizationList extends ScrollListPage {
 
             @Override
             protected void onClick() {
-                DomainObjectList.onAddObject(this.getPage(), organizationStrategy, getTemplateSession());
+                //DomainObjectList.onAddObject(this.getPage(), organizationStrategy, getTemplateSession());
             }
 
             @Override

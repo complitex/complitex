@@ -13,8 +13,8 @@ import org.complitex.pspoffice.person.strategy.entity.PersonName;
 import org.complitex.pspoffice.person.strategy.service.PersonNameBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.complitex.pspoffice.api.model.DocumentObject;
-import ru.complitex.pspoffice.api.model.PersonObject;
+import ru.complitex.pspoffice.api.model.DocumentModel;
+import ru.complitex.pspoffice.api.model.PersonModel;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -60,8 +60,8 @@ public class PersonResource {
         return map.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getLanguage(), Map.Entry::getValue));
     }
 
-    private PersonObject getPersonObject(Person p){
-        PersonObject person = new PersonObject();
+    private PersonModel getPersonObject(Person p){
+        PersonModel person = new PersonModel();
 
         person.setId(p.getObjectId());
         person.setLastName(getPersonNames(p.getLastNames()));
@@ -76,12 +76,12 @@ public class PersonResource {
         person.setGender(Gender.MALE.equals(p.getGender()) ? 1 : 0);
 
         if (p.getDocument() != null){
-            List<DocumentObject> documents = new ArrayList<>();
+            List<DocumentModel> documents = new ArrayList<>();
             person.setDocuments(documents);
 
             Document d = p.getDocument();
 
-            DocumentObject document = new DocumentObject();
+            DocumentModel document = new DocumentModel();
             document.setId(d.getObjectId());
             document.setTypeId(d.getDocumentTypeId());
             document.setSeries(d.getSeries());
@@ -100,7 +100,7 @@ public class PersonResource {
 
     @GET
     @Path("{id}")
-    @ApiOperation(value = "Get person by id", response = PersonObject.class)
+    @ApiOperation(value = "Get person by id", response = PersonModel.class)
     public Response getPerson(@PathParam("id") Long id){
         Person p = personStrategy.getDomainObject(id);
 
@@ -112,7 +112,7 @@ public class PersonResource {
     }
 
     @GET
-    @ApiOperation(value = "Get persons by query", response = PersonObject.class, responseContainer = "List")
+    @ApiOperation(value = "Get persons by query", response = PersonModel.class, responseContainer = "List")
     public Response getPersons(@QueryParam("firstName") String firstName,
                                @QueryParam("lastName") String lastName,
                                @QueryParam("middleName") String middleName,
@@ -133,17 +133,17 @@ public class PersonResource {
 
     @PUT
     @ApiOperation(value = "Put person")
-    public Response putPerson(PersonObject personObject){
+    public Response putPerson(PersonModel personModel){
         try {
-            Long id = personObject.getId();
+            Long id = personModel.getId();
 
             if (id != null){
                 Person person = personStrategy.getDomainObject(id);
 
                 if (person != null){
-                    updateNames(person, personObject);
-                    updateInfo(person, personObject);
-                    updateDocument(person, personObject);
+                    updateNames(person, personModel);
+                    updateInfo(person, personModel);
+                    updateDocument(person, personModel);
 
                     personStrategy.update(person);
 
@@ -154,9 +154,9 @@ public class PersonResource {
             }else{
                 Person person = personStrategy.newInstance();
 
-                updateNames(person, personObject);
-                updateInfo(person, personObject);
-                updateDocument(person, personObject);
+                updateNames(person, personModel);
+                updateInfo(person, personModel);
+                updateDocument(person, personModel);
 
                 personStrategy.insert(person);
 
@@ -169,75 +169,75 @@ public class PersonResource {
         }
     }
 
-    private void updateNames(Person person, PersonObject personObject){
+    private void updateNames(Person person, PersonModel personModel){
         person.getAttribute(PersonStrategy.LAST_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
-                        personObject.getLastName().get(RU.getLanguage()), RU, true).getId());
+                        personModel.getLastName().get(RU.getLanguage()), RU, true).getId());
 
-        if (personObject.getLastName().get(UA.getLanguage()) != null) {
+        if (personModel.getLastName().get(UA.getLanguage()) != null) {
             person.getAttribute(PersonStrategy.LAST_NAME, 2L)
                     .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.LAST_NAME,
-                            personObject.getLastName().get(UA.getLanguage()), UA, true).getId());
+                            personModel.getLastName().get(UA.getLanguage()), UA, true).getId());
         }else{
             person.getAttribute(PersonStrategy.LAST_NAME, 2L).setValueId(null);
         }
 
         person.getAttribute(PersonStrategy.FIRST_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.FIRST_NAME,
-                        personObject.getFirstName().get(RU.getLanguage()), RU, true).getId());
+                        personModel.getFirstName().get(RU.getLanguage()), RU, true).getId());
 
 
-        if (personObject.getFirstName().get(UA.getLanguage()) != null) {
+        if (personModel.getFirstName().get(UA.getLanguage()) != null) {
             person.getAttribute(PersonStrategy.FIRST_NAME, 2L)
                     .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.FIRST_NAME,
-                            personObject.getFirstName().get(UA.getLanguage()), UA, true).getId());
+                            personModel.getFirstName().get(UA.getLanguage()), UA, true).getId());
         }else{
             person.getAttribute(PersonStrategy.FIRST_NAME, 2L).setValueId(null);
         }
 
         person.getAttribute(PersonStrategy.MIDDLE_NAME, 1L)
                 .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.MIDDLE_NAME,
-                        personObject.getMiddleName().get(RU.getLanguage()), RU, true).getId());
+                        personModel.getMiddleName().get(RU.getLanguage()), RU, true).getId());
 
-        if (personObject.getMiddleName().get(UA.getLanguage()) != null) {
+        if (personModel.getMiddleName().get(UA.getLanguage()) != null) {
             person.getAttribute(PersonStrategy.MIDDLE_NAME, 2L)
                     .setValueId(personNameBean.findOrSave(PersonName.PersonNameType.MIDDLE_NAME,
-                            personObject.getMiddleName().get(UA.getLanguage()), UA, true).getId());
+                            personModel.getMiddleName().get(UA.getLanguage()), UA, true).getId());
         }else{
             person.getAttribute(PersonStrategy.MIDDLE_NAME, 2L).setValueId(null);
         }
     }
 
-    private void updateInfo(Person person, PersonObject personObject){
-        person.setDateValue(PersonStrategy.BIRTH_DATE, personObject.getBirthDate());
-        person.setStringValue(PersonStrategy.GENDER, personObject.getGender() == 1 ? Gender.MALE.name() : Gender.FEMALE.name());
-        person.setBooleanValue(PersonStrategy.UKRAINE_CITIZENSHIP, personObject.getCitizenshipId() != null && personObject.getCitizenshipId() == 2);
+    private void updateInfo(Person person, PersonModel personModel){
+        person.setDateValue(PersonStrategy.BIRTH_DATE, personModel.getBirthDate());
+        person.setStringValue(PersonStrategy.GENDER, personModel.getGender() == 1 ? Gender.MALE.name() : Gender.FEMALE.name());
+        person.setBooleanValue(PersonStrategy.UKRAINE_CITIZENSHIP, personModel.getCitizenshipId() != null && personModel.getCitizenshipId() == 2);
         person.setStringValue(PersonStrategy.IDENTITY_CODE, person.getIdentityCode());
 
-        person.setStringValue(PersonStrategy.BIRTH_COUNTRY, personObject.getBirthCountry());
-        person.setStringValue(PersonStrategy.BIRTH_REGION, personObject.getBirthRegion());
-        person.setStringValue(PersonStrategy.BIRTH_CITY, personObject.getBirthCity());
-        person.setStringValue(PersonStrategy.BIRTH_DISTRICT, personObject.getBirthDistrict());
+        person.setStringValue(PersonStrategy.BIRTH_COUNTRY, personModel.getBirthCountry());
+        person.setStringValue(PersonStrategy.BIRTH_REGION, personModel.getBirthRegion());
+        person.setStringValue(PersonStrategy.BIRTH_CITY, personModel.getBirthCity());
+        person.setStringValue(PersonStrategy.BIRTH_DISTRICT, personModel.getBirthDistrict());
     }
 
-    private void updateDocument(Person person, PersonObject personObject){
-        if (personObject.getDocuments() == null){
+    private void updateDocument(Person person, PersonModel personModel){
+        if (personModel.getDocuments() == null){
             return;
         }
 
         Document document = person.getDocument();
-        DocumentObject documentObject = personObject.getDocuments().get(0);
+        DocumentModel documentModel = personModel.getDocuments().get(0);
 
         if (document == null){
-            document = documentStrategy.newInstance(documentObject.getTypeId());
+            document = documentStrategy.newInstance(documentModel.getTypeId());
             person.setDocument(document);
         }
 
-        document.setValue(DocumentStrategy.DOCUMENT_TYPE, documentObject.getTypeId());
-        document.setStringValue(DocumentStrategy.DOCUMENT_SERIES, documentObject.getSeries());
-        document.setStringValue(DocumentStrategy.DOCUMENT_NUMBER, documentObject.getNumber());
-        document.setStringValue(DocumentStrategy.ORGANIZATION_ISSUED, documentObject.getOrganization());
-        document.setDateValue(DocumentStrategy.DATE_ISSUED, documentObject.getDate());
+        document.setValue(DocumentStrategy.DOCUMENT_TYPE, documentModel.getTypeId());
+        document.setStringValue(DocumentStrategy.DOCUMENT_SERIES, documentModel.getSeries());
+        document.setStringValue(DocumentStrategy.DOCUMENT_NUMBER, documentModel.getNumber());
+        document.setStringValue(DocumentStrategy.ORGANIZATION_ISSUED, documentModel.getOrganization());
+        document.setDateValue(DocumentStrategy.DATE_ISSUED, documentModel.getDate());
     }
 
 

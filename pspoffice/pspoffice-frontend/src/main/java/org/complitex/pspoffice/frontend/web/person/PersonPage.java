@@ -13,9 +13,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.pspoffice.frontend.web.FormPage;
-import ru.complitex.pspoffice.api.model.DocumentObject;
-import ru.complitex.pspoffice.api.model.NameObject;
-import ru.complitex.pspoffice.api.model.PersonObject;
+import ru.complitex.pspoffice.api.model.DocumentModel;
+import ru.complitex.pspoffice.api.model.NameModel;
+import ru.complitex.pspoffice.api.model.PersonModel;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
@@ -31,12 +31,12 @@ public class PersonPage extends FormPage{
     @Inject
     private PspOfficeClient pspOfficeClient;
 
-    private IModel<PersonObject> personModel;
+    private IModel<PersonModel> personModel;
 
     public PersonPage(PageParameters pageParameters) {
-        Long personObjectId = pageParameters.get("id").toOptionalLong();
+        Long personModelId = pageParameters.get("id").toOptionalLong();
 
-        personModel = Model.of(personObjectId != null ? getPersonObject(personObjectId) : newPersonObject());
+        personModel = Model.of(personModelId != null ? getPersonModel(personModelId) : newPersonModel());
 
         //Основные
 
@@ -95,12 +95,12 @@ public class PersonPage extends FormPage{
 
         //Документ
 
-        List<NameObject> documentTypes = getDocumentTypes();
+        List<NameModel> documentTypes = getDocumentTypes();
 
         getForm().add(new DropDownChoice<>("documentTypeId",
-                new IModel<NameObject>() {
+                new IModel<NameModel>() {
                     @Override
-                    public NameObject getObject() {
+                    public NameModel getObject() {
                         return documentTypes.stream()
                                 .filter(o -> o.getId().equals(getDocumentObject().getTypeId()))
                                 .findAny()
@@ -108,11 +108,11 @@ public class PersonPage extends FormPage{
                     }
 
                     @Override
-                    public void setObject(NameObject nameObject) {
-                        getDocumentObject().setTypeId(nameObject.getId());
+                    public void setObject(NameModel nameModel) {
+                        getDocumentObject().setTypeId(nameModel.getId());
                     }
 
-                    private DocumentObject getDocumentObject(){
+                    private DocumentModel getDocumentObject(){
                         return personModel.getObject().getDocuments().get(0);
                     }
                 },
@@ -141,34 +141,34 @@ public class PersonPage extends FormPage{
         return new ResourceModel(personModel.getObject().getId() == null ? "titleNew" : "titleEdit");
     }
 
-    private PersonObject newPersonObject(){
-        PersonObject personObject = new PersonObject();
+    private PersonModel newPersonModel(){
+        PersonModel personModel = new PersonModel();
 
-        personObject.setLastName(new HashMap<>());
-        personObject.setFirstName(new HashMap<>());
-        personObject.setMiddleName(new HashMap<>());
+        personModel.setLastName(new HashMap<>());
+        personModel.setFirstName(new HashMap<>());
+        personModel.setMiddleName(new HashMap<>());
 
-        personObject.setGender(1);
+        personModel.setGender(1);
 
-        personObject.setDocuments(new ArrayList<>());
-        personObject.getDocuments().add(new DocumentObject());
+        personModel.setDocuments(new ArrayList<>());
+        personModel.getDocuments().add(new DocumentModel());
 
-        return personObject;
+        return personModel;
     }
 
 
-    private PersonObject getPersonObject(Long objectId){
-        PersonObject personObject = pspOfficeClient.request("person/" + objectId).get(PersonObject.class);
+    private PersonModel getPersonModel(Long objectId){
+        PersonModel personModel = pspOfficeClient.request("person/" + objectId).get(PersonModel.class);
 
-        if (personObject.getDocuments() == null){
-            personObject.setDocuments(new ArrayList<>());
-            personObject.getDocuments().add(new DocumentObject());
+        if (personModel.getDocuments() == null){
+            personModel.setDocuments(new ArrayList<>());
+            personModel.getDocuments().add(new DocumentModel());
         }
 
-        return personObject;
+        return personModel;
     }
 
-    private List<NameObject> getDocumentTypes(){
-        return pspOfficeClient.request("dictionary/document-type").get(new GenericType<List<NameObject>>(){});
+    private List<NameModel> getDocumentTypes(){
+        return pspOfficeClient.request("dictionary/document-type").get(new GenericType<List<NameModel>>(){});
     }
 }

@@ -122,8 +122,8 @@
             <include refid="org.complitex.osznconnection.file.service.RequestFileBean.requestFilesFilterWhere"/>
 
             <if test="sortProperty == 'service_provider'">
-              and (oa.`value_type_id` = 926 or oa.`value_type_id` is null)
-              and (oa_name.`value_type_id` = 900 or oa_name.`value_type_id` is null)
+              and (oa.`entity_attribute_id` = 926)
+              and (oa_name.`entity_attribute_id` = 900)
             </if>
 
             <if test="sum != null">

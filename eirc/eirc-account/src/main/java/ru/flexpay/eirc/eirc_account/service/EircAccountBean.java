@@ -27,7 +27,7 @@ import java.util.Map;
 public class EircAccountBean extends AbstractBean {
 
     private static final String NS = EircAccountBean.class.getPackage().getName() + ".EircAccountBean";
-    public static final String ENTITY_TABLE = "eirc_account";
+    public static final String ENTITY = "eirc_account";
 
     public static final String FILTER_MAPPING_ATTRIBUTE_NAME = "eircAccount";
 
@@ -120,7 +120,7 @@ public class EircAccountBean extends AbstractBean {
     }
 
     private void saveNew(EircAccount eircAccount) {
-        eircAccount.setId(sequenceBean.nextId(ENTITY_TABLE));
+        eircAccount.setId(sequenceBean.nextId(ENTITY));
         sqlSession().insert(NS + ".insertEircAccount", eircAccount);
     }
 

@@ -71,7 +71,7 @@ public final class ApartmentEdit extends DomainObjectEdit {
                         @Override
                         protected void addComplexAttributesPanelBefore(String id) {
                             final IModel<String> labelModel = DomainObjectComponentUtil.labelModel(getStrategy().getEntity().
-                                    getAttributeType(ApartmentStrategy.NAME).getAttributeNames(), getLocale());
+                                    getAttribute(ApartmentStrategy.NAME).getNames(), getLocale());
                             rangeNumbersPanel = new RangeNumbersPanel(id, labelModel, numbersList);
                             rangeNumbersPanel.add(new CssAttributeBehavior("apartmentRangeNumberPanel"));
                             add(rangeNumbersPanel);

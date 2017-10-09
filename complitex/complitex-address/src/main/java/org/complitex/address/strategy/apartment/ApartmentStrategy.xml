@@ -5,7 +5,7 @@
     <select id="selectApartmentObjectIds" parameterType="map" resultType="long">
         select distinct a.`object_id` from `apartment` a
           join `apartment_attribute` num on (num.`object_id` = a.`object_id` and num.`status` = 1
-          and num.`attribute_type_id` = 100)
+          and num.`entity_attribute_id` = 100)
           join `apartment_string_value` num_sc on (num_sc.`id` = num.`value_id`)
         where a.`status` = 1 and num_sc.`value` = #{number} and a.`parent_id` = #{buildingId}
     </select>

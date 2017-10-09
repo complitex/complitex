@@ -6,7 +6,8 @@ package org.complitex.pspoffice.person.strategy.entity;
 
 import java.io.Serializable;
 import java.util.Map;
-import static com.google.common.collect.Maps.*;
+
+import static com.google.common.collect.Maps.newHashMap;
 
 /**
  *
@@ -24,12 +25,12 @@ public class PersonModification implements Serializable {
     public PersonModification() {
     }
 
-    public ModificationType getModificationType(long attributeTypeId) {
-        return attributeModificationMap.get(attributeTypeId);
+    public ModificationType getModificationType(long entityAttributeId) {
+        return attributeModificationMap.get(entityAttributeId);
     }
 
-    public void addAttributeModification(long attributeTypeId, ModificationType modificationType) {
-        attributeModificationMap.put(attributeTypeId, modificationType);
+    public void addAttributeModification(long entityAttributeId, ModificationType modificationType) {
+        attributeModificationMap.put(entityAttributeId, modificationType);
     }
 
     public ModificationType getChildModificationType(long childId) {

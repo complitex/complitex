@@ -6,8 +6,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringValueUtil;
@@ -54,17 +54,17 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
                 @Override
                 protected void populateItem(ListItem<Long> item) {
-                    final long attributeTypeId = item.getModelObject();
-                    final AttributeType attributeType =
-                            osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
+                    final long entityAttributeId = item.getModelObject();
+                    final EntityAttribute entityAttribute =
+                            osznOrganizationStrategy.getEntity().getAttribute(entityAttributeId);
                     item.add(new Label("label",
-                            DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
-                    item.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                            DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
+                    item.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
-                    Attribute attribute = organization.getAttribute(attributeTypeId);
+                    Attribute attribute = organization.getAttribute(entityAttributeId);
                     if (attribute == null) {
                         attribute = new Attribute();
-                        attribute.setAttributeTypeId(attributeTypeId);
+                        attribute.setEntityAttributeId(entityAttributeId);
                         attribute.setObjectId(organization.getObjectId());
                         attribute.setAttributeId(1L);
                         attribute.setStringValues(StringValueUtil.newStringValues());
@@ -87,17 +87,17 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
                 @Override
                 protected void populateItem(ListItem<Long> item) {
-                    final long attributeTypeId = item.getModelObject();
-                    final AttributeType attributeType =
-                            osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
+                    final long entityAttributeId = item.getModelObject();
+                    final EntityAttribute entityAttribute =
+                            osznOrganizationStrategy.getEntity().getAttribute(entityAttributeId);
                     item.add(new Label("label",
-                            DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
-                    item.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                            DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
+                    item.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
-                    Attribute attribute = organization.getAttribute(attributeTypeId);
+                    Attribute attribute = organization.getAttribute(entityAttributeId);
                     if (attribute == null) {
                         attribute = new Attribute();
-                        attribute.setAttributeTypeId(attributeTypeId);
+                        attribute.setEntityAttributeId(entityAttributeId);
                         attribute.setObjectId(organization.getObjectId());
                         attribute.setAttributeId(1L);
                         attribute.setStringValues(StringValueUtil.newStringValues());
@@ -118,16 +118,16 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
             if (attribute == null) {
                 attribute = new Attribute();
-                attribute.setAttributeTypeId(OsznOrganizationStrategy.EDRPOU);
+                attribute.setEntityAttributeId(OsznOrganizationStrategy.EDRPOU);
                 attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
                 attribute.setStringValues(StringValueUtil.newStringValues());
             }
-            final AttributeType attributeType =
-                    osznOrganizationStrategy.getEntity().getAttributeType(OsznOrganizationStrategy.EDRPOU);
+            final EntityAttribute entityAttribute =
+                    osznOrganizationStrategy.getEntity().getAttribute(OsznOrganizationStrategy.EDRPOU);
             edrpouContainer.add(new Label("label",
-                    DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
-            edrpouContainer.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                    DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
+            edrpouContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
             edrpouContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
@@ -142,20 +142,20 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             rootDirectoryContainer.setOutputMarkupPlaceholderTag(true);
             add(rootDirectoryContainer);
 
-            final long attributeTypeId = OsznOrganizationStrategy.ROOT_REQUEST_FILE_DIRECTORY;
-            Attribute attribute = organization.getAttribute(attributeTypeId);
+            final long entityAttributeId = OsznOrganizationStrategy.ROOT_REQUEST_FILE_DIRECTORY;
+            Attribute attribute = organization.getAttribute(entityAttributeId);
             if (attribute == null) {
                 attribute = new Attribute();
-                attribute.setAttributeTypeId(attributeTypeId);
+                attribute.setEntityAttributeId(entityAttributeId);
                 attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
                 attribute.setStringValues(StringValueUtil.newStringValues());
             }
-            final AttributeType attributeType =
-                    osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
+            final EntityAttribute entityAttribute =
+                    osznOrganizationStrategy.getEntity().getAttribute(entityAttributeId);
             rootDirectoryContainer.add(new Label("label",
-                    DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
-            rootDirectoryContainer.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                    DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
+            rootDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
             rootDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
@@ -170,20 +170,20 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             rootExportDirectoryContainer.setOutputMarkupPlaceholderTag(true);
             add(rootExportDirectoryContainer);
 
-            final long attributeTypeId = OsznOrganizationStrategy.ROOT_EXPORT_DIRECTORY;
-            Attribute attribute = organization.getAttribute(attributeTypeId);
+            final long entityAttributeId = OsznOrganizationStrategy.ROOT_EXPORT_DIRECTORY;
+            Attribute attribute = organization.getAttribute(entityAttributeId);
             if (attribute == null) {
                 attribute = new Attribute();
-                attribute.setAttributeTypeId(attributeTypeId);
+                attribute.setEntityAttributeId(entityAttributeId);
                 attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
                 attribute.setStringValues(StringValueUtil.newStringValues());
             }
-            final AttributeType attributeType =
-                    osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
+            final EntityAttribute entityAttribute =
+                    osznOrganizationStrategy.getEntity().getAttribute(entityAttributeId);
             rootExportDirectoryContainer.add(new Label("label",
-                    DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
-            rootExportDirectoryContainer.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                    DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
+            rootExportDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
             rootExportDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
@@ -198,19 +198,19 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
             referencesDirectoryContainer.setOutputMarkupPlaceholderTag(true);
             add(referencesDirectoryContainer);
 
-            long attributeTypeId = OsznOrganizationStrategy.REFERENCES_DIR;
-            Attribute attribute = organization.getAttribute(attributeTypeId);
+            long entityAttributeId = OsznOrganizationStrategy.REFERENCES_DIR;
+            Attribute attribute = organization.getAttribute(entityAttributeId);
             if (attribute == null) {
                 attribute = new Attribute();
-                attribute.setAttributeTypeId(attributeTypeId);
+                attribute.setEntityAttributeId(entityAttributeId);
                 attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
                 attribute.setStringValues(StringValueUtil.newStringValues());
             }
-            AttributeType attributeType = osznOrganizationStrategy.getEntity().getAttributeType(attributeTypeId);
+            EntityAttribute entityAttribute = osznOrganizationStrategy.getEntity().getAttribute(entityAttributeId);
             referencesDirectoryContainer.add(new Label("label", DomainObjectComponentUtil.labelModel(
-                    attributeType.getAttributeNames(), getLocale())));
-            referencesDirectoryContainer.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                    entityAttribute.getNames(), getLocale())));
+            referencesDirectoryContainer.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
             referencesDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
@@ -296,15 +296,15 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
         if (!isSubsidyDepartment()) {
             //load/save request file dirs
-            for (long attributeTypeId : OsznOrganizationStrategy.LOAD_SAVE_FILE_DIR_SUBSIDY_ATTRIBUTES) {
-                organization.removeAttribute(attributeTypeId);
+            for (long entityAttributeId : OsznOrganizationStrategy.LOAD_SAVE_FILE_DIR_SUBSIDY_ATTRIBUTES) {
+                organization.removeAttribute(entityAttributeId);
             }
         }
 
         if (!isPrivilegesDepartment()) {
             //load/save request file dirs
-            for (long attributeTypeId : OsznOrganizationStrategy.LOAD_SAVE_FILE_DIR_PRIVILEGES_ATTRIBUTES) {
-                organization.removeAttribute(attributeTypeId);
+            for (long entityAttributeId : OsznOrganizationStrategy.LOAD_SAVE_FILE_DIR_PRIVILEGES_ATTRIBUTES) {
+                organization.removeAttribute(entityAttributeId);
             }
         }
 

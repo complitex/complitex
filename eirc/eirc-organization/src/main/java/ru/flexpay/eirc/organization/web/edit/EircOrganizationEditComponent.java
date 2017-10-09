@@ -4,8 +4,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringValueUtil;
@@ -76,24 +76,24 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
         }
     }
 
-    private WebMarkupContainer addAttributeContainer(final long attributeTypeId, boolean disabled,
+    private WebMarkupContainer addAttributeContainer(final long entityAttributeId, boolean disabled,
                                                      EircOrganization organization, String name) {
         WebMarkupContainer container = new WebMarkupContainer(name);
         container.setOutputMarkupPlaceholderTag(true);
         add(container);
-        Attribute attribute = organization.getAttribute(attributeTypeId);
+        Attribute attribute = organization.getAttribute(entityAttributeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setAttributeTypeId(attributeTypeId);
+            attribute.setEntityAttributeId(entityAttributeId);
             attribute.setObjectId(organization.getObjectId());
             attribute.setAttributeId(1L);
             attribute.setStringValues(StringValueUtil.newStringValues());
         }
-        final AttributeType attributeType =
-                organizationStrategy.getEntity().getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute =
+                organizationStrategy.getEntity().getAttribute(entityAttributeId);
         container.add(new Label("label",
-                DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
-        container.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
+        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
 
         container.add(
                 DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
@@ -103,24 +103,24 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
     }
 
     private WebMarkupContainer addServiceContainer(EircOrganization organization, String name) {
-        Long attributeTypeId = EircOrganizationStrategy.SERVICE;
+        Long entityAttributeId = EircOrganizationStrategy.SERVICE;
 
         WebMarkupContainer container = new WebMarkupContainer(name);
         container.setOutputMarkupPlaceholderTag(true);
         add(container);
-        Attribute attribute = organization.getAttribute(attributeTypeId);
+        Attribute attribute = organization.getAttribute(entityAttributeId);
         if (attribute == null) {
             attribute = new Attribute();
-            attribute.setAttributeTypeId(attributeTypeId);
+            attribute.setEntityAttributeId(entityAttributeId);
             attribute.setObjectId(organization.getObjectId());
             attribute.setAttributeId(1L);
             attribute.setStringValues(StringValueUtil.newStringValues());
         }
-        final AttributeType attributeType =
-                organizationStrategy.getEntity().getAttributeType(attributeTypeId);
+        final EntityAttribute entityAttribute =
+                organizationStrategy.getEntity().getAttribute(entityAttributeId);
         container.add(new Label("label",
-                DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
-        container.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
+        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
 
         ServiceAllowableListPanel panel = new ServiceAllowableListPanel("input", organization);
         services = panel.getServices();

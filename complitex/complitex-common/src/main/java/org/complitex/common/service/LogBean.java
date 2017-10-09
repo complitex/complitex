@@ -218,22 +218,11 @@ public class LogBean extends AbstractBean {
 
         if (oldDomainObject == null) {
             for (Attribute na : newDomainObject.getAttributes()) {
-                AttributeType attributeType = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
-                String attributeValueType = attributeType.getAttributeValueType(na.getValueTypeId()).getValueType();
+                EntityAttribute entityAttribute = strategy.getEntity().getAttribute(na.getEntityAttributeId());
+                ValueType attributeValueType = entityAttribute.getValueType();
 
-                if (SimpleTypes.isSimpleType(attributeValueType)) {
-                    if (SimpleTypes.STRING_VALUE.name().equals(attributeValueType.toUpperCase())) {
-                        for (StringValue newString : na.getStringValues()) {
-                            if (!Strings.isEqual(newString.getValue(), null)) {
-                                logChanges.add(new LogChange(na.getAttributeId(), null,
-                                        strategy.getAttributeLabel(na, systemLocale), null, newString.getValue(),
-                                        stringLocaleBean.getLocaleObject(newString.getLocaleId()).getLanguage()));
-                            }
-                        }
-                    } else {
-                        logChanges.add(new LogChange(na.getAttributeId(), null,
-                                strategy.getAttributeLabel(na, systemLocale), null, na.getStringValue(), null));
-                    }
+                if (attributeValueType.isSimple()) {
+                    log(strategy, systemLocale, logChanges, na, attributeValueType);
                 } else {
                     logChanges.add(new LogChange(na.getAttributeId(), null, strategy.getAttributeLabel(na, systemLocale),
                             null, StringUtil.valueOf(na.getValueId()), null));
@@ -241,20 +230,19 @@ public class LogBean extends AbstractBean {
             }
         } else {
             for (Attribute oa : oldDomainObject.getAttributes()) {
-                AttributeType oldAttributeType = strategy.getEntity().getAttributeType(oa.getAttributeTypeId());
-                String oldAttributeValueType = oldAttributeType.getAttributeValueType(oa.getValueTypeId()).getValueType();
+                EntityAttribute oldEntityAttribute = strategy.getEntity().getAttribute(oa.getEntityAttributeId());
+                ValueType oldAttributeValueType = oldEntityAttribute.getValueType();
 
                 boolean removed = true;
                 for (Attribute na : newDomainObject.getAttributes()) {
-                    if (oa.getAttributeTypeId().equals(na.getAttributeTypeId()) && oa.getAttributeId().equals(na.getAttributeId())) {
+                    if (oa.getEntityAttributeId().equals(na.getEntityAttributeId()) && oa.getAttributeId().equals(na.getAttributeId())) {
                         //the same attribute_type and the same attribute_id
 
-                        AttributeType newAttributeType = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
-                        String newAttributeValueType = newAttributeType.getAttributeValueType(na.getValueTypeId()).getValueType();
+                        EntityAttribute newEntityAttribute = strategy.getEntity().getAttribute(na.getEntityAttributeId());
+                        ValueType newAttributeValueType = newEntityAttribute.getValueType();
 
-                        if (SimpleTypes.isSimpleType(newAttributeValueType) && SimpleTypes.isSimpleType(oldAttributeValueType)) {
-                            if (SimpleTypes.STRING_VALUE.name().equals(newAttributeValueType.toUpperCase())
-                                    || SimpleTypes.STRING_VALUE.name().equals(oldAttributeValueType.toUpperCase())) {
+                        if (newAttributeValueType.isSimple() && oldAttributeValueType.isSimple()) {
+                            if (ValueType.STRING_VALUE.equals(newAttributeValueType) || ValueType.STRING_VALUE.equals(oldAttributeValueType)) {
                                 for (StringValue oldString : oa.getStringValues()) {
                                     for (StringValue newString : na.getStringValues()) {
                                         if (oldString.getLocaleId().equals(newString.getLocaleId())) {
@@ -290,8 +278,8 @@ public class LogBean extends AbstractBean {
                 }
 
                 if (removed) {
-                    if (SimpleTypes.isSimpleType(oldAttributeValueType)) {
-                        if (SimpleTypes.STRING_VALUE.name().equals(oldAttributeValueType.toUpperCase())) {
+                    if (oldAttributeValueType.isSimple()) {
+                        if (ValueType.STRING_VALUE.equals(oldAttributeValueType)) {
                             for (StringValue oldString : oa.getStringValues()) {
                                 if (!Strings.isEqual(oldString.getValue(), null)) {
                                     logChanges.add(new LogChange(oa.getAttributeId(), null,
@@ -314,12 +302,12 @@ public class LogBean extends AbstractBean {
             }
 
             for (Attribute na : newDomainObject.getAttributes()) {
-                AttributeType newAttributeType = strategy.getEntity().getAttributeType(na.getAttributeTypeId());
-                String newAttributeValueType = newAttributeType.getAttributeValueType(na.getValueTypeId()).getValueType();
+                EntityAttribute newEntityAttribute = strategy.getEntity().getAttribute(na.getEntityAttributeId());
+                ValueType newAttributeValueType = newEntityAttribute.getValueType();
 
                 boolean added = true;
                 for (Attribute oa : oldDomainObject.getAttributes()) {
-                    if (oa.getAttributeTypeId().equals(na.getAttributeTypeId()) && oa.getAttributeId().equals(na.getAttributeId())) {
+                    if (oa.getEntityAttributeId().equals(na.getEntityAttributeId()) && oa.getAttributeId().equals(na.getAttributeId())) {
                         //the same attribute_type and the same attribute_id
                         added = false;
                         break;
@@ -327,21 +315,8 @@ public class LogBean extends AbstractBean {
                 }
 
                 if (added) {
-                    if (SimpleTypes.isSimpleType(newAttributeValueType)) {
-                        if (SimpleTypes.STRING_VALUE.name().equals(newAttributeValueType.toUpperCase())) {
-                            for (StringValue newString : na.getStringValues()) {
-                                if (!Strings.isEqual(newString.getValue(), null)) {
-                                    logChanges.add(new LogChange(na.getAttributeId(), null,
-                                            strategy.getAttributeLabel(na, systemLocale),
-                                            null, newString.getValue(),
-                                            stringLocaleBean.getLocaleObject(newString.getLocaleId()).getLanguage()));
-                                }
-                            }
-                        } else {
-                            logChanges.add(new LogChange(na.getAttributeId(), null,
-                                    strategy.getAttributeLabel(na, systemLocale), null,
-                                    na.getStringValue(), null));
-                        }
+                    if (newAttributeValueType.isSimple()) {
+                        log(strategy, systemLocale, logChanges, na, newAttributeValueType);
                     } else {
                         logChanges.add(new LogChange(na.getAttributeId(), null, strategy.getAttributeLabel(na, systemLocale),
                                 null, String.valueOf(na.getValueId()), null));
@@ -351,5 +326,20 @@ public class LogBean extends AbstractBean {
         }
 
         return logChanges;
+    }
+
+    private void log(IStrategy strategy, Locale systemLocale, List<LogChange> logChanges, Attribute na, ValueType attributeValueType) {
+        if (ValueType.STRING_VALUE.equals(attributeValueType)) {
+            for (StringValue newString : na.getStringValues()) {
+                if (!Strings.isEqual(newString.getValue(), null)) {
+                    logChanges.add(new LogChange(na.getAttributeId(), null,
+                            strategy.getAttributeLabel(na, systemLocale), null, newString.getValue(),
+                            stringLocaleBean.getLocaleObject(newString.getLocaleId()).getLanguage()));
+                }
+            }
+        } else {
+            logChanges.add(new LogChange(na.getAttributeId(), null,
+                    strategy.getAttributeLabel(na, systemLocale), null, na.getStringValue(), null));
+        }
     }
 }

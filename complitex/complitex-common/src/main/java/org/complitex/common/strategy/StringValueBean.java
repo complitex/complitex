@@ -1,7 +1,6 @@
 package org.complitex.common.strategy;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.StringValue;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
@@ -9,9 +8,9 @@ import org.complitex.common.service.AbstractBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static org.complitex.common.strategy.DomainObjectStrategy.NS;
 
@@ -84,11 +83,10 @@ public class StringValueBean extends AbstractBean {
         return (dataSource == null ? sqlSession() : sqlSession(dataSource)).selectList(NS + ".selectStringValues", params);
     }
 
-    public void delete(String entityName, long objectId, Set<Long> localizedValueTypeIds) {
-        Map<String, Object> params = Maps.newHashMap();
+    public void delete(String entityName, long objectId) {
+        Map<String, Object> params = new HashMap<>();
         params.put("entityName", entityName);
         params.put("objectId", objectId);
-        params.put("localizedValueTypeIds", localizedValueTypeIds);
 
         sqlSession().delete(NS + ".deleteStringValue", params);
     }

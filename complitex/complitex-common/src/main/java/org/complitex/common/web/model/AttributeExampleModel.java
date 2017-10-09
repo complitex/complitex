@@ -9,21 +9,21 @@ import org.complitex.common.entity.DomainObjectFilter;
  */
 public class AttributeExampleModel implements IModel<String> {
     private DomainObjectFilter example;
-    private Long attributeTypeId;
+    private Long entityAttributeId;
 
-    public AttributeExampleModel(DomainObjectFilter example, Long attributeTypeId) {
+    public AttributeExampleModel(DomainObjectFilter example, Long entityAttributeId) {
         this.example = example;
-        this.attributeTypeId = attributeTypeId;
+        this.entityAttributeId = entityAttributeId;
     }
 
     @Override
     public String getObject() {
-        return example.getAttributeExample(attributeTypeId).getValue();
+        return example.getAttributeExample(entityAttributeId).getValue();
     }
 
     @Override
     public void setObject(String object) {
-        example.getAttributeExample(attributeTypeId).setValue(object);
+        example.getAttributeExample(entityAttributeId).setValue(object);
     }
 
     @Override

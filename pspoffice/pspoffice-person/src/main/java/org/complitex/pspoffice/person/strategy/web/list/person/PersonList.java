@@ -65,15 +65,15 @@ public final class PersonList extends ScrollListPage {
 
     private class ColumnLabelModel extends AbstractReadOnlyModel<String> {
 
-        private long attributeTypeId;
+        private long entityAttributeId;
 
-        private ColumnLabelModel(long attributeTypeId) {
-            this.attributeTypeId = attributeTypeId;
+        private ColumnLabelModel(long entityAttributeId) {
+            this.entityAttributeId = entityAttributeId;
         }
 
         @Override
         public String getObject() {
-            return personStrategy.getEntity().getName(attributeTypeId, getLocale()).toLowerCase();
+            return personStrategy.getEntity().getName(entityAttributeId, getLocale()).toLowerCase();
         }
     }
 

@@ -17,7 +17,7 @@
 
         AND (e.`parent_id` = #{additionalParams.buildingAddressId} OR EXISTS
             (SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = e.`object_id` AND ba.`status` = 1
-              AND ba.`attribute_type_id` = 501 AND ba.`value_id` = #{additionalParams.buildingAddressId}))
+              AND ba.`entity_attribute_id` = 501 AND ba.`value_id` = #{additionalParams.buildingAddressId}))
     </select>
 
     <select id="selectBuildingById" parameterType="org.complitex.common.entity.DomainObjectFilter"
@@ -30,13 +30,13 @@
         SELECT DISTINCT b.`object_id` FROM `building` b
             JOIN `building_address` addr ON (addr.`status` IN (1, 0) AND ((b.`parent_id` = addr.`object_id`) OR
                 EXISTS(SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = b.`object_id` AND ba.`status` = 1
-                    AND ba.`attribute_type_id` = ${additionalAddressAT} AND ba.`value_id` = addr.`object_id`)))
+                    AND ba.`entity_attribute_id` = ${additionalAddressAT} AND ba.`value_id` = addr.`object_id`)))
             JOIN `building_address_attribute` num ON (num.`object_id` = addr.`object_id` AND num.`status` = 1
-                    AND num.`attribute_type_id` = ${buildingAddressNumberAT})
+                    AND num.`entity_attribute_id` = ${buildingAddressNumberAT})
             LEFT JOIN `building_address_attribute` corp ON (corp.`object_id` = addr.`object_id` AND corp.`status` = 1
-                    AND corp.`attribute_type_id` = ${buildingAddressCorpAT})
+                    AND corp.`entity_attribute_id` = ${buildingAddressCorpAT})
             LEFT JOIN `building_address_attribute` struc ON (struc.`object_id` = addr.`object_id` AND struc.`status` = 1
-                    AND struc.`attribute_type_id` = ${buildingAddressStructureAT})
+                    AND struc.`entity_attribute_id` = ${buildingAddressStructureAT})
         WHERE b.`status` IN (1, 0) AND
             num.`value_id` IN (SELECT sc.`id` FROM `building_address_string_value` sc WHERE sc.`value` = #{number} AND sc.`locale_id` = #{localeId}) AND
             <choose>
@@ -67,7 +67,7 @@
             (SELECT b.`parent_id` FROM `building` b WHERE b.`object_id` = #{buildingId})
         UNION
         SELECT addr.`object_id` FROM `building_address` addr WHERE
-            EXISTS(SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = #{buildingId} AND ba.`attribute_type_id` = 501 AND ba.`value_id` = addr.`object_id`)
+            EXISTS(SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = #{buildingId} AND ba.`entity_attribute_id` = 501 AND ba.`value_id` = addr.`object_id`)
     </select>
 
     <select id="selectHistoryObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
@@ -93,12 +93,12 @@
         select distinct b.`object_id` from `building` b
           join `building_address` addr on (((b.`parent_id` = addr.`object_id`) or
             exists(select 1 from `building_attribute` ba where ba.`object_id` = b.`object_id` and ba.`status` = 1
-              and ba.`attribute_type_id` = 501 and ba.`value_id` = addr.`object_id`)) and addr.`status` = 1)
+              and ba.`entity_attribute_id` = 501 and ba.`value_id` = addr.`object_id`)) and addr.`status` = 1)
           join `building_address_attribute` num on (num.`object_id` = addr.`object_id` and num.`status` = 1
-            and num.`attribute_type_id` = 1500)
+            and num.`entity_attribute_id` = 1500)
           join `building_address_string_value` num_sc on (num_sc.`id` = num.`value_id`)
           left join `building_address_attribute` corp on (corp.`object_id` = addr.`object_id` and corp.`status` = 1
-            and corp.`attribute_type_id` = 1501)
+            and corp.`entity_attribute_id` = 1501)
           left join `building_address_string_value` corp_sc on (corp_sc.`id` = corp.`value_id`)
         where b.`status` = 1 and num_sc.`value` = #{number}
         and
@@ -139,7 +139,7 @@
     <delete id="deleteBuildingCodes" parameterType="map">
         DELETE FROM `building_code` WHERE `id` IN
           (SELECT a.`value_id` FROM `building_attribute` a WHERE a.`object_id` = #{objectId}
-            AND a.`attribute_type_id` = #{buildingCodesAT})
+            AND a.`entity_attribute_id` = #{buildingCodesAT})
     </delete>
 
     <select id="selectBuildingCodeIdByCode" parameterType="map" resultType="long">
@@ -154,7 +154,7 @@
         select bc.* from building_code bc
             left join organization_attribute oa on oa.object_id = bc.organization_id
             left join organization_string_value osc on osc.id = oa.value_id
-        where bc.building_id = #{buildingId} and oa.attribute_type_id = 901 and oa.end_date is null
+        where bc.building_id = #{buildingId} and oa.entity_attribute_id = 901 and oa.end_date is null
               and osc.value = #{organizationCode}
     </select>
 

@@ -19,7 +19,7 @@ public class StreetCorrection extends Correction {
 
     @Override
     public String getEntity() {
-        return AddressEntity.STREET.getEntityName();
+        return AddressEntity.STREET.getEntity();
     }
 
     @Deprecated

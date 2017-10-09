@@ -18,7 +18,6 @@ import org.complitex.common.exception.DeleteException;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.StringLocaleBean;
-import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.BuildingNumberConverter;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.util.StringValueUtil;
@@ -55,12 +54,12 @@ public class BuildingStrategy extends TemplateStrategy {
     /**
      * Order by related constants
      */
-    public static enum OrderBy {
+    public enum OrderBy {
 
         NUMBER(BuildingAddressStrategy.NUMBER), CORP(BuildingAddressStrategy.CORP), STRUCTURE(BuildingAddressStrategy.STRUCTURE);
         private Long orderByAttributeId;
 
-        private OrderBy(Long orderByAttributeId) {
+        OrderBy(Long orderByAttributeId) {
             this.orderByAttributeId = orderByAttributeId;
         }
 
@@ -79,8 +78,6 @@ public class BuildingStrategy extends TemplateStrategy {
     public static final String P_SERVICING_ORGANIZATION_ID = "servicingOrganizationId";
 
     public static final long PARENT_ENTITY_ID = 1500L;
-    @EJB
-    private StringValueBean stringBean;
 
     @EJB
     private StringLocaleBean stringLocaleBean;
@@ -242,7 +239,7 @@ public class BuildingStrategy extends TemplateStrategy {
 
     private void setAlternativeAddresses(Building building, Date date) {
         for (Attribute attr : building.getAttributes()) {
-            if (attr.getAttributeTypeId().equals(BUILDING_ADDRESS)) {
+            if (attr.getEntityAttributeId().equals(BUILDING_ADDRESS)) {
                 DomainObject alternativeAddress = getBuildingAddress(attr.getValueId(), date);
                 if (alternativeAddress != null) {
                     building.addAlternativeAddress(alternativeAddress);
@@ -318,6 +315,17 @@ public class BuildingStrategy extends TemplateStrategy {
                 return MessageFormat.format(ResourceUtil.getString(RESOURCE_BUNDLE, "number_corp_structure", locale), number, corp, structure);
             }
         }
+    }
+
+    @Override
+    public String displayAttribute(Attribute attribute, Locale locale) {
+        Long eaId = attribute.getEntityAttributeId();
+
+        if (eaId == BuildingAddressStrategy.NUMBER || eaId == BuildingAddressStrategy.CORP || eaId == BuildingAddressStrategy.STRUCTURE){
+            return buildingAddressStrategy.displayAttribute(attribute, locale);
+        }
+
+        return super.displayAttribute(attribute, locale);
     }
 
     @Override
@@ -469,18 +477,16 @@ public class BuildingStrategy extends TemplateStrategy {
     protected void fillAttributes(String dataSource, DomainObject object) {
         List<Attribute> toAdd = Lists.newArrayList();
 
-        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
-            if (!attributeType.isObsolete()) {
-                if (object.getAttributes(attributeType.getId()).isEmpty()) {
-                    if ((attributeType.getAttributeValueTypes().size() == 1) && !attributeType.getId().equals(BUILDING_ADDRESS)) {
+        for (EntityAttribute entityAttribute : getEntity().getAttributes()) {
+            if (!entityAttribute.isObsolete()) {
+                if (object.getAttributes(entityAttribute.getId()).isEmpty()) {
+                    if ( !entityAttribute.getId().equals(BUILDING_ADDRESS)) {
                         Attribute attribute = new Attribute();
-                        AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
-                        attribute.setAttributeTypeId(attributeType.getId());
-                        attribute.setValueTypeId(attributeValueType.getId());
+                        attribute.setEntityAttributeId(entityAttribute.getId());
                         attribute.setObjectId(object.getObjectId());
                         attribute.setAttributeId(1L);
 
-                        if (isSimpleAttributeType(attributeType)) {
+                        if (entityAttribute.getValueType().isSimple()) {
                             attribute.setStringValues(StringValueUtil.newStringValues());
                         }
                         toAdd.add(attribute);
@@ -813,9 +819,8 @@ public class BuildingStrategy extends TemplateStrategy {
 
     private Attribute newBuildingCodeAttribute(long attributeId, long buildingCodeId) {
         Attribute a = new Attribute();
-        a.setAttributeTypeId(BUILDING_CODE);
+        a.setEntityAttributeId(BUILDING_CODE);
         a.setValueId(buildingCodeId);
-        a.setValueTypeId(BUILDING_CODE);
         a.setAttributeId(attributeId);
 
         return a;

@@ -54,7 +54,7 @@ public final class DomainObjectList extends TemplatePage {
 
             @Override
             protected void onClick() {
-                onAddObject(this.getPage(), strategyFactory.getStrategy(strategyName, entity), getTemplateSession());
+                onAddObject(this.getPage(), strategyName, entity, getTemplateSession());
             }
 
             @Override
@@ -67,7 +67,9 @@ public final class DomainObjectList extends TemplatePage {
         }, new CollapsibleSearchToolbarButton(id, listPanel.getSearchPanel()));
     }
 
-    public static void onAddObject(Page page, IStrategy strategy, DictionaryFwSession session) {
+    protected void onAddObject(Page page, String strategyName, String entity, DictionaryFwSession session) {
+        IStrategy strategy = strategyFactory.getStrategy(strategyName, entity);
+
         if (strategy.getSearchFilters() != null && !strategy.getSearchFilters().isEmpty()) {
             SearchComponentState globalSearchComponentState = session.getGlobalSearchComponentState();
             List<String> reverseSearchFilters = Lists.newArrayList(strategy.getSearchFilters());

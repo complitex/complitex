@@ -1,7 +1,5 @@
 package org.complitex.common.entity;
 
-import org.complitex.common.mybatis.IFixedIdType;
-
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 15.10.13 16:39

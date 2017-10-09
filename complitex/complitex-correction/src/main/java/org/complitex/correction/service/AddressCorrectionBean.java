@@ -15,7 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Stateless
 public class AddressCorrectionBean extends CorrectionBean {
@@ -24,9 +27,9 @@ public class AddressCorrectionBean extends CorrectionBean {
     public static final String NS = AddressCorrectionBean.class.getName();
 
     //todo add locale
-    private List<Long> getObjectIds(String entity, String correction, Long attributeTypeId){
+    private List<Long> getObjectIds(String entity, String correction, Long entityAttributeId){
         return sqlSession().selectList(NS + ".selectObjectIds", ImmutableMap.of("entity", entity, "correction",
-                correction, "attributeTypeId", attributeTypeId));
+                correction, "entityAttributeId", entityAttributeId));
     }
 
     /* CITY */

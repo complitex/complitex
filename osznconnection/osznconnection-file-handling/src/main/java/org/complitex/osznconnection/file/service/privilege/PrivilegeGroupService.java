@@ -44,7 +44,7 @@ public class PrivilegeGroupService {
             PrivilegeGroup privilegeGroup = privilegeGroupMap.get(key);
 
             if (privilegeGroup != null){
-                privilegeGroup.setFacilityServiceType(facilityServiceType);
+                privilegeGroup.setFacilityServiceType(facilityServiceType); //todo duplicate status
             }else{
                 privilegeGroupMap.put(key, new PrivilegeGroup(facilityServiceType));
             }

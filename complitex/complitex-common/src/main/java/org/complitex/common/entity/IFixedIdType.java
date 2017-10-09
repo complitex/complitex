@@ -1,4 +1,4 @@
-package org.complitex.common.mybatis;
+package org.complitex.common.entity;
 
 import java.io.Serializable;
 

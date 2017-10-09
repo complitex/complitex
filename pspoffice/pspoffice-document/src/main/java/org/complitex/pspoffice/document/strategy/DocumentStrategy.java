@@ -4,7 +4,10 @@
  */
 package org.complitex.pspoffice.document.strategy;
 
-import org.complitex.common.entity.*;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.strategy.PermissionBean;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.StringValueUtil;
@@ -62,9 +65,8 @@ public class DocumentStrategy extends TemplateStrategy {
 
         Attribute documentTypeAttribute = new Attribute();
         documentTypeAttribute.setAttributeId(1L);
-        documentTypeAttribute.setAttributeTypeId(DOCUMENT_TYPE);
+        documentTypeAttribute.setEntityAttributeId(DOCUMENT_TYPE);
         documentTypeAttribute.setValueId(documentTypeId);
-        documentTypeAttribute.setValueTypeId(DOCUMENT_TYPE);
         document.addAttribute(documentTypeAttribute);
 
         fillAttributes(null, document);
@@ -78,19 +80,16 @@ public class DocumentStrategy extends TemplateStrategy {
     protected void fillAttributes(String dataSource, DomainObject document) {
         List<Attribute> toAdd = newArrayList();
 
-        for (AttributeType attributeType : getEntity().getAttributeTypes()) {
-            if (document.getAttributes(attributeType.getId()).isEmpty()
-                    && (attributeType.getAttributeValueTypes().size() == 1)
-                    && !attributeType.isObsolete()
-                    && !attributeType.getId().equals(DOCUMENT_TYPE)) {
+        for (EntityAttribute entityAttribute : getEntity().getAttributes()) {
+            if (document.getAttributes(entityAttribute.getId()).isEmpty()
+                    && !entityAttribute.isObsolete()
+                    && !entityAttribute.getId().equals(DOCUMENT_TYPE)) {
                 Attribute attribute = new Attribute();
-                AttributeValueType attributeValueType = attributeType.getAttributeValueTypes().get(0);
-                attribute.setAttributeTypeId(attributeType.getId());
-                attribute.setValueTypeId(attributeValueType.getId());
+                attribute.setEntityAttributeId(entityAttribute.getId());
                 attribute.setObjectId(document.getObjectId());
                 attribute.setAttributeId(1L);
 
-                if (isSimpleAttributeType(attributeType)) {
+                if (entityAttribute.getValueType().isSimple()) {
                     attribute.setStringValues(StringValueUtil.newStringValues());
                 }
                 toAdd.add(attribute);

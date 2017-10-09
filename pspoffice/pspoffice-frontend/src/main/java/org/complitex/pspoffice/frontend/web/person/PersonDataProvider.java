@@ -4,7 +4,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.ui.wicket.datatable.TableDataProvider;
-import ru.complitex.pspoffice.api.model.PersonObject;
+import ru.complitex.pspoffice.api.model.PersonModel;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
@@ -18,38 +18,29 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
  * @author Anatoly A. Ivanov
  * 05.07.2017 16:15
  */
-public class PersonDataProvider extends TableDataProvider<PersonObject>{
+public class PersonDataProvider extends TableDataProvider<PersonModel>{
     @Inject
     private PspOfficeClient pspOfficeClient;
 
-    private PersonObject personObject;
-
     public PersonDataProvider() {
-        personObject = new PersonObject();
+        PersonModel personModel = new PersonModel();
 
-        personObject.setLastName(new HashMap<>());
-        personObject.setFirstName(new HashMap<>());
-        personObject.setMiddleName(new HashMap<>());
+        personModel.setLastName(new HashMap<>());
+        personModel.setFirstName(new HashMap<>());
+        personModel.setMiddleName(new HashMap<>());
+
+        setFilterState(personModel);
     }
 
     @Override
-    public PersonObject getFilterState() {
-        return personObject;
-    }
-
-    @Override
-    public void setFilterState(PersonObject state) {
-        personObject = state;
-    }
-
-    @Override
-    public Iterator<? extends PersonObject> iterator(long first, long count) {
+    public Iterator<? extends PersonModel> iterator(long first, long count) {
         return pspOfficeClient.target()
                 .path("person")
                 .queryParam("offset", first)
                 .queryParam("limit", count)
                 .request(APPLICATION_JSON_TYPE)
-                .get(new GenericType<List<PersonObject>>(){}).iterator();
+                .get(new GenericType<List<PersonModel>>(){})
+                .iterator();
     }
 
     @Override
@@ -58,7 +49,7 @@ public class PersonDataProvider extends TableDataProvider<PersonObject>{
     }
 
     @Override
-    public IModel<PersonObject> model(PersonObject object) {
-        return new CompoundPropertyModel<>(object);
+    public IModel<PersonModel> model(PersonModel personModel) {
+        return new CompoundPropertyModel<>(personModel);
     }
 }

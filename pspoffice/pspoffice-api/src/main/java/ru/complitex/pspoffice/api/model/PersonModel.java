@@ -9,7 +9,7 @@ import java.util.Map;
  * @author Anatoly A. Ivanov
  *         25.05.2017 16:55
  */
-public class PersonObject implements Serializable{
+public class PersonModel implements Serializable {
     private Long id;
 
     private Map<String, String> lastName;
@@ -27,12 +27,12 @@ public class PersonObject implements Serializable{
 
     private Integer gender;
 
-    private List<DocumentObject> documents;
+    private List<DocumentModel> documents;
 
     private Long citizenshipId;
     private Long militaryServiceRelationId;
 
-    private List<PersonObject> children;
+    private List<PersonModel> children;
 
     public Long getId() {
         return id;
@@ -122,11 +122,11 @@ public class PersonObject implements Serializable{
         this.gender = gender;
     }
 
-    public List<DocumentObject> getDocuments() {
+    public List<DocumentModel> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(List<DocumentObject> documents) {
+    public void setDocuments(List<DocumentModel> documents) {
         this.documents = documents;
     }
 
@@ -146,11 +146,11 @@ public class PersonObject implements Serializable{
         this.militaryServiceRelationId = militaryServiceRelationId;
     }
 
-    public List<PersonObject> getChildren() {
+    public List<PersonModel> getChildren() {
         return children;
     }
 
-    public void setChildren(List<PersonObject> children) {
+    public void setChildren(List<PersonModel> children) {
         this.children = children;
     }
 }

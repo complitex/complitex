@@ -16,7 +16,7 @@ public interface IStrategy {
     
     void archive(DomainObject object, Date endDate);
     
-    void archiveAttributes(Collection<Long> attributeTypeIds, Date endDate);
+    void archiveAttributes(Collection<Long> entityAttributeIds, Date endDate);
 
     void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput);
     
@@ -103,10 +103,6 @@ public interface IStrategy {
     IValidator getValidator();
 
     void insert(DomainObject object, Date insertDate);
-
-    boolean isSimpleAttribute(final Attribute attribute);
-
-    boolean isSimpleAttributeType(AttributeType attributeType);
 
     DomainObject newInstance();
     

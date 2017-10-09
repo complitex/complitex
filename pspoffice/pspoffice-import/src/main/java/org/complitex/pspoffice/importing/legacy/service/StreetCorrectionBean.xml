@@ -43,7 +43,7 @@
     <select id="findSystemStreetType" parameterType="map" resultType="long">
         SELECT DISTINCT e.`object_id` FROM `street_type` e 
             JOIN `street_type_attribute` namea ON (e.`object_id` = namea.`object_id` 
-                    AND namea.`attribute_type_id` = #{streetTypeShortNameAT} AND namea.`status` = 1)
+                    AND namea.`entity_attribute_id` = #{streetTypeShortNameAT} AND namea.`status` = 1)
             LEFT JOIN `street_type_string_value` name ON (namea.`value_id` = name.`id` AND name.`locale_id` = #{localeId})
         WHERE e.`status` IN (1, 0) AND
             name.`value` = #{name} 
@@ -52,9 +52,9 @@
     <select id="findSystemStreet" parameterType="map" resultType="long">
         SELECT DISTINCT e.`object_id` FROM `street` e 
             JOIN `street_attribute` t ON (e.`object_id` = t.`object_id` 
-                AND t.`attribute_type_id` = #{streetTypeAT} AND t.`status` = 1)
+                AND t.`entity_attribute_id` = #{streetTypeAT} AND t.`status` = 1)
             JOIN `street_attribute` n ON (e.`object_id` = n.`object_id` 
-                AND n.`attribute_type_id` = #{streetNameAT} AND n.`status` = 1)
+                AND n.`entity_attribute_id` = #{streetNameAT} AND n.`status` = 1)
             LEFT JOIN `street_string_value` name ON (n.`value_id` = name.`id` AND name.`locale_id` = #{localeId})
             WHERE e.`status` IN (1, 0) AND
                 t.`value_id` = #{streetTypeId} AND name.`value` = #{name}

@@ -4,8 +4,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringValueUtil;
@@ -50,20 +50,20 @@ public class KeOrganizationEditComponent extends OrganizationEditComponent {
             readyCloseOmSection.setOutputMarkupPlaceholderTag(true);
             add(readyCloseOmSection);
 
-            final long attributeTypeId = KeOrganizationStrategy.READY_CLOSE_OPER_MONTH;
-            Attribute attribute = organization.getAttribute(attributeTypeId);
+            final long entityAttributeId = KeOrganizationStrategy.READY_CLOSE_OPER_MONTH;
+            Attribute attribute = organization.getAttribute(entityAttributeId);
             if (attribute == null) {
                 attribute = new Attribute();
-                attribute.setAttributeTypeId(attributeTypeId);
+                attribute.setEntityAttributeId(entityAttributeId);
                 attribute.setObjectId(organization.getObjectId());
                 attribute.setAttributeId(1L);
                 attribute.setStringValues(StringValueUtil.newStringValues());
             }
-            final AttributeType attributeType =
-                    organizationStrategy.getEntity().getAttributeType(attributeTypeId);
+            final EntityAttribute entityAttribute =
+                    organizationStrategy.getEntity().getAttribute(entityAttributeId);
             readyCloseOmSection.add(new Label("label",
-                    DomainObjectComponentUtil.labelModel(attributeType.getAttributeNames(), getLocale())));
-            readyCloseOmSection.add(new WebMarkupContainer("required").setVisible(attributeType.isMandatory()));
+                    DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
+            readyCloseOmSection.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
 
             readyCloseOmSection.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), true));

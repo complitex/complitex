@@ -4,6 +4,7 @@
 <configuration>
     <typeHandlers>
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.common.entity.Status"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.common.entity.ValueType"/>
 
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.AddressEntity"/>
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.SyncEntity"/>

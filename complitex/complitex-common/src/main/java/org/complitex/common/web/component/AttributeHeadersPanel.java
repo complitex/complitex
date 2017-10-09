@@ -8,7 +8,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.entity.AttributeType;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 
 import java.util.List;
@@ -19,22 +19,22 @@ import java.util.List;
  */
 public class AttributeHeadersPanel extends Panel {
 
-    public AttributeHeadersPanel(String id, List<AttributeType> attributeTypes,
+    public AttributeHeadersPanel(String id, List<EntityAttribute> entityAttributes,
             final ISortStateLocator stateLocator, final DataView dataView,
             final Component refreshComponent) {
         super(id);
 
-        ListView<AttributeType> headers = new ListView<AttributeType>("headers", attributeTypes) {
+        ListView<EntityAttribute> headers = new ListView<EntityAttribute>("headers", entityAttributes) {
 
             @Override
-            protected void populateItem(ListItem<AttributeType> item) {
-                AttributeType attributeType = item.getModelObject();
+            protected void populateItem(ListItem<EntityAttribute> item) {
+                EntityAttribute entityAttribute = item.getModelObject();
 
-                ArrowOrderByBorder header = new ArrowOrderByBorder("header", String.valueOf(attributeType.getId()),
+                ArrowOrderByBorder header = new ArrowOrderByBorder("header", String.valueOf(entityAttribute.getId()),
                         stateLocator, dataView, refreshComponent);
                 item.add(header);
 
-                header.add(new Label("header_name", Strings.capitalize(attributeType.getAttributeName(getLocale()))));
+                header.add(new Label("header_name", Strings.capitalize(entityAttribute.getName(getLocale()))));
             }
         };
 

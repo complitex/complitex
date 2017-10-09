@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.complitex</groupId>
         <artifactId>complitex</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>7.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>complitex-common</artifactId>
@@ -18,6 +18,8 @@
             <groupId>org.complitex</groupId>
             <artifactId>complitex-resources</artifactId>
         </dependency>
+
+
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-auth-roles</artifactId>
@@ -141,6 +143,13 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+
+
     </dependencies>
 
     <!--<build>

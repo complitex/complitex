@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.StringLocaleBean;
@@ -221,19 +220,12 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
     }
 
     @Override
-    public boolean isSimpleAttributeType(AttributeType attributeType) {
-        return !CUSTOM_ATTRIBUTE_TYPES.contains(attributeType.getId()) &&
-                super.isSimpleAttributeType(attributeType);
-
-    }
-
-    @Override
     protected void fillAttributes(String dataSource, DomainObject object) {
         super.fillAttributes(null, object);
 
-        for (long attributeTypeId : CUSTOM_ATTRIBUTE_TYPES) {
-            if (object.getAttribute(attributeTypeId).getStringValues() == null) {
-                object.getAttribute(attributeTypeId).setStringValues(StringValueUtil.newStringValues());
+        for (long entityAttributeId : CUSTOM_ATTRIBUTE_TYPES) {
+            if (object.getAttribute(entityAttributeId).getStringValues() == null) {
+                object.getAttribute(entityAttributeId).setStringValues(StringValueUtil.newStringValues());
             }
         }
     }
@@ -243,7 +235,7 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
         super.loadStringValues(attributes);
 
         for (Attribute attribute : attributes) {
-            if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())) {
+            if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getEntityAttributeId())) {
                 if (attribute.getValueId() != null) {
                     loadStringValues(attribute);
                 } else {
@@ -255,8 +247,8 @@ public class KeOrganizationStrategy extends OrganizationStrategy {
 
     @Override
     protected void insertAttribute(Attribute attribute) {
-        if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getAttributeTypeId())){
-            Long generatedStringId = insertStrings(attribute.getAttributeTypeId(), attribute.getStringValues());
+        if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getEntityAttributeId())){
+            Long generatedStringId = insertStrings(attribute.getEntityAttributeId(), attribute.getStringValues());
             attribute.setValueId(generatedStringId);
         }
 

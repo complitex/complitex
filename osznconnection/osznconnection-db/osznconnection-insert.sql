@@ -1,7 +1,7 @@
 -- --------------------------------
 -- Current database version
 -- --------------------------------
-INSERT INTO `update` (`version`) VALUE ('20170613_0.6.1');
+INSERT INTO `update` (`version`) VALUE ('20170920_0.6.3');
 
 
 -- admin user --
@@ -9,8 +9,8 @@ INSERT INTO `user_info` (`object_id`) VALUES (1);
 INSERT INTO `first_name`(`id`, `name`) VALUES (1,'admin');
 INSERT INTO `middle_name`(`id`, `name`) VALUES (1,'admin');
 INSERT INTO `last_name`(`id`, `name`) VALUES (1,'admin');
-INSERT INTO `user_info_attribute` (`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
-VALUES (1,1,1000,1,1000), (1,1,1001,1,1001), (1,1,1002,1,1002);
+INSERT INTO `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`)
+  VALUES (1,1,1000,1), (1,1,1001,1), (1,1,1002,1);
 INSERT INTO `user` (`id`, `login`, `password`, `user_info_object_id`) VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1);
 INSERT INTO `usergroup` (`id`, `login`, `group_name`) VALUES (1, 'admin', 'ADMINISTRATORS');
 INSERT INTO `usergroup` (`id`, `login`, `group_name`) VALUES (2, 'admin', 'EMPLOYEES');
@@ -60,126 +60,124 @@ INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES
 # INSERT INTO `organization_type`(`object_id`) VALUES (2),(3);
 # INSERT INTO `organization_type_string_value`(`id`, `locale_id`, `value`) VALUES (2, 1, UPPER('ОСЗН')), (2, 2,UPPER('ОСЗН')),
 # (3, 1, UPPER('Модуль начислений')), (3, 2,UPPER('Центр нарахувань'));
-# INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES (1,2,2300,2,2300),(1,3,2300,3,2300);
+# INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`, `value_type_id`) VALUES (1,2,2300,2,2300),(1,3,2300,3,2300);
 
 INSERT INTO `organization_type`(`object_id`) VALUES (7);
 INSERT INTO `organization_type_string_value`(`id`, `locale_id`, `value`)
 VALUES (7, 1, UPPER('Отдел субсидий')), (7, 2, UPPER('Отдел субсидий'));
-INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
-VALUES (1, 7, 2300, 7, 2300);
+INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`)
+  VALUES (1, 7, 2300, 7);
 
 INSERT INTO `organization_type`(`object_id`) VALUES (8);
 INSERT INTO `organization_type_string_value`(`id`, `locale_id`, `value`)
 VALUES (8, 1, UPPER('Отдел льгот')), (8, 2, UPPER('Отдел льгот'));
-INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`)
-VALUES (1, 8, 2300, 8, 2300);
+INSERT INTO `organization_type_attribute`(`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`)
+  VALUES (1, 8, 2300, 8);
 
 -- --------------------------------
 -- Organization
 -- --------------------------------
 
 -- Reference to `service_association` helper table. It is user organization only attribute. --
-# INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (915, 1, UPPER('Ассоцияции тип услуги - модуль начислений')), (915, 2, UPPER('Ассоцияции тип услуги - модуль начислений'));
-# INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (914, 900, 1, 915, 1);
-# INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (914, 914, 'service_association');
+# INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (915, 1, UPPER('Ассоцияции тип услуги - модуль начислений')), (915, 2, UPPER('Ассоцияции тип услуги - модуль начислений'));
+# INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`) VALUES (914, 900, 1, 915, 1);
+# INSERT INTO `entity_attribute_value_type`(`id`, `entity_attribute_id`, `value_type`) VALUES (914, 914, 'service_association');
 
 -- -------------------------------
 -- Request files paths attributes
 -- -------------------------------
 
 -- Load payments/benefits directory. It is OSZN only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (915, 1, UPPER('Директория входящих запросов на субсидию')), (915, 2, UPPER('Директория входящих запросов на субсидию'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (915, 900, 0, 915, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (915, 915, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (915, 1, UPPER('Директория входящих запросов на субсидию')),
+  (915, 2, UPPER('Директория входящих запросов на субсидию'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (915, 900, 0, 915, 1, 1);
 
 -- Save payments/benefits directory. It is OSZN only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (916, 1, UPPER('Директория исходящих ответов на запросы на субсидию')), (916, 2, UPPER('Директория исходящих ответов на запросы на субсидию'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (916, 900, 0, 916, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (916, 916, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (916, 1, UPPER('Директория исходящих ответов на запросы на субсидию')),
+  (916, 2, UPPER('Директория исходящих ответов на запросы на субсидию'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (916, 900, 0, 916, 1, 1);
 
 -- Load actual payments directory. It is OSZN only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (917, 1, UPPER('Директория входящих запросов фактического начисления')), (917, 2, UPPER('Директория входящих запросов фактического начисления'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (917, 900, 0, 917, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (917, 917, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (917, 1, UPPER('Директория входящих запросов фактического начисления')),
+  (917, 2, UPPER('Директория входящих запросов фактического начисления'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (917, 900, 0, 917, 1, 1);
 
 -- Save actual payments directory. It is OSZN only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (918, 1, UPPER('Директория исходящих ответов на запросы фактического начисления')), (918, 2, UPPER('Директория исходящих ответов на запросы фактического начисления'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (918, 900, 0, 918, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (918, 918, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (918, 1, UPPER('Директория исходящих ответов на запросы фактического начисления')),
+  (918, 2, UPPER('Директория исходящих ответов на запросы фактического начисления'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (918, 900, 0, 918, 1, 1);
 
 -- Load subsidies directory. It is OSZN only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (919, 1, UPPER('Директория входящих файлов субсидий')), (919, 2, UPPER('Директория входящих файлов субсидий'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (919, 900, 0, 919, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (919, 919, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (919, 1, UPPER('Директория входящих файлов субсидий')),
+  (919, 2, UPPER('Директория входящих файлов субсидий'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (919, 900, 0, 919, 1, 1);
 
 -- Save subsidies directory. It is OSZN only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (920, 1, UPPER('Директория исходящих файлов субсидий')), (920, 2, UPPER('Директория исходящих файлов субсидий'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (920, 900, 0, 920, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (920, 920, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (920, 1, UPPER('Директория исходящих файлов субсидий')),
+  (920, 2, UPPER('Директория исходящих файлов субсидий'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (920, 900, 0, 920, 1, 1);
 
 -- Load dwelling characteristics directory. It is OSZN only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (921, 1, UPPER('Директория входящих файлов характеристик жилья')), (921, 2, UPPER('Директория входящих файлов характеристик жилья'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (921, 900, 0, 921, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (921, 921, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (921, 1, UPPER('Директория входящих файлов характеристик жилья')),
+  (921, 2, UPPER('Директория входящих файлов характеристик жилья'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (921, 900, 0, 921, 1, 1);
 
 -- Save dwelling characteristics directory. It is OSZN only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (922, 1, UPPER('Директория исходящих файлов характеристик жилья')), (922, 2, UPPER('Директория исходящих файлов характеристик жилья'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (922, 900, 0, 922, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (922, 922, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (922, 1, UPPER('Директория исходящих файлов характеристик жилья')),
+  (922, 2, UPPER('Директория исходящих файлов характеристик жилья'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (922, 900, 0, 922, 1, 1);
 
 -- Load facility service type directory. It is OSZN only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (923, 1, UPPER('Директория входящих файлов-запросов видов услуг')), (923, 2, UPPER('Директория входящих файлов-запросов видов услуг'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (923, 900, 0, 923, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (923, 923, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (923, 1, UPPER('Директория входящих файлов-запросов видов услуг')),
+  (923, 2, UPPER('Директория входящих файлов-запросов видов услуг'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (923, 900, 0, 923, 1, 1);
 
 -- Save facility service type directory. It is OSZN only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (924, 1, UPPER('Директория исходящих файлов-запросов видов услуг')), (924, 2, UPPER('Директория исходящих файлов-запросов видов услуг'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (924, 900, 0, 924, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (924, 924, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (924, 1, UPPER('Директория исходящих файлов-запросов видов услуг')),
+  (924, 2, UPPER('Директория исходящих файлов-запросов видов услуг'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (924, 900, 0, 924, 1, 1);
 
 -- References directory. It is OSZN only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (925, 1, UPPER('Директория справочников')), (925, 2, UPPER('Директория справочников'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (925, 900, 0, 925, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (925, 925, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (925, 1, UPPER('Директория справочников')),
+  (925, 2, UPPER('Директория справочников'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (925, 900, 0, 925, 1, 1);
 
 -- EDRPOU(ЕДРПОУ) attribute. It is user organization only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (926, 1, UPPER('ЕДРПОУ')), (926, 2, UPPER('ЕДРПОУ'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (926, 900, 1, 926, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (926, 926, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (926, 1, UPPER('ЕДРПОУ')), (926, 2, UPPER('ЕДРПОУ'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (926, 900, 1, 926, 1, 1);
 
 -- Root directory for loading and saving request files. It is user organization only attribute. --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (927, 1, UPPER('Корневой каталог для файлов запросов')), (927, 2, UPPER('Корневой каталог для файлов запросов'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (927, 900, 1, 927, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (927, 927, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (927, 1, UPPER('Корневой каталог для файлов запросов')),
+  (927, 2, UPPER('Корневой каталог для файлов запросов'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (927, 900, 1, 927, 1, 1);
 
 -- Save facility form2 directory --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (928, 1, UPPER('Директория исходящих файлов форма-2 льгота')), (928, 2, UPPER('Директория исходящих файлов форма-2 льгота'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (928, 900, 0, 928, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (928, 928, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (928, 1, UPPER('Директория исходящих файлов форма-2 льгота')),
+  (928, 2, UPPER('Директория исходящих файлов форма-2 льгота'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (928, 900, 0, 928, 1, 1);
 
 -- Save facility local directory
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (929, 1, UPPER('Директория исходящих файлов местной льготы')), (929, 2, UPPER('Директория исходящих файлов местной льготы'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (929, 900, 0, 929, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (929, 929, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (929, 1, UPPER('Директория исходящих файлов местной льготы')),
+  (929, 2, UPPER('Директория исходящих файлов местной льготы'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (929, 900, 0, 929, 1, 1);
 
 -- Export subsidy directory--
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (930, 1, UPPER('Корневой каталог для экспорта файлов'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (930, 900, 0, 930, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (930, 930, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (930, 1, UPPER('Корневой каталог для экспорта файлов'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (930, 900, 0, 930, 1, 1);
 
 -- Load privilege prolongation directory --
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (931, 1, UPPER('Директория входящих файлов продления льгот')), (931, 2, UPPER('Директория входящих файлов продления льгот'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (931, 900, 0, 931, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (931, 931, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (931, 1, UPPER('Директория входящих файлов продления льгот')),
+  (931, 2, UPPER('Директория входящих файлов продления льгот'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (931, 900, 0, 931, 1, 1);
 
 -- --------------------------------
 -- Ownership
 -- --------------------------------
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (1100, 1, 'Форма собственности'), (1100, 2, 'Форма власності');
-INSERT INTO `entity`(`id`, `entity_table`, `entity_name_id`, `strategy_factory`) VALUES (1100, 'ownership', 1100, '');
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (1101, 1, UPPER('Название')), (1101, 2, UPPER('Назва'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (1100, 1100, 1, 1101, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (1100, 1100, UPPER('string_value'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1100, 1, 'Форма собственности'), (1100, 2, 'Форма власності');
+INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (1100, 'ownership', 1100, '');
+
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1101, 1, UPPER('Название')), (1101, 2, UPPER('Назва'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1100, 1100, 1, 1101, 1, 0);
 
 -- --------------------------------
 -- Forms of ownerships
@@ -189,21 +187,21 @@ INSERT INTO `ownership_string_value`(`id`, `locale_id`, `value`) VALUES (1, 1, U
 (2, 1, UPPER('кооперативна')), (2, 2, UPPER('кооперативна')), (3, 1, UPPER('вiдомча')), (3, 2, UPPER('вiдомча')),
 (4, 1, UPPER('громадська')), (4, 2, UPPER('громадська')), (5, 1, UPPER('приватна')), (5, 2, UPPER('приватна')),
 (6, 1, UPPER('приватизована')), (6, 2, UPPER('приватизована'));
-INSERT INTO `ownership_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
-(1,1,1100,1,1100),(1,2,1100,2,1100),(1,3,1100,3,1100),(1,4,1100,4,1100),(1,5,1100,5,1100),(1,6,1100,6,1100);
+INSERT INTO `ownership_attribute`(`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`) 
+  VALUES (1,1,1100,1),(1,2,1100,2),(1,3,1100,3),(1,4,1100,4),(1,5,1100,5),(1,6,1100,6);
 
 -- --------------------------------
 -- Privilege
 -- --------------------------------
 
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (1200, 1, 'Льгота'), (1200, 2, 'Привілей');
-INSERT INTO `entity`(`id`, `entity_table`, `entity_name_id`, `strategy_factory`) VALUES (1200, 'privilege', 1200, '');
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (1201, 1, UPPER('Название')), (1201, 2, UPPER('Назва'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (1200, 1200, 1, 1201, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (1200, 1200, UPPER('string_value'));
-INSERT INTO `string_value`(`id`, `locale_id`, `value`) VALUES (1202, 1, UPPER('Код')), (1202, 2, UPPER('Код'));
-INSERT INTO `attribute_type`(`id`, `entity_id`, `mandatory`, `attribute_type_name_id`, `system`) VALUES (1201, 1200, 1, 1202, 1);
-INSERT INTO `attribute_value_type`(`id`, `attribute_type_id`, `attribute_value_type`) VALUES (1201, 1201, UPPER('string'));
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1200, 1, 'Льгота'), (1200, 2, 'Привілей');
+INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (1200, 'privilege', 1200, '');
+
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1201, 1, UPPER('Название')), (1201, 2, UPPER('Назва'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1200, 1200, 1, 1201, 1, 0);
+
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1202, 1, UPPER('Код')), (1202, 2, UPPER('Код'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1201, 1200, 1, 1202, 1, 1);
 
 -- Privileges
 INSERT INTO `privilege`(`object_id`) VALUES
@@ -211,6 +209,7 @@ INSERT INTO `privilege`(`object_id`) VALUES
 (31),(32),(33),(34),(35),(36),(37),(38),(39),(40),(41),(42),(43),(44),(45),(46),(47),(48),(49),(50),(51),(52),(53),(54),(55),(56),(57),(58),(59),(60),
 (61),(62),(63),(64),(65),(66),(67),(68),(69),(70),(71),(72),(73),(74),(75),(76),(77),(78),(79),(80),(81),(82),(83),(84),(85),(86),(87),(88),(89),(90),
 (91),(92),(93),(94),(95),(96),(97),(98),(99),(100),(101),(102),(103),(104);
+
 INSERT INTO `privilege_string_value`(`id`, `locale_id`, `value`) VALUES
 (1,1,UPPER('УЧАСТНИК БОЕВЫХ ДЕЙСТВИЙ')), (1,2,UPPER('УЧАСТНИК БОЕВЫХ ДЕЙСТВИЙ')), (2,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('1')),
 (3,1,UPPER('УЧАСТНИК ВОЙНЫ')), (3,2,UPPER('УЧАСТНИК ВОЙНЫ')), (4,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('2')),
@@ -316,111 +315,112 @@ INSERT INTO `privilege_string_value`(`id`, `locale_id`, `value`) VALUES
 (203,1,UPPER('РАБОТНИКИ ХКП "ГОРЭЛЕКТРОТРАНС"')), (203,2,UPPER('РАБОТНИКИ ХКП "ГОРЭЛЕКТРОТРАНС"')), (204,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('306')),
 (205,1,UPPER('АФГАНИСТАН')), (205,2,UPPER('АФГАНИСТАН')), (206,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('633')),
 (207,1,UPPER('ВЕТЕРАН НАЛОГОВОЙ МИЛИЦИИ')), (207,2,UPPER('ВЕТЕРАН НАЛОГОВОЙ МИЛИЦИИ')), (208,(SELECT `id` FROM `locale` WHERE `system` = 1),UPPER('45'));
-INSERT INTO `privilege_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
-(1,1,1200,1,1200),(1,1,1201,2,1201),
-(1,2,1200,3,1200),(1,2,1201,4,1201),
-(1,3,1200,5,1200),(1,3,1201,6,1201),
-(1,4,1200,7,1200),(1,4,1201,8,1201),
-(1,5,1200,9,1200),(1,5,1201,10,1201),
-(1,6,1200,11,1200),(1,6,1201,12,1201),
-(1,7,1200,13,1200),(1,7,1201,14,1201),
-(1,8,1200,15,1200),(1,8,1201,16,1201),
-(1,9,1200,17,1200),(1,9,1201,18,1201),
-(1,10,1200,19,1200),(1,10,1201,20,1201),
-(1,11,1200,21,1200),(1,11,1201,22,1201),
-(1,12,1200,23,1200),(1,12,1201,24,1201),
-(1,13,1200,25,1200),(1,13,1201,26,1201),
-(1,14,1200,27,1200),(1,14,1201,28,1201),
-(1,15,1200,29,1200),(1,15,1201,30,1201),
-(1,16,1200,31,1200),(1,16,1201,32,1201),
-(1,17,1200,33,1200),(1,17,1201,34,1201),
-(1,18,1200,35,1200),(1,18,1201,36,1201),
-(1,19,1200,37,1200),(1,19,1201,38,1201),
-(1,20,1200,39,1200),(1,20,1201,40,1201),
-(1,21,1200,41,1200),(1,21,1201,42,1201),
-(1,22,1200,43,1200),(1,22,1201,44,1201),
-(1,23,1200,45,1200),(1,23,1201,46,1201),
-(1,24,1200,47,1200),(1,24,1201,48,1201),
-(1,25,1200,49,1200),(1,25,1201,50,1201),
-(1,26,1200,51,1200),(1,26,1201,52,1201),
-(1,27,1200,53,1200),(1,27,1201,54,1201),
-(1,28,1200,55,1200),(1,28,1201,56,1201),
-(1,29,1200,57,1200),(1,29,1201,58,1201),
-(1,30,1200,59,1200),(1,30,1201,60,1201),
-(1,31,1200,61,1200),(1,31,1201,62,1201),
-(1,32,1200,63,1200),(1,32,1201,64,1201),
-(1,33,1200,65,1200),(1,33,1201,66,1201),
-(1,34,1200,67,1200),(1,34,1201,68,1201),
-(1,35,1200,69,1200),(1,35,1201,70,1201),
-(1,36,1200,71,1200),(1,36,1201,72,1201),
-(1,37,1200,73,1200),(1,37,1201,74,1201),
-(1,38,1200,75,1200),(1,38,1201,76,1201),
-(1,39,1200,77,1200),(1,39,1201,78,1201),
-(1,40,1200,79,1200),(1,40,1201,80,1201),
-(1,41,1200,81,1200),(1,41,1201,82,1201),
-(1,42,1200,83,1200),(1,42,1201,84,1201),
-(1,43,1200,85,1200),(1,43,1201,86,1201),
-(1,44,1200,87,1200),(1,44,1201,88,1201),
-(1,45,1200,89,1200),(1,45,1201,90,1201),
-(1,46,1200,91,1200),(1,46,1201,92,1201),
-(1,47,1200,93,1200),(1,47,1201,94,1201),
-(1,48,1200,95,1200),(1,48,1201,96,1201),
-(1,49,1200,97,1200),(1,49,1201,98,1201),
-(1,50,1200,99,1200),(1,50,1201,100,1201),
-(1,51,1200,101,1200),(1,51,1201,102,1201),
-(1,52,1200,103,1200),(1,52,1201,104,1201),
-(1,53,1200,105,1200),(1,53,1201,106,1201),
-(1,54,1200,107,1200),(1,54,1201,108,1201),
-(1,55,1200,109,1200),(1,55,1201,110,1201),
-(1,56,1200,111,1200),(1,56,1201,112,1201),
-(1,57,1200,113,1200),(1,57,1201,114,1201),
-(1,58,1200,115,1200),(1,58,1201,116,1201),
-(1,59,1200,117,1200),(1,59,1201,118,1201),
-(1,60,1200,119,1200),(1,60,1201,120,1201),
-(1,61,1200,121,1200),(1,61,1201,122,1201),
-(1,62,1200,123,1200),(1,62,1201,124,1201),
-(1,63,1200,125,1200),(1,63,1201,126,1201),
-(1,64,1200,127,1200),(1,64,1201,128,1201),
-(1,65,1200,129,1200),(1,65,1201,130,1201),
-(1,66,1200,131,1200),(1,66,1201,132,1201),
-(1,67,1200,133,1200),(1,67,1201,134,1201),
-(1,68,1200,135,1200),(1,68,1201,136,1201),
-(1,69,1200,137,1200),(1,69,1201,138,1201),
-(1,70,1200,139,1200),(1,70,1201,140,1201),
-(1,71,1200,141,1200),(1,71,1201,142,1201),
-(1,72,1200,143,1200),(1,72,1201,144,1201),
-(1,73,1200,145,1200),(1,73,1201,146,1201),
-(1,74,1200,147,1200),(1,74,1201,148,1201),
-(1,75,1200,149,1200),(1,75,1201,150,1201),
-(1,76,1200,151,1200),(1,76,1201,152,1201),
-(1,77,1200,153,1200),(1,77,1201,154,1201),
-(1,78,1200,155,1200),(1,78,1201,156,1201),
-(1,79,1200,157,1200),(1,79,1201,158,1201),
-(1,80,1200,159,1200),(1,80,1201,160,1201),
-(1,81,1200,161,1200),(1,81,1201,162,1201),
-(1,82,1200,163,1200),(1,82,1201,164,1201),
-(1,83,1200,165,1200),(1,83,1201,166,1201),
-(1,84,1200,167,1200),(1,84,1201,168,1201),
-(1,85,1200,169,1200),(1,85,1201,170,1201),
-(1,86,1200,171,1200),(1,86,1201,172,1201),
-(1,87,1200,173,1200),(1,87,1201,174,1201),
-(1,88,1200,175,1200),(1,88,1201,176,1201),
-(1,89,1200,177,1200),(1,89,1201,178,1201),
-(1,90,1200,179,1200),(1,90,1201,180,1201),
-(1,91,1200,181,1200),(1,91,1201,182,1201),
-(1,92,1200,183,1200),(1,92,1201,184,1201),
-(1,93,1200,185,1200),(1,93,1201,186,1201),
-(1,94,1200,187,1200),(1,94,1201,188,1201),
-(1,95,1200,189,1200),(1,95,1201,190,1201),
-(1,96,1200,191,1200),(1,96,1201,192,1201),
-(1,97,1200,193,1200),(1,97,1201,194,1201),
-(1,98,1200,195,1200),(1,98,1201,196,1201),
-(1,99,1200,197,1200),(1,99,1201,198,1201),
-(1,100,1200,199,1200),(1,100,1201,200,1201),
-(1,101,1200,201,1200),(1,101,1201,202,1201),
-(1,102,1200,203,1200),(1,102,1201,204,1201),
-(1,103,1200,205,1200),(1,103,1201,206,1201),
-(1,104,1200,207,1200),(1,104,1201,208,1201);
+
+INSERT INTO `privilege_attribute`(`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`)
+VALUES (1,1,1200,1),(1,1,1201,2),
+  (1,2,1200,3),(1,2,1201,4),
+  (1,3,1200,5),(1,3,1201,6),
+  (1,4,1200,7),(1,4,1201,8),
+  (1,5,1200,9),(1,5,1201,10),
+  (1,6,1200,11),(1,6,1201,12),
+  (1,7,1200,13),(1,7,1201,14),
+  (1,8,1200,15),(1,8,1201,16),
+  (1,9,1200,17),(1,9,1201,18),
+  (1,10,1200,19),(1,10,1201,20),
+  (1,11,1200,21),(1,11,1201,22),
+  (1,12,1200,23),(1,12,1201,24),
+  (1,13,1200,25),(1,13,1201,26),
+  (1,14,1200,27),(1,14,1201,28),
+  (1,15,1200,29),(1,15,1201,30),
+  (1,16,1200,31),(1,16,1201,32),
+  (1,17,1200,33),(1,17,1201,34),
+  (1,18,1200,35),(1,18,1201,36),
+  (1,19,1200,37),(1,19,1201,38),
+  (1,20,1200,39),(1,20,1201,40),
+  (1,21,1200,41),(1,21,1201,42),
+  (1,22,1200,43),(1,22,1201,44),
+  (1,23,1200,45),(1,23,1201,46),
+  (1,24,1200,47),(1,24,1201,48),
+  (1,25,1200,49),(1,25,1201,50),
+  (1,26,1200,51),(1,26,1201,52),
+  (1,27,1200,53),(1,27,1201,54),
+  (1,28,1200,55),(1,28,1201,56),
+  (1,29,1200,57),(1,29,1201,58),
+  (1,30,1200,59),(1,30,1201,60),
+  (1,31,1200,61),(1,31,1201,62),
+  (1,32,1200,63),(1,32,1201,64),
+  (1,33,1200,65),(1,33,1201,66),
+  (1,34,1200,67),(1,34,1201,68),
+  (1,35,1200,69),(1,35,1201,70),
+  (1,36,1200,71),(1,36,1201,72),
+  (1,37,1200,73),(1,37,1201,74),
+  (1,38,1200,75),(1,38,1201,76),
+  (1,39,1200,77),(1,39,1201,78),
+  (1,40,1200,79),(1,40,1201,80),
+  (1,41,1200,81),(1,41,1201,82),
+  (1,42,1200,83),(1,42,1201,84),
+  (1,43,1200,85),(1,43,1201,86),
+  (1,44,1200,87),(1,44,1201,88),
+  (1,45,1200,89),(1,45,1201,90),
+  (1,46,1200,91),(1,46,1201,92),
+  (1,47,1200,93),(1,47,1201,94),
+  (1,48,1200,95),(1,48,1201,96),
+  (1,49,1200,97),(1,49,1201,98),
+  (1,50,1200,99),(1,50,1201,100),
+  (1,51,1200,101),(1,51,1201,102),
+  (1,52,1200,103),(1,52,1201,104),
+  (1,53,1200,105),(1,53,1201,106),
+  (1,54,1200,107),(1,54,1201,108),
+  (1,55,1200,109),(1,55,1201,110),
+  (1,56,1200,111),(1,56,1201,112),
+  (1,57,1200,113),(1,57,1201,114),
+  (1,58,1200,115),(1,58,1201,116),
+  (1,59,1200,117),(1,59,1201,118),
+  (1,60,1200,119),(1,60,1201,120),
+  (1,61,1200,121),(1,61,1201,122),
+  (1,62,1200,123),(1,62,1201,124),
+  (1,63,1200,125),(1,63,1201,126),
+  (1,64,1200,127),(1,64,1201,128),
+  (1,65,1200,129),(1,65,1201,130),
+  (1,66,1200,131),(1,66,1201,132),
+  (1,67,1200,133),(1,67,1201,134),
+  (1,68,1200,135),(1,68,1201,136),
+  (1,69,1200,137),(1,69,1201,138),
+  (1,70,1200,139),(1,70,1201,140),
+  (1,71,1200,141),(1,71,1201,142),
+  (1,72,1200,143),(1,72,1201,144),
+  (1,73,1200,145),(1,73,1201,146),
+  (1,74,1200,147),(1,74,1201,148),
+  (1,75,1200,149),(1,75,1201,150),
+  (1,76,1200,151),(1,76,1201,152),
+  (1,77,1200,153),(1,77,1201,154),
+  (1,78,1200,155),(1,78,1201,156),
+  (1,79,1200,157),(1,79,1201,158),
+  (1,80,1200,159),(1,80,1201,160),
+  (1,81,1200,161),(1,81,1201,162),
+  (1,82,1200,163),(1,82,1201,164),
+  (1,83,1200,165),(1,83,1201,166),
+  (1,84,1200,167),(1,84,1201,168),
+  (1,85,1200,169),(1,85,1201,170),
+  (1,86,1200,171),(1,86,1201,172),
+  (1,87,1200,173),(1,87,1201,174),
+  (1,88,1200,175),(1,88,1201,176),
+  (1,89,1200,177),(1,89,1201,178),
+  (1,90,1200,179),(1,90,1201,180),
+  (1,91,1200,181),(1,91,1201,182),
+  (1,92,1200,183),(1,92,1201,184),
+  (1,93,1200,185),(1,93,1201,186),
+  (1,94,1200,187),(1,94,1201,188),
+  (1,95,1200,189),(1,95,1201,190),
+  (1,96,1200,191),(1,96,1201,192),
+  (1,97,1200,193),(1,97,1201,194),
+  (1,98,1200,195),(1,98,1201,196),
+  (1,99,1200,197),(1,99,1201,198),
+  (1,100,1200,199),(1,100,1201,200),
+  (1,101,1200,201),(1,101,1201,202),
+  (1,102,1200,203),(1,102,1201,204),
+  (1,103,1200,205),(1,103,1201,206),
+  (1,104,1200,207),(1,104,1201,208);
 
 -- Status descriptions
 INSERT INTO `status_description`(`code`, `name`) VALUES
@@ -459,6 +459,6 @@ INSERT INTO `type_description`(`code`, `name`) VALUES
 INSERT INTO `organization`(`object_id`) VALUES (0);
 INSERT INTO `organization_string_value`(`id`, `locale_id`, `value`) VALUES
 (1, 1, UPPER('Модуль №1')), (1,2,UPPER('Модуль №1')), (2, (SELECT `id` FROM `locale` WHERE `system` = 1), UPPER('0'));
-INSERT INTO `organization_attribute`(`attribute_id`, `object_id`, `attribute_type_id`, `value_id`, `value_type_id`) VALUES
-(1,0,900,1,900), (1,0,901,2,901);
+INSERT INTO `organization_attribute`(`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`) VALUES
+(1,0,900,1), (1,0,901,2);
 

@@ -29,7 +29,7 @@ import java.util.Map;
 public class ServiceProviderAccountBean extends AbstractBean {
 
     private static final String NS = ServiceProviderAccountBean.class.getPackage().getName() + ".ServiceProviderAccountBean";
-    public static final String ENTITY_TABLE = "service_provider_account";
+    public static final String ENTITY = "service_provider_account";
 
     public static final String FILTER_MAPPING_ATTRIBUTE_NAME = "serviceProviderAccount";
 
@@ -120,7 +120,7 @@ public class ServiceProviderAccountBean extends AbstractBean {
     }
 
     private void saveNew(ServiceProviderAccount serviceProviderAccount) {
-        serviceProviderAccount.setId(sequenceBean.nextId(ENTITY_TABLE));
+        serviceProviderAccount.setId(sequenceBean.nextId(ENTITY));
         sqlSession().insert(NS + ".insertServiceProviderAccount", serviceProviderAccount);
     }
 

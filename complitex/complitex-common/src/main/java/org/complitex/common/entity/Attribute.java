@@ -7,14 +7,15 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static org.complitex.common.util.Locales.getSystemLocaleId;
+
 public class Attribute implements Serializable {
     private Long pkId;
     private String entityName;
     private Long attributeId;
     private Long objectId;
-    private Long attributeTypeId;
+    private Long entityAttributeId;
     private Long valueId;
-    private Long valueTypeId;
     private Date startDate;
     private Date endDate;
 
@@ -25,11 +26,9 @@ public class Attribute implements Serializable {
     public Attribute() {
     }
 
-    public Attribute(Long attributeTypeId, Long attributeId) {
-        this.attributeTypeId = attributeTypeId;
+    public Attribute(Long entityAttributeId, Long attributeId) {
+        this.entityAttributeId = entityAttributeId;
         this.attributeId = attributeId;
-
-        this.valueTypeId = attributeTypeId;
     }
 
     public StringValue getStringValue(Long localeId){
@@ -45,7 +44,7 @@ public class Attribute implements Serializable {
     }
 
     public String getStringValue(){
-        StringValue stringValue = getStringValue(Locales.getSystemLocaleId());
+        StringValue stringValue = getStringValue(getSystemLocaleId());
 
         return stringValue != null ? stringValue.getValue() : null;
     }
@@ -62,7 +61,7 @@ public class Attribute implements Serializable {
         }
 
         stringValues.stream()
-                .filter(s -> s.getLocaleId().equals(localeId) || (s.isSystemLocale() && s.getValue() == null))
+                .filter(s -> s.getLocaleId().equals(localeId) || (getSystemLocaleId().equals(s.getLocaleId()) && s.getValue() == null))
                 .forEach(s -> s.setValue(value));
     }
 
@@ -90,12 +89,12 @@ public class Attribute implements Serializable {
         this.attributeId = attributeId;
     }
 
-    public Long getAttributeTypeId() {
-        return attributeTypeId;
+    public Long getEntityAttributeId() {
+        return entityAttributeId;
     }
 
-    public void setAttributeTypeId(Long attributeTypeId) {
-        this.attributeTypeId = attributeTypeId;
+    public void setEntityAttributeId(Long entityAttributeId) {
+        this.entityAttributeId = entityAttributeId;
     }
 
     public Date getEndDate() {
@@ -144,13 +143,5 @@ public class Attribute implements Serializable {
 
     public void setStringValues(List<StringValue> stringValues) {
         this.stringValues = stringValues;
-    }
-
-    public Long getValueTypeId() {
-        return valueTypeId;
-    }
-
-    public void setValueTypeId(Long valueTypeId) {
-        this.valueTypeId = valueTypeId;
     }
 }

@@ -208,8 +208,7 @@ public class PersonCorrectionBean extends AbstractBean {
     private Attribute newChildAttribute(long attributeId, long childId) {
         Attribute childAttribute = new Attribute();
         childAttribute.setAttributeId(attributeId);
-        childAttribute.setAttributeTypeId(PersonStrategy.CHILDREN);
-        childAttribute.setValueTypeId(PersonStrategy.CHILDREN);
+        childAttribute.setEntityAttributeId(PersonStrategy.CHILDREN);
         childAttribute.setValueId(childId);
         return childAttribute;
     }

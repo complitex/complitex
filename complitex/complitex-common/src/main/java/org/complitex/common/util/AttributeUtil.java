@@ -15,8 +15,8 @@ public final class AttributeUtil {
     private AttributeUtil() {
     }
 
-    public static <T> T getAttributeValue(DomainObject object, long attributeTypeId, IConverter<T> converter) {
-        Attribute attribute = object.getAttribute(attributeTypeId);
+    public static <T> T getAttributeValue(DomainObject object, long entityAttributeId, IConverter<T> converter) {
+        Attribute attribute = object.getAttribute(entityAttributeId);
         T value = null;
         if (attribute != null) {
             String attributeValue = StringValueUtil.getSystemStringValue(attribute.getStringValues()).getValue();
@@ -25,25 +25,25 @@ public final class AttributeUtil {
         return value;
     }
 
-    public static String getStringValue(DomainObject object, long attributeTypeId) {
-        return getAttributeValue(object, attributeTypeId, new StringConverter());
+    public static String getStringValue(DomainObject object, long entityAttributeId) {
+        return getAttributeValue(object, entityAttributeId, new StringConverter());
     }
 
 
-    public static Integer getIntegerValue(DomainObject object, long attributeTypeId) {
-        return getAttributeValue(object, attributeTypeId, new IntegerConverter());
+    public static Integer getIntegerValue(DomainObject object, long entityAttributeId) {
+        return getAttributeValue(object, entityAttributeId, new IntegerConverter());
     }
 
-    public static Double getDoubleValue(DomainObject object, long attributeTypeId) {
-        return getAttributeValue(object, attributeTypeId, new DoubleConverter());
+    public static Double getDoubleValue(DomainObject object, long entityAttributeId) {
+        return getAttributeValue(object, entityAttributeId, new DoubleConverter());
     }
 
-    public static Date getDateValue(DomainObject object, long attributeTypeId) {
-        return getAttributeValue(object, attributeTypeId, new DateConverter());
+    public static Date getDateValue(DomainObject object, long entityAttributeId) {
+        return getAttributeValue(object, entityAttributeId, new DateConverter());
     }
 
-    public static boolean getBooleanValue(DomainObject object, long attributeTypeId) {
-        Boolean value = getAttributeValue(object, attributeTypeId, new BooleanConverter());
+    public static boolean getBooleanValue(DomainObject object, long entityAttributeId) {
+        Boolean value = getAttributeValue(object, entityAttributeId, new BooleanConverter());
         return value != null ? value : false;
     }
 }

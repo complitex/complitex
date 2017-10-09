@@ -69,8 +69,7 @@ public class OrganizationSyncHandler implements IAddressSyncHandler{
 
         Attribute servicingOrganization = new Attribute();
         servicingOrganization.setAttributeId(1L);
-        servicingOrganization.setAttributeTypeId(ORGANIZATION_TYPE);
-        servicingOrganization.setValueTypeId(ORGANIZATION_TYPE);
+        servicingOrganization.setEntityAttributeId(ORGANIZATION_TYPE);
         servicingOrganization.setValueId( OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE);
         domainObject.addAttribute(servicingOrganization);
 

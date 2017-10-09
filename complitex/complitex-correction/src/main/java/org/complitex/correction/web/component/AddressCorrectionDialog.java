@@ -148,7 +148,7 @@ public class AddressCorrectionDialog<T> extends Panel {
 
                 try {
                     if (!addressEntity.equals(AddressEntity.STREET_TYPE)) {
-                        Long id = state.getId(addressEntity.getEntityName());
+                        Long id = state.getId(addressEntity.getEntity());
 
                         switch (addressEntity){
                             case APARTMENT:
@@ -305,7 +305,7 @@ public class AddressCorrectionDialog<T> extends Panel {
 
             WiQuerySearchComponent newSearchComponent = new AddressSearchComponent("searchComponent", state,
                     getFilters(addressEntity), null, ShowMode.ACTIVE, true);
-            newSearchComponent.setFocus(target, localAddress.getFirstEmptyAddressEntity(false).getEntityName()); //todo focus
+            newSearchComponent.setFocus(target, localAddress.getFirstEmptyAddressEntity(false).getEntity()); //todo focus
 
             searchComponent.replaceWith(newSearchComponent);
             searchComponent = newSearchComponent;

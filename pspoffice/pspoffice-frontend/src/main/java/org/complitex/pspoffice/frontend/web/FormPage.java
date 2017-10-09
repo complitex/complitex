@@ -29,7 +29,7 @@ public abstract class FormPage extends BasePage{
 
     private Form form;
 
-    public FormPage() {
+    protected FormPage() {
         add(feedback = new NotificationPanel("feedback").setOutputMarkupId(true));
 
         form = new Form("form");
@@ -84,15 +84,15 @@ public abstract class FormPage extends BasePage{
         });
     }
 
-    public Form getForm() {
+    protected Form getForm() {
         return form;
     }
 
-    public void setReturnPage(Class<? extends IRequestablePage> returnPage) {
+    protected void setReturnPage(Class<? extends IRequestablePage> returnPage) {
         this.returnPage = returnPage;
     }
 
-    public void setReturnPage(Class<? extends IRequestablePage> returnPage, PageParameters returnPageParameters){
+    protected void setReturnPage(Class<? extends IRequestablePage> returnPage, PageParameters returnPageParameters){
         this.returnPage = returnPage;
         this.returnPageParameters = returnPageParameters;
     }

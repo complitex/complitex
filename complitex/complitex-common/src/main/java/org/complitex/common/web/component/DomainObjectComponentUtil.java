@@ -5,7 +5,10 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.converter.*;
+import org.complitex.common.converter.BooleanConverter;
+import org.complitex.common.converter.DateConverter;
+import org.complitex.common.converter.DoubleConverter;
+import org.complitex.common.converter.IntegerConverter;
 import org.complitex.common.entity.*;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
@@ -44,75 +47,74 @@ public class DomainObjectComponentUtil {
         IStrategy strategy = strategyFactory.getStrategy(strategyName, entityName);
 
         Entity entity = strategy.getEntity();
-        AttributeType attributeType = entity.getAttributeType(attribute.getAttributeTypeId());
-        IModel<String> labelModel = labelModel(attributeType.getAttributeNames(), locale);
-        String valueType = attributeType.getAttributeValueTypes().get(0).getValueType();
-        SimpleTypes type = SimpleTypes.valueOf(valueType.toUpperCase());
+        EntityAttribute entityAttribute = entity.getAttribute(attribute.getEntityAttributeId());
+        IModel<String> labelModel = labelModel(entityAttribute.getNames(), locale);
+
         Component input = null;
 
-        switch (type) {
+        switch (entityAttribute.getValueType()) {
             case STRING: {
-                input = new StringPanel(INPUT_COMPONENT_ID, new AttributeStringModel(attribute), attributeType.isMandatory(),
+                input = new StringPanel(INPUT_COMPONENT_ID, new AttributeStringModel(attribute), entityAttribute.isRequired(),
                         labelModel, !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
-            case BIG_STRING: {
-                input = new BigStringPanel(INPUT_COMPONENT_ID, new AttributeStringModel(attribute), attributeType.isMandatory(),
-                        labelModel, !isHistory && canEdit(strategyName, entityName, object));
-            }
-            break;
+//            case BIG_STRING: {
+//                input = new BigStringPanel(INPUT_COMPONENT_ID, new AttributeStringModel(attribute), entityAttribute.isMandatory(),
+//                        labelModel, !isHistory && canEdit(strategyName, entityName, object));
+//            }
+//            break;
             case STRING_VALUE: {
                 IModel<List<StringValue>> model = new PropertyModel<>(attribute, "stringValues");
-                input = new StringValuePanel(INPUT_COMPONENT_ID, model, attributeType.isMandatory(), labelModel,
+                input = new StringValuePanel(INPUT_COMPONENT_ID, model, entityAttribute.isRequired(), labelModel,
                         !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
             case INTEGER: {
                 IModel<Integer> model = new SimpleTypeModel<>(attribute, new IntegerConverter());
-                input = new IntegerPanel(INPUT_COMPONENT_ID, model, attributeType.isMandatory(), labelModel,
+                input = new IntegerPanel(INPUT_COMPONENT_ID, model, entityAttribute.isRequired(), labelModel,
                         !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
             case DATE: {
                 IModel<Date> model = new SimpleTypeModel<>(attribute, new DateConverter());
-                input = new DatePanel(INPUT_COMPONENT_ID, model, attributeType.isMandatory(), labelModel,
+                input = new DatePanel(INPUT_COMPONENT_ID, model, entityAttribute.isRequired(), labelModel,
                         !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
-            case DATE2: {
-                IModel<Date> model = new SimpleTypeModel<>(attribute, new DateConverter());
-                input = new Date2Panel(INPUT_COMPONENT_ID, model, attributeType.isMandatory(), labelModel,
-                        !isHistory && canEdit(strategyName, entityName, object));
-            }
-            break;
-            case MASKED_DATE: {
-                IModel<Date> model = new SimpleTypeModel<>(attribute, new DateConverter());
-                input = new MaskedDateInputPanel(INPUT_COMPONENT_ID, model, attributeType.isMandatory(), labelModel,
-                        !isHistory && canEdit(strategyName, entityName, object));
-            }
-            break;
+//            case DATE2: {
+//                IModel<Date> model = new SimpleTypeModel<>(attribute, new DateConverter());
+//                input = new Date2Panel(INPUT_COMPONENT_ID, model, entityAttribute.isMandatory(), labelModel,
+//                        !isHistory && canEdit(strategyName, entityName, object));
+//            }
+//            break;
+//            case MASKED_DATE: {
+//                IModel<Date> model = new SimpleTypeModel<>(attribute, new DateConverter());
+//                input = new MaskedDateInputPanel(INPUT_COMPONENT_ID, model, entityAttribute.isMandatory(), labelModel,
+//                        !isHistory && canEdit(strategyName, entityName, object));
+//            }
+//            break;
             case BOOLEAN: {
                 IModel<Boolean> model = new SimpleTypeModel<>(attribute, new BooleanConverter());
                 input = new BooleanPanel(INPUT_COMPONENT_ID, model, labelModel,
                         !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
-            case DOUBLE: {
+            case DECIMAL: {
                 IModel<Double> model = new SimpleTypeModel<>(attribute, new DoubleConverter());
-                input = new DoublePanel(INPUT_COMPONENT_ID, model, attributeType.isMandatory(), labelModel,
+                input = new DoublePanel(INPUT_COMPONENT_ID, model, entityAttribute.isRequired(), labelModel,
                         !isHistory && canEdit(strategyName, entityName, object));
             }
             break;
-            case GENDER: {
-                IModel<Gender> model = new SimpleTypeModel<>(attribute, new GenderConverter());
-                input = new GenderPanel(INPUT_COMPONENT_ID, model, attributeType.isMandatory(), labelModel,
-                        !isHistory && canEdit(strategyName, entityName, object));
-            }
-            break;
+//            case GENDER: {
+//                IModel<Gender> model = new SimpleTypeModel<>(attribute, new GenderConverter());
+//                input = new GenderPanel(INPUT_COMPONENT_ID, model, entityAttribute.isMandatory(), labelModel,
+//                        !isHistory && canEdit(strategyName, entityName, object));
+//            }
+//            break;
         }
 
         if (input == null) {
-            throw new IllegalStateException("Input component for attribute type " + attributeType.getId() + " is not recognized.");
+            throw new IllegalStateException("Input component for attribute type " + entityAttribute.getId() + " is not recognized.");
         }
 
         return input;

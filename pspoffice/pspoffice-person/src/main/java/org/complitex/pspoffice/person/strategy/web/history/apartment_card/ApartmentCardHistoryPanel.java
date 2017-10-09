@@ -19,9 +19,9 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.AttributeType;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Entity;
+import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.service.IUserProfileBean;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
@@ -111,9 +111,9 @@ final class ApartmentCardHistoryPanel extends Panel {
 
         //address
         WebMarkupContainer addressContainer = new WebMarkupContainer("addressContainer");
-        final AttributeType addressAttributeType = ENTITY.getAttributeType(ADDRESS);
-        addressContainer.add(new Label("label", labelModel(addressAttributeType.getAttributeNames(), getLocale())));
-        addressContainer.add(new WebMarkupContainer("required").setVisible(addressAttributeType.isMandatory()));
+        final EntityAttribute addressEntityAttribute = ENTITY.getAttribute(ADDRESS);
+        addressContainer.add(new Label("label", labelModel(addressEntityAttribute.getNames(), getLocale())));
+        addressContainer.add(new WebMarkupContainer("required").setVisible(addressEntityAttribute.isRequired()));
         final Component address = new CollapsibleSearchComponent("address",
                 apartmentCardStrategy.initAddressSearchComponentState(apartmentCardStrategy.getAddressEntity(card), card.getAddressId()),
                 of("city", "street", "building", "apartment", "room"), null, ShowMode.ALL, false);
@@ -123,21 +123,21 @@ final class ApartmentCardHistoryPanel extends Panel {
 
         //owner
         WebMarkupContainer ownerContainer = new WebMarkupContainer("ownerContainer");
-        final AttributeType ownerAttributeType = ENTITY.getAttributeType(OWNER);
-        IModel<String> ownerLabelModel = labelModel(ownerAttributeType.getAttributeNames(), getLocale());
+        final EntityAttribute ownerEntityAttribute = ENTITY.getAttribute(OWNER);
+        IModel<String> ownerLabelModel = labelModel(ownerEntityAttribute.getNames(), getLocale());
         ownerContainer.add(new Label("label", ownerLabelModel));
-        ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerAttributeType.isMandatory()));
+        ownerContainer.add(new WebMarkupContainer("required").setVisible(ownerEntityAttribute.isRequired()));
         final Component owner = new Label("owner", personStrategy.displayDomainObject(card.getOwner(), getLocale()));
         owner.add(new CssAttributeBehavior(modification.getModificationType(OWNER).getCssClass()));
         ownerContainer.add(owner);
         add(ownerContainer);
 
         //form of ownership
-        final AttributeType formOfOwnershipAttributeType = apartmentCardStrategy.getEntity().getAttributeType(FORM_OF_OWNERSHIP);
+        final EntityAttribute formOfOwnershipEntityAttribute = apartmentCardStrategy.getEntity().getAttribute(FORM_OF_OWNERSHIP);
         WebMarkupContainer formOfOwnershipContainer = new WebMarkupContainer("formOfOwnershipContainer");
-        IModel<String> labelModel = labelModel(formOfOwnershipAttributeType.getAttributeNames(), getLocale());
+        IModel<String> labelModel = labelModel(formOfOwnershipEntityAttribute.getNames(), getLocale());
         formOfOwnershipContainer.add(new Label("label", labelModel));
-        formOfOwnershipContainer.add(new WebMarkupContainer("required").setVisible(formOfOwnershipAttributeType.isMandatory()));
+        formOfOwnershipContainer.add(new WebMarkupContainer("required").setVisible(formOfOwnershipEntityAttribute.isRequired()));
         final List<DomainObject> allOwnershipForms = ownershipFormStrategy.getAll();
         IModel<DomainObject> ownershipFormModel = new Model<DomainObject>();
         if (card.getOwnershipForm() != null) {
@@ -210,9 +210,9 @@ final class ApartmentCardHistoryPanel extends Panel {
                 item.add(new CssAttributeBehavior(rowCss));
             }
 
-            private void addRegistrationAttributeCss(Component component, long attributeTypeId,
+            private void addRegistrationAttributeCss(Component component, long entityAttributeId,
                     RegistrationModification registrationModification) {
-                ModificationType attributeModificationType = registrationModification.getAttributeModificationType(attributeTypeId);
+                ModificationType attributeModificationType = registrationModification.getAttributeModificationType(entityAttributeId);
                 if (attributeModificationType != null) {
                     component.add(new CssAttributeBehavior(attributeModificationType.getCssClass()));
                 }
@@ -221,25 +221,25 @@ final class ApartmentCardHistoryPanel extends Panel {
         add(registrations);
 
         //user attributes and housing rights:
-        List<Long> restAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributeTypes(),
-                new Predicate<AttributeType>() {
+        List<Long> restAttributeTypeIds = newArrayList(transform(filter(ENTITY.getAttributes(),
+                new Predicate<EntityAttribute>() {
 
                     @Override
-                    public boolean apply(AttributeType attributeType) {
+                    public boolean apply(EntityAttribute attributeType) {
                         return !attributeType.isSystem() || attributeType.getId().equals(HOUSING_RIGHTS);
                     }
                 }),
-                new Function<AttributeType, Long>() {
+                new Function<EntityAttribute, Long>() {
 
                     @Override
-                    public Long apply(AttributeType attributeType) {
+                    public Long apply(EntityAttribute attributeType) {
                         return attributeType.getId();
                     }
                 }));
 
         List<Attribute> restAttributes = newArrayList();
-        for (Long attributeTypeId : restAttributeTypeIds) {
-            Attribute userAttribute = card.getAttribute(attributeTypeId);
+        for (Long entityAttributeId : restAttributeTypeIds) {
+            Attribute userAttribute = card.getAttribute(entityAttributeId);
             if (userAttribute != null) {
                 restAttributes.add(userAttribute);
             }
@@ -248,7 +248,7 @@ final class ApartmentCardHistoryPanel extends Panel {
 
             @Override
             protected void populateItem(ListItem<Attribute> item) {
-                long restAttributeTypeId = item.getModelObject().getAttributeTypeId();
+                long restAttributeTypeId = item.getModelObject().getEntityAttributeId();
                 initAttributeInput(card, modification, item, restAttributeTypeId);
             }
         };
@@ -269,22 +269,22 @@ final class ApartmentCardHistoryPanel extends Panel {
     }
 
     private void initAttributeInput(ApartmentCard card, ApartmentCardModification modification, MarkupContainer parent,
-            long attributeTypeId) {
-        final AttributeType attributeType = ENTITY.getAttributeType(attributeTypeId);
+            long entityAttributeId) {
+        final EntityAttribute entityAttribute = ENTITY.getAttribute(entityAttributeId);
 
         //label
-        parent.add(new Label("label", labelModel(attributeType.getAttributeNames(), getLocale())));
+        parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
 
         //required container
         WebMarkupContainer requiredContainer = new WebMarkupContainer("required");
-        requiredContainer.setVisible(attributeType.isMandatory());
+        requiredContainer.setVisible(entityAttribute.isRequired());
         parent.add(requiredContainer);
 
         //input component
-        Attribute attribute = card.getAttribute(attributeTypeId);
+        Attribute attribute = card.getAttribute(entityAttributeId);
         Component inputComponent = newInputComponent(apartmentCardStrategy.getEntityName(), null, card, attribute,
                 getLocale(), true);
-        inputComponent.add(new CssAttributeBehavior(modification.getModificationType(attributeTypeId).getCssClass()));
+        inputComponent.add(new CssAttributeBehavior(modification.getModificationType(entityAttributeId).getCssClass()));
         parent.add(inputComponent);
     }
 
