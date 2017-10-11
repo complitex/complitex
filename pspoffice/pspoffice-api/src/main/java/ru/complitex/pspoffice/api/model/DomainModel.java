@@ -1,10 +1,85 @@
 package ru.complitex.pspoffice.api.model;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Anatoly A. Ivanov
  * 10.10.2017 13:20
  */
-public class DomainModel implements Serializable{
+public class DomainModel implements Serializable {
+    private Long objectId;
+    private Long parentEntityId;
+    private Long parentId;
+    private String externalId;
+    private Date startDate;
+    private Date endDate;
+    private Integer statusId;
+
+    private List<DomainAttributeModel> attributes;
+
+    public Long getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(Long objectId) {
+        this.objectId = objectId;
+    }
+
+    public Long getParentEntityId() {
+        return parentEntityId;
+    }
+
+    public void setParentEntityId(Long parentEntityId) {
+        this.parentEntityId = parentEntityId;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Integer getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(Integer statusId) {
+        this.statusId = statusId;
+    }
+
+    public List<DomainAttributeModel> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<DomainAttributeModel> attributes) {
+        this.attributes = attributes;
+    }
 }

@@ -33,8 +33,8 @@ public class EntityAdapter {
                     m.setValueTypeId(a.getValueType().getId());
                     m.setReferenceId(a.getReferenceId());
 
-                    m.setNames(a.getNames().stream().collect(Collectors.toMap(n -> n.getLocaleId().toString(),
-                                    StringValue::getValue)));
+                    m.setNames(a.getNames().stream()
+                            .collect(Collectors.toMap(n -> n.getLocaleId().toString(), StringValue::getValue)));
 
                     return m;
                 }).collect(Collectors.toList()));
