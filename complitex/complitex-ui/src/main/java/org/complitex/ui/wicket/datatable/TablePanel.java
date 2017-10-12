@@ -33,16 +33,18 @@ import java.util.List;
 public class TablePanel<T extends Serializable> extends Panel {
     private Class<? extends Page> editPageClass;
 
-    public TablePanel(String id, Class<T> modelClass, List<String> modelFields, TableDataProvider<T> dataProvider, Class<? extends Page> editPageClass) {
+    private List<String> modelFields;
+
+    public TablePanel(String id, List<String> modelFields, TableDataProvider<T> dataProvider, Class<? extends Page> editPageClass) {
         super(id);
 
         this.editPageClass = editPageClass;
+        this.modelFields = modelFields;
 
         FilterForm<T> filterForm = new FilterForm<>("filterForm", dataProvider);
         add(filterForm);
 
-        DataTable<T, String> dataTable = new DataTable<>("dataTable", getColumns(modelClass, modelFields),
-                dataProvider, 10);
+        DataTable<T, String> dataTable = new DataTable<>("dataTable", getColumns(), dataProvider, 10);
         dataTable.addTopToolbar(new AjaxFallbackHeadersToolbar<>(dataTable, dataProvider));
 
         if (isShowFilter()) {
@@ -62,26 +64,32 @@ public class TablePanel<T extends Serializable> extends Panel {
         filterForm.add(dataTable);
     }
 
-    public TablePanel(String id, Class<T> modelClass, List<String> modelFields, TableDataProvider<T> dataProvider){
-        this(id, modelClass, modelFields, dataProvider, null);
+    public TablePanel(String id, List<String> modelFields, TableDataProvider<T> dataProvider){
+        this(id, modelFields, dataProvider, null);
+    }
+
+    public TablePanel(String id, TableDataProvider<T> dataProvider){
+        this(id, null, dataProvider, null);
     }
 
     protected IColumn<T, String> getColumn(String field){
         return null;
     }
 
-    private List<IColumn<T, String>> getColumns(Class<T> modelClass, List<String> modelFields){
+    protected List<IColumn<T, String>> getColumns(){
         List<IColumn<T, String>> columns = new ArrayList<>();
 
-        modelFields.forEach(f -> {
-            IColumn<T, String> column = getColumn(f);
+        if (modelFields != null) {
+            modelFields.forEach(f -> {
+                IColumn<T, String> column = getColumn(f);
 
-            if (column == null){
-                column = new TextFilteredPropertyColumn<T, String, String>(new ResourceModel(f), f, f);
-            }
+                if (column == null){
+                    column = new TextFilteredPropertyColumn<T, String, String>(new ResourceModel(f), f, f);
+                }
 
-            columns.add(column);
-        });
+                columns.add(column);
+            });
+        }
 
         if (editPageClass != null){
             columns.add(new EditColumn<T>(){

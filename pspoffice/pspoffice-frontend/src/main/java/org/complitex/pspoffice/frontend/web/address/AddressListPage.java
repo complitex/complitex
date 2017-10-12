@@ -50,7 +50,7 @@ public class AddressListPage extends BasePage{
 
         addressDataProvider.setEntity(entity);
 
-        add(new TablePanel<AddressModel>("addresses", AddressModel.class, Arrays.asList("id", "name.ru", "edit"),
+        add(new TablePanel<AddressModel>("addresses", Arrays.asList("id", "name.ru", "edit"),
                 addressDataProvider){
             @Override
             protected IColumn<AddressModel, String> getColumn(String field) {

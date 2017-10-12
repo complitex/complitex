@@ -1,7 +1,5 @@
 package org.complitex.pspoffice.frontend.web.entity;
 
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.ui.wicket.datatable.TableDataProvider;
 import ru.complitex.pspoffice.api.model.EntityModel;
@@ -35,10 +33,5 @@ public class EntityDataProvider extends TableDataProvider<EntityModel>{
     @Override
     public long size() {
         return pspOfficeClient.request("entity/size").get(Long.class);
-    }
-
-    @Override
-    public IModel<EntityModel> model(EntityModel entityModel) {
-        return new CompoundPropertyModel<>(entityModel);
     }
 }

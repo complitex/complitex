@@ -1,8 +1,6 @@
 package org.complitex.pspoffice.frontend.web.address;
 
 
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.ui.wicket.datatable.TableDataProvider;
 import ru.complitex.pspoffice.api.model.AddressModel;
@@ -51,10 +49,5 @@ public class AddressDataProvider extends TableDataProvider<AddressModel> {
                 .path("size")
                 .request(APPLICATION_JSON_TYPE)
                 .get(Long.class);
-    }
-
-    @Override
-    public IModel<AddressModel> model(AddressModel addressModel) {
-        return new CompoundPropertyModel<>(addressModel);
     }
 }

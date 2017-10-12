@@ -22,8 +22,8 @@ public class EntityListPage extends BasePage{
     public EntityListPage() {
         add(new NotificationPanel("feedback"));
 
-        add(new TablePanel<EntityModel>("entities", EntityModel.class,
-                Arrays.asList("id", "entity", "names.1", "names.2"), entityDataProvider, EntityPage.class){
+        add(new TablePanel<EntityModel>("entities",  Arrays.asList("id", "entity", "names.1", "names.2"),
+                entityDataProvider, EntityPage.class){
             @Override
             protected void populateEdit(IModel<EntityModel> rowModel, PageParameters pageParameters) {
                 pageParameters.add("id", rowModel.getObject().getId());

@@ -11,6 +11,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.complitex.pspoffice.frontend.web.address.AddressListPage;
 import org.complitex.pspoffice.frontend.web.address.building.BuildingListPage;
+import org.complitex.pspoffice.frontend.web.domain.DomainListPage;
 import org.complitex.pspoffice.frontend.web.entity.EntityListPage;
 import org.complitex.pspoffice.frontend.web.person.PersonListPage;
 
@@ -39,6 +40,8 @@ public abstract class BasePage extends WebPage{
         add(new BookmarkablePageLink("building", BuildingListPage.class));
 
         add(new BookmarkablePageLink("entity", EntityListPage.class));
+        add(new BookmarkablePageLink("domain", DomainListPage.class));
+
     }
 
     protected IModel<String> getTitleModel(){

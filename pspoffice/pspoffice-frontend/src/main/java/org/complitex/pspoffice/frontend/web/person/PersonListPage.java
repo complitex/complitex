@@ -24,7 +24,7 @@ public class PersonListPage extends BasePage{
     public PersonListPage() {
         add(new NotificationPanel("feedback"));
 
-        add(new TablePanel<PersonModel>("persons", PersonModel.class,
+        add(new TablePanel<PersonModel>("persons",
                 Arrays.asList("lastName.ru", "firstName.ru", "middleName.ru", "birthDate"), personDataProvider,
                 PersonPage.class){
             @Override

@@ -37,7 +37,7 @@ public class EntityPage extends FormPage{
         getForm().add(new TextField<String>("nameRu", new PropertyModel<>(entityModel, "names.1")));
         getForm().add(new TextField<String>("nameUk", new PropertyModel<>(entityModel, "names.2")));
 
-        getForm().add(new TablePanel<EntityAttributeModel>("entityAttributes", EntityAttributeModel.class,
+        getForm().add(new TablePanel<EntityAttributeModel>("entityAttributes",
                 Arrays.asList("id", "names.1", "names.2", "valueTypeId"),
                 new TableDataProvider<EntityAttributeModel>() {
 

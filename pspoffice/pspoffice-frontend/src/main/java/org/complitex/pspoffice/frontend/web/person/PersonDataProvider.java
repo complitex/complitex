@@ -1,7 +1,5 @@
 package org.complitex.pspoffice.frontend.web.person;
 
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.ui.wicket.datatable.TableDataProvider;
 import ru.complitex.pspoffice.api.model.PersonModel;
@@ -46,10 +44,5 @@ public class PersonDataProvider extends TableDataProvider<PersonModel>{
     @Override
     public long size() {
         return pspOfficeClient.request("person/size").get(Long.class);
-    }
-
-    @Override
-    public IModel<PersonModel> model(PersonModel personModel) {
-        return new CompoundPropertyModel<>(personModel);
     }
 }

@@ -1,7 +1,5 @@
 package org.complitex.pspoffice.frontend.web.address.building;
 
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.ui.wicket.datatable.TableDataProvider;
 import ru.complitex.pspoffice.api.model.BuildingModel;
@@ -37,10 +35,5 @@ public class BuildingDataProvider extends TableDataProvider<BuildingModel> {
                 .path("address/building/size")
                 .request(APPLICATION_JSON_TYPE)
                 .get(Long.class);
-    }
-
-    @Override
-    public IModel<BuildingModel> model(BuildingModel buildingObject) {
-        return new CompoundPropertyModel<>(buildingObject);
     }
 }
