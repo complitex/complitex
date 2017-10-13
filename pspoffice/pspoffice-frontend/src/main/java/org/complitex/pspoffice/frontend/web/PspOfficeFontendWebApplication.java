@@ -61,6 +61,6 @@ public class PspOfficeFontendWebApplication extends WebApplication{
         mountPage("address/building", BuildingListPage.class);
         mountPage("entities", EntityListPage.class);
         mountPage("entity/${id}", EntityPage.class);
-        mountPage("domain/${id}", DomainListPage.class);
+        mountPage("domain/${entity}", DomainListPage.class);
     }
 }

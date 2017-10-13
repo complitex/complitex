@@ -17,7 +17,7 @@ public class DomainAdapter {
     public static DomainModel adapt(DomainObject domainObject){
         DomainModel m = new DomainModel();
 
-        m.setObjectId(domainObject.getObjectId());
+        m.setId(domainObject.getObjectId());
         m.setParentEntityId(domainObject.getParentEntityId());
         m.setParentId(domainObject.getParentId());
         m.setExternalId(domainObject.getExternalId());
@@ -37,8 +37,9 @@ public class DomainAdapter {
     public static DomainAttributeModel adapt(Attribute attribute){
         DomainAttributeModel m = new DomainAttributeModel();
 
-        m.setAttributeId(attribute.getAttributeId());
-        m.setObjectId(attribute.getObjectId());
+        if (attribute.getAttributeId() > 1) {
+            m.setAttributeId(attribute.getAttributeId());
+        }
         m.setEntityAttributeId(attribute.getEntityAttributeId());
         m.setValueId(attribute.getValueId());
         m.setStartDate(attribute.getStartDate());

@@ -1,6 +1,7 @@
 package ru.complitex.pspoffice.backend.resource;
 
 import io.swagger.annotations.Api;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.complitex.common.entity.Entity;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.EntityBean;
@@ -32,9 +33,11 @@ public class EntityResource {
     }
 
     @GET
-    @Path("{id}")
-    public Response getEntity(@PathParam("id") Long id){
-        Entity entity = entityBean.getEntity(id);
+    @Path("{entity}")
+    public Response getEntity(@PathParam("entity") String entityName){
+        Long id = NumberUtils.isCreatable(entityName) ? Long.valueOf(entityName) : null;
+
+        Entity entity = id != null ? entityBean.getEntity(id) : entityBean.getEntity(entityName);
 
         if (entity == null){
             return Response.status(NOT_FOUND).build();

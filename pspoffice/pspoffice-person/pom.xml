@@ -48,6 +48,18 @@
             <groupId>org.complitex.pspoffice</groupId>
             <artifactId>pspoffice-military-service-relation</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.complitex.pspoffice</groupId>
+            <artifactId>pspoffice-departure-reason</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.complitex.pspoffice</groupId>
+            <artifactId>pspoffice-housing-rights</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.complitex.pspoffice</groupId>
+            <artifactId>pspoffice-street</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.codehaus.jackson</groupId>

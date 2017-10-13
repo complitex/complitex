@@ -9,7 +9,7 @@ import java.util.List;
  * 10.10.2017 13:20
  */
 public class DomainModel implements Serializable {
-    private Long objectId;
+    private Long id;
     private Long parentEntityId;
     private Long parentId;
     private String externalId;
@@ -19,12 +19,12 @@ public class DomainModel implements Serializable {
 
     private List<DomainAttributeModel> attributes;
 
-    public Long getObjectId() {
-        return objectId;
+    public Long getId() {
+        return id;
     }
 
-    public void setObjectId(Long objectId) {
-        this.objectId = objectId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getParentEntityId() {

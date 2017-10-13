@@ -48,7 +48,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Адресный справочник</a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Адрес</a>
                         </h4>
                     </div>
                     <div id="collapseTwo" class="panel-collapse collapse in">
@@ -68,14 +68,36 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Администрирование</a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Справочник</a>
                         </h4>
                     </div>
                     <div id="collapseThree" class="panel-collapse collapse in">
                         <div class="panel-body">
                             <table class="table">
+                                <tr><td><a wicket:id="organization">Организация</a></td></tr>
+                                <tr><td><a wicket:id="organization_type">Тип огранизации</a></td></tr>
+                                <tr><td><a wicket:id="owner_relationship">Отношение к владельцу</a></td></tr>
+                                <tr><td><a wicket:id="ownership_form">Форма собственности</a></td></tr>
+                                <tr><td><a wicket:id="registration_type">Тип регитсраций</a></td></tr>
+                                <tr><td><a wicket:id="document_type">Тип документа</a></td></tr>
+                                <tr><td><a wicket:id="military_service_relation">Воинская обязанность</a></td></tr>
+                                <tr><td><a wicket:id="departure_reason">Причина выбытия</a></td></tr>
+                                <tr><td><a wicket:id="housing_rights">Документ на жилплощадь</a></td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Администрирование</a>
+                        </h4>
+                    </div>
+                    <div id="collapseFour" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <table class="table">
                                 <tr><td><a wicket:id="entity">Модель данных</a></td></tr>
-                                <tr><td><a wicket:id="domain">Тест</a></td></tr>
                             </table>
                         </div>
                     </div>

@@ -39,9 +39,17 @@ public abstract class BasePage extends WebPage{
         add(new BookmarkablePageLink("street", AddressListPage.class, new PageParameters().add("entity", "street")));
         add(new BookmarkablePageLink("building", BuildingListPage.class));
 
-        add(new BookmarkablePageLink("entity", EntityListPage.class));
-        add(new BookmarkablePageLink("domain", DomainListPage.class));
+        add(new BookmarkablePageLink("organization", DomainListPage.class, new PageParameters().add("entity", "organization")));
+        add(new BookmarkablePageLink("organization_type", DomainListPage.class, new PageParameters().add("entity", "organization_type")));
+        add(new BookmarkablePageLink("owner_relationship", DomainListPage.class, new PageParameters().add("entity", "owner_relationship")));
+        add(new BookmarkablePageLink("ownership_form", DomainListPage.class, new PageParameters().add("entity", "ownership_form")));
+        add(new BookmarkablePageLink("registration_type", DomainListPage.class, new PageParameters().add("entity", "registration_type")));
+        add(new BookmarkablePageLink("document_type", DomainListPage.class, new PageParameters().add("entity", "document_type")));
+        add(new BookmarkablePageLink("military_service_relation", DomainListPage.class, new PageParameters().add("entity", "military_service_relation")));
+        add(new BookmarkablePageLink("departure_reason", DomainListPage.class, new PageParameters().add("entity", "departure_reason")));
+        add(new BookmarkablePageLink("housing_rights", DomainListPage.class, new PageParameters().add("entity", "housing_rights")));
 
+        add(new BookmarkablePageLink("entity", EntityListPage.class));
     }
 
     protected IModel<String> getTitleModel(){

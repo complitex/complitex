@@ -31,4 +31,11 @@ public class PspOfficeClient implements Serializable{
                 .path(path)
                 .request(MediaType.APPLICATION_JSON_TYPE);
     }
+
+    public Invocation.Builder request(String path, String name, Object value){
+        return target()
+                .path(path)
+                .queryParam(name, value)
+                .request(MediaType.APPLICATION_JSON_TYPE);
+    }
 }

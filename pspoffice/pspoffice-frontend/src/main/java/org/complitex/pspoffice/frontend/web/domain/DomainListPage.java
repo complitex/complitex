@@ -11,6 +11,7 @@ import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.pspoffice.frontend.web.BasePage;
 import org.complitex.ui.wicket.datatable.TablePanel;
 import ru.complitex.pspoffice.api.model.DomainModel;
+import ru.complitex.pspoffice.api.model.EntityAttributeModel;
 import ru.complitex.pspoffice.api.model.EntityModel;
 
 import javax.inject.Inject;
@@ -26,35 +27,40 @@ public class DomainListPage extends BasePage{
     private PspOfficeClient pspOfficeClient;
 
     public DomainListPage(PageParameters pageParameters) {
-        Long entityId = pageParameters.get("id").toLongObject();
+        String entity = pageParameters.get("entity").toString();
 
         add(new NotificationPanel("feedback"));
 
-        EntityModel entity = pspOfficeClient.request("entity/" + entityId).get(EntityModel.class);
+        EntityModel entityModel = pspOfficeClient.request("entity/" + entity).get(EntityModel.class);
 
-        add(new TablePanel<DomainModel>("domains", new DomainDataProvider(pspOfficeClient, entity.getEntity())){
+        add(new TablePanel<DomainModel>("domains", new DomainDataProvider(pspOfficeClient, entityModel.getEntity())){
             @Override
             protected List<IColumn<DomainModel, String>> getColumns() {
                 List<IColumn<DomainModel, String>> columns = new ArrayList<>();
 
                 columns.add(new TextFilteredPropertyColumn<DomainModel, String, String>(
-                        new ResourceModel("objectId"), "objectId", "objectId"));
-
-                entity.getAttributes().forEach(ea -> {
-                    columns.add(new TextFilteredPropertyColumn<DomainModel, String, String>(
-                            Model.of(ea.getNames().get("1")), ea.getId().toString(), ""){
-                        @Override
-                        public IModel<?> getDataModel(IModel<DomainModel> rowModel) {
-                            return rowModel.getObject().getAttributes().stream()
-                                    .filter(a -> a.getEntityAttributeId().equals(ea.getId()))
-                                    .filter(a -> a.getValues() != null)
-                                    .findAny()
-                                    .map(a -> a.getValues().get("1"))
-                                    .map(Model::of)
-                                    .orElse(new Model<>());
-                        }
-                    });
+                        new ResourceModel("id"), "id", "id"){
+                    @Override
+                    public String getCssClass() {
+                        return "filter-td-id";
+                    }
                 });
+
+                entityModel.getAttributes().stream()
+                        .filter(EntityAttributeModel::getRequired)
+                        .forEach(ea -> columns.add(new TextFilteredPropertyColumn<DomainModel, String, String>(
+                                Model.of(ea.getNames().get("1")), ea.getId().toString(), ""){
+                            @Override
+                            public IModel<?> getDataModel(IModel<DomainModel> rowModel) {
+                                return rowModel.getObject().getAttributes().stream()
+                                        .filter(a -> a.getEntityAttributeId().equals(ea.getId()))
+                                        .filter(a -> a.getValues() != null)
+                                        .findAny()
+                                        .map(a -> a.getValues().get("1"))
+                                        .map(Model::of)
+                                        .orElse(new Model<>());
+                            }
+                        }));
 
                 return columns;
             }
