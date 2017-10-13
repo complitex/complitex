@@ -2,7 +2,6 @@ package org.complitex.common.strategy;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import org.apache.ibatis.session.RowBounds;
 import org.complitex.common.entity.Entity;
 import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.entity.FilterWrapper;
@@ -153,8 +152,7 @@ public class EntityBean extends AbstractBean {
     }
 
     public List<Entity> getEntities(FilterWrapper<Entity> filterWrapper) {
-        return sqlSession().selectList(NS + ".selectEntities", filterWrapper,
-                new RowBounds((int)filterWrapper.getFirst(), (int)filterWrapper.getCount()));
+        return sqlSession().selectList(NS + ".selectEntities", filterWrapper);
     }
 
     public Long getEntitiesCount(FilterWrapper<Entity> filterWrapper) {

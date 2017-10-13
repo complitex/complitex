@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.pspoffice.housing_rights.strategy;
 
 import org.complitex.common.entity.AttributeFilter;
