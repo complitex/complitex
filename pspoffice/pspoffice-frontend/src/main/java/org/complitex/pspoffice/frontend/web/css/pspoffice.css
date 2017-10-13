@@ -27,3 +27,12 @@
 .filter-td-edit{
     width: 28px;
 }
+
+.headers span{
+    display: block;
+    text-transform: lowercase;
+}
+
+.headers span::first-letter {
+    text-transform: uppercase;
+}

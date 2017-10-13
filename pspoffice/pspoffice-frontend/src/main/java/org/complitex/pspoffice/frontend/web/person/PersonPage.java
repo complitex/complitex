@@ -34,9 +34,9 @@ public class PersonPage extends FormPage{
     private IModel<PersonModel> personModel;
 
     public PersonPage(PageParameters pageParameters) {
-        Long personModelId = pageParameters.get("id").toOptionalLong();
+        Long personModelId = pageParameters.get("id").toLongObject();
 
-        personModel = Model.of(personModelId != null ? getPersonModel(personModelId) : newPersonModel());
+        personModel = Model.of(personModelId > 0 ? getPersonModel(personModelId) : newPersonModel());
 
         //Основные
 

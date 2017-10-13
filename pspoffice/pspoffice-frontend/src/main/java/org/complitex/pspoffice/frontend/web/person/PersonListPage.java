@@ -36,7 +36,7 @@ public class PersonListPage extends BasePage{
         add(new BootstrapLink<Void>("addPerson", Buttons.Type.Primary) {
             @Override
             public void onClick() {
-                setResponsePage(PersonPage.class);
+                setResponsePage(PersonPage.class, new PageParameters().add("id", 0));
 
             }
         }.setLabel(new ResourceModel("addPerson")));
