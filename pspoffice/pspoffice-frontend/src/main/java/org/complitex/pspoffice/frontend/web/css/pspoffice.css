@@ -36,3 +36,11 @@
 .headers span::first-letter {
     text-transform: uppercase;
 }
+
+label.control-label{
+    text-transform: lowercase;
+}
+
+label.control-label::first-letter{
+    text-transform: uppercase;
+}
