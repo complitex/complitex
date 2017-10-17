@@ -24,6 +24,11 @@ public class StringValue implements Serializable {
         this.localeId = localeId;
     }
 
+    public StringValue(Long localeId, String value) {
+        this.localeId = localeId;
+        this.value = value;
+    }
+
     public Long getPkId() {
         return pkId;
     }

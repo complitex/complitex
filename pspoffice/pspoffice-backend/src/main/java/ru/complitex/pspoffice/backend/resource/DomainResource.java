@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.StrategyFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.complitex.pspoffice.api.model.DomainModel;
 import ru.complitex.pspoffice.backend.adapter.DomainAdapter;
 
@@ -14,6 +16,7 @@ import javax.ws.rs.core.Response;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 /**
  * @author Anatoly A. Ivanov
@@ -24,6 +27,8 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Produces(APPLICATION_JSON)
 @Api(description = "Domain API")
 public class DomainResource {
+    private Logger log = LoggerFactory.getLogger(DomainResource.class);
+
     @EJB
     private StrategyFactory strategyFactory;
 
@@ -65,5 +70,27 @@ public class DomainResource {
     @ApiOperation(value = "Get domain model count", response = DomainModel.class)
     public Response getDomainsCount(@PathParam("entity") String entity){
         return Response.ok(strategyFactory.getStrategy(entity).getCount(new DomainObjectFilter())).build();
+    }
+
+    @PUT
+    @Path("{entity}")
+    @ApiOperation(value = "Put domain")
+    public Response putDomain(@PathParam("entity") String entity, DomainModel domainModel){
+        try {
+            Long id = domainModel.getId();
+
+            if (id != null){
+                strategyFactory.getStrategy(entity).update(DomainAdapter.adapt(domainModel));
+
+                return Response.ok().build();
+            }else {
+                throw new RuntimeException("not implemented");
+            }
+        } catch (Exception e) {
+            log.error("put domain error", e);
+
+            return Response.status(INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+
     }
 }

@@ -107,6 +107,8 @@ public interface IStrategy {
     DomainObject newInstance();
     
     Long performDefaultValidation(DomainObject object, Locale locale);
+
+    void update(DomainObject domainObject);
     
     void update(DomainObject oldObject, DomainObject newObject, Date updateDate);
     

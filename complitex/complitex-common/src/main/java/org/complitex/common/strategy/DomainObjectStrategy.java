@@ -473,7 +473,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             newObject.setPermissionId(getNewPermissionId(newObject.getSubjectIds()));
         }
 
-        if (!Numbers.isEqual(oldObject.getPermissionId(), newObject.getPermissionId())) {
+        if (newObject.getPermissionId() != null && !Numbers.isEqual(oldObject.getPermissionId(), newObject.getPermissionId())) {
             updatePermissionId(newObject.getObjectId(), newObject.getPermissionId());
         }
 
@@ -697,7 +697,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
 
-    protected void updatePermissionId(long objectId, long permissionId) {
+    protected void updatePermissionId(Long objectId, Long permissionId) {
         Map<String, Object> params = new HashMap<>();
 
         params.put("entity", getEntityName());

@@ -21,7 +21,10 @@ import ru.complitex.pspoffice.api.model.EntityAttributeModel;
 import ru.complitex.pspoffice.api.model.EntityModel;
 
 import javax.inject.Inject;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -34,13 +37,16 @@ public class DomainPage extends FormPage{
 
     private IModel<DomainModel> domainModel;
 
+    private String entity;
+
     public DomainPage(PageParameters pageParameters) {
-        String entity = pageParameters.get("entity").toString();
+        entity = pageParameters.get("entity").toString();
         Long id = pageParameters.get("id").toLongObject();
 
+        EntityModel entityModel = getEntityModel(entity);
         domainModel = Model.of(getDomainModel(entity, id));
 
-        getForm().add(new ListView<EntityAttributeModel>("attributes", getEntityModel(entity).getAttributes()) {
+        getForm().add(new ListView<EntityAttributeModel>("attributes", entityModel.getAttributes()) {
             @Override
             protected void populateItem(ListItem<EntityAttributeModel> item) {
                 EntityAttributeModel entityAttributeModel = item.getModelObject();
@@ -58,6 +64,7 @@ public class DomainPage extends FormPage{
                                 .add(new Label("label1", entityAttributeModel.getNames().get("1"))
                                         .add(new AttributeModifier("for", id + "1")))
                                 .add(new TextField<String>("input1", new PropertyModel<>(domainAttributeModel, "values.1"))
+                                        .setRequired(entityAttributeModel.getRequired())
                                         .add(new AttributeModifier("id", id + "1")))
                                 .add(new Label("label2", entityAttributeModel.getNames().get("2"))
                                         .add(new AttributeModifier("for", id + "2")))
@@ -70,6 +77,7 @@ public class DomainPage extends FormPage{
                                 .add(new Label("label", entityAttributeModel.getNames().get("1"))
                                         .add(new AttributeModifier("for", id)))
                                 .add(new TextField<String>("input", new PropertyModel<>(domainAttributeModel, "values.1"))
+                                        .setRequired(entityAttributeModel.getRequired())
                                         .add(new AttributeModifier("id", id))));
                         break;
                     case 2:
@@ -92,20 +100,24 @@ public class DomainPage extends FormPage{
                                     public Boolean getObject(String id, IModel<? extends List<? extends Boolean>> choices) {
                                         return "true".equals(id);
                                     }
-                                }).add(new AttributeModifier("id", id))));
+                                })
+                                        .setRequired(entityAttributeModel.getRequired())
+                                        .add(new AttributeModifier("id", id))));
                         break;
                     case 5:
                         item.add(new Fragment("attribute", "value", DomainPage.this)
                                 .add(new Label("label", entityAttributeModel.getNames().get("1"))
                                         .add(new AttributeModifier("for", id)))
                                 .add(new DateTextField("input", new PropertyModel<>(domainAttributeModel, "value.1"), "dd.MM.yyyy")
+                                        .setRequired(entityAttributeModel.getRequired())
                                         .add(new AttributeModifier("id", id))));
                         break;
                     default:
                         item.add(new Fragment("attribute", "value", DomainPage.this)
-                                .add(new Label("label", entityAttributeModel.getNames().get("1") + "*")
+                                .add(new Label("label", entityAttributeModel.getNames().get("1") + "[" + entityAttributeModel.getValueTypeId() + "]")
                                         .add(new AttributeModifier("for", id)))
-                                .add(new TextField<String>("input", new PropertyModel<>(domainAttributeModel, "values.1"))
+                                .add(new TextField<String>("input", new PropertyModel<>(domainAttributeModel, "valueId"))
+                                        .setRequired(entityAttributeModel.getRequired())
                                         .add(new AttributeModifier("id", id))));
                 }
             }
@@ -119,6 +131,17 @@ public class DomainPage extends FormPage{
     }
 
     private DomainModel getDomainModel(String entity, Long id) {
-        return pspOfficeClient.request("domain/" + entity + "/" + id).get(DomainModel.class);
+        DomainModel domainModel =  pspOfficeClient.request("domain/" + entity + "/" + id).get(DomainModel.class);
+
+        domainModel.getAttributes().stream()
+                .filter(a -> a.getValues() == null)
+                .forEach(a -> a.setValues(new HashMap<>()));
+
+        return domainModel;
+    }
+
+    @Override
+    protected Response put() {
+        return pspOfficeClient.request("domain/" + entity).put(Entity.json(domainModel.getObject()));
     }
 }
