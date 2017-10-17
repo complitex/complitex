@@ -422,7 +422,9 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     public void insert(DomainObject domainObject, Date insertDate){
         domainObject.setObjectId(sequenceBean.nextId(getEntityName()));
 
-        domainObject.setPermissionId(getNewPermissionId(domainObject.getSubjectIds()));
+        if (domainObject.getSubjectIds() != null) {
+            domainObject.setPermissionId(getNewPermissionId(domainObject.getSubjectIds()));
+        }
 
         if (domainObject.getStatus() == null){
             domainObject.setStatus(Status.ACTIVE);
