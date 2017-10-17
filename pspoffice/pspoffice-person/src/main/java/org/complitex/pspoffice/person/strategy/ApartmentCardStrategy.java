@@ -270,9 +270,9 @@ public class ApartmentCardStrategy extends TemplateStrategy {
 
 
     @Override
-    public void insert(DomainObject apartmentCard, Date insertDate) {
-        setEditedByUserId(apartmentCard);
-        super.insert(apartmentCard, insertDate);
+    public void insert(DomainObject domainObject, Date insertDate) {
+        setEditedByUserId(domainObject);
+        super.insert(domainObject, insertDate);
     }
 
 

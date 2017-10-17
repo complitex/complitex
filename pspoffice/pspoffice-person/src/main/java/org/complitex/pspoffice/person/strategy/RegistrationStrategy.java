@@ -160,9 +160,9 @@ public class RegistrationStrategy extends DomainObjectStrategy {
 
 
     @Override
-    public void insert(DomainObject registration, Date insertDate) {
-        setEditedByUserId(registration);
-        super.insert(registration, insertDate);
+    public void insert(DomainObject domainObject, Date insertDate) {
+        setEditedByUserId(domainObject);
+        super.insert(domainObject, insertDate);
     }
 
 

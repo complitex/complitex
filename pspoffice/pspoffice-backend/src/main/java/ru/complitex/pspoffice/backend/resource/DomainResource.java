@@ -81,11 +81,11 @@ public class DomainResource {
 
             if (id != null){
                 strategyFactory.getStrategy(entity).update(DomainAdapter.adapt(domainModel));
-
-                return Response.ok().build();
             }else {
-                throw new RuntimeException("not implemented");
+                strategyFactory.getStrategy(entity).insert(DomainAdapter.adapt(domainModel));
             }
+
+            return Response.ok().build();
         } catch (Exception e) {
             log.error("put domain error", e);
 

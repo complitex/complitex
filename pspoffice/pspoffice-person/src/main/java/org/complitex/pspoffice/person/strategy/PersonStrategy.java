@@ -527,9 +527,9 @@ public class PersonStrategy extends TemplateStrategy {
     }
 
     @Override
-    public void insert(DomainObject person, Date insertDate) {
-        setEditedByUserId(person);
-        super.insert(person, insertDate);
+    public void insert(DomainObject domainObject, Date insertDate) {
+        setEditedByUserId(domainObject);
+        super.insert(domainObject, insertDate);
     }
 
     private void setEditedByUserId(DomainObject person) {

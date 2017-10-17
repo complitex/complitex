@@ -283,7 +283,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                 .filter(ea -> !ea.isObsolete())
                 .filter(ea -> object.getAttributes(ea.getId()).isEmpty())
                 .forEach(ea -> {
-                    Attribute attribute = getNewAttributeInstance();
+                    Attribute attribute = new Attribute();
 
                     attribute.setEntityAttributeId(ea.getId());
                     attribute.setObjectId(object.getObjectId());
@@ -297,10 +297,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         if (!toAdd.isEmpty()) {
             object.getAttributes().addAll(toAdd);
         }
-    }
-
-    protected Attribute getNewAttributeInstance() {
-        return new Attribute();
     }
 
     protected Attribute fillManyValueTypesAttribute(EntityAttribute entityAttribute, Long objectId) {
@@ -394,6 +390,14 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             attribute.setValueId(generatedStringId);
         }
 
+        if (attribute.getAttributeId() == null){
+            attribute.setAttributeId(1L);
+        }
+
+        if (attribute.getStatus() == null){
+            attribute.setStatus(Status.ACTIVE);
+        }
+
         if (attribute.getValueId() != null || entityAttribute.isRequired()) {
             attribute.setEntityName(getEntityName());
 
@@ -415,13 +419,23 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     @Override
-    public void insert(DomainObject object, Date insertDate){
-        object.setObjectId(sequenceBean.nextId(getEntityName()));
-        object.setPermissionId(getNewPermissionId(object.getSubjectIds()));
-        insertDomainObject(object, insertDate);
+    public void insert(DomainObject domainObject, Date insertDate){
+        domainObject.setObjectId(sequenceBean.nextId(getEntityName()));
 
-        for (Attribute attribute : object.getAttributes()) {
-            attribute.setObjectId(object.getObjectId());
+        domainObject.setPermissionId(getNewPermissionId(domainObject.getSubjectIds()));
+
+        if (domainObject.getStatus() == null){
+            domainObject.setStatus(Status.ACTIVE);
+        }
+
+        if (domainObject.getPermissionId() == null){
+            domainObject.setPermissionId(0L);
+        }
+
+        insertDomainObject(domainObject, insertDate);
+
+        for (Attribute attribute : domainObject.getAttributes()) {
+            attribute.setObjectId(domainObject.getObjectId());
             attribute.setStartDate(insertDate);
             insertAttribute(attribute);
         }

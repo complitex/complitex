@@ -179,23 +179,27 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
     }
 
     @Override
-    public void insert(DomainObject organization, Date insertDate) {
-        organization.setObjectId(sequenceBean.nextId(getEntityName()));
+    public void insert(DomainObject domainObject, Date insertDate) {
+        domainObject.setObjectId(sequenceBean.nextId(getEntityName()));
 
-        if (!organization.getSubjectIds().contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
-            organization.getSubjectIds().add(organization.getObjectId());
+        if (domainObject.getStatus() == null){
+            domainObject.setStatus(Status.ACTIVE);
         }
 
-        organization.setPermissionId(getNewPermissionId(organization.getSubjectIds()));
-        insertDomainObject(organization, insertDate);
+        if (!domainObject.getSubjectIds().contains(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
+            domainObject.getSubjectIds().add(domainObject.getObjectId());
+        }
 
-        for (Attribute attribute : organization.getAttributes()) {
-            attribute.setObjectId(organization.getObjectId());
+        domainObject.setPermissionId(getNewPermissionId(domainObject.getSubjectIds()));
+        insertDomainObject(domainObject, insertDate);
+
+        for (Attribute attribute : domainObject.getAttributes()) {
+            attribute.setObjectId(domainObject.getObjectId());
             attribute.setStartDate(insertDate);
             insertAttribute(attribute);
         }
 
-        changeDistrictPermissions(organization);
+        changeDistrictPermissions(domainObject);
     }
 
     @Override

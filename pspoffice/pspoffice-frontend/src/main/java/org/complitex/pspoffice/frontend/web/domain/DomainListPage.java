@@ -1,6 +1,7 @@
 package org.complitex.pspoffice.frontend.web.domain;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapBookmarkablePageLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
@@ -120,5 +121,13 @@ public class DomainListPage extends BasePage{
                 return columns;
             }
         });
+
+        add(new BootstrapLink<Void>("addDomain", Buttons.Type.Primary) {
+            @Override
+            public void onClick() {
+                setResponsePage(DomainPage.class, new PageParameters().add("entity", entity).add("id", 0));
+
+            }
+        }.setLabel(new ResourceModel("addDomain")));
     }
 }

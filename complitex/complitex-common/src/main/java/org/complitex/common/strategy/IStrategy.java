@@ -102,6 +102,8 @@ public interface IStrategy {
 
     IValidator getValidator();
 
+    void insert(DomainObject object);
+
     void insert(DomainObject object, Date insertDate);
 
     DomainObject newInstance();

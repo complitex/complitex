@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Anatoly A. Ivanov
@@ -44,7 +45,7 @@ public class DomainPage extends FormPage{
         Long id = pageParameters.get("id").toLongObject();
 
         EntityModel entityModel = getEntityModel(entity);
-        domainModel = Model.of(getDomainModel(entity, id));
+        domainModel = Model.of(id > 0 ? getDomainModel(entity, id) : newDomainModel(entityModel));
 
         getForm().add(new ListView<EntityAttributeModel>("attributes", entityModel.getAttributes()) {
             @Override
@@ -65,11 +66,11 @@ public class DomainPage extends FormPage{
                                         .add(new AttributeModifier("for", id + "1")))
                                 .add(new TextField<String>("input1", new PropertyModel<>(domainAttributeModel, "values.1"))
                                         .setRequired(entityAttributeModel.getRequired())
-                                        .add(new AttributeModifier("id", id + "1")))
+                                        .setMarkupId(id + "1"))
                                 .add(new Label("label2", entityAttributeModel.getNames().get("2"))
                                         .add(new AttributeModifier("for", id + "2")))
                                 .add(new TextField<String>("input2", new PropertyModel<>(domainAttributeModel, "values.2"))
-                                        .add(new AttributeModifier("id", id + "2"))));
+                                        .setMarkupId(id + "2")));
                         break;
                     case 1:
                     case 3:
@@ -78,7 +79,7 @@ public class DomainPage extends FormPage{
                                         .add(new AttributeModifier("for", id)))
                                 .add(new TextField<String>("input", new PropertyModel<>(domainAttributeModel, "values.1"))
                                         .setRequired(entityAttributeModel.getRequired())
-                                        .add(new AttributeModifier("id", id))));
+                                        .setMarkupId(id)));
                         break;
                     case 2:
                         item.add(new Fragment("attribute", "value", DomainPage.this)
@@ -102,7 +103,7 @@ public class DomainPage extends FormPage{
                                     }
                                 })
                                         .setRequired(entityAttributeModel.getRequired())
-                                        .add(new AttributeModifier("id", id))));
+                                        .setMarkupId(id)));
                         break;
                     case 5:
                         item.add(new Fragment("attribute", "value", DomainPage.this)
@@ -110,20 +111,37 @@ public class DomainPage extends FormPage{
                                         .add(new AttributeModifier("for", id)))
                                 .add(new DateTextField("input", new PropertyModel<>(domainAttributeModel, "value.1"), "dd.MM.yyyy")
                                         .setRequired(entityAttributeModel.getRequired())
-                                        .add(new AttributeModifier("id", id))));
+                                        .setMarkupId(id)));
                         break;
                     default:
                         item.add(new Fragment("attribute", "value", DomainPage.this)
                                 .add(new Label("label", entityAttributeModel.getNames().get("1") + "[" + entityAttributeModel.getValueTypeId() + "]")
                                         .add(new AttributeModifier("for", id)))
                                 .add(new TextField<String>("input", new PropertyModel<>(domainAttributeModel, "valueId"))
-                                        .setRequired(entityAttributeModel.getRequired())
-                                        .add(new AttributeModifier("id", id))));
+                                        .setMarkupId(id)));
                 }
             }
         });
 
         setReturnPage(DomainListPage.class, new PageParameters().add("entity", entity));
+    }
+
+    private DomainModel newDomainModel(EntityModel entityModel) {
+        DomainModel domainModel = new DomainModel();
+
+        domainModel.setAttributes(
+                entityModel.getAttributes().stream()
+                        .map(ea -> {
+                            DomainAttributeModel m = new DomainAttributeModel();
+
+                            m.setEntityAttributeId(ea.getId());
+                            m.setValues(new HashMap<>());
+
+                            return m;
+                        })
+                        .collect(Collectors.toList()));
+
+        return domainModel;
     }
 
     private EntityModel getEntityModel(String entity){
