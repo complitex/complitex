@@ -14,7 +14,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.pspoffice.frontend.web.FormPage;
 import ru.complitex.pspoffice.api.model.DocumentModel;
-import ru.complitex.pspoffice.api.model.NameModel;
+import ru.complitex.pspoffice.api.model.DomainModel;
 import ru.complitex.pspoffice.api.model.PersonModel;
 
 import javax.inject.Inject;
@@ -95,12 +95,12 @@ public class PersonPage extends FormPage{
 
         //Документ
 
-        List<NameModel> documentTypes = getDocumentTypes();
+        List<DomainModel> documentTypes = getDocumentTypes();
 
         getForm().add(new DropDownChoice<>("documentTypeId",
-                new IModel<NameModel>() {
+                new IModel<DomainModel>() {
                     @Override
-                    public NameModel getObject() {
+                    public DomainModel getObject() {
                         return documentTypes.stream()
                                 .filter(o -> o.getId().equals(getDocumentObject().getTypeId()))
                                 .findAny()
@@ -108,8 +108,8 @@ public class PersonPage extends FormPage{
                     }
 
                     @Override
-                    public void setObject(NameModel nameModel) {
-                        getDocumentObject().setTypeId(nameModel.getId());
+                    public void setObject(DomainModel domainModel) {
+                        getDocumentObject().setTypeId(domainModel.getId());
                     }
 
                     private DocumentModel getDocumentObject(){
@@ -118,7 +118,7 @@ public class PersonPage extends FormPage{
                 },
 
                 documentTypes,
-                new ChoiceRenderer<>("name.ru", "id")
+                new ChoiceRenderer<>("attributes.0.values.1", "id")
         ).setNullValid(true).setRequired(true));
 
         getForm().add(new TextField<>("documentSeries", new PropertyModel<>(personModel, "documents[0].series")).setRequired(true));
@@ -168,7 +168,7 @@ public class PersonPage extends FormPage{
         return personModel;
     }
 
-    private List<NameModel> getDocumentTypes(){
-        return pspOfficeClient.request("dictionary/document-type").get(new GenericType<List<NameModel>>(){});
+    private List<DomainModel> getDocumentTypes(){
+        return pspOfficeClient.request("domain/document_type").get(new GenericType<List<DomainModel>>(){});
     }
 }
