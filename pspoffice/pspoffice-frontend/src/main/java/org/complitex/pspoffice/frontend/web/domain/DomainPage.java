@@ -1,6 +1,8 @@
 package org.complitex.pspoffice.frontend.web.domain;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteRenderer;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -14,6 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.pspoffice.frontend.web.FormPage;
 import ru.complitex.pspoffice.api.model.DomainAttributeModel;
@@ -27,6 +30,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,9 +70,49 @@ public class DomainPage extends FormPage{
             getForm().add(new Fragment("parent", "value", DomainPage.this)
                     .add(new Label("label", parentEntityModel.getNames().get("1") + " [" + parentEntityModel.getId() + "]")
                             .add(new AttributeModifier("for", "parent" + id)))
-                    .add(new TextField<String>("input", new PropertyModel<>(domainModel, "parentId"))
+                    .add(new AutoCompleteTextField<DomainModel>("input", new Model<DomainModel>() {
+                        @Override
+                        public DomainModel getObject() {
+
+                            return super.getObject();
+                        }
+
+                        @Override
+                        public void setObject(DomainModel object) {
+                            super.setObject(object);
+                        }
+                    }, new IAutoCompleteRenderer<DomainModel>(){
+
+                        @Override
+                        public void render(DomainModel object, org.apache.wicket.request.Response response, String criteria) {
+                            String textValue = object.getAttributes().get(0).getValues().get("1");
+                            textValue = Strings.escapeMarkup(textValue).toString();
+
+                            response.write("<li>");
+                            response.write(textValue);
+                            response.write("</li>");
+                        }
+
+                        @Override
+                        public void renderHeader(org.apache.wicket.request.Response response) {
+                            response.write("<ul>");
+                        }
+
+                        @Override
+                        public void renderFooter(org.apache.wicket.request.Response response, int count) {
+                            response.write("</ul>");
+                        }
+                    }) {
+                        @Override
+                        protected Iterator<DomainModel> getChoices(String input) {
+                            return pspOfficeClient.request("domain/" + parentEntityModel.getEntity(), "value", input)
+                                    .get(new GenericType<List<DomainModel>>(){}).iterator();
+                        }
+                    }
                             .setRequired(true))
                     .setMarkupId("parent" + id));
+
+
         }else{
             getForm().add(new EmptyPanel("parent"));
         }

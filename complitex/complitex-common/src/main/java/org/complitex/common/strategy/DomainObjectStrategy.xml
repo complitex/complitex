@@ -170,6 +170,14 @@
         <if test="parentId != null and parentEntity != null">
             AND e.`parent_entity_id` = (SELECT ent.`id` FROM `entity` ent WHERE ent.`entity` = #{parentEntity}) AND e.`parent_id` = #{parentId}
         </if>
+
+        <if test="value != null">
+            AND EXISTS(
+              SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
+                AND attr.`status` = 1 AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc
+                  WHERE sc.`value` LIKE CONCAT('%', #{value}, '%'))
+            )
+        </if>
     </sql>
 
     <sql id="sqlLimit">

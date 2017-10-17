@@ -37,6 +37,8 @@ public class DomainObjectFilter implements Serializable {
 
     private String userOrganizationsString;
 
+    private String value;
+
     public DomainObjectFilter() {
     }
 
@@ -255,5 +257,13 @@ public class DomainObjectFilter implements Serializable {
 
     public void setUserOrganizationsString(String userOrganizationsString) {
         this.userOrganizationsString = userOrganizationsString;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

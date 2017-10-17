@@ -56,12 +56,15 @@ public class DomainResource {
     @ApiOperation(value = "Get domain model list by entity name and object id", response = DomainModel.class, responseContainer = "List")
     public Response getDomains(@PathParam("entity") String entity,
                                @QueryParam("offset") @DefaultValue("0") Long offset,
-                               @QueryParam("limit") @DefaultValue("10") Long limit){
+                               @QueryParam("limit") @DefaultValue("10") Long limit,
+                               @QueryParam("value") String value){
         DomainObjectFilter filter = new DomainObjectFilter();
         filter.setFirst(offset);
         filter.setCount(limit);
+        filter.setValue(value);
 
-        return  Response.ok(strategyFactory.getStrategy(entity).getList(filter).stream().map(DomainAdapter::adapt)
+        return  Response.ok(strategyFactory.getStrategy(entity).getList(filter).stream()
+                .map(DomainAdapter::adapt)
                 .collect(Collectors.toList())).build();
     }
 
