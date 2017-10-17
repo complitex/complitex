@@ -23,6 +23,7 @@ import ru.complitex.pspoffice.api.model.EntityModel;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,16 +49,27 @@ public class DomainPage extends FormPage{
         EntityModel entityModel = getEntityModel(entity);
         domainModel = Model.of(id > 0 ? getDomainModel(entity, id) : newDomainModel(entityModel));
 
-        if (domainModel.getObject().getParentEntityId() != null){
-            EntityModel parentEntityModel = getEntityModel(domainModel.getObject().getParentEntityId().toString());
+        Long parentEntityId = domainModel.getObject().getParentEntityId();
+
+        if (parentEntityId == null){
+            List<DomainModel> list = pspOfficeClient.request("domain/" + entity, "limit", 1)
+                    .get(new GenericType<List<DomainModel>>(){});
+
+            if (!list.isEmpty()){
+                parentEntityId = list.get(0).getParentEntityId();
+            }
+        }
+
+        if (parentEntityId != null) {
+            EntityModel parentEntityModel = getEntityModel(parentEntityId.toString());
 
             getForm().add(new Fragment("parent", "value", DomainPage.this)
                     .add(new Label("label", parentEntityModel.getNames().get("1") + " [" + parentEntityModel.getId() + "]")
                             .add(new AttributeModifier("for", "parent" + id)))
                     .add(new TextField<String>("input", new PropertyModel<>(domainModel, "parentId"))
                             .setRequired(true))
-                            .setMarkupId("parent" + id));
-        }else {
+                    .setMarkupId("parent" + id));
+        }else{
             getForm().add(new EmptyPanel("parent"));
         }
 

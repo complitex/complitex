@@ -491,6 +491,10 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             updatePermissionId(newObject.getObjectId(), newObject.getPermissionId());
         }
 
+        if (newObject.getPermissionId() == null){
+            newObject.setPermissionId(0L);
+        }
+
         Set<Attribute> updatedAttributes = new HashSet<>();
 
         oldObject.getAttributes().forEach(oldAttribute -> {

@@ -25,6 +25,7 @@ public class DomainAdapter {
         m.setStartDate(domainObject.getStartDate());
         m.setEndDate(domainObject.getEndDate());
         m.setStatusId(domainObject.getStatus().getId());
+        m.setSubjectIds(domainObject.getSubjectIds());
 
         if (domainObject.getAttributes() != null) {
             m.setAttributes(domainObject.getAttributes().stream().map(DomainAdapter::adapt).collect(Collectors.toList()));
@@ -57,11 +58,13 @@ public class DomainAdapter {
 
         o.setObjectId(domainModel.getId());
         o.setParentEntityId(domainModel.getParentEntityId());
+        o.setParentId(domainModel.getParentId());
         o.setExternalId(domainModel.getExternalId());
         o.setStartDate(domainModel.getStartDate());
         o.setEndDate(domainModel.getEndDate());
         o.setStatus(Stream.of(Status.values())
                 .filter(s -> s.getId().equals(domainModel.getStatusId())).findAny().orElse(null));
+        o.setSubjectIds(domainModel.getSubjectIds());
 
         if (domainModel.getAttributes() != null){
             o.setAttributes(domainModel.getAttributes().stream().map(DomainAdapter::adapt).collect(Collectors.toList()));

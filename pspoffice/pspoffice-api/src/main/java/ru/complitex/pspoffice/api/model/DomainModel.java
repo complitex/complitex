@@ -3,6 +3,7 @@ package ru.complitex.pspoffice.api.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Anatoly A. Ivanov
@@ -16,6 +17,7 @@ public class DomainModel implements Serializable {
     private Date startDate;
     private Date endDate;
     private Integer statusId;
+    private Set<Long> subjectIds;
 
     private List<DomainAttributeModel> attributes;
 
@@ -73,6 +75,14 @@ public class DomainModel implements Serializable {
 
     public void setStatusId(Integer statusId) {
         this.statusId = statusId;
+    }
+
+    public Set<Long> getSubjectIds() {
+        return subjectIds;
+    }
+
+    public void setSubjectIds(Set<Long> subjectIds) {
+        this.subjectIds = subjectIds;
     }
 
     public List<DomainAttributeModel> getAttributes() {
