@@ -112,7 +112,7 @@ public class DomainListPage extends BasePage{
                         PageParameters pageParameters = new PageParameters().add("entity", entity).add("id", rowModel.getObject().getId());
 
                         cellItem.add(new LinkPanel(componentId, new BootstrapBookmarkablePageLink(LinkPanel.LINK_COMPONENT_ID,
-                                DomainEditPage.class, pageParameters, Buttons.Type.Menu) .setIconType(GlyphIconType.edit)
+                                DomainPage.class, pageParameters, Buttons.Type.Menu) .setIconType(GlyphIconType.edit)
                                 .setSize(Buttons.Size.Small)));
                     }
                 });
