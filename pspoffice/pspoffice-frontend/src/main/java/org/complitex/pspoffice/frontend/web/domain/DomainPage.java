@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -46,6 +47,19 @@ public class DomainPage extends FormPage{
 
         EntityModel entityModel = getEntityModel(entity);
         domainModel = Model.of(id > 0 ? getDomainModel(entity, id) : newDomainModel(entityModel));
+
+        if (domainModel.getObject().getParentEntityId() != null){
+            EntityModel parentEntityModel = getEntityModel(domainModel.getObject().getParentEntityId().toString());
+
+            getForm().add(new Fragment("parent", "value", DomainPage.this)
+                    .add(new Label("label", parentEntityModel.getNames().get("1") + " [" + parentEntityModel.getId() + "]")
+                            .add(new AttributeModifier("for", "parent" + id)))
+                    .add(new TextField<String>("input", new PropertyModel<>(domainModel, "parentId"))
+                            .setRequired(true))
+                            .setMarkupId("parent" + id));
+        }else {
+            getForm().add(new EmptyPanel("parent"));
+        }
 
         getForm().add(new ListView<EntityAttributeModel>("attributes", entityModel.getAttributes()) {
             @Override
