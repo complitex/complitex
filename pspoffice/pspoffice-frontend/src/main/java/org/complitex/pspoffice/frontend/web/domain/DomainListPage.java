@@ -35,8 +35,10 @@ public class DomainListPage extends BasePage{
     @Inject
     private PspOfficeClient pspOfficeClient;
 
+    private String entity;
+
     public DomainListPage(PageParameters pageParameters) {
-        String entity = pageParameters.get("entity").toString();
+        entity = pageParameters.get("entity").toString();
 
         add(new NotificationPanel("feedback"));
 
@@ -129,5 +131,10 @@ public class DomainListPage extends BasePage{
 
             }
         }.setLabel(new ResourceModel("addDomain")));
+    }
+
+    @Override
+    protected IModel<String> getTitleModel() {
+        return new ResourceModel(entity, entity);
     }
 }
