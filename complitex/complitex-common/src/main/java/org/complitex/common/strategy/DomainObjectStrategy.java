@@ -1185,6 +1185,10 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
 
+    public void delete(Long objectId) throws DeleteException {
+        delete(objectId, Locales.getSystemLocale());
+    }
+
     @Override
     public void delete(Long objectId, Locale locale) throws DeleteException {
         deleteChecks(objectId, locale);
@@ -1192,7 +1196,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         deleteAttributes(objectId);
         deleteDomainObject(objectId);
     }
-
 
     protected void deleteChecks(Long objectId, Locale locale) throws DeleteException {
         childrenExistCheck(objectId, locale);

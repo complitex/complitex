@@ -91,6 +91,20 @@ public class DomainResource {
 
             return Response.status(INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
+    }
 
+    @DELETE
+    @Path("{entity}/{id}")
+    @ApiOperation(value = "Delete domain")
+    public Response deleteDomain(@PathParam("entity") String entity, @PathParam("id") Long id){
+        try {
+            strategyFactory.getStrategy(entity).delete(id);
+
+            return Response.ok().build();
+        } catch (Exception e) {
+            log.error("delete domain error", e);
+
+            return Response.status(INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
     }
 }

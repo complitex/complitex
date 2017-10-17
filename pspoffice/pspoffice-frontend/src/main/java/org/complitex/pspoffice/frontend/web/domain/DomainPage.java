@@ -162,4 +162,14 @@ public class DomainPage extends FormPage{
     protected Response put() {
         return pspOfficeClient.request("domain/" + entity).put(Entity.json(domainModel.getObject()));
     }
+
+    @Override
+    protected boolean isDeleteVisible() {
+        return domainModel.getObject().getId() != null && domainModel.getObject().getId() > 0;
+    }
+
+    @Override
+    protected Response delete() {
+        return pspOfficeClient.request("domain/" + entity + "/" + domainModel.getObject().getId()).delete();
+    }
 }

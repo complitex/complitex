@@ -131,6 +131,8 @@ public interface IStrategy {
     void changeChildrenActivity(Long parentId, boolean enable);
 
     boolean canPropagatePermissions(DomainObject object);
+
+    void delete(Long objectId) throws DeleteException;
     
     void delete(Long objectId, Locale locale) throws DeleteException;
 

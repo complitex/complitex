@@ -6,6 +6,7 @@ import de.agilecoders.wicket.jquery.function.Function;
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -82,6 +83,34 @@ public abstract class FormPage extends BasePage{
                 FormPage.this.onCancel();
             }
         });
+
+        form.add(new AjaxLink<Void>("delete") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                Response response = delete();
+
+                boolean error = false;
+
+                if (response != null){
+                    if (response.getStatus() == OK.getStatusCode()){
+                        getSession().info("Запись удалена");
+                    }else {
+                        error = true;
+                        getSession().error(response.getStatusInfo().getReasonPhrase() + ": " + response.readEntity(String.class));
+                        target.add(feedback);
+                    }
+                }
+
+                if (returnPage != null && !error) {
+                    setResponsePage(returnPage, returnPageParameters);
+                }
+            }
+
+            @Override
+            public boolean isVisible() {
+                return isDeleteVisible();
+            }
+        });
     }
 
     protected Form getForm() {
@@ -123,5 +152,13 @@ public abstract class FormPage extends BasePage{
 
     protected void onCancel(){
 
+    }
+
+    protected Response delete(){
+        return null;
+    }
+
+    protected boolean isDeleteVisible(){
+        return false;
     }
 }
