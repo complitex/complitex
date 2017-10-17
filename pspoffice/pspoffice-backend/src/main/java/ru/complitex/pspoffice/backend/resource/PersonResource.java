@@ -117,7 +117,7 @@ public class PersonResource {
                                @QueryParam("lastName") String lastName,
                                @QueryParam("middleName") String middleName,
                                @QueryParam("offset") Long offset,
-                               @QueryParam("count") Long count){
+                               @QueryParam("limit") Long limit){
         return Response.ok(personStrategy.getList(new DomainObjectFilter()).stream()
                 .map(this::getPersonObject).collect(Collectors.toList())).build();
     }

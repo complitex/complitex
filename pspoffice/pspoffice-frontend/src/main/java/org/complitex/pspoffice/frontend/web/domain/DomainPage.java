@@ -62,14 +62,14 @@ public class DomainPage extends FormPage{
                 switch (entityAttributeModel.getValueTypeId()){
                     case 0:
                         item.add(new Fragment("attribute", "stringValue", DomainPage.this)
-                                .add(new Label("label1", entityAttributeModel.getNames().get("1"))
+                                .add(new Label("labelRu", entityAttributeModel.getNames().get("1"))
                                         .add(new AttributeModifier("for", id + "1")))
-                                .add(new TextField<String>("input1", new PropertyModel<>(domainAttributeModel, "values.1"))
+                                .add(new TextField<String>("inputRu", new PropertyModel<>(domainAttributeModel, "values.1"))
                                         .setRequired(entityAttributeModel.getRequired())
                                         .setMarkupId(id + "1"))
-                                .add(new Label("label2", entityAttributeModel.getNames().get("2"))
+                                .add(new Label("labelUk", "")
                                         .add(new AttributeModifier("for", id + "2")))
-                                .add(new TextField<String>("input2", new PropertyModel<>(domainAttributeModel, "values.2"))
+                                .add(new TextField<String>("inputUk", new PropertyModel<>(domainAttributeModel, "values.2"))
                                         .setMarkupId(id + "2")));
                         break;
                     case 1:

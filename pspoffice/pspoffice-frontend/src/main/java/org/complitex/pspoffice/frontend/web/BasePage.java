@@ -9,8 +9,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.complitex.pspoffice.frontend.web.address.AddressListPage;
-import org.complitex.pspoffice.frontend.web.address.building.BuildingListPage;
 import org.complitex.pspoffice.frontend.web.domain.DomainListPage;
 import org.complitex.pspoffice.frontend.web.entity.EntityListPage;
 import org.complitex.pspoffice.frontend.web.person.PersonListPage;
@@ -32,12 +30,12 @@ public abstract class BasePage extends WebPage{
 
         add(new BookmarkablePageLink("personsLink", PersonListPage.class));
 
-        add(new BookmarkablePageLink("country", AddressListPage.class, new PageParameters().add("entity", "country")));
-        add(new BookmarkablePageLink("region", AddressListPage.class, new PageParameters().add("entity", "region")));
-        add(new BookmarkablePageLink("city", AddressListPage.class, new PageParameters().add("entity", "city")));
-        add(new BookmarkablePageLink("district", AddressListPage.class, new PageParameters().add("entity", "district")));
-        add(new BookmarkablePageLink("street", AddressListPage.class, new PageParameters().add("entity", "street")));
-        add(new BookmarkablePageLink("building", BuildingListPage.class));
+        add(new BookmarkablePageLink("country", DomainListPage.class, new PageParameters().add("entity", "country")));
+        add(new BookmarkablePageLink("region", DomainListPage.class, new PageParameters().add("entity", "region")));
+        add(new BookmarkablePageLink("city", DomainListPage.class, new PageParameters().add("entity", "city")));
+        add(new BookmarkablePageLink("district", DomainListPage.class, new PageParameters().add("entity", "district")));
+        add(new BookmarkablePageLink("street", DomainListPage.class, new PageParameters().add("entity", "street")));
+        add(new BookmarkablePageLink("building_address", DomainListPage.class, new PageParameters().add("entity", "building_address")));
 
         add(new BookmarkablePageLink("organization", DomainListPage.class, new PageParameters().add("entity", "organization")));
         add(new BookmarkablePageLink("organization_type", DomainListPage.class, new PageParameters().add("entity", "organization_type")));

@@ -5,7 +5,10 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import ru.complitex.pspoffice.api.json.CharsetRequestFilter;
 import ru.complitex.pspoffice.api.json.ObjectMapperProvider;
-import ru.complitex.pspoffice.backend.resource.*;
+import ru.complitex.pspoffice.backend.resource.AddressResource;
+import ru.complitex.pspoffice.backend.resource.DomainResource;
+import ru.complitex.pspoffice.backend.resource.EntityResource;
+import ru.complitex.pspoffice.backend.resource.PersonResource;
 
 import javax.ws.rs.ApplicationPath;
 import java.util.logging.Logger;
@@ -28,7 +31,6 @@ public class PspOfficeBackendApplication extends ResourceConfig {
 
         register(AddressResource.class);
         register(PersonResource.class);
-        register(DictionaryResource.class);
         register(EntityResource.class);
         register(DomainResource.class);
 
