@@ -45,7 +45,7 @@ label.control-label::first-letter{
     text-transform: uppercase;
 }
 
-.tt-dropdown-menu{
+.wicket-aa{
     background-color: #fff;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
@@ -61,10 +61,10 @@ label.control-label::first-letter{
     padding: 3px 20px;
 }
 
-.wicket-aa ul li{
+.wicket-aa li{
     cursor: pointer;
 }
 
-.wicket-aa ul li.selected {
+.wicket-aa li:hover, .wicket-aa li:focus{
     color: #009688;
 }
