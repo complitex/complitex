@@ -68,7 +68,7 @@ public class DomainPage extends FormPage{
             EntityModel parentEntityModel = getEntityModel(parentEntityId.toString());
 
             getForm().add(new Fragment("parent", "value", DomainPage.this)
-                    .add(new Label("label", parentEntityModel.getNames().get("1") + " [" + parentEntityModel.getId() + "]")
+                    .add(new Label("label", parentEntityModel.getNames().get("1"))
                             .add(new AttributeModifier("for", "parent" + id)))
                     .add(new AutoCompleteTextField<DomainModel>("input", new Model<DomainModel>() {
                         @Override
