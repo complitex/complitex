@@ -9,4 +9,6 @@
         <role-name>AUTHORIZED</role-name>
         <group-name>ADMINISTRATORS</group-name>
     </security-role-mapping>
+
+    <class-loader delegate="false"/>
 </glassfish-web-app>

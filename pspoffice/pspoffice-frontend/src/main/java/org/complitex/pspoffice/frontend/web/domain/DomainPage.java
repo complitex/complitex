@@ -1,8 +1,10 @@
 package org.complitex.pspoffice.frontend.web.domain;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.typeaheadV10.DataSet;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.typeaheadV10.Typeahead;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.typeaheadV10.TypeaheadConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.typeaheadV10.bloodhound.Bloodhound;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
-import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteRenderer;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -13,10 +15,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.Strings;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.pspoffice.frontend.web.FormPage;
 import ru.complitex.pspoffice.api.model.DomainAttributeModel;
@@ -30,7 +32,6 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,52 +68,39 @@ public class DomainPage extends FormPage{
         if (parentEntityId != null) {
             EntityModel parentEntityModel = getEntityModel(parentEntityId.toString());
 
+            //noinspection unchecked
             getForm().add(new Fragment("parent", "value", DomainPage.this)
-                    .add(new Label("label", parentEntityModel.getNames().get("1") + " [" + parentEntityModel.getId() + "]")
+                    .add(new Label("label", parentEntityModel.getNames().get("1"))
                             .add(new AttributeModifier("for", "parent" + id)))
-                    .add(new AutoCompleteTextField<DomainModel>("input", new Model<DomainModel>() {
-                        @Override
-                        public DomainModel getObject() {
+                    .add(new Typeahead<>("input",
+                            new LoadableDetachableModel<DomainModel>() {
+                                @Override
+                                protected DomainModel load() {
+                                    return getDomainModel(parentEntityModel.getEntity(), domainModel.getObject().getParentId());
+                                }
 
-                            return super.getObject();
-                        }
+                                @Override
+                                public void setObject(DomainModel object) {
+                                    if (object != null) {
+                                        domainModel.getObject().setParentId(object.getParentId());
+                                    }
 
-                        @Override
-                        public void setObject(DomainModel object) {
-                            super.setObject(object);
-                        }
-                    }, new IAutoCompleteRenderer<DomainModel>(){
-
-                        @Override
-                        public void render(DomainModel object, org.apache.wicket.request.Response response, String criteria) {
-                            String textValue = object.getAttributes().get(0).getValues().get("1");
-                            textValue = Strings.escapeMarkup(textValue).toString();
-
-                            response.write("<li>");
-                            response.write(textValue);
-                            response.write("</li>");
-                        }
+                                    super.setObject(object);
+                                }
+                            }, new TypeaheadConfig(new DataSet(new Bloodhound<DomainModel>("domain") {
 
                         @Override
-                        public void renderHeader(org.apache.wicket.request.Response response) {
-                            response.write("<ul>");
-                        }
-
-                        @Override
-                        public void renderFooter(org.apache.wicket.request.Response response, int count) {
-                            response.write("</ul>");
-                        }
-                    }) {
-                        @Override
-                        protected Iterator<DomainModel> getChoices(String input) {
+                        public Iterable<DomainModel> getChoices(String input) {
                             return pspOfficeClient.request("domain/" + parentEntityModel.getEntity(), "value", input)
-                                    .get(new GenericType<List<DomainModel>>(){}).iterator();
+                                    .get(new GenericType<List<DomainModel>>(){});
                         }
-                    }
-                            .setRequired(true))
-                    .setMarkupId("parent" + id));
 
-
+                        @Override
+                        public String renderChoice(DomainModel choice) {
+                            return choice.getAttributes().get(0).getValues().get("1");
+                        }
+                    })))
+                            .setRequired(true)).setMarkupId("parent" + id));
         }else{
             getForm().add(new EmptyPanel("parent"));
         }
@@ -123,11 +111,10 @@ public class DomainPage extends FormPage{
                 EntityAttributeModel entityAttributeModel = item.getModelObject();
                 String id = "attribute" + item.getMarkupId();
 
-                IModel<DomainAttributeModel> domainAttributeModel = domainModel.getObject().getAttributes().stream()
+                DomainAttributeModel domainAttributeModel = domainModel.getObject().getAttributes().stream()
                         .filter(a -> a.getEntityAttributeId().equals(entityAttributeModel.getId()))
                         .findAny()
-                        .map(Model::of)
-                        .orElse(null);
+                        .get();
 
                 switch (entityAttributeModel.getValueTypeId()){
                     case 0:

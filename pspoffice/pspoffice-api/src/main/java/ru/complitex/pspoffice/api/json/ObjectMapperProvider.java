@@ -33,6 +33,8 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         objectMapper.setDateFormat(new SimpleDateFormat("dd.MM.yyyy"));
+//        objectMapper.registerModule(new Jaxrs2TypesModule());
+        objectMapper.findAndRegisterModules();
 
         return objectMapper;
     }
