@@ -217,6 +217,7 @@ public class DomainPage extends FormPage{
                                         return new IConverter<DomainModel>() {
                                             @Override
                                             public DomainModel convertToObject(String s, Locale locale) throws ConversionException {
+
                                                 return null;
                                             }
 
@@ -230,7 +231,9 @@ public class DomainPage extends FormPage{
                                     return super.createConverter(type);
                                 }
 
-                            }.setMarkupId("value" + id)));
+                            }
+                            .add(new AttributeModifier("onchange", "if($('#value" + id +"').val()=='') $('#valueId" + id +"').val('')"))
+                            .setMarkupId("value" + id)));
                         break;
                     default:
                         item.add(new Fragment("attribute", "value", DomainPage.this)
