@@ -65,6 +65,6 @@ label.control-label::first-letter{
     cursor: pointer;
 }
 
-.wicket-aa li:hover, .wicket-aa li:focus{
+.wicket-aa ul li.selected {
     color: #009688;
 }
