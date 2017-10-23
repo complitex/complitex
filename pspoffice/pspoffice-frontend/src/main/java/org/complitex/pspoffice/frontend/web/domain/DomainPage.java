@@ -1,13 +1,9 @@
 package org.complitex.pspoffice.frontend.web.domain;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AbstractAutoCompleteTextRenderer;
-import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteSettings;
-import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -18,8 +14,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.convert.ConversionException;
-import org.apache.wicket.util.convert.IConverter;
 import org.complitex.pspoffice.frontend.service.PspOfficeClient;
 import org.complitex.pspoffice.frontend.web.FormPage;
 import ru.complitex.pspoffice.api.model.DomainAttributeModel;
@@ -31,7 +25,9 @@ import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -142,55 +138,8 @@ public class DomainPage extends FormPage{
                     case 10:
                         EntityModel reference = getEntityModel(entityAttributeModel.getReferenceId().toString());
 
-                        item.add(new Fragment("attribute", "entity", DomainPage.this)
-                            .add(new Label("label", entityAttributeModel.getNames().get("1"))
-                                    .add(new AttributeModifier("for", "value" + id)))
-                            .add(new HiddenField<>("inputId", new PropertyModel<>(domainAttributeModel, "valueId"))
-                                    .setMarkupId("valueId" + id))
-                            .add(new AutoCompleteTextField<DomainModel>("input",
-                                    Model.of(getDomainModel(reference.getEntity(), domainAttributeModel.getObject().getValueId())),
-                                    DomainModel.class,
-                                    new AbstractAutoCompleteTextRenderer<DomainModel>(){
-
-                                        @Override
-                                        protected String getTextValue(DomainModel object) {
-                                            return object.getAttributes().get(0).getValues().get("1");
-                                        }
-
-                                        @Override
-                                        protected CharSequence getOnSelectJavaScriptExpression(DomainModel item) {
-                                            return "$('#valueId" + id +"').val('" + item.getId() + "'); input";
-                                        }
-                                    }, new AutoCompleteSettings().setShowListOnEmptyInput(true)) {
-                                @Override
-                                protected Iterator<DomainModel> getChoices(String input) {
-                                    return pspOfficeClient.request("domain/" + reference.getEntity(), "value", input)
-                                            .get(new GenericType<List<DomainModel>>(){}).iterator();
-                                }
-
-                                @Override
-                                protected IConverter<?> createConverter(Class<?> type) {
-                                    if (DomainModel.class.equals(type)){
-                                        return new IConverter<DomainModel>() {
-                                            @Override
-                                            public DomainModel convertToObject(String s, Locale locale) throws ConversionException {
-
-                                                return null;
-                                            }
-
-                                            @Override
-                                            public String convertToString(DomainModel c, Locale locale) {
-                                                return c.getAttributes().get(0).getValues().get("1");
-                                            }
-                                        };
-                                    }
-
-                                    return super.createConverter(type);
-                                }
-
-                            }
-                            .add(new AttributeModifier("onchange", "if($('#value" + id +"').val()=='') $('#valueId" + id +"').val('')"))
-                            .setMarkupId("value" + id)));
+                        item.add(new DomainAutocomplete("attribute", Model.of(entityAttributeModel.getNames().get("1")),
+                                reference.getEntity(), new PropertyModel<>(domainAttributeModel, "valueId")));
                         break;
                     default:
                         item.add(new Fragment("attribute", "value", DomainPage.this)
