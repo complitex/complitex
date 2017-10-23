@@ -65,53 +65,10 @@ public class DomainPage extends FormPage{
         }
 
         if (parentEntityId != null) {
-            EntityModel parentEntityModel = getEntityModel(parentEntityId.toString());
+            EntityModel parent = getEntityModel(parentEntityId.toString());
 
-            getForm().add(new Fragment("parent", "entity", DomainPage.this)
-                    .add(new Label("label", parentEntityModel.getNames().get("1"))
-                            .add(new AttributeModifier("for", "parent" + id)))
-                    .add(new HiddenField<>("inputId", new PropertyModel<>(domainModel, "parentId"))
-                            .setMarkupId("parentId" + id))
-                    .add(new AutoCompleteTextField<DomainModel>("input",
-                            Model.of(getDomainModel(parentEntityModel.getEntity(), domainModel.getObject().getParentId())),
-                            new AbstractAutoCompleteTextRenderer<DomainModel>(){
-
-                                @Override
-                                protected String getTextValue(DomainModel object) {
-                                    return object.getAttributes().get(0).getValues().get("1");
-                                }
-
-                                @Override
-                                protected CharSequence getOnSelectJavaScriptExpression(DomainModel item) {
-                                    return "$('#parentId" + id +"').val('" + item.getId() + "'); input";
-                                }
-                            }) {
-                        @Override
-                        protected Iterator<DomainModel> getChoices(String input) {
-                            return pspOfficeClient.request("domain/" + parentEntityModel.getEntity(), "value", input)
-                                    .get(new GenericType<List<DomainModel>>(){}).iterator();
-                        }
-
-                        @Override
-                        protected IConverter<?> createConverter(Class<?> type) {
-                            if (DomainModel.class.equals(type)){
-                                return new IConverter<DomainModel>() {
-                                    @Override
-                                    public DomainModel convertToObject(String s, Locale locale) throws ConversionException {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public String convertToString(DomainModel c, Locale locale) {
-                                        return c.getAttributes().get(0).getValues().get("1");
-                                    }
-                                };
-                            }
-
-                            return super.createConverter(type);
-                        }
-
-                    }.setMarkupId("parent" + id)));
+            getForm().add(new DomainAutocomplete("parent", Model.of(parent.getNames().get("1")),
+                    parent.getEntity(), new PropertyModel<>(domainModel, "parentId")));
         }else{
             getForm().add(new EmptyPanel("parent"));
         }
