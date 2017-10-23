@@ -33,12 +33,12 @@ import java.util.stream.Collectors;
 /**
  * @author Anatoly A. Ivanov
  * 13.10.2017 12:56
- */
-public class DomainPage extends FormPage{
-    @Inject
-    private PspOfficeClient pspOfficeClient;
+         */
+    public class DomainPage extends FormPage{
+        @Inject
+        private PspOfficeClient pspOfficeClient;
 
-    private IModel<DomainModel> domainModel;
+        private IModel<DomainModel> domainModel;
 
     private String entity;
 
