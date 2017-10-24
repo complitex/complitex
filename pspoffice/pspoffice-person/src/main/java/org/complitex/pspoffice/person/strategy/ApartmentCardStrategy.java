@@ -218,7 +218,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
 
     public String getAddressEntity(ApartmentCard apartmentCard) {
 //        long valueTypeId = apartmentCard.getAttribute(ADDRESS).getValueTypeId();
-        return getAddressEntity(0); //todo add attribute
+        return getAddressEntity(ADDRESS_APARTMENT); //todo add attribute
     }
 
     @Override
@@ -264,8 +264,8 @@ public class ApartmentCardStrategy extends TemplateStrategy {
 
     private void setEditedByUserId(DomainObject apartmentCard) {
         long userId = sessionBean.getCurrentUserId();
-        StringValueUtil.getSystemStringValue(apartmentCard.getAttribute(EDITED_BY_USER_ID).getStringValues()).
-                setValue(String.valueOf(userId));
+//        StringValueUtil.getSystemStringValue(apartmentCard.getAttribute(EDITED_BY_USER_ID).getStringValues()).
+//                setValue(String.valueOf(userId));
     }
 
 
@@ -762,7 +762,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
                         if (current.isFinished() && !prev.isFinished()) {
                             m.addRegistrationModification(current.getObjectId(),
                                     new RegistrationModification().setModificationType(ModificationType.REMOVE).
-                                    setEditedByUserId(current.getEditedByUserId()).
+//                                    setEditedByUserId(current.getEditedByUserId()).
                                     setExplanation(current.getExplanation()));
                             break;
                         }

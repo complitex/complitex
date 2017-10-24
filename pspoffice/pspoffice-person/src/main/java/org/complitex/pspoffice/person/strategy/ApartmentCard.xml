@@ -19,12 +19,11 @@
 
     <sql id="findByApartmentSql"> <!--todo add attributes-->
         LEFT JOIN `apartment_card_attribute` apartment_a ON (apartment_a.`object_id` = e.`object_id` AND apartment_a.`status` = 1
-            AND apartment_a.`entity_attribute_id` = ${apartmentCardAddressAT}
-            AND apartment_a.`value_type_id` = ${apartmentCardApartmentVT})
+            AND apartment_a.`entity_attribute_id` = ${apartmentCardAddressAT})
+
         LEFT JOIN `apartment_card_attribute` room_a ON (room_a.`object_id` = e.`object_id` AND room_a.`status` = 1
-            AND room_a.`entity_attribute_id` = ${apartmentCardAddressAT}
-            AND room_a.`value_type_id` = ${apartmentCardRoomVT})
-            
+            AND room_a.`entity_attribute_id` = ${apartmentCardAddressAT})
+
         LEFT JOIN `room` room ON (room.`object_id` = room_a.`value_id` AND room.`status` = 1)
         LEFT JOIN `apartment` apartment ON (apartment.`status` = 1 AND apartment.`object_id` = room.`parent_id`
             AND room.`parent_entity_id` = 100)
@@ -50,14 +49,11 @@
 
     <sql id="findByBuildingSql">
         LEFT JOIN `apartment_card_attribute` building_a ON (building_a.`object_id` = e.`object_id` AND building_a.`status` = 1
-            AND building_a.`entity_attribute_id` = ${apartmentCardAddressAT}
-            AND building_a.`value_type_id` = ${apartmentCardBuildingVT})
+            AND building_a.`entity_attribute_id` = ${apartmentCardAddressAT})
         LEFT JOIN `apartment_card_attribute` apartment_a ON (apartment_a.`object_id` = e.`object_id` AND apartment_a.`status` = 1
-            AND apartment_a.`entity_attribute_id` = ${apartmentCardAddressAT}
-            AND apartment_a.`value_type_id` = ${apartmentCardApartmentVT})
+            AND apartment_a.`entity_attribute_id` = ${apartmentCardAddressAT})
         LEFT JOIN `apartment_card_attribute` room_a ON (room_a.`object_id` = e.`object_id` AND room_a.`status` = 1
-            AND room_a.`entity_attribute_id` = ${apartmentCardAddressAT}
-            AND room_a.`value_type_id` = ${apartmentCardRoomVT})
+            AND room_a.`entity_attribute_id` = ${apartmentCardAddressAT})
 
         LEFT JOIN `room` room1 ON (room1.`object_id` = room_a.`value_id` AND room1.`status` = 1)
         LEFT JOIN `apartment` apartment1 ON (apartment1.`status` = 1
@@ -95,7 +91,7 @@
         SELECT e.`object_id` FROM `apartment_card` e
             JOIN `apartment_card_attribute` address ON (address.`object_id` = e.`object_id`
                 AND address.`entity_attribute_id` = #{apartmentCardAddressAT} AND address.`status` = 1
-                AND address.`value_id` = #{addressId} AND address.`value_type_id` = #{addressTypeId})
+                AND address.`value_id` = #{addressId})
             JOIN `apartment_card_attribute` owner ON (owner.`object_id` = e.`object_id`
                 AND owner.`entity_attribute_id` = #{apartmentCardOwnerAT} AND owner.`status` = 1
                 AND owner.`value_id` = #{ownerId})

@@ -153,9 +153,9 @@ public class RegistrationStrategy extends DomainObjectStrategy {
     }
 
     private void setEditedByUserId(DomainObject registration) {
-        long userId = sessionBean.getCurrentUserId();
-        StringValueUtil.getSystemStringValue(registration.getAttribute(EDITED_BY_USER_ID).getStringValues()).
-                setValue(String.valueOf(userId));
+//        long userId = sessionBean.getCurrentUserId();
+//        StringValueUtil.getSystemStringValue(registration.getAttribute(EDITED_BY_USER_ID).getStringValues()).
+//                setValue(String.valueOf(userId));
     }
 
 
@@ -335,7 +335,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
                 : getHistoryRegistration(historyRegistration.getObjectId(), previousStartDate);
         if (previousRegistration == null) {
             m.setModificationType(ModificationType.ADD);
-            m.setEditedByUserId(historyRegistration.getEditedByUserId());
+//            m.setEditedByUserId(historyRegistration.getEditedByUserId());
         } else {
             //changes
             for (Attribute current : historyRegistration.getAttributes()) {
@@ -343,7 +343,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
                     if (current.getEntityAttributeId().equals(prev.getEntityAttributeId())) {
                         if (!current.getValueId().equals(prev.getValueId())
                                 && !current.getEntityAttributeId().equals(EXPLANATION)) {
-                            m.setEditedByUserId(historyRegistration.getEditedByUserId());
+//                            m.setEditedByUserId(historyRegistration.getEditedByUserId());
                             m.setExplanation(historyRegistration.getExplanation());
                             if (DISTINGUISH_ATTRIBUTES.contains(current.getEntityAttributeId())) {
                                 m.addAttributeModification(current.getEntityAttributeId(), ModificationType.CHANGE);
@@ -370,7 +370,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
                         }
                     }
                     if (added) {
-                        m.setEditedByUserId(historyRegistration.getEditedByUserId());
+//                        m.setEditedByUserId(historyRegistration.getEditedByUserId());
                         m.setExplanation(historyRegistration.getExplanation());
                         if (DISTINGUISH_ATTRIBUTES.contains(current.getEntityAttributeId())) {
                             m.addAttributeModification(current.getEntityAttributeId(), ModificationType.ADD);
@@ -394,7 +394,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
                         }
                     }
                     if (removed) {
-                        m.setEditedByUserId(historyRegistration.getEditedByUserId());
+//                        m.setEditedByUserId(historyRegistration.getEditedByUserId());
                         m.setExplanation(historyRegistration.getExplanation());
                         if (DISTINGUISH_ATTRIBUTES.contains(prev.getEntityAttributeId())) {
                             m.addAttributeModification(prev.getEntityAttributeId(), ModificationType.REMOVE);
@@ -461,7 +461,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
                 }
             }
         }
-        m.setEditedByUserId(historyRegistration.getEditedByUserId());
+//        m.setEditedByUserId(historyRegistration.getEditedByUserId());
         m.setExplanation(historyRegistration.getExplanation());
         return m;
     }
