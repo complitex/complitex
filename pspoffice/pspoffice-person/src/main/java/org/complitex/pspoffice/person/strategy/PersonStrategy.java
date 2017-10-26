@@ -695,7 +695,7 @@ public class PersonStrategy extends TemplateStrategy {
         for (PersonRegistration personRegistration : personRegistrations) {
             personRegistration.setRegistration(
                     registrationStrategy.findById(personRegistration.getRegistrationId(), true, false, true, true));
-            personRegistration.setAddressEntity(apartmentCardStrategy.getAddressEntity(personRegistration.getAddressTypeId()));
+            personRegistration.setAddressEntity(apartmentCardStrategy.getAddressEntity(ApartmentCardStrategy.ADDRESS_APARTMENT));
         }
         return personRegistrations;
     }

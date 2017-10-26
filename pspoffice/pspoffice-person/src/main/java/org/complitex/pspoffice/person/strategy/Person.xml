@@ -218,7 +218,7 @@
         </if>
     </sql>
     
-    <select id="gemvntPreviousModificationDate" parameterType="map" resultType="date">
+    <select id="getPreviousModificationDate" parameterType="map" resultType="date">
         SELECT MAX(d.`date`) FROM (
             SELECT a.`start_date` `date` FROM `person_attribute` a WHERE a.`object_id` = #{personId} 
                 AND a.`start_date` <![CDATA[ < ]]> #{date}

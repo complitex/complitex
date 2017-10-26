@@ -9,8 +9,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -31,19 +29,15 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.EntityAttribute;
 import org.complitex.common.entity.Status;
 import org.complitex.common.strategy.StringValueBean;
-import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
-import org.complitex.common.web.component.DomainObjectComponentUtil;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.DomainObjectInputPanel;
-import org.complitex.common.web.component.dateinput.MaskedDateInput;
 import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
 import org.complitex.common.web.component.fieldset.CollapsibleFieldset;
 import org.complitex.common.web.component.fieldset.ICollapsibleFieldsetListener;
 import org.complitex.common.web.component.list.AjaxRemovableListView;
 import org.complitex.common.web.component.scroll.ScrollToElementUtil;
-import org.complitex.common.web.component.type.MaskedDateInputPanel;
 import org.complitex.pspoffice.document.strategy.DocumentStrategy;
 import org.complitex.pspoffice.document.strategy.entity.Document;
 import org.complitex.pspoffice.document_type.strategy.DocumentTypeStrategy;
@@ -141,21 +135,21 @@ public class PersonInputPanel extends Panel {
         //system attributes:
         initSystemAttributeInput(this, "identityCode", IDENTITY_CODE, false);
         initSystemAttributeInput(this, "birthDate", BIRTH_DATE, true);
-        final MaskedDateInput birthDateComponent = (MaskedDateInput) get("birthDateContainer:"
-                + DomainObjectComponentUtil.INPUT_COMPONENT_ID + ":" + MaskedDateInputPanel.DATE_INPUT_ID);
-
-        switch (personAgeType) {
-            case KID:
-                birthDateComponent.setMinDate(DateUtil.add(DateUtil.getCurrentDate(), -AGE_THRESHOLD));
-                birthDateComponent.setMaxDate(DateUtil.getCurrentDate());
-                break;
-            case ADULT:
-                birthDateComponent.setMaxDate(DateUtil.add(DateUtil.getCurrentDate(), -AGE_THRESHOLD));
-                break;
-            case ANY:
-                birthDateComponent.setMaxDate(DateUtil.getCurrentDate());
-                break;
-        }
+//        final MaskedDateInput birthDateComponent = (MaskedDateInput) get("birthDateContainer:"
+//                + DomainObjectComponentUtil.INPUT_COMPONENT_ID + ":" + MaskedDateInputPanel.DATE_INPUT_ID);
+//
+//        switch (personAgeType) {
+//            case KID:
+//                birthDateComponent.setMinDate(DateUtil.add(DateUtil.getCurrentDate(), -AGE_THRESHOLD));
+//                birthDateComponent.setMaxDate(DateUtil.getCurrentDate());
+//                break;
+//            case ADULT:
+//                birthDateComponent.setMaxDate(DateUtil.add(DateUtil.getCurrentDate(), -AGE_THRESHOLD));
+//                break;
+//            case ANY:
+//                birthDateComponent.setMaxDate(DateUtil.getCurrentDate());
+//                break;
+//        }
 
         initSystemAttributeInput(this, "gender", GENDER, false);
 
@@ -188,47 +182,47 @@ public class PersonInputPanel extends Panel {
                 (personAgeType == PersonAgeType.ADULT) || (personAgeType == PersonAgeType.ANY && !person.isKid()));
         add(childrentComponent);
 
-        birthDateComponent.add(new AjaxFormComponentUpdatingBehavior("blur") {
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                boolean showAdultComponents = (personAgeType == PersonAgeType.ADULT)
-                        || (personAgeType == PersonAgeType.ANY && !person.isKid())
-                        || person.hasChildren();
-                updateChildrenComponent(target, showAdultComponents);
-                updateMilitaryServiceRelationComponent(target, showAdultComponents);
-            }
-
-            @Override
-            protected void onError(AjaxRequestTarget target, RuntimeException e) {
-                super.onError(target, e);
-                getSession().getFeedbackMessages().clear(new IFeedbackMessageFilter() {
-
-                    @Override
-                    public boolean accept(FeedbackMessage message) {
-                        return message.getReporter() == birthDateComponent && message.isError();
-                    }
-                });
-            }
-
-            private void updateMilitaryServiceRelationComponent(AjaxRequestTarget target, boolean visible) {
-                boolean wasVisible = militaryServiceRelationHead.isVisible();
-                militaryServiceRelationHead.setVisible(visible);
-                militaryServiceRelationBody.setVisible(visible);
-                if (wasVisible ^ visible) {
-                    target.add(militaryServiceRelationHead);
-                    target.add(militaryServiceRelationBody);
-                }
-            }
-
-            private void updateChildrenComponent(AjaxRequestTarget target, boolean visible) {
-                boolean wasVisible = childrentComponent.isVisible();
-                childrentComponent.setVisible(visible);
-                if (wasVisible ^ visible) {
-                    target.add(childrentComponent);
-                }
-            }
-        });
+//        birthDateComponent.add(new AjaxFormComponentUpdatingBehavior("blur") {
+//
+//            @Override
+//            protected void onUpdate(AjaxRequestTarget target) {
+//                boolean showAdultComponents = (personAgeType == PersonAgeType.ADULT)
+//                        || (personAgeType == PersonAgeType.ANY && !person.isKid())
+//                        || person.hasChildren();
+//                updateChildrenComponent(target, showAdultComponents);
+//                updateMilitaryServiceRelationComponent(target, showAdultComponents);
+//            }
+//
+//            @Override
+//            protected void onError(AjaxRequestTarget target, RuntimeException e) {
+//                super.onError(target, e);
+//                getSession().getFeedbackMessages().clear(new IFeedbackMessageFilter() {
+//
+//                    @Override
+//                    public boolean accept(FeedbackMessage message) {
+//                        return message.getReporter() == birthDateComponent && message.isError();
+//                    }
+//                });
+//            }
+//
+//            private void updateMilitaryServiceRelationComponent(AjaxRequestTarget target, boolean visible) {
+//                boolean wasVisible = militaryServiceRelationHead.isVisible();
+//                militaryServiceRelationHead.setVisible(visible);
+//                militaryServiceRelationBody.setVisible(visible);
+//                if (wasVisible ^ visible) {
+//                    target.add(militaryServiceRelationHead);
+//                    target.add(militaryServiceRelationBody);
+//                }
+//            }
+//
+//            private void updateChildrenComponent(AjaxRequestTarget target, boolean visible) {
+//                boolean wasVisible = childrentComponent.isVisible();
+//                childrentComponent.setVisible(visible);
+//                if (wasVisible ^ visible) {
+//                    target.add(childrentComponent);
+//                }
+//            }
+//        });
 
         //registrations
         add(initRegistrationsFieldset());
@@ -281,8 +275,9 @@ public class PersonInputPanel extends Panel {
                 || (person.getAttribute(BIRTH_REGION) != null) || (person.getAttribute(BIRTH_CITY) != null);
     }
 
+    @SuppressWarnings("Duplicates")
     private void initAttributeInput(MarkupContainer parent, long entityAttributeId, boolean showIfMissing) {
-        final EntityAttribute entityAttribute = personStrategy.getEntity().getAttribute(entityAttributeId);
+        EntityAttribute entityAttribute = personStrategy.getEntity().getAttribute(entityAttributeId);
 
         //label
         parent.add(new Label("label", labelModel(entityAttribute.getNames(), getLocale())));
