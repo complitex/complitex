@@ -19,6 +19,8 @@ public class DomainAttributeModel implements Serializable {
 
     private Map<String, String> values;
 
+    private DomainModel reference;
+
     public Long getAttributeId() {
         return attributeId;
     }
@@ -81,5 +83,13 @@ public class DomainAttributeModel implements Serializable {
 
     public void setValues(Map<String, String> values) {
         this.values = values;
+    }
+
+    public DomainModel getReference() {
+        return reference;
+    }
+
+    public void setReference(DomainModel reference) {
+        this.reference = reference;
     }
 }
