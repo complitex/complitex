@@ -703,7 +703,7 @@ public class PersonStrategy extends TemplateStrategy {
     private Map<String, Long> newFindPersonRegistrationParameters(long personId) {
         return of("registrationPersonAT", RegistrationStrategy.PERSON,
                 "apartmentCardRegistrationAT", ApartmentCardStrategy.REGISTRATIONS,
-                "apartmentCardAddressAT", ApartmentCardStrategy.ADDRESS,
+                "apartmentCardAddressAT", ApartmentCardStrategy.ADDRESS_APARTMENT,
                 "personId", personId);
     }
 

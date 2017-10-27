@@ -292,7 +292,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
 
         //address
         WebMarkupContainer addressContainer = new WebMarkupContainer("addressContainer");
-        final EntityAttribute addressEntityAttribute = ENTITY.getAttribute(ADDRESS);
+        final EntityAttribute addressEntityAttribute = ENTITY.getAttribute(ADDRESS_APARTMENT);
         addressContainer.add(new Label("label", labelModel(addressEntityAttribute.getNames(), getLocale())));
         addressContainer.add(new WebMarkupContainer("required").setVisible(addressEntityAttribute.isRequired()));
 
@@ -718,7 +718,7 @@ public final class ApartmentCardEdit extends FormTemplatePage {
     private void beforePersist() { //todo add attributes
         // address
         if (isNew()) {
-            Attribute addressAttribute = newApartmentCard.getAttribute(ADDRESS);
+            Attribute addressAttribute = newApartmentCard.getAttribute(ADDRESS_APARTMENT);
             if (addressSearchComponentState.get("room") != null
                     && addressSearchComponentState.get("room").getObjectId() > 0) {
                 addressAttribute.setValueId(addressSearchComponentState.get("room").getObjectId());

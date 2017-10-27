@@ -95,10 +95,6 @@ INSERT INTO `entity`(`id`, `entity`, `name_id`, `strategy_factory`) VALUES (2400
 /* Собственник */
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2402, 1, UPPER('Собственник')), (2402, 2, UPPER('Собственник'));
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (2401, 2400, 1, 2402, 1, 10, 2000);
-/* Адрес */
--- todo room building attribute
-INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2403, 1, UPPER('Адрес')), (2403, 2, UPPER('Адрес'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (2402, 2400, 1, 2403, 1, 10, 100);
 /* Форма собственности */
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2404, 1, UPPER('Форма собственности')), (2404, 2, UPPER('Форма собственности'));
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (2403, 2400, 1, 2404, 1, 10, 2500);
@@ -117,6 +113,15 @@ INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system
 /* ID поквартирной карточки в старой системе паспортного стола */
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2409, 1, UPPER('ID поквартирной карточки в старой системе паспортного стола')), (2409, 2, UPPER('ID поквартирной карточки в старой системе паспортного стола'));
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (2408, 2400, 0, 2409, 1, 1);
+
+
+/* Адрес */
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2410, 1, UPPER('Комната')), (2410, 2, UPPER('Комната'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (2410, 2400, 0, 2410, 1, 10, 200);
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2411, 1, UPPER('Квартира')), (2411, 2, UPPER('Квартира'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (2411, 2400, 0, 2411, 1, 10, 100);
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (2412, 1, UPPER('Дом')), (2412, 2, UPPER('Дом'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (2412, 2400, 1, 2412, 1, 10, 500);
 
 -- Registration --
 INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES ('registration',1), ('registration_string_value',1);

@@ -6,9 +6,6 @@ package org.complitex.pspoffice.importing.legacy.service;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
@@ -17,6 +14,10 @@ import org.complitex.pspoffice.importing.legacy.entity.ApartmentCardCorrection;
 import org.complitex.pspoffice.importing.legacy.service.exception.TooManyResultsException;
 import org.complitex.pspoffice.person.strategy.ApartmentCardStrategy;
 import org.complitex.pspoffice.person.strategy.entity.ApartmentCard;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.List;
 
 /**
  *
@@ -89,7 +90,7 @@ public class ApartmentCardCorrectionBean extends AbstractBean {
 
     public Long findSystemApartmentCard(long apartmentCardCorrectionId, long apartmentId) throws TooManyResultsException {
         List<Long> ids = sqlSession().selectList(MAPPING_NAMESPACE + ".findSystemApartmentCard",
-                ImmutableMap.of("apartmentCardAddressAT", ApartmentCardStrategy.ADDRESS,
+                ImmutableMap.of("apartmentCardAddressAT", ApartmentCardStrategy.ADDRESS_APARTMENT,
                 "apartmentCardApartmentATID", ApartmentCardStrategy.ADDRESS_APARTMENT,
                 "apartmentCardIdAT", ApartmentCardStrategy.OLD_SYSTEM_APARTMENT_CARD_ID,
                 "apartmentId", apartmentId, "apartmentCardId", apartmentCardCorrectionId));
@@ -106,7 +107,7 @@ public class ApartmentCardCorrectionBean extends AbstractBean {
         ApartmentCard c = apartmentCardStrategy.newInstance();
 
         //address
-        Attribute addressAttribute = c.getAttribute(ApartmentCardStrategy.ADDRESS);
+        Attribute addressAttribute = c.getAttribute(ApartmentCardStrategy.ADDRESS_APARTMENT);
         addressAttribute.setValueId(apartmentId);
 
         //owner

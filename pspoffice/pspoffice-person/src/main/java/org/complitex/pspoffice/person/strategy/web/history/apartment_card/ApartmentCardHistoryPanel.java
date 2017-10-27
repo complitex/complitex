@@ -111,13 +111,13 @@ final class ApartmentCardHistoryPanel extends Panel {
 
         //address
         WebMarkupContainer addressContainer = new WebMarkupContainer("addressContainer");
-        final EntityAttribute addressEntityAttribute = ENTITY.getAttribute(ADDRESS);
+        final EntityAttribute addressEntityAttribute = ENTITY.getAttribute(ADDRESS_APARTMENT);
         addressContainer.add(new Label("label", labelModel(addressEntityAttribute.getNames(), getLocale())));
         addressContainer.add(new WebMarkupContainer("required").setVisible(addressEntityAttribute.isRequired()));
         final Component address = new CollapsibleSearchComponent("address",
                 apartmentCardStrategy.initAddressSearchComponentState(apartmentCardStrategy.getAddressEntity(card), card.getAddressId()),
                 of("city", "street", "building", "apartment", "room"), null, ShowMode.ALL, false);
-        address.add(new CssAttributeBehavior(modification.getModificationType(ADDRESS).getCssClass()));
+        address.add(new CssAttributeBehavior(modification.getModificationType(ADDRESS_APARTMENT).getCssClass()));
         addressContainer.add(address);
         add(addressContainer);
 

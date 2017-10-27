@@ -5,12 +5,14 @@
 package org.complitex.pspoffice.person.strategy.entity;
 
 import com.google.common.base.Predicate;
-import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
-import java.util.List;
 import org.complitex.common.entity.DomainObject;
+
+import java.util.List;
+
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.complitex.common.util.AttributeUtil.getIntegerValue;
 import static org.complitex.pspoffice.person.strategy.ApartmentCardStrategy.*;
-import static org.complitex.common.util.AttributeUtil.*;
 
 /**
  *
@@ -62,7 +64,7 @@ public class ApartmentCard extends DomainObject {
     }
 
     public long getAddressId() {
-        return getAttribute(ADDRESS).getValueId();
+        return getAttribute(ADDRESS_APARTMENT).getValueId();
     }
 
     public String getHousingRights() {

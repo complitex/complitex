@@ -48,27 +48,17 @@ public class ApartmentCardStrategy extends TemplateStrategy {
      */
     public static final long PERSONAL_ACCOUNT = 2400;
     public static final long OWNER = 2401;
-    public static final long ADDRESS = 2402;
     public static final long FORM_OF_OWNERSHIP = 2403;
     public static final long HOUSING_RIGHTS = 2404;
     public static final long REGISTRATIONS = 2405;
     public static final long EXPLANATION = 2406;
     public static final long EDITED_BY_USER_ID = 2407;
     public static final long OLD_SYSTEM_APARTMENT_CARD_ID = 2408;
-    /**
-     * Attribute value type ids
-     */
-    public static final long PERSONAL_ACCOUNT_TYPE = 2400;
-    public static final long OWNER_TYPE = 2401;
-    public static final long ADDRESS_ROOM = 2402;
-    public static final long ADDRESS_APARTMENT = 2403;
-    public static final long ADDRESS_BUILDING = 2404;
-    public static final long FORM_OF_OWNERSHIP_TYPE = 2405;
-    public static final long HOUSING_RIGHTS_TYPE = 2406;
-    public static final long REGISTRATIONS_TYPE = 2407;
-    public static final long EXPLANATION_TYPE = 2408;
-    public static final long EDITED_BY_USER_ID_TYPE = 2409;
-    public static final long OLD_SYSTEM_APARTMENT_CARD_ID_TYPE = 2410;
+
+    public static final long ADDRESS_ROOM = 2410;
+    public static final long ADDRESS_APARTMENT = 2411;
+    public static final long ADDRESS_BUILDING = 2412;
+
     /**
      * Set of persistable search state entities
      */
@@ -254,11 +244,6 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         attribute.setObjectId(objectId);
         attribute.setAttributeId(1L);
 
-        Long attributeValueTypeId = null;
-        if (entityAttribute.getId().equals(ADDRESS)) {
-            attributeValueTypeId = ADDRESS_APARTMENT;
-        }
-
         return attribute;
     }
 
@@ -327,10 +312,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
 
     private Map<String, Object> newSearchByAddressParams(long addressId) {
         Map<String, Object> params = newHashMap();
-        params.put("apartmentCardAddressAT", ApartmentCardStrategy.ADDRESS);
-        params.put("apartmentCardApartmentVT", ApartmentCardStrategy.ADDRESS_APARTMENT);
-        params.put("apartmentCardRoomVT", ApartmentCardStrategy.ADDRESS_ROOM);
-        params.put("apartmentCardBuildingVT", ApartmentCardStrategy.ADDRESS_BUILDING);
+        params.put("apartmentCardAddressAT", ApartmentCardStrategy.ADDRESS_APARTMENT);
         params.put("addressId", addressId);
         if (!sessionBean.isAdmin()) {
             params.put("userPermissionString", sessionBean.getPermissionString(getEntityName()));
@@ -583,7 +565,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
 
     public boolean validateOwnerAddressUniqueness(long addressId, long addressTypeId, long ownerId, Long apartmentCardId) {
         Map<String, Long> params = newHashMap();
-        params.put("apartmentCardAddressAT", ADDRESS);
+        params.put("apartmentCardAddressAT", ADDRESS_APARTMENT);
         params.put("addressId", addressId);
         params.put("addressTypeId", addressTypeId);
         params.put("apartmentCardOwnerAT", OWNER);
