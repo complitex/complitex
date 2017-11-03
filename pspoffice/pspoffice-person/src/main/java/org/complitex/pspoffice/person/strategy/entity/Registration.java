@@ -1,14 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.pspoffice.person.strategy.entity;
 
-import java.util.Date;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.Status;
+
+import java.util.Date;
+
+import static org.complitex.common.util.AttributeUtil.getDateValue;
+import static org.complitex.common.util.AttributeUtil.getIntegerValue;
 import static org.complitex.pspoffice.person.strategy.RegistrationStrategy.*;
-import static org.complitex.common.util.AttributeUtil.*;
 
 /**
  *

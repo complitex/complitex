@@ -15,14 +15,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.complitex.pspoffice.api.model.DocumentModel;
 import ru.complitex.pspoffice.api.model.PersonModel;
+import ru.complitex.pspoffice.backend.adapter.PersonAdapter;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -56,17 +55,15 @@ public class PersonResource {
         return Response.ok("pong").build();
     }
 
-    private Map<String, String> getPersonNames(Map<Locale, String> map){
-        return map.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getLanguage(), Map.Entry::getValue));
-    }
+
 
     private PersonModel getPersonObject(Person p){
         PersonModel person = new PersonModel();
 
         person.setId(p.getObjectId());
-        person.setLastName(getPersonNames(p.getLastNames()));
-        person.setFirstName(getPersonNames(p.getFirstNames()));
-        person.setMiddleName(getPersonNames(p.getMiddleNames()));
+        person.setLastName(PersonAdapter.adaptNames(p.getLastNames()));
+        person.setFirstName(PersonAdapter.adaptNames(p.getFirstNames()));
+        person.setMiddleName(PersonAdapter.adaptNames(p.getMiddleNames()));
         person.setIdentityCode(p.getIdentityCode());
         person.setBirthDate(p.getBirthDate());
         person.setBirthCountry(p.getBirthCountry());

@@ -1,6 +1,6 @@
 @ECHO off
 
-SET GLASSFISH_ASADMIN=C:\glassfish4\bin\asadmin.bat
+SET GLASSFISH_ASADMIN=C:\glassfish5\bin\asadmin.bat
 
 ECHO ---------------------------------------------------
 ECHO Local database and Realm

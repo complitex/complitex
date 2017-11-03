@@ -1,4 +1,4 @@
-package org.complitex.pspoffice.frontend.web.apartmentcard;
+package org.complitex.pspoffice.frontend.web.card;
 
 import org.complitex.pspoffice.frontend.web.FormPage;
 

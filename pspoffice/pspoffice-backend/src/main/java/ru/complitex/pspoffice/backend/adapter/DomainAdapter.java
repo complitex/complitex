@@ -7,6 +7,8 @@ import org.complitex.common.entity.StringValue;
 import ru.complitex.pspoffice.api.model.DomainAttributeModel;
 import ru.complitex.pspoffice.api.model.DomainModel;
 
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,16 +30,19 @@ public class DomainAdapter {
 //        m.setSubjectIds(domainObject.getSubjectIds());
 
         if (domainObject.getAttributes() != null) {
-            m.setAttributes(domainObject.getAttributes().stream().map(DomainAdapter::adapt).collect(Collectors.toList()));
+            m.setAttributes(domainObject.getAttributes().stream().map(a -> DomainAdapter.adapt(domainObject, a)).collect(Collectors.toList()));
         }
 
         return m;
     }
 
-    public static DomainAttributeModel adapt(Attribute attribute){
+    public static DomainAttributeModel adapt(DomainObject domainObject, Attribute attribute){
         DomainAttributeModel m = new DomainAttributeModel();
 
-        m.setAttributeId(attribute.getAttributeId());
+        if (domainObject.getAttributes(attribute.getEntityAttributeId()).size() > 1) {
+            m.setAttributeId(attribute.getAttributeId());
+        }
+
         m.setEntityAttributeId(attribute.getEntityAttributeId());
         m.setValueId(attribute.getValueId());
         m.setStartDate(attribute.getStartDate());
@@ -45,12 +50,16 @@ public class DomainAdapter {
         m.setStatusId(attribute.getStatus().getId());
 
         if (attribute.getStringValues() != null) {
-            m.setValues(attribute.getStringValues().stream()
-                    .filter(a -> a.getValue() != null)
-                    .collect(Collectors.toMap(a -> a.getLocaleId().toString(), StringValue::getValue)));
+            m.setValues(adaptNames(attribute.getStringValues()));
         }
 
         return m;
+    }
+
+    public static Map<String, String> adaptNames(List<StringValue> stringValues){
+        return stringValues.stream()
+                .filter(a -> a.getValue() != null)
+                .collect(Collectors.toMap(a -> a.getLocaleId().toString(), StringValue::getValue));
     }
 
     public static DomainObject adapt(DomainModel domainModel){
@@ -76,7 +85,11 @@ public class DomainAdapter {
     public static Attribute adapt(DomainAttributeModel domainAttributeModel){
         Attribute a = new Attribute();
 
-        a.setAttributeId(domainAttributeModel.getAttributeId());
+        if (domainAttributeModel.getAttributeId() != null) {
+            a.setAttributeId(domainAttributeModel.getAttributeId());
+        }else{
+            a.setAttributeId(1L);
+        }
         a.setEntityAttributeId(domainAttributeModel.getEntityAttributeId());
         a.setValueId(domainAttributeModel.getValueId());
         a.setStartDate(domainAttributeModel.getStartDate());

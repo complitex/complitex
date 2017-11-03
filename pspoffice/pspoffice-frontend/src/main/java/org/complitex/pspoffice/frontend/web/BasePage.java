@@ -9,6 +9,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.complitex.pspoffice.frontend.web.card.ApartmentCardListPage;
 import org.complitex.pspoffice.frontend.web.domain.DomainListPage;
 import org.complitex.pspoffice.frontend.web.entity.EntityListPage;
 import org.complitex.pspoffice.frontend.web.person.PersonListPage;
@@ -29,6 +30,7 @@ public abstract class BasePage extends WebPage{
         add(new BookmarkablePageLink("headerLink", HomePage.class));
 
         add(new BookmarkablePageLink("personsLink", PersonListPage.class));
+        add(new BookmarkablePageLink("apartmentCards", ApartmentCardListPage.class));
 
         add(new BookmarkablePageLink("country", DomainListPage.class, new PageParameters().add("entity", "country")));
         add(new BookmarkablePageLink("region", DomainListPage.class, new PageParameters().add("entity", "region")));
