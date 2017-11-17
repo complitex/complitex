@@ -18,10 +18,12 @@ import org.apache.wicket.model.*;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.service.executor.ExecutorService;
+import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.DatePicker;
+import org.complitex.common.web.component.MonthDropDownChoice;
 import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
@@ -147,6 +149,9 @@ public class SubsidyTarifFileList extends TemplatePage {
                 new PropertyModel<>(model, "userOrganizationId"),
                 OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
 
+        //Месяц
+        form.add(new MonthDropDownChoice("month").setNullValid(true));
+
         //Год
         form.add(new YearDropDownChoice("year").setNullValid(true));
 
@@ -196,6 +201,7 @@ public class SubsidyTarifFileList extends TemplatePage {
                 //Организация пользователя
                 item.add(new ItemOrganizationLabel("userOrganization", item.getModelObject().getUserOrganizationId()));
 
+                item.add(new Label("month", DateUtil.displayMonth(item.getModelObject().getBeginDate(), getLocale())));
                 item.add(new Label("year", getYear(item.getModelObject().getBeginDate()) + ""));
 
                 item.add(new Label("dbf_record_count", StringUtil.valueOf(item.getModelObject().getDbfRecordCount())));
@@ -226,6 +232,7 @@ public class SubsidyTarifFileList extends TemplatePage {
         form.add(new ArrowOrderByBorder("header.name", "name", dataProvider, dataView, form));
         form.add(new ArrowOrderByBorder("header.organization", "organization_id", dataProvider, dataView, form));
         form.add(new ArrowOrderByBorder("header.user_organization", "user_organization_id", dataProvider, dataView, form));
+        form.add(new ArrowOrderByBorder("header.month", "month", dataProvider, dataView, form));
         form.add(new ArrowOrderByBorder("header.year", "year", dataProvider, dataView, form));
 
         WebMarkupContainer buttons = new WebMarkupContainer("buttons");
@@ -264,7 +271,7 @@ public class SubsidyTarifFileList extends TemplatePage {
 
         //Диалог загрузки
         requestFileLoadPanel = new RequestFileLoadPanel("load_panel", new ResourceModel("load_panel_title"),
-                MonthParameterViewMode.HIDDEN, new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE}) {
+                MonthParameterViewMode.EXACT, new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE}) {
             @Override
             protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
                 processManagerService.loadSubsidyTarif(userOrganizationId, organizationId, year, monthFrom);
