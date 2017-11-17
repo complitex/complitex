@@ -248,6 +248,9 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
 
                     facilityServiceType.setStatus(PROCESSED);
                 } else {
+                    facilityServiceType.putUpdateField(TARIF, null);
+                    facilityServiceType.putUpdateField(RIZN, null);
+
                     facilityServiceType.setStatus(TARIF_NOT_FOUND);
 
                     RequestWarning warning = new RequestWarning(facilityServiceType.getId(), FACILITY_SERVICE_TYPE,
