@@ -310,7 +310,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
         return isLeaf;
     }
 
-    private Map<String, Object> newSearchByAddressParams(long addressId) {
+    private Map<String, Object> newSearchByAddressParams(Long addressId) {
         Map<String, Object> params = newHashMap();
         params.put("apartmentCardAddressAT", ApartmentCardStrategy.ADDRESS_APARTMENT);
         params.put("addressId", addressId);
@@ -321,11 +321,10 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     }
 
 
-    public int countByAddress(String addressEntity, long addressId) {
+    public int countByAddress(String addressEntity, Long addressId) {
         checkEntity(addressEntity);
-        addressEntity = Strings.capitalize(addressEntity);
         Map<String, Object> params = newSearchByAddressParams(addressId);
-        return (Integer) sqlSession().selectOne(APARTMENT_CARD_MAPPING + ".countBy" + addressEntity, params);
+        return (Integer) sqlSession().selectOne(APARTMENT_CARD_MAPPING + ".countBy" + Strings.capitalize(addressEntity), params);
     }
 
     private void checkEntity(String addressEntity) {
@@ -340,13 +339,12 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     }
 
 
-    public List<ApartmentCard> findByAddress(String addressEntity, long addressId, int start, int size) {
+    public List<ApartmentCard> findByAddress(String addressEntity, Long addressId, int start, int size) {
         checkEntity(addressEntity);
         Map<String, Object> params = newSearchByAddressParams(addressId);
         params.put("start", start);
         params.put("size", size);
-        addressEntity = Strings.capitalize(addressEntity);
-        List<Long> apartmentCardIds = sqlSession().selectList(APARTMENT_CARD_MAPPING + ".findBy" + addressEntity, params);
+        List<Long> apartmentCardIds = sqlSession().selectList(APARTMENT_CARD_MAPPING + ".findBy" + Strings.capitalize(addressEntity), params);
         List<ApartmentCard> apartmentCards = newArrayList();
         for (Long apartmentCardId : apartmentCardIds) {
             apartmentCards.add(findById(apartmentCardId, false, true, true, true));

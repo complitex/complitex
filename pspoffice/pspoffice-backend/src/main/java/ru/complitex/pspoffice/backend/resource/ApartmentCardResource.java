@@ -12,11 +12,13 @@ import org.complitex.pspoffice.person.strategy.service.PersonNameBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.complitex.pspoffice.api.model.DomainModel;
+import ru.complitex.pspoffice.backend.adapter.ApartmentCardAdapter;
 import ru.complitex.pspoffice.backend.adapter.DomainAdapter;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -72,12 +74,28 @@ public class ApartmentCardResource {
                     a.setReference(DomainAdapter.adapt(o));
                 }
             }
-
-            //todo person model
-
         });
 
         return Response.ok(domainModel).build();
+    }
+
+    @GET
+    @ApiOperation(value = "Get apartment card list", response = DomainModel.class, responseContainer = "List")
+    public Response getApartmentCards(@QueryParam("offset") @DefaultValue("0") Integer offset,
+                                      @QueryParam("limit") @DefaultValue("10") Integer limit){
+
+        return Response.ok(apartmentCardStrategy.findByAddress("apartment", null, offset, limit).stream()
+                .map(ApartmentCardAdapter::adaptSimple)
+                .collect(Collectors.toList())).build();
+    }
+
+    @GET
+    @Path("size")
+    @ApiOperation(value = "Get apartment card count by query", response = Long.class)
+    public Response getApartmentCardsCount(@QueryParam("firstName") String firstName,
+                                    @QueryParam("lastName") String lastName,
+                                    @QueryParam("middleName") String middleName){
+        return Response.ok(apartmentCardStrategy.countByAddress("apartment", null)).build();
     }
 }
 

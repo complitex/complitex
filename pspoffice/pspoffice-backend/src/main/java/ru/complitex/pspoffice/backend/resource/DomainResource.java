@@ -63,7 +63,7 @@ public class DomainResource {
         filter.setCount(limit);
         filter.setValue(value);
 
-        return  Response.ok(strategyFactory.getStrategy(entity).getList(filter).stream()
+        return Response.ok(strategyFactory.getStrategy(entity).getList(filter).stream()
                 .map(DomainAdapter::adapt)
                 .collect(Collectors.toList())).build();
     }

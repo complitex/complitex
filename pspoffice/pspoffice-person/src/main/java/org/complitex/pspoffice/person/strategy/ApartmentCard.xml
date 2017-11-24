@@ -28,7 +28,12 @@
         LEFT JOIN `apartment` apartment ON (apartment.`status` = 1 AND apartment.`object_id` = room.`parent_id`
             AND room.`parent_entity_id` = 100)
 
-        WHERE (apartment_a.`value_id` = #{addressId} OR apartment.`object_id` = #{addressId})
+        <where>
+            <if test="addressId!=null">
+                (apartment_a.`value_id` = #{addressId} OR apartment.`object_id` = #{addressId})
+            </if>
+        </where>
+
         <include refid="permissionFilter"/>
         <include refid="statusFilter"/>
     </sql>

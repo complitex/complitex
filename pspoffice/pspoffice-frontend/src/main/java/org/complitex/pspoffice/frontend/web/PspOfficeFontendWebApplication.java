@@ -12,6 +12,7 @@ import org.apache.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.complitex.pspoffice.frontend.web.address.AddressListPage;
 import org.complitex.pspoffice.frontend.web.address.building.BuildingListPage;
+import org.complitex.pspoffice.frontend.web.card.ApartmentCardListPage;
 import org.complitex.pspoffice.frontend.web.domain.DomainListPage;
 import org.complitex.pspoffice.frontend.web.domain.DomainPage;
 import org.complitex.pspoffice.frontend.web.entity.EntityListPage;
@@ -57,6 +58,7 @@ public class PspOfficeFontendWebApplication extends WebApplication{
         mountPage("login", LoginPage.class);
         mountPage("person", PersonListPage.class);
         mountPage("person/${id}", PersonPage.class);
+        mountPage("card", ApartmentCardListPage.class);
         mountPage("address/${entity}", AddressListPage.class);
         mountPage("address/building", BuildingListPage.class);
         mountPage("entity", EntityListPage.class);
