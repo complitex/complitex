@@ -201,7 +201,6 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
         return new String[]{SecurityRole.AUTHORIZED};
     }
 
-    @Override
     protected Attribute getNewAttributeInstance() {
         return new ServiceProviderAccountAttribute();
     }

@@ -94,7 +94,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
 
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
-        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
     }
 
     private void addModuleInstanceTypeContainer(final DomainObject moduleInstance, String name) {
@@ -138,7 +138,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
                 moduleInstanceStrategy.getEntity().getAttribute(ModuleInstanceStrategy.MODULE_INSTANCE_TYPE);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
-        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
     }
 
     private WebMarkupContainer addPrivateKeyContainer(final long entityAttributeId, boolean disabled,
@@ -159,7 +159,7 @@ public class ModuleInstancePrivateKeyPanel extends AbstractComplexAttributesPane
                 moduleInstanceStrategy.getEntity().getAttribute(entityAttributeId);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
-        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
         final Component key =
                 DomainObjectComponentUtil.newInputComponent("module_instance", getStrategyName(),

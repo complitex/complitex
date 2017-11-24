@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.payments_communication.entity;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.common.entity.IFixedIdType;
 
 import java.util.Map;
 

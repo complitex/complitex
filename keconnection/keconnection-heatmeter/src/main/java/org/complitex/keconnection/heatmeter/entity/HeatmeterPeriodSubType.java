@@ -1,6 +1,6 @@
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.common.entity.IFixedIdType;
 import org.complitex.keconnection.heatmeter.strategy.HeatmeterPeriodTypeStrategy;
 
 /**

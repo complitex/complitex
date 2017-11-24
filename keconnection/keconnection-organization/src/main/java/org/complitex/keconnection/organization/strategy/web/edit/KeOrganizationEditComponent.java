@@ -63,7 +63,7 @@ public class KeOrganizationEditComponent extends OrganizationEditComponent {
                     organizationStrategy.getEntity().getAttribute(entityAttributeId);
             readyCloseOmSection.add(new Label("label",
                     DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
-            readyCloseOmSection.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+            readyCloseOmSection.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
             readyCloseOmSection.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), true));

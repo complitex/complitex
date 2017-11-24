@@ -44,7 +44,7 @@ public final class TarifEditComponent extends AbstractComplexAttributesPanel {
         add(new Label("tarifGroupLabel", tarifGroupLabelModel));
 
         WebMarkupContainer tarifGroupRequiredContainer = new WebMarkupContainer("tarifGroupRequiredContainer");
-        tarifGroupRequiredContainer.setVisible(tarifGroupEntityAttribute.isMandatory());
+        tarifGroupRequiredContainer.setVisible(tarifGroupEntityAttribute.isRequired());
         add(tarifGroupRequiredContainer);
 
         final List<DomainObject> allTarifGroups = tarifGroupStrategy.getAll();

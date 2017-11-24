@@ -1,6 +1,6 @@
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.common.entity.IFixedIdType;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

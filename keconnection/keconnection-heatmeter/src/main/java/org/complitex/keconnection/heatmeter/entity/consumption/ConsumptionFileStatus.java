@@ -1,6 +1,6 @@
 package org.complitex.keconnection.heatmeter.entity.consumption;
 
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.common.entity.IFixedIdType;
 
 /**
  * @author inheaven on 016 16.03.15 19:06

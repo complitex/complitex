@@ -1,6 +1,6 @@
 package org.complitex.keconnection.heatmeter.entity;
 
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.common.entity.IFixedIdType;
 
 public enum HeatmeterBindingStatus implements IFixedIdType {
     UNBOUND(1), ORGANIZATION_NOT_FOUND(2), BUILDING_NOT_FOUND(3), BINDING_ERROR(4), MORE_ONE_EXTERNAL_HEATMETER(5),

@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <complitex.version>6.0.0-SNAPSHOT</complitex.version>
+        <complitex.version>7.0.0-SNAPSHOT</complitex.version>
     </properties>
 
     <modules>

@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.entity;
 
+import org.complitex.common.entity.IFixedIdType;
 import org.complitex.common.entity.ILocalizedType;
-import org.complitex.common.mybatis.IFixedIdType;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.correction.entity.AddressLinkStatus;
 import org.complitex.correction.entity.LinkStatus;

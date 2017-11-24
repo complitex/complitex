@@ -93,7 +93,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
                 organizationStrategy.getEntity().getAttribute(entityAttributeId);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
-        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
         container.add(
                 DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
@@ -120,7 +120,7 @@ public class EircOrganizationEditComponent extends OrganizationEditComponent {
                 organizationStrategy.getEntity().getAttribute(entityAttributeId);
         container.add(new Label("label",
                 DomainObjectComponentUtil.labelModel(entityAttribute.getNames(), getLocale())));
-        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isMandatory()));
+        container.add(new WebMarkupContainer("required").setVisible(entityAttribute.isRequired()));
 
         ServiceAllowableListPanel panel = new ServiceAllowableListPanel("input", organization);
         services = panel.getServices();

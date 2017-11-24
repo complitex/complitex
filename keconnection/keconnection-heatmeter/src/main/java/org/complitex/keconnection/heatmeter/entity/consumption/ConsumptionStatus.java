@@ -1,6 +1,6 @@
 package org.complitex.keconnection.heatmeter.entity.consumption;
 
-import org.complitex.common.mybatis.IFixedIdType;
+import org.complitex.common.entity.IFixedIdType;
 
 import java.util.EnumSet;
 
