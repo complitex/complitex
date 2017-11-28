@@ -9,6 +9,7 @@ import org.complitex.osznconnection.file.service.file_description.RequestFileDes
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,7 @@ public class SubsidyTarifBean extends AbstractBean {
      * @param service код услуги СЗ
      * @return Code
      */
-    public String getCode2(BigDecimal T11_CS_UNI, long organizationId, long userOrganizationId, int service) {
+    public String getCode2(BigDecimal T11_CS_UNI, long organizationId, long userOrganizationId, int service, Date date) {
         RequestFileDescription tarifDescription = requestFileDescriptionBean.getFileDescription(SUBSIDY_TARIF);
 
         Map<String, Object> params = new HashMap<>();
@@ -61,6 +62,7 @@ public class SubsidyTarifBean extends AbstractBean {
         params.put("organizationId", organizationId);
         params.put("userOrganizationId", userOrganizationId);
         params.put("service", service);
+        params.put("date", date);
 
         return (String) sqlSession().selectOne(NS + ".getCode2", params);
     }
@@ -80,7 +82,7 @@ public class SubsidyTarifBean extends AbstractBean {
      * @param service код услуги СЗ
      * @return Code
      */
-    public String getCode3(BigDecimal T11_CS_UNI, long organizationId, long userOrganizationId, int service) {
+    public String getCode3(BigDecimal T11_CS_UNI, long organizationId, long userOrganizationId, int service, Date date) {
         RequestFileDescription tarifDescription = requestFileDescriptionBean.getFileDescription(SUBSIDY_TARIF);
 
         Map<String, Object> params = new HashMap<>();
@@ -88,6 +90,7 @@ public class SubsidyTarifBean extends AbstractBean {
         params.put("organizationId", organizationId);
         params.put("userOrganizationId", userOrganizationId);
         params.put("service", service);
+        params.put("date", date);
 
         return (String) sqlSession().selectOne(NS + ".getCode3", params);
     }

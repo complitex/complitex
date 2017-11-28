@@ -738,7 +738,9 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     protected boolean handleSubsidyService(Payment payment, PaymentDBF field, BigDecimal rawTarif, int service) {
-        String serviceCode = getSubsidyServiceCode(rawTarif, payment.getOrganizationId(), payment.getUserOrganizationId(), service);
+        String serviceCode = getSubsidyServiceCode(rawTarif, payment.getOrganizationId(), payment.getUserOrganizationId(),
+                service, (Date) payment.getField(PaymentDBF.DAT1));
+
         if (serviceCode == null) {
             return false;
         } else {
@@ -749,7 +751,9 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     protected boolean handleSubsidyTarif(Payment payment, PaymentDBF field, BigDecimal rawTarif, int service) {
-        String tarifCode = getSubsidyTarifCode(rawTarif, payment.getOrganizationId(), payment.getUserOrganizationId(), service);
+        String tarifCode = getSubsidyTarifCode(rawTarif, payment.getOrganizationId(), payment.getUserOrganizationId(),
+                service, (Date) payment.getField(PaymentDBF.DAT1));
+
         if (tarifCode == null) {
             return false;
         } else {
@@ -772,8 +776,8 @@ public class ServiceProviderAdapter extends AbstractBean {
      * @param T11_CS_UNI
      * @return
      */
-    protected String getSubsidyServiceCode(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service) {
-        return subsidyTarifBean.getCode2(T11_CS_UNI, osznId, userOrganizationId, service);
+    protected String getSubsidyServiceCode(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service, Date date) {
+        return subsidyTarifBean.getCode2(T11_CS_UNI, osznId, userOrganizationId, service, date);
     }
 
     /**
@@ -781,8 +785,8 @@ public class ServiceProviderAdapter extends AbstractBean {
      * @param T11_CS_UNI
      * @return
      */
-    protected String getSubsidyTarifCode(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service) {
-        return subsidyTarifBean.getCode3(T11_CS_UNI, osznId, userOrganizationId, service);
+    protected String getSubsidyTarifCode(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service, Date date) {
+        return subsidyTarifBean.getCode3(T11_CS_UNI, osznId, userOrganizationId, service, date);
     }
 
     public Collection<BenefitData> getBenefitData(Benefit benefit, Date dat1){
