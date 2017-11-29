@@ -30,7 +30,7 @@ public class PrivilegeStatusDetailRenderer implements IStatusDetailRenderer, Ser
             case STREET_UNRESOLVED:
             case STREET_NOT_FOUND:
                 return ResourceUtil.getFormatString(RESOURCE_BUNDLE, "street", locale,
-                        Objects.toString(statusDetail.getDetail("streetType"), statusDetail.getDetail("streetTypeCode")),
+                        Objects.toString(statusDetail.getDetail("streetType"), Objects.toString(statusDetail.getDetail("streetTypeCode"), "")),
                         Objects.toString(statusDetail.getDetail("street"), statusDetail.getDetail("streetCode")));
             case BUILDING_UNRESOLVED_LOCALLY:
             case BUILDING_UNRESOLVED:

@@ -38,9 +38,12 @@ public class StatusDetailBean extends AbstractBean {
         return sqlSession().selectList(NS + ".getSubsidyStatusDetailInfo", requestFileId);
     }
 
-    //todo update load street
     public List<StatusDetailInfo> getDwellingCharacteristicsStatusDetails(Long requestFileId) {
-        return sqlSession().selectList(NS + ".getDwellingCharacteristicsStatusDetailInfo", requestFileId);
+        List<StatusDetailInfo> list =  sqlSession().selectList(NS + ".getDwellingCharacteristicsStatusDetailInfo", requestFileId);
+
+        loadFacilityStreet(requestFileId, list);
+
+        return list;
     }
     
     public List<StatusDetailInfo> getFacilityServiceTypeStatusDetails(Long requestFileId) {
@@ -51,9 +54,12 @@ public class StatusDetailBean extends AbstractBean {
         return list;
     }
 
-    //todo update load street
     public List<StatusDetailInfo> getPrivilegeProlongationStatusDetails(Long requestFileId) {
-        return sqlSession().selectList(NS + ".getPrivilegeProlongationStatusDetailInfo", requestFileId);
+        List<StatusDetailInfo>  list =  sqlSession().selectList(NS + ".getPrivilegeProlongationStatusDetailInfo", requestFileId);
+
+        loadFacilityStreet(requestFileId, list);
+
+        return list;
     }
 
     private void loadFacilityStreet(Long requestFileId, List<StatusDetailInfo> list){
