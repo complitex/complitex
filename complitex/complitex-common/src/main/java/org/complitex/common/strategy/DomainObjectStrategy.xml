@@ -81,7 +81,7 @@
     </select>
 
     <select id="selectDomainObjectId" resultType="long" parameterType="map">
-        SELECT e.`object_id` FROM `${entityName}` e WHERE e.`external_id` = #{externalId}
+        SELECT e.`object_id` FROM `${entityName}` e WHERE e.`external_id` = #{externalId} and `status` = 1
     </select>
 
     <sql id="sqlOrderByAttributeTypeId">

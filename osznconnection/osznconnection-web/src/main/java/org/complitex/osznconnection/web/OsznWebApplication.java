@@ -1,6 +1,7 @@
 package org.complitex.osznconnection.web;
 
 import org.complitex.address.web.sync.AddressSyncPage;
+import org.complitex.admin.web.ProfilePage;
 import org.complitex.admin.web.UserEdit;
 import org.complitex.admin.web.UserList;
 import org.complitex.correction.web.address.*;
@@ -19,6 +20,7 @@ import org.complitex.osznconnection.file.web.pages.privilege.*;
 import org.complitex.osznconnection.file.web.pages.subsidy.*;
 import org.complitex.template.web.ComplitexWebApplication;
 import org.complitex.template.web.pages.ConfigEdit;
+import org.complitex.template.web.pages.DomainObjectEdit;
 import org.complitex.template.web.pages.DomainObjectList;
 import org.complitex.template.web.pages.EntityDescription;
 import org.complitex.template.web.pages.login.Login;
@@ -98,12 +100,14 @@ public class OsznWebApplication extends ComplitexWebApplication{
         //admin
         mountPage("/user", UserList.class);
         mountPage("/user/${user_id}", UserEdit.class);
-        mountPage("/domain", DomainObjectList.class);
+        mountPage("/domain/${entity}", DomainObjectList.class);
+        mountPage("/domain/${entity}/${object_id}", DomainObjectEdit.class);
         mountPage("/organization/${object_id}", OrganizationEdit.class);
         mountPage("/description/file", RequestFileDescriptionPage.class);
         mountPage("/import", ImportPage.class);
         mountPage("/log", LogList.class);
         mountPage("/config", ConfigEdit.class);
+        mountPage("/profile", ProfilePage.class);
 
         //login
         mountPage("/login", Login.class);

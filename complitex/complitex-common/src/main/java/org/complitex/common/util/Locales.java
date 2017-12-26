@@ -3,10 +3,10 @@ package org.complitex.common.util;
 import org.complitex.common.entity.StringLocale;
 import org.complitex.common.strategy.StringLocaleBean;
 
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * @author Anatoly Ivanov
@@ -76,5 +76,23 @@ public class Locales {
 
     public static String getLanguage(Long localeId){
         return instance.mapId.get(localeId).getLanguage();
+    }
+
+    public static <T, U extends Comparable<? super U>> Comparator<T> comparing(
+            Function<? super T, ? extends U> keyExtractor, U first)
+    {
+        Objects.requireNonNull(keyExtractor);
+        return (Comparator<T> & Serializable)
+                (c1, c2) -> {
+                    if (keyExtractor.apply(c1).equals(first)){
+                        return 1;
+                    }
+
+                    if (keyExtractor.apply(c2).equals(first)){
+                        return -1;
+                    }
+
+                    return keyExtractor.apply(c1).compareTo(keyExtractor.apply(c2));
+                };
     }
 }
