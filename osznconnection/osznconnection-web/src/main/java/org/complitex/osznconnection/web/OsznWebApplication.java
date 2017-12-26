@@ -101,7 +101,8 @@ public class OsznWebApplication extends ComplitexWebApplication{
         mountPage("/user", UserList.class);
         mountPage("/user/${user_id}", UserEdit.class);
         mountPage("/domain/${entity}", DomainObjectList.class);
-        mountPage("/domain/${entity}/${object_id}", DomainObjectEdit.class);
+        mountPage("/domain/${entity}/${strategy}", DomainObjectEdit.class);
+        mountPage("/domain/${entity}/${strategy}/${object_id}", DomainObjectEdit.class);
         mountPage("/organization/${object_id}", OrganizationEdit.class);
         mountPage("/description/file", RequestFileDescriptionPage.class);
         mountPage("/import", ImportPage.class);

@@ -73,6 +73,11 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     @Override
+    public boolean isSimpleAttributeType(EntityAttribute entityAttribute) {
+        return entityAttribute.getValueType().isSimple() && entityAttribute.getReferenceId() == null;
+    }
+
+    @Override
     @Asynchronous
     public void disable(final DomainObject object) {
         long start = System.currentTimeMillis();

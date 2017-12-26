@@ -195,7 +195,7 @@ public class DomainObjectInputPanel extends Panel {
         for (Attribute attribute : allAttributes) {
             EntityAttribute entityAttribute = description.getAttribute(attribute.getEntityAttributeId());
 
-            if (entityAttribute.getValueType().isSimple() && entityAttribute.getReferenceId() == null) {
+            if (getStrategy().isSimpleAttributeType(entityAttribute)) {
                 attributes.add(attribute);
             }
         }

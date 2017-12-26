@@ -4,10 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.district.DistrictStrategy;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.entity.StringValue;
+import org.complitex.common.entity.*;
 import org.complitex.common.exception.ServiceRuntimeException;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.StringValueBean;
@@ -194,6 +191,11 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     @Override
     public List<? extends DomainObject> getAllOuterOrganizations(Locale locale) {
         return getOrganizations(SERVICING_ORGANIZATION_TYPE, BILLING_TYPE, SERVICING_ORGANIZATION_TYPE);
+    }
+
+    @Override
+    public boolean isSimpleAttributeType(EntityAttribute entityAttribute) {
+        return !CUSTOM_ATTRIBUTE_TYPES.contains(entityAttribute.getId()) && super.isSimpleAttributeType(entityAttribute);
     }
 
     @Override

@@ -39,10 +39,10 @@ public class DomainObjectComponentUtil {
                 String s = StringValueUtil.getValue(attributeNames, locale);
 
                 if (s == null && !attributeNames.isEmpty()){
-                    return attributeNames.get(0).getValue();
+                    s = attributeNames.get(0).getValue();
                 }
 
-                return s != null? Strings.capitalize(s.toLowerCase(locale)) : null;
+                return s != null ? Strings.capitalize(s.toLowerCase(locale)) : null;
             }
         };
     }
