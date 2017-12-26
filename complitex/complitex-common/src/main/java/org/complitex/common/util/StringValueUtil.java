@@ -20,7 +20,7 @@ public class StringValueUtil {
             }
         }
 
-        throw new IllegalArgumentException("System string value not found");
+        return null;
     }
 
     public static String getValue(List<StringValue> stringValues, Locale locale) {

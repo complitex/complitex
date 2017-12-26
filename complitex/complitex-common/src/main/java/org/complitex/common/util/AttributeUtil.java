@@ -3,6 +3,7 @@ package org.complitex.common.util;
 import org.complitex.common.converter.*;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.StringValue;
 
 import java.util.Date;
 
@@ -19,8 +20,9 @@ public final class AttributeUtil {
         Attribute attribute = object.getAttribute(entityAttributeId);
         T value = null;
         if (attribute != null) {
-            String attributeValue = StringValueUtil.getSystemStringValue(attribute.getStringValues()).getValue();
-            value = attributeValue != null ? converter.toObject(attributeValue) : null;
+            StringValue stringValue = StringValueUtil.getSystemStringValue(attribute.getStringValues());
+            String v = stringValue != null ? stringValue.getValue() : null;
+            value = v != null ? converter.toObject(v) : null;
         }
         return value;
     }

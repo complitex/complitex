@@ -85,11 +85,11 @@ public class Locales {
         return (Comparator<T> & Serializable)
                 (c1, c2) -> {
                     if (keyExtractor.apply(c1).equals(first)){
-                        return 1;
+                        return -1;
                     }
 
                     if (keyExtractor.apply(c2).equals(first)){
-                        return -1;
+                        return 1;
                     }
 
                     return keyExtractor.apply(c1).compareTo(keyExtractor.apply(c2));
