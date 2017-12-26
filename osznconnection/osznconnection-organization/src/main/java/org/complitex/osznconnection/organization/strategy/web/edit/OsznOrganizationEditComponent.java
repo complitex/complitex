@@ -110,12 +110,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
         //EDRPOU. It is user organization only attribute.
         {
-            edrpouContainer = new WebMarkupContainer("edrpouContainer"){
-                @Override
-                public boolean isVisible() {
-                    return isSubsidyDepartment() || isPrivilegesDepartment() || isServiceProvider();
-                }
-            };
+            edrpouContainer = new WebMarkupContainer("edrpouContainer");
             edrpouContainer.setOutputMarkupPlaceholderTag(true);
             add(edrpouContainer);
 
@@ -136,16 +131,14 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
             edrpouContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
+
+            //initial visibility
+            edrpouContainer.setVisible(isServiceProvider() || isSubsidyDepartment() || isPrivilegesDepartment());
         }
 
         //Root directory for loading and saving request files. It is user organization only attribute.
         {
-            rootDirectoryContainer = new WebMarkupContainer("rootDirectoryContainer"){
-                @Override
-                public boolean isVisible() {
-                    return isSubsidyDepartment() || isPrivilegesDepartment();
-                }
-            };
+            rootDirectoryContainer = new WebMarkupContainer("rootDirectoryContainer");
             rootDirectoryContainer.setOutputMarkupPlaceholderTag(true);
             add(rootDirectoryContainer);
 
@@ -166,16 +159,14 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
             rootDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
+
+            //initial visibility
+            rootDirectoryContainer.setVisible(isSubsidyDepartment() || isPrivilegesDepartment());
         }
 
         //Root Export directory for loading and saving request files. It is user organization only attribute.
         {
-            rootExportDirectoryContainer = new WebMarkupContainer("rootExportDirectoryContainer"){
-                @Override
-                public boolean isVisible() {
-                    return isUserOrganization();
-                }
-            };
+            rootExportDirectoryContainer = new WebMarkupContainer("rootExportDirectoryContainer");
             rootExportDirectoryContainer.setOutputMarkupPlaceholderTag(true);
             add(rootExportDirectoryContainer);
 
@@ -196,16 +187,14 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
             rootExportDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
+
+            //initial visibility
+            rootExportDirectoryContainer.setVisible(isSubsidyDepartment() || isPrivilegesDepartment());
         }
 
         //referencesDirectoryContainer
         {
-            referencesDirectoryContainer = new WebMarkupContainer("referencesDirectoryContainer"){
-                @Override
-                public boolean isVisible() {
-                    return isPrivilegesDepartment() || isSubsidyDepartment();
-                }
-            };
+            referencesDirectoryContainer = new WebMarkupContainer("referencesDirectoryContainer");
             referencesDirectoryContainer.setOutputMarkupPlaceholderTag(true);
             add(referencesDirectoryContainer);
 
@@ -225,6 +214,8 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
             referencesDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
+
+            referencesDirectoryContainer.setVisible(isPrivilegesDepartment() || isSubsidyDepartment());
         }
     }
 
@@ -246,19 +237,19 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
         //edrpou.
         {
-            edrpouContainer.setVisible(isUserOrganization() || isServiceProvider());
+            edrpouContainer.setVisible(isSubsidyDepartment() || isPrivilegesDepartment() || isServiceProvider());
             target.add(edrpouContainer);
         }
 
         //root directory.
         {
-            rootDirectoryContainer.setVisible(isUserOrganization());
+            rootDirectoryContainer.setVisible(isSubsidyDepartment() || isPrivilegesDepartment());
             target.add(rootDirectoryContainer);
         }
 
         //root export directory.
         {
-            rootExportDirectoryContainer.setVisible(isUserOrganization());
+            rootExportDirectoryContainer.setVisible(isSubsidyDepartment() || isPrivilegesDepartment());
             target.add(rootExportDirectoryContainer);
         }
 

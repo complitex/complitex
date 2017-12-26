@@ -54,7 +54,7 @@ public final class StringValuePanel extends Panel {
 
     private void init(IModel<List<StringValue>> model, final boolean required, final IModel<String> labelModel, final boolean enabled,
                       final MarkupContainer[] toUpdate) {
-        model.getObject().sort(Locales.comparing(StringValue::getLocaleId, Locales.getSystemLocaleId()));
+        //model.getObject().sort(Locales.comparing(StringValue::getLocaleId, Locales.getSystemLocaleId()));
 
         add(new ListView<StringValue>("strings", model) {
 

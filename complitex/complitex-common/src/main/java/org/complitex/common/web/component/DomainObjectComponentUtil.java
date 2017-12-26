@@ -36,7 +36,13 @@ public class DomainObjectComponentUtil {
 
             @Override
             public String getObject() {
-                return Strings.capitalize(StringValueUtil.getValue(attributeNames, locale).toLowerCase(locale));
+                String s = StringValueUtil.getValue(attributeNames, locale);
+
+                if (s == null && !attributeNames.isEmpty()){
+                    return attributeNames.get(0).getValue();
+                }
+
+                return s != null? Strings.capitalize(s.toLowerCase(locale)) : null;
             }
         };
     }

@@ -32,7 +32,9 @@ public class StringValueUtil {
             }
         }
 
-        return getSystemStringValue(stringValues).getValue();
+        StringValue stringValue = getSystemStringValue(stringValues);
+
+        return stringValue != null ? stringValue.getValue() : null;
     }
 
     public static List<StringValue> newStringValues() {
