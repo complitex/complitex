@@ -58,9 +58,9 @@
                 AND attr.`value_id` IS NOT NULL)
         </if>
 
-        <if test="userOrganizationsString != null">
+       <!-- <if test="userOrganizationsString != null">
             and e.`object_id` in ${userOrganizationsString}
-        </if>
+        </if>-->
     </sql>
 
     <select id="selectOrganizationCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
