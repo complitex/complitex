@@ -110,7 +110,12 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
         //EDRPOU. It is user organization only attribute.
         {
-            edrpouContainer = new WebMarkupContainer("edrpouContainer");
+            edrpouContainer = new WebMarkupContainer("edrpouContainer"){
+                @Override
+                public boolean isVisible() {
+                    return isSubsidyDepartment() || isPrivilegesDepartment() || isServiceProvider();
+                }
+            };
             edrpouContainer.setOutputMarkupPlaceholderTag(true);
             add(edrpouContainer);
 
@@ -131,14 +136,16 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
             edrpouContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
-
-            //initial visibility
-            edrpouContainer.setVisible(isUserOrganization() || isServiceProvider());
         }
 
         //Root directory for loading and saving request files. It is user organization only attribute.
         {
-            rootDirectoryContainer = new WebMarkupContainer("rootDirectoryContainer");
+            rootDirectoryContainer = new WebMarkupContainer("rootDirectoryContainer"){
+                @Override
+                public boolean isVisible() {
+                    return isSubsidyDepartment() || isPrivilegesDepartment();
+                }
+            };
             rootDirectoryContainer.setOutputMarkupPlaceholderTag(true);
             add(rootDirectoryContainer);
 
@@ -159,14 +166,16 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
             rootDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
-
-            //initial visibility
-            rootDirectoryContainer.setVisible(isUserOrganization());
         }
 
         //Root Export directory for loading and saving request files. It is user organization only attribute.
         {
-            rootExportDirectoryContainer = new WebMarkupContainer("rootExportDirectoryContainer");
+            rootExportDirectoryContainer = new WebMarkupContainer("rootExportDirectoryContainer"){
+                @Override
+                public boolean isVisible() {
+                    return isUserOrganization();
+                }
+            };
             rootExportDirectoryContainer.setOutputMarkupPlaceholderTag(true);
             add(rootExportDirectoryContainer);
 
@@ -187,14 +196,16 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
             rootExportDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
-
-            //initial visibility
-            rootExportDirectoryContainer.setVisible(isUserOrganization());
         }
 
         //referencesDirectoryContainer
         {
-            referencesDirectoryContainer = new WebMarkupContainer("referencesDirectoryContainer");
+            referencesDirectoryContainer = new WebMarkupContainer("referencesDirectoryContainer"){
+                @Override
+                public boolean isVisible() {
+                    return isPrivilegesDepartment() || isSubsidyDepartment();
+                }
+            };
             referencesDirectoryContainer.setOutputMarkupPlaceholderTag(true);
             add(referencesDirectoryContainer);
 
@@ -214,8 +225,6 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
             referencesDirectoryContainer.add(DomainObjectComponentUtil.newInputComponent("organization", getStrategyName(),
                     organization, attribute, getLocale(), isDisabled()));
-
-            referencesDirectoryContainer.setVisible(isPrivilegesDepartment() || isSubsidyDepartment());
         }
     }
 
