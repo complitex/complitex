@@ -73,4 +73,9 @@ public class CountryStrategy extends TemplateStrategy {
     public String[] getListRoles() {
         return new String[]{SecurityRole.ADDRESS_MODULE_VIEW};
     }
+
+    @Override
+    public boolean isUpperCase() {
+        return true;
+    }
 }

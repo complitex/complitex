@@ -409,9 +409,12 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return NS + ".insertAttribute";
     }
 
+    public boolean isUpperCase() {
+        return false;
+    }
 
     protected Long insertStrings(Long entityAttributeId, List<StringValue> strings) {
-        return stringValueBean.save(strings, getEntityName());
+        return stringValueBean.save(strings, getEntityName(), isUpperCase());
     }
 
     public void insert(DomainObject domainObject){

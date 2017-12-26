@@ -12,7 +12,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
@@ -35,9 +34,6 @@ import java.util.Map;
 @Stateless
 public class CityStrategy extends TemplateStrategy {
     private static final String CITY_NS = CityStrategy.class.getName();
-
-    @EJB
-    private StringValueBean stringBean;
 
     @EJB
     private StrategyFactory strategyFactory;
@@ -201,5 +197,10 @@ public class CityStrategy extends TemplateStrategy {
     @Override
     public String[] getListRoles() {
         return new String[]{SecurityRole.ADDRESS_MODULE_VIEW};
+    }
+
+    @Override
+    public boolean isUpperCase() {
+        return true;
     }
 }

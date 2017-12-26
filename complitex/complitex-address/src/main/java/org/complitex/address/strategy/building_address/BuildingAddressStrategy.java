@@ -340,4 +340,9 @@ public class BuildingAddressStrategy extends TemplateStrategy {
             buildingStrategy.updateBuildingActivity(buildingId, !enable);
         }
     }
+
+    @Override
+    public boolean isUpperCase() {
+        return true;
+    }
 }

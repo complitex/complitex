@@ -90,4 +90,9 @@ public class CityTypeStrategy extends TemplateStrategy {
     public Long getDefaultOrderByAttributeId() {
         return NAME;
     }
+
+    @Override
+    public boolean isUpperCase() {
+        return true;
+    }
 }

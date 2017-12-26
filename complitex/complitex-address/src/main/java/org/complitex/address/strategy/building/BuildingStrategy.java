@@ -829,4 +829,9 @@ public class BuildingStrategy extends TemplateStrategy {
     private void saveBuildingCode(BuildingCode buildingCode) {
         sqlSession().insert(BUILDING_NS + ".insertBuildingCode", buildingCode);
     }
+
+    @Override
+    public boolean isUpperCase() {
+        return true;
+    }
 }

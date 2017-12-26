@@ -359,4 +359,9 @@ public class StreetStrategy extends TemplateStrategy {
         return sqlSession().selectOne(STREET_NS + ".selectStreetIdByCode", code);
     }
 
+    @Override
+    public boolean isUpperCase() {
+        return true;
+    }
+
 }
