@@ -2,7 +2,6 @@ package org.complitex.address.service;
 
 import org.complitex.address.entity.AddressSync;
 import org.complitex.address.exception.RemoteCallException;
-import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
@@ -83,8 +82,8 @@ public class OrganizationSyncHandler implements IAddressSyncHandler{
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
         newObject.setExternalId(sync.getExternalId());
-        newObject.setStringValue(DistrictStrategy.NAME, sync.getName());
-        newObject.setStringValue(DistrictStrategy.CODE, sync.getExternalId());
+        newObject.setStringValue(IOrganizationStrategy.NAME, sync.getName());
+        newObject.setStringValue(IOrganizationStrategy.CODE, sync.getExternalId());
 
         organizationStrategy.update(oldObject, newObject, sync.getDate());
         addressSyncBean.delete(sync.getId());

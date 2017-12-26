@@ -133,7 +133,14 @@ public class DomainObject implements ILongId {
     }
 
     public void setStringValue(Long entityAttributeId, String value, Locale locale){
-        getAttribute(entityAttributeId).setStringValue(value, Locales.getLocaleId(locale));
+        Attribute attribute = getAttribute(entityAttributeId);
+
+        if (attribute == null){
+            addAttribute(new Attribute(entityAttributeId, 1L));
+        }
+
+        attribute.setStringValue(value, Locales.getLocaleId(locale));
+
     }
 
     public void setStringValue(Long entityAttributeId, String value){
