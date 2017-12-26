@@ -133,7 +133,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     organization, attribute, getLocale(), isDisabled()));
 
             //initial visibility
-            edrpouContainer.setVisible(isServiceProvider() || isSubsidyDepartment() || isPrivilegesDepartment());
+            edrpouContainer.setVisible(isUserOrganization() || isServiceProvider());
         }
 
         //Root directory for loading and saving request files. It is user organization only attribute.
@@ -161,7 +161,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     organization, attribute, getLocale(), isDisabled()));
 
             //initial visibility
-            rootDirectoryContainer.setVisible(isSubsidyDepartment() || isPrivilegesDepartment());
+            rootDirectoryContainer.setVisible(isUserOrganization());
         }
 
         //Root Export directory for loading and saving request files. It is user organization only attribute.
@@ -189,7 +189,7 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
                     organization, attribute, getLocale(), isDisabled()));
 
             //initial visibility
-            rootExportDirectoryContainer.setVisible(isSubsidyDepartment() || isPrivilegesDepartment());
+            rootExportDirectoryContainer.setVisible(isUserOrganization());
         }
 
         //referencesDirectoryContainer
@@ -237,19 +237,19 @@ public class OsznOrganizationEditComponent extends OrganizationEditComponent {
 
         //edrpou.
         {
-            edrpouContainer.setVisible(isSubsidyDepartment() || isPrivilegesDepartment() || isServiceProvider());
+            edrpouContainer.setVisible(isUserOrganization() || isServiceProvider());
             target.add(edrpouContainer);
         }
 
         //root directory.
         {
-            rootDirectoryContainer.setVisible(isSubsidyDepartment() || isPrivilegesDepartment());
+            rootDirectoryContainer.setVisible(isUserOrganization());
             target.add(rootDirectoryContainer);
         }
 
         //root export directory.
         {
-            rootExportDirectoryContainer.setVisible(isSubsidyDepartment() || isPrivilegesDepartment());
+            rootExportDirectoryContainer.setVisible(isUserOrganization());
             target.add(rootExportDirectoryContainer);
         }
 
