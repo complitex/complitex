@@ -25,7 +25,10 @@ import javax.xml.validation.SchemaFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.complitex.common.util.ResourceUtil.getFormatString;
@@ -56,6 +59,7 @@ public class RequestFileDescriptionBean extends AbstractBean {
                     put(RequestFileType.FACILITY_TARIF_REFERENCE, FacilityTarifDBF.class).
                     put(RequestFileType.FACILITY_FORM2, FacilityForm2DBF.class).
                     put(RequestFileType.FACILITY_LOCAL, FacilityLocalDBF.class).
+                    put(RequestFileType.PRIVILEGE_PROLONGATION, PrivilegeProlongationDBF.class).
                     build();
 
     private final static String DATE_PATTERN = "dd.MM.yyyy";

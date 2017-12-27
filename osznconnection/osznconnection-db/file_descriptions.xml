@@ -373,14 +373,14 @@
         </fields>
     </file-description>
 
-    <file-description type="FACILITY_STREET_TYPE">
+    <file-description type="FACILITY_STREET_TYPE_REFERENCE">
         <fields>
             <field length="3" type="java.lang.Integer" name="KLKUL_CODE"/>
             <field length="7" type="java.lang.String" name="KLKUL_NAME"/>
         </fields>
     </file-description>
 
-    <file-description type="FACILITY_STREET">
+    <file-description type="FACILITY_STREET_REFERENCE">
         <fields>
             <field length="5" type="java.lang.Integer" name="KL_CODERN"/>
             <field length="5" type="java.lang.Integer" name="KL_CODEUL"/>
@@ -389,7 +389,7 @@
         </fields>
     </file-description>
 
-    <file-description type="FACILITY_TARIF">
+    <file-description type="FACILITY_TARIF_REFERENCE">
         <fields>
             <field length="10" type="java.lang.Long" name="TAR_CODE"/>
             <field length="10" type="java.lang.Long" name="TAR_CDPLG"/>
