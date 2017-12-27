@@ -218,14 +218,14 @@
             <when test="status == 212 or status == 213">
                 SELECT CONCAT(`SUR_NAM`, `F_NAM`, `M_NAM`) `id`, `SUR_NAM`, `F_NAM`, `M_NAM`, COUNT(1) `count` FROM `actual_payment`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `SUR_NAM`, `F_NAM`, `M_NAM`
             </when>
 
             <!--city-->
             <when test="status == 200 or status == 205 or status == 221">
                 SELECT `N_NAME` `id`, COUNT(1) `count`, TO_CYRILLIC(`N_NAME`) as N_NAME FROM `actual_payment`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `N_NAME`
             </when>
 
             <!--street-->
@@ -233,7 +233,7 @@
                 SELECT CONCAT(`N_NAME`, `VUL_CAT`, `VUL_NAME`) `id`, COUNT(1) `count`,
                 TO_CYRILLIC(`N_NAME`) as N_NAME, `VUL_CAT`, TO_CYRILLIC(`VUL_NAME`) as VUL_NAME FROM `actual_payment`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `N_NAME`, `VUL_CAT`, `VUL_NAME`
             </when>
 
             <!--building-->
@@ -245,7 +245,7 @@
                 TO_CYRILLIC(`BLD_NUM`) as BLD_NUM
                 FROM `actual_payment`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `N_NAME`, `VUL_CAT`, `VUL_NAME`, `BLD_NUM`
             </when>
 
             <!--building corp-->
@@ -257,7 +257,7 @@
                 TO_CYRILLIC(`BLD_NUM`) as BLD_NUM,
                 TO_CYRILLIC(`CORP_NUM`) as CORP_NUM FROM `actual_payment`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `N_NAME`, `VUL_CAT`, `VUL_NAME`, `BLD_NUM`, `CORP_NUM`
             </when>
 
             <!-- apartment -->
@@ -270,7 +270,7 @@
                 TO_CYRILLIC(`CORP_NUM`) as CORP_NUM,
                 TO_CYRILLIC(`FLAT`) as FLAT FROM `actual_payment`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `N_NAME`, `VUL_CAT`, `VUL_NAME`, `BLD_NUM`, `CORP_NUM`, `FLAT`
             </when>
             <otherwise>
                 SELECT 1 FROM DUAL where 1=0;
@@ -316,14 +316,14 @@
                     TO_CYRILLIC(`first_name`) first_name, TO_CYRILLIC(`middle_name`) middle_name,
                     TO_CYRILLIC(`last_name`) last_name, TO_CYRILLIC(`FIO`) FIO FROM `subsidy`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `FIO`
             </when>
 
             <!--city-->
             <when test="status == 200 or status == 205 or status == 221">
                 SELECT TO_CYRILLIC(`NP_NAME`) `id`, COUNT(1) `count`, TO_CYRILLIC(`NP_NAME`) NP_NAME FROM `subsidy`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `NP_NAME`
             </when>
 
             <!--street-->
@@ -331,7 +331,7 @@
                 SELECT TO_CYRILLIC(CONCAT(`NP_NAME`, `CAT_V`, `NAME_V`)) `id`, COUNT(1) `count`,
                   TO_CYRILLIC(`NP_NAME`) NP_NAME, TO_CYRILLIC(`CAT_V`) CAT_V, TO_CYRILLIC(`NAME_V`) NAME_V FROM `subsidy`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `NP_NAME`, `CAT_V`, `NAME_V`
             </when>
 
             <!--building-->
@@ -341,7 +341,7 @@
                   TO_CYRILLIC(`BLD`) BLD
                 FROM `subsidy`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `NP_NAME`, `CAT_V`, `NAME_V`, `BLD`
             </when>
 
             <!--building corp-->
@@ -350,7 +350,7 @@
                     TO_CYRILLIC(`NP_NAME`) NP_NAME, TO_CYRILLIC(`CAT_V`) CAT_V, TO_CYRILLIC(`NAME_V`) NAME_V,
                     TO_CYRILLIC(`BLD`) BLD, TO_CYRILLIC(`CORP`) CORP FROM `subsidy`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `NP_NAME`, `CAT_V`, `NAME_V`, `BLD`, `CORP`
             </when>
 
             <!-- apartment -->
@@ -359,7 +359,7 @@
                     TO_CYRILLIC(`NP_NAME`) NP_NAME, TO_CYRILLIC(`CAT_V`) CAT_V, TO_CYRILLIC(`NAME_V`) NAME_V,
                     TO_CYRILLIC(`BLD`) BLD, TO_CYRILLIC(`CORP`) CORP, TO_CYRILLIC(`FLAT`) FLAT FROM `subsidy`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `NP_NAME`, `CAT_V`, `NAME_V`, `BLD`, `CORP`, `FLAT`
             </when>
             <otherwise>
                 SELECT 1 FROM DUAL where 1=0;
@@ -407,7 +407,7 @@
                 TO_CYRILLIC(`FIO`) FIO
                 FROM `dwelling_characteristics`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `FIO`
             </when>
 
             <!--street-->
@@ -415,7 +415,7 @@
                 SELECT CONCAT(`CDUL`) `id`, COUNT(1) `count`, CDUL
                 FROM `dwelling_characteristics`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`
             </when>
 
             <!--building-->
@@ -423,7 +423,7 @@
                 SELECT CONCAT(`CDUL`, `HOUSE`) `id`, COUNT(*) `count`, `CDUL`, `HOUSE`
                 FROM `dwelling_characteristics`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`, `HOUSE`
             </when>
 
             <!--building corp-->
@@ -431,7 +431,7 @@
                 SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`, `BUILD`
                 FROM `dwelling_characteristics`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`, `HOUSE`, `BUILD`
             </when>
 
             <!-- apartment -->
@@ -439,7 +439,7 @@
                 SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`, `APT`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`, `BUILD`, `APT`
                 FROM `dwelling_characteristics`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`, `HOUSE`, `BUILD`, `APT`
             </when>
             <otherwise>
                 SELECT 1 FROM DUAL where 1=0;
@@ -487,14 +487,14 @@
                 TO_CYRILLIC(`FIO`) FIO
                 FROM `facility_service_type`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `FIO`
             </when>
 
             <!--street-->
             <when test="status == 201 or status == 237 or status == 208 or status == 207 or status == 223 or status == 224">
                 SELECT CONCAT(`CDUL`) `id`, COUNT(1) `count`, `CDUL` FROM `facility_service_type`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`
             </when>
 
             <!--building-->
@@ -502,7 +502,7 @@
                 SELECT CONCAT(`CDUL`, `HOUSE`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`
                 FROM `facility_service_type`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`, `HOUSE`
             </when>
 
             <!--building corp-->
@@ -510,7 +510,7 @@
                 SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`, `BUILD` 
                 FROM `facility_service_type`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`, `HOUSE`, `BUILD`
             </when>
 
             <!-- apartment -->
@@ -518,7 +518,7 @@
                 SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`, `APT`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`, `BUILD`, `APT` 
                 FROM `facility_service_type`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`, `HOUSE`, `BUILD`, `APT`
             </when>
             <otherwise>
                 SELECT 1 FROM DUAL where 1=0;
@@ -566,7 +566,7 @@
                 TO_CYRILLIC(`FIOPIL`) FIO
                 FROM `privilege_prolongation`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `FIOPIL`
             </when>
 
             <!--street-->
@@ -574,7 +574,7 @@
                 SELECT `CDUL` `id`, COUNT(1) `count`, CDUL
                 FROM `privilege_prolongation`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`
             </when>
 
             <!--building-->
@@ -582,7 +582,7 @@
                 SELECT CONCAT(`CDUL`, `HOUSE`) `id`, COUNT(1) `count`, `HOUSE`, `CDUL`
                 FROM `privilege_prolongation`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`, `HOUSE`
             </when>
 
             <!--building corp-->
@@ -590,7 +590,7 @@
                 SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`, `BUILD`
                 FROM `privilege_prolongation`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`, `HOUSE`, `BUILD`
             </when>
 
             <!-- apartment -->
@@ -598,7 +598,7 @@
                 SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`, `APT`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`, `BUILD`, `APT`
                 FROM `privilege_prolongation`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY 1
+                GROUP BY `CDUL`, `HOUSE`, `BUILD`, `APT`
             </when>
             <otherwise>
                 SELECT 1 FROM DUAL where 1=0;
