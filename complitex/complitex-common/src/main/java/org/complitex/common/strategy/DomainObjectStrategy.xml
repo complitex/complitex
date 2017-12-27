@@ -143,6 +143,9 @@
         <if test="objectId != null">
             AND e.`object_id` = #{objectId}
         </if>
+        <if test="externalId != null">
+            AND e.`externalId` = #{externalId}
+        </if>
         <foreach item="attributeFilter" collection="attributeFilters">
             <if test="attributeFilter.value != null">
                 AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`

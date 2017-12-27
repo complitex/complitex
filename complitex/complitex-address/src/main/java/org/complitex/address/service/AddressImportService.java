@@ -769,6 +769,7 @@ public class AddressImportService extends AbstractImportService {
                 if (buildingId == null){
                     building = buildingStrategy.newInstance();
                     building.getAttribute(BuildingStrategy.DISTRICT).setValueId(districtObjectId);
+                    building.setExternalId(buildingAddressExternalId);
                     buildingAddress = building.getPrimaryAddress();
                 }else {
                     oldBuilding = buildingStrategy.getDomainObject(buildingId, true);
@@ -787,6 +788,10 @@ public class AddressImportService extends AbstractImportService {
                     }
 
                     building = CloneUtil.cloneObject(oldBuilding);
+
+                    if (building.getExternalId() == null){
+                        building.setExternalId(buildingAddressExternalId);
+                    }
 
                     //find address by external id
                     for (DomainObject ba : building.getAllAddresses()){

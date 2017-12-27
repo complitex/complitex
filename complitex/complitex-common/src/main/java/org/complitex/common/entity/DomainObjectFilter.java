@@ -39,6 +39,8 @@ public class DomainObjectFilter implements Serializable {
 
     private String value;
 
+    private String externalId;
+
     public DomainObjectFilter() {
     }
 
@@ -265,5 +267,13 @@ public class DomainObjectFilter implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 }

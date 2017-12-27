@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -20,6 +21,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.converter.DateConverter;
@@ -369,6 +371,9 @@ public class DomainObjectListPanel extends Panel {
         };
         filters.setReuseItems(true);
         filterForm.add(filters);
+
+        filterForm.add(new TextField<>("objectId", new PropertyModel<>(filter, "objectId")));
+        filterForm.add(new TextField<>("externalId", new PropertyModel<>(filter, "externalId")));
 
         //Reset Action
         AjaxLink reset = new AjaxLink("reset") {

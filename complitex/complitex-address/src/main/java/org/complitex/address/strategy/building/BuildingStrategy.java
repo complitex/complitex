@@ -195,6 +195,8 @@ public class BuildingStrategy extends TemplateStrategy {
         addressExample.setCount(buildingExample.getCount());
         addressExample.setStatus(buildingExample.getStatus());
         addressExample.setAdmin(buildingExample.isAdmin());
+        addressExample.setExternalId(buildingExample.getExternalId());
+
 //        addressExample.setUserPermissionString(sessionBean.getPermissionString("building_address"));
 
         addressExample.addAttributeFilter(new AttributeFilter(BuildingAddressStrategy.NUMBER, number));
