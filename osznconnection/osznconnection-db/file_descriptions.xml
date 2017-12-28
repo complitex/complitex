@@ -116,7 +116,7 @@
             <field length="20" type="java.lang.String" name="M_NAM"/>
             <field length="10" type="java.lang.String" name="IND_COD"/>
             <field length="6" type="java.lang.String" name="PSP_SER"/>
-            <field length="6" type="java.lang.String" name="PSP_NUM"/>
+            <field length="10" type="java.lang.String" name="PSP_NUM"/>
             <field length="1" type="java.lang.Integer" name="OZN"/>
             <field scale="2" length="10" type="java.math.BigDecimal" name="CM_AREA"/>
             <field scale="2" length="10" type="java.math.BigDecimal" name="HEAT_AREA"/>
