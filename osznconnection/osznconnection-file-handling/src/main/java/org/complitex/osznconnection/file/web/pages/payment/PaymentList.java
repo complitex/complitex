@@ -111,9 +111,6 @@ public final class PaymentList extends TemplatePage {
     private void init() {
         RequestFile requestFile = requestFileBean.getRequestFile(fileId);
 
-        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
-                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
-
         //Проверка доступа к данным
         if (!osznSessionBean.isAuthorized(requestFile.getUserOrganizationId())) {
             throw new UnauthorizedInstantiationException(this.getClass());
@@ -314,6 +311,9 @@ public final class PaymentList extends TemplatePage {
                 payments.forEach(payment -> {
                     //noinspection Duplicates
                     try {
+                        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
                         groupBindTaskBean.bind(serviceProviderCode, payment);
 
                         if (payment.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
