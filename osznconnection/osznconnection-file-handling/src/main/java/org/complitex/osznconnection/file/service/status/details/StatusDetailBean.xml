@@ -318,7 +318,7 @@
                     TO_CYRILLIC(`first_name`) first_name, TO_CYRILLIC(`middle_name`) middle_name,
                     TO_CYRILLIC(`last_name`) last_name, TO_CYRILLIC(`FIO`) FIO FROM `subsidy`
                 WHERE `request_file_id` = #{id} AND `status` = #{status}
-                GROUP BY `subsidy`.`FIO`
+                GROUP BY `FIO`, last_name, first_name, middle_name
             </when>
 
             <!--city-->
