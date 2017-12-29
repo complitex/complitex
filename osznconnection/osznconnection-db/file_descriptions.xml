@@ -490,8 +490,8 @@
             <field length="4" type="java.lang.String" name="APT"/>
             <field length="4" type="java.lang.Integer" name="KAT"/>
             <field length="4" type="java.lang.Integer" name="LGCODE"/>
-            <field length="10" type="java.util.Date" name="DATEIN"/>
-            <field length="10" type="java.util.Date" name="DATEOUT"/>
+            <field length="10" type="java.lang.String" name="DATEIN"/>
+            <field length="10" type="java.lang.String" name="DATEOUT"/>
             <field length="25" type="java.lang.String" name="RAH"/>
         </fields>
     </file-description>
