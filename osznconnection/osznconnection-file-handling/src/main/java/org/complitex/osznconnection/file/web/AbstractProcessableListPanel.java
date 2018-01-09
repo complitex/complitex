@@ -78,6 +78,7 @@ import java.util.*;
 
 import static org.complitex.common.util.StringUtil.currentTime;
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
+import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE;
 
 public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile, F extends AbstractFilter> extends Panel {
 
@@ -307,7 +308,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         Model<R> selectedRequestFileModel = new Model<>();
 
         OrganizationPickerDialog serviceProviderDialog = new OrganizationPickerDialog("organization_correction_dialog",
-                Model.of(new DomainObject()), OsznOrganizationTypeStrategy.SERVICE_PROVIDER_TYPE) {
+                Model.of(new DomainObject()), SERVICE_PROVIDER_TYPE, SERVICING_ORGANIZATION_TYPE) {
             @Override
             protected void onSelect(AjaxRequestTarget target) {
                 R requestFile = selectedRequestFileModel.getObject();
