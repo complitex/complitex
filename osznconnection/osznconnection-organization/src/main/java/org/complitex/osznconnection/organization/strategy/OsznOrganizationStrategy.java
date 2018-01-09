@@ -293,7 +293,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
         if (serviceProviderId != null){
             return getDomainObject(serviceProviderId).getStringValue(OsznOrganizationStrategy.CODE);
         }else {
-            throw new ServiceRuntimeException("ПУ не найден по ЕДРПОУ {0}", edrpou);
+            throw new ServiceRuntimeException("ПУ не найден по ЕДРПОУ {0}", edrpou); //todo handle ui exception
         }
     }
 

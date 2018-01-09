@@ -19,6 +19,14 @@ img {
     text-decoration:none;
 }
 
+input{
+    -moz-appearance: none
+}
+
+select{
+    -moz-appearance: none
+}
+
 #Header { height:85px; vertical-align:top; background:url('../../../../logo.jpg') no-repeat; border-bottom: 1px solid #C9D1D9; }
 
 #LoginForm { float: right; margin-top: 22px;}
