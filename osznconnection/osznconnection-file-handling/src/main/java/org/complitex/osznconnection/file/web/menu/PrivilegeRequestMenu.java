@@ -24,7 +24,7 @@ public class PrivilegeRequestMenu extends ResourceTemplateMenu {
         add("facility_local__janitor_list", FacilityLocalJanitorFileList.class, new String[]{"PRIVILEGE_LOCAL"});
         add("facility_local_compensation_list", FacilityLocalCompensationFileList.class, new String[]{"PRIVILEGE_LOCAL"});
 
-        add("facility_tarif_file_list", FacilityTarifFileList.class);
+        add("facility_tarif_file_list", FacilityTarifFileList.class, new String[]{"PRIVILEGE_GROUP"});
         add("facility_street_type_file_list", FacilityStreetTypeFileList.class);
         add("facility_street_file_list", FacilityStreetFileList.class);
     }

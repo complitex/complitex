@@ -135,6 +135,11 @@ public class SubsidyRequestMenu extends ResourceTemplateMenu {
             public String getTagId() {
                 return "SubsidyTarifList";
             }
+
+            @Override
+            public String[] getRoles() {
+                return new String[]{"SUBSIDY_GROUP"};
+            }
         });
 
         return links;
