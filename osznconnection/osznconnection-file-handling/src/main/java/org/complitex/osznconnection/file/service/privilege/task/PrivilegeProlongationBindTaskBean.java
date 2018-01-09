@@ -107,6 +107,8 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
     public void bind(String serviceProviderCode, PrivilegeProlongation privilegeProlongation) throws MoreOneAccountException {
         String puAccountNumber = privilegeProlongation.getPuAccountNumber();
 
+        privilegeProlongation.setCity(configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY, true));
+
         //resolve local account number
         personAccountService.localResolveAccountNumber(privilegeProlongation, puAccountNumber, true);
 
