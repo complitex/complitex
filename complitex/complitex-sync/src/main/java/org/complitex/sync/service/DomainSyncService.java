@@ -14,7 +14,6 @@ import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.sync.entity.DomainSync;
-import org.complitex.sync.entity.DomainSyncStatus;
 import org.complitex.sync.entity.SyncBeginMessage;
 import org.complitex.sync.entity.SyncEntity;
 import org.complitex.sync.handler.*;
@@ -33,6 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static javax.ejb.ConcurrencyManagementType.BEAN;
+import static org.complitex.sync.entity.DomainSyncStatus.LOADED;
 import static org.complitex.sync.entity.SyncEntity.*;
 import static org.complitex.sync.service.IDomainSyncHandler.NOT_FOUND_ID;
 
@@ -69,8 +69,8 @@ public class DomainSyncService {
     private AtomicBoolean cancelSync = new AtomicBoolean(false);
 
 
-    private IDomainSyncHandler getHandler(SyncEntity type){
-        switch (type){
+    private IDomainSyncHandler getHandler(SyncEntity syncEntity){
+        switch (syncEntity){
             case DISTRICT:
                 return EjbBeanLocator.getBean(DistrictSyncHandler.class);
             case STREET_TYPE:
@@ -100,12 +100,7 @@ public class DomainSyncService {
     }
 
     @Asynchronous
-    public void load(SyncEntity type){
-        load(type, null);
-    }
-
-    @Asynchronous
-    public void load(SyncEntity type, Map<String, DomainObject> map){
+    public void load(SyncEntity syncEntity, Map<String, DomainObject> map){
         if (loading.get()){
             return;
         }
@@ -116,22 +111,18 @@ public class DomainSyncService {
             cancelSync.set(false);
 
             //clear
-            deleteAll(null, type);
+            domainSyncBean.delete(syncEntity);
 
             Date date = DateUtil.getCurrentDate();
 
-            List<? extends DomainObject> parents = getHandler(type).getParentObjects(map);
+            List<? extends DomainObject> parents = getHandler(syncEntity).getParentObjects(map);
 
             if (parents != null){
                 for (DomainObject p : parents) {
-                    sync(p, type, map, date);
-
-                    if (cancelSync.get()){
-                        break;
-                    }
+                    load(syncEntity, p, map, date);
                 }
             }else{
-                sync(null, type, map, date);
+                load(syncEntity, null, map, date);
             }
         } catch (Exception e) {
             log.error("Ошибка синхронизации", e);
@@ -143,8 +134,46 @@ public class DomainSyncService {
             //unlock sync
             loading.set(false);
 
-            broadcastService.broadcast(getClass(), "done", type.name());
+            broadcastService.broadcast(getClass(), "done", syncEntity.name());
         }
+    }
+
+    private void load(SyncEntity syncEntity, DomainObject parent, Map<String, DomainObject> map, Date date)
+            throws RemoteCallException{
+        if (cancelSync.get()){
+            return;
+        }
+
+        Cursor<DomainSync> cursor = getHandler(syncEntity).getAddressSyncs(parent, date);
+
+        SyncBeginMessage message = new SyncBeginMessage();
+        message.setSyncEntity(syncEntity);
+        message.setCount(cursor.getData() != null ? cursor.getData().size() : 0L);
+
+        if (parent != null){
+            if (syncEntity.equals(DISTRICT) || syncEntity.equals(STREET)){
+                message.setParentName(cityStrategy.getName(parent));
+            }else if (syncEntity.equals(BUILDING)){
+                switch (parent.getEntityName()){
+                    case "district":
+                        message.setParentName(districtStrategy.getName(parent));
+                        break;
+                    case "street":
+                        message.setParentName(streetStrategy.getName(parent));
+                        break;
+                }
+            }
+        }
+
+        broadcastService.broadcast(getClass(), "begin", message);
+
+        cursor.getData().forEach(s -> {
+            s.setStatus(LOADED);
+            s.setType(syncEntity);
+            s.setDate(date);
+
+            domainSyncBean.save(s);
+        });
     }
 
     public void sync(DomainObject parent, SyncEntity syncEntity, Map<String, DomainObject> map, Date date)
@@ -280,7 +309,7 @@ public class DomainSyncService {
 
                         //новый
                         if (sync.getStatus() == null) {
-                            sync.setStatus(DomainSyncStatus.NEW);
+//                            sync.setStatus(DomainSyncStatus.NEW);
                         }
 
                         //сохранение
@@ -348,7 +377,7 @@ public class DomainSyncService {
     protected void addAll(Long parentObjectId, SyncEntity syncEntity){
         DomainSync domainSync = new DomainSync();
         domainSync.setType(syncEntity);
-        domainSync.setStatus(DomainSyncStatus.NEW);
+//        domainSync.setStatus(DomainSyncStatus.NEW);
 
         domainSyncBean.getList(FilterWrapper.of(domainSync)).stream()
                 .filter(s -> parentObjectId == null || parentObjectId.equals(s.getParentId()))

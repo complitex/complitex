@@ -34,9 +34,9 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import java.util.*;
 
-import static org.complitex.sync.entity.DomainSyncStatus.NEW;
 import static org.complitex.sync.entity.SyncEntity.BUILDING;
 import static org.complitex.sync.entity.SyncEntity.STREET;
+
 
 /**
  * @author Anatoly Ivanov
@@ -89,7 +89,7 @@ public class DomainSyncPanel extends Panel {
 
             @Override
             public boolean isVisible(IModel<DomainSync> model) {
-                return NEW.equals(model.getObject().getStatus());
+                return false;
             }
         });
 
@@ -261,7 +261,7 @@ public class DomainSyncPanel extends Panel {
                 onUpdate(target);
 
                 if (syncEntity != null){
-                    domainSyncService.load(syncEntity);
+                    domainSyncService.load(syncEntity, null);
                 }else{
 //                    domainSyncService.syncAll();
                 }

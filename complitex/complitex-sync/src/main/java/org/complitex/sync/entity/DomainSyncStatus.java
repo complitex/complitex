@@ -7,7 +7,7 @@ import org.complitex.common.entity.IFixedIdType;
  *         Date: 25.04.2014 23:47
  */
 public enum DomainSyncStatus implements IFixedIdType{
-    NEW(1);
+    LOADED(1);
 
     private Integer id;
 

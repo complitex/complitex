@@ -1,6 +1,5 @@
 package org.complitex.sync.service;
 
-import org.complitex.address.entity.AddressEntity;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.sync.entity.DomainSync;
@@ -58,8 +57,8 @@ public class DomainSyncBean extends AbstractBean {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void delete(AddressEntity addressEntity){
-        sqlSession().delete(NS + ".deleteDomainSyncByDomainEntity", addressEntity);
+    public void delete(SyncEntity syncEntity){
+        sqlSession().delete(NS + ".deleteDomainSyncBySyncEntity", syncEntity);
     }
 
     public List<DomainSyncFilter> getDomainSyncFilters(SyncEntity syncEntity){
