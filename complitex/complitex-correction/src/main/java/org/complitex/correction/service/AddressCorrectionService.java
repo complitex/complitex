@@ -427,7 +427,7 @@ public class AddressCorrectionService {
                         addressCorrectionBean.getStreetTypeCorrections(externalAddress);
 
                 if (streetTypeCorrections.isEmpty()) {
-                    StreetTypeCorrection streetTypeCorrection = new StreetTypeCorrection(externalAddress.getStreetTypeCode(),
+                    StreetTypeCorrection streetTypeCorrection = new StreetTypeCorrection(null,
                             localAddress.getStreetTypeId(), externalAddress.getStreetType().toUpperCase(),
                             externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId(), moduleId);
                     addressCorrectionBean.save(streetTypeCorrection);
@@ -449,7 +449,7 @@ public class AddressCorrectionService {
                     }
 
                     StreetCorrection streetCorrection = new StreetCorrection(localAddress.getCityId(), streetTypeId,
-                            externalAddress.getStreetCode(), localAddress.getStreetId(), externalAddress.getStreet().toUpperCase(),
+                            null, localAddress.getStreetId(), externalAddress.getStreet().toUpperCase(),
                             externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId(), moduleId);
 
                     addressCorrectionBean.save(streetCorrection);

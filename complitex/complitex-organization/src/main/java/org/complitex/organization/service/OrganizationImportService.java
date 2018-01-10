@@ -4,10 +4,10 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Strings;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.AbstractImportService;
-import org.complitex.common.service.IImportListener;
 import org.complitex.common.exception.ImportFileNotFoundException;
 import org.complitex.common.exception.ImportFileReadException;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.IImportListener;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.CloneUtil;
@@ -110,7 +110,7 @@ public class OrganizationImportService extends AbstractImportService {
             DomainObject newObject = null;
             DomainObject oldObject = null;
 
-            final Long objectId = organizationStrategy.getObjectId(externalOrganizationId);
+            final Long objectId = null;//organizationStrategy.getObjectId(externalOrganizationId);
             if (objectId != null) {
                 oldObject = organizationStrategy.getDomainObject(objectId, true);
                 if (oldObject != null) { // нашли
@@ -136,7 +136,7 @@ public class OrganizationImportService extends AbstractImportService {
             //parent
             Long parentId = organization.getHlevel();
             if (parentId != null) {
-                Long parentObjectId = organizationStrategy.getObjectId(parentId.toString());
+                Long parentObjectId = null;//organizationStrategy.getObjectId(parentId.toString());
                 newObject.getAttribute(USER_ORGANIZATION_PARENT).
                         setValueId(parentObjectId);
             }

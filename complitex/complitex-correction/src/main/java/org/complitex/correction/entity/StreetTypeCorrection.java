@@ -10,7 +10,7 @@ public class StreetTypeCorrection extends Correction {
     public StreetTypeCorrection() {
     }
 
-    public StreetTypeCorrection(String externalId, Long objectId, String correction, Long organizationId,
+    public StreetTypeCorrection(Long externalId, Long objectId, String correction, Long organizationId,
                                 Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
     }

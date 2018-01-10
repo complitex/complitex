@@ -10,7 +10,7 @@ public class CityCorrection extends Correction {
     public CityCorrection() {
     }
 
-    public CityCorrection(String externalId, Long objectId, String correction, Long organizationId,
+    public CityCorrection(Long externalId, Long objectId, String correction, Long organizationId,
                           Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
     }

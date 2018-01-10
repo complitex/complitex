@@ -107,7 +107,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
             newObject.setParentId(sync.getParentId());
 
             //STREET_TYPE_ID
-            Long streetTypeId = streetTypeStrategy.getObjectId(sync.getAdditionalExternalId());
+            Long streetTypeId = null;//streetTypeStrategy.getObjectId(sync.getAdditionalExternalId());
 
             if (streetTypeId == null) {
                 throw new RuntimeException("StreetType not found: " + sync);
@@ -127,7 +127,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         newObject.setStringValue(StreetStrategy.NAME, sync.getName());
         newObject.setStringValue(StreetStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
 
-        Long streetTypeId = streetTypeStrategy.getObjectId(sync.getAdditionalExternalId());
+        Long streetTypeId = null;//streetTypeStrategy.getObjectId(sync.getAdditionalExternalId());
 
         if (streetTypeId == null) {
             throw new RuntimeException("StreetType not found: " + sync);

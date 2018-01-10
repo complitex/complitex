@@ -64,7 +64,7 @@ public class DomainSyncService {
     @Resource
     private UserTransaction tx;
 
-    private AtomicBoolean loading = new AtomicBoolean(false);
+    private AtomicBoolean processing = new AtomicBoolean(false);
 
     private AtomicBoolean cancelSync = new AtomicBoolean(false);
 
@@ -101,13 +101,13 @@ public class DomainSyncService {
 
     @Asynchronous
     public void load(SyncEntity syncEntity, Map<String, DomainObject> map){
-        if (loading.get()){
+        if (processing.get()){
             return;
         }
 
         try {
             //lock sync
-            loading.set(true);
+            processing.set(true);
             cancelSync.set(false);
 
             //clear
@@ -132,7 +132,7 @@ public class DomainSyncService {
             broadcastService.broadcast(getClass(), "error", message != null ? message : e.getMessage());
         } finally {
             //unlock sync
-            loading.set(false);
+            processing.set(false);
 
             broadcastService.broadcast(getClass(), "done", syncEntity.name());
         }
@@ -174,6 +174,17 @@ public class DomainSyncService {
 
             domainSyncBean.save(s);
         });
+    }
+
+    public void bind(Long parentId, SyncEntity syncEntity){
+        processing.set(true);
+        cancelSync.set(false);
+
+        getHandler(syncEntity).bind(parentId);
+
+
+
+        processing.set(false);
     }
 
     public void sync(DomainObject parent, SyncEntity syncEntity, Map<String, DomainObject> map, Date date)
@@ -370,8 +381,8 @@ public class DomainSyncService {
         cancelSync.set(true);
     }
 
-    public boolean isLoading(){
-        return loading.get();
+    public boolean getProcessing(){
+        return processing.get();
     }
 
     protected void addAll(Long parentObjectId, SyncEntity syncEntity){
@@ -455,13 +466,13 @@ public class DomainSyncService {
 
     @Asynchronous
     public void addAndUpdateAll(Long parentObjectId, SyncEntity syncEntity){
-        loading.set(true);
+        processing.set(true);
         cancelSync.set(false);
 
         addAll(parentObjectId, syncEntity);
         updateAll(parentObjectId, syncEntity);
 
-        loading.set(false);
+        processing.set(false);
     }
 
     private void deleteAll(Long parentObjectId, SyncEntity syncEntity){

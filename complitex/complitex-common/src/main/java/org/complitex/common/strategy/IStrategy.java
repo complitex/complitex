@@ -38,8 +38,6 @@ public interface IStrategy {
     
     DomainObject getDomainObject(String dataSource, Long id, boolean runAsAdmin);
 
-    Long getObjectId(String externalId);
-    
     DomainObject getHistoryObject(Long objectId, Date date);
 
     EntityObjectInfo findParentInSearchComponent(Long id, Date date);

@@ -12,7 +12,7 @@ import java.util.Date;
 public abstract class Correction implements Serializable {
 
     private Long id;
-    private String externalId;
+    private Long externalId;
     private Long objectId;
     private String correction;
     private Date beginDate = DateUtil.MIN_BEGIN_DATE;
@@ -36,7 +36,7 @@ public abstract class Correction implements Serializable {
     protected Correction() {
     }
 
-    public Correction(String externalId, Long objectId, String correction, Long organizationId, Long userOrganizationId,
+    public Correction(Long externalId, Long objectId, String correction, Long organizationId, Long userOrganizationId,
                       Long moduleId) {
         this.externalId = externalId;
         this.objectId = objectId;
@@ -68,11 +68,11 @@ public abstract class Correction implements Serializable {
         this.id = id;
     }
 
-    public String getExternalId() {
+    public Long getExternalId() {
         return externalId;
     }
 
-    public void setExternalId(String externalId) {
+    public void setExternalId(Long externalId) {
         this.externalId = externalId;
     }
 

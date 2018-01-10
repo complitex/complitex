@@ -10,7 +10,7 @@ public class OwnershipCorrection extends Correction {
     public OwnershipCorrection() {
     }
 
-    public OwnershipCorrection(String externalId, Long objectId, String ownership,
+    public OwnershipCorrection(Long externalId, Long objectId, String ownership,
                                Long organizationId, Long userOrganizationId, Long moduleId) {
         setExternalId(externalId);
         setObjectId(objectId);

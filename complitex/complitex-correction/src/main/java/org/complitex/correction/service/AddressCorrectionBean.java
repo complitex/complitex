@@ -88,7 +88,7 @@ public class AddressCorrectionBean extends CorrectionBean {
         return sqlSession().selectList(NS + ".selectDistrictCorrections", filterWrapper);
     }
 
-    public List<DistrictCorrection> getDistrictCorrections(Long cityObjectId, String externalId, Long objectId, String correction,
+    public List<DistrictCorrection> getDistrictCorrections(Long cityObjectId, Long externalId, Long objectId, String correction,
                                                            Long organizationId, Long userOrganizationId){
         return getDistrictCorrections(FilterWrapper.of(new DistrictCorrection(cityObjectId, externalId, objectId,
                 correction, organizationId, userOrganizationId, null)));
@@ -186,7 +186,7 @@ public class AddressCorrectionBean extends CorrectionBean {
         return sqlSession().selectOne(NS + ".selectStreetCorrectionsCount", filterWrapper);
     }
 
-    public List<StreetCorrection> getStreetCorrections(Long cityId, Long streetTypeId, String externalId,
+    public List<StreetCorrection> getStreetCorrections(Long cityId, Long streetTypeId, Long externalId,
                                                        Long objectId,  String street, Long organizationId, Long userOrganizationId) {
 
         return getStreetCorrections(FilterWrapper.of(new StreetCorrection(cityId, streetTypeId, externalId,
@@ -278,7 +278,7 @@ public class AddressCorrectionBean extends CorrectionBean {
         return sqlSession().selectList(NS + ".selectApartmentCorrections", filterWrapper);
     }
 
-    public List<ApartmentCorrection> getApartmentCorrections(Long buildingId, String externalId, Long objectId, String correction,
+    public List<ApartmentCorrection> getApartmentCorrections(Long buildingId, Long externalId, Long objectId, String correction,
                                                            Long organizationId, Long userOrganizationId){
         return getApartmentCorrections(FilterWrapper.of(new ApartmentCorrection(buildingId, externalId, objectId,
                 correction, organizationId, userOrganizationId, null)));
@@ -318,7 +318,7 @@ public class AddressCorrectionBean extends CorrectionBean {
         return sqlSession().selectList(NS + ".selectRoomCorrections", filterWrapper);
     }
 
-    public List<RoomCorrection> getRoomCorrections(Long buildingId, Long apartmentId, String externalId,
+    public List<RoomCorrection> getRoomCorrections(Long buildingId, Long apartmentId, Long externalId,
                                                    Long objectId, String correction,
                                                    Long organizationId, Long userOrganizationId){
         return getRoomCorrections(FilterWrapper.of(new RoomCorrection(buildingId, apartmentId, externalId, objectId,

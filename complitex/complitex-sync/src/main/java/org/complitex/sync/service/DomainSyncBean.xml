@@ -45,7 +45,6 @@
 
     <sql id="selectDomainSyncWhere">
         <where>
-            <if test="object.objectId != null">and `object_id` = #{object.objectId}</if>
             <if test="object.parentId != null">and `parent_id` = #{object.parentId}</if>
             <if test="object.additionalParentId != null">and `additional_parent_id` = #{object.additionalParentId}</if>
             <if test="object.externalId != null">and `external_id` = #{object.externalId}</if>

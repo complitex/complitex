@@ -1,11 +1,11 @@
 package org.complitex.osznconnection.file.service.privilege;
 
 import au.com.bytecode.opencsv.CSVReader;
-import org.complitex.common.service.AbstractImportService;
-import org.complitex.common.service.IImportListener;
 import org.complitex.common.exception.ImportFileNotFoundException;
 import org.complitex.common.exception.ImportFileReadException;
 import org.complitex.common.exception.ImportObjectLinkException;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.IImportListener;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeCorrection;
 import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
 import org.slf4j.Logger;
@@ -53,12 +53,12 @@ public class PrivilegeCorrectionImportService extends AbstractImportService {
                 recordIndex++;
 
                 //PRIVILEGE_ID
-                Long objectId = privilegeStrategy.getObjectId(line[1].trim());
+                Long objectId = null;//privilegeStrategy.getObjectId(line[1].trim());
                 if (objectId == null) {
                     throw new ImportObjectLinkException(PRIVILEGE_CORRECTION.getFileName(), recordIndex, line[1].trim());
                 }
 
-                privilegeCorrectionBean.save(new PrivilegeCorrection(line[2].trim(), objectId, line[3].trim(), orgId,
+                privilegeCorrectionBean.save(new PrivilegeCorrection(Long.valueOf(line[2].trim()), objectId, line[3].trim(), orgId,
                         intOrgId, null));
 
                 listener.recordProcessed(PRIVILEGE_CORRECTION, recordIndex);

@@ -218,7 +218,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
             List<Long> streetTypeIds = addressCorrectionBean.getStreetTypeIds(streetTypeName);
             if (streetTypeIds.size() == 1) {
                 streetTypeId = streetTypeIds.get(0);
-                streetTypeCorrection = new StreetTypeCorrection(streetTypeCode, streetTypeId, streetTypeName.toUpperCase(),
+                streetTypeCorrection = new StreetTypeCorrection(null, streetTypeId, streetTypeName.toUpperCase(),
                          osznId, userOrganizationId, moduleId);
 
                 addressCorrectionBean.save(streetTypeCorrection);
@@ -241,12 +241,12 @@ public class FacilityReferenceBookBean extends AbstractBean {
 
         if (streetCorrections.size() == 1) {
             StreetCorrection streetCorrection = streetCorrections.get(0);
-            if (!Strings.isEqual(streetCode, streetCorrection.getExternalId())) {
-                // коды не совпадают, нужно обновить код соответствия.
-                streetCorrection.setExternalId(streetCode);
-
-                addressCorrectionBean.save(streetCorrection);
-            }
+//            if (!Strings.isEqual(streetCode, streetCorrection.getExternalId())) {
+//                // коды не совпадают, нужно обновить код соответствия.
+//                streetCorrection.setExternalId(streetCode);
+//
+//                addressCorrectionBean.save(streetCorrection);
+//            }
         } else if (streetCorrections.size() > 1) {
             throw new ExecuteException(ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_street_corrections.too_many",
                             locale, printStringValue(cityCorrection.getCorrection(), locale), cityCorrection.getId(),
@@ -260,7 +260,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
                 long streetId = streetIds.get(0);
 
                 StreetCorrection streetCorrection =  new StreetCorrection(cityId, streetTypeId,
-                        streetCode.toUpperCase(), streetId, streetName.toUpperCase(),
+                        null, streetId, streetName.toUpperCase(),
                         osznId, userOrganizationId, moduleId);
 
                 addressCorrectionBean.save(streetCorrection);

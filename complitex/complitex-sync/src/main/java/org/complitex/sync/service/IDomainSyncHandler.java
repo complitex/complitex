@@ -39,4 +39,8 @@ public interface IDomainSyncHandler {
     void archive(DomainSync sync);
 
     String getName(DomainObject object);
+
+    default void bind(Long parentId){
+        //todo implement
+    }
 }

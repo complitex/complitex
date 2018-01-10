@@ -143,7 +143,7 @@ public class AddressService extends AbstractBean {
 
         //Связывание улицы
         List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(data.getCityId(),
-                data.getStreetTypeId(), data.getStreetCode(), null,  data.getStreet(),
+                data.getStreetTypeId(), null, null,  data.getStreet(),
                 organizationId, userOrganizationId);
 
         if (streetCorrections.size() == 1){
@@ -411,7 +411,7 @@ public class AddressService extends AbstractBean {
                         null, data.getStreetType(), organizationId, userOrganizationId);
 
                 if (streetTypeCorrections.isEmpty()) {
-                    StreetTypeCorrection streetTypeCorrection = new StreetTypeCorrection(data.getStreetTypeCode(),
+                    StreetTypeCorrection streetTypeCorrection = new StreetTypeCorrection(null,
                             streetTypeObjectId,
                             data.getStreetType().toUpperCase(),
                             organizationId, userOrganizationId, MODULE_ID);
@@ -431,7 +431,7 @@ public class AddressService extends AbstractBean {
 
                 if (streetCorrections.isEmpty()) {
                     StreetCorrection streetCorrection = new StreetCorrection(data.getCityId(), streetTypeId,
-                            data.getStreetCode(), streetObjectId, data.getStreet().toUpperCase(),
+                            null, streetObjectId, data.getStreet().toUpperCase(),
                             organizationId, userOrganizationId, MODULE_ID);
 
                     addressCorrectionBean.save(streetCorrection);

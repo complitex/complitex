@@ -118,7 +118,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
     @Override
     public Long getParentId(DomainSync sync, DomainObject parent) {
-        Long objectId = streetStrategy.getObjectId(sync.getAdditionalExternalId());
+        Long objectId = null;//streetStrategy.getObjectId(sync.getAdditionalExternalId());
 
         if (objectId == null){
             objectId = streetStrategy.getStreetIdByCode(sync.getAdditionalExternalId());

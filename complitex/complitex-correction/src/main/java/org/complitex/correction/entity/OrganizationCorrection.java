@@ -8,7 +8,7 @@ public class OrganizationCorrection extends Correction {
     public OrganizationCorrection() {
     }
 
-    public OrganizationCorrection(String externalId, Long objectId, String correction, Long organizationId,
+    public OrganizationCorrection(Long externalId, Long objectId, String correction, Long organizationId,
                                   Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
     }

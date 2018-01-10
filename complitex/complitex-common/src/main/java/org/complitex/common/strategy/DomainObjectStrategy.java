@@ -255,12 +255,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return getDomainObject(null, objectId, true);
     }
 
-    @Override
-    public Long getObjectId(String externalId) { //todo remove externalId
-        return sqlSession().selectOne(NS + ".selectDomainObjectId", ImmutableMap.of("entityName", getEntityName(),
-                "externalId", externalId));
-    }
-
     protected Set<Long> getSubjects(String dataSource, Long permissionId) {
         if (Objects.equals(permissionId, PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID)) {
             return new HashSet<>(Collections.singletonList(PermissionBean.VISIBLE_BY_ALL_PERMISSION_ID));

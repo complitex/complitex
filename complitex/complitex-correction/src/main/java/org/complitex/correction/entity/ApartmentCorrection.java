@@ -11,7 +11,7 @@ public class ApartmentCorrection extends Correction {
     public ApartmentCorrection() {
     }
 
-    public ApartmentCorrection(Long buildingId, String externalId, Long objectId, String correction, Long organizationId,
+    public ApartmentCorrection(Long buildingId, Long externalId, Long objectId, String correction, Long organizationId,
                           Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
 

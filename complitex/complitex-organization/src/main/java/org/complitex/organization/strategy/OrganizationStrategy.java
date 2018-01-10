@@ -363,11 +363,6 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
         return organization != null ? getCode(organization) : null;
     }
 
-    @Override
-    public Long getObjectId(String externalId) {
-        return null;  //todo remove externalId
-    }
-
     public Long getObjectIdByCode(String code) {
         return sqlSession().selectOne(ORGANIZATION_NS + ".selectOrganizationObjectIdByCode", code);
     }

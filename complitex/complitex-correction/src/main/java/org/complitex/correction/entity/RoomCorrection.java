@@ -12,7 +12,7 @@ public class RoomCorrection extends Correction {
     public RoomCorrection() {
     }
 
-    public RoomCorrection(Long buildingId, Long apartmentId, String externalId, Long objectId, String correction, Long organizationId,
+    public RoomCorrection(Long buildingId, Long apartmentId, Long externalId, Long objectId, String correction, Long organizationId,
                           Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
 

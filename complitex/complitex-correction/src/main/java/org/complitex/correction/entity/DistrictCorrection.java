@@ -12,7 +12,7 @@ public class DistrictCorrection extends Correction {
     public DistrictCorrection() {
     }
 
-    public DistrictCorrection(Long cityId, String externalId, Long objectId, String correction, Long organizationId,
+    public DistrictCorrection(Long cityId, Long externalId, Long objectId, String correction, Long organizationId,
                               Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
 

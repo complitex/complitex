@@ -1,11 +1,11 @@
 package org.complitex.osznconnection.file.service.privilege;
 
 import au.com.bytecode.opencsv.CSVReader;
-import org.complitex.common.service.AbstractImportService;
-import org.complitex.common.service.IImportListener;
 import org.complitex.common.exception.ImportFileNotFoundException;
 import org.complitex.common.exception.ImportFileReadException;
 import org.complitex.common.exception.ImportObjectLinkException;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.IImportListener;
 import org.complitex.osznconnection.file.entity.privilege.OwnershipCorrection;
 import org.complitex.osznconnection.file.strategy.OwnershipStrategy;
 import org.slf4j.Logger;
@@ -52,12 +52,12 @@ public class OwnershipCorrectionImportService extends AbstractImportService {
                 recordIndex++;
 
                 //OWNERSHIP_ID
-                Long objectId = ownershipStrategy.getObjectId(line[1].trim());
+                Long objectId = null;//ownershipStrategy.getObjectId(line[1].trim());
                 if (objectId == null) {
                     throw new ImportObjectLinkException(OWNERSHIP_CORRECTION.getFileName(), recordIndex, line[1]);
                 }
 
-                ownershipCorrectionBean.save(new OwnershipCorrection(line[2].trim(), objectId, line[3].trim(), orgId,
+                ownershipCorrectionBean.save(new OwnershipCorrection(Long.valueOf(line[2].trim()), objectId, line[3].trim(), orgId,
                         null, intOrgId));
 
                 listener.recordProcessed(OWNERSHIP_CORRECTION, recordIndex);

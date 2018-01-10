@@ -17,7 +17,6 @@ import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.Action;
@@ -35,7 +34,6 @@ import javax.ejb.EJB;
 import java.util.*;
 
 import static org.complitex.sync.entity.SyncEntity.BUILDING;
-import static org.complitex.sync.entity.SyncEntity.STREET;
 
 
 /**
@@ -69,57 +67,6 @@ public class DomainSyncPanel extends Panel {
         //actions
         List<Action<DomainSync>> actions = new ArrayList<>();
 
-        actions.add(new Action<DomainSync>("add", "object.add") {
-            @Override
-            public void onAction(AjaxRequestTarget target, IModel<DomainSync> model) {
-                try {
-                    domainSyncService.insert(model.getObject());
-
-                    getSession().info(String.format(getString(model.getObject().getType().name() + ".added"),
-                            model.getObject().getName()));
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-
-                    getSession().error(ExceptionUtil.getCauseMessage(e, true));
-                }
-
-                target.add(DomainSyncPanel.this);
-                onUpdate(target);
-            }
-
-            @Override
-            public boolean isVisible(IModel<DomainSync> model) {
-                return false;
-            }
-        });
-
-        if (STREET.equals(syncEntity)) {
-            actions.add(new Action<DomainSync>("street_code_add", "object.street_code_add") {
-                @Override
-                public void onAction(AjaxRequestTarget target, IModel<DomainSync> model) {
-                    try {
-                        DomainSync sync = model.getObject();
-
-                        domainSyncService.insert(sync);
-
-                        getSession().info(String.format(getString(sync.getType().name() + ".code_added"),
-                                sync.getName(), sync.getExternalId()));
-                    } catch (Exception e) {
-                        log.error(e.getMessage(), e);
-
-                        getSession().error(ExceptionUtil.getCauseMessage(e, true));
-                    }
-
-                    target.add(DomainSyncPanel.this);
-                    onUpdate(target);
-                }
-
-                @Override
-                public boolean isVisible(IModel<DomainSync> model) {
-                    return false; //todo
-                }
-            });
-        }
 
         actions.add(new Action<DomainSync>("update", "object.duplicate") {
             @Override
@@ -138,56 +85,6 @@ public class DomainSyncPanel extends Panel {
             }
         });
 
-        actions.add(new Action<DomainSync>("update", "object.new_name") {
-            @Override
-            public void onAction(AjaxRequestTarget target, IModel<DomainSync> model) {
-                domainSyncService.update(model.getObject());
-
-                getSession().info(String.format(getString(model.getObject().getType().name() + ".new_named"),
-                        model.getObject().getName()));
-                target.add(DomainSyncPanel.this);
-                onUpdate(target);
-            }
-
-            @Override
-            public boolean isVisible(IModel<DomainSync> model) {
-                return false; //todo
-            }
-        });
-
-        actions.add(new Action<DomainSync>("archive", "object.archive") {
-            @Override
-            public void onAction(AjaxRequestTarget target, IModel<DomainSync> model) {
-                domainSyncService.archive(model.getObject());
-
-                getSession().info(String.format(getString(model.getObject().getType().name() + ".archived"),
-                        model.getObject().getName()));
-                target.add(DomainSyncPanel.this);
-                onUpdate(target);
-            }
-
-            @Override
-            public boolean isVisible(IModel<DomainSync> model) {
-                return false; //todo
-            }
-        });
-
-        actions.add(new Action<DomainSync>("remove", "object.remove") {
-            @Override
-            public void onAction(AjaxRequestTarget target, IModel<DomainSync> model) {
-                domainSyncBean.delete(model.getObject().getId());
-
-                getSession().info(String.format(getString(model.getObject().getType().name() + ".removed"),
-                        model.getObject().getName()));
-                target.add(DomainSyncPanel.this);
-                onUpdate(target);
-            }
-
-            @Override
-            public boolean isVisible(IModel<DomainSync> model) {
-                return true;
-            }
-        });
 
         Map<String, IColumn<DomainSync, String>> columnMap = new HashMap<>();
 
@@ -241,37 +138,12 @@ public class DomainSyncPanel extends Panel {
             }
         });
 
-        add(new AjaxLink("load") {
-            @Override
-            public boolean isVisible() {
-                return !BUILDING.equals(syncEntity) && !domainSyncService.isLoading();
-            }
 
-            @Override
-            public void onClick(final AjaxRequestTarget target) {
-                if (domainSyncService.isLoading()){
-                    return;
-                }
-
-                getSession().info(getString("object.start"));
-
-                setVisible(false);
-
-                target.add(DomainSyncPanel.this);
-                onUpdate(target);
-
-                if (syncEntity != null){
-                    domainSyncService.load(syncEntity, null);
-                }else{
-//                    domainSyncService.syncAll();
-                }
-            }
-        });
 
         AjaxLink buildingLoadLink = new AjaxLink("building_load") {
             @Override
             public boolean isVisible() {
-                return BUILDING.equals(syncEntity) && !domainSyncService.isLoading();
+                return BUILDING.equals(syncEntity) && !domainSyncService.getProcessing();
             }
 
             @Override
@@ -284,7 +156,7 @@ public class DomainSyncPanel extends Panel {
         BuildingLoadDialog buildingLoadDialog = new BuildingLoadDialog("building_load_dialog"){
             @Override
             protected void onLoad(AjaxRequestTarget target, Map<String, DomainObject> map) {
-                if (domainSyncService.isLoading()){
+                if (domainSyncService.getProcessing()){
                     return;
                 }
 
@@ -300,6 +172,80 @@ public class DomainSyncPanel extends Panel {
         };
         buildingLoadDialog.setVisible(BUILDING.equals(syncEntity));
         add(buildingLoadDialog);
+
+        DomainSyncDialog domainSyncDialog = new DomainSyncDialog("dialog", syncEntity){
+            @Override
+            public void onUpdate(AjaxRequestTarget target, SearchComponentState state) {
+                switch (syncEntity){
+                    case STREET:
+                        domainSyncService.bind(state.getId("city"), syncEntity);
+                        break;
+                    case BUILDING:
+                        domainSyncService.bind(state.getId("street"), syncEntity);
+                        break;
+                    default:
+                        domainSyncService.bind(null, syncEntity);
+                }
+
+                target.add(DomainSyncPanel.this);
+            }
+        };
+        add(domainSyncDialog);
+
+
+        add(new AjaxLink("load") {
+            @Override
+            public boolean isVisible() {
+                return !BUILDING.equals(syncEntity) && !domainSyncService.getProcessing();
+            }
+
+            @Override
+            public void onClick(final AjaxRequestTarget target) {
+                if (domainSyncService.getProcessing()){
+                    return;
+                }
+
+                getSession().info(getString("object.start"));
+
+                setVisible(false);
+
+                target.add(DomainSyncPanel.this);
+                onUpdate(target);
+
+                domainSyncService.load(syncEntity, null);
+            }
+        });
+
+        add(new AjaxLink("bind") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                switch (syncEntity){
+                    case STREET:
+                    case BUILDING:
+                        domainSyncDialog.open(target);
+                        break;
+                    default:
+                        domainSyncService.bind(null, syncEntity);
+                }
+            }
+
+            @Override
+            public boolean isVisible() {
+                return !domainSyncService.getProcessing();
+            }
+        });
+
+        add(new AjaxLink("cancel") {
+            @Override
+            public boolean isVisible() {
+                return domainSyncService.getProcessing();
+            }
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                domainSyncService.cancelSync();
+            }
+        });
 
         add(new BroadcastBehavior(DomainSyncService.class) {
             private Long lastProcessed = System.currentTimeMillis();
@@ -377,57 +323,8 @@ public class DomainSyncPanel extends Panel {
             }
         });
 
-        add(new AjaxLink("cancel") {
-            @Override
-            public boolean isVisible() {
-                return domainSyncService.isLoading();
-            }
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                domainSyncService.cancelSync();
-            }
-        });
-
-        DomainSyncDialog domainSyncDialog = new DomainSyncDialog("dialog", syncEntity){
 
 
-            @Override
-            public void onUpdate(AjaxRequestTarget target, SearchComponentState state) {
-                switch (syncEntity){
-                    case STREET:
-                        domainSyncService.addAndUpdateAll(state.getId("city"), syncEntity);
-                        break;
-                    case BUILDING:
-                        domainSyncService.addAndUpdateAll(state.getId("street"), syncEntity);
-                        break;
-                    default:
-                        domainSyncService.addAndUpdateAll(null, syncEntity);
-                }
-
-                target.add(DomainSyncPanel.this);
-            }
-        };
-        add(domainSyncDialog);
-
-        add(new AjaxLink("add_all") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                switch (syncEntity){
-                    case STREET:
-                    case BUILDING:
-                        domainSyncDialog.open(target);
-                        break;
-                    default:
-                        domainSyncService.addAndUpdateAll(null, syncEntity);
-                }
-            }
-
-            @Override
-            public boolean isVisible() {
-                return !domainSyncService.isLoading();
-            }
-        });
     }
 
     protected void onUpdate(IPartialPageRequestHandler target){

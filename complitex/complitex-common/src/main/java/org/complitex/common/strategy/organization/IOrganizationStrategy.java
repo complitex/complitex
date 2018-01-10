@@ -135,12 +135,6 @@ public interface IOrganizationStrategy extends IStrategy{
      */
     String getCode(Long organizationId);
 
-    /**
-     * Return object id of organization by external id
-     * @param externalId Code
-     * @return Organization object id
-     */
-    Long getObjectId(String externalId);
 
     Long getObjectIdByCode(String code);
 

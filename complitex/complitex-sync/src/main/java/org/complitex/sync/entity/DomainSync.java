@@ -29,6 +29,14 @@ public class DomainSync implements ILongId {
 
     private Date date;
 
+    public DomainSync() {
+    }
+
+    public DomainSync(SyncEntity type, DomainSyncStatus status) {
+        this.type = type;
+        this.status = status;
+    }
+
     public String getUniqueExternalId(){
         return BUILDING.equals(type) ? additionalExternalId + '.' + externalId  : externalId;
     }

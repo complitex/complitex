@@ -7,14 +7,16 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.ShowMode;
+import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
 import org.complitex.sync.service.DomainSyncBean;
 import org.complitex.sync.service.IDomainSyncHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -22,14 +24,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static org.complitex.common.entity.FilterWrapper.of;
+import static org.complitex.sync.entity.DomainSyncStatus.LOADED;
+import static org.complitex.sync.entity.SyncEntity.DISTRICT;
+
 /**
  * @author Anatoly Ivanov
  * Date: 17.07.2014 23:34
  */
 @Stateless
 public class DistrictSyncHandler implements IDomainSyncHandler {
-    @EJB
-    private ConfigBean configBean;
+    private Logger log = LoggerFactory.getLogger(DistrictSyncHandler.class);
 
     @EJB
     private DomainSyncBean addressSyncBean;
@@ -45,6 +50,9 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
 
     @EJB
     private DistrictStrategy districtStrategy;
+
+    @EJB
+    private AddressCorrectionBean addressCorrectionBean;
 
     @Override
     public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
@@ -107,5 +115,14 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     @Override
     public String getName(DomainObject object) {
         return districtStrategy.getName(object);
+    }
+
+    public void bind(Long parentId){
+        addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED))).forEach(this::bind);
+    }
+
+    private void bind(DomainSync domainSync){
+
+
     }
 }

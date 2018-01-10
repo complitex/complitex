@@ -186,14 +186,10 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
         if (!serviceCorrections.isEmpty()){
             ServiceCorrection serviceCorrection = serviceCorrections.get(0);
 
-            if (!Strings.isNullOrEmpty(serviceCorrection.getExternalId())){
-                serviceCode = serviceCorrection.getExternalId();
-            }else {
-                DomainObject service = serviceStrategy.getDomainObject(serviceCorrection.getObjectId());
+            DomainObject service = serviceStrategy.getDomainObject(serviceCorrection.getObjectId());
 
-                if (service != null && !Strings.isNullOrEmpty(service.getStringValue(ServiceStrategy.CODE))){
-                    serviceCode = service.getStringValue(CODE);
-                }
+            if (service != null && !Strings.isNullOrEmpty(service.getStringValue(ServiceStrategy.CODE))){
+                serviceCode = service.getStringValue(CODE);
             }
         }
 

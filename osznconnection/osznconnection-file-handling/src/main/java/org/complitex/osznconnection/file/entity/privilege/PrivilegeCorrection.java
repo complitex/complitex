@@ -10,7 +10,7 @@ public class PrivilegeCorrection extends Correction {
     public PrivilegeCorrection() {
     }
 
-    public PrivilegeCorrection(String externalId, Long objectId, String correction, Long organizationId,
+    public PrivilegeCorrection(Long externalId, Long objectId, String correction, Long organizationId,
                                Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
     }

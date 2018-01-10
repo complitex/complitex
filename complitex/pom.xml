@@ -111,6 +111,11 @@
             </dependency>
             <dependency>
                 <groupId>org.complitex</groupId>
+                <artifactId>complitex-correction</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.complitex</groupId>
                 <artifactId>complitex-admin</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -68,7 +68,7 @@ public class RegistrationTypeImportService extends AbstractImportService {
                     // это зарезервированный системой объект, пропускаем его.
                 } else {
                     // Ищем по externalId в базе.
-                    final Long objectId = strategy.getObjectId(externalId);
+                    final Long objectId = null; //strategy.getObjectId(externalId);
                     if (objectId != null) {
                         DomainObject oldObject = strategy.getDomainObject(objectId, true);
                         if (oldObject != null) {

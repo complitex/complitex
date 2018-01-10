@@ -560,7 +560,7 @@ public class AddressService extends AbstractBean {
                         null, request.getStreetType(), osznId, userOrganizationId);
 
                 if (streetTypeCorrections.isEmpty()) {
-                    StreetTypeCorrection streetTypeCorrection = new StreetTypeCorrection(request.getStreetTypeCode(),
+                    StreetTypeCorrection streetTypeCorrection = new StreetTypeCorrection(null,
                             streetTypeObjectId,
                             request.getStreetType().toUpperCase(),
                             osznId, userOrganizationId, moduleId);
@@ -580,7 +580,7 @@ public class AddressService extends AbstractBean {
 
                 if (streetCorrections.isEmpty()) {
                     StreetCorrection streetCorrection = new StreetCorrection(request.getCityId(), streetTypeId,
-                            request.getStreetCode(), streetObjectId, request.getStreet().toUpperCase(),
+                            null, streetObjectId, request.getStreet().toUpperCase(),
                             osznId, userOrganizationId, moduleId);
 
                     addressCorrectionBean.save(streetCorrection);

@@ -7,15 +7,15 @@ import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
+import org.complitex.common.exception.ImportFileNotFoundException;
+import org.complitex.common.exception.ImportFileReadException;
+import org.complitex.common.exception.ImportObjectLinkException;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.IImportListener;
 import org.complitex.correction.entity.BuildingCorrection;
 import org.complitex.correction.entity.CityCorrection;
 import org.complitex.correction.entity.StreetCorrection;
 import org.complitex.correction.entity.StreetTypeCorrection;
-import org.complitex.common.service.AbstractImportService;
-import org.complitex.common.service.IImportListener;
-import org.complitex.common.exception.ImportFileNotFoundException;
-import org.complitex.common.exception.ImportFileReadException;
-import org.complitex.common.exception.ImportObjectLinkException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,10 +77,10 @@ public class AddressCorrectionImportService extends AbstractImportService {
             while ((line = reader.readNext()) != null) {
                 recordIndex++;
 
-                String externalId = line[0].trim();
+                Long externalId = Long.valueOf(line[0].trim());
 
                 //CITY_ID
-                Long objectId = cityStrategy.getObjectId(externalId);
+                Long objectId = null;//cityStrategy.getObjectId(externalId);
                 if (objectId == null) {
                     throw new ImportObjectLinkException(AddressImportFile.CITY.getFileName(), recordIndex, line[0]);
                 }
@@ -124,15 +124,15 @@ public class AddressCorrectionImportService extends AbstractImportService {
                 String externalId = line[0].trim();
 
                 //DISTRICT_ID
-                Long districtId = districtStrategy.getObjectId(externalId);
+                Long districtId = null;//districtStrategy.getObjectId(externalId);
                 if (districtId == null) {
                     throw new ImportObjectLinkException(AddressImportFile.DISTRICT.getFileName(), recordIndex, line[0]);
                 }
 
                 //CITY_ID
-                if (cityStrategy.getObjectId(line[1].trim()) == null) {
-                    throw new ImportObjectLinkException(AddressImportFile.DISTRICT.getFileName(), recordIndex, line[1]);
-                }
+//                if (cityStrategy.getObjectId(line[1].trim()) == null) {
+//                    throw new ImportObjectLinkException(AddressImportFile.DISTRICT.getFileName(), recordIndex, line[1]);
+//                }
 
                 listener.recordProcessed(AddressImportFile.DISTRICT, recordIndex);
             }
@@ -168,10 +168,10 @@ public class AddressCorrectionImportService extends AbstractImportService {
             while ((line = reader.readNext()) != null) {
                 recordIndex++;
 
-                String externalId = line[0].trim();
+                Long externalId = Long.valueOf(line[0].trim());
 
                 //STREET_TYPE_ID
-                Long streetTypeId = streetTypeStrategy.getObjectId(externalId);
+                Long streetTypeId = null;// streetTypeStrategy.getObjectId(externalId);
                 if (streetTypeId == null) {
                     throw new ImportObjectLinkException(AddressImportFile.STREET_TYPE.getFileName(), recordIndex, line[0]);
                 }
@@ -212,20 +212,20 @@ public class AddressCorrectionImportService extends AbstractImportService {
             while ((line = reader.readNext()) != null) {
                 recordIndex++;
 
-                String externalId = line[0].trim();
+                Long externalId = Long.valueOf(line[0].trim());
 
                 //STREET_ID
-                Long streetId = streetStrategy.getObjectId(externalId);
+                Long streetId = null; //streetStrategy.getObjectId(externalId);
 
                 //CITY_ID
-                Long cityObjectId = cityStrategy.getObjectId(externalId);
+                Long cityObjectId = null;//cityStrategy.getObjectId(externalId);
 
                 if (cityObjectId == null) {
                     throw new ImportObjectLinkException(AddressImportFile.STREET.getFileName(), recordIndex, line[1]);
                 }
 
                 //STREET_TYPE_ID
-                Long streetTypeObjectId = streetTypeStrategy.getObjectId(line[2].trim());
+                Long streetTypeObjectId = null;//streetTypeStrategy.getObjectId(line[2].trim());
                 if (streetTypeObjectId == null) {
                     throw new ImportObjectLinkException(AddressImportFile.STREET.getFileName(), recordIndex, line[2]);
                 }
@@ -267,15 +267,15 @@ public class AddressCorrectionImportService extends AbstractImportService {
             while ((line = reader.readNext()) != null) {
                 recordIndex++;
 
-                String externalId = line[0].trim();
+                Long externalId = Long.valueOf(line[0].trim());
 
-                Long buildingId = buildingStrategy.getObjectId(externalId);
+                Long buildingId = null;//buildingStrategy.getObjectId(externalId);
                 if (buildingId == null) {
                     throw new ImportObjectLinkException(AddressImportFile.BUILDING.getFileName(), recordIndex, line[0]);
                 }
 
                 //STREET_ID
-                Long streetObjectId = streetStrategy.getObjectId(line[2].trim());
+                Long streetObjectId = null;//streetStrategy.getObjectId(line[2].trim());
                 if (streetObjectId == null) {
                     throw new ImportObjectLinkException(AddressImportFile.BUILDING.getFileName(), recordIndex, line[2]);
                 }

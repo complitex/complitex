@@ -13,7 +13,7 @@ public class BuildingCorrection extends Correction {
     public BuildingCorrection() {
     }
 
-    public BuildingCorrection(Long streetId, String externalId, Long objectId, String correction, String correctionCorp,
+    public BuildingCorrection(Long streetId, Long externalId, Long objectId, String correction, String correctionCorp,
                               Long organizationId, Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
 

@@ -50,7 +50,7 @@ public class OwnershipFormImportService extends AbstractImportService {
                 final String name = line[1].trim();
 
                 // Ищем по externalId в базе.
-                final Long objectId = strategy.getObjectId(externalId);
+                final Long objectId = null;//strategy.getObjectId(externalId);
                 if (objectId != null) {
                     DomainObject oldObject = strategy.getDomainObject(objectId, true);
                     if (oldObject != null) {

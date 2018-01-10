@@ -26,5 +26,9 @@
             <groupId>org.complitex</groupId>
             <artifactId>complitex-organization-type</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.complitex</groupId>
+            <artifactId>complitex-correction</artifactId>
+        </dependency>
     </dependencies>
 </project>
