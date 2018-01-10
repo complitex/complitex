@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.Page;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
@@ -40,6 +41,8 @@ public final class DomainObjectList extends TemplatePage {
     public DomainObjectList(PageParameters params) {
         entity = params.get(ENTITY).toString();
         strategyName = params.get(STRATEGY).toString();
+
+        add(new Label("title", strategyFactory.getStrategy(strategyName, entity).getEntity().getName(getLocale())));
 
         if (!hasAnyRole(strategyFactory.getStrategy(strategyName, entity).getListRoles())) {
             throw new UnauthorizedInstantiationException(getClass());
