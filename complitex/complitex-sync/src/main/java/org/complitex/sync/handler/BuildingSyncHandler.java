@@ -106,7 +106,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
     public boolean isEqualNames(DomainSync sync, DomainObject object) {
         DomainObject street = streetStrategy.getDomainObject(object.getParentId());
 
-        return (Objects.equals(street.getExternalId(), sync.getAdditionalExternalId()) ||
+        return (Objects.equals(null, sync.getAdditionalExternalId()) ||
                 street.getAttributes(StreetStrategy.STREET_CODE).stream()
                         .filter(a -> a.getValueId() != null)
                         .filter(a -> a.getValueId().toString().equals(sync.getAdditionalExternalId()))
@@ -130,7 +130,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
     @Override
     public void insert(DomainSync sync) {
         Building building = buildingStrategy.newInstance();
-        building.setExternalId(sync.getUniqueExternalId());
+//        building.setExternalId(sync.getUniqueExternalId());
         building.setValue(BuildingStrategy.DISTRICT, sync.getAdditionalParentId());
 
         Long organizationId = organizationStrategy.getObjectIdByCode(sync.getServicingOrganization());
@@ -143,7 +143,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
         DomainObject buildingAddress = building.getPrimaryAddress();
 
-        buildingAddress.setExternalId(sync.getUniqueExternalId());
+//        buildingAddress.setExternalId(sync.getUniqueExternalId());
         buildingAddress.setParentEntityId(BuildingAddressStrategy.PARENT_STREET_ENTITY_ID);
         buildingAddress.setParentId(sync.getParentId());
 

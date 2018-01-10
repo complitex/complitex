@@ -58,7 +58,7 @@ public class OwnershipImportService extends AbstractImportService{
                 Attribute name = domainObject.getAttribute(OwnershipStrategy.NAME);
 
                 //OWNERSHIP_ID
-                domainObject.setExternalId(line[0].trim());
+//                domainObject.setExternalId(line[0].trim());
 
                 //Название формы собственности
                 StringValueUtil.getSystemStringValue(name.getStringValues()).setValue(line[1].trim());

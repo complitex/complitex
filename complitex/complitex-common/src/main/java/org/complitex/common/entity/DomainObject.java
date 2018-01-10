@@ -20,7 +20,6 @@ public class DomainObject implements ILongId {
     private Long parentId;
     private Long parentEntityId;
     private Long permissionId;
-    private String externalId;
 
     private List<Attribute> attributes = new ArrayList<>();
     private Set<Long> subjectIds = new HashSet<>();
@@ -40,7 +39,6 @@ public class DomainObject implements ILongId {
         parentId = copy.parentId;
         parentEntityId = copy.parentEntityId;
         permissionId = copy.permissionId;
-        externalId = copy.externalId;
         attributes = copy.attributes;
         subjectIds = copy.subjectIds;
     }
@@ -253,14 +251,6 @@ public class DomainObject implements ILongId {
 
     public void setPermissionId(Long permissionId) {
         this.permissionId = permissionId;
-    }
-
-    public String getExternalId() {
-        return externalId;
-    }
-
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
     }
 
     public List<Attribute> getAttributes() {

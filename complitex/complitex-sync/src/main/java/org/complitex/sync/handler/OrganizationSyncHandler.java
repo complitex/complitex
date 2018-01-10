@@ -65,9 +65,9 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     public void insert(DomainSync sync) {
         DomainObject domainObject = organizationStrategy.newInstance();
 
-        domainObject.setExternalId(sync.getExternalId());
+//        domainObject.setExternalId(sync.getExternalId());
         domainObject.setStringValue(IOrganizationStrategy.NAME, sync.getName());
-        domainObject.setStringValue(IOrganizationStrategy.CODE, sync.getExternalId());
+//        domainObject.setStringValue(IOrganizationStrategy.CODE, sync.getExternalId());
 
         Attribute servicingOrganization = new Attribute();
         servicingOrganization.setAttributeId(1L);
@@ -84,9 +84,9 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
         DomainObject oldObject = organizationStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
-        newObject.setExternalId(sync.getExternalId());
+//        newObject.setExternalId(sync.getExternalId());
         newObject.setStringValue(IOrganizationStrategy.NAME, sync.getName());
-        newObject.setStringValue(IOrganizationStrategy.CODE, sync.getExternalId());
+//        newObject.setStringValue(IOrganizationStrategy.CODE, sync.getExternalId());
 
         organizationStrategy.update(oldObject, newObject, sync.getDate());
         domainSyncBean.delete(sync.getId());

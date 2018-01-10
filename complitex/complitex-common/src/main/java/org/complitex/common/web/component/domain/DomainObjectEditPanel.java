@@ -129,7 +129,7 @@ public class DomainObjectEditPanel extends Panel {
 
                 return isNew() || !sessionBean.isAdmin() ? entityName
                         : MessageFormat.format(getString("label_edit"), entityName, newObject.getObjectId(),
-                        newObject.getExternalId());
+                        null);
             }
         };
         Label title = new Label("title", labelModel);

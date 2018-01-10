@@ -38,7 +38,7 @@ public class DomainSyncAdapter extends AbstractBean {
     @EJB(lookup = IOrganizationStrategy.BEAN_LOOKUP)
     private IOrganizationStrategy organizationStrategy;
 
-    public String getDataSource(){
+    public DomainObject getOrganization(){
         Long organizationId = configBean.getLong(DictionaryConfig.SYNC_DATA_SOURCE, true);
 
         DomainObject organization = organizationStrategy.getDomainObject(organizationId, true);
@@ -47,7 +47,11 @@ public class DomainSyncAdapter extends AbstractBean {
             throw new SyncException("Не выбран JDBC ресурс синхронизации");
         }
 
-        String dataSource = organization.getStringValue(IOrganizationStrategy.DATA_SOURCE);
+        return organization;
+    }
+
+    public String getDataSource(){
+        String dataSource = getOrganization().getStringValue(IOrganizationStrategy.DATA_SOURCE);
 
         if (dataSource == null){
             throw new SyncException("JDBC ресурс не найден");

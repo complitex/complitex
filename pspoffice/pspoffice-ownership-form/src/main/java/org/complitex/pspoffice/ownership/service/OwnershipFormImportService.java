@@ -63,7 +63,7 @@ public class OwnershipFormImportService extends AbstractImportService {
                 } else {
                     // не нашли, создаём объект заполняем его атрибуты и сохраняем.
                     DomainObject object = strategy.newInstance();
-                    object.setExternalId(externalId);
+
                     object.setStringValue(OwnershipFormStrategy.NAME, name, locale);
 
                     strategy.insert(object, DateUtil.getCurrentDate());

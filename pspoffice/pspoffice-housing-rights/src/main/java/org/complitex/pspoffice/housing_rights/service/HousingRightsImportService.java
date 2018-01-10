@@ -64,7 +64,7 @@ public class HousingRightsImportService extends AbstractImportService {
                 } else {
                     // не нашли, создаём объект заполняем его атрибуты и сохраняем.
                     DomainObject object = strategy.newInstance();
-                    object.setExternalId(externalId);
+
                     object.setStringValue(HousingRightsStrategy.CODE, code);
                     object.setStringValue(HousingRightsStrategy.NAME, name, locale);
 

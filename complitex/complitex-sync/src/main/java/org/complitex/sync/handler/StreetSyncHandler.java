@@ -75,8 +75,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     @Override
     public boolean isEqualNames(DomainSync sync, DomainObject object) {
         return Objects.equals(sync.getName(), streetStrategy.getName(object))
-                && Objects.equals(sync.getAltName(), streetStrategy.getName(object, Locales.getAlternativeLocale()))
-                && Objects.equals(sync.getAdditionalExternalId(), streetStrategy.getStreetTypeExternalId(object));
+                && Objects.equals(sync.getAltName(), streetStrategy.getName(object, Locales.getAlternativeLocale()));
     }
 
     @Override
@@ -96,7 +95,6 @@ public class StreetSyncHandler implements IDomainSyncHandler {
             domainSyncBean.delete(sync.getId());
         }else{
             DomainObject newObject = streetStrategy.newInstance();
-            newObject.setExternalId(sync.getExternalId());
 
             //name
             newObject.setStringValue(StreetStrategy.NAME, sync.getName());

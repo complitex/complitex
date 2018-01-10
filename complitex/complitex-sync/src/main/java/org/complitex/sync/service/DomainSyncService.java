@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 import static javax.ejb.ConcurrencyManagementType.BEAN;
 import static org.complitex.sync.entity.DomainSyncStatus.LOADED;
@@ -221,9 +220,9 @@ public class DomainSyncService {
         @SuppressWarnings("unchecked")
         List<DomainObject> objects = (List<DomainObject>) handler.getObjects(parent);
 
-        Map<String, DomainObject> objectMap = objects.parallelStream()
-                .filter(o -> o.getExternalId() != null)
-                .collect(Collectors.toMap(DomainObject::getExternalId, o -> o));
+        Map<String, DomainObject> objectMap = null;//objects.parallelStream()
+//                .filter(o -> o.getExternalId() != null)
+//                .collect(Collectors.toMap(DomainObject::getExternalId, o -> o));
 
         //коды улиц
         if (syncEntity.equals(STREET)){
@@ -276,9 +275,9 @@ public class DomainSyncService {
                             sync.setAdditionalParentId(map.get("district").getId());
                         }
 
-                        String uniqueExternalId = sync.getUniqueExternalId();
+//                        String uniqueExternalId = sync.getUniqueExternalId();
 
-                        DomainObject object = objectMap.get(uniqueExternalId);
+                        DomainObject object = null;//objectMap.get(uniqueExternalId);
 
                         if (object != null){
                             sync.setObjectId(object.getObjectId());
@@ -292,13 +291,13 @@ public class DomainSyncService {
 //                                sync.setStatus(DomainSyncStatus.NEW_NAME);
                         }else{
                             //дубликат
-                            objects.parallelStream().filter(o -> !Objects.equals(uniqueExternalId, o.getExternalId()) &&
-                                    handler.hasEqualNames(sync, o))
-                                    .findAny()
-                                    .ifPresent(o -> {
-                                        sync.setObjectId(o.getObjectId());
-//                                        sync.setStatus(DomainSyncStatus.DUPLICATE);
-                                    });
+//                            objects.parallelStream().filter(o -> !Objects.equals(uniqueExternalId, o.getExternalId()) &&
+//                                    handler.hasEqualNames(sync, o))
+//                                    .findAny()
+//                                    .ifPresent(o -> {
+//                                        sync.setObjectId(o.getObjectId());
+////                                        sync.setStatus(DomainSyncStatus.DUPLICATE);
+//                                    });
 
                             //внешний дубликат
                             if (sync.getStatus() == null) {
@@ -345,35 +344,35 @@ public class DomainSyncService {
         );
 
         if (!BUILDING.equals(syncEntity)) { //todo fix building object list
-            Map<String, DomainSync> syncMap = cursor.getData().parallelStream()
-                    .filter(a -> a.getExternalId() != null)
-                    .collect(Collectors.toMap(DomainSync::getUniqueExternalId, a -> a));
+            Map<String, DomainSync> syncMap = null;//cursor.getData().parallelStream()
+//                    .filter(a -> a.getExternalId() != null)
+//                    .collect(Collectors.toMap(DomainSync::getUniqueExternalId, a -> a));
 
-            objects.parallelStream().filter(o -> o.getExternalId() != null).forEach(object -> {
-                DomainSync domainSync = syncMap.get(object.getExternalId());
-
-                //архив
-                if (domainSync == null) {
-                    DomainSync s = new DomainSync();
-
-                    if (parent != null){
-                        s.setParentId(parent.getObjectId());
-                    }
-
-                    s.setObjectId(object.getObjectId());
-                    s.setName(handler.getName(object));
-                    s.setType(syncEntity);
-                    s.setUniqueExternalId(object.getExternalId());
-//                    s.setStatus(DomainSyncStatus.ARCHIVAL);
-                    s.setDate(date);
-
-                    if (!domainSyncBean.isExist(s)) {
-                        domainSyncBean.save(s);
-                    }
-
-                    broadcastService.broadcast(getClass(), "processed", s);
-                }
-            });
+//            objects.parallelStream().filter(o -> o.getExternalId() != null).forEach(object -> {
+//                DomainSync domainSync = syncMap.get(object.getExternalId());
+//
+//                //архив
+//                if (domainSync == null) {
+//                    DomainSync s = new DomainSync();
+//
+//                    if (parent != null){
+//                        s.setParentId(parent.getObjectId());
+//                    }
+//
+//                    s.setObjectId(object.getObjectId());
+//                    s.setName(handler.getName(object));
+//                    s.setType(syncEntity);
+//                    s.setUniqueExternalId(object.getExternalId());
+////                    s.setStatus(DomainSyncStatus.ARCHIVAL);
+//                    s.setDate(date);
+//
+//                    if (!domainSyncBean.isExist(s)) {
+//                        domainSyncBean.save(s);
+//                    }
+//
+//                    broadcastService.broadcast(getClass(), "processed", s);
+//                }
+//            });
         }
     }
 

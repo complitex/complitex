@@ -57,7 +57,7 @@ public class PrivilegeImportService extends AbstractImportService{
                 DomainObject domainObject = privilegeStrategy.newInstance();
 
                 //PRIVILEGE_ID
-                domainObject.setExternalId(line[0].trim());
+//                domainObject.setExternalId(line[0].trim());
 
                 //Код
                 Attribute code = domainObject.getAttribute(PrivilegeStrategy.CODE);

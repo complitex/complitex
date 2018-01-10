@@ -67,7 +67,7 @@ public class MilitaryServiceRelationImportService extends AbstractImportService 
                 } else {
                     // не нашли, создаём объект заполняем его атрибуты и сохраняем.
                     DomainObject object = strategy.newInstance();
-                    object.setExternalId(externalId);
+
                     object.setStringValue(MilitaryServiceRelationStrategy.CODE, code);
                     object.setStringValue(MilitaryServiceRelationStrategy.NAME, name, locale);
 

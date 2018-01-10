@@ -209,7 +209,7 @@ public class DomainObjectListPanel extends Panel {
 
                 item.add(new Radio<>("radio", item.getModel()).setVisible(radioSelect));
                 item.add(new Label("object_id", Model.of(object.getObjectId())));
-                item.add(new Label("external_id", Model.of(object.getExternalId())));
+                item.add(new Label("external_id", Model.of(""))); //todo depricated
 
                 ListView<EntityAttribute> dataColumns = new ListView<EntityAttribute>("dataColumns", columnEntityAttributes) {
                     @Override

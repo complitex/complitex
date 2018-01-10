@@ -84,11 +84,10 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     public void insert(DomainSync sync){
         DomainObject domainObject = districtStrategy.newInstance();
 
-        domainObject.setExternalId(sync.getExternalId());
         domainObject.setParentId(sync.getParentId());
         domainObject.setStringValue(DistrictStrategy.NAME, sync.getName());
         domainObject.setStringValue(DistrictStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
-        domainObject.setStringValue(DistrictStrategy.CODE, sync.getExternalId());
+        domainObject.setStringValue(DistrictStrategy.CODE, sync.getAdditionalExternalId());
 
         districtStrategy.insert(domainObject, sync.getDate());
         addressSyncBean.delete(sync.getId());
@@ -98,10 +97,9 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
         DomainObject oldObject = districtStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
-        newObject.setExternalId(sync.getExternalId());
         newObject.setStringValue(DistrictStrategy.NAME, sync.getName());
         newObject.setStringValue(DistrictStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
-        newObject.setStringValue(DistrictStrategy.CODE, sync.getExternalId());
+        newObject.setStringValue(DistrictStrategy.CODE, sync.getAdditionalExternalId());
 
         districtStrategy.update(oldObject, newObject, sync.getDate());
         addressSyncBean.delete(sync.getId());
@@ -122,6 +120,9 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     }
 
     private void bind(DomainSync domainSync){
+//        List<DistrictCorrection> list = addressCorrectionBean.getDistrictCorrections(null, domainSync.getExternalId())
+
+        //todo correction -> domain
 
 
     }

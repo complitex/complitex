@@ -4,8 +4,6 @@ import org.complitex.common.entity.ILongId;
 
 import java.util.Date;
 
-import static org.complitex.sync.entity.SyncEntity.BUILDING;
-
 /**
  * @author Anatoly Ivanov
  *         Date: 29.07.2014 22:35
@@ -15,7 +13,7 @@ public class DomainSync implements ILongId {
     private Long objectId;
     private Long parentId;
     private Long additionalParentId;
-    private String externalId;
+    private Long externalId;
     private String additionalExternalId;
     private String name;
     private String additionalName;
@@ -35,20 +33,6 @@ public class DomainSync implements ILongId {
     public DomainSync(SyncEntity type, DomainSyncStatus status) {
         this.type = type;
         this.status = status;
-    }
-
-    public String getUniqueExternalId(){
-        return BUILDING.equals(type) ? additionalExternalId + '.' + externalId  : externalId;
-    }
-
-    public void setUniqueExternalId(String uniqueExternalId){
-        if (BUILDING.equals(type)){
-            String[] ids = uniqueExternalId.split("\\.");
-            additionalExternalId = ids[0];
-            externalId = ids[1];
-        }else{
-            externalId = uniqueExternalId;
-        }
     }
 
     public Long getId() {
@@ -83,11 +67,11 @@ public class DomainSync implements ILongId {
         this.additionalParentId = additionalParentId;
     }
 
-    public String getExternalId() {
+    public Long getExternalId() {
         return externalId;
     }
 
-    public void setExternalId(String externalId) {
+    public void setExternalId(Long externalId) {
         this.externalId = externalId;
     }
 

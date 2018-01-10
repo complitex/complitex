@@ -23,7 +23,6 @@ public class DomainAdapter {
         m.setId(domainObject.getObjectId());
         m.setParentEntityId(domainObject.getParentEntityId());
         m.setParentId(domainObject.getParentId());
-        m.setExternalId(domainObject.getExternalId());
         m.setStartDate(domainObject.getStartDate());
         m.setEndDate(domainObject.getEndDate());
         m.setStatusId(domainObject.getStatus().getId());
@@ -68,7 +67,6 @@ public class DomainAdapter {
         o.setObjectId(domainModel.getId());
         o.setParentEntityId(domainModel.getParentEntityId());
         o.setParentId(domainModel.getParentId());
-        o.setExternalId(domainModel.getExternalId());
         o.setStartDate(domainModel.getStartDate());
         o.setEndDate(domainModel.getEndDate());
         o.setStatus(Stream.of(Status.values())

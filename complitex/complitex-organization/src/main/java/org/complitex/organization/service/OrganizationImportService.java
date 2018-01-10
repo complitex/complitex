@@ -119,7 +119,6 @@ public class OrganizationImportService extends AbstractImportService {
             }
             if (newObject == null) {
                 newObject = organizationStrategy.newInstance();
-                newObject.setExternalId(externalOrganizationId);
             }
 
             //code

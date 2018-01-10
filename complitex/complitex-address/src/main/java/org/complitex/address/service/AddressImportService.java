@@ -249,7 +249,6 @@ public class AddressImportService extends AbstractImportService {
                 }
                 if (newObject == null) {
                     newObject = countryStrategy.newInstance();
-                    newObject.setExternalId(externalId);
                 }
 
                 //name
@@ -311,7 +310,6 @@ public class AddressImportService extends AbstractImportService {
                 }
                 if (newObject == null) {
                     newObject = regionStrategy.newInstance();
-                    newObject.setExternalId(externalId);
                 }
 
                 //name
@@ -380,7 +378,7 @@ public class AddressImportService extends AbstractImportService {
                 }
                 if (newObject == null) {
                     newObject = cityTypeStrategy.newInstance();
-                    newObject.setExternalId(externalId);
+
                 }
 
                 //name
@@ -444,7 +442,7 @@ public class AddressImportService extends AbstractImportService {
                 }
                 if (newObject == null) {
                     newObject = cityStrategy.newInstance();
-                    newObject.setExternalId(externalId);
+
                 }
 
                 //name
@@ -520,7 +518,7 @@ public class AddressImportService extends AbstractImportService {
                 }
                 if (newObject == null) {
                     newObject = districtStrategy.newInstance();
-                    newObject.setExternalId(externalId);
+
                 }
 
                 //name
@@ -592,7 +590,7 @@ public class AddressImportService extends AbstractImportService {
                 }
                 if (newObject == null) {
                     newObject = streetTypeStrategy.newInstance();
-                    newObject.setExternalId(externalId);
+
                 }
 
                 //name
@@ -656,7 +654,7 @@ public class AddressImportService extends AbstractImportService {
                 }
                 if (newObject == null) {
                     newObject = streetStrategy.newInstance();
-                    newObject.setExternalId(externalId);
+
                 }
 
                 //name
@@ -682,7 +680,7 @@ public class AddressImportService extends AbstractImportService {
 
                 if (existingStreetId != null) {  // нашли дубликат
                     DomainObject existingStreet = streetStrategy.getDomainObject(existingStreetId, true);
-                    String existingStreetExternalId = existingStreet.getExternalId();
+                    String existingStreetExternalId = null;//existingStreet.getExternalId();
                     listener.warn(STREET, ResourceUtil.getFormatString(RESOURCE_BUNDLE, "street_duplicate_warn",
                             locale,
                             line[3], externalId, existingStreetId, existingStreetExternalId));
@@ -769,7 +767,7 @@ public class AddressImportService extends AbstractImportService {
                 if (buildingId == null){
                     building = buildingStrategy.newInstance();
                     building.getAttribute(BuildingStrategy.DISTRICT).setValueId(districtObjectId);
-                    building.setExternalId(buildingAddressExternalId);
+
                     buildingAddress = building.getPrimaryAddress();
                 }else {
                     oldBuilding = buildingStrategy.getDomainObject(buildingId, true);
@@ -789,22 +787,18 @@ public class AddressImportService extends AbstractImportService {
 
                     building = CloneUtil.cloneObject(oldBuilding);
 
-                    if (building.getExternalId() == null){
-                        building.setExternalId(buildingAddressExternalId);
-                    }
 
                     //find address by external id
-                    for (DomainObject ba : building.getAllAddresses()){
-                        if (ba.getExternalId() != null && ba.getExternalId().equals(buildingAddressExternalId)){
-                            buildingAddress = ba;
-                            break;
-                        }
-                    }
+//                    for (DomainObject ba : building.getAllAddresses()){
+//                        if (ba.getExternalId() != null && ba.getExternalId().equals(buildingAddressExternalId)){
+//                            buildingAddress = ba;
+//                            break;
+//                        }
+//                    }
                 }
 
                 //building address
                 if (buildingAddress != null) {
-                    buildingAddress.setExternalId(buildingAddressExternalId);
                     buildingAddress.setParentEntityId(BuildingAddressStrategy.PARENT_STREET_ENTITY_ID);
                     buildingAddress.setParentId(streetObjectId);
 

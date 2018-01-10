@@ -140,20 +140,6 @@ public class StreetStrategy extends TemplateStrategy {
         return getStreetTypeShortName(domainObject, stringLocaleBean.getSystemLocale());
     }
 
-    public String getStreetTypeExternalId(DomainObject domainObject){
-        Long streetTypeId = getStreetType(domainObject);
-
-        if (streetTypeId != null) {
-            DomainObject streetType = streetTypeStrategy.getDomainObject(streetTypeId, true);
-
-            if (streetType != null) {
-                return streetType.getExternalId();
-            }
-        }
-
-        return null;
-    }
-
     @Override
     public List<String> getSearchFilters() {
         return ImmutableList.of("country", "region", "city");

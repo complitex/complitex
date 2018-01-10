@@ -592,8 +592,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
                 });
 
         if (!Objects.equals(oldObject.getParentId(), newObject.getParentId())
-                || !Objects.equals(oldObject.getParentEntityId(), newObject.getParentEntityId())
-                || (!Objects.equals(oldObject.getExternalId(), newObject.getExternalId()))) {
+                || !Objects.equals(oldObject.getParentEntityId(), newObject.getParentEntityId())) {
             oldObject.setStatus(Status.ARCHIVE);
             oldObject.setEndDate(updateDate);
             oldObject.setEntityName(getEntityName());

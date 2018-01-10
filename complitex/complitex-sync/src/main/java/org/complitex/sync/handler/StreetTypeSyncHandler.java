@@ -80,7 +80,7 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
         DomainObject domainObject = streetTypeStrategy.newInstance();
 
         //external id
-        domainObject.setExternalId(sync.getExternalId());
+//        domainObject.setExternalId(sync.getExternalId());
 
         //name
         domainObject.setStringValue(StreetTypeStrategy.NAME, sync.getName());
@@ -102,7 +102,7 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
         //external id
-        newObject.setExternalId(sync.getExternalId());
+//        newObject.setExternalId(sync.getExternalId());
 
         //name
         newObject.setStringValue(StreetTypeStrategy.NAME, sync.getName());
