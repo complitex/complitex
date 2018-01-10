@@ -10,7 +10,6 @@
         <result column="parent_id" property="parentId"/>
         <result column="parent_entity_id" property="parentEntityId"/>
         <result column="permission_id" property="permissionId"/>
-        <result column="external_id" property="externalId"/>
 
         <collection property="attributes" resultMap="attributeResultMap" columnPrefix="attr__"/>
     </resultMap>
@@ -53,9 +52,9 @@
 
     <insert id="insertDomainObject" parameterType="org.complitex.common.entity.DomainObject">
         INSERT INTO `${entityName}` (`object_id`, `status`, `start_date`, `end_date`, `parent_id`, `parent_entity_id`,
-          `permission_id`, `external_id`)
+          `permission_id`)
         VALUES
-          (#{objectId}, #{status}, #{startDate}, #{endDate}, #{parentId}, #{parentEntityId}, #{permissionId}, #{externalId})
+          (#{objectId}, #{status}, #{startDate}, #{endDate}, #{parentId}, #{parentEntityId}, #{permissionId})
     </insert>
 
     <select id="selectDomainObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
@@ -391,8 +390,4 @@
             LEFT JOIN entity_attribute ea ON a.entity_attribute_id = ea.id
           WHERE a.`object_id` = #{objectId} AND ea.value_type_id IN (0, 1, 2, 3, 4, 5))
     </delete>
-
-    <select id="selectExternalId" parameterType="map" resultType="string">
-        select external_id from ${entityName} where object_id = #{objectId} and `end_date` is null
-    </select>
 </mapper>

@@ -256,7 +256,7 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     @Override
-    public Long getObjectId(String externalId) {
+    public Long getObjectId(String externalId) { //todo remove externalId
         return sqlSession().selectOne(NS + ".selectDomainObjectId", ImmutableMap.of("entityName", getEntityName(),
                 "externalId", externalId));
     }
@@ -1302,12 +1302,5 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     @Override
     public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {
 
-    }
-
-    public String getExternalId(Long objectId){
-        return sqlSession().selectOne(NS +".selectExternalId", new HashMap<String, Object>(){{
-            put("entityName", getEntityName());
-            put("objectId", objectId);
-        }});
     }
 }
