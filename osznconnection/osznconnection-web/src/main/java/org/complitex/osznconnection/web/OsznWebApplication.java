@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.web;
 
-import org.complitex.address.web.sync.AddressSyncPage;
 import org.complitex.admin.web.ProfilePage;
 import org.complitex.admin.web.UserEdit;
 import org.complitex.admin.web.UserList;
@@ -18,6 +17,7 @@ import org.complitex.osznconnection.file.web.pages.ownership.OwnershipCorrection
 import org.complitex.osznconnection.file.web.pages.payment.PaymentList;
 import org.complitex.osznconnection.file.web.pages.privilege.*;
 import org.complitex.osznconnection.file.web.pages.subsidy.*;
+import org.complitex.sync.web.DomainSyncPage;
 import org.complitex.template.web.ComplitexWebApplication;
 import org.complitex.template.web.pages.ConfigEdit;
 import org.complitex.template.web.pages.DomainObjectEdit;
@@ -95,7 +95,7 @@ public class OsznWebApplication extends ComplitexWebApplication{
         mountPage("/description/${entity}", EntityDescription.class);
 
         //sync
-        mountPage("/address-sync", AddressSyncPage.class);
+        mountPage("/sync", DomainSyncPage.class);
 
         //admin
         mountPage("/user", UserList.class);

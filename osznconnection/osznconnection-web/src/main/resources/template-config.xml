@@ -19,7 +19,7 @@
         <menu class="org.complitex.osznconnection.file.web.menu.CorrectionMenu"/>
         <menu class="org.complitex.address.menu.AddressMenu"/>
         <menu class="org.complitex.osznconnection.file.web.menu.OsznDictionaryMenu"/>
-        <menu class="org.complitex.address.web.AddressSyncMenu"/>
+        <menu class="org.complitex.sync.web.DomainSyncMenu"/>
         <menu class="org.complitex.osznconnection.file.web.AdminTemplateMenu"/>
         <menu class="org.complitex.osznconnection.file.web.menu.OsznDescriptionMenu"/>
     </sidebar>

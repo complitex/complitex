@@ -12,8 +12,8 @@
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.common.entity.ValueType"/>
 
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.AddressEntity"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.SyncEntity"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.AddressSyncStatus"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.sync.entity.SyncEntity"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.sync.entity.DomainSyncStatus"/>
 
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestStatus"/>
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileStatus"/>
@@ -108,10 +108,11 @@
 
         <mapper resource="org/complitex/osznconnection/file/service/file_description/RequestFileDescriptionBean.xml"/>
 
-        <mapper resource="org/complitex/address/service/AddressSyncBean.xml"/>
-
         <!--remote mappers-->
         <mapper resource="org/complitex/osznconnection/file/service_provider/ServiceProviderAdapter.xml"/>
-        <mapper resource="org/complitex/address/service/AddressSyncAdapter.xml"/>
+
+        <!--sync-->
+        <mapper resource="org/complitex/sync/service/DomainSyncBean.xml"/>
+        <mapper resource="org/complitex/sync/service/DomainSyncAdapter.xml"/>
     </mappers>
 </configuration>

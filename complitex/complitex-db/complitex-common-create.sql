@@ -1101,25 +1101,26 @@ CREATE TABLE `organization_import` (
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Вспомогательная таблица для импорта организаций';
 
 -- ------------------------------
---  Address Sync
+--  Domain Sync
 -- ------------------------------
 
-DROP TABLE IF EXISTS `address_sync`;
-CREATE TABLE `address_sync`(
-  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор адресного элемента синхронизации',
-  `object_id` BIGINT(20) COMMENT 'Идентификатор адресного объекта',
-  `parent_id` BIGINT(20) COMMENT 'Идентификатор родительского адресного объекта',
-  `additional_parent_id` BIGINT(20) COMMENT 'Идентификатор дополнительного родительского адресного объекта',
+DROP TABLE IF EXISTS `domain_sync`;
+CREATE TABLE `domain_sync`(
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор записи синхронизации',
+  `object_id` BIGINT(20) COMMENT 'Идентификатор объекта',
+  `parent_id` BIGINT(20) COMMENT 'Идентификатор родительского объекта',
+  `additional_parent_id` BIGINT(20) COMMENT 'Идентификатор дополнительного родительского объекта',
   `external_id` VARCHAR(20) NOT NULL COMMENT 'Код адресного объекта (ID)',
   `additional_external_id` VARCHAR(20) COMMENT 'Код адресного объекта (ID)',
-  `name` VARCHAR(100) NOT NULL COMMENT 'Название адресного элемента',
-  `additional_name` VARCHAR(20) COMMENT 'Дополнительное название адресного элемента',
-  `alt_name` VARCHAR(100) COMMENT 'Украинское название адресного элемента',
-  `alt_additional_name` VARCHAR(20) COMMENT 'Украинское дополнительное название адресного элемента',
-  `servicing_organization` VARCHAR(16) COMMENT 'Обслуживающая организация',
-  `balance_holder` VARCHAR(16) COMMENT 'Балансодержатель',
-  `type` INTEGER NOT NULL COMMENT 'Тип адресного элемента синхронизации',
+  `name` VARCHAR(100) NOT NULL COMMENT 'Название',
+  `additional_name` VARCHAR(20) COMMENT 'Дополнительное название',
+  `alt_name` VARCHAR(100) COMMENT 'Украинское название',
+  `alt_additional_name` VARCHAR(20) COMMENT 'Украинское дополнительное название',
+  `servicing_organization` BIGINT(20) COMMENT 'Обслуживающая организация',
+  `balance_holder` BIGINT(20) COMMENT 'Балансодержатель',
+  `type` INTEGER NOT NULL COMMENT 'Тип синхронизации',
   `status` INTEGER NOT NULL COMMENT 'Статус синхронизации',
+  `status_detail` INTEGER NOT NULL COMMENT 'Дополнительный статус синхронизации',
   `date` DATETIME NOT NULL COMMENT 'Дата актуальности',
   PRIMARY KEY (`id`),
   KEY `key_object_id` (`object_id`),
@@ -1134,7 +1135,7 @@ CREATE TABLE `address_sync`(
   KEY `key_type` (`type`),
   KEY `key_status` (`status`),
   KEY `key_date` (`date`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Синхронизация адресного элемента';
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Синхронизация справочников';
 
 -- ------------------------------
 -- Service

@@ -1,0 +1,19 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+    <div wicket:id="processed" style="margin: -20px 0 20px 0; padding-left: 30px"></div>
+    <div>
+        <ul>
+            <li wicket:id="filters">
+                <span wicket:id="filter"></span>
+            </li>
+        </ul>
+    </div>
+    <div wicket:id="table"></div>
+    <div style="margin-top: 10px">
+        <input type="button" class="btnBig" wicket:id="load" wicket:message="value:load"/>
+        <input type="button" class="btnBig" wicket:id="building_load" wicket:message="value:sync"/>
+        <input type="button" class="btnMiddle" wicket:id="cancel" wicket:message="value:cancel"/>
+        <input type="button" class="btnMiddle" wicket:id="add_all" wicket:message="value:add_all"/>
+    </div>
+    <div wicket:id="dialog"></div>
+    <div wicket:id="building_load_dialog"></div>
+</wicket:panel>

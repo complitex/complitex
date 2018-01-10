@@ -38,14 +38,15 @@
         <module>complitex-template</module>
         <module>complitex-organization-type</module>
         <module>complitex-ui</module>
+        <module>complitex-sync</module>
     </modules>
 
     <properties>
         <!-- wicket version -->
-        <wicket.version>7.6.0</wicket.version>
+        <wicket.version>7.9.0</wicket.version>
 
         <!-- wicketstuff inject -->
-        <wicket-stuff.version>7.6.0</wicket-stuff.version>
+        <wicket-stuff.version>7.9.0</wicket-stuff.version>
 
         <!--skip test-->
         <maven.test.skip>true</maven.test.skip>
@@ -151,6 +152,11 @@
             <dependency>
                 <groupId>org.complitex</groupId>
                 <artifactId>complitex-ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.complitex</groupId>
+                <artifactId>complitex-sync</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
