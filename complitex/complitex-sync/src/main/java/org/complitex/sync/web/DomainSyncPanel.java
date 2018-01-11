@@ -71,7 +71,7 @@ public class DomainSyncPanel extends Panel {
         actions.add(new Action<DomainSync>("update", "object.duplicate") {
             @Override
             public void onAction(AjaxRequestTarget target, IModel<DomainSync> model) {
-                domainSyncService.update(model.getObject());
+//                domainSyncService.update(model.getObject());
 
                 getSession().info(String.format(getString(model.getObject().getType().name() + ".duplicated"),
                         model.getObject().getName()));
@@ -178,13 +178,13 @@ public class DomainSyncPanel extends Panel {
             public void onUpdate(AjaxRequestTarget target, SearchComponentState state) {
                 switch (syncEntity){
                     case STREET:
-                        domainSyncService.bind(state.getId("city"), syncEntity);
+                        domainSyncService.sync(state.getId("city"), syncEntity);
                         break;
                     case BUILDING:
-                        domainSyncService.bind(state.getId("street"), syncEntity);
+                        domainSyncService.sync(state.getId("street"), syncEntity);
                         break;
                     default:
-                        domainSyncService.bind(null, syncEntity);
+                        domainSyncService.sync(null, syncEntity);
                 }
 
                 target.add(DomainSyncPanel.this);
@@ -216,7 +216,7 @@ public class DomainSyncPanel extends Panel {
             }
         });
 
-        add(new AjaxLink("bind") {
+        add(new AjaxLink("sync") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 switch (syncEntity){
@@ -225,7 +225,7 @@ public class DomainSyncPanel extends Panel {
                         domainSyncDialog.open(target);
                         break;
                     default:
-                        domainSyncService.bind(null, syncEntity);
+                        domainSyncService.sync(null, syncEntity);
                 }
             }
 

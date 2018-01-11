@@ -8,8 +8,6 @@ import org.complitex.sync.entity.SyncEntity;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import java.util.List;
 
 /**
@@ -20,11 +18,8 @@ import java.util.List;
 public class DomainSyncBean extends AbstractBean {
     public final static String NS = DomainSyncBean.class.getName();
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void save(DomainSync domainSync){
-        if (domainSync.getId() == null){
-            sqlSession().insert("insertDomainSync", domainSync);
-        }
+        sqlSession().insert("insertDomainSync", domainSync);
     }
 
     @Asynchronous
@@ -36,27 +31,22 @@ public class DomainSyncBean extends AbstractBean {
         return sqlSession().selectOne(NS + ".selectDomainSync", id);
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<DomainSync> getList(FilterWrapper<DomainSync> filterWrapper){
         return sqlSession().selectList(NS + ".selectDomainSyncList", filterWrapper);
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Long getCount(FilterWrapper<DomainSync> filterWrapper){
         return sqlSession().selectOne(NS + ".selectDomainSyncCount", filterWrapper);
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public boolean isExist(DomainSync domainSync){
         return getCount(FilterWrapper.of(domainSync)) > 0;
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void delete(Long id){
         sqlSession().delete(NS + ".deleteDomainSync", id);
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void delete(SyncEntity syncEntity){
         sqlSession().delete(NS + ".deleteDomainSyncBySyncEntity", syncEntity);
     }
