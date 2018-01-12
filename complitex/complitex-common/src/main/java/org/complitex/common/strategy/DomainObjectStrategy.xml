@@ -167,15 +167,15 @@
                     </when>
                     <otherwise>
                         AND (
-                            EXISTS (SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
-                                AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc
-                                WHERE sc.`value` is null AND sc.`locale_id` = #{attributeFilter.localeId}))
+                            EXISTS (SELECT 1 FROM `${entityName}_attribute` attr LEFT JOIN `${entityName}_string_value` sc
+                                ON sc.`id` = attr.`value_id` WHERE attr.`object_id` = e.`object_id` AND attr.`status` = 1
+                                AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
+                                AND sc.`value` is null AND sc.`locale_id` = #{attributeFilter.localeId})
 
-                            OR NOT EXISTS (SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
-                                AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc
-                                WHERE sc.`locale_id` = #{attributeFilter.localeId}))
+                            OR NOT EXISTS (SELECT 1 FROM `${entityName}_attribute` attr LEFT JOIN `${entityName}_string_value` sc
+                                ON sc.`id` = attr.`value_id` WHERE attr.`object_id` = e.`object_id` AND attr.`status` = 1
+                                AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
+                                AND sc.`locale_id` = #{attributeFilter.localeId})
                         )
                     </otherwise>
                 </choose>

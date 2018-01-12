@@ -132,6 +132,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
             }else {
                 List<? extends DomainObject> domainObjects = districtStrategy.getList(
                         new DomainObjectFilter("district")
+                                .setStatus(ShowMode.ACTIVE.name())
                                 .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                                 .addAttribute(DistrictStrategy.NAME, domainSync.getName(), Locales.getRuId())
                                 .addAttribute(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getUaId()));

@@ -87,7 +87,6 @@ public class CollapsibleFieldset extends Border {
             content.add(new CssAttributeBehavior("hidden"));
         }
         addToBorder(content);
-        content.add(getBodyContainer());
     }
 
     @Override
