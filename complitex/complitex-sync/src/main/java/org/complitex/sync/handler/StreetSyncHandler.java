@@ -21,7 +21,6 @@ import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static org.complitex.address.strategy.street.StreetStrategy.STREET_CODE;
 
@@ -53,13 +52,12 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     private DomainSyncBean domainSyncBean;
 
     @Override
-    public Cursor<DomainSync> getAddressSyncs(DomainObject parent, Date date) throws RemoteCallException {
+    public Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException {
         return domainSyncAdapter.getStreetSyncs(cityStrategy.getName(parent),
                 cityTypeStrategy.getShortName(parent.getAttribute(CityStrategy.CITY_TYPE).getValueId()),
                 date);
     }
 
-    @Override
     public List<? extends DomainObject> getObjects(DomainObject parent) {
         return streetStrategy.getList(new DomainObjectFilter()
                 .setParent("city", parent.getObjectId())
@@ -71,18 +69,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         return cityStrategy.getList(new DomainObjectFilter());
     }
 
-    @Override
-    public boolean isEqualNames(DomainSync sync, DomainObject object) {
-        return Objects.equals(sync.getName(), streetStrategy.getName(object))
-                && Objects.equals(sync.getAltName(), streetStrategy.getName(object, Locales.getAlternativeLocale()));
-    }
 
-    @Override
-    public Long getParentId(DomainSync sync, DomainObject parent) {
-        return parent.getObjectId();
-    }
-
-    @Override
     public void insert(DomainSync sync) {
         if (false){ //todo
             DomainObject oldStreet = null;//streetStrategy.getDomainObject(sync.getObjectId());
@@ -116,38 +103,4 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         }
     }
 
-    @Override
-    public void update(DomainSync sync) {
-//        DomainObject oldObject = streetStrategy.getDomainObject(sync.getObjectId(), true);
-//        DomainObject newObject = CloneUtil.cloneObject(oldObject);
-//
-//        newObject.setStringValue(StreetStrategy.NAME, sync.getName());
-//        newObject.setStringValue(StreetStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
-//
-//        Long streetTypeId = null;//streetTypeStrategy.getObjectId(sync.getAdditionalExternalId());
-//
-//        if (streetTypeId == null) {
-//            throw new RuntimeException("StreetType not found: " + sync);
-//        }
-//        newObject.setValue(StreetStrategy.STREET_TYPE, streetTypeId);
-//
-//        streetStrategy.update(oldObject, newObject, sync.getDate());
-//        domainSyncBean.delete(sync.getId());
-    }
-
-    @Override
-    public void archive(DomainSync sync) {
-//        streetStrategy.archive(streetStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
-        domainSyncBean.delete(sync.getId());
-    }
-
-    @Override
-    public String getName(DomainObject object) {
-        return streetStrategy.getName(object, Locales.getSystemLocale());
-    }
-
-    @Override
-    public List<DomainSync> getDomainSyncs(Long parentId) {
-        return null;
-    }
 }

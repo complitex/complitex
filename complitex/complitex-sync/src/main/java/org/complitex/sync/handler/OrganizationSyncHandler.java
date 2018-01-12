@@ -4,10 +4,7 @@ import org.complitex.address.exception.RemoteCallException;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.CloneUtil;
-import org.complitex.common.web.component.ShowMode;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
@@ -37,13 +34,8 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     private DomainSyncBean domainSyncBean;
 
     @Override
-    public Cursor<DomainSync> getAddressSyncs(DomainObject parent, Date date) throws RemoteCallException {
+    public Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException {
         return domainSyncAdapter.getOrganizationSyncs(date);
-    }
-
-    @Override
-    public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return organizationStrategy.getList(new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name()));
     }
 
     @Override
@@ -51,17 +43,6 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
         return null;
     }
 
-    @Override
-    public boolean isEqualNames(DomainSync sync, DomainObject object) {
-        return sync.getName().equals(object.getStringValue(IOrganizationStrategy.NAME).toUpperCase());
-    }
-
-    @Override
-    public Long getParentId(DomainSync sync, DomainObject parent) {
-        return null;
-    }
-
-    @Override
     public void insert(DomainSync sync) {
         DomainObject domainObject = organizationStrategy.newInstance();
 
@@ -80,31 +61,8 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public void update(DomainSync sync) {
-        DomainObject oldObject = null;//organizationStrategy.getDomainObject(sync.getObjectId(), true);
-        DomainObject newObject = CloneUtil.cloneObject(oldObject);
+    public void sync(Long parentId) {
 
-//        newObject.setExternalId(sync.getExternalId());
-        newObject.setStringValue(IOrganizationStrategy.NAME, sync.getName());
-//        newObject.setStringValue(IOrganizationStrategy.CODE, sync.getExternalId());
-
-        organizationStrategy.update(oldObject, newObject, sync.getDate());
-        domainSyncBean.delete(sync.getId());
     }
 
-    @Override
-    public void archive(DomainSync sync) {
-        //organizationStrategy.archive(organizationStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
-        domainSyncBean.delete(sync.getId());
-    }
-
-    @Override
-    public String getName(DomainObject object) {
-        return object.getStringValue(IOrganizationStrategy.NAME);
-    }
-
-    @Override
-    public List<DomainSync> getDomainSyncs(Long parentId) {
-        return null;
-    }
 }

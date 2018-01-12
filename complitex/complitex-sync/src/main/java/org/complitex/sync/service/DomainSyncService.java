@@ -123,7 +123,7 @@ public class DomainSyncService {
 
         domainSyncBean.delete(syncEntity);
 
-        Cursor<DomainSync> cursor = getHandler(syncEntity).getAddressSyncs(parent, date);
+        Cursor<DomainSync> cursor = getHandler(syncEntity).getCursorDomainSyncs(parent, date);
 
         SyncBeginMessage message = new SyncBeginMessage();
         message.setSyncEntity(syncEntity);

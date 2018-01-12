@@ -40,7 +40,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     private Logger log = LoggerFactory.getLogger(DistrictSyncHandler.class);
 
     @EJB
-    private DomainSyncBean addressSyncBean;
+    private DomainSyncBean domainSyncBean;
 
     @EJB
     private DomainSyncAdapter addressSyncAdapter;
@@ -57,73 +57,16 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     @EJB
     private AddressCorrectionBean addressCorrectionBean;
 
-    @EJB
-    private DomainSyncBean domainSyncBean;
-
     @Override
     public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
         return cityStrategy.getList(new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name()));
     }
 
     @Override
-    public Cursor<DomainSync> getAddressSyncs(DomainObject parent, Date date) throws RemoteCallException {
+    public Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException {
         return addressSyncAdapter.getDistrictSyncs(cityStrategy.getName(parent),
                 cityTypeStrategy.getShortName(parent.getAttribute(CityStrategy.CITY_TYPE).getValueId()),
                 date);
-    }
-
-    @Override
-    public List<? extends DomainObject> getObjects(DomainObject parent) {
-        return districtStrategy.getList(new DomainObjectFilter().setParent("city", parent.getObjectId()));
-    }
-
-    @Override
-    public boolean isEqualNames(DomainSync sync, DomainObject object) {
-        return sync.getName().equals(districtStrategy.getName(object));
-    }
-
-    @Override
-    public Long getParentId(DomainSync sync, DomainObject parent) {
-        return parent.getObjectId();
-    }
-
-    public void insert(DomainSync sync){
-        DomainObject domainObject = districtStrategy.newInstance();
-
-        domainObject.setParentId(sync.getParentId());
-        domainObject.setStringValue(DistrictStrategy.NAME, sync.getName());
-        domainObject.setStringValue(DistrictStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
-        domainObject.setStringValue(DistrictStrategy.CODE, sync.getAdditionalExternalId());
-
-        districtStrategy.insert(domainObject, sync.getDate());
-        addressSyncBean.delete(sync.getId());
-    }
-
-    public void update(DomainSync sync){
-//        DomainObject oldObject = districtStrategy.getDomainObject(sync.getObjectId(), true);
-//        DomainObject newObject = CloneUtil.cloneObject(oldObject);
-//
-//        newObject.setStringValue(DistrictStrategy.NAME, sync.getName());
-//        newObject.setStringValue(DistrictStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
-//        newObject.setStringValue(DistrictStrategy.CODE, sync.getAdditionalExternalId());
-//
-//        districtStrategy.update(oldObject, newObject, sync.getDate());
-//        addressSyncBean.delete(sync.getId());
-    }
-
-    public void archive(DomainSync sync){
-//        districtStrategy.archive(districtStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
-        addressSyncBean.delete(sync.getId());
-    }
-
-    @Override
-    public String getName(DomainObject object) {
-        return districtStrategy.getName(object);
-    }
-
-    @Override
-    public List<DomainSync> getDomainSyncs(Long parentId) {
-        return addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED)));
     }
 
     @Override
@@ -131,7 +74,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
         Long organizationId = addressSyncAdapter.getOrganization().getObjectId();
 
         //sync
-        addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED, parentObjectId))).forEach(ds -> {
+        domainSyncBean.getList(of(new DomainSync(DISTRICT, LOADED, parentObjectId))).forEach(ds -> {
             List<DistrictCorrection> corrections = addressCorrectionBean.getDistrictCorrections(ds.getParentObjectId(),
                     ds.getExternalId(), null, null, organizationId,null);
 
@@ -222,6 +165,12 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
 
                 log.info("sync: delete correction {}", c);
             }
+        });
+
+        //deferred
+        domainSyncBean.getList(of(new DomainSync(DISTRICT, DEFERRED, parentObjectId))).forEach(ds -> {
+
+
         });
     }
 }

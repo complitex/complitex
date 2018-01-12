@@ -16,31 +16,9 @@ import java.util.Map;
  */
 @Local
 public interface IDomainSyncHandler {
-    Long NOT_FOUND_ID = -1L;
-
-    Cursor<DomainSync> getAddressSyncs(DomainObject parent, Date date) throws RemoteCallException;
-
-    List<? extends DomainObject> getObjects(DomainObject parent);
+    Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException;
 
     List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map);
-
-    boolean isEqualNames(DomainSync sync, DomainObject object);
-
-    default boolean hasEqualNames(DomainSync sync, DomainObject object){
-        return isEqualNames(sync, object);
-    }
-
-    Long getParentId(DomainSync sync, DomainObject parent);
-
-    void insert(DomainSync sync);
-
-    void update(DomainSync sync);
-
-    void archive(DomainSync sync);
-
-    String getName(DomainObject object);
-
-    List<DomainSync> getDomainSyncs(Long parentId);
 
     default void sync(Long parentId){
 

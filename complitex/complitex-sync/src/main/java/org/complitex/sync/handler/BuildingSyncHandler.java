@@ -12,7 +12,6 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.CloneUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
@@ -23,7 +22,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.CORP;
 import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.NUMBER;
@@ -61,7 +63,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
     private IOrganizationStrategy organizationStrategy;
 
     @Override
-    public Cursor<DomainSync> getAddressSyncs(DomainObject parent, Date date) throws RemoteCallException {
+    public Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException {
         switch (parent.getEntityName()){
             case "district":
                 return domainSyncAdapter.getBuildingSyncs(districtStrategy.getName(parent), "", "", date);
@@ -74,7 +76,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         throw new IllegalArgumentException("parent entity name not district or street");
     }
 
-    @Override
+
     public List<? extends DomainObject> getObjects(DomainObject parent) {
         DomainObjectFilter filter = new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name());
 
@@ -102,32 +104,8 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         }
     }
 
-    @Override
-    public boolean isEqualNames(DomainSync sync, DomainObject object) {
-        DomainObject street = streetStrategy.getDomainObject(object.getParentId());
 
-        return (Objects.equals(null, sync.getAdditionalExternalId()) ||
-                street.getAttributes(StreetStrategy.STREET_CODE).stream()
-                        .filter(a -> a.getValueId() != null)
-                        .filter(a -> a.getValueId().toString().equals(sync.getAdditionalExternalId()))
-                        .findAny()
-                        .isPresent()) &&
-                sync.getName().equals(object.getStringValue(NUMBER)) &&
-                Objects.equals(sync.getAdditionalName(), object.getStringValue(CORP));
-    }
 
-    @Override
-    public Long getParentId(DomainSync sync, DomainObject parent) {
-        Long objectId = null;//streetStrategy.getObjectId(sync.getAdditionalExternalId());
-
-        if (objectId == null){
-            objectId = streetStrategy.getStreetIdByCode(sync.getAdditionalExternalId());
-        }
-
-        return objectId != null ? objectId : NOT_FOUND_ID;
-    }
-
-    @Override
     public void insert(DomainSync sync) {
         Building building = buildingStrategy.newInstance();
 //        building.setExternalId(sync.getUniqueExternalId());
@@ -157,38 +135,5 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
         buildingStrategy.insert(building, sync.getDate());
         domainSyncBean.delete(sync.getId());
-    }
-
-    @Override
-    public void update(DomainSync sync) {
-        DomainObject oldObject = null;//buildingAddressStrategy.getDomainObject(sync.getObjectId(), true);
-        DomainObject newObject = CloneUtil.cloneObject(oldObject);
-
-        //building number
-        newObject.setStringValue(NUMBER, sync.getName());
-
-        //building part
-        if (sync.getAdditionalName() != null) {
-            newObject.setStringValue(CORP, sync.getAdditionalName());
-        }
-
-        buildingStrategy.update(oldObject, newObject, sync.getDate());
-        domainSyncBean.delete(sync.getId());
-    }
-
-    @Override
-    public void archive(DomainSync sync) {
-        //buildingStrategy.archive(buildingStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
-        domainSyncBean.delete(sync.getId());
-    }
-
-    @Override
-    public String getName(DomainObject object) {
-        return buildingAddressStrategy.getName(object);
-    }
-
-    @Override
-    public List<DomainSync> getDomainSyncs(Long parentId) {
-        return null;
     }
 }
