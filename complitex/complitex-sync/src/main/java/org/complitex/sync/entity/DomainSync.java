@@ -11,6 +11,7 @@ import java.util.Date;
  */
 public class DomainSync implements ILongId {
     private Long id;
+    private Long parentObjectId;
     private Long parentId;
     private Long additionalParentId;
     private Long externalId;
@@ -35,12 +36,26 @@ public class DomainSync implements ILongId {
         this.status = status;
     }
 
+    public DomainSync(SyncEntity type, DomainSyncStatus status, Long parentObjectId) {
+        this.type = type;
+        this.status = status;
+        this.parentObjectId = parentObjectId;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getParentObjectId() {
+        return parentObjectId;
+    }
+
+    public void setParentObjectId(Long parentObjectId) {
+        this.parentObjectId = parentObjectId;
     }
 
     public Long getParentId() {

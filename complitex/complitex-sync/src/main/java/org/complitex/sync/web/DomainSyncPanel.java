@@ -43,8 +43,8 @@ import static org.complitex.sync.entity.SyncEntity.BUILDING;
 public class DomainSyncPanel extends Panel {
     private Logger log = LoggerFactory.getLogger(DomainSyncPanel.class);
 
-    private final static String[] FIELDS = {"name", "additionalName", "altName", "altAdditionalName", "parentId",
-            "additionalParentId", "externalId", "additionalExternalId", "type", "status", "date"};
+    private final static String[] FIELDS = {"name", "additionalName", "altName", "altAdditionalName", "parentObjectId",
+            "parentId", "additionalParentId", "externalId", "additionalExternalId", "type", "status", "date"};
 
     @EJB
     private DomainSyncBean domainSyncBean;
@@ -88,6 +88,7 @@ public class DomainSyncPanel extends Panel {
 
         Map<String, IColumn<DomainSync, String>> columnMap = new HashMap<>();
 
+        columnMap.put("parentObjectId", new DomainSyncParentColumn("parentObjectId"));
         columnMap.put("type", new EnumColumn<>("type", AddressEntity.class, getLocale()));
         columnMap.put("status", new EnumColumn<>("status", DomainSyncStatus.class, getLocale()));
 

@@ -151,18 +151,22 @@ public class DomainSyncService {
             s.setType(syncEntity);
             s.setDate(date);
 
+            if (parent != null) {
+                s.setParentObjectId(parent.getObjectId());
+            }
+
             domainSyncBean.save(s);
         });
     }
 
-    public void sync(Long parentId, SyncEntity syncEntity){
+    public void sync(Long parentObjectId, SyncEntity syncEntity){
         processing.set(true);
         cancelSync.set(false);
 
         broadcastService.broadcast(getClass(), "info","Начата синхронизация");
         log.info("sync: begin");
 
-        getHandler(syncEntity).sync(parentId);
+        getHandler(syncEntity).sync(parentObjectId);
 
         broadcastService.broadcast(getClass(), "info", "Синхронизация завершена успешно");
         log.info("sync: completed");

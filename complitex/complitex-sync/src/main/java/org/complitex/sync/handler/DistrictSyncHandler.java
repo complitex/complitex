@@ -122,11 +122,11 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public void sync(Long parentId) {
+    public void sync(Long parentObjectId) {
         Long organizationId = addressSyncAdapter.getOrganization().getObjectId();
 
-        addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED))).forEach(s -> {
-            List<DistrictCorrection> corrections = addressCorrectionBean.getDistrictCorrections(parentId,
+        addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED, parentObjectId))).forEach(s -> {
+            List<DistrictCorrection> corrections = addressCorrectionBean.getDistrictCorrections(s.getParentObjectId(),
                     s.getExternalId(), null, null, organizationId,null);
 
             if (!corrections.isEmpty()){
@@ -137,38 +137,40 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
                                 .setStatus(ShowMode.ACTIVE.name())
                                 .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                                 .setParentEntity("city")
-                                .setParentId(parentId)
+                                .setParentId(s.getParentObjectId())
                                 .addAttribute(DistrictStrategy.NAME, s.getName(), Locales.getSystemLocaleId())
                                 .addAttribute(DistrictStrategy.NAME, s.getAltName(), Locales.getAlternativeLocaleId()));
 
+                DomainObject domainObject;
+
                 if (!domainObjects.isEmpty()){
+                    domainObject = domainObjects.get(0);
+
                     for (int i = 1; i < domainObjects.size(); ++i){
                         districtStrategy.disable(domainObjects.get(i));
 
                         log.info("sync: disable domain object {}", domainObjects.get(i));
                     }
-
-                    DomainObject o = domainObjects.get(0);
-
-                    DistrictCorrection correction = new DistrictCorrection(o.getParentId(), s.getExternalId(),
-                            o.getObjectId(), s.getName(), organizationId, null, 0L);
-
-                    addressCorrectionBean.insert(correction);
-
-                    log.info("sync: add correction {}", correction);
                 }else{
-                    DomainObject domainObject = districtStrategy.newInstance();
+                    domainObject = districtStrategy.newInstance();
 
                     domainObject.setParentEntityId(DistrictStrategy.PARENT_ENTITY_ID);
-                    domainObject.setParentId(parentId);
+                    domainObject.setParentId(s.getParentObjectId());
                     domainObject.setStringValue(DistrictStrategy.CODE, s.getAdditionalExternalId());
                     domainObject.setStringValue(DistrictStrategy.NAME, s.getName(), Locales.getSystemLocale());
                     domainObject.setStringValue(DistrictStrategy.NAME, s.getAltName(), Locales.getAlternativeLocale());
 
                     districtStrategy.insert(domainObject, DateUtil.getCurrentDate());
 
-                    log.info("sync: add domain object {}", domainObjects);
+                    log.info("sync: add domain object {}", domainObject);
                 }
+
+                DistrictCorrection correction = new DistrictCorrection(domainObject.getParentId(), s.getExternalId(),
+                        domainObject.getObjectId(), s.getName(), organizationId, null, 0L);
+
+                addressCorrectionBean.insert(correction);
+
+                log.info("sync: add correction {}", correction);
             }
         });
     }

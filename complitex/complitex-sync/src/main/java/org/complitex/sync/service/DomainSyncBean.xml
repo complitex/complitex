@@ -3,6 +3,7 @@
 <mapper namespace="org.complitex.sync.service.DomainSyncBean">
     <resultMap id="domainSyncResultMap" type="org.complitex.sync.entity.DomainSync">
         <id column="id" property="id"/>
+        <result column="parent_object_id" property="parentObjectId"/>
         <result column="parent_id" property="parentId"/>
         <result column="additional_parent_id" property="additionalParentId"/>
         <result column="external_id" property="externalId"/>
@@ -21,10 +22,10 @@
 
     <insert id="insertDomainSync" parameterType="org.complitex.sync.entity.DomainSync"
             useGeneratedKeys="true" keyProperty="id">
-        insert into `domain_sync` (`parent_id`, `additional_parent_id`, `external_id`,
+        insert into `domain_sync` (`parent_object_id`,`parent_id`, `additional_parent_id`, `external_id`,
                                     `additional_external_id`, `name`, `additional_name`, `alt_name`, `alt_additional_name`,
                                     `servicing_organization`, `balance_holder`, `type`, `status`, `status_detail`, `date`)
-        values (#{parentId}, #{additionalParentId}, #{externalId}, #{additionalExternalId},
+        values (#{parentObjectId}, #{parentId}, #{additionalParentId}, #{externalId}, #{additionalExternalId},
                 #{name}, #{additionalName}, #{altName}, #{altAdditionalName}, #{servicingOrganization}, #{balanceHolder},
                 #{type}, #{status}, #{statusDetail}, #{date})
     </insert>
@@ -43,6 +44,7 @@
 
     <sql id="selectDomainSyncWhere">
         <where>
+            <if test="object.parentObjectId != null">and `parent_object_id` = #{object.parentObjectId}</if>
             <if test="object.parentId != null">and `parent_id` = #{object.parentId}</if>
             <if test="object.additionalParentId != null">and `additional_parent_id` = #{object.additionalParentId}</if>
             <if test="object.externalId != null">and `external_id` = #{object.externalId}</if>

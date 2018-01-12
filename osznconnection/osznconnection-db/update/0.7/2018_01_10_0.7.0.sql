@@ -7,6 +7,8 @@ alter table domain_sync change column external_id external_id bigint(20);
 alter table domain_sync change column servicing_organization servicing_organization bigint(20);
 alter table domain_sync change column balance_holder balance_holder bigint(20);
 
+alter table domain_sync add column parent_object_id bigint(20);
+create index key_parent_object_id on domain_sync (parent_object_id);
 alter table domain_sync add column status_detail integer;
 create index key_status_detail on domain_sync (status_detail);
 

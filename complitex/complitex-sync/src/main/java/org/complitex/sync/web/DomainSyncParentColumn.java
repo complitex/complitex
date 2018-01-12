@@ -41,13 +41,13 @@ public class DomainSyncParentColumn extends FilteredColumn<DomainSync>{
 
         String objectName = "";
 
-        if (domainSync.getParentId() != null){
+        if (domainSync.getParentObjectId() != null){
             if (domainSync.getType().equals(SyncEntity.DISTRICT) || domainSync.getType().equals(SyncEntity.STREET)){
-                objectName = EjbBeanLocator.getBean(CityStrategy.class).displayDomainObject(domainSync.getParentId(), cellItem.getLocale());
+                objectName = EjbBeanLocator.getBean(CityStrategy.class).displayDomainObject(domainSync.getParentObjectId(), cellItem.getLocale());
             }else if (domainSync.getType().equals(SyncEntity.BUILDING) ){
-                objectName = EjbBeanLocator.getBean(StreetStrategy.class).displayDomainObject(domainSync.getParentId(), cellItem.getLocale());
+                objectName = EjbBeanLocator.getBean(StreetStrategy.class).displayDomainObject(domainSync.getParentObjectId(), cellItem.getLocale());
             }else {
-                objectName = domainSync.getParentId() + "";
+                objectName = domainSync.getParentObjectId() + "";
             }
         }
 
