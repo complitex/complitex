@@ -7,7 +7,6 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.correction.entity.DistrictCorrection;
@@ -95,19 +94,19 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     }
 
     public void update(DomainSync sync){
-        DomainObject oldObject = districtStrategy.getDomainObject(sync.getObjectId(), true);
-        DomainObject newObject = CloneUtil.cloneObject(oldObject);
-
-        newObject.setStringValue(DistrictStrategy.NAME, sync.getName());
-        newObject.setStringValue(DistrictStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
-        newObject.setStringValue(DistrictStrategy.CODE, sync.getAdditionalExternalId());
-
-        districtStrategy.update(oldObject, newObject, sync.getDate());
-        addressSyncBean.delete(sync.getId());
+//        DomainObject oldObject = districtStrategy.getDomainObject(sync.getObjectId(), true);
+//        DomainObject newObject = CloneUtil.cloneObject(oldObject);
+//
+//        newObject.setStringValue(DistrictStrategy.NAME, sync.getName());
+//        newObject.setStringValue(DistrictStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
+//        newObject.setStringValue(DistrictStrategy.CODE, sync.getAdditionalExternalId());
+//
+//        districtStrategy.update(oldObject, newObject, sync.getDate());
+//        addressSyncBean.delete(sync.getId());
     }
 
     public void archive(DomainSync sync){
-        districtStrategy.archive(districtStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
+//        districtStrategy.archive(districtStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
         addressSyncBean.delete(sync.getId());
     }
 

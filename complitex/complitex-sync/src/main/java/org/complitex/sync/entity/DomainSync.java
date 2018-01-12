@@ -1,5 +1,6 @@
 package org.complitex.sync.entity;
 
+import com.google.common.base.MoreObjects;
 import org.complitex.common.entity.ILongId;
 
 import java.util.Date;
@@ -10,7 +11,6 @@ import java.util.Date;
  */
 public class DomainSync implements ILongId {
     private Long id;
-    private Long objectId;
     private Long parentId;
     private Long additionalParentId;
     private Long externalId;
@@ -41,14 +41,6 @@ public class DomainSync implements ILongId {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getObjectId() {
-        return objectId;
-    }
-
-    public void setObjectId(Long objectId) {
-        this.objectId = objectId;
     }
 
     public Long getParentId() {
@@ -165,23 +157,22 @@ public class DomainSync implements ILongId {
 
     @Override
     public String toString() {
-        return "DomainSync{" +
-                "id=" + id +
-                ", objectId=" + objectId +
-                ", parentId=" + parentId +
-                ", additionalParentId=" + additionalParentId +
-                ", externalId='" + externalId + '\'' +
-                ", additionalExternalId='" + additionalExternalId + '\'' +
-                ", name='" + name + '\'' +
-                ", additionalName='" + additionalName + '\'' +
-                ", altName='" + altName + '\'' +
-                ", altAdditionalName='" + altAdditionalName + '\'' +
-                ", servicingOrganization='" + servicingOrganization + '\'' +
-                ", balanceHolder='" + balanceHolder + '\'' +
-                ", type=" + type +
-                ", status=" + status +
-                ", statusDetail=" + statusDetail +
-                ", date=" + date +
-                '}';
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add("id", id)
+                .add("parentId", parentId)
+                .add("additionalParentId", additionalParentId)
+                .add("externalId", externalId)
+                .add("additionalExternalId", additionalExternalId)
+                .add("name", name)
+                .add("additionalName", additionalName)
+                .add("altName", altName)
+                .add("altAdditionalName", altAdditionalName)
+                .add("servicingOrganization", servicingOrganization)
+                .add("balanceHolder", balanceHolder)
+                .add("type", type)
+                .add("status", status)
+                .add("statusDetail", statusDetail)
+                .add("date", date)
+                .toString();
     }
 }

@@ -10,14 +10,8 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.address.strategy.street_type.StreetTypeStrategy;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.strategy.IStrategy;
-import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.web.component.datatable.column.FilteredColumn;
 import org.complitex.sync.entity.DomainSync;
-import org.complitex.sync.entity.SyncEntity;
 
 /**
  * @author Anatoly Ivanov
@@ -44,21 +38,21 @@ public class DomainSyncObjectColumn extends FilteredColumn<DomainSync>
 
         String objectName = "";
 
-        if (domainSync.getObjectId() != null){
-            if (SyncEntity.STREET_TYPE.equals(domainSync.getType())){
-                StreetTypeStrategy strategy = EjbBeanLocator.getBean(StreetTypeStrategy.class);
-
-                DomainObject domainObject = strategy.getDomainObject(domainSync.getObjectId(), true);
-                objectName = strategy.getName(domainObject) + " (" + strategy.getShortName(domainObject) + ")";
-            }else if (SyncEntity.BUILDING.equals(domainSync.getType())){
-                IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(SyncEntity.BUILDING_ADDRESS.getEntityName());
-                objectName = strategy.displayDomainObject(domainSync.getObjectId(), cellItem.getLocale());
-
-            }else {
-                IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(domainSync.getType().getEntityName());
-                objectName = strategy.displayDomainObject(domainSync.getObjectId(), cellItem.getLocale());
-            }
-        }
+//        if (domainSync.getObjectId() != null){
+//            if (SyncEntity.STREET_TYPE.equals(domainSync.getType())){
+//                StreetTypeStrategy strategy = EjbBeanLocator.getBean(StreetTypeStrategy.class);
+//
+//                DomainObject domainObject = strategy.getDomainObject(domainSync.getObjectId(), true);
+//                objectName = strategy.getName(domainObject) + " (" + strategy.getShortName(domainObject) + ")";
+//            }else if (SyncEntity.BUILDING.equals(domainSync.getType())){
+//                IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(SyncEntity.BUILDING_ADDRESS.getEntityName());
+//                objectName = strategy.displayDomainObject(domainSync.getObjectId(), cellItem.getLocale());
+//
+//            }else {
+//                IStrategy strategy = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy(domainSync.getType().getEntityName());
+//                objectName = strategy.displayDomainObject(domainSync.getObjectId(), cellItem.getLocale());
+//            }
+//        }
 
         cellItem.add(new Label(componentId, Model.of(objectName)));
     }

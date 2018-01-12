@@ -34,10 +34,8 @@
     </delete>
 
     <delete id="deleteDomainSyncBySyncEntity" parameterType="org.complitex.sync.entity.SyncEntity">
-        delete from `domain_sync` where `id` = #{id}
+        delete from `domain_sync` where `type` = #{type}
     </delete>
-
-
 
     <select id="selectDomainSync" parameterType="long" resultMap="domainSyncResultMap">
         select * from `domain_sync` where `id` = #{id}

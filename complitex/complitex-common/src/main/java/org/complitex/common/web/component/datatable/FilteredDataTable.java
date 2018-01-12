@@ -80,7 +80,16 @@ public abstract class FilteredDataTable<T extends Serializable> extends Panel im
 
             if (column == null){
                 if (f.getType().equals(Date.class)){
-                    column = new DateColumn<>(new ResourceModel(field), field, field);
+                    column = new DateColumn<>(new ResourceModel(field){
+                        @Override
+                        public String getObject() {
+                            try {
+                                return super.getObject();
+                            } catch (Exception e) {
+                                return "[" + field + "]";
+                            }
+                        }
+                    }, field, field);
                 }else if (f.getType().isEnum()){
                     //noinspection unchecked
                     column = new EnumColumn(field, f.getType(), getLocale());

@@ -161,7 +161,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void update(DomainSync sync) {
-        DomainObject oldObject = buildingAddressStrategy.getDomainObject(sync.getObjectId(), true);
+        DomainObject oldObject = null;//buildingAddressStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
         //building number
@@ -178,7 +178,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void archive(DomainSync sync) {
-        buildingStrategy.archive(buildingStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
+        //buildingStrategy.archive(buildingStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
         domainSyncBean.delete(sync.getId());
     }
 

@@ -98,7 +98,7 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void update(DomainSync sync) {
-        DomainObject oldObject = streetTypeStrategy.getDomainObject(sync.getObjectId(), true);
+        DomainObject oldObject = null;//streetTypeStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
         //external id
@@ -118,7 +118,7 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void archive(DomainSync sync) {
-        streetTypeStrategy.archive(streetTypeStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
+//        streetTypeStrategy.archive(streetTypeStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
         addressSyncBean.delete(sync.getId());
     }
 

@@ -9,7 +9,6 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.ConfigBean;
-import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.sync.entity.DomainSync;
@@ -86,8 +85,8 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     @Override
     public void insert(DomainSync sync) {
         if (false){ //todo
-            DomainObject oldStreet = streetStrategy.getDomainObject(sync.getObjectId());
-            DomainObject street = streetStrategy.getDomainObject(sync.getObjectId());
+            DomainObject oldStreet = null;//streetStrategy.getDomainObject(sync.getObjectId());
+            DomainObject street = null;//streetStrategy.getDomainObject(sync.getObjectId());
 
             street.addAttribute(STREET_CODE, Long.valueOf(sync.getExternalId()));
 
@@ -119,26 +118,26 @@ public class StreetSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void update(DomainSync sync) {
-        DomainObject oldObject = streetStrategy.getDomainObject(sync.getObjectId(), true);
-        DomainObject newObject = CloneUtil.cloneObject(oldObject);
-
-        newObject.setStringValue(StreetStrategy.NAME, sync.getName());
-        newObject.setStringValue(StreetStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
-
-        Long streetTypeId = null;//streetTypeStrategy.getObjectId(sync.getAdditionalExternalId());
-
-        if (streetTypeId == null) {
-            throw new RuntimeException("StreetType not found: " + sync);
-        }
-        newObject.setValue(StreetStrategy.STREET_TYPE, streetTypeId);
-
-        streetStrategy.update(oldObject, newObject, sync.getDate());
-        domainSyncBean.delete(sync.getId());
+//        DomainObject oldObject = streetStrategy.getDomainObject(sync.getObjectId(), true);
+//        DomainObject newObject = CloneUtil.cloneObject(oldObject);
+//
+//        newObject.setStringValue(StreetStrategy.NAME, sync.getName());
+//        newObject.setStringValue(StreetStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
+//
+//        Long streetTypeId = null;//streetTypeStrategy.getObjectId(sync.getAdditionalExternalId());
+//
+//        if (streetTypeId == null) {
+//            throw new RuntimeException("StreetType not found: " + sync);
+//        }
+//        newObject.setValue(StreetStrategy.STREET_TYPE, streetTypeId);
+//
+//        streetStrategy.update(oldObject, newObject, sync.getDate());
+//        domainSyncBean.delete(sync.getId());
     }
 
     @Override
     public void archive(DomainSync sync) {
-        streetStrategy.archive(streetStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
+//        streetStrategy.archive(streetStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
         domainSyncBean.delete(sync.getId());
     }
 

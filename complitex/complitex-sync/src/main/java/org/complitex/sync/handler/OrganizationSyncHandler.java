@@ -81,7 +81,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void update(DomainSync sync) {
-        DomainObject oldObject = organizationStrategy.getDomainObject(sync.getObjectId(), true);
+        DomainObject oldObject = null;//organizationStrategy.getDomainObject(sync.getObjectId(), true);
         DomainObject newObject = CloneUtil.cloneObject(oldObject);
 
 //        newObject.setExternalId(sync.getExternalId());
@@ -94,7 +94,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void archive(DomainSync sync) {
-        organizationStrategy.archive(organizationStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
+        //organizationStrategy.archive(organizationStrategy.getDomainObject(sync.getObjectId(), true), sync.getDate());
         domainSyncBean.delete(sync.getId());
     }
 
