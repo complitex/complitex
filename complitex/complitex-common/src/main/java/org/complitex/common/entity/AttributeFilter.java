@@ -11,6 +11,8 @@ public class AttributeFilter implements Serializable {
 
     private Long valueId;
 
+    private Long localeId;
+
     public AttributeFilter(Long entityAttributeId) {
         this.entityAttributeId = entityAttributeId;
     }
@@ -18,6 +20,12 @@ public class AttributeFilter implements Serializable {
     public AttributeFilter(Long entityAttributeId, String value) {
         this.entityAttributeId = entityAttributeId;
         this.value = value;
+    }
+
+    public AttributeFilter(Long entityAttributeId, String value, Long localeId) {
+        this.entityAttributeId = entityAttributeId;
+        this.value = value;
+        this.localeId = localeId;
     }
 
     public AttributeFilter(Long entityAttributeId, Long valueId) {
@@ -55,5 +63,13 @@ public class AttributeFilter implements Serializable {
 
     public void setValueId(Long valueId) {
         this.valueId = valueId;
+    }
+
+    public Long getLocaleId() {
+        return localeId;
+    }
+
+    public void setLocaleId(Long localeId) {
+        this.localeId = localeId;
     }
 }

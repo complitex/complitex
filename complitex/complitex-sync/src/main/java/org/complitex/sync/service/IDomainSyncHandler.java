@@ -40,7 +40,9 @@ public interface IDomainSyncHandler {
 
     String getName(DomainObject object);
 
-    default void bind(Long parentId){
-        //todo implement
+    List<DomainSync> getDomainSyncs(Long parentId);
+
+    default void sync(Long parentId){
+
     }
 }

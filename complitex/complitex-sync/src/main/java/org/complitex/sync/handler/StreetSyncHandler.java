@@ -146,4 +146,9 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     public String getName(DomainObject object) {
         return streetStrategy.getName(object, Locales.getSystemLocale());
     }
+
+    @Override
+    public List<DomainSync> getDomainSyncs(Long parentId) {
+        return null;
+    }
 }

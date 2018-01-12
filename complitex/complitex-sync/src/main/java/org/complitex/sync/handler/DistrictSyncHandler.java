@@ -10,6 +10,7 @@ import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.ShowMode;
+import org.complitex.correction.entity.DistrictCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
@@ -115,15 +116,28 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
         return districtStrategy.getName(object);
     }
 
-    public void bind(Long parentId){
-        addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED))).forEach(this::bind);
+    @Override
+    public List<DomainSync> getDomainSyncs(Long parentId) {
+        return addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED)));
     }
 
-    private void bind(DomainSync domainSync){
-//        List<DistrictCorrection> list = addressCorrectionBean.getDistrictCorrections(null, domainSync.getExternalId())
+    @Override
+    public void sync(Long parentId) {
+        addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED))).forEach(domainSync -> {
+            List<DistrictCorrection> corrections = addressCorrectionBean.getDistrictCorrections(null,
+                    domainSync.getExternalId(), null, null,
+                    addressSyncAdapter.getOrganization().getObjectId(), addressSyncAdapter.getOrganization().getObjectId());
 
-        //todo correction -> domain
+            if (!corrections.isEmpty()){
 
+            }else {
+                List<? extends DomainObject> domainObjects = districtStrategy.getList(
+                        new DomainObjectFilter("district")
+                                .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
+                                .addAttribute(DistrictStrategy.NAME, domainSync.getName(), Locales.getRuId())
+                                .addAttribute(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getUaId()));
 
+            }
+        });
     }
 }

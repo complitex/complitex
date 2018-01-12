@@ -35,7 +35,7 @@ DROP TABLE IF EXISTS `city_type_correction`;
 CREATE TABLE `city_type_correction` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор коррекции',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта типа населенного пункта',
-  `external_id` VARCHAR(20) COMMENT 'Внешний идентификатор объекта',
+  `external_id` BIGINT(20) COMMENT 'Внешний идентификатор объекта',
   `correction` VARCHAR(100) NOT NULL COMMENT 'Название типа населенного пункта',
   `begin_date` DATE NOT NULL DEFAULT '1970-01-01' COMMENT 'Дата начала актуальности соответствия',
   `end_date` DATE NOT NULL DEFAULT '2054-12-31' COMMENT 'Дата окончания актуальности соответствия',

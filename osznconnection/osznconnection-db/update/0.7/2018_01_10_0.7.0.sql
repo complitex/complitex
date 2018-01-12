@@ -39,6 +39,7 @@ alter table user_info drop column external_id;
 alter table service drop column external_id;
 
 alter table city_correction change column external_id external_id bigint(20);
+alter table city_type_correction change column external_id external_id bigint(20);
 alter table district_correction change column external_id external_id bigint(20);
 alter table street_correction change column external_id external_id bigint(20);
 alter table street_type_correction change column external_id external_id bigint(20);
@@ -46,5 +47,13 @@ alter table building_correction change column external_id external_id bigint(20)
 alter table organization_correction change column external_id external_id bigint(20);
 alter table service_correction change column external_id external_id bigint(20);
 
+create unique index unique_external_id on city_correction (external_id, organization_id, user_organization_id);
+create unique index unique_external_id on city_type_correction (external_id, organization_id, user_organization_id);
+create unique index unique_external_id on district_correction (external_id, organization_id, user_organization_id);
+create unique index unique_external_id on street_correction (external_id, organization_id, user_organization_id);
+create unique index unique_external_id on street_type_correction (external_id, organization_id, user_organization_id);
+create unique index unique_external_id on building_correction (external_id, organization_id, user_organization_id);
+create unique index unique_external_id on organization_correction (external_id, organization_id, user_organization_id);
+create unique index unique_external_id on service_correction (external_id, organization_id, user_organization_id);
 
 INSERT INTO `update` (`version`) VALUE ('20180110_0.7.0');

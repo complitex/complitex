@@ -102,4 +102,9 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     public String getName(DomainObject object) {
         return object.getStringValue(IOrganizationStrategy.NAME);
     }
+
+    @Override
+    public List<DomainSync> getDomainSyncs(Long parentId) {
+        return null;
+    }
 }

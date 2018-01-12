@@ -126,4 +126,9 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
     public String getName(DomainObject object) {
         return streetTypeStrategy.getName(object);
     }
+
+    @Override
+    public List<DomainSync> getDomainSyncs(Long parentId) {
+        return null;
+    }
 }

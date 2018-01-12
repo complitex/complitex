@@ -157,11 +157,7 @@ public class DomainSyncService {
         processing.set(true);
         cancelSync.set(false);
 
-        IDomainSyncHandler handler = getHandler(syncEntity);
-
-
-
-
+        getHandler(syncEntity).sync(parentId);
 
         processing.set(false);
     }

@@ -186,4 +186,9 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
     public String getName(DomainObject object) {
         return buildingAddressStrategy.getName(object);
     }
+
+    @Override
+    public List<DomainSync> getDomainSyncs(Long parentId) {
+        return null;
+    }
 }

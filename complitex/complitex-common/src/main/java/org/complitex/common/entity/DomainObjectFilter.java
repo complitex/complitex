@@ -84,6 +84,12 @@ public class DomainObjectFilter implements Serializable {
         return this;
     }
 
+    public DomainObjectFilter addAttribute(Long entityAttributeId, String value, Long localeId){
+        attributeFilters.add(new AttributeFilter(entityAttributeId, value, localeId));
+
+        return this;
+    }
+
     public DomainObjectFilter addAttribute(Long entityAttributeId, Long valueId){
         attributeFilters.add(new AttributeFilter(entityAttributeId, valueId));
 
@@ -207,8 +213,10 @@ public class DomainObjectFilter implements Serializable {
         return comparisonType;
     }
 
-    public void setComparisonType(String comparisonType) {
+    public DomainObjectFilter setComparisonType(String comparisonType) {
         this.comparisonType = comparisonType;
+
+        return this;
     }
 
     public String getStatus() {

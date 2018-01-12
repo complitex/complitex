@@ -95,4 +95,12 @@ public class Locales {
                     return keyExtractor.apply(c1).compareTo(keyExtractor.apply(c2));
                 };
     }
+
+    public static Long getRuId(){
+        return getLocaleId(RU);
+    }
+
+    public static Long getUaId(){
+        return getLocaleId(UA);
+    }
 }

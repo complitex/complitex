@@ -146,20 +146,39 @@
             AND e.`externalId` = #{externalId}
         </if>
         <foreach item="attributeFilter" collection="attributeFilters">
-            <if test="attributeFilter.value != null">
-                AND EXISTS(SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
-                AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc WHERE sc.`value`
+            <if test="attributeFilter.value != null or attributeFilter.localeId != null">
                 <choose>
-                    <when test="comparisonType == 'LIKE'">
-                        LIKE CONCAT('%', #{attributeFilter.value}, '%')
+                    <when test="attributeFilter.value != null">
+                        AND EXISTS (SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
+                            AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
+                            AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc
+                            WHERE sc.`value`
+                                <choose>
+                                    <when test="comparisonType == 'LIKE'">
+                                        LIKE CONCAT('%', #{attributeFilter.value}, '%')
+                                    </when>
+                                    <when test="comparisonType == 'EQUALITY'">
+                                        = #{attributeFilter.value}
+                                    </when>
+                                </choose>
+                            <if test="attributeFilter.localeId != null">AND sc.`locale_id` = #{attributeFilter.localeId}</if>
+                            )
+                        )
                     </when>
-                    <when test="comparisonType == 'EQUALITY'">
-                        = #{attributeFilter.value}
-                    </when>
+                    <otherwise>
+                        AND (
+                            EXISTS (SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
+                                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
+                                AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc
+                                WHERE sc.`value` is null AND sc.`locale_id` = #{attributeFilter.localeId}))
+
+                            OR NOT EXISTS (SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
+                                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
+                                AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc
+                                WHERE sc.`locale_id` = #{attributeFilter.localeId}))
+                        )
+                    </otherwise>
                 </choose>
-                )
-                )
             </if>
 
             <if test="attributeFilter.valueId != null">
