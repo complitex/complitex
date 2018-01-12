@@ -14,8 +14,9 @@ import java.util.function.Function;
  */
 public class Locales {
     private Long systemLocaleId;
-
     private Locale systemLocale;
+
+    private Long alternativeLocaleId;
     private Locale alternativeLocale;
 
     private Map<Locale, Long> map = new ConcurrentHashMap<>();
@@ -41,6 +42,7 @@ public class Locales {
             }
 
             if (l.isAlternative()){
+                alternativeLocaleId = l.getId();
                 alternativeLocale = new Locale(l.getLanguage());
             }
         }
@@ -60,6 +62,10 @@ public class Locales {
 
     public static Locale getAlternativeLocale() {
         return instance.alternativeLocale;
+    }
+
+    public static Long getAlternativeLocaleId(){
+        return instance.alternativeLocaleId;
     }
 
     public static Long getLocaleId(Locale locale){
@@ -94,13 +100,5 @@ public class Locales {
 
                     return keyExtractor.apply(c1).compareTo(keyExtractor.apply(c2));
                 };
-    }
-
-    public static Long getRuId(){
-        return getLocaleId(RU);
-    }
-
-    public static Long getUaId(){
-        return getLocaleId(UA);
     }
 }

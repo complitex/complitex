@@ -10,10 +10,12 @@ import org.complitex.address.strategy.room.RoomStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.service.ModuleBean;
 import org.complitex.correction.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,6 +24,9 @@ import java.util.Set;
 
 @Stateless
 public class AddressCorrectionBean extends CorrectionBean {
+    @EJB
+    private ModuleBean moduleBean;
+
     private final Logger log = LoggerFactory.getLogger(AddressCorrectionBean.class);
 
     public static final String NS = AddressCorrectionBean.class.getName();
@@ -111,6 +116,14 @@ public class AddressCorrectionBean extends CorrectionBean {
         }
 
         return true;
+    }
+
+    public void insert(DistrictCorrection districtCorrection){
+        if (districtCorrection.getModuleId() == null){
+            districtCorrection.setModuleId(moduleBean.getModuleId());
+        }
+
+        sqlSession().insert(NS + ".insertDistrictCorrection", districtCorrection);
     }
 
     public List<Long> getDistrictObjectIds(String district) {

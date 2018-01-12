@@ -1,5 +1,6 @@
 package org.complitex.correction.entity;
 
+import com.google.common.base.MoreObjects;
 import org.complitex.common.util.DateUtil;
 
 import java.io.Serializable;
@@ -28,8 +29,6 @@ public abstract class Correction implements Serializable {
     private String displayObject;
 
     private boolean editable = true;
-
-    private Integer status = 0;
 
     public abstract String getEntity();
 
@@ -172,11 +171,25 @@ public abstract class Correction implements Serializable {
         this.editable = editable;
     }
 
-    public Integer getStatus() {
-        return status;
+    protected MoreObjects.ToStringHelper getToStringHelper(){
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add("id", id)
+                .add("externalId", externalId)
+                .add("objectId", objectId)
+                .add("correction", correction)
+                .add("beginDate", beginDate)
+                .add("endDate", endDate)
+                .add("organizationId", organizationId)
+                .add("userOrganizationId", userOrganizationId)
+                .add("moduleId", moduleId)
+                .add("organizationName", organizationName)
+                .add("userOrganizationName", userOrganizationName)
+                .add("internalObject", internalObject)
+                .add("displayObject", displayObject);
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    @Override
+    public String toString() {
+        return  getToStringHelper().toString();
     }
 }

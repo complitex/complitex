@@ -56,4 +56,13 @@ create unique index unique_external_id on building_correction (external_id, orga
 create unique index unique_external_id on organization_correction (external_id, organization_id, user_organization_id);
 create unique index unique_external_id on service_correction (external_id, organization_id, user_organization_id);
 
+alter table city_correction drop column `status`;
+alter table city_type_correction drop column `status`;
+alter table district_correction drop column `status`;
+alter table street_correction drop column `status`;
+alter table street_type_correction drop column `status`;
+alter table building_correction drop column `status`;
+alter table organization_correction drop column `status`;
+alter table service_correction drop column `status`;
+
 INSERT INTO `update` (`version`) VALUE ('20180110_0.7.0');

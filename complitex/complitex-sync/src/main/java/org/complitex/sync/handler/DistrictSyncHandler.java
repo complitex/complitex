@@ -7,6 +7,7 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.correction.entity.DistrictCorrection;
@@ -122,10 +123,11 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void sync(Long parentId) {
-        addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED))).forEach(domainSync -> {
-            List<DistrictCorrection> corrections = addressCorrectionBean.getDistrictCorrections(null,
-                    domainSync.getExternalId(), null, null,
-                    addressSyncAdapter.getOrganization().getObjectId(), null);
+        Long organizationId = addressSyncAdapter.getOrganization().getObjectId();
+
+        addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED))).forEach(s -> {
+            List<DistrictCorrection> corrections = addressCorrectionBean.getDistrictCorrections(parentId,
+                    s.getExternalId(), null, null, organizationId,null);
 
             if (!corrections.isEmpty()){
 
@@ -134,11 +136,39 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
                         new DomainObjectFilter("district")
                                 .setStatus(ShowMode.ACTIVE.name())
                                 .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
-                                .addAttribute(DistrictStrategy.NAME, domainSync.getName(), Locales.getRuId())
-                                .addAttribute(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getUaId()));
+                                .setParentEntity("city")
+                                .setParentId(parentId)
+                                .addAttribute(DistrictStrategy.NAME, s.getName(), Locales.getSystemLocaleId())
+                                .addAttribute(DistrictStrategy.NAME, s.getAltName(), Locales.getAlternativeLocaleId()));
 
-                System.out.println(domainObjects);
+                if (!domainObjects.isEmpty()){
+                    for (int i = 1; i < domainObjects.size(); ++i){
+                        districtStrategy.archive(domainObjects.get(i), DateUtil.getCurrentDate());
 
+                        log.info("sync: archive domain object {}", domainObjects.get(i));
+                    }
+
+                    DomainObject o = domainObjects.get(0);
+
+                    DistrictCorrection correction = new DistrictCorrection(o.getParentId(), s.getExternalId(),
+                            o.getObjectId(), s.getName(), organizationId, null, 0L);
+
+                    addressCorrectionBean.insert(correction);
+
+                    log.info("sync: add correction {}", correction);
+                }else{
+                    DomainObject domainObject = districtStrategy.newInstance();
+
+                    domainObject.setParentEntityId(DistrictStrategy.PARENT_ENTITY_ID);
+                    domainObject.setParentId(parentId);
+                    domainObject.setStringValue(DistrictStrategy.CODE, s.getAdditionalExternalId());
+                    domainObject.setStringValue(DistrictStrategy.NAME, s.getName(), Locales.getSystemLocale());
+                    domainObject.setStringValue(DistrictStrategy.NAME, s.getAltName(), Locales.getAlternativeLocale());
+
+                    districtStrategy.insert(domainObject, DateUtil.getCurrentDate());
+
+                    log.info("sync: add domain object {}", domainObjects);
+                }
             }
         });
     }

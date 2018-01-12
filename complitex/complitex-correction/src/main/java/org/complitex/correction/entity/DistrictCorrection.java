@@ -31,4 +31,11 @@ public class DistrictCorrection extends Correction {
     public void setCityId(Long cityId) {
         this.cityId = cityId;
     }
+
+    @Override
+    public String toString() {
+        return getToStringHelper()
+                .add("cityId", cityId)
+                .toString();
+    }
 }

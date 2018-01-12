@@ -90,16 +90,16 @@
     <insert id="insertDistrictCorrection" parameterType="org.complitex.correction.entity.DistrictCorrection"
             keyProperty="id" useGeneratedKeys="true">
         insert into `district_correction`(`city_id`, `object_id`, `external_id`, `correction`, `begin_date`, `end_date`,
-                                          `organization_id`, `user_organization_id`, `module_id`, `status`)
+                                          `organization_id`, `user_organization_id`, `module_id`)
           values (#{cityId}, #{objectId}, #{externalId}, #{correction}, #{beginDate}, #{endDate},
-                  #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status})
+                  #{organizationId}, #{userOrganizationId}, #{moduleId})
     </insert>
 
     <update id="updateDistrictCorrection" parameterType="org.complitex.correction.entity.DistrictCorrection">
         update `district_correction` set `city_id` = #{cityId}, `object_id` = #{objectId},
             `external_id` = #{externalId}, `correction` = #{correction},
             `begin_date` = #{beginDate}, `end_date` = #{endDate}, `organization_id` = #{organizationId},
-            `user_organization_id` = #{userOrganizationId}, `module_id` = #{moduleId}, `status` = #{status}
+            `user_organization_id` = #{userOrganizationId}, `module_id` = #{moduleId}
         where `id` = #{id}
     </update>
 
@@ -151,9 +151,9 @@
             keyProperty="id" useGeneratedKeys="true">
         INSERT INTO `street_correction`(`city_id`, `street_type_id`, `object_id`, `external_id`,
                                         `correction`, `begin_date`, `end_date`, `organization_id`,
-                                        `user_organization_id`, `module_id`, `status`)
+                                        `user_organization_id`, `module_id`)
             VALUES (#{cityId}, #{streetTypeId}, #{objectId}, #{externalId}, #{correction},
-                    #{beginDate}, #{endDate}, #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status})
+                    #{beginDate}, #{endDate}, #{organizationId}, #{userOrganizationId}, #{moduleId})
     </insert>
 
 
@@ -202,9 +202,9 @@
     <insert id="insertBuildingCorrection" parameterType="org.complitex.correction.entity.BuildingCorrection"
             keyProperty="id" useGeneratedKeys="true">
         insert into `building_correction`(`street_id`, `object_id`, `external_id`,  `correction`, `correction_corp`,
-          `begin_date`, `end_date`, `organization_id`, `user_organization_id`, `module_id`, `status`)
+          `begin_date`, `end_date`, `organization_id`, `user_organization_id`, `module_id`)
         values (#{streetId}, #{objectId}, #{externalId}, TO_CYRILLIC(#{correction}), TO_CYRILLIC(#{correctionCorp}), #{beginDate}, #{endDate},
-           #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status})
+           #{organizationId}, #{userOrganizationId}, #{moduleId})
     </insert>
 
     <update id="updateBuildingCorrection" parameterType="org.complitex.correction.entity.BuildingCorrection">
@@ -361,9 +361,9 @@
     <insert id="insertApartmentCorrection" parameterType="org.complitex.correction.entity.ApartmentCorrection"
             keyProperty="id" useGeneratedKeys="true">
         insert into `apartment_correction`(`building_id`, `object_id`, `external_id`, `correction`, `begin_date`, `end_date`,
-                                          `organization_id`, `user_organization_id`, `module_id`, `status`)
+                                          `organization_id`, `user_organization_id`, `module_id`)
           values (#{buildingId}, #{objectId}, #{externalId}, #{correction}, #{beginDate}, #{endDate},
-                  #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status.id})
+                  #{organizationId}, #{userOrganizationId}, #{moduleId})
     </insert>
 
     <!--Room-->
@@ -397,9 +397,9 @@
     <insert id="insertRoomCorrection" parameterType="org.complitex.correction.entity.RoomCorrection"
             keyProperty="id" useGeneratedKeys="true">
         insert into `room_correction`(`building_id`, `apartment_id`, `object_id`, `external_id`, `correction`, `begin_date`, `end_date`,
-                                          `organization_id`, `user_organization_id`, `module_id`, `status`)
+                                          `organization_id`, `user_organization_id`, `module_id`)
           values (#{buildingId}, #{apartmentId}, #{objectId}, #{externalId}, #{correction}, #{beginDate}, #{endDate},
-                  #{organizationId}, #{userOrganizationId}, #{moduleId}, #{status.id})
+                  #{organizationId}, #{userOrganizationId}, #{moduleId})
     </insert>
     
 </mapper>

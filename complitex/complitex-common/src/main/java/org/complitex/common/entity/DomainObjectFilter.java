@@ -133,8 +133,10 @@ public class DomainObjectFilter implements Serializable {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public DomainObjectFilter setParentId(Long parentId) {
         this.parentId = parentId;
+
+        return this;
     }
 
     public Long getLocaleId() {
@@ -157,8 +159,10 @@ public class DomainObjectFilter implements Serializable {
         return parentEntity;
     }
 
-    public void setParentEntity(String parentEntity) {
+    public DomainObjectFilter setParentEntity(String parentEntity) {
         this.parentEntity = parentEntity;
+
+        return this;
     }
 
     public long getFirst() {
