@@ -6,7 +6,6 @@ import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.entity.DomainSyncFilter;
 import org.complitex.sync.entity.SyncEntity;
 
-import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import java.util.List;
 
@@ -18,13 +17,12 @@ import java.util.List;
 public class DomainSyncBean extends AbstractBean {
     public final static String NS = DomainSyncBean.class.getName();
 
-    public void save(DomainSync domainSync){
+    public void insert(DomainSync domainSync){
         sqlSession().insert("insertDomainSync", domainSync);
     }
 
-    @Asynchronous
-    public void saveAsync(DomainSync domainSync){
-        save(domainSync);
+    public void updateStatus(DomainSync domainSync){
+        sqlSession().update("updateDomainSyncStatus", domainSync);
     }
 
     public DomainSync getObject(Long id){

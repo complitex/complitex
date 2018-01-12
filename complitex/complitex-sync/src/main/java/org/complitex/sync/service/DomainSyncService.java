@@ -155,7 +155,7 @@ public class DomainSyncService {
                 s.setParentObjectId(parent.getObjectId());
             }
 
-            domainSyncBean.save(s);
+            domainSyncBean.insert(s);
         });
     }
 

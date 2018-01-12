@@ -13,6 +13,7 @@ import org.complitex.common.web.component.ShowMode;
 import org.complitex.correction.entity.DistrictCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.sync.entity.DomainSync;
+import org.complitex.sync.entity.DomainSyncStatus;
 import org.complitex.sync.service.DomainSyncAdapter;
 import org.complitex.sync.service.DomainSyncBean;
 import org.complitex.sync.service.IDomainSyncHandler;
@@ -54,6 +55,9 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
 
     @EJB
     private AddressCorrectionBean addressCorrectionBean;
+
+    @EJB
+    private DomainSyncBean domainSyncBean;
 
     @Override
     public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
@@ -125,11 +129,12 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     public void sync(Long parentObjectId) {
         Long organizationId = addressSyncAdapter.getOrganization().getObjectId();
 
-        addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED, parentObjectId))).forEach(s -> {
-            List<DistrictCorrection> corrections = addressCorrectionBean.getDistrictCorrections(s.getParentObjectId(),
-                    s.getExternalId(), null, null, organizationId,null);
+        addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED, parentObjectId))).forEach(ds -> {
+            List<DistrictCorrection> corrections = addressCorrectionBean.getDistrictCorrections(ds.getParentObjectId(),
+                    ds.getExternalId(), null, null, organizationId,null);
 
             if (!corrections.isEmpty()){
+                //todo mapping
 
             }else {
                 List<? extends DomainObject> domainObjects = districtStrategy.getList(
@@ -137,9 +142,9 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
                                 .setStatus(ShowMode.ACTIVE.name())
                                 .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                                 .setParentEntity("city")
-                                .setParentId(s.getParentObjectId())
-                                .addAttribute(DistrictStrategy.NAME, s.getName(), Locales.getSystemLocaleId())
-                                .addAttribute(DistrictStrategy.NAME, s.getAltName(), Locales.getAlternativeLocaleId()));
+                                .setParentId(ds.getParentObjectId())
+                                .addAttribute(DistrictStrategy.NAME, ds.getName(), Locales.getSystemLocaleId())
+                                .addAttribute(DistrictStrategy.NAME, ds.getAltName(), Locales.getAlternativeLocaleId()));
 
                 DomainObject domainObject;
 
@@ -155,22 +160,25 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
                     domainObject = districtStrategy.newInstance();
 
                     domainObject.setParentEntityId(DistrictStrategy.PARENT_ENTITY_ID);
-                    domainObject.setParentId(s.getParentObjectId());
-                    domainObject.setStringValue(DistrictStrategy.CODE, s.getAdditionalExternalId());
-                    domainObject.setStringValue(DistrictStrategy.NAME, s.getName(), Locales.getSystemLocale());
-                    domainObject.setStringValue(DistrictStrategy.NAME, s.getAltName(), Locales.getAlternativeLocale());
+                    domainObject.setParentId(ds.getParentObjectId());
+                    domainObject.setStringValue(DistrictStrategy.CODE, ds.getAdditionalExternalId());
+                    domainObject.setStringValue(DistrictStrategy.NAME, ds.getName(), Locales.getSystemLocale());
+                    domainObject.setStringValue(DistrictStrategy.NAME, ds.getAltName(), Locales.getAlternativeLocale());
 
                     districtStrategy.insert(domainObject, DateUtil.getCurrentDate());
 
                     log.info("sync: add domain object {}", domainObject);
                 }
 
-                DistrictCorrection correction = new DistrictCorrection(domainObject.getParentId(), s.getExternalId(),
-                        domainObject.getObjectId(), s.getName(), organizationId, null, 0L);
+                DistrictCorrection correction = new DistrictCorrection(domainObject.getParentId(), ds.getExternalId(),
+                        domainObject.getObjectId(), ds.getName(), organizationId, null, 0L);
 
                 addressCorrectionBean.insert(correction);
 
                 log.info("sync: add correction {}", correction);
+
+                ds.setStatus(DomainSyncStatus.SYNCHRONIZED);
+                domainSyncBean.updateStatus(ds);
             }
         });
     }

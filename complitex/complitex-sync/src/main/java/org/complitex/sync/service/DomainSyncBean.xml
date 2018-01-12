@@ -30,6 +30,10 @@
                 #{type}, #{status}, #{statusDetail}, #{date})
     </insert>
 
+    <update id="updateDomainSyncStatus" parameterType="org.complitex.sync.entity.DomainSync">
+        update domain_sync set `status` = #{status}, status_detail = #{statusDetail} where id = #{id}
+    </update>
+
     <delete id="deleteDomainSync" parameterType="long">
         delete from `domain_sync` where `id` = #{id}
     </delete>
