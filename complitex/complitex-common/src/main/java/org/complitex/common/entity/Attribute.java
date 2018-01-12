@@ -1,5 +1,6 @@
 package org.complitex.common.entity;
 
+import com.google.common.base.MoreObjects;
 import org.complitex.common.util.Locales;
 import org.complitex.common.util.StringValueUtil;
 
@@ -143,5 +144,21 @@ public class Attribute implements Serializable {
 
     public void setStringValues(List<StringValue> stringValues) {
         this.stringValues = stringValues;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add("pkId", pkId)
+                .add("entityName", entityName)
+                .add("attributeId", attributeId)
+                .add("objectId", objectId)
+                .add("entityAttributeId", entityAttributeId)
+                .add("valueId", valueId)
+                .add("startDate", startDate)
+                .add("endDate", endDate)
+                .add("status", status)
+                .add("stringValues", stringValues)
+                .toString();
     }
 }

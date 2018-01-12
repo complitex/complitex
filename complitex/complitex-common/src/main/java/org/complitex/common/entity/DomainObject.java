@@ -1,5 +1,6 @@
 package org.complitex.common.entity;
 
+import com.google.common.base.MoreObjects;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.converter.DateConverter;
 import org.complitex.common.converter.IConverter;
@@ -267,5 +268,22 @@ public class DomainObject implements ILongId {
 
     public void setSubjectIds(Set<Long> subjectIds) {
         this.subjectIds = subjectIds;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add("pkId", pkId)
+                .add("entityName", entityName)
+                .add("objectId", objectId)
+                .add("status", status)
+                .add("startDate", startDate)
+                .add("endDate", endDate)
+                .add("parentId", parentId)
+                .add("parentEntityId", parentEntityId)
+                .add("permissionId", permissionId)
+                .add("attributes", attributes)
+                .add("subjectIds", subjectIds)
+                .toString();
     }
 }

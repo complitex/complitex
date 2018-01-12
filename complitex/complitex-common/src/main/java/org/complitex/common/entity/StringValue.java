@@ -1,17 +1,14 @@
 package org.complitex.common.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.MoreObjects;
 
 import java.io.Serializable;
 
 public class StringValue implements Serializable {
-    @JsonIgnore
     private Long pkId;
 
-    @JsonIgnore
     private Long id;
 
-    @JsonIgnore
     private String entityName;
 
     private Long localeId;
@@ -67,6 +64,17 @@ public class StringValue implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add("pkId", pkId)
+                .add("id", id)
+                .add("entityName", entityName)
+                .add("localeId", localeId)
+                .add("value", value)
+                .toString();
     }
 }
 

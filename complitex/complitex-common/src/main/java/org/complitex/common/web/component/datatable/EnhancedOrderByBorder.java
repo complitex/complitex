@@ -2,7 +2,6 @@ package org.complitex.common.web.component.datatable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink;
 import org.apache.wicket.markup.html.border.Border;
 import org.apache.wicket.markup.repeater.data.DataView;
 
@@ -14,20 +13,6 @@ public class EnhancedOrderByBorder extends Border {
 
     private EnhancedOrderByLink link;
 
-    /**
-     * @param id
-     *            see
-     *            {@link OrderByLink#OrderByLink(String, String, ISortStateLocator, OrderByLink.ICssProvider) }
-     * @param property
-     *            see
-     *            {@link OrderByLink#OrderByLink(String, String, ISortStateLocator, OrderByLink.ICssProvider) }
-     * @param stateLocator
-     *            see
-     *            {@link OrderByLink#OrderByLink(String, String, ISortStateLocator, OrderByLink.ICssProvider) }
-     * @param cssProvider
-     *            see
-     *            {@link OrderByLink#OrderByLink(String, String, ISortStateLocator, OrderByLink.ICssProvider) }
-     */
     public EnhancedOrderByBorder(String id, String property, ISortStateLocator stateLocator,
             EnhancedOrderByLink.ICssProvider cssProvider, DataView<?> dataView, Component refreshComponent) {
         super(id);
@@ -44,7 +29,6 @@ public class EnhancedOrderByBorder extends Border {
         };
         addToBorder(link);
         add(new EnhancedOrderByLink.CssModifier(link, cssProvider));
-        link.add(getBodyContainer());
     }
 
     public EnhancedOrderByLink getLink() {
@@ -58,14 +42,6 @@ public class EnhancedOrderByBorder extends Border {
         // noop
     }
 
-    /**
-     * @param id
-     *            see {@link OrderByLink#OrderByLink(String, String, ISortStateLocator)}
-     * @param property
-     *            see {@link OrderByLink#OrderByLink(String, String, ISortStateLocator)}
-     * @param stateLocator
-     *            see {@link OrderByLink#OrderByLink(String, String, ISortStateLocator)}
-     */
     public EnhancedOrderByBorder(String id, String property, ISortStateLocator stateLocator, DataView<?> dataView, Component refreshComponent) {
         this(id, property, stateLocator, EnhancedOrderByLink.DefaultCssProvider.getInstance(), dataView, refreshComponent);
     }

@@ -126,7 +126,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
         addressSyncBean.getList(of(new DomainSync(DISTRICT, LOADED))).forEach(domainSync -> {
             List<DistrictCorrection> corrections = addressCorrectionBean.getDistrictCorrections(null,
                     domainSync.getExternalId(), null, null,
-                    addressSyncAdapter.getOrganization().getObjectId(), addressSyncAdapter.getOrganization().getObjectId());
+                    addressSyncAdapter.getOrganization().getObjectId(), null);
 
             if (!corrections.isEmpty()){
 
@@ -136,6 +136,8 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
                                 .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                                 .addAttribute(DistrictStrategy.NAME, domainSync.getName(), Locales.getRuId())
                                 .addAttribute(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getUaId()));
+
+                System.out.println(domainObjects);
 
             }
         });
