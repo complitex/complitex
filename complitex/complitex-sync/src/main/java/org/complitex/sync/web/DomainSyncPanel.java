@@ -267,18 +267,14 @@ public class DomainSyncPanel extends Panel {
                     handler.add(processed);
                 }else if ("error".equals(key)){
                     getSession().error(Objects.toString(payload));
+
                     onUpdate(handler);
                     handler.add(DomainSyncPanel.this);
-                }
+                }else if ("info".equals(key)){
+                    getSession().info(Objects.toString(payload));
 
-                if (key.equals("add_all_complete")){
-                    processed.setDefaultModelObject("");
-
-                    handler.add(DomainSyncPanel.this);
-                    handler.add(processed);
                     onUpdate(handler);
-
-                    return;
+                    handler.add(DomainSyncPanel.this);
                 }
 
                 if (payload instanceof DomainSync && System.currentTimeMillis() - lastProcessed > 100) {

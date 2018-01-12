@@ -9,24 +9,25 @@ import org.apache.wicket.model.IModel;
 
 import java.util.Arrays;
 
-/**
- *
- * @author Artem
- */
-public final class ShowModePanel extends Panel {
+public class ShowModePanel extends Panel {
 
     public ShowModePanel(String id, final IModel<ShowMode> model) {
         super(id);
 
         RadioChoice<ShowMode> showModeChoice = new RadioChoice<ShowMode>("showModeChoice", model,
-                Arrays.asList(ShowMode.values()), new EnumChoiceRenderer<ShowMode>(this));
+                Arrays.asList(ShowMode.values()), new EnumChoiceRenderer<>(this));
         showModeChoice.setSuffix("");
         showModeChoice.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+                ShowModePanel.this.onUpdate(target);
             }
         });
         add(showModeChoice);
+    }
+
+    protected void onUpdate(AjaxRequestTarget target){
+
     }
 }

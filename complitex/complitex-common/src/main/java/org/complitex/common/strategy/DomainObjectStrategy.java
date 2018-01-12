@@ -78,12 +78,9 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
     }
 
     @Override
-    @Asynchronous
     public void disable(final DomainObject object) {
-        long start = System.currentTimeMillis();
         try {
             changeActivity(object, false);
-            log.info("The process of disabling of {} tree has been successful.", getEntityName());
             logBean.logChangeActivity(STATUS.OK, getEntityName(), object.getObjectId(), false,
                     ResourceUtil.getString(RESOURCE_BUNDLE, "disable_success", stringLocaleBean.getSystemLocale()));
         } catch (Exception e) {
@@ -91,7 +88,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
             logBean.logChangeActivity(STATUS.ERROR, getEntityName(), object.getObjectId(), false,
                     ResourceUtil.getString(RESOURCE_BUNDLE, "disable_error", stringLocaleBean.getSystemLocale()));
         }
-        log.info("The process of disabling of {} tree took {} sec.", getEntityName(), (System.currentTimeMillis() - start) / 1000);
     }
 
 

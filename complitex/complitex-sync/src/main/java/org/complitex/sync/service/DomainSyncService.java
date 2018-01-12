@@ -159,7 +159,13 @@ public class DomainSyncService {
         processing.set(true);
         cancelSync.set(false);
 
+        broadcastService.broadcast(getClass(), "info","Начата синхронизация");
+        log.info("sync: begin");
+
         getHandler(syncEntity).sync(parentId);
+
+        broadcastService.broadcast(getClass(), "info", "Синхронизация завершена успешно");
+        log.info("sync: completed");
 
         processing.set(false);
     }

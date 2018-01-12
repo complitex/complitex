@@ -143,9 +143,9 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
 
                 if (!domainObjects.isEmpty()){
                     for (int i = 1; i < domainObjects.size(); ++i){
-                        districtStrategy.archive(domainObjects.get(i), DateUtil.getCurrentDate());
+                        districtStrategy.disable(domainObjects.get(i));
 
-                        log.info("sync: archive domain object {}", domainObjects.get(i));
+                        log.info("sync: disable domain object {}", domainObjects.get(i));
                     }
 
                     DomainObject o = domainObjects.get(0);

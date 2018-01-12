@@ -32,7 +32,13 @@ public class CollapsibleSearchPanel extends Panel {
             add(new EmptyPanel(SEARCH_COMPONENT_WICKET_ID));
         }
 
-        showModePanel = new ShowModePanel("showModePanel", showModelModel);
+        showModePanel = new ShowModePanel("showModePanel", showModelModel){
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                //todo update
+
+            }
+        };
         showModePanel.setOutputMarkupPlaceholderTag(true);
         showModePanel.setVisible(collapsibleSearchComponent != null && collapsibleSearchComponent.isTopPartVisible());
         add(showModePanel);
