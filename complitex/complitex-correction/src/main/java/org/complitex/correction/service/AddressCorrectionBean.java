@@ -268,6 +268,11 @@ public class AddressCorrectionBean extends CorrectionBean {
                 buildingNumber, buildingCorp, organizationId, userOrganizationId, null)));
     }
 
+    public List<BuildingCorrection> getBuildingCorrections(Long streetId, Long externalId, Long objectId, Long organizationId) {
+        return getBuildingCorrections(FilterWrapper.of(new BuildingCorrection(streetId, externalId, objectId,
+                null, null, organizationId, null, null)));
+    }
+
     public List<BuildingCorrection> getBuildingCorrections(LocalAddress localAddress, ExternalAddress externalAddress){
         return getBuildingCorrections(localAddress.getStreetId(), null, externalAddress.getBuildingNumber(),
                 externalAddress.getBuildingCorp(), externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
@@ -282,15 +287,23 @@ public class AddressCorrectionBean extends CorrectionBean {
         if (buildingCorrection.getId() == null) {
             if (!isBuildingObjectExists(buildingCorrection.getCorrection(),
                     buildingCorrection.getCorrectionCorp(), buildingCorrection.getObjectId())) {
-                sqlSession().insert(NS + ".insertBuildingCorrection", buildingCorrection);
+                insert(buildingCorrection);
             }else {
                 return false;
             }
         }else {
-            sqlSession().update(NS + ".updateBuildingCorrection", buildingCorrection);
+            update(buildingCorrection);
         }
 
         return true;
+    }
+
+    public void insert(BuildingCorrection buildingCorrection){
+        sqlSession().insert(NS + ".insertBuildingCorrection", buildingCorrection);
+    }
+
+    public void update(BuildingCorrection buildingCorrection){
+        sqlSession().update(NS + ".updateBuildingCorrection", buildingCorrection);
     }
 
     public boolean isBuildingObjectExists(String buildingNumber, String buildingCorp, Long objectId){
