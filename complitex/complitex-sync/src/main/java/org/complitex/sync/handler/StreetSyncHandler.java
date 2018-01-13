@@ -3,7 +3,6 @@ package org.complitex.sync.handler;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
-import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
@@ -90,8 +89,8 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         }
 
         return Objects.equals(domainObject.getValueId(StreetStrategy.STREET_TYPE), streetTypeCorrections.get(0).getObjectId()) &&
-                Objects.equals(domainSync.getName(), domainObject.getStringValue(DistrictStrategy.NAME)) &&
-                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getAlternativeLocale()));
+                Objects.equals(domainSync.getName(), domainObject.getStringValue(StreetStrategy.NAME)) &&
+                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(StreetStrategy.NAME, Locales.getAlternativeLocale()));
     }
 
     @Override
@@ -102,8 +101,8 @@ public class StreetSyncHandler implements IDomainSyncHandler {
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("city")
                         .setParentId(domainSync.getParentObjectId())
-                        .addAttribute(DistrictStrategy.NAME, domainSync.getName())
-                        .addAttribute(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(StreetStrategy.NAME, domainSync.getName())
+                        .addAttribute(StreetStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
     }
 
     @Override
