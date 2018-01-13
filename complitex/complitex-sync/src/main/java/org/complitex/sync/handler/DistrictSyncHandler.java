@@ -16,7 +16,6 @@ import org.complitex.correction.entity.DistrictCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
-import org.complitex.sync.service.DomainSyncBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -31,9 +30,6 @@ import java.util.Objects;
  */
 @Stateless
 public class DistrictSyncHandler implements IDomainSyncHandler {
-    @EJB
-    private DomainSyncBean domainSyncBean;
-
     @EJB
     private DomainSyncAdapter addressSyncAdapter;
 

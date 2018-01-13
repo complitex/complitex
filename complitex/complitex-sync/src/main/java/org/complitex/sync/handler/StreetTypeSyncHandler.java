@@ -52,7 +52,7 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        return Objects.equals(domainSync.getName(), streetTypeStrategy.getName(domainObject))
+        return Objects.equals(domainSync.getName(), streetTypeStrategy.getName(domainObject)) //todo get
                 && Objects.equals(domainSync.getAdditionalName(), streetTypeStrategy.getShortName(domainObject))
                 && Objects.equals(domainSync.getAltName(), streetTypeStrategy.getName(domainObject, Locales.getAlternativeLocale()))
                 && Objects.equals(domainSync.getAltAdditionalName(), streetTypeStrategy.getShortName(domainObject, Locales.getAlternativeLocale()));

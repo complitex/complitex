@@ -47,6 +47,11 @@ public interface IOrganizationStrategy extends IStrategy{
     long DATA_SOURCE = 913;
 
     /**
+     * EDRPOU(ЕДРПОУ).
+     */
+    public final static long EDRPOU = 926;
+
+    /**
      * Service reference.
      */
     long SERVICE = 4914;

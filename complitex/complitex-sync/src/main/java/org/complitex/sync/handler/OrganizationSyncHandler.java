@@ -1,12 +1,17 @@
 package org.complitex.sync.handler;
 
 import org.complitex.address.exception.RemoteCallException;
-import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.Locales;
+import org.complitex.common.web.component.ShowMode;
 import org.complitex.correction.entity.Correction;
+import org.complitex.correction.entity.OrganizationCorrection;
+import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
@@ -17,6 +22,7 @@ import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.complitex.common.strategy.organization.IOrganizationStrategy.ORGANIZATION_TYPE;
 
@@ -34,6 +40,12 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     @EJB
     private DomainSyncBean domainSyncBean;
 
+    @EJB
+    private OrganizationCorrectionBean organizationCorrectionBean;
+
+    @EJB
+    private ModuleBean moduleBean;
+
     @Override
     public Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException {
         return domainSyncAdapter.getOrganizationSyncs(date);
@@ -46,55 +58,57 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId) {
-        return null;
+        return organizationCorrectionBean.getOrganizationCorrections(externalId, objectId, organizationId);
     }
 
     @Override
     public void update(Correction correction) {
-
+        organizationCorrectionBean.save((OrganizationCorrection) correction);
     }
 
     @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        return false;
+        return Objects.equals(domainSync.getName(), domainObject.getStringValue(IOrganizationStrategy.NAME)) &&
+                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(IOrganizationStrategy.NAME, Locales.getAlternativeLocale())) &&
+                Objects.equals(domainSync.getAdditionalName(), domainObject.getStringValue(IOrganizationStrategy.SHORT_NAME)) &&
+                Objects.equals(domainSync.getAltAdditionalName(), domainObject.getStringValue(IOrganizationStrategy.SHORT_NAME, Locales.getAlternativeLocale()));
     }
 
     @Override
     public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
-        return null;
+        return organizationStrategy.getList(
+                new DomainObjectFilter()
+                        .setStatus(ShowMode.ACTIVE.name())
+                        .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
+                        .addAttribute(IOrganizationStrategy.NAME, domainSync.getName())
+                        .addAttribute(IOrganizationStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId())
+                        .addAttribute(IOrganizationStrategy.SHORT_NAME, domainSync.getName())
+                        .addAttribute(IOrganizationStrategy.SHORT_NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
     }
 
     @Override
     public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        return null;
+        OrganizationCorrection organizationCorrection = new OrganizationCorrection(domainSync.getExternalId(),
+                domainObject.getObjectId(), domainSync.getName(), organizationId, null, moduleBean.getModuleId());
+
+        organizationCorrectionBean.save(organizationCorrection);
+
+        return organizationCorrection;
     }
 
     @Override
     public IStrategy getStrategy() {
-        return null;
+        return organizationStrategy;
     }
 
     @Override
     public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-
+        domainObject.setStringValue(IOrganizationStrategy.EDRPOU, domainSync.getAdditionalParentId() + "");
+        domainObject.setStringValue(IOrganizationStrategy.CODE, domainSync.getAdditionalExternalId());
+        domainObject.setStringValue(IOrganizationStrategy.NAME, domainSync.getName());
+        domainObject.setStringValue(IOrganizationStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());
+        domainObject.setStringValue(IOrganizationStrategy.SHORT_NAME, domainSync.getAdditionalName());
+        domainObject.setStringValue(IOrganizationStrategy.SHORT_NAME, domainSync.getAltAdditionalName(), Locales.getAlternativeLocale());
+        domainObject.setValueId(ORGANIZATION_TYPE, OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE);
     }
-
-    public void insert(DomainSync sync) {
-        DomainObject domainObject = organizationStrategy.newInstance();
-
-//        domainObject.setExternalId(sync.getExternalId());
-        domainObject.setStringValue(IOrganizationStrategy.NAME, sync.getName());
-//        domainObject.setStringValue(IOrganizationStrategy.CODE, sync.getExternalId());
-
-        Attribute servicingOrganization = new Attribute();
-        servicingOrganization.setAttributeId(1L);
-        servicingOrganization.setEntityAttributeId(ORGANIZATION_TYPE);
-        servicingOrganization.setValueId( OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE);
-        domainObject.addAttribute(servicingOrganization);
-
-        organizationStrategy.insert(domainObject, sync.getDate());
-        domainSyncBean.delete(sync.getId());
-    }
-
-
 }

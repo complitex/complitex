@@ -24,6 +24,11 @@ public class OrganizationCorrectionBean extends AbstractBean{
         return sqlSession().selectList(NS + ".selectOrganizationCorrections", filterWrapper);
     }
 
+    public List<OrganizationCorrection> getOrganizationCorrections(Long externalId, Long objectId, Long organizationId){
+        return getOrganizationCorrections(FilterWrapper.of(new OrganizationCorrection(externalId, objectId, null,
+                organizationId, null, null)));
+    }
+
     public List<OrganizationCorrection> getOrganizationCorrections(String dataSource, FilterWrapper<OrganizationCorrection> filterWrapper){
         return sqlSession(dataSource).selectList(NS + ".selectOrganizationCorrections", filterWrapper);
     }

@@ -88,10 +88,6 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
      */
     public final static long REFERENCES_DIR = 925;
 
-    /**
-     * EDRPOU(ЕДРПОУ). 
-     */
-    public final static long EDRPOU = 926;
 
     /**
      * Root directory for loading and saving request files. 
