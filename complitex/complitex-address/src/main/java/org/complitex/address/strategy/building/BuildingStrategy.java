@@ -43,9 +43,8 @@ public class BuildingStrategy extends TemplateStrategy {
     public static final String BUILDING_NS = BuildingStrategy.class.getName();
     private static final String RESOURCE_BUNDLE = BuildingStrategy.class.getName();
 
-    /**
-     * Attribute ids
-     */
+    //todo buiding attributes
+
     public static final long DISTRICT = 500;
     public static final long BUILDING_ADDRESS = 501;
     private static final long BUILDING_CODE = 502;
