@@ -250,7 +250,7 @@ public class ApartmentCardStrategy extends TemplateStrategy {
     private void setEditedByUserId(DomainObject apartmentCard) {
         long userId = sessionBean.getCurrentUserId();
 //        StringValueUtil.getSystemStringValue(apartmentCard.getAttribute(EDITED_BY_USER_ID).getStringValues()).
-//                setValue(String.valueOf(userId));
+//                setValueId(String.valueOf(userId));
     }
 
 

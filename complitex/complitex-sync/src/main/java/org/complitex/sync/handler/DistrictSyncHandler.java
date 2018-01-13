@@ -7,18 +7,16 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.util.DateUtil;
+import org.complitex.common.service.ModuleBean;
+import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.ShowMode;
+import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.DistrictCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
 import org.complitex.sync.service.DomainSyncBean;
-import org.complitex.sync.service.IDomainSyncHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -27,18 +25,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static org.complitex.common.entity.FilterWrapper.of;
-import static org.complitex.sync.entity.DomainSyncStatus.*;
-import static org.complitex.sync.entity.SyncEntity.DISTRICT;
-
 /**
  * @author Anatoly Ivanov
  * Date: 17.07.2014 23:34
  */
 @Stateless
 public class DistrictSyncHandler implements IDomainSyncHandler {
-    private Logger log = LoggerFactory.getLogger(DistrictSyncHandler.class);
-
     @EJB
     private DomainSyncBean domainSyncBean;
 
@@ -57,6 +49,9 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     @EJB
     private AddressCorrectionBean addressCorrectionBean;
 
+    @EJB
+    private ModuleBean moduleBean;
+
     @Override
     public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
         return cityStrategy.getList(new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name()));
@@ -70,107 +65,55 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public void sync(Long parentObjectId) {
-        Long organizationId = addressSyncAdapter.getOrganization().getObjectId();
+    public List<DistrictCorrection> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId) {
+        return addressCorrectionBean.getDistrictCorrections(parentObjectId, externalId, null, null,
+                organizationId,null);
+    }
 
-        //sync
-        domainSyncBean.getList(of(new DomainSync(DISTRICT, LOADED, parentObjectId))).forEach(ds -> {
-            List<DistrictCorrection> corrections = addressCorrectionBean.getDistrictCorrections(ds.getParentObjectId(),
-                    ds.getExternalId(), null, null, organizationId,null);
+    @Override
+    public void update(Correction correction) {
+        addressCorrectionBean.save((DistrictCorrection) correction);
+    }
 
-            if (!corrections.isEmpty()){
-                DistrictCorrection correction = corrections.get(0);
+    @Override
+    public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        return Objects.equals(domainSync.getName(), domainObject.getStringValue(DistrictStrategy.NAME)) &&
+                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getAlternativeLocale()));
+    }
 
-                if (!Objects.equals(correction.getCorrection(), ds.getName())){
-                    correction.setCorrection(ds.getName());
+    @Override
+    public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        domainObject.setParentEntityId(DistrictStrategy.PARENT_ENTITY_ID);
+        domainObject.setParentId(domainSync.getParentObjectId());
+        domainObject.setStringValue(DistrictStrategy.CODE, domainSync.getAdditionalExternalId());
+        domainObject.setStringValue(DistrictStrategy.NAME, domainSync.getName());
+        domainObject.setStringValue(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());
+    }
 
-                    addressCorrectionBean.save(correction);
+    @Override
+    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
+        return districtStrategy.getList(
+                new DomainObjectFilter()
+                        .setStatus(ShowMode.ACTIVE.name())
+                        .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
+                        .setParentEntity("city")
+                        .setParentId(domainSync.getParentObjectId())
+                        .addAttribute(DistrictStrategy.NAME, domainSync.getName())
+                        .addAttribute(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+    }
 
-                    log.info("sync: update correction name {}", correction);
-                }
+    @Override
+    public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        DistrictCorrection districtCorrection = new DistrictCorrection(domainObject.getParentId(), domainSync.getExternalId(),
+                domainObject.getObjectId(), domainSync.getName(), organizationId, null, moduleBean.getModuleId());
 
-                DomainObject domainObject = districtStrategy.getDomainObject(correction.getObjectId());
+        addressCorrectionBean.insert(districtCorrection);
 
-                if (Objects.equals(ds.getName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getSystemLocale())) &&
-                        Objects.equals(ds.getAdditionalName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getAlternativeLocale()))){
-                    ds.setStatus(SYNCHRONIZED);
-                    domainSyncBean.updateStatus(ds);
-                }else{
-                    List<DistrictCorrection> objectCorrections = addressCorrectionBean.getDistrictCorrections(null,
-                            null, domainObject.getObjectId(), null, organizationId, null);
+        return districtCorrection;
+    }
 
-                    if (objectCorrections.size() == 1 && objectCorrections.get(0).getId().equals(correction.getId())){
-                        domainObject.setStringValue(DistrictStrategy.CODE, ds.getAdditionalExternalId());
-                        domainObject.setStringValue(DistrictStrategy.NAME, ds.getName(), Locales.getSystemLocale());
-                        domainObject.setStringValue(DistrictStrategy.NAME, ds.getAltName(), Locales.getAlternativeLocale());
-
-                        districtStrategy.update(domainObject);
-
-                        log.info("sync: update domain object {}", domainObject);
-                    }else {
-                        ds.setStatus(DEFERRED);
-                        domainSyncBean.updateStatus(ds);
-                    }
-                }
-            }else {
-                List<? extends DomainObject> domainObjects = districtStrategy.getList(
-                        new DomainObjectFilter("district")
-                                .setStatus(ShowMode.ACTIVE.name())
-                                .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
-                                .setParentEntity("city")
-                                .setParentId(ds.getParentObjectId())
-                                .addAttribute(DistrictStrategy.NAME, ds.getName(), Locales.getSystemLocaleId())
-                                .addAttribute(DistrictStrategy.NAME, ds.getAltName(), Locales.getAlternativeLocaleId()));
-
-                DomainObject domainObject;
-
-                if (!domainObjects.isEmpty()){
-                    domainObject = domainObjects.get(0);
-
-                    for (int i = 1; i < domainObjects.size(); ++i){
-                        districtStrategy.disable(domainObjects.get(i));
-
-                        log.info("sync: disable domain object {}", domainObjects.get(i));
-                    }
-                }else{
-                    domainObject = districtStrategy.newInstance();
-
-                    domainObject.setParentEntityId(DistrictStrategy.PARENT_ENTITY_ID);
-                    domainObject.setParentId(ds.getParentObjectId());
-                    domainObject.setStringValue(DistrictStrategy.CODE, ds.getAdditionalExternalId());
-                    domainObject.setStringValue(DistrictStrategy.NAME, ds.getName(), Locales.getSystemLocale());
-                    domainObject.setStringValue(DistrictStrategy.NAME, ds.getAltName(), Locales.getAlternativeLocale());
-
-                    districtStrategy.insert(domainObject, DateUtil.getCurrentDate());
-
-                    log.info("sync: add domain object {}", domainObject);
-                }
-
-                DistrictCorrection correction = new DistrictCorrection(domainObject.getParentId(), ds.getExternalId(),
-                        domainObject.getObjectId(), ds.getName(), organizationId, null, 0L);
-
-                addressCorrectionBean.insert(correction);
-
-                log.info("sync: add correction {}", correction);
-
-                ds.setStatus(SYNCHRONIZED);
-                domainSyncBean.updateStatus(ds);
-            }
-        });
-
-        //clear
-        addressCorrectionBean.getDistrictCorrections(parentObjectId, null, null, null, organizationId, null).forEach(c -> {
-            if (domainSyncBean.getList(FilterWrapper.of(new DomainSync(c.getCityId(), c.getExternalId()))).isEmpty()){
-                addressCorrectionBean.delete(c);
-
-                log.info("sync: delete correction {}", c);
-            }
-        });
-
-        //deferred
-        domainSyncBean.getList(of(new DomainSync(DISTRICT, DEFERRED, parentObjectId))).forEach(ds -> {
-
-
-        });
+    @Override
+    public IStrategy getStrategy() {
+        return districtStrategy;
     }
 }

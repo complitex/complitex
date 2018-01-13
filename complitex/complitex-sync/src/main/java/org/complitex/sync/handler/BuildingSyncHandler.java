@@ -11,12 +11,13 @@ import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.ShowMode;
+import org.complitex.correction.entity.Correction;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
 import org.complitex.sync.service.DomainSyncBean;
-import org.complitex.sync.service.IDomainSyncHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,12 +105,46 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         }
     }
 
+    @Override
+    public List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId) {
+        return null;
+    }
+
+    @Override
+    public void update(Correction correction) {
+
+    }
+
+    @Override
+    public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        return false;
+    }
+
+    @Override
+    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
+        return null;
+    }
+
+    @Override
+    public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        return null;
+    }
+
+    @Override
+    public IStrategy getStrategy() {
+        return null;
+    }
+
+    @Override
+    public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+
+    }
 
 
     public void insert(DomainSync sync) {
         Building building = buildingStrategy.newInstance();
 //        building.setExternalId(sync.getUniqueExternalId());
-        building.setValue(BuildingStrategy.DISTRICT, sync.getAdditionalParentId());
+        building.setValueId(BuildingStrategy.DISTRICT, sync.getAdditionalParentId());
 
         Long organizationId = organizationStrategy.getObjectIdByCode(sync.getServicingOrganization());
 

@@ -41,10 +41,11 @@ public class DomainSync implements ILongId {
         this.status = status;
     }
 
-    public DomainSync(SyncEntity type, DomainSyncStatus status, Long parentObjectId) {
+    public DomainSync(SyncEntity type, DomainSyncStatus status, Long parentObjectId, Long externalId) {
         this.type = type;
         this.status = status;
         this.parentObjectId = parentObjectId;
+        this.externalId = externalId;
     }
 
     public Long getId() {

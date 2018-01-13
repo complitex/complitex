@@ -4,12 +4,16 @@ import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.ConfigBean;
+import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.service.ModuleBean;
+import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
+import org.complitex.common.web.component.ShowMode;
+import org.complitex.correction.entity.Correction;
+import org.complitex.correction.entity.StreetTypeCorrection;
+import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
-import org.complitex.sync.service.DomainSyncBean;
-import org.complitex.sync.service.IDomainSyncHandler;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -25,16 +29,16 @@ import java.util.Objects;
 @Stateless
 public class StreetTypeSyncHandler implements IDomainSyncHandler {
     @EJB
-    private ConfigBean configBean;
-
-    @EJB
     private StreetTypeStrategy streetTypeStrategy;
 
     @EJB
     private DomainSyncAdapter addressSyncAdapter;
 
     @EJB
-    private DomainSyncBean addressSyncBean;
+    private AddressCorrectionBean addressCorrectionBean;
+
+    @EJB
+    private ModuleBean moduleBean;
 
     @Override
     public Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException {
@@ -46,42 +50,56 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
         return null;
     }
 
-    public boolean isEqualNames(DomainSync sync, DomainObject object) {
-        return Objects.equals(sync.getName(), streetTypeStrategy.getName(object))
-                && Objects.equals(sync.getAdditionalName(), streetTypeStrategy.getShortName(object))
-                && Objects.equals(sync.getAltName(), streetTypeStrategy.getName(object, Locales.getAlternativeLocale()))
-                && Objects.equals(sync.getAltAdditionalName(), streetTypeStrategy.getShortName(object, Locales.getAlternativeLocale()));
-    }
-
-
-    public boolean hasEqualNames(DomainSync sync, DomainObject object) {
-        return sync.getName().equals(streetTypeStrategy.getName(object))
-                || sync.getAdditionalName().equals(streetTypeStrategy.getShortName(object));
-    }
-
-
-    public void insert(DomainSync sync) {
-        DomainObject domainObject = streetTypeStrategy.newInstance();
-
-        //external id
-//        domainObject.setExternalId(sync.getExternalId());
-
-        //name
-        domainObject.setStringValue(StreetTypeStrategy.NAME, sync.getName());
-        domainObject.setStringValue(StreetTypeStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
-
-        //short name
-        domainObject.setStringValue(StreetTypeStrategy.SHORT_NAME, sync.getAdditionalName());
-        domainObject.setStringValue(StreetTypeStrategy.SHORT_NAME, sync.getAltAdditionalName(), Locales.getAlternativeLocale());
-
-
-        streetTypeStrategy.insert(domainObject, sync.getDate());
-        addressSyncBean.delete(sync.getId());
+    @Override
+    public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        return Objects.equals(domainSync.getName(), streetTypeStrategy.getName(domainObject))
+                && Objects.equals(domainSync.getAdditionalName(), streetTypeStrategy.getShortName(domainObject))
+                && Objects.equals(domainSync.getAltName(), streetTypeStrategy.getName(domainObject, Locales.getAlternativeLocale()))
+                && Objects.equals(domainSync.getAltAdditionalName(), streetTypeStrategy.getShortName(domainObject, Locales.getAlternativeLocale()));
     }
 
     @Override
-    public void sync(Long parentId) {
-
+    public List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId) {
+        return addressCorrectionBean.getStreetTypeCorrections(externalId, objectId, organizationId);
     }
 
+    @Override
+    public void update(Correction correction) {
+        addressCorrectionBean.save((StreetTypeCorrection) correction);
+    }
+
+    @Override
+    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
+        return streetTypeStrategy.getList(
+                new DomainObjectFilter()
+                        .setStatus(ShowMode.ACTIVE.name())
+                        .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
+                        .addAttribute(StreetTypeStrategy.NAME, domainSync.getName())
+                        .addAttribute(StreetTypeStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId())
+                        .addAttribute(StreetTypeStrategy.SHORT_NAME, domainSync.getAdditionalName())
+                        .addAttribute(StreetTypeStrategy.SHORT_NAME, domainSync.getAltAdditionalName(), Locales.getAlternativeLocaleId()));
+    }
+
+    @Override
+    public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        StreetTypeCorrection correction = new StreetTypeCorrection(domainSync.getExternalId(), domainObject.getObjectId(),
+                domainSync.getName(), organizationId, null, moduleBean.getModuleId());
+
+        addressCorrectionBean.insert(correction);
+
+        return correction;
+    }
+
+    @Override
+    public IStrategy getStrategy() {
+        return streetTypeStrategy;
+    }
+
+    @Override
+    public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        domainObject.setStringValue(StreetTypeStrategy.NAME, domainSync.getName());
+        domainObject.setStringValue(StreetTypeStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());
+        domainObject.setStringValue(StreetTypeStrategy.SHORT_NAME, domainSync.getAdditionalName());
+        domainObject.setStringValue(StreetTypeStrategy.SHORT_NAME, domainSync.getAltAdditionalName(), Locales.getAlternativeLocale());
+    }
 }

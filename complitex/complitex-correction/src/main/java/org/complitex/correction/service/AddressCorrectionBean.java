@@ -149,6 +149,11 @@ public class AddressCorrectionBean extends CorrectionBean {
                 userOrganizationId, null)));
     }
 
+    public List<StreetTypeCorrection> getStreetTypeCorrections(Long externalId, Long objectId, Long organizationId) {
+        return getStreetTypeCorrections(FilterWrapper.of(new StreetTypeCorrection(externalId, objectId, null,
+                organizationId, null, null)));
+    }
+
     public List<StreetTypeCorrection> getStreetTypeCorrections(String correction, Long organizationId, Long userOrganizationId) {
         return getStreetTypeCorrections(null, correction, organizationId, userOrganizationId);
     }
@@ -170,6 +175,10 @@ public class AddressCorrectionBean extends CorrectionBean {
         super.save(streetTypeCorrection);
 
         return true;
+    }
+
+    public void insert(StreetTypeCorrection streetTypeCorrection){
+        super.save(streetTypeCorrection);
     }
 
     public List<Long> getStreetTypeIds(String streetType) {
@@ -214,10 +223,18 @@ public class AddressCorrectionBean extends CorrectionBean {
 
     public void save(StreetCorrection streetCorrection) {
         if (streetCorrection.getId() == null) {
-            sqlSession().insert(NS + ".insertStreetCorrection", streetCorrection);
+            insert(streetCorrection);
         }else {
-            sqlSession().update(NS + ".updateStreetCorrection", streetCorrection);
+            update(streetCorrection);
         }
+    }
+
+    public void insert(StreetCorrection streetCorrection){
+        sqlSession().insert(NS + ".insertStreetCorrection", streetCorrection);
+    }
+
+    public void update(StreetCorrection streetCorrection){
+        sqlSession().update(NS + ".updateStreetCorrection", streetCorrection);
     }
 
     public List<StreetCorrection> getStreetCorrectionsByBuilding(Long internalStreetId, Long internalBuildingId,

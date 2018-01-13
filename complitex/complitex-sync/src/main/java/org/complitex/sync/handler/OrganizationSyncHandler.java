@@ -4,12 +4,13 @@ import org.complitex.address.exception.RemoteCallException;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.correction.entity.Correction;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
 import org.complitex.sync.service.DomainSyncBean;
-import org.complitex.sync.service.IDomainSyncHandler;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -43,6 +44,41 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
         return null;
     }
 
+    @Override
+    public List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId) {
+        return null;
+    }
+
+    @Override
+    public void update(Correction correction) {
+
+    }
+
+    @Override
+    public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        return false;
+    }
+
+    @Override
+    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
+        return null;
+    }
+
+    @Override
+    public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        return null;
+    }
+
+    @Override
+    public IStrategy getStrategy() {
+        return null;
+    }
+
+    @Override
+    public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+
+    }
+
     public void insert(DomainSync sync) {
         DomainObject domainObject = organizationStrategy.newInstance();
 
@@ -60,9 +96,5 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
         domainSyncBean.delete(sync.getId());
     }
 
-    @Override
-    public void sync(Long parentId) {
-
-    }
 
 }

@@ -4,12 +4,10 @@ import org.complitex.address.resource.CommonResources;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Locale;
@@ -18,19 +16,10 @@ import java.util.Map;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.wicket.util.string.Strings.isEmpty;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 public class StreetTypeStrategy extends TemplateStrategy {
-
-    @EJB
-    private StringValueBean stringBean;
-    /*
-     * Attribute type ids
-     */
     public static final long SHORT_NAME = 1400;
+
     public static final long NAME = 1401;
 
     @Override

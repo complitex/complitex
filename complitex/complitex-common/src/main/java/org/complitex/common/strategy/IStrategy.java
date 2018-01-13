@@ -35,6 +35,8 @@ public interface IStrategy {
     void enable(DomainObject object);
 
     DomainObject getDomainObject(Long id, boolean runAsAdmin);
+
+    DomainObject getDomainObject(Long id);
     
     DomainObject getDomainObject(String dataSource, Long id, boolean runAsAdmin);
 

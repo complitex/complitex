@@ -3,26 +3,28 @@ package org.complitex.sync.handler;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
+import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
-import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.service.ConfigBean;
+import org.complitex.common.service.ModuleBean;
+import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.ShowMode;
+import org.complitex.correction.entity.Correction;
+import org.complitex.correction.entity.StreetCorrection;
+import org.complitex.correction.entity.StreetTypeCorrection;
+import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
-import org.complitex.sync.service.DomainSyncBean;
-import org.complitex.sync.service.IDomainSyncHandler;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import static org.complitex.address.strategy.street.StreetStrategy.STREET_CODE;
+import java.util.Objects;
 
 /**
  * @author Anatoly Ivanov
@@ -30,8 +32,6 @@ import static org.complitex.address.strategy.street.StreetStrategy.STREET_CODE;
  */
 @Stateless
 public class StreetSyncHandler implements IDomainSyncHandler {
-    @EJB
-    private ConfigBean configBean;
 
     @EJB
     private DomainSyncAdapter domainSyncAdapter;
@@ -46,10 +46,10 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     private StreetStrategy streetStrategy;
 
     @EJB
-    private StreetTypeStrategy streetTypeStrategy;
+    private AddressCorrectionBean addressCorrectionBean;
 
     @EJB
-    private DomainSyncBean domainSyncBean;
+    private ModuleBean moduleBean;
 
     @Override
     public Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException {
@@ -69,38 +69,73 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         return cityStrategy.getList(new DomainObjectFilter());
     }
 
-
-    public void insert(DomainSync sync) {
-        if (false){ //todo
-            DomainObject oldStreet = null;//streetStrategy.getDomainObject(sync.getObjectId());
-            DomainObject street = null;//streetStrategy.getDomainObject(sync.getObjectId());
-
-            street.addAttribute(STREET_CODE, Long.valueOf(sync.getExternalId()));
-
-            streetStrategy.update(oldStreet, street, sync.getDate());
-            domainSyncBean.delete(sync.getId());
-        }else{
-            DomainObject newObject = streetStrategy.newInstance();
-
-            //name
-            newObject.setStringValue(StreetStrategy.NAME, sync.getName());
-            newObject.setStringValue(StreetStrategy.NAME, sync.getAltName(), Locales.getAlternativeLocale());
-
-            //CITY_ID
-            newObject.setParentEntityId(StreetStrategy.PARENT_ENTITY_ID);
-            newObject.setParentId(sync.getParentId());
-
-            //STREET_TYPE_ID
-            Long streetTypeId = null;//streetTypeStrategy.getObjectId(sync.getAdditionalExternalId());
-
-            if (streetTypeId == null) {
-                throw new RuntimeException("StreetType not found: " + sync);
-            }
-            newObject.setValue(StreetStrategy.STREET_TYPE, streetTypeId);
-
-            streetStrategy.insert(newObject, sync.getDate());
-            domainSyncBean.delete(sync.getId());
-        }
+    @Override
+    public List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId) {
+        return addressCorrectionBean.getStreetCorrections(parentObjectId, null, externalId, objectId, null,
+                organizationId, null);
     }
 
+    @Override
+    public void update(Correction correction) {
+        addressCorrectionBean.save((StreetCorrection) correction);
+    }
+
+    @Override
+    public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
+                domainSync.getAdditionalParentId(), null, organizationId);
+
+        if (streetTypeCorrections.isEmpty()) {
+            throw new RuntimeException("street type correction not found" + domainSync);
+        }
+
+        return Objects.equals(domainObject.getValueId(StreetStrategy.STREET_TYPE), streetTypeCorrections.get(0).getObjectId()) &&
+                Objects.equals(domainSync.getName(), domainObject.getStringValue(DistrictStrategy.NAME)) &&
+                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getAlternativeLocale()));
+    }
+
+    @Override
+    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
+        return streetStrategy.getList(
+                new DomainObjectFilter()
+                        .setStatus(ShowMode.ACTIVE.name())
+                        .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
+                        .setParentEntity("city")
+                        .setParentId(domainSync.getParentObjectId())
+                        .addAttribute(DistrictStrategy.NAME, domainSync.getName())
+                        .addAttribute(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+    }
+
+    @Override
+    public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        StreetCorrection streetCorrection = new StreetCorrection(domainObject.getParentId(),
+                domainObject.getValueId(StreetStrategy.STREET_TYPE), domainSync.getExternalId(),
+                domainObject.getObjectId(), domainSync.getName(), organizationId, null, moduleBean.getModuleId());
+
+        addressCorrectionBean.insert(streetCorrection);
+
+        return streetCorrection;
+    }
+
+    @Override
+    public IStrategy getStrategy() {
+        return streetStrategy;
+    }
+
+    @Override
+    public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
+                domainSync.getAdditionalParentId(), null, organizationId);
+
+        if (streetTypeCorrections.isEmpty()) {
+            throw new RuntimeException("street type correction not found" + domainSync);
+        }
+
+        domainObject.setParentEntityId(StreetStrategy.PARENT_ENTITY_ID);
+        domainObject.setParentId(domainSync.getParentObjectId());
+        domainObject.setValueId(StreetStrategy.STREET_TYPE, streetTypeCorrections.get(0).getObjectId());
+        domainObject.setStringValue(StreetStrategy.STREET_CODE, domainSync.getAdditionalExternalId());
+        domainObject.setStringValue(StreetStrategy.NAME, domainSync.getName());
+        domainObject.setStringValue(StreetStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());
+    }
 }

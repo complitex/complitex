@@ -161,20 +161,20 @@ public class DomainObject implements ILongId {
         return attribute != null ? attribute.getValueId() : null;
     }
 
-    public void setValue(Long entityAttributeId, Long value){
+    public void setValueId(Long entityAttributeId, Long value){
         getAttribute(entityAttributeId).setValueId(value);
     }
 
-    public <T> void setValue(Long entityAttributeId, T value, IConverter<T> converter){
+    public <T> void setValueId(Long entityAttributeId, T value, IConverter<T> converter){
         setStringValue(entityAttributeId, converter.toString(value));
     }
 
     public void setDateValue(Long entityAttributeId, Date value){
-        setValue(entityAttributeId, value, new DateConverter());
+        setValueId(entityAttributeId, value, new DateConverter());
     }
 
     public void setBooleanValue(Long entityAttributeId, Boolean value){
-        setValue(entityAttributeId, value, new BooleanConverter());
+        setValueId(entityAttributeId, value, new BooleanConverter());
     }
 
     @Override

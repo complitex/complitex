@@ -151,7 +151,7 @@ public class RegistrationStrategy extends DomainObjectStrategy {
     private void setEditedByUserId(DomainObject registration) {
 //        long userId = sessionBean.getCurrentUserId();
 //        StringValueUtil.getSystemStringValue(registration.getAttribute(EDITED_BY_USER_ID).getStringValues()).
-//                setValue(String.valueOf(userId));
+//                setValueId(String.valueOf(userId));
     }
 
 

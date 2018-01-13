@@ -230,7 +230,7 @@ public class PersonResource {
             person.setDocument(document);
         }
 
-        document.setValue(DocumentStrategy.DOCUMENT_TYPE, documentModel.getTypeId());
+        document.setValueId(DocumentStrategy.DOCUMENT_TYPE, documentModel.getTypeId());
         document.setStringValue(DocumentStrategy.DOCUMENT_SERIES, documentModel.getSeries());
         document.setStringValue(DocumentStrategy.DOCUMENT_NUMBER, documentModel.getNumber());
         document.setStringValue(DocumentStrategy.ORGANIZATION_ISSUED, documentModel.getOrganization());
