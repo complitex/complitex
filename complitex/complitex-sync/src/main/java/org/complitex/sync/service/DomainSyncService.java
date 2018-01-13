@@ -181,6 +181,7 @@ public class DomainSyncService {
         processing.set(true);
         cancelSync.set(false);
 
+        broadcastService.broadcast(getClass(), "info", "Начата синхронизация");
         log.info("sync: begin");
 
         Long organizationId = addressSyncAdapter.getOrganization().getObjectId();
@@ -250,6 +251,8 @@ public class DomainSyncService {
                 ds.setStatus(SYNCHRONIZED);
                 domainSyncBean.updateStatus(ds);
             }
+
+            broadcastService.broadcast(getClass(), "processed", ds);
         });
 
         //clear
