@@ -132,8 +132,6 @@ public class DomainSyncService {
             return;
         }
 
-        domainSyncBean.delete(syncEntity);
-
         Cursor<DomainSync> cursor = getHandler(syncEntity).getCursorDomainSyncs(parent, date);
 
         SyncBeginMessage message = new SyncBeginMessage();
