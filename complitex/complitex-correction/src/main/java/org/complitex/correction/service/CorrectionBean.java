@@ -3,9 +3,12 @@ package org.complitex.correction.service;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.correction.entity.Correction;
 
+import javax.ejb.Stateless;
+
 /**
  * @author inheaven on 002 02.02.15 18:11
  */
+@Stateless
 public class CorrectionBean extends AbstractBean{
     public static final String CORRECTION_NS = CorrectionBean.class.getName();
 

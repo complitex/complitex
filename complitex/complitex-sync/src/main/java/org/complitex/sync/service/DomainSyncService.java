@@ -61,9 +61,6 @@ public class DomainSyncService {
     private DomainSyncAdapter addressSyncAdapter;
 
     @EJB
-    private DistrictSyncHandler districtSyncHandler;
-
-    @EJB
     private CorrectionBean correctionBean;
 
     private AtomicBoolean processing = new AtomicBoolean(false);
@@ -170,6 +167,8 @@ public class DomainSyncService {
             }
 
             domainSyncBean.insert(s);
+
+            broadcastService.broadcast(getClass(), "processed", s);
         });
     }
 
@@ -177,11 +176,11 @@ public class DomainSyncService {
         return domainSyncBean.getList(of(new DomainSync(syncEntity, syncStatus, parentObjectId, externalId)));
     }
 
+    @Asynchronous
     public void sync(Long parentObjectId, SyncEntity syncEntity){
         processing.set(true);
         cancelSync.set(false);
 
-        broadcastService.broadcast(getClass(), "info","Начата синхронизация");
         log.info("sync: begin");
 
         Long organizationId = addressSyncAdapter.getOrganization().getObjectId();
