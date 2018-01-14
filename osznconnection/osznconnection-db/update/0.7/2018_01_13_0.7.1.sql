@@ -56,6 +56,9 @@ create procedure ref_building()
     declare b_object_id bigint;
     declare b_parent_id bigint;
 
+    declare a_parent_id bigint;
+    declare a_parent_entity_id bigint;
+
     open b_cursor;
 
     b_loop: loop
@@ -70,14 +73,17 @@ create procedure ref_building()
       update building_attribute set entity_attribute_id = 505 where entity_attribute_id = 501 and object_id = b_object_id;
 
       call copy_building_attribute(b_object_id, 500, b_parent_id, 1500);
+      call copy_building_attribute(b_object_id, 501, b_parent_id, 1501);
+      call copy_building_attribute(b_object_id, 502, b_parent_id, 1502);
+
+      select parent_id, parent_entity_id from building_address where object_id = b_parent_id into a_parent_id, a_parent_entity_id;
+      update building set parent_id = a_parent_id, parent_entity_id = a_parent_entity_id;
+
     end loop;
 
     close b_cursor;
 
   end//
-
-
-
 
 delimiter ;
 
@@ -85,7 +91,6 @@ call ref_building();
 
 drop procedure copy_building_attribute;
 drop procedure ref_building;
-
 
 delete from entity_attribute where entity_id = 1500;
 delete from entity_string_value where id in (1500, 1501, 1502, 1503);
