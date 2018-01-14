@@ -3,11 +3,6 @@ delimiter //
 create procedure copy_building_attribute(b_object_id bigint, b_entity_attribute_id bigint,
                                        a_object_id bigint, a_entity_attribute_id bigint)
   begin
-    declare done int default false;
-    declare baa_cursor cursor for select attribute_id, value_id, start_date, end_date, status
-      from building_address_attribute where object_id = a_object_id and entity_attribute_id = a_entity_attribute_id;
-    declare continue handler for not found set done = true;
-
     declare baa_attribute_id bigint;
     declare baa_value_id bigint;
     declare baa_start_date timestamp;
@@ -16,6 +11,11 @@ create procedure copy_building_attribute(b_object_id bigint, b_entity_attribute_
 
     declare next_value_id bigint;
     declare a_value varchar(1000);
+
+    declare done int default false;
+    declare baa_cursor cursor for select attribute_id, value_id, start_date, end_date, status
+      from building_address_attribute where object_id = a_object_id and entity_attribute_id = a_entity_attribute_id;
+    declare continue handler for not found set done = true;
 
     open baa_cursor;
 
@@ -27,14 +27,14 @@ create procedure copy_building_attribute(b_object_id bigint, b_entity_attribute_
       end if;
 
       update `sequence` s set s.`sequence_value` = s.`sequence_value` + 1 where s.`sequence_name` = 'building_string_value';
-      select s.`sequence_value` from `sequence` s where s.`sequence_name` = 'building_string_valuee' into next_value_id for update;
+      select s.`sequence_value` from `sequence` s where s.`sequence_name` = 'building_string_value' into next_value_id;
 
-      set a_value = (select `value` from building_address_string_value where id = baa_value_id and locale_id = 1);
+      select `value` from building_address_string_value where id = baa_value_id and locale_id = 1 into a_value;
       if (a_value is not null) then
         insert into building_string_value(id, locale_id, value) value (next_value_id, 1, a_value);
       end if;
 
-      set a_value = (select `value` from building_address_string_value where id = baa_value_id and locale_id = 2);
+      select `value` from building_address_string_value where id = baa_value_id and locale_id = 2 into a_value;
       if (a_value is not null) then
         insert into building_string_value(id, locale_id, value) value (next_value_id, 2, a_value);
       end if;
@@ -49,15 +49,17 @@ create procedure copy_building_attribute(b_object_id bigint, b_entity_attribute_
 
 create procedure ref_building()
   begin
-    declare done int default false;
-    declare b_cursor cursor for select object_id, parent_id from building where parent_entity_id = 1500;
-    declare continue handler for not found set done = true;
-
     declare b_object_id bigint;
     declare b_parent_id bigint;
 
     declare a_parent_id bigint;
     declare a_parent_entity_id bigint;
+
+    declare done int default false;
+    declare b_cursor cursor for select object_id, parent_id from building where parent_entity_id = 1500;
+    declare continue handler for not found set done = true;
+
+    set foreign_key_checks=0;
 
     open b_cursor;
 
@@ -92,12 +94,18 @@ call ref_building();
 drop procedure copy_building_attribute;
 drop procedure ref_building;
 
+set foreign_key_checks=0;
+
+delete from entity_string_value where id in (501, 502, 503);
+delete from entity_attribute where entity_id = 500;
+
 delete from entity_attribute where entity_id = 1500;
 delete from entity_string_value where id in (1500, 1501, 1502, 1503);
 delete from entity where id = 1500;
 
-delete from entity_string_value where id in (501, 502, 503);
-delete from entity_attribute where entity_id = 500;
+drop table building_address;
+drop table building_address_attribute;
+drop table building_address_string_value;
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (501, 1, UPPER('Номер дома')), (501, 2, UPPER('Номер будинку'));
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (500, 500, 1, 501, 1, 0);
@@ -114,6 +122,5 @@ INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (505, 1, UPPER('Список кодов дома')), (505, 2, UPPER('Список кодов дома'));
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (504, 500, 0, 505, 1, 20);
-
 
 INSERT INTO `update` (`version`) VALUE ('20180113_0.7.1');
