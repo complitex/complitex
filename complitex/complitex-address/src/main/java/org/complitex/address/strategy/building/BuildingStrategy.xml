@@ -2,12 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.complitex.address.strategy.building.BuildingStrategy">
-    <resultMap id="buildingResultMap" type="org.complitex.address.strategy.building.entity.Building"
-               extends="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
-    </resultMap>
-
     <select id="selectBuildings" parameterType="org.complitex.common.entity.DomainObjectFilter"
-            resultMap="buildingResultMap">
+            resultMap="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
         SELECT DISTINCT e.`object_id`, e.`start_date`, e.`end_date`, e.`status`, e.`parent_id`, e.`parent_entity_id`,
           e.`permission_id`
         FROM `building` e WHERE
@@ -21,7 +17,7 @@
     </select>
 
     <select id="selectBuildingById" parameterType="org.complitex.common.entity.DomainObjectFilter"
-            resultMap="buildingResultMap">
+            resultMap="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
         SELECT e.* FROM `${entityName}` e WHERE (e.`status` IN (1, 0)) AND e.`object_id` = #{objectId}
             <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
     </select>
@@ -71,7 +67,7 @@
     </select>
 
     <select id="selectHistoryObject" parameterType="org.complitex.common.entity.DomainObjectFilter"
-            resultMap="buildingResultMap">
+            resultMap="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
         <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlSelectHistoryObject"/>
     </select>
 
@@ -291,7 +287,8 @@
         </if>
     </sql>
 
-    <select id="selectBuildingAddresses" parameterType="org.complitex.common.entity.DomainObjectFilter"
+    <!--todo dev-->
+    <select id="selectBuildingAddresses2" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap" >
         SELECT e.*
         FROM `building_address` e
