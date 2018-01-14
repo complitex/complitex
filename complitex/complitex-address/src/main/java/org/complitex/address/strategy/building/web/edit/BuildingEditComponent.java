@@ -4,10 +4,8 @@ import com.google.common.collect.ImmutableList;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -18,7 +16,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.building.entity.BuildingCode;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
@@ -38,6 +35,7 @@ import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 
 import javax.ejb.EJB;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -86,7 +84,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
         IStrategy buildingStrategy = strategyFactory.getStrategy(getBuildingStrategyName(), "building");
         IStrategy districtStrategy = strategyFactory.getStrategy("district");
 
-        final Building building = (Building) getDomainObject();
+         DomainObject building = getDomainObject();
 
         final boolean enabled = !isDisabled() && DomainObjectAccessUtil.canEdit(getBuildingStrategyName(),
                 "building", building);
@@ -108,7 +106,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
                 super.put(entity, object);
 
                 if ("district".equals(entity)) {
-                    building.setDistrict(object);
+//                    building.setDistrict(object);
                 }
                 return object;
             }
@@ -128,15 +126,14 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
         districtContainer.setVisible(districtAttribute != null);
 
         //primary building address
-        final DomainObject primaryBuildingAddress = building.getPrimaryAddress();
-        DomainObjectInputPanel primaryAddressPanel = new DomainObjectInputPanel("primaryAddress", primaryBuildingAddress,
+        DomainObjectInputPanel primaryAddressPanel = new DomainObjectInputPanel("primaryAddress", building,
                 "building_address", null, getInputPanel().getParentId(), getInputPanel().getParentEntity(), getInputPanel().getDate()) {
 
             @Override
             public SearchComponentState initParentSearchComponentState() {
                 SearchComponentState primaryAddressComponentState = super.initParentSearchComponentState();
 
-                if (primaryBuildingAddress.getObjectId() == null) {
+                if (building.getObjectId() == null) {
                     primaryAddressComponentState.updateState(parentSearchComponentState);
                 }
                 return primaryAddressComponentState;
@@ -144,63 +141,13 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
         };
         attributesContainer.add(primaryAddressPanel);
 
-        //alternative addresses
-        ListView<DomainObject> alternativeAdresses = new AjaxRemovableListView<DomainObject>("alternativeAdresses",
-                building.getAlternativeAddresses()) {
-
-            @Override
-            protected void populateItem(ListItem<DomainObject> item) {
-                final DomainObject address = item.getModelObject();
-
-                DomainObjectInputPanel alternativeAddress = new DomainObjectInputPanel("alternativeAddress", address,
-                        "building_address", null, getInputPanel().getParentId(), getInputPanel().getParentEntity(),
-                        getInputPanel().getDate()) {
-
-                    @Override
-                    public SearchComponentState initParentSearchComponentState() {
-                        SearchComponentState alternativeAddressComponentState = null;
-                        if (address.getObjectId() == null) {
-                            alternativeAddressComponentState = new SearchComponentState();
-                            alternativeAddressComponentState.updateState(parentSearchComponentState);
-                            alternativeAddressComponentState.put("street", null);
-                        } else {
-                            alternativeAddressComponentState = super.initParentSearchComponentState();
-                        }
-                        return alternativeAddressComponentState;
-                    }
-                };
-                item.add(alternativeAddress);
-                addRemoveSubmitLink("remove", findParent(Form.class), item, null, attributesContainer, feedbackPanel).
-                        setVisible(enabled);
-            }
-        };
-        attributesContainer.add(alternativeAdresses);
-
-        AjaxSubmitLink add = new AjaxSubmitLink("add") {
-
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                IStrategy buildingAddressStrategy = strategyFactory.getStrategy("building_address");
-                DomainObject newBuildingAddress = buildingAddressStrategy.newInstance();
-                building.addAlternativeAddress(newBuildingAddress);
-
-                target.add(attributesContainer);
-                target.add(feedbackPanel);
-            }
-
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.add(feedbackPanel);
-            }
-        };
-        add.setVisible(enabled);
-        add(add);
-
         //
         //Building Code
         //
+        List<BuildingCode> buildingCodes = new ArrayList<>();
+
         if (building.getObjectId() == null) { // new building
-            building.getBuildingCodes().add(new BuildingCode());
+            buildingCodes.add(new BuildingCode());
         }
 
         final List<? extends DomainObject> allServicingOrganizations = organizationStrategy.getAllOuterOrganizations(getLocale());
@@ -215,7 +162,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
 
         final WebMarkupContainer buildingOrganizationAssociationsContainer =
                 new WebMarkupContainer("buildingOrganizationAssociationsContainer");
-        buildingOrganizationAssociationsContainer.setVisible(!isDisabled() || !building.getBuildingCodes().isEmpty());
+        buildingOrganizationAssociationsContainer.setVisible(!isDisabled() || !buildingCodes.isEmpty());
         add(buildingOrganizationAssociationsContainer);
 
         final WebMarkupContainer associationsUpdateContainer = new WebMarkupContainer("associationsUpdateContainer");
@@ -223,7 +170,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
         buildingOrganizationAssociationsContainer.add(associationsUpdateContainer);
 
         ListView<BuildingCode> associations =
-                new AjaxRemovableListView<BuildingCode>("associations", building.getBuildingCodes()) {
+                new AjaxRemovableListView<BuildingCode>("associations", buildingCodes) {
 
                     @Override
                     protected void populateItem(ListItem<BuildingCode> item) {
@@ -286,7 +233,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
 
                     @Override
                     protected boolean approveRemoval(ListItem<BuildingCode> item) {
-                        return building.getBuildingCodes().size() > 1;
+                        return buildingCodes.size() > 1;
                     }
                 };
         associationsUpdateContainer.add(associations);
@@ -294,7 +241,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                building.getBuildingCodes().add(new BuildingCode());
+                buildingCodes.add(new BuildingCode());
                 target.add(associationsUpdateContainer);
             }
         };
@@ -320,18 +267,5 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
         } else {
             districtAttribute.setValueId(null);
         }
-    }
-
-    public boolean isBuildingOrganizationAssociationListEmpty() {
-        return ((Building)getDomainObject()).getBuildingCodes().isEmpty();
-    }
-
-    public boolean isBuildingOrganizationAssociationListHasNulls() {
-        for (BuildingCode buildingCode : ((Building)getDomainObject()).getBuildingCodes()) {
-            if (buildingCode == null || buildingCode.getOrganizationId() == null || buildingCode.getBuildingCode() == null) {
-                return true;
-            }
-        }
-        return false;
     }
 }

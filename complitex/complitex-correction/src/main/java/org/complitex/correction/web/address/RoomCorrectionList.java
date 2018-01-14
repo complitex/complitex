@@ -2,7 +2,6 @@ package org.complitex.correction.web.address;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
@@ -89,18 +88,18 @@ public class RoomCorrectionList extends AddressCorrectionList<RoomCorrection> {
         IStrategy cityStrategy = strategyFactory.getStrategy("city");
 
         String apartment = null;
-        Building buildingDomainObject;
+        DomainObject buildingDomainObject;
         if (correction.getApartmentId() == null) {
-            buildingDomainObject = (Building)buildingStrategy.getDomainObject(correction.getBuildingId(), true);
+            buildingDomainObject = buildingStrategy.getDomainObject(correction.getBuildingId(), true);
         } else {
             DomainObject apartmentDomainObject = apartmentStrategy.getDomainObject(correction.getApartmentId(), true);
             apartment = apartmentStrategy.displayDomainObject(apartmentDomainObject, getLocale());
 
-            buildingDomainObject = (Building)buildingStrategy.getDomainObject(apartmentDomainObject.getParentId(), true);
+            buildingDomainObject = buildingStrategy.getDomainObject(apartmentDomainObject.getParentId(), true);
         }
         String building = buildingStrategy.displayDomainObject(buildingDomainObject, getLocale());
 
-        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getPrimaryStreetId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getParentId(), true);
         String street = streetStrategy.displayDomainObject(streetDomainObject, getLocale());
 
         DomainObject cityDomainObject = cityStrategy.getDomainObject(streetDomainObject.getParentId(), true);

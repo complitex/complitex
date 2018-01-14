@@ -1,30 +1,21 @@
 package org.complitex.address.strategy.building.web.edit;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.common.util.Numbers;
 import org.complitex.common.web.component.domain.DomainObjectEditPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
 
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.Locale;
-import java.util.Set;
-
-import static org.complitex.address.strategy.building_address.BuildingAddressStrategy.*;
 
 /**
  *
@@ -52,97 +43,10 @@ public class BuildingValidator implements IValidator {
 
     @Override
     public boolean validate(DomainObject object, DomainObjectEditPanel editPanel) {
-        Building building = (Building) object;
-
-        boolean valid = validateParents(building, editPanel) && validateCity(building, editPanel)
-                && validateStreets(building, editPanel) && validateAdresses(building, editPanel);
-
-        if (valid) {
-            BuildingEditComponent editComponent = getEditComponent(editPanel);
-
-            if (editComponent.isBuildingOrganizationAssociationListEmpty()) {
-                valid = false;
-                editComponent.error(editComponent.getString("building_organization_associations_empty"));
-            } else if (editComponent.isBuildingOrganizationAssociationListHasNulls()) {
-                valid = false;
-                editComponent.error(editComponent.getString("building_organization_associations_has_nulls"));
-            }
-        }
-
-        return valid;
-    }
-
-    private boolean validateCity(Building building, DomainObjectEditPanel editPanel) {
-        boolean valid = true;
-
-        //город для района(если район задан) должен совпадать с городом каждого адреса.
-        DomainObject district = building.getDistrict();
-        if (district != null && district.getObjectId() != null && district.getObjectId() > 0) {
-            Long cityFromDistrict = district.getParentId();
-
-            for (DomainObject address : building.getAllAddresses()) {
-                Long cityFromAddress = getCityId(address);
-                if (!Numbers.isEqual(cityFromDistrict, cityFromAddress)) {
-                    error("city_mismatch_to_district", editPanel);
-                    valid = false;
-                    break;
-                }
-            }
-        }
-
-        //город для главного адреса должен совпадать с городом каждого альтернативного адреса.
-        long primaryCity = getCityId(building.getPrimaryAddress());
-        for (DomainObject alternativeAddress : building.getAlternativeAddresses()) {
-            Long alternativeCity = getCityId(alternativeAddress);
-            if (!Numbers.isEqual(primaryCity, alternativeCity)) {
-                error("city_mismatch_to_city", editPanel);
-                valid = false;
-                break;
-            }
-        }
-
-        //дом который привязан напрямую к городу может иметь только один адрес
-        if (building.getAllAddresses().size() > 1) {
-            for (DomainObject address : building.getAllAddresses()) {
-                Long addressParentEntityId = address.getParentEntityId();
-                if (addressParentEntityId != null && addressParentEntityId.equals(400L)) {
-                    error("more_one_city_address", editPanel);
-                    valid = false;
-                    break;
-                }
-            }
-        }
-
-        return valid;
-    }
-
-    private boolean validateStreets(Building building, DomainObjectEditPanel editPanel) {
-        //все адреса дома должны иметь разные улицы
-        //кол-во адресов:
-        final int addressCount = building.getAllAddresses().size();
-
-        //кол-во улиц:
-        Set<Long> streetIds = Sets.newHashSet();
-        for (DomainObject address : building.getAllAddresses()) {
-            final Long streetId = getStreetId(address);
-            if (streetId != null) {
-                streetIds.add(streetId);
-            }
-        }
-        final int streetCount = streetIds.size();
-
-        if (addressCount == 1 && streetCount == 0) {
-            //дом привязан напрямую к городу.
-            return true;
-        }
-
-        if (addressCount != streetCount) {
-            error("repeating_street", editPanel);
-            return false;
-        }
 
         return true;
     }
+
 
     private Long getCityId(DomainObject address) {
         if (address.getParentEntityId().equals(400L)) {
@@ -165,15 +69,6 @@ public class BuildingValidator implements IValidator {
         return null;
     }
 
-    private boolean validateParents(Building building, DomainObjectEditPanel editPanel) {
-        for (DomainObject address : building.getAllAddresses()) {
-            if (address.getParentId() == null || address.getParentEntityId() == null) {
-                error("parent_not_specified", editPanel);
-                return false;
-            }
-        }
-        return true;
-    }
 
     private void error(String key, Component component, Object... formatArguments) {
         if (formatArguments == null) {
@@ -203,29 +98,6 @@ public class BuildingValidator implements IValidator {
         return editComponent;
     }
 
-    private boolean validateAdresses(Building building, DomainObjectEditPanel editPanel) {
-        List<DomainObject> addresses = building.getAllAddresses();
-
-        BuildingStrategy buildingStrategy = EjbBeanLocator.getBean("BuildingStrategy");
-        StringValueBean stringBean = EjbBeanLocator.getBean(StringValueBean.class);
-
-        boolean valid = true;
-
-        for (DomainObject address : addresses) {
-            String number = address.getStringValue(NUMBER);
-            String corp = address.getStringValue(CORP);
-            String structure = address.getStringValue(STRUCTURE);
-
-            Long existingBuildingId = buildingStrategy.checkForExistingAddress(building.getObjectId(), number, Strings.isEmpty(corp) ? null : corp,
-                    Strings.isEmpty(structure) ? null : structure, address.getParentEntityId(), address.getParentId(), systemLocale);
-            if (existingBuildingId != null) {
-                valid = false;
-                printExistingAddressErrorMessage(existingBuildingId, number, corp, structure, address.getParentId(), address.getParentEntityId(),
-                        systemLocale, editPanel);
-            }
-        }
-        return valid;
-    }
 
     private StrategyFactory getStrategyFactory() {
         return EjbBeanLocator.getBean(StrategyFactory.class);

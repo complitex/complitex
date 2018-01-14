@@ -2,7 +2,6 @@ package org.complitex.sync.handler;
 
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
@@ -46,9 +45,6 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
     @EJB
     private BuildingStrategy buildingStrategy;
-
-    @EJB
-    private BuildingAddressStrategy buildingAddressStrategy;
 
     @EJB(lookup = IOrganizationStrategy.BEAN_LOOKUP)
     private IOrganizationStrategy organizationStrategy;
@@ -104,24 +100,24 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         }
 
         return Objects.equals(domainObject.getParentId(), streetCorrections.get(0).getObjectId()) &&
-                Objects.equals(domainSync.getName(), domainObject.getStringValue(BuildingAddressStrategy.NUMBER)) &&
-                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(BuildingAddressStrategy.NUMBER, Locales.getAlternativeLocale())) &&
-                Objects.equals(domainSync.getAdditionalName(), domainObject.getStringValue(BuildingAddressStrategy.CORP)) &&
-                Objects.equals(domainSync.getAltAdditionalName(), domainObject.getStringValue(BuildingAddressStrategy.CORP, Locales.getAlternativeLocale()));
+                Objects.equals(domainSync.getName(), domainObject.getStringValue(BuildingStrategy.NUMBER)) &&
+                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(BuildingStrategy.NUMBER, Locales.getAlternativeLocale())) &&
+                Objects.equals(domainSync.getAdditionalName(), domainObject.getStringValue(BuildingStrategy.CORP)) &&
+                Objects.equals(domainSync.getAltAdditionalName(), domainObject.getStringValue(BuildingStrategy.CORP, Locales.getAlternativeLocale()));
     }
 
     @Override
     public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
-        return buildingAddressStrategy.getList(
+        return buildingStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("street")
                         .setParentId(domainSync.getParentObjectId())
-                        .addAttribute(BuildingAddressStrategy.NUMBER, domainSync.getName())
-                        .addAttribute(BuildingAddressStrategy.NUMBER, domainSync.getAltName(), Locales.getAlternativeLocaleId())
-                        .addAttribute(BuildingAddressStrategy.CORP, domainSync.getName())
-                        .addAttribute(BuildingAddressStrategy.CORP, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(BuildingStrategy.NUMBER, domainSync.getName())
+                        .addAttribute(BuildingStrategy.NUMBER, domainSync.getAltName(), Locales.getAlternativeLocaleId())
+                        .addAttribute(BuildingStrategy.CORP, domainSync.getName())
+                        .addAttribute(BuildingStrategy.CORP, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
     }
 
     @Override
@@ -151,7 +147,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
     @Override
     public IStrategy getStrategy() {
-        return buildingAddressStrategy;
+        return buildingStrategy;
     }
 
     @Override
@@ -172,9 +168,9 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
         domainObject.setParentId(streetCorrections.get(0).getObjectId());
 //        domainObject.setValueId(); todo district
-        domainObject.setStringValue(BuildingAddressStrategy.NUMBER, domainSync.getName());
-        domainObject.setStringValue(BuildingAddressStrategy.NUMBER, domainSync.getAltName(), Locales.getAlternativeLocale());
-        domainObject.setStringValue(BuildingAddressStrategy.CORP, domainSync.getAdditionalName());
-        domainObject.setStringValue(BuildingAddressStrategy.CORP, domainSync.getAltAdditionalName(), Locales.getAlternativeLocale());
+        domainObject.setStringValue(BuildingStrategy.NUMBER, domainSync.getName());
+        domainObject.setStringValue(BuildingStrategy.NUMBER, domainSync.getAltName(), Locales.getAlternativeLocale());
+        domainObject.setStringValue(BuildingStrategy.CORP, domainSync.getAdditionalName());
+        domainObject.setStringValue(BuildingStrategy.CORP, domainSync.getAltAdditionalName(), Locales.getAlternativeLocale());
     }
 }

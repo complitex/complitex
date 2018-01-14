@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.complitex.pspoffice.importing.legacy.service;
 
 import com.google.common.collect.ImmutableMap;
@@ -9,8 +6,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
-import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.strategy.StringLocaleBean;
@@ -85,11 +80,11 @@ public class BuildingCorrectionBean extends AbstractBean {
             korpus = null;
         }
         Map<String, Object> params = Maps.newHashMap(ImmutableMap.<String, Object>of(
-                "buildingBuildingAddressAT", BuildingStrategy.BUILDING_ADDRESS,
-                "buildingAddressNumberAT", BuildingAddressStrategy.NUMBER,
-                "buildingAddressCorpAT", BuildingAddressStrategy.CORP,
+//                "buildingBuildingAddressAT", BuildingStrategy.BUILDING_ADDRESS,
+                "buildingAddressNumberAT", BuildingStrategy.NUMBER,
+                "buildingAddressCorpAT", BuildingStrategy.CORP,
                 "dom", dom,
-                "parentEntityId", BuildingAddressStrategy.PARENT_STREET_ENTITY_ID));
+                "parentEntityId", BuildingStrategy.PARENT_ENTITY_ID));
         params.put("parentId", streetId);
         params.put("korpus", korpus);
 
@@ -115,18 +110,14 @@ public class BuildingCorrectionBean extends AbstractBean {
         }
     }
 
-    public Building newBuilding(long streetId, String buildingNumber, String corp, long jekId) {
-        Building b = buildingStrategy.newInstance();
-        DomainObject systemBuildingAddress = b.getPrimaryAddress();
+    public DomainObject newBuilding(long streetId, String buildingNumber, String corp, long jekId) {
+        DomainObject b = buildingStrategy.newInstance();
 
-        systemBuildingAddress.setParentEntityId(
-                BuildingAddressStrategy.PARENT_STREET_ENTITY_ID);
-        systemBuildingAddress.setParentId(streetId);
+        b.setParentEntityId(BuildingStrategy.PARENT_ENTITY_ID);
+        b.setParentId(streetId);
 
-        Utils.setValue(systemBuildingAddress.getAttribute(
-                BuildingAddressStrategy.NUMBER), SYSTEM_LOCALE_ID, buildingNumber);
-        Utils.setValue(systemBuildingAddress.getAttribute(
-                BuildingAddressStrategy.CORP), SYSTEM_LOCALE_ID, corp);
+        Utils.setValue(b.getAttribute(BuildingStrategy.NUMBER), SYSTEM_LOCALE_ID, buildingNumber);
+        Utils.setValue(b.getAttribute(BuildingStrategy.CORP), SYSTEM_LOCALE_ID, corp);
 
         b.setSubjectIds(Sets.newHashSet(jekId));
 

@@ -68,9 +68,9 @@ public class StreetStrategyDelegate extends StreetStrategy {
     }
 
     private void prepareExampleForBuildingCheck(DomainObjectFilter example) {
-        if (!example.isAdmin()) {
-            example.addAdditionalParam("building_address_permission_string",
-                    sessionBean.getPermissionString(buildingAddressStrategy.getEntityName()));
-        }
+//        if (!example.isAdmin()) {
+//            example.addAdditionalParam("building_address_permission_string",
+//                    sessionBean.getPermissionString(buildingAddressStrategy.getEntityName()));
+//        }
     }
 }

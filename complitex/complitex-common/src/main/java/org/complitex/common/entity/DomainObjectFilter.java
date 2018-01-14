@@ -133,6 +133,7 @@ public class DomainObjectFilter implements Serializable {
         return parentId;
     }
 
+    //todo add parent entity id
     public DomainObjectFilter setParentId(Long parentId) {
         this.parentId = parentId;
 
