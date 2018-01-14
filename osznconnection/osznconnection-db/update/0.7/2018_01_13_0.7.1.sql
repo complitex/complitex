@@ -10,7 +10,8 @@ create procedure copy_building_attribute(b_object_id bigint, b_entity_attribute_
     declare baa_status int;
 
     declare next_value_id bigint;
-    declare a_value varchar(1000);
+    declare a_value_1 varchar(1000);
+    declare a_value_2 varchar(1000);
 
     declare done int default false;
     declare baa_cursor cursor for select attribute_id, value_id, start_date, end_date, status
@@ -29,14 +30,14 @@ create procedure copy_building_attribute(b_object_id bigint, b_entity_attribute_
       update `sequence` s set s.`sequence_value` = s.`sequence_value` + 1 where s.`sequence_name` = 'building_string_value';
       select s.`sequence_value` from `sequence` s where s.`sequence_name` = 'building_string_value' into next_value_id;
 
-      select `value` from building_address_string_value where id = baa_value_id and locale_id = 1 into a_value;
-      if (a_value is not null) then
-        insert into building_string_value(id, locale_id, value) value (next_value_id, 1, a_value);
+      select `value` from building_address_string_value where id = baa_value_id and locale_id = 1 into a_value_1;
+      if (a_value_1 is not null) then
+        insert into building_string_value(id, locale_id, value) value (next_value_id, 1, a_value_1);
       end if;
 
-      select `value` from building_address_string_value where id = baa_value_id and locale_id = 2 into a_value;
-      if (a_value is not null) then
-        insert into building_string_value(id, locale_id, value) value (next_value_id, 2, a_value);
+      select `value` from building_address_string_value where id = baa_value_id and locale_id = 2 into a_value_2;
+      if (a_value_2 is not null) then
+        insert into building_string_value(id, locale_id, value) value (next_value_id, 2, a_value_2);
       end if;
 
       insert into building_attribute(attribute_id, object_id, entity_attribute_id, value_id, start_date, end_date, status)
@@ -107,20 +108,20 @@ drop table building_address;
 drop table building_address_attribute;
 drop table building_address_string_value;
 
-INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (501, 1, UPPER('Номер дома')), (501, 2, UPPER('Номер будинку'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (500, 500, 1, 501, 1, 0);
+insert into `entity_string_value`(`id`, `locale_id`, `value`) value (501, 1, upper('Номер дома')), (501, 2, upper('Номер будинку'));
+insert into `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) value (500, 500, 1, 501, 1, 0);
 
-INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (502, 1, UPPER('Корпус')), (502, 2, UPPER('Корпус'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (501, 500, 0, 502, 1, 0);
+insert into `entity_string_value`(`id`, `locale_id`, `value`) value (502, 1, upper('Корпус')), (502, 2, upper('Корпус'));
+insert into `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) value (501, 500, 0, 502, 1, 0);
 
-INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (503, 1, UPPER('Строение')), (503, 2, UPPER('Будова'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (502, 500, 0, 503, 1, 0);
+insert into `entity_string_value`(`id`, `locale_id`, `value`) value (503, 1, upper('Строение')), (503, 2, upper('Будова'));
+insert into `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) value (502, 500, 0, 503, 1, 0);
 
 
-INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (504, 1, UPPER('Район')), (504, 2, UPPER('Район'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) VALUES (503, 500, 0, 504, 1, 10, 600);
+insert into `entity_string_value`(`id`, `locale_id`, `value`) value (504, 1, upper('Район')), (504, 2, upper('Район'));
+insert into `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`, `reference_id`) value (503, 500, 0, 504, 1, 10, 600);
 
-INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (505, 1, UPPER('Список кодов дома')), (505, 2, UPPER('Список кодов дома'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (504, 500, 0, 505, 1, 20);
+insert into `entity_string_value`(`id`, `locale_id`, `value`) value (505, 1, upper('Список кодов дома')), (505, 2, upper('Список кодов дома'));
+insert into `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) value (504, 500, 0, 505, 1, 20);
 
-INSERT INTO `update` (`version`) VALUE ('20180113_0.7.1');
+insert into `update` (`version`) VALUE ('20180113_0.7.1');
