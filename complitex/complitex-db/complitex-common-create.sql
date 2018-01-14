@@ -650,7 +650,7 @@ CREATE TABLE `building` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT  COMMENT 'Суррогатный ключ',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
   `parent_id` BIGINT(20) COMMENT 'Идентификатор родительского объекта',
-  `parent_entity_id` BIGINT(20) COMMENT 'Идентификатор сущности родительского объекта: 1500 - building_address',
+  `parent_entity_id` BIGINT(20) COMMENT 'Идентификатор сущности родительского объекта',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия объекта',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия объекта',
   `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус: INACTIVE(0), ACTIVE(1), ARCHIVE(2)',
@@ -674,7 +674,7 @@ CREATE TABLE `building_attribute` (
   `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT  COMMENT 'Суррогатный ключ',
   `attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор атрибута',
   `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
-  `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 500 - РАЙОН, 501- АЛЬТЕРНАТИВНЫЙ АДРЕС',
+  `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута',
   `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
   `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
   `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
@@ -704,70 +704,6 @@ CREATE TABLE `building_string_value` (
   KEY `key_value` (`value`(128)),
   CONSTRAINT `fk_building_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация атрибутов дома ';
-
--- ------------------------------
--- Building Address
--- ------------------------------
-DROP TABLE IF EXISTS `building_address`;
-
-CREATE TABLE `building_address` (
-  `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT  COMMENT 'Суррогатный ключ',
-  `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
-  `parent_id` BIGINT(20) COMMENT 'Идентификатор родительского объекта',
-  `parent_entity_id` BIGINT(20) COMMENT 'Идентификатор сущности родительского объекта: 300 - street',
-  `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия объекта',
-  `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия объекта',
-  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус: INACTIVE(0), ACTIVE(1), ARCHIVE(2)',
-  `permission_id` BIGINT(20) NOT NULL DEFAULT 0 COMMENT 'Ключ прав доступа к объекту',
-  PRIMARY KEY  (`pk_id`),
-  UNIQUE KEY `unique_object_id__start_date` (`object_id`,`start_date`),
-  KEY `key_object_id` (`object_id`),
-  KEY `key_parent_id` (`parent_id`),
-  KEY `key_parent_entity_id` (`parent_entity_id`),
-  KEY `key_start_date` (`start_date`),
-  KEY `key_end_date` (`end_date`),
-  KEY `key_status` (`status`),
-  KEY `key_permission_id` (`permission_id`),
-  CONSTRAINT `fk_building_address__entity` FOREIGN KEY (`parent_entity_id`) REFERENCES `entity` (`id`),
-  CONSTRAINT `fk_building_address__permission` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Адрес дома';
-
-DROP TABLE IF EXISTS `building_address_attribute`;
-
-CREATE TABLE `building_address_attribute` (
-  `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT  COMMENT 'Суррогатный ключ',
-  `attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор атрибута',
-  `object_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор объекта',
-  `entity_attribute_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор типа атрибута: 1500 - НОМЕР ДОМА, 1501 - КОРПУС, 1502 - СТРОЕНИЕ',
-  `value_id` BIGINT(20) COMMENT 'Идентификатор значения',
-  `start_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата начала периода действия атрибута',
-  `end_date` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата окончания периода действия атрибута',
-  `status` INTEGER NOT NULL DEFAULT 1 COMMENT 'Статус: INACTIVE(0), ACTIVE(1), ARCHIVE(2)',
-  PRIMARY KEY  (`pk_id`),
-  UNIQUE KEY `unique_id` (`attribute_id`,`object_id`,`entity_attribute_id`, `start_date`),
-  KEY `key_object_id` (`object_id`),
-  KEY `key_entity_attribute_id` (`entity_attribute_id`),
-  KEY `key_value_id` (`value_id`),
-  KEY `key_start_date` (`start_date`),
-  KEY `key_end_date` (`end_date`),
-  KEY `key_status` (`status`),
-  CONSTRAINT `fk_building_address_attribute__building_address` FOREIGN KEY (`object_id`) REFERENCES `building_address`(`object_id`),
-  CONSTRAINT `fk_building_address_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`) REFERENCES entity_attribute (`id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты адреса дома';
-
-DROP TABLE IF EXISTS `building_address_string_value`;
-
-CREATE TABLE `building_address_string_value` (
-  `pk_id` BIGINT(20) NOT NULL AUTO_INCREMENT  COMMENT 'Суррогатный ключ',
-  `id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локализации',
-  `locale_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор локали',
-  `value` VARCHAR(1000) COMMENT 'Текстовое значение',
-  PRIMARY KEY (`pk_id`),
-  UNIQUE KEY `unique_id__locale` (`id`,`locale_id`),
-  KEY `key_locale` (`locale_id`),
-  KEY `key_value` (`value`(128)),
-  CONSTRAINT `fk_building_address_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Локализация атрибутов адреса дома';
 
 -- ------------------------------
 -- Apartment

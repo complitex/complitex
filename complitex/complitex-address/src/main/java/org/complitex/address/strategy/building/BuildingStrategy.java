@@ -20,7 +20,6 @@ import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.BuildingNumberConverter;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.DomainObjectEditPanel;
 import org.complitex.common.web.component.domain.DomainObjectListPanel;
@@ -48,14 +47,9 @@ public class BuildingStrategy extends TemplateStrategy {
     public static final long NUMBER = 500;
     public static final long CORP = 501;
     public static final long STRUCTURE = 502;
-
     public static final long DISTRICT = 503;
     private static final long BUILDING_CODE = 504;
 
-
-    /**
-     * Order by related constants
-     */
     public enum OrderBy {
 
         NUMBER(BuildingAddressStrategy.NUMBER), CORP(BuildingAddressStrategy.CORP), STRUCTURE(BuildingAddressStrategy.STRUCTURE);
@@ -69,17 +63,13 @@ public class BuildingStrategy extends TemplateStrategy {
             return orderByAttributeId;
         }
     }
-    /**
-     * Filter constants
-     */
+
     public static final String P_NUMBER = "number";
     public static final String P_CORP = "corp";
     public static final String P_STRUCTURE = "structure";
     public static final String P_STREET = "street";
     public static final String P_CITY = "city";
     public static final String P_SERVICING_ORGANIZATION_ID = "servicingOrganizationId";
-
-    public static final long PARENT_ENTITY_ID = 1500L;
 
     @EJB
     private StringLocaleBean stringLocaleBean;
@@ -241,16 +231,16 @@ public class BuildingStrategy extends TemplateStrategy {
         }
     }
 
-    private void setAlternativeAddresses(Building building, Date date) {
-        for (Attribute attr : building.getAttributes()) {
-            if (attr.getEntityAttributeId().equals(BUILDING_ADDRESS)) {
-                DomainObject alternativeAddress = getBuildingAddress(attr.getValueId(), date);
-                if (alternativeAddress != null) {
-                    building.addAlternativeAddress(alternativeAddress);
-                }
-            }
-        }
-    }
+//    private void setAlternativeAddresses(Building building, Date date) {
+//        for (Attribute attr : building.getAttributes()) {
+//            if (attr.getEntityAttributeId().equals(BUILDING_ADDRESS)) {
+//                DomainObject alternativeAddress = getBuildingAddress(attr.getValueId(), date);
+//                if (alternativeAddress != null) {
+//                    building.addAlternativeAddress(alternativeAddress);
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public Building getDomainObject(Long id, boolean runAsAdmin) {
@@ -269,7 +259,7 @@ public class BuildingStrategy extends TemplateStrategy {
             DomainObject primaryAddress = getBuildingAddress(building.getParentId(), null);
             building.setPrimaryAddress(primaryAddress);
             building.setAccompaniedAddress(primaryAddress);
-            setAlternativeAddresses(building, null);
+//            setAlternativeAddresses(building, null);
             fillAttributes(null, building);
             updateStringsForNewLocales(building);
 
@@ -450,7 +440,7 @@ public class BuildingStrategy extends TemplateStrategy {
     public List<Long> getObjectIds(Long parentId, String number, String corp, String structure, long parentEntityId,
                                     Locale locale) {
         Map<String, Object> params = Maps.newHashMap();
-        params.put("additionalAddressAT", BUILDING_ADDRESS);
+//        params.put("additionalAddressAT", BUILDING_ADDRESS);
         params.put("buildingAddressNumberAT", BuildingAddressStrategy.NUMBER);
         params.put("buildingAddressCorpAT", BuildingAddressStrategy.CORP);
         params.put("buildingAddressStructureAT", BuildingAddressStrategy.STRUCTURE);
@@ -484,17 +474,17 @@ public class BuildingStrategy extends TemplateStrategy {
         for (EntityAttribute entityAttribute : getEntity().getAttributes()) {
             if (!entityAttribute.isObsolete()) {
                 if (object.getAttributes(entityAttribute.getId()).isEmpty()) {
-                    if ( !entityAttribute.getId().equals(BUILDING_ADDRESS)) {
-                        Attribute attribute = new Attribute();
-                        attribute.setEntityAttributeId(entityAttribute.getId());
-                        attribute.setObjectId(object.getObjectId());
-                        attribute.setAttributeId(1L);
-
-                        if (entityAttribute.getValueType().isSimple()) {
-                            attribute.setStringValues(StringValueUtil.newStringValues());
-                        }
-                        toAdd.add(attribute);
-                    }
+//                    if ( !entityAttribute.getId().equals(BUILDING_ADDRESS)) {
+//                        Attribute attribute = new Attribute();
+//                        attribute.setEntityAttributeId(entityAttribute.getId());
+//                        attribute.setObjectId(object.getObjectId());
+//                        attribute.setAttributeId(1L);
+//
+//                        if (entityAttribute.getValueType().isSimple()) {
+//                            attribute.setStringValues(StringValueUtil.newStringValues());
+//                        }
+//                        toAdd.add(attribute);
+//                    }
                 }
             }
         }
@@ -664,7 +654,7 @@ public class BuildingStrategy extends TemplateStrategy {
         DomainObject primaryAddress = getBuildingAddress(building.getParentId(), date);
         building.setPrimaryAddress(primaryAddress);
         building.setAccompaniedAddress(primaryAddress);
-        setAlternativeAddresses(building, date);
+//        setAlternativeAddresses(building, date);
 
         updateStringsForNewLocales(building);
 
