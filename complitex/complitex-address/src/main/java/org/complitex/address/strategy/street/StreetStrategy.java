@@ -216,11 +216,6 @@ public class StreetStrategy extends TemplateStrategy {
 
     @Override
     public String[] getRealChildren() {
-        return new String[]{"building_address"};
-    }
-
-    @Override
-    public String[] getLogicalChildren() {
         return new String[]{"building"};
     }
 
@@ -264,19 +259,19 @@ public class StreetStrategy extends TemplateStrategy {
 
     @Override
     public void replaceChildrenPermissions(Long parentId, Set<Long> subjectIds) {
-        replaceChildrenPermissions("building_address", parentId, subjectIds);
+        replaceChildrenPermissions("building", parentId, subjectIds);
     }
 
 
     @Override
     protected void changeChildrenPermissions(Long parentId, Set<Long> addSubjectIds, Set<Long> removeSubjectIds) {
-        changeChildrenPermissions("building_address", parentId, addSubjectIds, removeSubjectIds);
+        changeChildrenPermissions("building", parentId, addSubjectIds, removeSubjectIds);
     }
 
 
     @Override
     public void changeChildrenActivity(Long parentId, boolean enable) {
-        changeChildrenActivity(parentId, "building_address", enable);
+        changeChildrenActivity(parentId, "building", enable);
     }
 
     @Override
