@@ -41,11 +41,6 @@ public class ServiceProviderAccountStrategy extends TemplateStrategy {
     private StringValueBean stringBean;
 
     @Override
-    public Long getObjectId(String externalId) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<? extends DomainObject> getList(DomainObjectFilter example) {
         throw new UnsupportedOperationException("Use findById");
     }

@@ -153,14 +153,14 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
                     @Override
                     protected List<BuildingCorrection> getAddressCorrection(String addressId, Long organizationId) {
                         FilterWrapper<BuildingCorrection> filter = FilterWrapper.of(
-                                new BuildingCorrection(null, addressId, null, null, null, organizationId, eircOrganizationId, null)
+                                new BuildingCorrection(null, null, null, null, null, organizationId, eircOrganizationId, null)
                         );
                         return addressCorrectionBean.getBuildingCorrections(filter);
                     }
 
                     @Override
                     protected Address getAddress(Long id) {
-                        DomainObject domainObject = buildingAddressStrategy.getDomainObject(id, true);
+                        DomainObject domainObject = null;//buildingAddressStrategy.getDomainObject(id, true);
                         if (domainObject == null) {
                             return null;
                         }
@@ -171,7 +171,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
                 return getByAddressMasterIndex(searchString, service, new AddressDataProvider<ApartmentCorrection>() {
                     @Override
                     protected List<ApartmentCorrection> getAddressCorrection(String addressId, Long organizationId) {
-                        return addressCorrectionBean.getApartmentCorrections(null, addressId, null, null, organizationId, eircOrganizationId);
+                        return addressCorrectionBean.getApartmentCorrections(null, null, null, null, organizationId, eircOrganizationId);
                     }
 
                     @Override
@@ -187,7 +187,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
                 return getByAddressMasterIndex(searchString, service, new AddressDataProvider<RoomCorrection>() {
                     @Override
                     protected List<RoomCorrection> getAddressCorrection(String addressId, Long organizationId) {
-                        return addressCorrectionBean.getRoomCorrections(null, null, addressId, null, null, organizationId, eircOrganizationId);
+                        return addressCorrectionBean.getRoomCorrections(null, null, null, null, null, organizationId, eircOrganizationId);
                     }
 
                     @Override
@@ -342,7 +342,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
                 logger.warn("Multiply service corrections for service by id {}: organization={}, userOrganization={}",
                         service.getId(), moduleOrganizationId, eircOrganizationId);
             } else {
-                serviceMasterIndex = serviceCorrections.get(0).getExternalId();
+//                serviceMasterIndex = serviceCorrections.get(0).getExternalId();
             }
 
             ServiceDetails serviceDetails = new ServiceDetails();
