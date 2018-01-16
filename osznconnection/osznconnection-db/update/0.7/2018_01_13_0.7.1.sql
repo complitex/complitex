@@ -92,6 +92,8 @@ delimiter ;
 
 call ref_building();
 
+update `sequence` s set s.`sequence_value` = s.`sequence_value` + 1 where s.`sequence_name` = 'building_string_value';
+
 drop procedure copy_building_attribute;
 drop procedure ref_building;
 

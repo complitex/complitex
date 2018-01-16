@@ -38,10 +38,6 @@ import javax.ejb.EJB;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
 public class BuildingEditComponent extends AbstractComplexAttributesPanel {
 
     @EJB
@@ -106,7 +102,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
                 super.put(entity, object);
 
                 if ("district".equals(entity)) {
-//                    building.setDistrict(object);
+                    building.setValueId(BuildingStrategy.DISTRICT, object.getObjectId());
                 }
                 return object;
             }
@@ -127,7 +123,7 @@ public class BuildingEditComponent extends AbstractComplexAttributesPanel {
 
         //primary building address
         DomainObjectInputPanel primaryAddressPanel = new DomainObjectInputPanel("primaryAddress", building,
-                "building_address", null, getInputPanel().getParentId(), getInputPanel().getParentEntity(), getInputPanel().getDate()) {
+                "building", null, getInputPanel().getParentId(), getInputPanel().getParentEntity(), getInputPanel().getDate()) {
 
             @Override
             public SearchComponentState initParentSearchComponentState() {

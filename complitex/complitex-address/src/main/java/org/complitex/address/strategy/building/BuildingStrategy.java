@@ -11,8 +11,6 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.address.resource.CommonResources;
 import org.complitex.address.strategy.building.entity.BuildingCode;
 import org.complitex.address.strategy.building.web.edit.BuildingEdit;
-import org.complitex.address.strategy.building.web.edit.BuildingEditComponent;
-import org.complitex.address.strategy.building.web.edit.BuildingValidator;
 import org.complitex.common.entity.*;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
@@ -21,9 +19,7 @@ import org.complitex.common.util.BuildingNumberConverter;
 import org.complitex.common.util.Locales;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
-import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.DomainObjectListPanel;
-import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -236,15 +232,15 @@ public class BuildingStrategy extends TemplateStrategy {
         return ResourceUtil.getString(CommonResources.class.getName(), getEntityName(), locale);
     }
 
-    @Override
-    public IValidator getValidator() {
-        return new BuildingValidator(stringLocaleBean.getSystemLocale());
-    }
-
-    @Override
-    public Class<? extends AbstractComplexAttributesPanel> getComplexAttributesPanelAfterClass() {
-        return BuildingEditComponent.class;
-    }
+//    @Override
+//    public IValidator getValidator() {
+//        return new BuildingValidator(stringLocaleBean.getSystemLocale());
+//    }
+//
+//    @Override
+//    public Class<? extends AbstractComplexAttributesPanel> getComplexAttributesPanelAfterClass() {
+//        return BuildingEditComponent.class;
+//    }
 
     @Override
     public String[] getParents() {
