@@ -264,35 +264,6 @@ public class BuildingStrategy extends TemplateStrategy {
         super.insertDomainObject(object, updateDate);
     }
 
-    public List<Long> getObjectIds(Long parentId, String number, String corp, String structure, long parentEntityId,
-                                    Locale locale) {
-        Map<String, Object> params = Maps.newHashMap();
-        params.put("buildingAddressNumberAT", NUMBER);
-        params.put("buildingAddressCorpAT", CORP);
-        params.put("buildingAddressStructureAT", STRUCTURE);
-        params.put("number", number);
-        params.put("corp", corp != null && corp.isEmpty() ? null : corp);
-        params.put("structure", structure);
-        params.put("parentEntityId", parentEntityId);
-        params.put("parentId", parentId);
-        params.put("localeId", stringLocaleBean.convert(locale).getId());
-
-        return sqlSession().selectList(NS + ".checkBuildingAddress", params);
-    }
-
-    public Long checkForExistingAddress(Long id, String number, String corp, String structure, long parentEntityId,
-                                        long parentId, Locale locale) {
-        List<Long> buildingIds = getObjectIds(parentEntityId, number, corp, structure, parentId, locale);
-
-        for (Long buildingId : buildingIds) {
-            if (!buildingId.equals(id)) {
-                return buildingId;
-            }
-        }
-
-        return null;
-    }
-
     @Override
     public String[] getEditRoles() {
         return new String[]{SecurityRole.ADDRESS_MODULE_EDIT};
@@ -327,7 +298,6 @@ public class BuildingStrategy extends TemplateStrategy {
      * Найти дом в локальной адресной базе.
      * При поиске к значению номера(buildingNumber) и корпуса(buildingCorp) дома применяются SQL функции TRIM() и TO_CYRILLIC()
      */
-    //todo ref
     public List<Long> getBuildingObjectIds(Long cityId, Long streetId, String buildingNumber, String buildingCorp) {
         Map<String, Object> params = Maps.newHashMap();
 
