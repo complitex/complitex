@@ -7,6 +7,7 @@ import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.Status;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
@@ -22,7 +23,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -64,8 +64,8 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
-        return cityStrategy.getList(new DomainObjectFilter());
+    public List<? extends DomainObject> getParentObjects() {
+        return cityStrategy.getList(new DomainObjectFilter().setStatus(Status.ACTIVE.name()));
     }
 
     @Override

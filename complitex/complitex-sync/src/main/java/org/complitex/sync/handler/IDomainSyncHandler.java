@@ -10,7 +10,6 @@ import org.complitex.sync.entity.DomainSync;
 import javax.ejb.Local;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Anatoly Ivanov
@@ -20,7 +19,7 @@ import java.util.Map;
 public interface IDomainSyncHandler {
     Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException;
 
-    List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map);
+    List<? extends DomainObject> getParentObjects();
 
     List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId);
 

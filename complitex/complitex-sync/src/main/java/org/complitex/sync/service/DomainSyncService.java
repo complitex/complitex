@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -88,7 +87,7 @@ public class DomainSyncService {
 
 
     @Asynchronous
-    public void load(SyncEntity syncEntity, Map<String, DomainObject> map){
+    public void load(SyncEntity syncEntity){
         if (processing.get()){
             return;
         }
@@ -103,14 +102,14 @@ public class DomainSyncService {
 
             Date date = DateUtil.getCurrentDate();
 
-            List<? extends DomainObject> parents = getHandler(syncEntity).getParentObjects(map);
+            List<? extends DomainObject> parents = getHandler(syncEntity).getParentObjects();
 
             if (parents != null){
                 for (DomainObject p : parents) {
-                    load(syncEntity, p, map, date);
+                    load(syncEntity, p, date);
                 }
             }else{
-                load(syncEntity, null, map, date);
+                load(syncEntity, null, date);
             }
         } catch (Exception e) {
             log.error("Ошибка синхронизации", e);
@@ -126,7 +125,7 @@ public class DomainSyncService {
         }
     }
 
-    private void load(SyncEntity syncEntity, DomainObject parent, Map<String, DomainObject> map, Date date)
+    private void load(SyncEntity syncEntity, DomainObject parent, Date date)
             throws RemoteCallException{
         if (cancelSync.get()){
             return;
@@ -155,27 +154,29 @@ public class DomainSyncService {
 
         broadcastService.broadcast(getClass(), "begin", message);
 
-        cursor.getData().forEach(s -> {
-            s.setStatus(LOADED);
-            s.setType(syncEntity);
-            s.setDate(date);
+        if (cursor.getData() != null) {
+            cursor.getData().forEach(s -> {
+                s.setStatus(LOADED);
+                s.setType(syncEntity);
+                s.setDate(date);
 
-            if (parent != null) {
-                s.setParentObjectId(parent.getObjectId());
-            }
+                if (parent != null) {
+                    s.setParentObjectId(parent.getObjectId());
+                }
 
-            domainSyncBean.insert(s);
+                domainSyncBean.insert(s);
 
-            broadcastService.broadcast(getClass(), "processed", s);
-        });
+                broadcastService.broadcast(getClass(), "processed", s);
+            });
+        }
     }
 
-    private List<DomainSync> getDomainSyncs(SyncEntity syncEntity, DomainSyncStatus syncStatus, Long parentObjectId, Long externalId) {
-        return domainSyncBean.getList(of(new DomainSync(syncEntity, syncStatus, parentObjectId, externalId)));
+    private List<DomainSync> getDomainSyncs(SyncEntity syncEntity, DomainSyncStatus syncStatus, Long externalId) {
+        return domainSyncBean.getList(of(new DomainSync(syncEntity, syncStatus, null, externalId)));
     }
 
     @Asynchronous
-    public void sync(Long parentObjectId, SyncEntity syncEntity){
+    public void sync(SyncEntity syncEntity){
         processing.set(true);
         cancelSync.set(false);
 
@@ -187,7 +188,7 @@ public class DomainSyncService {
         IDomainSyncHandler handler = getHandler(syncEntity);
 
         //sync
-        getDomainSyncs(syncEntity, LOADED, parentObjectId, null).forEach(ds -> {
+        getDomainSyncs(syncEntity, LOADED, null).forEach(ds -> {
             List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(), ds.getExternalId(),
                     null, organizationId);
 
@@ -254,8 +255,8 @@ public class DomainSyncService {
         });
 
         //clear
-        handler.getCorrections(parentObjectId, null, null, organizationId).forEach(c -> {
-            if (getDomainSyncs(syncEntity, SYNCHRONIZED, null, c.getExternalId()).isEmpty()){
+        handler.getCorrections(null, null, null, organizationId).forEach(c -> {
+            if (getDomainSyncs(syncEntity, SYNCHRONIZED, c.getExternalId()).isEmpty()){
                 correctionBean.delete(c);
 
                 log.info("sync: delete correction {}", c);
@@ -263,7 +264,7 @@ public class DomainSyncService {
         });
 
         //deferred
-        getDomainSyncs(syncEntity, DEFERRED, parentObjectId, null).forEach(ds -> {
+        getDomainSyncs(syncEntity, DEFERRED, null).forEach(ds -> {
             List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(), ds.getExternalId(),
                     null, organizationId);
 

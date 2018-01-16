@@ -19,7 +19,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -46,7 +45,7 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
+    public List<? extends DomainObject> getParentObjects() {
         return null;
     }
 

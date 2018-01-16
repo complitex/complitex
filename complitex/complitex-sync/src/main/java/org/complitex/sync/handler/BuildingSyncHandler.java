@@ -4,13 +4,12 @@ import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
-import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.Status;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
-import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.Locales;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.correction.entity.BuildingCorrection;
@@ -23,7 +22,9 @@ import org.complitex.sync.service.DomainSyncAdapter;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Anatoly Ivanov
@@ -41,13 +42,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
     private StreetStrategy streetStrategy;
 
     @EJB
-    private StreetTypeStrategy streetTypeStrategy;
-
-    @EJB
     private BuildingStrategy buildingStrategy;
-
-    @EJB(lookup = IOrganizationStrategy.BEAN_LOOKUP)
-    private IOrganizationStrategy organizationStrategy;
 
     @EJB
     private AddressCorrectionBean addressCorrectionBean;
@@ -70,14 +65,8 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
-        if (map.containsKey("street") && map.get("street").getId() > 0){
-            return Collections.singletonList(map.get("street"));
-        }else if (map.containsKey("district") && map.get("district").getId() > 0){
-            return Collections.singletonList(map.get("district"));
-        }else {
-            return districtStrategy.getList(new DomainObjectFilter());
-        }
+    public List<? extends DomainObject> getParentObjects() {
+        return streetStrategy.getList(new DomainObjectFilter().setStatus(Status.ACTIVE.name()));
     }
 
     @Override
@@ -167,7 +156,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         }
 
         domainObject.setParentId(streetCorrections.get(0).getObjectId());
-//        domainObject.setValueId(); todo district
+        domainObject.setValueId(BuildingStrategy.DISTRICT, districtCorrections.get(0).getObjectId());
         domainObject.setStringValue(BuildingStrategy.NUMBER, domainSync.getName());
         domainObject.setStringValue(BuildingStrategy.NUMBER, domainSync.getAltName(), Locales.getAlternativeLocale());
         domainObject.setStringValue(BuildingStrategy.CORP, domainSync.getAdditionalName());
