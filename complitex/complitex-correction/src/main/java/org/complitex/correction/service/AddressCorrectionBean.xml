@@ -216,15 +216,12 @@
 
     <select id="selectBuildingObjectExists" parameterType="map" resultType="boolean">
         select count(b.`object_id`) > 0 from `building` b
-        join `building_address` addr on (((b.`parent_id` = addr.`object_id`) or
-          exists(select 1 from `building_attribute` ba where ba.`object_id` = b.`object_id` and ba.`status` = 1
-            and ba.`entity_attribute_id` = 501 and ba.`value_id` = addr.`object_id`)) and addr.`status` = 1)
-        join `building_address_attribute` num on (num.`object_id` = addr.`object_id` and num.`status` = 1
-          and num.`entity_attribute_id` = 1500)
-        join `building_address_string_value` num_sc on (num_sc.`id` = num.`value_id`)
-        left join `building_address_attribute` corp on (corp.`object_id` = addr.`object_id` AND corp.`status` = 1
-          and corp.`entity_attribute_id` = 1501)
-        left join `building_address_string_value` corp_sc on (corp_sc.`id` = corp.`value_id`)
+        join `building_attribute` num on (num.`object_id` = b.`object_id` and num.`status` = 1
+          and num.`entity_attribute_id` = 500)
+        join `building_string_value` num_sc on (num_sc.`id` = num.`value_id`)
+        left join `building_attribute` corp on (corp.`object_id` = b.`object_id` AND corp.`status` = 1
+          and corp.`entity_attribute_id` = 501)
+        left join `building_string_value` corp_sc on (corp_sc.`id` = corp.`value_id`)
         where b.`status` = 1
         and TO_CYRILLIC(num_sc.`value`) = #{buildingNumber}
         and
