@@ -22,6 +22,7 @@ import org.complitex.common.util.Locales;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
+import org.complitex.common.web.component.domain.DomainObjectListPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.template.strategy.TemplateStrategy;
@@ -149,8 +150,8 @@ public class BuildingStrategy extends TemplateStrategy {
         } else {
             Long cityId = ids.get("city");
             if (cityId != null && cityId > 0) {
-                filter.setParentId(cityId);
-                filter.setParentEntity("city");
+//                filter.setParentId(cityId);
+//                filter.setParentEntity("city");
             } else {
                 filter.setParentId(null);
                 filter.setParentEntity(null);
@@ -175,8 +176,8 @@ public class BuildingStrategy extends TemplateStrategy {
             } else {
                 Long cityId = ids.get("city");
                 if (cityId != null && cityId > 0) {
-                    domainObject.setParentId(cityId);
-                    domainObject.setParentEntityId(400L);
+//                    domainObject.setParentId(cityId);
+//                    domainObject.setParentEntityId(400L);
                 } else {
                     domainObject.setParentId(null);
                     domainObject.setParentEntityId(null);
@@ -188,6 +189,41 @@ public class BuildingStrategy extends TemplateStrategy {
     @Override
     public ISearchCallback getParentSearchCallback() {
         return new ParentSearchCallback();
+    }
+
+    private static class SearchCallback implements ISearchCallback, Serializable {
+
+        @Override
+        public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
+            DomainObjectListPanel list = component.findParent(DomainObjectListPanel.class);
+
+            assert list != null;
+            DomainObjectFilter filter = list.getFilter();
+
+            Long streetId = ids.get("street");
+            if (streetId != null && streetId > 0) {
+                filter.setParentEntity("street");
+                filter.setParentId(streetId);
+            } else {
+//                example.addAdditionalParam(P_STREET, null);
+//                Long cityId = ids.get("city");
+//                if (cityId != null && cityId > 0) {
+//                    example.addAdditionalParam(P_CITY, cityId);
+//                } else {
+//                    example.addAdditionalParam(P_CITY, null);
+//                }
+
+                filter.setParentEntity(null);
+                filter.setParentId(null);
+            }
+
+            list.refreshContent(target);
+        }
+    }
+
+    @Override
+    public ISearchCallback getSearchCallback() {
+        return new SearchCallback();
     }
 
     @Override

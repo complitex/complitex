@@ -80,7 +80,7 @@ create procedure ref_building()
       call copy_building_attribute(b_object_id, 502, b_parent_id, 1502);
 
       select parent_id, parent_entity_id from building_address where object_id = b_parent_id into a_parent_id, a_parent_entity_id;
-      update building set parent_id = a_parent_id, parent_entity_id = a_parent_entity_id;
+      update building set parent_id = a_parent_id, parent_entity_id = a_parent_entity_id where object_id = b_object_id;
 
     end loop;
 
