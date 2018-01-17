@@ -182,6 +182,7 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
 
         filterForm.add(new TextField<>("correctionFilter", new PropertyModel<>(filterWrapper, "object.correction")));
         filterForm.add(new TextField<>("codeFilter", new PropertyModel<>(filterWrapper, "object.externalId")));
+        filterForm.add(new TextField<>("internalObjectIdFilter", new PropertyModel<>(filterWrapper, "object.objectId")));
         filterForm.add(new TextField<>("internalObjectFilter", new PropertyModel<>(filterWrapper, "object.internalObject")));
 
         AjaxLink reset = new IndicatingAjaxLink("reset") {
@@ -218,6 +219,7 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
 
                 item.add(new Label("code", StringUtil.emptyOnNull(correction.getExternalId())));
 
+                item.add(new Label("internalObjectId", correction.getObjectId()));
                 item.add(new Label("internalObject", displayInternalObject(correction)));
 
                 //user organization
@@ -244,6 +246,7 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
         filterForm.add(new ArrowOrderByBorder("organizationHeader", CorrectionOrderBy.ORGANIZATION.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("correctionHeader", CorrectionOrderBy.CORRECTION.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("codeHeader", CorrectionOrderBy.EXTERNAL_ID.getOrderBy(), dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("internalObjectIdHeader", CorrectionOrderBy.OBJECT.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("internalObjectHeader", CorrectionOrderBy.OBJECT.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("userOrganizationHeader", CorrectionOrderBy.USER_ORGANIZATION.getOrderBy(), dataProvider, data, content));
 

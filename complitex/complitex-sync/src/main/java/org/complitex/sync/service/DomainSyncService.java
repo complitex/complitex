@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static javax.ejb.ConcurrencyManagementType.BEAN;
 import static org.complitex.common.entity.FilterWrapper.of;
@@ -188,7 +189,7 @@ public class DomainSyncService {
             IDomainSyncHandler handler = getHandler(syncEntity);
 
             //sync
-            getDomainSyncs(syncEntity, LOADED, null).forEach(ds -> {
+            getDomainSyncs(syncEntity, null, null).forEach(ds -> {
                 List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(), ds.getExternalId(),
                         null, organizationId);
                 if (cancelSync.get()){
@@ -263,7 +264,7 @@ public class DomainSyncService {
 
             //clear
             handler.getCorrections(null, null, null, organizationId).forEach(c -> {
-                if (getDomainSyncs(syncEntity, SYNCHRONIZED, c.getExternalId()).isEmpty()){
+                if (getDomainSyncs(syncEntity, null, c.getExternalId()).isEmpty()){
                     correctionBean.delete(c);
 
                     log.info("sync: delete correction {}", c);
@@ -271,18 +272,43 @@ public class DomainSyncService {
             });
 
             //deferred
-            getDomainSyncs(syncEntity, DEFERRED, null).forEach(ds -> {
-                List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(), ds.getExternalId(),
-                        null, organizationId);
+            getDomainSyncs(syncEntity, DEFERRED, null).stream()
+                    .collect(Collectors.groupingBy(ds -> handler.getCorrections(ds.getParentObjectId(),
+                            ds.getExternalId(), null, organizationId).get(0).getObjectId()))
+                    .forEach((k, v) -> {
+                        List<? extends Correction> objectCorrections1 = handler.getCorrections(null,
+                                null,k, organizationId);
 
-                if (!corrections.isEmpty()) {
-                    Correction correction = corrections.get(0);
+                        if (objectCorrections1.size() > 1){
+                            List<? extends Correction> objectCorrections2 = handler.getCorrections(null,
+                                    null, k, organizationId);
 
-                    List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
-                            correction.getObjectId(), organizationId);
-                }
+                            boolean corresponds = true;
 
-                //todo
+                            for (Correction c1 : objectCorrections1){
+                                for (Correction c2 : objectCorrections2){
+                                    if (!c1.getId().equals(c2.getId()) && !handler.isCorresponds(c1, c2)){
+                                        corresponds = false;
+                                    }
+                                }
+                            }
+
+                            if (corresponds){
+                                DomainObject domainObject = handler.getStrategy().getDomainObject(k);
+
+                                handler.updateValues(domainObject, v.get(0), organizationId);
+                                handler.getStrategy().update(domainObject);
+
+                                log.info("sync: update deferred domain object {}", domainObject);
+
+                                v.forEach(ds ->{
+                                    ds.setStatus(SYNCHRONIZED);
+                                    domainSyncBean.updateStatus(ds);
+                                });
+                            }else{
+                                //todo
+                            }
+                        }
 
             });
 
