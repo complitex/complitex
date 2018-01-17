@@ -131,6 +131,8 @@ public class DomainSyncService {
             return;
         }
 
+        Long organizationId = addressSyncAdapter.getOrganization().getObjectId();
+
         Cursor<DomainSync> cursor = getHandler(syncEntity).getCursorDomainSyncs(parent, date);
 
         SyncBeginMessage message = new SyncBeginMessage();
@@ -156,13 +158,10 @@ public class DomainSyncService {
 
         if (cursor.getData() != null) {
             cursor.getData().forEach(s -> {
+                s.setParentObjectId(getHandler(syncEntity).getParentObjectId(parent, s, organizationId));
                 s.setStatus(LOADED);
                 s.setType(syncEntity);
                 s.setDate(date);
-
-                if (parent != null) {
-                    s.setParentObjectId(parent.getObjectId());
-                }
 
                 domainSyncBean.insert(s);
 

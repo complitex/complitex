@@ -34,4 +34,8 @@ public interface IDomainSyncHandler {
     IStrategy getStrategy();
 
     void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId);
+
+    default Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId){
+        return parentDomainObject != null ? parentDomainObject.getObjectId() : null;
+    }
 }
