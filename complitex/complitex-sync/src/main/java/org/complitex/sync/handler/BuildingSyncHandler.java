@@ -11,6 +11,7 @@ import org.complitex.common.entity.Status;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
+import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.correction.entity.BuildingCorrection;
 import org.complitex.correction.entity.Correction;
@@ -107,8 +108,8 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
                         .setParentId(domainSync.getParentObjectId())
                         .addAttribute(BuildingStrategy.NUMBER, domainSync.getName())
                         .addAttribute(BuildingStrategy.NUMBER, domainSync.getAltName(), Locales.getAlternativeLocaleId())
-                        .addAttribute(BuildingStrategy.CORP, domainSync.getName())
-                        .addAttribute(BuildingStrategy.CORP, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(BuildingStrategy.CORP, domainSync.getAdditionalName())
+                        .addAttribute(BuildingStrategy.CORP, domainSync.getAltAdditionalName(), Locales.getAlternativeLocaleId()));
     }
 
     @Override
@@ -128,7 +129,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         }
 
         BuildingCorrection buildingCorrection = new BuildingCorrection(streetCorrections.get(0).getObjectId(),
-                domainSync.getExternalId(), domainObject.getObjectId(), domainSync.getName(), domainSync.getAdditionalName(),
+                domainSync.getExternalId(), domainObject.getObjectId(), domainSync.getName(), StringUtil.valueOf(domainSync.getAdditionalName()),
                 organizationId, null, moduleBean.getModuleId());
 
         addressCorrectionBean.insert(buildingCorrection);

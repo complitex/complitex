@@ -192,6 +192,9 @@ public class DomainSyncService {
             getDomainSyncs(syncEntity, LOADED, null).forEach(ds -> {
                 List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(), ds.getExternalId(),
                         null, organizationId);
+                if (cancelSync.get()){
+                    return;
+                }
 
                 if (!corrections.isEmpty()){
                     Correction correction = corrections.get(0);
