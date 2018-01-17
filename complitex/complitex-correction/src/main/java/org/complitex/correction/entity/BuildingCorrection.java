@@ -42,4 +42,11 @@ public class BuildingCorrection extends Correction {
         this.correctionCorp = correctionCorp;
     }
 
+    @Override
+    public String toString() {
+        return getToStringHelper()
+                .add("streetId", streetId)
+                .add("correctionCorp", correctionCorp)
+                .toString();
+    }
 }
