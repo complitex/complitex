@@ -3,8 +3,6 @@ package ru.complitex.pspoffice.backend.resource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
-import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
 import org.complitex.address.strategy.country.CountryStrategy;
@@ -22,8 +20,6 @@ import javax.ejb.EJB;
 import javax.validation.constraints.Max;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -370,32 +366,18 @@ public class AddressResource {
         return Response.ok(streetStrategy.getCount(filter)).build();
     }
 
-    private BuildingModel getBuildingObject(Building b){
-        DomainObject a = b.getAccompaniedAddress();
+    private BuildingModel getBuildingObject(DomainObject b){
 
-        BuildingModel building = new BuildingModel(b.getObjectId(), a.getParentId(),
-                a.getStringMap(BuildingAddressStrategy.NUMBER), a.getStringMap(BuildingAddressStrategy.CORP),
-                a.getStringMap(BuildingAddressStrategy.STRUCTURE));
-
-        if (!b.getAlternativeAddresses().isEmpty()){
-            List<BuildingModel> alternatives = new ArrayList<>();
-            building.setAlternatives(alternatives);
-
-            b.getAlternativeAddresses().forEach(alt -> {
-                alternatives.add(new BuildingModel(null, alt.getParentId(),
-                        alt.getStringMap(BuildingAddressStrategy.NUMBER), alt.getStringMap(BuildingAddressStrategy.CORP),
-                        alt.getStringMap(BuildingAddressStrategy.STRUCTURE)));
-            });
-        }
-
-        return building;
+        return new BuildingModel(b.getObjectId(), b.getParentId(),
+                b.getStringMap(BuildingStrategy.NUMBER), b.getStringMap(BuildingStrategy.CORP),
+                b.getStringMap(BuildingStrategy.STRUCTURE));
     }
 
     @GET
     @Path("building/{id}")
     @ApiOperation(value = "Get building by id", response = BuildingModel.class)
     public Response getBuilding(@PathParam("id") Long id){
-        Building building = buildingStrategy.getDomainObject(id, true);
+        DomainObject building = buildingStrategy.getDomainObject(id, true);
 
         if (building == null){
             return Response.status(NOT_FOUND).build();
@@ -413,8 +395,9 @@ public class AddressResource {
                                  @QueryParam("limit") @DefaultValue("10") Integer limit){
         DomainObjectFilter filter = new DomainObjectFilter();
 
-        filter.addAdditionalParam(BuildingStrategy.P_NUMBER, query);
-        filter.addAdditionalParam(BuildingStrategy.P_STREET, parentId);
+        filter.addAttribute(BuildingStrategy.NUMBER, query);
+        filter.setParentEntity(BuildingStrategy.PARENT_ENTITY);
+        filter.setParentId(parentId);
 
         filter.setFirst(offset);
         filter.setCount(limit);
@@ -429,8 +412,9 @@ public class AddressResource {
     public Response getBuildingsCount(@QueryParam("query") String query,
                                  @QueryParam("parentId") Long parentId){
         DomainObjectFilter filter = new DomainObjectFilter();
-        filter.addAdditionalParam(BuildingStrategy.P_NUMBER, query);
-        filter.addAdditionalParam(BuildingStrategy.P_STREET, parentId);
+        filter.addAttribute(BuildingStrategy.NUMBER, query);
+        filter.setParentEntity(BuildingStrategy.PARENT_ENTITY);
+        filter.setParentId(parentId);
 
         return Response.ok(buildingStrategy.getCount(filter)).build();
     }

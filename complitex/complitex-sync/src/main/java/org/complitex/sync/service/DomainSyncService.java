@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -88,7 +87,7 @@ public class DomainSyncService {
 
 
     @Asynchronous
-    public void load(SyncEntity syncEntity, Map<String, DomainObject> map){
+    public void load(SyncEntity syncEntity){
         if (processing.get()){
             return;
         }
@@ -103,14 +102,14 @@ public class DomainSyncService {
 
             Date date = DateUtil.getCurrentDate();
 
-            List<? extends DomainObject> parents = getHandler(syncEntity).getParentObjects(map);
+            List<? extends DomainObject> parents = getHandler(syncEntity).getParentObjects();
 
             if (parents != null){
                 for (DomainObject p : parents) {
-                    load(syncEntity, p, map, date);
+                    load(syncEntity, p, date);
                 }
             }else{
-                load(syncEntity, null, map, date);
+                load(syncEntity, null, date);
             }
         } catch (Exception e) {
             log.error("Ошибка синхронизации", e);
@@ -126,7 +125,7 @@ public class DomainSyncService {
         }
     }
 
-    private void load(SyncEntity syncEntity, DomainObject parent, Map<String, DomainObject> map, Date date)
+    private void load(SyncEntity syncEntity, DomainObject parent, Date date)
             throws RemoteCallException{
         if (cancelSync.get()){
             return;
@@ -155,131 +154,149 @@ public class DomainSyncService {
 
         broadcastService.broadcast(getClass(), "begin", message);
 
-        cursor.getData().forEach(s -> {
-            s.setStatus(LOADED);
-            s.setType(syncEntity);
-            s.setDate(date);
+        if (cursor.getData() != null) {
+            cursor.getData().forEach(s -> {
+                s.setStatus(LOADED);
+                s.setType(syncEntity);
+                s.setDate(date);
 
-            if (parent != null) {
-                s.setParentObjectId(parent.getObjectId());
-            }
+                if (parent != null) {
+                    s.setParentObjectId(parent.getObjectId());
+                }
 
-            domainSyncBean.insert(s);
+                domainSyncBean.insert(s);
 
-            broadcastService.broadcast(getClass(), "processed", s);
-        });
+                broadcastService.broadcast(getClass(), "processed", s);
+            });
+        }
     }
 
-    private List<DomainSync> getDomainSyncs(SyncEntity syncEntity, DomainSyncStatus syncStatus, Long parentObjectId, Long externalId) {
-        return domainSyncBean.getList(of(new DomainSync(syncEntity, syncStatus, parentObjectId, externalId)));
+    private List<DomainSync> getDomainSyncs(SyncEntity syncEntity, DomainSyncStatus syncStatus, Long externalId) {
+        return domainSyncBean.getList(of(new DomainSync(syncEntity, syncStatus, null, externalId)));
     }
 
     @Asynchronous
-    public void sync(Long parentObjectId, SyncEntity syncEntity){
+    public void sync(SyncEntity syncEntity){
         processing.set(true);
         cancelSync.set(false);
 
-        broadcastService.broadcast(getClass(), "info", "Начата синхронизация");
-        log.info("sync: begin");
+        try {
+            broadcastService.broadcast(getClass(), "info", "Начата синхронизация");
+            log.info("sync: begin");
 
-        Long organizationId = addressSyncAdapter.getOrganization().getObjectId();
+            Long organizationId = addressSyncAdapter.getOrganization().getObjectId();
 
-        IDomainSyncHandler handler = getHandler(syncEntity);
+            IDomainSyncHandler handler = getHandler(syncEntity);
 
-        //sync
-        getDomainSyncs(syncEntity, LOADED, parentObjectId, null).forEach(ds -> {
-            List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(), ds.getExternalId(),
-                    null, organizationId);
-
-            if (!corrections.isEmpty()){
-                Correction correction = corrections.get(0);
-
-                if (!Objects.equals(correction.getCorrection(), ds.getName())){
-                    correction.setCorrection(ds.getName());
-
-                    handler.update(correction);
-
-                    log.info("sync: update correction name {}", correction);
+            //sync
+            getDomainSyncs(syncEntity, LOADED, null).forEach(ds -> {
+                List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(), ds.getExternalId(),
+                        null, organizationId);
+                if (cancelSync.get()){
+                    return;
                 }
 
-                DomainObject domainObject = handler.getStrategy().getDomainObject(correction.getObjectId());
+                if (!corrections.isEmpty()){
+                    if (corrections.size() > 1){
+                        log.warn("sync: corrections > 1 {}", corrections); //todo
+                    }
 
-                if (handler.isCorresponds(domainObject, ds, organizationId)){
+                    Correction correction = corrections.get(0);
+
+                    if (!Objects.equals(correction.getCorrection(), ds.getName())){
+                        correction.setCorrection(ds.getName());
+
+                        handler.update(correction);
+
+                        log.info("sync: update correction name {}", correction);
+                    }
+
+                    DomainObject domainObject = handler.getStrategy().getDomainObject(correction.getObjectId());
+
+                    if (handler.isCorresponds(domainObject, ds, organizationId)){
+                        ds.setStatus(SYNCHRONIZED);
+                        domainSyncBean.updateStatus(ds);
+                    }else{
+                        List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
+                                domainObject.getObjectId(),  organizationId);
+
+                        if (objectCorrections.size() == 1 && objectCorrections.get(0).getId().equals(correction.getId())){
+                            handler.updateValues(domainObject, ds, organizationId);
+                            handler.getStrategy().update(domainObject);
+
+                            log.info("sync: update domain object {}", domainObject);
+                        }else {
+                            ds.setStatus(DEFERRED);
+                            domainSyncBean.updateStatus(ds);
+                        }
+                    }
+                }else {
+                    List<? extends DomainObject> domainObjects = handler.getDomainObjects(ds, organizationId);
+
+                    DomainObject domainObject;
+
+                    if (!domainObjects.isEmpty()){
+                        domainObject = domainObjects.get(0);
+
+                        for (int i = 1; i < domainObjects.size(); ++i){
+                            handler.getStrategy().disable(domainObjects.get(i));
+
+                            log.info("sync: disable domain object {}", domainObjects.get(i));
+                        }
+                    }else{
+                        domainObject = handler.getStrategy().newInstance();
+                        handler.updateValues(domainObject, ds, organizationId);
+                        handler.getStrategy().insert(domainObject, ds.getDate());
+
+                        log.info("sync: add domain object {}", domainObject);
+                    }
+
+                    Correction correction = handler.insertCorrection(domainObject, ds, organizationId);
+
+                    log.info("sync: add correction {}", correction);
+
                     ds.setStatus(SYNCHRONIZED);
                     domainSyncBean.updateStatus(ds);
-                }else{
+                }
+
+                broadcastService.broadcast(getClass(), "processed", ds);
+            });
+
+            //clear
+            handler.getCorrections(null, null, null, organizationId).forEach(c -> {
+                if (getDomainSyncs(syncEntity, SYNCHRONIZED, c.getExternalId()).isEmpty()){
+                    correctionBean.delete(c);
+
+                    log.info("sync: delete correction {}", c);
+                }
+            });
+
+            //deferred
+            getDomainSyncs(syncEntity, DEFERRED, null).forEach(ds -> {
+                List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(), ds.getExternalId(),
+                        null, organizationId);
+
+                if (!corrections.isEmpty()) {
+                    Correction correction = corrections.get(0);
+
                     List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
-                            domainObject.getObjectId(),  organizationId);
-
-                    if (objectCorrections.size() == 1 && objectCorrections.get(0).getId().equals(correction.getId())){
-                        handler.updateValues(domainObject, ds, organizationId);
-                        handler.getStrategy().update(domainObject);
-
-                        log.info("sync: update domain object {}", domainObject);
-                    }else {
-                        ds.setStatus(DEFERRED);
-                        domainSyncBean.updateStatus(ds);
-                    }
-                }
-            }else {
-                List<? extends DomainObject> domainObjects = handler.getDomainObjects(ds);
-
-                DomainObject domainObject;
-
-                if (!domainObjects.isEmpty()){
-                    domainObject = domainObjects.get(0);
-
-                    for (int i = 1; i < domainObjects.size(); ++i){
-                        handler.getStrategy().disable(domainObjects.get(i));
-
-                        log.info("sync: disable domain object {}", domainObjects.get(i));
-                    }
-                }else{
-                    domainObject = handler.getStrategy().newInstance();
-                    handler.updateValues(domainObject, ds, organizationId);
-                    handler.getStrategy().insert(domainObject, ds.getDate());
-
-                    log.info("sync: add domain object {}", domainObject);
+                            correction.getObjectId(), organizationId);
                 }
 
-                Correction correction = handler.insertCorrection(domainObject, ds, organizationId);
+                //todo
 
-                log.info("sync: add correction {}", correction);
+            });
 
-                ds.setStatus(SYNCHRONIZED);
-                domainSyncBean.updateStatus(ds);
-            }
+            broadcastService.broadcast(getClass(), "info", "Синхронизация завершена успешно");
+            log.info("sync: completed");
+        } catch (Exception e) {
+            log.error("sync: error", e);
 
-            broadcastService.broadcast(getClass(), "processed", ds);
-        });
+            broadcastService.broadcast(getClass(), "error", ExceptionUtil.getCauseMessage(e));
+        } finally {
+            processing.set(false);
+        }
 
-        //clear
-        handler.getCorrections(parentObjectId, null, null, organizationId).forEach(c -> {
-            if (getDomainSyncs(syncEntity, SYNCHRONIZED, null, c.getExternalId()).isEmpty()){
-                correctionBean.delete(c);
-
-                log.info("sync: delete correction {}", c);
-            }
-        });
-
-        //deferred
-        getDomainSyncs(syncEntity, DEFERRED, parentObjectId, null).forEach(ds -> {
-            List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(), ds.getExternalId(),
-                    null, organizationId);
-
-            Correction correction = corrections.get(0);
-
-            List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
-                    correction.getObjectId(), organizationId);
-
-            //todo
-
-        });
-
-        broadcastService.broadcast(getClass(), "info", "Синхронизация завершена успешно");
-        log.info("sync: completed");
-
-        processing.set(false);
     }
 
 

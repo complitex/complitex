@@ -21,8 +21,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+
+import static org.complitex.common.util.StringUtil.isEqualIgnoreCase;
 
 /**
  * @author Anatoly Ivanov
@@ -49,7 +49,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     private ModuleBean moduleBean;
 
     @Override
-    public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
+    public List<? extends DomainObject> getParentObjects() {
         return cityStrategy.getList(new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name()));
     }
 
@@ -73,8 +73,8 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        return Objects.equals(domainSync.getName(), domainObject.getStringValue(DistrictStrategy.NAME)) &&
-                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getAlternativeLocale()));
+        return isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(DistrictStrategy.NAME)) &&
+                isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getAlternativeLocale()));
     }
 
     @Override
@@ -87,7 +87,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
+    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
         return districtStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())

@@ -11,8 +11,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
-import org.complitex.address.strategy.building.entity.BuildingCode;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.DomainObject;
@@ -65,18 +63,18 @@ public class HeatmeterCodePanel extends Panel {
                 final SearchComponentState searchComponentState = new SearchComponentState();
 
                 if (heatmeterConnection.getBuildingId() != null) {
-                    Building building = buildingStrategy.getDomainObject(heatmeterConnection.getBuildingId(), true);
+                    DomainObject building = buildingStrategy.getDomainObject(heatmeterConnection.getBuildingId(), true);
                     searchComponentState.put("building", building);
 
-                    if (building != null && building.getPrimaryStreetId() != null) {
-                        DomainObject street = streetStrategy.getDomainObject(building.getPrimaryStreetId(), true);
-                        searchComponentState.put("street", street);
-
-                        if (street != null && street.getParentId() != null) {
-                            DomainObject city = cityStrategy.getDomainObject(street.getParentId(), true);
-                            searchComponentState.put("city", city);
-                        }
-                    }
+//                    if (building != null && building.getPrimaryStreetId() != null) {
+//                        DomainObject street = streetStrategy.getDomainObject(building.getPrimaryStreetId(), true);
+//                        searchComponentState.put("street", street);
+//
+//                        if (street != null && street.getParentId() != null) {
+//                            DomainObject city = cityStrategy.getDomainObject(street.getParentId(), true);
+//                            searchComponentState.put("city", city);
+//                        }
+//                    }
                 }
 
                 //Organization
@@ -110,13 +108,13 @@ public class HeatmeterCodePanel extends Panel {
                                 DomainObject b = searchComponentState.get("building");
 
                                 if (b != null) {
-                                    Building building = buildingStrategy.getDomainObject(b.getObjectId(), true);
-
-                                    if (building != null && building.getBuildingCodes() != null){
-                                        for (BuildingCode buildingCode : building.getBuildingCodes()){
-                                            list.add(organizationStrategy.getDomainObject(buildingCode.getOrganizationId(), true));
-                                        }
-                                    }
+                                    DomainObject building = buildingStrategy.getDomainObject(b.getObjectId(), true);
+//
+//                                    if (building != null && building.getBuildingCodes() != null){
+//                                        for (BuildingCode buildingCode : building.getBuildingCodes()){
+//                                            list.add(organizationStrategy.getDomainObject(buildingCode.getOrganizationId(), true));
+//                                        }
+//                                    }
                                 }
 
                                 return list;

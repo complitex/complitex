@@ -7,7 +7,6 @@ import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.ExternalAddress;
 import org.complitex.address.entity.LocalAddress;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
@@ -378,11 +377,11 @@ public class AddressCorrectionService {
                 localAddress.getBuildingId(), null, null, organizationId, null);
 
         if (buildingCorrections.isEmpty()){
-            Building building = buildingStrategy.getDomainObject(localAddress.getBuildingId(), true);
+            DomainObject building = buildingStrategy.getDomainObject(localAddress.getBuildingId(), true);
 
             if (building != null){
-                externalAddress.setBuildingNumber(building.getAccompaniedNumber());
-                externalAddress.setBuildingCorp(building.getAccompaniedCorp());
+                externalAddress.setBuildingNumber(building.getStringValue(BuildingStrategy.NUMBER));
+                externalAddress.setBuildingCorp(building.getStringValue(BuildingStrategy.CORP));
             }else {
 
                 return externalAddress;
@@ -391,8 +390,7 @@ public class AddressCorrectionService {
             BuildingCorrection buildingCorrection = buildingCorrections.get(0);
             externalAddress.setBuildingNumber(buildingCorrection.getCorrection());
             externalAddress.setBuildingCorp(buildingCorrection.getCorrectionCorp());
-        } else if (buildingCorrections.size() > 1) {
-
+        } else {
             throw new ResolveAddressException("MORE_ONE_REMOTE_BUILDING_CORRECTION");
         }
 

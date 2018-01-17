@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.complitex.pspoffice.importing.legacy.service;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -10,7 +6,6 @@ import com.google.common.collect.*;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.exception.AbstractException;
 import org.complitex.common.exception.ImportCriticalException;
@@ -759,7 +754,7 @@ public class LegacyDataImportService {
                                             Long systemBuildingId =
                                                     buildingCorrectionBean.findSystemBuilding(systemStreetId, dom, korpus);
                                             if (systemBuildingId == null) {
-                                                Building systemBuilding =
+                                                DomainObject systemBuilding =
                                                         buildingCorrectionBean.newBuilding(systemStreetId, dom, korpus,
                                                         organizationMap.get(building.getIdjek()));
                                                 buildingStrategy.insert(systemBuilding, DateUtil.getCurrentDate());

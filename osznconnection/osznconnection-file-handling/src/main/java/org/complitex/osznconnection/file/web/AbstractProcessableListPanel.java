@@ -68,6 +68,8 @@ import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationT
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.template.TemplateSession;
 import org.odlabs.wiquery.ui.effects.HighlightEffectJavaScriptResourceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import java.io.Serializable;
@@ -81,6 +83,7 @@ import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE;
 
 public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile, F extends AbstractFilter> extends Panel {
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     protected abstract class Column implements Serializable {
 

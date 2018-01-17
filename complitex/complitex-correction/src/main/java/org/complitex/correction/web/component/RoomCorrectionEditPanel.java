@@ -8,7 +8,6 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.util.AddressRenderer;
@@ -103,7 +102,7 @@ public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel<RoomCorr
         RoomCorrection correction = getCorrection();
 
         String apartment = null;
-        Building buildingDomainObject;
+        DomainObject buildingDomainObject;
         if (correction.getApartmentId() == null) {
             buildingDomainObject = buildingStrategy.getDomainObject(correction.getBuildingId(), true);
         } else {
@@ -114,7 +113,7 @@ public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel<RoomCorr
         }
         String building = buildingStrategy.displayDomainObject(buildingDomainObject, getLocale());
 
-        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getPrimaryStreetId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getParentId(), true);
         String street = streetStrategy.displayDomainObject(streetDomainObject, getLocale());
 
         DomainObject cityDomainObject = cityStrategy.getDomainObject(streetDomainObject.getParentId(), true);

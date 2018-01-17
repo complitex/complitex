@@ -7,8 +7,6 @@ package org.complitex.pspoffice.person.strategy.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
-import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
@@ -22,7 +20,10 @@ import org.complitex.pspoffice.person.strategy.entity.grid.BuildingsGridFilter;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -61,8 +62,8 @@ public class BuildingsGridBean extends AbstractBean {
 
     private Map<String, Object> newParamsMap(BuildingsGridFilter filter) {
         Map<String, Object> params = Maps.newHashMap();
-        params.put("additionalAddressAT", BuildingStrategy.BUILDING_ADDRESS);
-        params.put("buildingAddressNumberAT", BuildingAddressStrategy.NUMBER);
+//        params.put("additionalAddressAT", BuildingStrategy.BUILDING_ADDRESS);
+//        params.put("buildingAddressNumberAT", BuildingAddressStrategy.NUMBER);
         params.put("buildingDistrictAT", BuildingStrategy.DISTRICT);
         params.put("cityId", filter.getCityId());
         params.put("districtId", filter.getDistrictId());
@@ -78,8 +79,8 @@ public class BuildingsGridBean extends AbstractBean {
 
     private Map<String, Object> enhanceParams(Map<String, Object> params, Locale locale) {
         params.put("sortLocaleId", stringLocaleBean.convert(locale).getId());
-        params.put("buildingAddressCorpAT", BuildingAddressStrategy.CORP);
-        params.put("buildingAddressStructureAT", BuildingAddressStrategy.STRUCTURE);
+//        params.put("buildingAddressCorpAT", BuildingAddressStrategy.CORP);
+//        params.put("buildingAddressStructureAT", BuildingAddressStrategy.STRUCTURE);
         params.put("streetNameAT", StreetStrategy.NAME);
         params.put("streetTypeAT", StreetStrategy.STREET_TYPE);
         params.put("streetTypeNameAT", StreetTypeStrategy.NAME);
@@ -99,40 +100,40 @@ public class BuildingsGridBean extends AbstractBean {
             for (Map<String, Long> item : data) {
                 //building
                 final long buildingId = item.get("buildingId");
-                final Building buildingObject = buildingStrategy.getDomainObject(buildingId, true);
+                final DomainObject buildingObject = buildingStrategy.getDomainObject(buildingId, true);
                 String building = null;
 
                 //find appropriate address
                 {
-                    DomainObject buildingAddress = buildingObject.getPrimaryAddress();
-                    if (filter.getStreetId() != null) {
-                        for (DomainObject address : buildingObject.getAllAddresses()) {
-                            if (address.getParentEntityId().equals(BuildingAddressStrategy.PARENT_STREET_ENTITY_ID)
-                                    && address.getParentId().equals(filter.getStreetId())) {
-                                buildingAddress = address;
-                                break;
-                            }
-                        }
-                    }
-                    buildingObject.setAccompaniedAddress(buildingAddress);
-                    building = buildingStrategy.displayDomainObject(buildingObject, filter.getLocale());
+//                    DomainObject buildingAddress = buildingObject.getPrimaryAddress();
+//                    if (filter.getStreetId() != null) {
+//                        for (DomainObject address : buildingObject.getAllAddresses()) {
+//                            if (address.getParentEntityId().equals(BuildingAddressStrategy.PARENT_STREET_ENTITY_ID)
+//                                    && address.getParentId().equals(filter.getStreetId())) {
+//                                buildingAddress = address;
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    buildingObject.setAccompaniedAddress(buildingAddress);
+//                    building = buildingStrategy.displayDomainObject(buildingObject, filter.getLocale());
                 }
 
                 //street
-                Long streetId = null;
-                if (filter.getStreetId() != null) {
-                    streetId = filter.getStreetId();
-                } else {
-                    DomainObject buildingAddress = buildingObject.getPrimaryAddress();
-                    if (buildingAddress.getParentEntityId().equals(BuildingAddressStrategy.PARENT_STREET_ENTITY_ID)) {
-                        streetId = buildingAddress.getParentId();
-                    }
-                }
+//                Long streetId = null;
+//                if (filter.getStreetId() != null) {
+//                    streetId = filter.getStreetId();
+//                } else {
+//                    DomainObject buildingAddress = buildingObject.getPrimaryAddress();
+//                    if (buildingAddress.getParentEntityId().equals(BuildingAddressStrategy.PARENT_STREET_ENTITY_ID)) {
+//                        streetId = buildingAddress.getParentId();
+//                    }
+//                }
                 String street = null;
-                if (streetId != null) {
-                    DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
-                    street = streetStrategy.displayDomainObject(streetObject, filter.getLocale());
-                }
+//                if (streetId != null) {
+//                    DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
+//                    street = streetStrategy.displayDomainObject(streetObject, filter.getLocale());
+//                }
 
                 //district
                 final Long districtId = buildingStrategy.getDistrictId(buildingObject);
@@ -153,8 +154,8 @@ public class BuildingsGridBean extends AbstractBean {
                     }
                 }
 
-                result.add(new BuildingsGridEntity(district, districtId, street, streetId, building, buildingId,
-                        apartments, Collections.unmodifiableList(organizations)));
+//                result.add(new BuildingsGridEntity(district, districtId, street, streetId, building, buildingId,
+//                        apartments, Collections.unmodifiableList(organizations)));
             }
         }
         return result;

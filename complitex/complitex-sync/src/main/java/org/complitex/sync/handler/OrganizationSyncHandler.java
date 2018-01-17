@@ -21,7 +21,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static org.complitex.common.strategy.organization.IOrganizationStrategy.ORGANIZATION_TYPE;
@@ -52,7 +51,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
+    public List<? extends DomainObject> getParentObjects() {
         return null;
     }
 
@@ -75,7 +74,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
+    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
         return organizationStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())

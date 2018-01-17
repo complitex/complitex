@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
@@ -476,11 +475,11 @@ public class AddressService extends AbstractBean {
                 request.getBuildingId(), null, null, billingId, userOrganizationId);
 
         if (buildingCorrections.isEmpty()){
-            Building building = buildingStrategy.getDomainObject(request.getBuildingId(), true);
+            DomainObject building = buildingStrategy.getDomainObject(request.getBuildingId(), true);
 
             if (building != null){
-                request.setOutgoingBuildingNumber(building.getAccompaniedNumber(locale));
-                request.setOutgoingBuildingCorp(building.getAccompaniedCorp(locale));
+                request.setOutgoingBuildingNumber(building.getStringValue(BuildingStrategy.NUMBER, locale));
+                request.setOutgoingBuildingCorp(building.getStringValue(BuildingStrategy.CORP, locale));
             }else {
                 request.setStatus(RequestStatus.BUILDING_UNRESOLVED);
 
@@ -490,7 +489,7 @@ public class AddressService extends AbstractBean {
             BuildingCorrection buildingCorrection = buildingCorrections.get(0);
             request.setOutgoingBuildingNumber(buildingCorrection.getCorrection());
             request.setOutgoingBuildingCorp(buildingCorrection.getCorrectionCorp());
-        } else if (buildingCorrections.size() > 1) {
+        } else {
             request.setStatus(RequestStatus.MORE_ONE_REMOTE_BUILDING_CORRECTION);
 
             return;

@@ -3,7 +3,6 @@ package org.complitex.correction.web.address;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
@@ -95,10 +94,10 @@ public class ApartmentCorrectionList extends AddressCorrectionList<ApartmentCorr
         IStrategy streetStrategy = strategyFactory.getStrategy("street");
         IStrategy cityStrategy = strategyFactory.getStrategy("city");
 
-        Building buildingDomainObject = (Building)buildingStrategy.getDomainObject(correction.getBuildingId(), true);
+        DomainObject buildingDomainObject = buildingStrategy.getDomainObject(correction.getBuildingId(), true);
         String building = buildingStrategy.displayDomainObject(buildingDomainObject, getLocale());
 
-        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getPrimaryStreetId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getParentId(), true);
         String street = streetStrategy.displayDomainObject(streetDomainObject, getLocale());
 
         DomainObject cityDomainObject = cityStrategy.getDomainObject(streetDomainObject.getParentId(), true);

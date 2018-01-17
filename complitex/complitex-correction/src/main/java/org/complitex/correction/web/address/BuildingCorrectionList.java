@@ -73,7 +73,7 @@ public class BuildingCorrectionList extends AddressCorrectionList<BuildingCorrec
                     building = buildingStrategy.getDomainObject(c.getObjectId(), true);
                     c.setEditable(false);
                 }
-                SearchComponentState state = buildingStrategy.getSearchComponentStateForParent(building.getParentId(), "building_address", null);
+                SearchComponentState state = buildingStrategy.getSearchComponentStateForParent(building.getParentId(), "street", null);
                 DomainObject street = state.get("street");
                 DomainObject city = state.get("city");
                 String displayBuilding = buildingStrategy.displayDomainObject(building, locale);

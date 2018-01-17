@@ -4,8 +4,6 @@ import au.com.bytecode.opencsv.CSVReader;
 import org.complitex.address.Module;
 import org.complitex.address.entity.AddressImportFile;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building.entity.Building;
-import org.complitex.address.strategy.building.entity.BuildingCode;
 import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
@@ -743,8 +741,8 @@ public class AddressImportService extends AbstractImportService {
                     throw new ImportObjectLinkException(BUILDING.getFileName(), recordIndex, districtExternalId);
                 }
 
-                Building building;
-                Building oldBuilding = null;
+                DomainObject building;
+                DomainObject oldBuilding = null;
                 Long buildingId = null;
                 DomainObject buildingAddress = null;
 
@@ -753,8 +751,7 @@ public class AddressImportService extends AbstractImportService {
                 //noinspection ConstantConditions
                 buildingPart = StringUtil.removeWhiteSpaces(StringUtil.toCyrillic(buildingPart)).toUpperCase();
 
-                List<Long> buildingIds = buildingStrategy.getObjectIds(streetObjectId, buildingNum, buildingPart, null,
-                        BuildingAddressStrategy.PARENT_STREET_ENTITY_ID, locale);
+                List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(null, streetObjectId, buildingNum, buildingPart);
 
                 if (buildingIds.size() == 1){
                     buildingId = buildingIds.get(0);
@@ -768,7 +765,7 @@ public class AddressImportService extends AbstractImportService {
                     building = buildingStrategy.newInstance();
                     building.getAttribute(BuildingStrategy.DISTRICT).setValueId(districtObjectId);
 
-                    buildingAddress = building.getPrimaryAddress();
+                    buildingAddress = building;
                 }else {
                     oldBuilding = buildingStrategy.getDomainObject(buildingId, true);
 
@@ -799,16 +796,16 @@ public class AddressImportService extends AbstractImportService {
 
                 //building address
                 if (buildingAddress != null) {
-                    buildingAddress.setParentEntityId(BuildingAddressStrategy.PARENT_STREET_ENTITY_ID);
-                    buildingAddress.setParentId(streetObjectId);
-
-                    //building number
-                    buildingAddress.setStringValue(BuildingAddressStrategy.NUMBER, buildingNum, locale);
-
-                    //building part
-                    if (!buildingPart.isEmpty()) {
-                        buildingAddress.setStringValue(BuildingAddressStrategy.CORP, buildingPart, locale);
-                    }
+//                    buildingAddress.setParentEntityId(BuildingAddressStrategy.PARENT_STREET_ENTITY_ID);
+//                    buildingAddress.setParentId(streetObjectId);
+//
+//                    //building number
+//                    buildingAddress.setStringValue(BuildingAddressStrategy.NUMBER, buildingNum, locale);
+//
+//                    //building part
+//                    if (!buildingPart.isEmpty()) {
+//                        buildingAddress.setStringValue(BuildingAddressStrategy.CORP, buildingPart, locale);
+//                    }
                 }
 
                 //organization
@@ -830,16 +827,16 @@ public class AddressImportService extends AbstractImportService {
                     if (buildingCodeInt != null) {
                         boolean exist = false;
 
-                        for (BuildingCode bc : building.getBuildingCodes()){
-                            if (bc.getBuildingCode().equals(buildingCodeInt) && bc.getOrganizationId().equals(organizationId)){
-                                exist = true;
-                                break;
-                            }
-                        }
-
-                        if (!exist){
-                            building.getBuildingCodes().add(new BuildingCode(organizationId, buildingCodeInt));
-                        }
+//                        for (BuildingCode bc : building.getBuildingCodes()){
+//                            if (bc.getBuildingCode().equals(buildingCodeInt) && bc.getOrganizationId().equals(organizationId)){
+//                                exist = true;
+//                                break;
+//                            }
+//                        }
+//
+//                        if (!exist){
+//                            building.getBuildingCodes().add(new BuildingCode(organizationId, buildingCodeInt));
+//                        }
                     } else {
                         listener.warn(BUILDING, ResourceUtil.getFormatString(RESOURCE_BUNDLE, "building_code_format_warn",
                                 locale, buildingNum, buildingAddressExternalId, buildingCode));

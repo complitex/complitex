@@ -312,10 +312,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public List<? extends DomainObject> getList(DomainObjectFilter example) {
-        if (example.getObjectId() != null && example.getObjectId() <= 0) {
-            return Collections.emptyList();
-        }
-
         example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
         extendOrderBy(example);
@@ -340,10 +336,6 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
 
     @Override
     public Long getCount(DomainObjectFilter example) {
-        if (example.getObjectId() != null && example.getObjectId() <= 0) {
-            return 0L;
-        }
-
         example.setEntityName(getEntityName());
         prepareExampleForPermissionCheck(example);
 

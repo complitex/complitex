@@ -1,6 +1,5 @@
 package org.complitex.keconnection.web;
 
-import org.complitex.address.web.sync.AddressSyncPage;
 import org.complitex.keconnection.heatmeter.web.consumption.CentralHeatingConsumptionFileList;
 import org.complitex.template.web.ComplitexWebApplication;
 
@@ -26,6 +25,6 @@ public class KeWebApplication extends ComplitexWebApplication{
 //        }
 
         mountPage("/central-heating-consumptions", CentralHeatingConsumptionFileList.class);
-        mountPage("/address-sync", AddressSyncPage.class);
+//        mountPage("/address-sync", AddressSyncPage.class);
     }
 }

@@ -5,10 +5,10 @@ import com.google.common.base.Strings;
 import org.complitex.common.converter.BooleanConverter;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.AbstractImportService;
-import org.complitex.common.service.IImportListener;
 import org.complitex.common.exception.ImportFileNotFoundException;
 import org.complitex.common.exception.ImportFileReadException;
+import org.complitex.common.service.AbstractImportService;
+import org.complitex.common.service.IImportListener;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.CloneUtil;
 import org.complitex.keconnection.organization.entity.OrganizationImport;
@@ -117,7 +117,7 @@ public class KeOrganizationImportService extends AbstractImportService {
             DomainObject newObject = null;
             DomainObject oldObject = null;
 
-            Long objectId = organizationStrategy.getObjectId(externalOrganizationId);
+            Long objectId = null;//organizationStrategy.getObjectId(externalOrganizationId);
 
             if (objectId != null) {
                 oldObject = organizationStrategy.getDomainObject(objectId, true);
@@ -129,7 +129,7 @@ public class KeOrganizationImportService extends AbstractImportService {
 
             if (newObject == null) {
                 newObject = organizationStrategy.newInstance();
-                newObject.setExternalId(externalOrganizationId);
+//                newObject.setExternalId(externalOrganizationId);
             }
 
             //code
@@ -144,7 +144,7 @@ public class KeOrganizationImportService extends AbstractImportService {
             //parent
             Long parentId = organization.getHlevel();
             if (parentId != null) {
-                Long parentObjectId = organizationStrategy.getObjectId(parentId.toString());
+                Long parentObjectId = null;//organizationStrategy.getObjectId(parentId.toString());
 
                 if (parentObjectId != null) {
                     newObject.getAttribute(KeOrganizationStrategy.USER_ORGANIZATION_PARENT).setValueId(parentObjectId);

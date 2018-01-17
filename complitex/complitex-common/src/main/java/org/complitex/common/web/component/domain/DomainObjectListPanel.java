@@ -201,7 +201,7 @@ public class DomainObjectListPanel extends Panel {
         });
         filterForm.add(radioGroup);
 
-        dataView = new DataView<DomainObject>("data", dataProvider, 1) {
+        dataView = new DataView<DomainObject>("data", dataProvider, 10) {
 
             @Override
             protected void populateItem(Item<DomainObject> item) {
@@ -209,7 +209,6 @@ public class DomainObjectListPanel extends Panel {
 
                 item.add(new Radio<>("radio", item.getModel()).setVisible(radioSelect));
                 item.add(new Label("object_id", Model.of(object.getObjectId())));
-                item.add(new Label("external_id", Model.of(""))); //todo depricated
 
                 ListView<EntityAttribute> dataColumns = new ListView<EntityAttribute>("dataColumns", columnEntityAttributes) {
                     @Override
@@ -373,7 +372,6 @@ public class DomainObjectListPanel extends Panel {
         filterForm.add(filters);
 
         filterForm.add(new TextField<>("objectId", new PropertyModel<>(filter, "objectId")));
-        filterForm.add(new TextField<>("externalId", new PropertyModel<>(filter, "externalId")));
 
         //Reset Action
         AjaxLink reset = new AjaxLink("reset") {

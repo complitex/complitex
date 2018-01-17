@@ -7,6 +7,7 @@ import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.Status;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
@@ -22,8 +23,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+
+import static org.complitex.common.util.StringUtil.isEqualIgnoreCase;
 
 /**
  * @author Anatoly Ivanov
@@ -64,8 +66,8 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects(Map<String, DomainObject> map) {
-        return cityStrategy.getList(new DomainObjectFilter());
+    public List<? extends DomainObject> getParentObjects() {
+        return cityStrategy.getList(new DomainObjectFilter().setStatus(Status.ACTIVE.name()));
     }
 
     @Override
@@ -89,18 +91,26 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         }
 
         return Objects.equals(domainObject.getValueId(StreetStrategy.STREET_TYPE), streetTypeCorrections.get(0).getObjectId()) &&
-                Objects.equals(domainSync.getName(), domainObject.getStringValue(StreetStrategy.NAME)) &&
-                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(StreetStrategy.NAME, Locales.getAlternativeLocale()));
+                isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(StreetStrategy.NAME)) &&
+                isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(StreetStrategy.NAME, Locales.getAlternativeLocale()));
     }
 
     @Override
-    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
+    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
+        List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
+                domainSync.getAdditionalParentId(), null, organizationId);
+
+        if (streetTypeCorrections.isEmpty()) {
+            throw new RuntimeException("street type correction not found" + domainSync);
+        }
+
         return streetStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("city")
                         .setParentId(domainSync.getParentObjectId())
+                        .addAttribute(StreetStrategy.STREET_TYPE, streetTypeCorrections.get(0).getObjectId())
                         .addAttribute(StreetStrategy.NAME, domainSync.getName())
                         .addAttribute(StreetStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
     }

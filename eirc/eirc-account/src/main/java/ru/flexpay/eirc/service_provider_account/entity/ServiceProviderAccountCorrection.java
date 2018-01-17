@@ -9,7 +9,7 @@ public class ServiceProviderAccountCorrection extends Correction {
     public ServiceProviderAccountCorrection() {
     }
 
-    public ServiceProviderAccountCorrection(String externalId, Long objectId, String correction, Long organizationId,
+    public ServiceProviderAccountCorrection(Long externalId, Long objectId, String correction, Long organizationId,
                                             Long userOrganizationId, Long moduleId) {
         super(externalId, objectId, correction, organizationId, userOrganizationId, moduleId);
     }
