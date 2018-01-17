@@ -81,8 +81,8 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .addAttribute(IOrganizationStrategy.NAME, domainSync.getName())
                         .addAttribute(IOrganizationStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId())
-                        .addAttribute(IOrganizationStrategy.SHORT_NAME, domainSync.getName())
-                        .addAttribute(IOrganizationStrategy.SHORT_NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(IOrganizationStrategy.SHORT_NAME, domainSync.getAdditionalName())
+                        .addAttribute(IOrganizationStrategy.SHORT_NAME, domainSync.getAltAdditionalName(), Locales.getAlternativeLocaleId()));
     }
 
     @Override
