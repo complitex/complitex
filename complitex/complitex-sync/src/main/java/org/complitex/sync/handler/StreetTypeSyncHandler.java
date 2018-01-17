@@ -19,7 +19,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+
+import static org.complitex.common.util.StringUtil.isEqualIgnoreCase;
 
 /**
  * @author Anatoly Ivanov
@@ -51,10 +52,10 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        return Objects.equals(domainSync.getName(), streetTypeStrategy.getName(domainObject)) //todo get
-                && Objects.equals(domainSync.getAdditionalName(), streetTypeStrategy.getShortName(domainObject))
-                && Objects.equals(domainSync.getAltName(), streetTypeStrategy.getName(domainObject, Locales.getAlternativeLocale()))
-                && Objects.equals(domainSync.getAltAdditionalName(), streetTypeStrategy.getShortName(domainObject, Locales.getAlternativeLocale()));
+        return isEqualIgnoreCase(domainSync.getName(), streetTypeStrategy.getName(domainObject)) //todo get
+                && isEqualIgnoreCase(domainSync.getAdditionalName(), streetTypeStrategy.getShortName(domainObject))
+                && isEqualIgnoreCase(domainSync.getAltName(), streetTypeStrategy.getName(domainObject, Locales.getAlternativeLocale()))
+                && isEqualIgnoreCase(domainSync.getAltAdditionalName(), streetTypeStrategy.getShortName(domainObject, Locales.getAlternativeLocale()));
     }
 
     @Override

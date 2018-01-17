@@ -26,6 +26,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static org.complitex.common.util.StringUtil.isEqualIgnoreCase;
+
 /**
  * @author Anatoly Ivanov
  *         Date: 03.08.2014 6:47
@@ -89,10 +91,10 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         }
 
         return Objects.equals(domainObject.getParentId(), streetCorrections.get(0).getObjectId()) &&
-                Objects.equals(domainSync.getName(), domainObject.getStringValue(BuildingStrategy.NUMBER)) &&
-                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(BuildingStrategy.NUMBER, Locales.getAlternativeLocale())) &&
-                Objects.equals(domainSync.getAdditionalName(), domainObject.getStringValue(BuildingStrategy.CORP)) &&
-                Objects.equals(domainSync.getAltAdditionalName(), domainObject.getStringValue(BuildingStrategy.CORP, Locales.getAlternativeLocale()));
+                isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(BuildingStrategy.NUMBER)) &&
+                isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(BuildingStrategy.NUMBER, Locales.getAlternativeLocale())) &&
+                isEqualIgnoreCase(domainSync.getAdditionalName(), domainObject.getStringValue(BuildingStrategy.CORP)) &&
+                isEqualIgnoreCase(domainSync.getAltAdditionalName(), domainObject.getStringValue(BuildingStrategy.CORP, Locales.getAlternativeLocale()));
     }
 
     @Override

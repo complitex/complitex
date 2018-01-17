@@ -269,10 +269,12 @@ public class DomainSyncService {
                 List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(), ds.getExternalId(),
                         null, organizationId);
 
-                Correction correction = corrections.get(0);
+                if (!corrections.isEmpty()) {
+                    Correction correction = corrections.get(0);
 
-                List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
-                        correction.getObjectId(), organizationId);
+                    List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
+                            correction.getObjectId(), organizationId);
+                }
 
                 //todo
 

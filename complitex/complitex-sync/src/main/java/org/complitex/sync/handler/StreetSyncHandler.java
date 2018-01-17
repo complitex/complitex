@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static org.complitex.common.util.StringUtil.isEqualIgnoreCase;
+
 /**
  * @author Anatoly Ivanov
  *         Date: 03.08.2014 6:46
@@ -89,8 +91,8 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         }
 
         return Objects.equals(domainObject.getValueId(StreetStrategy.STREET_TYPE), streetTypeCorrections.get(0).getObjectId()) &&
-                Objects.equals(domainSync.getName(), domainObject.getStringValue(StreetStrategy.NAME)) &&
-                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(StreetStrategy.NAME, Locales.getAlternativeLocale()));
+                isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(StreetStrategy.NAME)) &&
+                isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(StreetStrategy.NAME, Locales.getAlternativeLocale()));
     }
 
     @Override

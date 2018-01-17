@@ -21,7 +21,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+
+import static org.complitex.common.util.StringUtil.isEqualIgnoreCase;
 
 /**
  * @author Anatoly Ivanov
@@ -72,8 +73,8 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        return Objects.equals(domainSync.getName(), domainObject.getStringValue(DistrictStrategy.NAME)) &&
-                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getAlternativeLocale()));
+        return isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(DistrictStrategy.NAME)) &&
+                isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getAlternativeLocale()));
     }
 
     @Override
