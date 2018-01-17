@@ -197,6 +197,10 @@ public class DomainSyncService {
                 }
 
                 if (!corrections.isEmpty()){
+                    if (corrections.size() > 1){
+                        log.warn("sync: corrections > 1 {}", corrections); //todo
+                    }
+
                     Correction correction = corrections.get(0);
 
                     if (!Objects.equals(correction.getCorrection(), ds.getName())){

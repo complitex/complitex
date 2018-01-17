@@ -16,6 +16,7 @@ import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.util.ResourceUtil;
+import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.Action;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
@@ -198,27 +199,10 @@ public class DomainSyncPanel extends Panel {
 
                     DomainSync domainSync = (DomainSync) payload;
 
-                    String name = domainSync.getName();
+                    String message = StringUtil.valueOf(domainSync.getParentId()) + " " +
+                            domainSync.getName() + " " +
+                            StringUtil.valueOf(domainSync.getAdditionalName());
 
-                    String message = "";
-
-                    switch (key){
-                        case "processed":
-                            message = name;
-                            break;
-                        case "add_all":
-                            message = String.format(getString(syncEntity.name() + ".added"), name);
-                            break;
-                        case "update_new_name_all":
-                            message = String.format(getString(syncEntity.name() + ".new_named"), name);
-                            break;
-                        case "update_duplicate_all":
-                            message = String.format(getString(syncEntity.name() + ".duplicated"), name);
-                            break;
-                        case "delete_all":
-                            message = String.format(getString(syncEntity.name() + ".removed"), name);
-                            break;
-                    }
 
                     processed.setDefaultModelObject(message);
                     handler.add(processed);

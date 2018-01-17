@@ -91,6 +91,10 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
             throw new RuntimeException("street correction not found " + domainSync);
         }
 
+        if (streetCorrections.size() > 1){
+            throw new RuntimeException("street correction size > 1 " + domainSync);
+        }
+
         return Objects.equals(domainObject.getParentId(), streetCorrections.get(0).getObjectId()) &&
                 isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(BuildingStrategy.NUMBER)) &&
                 isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(BuildingStrategy.NUMBER, Locales.getAlternativeLocale())) &&
