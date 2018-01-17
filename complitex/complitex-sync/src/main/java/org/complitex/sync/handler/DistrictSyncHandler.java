@@ -86,7 +86,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
+    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
         return districtStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())

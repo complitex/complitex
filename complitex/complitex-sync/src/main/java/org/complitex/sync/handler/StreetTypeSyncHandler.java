@@ -68,7 +68,7 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
+    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
         return streetTypeStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())

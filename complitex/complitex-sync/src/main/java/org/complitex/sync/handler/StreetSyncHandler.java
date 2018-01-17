@@ -94,13 +94,21 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync) {
+    public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
+        List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
+                domainSync.getAdditionalParentId(), null, organizationId);
+
+        if (streetTypeCorrections.isEmpty()) {
+            throw new RuntimeException("street type correction not found" + domainSync);
+        }
+
         return streetStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("city")
                         .setParentId(domainSync.getParentObjectId())
+                        .addAttribute(StreetStrategy.STREET_TYPE, streetTypeCorrections.get(0).getObjectId())
                         .addAttribute(StreetStrategy.NAME, domainSync.getName())
                         .addAttribute(StreetStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
     }

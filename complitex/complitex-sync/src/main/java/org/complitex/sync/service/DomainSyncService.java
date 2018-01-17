@@ -224,7 +224,7 @@ public class DomainSyncService {
                         }
                     }
                 }else {
-                    List<? extends DomainObject> domainObjects = handler.getDomainObjects(ds);
+                    List<? extends DomainObject> domainObjects = handler.getDomainObjects(ds, organizationId);
 
                     DomainObject domainObject;
 
