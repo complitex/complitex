@@ -300,9 +300,6 @@ public class DomainSyncService {
                     handler.getStrategy().update(domainObject);
 
                     log.info("sync: update deferred domain object {}", domainObject);
-
-                    ds.setStatus(SYNCHRONIZED);
-                    domainSyncBean.updateStatus(ds);
                 }else{
                     List<? extends DomainObject> domainObjects = handler.getDomainObjects(ds, organizationId);
 
@@ -319,10 +316,10 @@ public class DomainSyncService {
 
                         log.info("sync: add deferred domain object {}", domainObject);
                     }
-
-                    ds.setStatus(SYNCHRONIZED);
-                    domainSyncBean.updateStatus(ds);
                 }
+
+                ds.setStatus(SYNCHRONIZED);
+                domainSyncBean.updateStatus(ds);
             });
 
             broadcastService.broadcast(getClass(), "info", "Синхронизация завершена успешно");
