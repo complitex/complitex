@@ -14,7 +14,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.time.Duration;
-import org.complitex.address.entity.AddressImportFile;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.IImportFile;
 import org.complitex.common.entity.ImportMessage;
@@ -23,7 +22,6 @@ import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
-import org.complitex.organization.entity.OrganizationImportFile;
 import org.complitex.osznconnection.file.entity.CorrectionImportFile;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeImportFile;
 import org.complitex.osznconnection.file.service.ImportService;
@@ -78,8 +76,8 @@ public class ImportPage extends TemplatePage {
 
         //Справочники
         List<IImportFile> dictionaryList = new ArrayList<>();
-        Collections.addAll(dictionaryList, OrganizationImportFile.values());
-        Collections.addAll(dictionaryList, AddressImportFile.values());
+//        Collections.addAll(dictionaryList, OrganizationImportFile.values());
+//        Collections.addAll(dictionaryList, AddressImportFile.values());
         Collections.addAll(dictionaryList, PrivilegeImportFile.values());
         //Collections.addAll(dictionaryList, OwnershipImportFile.values());
 

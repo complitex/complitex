@@ -8,6 +8,7 @@ import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.Locales;
+import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.OrganizationCorrection;
@@ -62,10 +63,24 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        return Objects.equals(domainSync.getName(), domainObject.getStringValue(IOrganizationStrategy.NAME)) &&
-                Objects.equals(domainSync.getAltName(), domainObject.getStringValue(IOrganizationStrategy.NAME, Locales.getAlternativeLocale())) &&
-                Objects.equals(domainSync.getAdditionalName(), domainObject.getStringValue(IOrganizationStrategy.SHORT_NAME)) &&
-                Objects.equals(domainSync.getAltAdditionalName(), domainObject.getStringValue(IOrganizationStrategy.SHORT_NAME, Locales.getAlternativeLocale()));
+        Long parentObjectId = null;
+
+        if (domainSync.getParentId() != null) {
+            List<OrganizationCorrection> corrections = organizationCorrectionBean.getOrganizationCorrections(
+                    domainObject.getParentId(), null, organizationId);
+
+            if (corrections.isEmpty()) {
+                throw new RuntimeException("organization correction not found" + domainSync);
+            }
+
+            parentObjectId = corrections.get(0).getObjectId();
+        }
+
+        return Objects.equals(domainObject.getParentId(), parentObjectId) &&
+                StringUtil.isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(IOrganizationStrategy.NAME)) &&
+                StringUtil.isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(IOrganizationStrategy.NAME, Locales.getAlternativeLocale())) &&
+                StringUtil.isEqualIgnoreCase(domainSync.getAdditionalName(), domainObject.getStringValue(IOrganizationStrategy.SHORT_NAME)) &&
+                StringUtil.isEqualIgnoreCase(domainSync.getAltAdditionalName(), domainObject.getStringValue(IOrganizationStrategy.SHORT_NAME, Locales.getAlternativeLocale()));
     }
 
     @Override
@@ -114,6 +129,17 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        if (domainSync.getParentId() != null) {
+            List<OrganizationCorrection> corrections = organizationCorrectionBean.getOrganizationCorrections(
+                    domainObject.getParentId(), null, organizationId);
+
+            if (corrections.isEmpty()) {
+                throw new RuntimeException("organization correction not found" + domainSync);
+            }
+
+            domainObject.setParentId(corrections.get(0).getObjectId());
+        }
+
         domainObject.setStringValue(IOrganizationStrategy.EDRPOU, domainSync.getAdditionalParentId() + "");
         domainObject.setStringValue(IOrganizationStrategy.CODE, domainSync.getAdditionalExternalId());
         domainObject.setStringValue(IOrganizationStrategy.NAME, domainSync.getName());
