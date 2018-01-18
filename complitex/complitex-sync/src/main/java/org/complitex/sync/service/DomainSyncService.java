@@ -213,22 +213,27 @@ public class DomainSyncService {
 
                     DomainObject domainObject = handler.getStrategy().getDomainObject(correction.getObjectId());
 
-                    if (handler.isCorresponds(domainObject, ds, organizationId)){
-                        ds.setStatus(SYNCHRONIZED);
-                        domainSyncBean.updateStatus(ds);
-                    }else{
-                        List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
-                                domainObject.getObjectId(),  organizationId);
-
-                        if (objectCorrections.size() == 1 && objectCorrections.get(0).getId().equals(correction.getId())){
-                            handler.updateValues(domainObject, ds, organizationId);
-                            handler.getStrategy().update(domainObject);
-
-                            log.info("sync: update domain object {}", domainObject);
-                        }else {
-                            ds.setStatus(DEFERRED);
+                    try {
+                        if (handler.isCorresponds(domainObject, ds, organizationId)){
+                            ds.setStatus(SYNCHRONIZED);
                             domainSyncBean.updateStatus(ds);
+                        }else{
+                            List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
+                                    domainObject.getObjectId(),  organizationId);
+
+                            if (objectCorrections.size() == 1 && objectCorrections.get(0).getId().equals(correction.getId())){
+                                handler.updateValues(domainObject, ds, organizationId);
+                                handler.getStrategy().update(domainObject);
+
+                                log.info("sync: update domain object {}", domainObject);
+                            }else {
+                                ds.setStatus(DEFERRED);
+                                domainSyncBean.updateStatus(ds);
+                            }
                         }
+                    } catch (Exception e) {
+                        ds.setStatus(ERROR);
+                        domainSyncBean.updateStatus(ds);
                     }
                 }else {
                     List<? extends DomainObject> domainObjects = handler.getDomainObjects(ds, organizationId);
