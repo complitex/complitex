@@ -67,7 +67,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
         if (domainSync.getParentId() != null) {
             List<OrganizationCorrection> corrections = organizationCorrectionBean.getOrganizationCorrections(
-                    domainObject.getParentId(), null, organizationId);
+                    domainSync.getParentId(), null, organizationId);
 
             if (corrections.isEmpty()) {
                 throw new RuntimeException("organization correction not found" + domainSync);
@@ -131,7 +131,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         if (domainSync.getParentId() != null) {
             List<OrganizationCorrection> corrections = organizationCorrectionBean.getOrganizationCorrections(
-                    domainObject.getParentId(), null, organizationId);
+                    domainSync.getParentId(), null, organizationId);
 
             if (corrections.isEmpty()) {
                 throw new RuntimeException("organization correction not found" + domainSync);
