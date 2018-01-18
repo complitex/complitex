@@ -4,6 +4,7 @@ import org.complitex.address.exception.RemoteCallException;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.util.StringUtil;
 import org.complitex.correction.entity.Correction;
 import org.complitex.sync.entity.DomainSync;
 
@@ -37,5 +38,9 @@ public interface IDomainSyncHandler {
 
     default Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId){
         return parentDomainObject != null ? parentDomainObject.getObjectId() : null;
+    }
+
+    default boolean isCorresponds(Correction correction1, Correction correction2){
+        return StringUtil.isEqualIgnoreCase(correction1.getCorrection(), correction2.getCorrection());
     }
 }
