@@ -277,57 +277,53 @@ public class DomainSyncService {
             });
 
             //deferred
-//            getDomainSyncs(syncEntity, DEFERRED, null).forEach(s -> {
-//                DomainSync domainSync = domainSyncBean.getObject(s.getId());
-//
-//                if (domainSync.getStatus().equals(DEFERRED)){
-//                    List<? extends Correction> corrections = handler.getCorrections(domainSync.getParentObjectId(),
-//                            domainSync.getExternalId(), null, organizationId);
-//
-//                    if (corrections.isEmpty()){
-//                        throw new RuntimeException("sync: deferred correction nod found " + domainSync);
-//                    }
-//
-//                    Correction correction = corrections.get(0);
-//
-//                    List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
-//                            correction.getObjectId(), organizationId);
-//
-//                    boolean corresponds = objectCorrections.stream()
-//                            .filter(c -> !c.getId().equals(correction.getId()))
-//                            .allMatch(c -> handler.isCorresponds(c, correction));
-//
-//                    if (corresponds){
-//                        DomainObject domainObject = handler.getStrategy().getDomainObject(correction.getObjectId());
-//
-//                        handler.updateValues(domainObject, domainSync, organizationId);
-//                        handler.getStrategy().update(domainObject);
-//
-//                        log.info("sync: update deferred domain object {}", domainObject);
-//
-//                        objectCorrections.forEach(c -> {
-//                            getDomainSyncs(syncEntity, DEFERRED, c.getExternalId()).forEach(ds -> {
-//                                ds.setStatus(SYNCHRONIZED);
-//                                domainSyncBean.updateStatus(ds);
-//                            });
-//                        });
-//                    }else{
-//                        List<? extends DomainObject> domainObjects = handler.getDomainObjects(domainSync, organizationId);
-//
-//                        if (!domainObjects.isEmpty()){
-//                            correction.setObjectId(domainObjects.get(0).getObjectId());
-//
-//                            correctionBean.save(correction);
-//                        }else{
-//                            DomainObject domainObject = handler.getStrategy().newInstance();
-//                            handler.updateValues(domainObject, domainSync, organizationId);
-//                            handler.getStrategy().insert(domainObject, domainSync.getDate());
-//
-//                            log.info("sync: add deferred domain object {}", domainObject);
-//                        }
-//                    }
-//                }
-//            });
+            getDomainSyncs(syncEntity, DEFERRED, null).forEach(ds -> {
+                List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(),
+                        ds.getExternalId(), null, organizationId);
+
+                if (corrections.isEmpty()){
+                    throw new RuntimeException("sync: deferred correction nod found " + ds);
+                }
+
+                Correction correction = corrections.get(0);
+
+                List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
+                        correction.getObjectId(), organizationId);
+
+                boolean corresponds = objectCorrections.stream()
+                        .allMatch(c -> c.getId().equals(correction.getId()) || handler.isCorresponds(c, correction));
+
+                if (corresponds){
+                    DomainObject domainObject = handler.getStrategy().getDomainObject(correction.getObjectId());
+
+                    handler.updateValues(domainObject, ds, organizationId);
+                    handler.getStrategy().update(domainObject);
+
+                    log.info("sync: update deferred domain object {}", domainObject);
+
+                    ds.setStatus(SYNCHRONIZED);
+                    domainSyncBean.updateStatus(ds);
+                }else{
+                    List<? extends DomainObject> domainObjects = handler.getDomainObjects(ds, organizationId);
+
+                    if (!domainObjects.isEmpty()){
+                        correction.setObjectId(domainObjects.get(0).getObjectId());
+
+                        correctionBean.save(correction);
+
+                        log.info("sync: update deferred correction {}", correction);
+                    }else{
+                        DomainObject domainObject = handler.getStrategy().newInstance();
+                        handler.updateValues(domainObject, ds, organizationId);
+                        handler.getStrategy().insert(domainObject, ds.getDate());
+
+                        log.info("sync: add deferred domain object {}", domainObject);
+                    }
+
+                    ds.setStatus(SYNCHRONIZED);
+                    domainSyncBean.updateStatus(ds);
+                }
+            });
 
             broadcastService.broadcast(getClass(), "info", "Синхронизация завершена успешно");
             log.info("sync: completed");
