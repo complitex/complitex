@@ -8,6 +8,7 @@ import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
+import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.StreetTypeCorrection;
@@ -59,13 +60,18 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId) {
-        return addressCorrectionBean.getStreetTypeCorrections(externalId, objectId, organizationId);
+    public boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId) {
+        return StringUtil.isEqualIgnoreCase(correction.getCorrection(), domainSync.getName());
     }
 
     @Override
-    public void update(Correction correction) {
-        addressCorrectionBean.save((StreetTypeCorrection) correction);
+    public boolean isCorresponds(Correction correction1, Correction correction2) {
+        return StringUtil.isEqualIgnoreCase(correction1.getCorrection(), correction2.getCorrection());
+    }
+
+    @Override
+    public List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId) {
+        return addressCorrectionBean.getStreetTypeCorrections(externalId, objectId, organizationId);
     }
 
     @Override
@@ -91,6 +97,13 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
+    public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
+        correction.setCorrection(domainSync.getName());
+
+        addressCorrectionBean.save((StreetTypeCorrection) correction);
+    }
+
+    @Override
     public IStrategy getStrategy() {
         return streetTypeStrategy;
     }
@@ -101,5 +114,10 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
         domainObject.setStringValue(StreetTypeStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());
         domainObject.setStringValue(StreetTypeStrategy.SHORT_NAME, domainSync.getAdditionalName());
         domainObject.setStringValue(StreetTypeStrategy.SHORT_NAME, domainSync.getAltAdditionalName(), Locales.getAlternativeLocale());
+    }
+
+    @Override
+    public Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId) {
+        return null;
     }
 }

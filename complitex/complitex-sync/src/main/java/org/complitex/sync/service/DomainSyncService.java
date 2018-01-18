@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -159,7 +158,10 @@ public class DomainSyncService {
 
         if (cursor.getData() != null) {
             cursor.getData().forEach(s -> {
-                s.setParentObjectId(getHandler(syncEntity).getParentObjectId(parent, s, organizationId));
+                if (parent != null) {
+                    s.setParentObjectId(getHandler(syncEntity).getParentObjectId(parent, s, organizationId));
+                }
+
                 s.setStatus(LOADED);
                 s.setType(syncEntity);
                 s.setDate(date);
@@ -203,10 +205,8 @@ public class DomainSyncService {
 
                     Correction correction = corrections.get(0);
 
-                    if (!Objects.equals(correction.getCorrection(), ds.getName())){
-                        correction.setCorrection(ds.getName());
-
-                        handler.update(correction);
+                    if (!handler.isCorresponds(correction, ds, organizationId)){
+                        handler.updateCorrection(correction, ds, organizationId);
 
                         log.info("sync: update correction name {}", correction);
                     }

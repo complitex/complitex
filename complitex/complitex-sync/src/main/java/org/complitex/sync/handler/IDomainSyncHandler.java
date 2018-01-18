@@ -4,7 +4,6 @@ import org.complitex.address.exception.RemoteCallException;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
-import org.complitex.common.util.StringUtil;
 import org.complitex.correction.entity.Correction;
 import org.complitex.sync.entity.DomainSync;
 
@@ -24,23 +23,21 @@ public interface IDomainSyncHandler {
 
     List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId);
 
-    void update(Correction correction);
-
     boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId);
+
+    boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId);
+
+    boolean isCorresponds(Correction correction1, Correction correction2);
 
     List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId);
 
     Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId);
 
+    void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId);
+
     IStrategy getStrategy();
 
     void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId);
 
-    default Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId){
-        return parentDomainObject != null ? parentDomainObject.getObjectId() : null;
-    }
-
-    default boolean isCorresponds(Correction correction1, Correction correction2){
-        return StringUtil.isEqualIgnoreCase(correction1.getCorrection(), correction2.getCorrection());
-    }
+    Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId);
 }

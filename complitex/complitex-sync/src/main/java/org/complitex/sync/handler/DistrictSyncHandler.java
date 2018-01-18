@@ -10,6 +10,7 @@ import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
+import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.DistrictCorrection;
@@ -67,14 +68,20 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public void update(Correction correction) {
-        addressCorrectionBean.save((DistrictCorrection) correction);
-    }
-
-    @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         return isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(DistrictStrategy.NAME)) &&
                 isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getAlternativeLocale()));
+    }
+
+    @Override
+    public boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId) {
+        return StringUtil.isEqualIgnoreCase(correction.getCorrection(), domainSync.getName());
+    }
+
+    @Override
+    public boolean isCorresponds(Correction correction1, Correction correction2) {
+        return ((DistrictCorrection) correction1).getCityId().equals(((DistrictCorrection) correction2).getCityId()) &&
+                StringUtil.isEqualIgnoreCase(correction1.getCorrection(), correction2.getCorrection());
     }
 
     @Override
@@ -84,6 +91,11 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
         domainObject.setStringValue(DistrictStrategy.CODE, domainSync.getAdditionalExternalId());
         domainObject.setStringValue(DistrictStrategy.NAME, domainSync.getName());
         domainObject.setStringValue(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());
+    }
+
+    @Override
+    public Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId) {
+        return parentDomainObject.getObjectId();
     }
 
     @Override
@@ -106,6 +118,13 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
         addressCorrectionBean.insert(districtCorrection);
 
         return districtCorrection;
+    }
+
+    @Override
+    public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
+        correction.setCorrection(domainSync.getName());
+
+        addressCorrectionBean.save((DistrictCorrection) correction);
     }
 
     @Override

@@ -61,16 +61,21 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public void update(Correction correction) {
-        organizationCorrectionBean.save((OrganizationCorrection) correction);
-    }
-
-    @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         return Objects.equals(domainSync.getName(), domainObject.getStringValue(IOrganizationStrategy.NAME)) &&
                 Objects.equals(domainSync.getAltName(), domainObject.getStringValue(IOrganizationStrategy.NAME, Locales.getAlternativeLocale())) &&
                 Objects.equals(domainSync.getAdditionalName(), domainObject.getStringValue(IOrganizationStrategy.SHORT_NAME)) &&
                 Objects.equals(domainSync.getAltAdditionalName(), domainObject.getStringValue(IOrganizationStrategy.SHORT_NAME, Locales.getAlternativeLocale()));
+    }
+
+    @Override
+    public boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId) {
+        return correction.getCorrection().equals(domainSync.getName());
+    }
+
+    @Override
+    public boolean isCorresponds(Correction correction1, Correction correction2) {
+        return correction1.getCorrection().equals(correction2.getCorrection());
     }
 
     @Override
@@ -96,6 +101,13 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
+    public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
+        correction.setCorrection(domainSync.getName());
+
+        organizationCorrectionBean.save((OrganizationCorrection) correction);
+    }
+
+    @Override
     public IStrategy getStrategy() {
         return organizationStrategy;
     }
@@ -109,5 +121,10 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
         domainObject.setStringValue(IOrganizationStrategy.SHORT_NAME, domainSync.getAdditionalName());
         domainObject.setStringValue(IOrganizationStrategy.SHORT_NAME, domainSync.getAltAdditionalName(), Locales.getAlternativeLocale());
         domainObject.setValueId(ORGANIZATION_TYPE, OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE);
+    }
+
+    @Override
+    public Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId) {
+        return null;
     }
 }

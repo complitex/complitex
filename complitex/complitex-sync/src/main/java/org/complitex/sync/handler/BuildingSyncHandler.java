@@ -78,11 +78,6 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public void update(Correction correction) {
-        addressCorrectionBean.update((BuildingCorrection) correction);
-    }
-
-    @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null, null,
                 domainSync.getParentId(), null, null, organizationId, null);
@@ -100,6 +95,30 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
                 isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(BuildingStrategy.NUMBER, Locales.getAlternativeLocale())) &&
                 isEqualIgnoreCase(domainSync.getAdditionalName(), domainObject.getStringValue(BuildingStrategy.CORP)) &&
                 isEqualIgnoreCase(domainSync.getAltAdditionalName(), domainObject.getStringValue(BuildingStrategy.CORP, Locales.getAlternativeLocale()));
+    }
+
+    @Override
+    public boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId) {
+        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null, null,
+                domainSync.getParentId(), null, null, organizationId, null);
+
+        if (streetCorrections.isEmpty()){
+            throw new RuntimeException("street correction not found " + domainSync);
+        }
+
+        return ((BuildingCorrection)correction).getStreetId().equals(streetCorrections.get(0).getObjectId()) &&
+                correction.getCorrection().equals(domainSync.getName()) &&
+                ((BuildingCorrection) correction).getCorrectionCorp().equals(domainSync.getAdditionalName());
+    }
+
+    @Override
+    public boolean isCorresponds(Correction correction1, Correction correction2) {
+        BuildingCorrection c1 = (BuildingCorrection) correction1;
+        BuildingCorrection c2 = (BuildingCorrection) correction2;
+
+        return c1.getStreetId().equals(c2.getStreetId()) &&
+                c1.getCorrection().equals(c2.getCorrection()) &&
+                c1.getCorrectionCorp().equals(c2.getCorrectionCorp());
     }
 
     @Override
@@ -125,13 +144,6 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
             throw new RuntimeException("street correction not found " + domainSync);
         }
 
-        List<DistrictCorrection> districtCorrections = addressCorrectionBean.getDistrictCorrections(null,
-                domainSync.getAdditionalParentId(), null, null, organizationId, null);
-
-        if (districtCorrections.isEmpty()){
-            throw new RuntimeException("district correction not found " + domainSync);
-        }
-
         BuildingCorrection buildingCorrection = new BuildingCorrection(streetCorrections.get(0).getObjectId(),
                 domainSync.getExternalId(), domainObject.getObjectId(), domainSync.getName(), StringUtil.valueOf(domainSync.getAdditionalName()),
                 organizationId, null, moduleBean.getModuleId());
@@ -139,6 +151,22 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         addressCorrectionBean.insert(buildingCorrection);
 
         return buildingCorrection;
+    }
+
+    @Override
+    public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
+        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null, null,
+                domainSync.getParentId(), null, null, organizationId, null);
+
+        if (streetCorrections.isEmpty()){
+            throw new RuntimeException("street correction not found " + domainSync);
+        }
+
+        ((BuildingCorrection)correction).setStreetId(streetCorrections.get(0).getObjectId());
+        correction.setCorrection(domainSync.getName());
+        ((BuildingCorrection) correction).setCorrectionCorp(domainSync.getAdditionalName());
+
+        addressCorrectionBean.update((BuildingCorrection) correction);
     }
 
     @Override
