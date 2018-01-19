@@ -61,6 +61,79 @@ public class DomainSyncAdapter extends AbstractBean {
     }
 
     /**
+     * z$runtime_sz_utl.getCountries
+     * Типы улиц.
+     * Возвращает: 1 либо код ошибки (INTEGER):
+     * -10 Неопознанная ошибка
+     */
+    @SuppressWarnings("unchecked")
+    public Cursor<DomainSync> getCountrySyncs(Date date) throws RemoteCallException {
+        Map<String, Object> param = new HashMap<>();
+        param.put("date", date);
+        param.put("okCode", 0);
+
+        try {
+            sqlSession(getDataSource()).selectOne(NS + ".selectCountrySyncs", param);
+        } catch (Exception e) {
+            throw new RemoteCallException(e);
+        }
+
+        log.info("getCountriesSyncs: " + param);
+
+        return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
+    }
+
+    /**
+     * z$runtime_sz_utl.getRegions
+     * Районы населённого пункта.
+     * Возвращает: 1 либо код ошибки (INTEGER):
+     * -10 Неопознанная ошибка
+     * -1 Не найдена страна
+     */
+    @SuppressWarnings("unchecked")
+    public Cursor<DomainSync> getRegionSyncs(String countryName, Date date) throws RemoteCallException {
+        Map<String, Object> param = new HashMap<>();
+        param.put("countryName", countryName);
+        param.put("date", date);
+        param.put("okCode", 0);
+
+        try {
+            sqlSession(getDataSource()).selectOne(NS + ".selectRegionSyncs", param);
+        } catch (Exception e) {
+            throw new RemoteCallException(e);
+        }
+
+        log.info("getRegionSyncs: " + param);
+
+        return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
+    }
+
+    /**
+     * z$runtime_sz_utl.getCities
+     * Районы населённого пункта.
+     * Возвращает: 1 либо код ошибки (INTEGER):
+     * -10 Неопознанная ошибка
+     * -1 Не найден регион
+     */
+    @SuppressWarnings("unchecked")
+    public Cursor<DomainSync> getCitySyncs(String regionName, Date date) throws RemoteCallException {
+        Map<String, Object> param = new HashMap<>();
+        param.put("regionName", regionName);
+        param.put("date", date);
+        param.put("okCode", 0);
+
+        try {
+            sqlSession(getDataSource()).selectOne(NS + ".selectCitySyncs", param);
+        } catch (Exception e) {
+            throw new RemoteCallException(e);
+        }
+
+        log.info("getCitySyncs: " + param);
+
+        return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
+    }
+
+    /**
      * function z$runtime_sz_utl.getDistricts(
      *     pCityName varchar2,    -- Название нас.пункта
      *     pCityType varchar2,    -- Тип нас.пункта (краткое название)

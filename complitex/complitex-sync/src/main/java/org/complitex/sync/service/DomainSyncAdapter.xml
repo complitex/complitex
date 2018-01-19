@@ -14,6 +14,21 @@
         <result column="balance_holder" property="balanceHolder"/>
     </resultMap>
 
+    <select id="selectCountrySyncs" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getCountries(#{date},
+          #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap})}
+    </select>
+
+    <select id="selectRegionSyncs" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getRegions(#{countryName}, #{date},
+         #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap})}
+    </select>
+
+    <select id="selectCitySyncs" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getCities(#{regionName}, #{date},
+          #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap})}
+    </select>
+
     <select id="selectDistrictSyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getDistricts(#{cityName}, #{cityTypeName},
           #{date}, #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap})}
