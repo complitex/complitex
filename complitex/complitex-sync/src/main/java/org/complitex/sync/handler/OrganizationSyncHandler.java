@@ -16,7 +16,6 @@ import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
-import org.complitex.sync.service.DomainSyncBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -36,9 +35,6 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @EJB(lookup = IOrganizationStrategy.BEAN_LOOKUP)
     private IOrganizationStrategy organizationStrategy;
-
-    @EJB
-    private DomainSyncBean domainSyncBean;
 
     @EJB
     private OrganizationCorrectionBean organizationCorrectionBean;
@@ -63,20 +59,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        Long parentObjectId = null;
-
-        if (domainSync.getParentId() != null) {
-            List<OrganizationCorrection> corrections = organizationCorrectionBean.getOrganizationCorrections(
-                    domainSync.getParentId(), null, organizationId);
-
-            if (corrections.isEmpty()) {
-                throw new RuntimeException("organization correction not found" + domainSync);
-            }
-
-            parentObjectId = corrections.get(0).getObjectId();
-        }
-
-        return Objects.equals(domainObject.getParentId(), parentObjectId) &&
+        return Objects.equals(domainObject.getParentId(), getParentObjectId(domainSync, organizationId)) &&
                 StringUtil.isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(IOrganizationStrategy.NAME)) &&
                 StringUtil.isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(IOrganizationStrategy.NAME, Locales.getAlternativeLocale())) &&
                 StringUtil.isEqualIgnoreCase(domainSync.getAdditionalName(), domainObject.getStringValue(IOrganizationStrategy.SHORT_NAME)) &&
@@ -99,10 +82,27 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
+                        .setParentEntity("organization")
+                        .setParentId(getParentObjectId(domainSync, organizationId))
                         .addAttribute(IOrganizationStrategy.NAME, domainSync.getName())
                         .addAttribute(IOrganizationStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId())
                         .addAttribute(IOrganizationStrategy.SHORT_NAME, domainSync.getAdditionalName())
                         .addAttribute(IOrganizationStrategy.SHORT_NAME, domainSync.getAltAdditionalName(), Locales.getAlternativeLocaleId()));
+    }
+
+    private Long getParentObjectId(DomainSync domainSync, Long organizationId) {
+        if (domainSync.getParentId() != null) {
+            List<OrganizationCorrection> organizationCorrections = organizationCorrectionBean.getOrganizationCorrections(
+                    domainSync.getParentId(), null, organizationId);
+
+            if (organizationCorrections.isEmpty()) {
+                throw new CorrectionNotFoundException("organization correction not found" + domainSync);
+            }
+
+            return organizationCorrections.get(0).getObjectId();
+        }
+
+        return null;
     }
 
     @Override
@@ -130,14 +130,8 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     @Override
     public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         if (domainSync.getParentId() != null) {
-            List<OrganizationCorrection> corrections = organizationCorrectionBean.getOrganizationCorrections(
-                    domainSync.getParentId(), null, organizationId);
-
-            if (corrections.isEmpty()) {
-                throw new RuntimeException("organization correction not found" + domainSync);
-            }
-
-            domainObject.setParentId(corrections.get(0).getObjectId());
+            domainObject.setParentEntityId(IOrganizationStrategy.ENTITY_ID);
+            domainObject.setParentId(getParentObjectId(domainSync, organizationId));
         }
 
         domainObject.setStringValue(IOrganizationStrategy.EDRPOU, domainSync.getAdditionalParentId() + "");

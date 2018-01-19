@@ -59,7 +59,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
         List<DomainSync> cityTypeDomainSyncs = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.DISTRICT, parentDomainSync.getAdditionalParentId())));
 
         if (cityTypeDomainSyncs.isEmpty()){
-            throw new RuntimeException("city type correction not found " + cityTypeDomainSyncs);
+            throw new CorrectionNotFoundException("city type correction not found " + cityTypeDomainSyncs);
         }
 
         return addressSyncAdapter.getDistrictSyncs(cityTypeDomainSyncs.get(0).getAdditionalName(),
@@ -94,7 +94,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
         List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(domainSync.getParentId(), organizationId);
 
         if (cityCorrections.isEmpty()){
-            throw new RuntimeException("city correction not found " + cityCorrections);
+            throw new CorrectionNotFoundException("city correction not found " + cityCorrections);
         }
 
         domainObject.setParentEntityId(DistrictStrategy.PARENT_ENTITY_ID);
@@ -109,7 +109,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
         List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(domainSync.getParentId(), organizationId);
 
         if (cityCorrections.isEmpty()){
-            throw new RuntimeException("city correction not found " + cityCorrections);
+            throw new CorrectionNotFoundException("city correction not found " + cityCorrections);
         }
 
         return districtStrategy.getList(

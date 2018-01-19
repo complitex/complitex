@@ -65,7 +65,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         List<DomainSync> cityTypeDomainSyncs = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.DISTRICT, parentDomainSync.getAdditionalParentId())));
 
         if (cityTypeDomainSyncs.isEmpty()){
-            throw new RuntimeException("city type correction not found " + cityTypeDomainSyncs);
+            throw new CorrectionNotFoundException("city type correction not found " + cityTypeDomainSyncs);
         }
 
         return domainSyncAdapter.getStreetSyncs(parentDomainSync.getName(),
@@ -89,7 +89,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
                 domainSync.getAdditionalParentId(), null, organizationId);
 
         if (streetTypeCorrections.isEmpty()) {
-            throw new RuntimeException("street type correction not found" + domainSync);
+            throw new CorrectionNotFoundException("street type correction not found" + domainSync);
         }
 
         return Objects.equals(domainObject.getValueId(StreetStrategy.STREET_TYPE), streetTypeCorrections.get(0).getObjectId()) &&
@@ -103,7 +103,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
                 domainSync.getAdditionalParentId(), null, organizationId);
 
         if (streetTypeCorrections.isEmpty()) {
-            throw new RuntimeException("street type correction not found" + domainSync);
+            throw new CorrectionNotFoundException("street type correction not found" + domainSync);
         }
 
         return ((StreetCorrection) correction).getStreetTypeId().equals(streetTypeCorrections.get(0).getObjectId()) &&
@@ -125,14 +125,14 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(domainSync.getParentId(), organizationId);
 
         if (cityCorrections.isEmpty()){
-            throw new RuntimeException("city correction not found " + cityCorrections);
+            throw new CorrectionNotFoundException("city correction not found " + cityCorrections);
         }
 
         List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
                 domainSync.getAdditionalParentId(), null, organizationId);
 
         if (streetTypeCorrections.isEmpty()) {
-            throw new RuntimeException("street type correction not found" + domainSync);
+            throw new CorrectionNotFoundException("street type correction not found" + domainSync);
         }
 
         return streetStrategy.getList(
@@ -163,7 +163,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
                 domainSync.getAdditionalParentId(), null, organizationId);
 
         if (streetTypeCorrections.isEmpty()) {
-            throw new RuntimeException("street type correction not found" + domainSync);
+            throw new CorrectionNotFoundException("street type correction not found" + domainSync);
         }
 
         ((StreetCorrection) correction).setStreetTypeId(streetTypeCorrections.get(0).getObjectId());
@@ -182,14 +182,14 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(domainSync.getParentId(), organizationId);
 
         if (cityCorrections.isEmpty()){
-            throw new RuntimeException("city correction not found " + cityCorrections);
+            throw new CorrectionNotFoundException("city correction not found " + cityCorrections);
         }
 
         List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
                 domainSync.getAdditionalParentId(), null, organizationId);
 
         if (streetTypeCorrections.isEmpty()) {
-            throw new RuntimeException("street type correction not found" + domainSync);
+            throw new CorrectionNotFoundException("street type correction not found" + domainSync);
         }
 
         domainObject.setParentEntityId(StreetStrategy.PARENT_ENTITY_ID);

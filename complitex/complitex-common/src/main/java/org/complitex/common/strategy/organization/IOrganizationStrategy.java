@@ -49,7 +49,7 @@ public interface IOrganizationStrategy extends IStrategy{
     /**
      * EDRPOU(ЕДРПОУ).
      */
-    public final static long EDRPOU = 926;
+    long EDRPOU = 926;
 
     /**
      * Service reference.
@@ -60,6 +60,8 @@ public interface IOrganizationStrategy extends IStrategy{
      * Billing reference.
      */
     long BILLING = 4915;
+
+    long ENTITY_ID = 900;
 
     
     /**

@@ -80,11 +80,11 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
                 domainSync.getParentId(), null, null, organizationId, null);
 
         if (streetCorrections.isEmpty()){
-            throw new RuntimeException("street correction not found " + domainSync);
+            throw new CorrectionNotFoundException("street correction not found " + domainSync);
         }
 
         if (streetCorrections.size() > 1){
-            throw new RuntimeException("street correction size > 1 " + domainSync);
+            throw new CorrectionNotFoundException("street correction size > 1 " + domainSync);
         }
 
         return Objects.equals(domainObject.getParentId(), streetCorrections.get(0).getObjectId()) &&
@@ -100,7 +100,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
                 domainSync.getParentId(), null, null, organizationId, null);
 
         if (streetCorrections.isEmpty()){
-            throw new RuntimeException("street correction not found " + domainSync);
+            throw new CorrectionNotFoundException("street correction not found " + domainSync);
         }
 
         return ((BuildingCorrection)correction).getStreetId().equals(streetCorrections.get(0).getObjectId()) &&
@@ -124,7 +124,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
                 domainSync.getParentId(), null, null, organizationId, null);
 
         if (streetCorrections.isEmpty()){
-            throw new RuntimeException("street correction not found " + domainSync);
+            throw new CorrectionNotFoundException("street correction not found " + domainSync);
         }
 
         return buildingStrategy.getList(
@@ -145,7 +145,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
                 domainSync.getParentId(), null, null, organizationId, null);
 
         if (streetCorrections.isEmpty()){
-            throw new RuntimeException("street correction not found " + domainSync);
+            throw new CorrectionNotFoundException("street correction not found " + domainSync);
         }
 
         BuildingCorrection buildingCorrection = new BuildingCorrection(streetCorrections.get(0).getObjectId(),
@@ -163,7 +163,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
                 domainSync.getParentId(), null, null, organizationId, null);
 
         if (streetCorrections.isEmpty()){
-            throw new RuntimeException("street correction not found " + domainSync);
+            throw new CorrectionNotFoundException("street correction not found " + domainSync);
         }
 
         ((BuildingCorrection)correction).setStreetId(streetCorrections.get(0).getObjectId());
@@ -184,14 +184,14 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
                 domainSync.getParentId(), null, null, organizationId, null);
 
         if (streetCorrections.isEmpty()){
-            throw new RuntimeException("street correction not found " + domainSync);
+            throw new CorrectionNotFoundException("street correction not found " + domainSync);
         }
 
         List<DistrictCorrection> districtCorrections = addressCorrectionBean.getDistrictCorrections(null,
                 domainSync.getAdditionalParentId(), null, null, organizationId, null);
 
         if (districtCorrections.isEmpty()){
-            throw new RuntimeException("district correction not found " + domainSync);
+            throw new CorrectionNotFoundException("district correction not found " + domainSync);
         }
 
         domainObject.setParentId(streetCorrections.get(0).getObjectId());
