@@ -47,17 +47,17 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     private ModuleBean moduleBean;
 
     @Override
-    public Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException {
+    public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
         return domainSyncAdapter.getOrganizationSyncs(date);
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects() {
+    public List<DomainSync> getParentDomainSyncs() {
         return null;
     }
 
     @Override
-    public List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId) {
+    public List<? extends Correction> getCorrections(Long externalId, Long objectId, Long organizationId) {
         return organizationCorrectionBean.getOrganizationCorrections(externalId, objectId, organizationId);
     }
 

@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static javax.ejb.ConcurrencyManagementType.BEAN;
 import static org.complitex.common.entity.FilterWrapper.of;
 import static org.complitex.sync.entity.DomainSyncStatus.*;
-import static org.complitex.sync.entity.SyncEntity.*;
 
 /**
  * @author Anatoly Ivanov
@@ -101,11 +100,11 @@ public class DomainSyncService {
 
             Date date = DateUtil.getCurrentDate();
 
-            List<? extends DomainObject> parents = getHandler(syncEntity).getParentObjects();
+            List<DomainSync> parentDomainSyncs = getHandler(syncEntity).getParentDomainSyncs();
 
-            if (parents != null){
-                for (DomainObject p : parents) {
-                    load(syncEntity, p, date);
+            if (parentDomainSyncs != null){
+                for (DomainSync ds : parentDomainSyncs) {
+                    load(syncEntity, ds, date);
                 }
             }else{
                 load(syncEntity, null, date);
@@ -124,43 +123,25 @@ public class DomainSyncService {
         }
     }
 
-    private void load(SyncEntity syncEntity, DomainObject parent, Date date)
+    private void load(SyncEntity syncEntity, DomainSync parentDomainSync, Date date)
             throws RemoteCallException{
         if (cancelSync.get()){
             return;
         }
 
-        Long organizationId = addressSyncAdapter.getOrganization().getObjectId();
-
-        Cursor<DomainSync> cursor = getHandler(syncEntity).getCursorDomainSyncs(parent, date);
+        Cursor<DomainSync> cursor = getHandler(syncEntity).getCursorDomainSyncs(parentDomainSync, date);
 
         SyncBeginMessage message = new SyncBeginMessage();
         message.setSyncEntity(syncEntity);
         message.setCount(cursor.getData() != null ? cursor.getData().size() : 0L);
-
-        if (parent != null){
-            if (syncEntity.equals(DISTRICT) || syncEntity.equals(STREET)){
-                message.setParentName(cityStrategy.getName(parent));
-            }else if (syncEntity.equals(BUILDING)){
-                switch (parent.getEntityName()){
-                    case "district":
-                        message.setParentName(districtStrategy.getName(parent));
-                        break;
-                    case "street":
-                        message.setParentName(streetStrategy.getName(parent));
-                        break;
-                }
-            }
+        if (parentDomainSync != null){
+            message.setParentName(parentDomainSync.getName());
         }
 
         broadcastService.broadcast(getClass(), "begin", message);
 
         if (cursor.getData() != null) {
             cursor.getData().forEach(s -> {
-                if (parent != null) {
-                    s.setParentObjectId(getHandler(syncEntity).getParentObjectId(parent, s, organizationId));
-                }
-
                 s.setStatus(LOADED);
                 s.setType(syncEntity);
                 s.setDate(date);
@@ -173,7 +154,7 @@ public class DomainSyncService {
     }
 
     private List<DomainSync> getDomainSyncs(SyncEntity syncEntity, DomainSyncStatus syncStatus, Long externalId) {
-        return domainSyncBean.getList(of(new DomainSync(syncEntity, syncStatus, null, externalId)));
+        return domainSyncBean.getList(of(new DomainSync(syncEntity, syncStatus, externalId)));
     }
 
     @Asynchronous
@@ -195,8 +176,8 @@ public class DomainSyncService {
                     return;
                 }
 
-                List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(), ds.getExternalId(),
-                        null, organizationId);
+                List<? extends Correction> corrections = handler.getCorrections(ds.getExternalId(),null,
+                        organizationId);
 
                 if (!corrections.isEmpty()){
                     if (corrections.size() > 1){
@@ -218,7 +199,7 @@ public class DomainSyncService {
                             ds.setStatus(SYNCHRONIZED);
                             domainSyncBean.updateStatus(ds);
                         }else{
-                            List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
+                            List<? extends Correction> objectCorrections = handler.getCorrections(null,
                                     domainObject.getObjectId(),  organizationId);
 
                             if (objectCorrections.size() == 1 && objectCorrections.get(0).getId().equals(correction.getId())){
@@ -268,7 +249,7 @@ public class DomainSyncService {
             });
 
             //clear
-            handler.getCorrections(null, null, null, organizationId).forEach(c -> {
+            handler.getCorrections(null, null, organizationId).forEach(c -> {
                 if (getDomainSyncs(syncEntity, null, c.getExternalId()).isEmpty()){
                     correctionBean.delete(c);
 
@@ -279,8 +260,8 @@ public class DomainSyncService {
             //deferred
             getDomainSyncs(syncEntity, DEFERRED, null).forEach(ds -> {
                 if (domainSyncBean.getObject(ds.getId()).getStatus().equals(DEFERRED)) {
-                    List<? extends Correction> corrections = handler.getCorrections(ds.getParentObjectId(),
-                            ds.getExternalId(), null, organizationId);
+                    List<? extends Correction> corrections = handler.getCorrections(ds.getExternalId(), null,
+                            organizationId);
 
                     if (corrections.isEmpty()){
                         throw new RuntimeException("sync: deferred correction nod found " + ds);
@@ -288,7 +269,7 @@ public class DomainSyncService {
 
                     Correction correction = corrections.get(0);
 
-                    List<? extends Correction> objectCorrections = handler.getCorrections(null, null,
+                    List<? extends Correction> objectCorrections = handler.getCorrections(null,
                             correction.getObjectId(), organizationId);
 
                     boolean corresponds = objectCorrections.stream()

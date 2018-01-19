@@ -73,7 +73,7 @@ public class DomainSyncAdapter extends AbstractBean {
      * возвращаемое значение: 0 - все хорошо, -1 - неизвестный тип нас.пункта, -2 - неизвестный нас.пункт
      */
     @SuppressWarnings("unchecked")
-    public Cursor<DomainSync> getDistrictSyncs(String cityName, String cityTypeName, Date date) throws RemoteCallException {
+    public Cursor<DomainSync> getDistrictSyncs(String cityTypeName, String cityName, Date date) throws RemoteCallException {
         Map<String, Object> param = new HashMap<>();
 
         param.put("cityName", cityName);
@@ -103,8 +103,9 @@ public class DomainSyncAdapter extends AbstractBean {
      * возвращаемое значение: 0 - все хорошо, -1 - ошибка
      */
     @SuppressWarnings("unchecked")
-    public Cursor<DomainSync> getStreetTypeSyncs() throws RemoteCallException {
+    public Cursor<DomainSync> getStreetTypeSyncs(Date date) throws RemoteCallException {
         Map<String, Object> param = new HashMap<>();
+        param.put("date", date);
         param.put("okCode", 0);
 
         try {

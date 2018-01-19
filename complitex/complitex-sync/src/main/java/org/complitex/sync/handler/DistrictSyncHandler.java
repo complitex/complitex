@@ -7,16 +7,20 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
+import org.complitex.correction.entity.CityCorrection;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.DistrictCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.sync.entity.DomainSync;
+import org.complitex.sync.entity.SyncEntity;
 import org.complitex.sync.service.DomainSyncAdapter;
+import org.complitex.sync.service.DomainSyncBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -24,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.complitex.common.util.StringUtil.isEqualIgnoreCase;
+import static org.complitex.sync.entity.DomainSyncStatus.SYNCHRONIZED;
 
 /**
  * @author Anatoly Ivanov
@@ -49,21 +54,29 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     @EJB
     private ModuleBean moduleBean;
 
+    @EJB
+    private DomainSyncBean domainSyncBean;
+
     @Override
-    public List<? extends DomainObject> getParentObjects() {
-        return cityStrategy.getList(new DomainObjectFilter().setStatus(ShowMode.ACTIVE.name()));
+    public List<DomainSync> getParentDomainSyncs() {
+        return domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.CITY, SYNCHRONIZED)));
     }
 
     @Override
-    public Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException {
-        return addressSyncAdapter.getDistrictSyncs(cityStrategy.getName(parent),
-                cityTypeStrategy.getShortName(parent.getAttribute(CityStrategy.CITY_TYPE).getValueId()),
-                date);
+    public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
+        List<DomainSync> cityTypeDomainSyncs = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.DISTRICT, parentDomainSync.getAdditionalParentId())));
+
+        if (cityTypeDomainSyncs.isEmpty()){
+            throw new RuntimeException("city type correction not found " + cityTypeDomainSyncs);
+        }
+
+        return addressSyncAdapter.getDistrictSyncs(cityTypeDomainSyncs.get(0).getAdditionalName(),
+                parentDomainSync.getName(), date);
     }
 
     @Override
-    public List<DistrictCorrection> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId) {
-        return addressCorrectionBean.getDistrictCorrections(parentObjectId, externalId, null, null,
+    public List<DistrictCorrection> getCorrections(Long externalId, Long objectId, Long organizationId) {
+        return addressCorrectionBean.getDistrictCorrections(null, externalId, null, null,
                 organizationId,null);
     }
 
@@ -86,8 +99,14 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(domainSync.getParentId(), organizationId);
+
+        if (cityCorrections.isEmpty()){
+            throw new RuntimeException("city correction not found " + cityCorrections);
+        }
+
         domainObject.setParentEntityId(DistrictStrategy.PARENT_ENTITY_ID);
-        domainObject.setParentId(domainSync.getParentObjectId());
+        domainObject.setParentId(cityCorrections.get(0).getObjectId());
         domainObject.setStringValue(DistrictStrategy.CODE, domainSync.getAdditionalExternalId());
         domainObject.setStringValue(DistrictStrategy.NAME, domainSync.getName());
         domainObject.setStringValue(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());
@@ -100,12 +119,18 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
 
     @Override
     public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
+        List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(domainSync.getParentId(), organizationId);
+
+        if (cityCorrections.isEmpty()){
+            throw new RuntimeException("city correction not found " + cityCorrections);
+        }
+
         return districtStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("city")
-                        .setParentId(domainSync.getParentObjectId())
+                        .setParentId(cityCorrections.get(0).getObjectId())
                         .addAttribute(DistrictStrategy.NAME, domainSync.getName())
                         .addAttribute(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
     }

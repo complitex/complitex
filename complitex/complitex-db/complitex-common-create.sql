@@ -1015,7 +1015,6 @@ CREATE TABLE `organization_import` (
 DROP TABLE IF EXISTS `domain_sync`;
 CREATE TABLE `domain_sync`(
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор записи синхронизации',
-  `parent_object_id` BIGINT(20) COMMENT 'Идентификатор родительского объекта',
   `parent_id` BIGINT(20) COMMENT 'Внешний идентификатор родительского объекта',
   `additional_parent_id` BIGINT(20) COMMENT 'Внешний идентификатор дополнительного родительского объекта',
   `external_id` BIGINT(20) NOT NULL COMMENT 'Внешний идентификатор',
@@ -1031,7 +1030,6 @@ CREATE TABLE `domain_sync`(
   `status_detail` INTEGER NULL COMMENT 'Дополнительный статус синхронизации',
   `date` DATETIME NOT NULL COMMENT 'Дата актуальности',
   PRIMARY KEY (`id`),
-  KEY `key_parent_object_id` (`parent_object_id`),
   KEY `key_parent_id` (`parent_id`),
   KEY `key_additional_parent_id` (`additional_parent_id`),
   KEY `key_external_id` (`external_id`),

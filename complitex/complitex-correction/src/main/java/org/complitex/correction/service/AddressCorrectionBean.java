@@ -51,6 +51,10 @@ public class AddressCorrectionBean extends CorrectionBean {
         return getCityCorrections(FilterWrapper.of(new CityCorrection(null, objectId, correction, organizationId, userOrganizationId, null)));
     }
 
+    public List<CityCorrection> getCityCorrections(Long externalId, Long organizationId) {
+        return getCityCorrections(FilterWrapper.of(new CityCorrection(externalId, null, null, organizationId, null, null)));
+    }
+
     public List<CityCorrection> getCityCorrections(String correction, Long organizationId, Long userOrganizationId) {
         return getCityCorrections(null, correction, organizationId, userOrganizationId);
     }
@@ -215,6 +219,12 @@ public class AddressCorrectionBean extends CorrectionBean {
                 objectId, street, organizationId, userOrganizationId, null)));
     }
 
+    public List<StreetCorrection> getStreetCorrections(Long externalId, Long organizationId) {
+
+        return getStreetCorrections(FilterWrapper.of(new StreetCorrection(null, null, externalId,
+                null, null, organizationId, null, null)));
+    }
+
     public List<StreetCorrection> getStreetCorrections(LocalAddress localAddress, ExternalAddress externalAddress) {
 
         return getStreetCorrections(localAddress.getCityId(), localAddress.getStreetTypeId(), null, null,
@@ -268,8 +278,8 @@ public class AddressCorrectionBean extends CorrectionBean {
                 buildingNumber, buildingCorp, organizationId, userOrganizationId, null)));
     }
 
-    public List<BuildingCorrection> getBuildingCorrections(Long streetId, Long externalId, Long objectId, Long organizationId) {
-        return getBuildingCorrections(FilterWrapper.of(new BuildingCorrection(streetId, externalId, objectId,
+    public List<BuildingCorrection> getBuildingCorrections(Long externalId, Long objectId, Long organizationId) {
+        return getBuildingCorrections(FilterWrapper.of(new BuildingCorrection(null, externalId, objectId,
                 null, null, organizationId, null, null)));
     }
 

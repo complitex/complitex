@@ -9,12 +9,16 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.complitex.address.strategy.city.CityStrategy;
-import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.web.component.datatable.column.FilteredColumn;
+import org.complitex.correction.entity.CityCorrection;
+import org.complitex.correction.entity.StreetCorrection;
+import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.entity.SyncEntity;
+import org.complitex.sync.service.DomainSyncAdapter;
+
+import java.util.List;
 
 /**
  * @author Anatoly Ivanov
@@ -41,14 +45,23 @@ public class DomainSyncParentColumn extends FilteredColumn<DomainSync>{
 
         String objectName = "";
 
-        if (domainSync.getParentObjectId() != null){
-            if (domainSync.getType().equals(SyncEntity.DISTRICT) || domainSync.getType().equals(SyncEntity.STREET)){
-                objectName = EjbBeanLocator.getBean(CityStrategy.class).displayDomainObject(domainSync.getParentObjectId(), cellItem.getLocale());
-            }else if (domainSync.getType().equals(SyncEntity.BUILDING) ){
-                objectName = EjbBeanLocator.getBean(StreetStrategy.class).displayDomainObject(domainSync.getParentObjectId(), cellItem.getLocale());
-            }else {
-                objectName = domainSync.getParentObjectId() + "";
-            }
+        AddressCorrectionBean addressCorrectionBean = EjbBeanLocator.getBean(AddressCorrectionBean.class);
+        Long organizationId = EjbBeanLocator.getBean(DomainSyncAdapter.class).getOrganization().getObjectId();
+
+        if (domainSync.getType().equals(SyncEntity.DISTRICT) || domainSync.getType().equals(SyncEntity.STREET)){
+            List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(domainSync.getParentId(), organizationId);
+
+            objectName = !cityCorrections.isEmpty()
+                    ? cityCorrections.get(0).getCorrection()
+                    : "[" + domainSync.getParentId() + "]";
+        }else if (domainSync.getType().equals(SyncEntity.BUILDING) ){
+            List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(domainSync.getParentId(), organizationId);
+
+            objectName = !streetCorrections.isEmpty()
+                    ? streetCorrections.get(0).getCorrection()
+                    : "[" + domainSync.getParentId() + "]";
+        }else {
+            objectName = domainSync.getParentId() + "";
         }
 
         cellItem.add(new Label(componentId, Model.of(objectName)));

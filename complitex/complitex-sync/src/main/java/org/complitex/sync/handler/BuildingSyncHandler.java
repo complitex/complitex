@@ -7,7 +7,7 @@ import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.entity.Status;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
@@ -19,7 +19,9 @@ import org.complitex.correction.entity.DistrictCorrection;
 import org.complitex.correction.entity.StreetCorrection;
 import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.sync.entity.DomainSync;
+import org.complitex.sync.entity.SyncEntity;
 import org.complitex.sync.service.DomainSyncAdapter;
+import org.complitex.sync.service.DomainSyncBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.complitex.common.util.StringUtil.isEqualIgnoreCase;
+import static org.complitex.sync.entity.DomainSyncStatus.SYNCHRONIZED;
 
 /**
  * @author Anatoly Ivanov
@@ -53,28 +56,22 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
     @EJB
     private ModuleBean moduleBean;
 
-    @Override
-    public Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException {
-        switch (parent.getEntityName()){
-            case "district":
-                return domainSyncAdapter.getBuildingSyncs(districtStrategy.getName(parent), "", "", date);
-            case "street":
-                return domainSyncAdapter.getBuildingSyncs("",
-                        streetStrategy.getStreetTypeShortName(parent),
-                        streetStrategy.getName(parent), date);
-        }
+    @EJB
+    private DomainSyncBean domainSyncBean;
 
-        throw new IllegalArgumentException("parent entity name not district or street");
+    @Override
+    public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
+        return domainSyncAdapter.getBuildingSyncs(parentDomainSync.getName(), "", "", date);
     }
 
     @Override
-    public List<? extends DomainObject> getParentObjects() {
-        return districtStrategy.getList(new DomainObjectFilter().setStatus(Status.ACTIVE.name()));
+    public List<DomainSync> getParentDomainSyncs() {
+        return domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.DISTRICT, SYNCHRONIZED)));
     }
 
     @Override
-    public List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId) {
-        return addressCorrectionBean.getBuildingCorrections(parentObjectId, externalId, objectId, organizationId);
+    public List<? extends Correction> getCorrections(Long externalId, Long objectId, Long organizationId) {
+        return addressCorrectionBean.getBuildingCorrections(externalId, objectId, organizationId);
     }
 
     @Override
@@ -123,12 +120,19 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
     @Override
     public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
+        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null, null,
+                domainSync.getParentId(), null, null, organizationId, null);
+
+        if (streetCorrections.isEmpty()){
+            throw new RuntimeException("street correction not found " + domainSync);
+        }
+
         return buildingStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("street")
-                        .setParentId(domainSync.getParentObjectId())
+                        .setParentId(streetCorrections.get(0).getObjectId())
                         .addAttribute(BuildingStrategy.NUMBER, domainSync.getName())
                         .addAttribute(BuildingStrategy.NUMBER, domainSync.getAltName(), Locales.getAlternativeLocaleId())
                         .addAttribute(BuildingStrategy.CORP, domainSync.getAdditionalName())

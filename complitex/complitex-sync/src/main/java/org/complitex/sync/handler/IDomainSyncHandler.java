@@ -17,11 +17,11 @@ import java.util.List;
  */
 @Local
 public interface IDomainSyncHandler {
-    Cursor<DomainSync> getCursorDomainSyncs(DomainObject parent, Date date) throws RemoteCallException;
+    Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException;
 
-    List<? extends DomainObject> getParentObjects();
+    List<DomainSync> getParentDomainSyncs();
 
-    List<? extends Correction> getCorrections(Long parentObjectId, Long externalId, Long objectId, Long organizationId);
+    List<? extends Correction> getCorrections(Long externalId, Long objectId, Long organizationId);
 
     boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId);
 
@@ -39,5 +39,6 @@ public interface IDomainSyncHandler {
 
     void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId);
 
+    @Deprecated
     Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId);
 }

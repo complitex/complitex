@@ -20,7 +20,7 @@
     </select>
 
     <select id="selectStreetTypeSyncs" statementType="CALLABLE" parameterType="map">
-        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getStreetTypes(
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getStreetTypes(#{date},
           #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap})}
     </select>
 
