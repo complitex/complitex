@@ -67,6 +67,14 @@ public class DomainSyncService {
 
     private IDomainSyncHandler getHandler(SyncEntity syncEntity){
         switch (syncEntity){
+            case COUNTRY:
+                return EjbBeanLocator.getBean(CountrySyncHandler.class);
+            case REGION:
+                return EjbBeanLocator.getBean(RegionSyncHandler.class);
+            case CITY_TYPE:
+                return EjbBeanLocator.getBean(CityTypeSyncHandler.class);
+            case CITY:
+                return EjbBeanLocator.getBean(CitySyncHandler.class);
             case DISTRICT:
                 return EjbBeanLocator.getBean(DistrictSyncHandler.class);
             case STREET_TYPE:

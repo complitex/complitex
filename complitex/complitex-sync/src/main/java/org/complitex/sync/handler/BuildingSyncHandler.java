@@ -201,16 +201,4 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         domainObject.setStringValue(BuildingStrategy.CORP, domainSync.getAdditionalName());
         domainObject.setStringValue(BuildingStrategy.CORP, domainSync.getAltAdditionalName(), Locales.getAlternativeLocale());
     }
-
-    @Override
-    public Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId) {
-        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null, null,
-                domainSync.getParentId(), null, null, organizationId, null);
-
-        if (streetCorrections.isEmpty()){
-            throw new RuntimeException("street correction not found " + domainSync);
-        }
-
-        return streetCorrections.get(0).getObjectId();
-    }
 }

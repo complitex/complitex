@@ -9,7 +9,6 @@ import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.sync.entity.DomainSync;
-import org.complitex.sync.entity.SyncEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,6 +59,50 @@ public class DomainSyncAdapter extends AbstractBean {
         return dataSource;
     }
 
+    @SuppressWarnings("unchecked")
+    private Cursor<DomainSync> getDomainSyncCursor(String statement, Date date, String p1, Object v1, String p2, Object v2,
+                                                   String p3, Object v3) throws RemoteCallException{
+        Map<String, Object> param = new HashMap<>();
+        param.put("date", date);
+        param.put("okCode", 0);
+
+        if (p1 != null){
+            param.put(p1, v1);
+        }
+
+        if (p2 != null){
+            param.put(p2, v2);
+        }
+
+        if (p3 != null){
+            param.put(p3, v3);
+        }
+
+        try {
+            sqlSession(getDataSource()).selectOne(NS + "." + statement, param);
+        } catch (Exception e) {
+            throw new RemoteCallException(e);
+        }
+
+        log.info("{}: {}", statement, param);
+
+        return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
+    }
+
+    private Cursor<DomainSync> getDomainSyncCursor(String statement, Date date, String p1, Object v1, String p2, Object v2)
+            throws RemoteCallException{
+        return getDomainSyncCursor(statement, date, p1, v1, p2, v2, null, null);
+    }
+
+
+    private Cursor<DomainSync> getDomainSyncCursor(String statement, Date date, String p1, Object v1) throws RemoteCallException{
+        return getDomainSyncCursor(statement, date, p1, v1, null, null, null, null);
+    }
+
+    private Cursor<DomainSync> getDomainSyncCursor(String statement, Date date) throws RemoteCallException{
+        return getDomainSyncCursor(statement, date, null, null, null, null, null, null);
+    }
+
     /**
      * z$runtime_sz_utl.getCountries
      * Типы улиц.
@@ -68,19 +111,7 @@ public class DomainSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getCountrySyncs(Date date) throws RemoteCallException {
-        Map<String, Object> param = new HashMap<>();
-        param.put("date", date);
-        param.put("okCode", 0);
-
-        try {
-            sqlSession(getDataSource()).selectOne(NS + ".selectCountrySyncs", param);
-        } catch (Exception e) {
-            throw new RemoteCallException(e);
-        }
-
-        log.info("getCountriesSyncs: " + param);
-
-        return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
+        return getDomainSyncCursor("selectCountrySyncs", date);
     }
 
     /**
@@ -92,20 +123,12 @@ public class DomainSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getRegionSyncs(String countryName, Date date) throws RemoteCallException {
-        Map<String, Object> param = new HashMap<>();
-        param.put("countryName", countryName);
-        param.put("date", date);
-        param.put("okCode", 0);
+        return getDomainSyncCursor("selectRegionSyncs", date,"countryName", countryName);
+    }
 
-        try {
-            sqlSession(getDataSource()).selectOne(NS + ".selectRegionSyncs", param);
-        } catch (Exception e) {
-            throw new RemoteCallException(e);
-        }
-
-        log.info("getRegionSyncs: " + param);
-
-        return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
+    @SuppressWarnings("unchecked")
+    public Cursor<DomainSync> getCityTypeSyncs(Date date) throws RemoteCallException {
+        return getDomainSyncCursor("selectCityTypeSyncs", date);
     }
 
     /**
@@ -117,20 +140,7 @@ public class DomainSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getCitySyncs(String regionName, Date date) throws RemoteCallException {
-        Map<String, Object> param = new HashMap<>();
-        param.put("regionName", regionName);
-        param.put("date", date);
-        param.put("okCode", 0);
-
-        try {
-            sqlSession(getDataSource()).selectOne(NS + ".selectCitySyncs", param);
-        } catch (Exception e) {
-            throw new RemoteCallException(e);
-        }
-
-        log.info("getCitySyncs: " + param);
-
-        return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
+        return getDomainSyncCursor("selectCitySyncs", date, "regionName", regionName);
     }
 
     /**
@@ -147,22 +157,7 @@ public class DomainSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getDistrictSyncs(String cityTypeName, String cityName, Date date) throws RemoteCallException {
-        Map<String, Object> param = new HashMap<>();
-
-        param.put("cityName", cityName);
-        param.put("cityTypeName", cityTypeName);
-        param.put("date", date);
-        param.put("okCode", 0);
-
-        try {
-            sqlSession(getDataSource()).selectOne(NS + ".selectDistrictSyncs", param);
-        } catch (Exception e) {
-            throw new RemoteCallException(e);
-        }
-
-        log.info("getDistrictSyncs: " + param);
-
-        return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
+        return getDomainSyncCursor("selectDistrictSyncs", date, "cityName", cityName, "cityTypeName", cityTypeName);
     }
 
     /**
@@ -177,19 +172,7 @@ public class DomainSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getStreetTypeSyncs(Date date) throws RemoteCallException {
-        Map<String, Object> param = new HashMap<>();
-        param.put("date", date);
-        param.put("okCode", 0);
-
-        try {
-            sqlSession(getDataSource()).selectOne(NS + ".selectStreetTypeSyncs", param);
-        } catch (Exception e) {
-            throw new RemoteCallException(e);
-        }
-
-        log.info("getStreetTypeSyncs: " + param);
-
-        return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
+        return getDomainSyncCursor("selectStreetTypeSyncs", date);
     }
 
     /**
@@ -207,28 +190,7 @@ public class DomainSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getStreetSyncs(String cityName, String cityTypeName, Date date) throws RemoteCallException {
-        Map<String, Object> param = new HashMap<>();
-
-        param.put("cityName", cityName);
-        param.put("cityTypeName", cityTypeName);
-        param.put("date", date);
-        param.put("okCode", 0);
-
-        try {
-            sqlSession(getDataSource()).selectOne(NS + ".selectStreetSyncs", param);
-        } catch (Exception e) {
-            throw new RemoteCallException(e);
-        }
-
-        List<DomainSync> list = (List<DomainSync>) param.get("out");
-
-        if (list != null){
-            for (DomainSync sync : list){
-                sync.setType(SyncEntity.STREET);
-            }
-        }
-
-        return new Cursor<>((Integer)param.get("resultCode"), list);
+        return getDomainSyncCursor("selectStreetSyncs", date, "cityName", cityName, "cityTypeName", cityTypeName);
     }
 
     /**
@@ -249,38 +211,12 @@ public class DomainSyncAdapter extends AbstractBean {
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getBuildingSyncs(String districtName, String streetTypeName,
                                                String streetName, Date date) throws RemoteCallException {
-        Map<String, Object> param = new HashMap<>();
-
-        param.put("districtName", districtName);
-        param.put("streetName", streetName);
-        param.put("streetTypeName", streetTypeName);
-        param.put("date", date);
-        param.put("okCode", 0);
-
-        try {
-            sqlSession(getDataSource()).selectOne(NS + ".selectBuildingSyncs", param);
-        } catch (Exception e) {
-            throw new RemoteCallException(e);
-        }
-
-        return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
+        return getDomainSyncCursor("selectBuildingSyncs", date, "districtName", districtName,
+                "streetName", streetName, "streetTypeName", streetTypeName);
     }
 
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getOrganizationSyncs(Date date) throws RemoteCallException {
-        Map<String, Object> param = new HashMap<>();
-
-        param.put("okCode", 0);
-        param.put("date", date);
-
-        try {
-            sqlSession(getDataSource()).selectOne(NS + ".selectOrganizationSyncs", param);
-        } catch (Exception e) {
-            throw new RemoteCallException(e);
-        }
-
-        log.info("getOrganizationSyncs: " + param);
-
-        return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
+        return getDomainSyncCursor("selectOrganizationSyncs", date);
     }
 }

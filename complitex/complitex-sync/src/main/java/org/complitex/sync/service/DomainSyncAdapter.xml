@@ -24,6 +24,11 @@
          #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap})}
     </select>
 
+    <select id="selectCityTypeSyncs" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getCityTypes(#{date},
+          #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap})}
+    </select>
+
     <select id="selectCitySyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getCities(#{regionName}, #{date},
           #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap})}

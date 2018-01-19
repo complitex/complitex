@@ -148,9 +148,4 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
         domainObject.setStringValue(IOrganizationStrategy.SHORT_NAME, domainSync.getAltAdditionalName(), Locales.getAlternativeLocale());
         domainObject.setValueId(ORGANIZATION_TYPE, OrganizationTypeStrategy.SERVICING_ORGANIZATION_TYPE);
     }
-
-    @Override
-    public Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId) {
-        return null;
-    }
 }

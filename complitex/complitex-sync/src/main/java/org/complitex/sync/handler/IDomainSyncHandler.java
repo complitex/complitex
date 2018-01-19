@@ -38,7 +38,4 @@ public interface IDomainSyncHandler {
     IStrategy getStrategy();
 
     void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId);
-
-    @Deprecated
-    Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId);
 }

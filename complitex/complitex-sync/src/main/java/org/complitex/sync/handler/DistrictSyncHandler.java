@@ -113,11 +113,6 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId) {
-        return parentDomainObject.getObjectId();
-    }
-
-    @Override
     public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
         List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(domainSync.getParentId(), organizationId);
 

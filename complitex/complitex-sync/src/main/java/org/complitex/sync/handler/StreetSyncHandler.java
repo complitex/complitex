@@ -199,9 +199,4 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         domainObject.setStringValue(StreetStrategy.NAME, domainSync.getName());
         domainObject.setStringValue(StreetStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());
     }
-
-    @Override
-    public Long getParentObjectId(DomainObject parentDomainObject, DomainSync domainSync, Long organizationId) {
-        return parentDomainObject.getObjectId();
-    }
 }
