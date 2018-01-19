@@ -5,8 +5,12 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.AddressCorrectionBean;
 import org.complitex.sync.entity.DomainSync;
+import org.complitex.sync.service.DomainSyncAdapter;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
 
@@ -14,10 +18,17 @@ import java.util.List;
  * @author Anatoly A. Ivanov
  * 19.01.2018 17:19
  */
+@Stateless
 public class CountrySyncHandler implements IDomainSyncHandler{
+    @EJB
+    private DomainSyncAdapter domainSyncAdapter;
+
+    @EJB
+    private AddressCorrectionBean addressCorrectionBean;
+
     @Override
     public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
-        return null;
+        return domainSyncAdapter.getCountrySyncs(date);
     }
 
     @Override

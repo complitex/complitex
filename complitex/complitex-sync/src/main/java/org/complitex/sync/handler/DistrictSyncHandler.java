@@ -1,8 +1,6 @@
 package org.complitex.sync.handler;
 
 import org.complitex.address.exception.RemoteCallException;
-import org.complitex.address.strategy.city.CityStrategy;
-import org.complitex.address.strategy.city_type.CityTypeStrategy;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
@@ -38,12 +36,6 @@ import static org.complitex.sync.entity.DomainSyncStatus.SYNCHRONIZED;
 public class DistrictSyncHandler implements IDomainSyncHandler {
     @EJB
     private DomainSyncAdapter addressSyncAdapter;
-
-    @EJB
-    private CityStrategy cityStrategy;
-
-    @EJB
-    private CityTypeStrategy cityTypeStrategy;
 
     @EJB
     private DistrictStrategy districtStrategy;
