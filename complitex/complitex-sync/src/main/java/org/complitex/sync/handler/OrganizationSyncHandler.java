@@ -68,7 +68,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId) {
-        return correction.getCorrection().equals(domainSync.getName());
+        return correction.getCorrection().equals(domainSync.getAdditionalExternalId());
     }
 
     @Override
@@ -108,7 +108,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     @Override
     public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         OrganizationCorrection organizationCorrection = new OrganizationCorrection(domainSync.getExternalId(),
-                domainObject.getObjectId(), domainSync.getName(), organizationId, null, moduleBean.getModuleId());
+                domainObject.getObjectId(), domainSync.getAdditionalExternalId(), organizationId, null, moduleBean.getModuleId());
 
         organizationCorrectionBean.save(organizationCorrection);
 
@@ -117,7 +117,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
-        correction.setCorrection(domainSync.getName());
+        correction.setCorrection(domainSync.getAdditionalExternalId());
 
         organizationCorrectionBean.save((OrganizationCorrection) correction);
     }
@@ -134,7 +134,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
             domainObject.setParentId(getParentObjectId(domainSync, organizationId));
         }
 
-        domainObject.setStringValue(IOrganizationStrategy.EDRPOU, domainSync.getAdditionalParentId()); //todo string value duplicate
+        domainObject.setStringValue(IOrganizationStrategy.EDRPOU, domainSync.getAdditionalParentId());
         domainObject.setStringValue(IOrganizationStrategy.CODE, domainSync.getAdditionalExternalId());
         domainObject.setStringValue(IOrganizationStrategy.NAME, domainSync.getName());
         domainObject.setStringValue(IOrganizationStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());
