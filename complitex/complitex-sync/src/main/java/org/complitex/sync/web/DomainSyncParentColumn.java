@@ -9,6 +9,8 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
+import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.web.component.datatable.column.FilteredColumn;
 import org.complitex.correction.entity.CityCorrection;
@@ -70,7 +72,13 @@ public class DomainSyncParentColumn extends FilteredColumn<DomainSync>{
                         .getOrganizationCorrections(domainSync.getParentId(), null, organizationId);
 
                 if (!organizationCorrections.isEmpty()){
-                    objectName = organizationCorrections.get(0).getOrganizationName();
+                    Long orgId = organizationCorrections.get(0).getObjectId();
+
+                    if (orgId != null) {
+                        objectName = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy("organization")
+                                .getDomainObject(orgId)
+                                .getStringValue(IOrganizationStrategy.SHORT_NAME);
+                    }
                 }
             }
         }
