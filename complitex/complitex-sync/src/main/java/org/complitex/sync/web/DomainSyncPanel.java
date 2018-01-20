@@ -127,7 +127,7 @@ public class DomainSyncPanel extends Panel {
                     return;
                 }
 
-                getSession().info(getString("object.start"));
+                getSession().info(getString("load.start"));
 
                 setVisible(false);
 
@@ -171,11 +171,11 @@ public class DomainSyncPanel extends Panel {
                 if ("begin".equals(key)){
                     SyncBeginMessage begin = (SyncBeginMessage) payload;
 
-                    getSession().info(String.format(getString(begin.getSyncEntity().name() + ".onBegin"),
+                    getSession().info(String.format(getString("load.onBegin"),
                             Objects.toString(begin.getParentName(), ""), begin.getCount()));
                     onUpdate(handler);
                 }else if ("done".equals(key)){
-                    getSession().info(getString(payload + ".onDone"));
+                    getSession().info(getString("load.onDone"));
 
                     processed.setDefaultModelObject("");
                     onUpdate(handler);
