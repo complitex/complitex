@@ -1,9 +1,6 @@
 package org.complitex.sync.service;
 
 import org.complitex.address.exception.RemoteCallException;
-import org.complitex.address.strategy.city.CityStrategy;
-import org.complitex.address.strategy.district.DistrictStrategy;
-import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.BroadcastService;
@@ -44,15 +41,6 @@ public class DomainSyncService {
 
     @EJB
     private BroadcastService broadcastService;
-
-    @EJB
-    private CityStrategy cityStrategy;
-
-    @EJB
-    private DistrictStrategy districtStrategy;
-
-    @EJB
-    private StreetStrategy streetStrategy;
 
     @EJB
     private DomainSyncAdapter addressSyncAdapter;

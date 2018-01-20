@@ -12,7 +12,7 @@ import java.util.Date;
 public class DomainSync implements ILongId {
     private Long id;
     private Long parentId;
-    private Long additionalParentId;
+    private String additionalParentId;
     private Long externalId;
     private String additionalExternalId;
     private String name;
@@ -62,11 +62,11 @@ public class DomainSync implements ILongId {
         this.parentId = parentId;
     }
 
-    public Long getAdditionalParentId() {
+    public String getAdditionalParentId() {
         return additionalParentId;
     }
 
-    public void setAdditionalParentId(Long additionalParentId) {
+    public void setAdditionalParentId(String additionalParentId) {
         this.additionalParentId = additionalParentId;
     }
 

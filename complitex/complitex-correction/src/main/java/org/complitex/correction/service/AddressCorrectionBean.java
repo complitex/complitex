@@ -37,6 +37,16 @@ public class AddressCorrectionBean extends CorrectionBean {
                 correction, "entityAttributeId", entityAttributeId));
     }
 
+    /* COUNTRY */
+
+    public void insert(CountryCorrection countryCorrection){
+        if (countryCorrection.getModuleId() == null){
+            countryCorrection.setModuleId(moduleBean.getModuleId());
+        }
+
+        super.save(countryCorrection);
+    }
+
     /* CITY */
 
     public CityCorrection getCityCorrection(Long id) {

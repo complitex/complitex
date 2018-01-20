@@ -1016,7 +1016,7 @@ DROP TABLE IF EXISTS `domain_sync`;
 CREATE TABLE `domain_sync`(
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор записи синхронизации',
   `parent_id` BIGINT(20) COMMENT 'Внешний идентификатор родительского объекта',
-  `additional_parent_id` BIGINT(20) COMMENT 'Внешний идентификатор дополнительного родительского объекта',
+  `additional_parent_id` VARCHAR(16) COMMENT 'Внешний идентификатор дополнительного родительского объекта',
   `external_id` BIGINT(20) NOT NULL COMMENT 'Внешний идентификатор',
   `additional_external_id` VARCHAR(20) COMMENT 'Дополнительный внешний идентификатор',
   `name` VARCHAR(250) NOT NULL COMMENT 'Название',

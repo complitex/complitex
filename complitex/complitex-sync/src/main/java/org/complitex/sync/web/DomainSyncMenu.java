@@ -12,6 +12,10 @@ import org.complitex.template.web.template.ResourceTemplateMenu;
 public class DomainSyncMenu extends ResourceTemplateMenu{
     public DomainSyncMenu() {
         add("organization_sync", DomainSyncPage.class, new PageParameters().add("entity", "organization"));
+        add("country_sync", DomainSyncPage.class, new PageParameters().add("entity", "country"));
+        add("region_sync", DomainSyncPage.class, new PageParameters().add("entity", "region"));
+        add("city_type_sync", DomainSyncPage.class, new PageParameters().add("entity", "city_type"));
+        add("city_sync", DomainSyncPage.class, new PageParameters().add("entity", "city"));
         add("district_sync", DomainSyncPage.class, new PageParameters().add("entity", "district"));
         add("street_type_sync", DomainSyncPage.class, new PageParameters().add("entity", "street_type"));
         add("street_sync", DomainSyncPage.class, new PageParameters().add("entity", "street"));

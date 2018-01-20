@@ -134,7 +134,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
             domainObject.setParentId(getParentObjectId(domainSync, organizationId));
         }
 
-        domainObject.setStringValue(IOrganizationStrategy.EDRPOU, domainSync.getAdditionalParentId() + "");
+        domainObject.setStringValue(IOrganizationStrategy.EDRPOU, domainSync.getAdditionalParentId()); //todo string value duplicate
         domainObject.setStringValue(IOrganizationStrategy.CODE, domainSync.getAdditionalExternalId());
         domainObject.setStringValue(IOrganizationStrategy.NAME, domainSync.getName());
         domainObject.setStringValue(IOrganizationStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());

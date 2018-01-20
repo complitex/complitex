@@ -62,7 +62,8 @@ public class StreetSyncHandler implements IDomainSyncHandler {
 
     @Override
     public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
-        List<DomainSync> cityTypeDomainSyncs = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.DISTRICT, parentDomainSync.getAdditionalParentId())));
+        List<DomainSync> cityTypeDomainSyncs = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.DISTRICT,
+                Long.valueOf(parentDomainSync.getAdditionalParentId()))));
 
         if (cityTypeDomainSyncs.isEmpty()){
             throw new CorrectionNotFoundException("city type correction not found " + cityTypeDomainSyncs);
@@ -86,7 +87,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
-                domainSync.getAdditionalParentId(), null, organizationId);
+                Long.valueOf(domainSync.getAdditionalParentId()), null, organizationId);
 
         if (streetTypeCorrections.isEmpty()) {
             throw new CorrectionNotFoundException("street type correction not found" + domainSync);
@@ -100,7 +101,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     @Override
     public boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId) {
         List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
-                domainSync.getAdditionalParentId(), null, organizationId);
+                Long.valueOf(domainSync.getAdditionalParentId()), null, organizationId);
 
         if (streetTypeCorrections.isEmpty()) {
             throw new CorrectionNotFoundException("street type correction not found" + domainSync);
@@ -129,7 +130,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         }
 
         List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
-                domainSync.getAdditionalParentId(), null, organizationId);
+                Long.valueOf(domainSync.getAdditionalParentId()), null, organizationId);
 
         if (streetTypeCorrections.isEmpty()) {
             throw new CorrectionNotFoundException("street type correction not found" + domainSync);
@@ -160,7 +161,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     @Override
     public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
         List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
-                domainSync.getAdditionalParentId(), null, organizationId);
+                Long.valueOf(domainSync.getAdditionalParentId()), null, organizationId);
 
         if (streetTypeCorrections.isEmpty()) {
             throw new CorrectionNotFoundException("street type correction not found" + domainSync);
@@ -186,7 +187,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
         }
 
         List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
-                domainSync.getAdditionalParentId(), null, organizationId);
+                Long.valueOf(domainSync.getAdditionalParentId()), null, organizationId);
 
         if (streetTypeCorrections.isEmpty()) {
             throw new CorrectionNotFoundException("street type correction not found" + domainSync);

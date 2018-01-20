@@ -56,7 +56,8 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
 
     @Override
     public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
-        List<DomainSync> cityTypeDomainSyncs = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.DISTRICT, parentDomainSync.getAdditionalParentId())));
+        List<DomainSync> cityTypeDomainSyncs = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.DISTRICT,
+                Long.valueOf(parentDomainSync.getAdditionalParentId()))));
 
         if (cityTypeDomainSyncs.isEmpty()){
             throw new CorrectionNotFoundException("city type correction not found " + cityTypeDomainSyncs);

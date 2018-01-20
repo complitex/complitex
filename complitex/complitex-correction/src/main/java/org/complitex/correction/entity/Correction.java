@@ -45,6 +45,14 @@ public abstract class Correction implements Serializable {
         this.moduleId = moduleId;
     }
 
+    public Correction(Long externalId, Long objectId, String correction, Long organizationId, Long userOrganizationId) {
+        this.externalId = externalId;
+        this.objectId = objectId;
+        this.correction = correction;
+        this.organizationId = organizationId;
+        this.userOrganizationId = userOrganizationId;
+    }
+
     public Correction(String correction, Long organizationId, Long userOrganizationId) {
         this.correction = correction;
         this.organizationId = organizationId;

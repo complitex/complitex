@@ -220,16 +220,6 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
         }
     }
 
-    @Override
-    protected void insertAttribute(Attribute attribute) {
-        if (CUSTOM_ATTRIBUTE_TYPES.contains(attribute.getEntityAttributeId())){
-            Long generatedStringId = insertStrings(attribute.getEntityAttributeId(), attribute.getStringValues());
-            attribute.setValueId(generatedStringId);
-        }
-
-        super.insertAttribute(attribute);
-    }
-
     /**
      * Returns relative path to request files storage.
      * @param osznId Oszn's id.
