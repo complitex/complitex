@@ -113,10 +113,10 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
                 valid = false;
             }
 
-            if (correction.getUserOrganizationId() == null) {
-                error(getString("error_user_organization"));
-                valid = false;
-            }
+//            if (correction.getUserOrganizationId() == null) {
+//                error(getString("error_user_organization"));
+//                valid = false;
+//            }
         }
 
 

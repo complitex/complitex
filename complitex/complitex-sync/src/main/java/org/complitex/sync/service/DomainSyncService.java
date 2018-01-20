@@ -263,6 +263,8 @@ public class DomainSyncService {
                 } catch (CorrectionNotFoundException e) {
                     ds.setStatus(ERROR);
                     domainSyncBean.updateStatus(ds);
+
+                    log.warn("sync: warn sync {}", e.getMessage());
                 } catch (Exception e){
                     log.error("sync: error sync {}", ds);
 

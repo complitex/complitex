@@ -96,7 +96,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
                     domainSync.getParentId(), null, organizationId);
 
             if (organizationCorrections.isEmpty()) {
-                throw new CorrectionNotFoundException("organization correction not found" + domainSync);
+                throw new CorrectionNotFoundException("organization parent correction not found " + domainSync);
             }
 
             return organizationCorrections.get(0).getObjectId();
