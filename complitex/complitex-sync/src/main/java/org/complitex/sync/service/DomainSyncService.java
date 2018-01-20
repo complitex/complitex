@@ -162,7 +162,7 @@ public class DomainSyncService {
 
                 DomainSync p = ds;
 
-                while (p != null && p.getParentId() != null){
+                while (p != null && p.getParentId() != null && level < 100){
                     p = map.get(p.getParentId());
 
                     level++;

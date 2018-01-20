@@ -2,7 +2,6 @@ package org.complitex.organization.strategy.web.edit;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -23,7 +22,7 @@ import org.complitex.common.web.component.*;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.DomainDropDownChoice;
 import org.complitex.common.web.component.domain.DomainObjectAccessUtil;
-import org.complitex.common.web.component.domain.DomainObjectEditPanel;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
@@ -32,7 +31,6 @@ import javax.ejb.EJB;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 import static org.complitex.common.strategy.organization.IOrganizationStrategy.*;
 
@@ -194,44 +192,7 @@ public class OrganizationEditComponent extends AbstractComplexAttributesPanel {
         districtRequiredContainer.setVisible(isDistrictRequired());
 
         //parent
-        final Attribute parentAttribute = organization.getAttribute(IOrganizationStrategy.USER_ORGANIZATION_PARENT);
-        IModel<Long> parentModel = new Model<>();
-        if (parentAttribute != null) {
-            parentModel = new Model<Long>() {
-
-                @Override
-                public Long getObject() {
-                    return parentAttribute.getValueId();
-                }
-
-                @Override
-                public void setObject(Long object) {
-                    parentAttribute.setValueId(object);
-                }
-            };
-        }
-
-        if (isNew()) {
-            parentContainer.add(new UserOrganizationPicker("parent", parentModel, true) {
-
-                @Override
-                protected void onUpdate(AjaxRequestTarget target, DomainObject newOrganization) {
-                    if (newOrganization != null && newOrganization.getObjectId() != null && newOrganization.getObjectId() > 0) {
-                        DomainObjectEditPanel editPanel = findParent(DomainObjectEditPanel.class);
-                        editPanel.updateParentPermissions(target, newOrganization.getSubjectIds());
-                    }
-                }
-            });
-        } else {
-            Set<Long> excludeOrganizationIds = Sets.newHashSet(organization.getObjectId());
-            excludeOrganizationIds.addAll(organizationStrategy.getTreeChildrenOrganizationIds(organization.getObjectId()));
-            Long[] excludeAsArray = new Long[excludeOrganizationIds.size()];
-            UserOrganizationPicker parent = new UserOrganizationPicker("parent", parentModel, true,
-                    excludeOrganizationIds.toArray(excludeAsArray));
-            parent.setEnabled(enabled());
-            parentContainer.add(parent);
-        }
-        parentContainer.setVisible(isParentVisible());
+        parentContainer.add(new OrganizationIdPicker("parent", new PropertyModel<>(organization, "parentId")));
 
         //reference to jdbc data source. Only for calculation centres.
         {
