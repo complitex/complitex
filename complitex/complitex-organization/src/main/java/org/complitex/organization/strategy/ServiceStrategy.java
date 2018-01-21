@@ -2,6 +2,7 @@ package org.complitex.organization.strategy;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.IEntityName;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
@@ -28,6 +29,13 @@ public class ServiceStrategy extends TemplateStrategy{
     public static final long POWER_SUPPLY = 6;
     public static final long GARBAGE_DISPOSAL = 7;
     public static final long DRAINAGE = 8;
+
+    public static IEntityName SERVICE_ENTITY = new IEntityName() {
+        @Override
+        public String getEntityName() {
+            return "service";
+        }
+    };
 
     @Override
     public void configureFilter(DomainObjectFilter filter, Map<String, Long> ids, String searchTextInput) {

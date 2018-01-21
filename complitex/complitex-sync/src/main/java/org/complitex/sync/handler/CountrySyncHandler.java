@@ -1,5 +1,6 @@
 package org.complitex.sync.handler;
 
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.country.CountryStrategy;
 import org.complitex.common.entity.Cursor;
@@ -10,8 +11,7 @@ import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
 import org.complitex.common.util.StringUtil;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.entity.CountryCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
 
@@ -30,7 +30,7 @@ public class CountrySyncHandler implements IDomainSyncHandler{
     private DomainSyncAdapter domainSyncAdapter;
 
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private CountryStrategy countryStrategy;
@@ -42,11 +42,6 @@ public class CountrySyncHandler implements IDomainSyncHandler{
 
     @Override
     public List<DomainSync> getParentDomainSyncs() {
-        return null;
-    }
-
-    @Override
-    public List<? extends Correction> getCorrections(Long externalId, Long objectId, Long organizationId) {
         return null;
     }
 
@@ -77,10 +72,10 @@ public class CountrySyncHandler implements IDomainSyncHandler{
 
     @Override
     public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        CountryCorrection correction = new CountryCorrection(domainSync.getExternalId(), domainObject.getObjectId(),
-                domainSync.getName(), organizationId, null);
+        Correction correction = new Correction(AddressEntity.COUNTRY.getEntityName(), domainSync.getExternalId(),
+                domainObject.getObjectId(), domainSync.getName(), organizationId, null);
 
-        addressCorrectionBean.insert(correction);
+        correctionBean.save(correction);
 
         return correction;
     }
@@ -89,7 +84,7 @@ public class CountrySyncHandler implements IDomainSyncHandler{
     public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
         correction.setCorrection(domainSync.getName());
 
-        addressCorrectionBean.save(correction);
+        correctionBean.save(correction);
     }
 
     @Override

@@ -37,6 +37,14 @@ public abstract class OrganizationStrategy extends TemplateStrategy implements I
 
     private static final String RESOURCE_BUNDLE = OrganizationStrategy.class.getName();
 
+    public static final IEntityName ORGANIZATION_ENTITY = new IEntityName(){
+
+        @Override
+        public String getEntityName() {
+            return "organization";
+        }
+    };
+
     @EJB
     private StringLocaleBean stringLocaleBean;
 

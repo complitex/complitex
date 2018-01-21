@@ -46,8 +46,8 @@ import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.common.web.component.organization.OrganizationPicker;
 import org.complitex.common.web.component.organization.OrganizationPickerDialog;
 import org.complitex.common.wicket.BroadcastBehavior;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
+import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.AbstractRequestFile;
@@ -102,7 +102,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     private ModuleBean moduleBean;
 
     @EJB
-    private OrganizationCorrectionBean organizationCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private OsznOrganizationStrategy organizationStrategy;
@@ -317,12 +317,11 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 R requestFile = selectedRequestFileModel.getObject();
                 DomainObject organization = getOrganizationModel().getObject();
 
-                OrganizationCorrection correction = new OrganizationCorrection(null, organization.getObjectId(),
-                        requestFile.getEdrpou(), requestFile.getOrganizationId(), requestFile.getUserOrganizationId(),
-                        moduleBean.getModuleId());
+                Correction correction = new Correction("organization", null, organization.getObjectId(),
+                        requestFile.getEdrpou(), requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
-                if (organizationCorrectionBean.getOrganizationCorrectionsCount(FilterWrapper.of(correction)) == 0){
-                    organizationCorrectionBean.save(correction);
+                if (correctionBean.getCorrectionsCount(FilterWrapper.of(correction)) == 0){
+                    correctionBean.save(correction);
 
                     getSession().info(String.format(getString("info_correction_added"),
                             organizationStrategy.displayShortNameAndCode(organization, getLocale())));

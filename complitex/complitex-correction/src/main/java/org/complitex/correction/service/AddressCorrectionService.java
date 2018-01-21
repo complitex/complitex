@@ -70,7 +70,7 @@ public class AddressCorrectionService {
 
             throw new ResolveAddressException("MORE_ONE_LOCAL_CITY_CORRECTION");
         } else if (externalAddress.getCity() != null){
-            List<Long> cityIds = correctionBean.getObjectIds(AddressEntity.CITY.getEntityName(),
+            List<Long> cityIds = correctionBean.getObjectIds(AddressEntity.CITY,
                     externalAddress.getCity(), CityStrategy.NAME);
 
             if (cityIds.size() == 1) {
@@ -94,7 +94,7 @@ public class AddressCorrectionService {
 
                 throw new ResolveAddressException("MORE_ONE_LOCAL_STREET_TYPE_CORRECTION");
             } else {
-                List<Long> streetTypeIds = correctionBean.getObjectIds(AddressEntity.STREET_TYPE.getEntityName(),
+                List<Long> streetTypeIds = correctionBean.getObjectIds(AddressEntity.STREET_TYPE,
                         externalAddress.getStreetType(), StreetTypeStrategy.NAME);
 
                 if (streetTypeIds.size() == 1) {
@@ -285,7 +285,7 @@ public class AddressCorrectionService {
         ExternalAddress externalAddress = new ExternalAddress();
 
         //город
-        List<Correction> cityCorrections = correctionBean.getCorrections(AddressEntity.CITY.getEntityName(),
+        List<Correction> cityCorrections = correctionBean.getCorrections(AddressEntity.CITY,
                 localAddress.getCityId(),
                 null, organizationId, userOrganizationId);
 
@@ -306,7 +306,7 @@ public class AddressCorrectionService {
         }
 
         // район
-        List<Correction> districtCorrections = correctionBean.getCorrectionsByParentId(AddressEntity.DISTRICT.getEntityName(),
+        List<Correction> districtCorrections = correctionBean.getCorrectionsByParentId(AddressEntity.DISTRICT,
                 localAddress.getCityId(), organizationId, userOrganizationId);
 
         if (districtCorrections.isEmpty() && organizationId != null){
@@ -331,7 +331,7 @@ public class AddressCorrectionService {
 
         //тип улицы
         if (localAddress.getStreetTypeId() != null) {
-            List<Correction> streetTypeCorrections = correctionBean.getCorrectionsByObjectId(AddressEntity.STREET_TYPE.getEntityName(),
+            List<Correction> streetTypeCorrections = correctionBean.getCorrectionsByObjectId(AddressEntity.STREET_TYPE,
                     localAddress.getStreetTypeId(), organizationId, userOrganizationId);
 
             if (streetTypeCorrections.isEmpty()){
@@ -352,7 +352,7 @@ public class AddressCorrectionService {
         }
 
         //улица
-        List<Correction> streetCorrections = correctionBean.getCorrectionsByObjectId(AddressEntity.STREET.getEntityName(),
+        List<Correction> streetCorrections = correctionBean.getCorrectionsByObjectId(AddressEntity.STREET,
                 localAddress.getStreetId(), organizationId, userOrganizationId);
 
         if (streetCorrections.isEmpty()){
@@ -379,7 +379,7 @@ public class AddressCorrectionService {
         }
 
         //дом
-        List<Correction> buildingCorrections = correctionBean.getCorrectionsByObjectId(AddressEntity.BUILDING.getEntityName(),
+        List<Correction> buildingCorrections = correctionBean.getCorrectionsByObjectId(AddressEntity.BUILDING,
                 localAddress.getBuildingId(), organizationId, null);
 
         if (buildingCorrections.isEmpty()){

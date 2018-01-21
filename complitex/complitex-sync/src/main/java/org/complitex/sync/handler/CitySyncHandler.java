@@ -25,12 +25,7 @@ public class CitySyncHandler implements IDomainSyncHandler{
         return null;
     }
 
-    @Override
-    public List<? extends Correction> getCorrections(Long externalId, Long objectId, Long organizationId) {
-        return null;
-    }
-
-    @Override
+     @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         return false;
     }

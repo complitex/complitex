@@ -4,15 +4,13 @@ import org.complitex.address.exception.RemoteCallException;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.Locales;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
@@ -24,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.complitex.common.strategy.organization.IOrganizationStrategy.ORGANIZATION_TYPE;
+import static org.complitex.organization.strategy.OrganizationStrategy.ORGANIZATION_ENTITY;
 
 /**
  * @author inheaven on 22.01.2016 13:09.
@@ -37,10 +36,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     private IOrganizationStrategy organizationStrategy;
 
     @EJB
-    private OrganizationCorrectionBean organizationCorrectionBean;
-
-    @EJB
-    private ModuleBean moduleBean;
+    private CorrectionBean correctionBean;
 
     @Override
     public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
@@ -50,11 +46,6 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     @Override
     public List<DomainSync> getParentDomainSyncs() {
         return null;
-    }
-
-    @Override
-    public List<? extends Correction> getCorrections(Long externalId, Long objectId, Long organizationId) {
-        return organizationCorrectionBean.getOrganizationCorrections(externalId, objectId, organizationId);
     }
 
     @Override
@@ -92,7 +83,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     private Long getParentObjectId(DomainSync domainSync, Long organizationId) {
         if (domainSync.getParentId() != null) {
-            List<OrganizationCorrection> organizationCorrections = organizationCorrectionBean.getOrganizationCorrections(
+            List<Correction> organizationCorrections = correctionBean.getCorrectionsByExternalId(ORGANIZATION_ENTITY,
                     domainSync.getParentId(), null, organizationId);
 
             if (organizationCorrections.isEmpty()) {
@@ -107,10 +98,10 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        OrganizationCorrection organizationCorrection = new OrganizationCorrection(domainSync.getExternalId(),
-                domainObject.getObjectId(), domainSync.getAdditionalExternalId(), organizationId, null, moduleBean.getModuleId());
+        Correction organizationCorrection = new Correction(ORGANIZATION_ENTITY.getEntityName(), domainSync.getExternalId(),
+                domainObject.getObjectId(), domainSync.getAdditionalExternalId(), organizationId, null);
 
-        organizationCorrectionBean.save(organizationCorrection);
+        correctionBean.save(organizationCorrection);
 
         return organizationCorrection;
     }
@@ -119,7 +110,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
         correction.setCorrection(domainSync.getAdditionalExternalId());
 
-        organizationCorrectionBean.save((OrganizationCorrection) correction);
+        correctionBean.save(correction);
     }
 
     @Override

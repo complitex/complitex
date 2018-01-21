@@ -26,11 +26,6 @@ public class RegionSyncHandler implements IDomainSyncHandler{
     }
 
     @Override
-    public List<? extends Correction> getCorrections(Long externalId, Long objectId, Long organizationId) {
-        return null;
-    }
-
-    @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         return false;
     }

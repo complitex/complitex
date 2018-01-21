@@ -18,7 +18,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.osznconnection.file.entity.PersonAccount;
 import org.complitex.osznconnection.file.service.PersonAccountBean;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -87,7 +86,7 @@ public final class PersonAccountEdit extends FormTemplatePage {
     private void back(boolean useScrolling) {
         if (useScrolling) {
             PageParameters backPageParameters = new PageParameters();
-            backPageParameters.set(AbstractCorrectionList.SCROLL_PARAMETER, personAccount.getId());
+//            backPageParameters.set(AbstractCorrectionList.SCROLL_PARAMETER, personAccount.getId());
             setResponsePage(PersonAccountList.class, backPageParameters);
         } else {
             setResponsePage(PersonAccountList.class);

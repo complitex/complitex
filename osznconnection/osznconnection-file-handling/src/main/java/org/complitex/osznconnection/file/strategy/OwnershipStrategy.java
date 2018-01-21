@@ -6,6 +6,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.IEntityName;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
@@ -29,6 +30,13 @@ public class OwnershipStrategy extends TemplateStrategy {
      * Attribute type ids
      */
     public static final long NAME = 1100;
+
+    public static IEntityName OWNERSHIP_ENTITY = new IEntityName() {
+        @Override
+        public String getEntityName() {
+            return "ownership";
+        }
+    };
 
     @EJB
     private StringValueBean stringBean;

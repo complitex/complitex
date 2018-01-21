@@ -5,6 +5,7 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
+import org.complitex.common.entity.IEntityName;
 import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
@@ -29,6 +30,14 @@ public class PrivilegeStrategy extends TemplateStrategy {
      */
     public static final long NAME = 1200;
     public static final long CODE = 1201;
+
+    public static IEntityName PRIVILEGE_ENTITY = new IEntityName() {
+        @Override
+        public String getEntityName() {
+            return "privilege";
+        }
+    };
+
     @EJB
     private StringValueBean stringBean;
 

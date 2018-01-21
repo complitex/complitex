@@ -4,40 +4,21 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.correction.web.AbstractCorrectionList;
-import org.complitex.osznconnection.file.entity.privilege.PrivilegeCorrection;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeCorrectionBean;
 
 import javax.ejb.EJB;
-import java.util.List;
 
 /**
- * Список коррекций привилегий.
- * @author Artem
+ * Список коррекций привилегий
  */
-public class PrivilegeCorrectionList extends AbstractCorrectionList<PrivilegeCorrection> {
+public class PrivilegeCorrectionList extends AbstractCorrectionList {
     @EJB
     private PrivilegeCorrectionBean privilegeCorrectionBean;
 
 
     public PrivilegeCorrectionList() {
         super("privilege");
-    }
-
-    @Override
-    protected PrivilegeCorrection newCorrection() {
-        return new PrivilegeCorrection();
-    }
-
-    @Override
-    protected List<PrivilegeCorrection> getCorrections(FilterWrapper<PrivilegeCorrection> filterWrapper) {
-        return privilegeCorrectionBean.getPrivilegeCorrections(filterWrapper);
-    }
-
-    @Override
-    protected Long getCorrectionsCount(FilterWrapper<PrivilegeCorrection> filterWrapper) {
-        return privilegeCorrectionBean.getPrivilegeCorrectionCount(filterWrapper);
     }
 
     @Override

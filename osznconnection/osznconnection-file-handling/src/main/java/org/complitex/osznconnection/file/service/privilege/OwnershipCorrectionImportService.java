@@ -6,7 +6,8 @@ import org.complitex.common.exception.ImportFileReadException;
 import org.complitex.common.exception.ImportObjectLinkException;
 import org.complitex.common.service.AbstractImportService;
 import org.complitex.common.service.IImportListener;
-import org.complitex.osznconnection.file.entity.privilege.OwnershipCorrection;
+import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.osznconnection.file.strategy.OwnershipStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +28,12 @@ public class OwnershipCorrectionImportService extends AbstractImportService {
     private final Logger log = LoggerFactory.getLogger(OwnershipCorrectionImportService.class);
     @EJB
     private OwnershipStrategy ownershipStrategy;
+
     @EJB
     private OwnershipCorrectionBean ownershipCorrectionBean;
+
+    @EJB
+    private CorrectionBean correctionBean;
 
     /**
      * C_OWNERSHIP_ID	OWNERSHIP_ID	Код	Название формы собственности
@@ -57,8 +62,9 @@ public class OwnershipCorrectionImportService extends AbstractImportService {
                     throw new ImportObjectLinkException(OWNERSHIP_CORRECTION.getFileName(), recordIndex, line[1]);
                 }
 
-                ownershipCorrectionBean.save(new OwnershipCorrection(Long.valueOf(line[2].trim()), objectId, line[3].trim(), orgId,
-                        null, intOrgId));
+                correctionBean.save(new Correction(OwnershipStrategy.OWNERSHIP_ENTITY.getEntityName(),
+                        Long.valueOf(line[2].trim()), objectId, line[3].trim(), orgId,
+                        null));
 
                 listener.recordProcessed(OWNERSHIP_CORRECTION, recordIndex);
             }
