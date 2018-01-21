@@ -68,5 +68,22 @@ public class CorrectionBean extends AbstractBean{
                 correction, null, organizationId, userOrganizationId)));
     }
 
+    public List<Correction> getCorrectionsByParentId(String entityName, Long parentId, Long organizationId, Long userOrganizationId){
+        return getCorrections(FilterWrapper.of(new Correction(entityName, parentId, null, null,
+                null, null, null, organizationId, userOrganizationId)));
+    }
+
+    public List<Correction> getCorrectionsByExternalId(String entityName, Long externalId, Long organizationId, Long userOrganizationId){
+        return getCorrections(FilterWrapper.of(new Correction(entityName, null, null, externalId,
+                null, null, null, organizationId, userOrganizationId)));
+    }
+
+    public List<Correction> getCorrectionsByObjectId(String entityName, Long objectId, Long organizationId, Long userOrganizationId){
+        return getCorrections(FilterWrapper.of(new Correction(entityName, null, null, null,
+                objectId, null, null, organizationId, userOrganizationId)));
+    }
+
+
+
 
 }
