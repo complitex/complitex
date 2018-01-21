@@ -59,7 +59,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId) {
-        return correction.getCorrection().equals(domainSync.getAdditionalExternalId());
+        return Objects.equals(correction.getCorrection(), domainSync.getAdditionalExternalId());
     }
 
     @Override
@@ -99,7 +99,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     @Override
     public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         Correction organizationCorrection = new Correction(ORGANIZATION_ENTITY.getEntityName(), domainSync.getExternalId(),
-                domainObject.getObjectId(), domainSync.getAdditionalParentId(), organizationId, null);
+                domainObject.getObjectId(), domainSync.getAdditionalExternalId(), organizationId, null);
 
         correctionBean.save(organizationCorrection);
 
@@ -108,7 +108,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
-        correction.setCorrection(domainSync.getAdditionalParentId());
+        correction.setCorrection(domainSync.getAdditionalExternalId());
 
         correctionBean.save(correction);
     }
