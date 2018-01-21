@@ -10,12 +10,16 @@ import java.util.Date;
  * Объект коррекции
  * @author Anatoly A. Ivanov java@inheaven.ru
  */
-public abstract class Correction implements Serializable {
+public class Correction implements Serializable {
+    private String entityName;
 
     private Long id;
+    private Long parentId;
+    private Long additionalParentId;
     private Long externalId;
     private Long objectId;
     private String correction;
+    private String additionalCorrection;
     private Date beginDate = DateUtil.MIN_BEGIN_DATE;
     private Date endDate = DateUtil.MAX_END_DATE;
     private Long organizationId;
@@ -30,33 +34,54 @@ public abstract class Correction implements Serializable {
 
     private boolean editable = true;
 
-    public abstract String getEntity();
+
 
     protected Correction() {
     }
 
-    public Correction(Long externalId, Long objectId, String correction, Long organizationId, Long userOrganizationId,
-                      Long moduleId) {
+    public Correction(String entityName, Long parentId, Long additionalParentId, Long externalId, Long objectId,
+                      String correction, String additionalCorrection, Long organizationId, Long userOrganizationId) {
+        this.entityName = entityName;
+        this.parentId = parentId;
+        this.additionalParentId = additionalParentId;
         this.externalId = externalId;
         this.objectId = objectId;
         this.correction = correction;
+        this.additionalCorrection = additionalCorrection;
         this.organizationId = organizationId;
         this.userOrganizationId = userOrganizationId;
-        this.moduleId = moduleId;
     }
 
-    public Correction(Long externalId, Long objectId, String correction, Long organizationId, Long userOrganizationId) {
-        this.externalId = externalId;
-        this.objectId = objectId;
-        this.correction = correction;
-        this.organizationId = organizationId;
-        this.userOrganizationId = userOrganizationId;
+    public Correction(String entityName, Long parentId, Long additionalParentId, Long externalId, Long objectId,
+                      String correction, Long organizationId, Long userOrganizationId) {
+        this(entityName, parentId, additionalParentId, externalId, objectId, correction, null,
+                organizationId, userOrganizationId);
+    }
+
+    public Correction(String entityName, Long parentId, Long externalId, Long objectId, String correction,
+                      String additionalCorrection, Long organizationId, Long userOrganizationId) {
+        this(entityName, parentId, null, externalId, objectId, correction, organizationId, userOrganizationId);
+    }
+
+    public Correction(String entityName, Long parentId, Long externalId, Long objectId, String correction,
+                      Long organizationId, Long userOrganizationId) {
+        this(entityName, parentId, null, externalId, objectId, correction, organizationId, userOrganizationId);
+    }
+
+    public Correction(String entityName, Long externalId, Long objectId, String correction,
+                      Long organizationId, Long userOrganizationId) {
+        this(entityName, null, externalId, objectId, correction, organizationId, userOrganizationId);
     }
 
     public Correction(String correction, Long organizationId, Long userOrganizationId) {
         this.correction = correction;
         this.organizationId = organizationId;
         this.userOrganizationId = userOrganizationId;
+    }
+
+    public Correction(String entityName, Long id) {
+        this.entityName = entityName;
+        this.id = id;
     }
 
     public Correction toUpperCase(){
@@ -73,6 +98,22 @@ public abstract class Correction implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public Long getAdditionalParentId() {
+        return additionalParentId;
+    }
+
+    public void setAdditionalParentId(Long additionalParentId) {
+        this.additionalParentId = additionalParentId;
     }
 
     public Long getExternalId() {
@@ -97,6 +138,14 @@ public abstract class Correction implements Serializable {
 
     public void setCorrection(String correction) {
         this.correction = correction;
+    }
+
+    public String getAdditionalCorrection() {
+        return additionalCorrection;
+    }
+
+    public void setAdditionalCorrection(String additionalCorrection) {
+        this.additionalCorrection = additionalCorrection;
     }
 
     public Date getBeginDate() {
@@ -179,12 +228,23 @@ public abstract class Correction implements Serializable {
         this.editable = editable;
     }
 
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
     protected MoreObjects.ToStringHelper getToStringHelper(){
         return MoreObjects.toStringHelper(this).omitNullValues()
                 .add("id", id)
                 .add("externalId", externalId)
+                .add("parentId", parentId)
+                .add("additionalParentId", additionalParentId)
                 .add("objectId", objectId)
                 .add("correction", correction)
+                .add("additionalCorrection", additionalCorrection)
                 .add("beginDate", beginDate)
                 .add("endDate", endDate)
                 .add("organizationId", organizationId)
