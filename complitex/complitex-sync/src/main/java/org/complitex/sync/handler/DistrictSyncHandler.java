@@ -22,6 +22,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static org.complitex.common.util.StringUtil.isEqualIgnoreCase;
 import static org.complitex.sync.entity.DomainSyncStatus.SYNCHRONIZED;
@@ -62,23 +63,6 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
                 parentDomainSync.getName(), date);
     }
 
-    @Override
-    public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        return isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(DistrictStrategy.NAME)) &&
-                isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getAlternativeLocale()));
-    }
-
-    @Override
-    public boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId) {
-        return StringUtil.isEqualIgnoreCase(correction.getCorrection(), domainSync.getName());
-    }
-
-    @Override
-    public boolean isCorresponds(Correction correction1, Correction correction2) {
-        return correction1.getParentId().equals(correction2.getParentId()) &&
-                StringUtil.isEqualIgnoreCase(correction1.getCorrection(), correction2.getCorrection());
-    }
-
     private Long getParentObjectId(DomainSync domainSync, Long organizationId){
         List<Correction> cityCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.CITY,
                 domainSync.getParentId(), organizationId, null);
@@ -88,6 +72,25 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
         }
 
         return cityCorrections.get(0).getObjectId();
+    }
+
+    @Override
+    public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        return Objects.equals(domainObject.getParentId(), getParentObjectId(domainSync, organizationId)) &&
+                isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(DistrictStrategy.NAME)) &&
+                isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(DistrictStrategy.NAME, Locales.getAlternativeLocale()));
+    }
+
+    @Override
+    public boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId) {
+        return Objects.equals(correction.getParentId(), getParentObjectId(domainSync, organizationId)) &&
+                StringUtil.isEqualIgnoreCase(correction.getCorrection(), domainSync.getName());
+    }
+
+    @Override
+    public boolean isCorresponds(Correction correction1, Correction correction2) {
+        return correction1.getParentId().equals(correction2.getParentId()) &&
+                StringUtil.isEqualIgnoreCase(correction1.getCorrection(), correction2.getCorrection());
     }
 
     @Override

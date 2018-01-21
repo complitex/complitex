@@ -88,15 +88,17 @@ public class StreetSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        return Objects.equals(domainObject.getValueId(StreetStrategy.STREET_TYPE), getAdditionalParentObjectId(domainSync, organizationId)) &&
+        return Objects.equals(domainObject.getParentId(), getParentObjectId(domainSync, organizationId)) &&
+                Objects.equals(domainObject.getValueId(StreetStrategy.STREET_TYPE), getAdditionalParentObjectId(domainSync, organizationId)) &&
                 isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(StreetStrategy.NAME)) &&
                 isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(StreetStrategy.NAME, Locales.getAlternativeLocale()));
     }
 
     @Override
     public boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId) {
-        //todo city
-        return correction.getAdditionalParentId().equals(getAdditionalParentObjectId(domainSync, organizationId)) &&
+
+        return Objects.equals(correction.getParentId(),getParentObjectId(domainSync, organizationId)) &&
+                Objects.equals(correction.getAdditionalParentId(), getAdditionalParentObjectId(domainSync, organizationId)) &&
                 StringUtil.isEqualIgnoreCase(correction.getCorrection(), domainSync.getName());
     }
 
