@@ -14,6 +14,8 @@
         <result column="user_organization_id" property="userOrganizationId"/>
         <result column="module_id" property="moduleId"/>
 
+        <result column="entity_name" property="entityName"/>
+
         <association property="organizationName" select="org.complitex.organization.strategy.OrganizationStrategy.selectOrganizationName"
                      column="organization_id"/>
         <association property="userOrganizationName" select="org.complitex.organization.strategy.OrganizationStrategy.selectOrganizationName"
@@ -79,12 +81,12 @@
     </sql>
 
     <select id="selectCorrection" resultMap="correctionResultMap" parameterType="org.complitex.correction.entity.Correction">
-        select * from `${entityName}_correction` where `id` = #{id}
+        select c.*, '${entityName}' entity_name from `${entityName}_correction` c where c.`id` = #{id}
     </select>
 
     <select id="selectCorrections" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="correctionResultMap">
-        select * from `${entityName}_correction` c
+        select c.*, '${entityName}' entity_name from `${entityName}_correction` c
         <include refid="selectDistrictCorrectionsWhere"/>
     </select>
 

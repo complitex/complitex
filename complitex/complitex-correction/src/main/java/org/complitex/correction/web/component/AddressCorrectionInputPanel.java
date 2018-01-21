@@ -16,15 +16,14 @@ import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.strategy.EntityBean;
-import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
-import org.complitex.correction.entity.*;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.CorrectionBean;
 
 import javax.ejb.EJB;
 import java.util.Collections;
@@ -38,10 +37,7 @@ import java.util.Map;
  */
 public class AddressCorrectionInputPanel extends Panel {
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
-
-    @EJB
-    private StringValueBean stringBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private EntityBean entityBean;
@@ -52,11 +48,11 @@ public class AddressCorrectionInputPanel extends Panel {
     public AddressCorrectionInputPanel(String id, final Correction correction) {
         super(id);
 
-        final boolean isDistrict = "district".equals(correction.getEntity());
-        final boolean isStreet = "street".equals(correction.getEntity());
-        final boolean isBuilding = "building".equals(correction.getEntity());
-        final boolean isApartment = "apartment".equals(correction.getEntity());
-        final boolean isRoom = "room".equals(correction.getEntity());
+        boolean isDistrict = "district".equals(correction.getEntityName());
+        boolean isStreet = "street".equals(correction.getEntityName());
+        boolean isBuilding = "building".equals(correction.getEntityName());
+        boolean isApartment = "apartment".equals(correction.getEntityName());
+        boolean isRoom = "room".equals(correction.getEntityName());
 
         //District
         final WebMarkupContainer districtContainer = new WebMarkupContainer("districtContainer");
@@ -151,23 +147,37 @@ public class AddressCorrectionInputPanel extends Panel {
         add(new WiQuerySearchComponent("search_component", new SearchComponentState(), filter, new ISearchCallback() {
             @Override
             public void found(Component component, Map<String, Long> ids, AjaxRequestTarget target) {
+                Long countryObjectId = ids.get("country");
+                Long regionObjectId = ids.get("region");
                 Long cityObjectId = ids.get("city");
                 Long streetObjectId = ids.get("street");
                 Long buildingObjectId = ids.get("building");
                 Long apartmentObjectId = ids.get("apartment");
 
-                if (correction instanceof DistrictCorrection){
-                    ((DistrictCorrection) correction).setCityId(cityObjectId);
-                } else if (correction instanceof StreetCorrection){
-                    ((StreetCorrection) correction).setCityId(cityObjectId);
-                } else if (correction instanceof BuildingCorrection){
-                    ((BuildingCorrection) correction).setStreetId(streetObjectId);
-                } else if (correction instanceof ApartmentCorrection){
-                    ((ApartmentCorrection) correction).setBuildingId(buildingObjectId);
-                } else if (correction instanceof RoomCorrection && apartmentObjectId != null && apartmentObjectId > 0){
-                    ((RoomCorrection) correction).setApartmentId(apartmentObjectId);
-                } else if (correction instanceof RoomCorrection && buildingObjectId != null && buildingObjectId > 0){
-                    ((RoomCorrection) correction).setBuildingId(buildingObjectId);
+                switch (correction.getEntityName()){
+                    case "region":
+                        correction.setParentId(countryObjectId);
+                        break;
+                    case "city":
+                        correction.setParentId(regionObjectId);
+                        break;
+                    case "district":
+                    case "street":
+                        correction.setParentId(cityObjectId);
+                        break;
+                    case "building":
+                        correction.setParentId(streetObjectId);
+                        break;
+                    case "apartment":
+                        correction.setParentId(buildingObjectId);
+                        break;
+                    case "room":
+                        if (apartmentObjectId != null && apartmentObjectId > 0) {
+                            correction.setAdditionalParentId(apartmentObjectId);
+                        }else if (buildingObjectId != null && buildingObjectId > 0) {
+                            correction.setParentId(buildingObjectId);
+                        }
+                        break;
                 }
             }
         }, ShowMode.ACTIVE, true));
@@ -198,8 +208,8 @@ public class AddressCorrectionInputPanel extends Panel {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                if (correction instanceof StreetCorrection){
-                    ((StreetCorrection) correction).setStreetTypeId(streetTypeModel.getObject().getObjectId());
+                if ("street".equals(correction.getEntityName())){
+                    correction.setAdditionalParentId(streetTypeModel.getObject().getObjectId());
                 }
             }
         });

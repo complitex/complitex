@@ -6,13 +6,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.address.util.AddressRenderer;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.SessionBean;
-import org.complitex.correction.entity.StreetCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.entity.Correction;
 import org.complitex.correction.web.address.StreetCorrectionList;
 
 import javax.ejb.EJB;
@@ -21,45 +19,29 @@ import java.util.List;
 /**
  * Панель редактирования коррекции улицы.
  */
-public class StreetCorrectionEditPanel extends AddressCorrectionEditPanel<StreetCorrection> {
+public class StreetCorrectionEditPanel extends AddressCorrectionEditPanel {
     @EJB
     private CityStrategy cityStrategy;
 
     @EJB
     private StreetTypeStrategy streetTypeStrategy;
 
-    @EJB
-    private AddressCorrectionBean addressCorrectionBean;
-
-    @EJB
-    private SessionBean sessionBean;
-
     public StreetCorrectionEditPanel(String id, Long correctionId) {
-        super(id, correctionId);
-    }
-
-    @Override
-    protected StreetCorrection getCorrection(Long correctionId) {
-        return addressCorrectionBean.getStreetCorrection(correctionId);
-    }
-
-    @Override
-    protected StreetCorrection newCorrection() {
-        return new StreetCorrection();
+        super(id, AddressEntity.STREET, correctionId);
     }
 
     @Override
     protected String displayCorrection() {
-        StreetCorrection correction = getCorrection();
+        Correction correction = getCorrection();
 
         String city = null;
-        if (correction.getCityId() != null) {
-            city = cityStrategy.displayDomainObject(correction.getCityId(), getLocale());
+        if (correction.getParentId() != null) {
+            city = cityStrategy.displayDomainObject(correction.getParentId(), getLocale());
         }
 
         String streetType = null;
-        if (correction.getStreetTypeId() != null) {
-            streetType = streetTypeStrategy.displayDomainObject(correction.getStreetTypeId(), getLocale());
+        if (correction.getAdditionalParentId() != null) {
+            streetType = streetTypeStrategy.displayDomainObject(correction.getAdditionalParentId(), getLocale());
         }
         if (Strings.isEmpty(streetType)) {
             streetType = null;
@@ -71,21 +53,6 @@ public class StreetCorrectionEditPanel extends AddressCorrectionEditPanel<Street
     @Override
     protected Class<? extends Page> getBackPageClass() {
         return StreetCorrectionList.class;
-    }
-
-    @Override
-    protected void save() {
-        addressCorrectionBean.save(getCorrection());
-    }
-
-    @Override
-    protected void delete() {
-        addressCorrectionBean.delete(getCorrection());
-    }
-
-    @Override
-    protected boolean validateExistence() {
-        return addressCorrectionBean.getStreetCorrectionsCount(FilterWrapper.of(getCorrection())) > 0;
     }
 
     @Override

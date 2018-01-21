@@ -6,15 +6,14 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.correction.entity.RoomCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.entity.Correction;
 import org.complitex.correction.web.address.RoomCorrectionList;
 
 import javax.ejb.EJB;
@@ -23,7 +22,7 @@ import java.util.List;
 /**
  * Панель редактирования коррекции района.
  */
-public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel<RoomCorrection> {
+public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel {
     @EJB
     private CityStrategy cityStrategy;
 
@@ -36,31 +35,13 @@ public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel<RoomCorr
     @EJB
     private ApartmentStrategy apartmentStrategy;
 
-    @EJB
-    private AddressCorrectionBean addressCorrectionBean;
-
     public RoomCorrectionEditPanel(String id, Long correctionId) {
-        super(id, correctionId);
-    }
-
-    @Override
-    protected RoomCorrection getCorrection(Long correctionId) {
-        return addressCorrectionBean.getRoomCorrection(correctionId);
-    }
-
-    @Override
-    protected RoomCorrection newCorrection() {
-        return new RoomCorrection();
+        super(id, AddressEntity.ROOM, correctionId);
     }
 
     @Override
     protected List<String> getSearchFilters() {
         return ImmutableList.of("city", "street", "building", "apartment", "room");
-    }
-
-    @Override
-    protected boolean validateExistence() {
-        return addressCorrectionBean.getRoomCorrectionsCount(FilterWrapper.of(getCorrection())) > 0;
     }
 
     @Override
@@ -71,16 +52,6 @@ public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel<RoomCorr
     @Override
     protected Class<? extends Page> getBackPageClass() {
         return RoomCorrectionList.class;
-    }
-
-    @Override
-    protected void save() {
-        addressCorrectionBean.save(getCorrection());
-    }
-
-    @Override
-    protected void delete() {
-        addressCorrectionBean.delete(getCorrection());
     }
 
     @Override
@@ -99,14 +70,14 @@ public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel<RoomCorr
 
     @Override
     protected String displayCorrection() {
-        RoomCorrection correction = getCorrection();
+        Correction correction = getCorrection();
 
         String apartment = null;
         DomainObject buildingDomainObject;
-        if (correction.getApartmentId() == null) {
-            buildingDomainObject = buildingStrategy.getDomainObject(correction.getBuildingId(), true);
+        if (correction.getAdditionalParentId() == null) {
+            buildingDomainObject = buildingStrategy.getDomainObject(correction.getParentId(), true);
         } else {
-            DomainObject apartmentDomainObject = apartmentStrategy.getDomainObject(correction.getApartmentId(), true);
+            DomainObject apartmentDomainObject = apartmentStrategy.getDomainObject(correction.getAdditionalParentId(), true);
             apartment = apartmentStrategy.displayDomainObject(apartmentDomainObject, getLocale());
 
             buildingDomainObject = buildingStrategy.getDomainObject(apartmentDomainObject.getParentId(), true);

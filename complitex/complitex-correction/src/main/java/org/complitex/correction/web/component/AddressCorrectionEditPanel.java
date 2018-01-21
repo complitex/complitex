@@ -6,6 +6,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.EntityObjectInfo;
 import org.complitex.common.strategy.IStrategy;
@@ -15,7 +16,6 @@ import org.complitex.common.web.component.search.ISearchCallback;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.service.AddressCorrectionBean;
 
 import javax.ejb.EJB;
 import java.io.Serializable;
@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Стандартная панель редактирования коррекции элемента адреса.
  */
-public abstract class AddressCorrectionEditPanel<T extends Correction> extends AbstractCorrectionEditPanel<T> {
+public abstract class AddressCorrectionEditPanel extends AbstractCorrectionEditPanel {
     @EJB
     private StrategyFactory strategyFactory;
 
@@ -51,11 +51,8 @@ public abstract class AddressCorrectionEditPanel<T extends Correction> extends A
         }
     }
 
-    @EJB
-    private AddressCorrectionBean addressCorrectionBean;
-
-    public AddressCorrectionEditPanel(String id, Long correctionId) {
-        super(id, correctionId);
+    public AddressCorrectionEditPanel(String id, AddressEntity addressEntity, Long correctionId) {
+        super(id, addressEntity.getEntityName(), correctionId);
     }
 
     @Override
@@ -66,7 +63,7 @@ public abstract class AddressCorrectionEditPanel<T extends Correction> extends A
     @Override
     protected Panel internalObjectPanel(String id) {
         Correction correction = getCorrection();
-        String entity = correction.getEntity();
+        String entity = correction.getEntityName();
         SearchComponentState componentState = new SearchComponentState();
         if (!isNew()) {
             long objectId = correction.getObjectId();
@@ -100,7 +97,4 @@ public abstract class AddressCorrectionEditPanel<T extends Correction> extends A
     protected PageParameters getBackPageParameters() {
         return new PageParameters();
     }
-
-    @Override
-    protected abstract boolean validateExistence();
 }

@@ -34,9 +34,7 @@ public class Correction implements Serializable {
 
     private boolean editable = true;
 
-
-
-    protected Correction() {
+    public Correction() {
     }
 
     public Correction(String entityName, Long parentId, Long additionalParentId, Long externalId, Long objectId,

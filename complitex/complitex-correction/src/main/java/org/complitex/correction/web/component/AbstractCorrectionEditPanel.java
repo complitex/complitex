@@ -17,10 +17,10 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.service.ModuleBean;
-import org.complitex.common.service.SessionBean;
+import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
 import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.template.web.template.TemplateSession;
 import org.slf4j.LoggerFactory;
@@ -31,24 +31,23 @@ import java.util.Locale;
 /**
  * Абстрактная панель для редактирования коррекций.
   */
-public abstract class AbstractCorrectionEditPanel<T extends Correction> extends Panel {
-
+public abstract class AbstractCorrectionEditPanel extends Panel {
     @EJB
-    private SessionBean sessionBean;
-
-    @EJB
-    private ModuleBean moduleBean;
+    private CorrectionBean correctionBean;
 
     private Long correctionId;
 
-    private T correction;
+    private Correction correction;
 
     private WebMarkupContainer form;
     private Panel correctionInputPanel;
 
-    public AbstractCorrectionEditPanel(String id, Long correctionId) {
+    private String entityName;
+
+    public AbstractCorrectionEditPanel(String id, String entityName, Long correctionId) {
         super(id);
 
+        this.entityName = entityName;
         this.correctionId = correctionId;
 
         correction = isNew() ? newCorrection() : getCorrection(correctionId);
@@ -60,16 +59,20 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
         return correctionId == null;
     }
 
-    protected abstract T getCorrection(Long correctionId);
+    protected  Correction getCorrection(Long correctionId){
+        return correctionBean.getCorrection(entityName, correctionId);
+    }
 
-    protected abstract T newCorrection();
+    protected Correction newCorrection(){
+        return new Correction(entityName, null);
+    }
 
     @Override
     public TemplateSession getSession() {
         return (TemplateSession) super.getSession();
     }
 
-    protected T getCorrection() {
+    protected Correction getCorrection() {
         return correction;
     }
 
@@ -131,7 +134,9 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
         return true;
     }
 
-    protected abstract boolean validateExistence();
+    protected boolean validateExistence(){
+        return correctionBean.getCorrectionsCount(FilterWrapper.of(correction)) > 0;
+    }
 
     protected void back(boolean useScrolling) {
         PageParameters backPageParameters = getBackPageParameters();
@@ -150,9 +155,13 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
 
     protected abstract PageParameters getBackPageParameters();
 
-    protected abstract void save();
+    protected void save(){
+        correctionBean.save(correction);
+    }
 
-    protected abstract void delete();
+    protected void delete(){
+        correctionBean.delete(correction);
+    }
 
     public void executeDeletion() {
         try {
@@ -176,7 +185,9 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
         return new DefaultCorrectionInputPanel(id, new PropertyModel<String>(getCorrection(), "correction"));
     }
 
-    protected abstract IModel<String> getTitleModel();
+    protected IModel<String> getTitleModel() {
+        return new StringResourceModel(entityName + "_title", this, null);
+    }
 
     protected void init() {
         IModel<String> titleModel = getTitleModel();
@@ -212,10 +223,6 @@ public abstract class AbstractCorrectionEditPanel<T extends Correction> extends 
         form.add(new OrganizationIdPicker("userOrganizationId",
                 new PropertyModel<>(correction, "userOrganizationId"),
                 OrganizationTypeStrategy.USER_ORGANIZATION_TYPE));
-
-        if (isNew()) {
-            correction.setModuleId(moduleBean.getModuleId());
-        }
 
         form.add(new Label("internalObjectLabel", internalObjectLabel(getLocale())));
         form.add(internalObjectPanel("internalObject"));

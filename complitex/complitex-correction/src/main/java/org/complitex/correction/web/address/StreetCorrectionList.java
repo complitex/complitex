@@ -9,26 +9,25 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.entity.StreetCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.service.CorrectionBean;
 
 import javax.ejb.EJB;
 import java.util.List;
 import java.util.Locale;
 
 
-/**
- *
- * @author Artem
- */
-public class StreetCorrectionList extends AddressCorrectionList<StreetCorrection> {
+public class StreetCorrectionList extends AddressCorrectionList {
+
+    @EJB
+    private StrategyFactory strategyFactory;
 
     @EJB
     private SessionBean sessionBean;
 
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private CityStrategy cityStrategy;
@@ -45,16 +44,12 @@ public class StreetCorrectionList extends AddressCorrectionList<StreetCorrection
         return new StringResourceModel("title", this, null);
     }
 
-    @Override
-    protected StreetCorrection newCorrection() {
-        return new StreetCorrection();
-    }
 
     @Override
-    protected List<StreetCorrection> getCorrections(FilterWrapper<StreetCorrection> filterWrapper) {
+    protected List<Correction> getCorrections(FilterWrapper<Correction> filterWrapper) {
         sessionBean.authorize(filterWrapper);
 
-        List<StreetCorrection> streets = addressCorrectionBean.getStreetCorrections(filterWrapper);
+        List<Correction> streets = correctionBean.getCorrections(filterWrapper);
 
         IStrategy streetStrategy = strategyFactory.getStrategy("street");
         IStrategy cityStrategy = strategyFactory.getStrategy("city");
@@ -83,24 +78,20 @@ public class StreetCorrectionList extends AddressCorrectionList<StreetCorrection
     }
 
     @Override
-    protected Long getCorrectionsCount(FilterWrapper<StreetCorrection> filterWrapper) {
-        return addressCorrectionBean.getStreetCorrectionsCount(filterWrapper);
-    }
-
-    @Override
-    protected String displayCorrection(StreetCorrection streetCorrection) {
+    protected String displayCorrection(Correction streetCorrection) {
         String city = null;
-        if (streetCorrection.getCityId() != null) {
-            city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(streetCorrection.getCityId(), true),
+        if (streetCorrection.getParentId() != null) {
+            city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(streetCorrection.getParentId(), true),
                     getLocale());
         }
 
         String streetType = null;
-        if (streetCorrection.getStreetTypeId() != null) {
+        if (streetCorrection.getAdditionalParentId() != null) {
             streetType = streetTypeStrategy.displayDomainObject(
-                    streetTypeStrategy.getDomainObject(streetCorrection.getStreetTypeId(), true), getLocale());
+                    streetTypeStrategy.getDomainObject(streetCorrection.getAdditionalParentId(), true), getLocale());
         }
 
-        return AddressRenderer.displayAddress(null, city, streetType, streetCorrection.getCorrection(), null, null, null, getLocale());
+        return AddressRenderer.displayAddress(null, city, streetType, streetCorrection.getCorrection(),
+                null, null, null, getLocale());
     }
 }

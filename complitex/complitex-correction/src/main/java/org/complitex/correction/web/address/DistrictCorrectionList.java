@@ -8,24 +8,23 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.entity.DistrictCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.service.CorrectionBean;
 
 import javax.ejb.EJB;
 import java.util.List;
 import java.util.Locale;
 
-/**
- *
- * @author Artem
- */
-public class DistrictCorrectionList extends AddressCorrectionList<DistrictCorrection> {
+public class DistrictCorrectionList extends AddressCorrectionList {
+    @EJB
+    private StrategyFactory strategyFactory;
+
     @EJB
     private SessionBean sessionBean;
 
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private CityStrategy cityStrategy;
@@ -34,16 +33,12 @@ public class DistrictCorrectionList extends AddressCorrectionList<DistrictCorrec
         super("district");
     }
 
-    @Override
-    protected DistrictCorrection newCorrection() {
-        return new DistrictCorrection();
-    }
 
     @Override
-    protected List<DistrictCorrection> getCorrections(FilterWrapper<DistrictCorrection> filterWrapper) {
+    protected List<Correction> getCorrections(FilterWrapper<Correction> filterWrapper) {
         sessionBean.authorize(filterWrapper);
 
-        List<DistrictCorrection> districts = addressCorrectionBean.getDistrictCorrections(filterWrapper);
+        List<Correction> districts = correctionBean.getCorrections(filterWrapper);
 
         IStrategy districtStrategy = strategyFactory.getStrategy("district");
         IStrategy cityStrategy = strategyFactory.getStrategy("city");
@@ -66,14 +61,9 @@ public class DistrictCorrectionList extends AddressCorrectionList<DistrictCorrec
             }
             String displayCity = cityStrategy.displayDomainObject(city, locale);
             String displayDistrict = districtStrategy.displayDomainObject(district, locale);
-            c.setDisplayObject(displayCity + ", " + displayDistrict);
+            c.setDisplayObject(displayCity + ", " + displayDistrict); //todo ref c display object
         }
         return districts;
-    }
-
-    @Override
-    protected Long getCorrectionsCount(FilterWrapper<DistrictCorrection> filterWrapper) {
-        return addressCorrectionBean.getDistrictCorrectionsCount(filterWrapper);
     }
 
     @Override
@@ -82,8 +72,8 @@ public class DistrictCorrectionList extends AddressCorrectionList<DistrictCorrec
     }
 
     @Override
-    protected String displayCorrection(DistrictCorrection correction) {
-        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityId(), true), getLocale());
+    protected String displayCorrection(Correction correction) {
+        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getParentId(), true), getLocale());
 
         return AddressRenderer.displayAddress(null, city, correction.getCorrection(), getLocale());
     }

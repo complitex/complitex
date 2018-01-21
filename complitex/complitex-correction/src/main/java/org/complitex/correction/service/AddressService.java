@@ -15,7 +15,9 @@ import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.strategy.StringLocaleBean;
-import org.complitex.correction.entity.*;
+import org.complitex.correction.entity.AddressLinkData;
+import org.complitex.correction.entity.AddressLinkStatus;
+import org.complitex.correction.entity.Correction;
 import org.complitex.correction.service.exception.DuplicateCorrectionException;
 import org.complitex.correction.service.exception.MoreOneCorrectionException;
 import org.complitex.correction.service.exception.NotFoundCorrectionException;
@@ -37,7 +39,7 @@ public class AddressService extends AbstractBean {
     public final static Long MODULE_ID = 0L;
 
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private StringLocaleBean stringLocaleBean;
@@ -87,18 +89,18 @@ public class AddressService extends AbstractBean {
     public void resolveAddress(AddressLinkData data, Long organizationId, Long userOrganizationId){
 
         //Связывание города
-        List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(null, data.getCity(),
-                organizationId, userOrganizationId);
+        List<Correction> cityCorrections = correctionBean.getCorrections(AddressEntity.CITY.getEntityName(),
+                data.getCity(), organizationId, userOrganizationId);
 
         if (cityCorrections.size() == 1) {
-            CityCorrection cityCorrection = cityCorrections.get(0);
+            Correction cityCorrection = cityCorrections.get(0);
             data.setCityId(cityCorrection.getObjectId());
         } else if (cityCorrections.size() > 1) {
             data.setStatus(AddressLinkStatus.MORE_ONE_CITY_CORRECTION);
 
             return;
         } else {
-            List<Long> cityIds = addressCorrectionBean.getCityIds(data.getCity());
+            List<Long> cityIds = correctionBean.getObjectIds(AddressEntity.CITY.getEntityName(), data.getCity(), CityStrategy.NAME);
 
             if (cityIds.size() == 1) {
                 data.setCityId(cityIds.get(0));
@@ -115,7 +117,7 @@ public class AddressService extends AbstractBean {
 
         //Связывание типа улицы
         if(data.getStreetType() != null){
-            List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(null,
+            List<Correction> streetTypeCorrections = correctionBean.getCorrections(AddressEntity.STREET_TYPE.getEntityName(),
                     data.getStreetType(), organizationId, userOrganizationId);
 
             if (streetTypeCorrections.size() == 1) {
@@ -125,7 +127,8 @@ public class AddressService extends AbstractBean {
 
                 return;
             } else {
-                List<Long> streetTypeIds = addressCorrectionBean.getStreetTypeIds(data.getStreetType());
+                List<Long> streetTypeIds = correctionBean.getObjectIds(AddressEntity.STREET_TYPE.getEntityName(),
+                        data.getStreetType(), StreetTypeStrategy.NAME);
 
                 if (streetTypeIds.size() == 1) {
                     data.setStreetTypeId(streetTypeIds.get(0));
@@ -142,21 +145,20 @@ public class AddressService extends AbstractBean {
         }
 
         //Связывание улицы
-        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(data.getCityId(),
-                data.getStreetTypeId(), null, null,  data.getStreet(),
-                organizationId, userOrganizationId);
+        List<Correction> streetCorrections = correctionBean.getCorrections(AddressEntity.STREET.getEntityName(),
+                data.getCityId(), data.getStreetTypeId(), data.getStreet(), organizationId, userOrganizationId);
 
         if (streetCorrections.size() == 1){
-            StreetCorrection streetCorrection = streetCorrections.get(0);
+            Correction streetCorrection = streetCorrections.get(0);
 
-            data.setCityId(streetCorrection.getCityId());
-            data.setStreetTypeId(streetCorrection.getStreetTypeId());
+            data.setCityId(streetCorrection.getParentId());
+            data.setStreetTypeId(streetCorrection.getAdditionalParentId());
             data.setStreetId(streetCorrection.getObjectId());
         }else if (streetCorrections.size() > 1) {
             //сформируем множество названий
             Set<String> streetNames = Sets.newHashSet();
 
-            for (StreetCorrection sc : streetCorrections) {
+            for (Correction sc : streetCorrections) {
                 String streetName = streetStrategy.getName(sc.getObjectId());
 
                 if (!Strings.isEmpty(streetName)) {
@@ -286,9 +288,8 @@ public class AddressService extends AbstractBean {
         }
 
         //Связывание дома
-        List<BuildingCorrection> buildingCorrections = addressCorrectionBean.getBuildingCorrections(
-                data.getStreetId(), null, data.getBuildingNumber(), data.getBuildingCorp(),
-                organizationId, userOrganizationId);
+        List<Correction> buildingCorrections = correctionBean.getCorrections(AddressEntity.BUILDING.getEntityName(),
+                data.getStreetId(),  data.getBuildingNumber(), data.getBuildingCorp(), organizationId, userOrganizationId);
 
         if (buildingCorrections.size() == 1) {
             data.setBuildingId(buildingCorrections.get(0).getObjectId());
@@ -302,7 +303,7 @@ public class AddressService extends AbstractBean {
                 data.setBuildingId(buildingIds.get(0));
             } else if (buildingIds.size() > 1) {
                 data.setStatus(AddressLinkStatus.MORE_ONE_BUILDING);
-            } else if (buildingIds.isEmpty()){
+            } else {
                 data.setStatus(AddressLinkStatus.BUILDING_UNRESOLVED);
             }
         }
@@ -313,8 +314,8 @@ public class AddressService extends AbstractBean {
 
         //Связывание квартиры
         if (StringUtils.isNotEmpty(data.getApartment())) {
-            List<ApartmentCorrection> apartmentCorrections = addressCorrectionBean.getApartmentCorrections(
-                    data.getBuildingId(), null, null, data.getApartment(), organizationId, userOrganizationId);
+            List<Correction> apartmentCorrections = correctionBean.getCorrections(AddressEntity.APARTMENT.getEntityName(),
+                    data.getBuildingId(), data.getApartment(), organizationId, userOrganizationId);
             if (apartmentCorrections.size() == 1) {
                 data.setApartmentId(apartmentCorrections.get(0).getObjectId());
             } else if (apartmentCorrections.size() > 1) {
@@ -327,7 +328,7 @@ public class AddressService extends AbstractBean {
                     data.setApartmentId(apartmentIds.get(0));
                 } else if (apartmentIds.size() > 1) {
                     data.setStatus(AddressLinkStatus.MORE_ONE_APARTMENT);
-                } else if (apartmentIds.isEmpty()){
+                } else {
                     data.setStatus(AddressLinkStatus.APARTMENT_UNRESOLVED);
                 }
             }
@@ -339,8 +340,8 @@ public class AddressService extends AbstractBean {
 
         //Связывание комнаты
         if (StringUtils.isNotEmpty(data.getRoom())) {
-            List<RoomCorrection> roomCorrections = addressCorrectionBean.getRoomCorrections(
-                    data.getBuildingId(), data.getApartmentId(), null, null, data.getRoom(), organizationId, userOrganizationId);
+            List<Correction> roomCorrections = correctionBean.getCorrections(AddressEntity.ROOM.getEntityName(),
+                    data.getBuildingId(), data.getApartmentId(), data.getRoom(), organizationId, userOrganizationId);
             if (roomCorrections.size() == 1) {
                 data.setRoomId(roomCorrections.get(0).getObjectId());
             } else if (roomCorrections.size() > 1) {
@@ -393,13 +394,13 @@ public class AddressService extends AbstractBean {
 
         switch (entity) {
             case CITY: {
-                List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(null, data.getCity(),
-                        organizationId, userOrganizationId);
+                List<Correction> cityCorrections = correctionBean.getCorrections(AddressEntity.CITY.getEntityName(),
+                        data.getCity(), organizationId, userOrganizationId);
 
                 if (cityCorrections.isEmpty()) {
-                    CityCorrection cityCorrection = new CityCorrection(null, cityObjectId, data.getCity().toUpperCase(),
-                            organizationId, userOrganizationId, MODULE_ID);
-                    addressCorrectionBean.save(cityCorrection);
+                    Correction cityCorrection = new Correction(AddressEntity.CITY.getEntityName(), null,
+                            cityObjectId, data.getCity().toUpperCase(), organizationId, userOrganizationId);
+                    correctionBean.save(cityCorrection);
                 } else {
                     throw new DuplicateCorrectionException();
                 }
@@ -407,15 +408,16 @@ public class AddressService extends AbstractBean {
             break;
 
             case STREET_TYPE: {
-                List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(
+                List<Correction> streetTypeCorrections = correctionBean.getCorrections(AddressEntity.STREET.getEntityName(),
                         null, data.getStreetType(), organizationId, userOrganizationId);
 
                 if (streetTypeCorrections.isEmpty()) {
-                    StreetTypeCorrection streetTypeCorrection = new StreetTypeCorrection(null,
+                    Correction streetTypeCorrection = new Correction(AddressEntity.STREET.getEntityName(),
+                            null,
                             streetTypeObjectId,
                             data.getStreetType().toUpperCase(),
-                            organizationId, userOrganizationId, MODULE_ID);
-                    addressCorrectionBean.save(streetTypeCorrection);
+                            organizationId, userOrganizationId);
+                    correctionBean.save(streetTypeCorrection);
                 } else {
                     throw new DuplicateCorrectionException();
                 }
@@ -426,15 +428,15 @@ public class AddressService extends AbstractBean {
                 Long streetTypeId = data.getStreetTypeId() != null
                         ? data.getStreetTypeId() : streetTypeObjectId;
 
-                List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(
-                        data.getCityId(), streetTypeId, null, null, data.getStreet(), organizationId, userOrganizationId);
+                List<Correction> streetCorrections = correctionBean.getCorrections(AddressEntity.STREET.getEntityName(),
+                        data.getCityId(), streetTypeId, data.getStreet(), organizationId, userOrganizationId);
 
                 if (streetCorrections.isEmpty()) {
-                    StreetCorrection streetCorrection = new StreetCorrection(data.getCityId(), streetTypeId,
-                            null, streetObjectId, data.getStreet().toUpperCase(),
-                            organizationId, userOrganizationId, MODULE_ID);
+                    Correction streetCorrection = new Correction(AddressEntity.STREET.getEntityName(), data.getCityId(),
+                            streetTypeId, streetObjectId, data.getStreet().toUpperCase(),
+                            organizationId, userOrganizationId);
 
-                    addressCorrectionBean.save(streetCorrection);
+                    correctionBean.save(streetCorrection);
                 } else {
                     throw new DuplicateCorrectionException();
                 }
@@ -442,18 +444,19 @@ public class AddressService extends AbstractBean {
                 break;
 
             case BUILDING:
-                List<BuildingCorrection> buildingCorrections = addressCorrectionBean.getBuildingCorrections(
-                        data.getStreetId(), null, data.getBuildingNumber(), data.getBuildingCorp(),
+                List<Correction> buildingCorrections = correctionBean.getCorrections(AddressEntity.BUILDING.getEntityName(),
+                        data.getStreetId(), data.getBuildingNumber(), data.getBuildingCorp(),
                         organizationId, userOrganizationId);
 
                 if (buildingCorrections.isEmpty()) {
-                    BuildingCorrection buildingCorrection = new BuildingCorrection(data.getStreetId(), null,
+                    Correction buildingCorrection = new Correction(AddressEntity.BUILDING.getEntityName(),
+                            data.getStreetId(), null,
                             buildingObjectId,
                             data.getBuildingNumber().toUpperCase(),
                             data.getBuildingCorp() != null ? data.getBuildingCorp().toUpperCase() : null,
-                            organizationId, userOrganizationId, MODULE_ID);
+                            organizationId, userOrganizationId);
 
-                    addressCorrectionBean.save(buildingCorrection);
+                    correctionBean.save(buildingCorrection);
                 } else {
                     throw new DuplicateCorrectionException();
                 }
@@ -461,17 +464,18 @@ public class AddressService extends AbstractBean {
                 break;
 
             case APARTMENT:
-                List<ApartmentCorrection> apartmentCorrections = addressCorrectionBean.getApartmentCorrections(
-                        data.getBuildingId(), null, apartmentObjectId, data.getApartment(),
+                List<Correction> apartmentCorrections = correctionBean.getCorrections(AddressEntity.APARTMENT.getEntityName(),
+                        data.getBuildingId(), apartmentObjectId, data.getApartment(),
                         organizationId, userOrganizationId);
 
                 if (apartmentCorrections.isEmpty()) {
-                    ApartmentCorrection apartmentCorrection = new ApartmentCorrection(data.getBuildingId(), null,
+                    Correction apartmentCorrection = new Correction(AddressEntity.APARTMENT.getEntityName(),
+                            data.getBuildingId(), null,
                             apartmentObjectId,
                             data.getApartment().toUpperCase(),
-                            organizationId, userOrganizationId, MODULE_ID);
+                            organizationId, userOrganizationId);
 
-                    addressCorrectionBean.save(apartmentCorrection);
+                    correctionBean.save(apartmentCorrection);
                 } else {
                     throw new DuplicateCorrectionException();
                 }
@@ -479,17 +483,17 @@ public class AddressService extends AbstractBean {
                 break;
             
             case ROOM:
-                List<RoomCorrection> roomCorrections = addressCorrectionBean.getRoomCorrections(
-                        data.getBuildingId(), data.getApartmentId(), null, roomObjectId, data.getRoom(),
-                        organizationId, userOrganizationId);
+                List<Correction> roomCorrections = correctionBean.getCorrections(AddressEntity.ROOM.getEntityName(),
+                        data.getBuildingId(), data.getApartmentId(), data.getRoom(), organizationId, userOrganizationId);
 
                 if (roomCorrections.isEmpty()) {
-                    RoomCorrection roomCorrection = new RoomCorrection(data.getBuildingId(), data.getApartmentId(), null,
+                    Correction roomCorrection = new Correction(AddressEntity.ROOM.getEntityName(), data.getBuildingId(),
+                            data.getApartmentId(), null,
                             roomObjectId,
                             data.getRoom().toUpperCase(),
-                            organizationId, userOrganizationId, MODULE_ID);
+                            organizationId, userOrganizationId);
 
-                    addressCorrectionBean.save(roomCorrection);
+                    correctionBean.save(roomCorrection);
                 } else {
                     throw new DuplicateCorrectionException();
                 }

@@ -6,11 +6,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.util.AddressRenderer;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.correction.entity.DistrictCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.entity.Correction;
 import org.complitex.correction.web.address.DistrictCorrectionList;
 
 import javax.ejb.EJB;
@@ -19,35 +18,18 @@ import java.util.List;
 /**
  * Панель редактирования коррекции района.
  */
-public class DistrictCorrectionEditPanel extends AddressCorrectionEditPanel<DistrictCorrection> {
+public class DistrictCorrectionEditPanel extends AddressCorrectionEditPanel {
     @EJB
     private CityStrategy cityStrategy;
 
-    @EJB
-    private AddressCorrectionBean addressCorrectionBean;
 
     public DistrictCorrectionEditPanel(String id, Long correctionId) {
-        super(id, correctionId);
-    }
-
-    @Override
-    protected DistrictCorrection getCorrection(Long correctionId) {
-        return addressCorrectionBean.getDistrictCorrection(correctionId);
-    }
-
-    @Override
-    protected DistrictCorrection newCorrection() {
-        return new DistrictCorrection();
+        super(id, AddressEntity.DISTRICT, correctionId);
     }
 
     @Override
     protected List<String> getSearchFilters() {
         return ImmutableList.of("city", "district");
-    }
-
-    @Override
-    protected boolean validateExistence() {
-        return addressCorrectionBean.getDistrictCorrectionsCount(FilterWrapper.of(getCorrection())) > 0;
     }
 
     @Override
@@ -58,16 +40,6 @@ public class DistrictCorrectionEditPanel extends AddressCorrectionEditPanel<Dist
     @Override
     protected Class<? extends Page> getBackPageClass() {
         return DistrictCorrectionList.class;
-    }
-
-    @Override
-    protected void save() {
-        addressCorrectionBean.save(getCorrection());
-    }
-
-    @Override
-    protected void delete() {
-        addressCorrectionBean.delete(getCorrection());
     }
 
     @Override
@@ -86,9 +58,9 @@ public class DistrictCorrectionEditPanel extends AddressCorrectionEditPanel<Dist
 
     @Override
     protected String displayCorrection() {
-        DistrictCorrection correction = getCorrection();
+        Correction correction = getCorrection();
 
-        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getCityId(), true), getLocale());
+        String city = cityStrategy.displayDomainObject(cityStrategy.getDomainObject(correction.getParentId()), getLocale());
 
         return AddressRenderer.displayAddress(null, city, correction.getCorrection(), getLocale());
     }

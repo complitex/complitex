@@ -8,10 +8,10 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.IStrategy;
+import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.component.search.SearchComponentState;
-import org.complitex.correction.entity.ApartmentCorrection;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.service.CorrectionBean;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -20,12 +20,15 @@ import java.util.Locale;
 /**
  * @author Pavel Sknar
  */
-public class ApartmentCorrectionList extends AddressCorrectionList<ApartmentCorrection> {
+public class ApartmentCorrectionList extends AddressCorrectionList {
+    @EJB
+    private StrategyFactory strategyFactory;
+
     @EJB
     private SessionBean sessionBean;
 
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private BuildingStrategy buildingStrategy;
@@ -35,15 +38,10 @@ public class ApartmentCorrectionList extends AddressCorrectionList<ApartmentCorr
     }
 
     @Override
-    protected ApartmentCorrection newCorrection() {
-        return new ApartmentCorrection();
-    }
-
-    @Override
-    protected List<ApartmentCorrection> getCorrections(FilterWrapper<ApartmentCorrection> filterWrapper) {
+    protected List<Correction> getCorrections(FilterWrapper<Correction> filterWrapper) {
         sessionBean.authorize(filterWrapper);
 
-        List<ApartmentCorrection> apartments = addressCorrectionBean.getApartmentCorrections(filterWrapper);
+        List<Correction> apartments = correctionBean.getCorrections(filterWrapper);
 
         IStrategy apartmentStrategy = strategyFactory.getStrategy("apartment");
         IStrategy buildingStrategy = strategyFactory.getStrategy("building");
@@ -79,28 +77,23 @@ public class ApartmentCorrectionList extends AddressCorrectionList<ApartmentCorr
     }
 
     @Override
-    protected Long getCorrectionsCount(FilterWrapper<ApartmentCorrection> filterWrapper) {
-        return addressCorrectionBean.getApartmentCorrectionsCount(filterWrapper);
-    }
-
-    @Override
     protected IModel<String> getTitleModel() {
         return new StringResourceModel("title", this, null);
     }
 
     @Override
-    protected String displayCorrection(ApartmentCorrection correction) {
+    protected String displayCorrection(Correction correction) {
         IStrategy buildingStrategy = strategyFactory.getStrategy("building");
         IStrategy streetStrategy = strategyFactory.getStrategy("street");
         IStrategy cityStrategy = strategyFactory.getStrategy("city");
 
-        DomainObject buildingDomainObject = buildingStrategy.getDomainObject(correction.getBuildingId(), true);
+        DomainObject buildingDomainObject = buildingStrategy.getDomainObject(correction.getParentId());
         String building = buildingStrategy.displayDomainObject(buildingDomainObject, getLocale());
 
-        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getParentId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getParentId());
         String street = streetStrategy.displayDomainObject(streetDomainObject, getLocale());
 
-        DomainObject cityDomainObject = cityStrategy.getDomainObject(streetDomainObject.getParentId(), true);
+        DomainObject cityDomainObject = cityStrategy.getDomainObject(streetDomainObject.getParentId());
         String city = cityStrategy.displayDomainObject(cityDomainObject, getLocale());
 
         return AddressRenderer.displayAddress(null, city, null, street, building, null, correction.getCorrection(), getLocale());

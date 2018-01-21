@@ -40,9 +40,33 @@ public class CorrectionBean extends AbstractBean{
         return sqlSession().selectOne(CORRECTION_NS + ".selectCorrectionsCount", filterWrapper);
     }
 
-    //todo locale
-    private List<Long> getObjectIds(String entity, String correction, Long entityAttributeId){
-        return sqlSession().selectList(CORRECTION_NS + ".selectObjectIds", ImmutableMap.of("entity", entity, "correction",
-                correction, "entityAttributeId", entityAttributeId));
+    public List<Long> getObjectIds(String entityName, String correction, Long entityAttributeId){
+        return sqlSession().selectList(CORRECTION_NS + ".selectObjectIds", ImmutableMap.of("entityName", entityName,
+                "correction", correction, "entityAttributeId", entityAttributeId));
     }
+
+    public List<Correction> getCorrections(String entityName,  String correction, Long organizationId, Long userOrganizationId){
+        return getCorrections(FilterWrapper.of(new Correction(entityName, null, null, null,
+                correction, organizationId, userOrganizationId)));
+    }
+
+    public List<Correction> getCorrections(String entityName, Long parentId, Long additionalParentId, String correction,
+                                           Long organizationId, Long userOrganizationId){
+        return getCorrections(FilterWrapper.of(new Correction(entityName, parentId, additionalParentId, null, null,
+                correction, null, organizationId, userOrganizationId)));
+    }
+
+    public List<Correction> getCorrections(String entityName, Long parentId, String correction, String additionalCorrection,
+                                           Long organizationId, Long userOrganizationId){
+        return getCorrections(FilterWrapper.of(new Correction(entityName, parentId, null, null, null,
+                correction, additionalCorrection, organizationId, userOrganizationId)));
+    }
+
+    public List<Correction> getCorrections(String entityName, Long parentId, String correction,
+                                           Long organizationId, Long userOrganizationId){
+        return getCorrections(FilterWrapper.of(new Correction(entityName, parentId, null, null, null,
+                correction, null, organizationId, userOrganizationId)));
+    }
+
+
 }

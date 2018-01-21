@@ -3,38 +3,17 @@ package org.complitex.correction.web.address;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.strategy.city.CityStrategy;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.correction.entity.CityCorrection;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.service.AddressCorrectionBean;
 
 import javax.ejb.EJB;
-import java.util.List;
 
-public class CityCorrectionList extends AddressCorrectionList<CityCorrection> {
-    @EJB
-    private AddressCorrectionBean addressCorrectionBean;
+public class CityCorrectionList extends AddressCorrectionList {
 
     @EJB
     private CityStrategy cityStrategy;
 
     public CityCorrectionList() {
         super("city");
-    }
-
-    @Override
-    protected CityCorrection newCorrection() {
-        return new CityCorrection();
-    }
-
-    @Override
-    protected List<CityCorrection> getCorrections(FilterWrapper<CityCorrection> filterWrapper) {
-        return addressCorrectionBean.getCityCorrections(filterWrapper);
-    }
-
-    @Override
-    protected Long getCorrectionsCount(FilterWrapper<CityCorrection> filterWrapper) {
-        return addressCorrectionBean.getCityCorrectionsCount(filterWrapper);
     }
 
     @Override

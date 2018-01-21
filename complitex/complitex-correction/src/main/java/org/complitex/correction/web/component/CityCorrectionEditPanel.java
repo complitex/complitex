@@ -4,44 +4,23 @@ import com.google.common.collect.ImmutableList;
 import org.apache.wicket.Page;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.complitex.correction.entity.CityCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.correction.web.address.CityCorrectionList;
-import org.complitex.common.entity.FilterWrapper;
 
-import javax.ejb.EJB;
 import java.util.List;
 
 /**
  * Панель редактирования коррекции населенного пункта.
  */
-public class CityCorrectionEditPanel extends AddressCorrectionEditPanel<CityCorrection> {
-
-    @EJB
-    private AddressCorrectionBean addressCorrectionBean;
+public class CityCorrectionEditPanel extends AddressCorrectionEditPanel {
 
     public CityCorrectionEditPanel(String id, Long correctionId) {
-        super(id, correctionId);
-    }
-
-    @Override
-    protected CityCorrection getCorrection(Long correctionId) {
-        return addressCorrectionBean.getCityCorrection(correctionId);
-    }
-
-    @Override
-    protected CityCorrection newCorrection() {
-        return new CityCorrection();
+        super(id, AddressEntity.CITY, correctionId);
     }
 
     @Override
     protected List<String> getSearchFilters() {
         return ImmutableList.of("city");
-    }
-
-    @Override
-    protected boolean validateExistence() {
-        return addressCorrectionBean.getCityCorrectionsCount(FilterWrapper.of(getCorrection())) > 0;
     }
 
     @Override
@@ -52,15 +31,5 @@ public class CityCorrectionEditPanel extends AddressCorrectionEditPanel<CityCorr
     @Override
     protected Class<? extends Page> getBackPageClass() {
         return CityCorrectionList.class;
-    }
-
-    @Override
-    protected void save() {
-        addressCorrectionBean.save(getCorrection());
-    }
-
-    @Override
-    protected void delete() {
-        addressCorrectionBean.delete(getCorrection());
     }
 }
