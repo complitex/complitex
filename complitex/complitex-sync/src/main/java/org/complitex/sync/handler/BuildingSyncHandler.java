@@ -1,23 +1,18 @@
 package org.complitex.sync.handler;
 
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.district.DistrictStrategy;
-import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
 import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
-import org.complitex.correction.entity.BuildingCorrection;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.entity.DistrictCorrection;
-import org.complitex.correction.entity.StreetCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.entity.SyncEntity;
 import org.complitex.sync.service.DomainSyncAdapter;
@@ -42,19 +37,10 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
     private DomainSyncAdapter domainSyncAdapter;
 
     @EJB
-    private DistrictStrategy districtStrategy;
-
-    @EJB
-    private StreetStrategy streetStrategy;
-
-    @EJB
     private BuildingStrategy buildingStrategy;
 
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
-
-    @EJB
-    private ModuleBean moduleBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private DomainSyncBean domainSyncBean;
@@ -69,15 +55,9 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         return domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.DISTRICT, SYNCHRONIZED)));
     }
 
-    @Override
-    public List<? extends Correction> getCorrections(Long externalId, Long objectId, Long organizationId) {
-        return addressCorrectionBean.getBuildingCorrections(externalId, objectId, organizationId);
-    }
-
-    @Override
-    public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null, null,
-                domainSync.getParentId(), null, null, organizationId, null);
+    private Long getParentObjectId(DomainSync domainSync, Long organizationId){
+        List<Correction> streetCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.STREET,
+                domainSync.getParentId(), organizationId, null);
 
         if (streetCorrections.isEmpty()){
             throw new CorrectionNotFoundException("street correction not found " + domainSync);
@@ -87,52 +67,42 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
             throw new CorrectionNotFoundException("street correction size > 1 " + domainSync);
         }
 
-        return Objects.equals(domainObject.getParentId(), streetCorrections.get(0).getObjectId()) &&
+        return streetCorrections.get(0).getObjectId();
+    }
+
+    @Override
+    public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
+        return Objects.equals(domainObject.getParentId(), getParentObjectId(domainSync, organizationId)) &&
                 isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(BuildingStrategy.NUMBER)) &&
                 isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(BuildingStrategy.NUMBER, Locales.getAlternativeLocale())) &&
                 isEqualIgnoreCase(domainSync.getAdditionalName(), domainObject.getStringValue(BuildingStrategy.CORP)) &&
                 isEqualIgnoreCase(domainSync.getAltAdditionalName(), domainObject.getStringValue(BuildingStrategy.CORP, Locales.getAlternativeLocale()));
     }
 
+
     @Override
     public boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId) {
-        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null, null,
-                domainSync.getParentId(), null, null, organizationId, null);
-
-        if (streetCorrections.isEmpty()){
-            throw new CorrectionNotFoundException("street correction not found " + domainSync);
-        }
-
-        return ((BuildingCorrection)correction).getStreetId().equals(streetCorrections.get(0).getObjectId()) &&
-                correction.getCorrection().equals(domainSync.getName()) &&
-                ((BuildingCorrection) correction).getCorrectionCorp().equals(domainSync.getAdditionalName());
+        return correction.getParentId().equals(getParentObjectId(domainSync, organizationId)) &&
+                StringUtil.isEqualIgnoreCase(correction.getCorrection(), domainSync.getName()) &&
+                StringUtil.isEqualIgnoreCase(correction.getAdditionalCorrection(), domainSync.getAdditionalName());
     }
 
     @Override
     public boolean isCorresponds(Correction correction1, Correction correction2) {
-        BuildingCorrection c1 = (BuildingCorrection) correction1;
-        BuildingCorrection c2 = (BuildingCorrection) correction2;
 
-        return c1.getStreetId().equals(c2.getStreetId()) &&
-                c1.getCorrection().equals(c2.getCorrection()) &&
-                c1.getCorrectionCorp().equals(c2.getCorrectionCorp());
+        return correction1.getParentId().equals(correction2.getParentId()) &&
+                StringUtil.isEqualIgnoreCase(correction1.getCorrection(), correction2.getCorrection()) &&
+                StringUtil.isEqualIgnoreCase(correction1.getAdditionalCorrection(), correction2.getAdditionalCorrection());
     }
 
     @Override
     public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
-        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null, null,
-                domainSync.getParentId(), null, null, organizationId, null);
-
-        if (streetCorrections.isEmpty()){
-            throw new CorrectionNotFoundException("street correction not found " + domainSync);
-        }
-
         return buildingStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("street")
-                        .setParentId(streetCorrections.get(0).getObjectId())
+                        .setParentId(getParentObjectId(domainSync, organizationId))
                         .addAttribute(BuildingStrategy.NUMBER, domainSync.getName())
                         .addAttribute(BuildingStrategy.NUMBER, domainSync.getAltName(), Locales.getAlternativeLocaleId())
                         .addAttribute(BuildingStrategy.CORP, domainSync.getAdditionalName())
@@ -141,36 +111,22 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
     @Override
     public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null, null,
-                domainSync.getParentId(), null, null, organizationId, null);
-
-        if (streetCorrections.isEmpty()){
-            throw new CorrectionNotFoundException("street correction not found " + domainSync);
-        }
-
-        BuildingCorrection buildingCorrection = new BuildingCorrection(streetCorrections.get(0).getObjectId(),
+        Correction buildingCorrection = new Correction(AddressEntity.BUILDING.getEntityName(), getParentObjectId(domainSync, organizationId),
                 domainSync.getExternalId(), domainObject.getObjectId(), domainSync.getName(), StringUtil.valueOf(domainSync.getAdditionalName()),
-                organizationId, null, moduleBean.getModuleId());
+                organizationId, null);
 
-        addressCorrectionBean.insert(buildingCorrection);
+        correctionBean.save(buildingCorrection);
 
         return buildingCorrection;
     }
 
     @Override
     public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
-        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null, null,
-                domainSync.getParentId(), null, null, organizationId, null);
-
-        if (streetCorrections.isEmpty()){
-            throw new CorrectionNotFoundException("street correction not found " + domainSync);
-        }
-
-        ((BuildingCorrection)correction).setStreetId(streetCorrections.get(0).getObjectId());
+        correction.setParentId(getParentObjectId(domainSync, organizationId));
         correction.setCorrection(domainSync.getName());
-        ((BuildingCorrection) correction).setCorrectionCorp(domainSync.getAdditionalName());
+        correction.setAdditionalCorrection(domainSync.getAdditionalName());
 
-        addressCorrectionBean.update((BuildingCorrection) correction);
+        correctionBean.save(correction);
     }
 
     @Override
@@ -180,21 +136,14 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(null, null,
-                domainSync.getParentId(), null, null, organizationId, null);
-
-        if (streetCorrections.isEmpty()){
-            throw new CorrectionNotFoundException("street correction not found " + domainSync);
-        }
-
-        List<DistrictCorrection> districtCorrections = addressCorrectionBean.getDistrictCorrections(null,
-                domainSync.getParentId(), null, null, organizationId, null);
+        List<Correction> districtCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.DISTRICT,
+                domainSync.getParentId(), organizationId, null);
 
         if (districtCorrections.isEmpty()){
             throw new CorrectionNotFoundException("district correction not found " + domainSync);
         }
 
-        domainObject.setParentId(streetCorrections.get(0).getObjectId());
+        domainObject.setParentId(getParentObjectId(domainSync, organizationId));
         domainObject.setValueId(BuildingStrategy.DISTRICT, districtCorrections.get(0).getObjectId());
         domainObject.setStringValue(BuildingStrategy.NUMBER, domainSync.getName());
         domainObject.setStringValue(BuildingStrategy.NUMBER, domainSync.getAltName(), Locales.getAlternativeLocale());

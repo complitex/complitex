@@ -4,39 +4,20 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.correction.web.AbstractCorrectionList;
-import org.complitex.osznconnection.file.entity.privilege.OwnershipCorrection;
 import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
 
 import javax.ejb.EJB;
-import java.util.List;
 
 /**
  * Список коррекций форм власти.
- * @author Artem
  */
-public class OwnershipCorrectionList extends AbstractCorrectionList<OwnershipCorrection> {
+public class OwnershipCorrectionList extends AbstractCorrectionList {
     @EJB
     private OwnershipCorrectionBean ownershipCorrectionBean;
 
     public OwnershipCorrectionList() {
         super("ownership");
-    }
-
-    @Override
-    protected OwnershipCorrection newCorrection() {
-        return new OwnershipCorrection();
-    }
-
-    @Override
-    protected List<OwnershipCorrection> getCorrections(FilterWrapper<OwnershipCorrection> filterWrapper) {
-        return ownershipCorrectionBean.getOwnershipCorrections(filterWrapper);
-    }
-
-    @Override
-    protected Long getCorrectionsCount(FilterWrapper<OwnershipCorrection> filter) {
-        return ownershipCorrectionBean.getOwnershipCorrectionsCount(filter);
     }
 
     @Override

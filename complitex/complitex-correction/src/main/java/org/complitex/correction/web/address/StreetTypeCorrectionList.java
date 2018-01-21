@@ -9,24 +9,19 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.SessionBean;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.entity.StreetTypeCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.correction.web.AbstractCorrectionList;
 
 import javax.ejb.EJB;
 import java.util.List;
 import java.util.Locale;
 
-/**
- *
- * @author Artem
- */
-public class StreetTypeCorrectionList extends AbstractCorrectionList<StreetTypeCorrection> {
+public class StreetTypeCorrectionList extends AbstractCorrectionList{
     @EJB
     private SessionBean sessionBean;
 
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private StreetTypeStrategy streetTypeStrategy;
@@ -35,16 +30,12 @@ public class StreetTypeCorrectionList extends AbstractCorrectionList<StreetTypeC
         super("street_type");
     }
 
-    @Override
-    protected StreetTypeCorrection newCorrection() {
-        return new StreetTypeCorrection();
-    }
 
     @Override
-    protected List<StreetTypeCorrection> getCorrections(FilterWrapper<StreetTypeCorrection> filterWrapper) {
+    protected List<Correction> getCorrections(FilterWrapper<Correction> filterWrapper) {
         sessionBean.authorize(filterWrapper);
 
-        List<StreetTypeCorrection> streetTypeCorrections = addressCorrectionBean.getStreetTypeCorrections(filterWrapper);
+        List<Correction> streetTypeCorrections = correctionBean.getCorrections(filterWrapper);
 
         Locale locale = getLocale();
 
@@ -59,11 +50,6 @@ public class StreetTypeCorrectionList extends AbstractCorrectionList<StreetTypeC
             }
         }
         return streetTypeCorrections;
-    }
-
-    @Override
-    protected Long getCorrectionsCount(FilterWrapper<StreetTypeCorrection> filterWrapper) {
-        return addressCorrectionBean.getStreetTypeCorrectionsCount(filterWrapper);
     }
 
     @Override

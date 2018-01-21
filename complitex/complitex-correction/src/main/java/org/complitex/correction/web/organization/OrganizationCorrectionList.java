@@ -5,16 +5,12 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.correction.web.AbstractCorrectionList;
 import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;
-import java.util.List;
 
 
 /**
@@ -22,30 +18,13 @@ import java.util.List;
  *         Date: 28.11.13 15:36
  */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
-public class OrganizationCorrectionList extends AbstractCorrectionList<OrganizationCorrection> {
-    @EJB
-    private OrganizationCorrectionBean organizationCorrectionBean;
+public class OrganizationCorrectionList extends AbstractCorrectionList {
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
     private IOrganizationStrategy organizationStrategy;
 
     public OrganizationCorrectionList() {
         super("organization");
-    }
-
-    @Override
-    protected OrganizationCorrection newCorrection() {
-        return new OrganizationCorrection();
-    }
-
-    @Override
-    protected List<OrganizationCorrection> getCorrections(FilterWrapper<OrganizationCorrection> filterWrapper) {
-        return organizationCorrectionBean.getOrganizationCorrections(filterWrapper);
-    }
-
-    @Override
-    protected Long getCorrectionsCount(FilterWrapper<OrganizationCorrection> filterWrapper) {
-        return organizationCorrectionBean.getOrganizationCorrectionsCount(filterWrapper);
     }
 
     @Override
@@ -73,11 +52,6 @@ public class OrganizationCorrectionList extends AbstractCorrectionList<Organizat
     protected String displayInternalObject(Correction correction) {
         return organizationStrategy.displayShortNameAndCode(organizationStrategy.getDomainObject(correction.getObjectId(), true),
                 getLocale());
-    }
-
-    @Override
-    protected void onDelete(OrganizationCorrection correction) {
-        organizationCorrectionBean.delete(correction);
     }
 
     @Override

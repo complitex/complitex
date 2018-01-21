@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableList;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.district.DistrictStrategy;
-import org.complitex.common.entity.*;
+import org.complitex.common.entity.Attribute;
+import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.EntityAttribute;
+import org.complitex.common.entity.StringValue;
 import org.complitex.common.exception.ServiceRuntimeException;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.StringValueBean;
@@ -13,8 +16,8 @@ import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.StringValueUtil;
 import org.complitex.common.web.component.domain.AbstractComplexAttributesPanel;
 import org.complitex.common.web.component.domain.validate.IValidator;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
+import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationEditComponent;
 import org.complitex.osznconnection.organization.strategy.web.edit.OsznOrganizationValidator;
@@ -148,7 +151,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     private StringValueBean stringBean;
 
     @EJB
-    private OrganizationCorrectionBean organizationCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private DistrictStrategy districtStrategy;
@@ -287,8 +290,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     public Long getServiceProviderId(String edrpou, Long organizationId, Long userOrganizationId){
         Long serviceProviderId = null;
 
-        List<OrganizationCorrection> list = organizationCorrectionBean.getOrganizationCorrections(
-                FilterWrapper.of(new OrganizationCorrection(null, null, edrpou, organizationId, userOrganizationId, null)));
+        List<Correction> list = correctionBean.getCorrections(ORGANIZATION_ENTITY, edrpou, organizationId, userOrganizationId);
 
         if (!list.isEmpty()){
             serviceProviderId = list.get(0).getObjectId();
@@ -302,9 +304,8 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     }
 
     public String getEdrpou(Long organizationId, Long userOrganizationId){
-        List<OrganizationCorrection> list = organizationCorrectionBean.getOrganizationCorrections(
-                FilterWrapper.of(new OrganizationCorrection(null, userOrganizationId, null,
-                        organizationId, userOrganizationId, null)));
+        List<Correction> list = correctionBean.getCorrectionsByObjectId(ORGANIZATION_ENTITY, userOrganizationId,
+                organizationId, userOrganizationId);
 
         if (!list.isEmpty()){
             return list.get(0).getCorrection();
@@ -320,15 +321,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
             return serviceProvider.getStringValue(EDRPOU);
         }
 
-        List<OrganizationCorrection> list = organizationCorrectionBean.getOrganizationCorrections(
-                FilterWrapper.of(new OrganizationCorrection(null, userOrganizationId, null,
-                        organizationId, userOrganizationId, null)));
-
-        if (!list.isEmpty()){
-            return list.get(0).getCorrection();
-        }
-
-        return null;
+        return getEdrpou(organizationId, userOrganizationId);
     }
 
     public String getDistrict(Long organizationId){

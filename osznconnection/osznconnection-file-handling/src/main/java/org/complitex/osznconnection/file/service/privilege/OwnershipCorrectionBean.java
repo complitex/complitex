@@ -1,9 +1,7 @@
 package org.complitex.osznconnection.file.service.privilege;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.correction.service.CorrectionBean;
-import org.complitex.osznconnection.file.entity.privilege.OwnershipCorrection;
 
 import javax.ejb.Stateless;
 import java.util.List;
@@ -51,17 +49,5 @@ public class OwnershipCorrectionBean extends CorrectionBean {
             return codes.get(0);
         }
         return null;
-    }
-
-    public OwnershipCorrection getOwnershipCorrection(Long id){
-        return sqlSession().selectOne(NS + ".selectOwnershipCorrection", id);
-    }
-
-    public List<OwnershipCorrection> getOwnershipCorrections(FilterWrapper<OwnershipCorrection> filterWrapper){
-        return sqlSession().selectList(NS + ".selectOwnershipCorrections", filterWrapper);
-    }
-
-    public Long getOwnershipCorrectionsCount(FilterWrapper<OwnershipCorrection> filterWrapper){
-        return sqlSession().selectOne(NS + ".selectOwnershipCorrectionsCount", filterWrapper);
     }
 }

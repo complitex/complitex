@@ -80,6 +80,9 @@ public class OsznWebApplication extends ComplitexWebApplication{
         mountPage("/privilege/prolongation/${request_file_id}", PrivilegeProlongationList.class);
 
         //correction
+        mountPage("/correction/country", CountryCorrectionList.class);
+        mountPage("/correction/region", RegionCorrectionList.class);
+        mountPage("/correction/city_type", CityTypeCorrectionList.class);
         mountPage("/correction/city", CityCorrectionList.class);
         mountPage("/correction/district", DistrictCorrectionList.class);
         mountPage("/correction/street", StreetCorrectionList.class);

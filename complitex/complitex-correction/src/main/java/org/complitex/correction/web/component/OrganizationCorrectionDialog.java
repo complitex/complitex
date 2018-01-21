@@ -9,13 +9,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.*;
-import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.web.component.organization.OrganizationPicker;
+import org.complitex.common.web.component.organization.OrganizationIdPicker;
+import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.CorrectionBean;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 
 import javax.ejb.EJB;
@@ -30,13 +29,13 @@ public class OrganizationCorrectionDialog extends Panel {
     private IOrganizationStrategy organizationStrategy;
 
     @EJB
-    private OrganizationCorrectionBean organizationCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private ModuleBean moduleBean;
 
     private Dialog dialog;
-    private Form<OrganizationCorrection> form;
+    private Form<Correction> form;
 
     public OrganizationCorrectionDialog(String id, final List<WebMarkupContainer> toUpdate) {
         super(id);
@@ -47,7 +46,7 @@ public class OrganizationCorrectionDialog extends Panel {
 
         add(dialog);
 
-        form = new Form<>("form", new CompoundPropertyModel<>(Model.of(new OrganizationCorrection())));
+        form = new Form<>("form", new CompoundPropertyModel<>(Model.of(new Correction("organization", null))));
         dialog.add(form);
 
         //Организация
@@ -73,10 +72,10 @@ public class OrganizationCorrectionDialog extends Panel {
         form.add(new AjaxSubmitLink("save") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                OrganizationCorrection correction = OrganizationCorrectionDialog.this.form.getModelObject();
+                Correction correction = OrganizationCorrectionDialog.this.form.getModelObject();
 
-                if (organizationCorrectionBean.getOrganizationCorrectionsCount(FilterWrapper.of(correction)) == 0){
-                    organizationCorrectionBean.save(correction);
+                if (correctionBean.getCorrectionsCount(FilterWrapper.of(correction)) == 0){
+                    correctionBean.save(correction);
 
                     getSession().info(getString("info_correction_added"));
                 }else {
@@ -100,8 +99,8 @@ public class OrganizationCorrectionDialog extends Panel {
     }
 
     public void open(AjaxRequestTarget target, String correction, Long organizationId, Long userOrganizationId){
-        form.setModelObject(new OrganizationCorrection(null, null, correction, organizationId, userOrganizationId,
-                moduleBean.getModuleId()));
+        form.setModelObject(new Correction("organization",null, null, correction, organizationId,
+                userOrganizationId));
 
         target.add(form);
 

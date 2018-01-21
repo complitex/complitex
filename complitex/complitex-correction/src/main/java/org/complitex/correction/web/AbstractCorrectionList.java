@@ -29,7 +29,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
@@ -38,33 +37,33 @@ import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.CorrectionOrderBy;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.template.web.component.toolbar.AddItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
-import org.complitex.template.web.pages.ScrollListPage;
 import org.complitex.template.web.security.SecurityRole;
+import org.complitex.template.web.template.TemplatePage;
 
 import javax.ejb.EJB;
 import java.util.List;
 
 /**
  * Абстрактный класс для списка коррекций.
- * @author Artem
  */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
-public abstract class AbstractCorrectionList<T extends Correction> extends ScrollListPage {
+public abstract class AbstractCorrectionList extends TemplatePage {
     @EJB
-    protected StrategyFactory strategyFactory;
+    private StrategyFactory strategyFactory;
 
     @EJB
-    private StringLocaleBean stringLocaleBean;
+    private CorrectionBean correctionBean;
 
-    private String entity;
-    private FilterWrapper<T> filterWrapper;
+    private String entityName;
+    private FilterWrapper<Correction> filterWrapper;
 
-    public AbstractCorrectionList(String entity) {
-        this.entity = entity;
-        setPreferencesPage(getClass().getName() + "#" + entity);
+    public AbstractCorrectionList(String entityName) {
+        this.entityName = entityName;
+        setPreferencesPage(getClass().getName() + "#" + entityName);
 
         init();
     }
@@ -76,27 +75,33 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
                 AbstractCorrectionList.class.getSimpleName() + ".css")));
     }
 
-    protected String getEntity() {
-        return entity;
+    protected String getEntityName() {
+        return entityName;
     }
 
     protected void clearFilter() {
         filterWrapper.setObject(newCorrection());
     }
 
-    protected abstract T newCorrection();
+    protected Correction newCorrection(){
+        return new Correction(entityName, null);
+    }
 
-    protected abstract List<T> getCorrections(FilterWrapper<T> filterWrapper);
+    protected List<Correction> getCorrections(FilterWrapper<Correction> filterWrapper){
+        return correctionBean.getCorrections(filterWrapper);
+    }
 
-    protected abstract Long getCorrectionsCount(FilterWrapper<T> filterWrapper);
+    protected Long getCorrectionsCount(FilterWrapper<Correction> filterWrapper){
+        return correctionBean.getCorrectionsCount(filterWrapper);
+    }
 
-    protected String displayCorrection(T correction) {
+    protected String displayCorrection(Correction correction) {
         return correction.getCorrection();
     }
 
     protected String displayInternalObject(Correction correction) {
         if (correction.getDisplayObject() == null){
-            IStrategy strategy = strategyFactory.getStrategy(entity);
+            IStrategy strategy = strategyFactory.getStrategy(entityName);
             DomainObject object = strategy.getDomainObject(correction.getObjectId(), false);
 
             if (object == null) { //объект доступен только для просмотра
@@ -136,10 +141,10 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
 
         filterWrapper = FilterWrapper.of(getFilterObject(newCorrection()));
 
-        final DataProvider<T> dataProvider = new DataProvider<T>() {
+        final DataProvider<Correction> dataProvider = new DataProvider<Correction>() {
 
             @Override
-            protected Iterable<T> getData(long first, long count) {
+            protected Iterable<Correction> getData(long first, long count) {
                 //store preference, but before clear data order related properties.
                 {
                     filterWrapper.setAscending(false);
@@ -208,11 +213,11 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
         };
         filterForm.add(submit);
 
-        DataView<T> data = new DataView<T>("data", dataProvider, 1) {
+        DataView<Correction> data = new DataView<Correction>("data", dataProvider, 10) {
 
             @Override
-            protected void populateItem(Item<T> item) {
-                final T correction = item.getModelObject();
+            protected void populateItem(Item<Correction> item) {
+                final Correction correction = item.getModelObject();
 
                 item.add(new Label("organization", correction.getOrganizationName()));
                 item.add(new Label("correction", displayCorrection(correction)));
@@ -250,7 +255,7 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
         filterForm.add(new ArrowOrderByBorder("internalObjectHeader", CorrectionOrderBy.OBJECT.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("userOrganizationHeader", CorrectionOrderBy.USER_ORGANIZATION.getOrderBy(), dataProvider, data, content));
 
-        content.add(new PagingNavigator("navigator", data, getPreferencesPage() + "#" + entity, content));
+        content.add(new PagingNavigator("navigator", data, getPreferencesPage() + "#" + entityName, content));
     }
 
     @Override
@@ -264,7 +269,7 @@ public abstract class AbstractCorrectionList<T extends Correction> extends Scrol
         });
     }
 
-    protected void onDelete(T correction){
+    protected void onDelete(Correction correction){
     }
 
     protected boolean isDeleteVisible(){

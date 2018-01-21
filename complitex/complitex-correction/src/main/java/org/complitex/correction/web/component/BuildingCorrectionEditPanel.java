@@ -6,14 +6,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.SessionBean;
-import org.complitex.correction.entity.BuildingCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.entity.Correction;
 import org.complitex.correction.web.address.BuildingCorrectionList;
 
 import javax.ejb.EJB;
@@ -22,64 +20,33 @@ import java.util.List;
 /**
  * Панель редактирования коррекции дома.
  */
-public class BuildingCorrectionEditPanel extends AddressCorrectionEditPanel<BuildingCorrection> {
+public class BuildingCorrectionEditPanel extends AddressCorrectionEditPanel {
     @EJB
     private StreetStrategy streetStrategy;
 
     @EJB
     private CityStrategy cityStrategy;
 
-    @EJB
-    private AddressCorrectionBean addressCorrectionBean;
-
-    @EJB
-    private SessionBean sessionBean;
-
     public BuildingCorrectionEditPanel(String id, Long correctionId) {
-        super(id, correctionId);
-    }
-
-    @Override
-    protected BuildingCorrection getCorrection(Long correctionId) {
-        return addressCorrectionBean.getBuildingCorrection(correctionId);
-    }
-
-    @Override
-    protected BuildingCorrection newCorrection() {
-        return new BuildingCorrection();
+        super(id, AddressEntity.BUILDING, correctionId);
     }
 
     @Override
     protected String displayCorrection() {
-        BuildingCorrection correction = getCorrection();
+        Correction correction = getCorrection();
 
-        DomainObject streetDomainObject = streetStrategy.getDomainObject(correction.getStreetId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(correction.getParentId(), true);
         String street = streetStrategy.displayDomainObject(streetDomainObject, getLocale());
 
         String city = cityStrategy.displayDomainObject(streetDomainObject.getParentId(), getLocale());
 
         return AddressRenderer.displayAddress(null, city, null, street, correction.getCorrection(),
-                correction.getCorrectionCorp(), null, getLocale());
+                correction.getAdditionalCorrection(), null, getLocale());
     }
 
     @Override
     protected Class<? extends Page> getBackPageClass() {
         return BuildingCorrectionList.class;
-    }
-
-    @Override
-    protected void save() {
-        addressCorrectionBean.save(getCorrection());
-    }
-
-    @Override
-    protected void delete() {
-        addressCorrectionBean.delete(getCorrection());
-    }
-
-    @Override
-    protected boolean validateExistence() {
-        return addressCorrectionBean.getBuildingCorrectionsCount(FilterWrapper.of(getCorrection())) > 0;
     }
 
     @Override

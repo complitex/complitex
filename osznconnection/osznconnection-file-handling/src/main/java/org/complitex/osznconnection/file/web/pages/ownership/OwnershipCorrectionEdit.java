@@ -10,12 +10,10 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
-import org.complitex.osznconnection.file.entity.privilege.OwnershipCorrection;
 import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
 import org.complitex.osznconnection.file.strategy.OwnershipStrategy;
 import org.complitex.template.web.component.toolbar.DeleteItemButton;
@@ -29,7 +27,6 @@ import java.util.Locale;
 
 /**
  * Страница для редактирования коррекций форм власти.
- * @author Artem
  */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public final class OwnershipCorrectionEdit extends FormTemplatePage {
@@ -85,17 +82,7 @@ public final class OwnershipCorrectionEdit extends FormTemplatePage {
 
     public OwnershipCorrectionEdit(PageParameters params) {
         Long correctionId = params.get(CORRECTION_ID).toOptionalLong();
-        add(correctionEditPanel = new AbstractCorrectionEditPanel<OwnershipCorrection>("correctionEditPanel", correctionId) {
-
-            @Override
-            protected OwnershipCorrection getCorrection(Long correctionId) {
-                return ownershipCorrectionBean.getOwnershipCorrection(correctionId);
-            }
-
-            @Override
-            protected OwnershipCorrection newCorrection() {
-                return new OwnershipCorrection();
-            }
+        add(correctionEditPanel = new AbstractCorrectionEditPanel("correctionEditPanel", "ownership", correctionId) {
 
             @Override
             protected IModel<String> internalObjectLabel(Locale locale) {
@@ -110,11 +97,6 @@ public final class OwnershipCorrectionEdit extends FormTemplatePage {
             @Override
             protected String getNullObjectErrorMessage() {
                 return getString("ownership_required");
-            }
-
-            @Override
-            protected boolean validateExistence() {
-                return ownershipCorrectionBean.getOwnershipCorrectionsCount(FilterWrapper.of(getCorrection())) > 0;
             }
 
             @Override

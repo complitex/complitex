@@ -21,8 +21,6 @@ public interface IDomainSyncHandler {
 
     List<DomainSync> getParentDomainSyncs();
 
-    List<? extends Correction> getCorrections(Long externalId, Long objectId, Long organizationId);
-
     boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId);
 
     boolean isCorresponds(Correction correction, DomainSync domainSync, Long organizationId);

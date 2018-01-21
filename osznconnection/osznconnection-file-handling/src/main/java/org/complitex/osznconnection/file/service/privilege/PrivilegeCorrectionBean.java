@@ -1,9 +1,7 @@
 package org.complitex.osznconnection.file.service.privilege;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.correction.service.CorrectionBean;
-import org.complitex.osznconnection.file.entity.privilege.PrivilegeCorrection;
 
 import javax.ejb.Stateless;
 import java.util.List;
@@ -48,17 +46,5 @@ public class PrivilegeCorrectionBean extends CorrectionBean {
             return codes.get(0);
         }
         return null;
-    }
-
-    public PrivilegeCorrection getPrivilegeCorrection(Long id){
-        return sqlSession().selectOne(NS + ".selectPrivilegeCorrection", id);
-    }
-
-    public List<PrivilegeCorrection> getPrivilegeCorrections(FilterWrapper<PrivilegeCorrection> filterWrapper){
-        return sqlSession().selectList(NS + ".selectPrivilegeCorrections", filterWrapper);
-    }
-
-    public Long getPrivilegeCorrectionCount(FilterWrapper<PrivilegeCorrection> filterWrapper){
-        return sqlSession().selectOne(NS + ".selectPrivilegeCorrectionsCount", filterWrapper);
     }
 }

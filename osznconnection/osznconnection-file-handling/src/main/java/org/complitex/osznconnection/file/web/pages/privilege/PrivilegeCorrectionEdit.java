@@ -18,7 +18,6 @@ import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.common.web.component.search.WiQuerySearchComponent;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
-import org.complitex.osznconnection.file.entity.privilege.PrivilegeCorrection;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeCorrectionBean;
 import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
 import org.complitex.template.web.component.toolbar.DeleteItemButton;
@@ -67,17 +66,7 @@ public final class PrivilegeCorrectionEdit extends FormTemplatePage {
     public PrivilegeCorrectionEdit(PageParameters params) {
         Long correctionId = params.get(CORRECTION_ID).toOptionalLong();
 
-        add(correctionEditPanel = new AbstractCorrectionEditPanel<PrivilegeCorrection>("correctionEditPanel", correctionId) {
-
-            @Override
-            protected PrivilegeCorrection getCorrection(Long correctionId) {
-                return privilegeCorrectionBean.getPrivilegeCorrection(correctionId);
-            }
-
-            @Override
-            protected PrivilegeCorrection newCorrection() {
-                return new PrivilegeCorrection();
-            }
+        add(correctionEditPanel = new AbstractCorrectionEditPanel("correctionEditPanel", "privilege", correctionId) {
 
             @Override
             protected IModel<String> internalObjectLabel(Locale locale) {

@@ -6,7 +6,7 @@ import org.complitex.common.exception.ImportFileReadException;
 import org.complitex.common.exception.ImportObjectLinkException;
 import org.complitex.common.service.AbstractImportService;
 import org.complitex.common.service.IImportListener;
-import org.complitex.osznconnection.file.entity.privilege.PrivilegeCorrection;
+import org.complitex.correction.entity.Correction;
 import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +58,8 @@ public class PrivilegeCorrectionImportService extends AbstractImportService {
                     throw new ImportObjectLinkException(PRIVILEGE_CORRECTION.getFileName(), recordIndex, line[1].trim());
                 }
 
-                privilegeCorrectionBean.save(new PrivilegeCorrection(Long.valueOf(line[2].trim()), objectId, line[3].trim(), orgId,
-                        intOrgId, null));
+                privilegeCorrectionBean.save(new Correction("privilege", Long.valueOf(line[2].trim()), objectId, line[3].trim(), orgId,
+                        intOrgId));
 
                 listener.recordProcessed(PRIVILEGE_CORRECTION, recordIndex);
             }

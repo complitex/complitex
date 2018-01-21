@@ -197,8 +197,8 @@ public class DomainSyncService {
                         return;
                     }
 
-                    List<? extends Correction> corrections = handler.getCorrections(ds.getExternalId(),null,
-                            organizationId);
+                    List<? extends Correction> corrections = correctionBean.getCorrectionsByExternalId(syncEntity,
+                            ds.getExternalId(), organizationId, null);
 
                     if (!corrections.isEmpty()){
                         if (corrections.size() > 1){
@@ -219,8 +219,8 @@ public class DomainSyncService {
                             ds.setStatus(SYNCHRONIZED);
                             domainSyncBean.updateStatus(ds);
                         }else{
-                            List<? extends Correction> objectCorrections = handler.getCorrections(null,
-                                    domainObject.getObjectId(),  organizationId);
+                            List<? extends Correction> objectCorrections = correctionBean.getCorrectionsByObjectId(syncEntity,
+                                    domainObject.getObjectId(),  organizationId, null);
 
                             if (objectCorrections.size() == 1 && objectCorrections.get(0).getId().equals(correction.getId())){
                                 handler.updateValues(domainObject, ds, organizationId);
@@ -275,7 +275,7 @@ public class DomainSyncService {
             });
 
             //clear
-            handler.getCorrections(null, null, organizationId).forEach(c -> {
+            correctionBean.getCorrections(syncEntity, null, organizationId, null).forEach(c -> {
                 if (getDomainSyncs(syncEntity, null, c.getExternalId()).isEmpty()){
                     correctionBean.delete(c);
 
@@ -286,8 +286,8 @@ public class DomainSyncService {
             //deferred
             getDomainSyncs(syncEntity, DEFERRED, null).forEach(ds -> {
                 if (domainSyncBean.getObject(ds.getId()).getStatus().equals(DEFERRED)) {
-                    List<? extends Correction> corrections = handler.getCorrections(ds.getExternalId(), null,
-                            organizationId);
+                    List<? extends Correction> corrections = correctionBean.getCorrectionsByExternalId(syncEntity,
+                            ds.getExternalId(), organizationId, null);
 
                     if (corrections.isEmpty()){
                         throw new RuntimeException("sync: deferred correction nod found " + ds);
@@ -295,8 +295,8 @@ public class DomainSyncService {
 
                     Correction correction = corrections.get(0);
 
-                    List<? extends Correction> objectCorrections = handler.getCorrections(null,
-                            correction.getObjectId(), organizationId);
+                    List<? extends Correction> objectCorrections = correctionBean.getCorrectionsByObjectId(syncEntity,
+                            correction.getObjectId(), organizationId, null);
 
                     boolean corresponds = objectCorrections.stream()
                             .allMatch(c -> c.getId().equals(correction.getId()) || handler.isCorresponds(c, correction));

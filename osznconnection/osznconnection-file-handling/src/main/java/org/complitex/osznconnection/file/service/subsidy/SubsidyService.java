@@ -2,8 +2,9 @@ package org.complitex.osznconnection.file.service.subsidy;
 
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.util.DateUtil;
-import org.complitex.correction.service.OrganizationCorrectionBean;
-import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.AbstractRequest;
+import org.complitex.osznconnection.file.entity.RequestFile;
+import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidySum;
 import org.complitex.osznconnection.file.service.RequestFileBean;
@@ -25,9 +26,6 @@ import java.util.Locale;
 public class SubsidyService {
     @EJB
     private OsznOrganizationStrategy organizationStrategy;
-
-    @EJB
-    private OrganizationCorrectionBean organizationCorrectionBean;
 
     @EJB
     private RequestFileBean requestFileBean;

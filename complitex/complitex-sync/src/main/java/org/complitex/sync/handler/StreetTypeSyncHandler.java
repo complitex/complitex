@@ -1,18 +1,17 @@
 package org.complitex.sync.handler;
 
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.util.Locales;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.entity.StreetTypeCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.sync.entity.DomainSync;
 import org.complitex.sync.service.DomainSyncAdapter;
 
@@ -36,10 +35,7 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
     private DomainSyncAdapter addressSyncAdapter;
 
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
-
-    @EJB
-    private ModuleBean moduleBean;
+    private CorrectionBean correctionBean;
 
     @Override
     public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
@@ -70,11 +66,6 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
     }
 
     @Override
-    public List<? extends Correction> getCorrections(Long externalId, Long objectId, Long organizationId) {
-        return addressCorrectionBean.getStreetTypeCorrections(externalId, objectId, organizationId);
-    }
-
-    @Override
     public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
         return streetTypeStrategy.getList(
                 new DomainObjectFilter()
@@ -88,19 +79,20 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
 
     @Override
     public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        StreetTypeCorrection correction = new StreetTypeCorrection(domainSync.getExternalId(), domainObject.getObjectId(),
-                domainSync.getName(), organizationId, null, moduleBean.getModuleId());
+        Correction streetTypeCorrection = new Correction(AddressEntity.STREET_TYPE.getEntityName(),
+                domainSync.getExternalId(), domainObject.getObjectId(), domainSync.getName(), organizationId,
+                null);
 
-        addressCorrectionBean.insert(correction);
+        correctionBean.save(streetTypeCorrection);
 
-        return correction;
+        return streetTypeCorrection;
     }
 
     @Override
     public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
         correction.setCorrection(domainSync.getName());
 
-        addressCorrectionBean.save((StreetTypeCorrection) correction);
+        correctionBean.save(correction);
     }
 
     @Override

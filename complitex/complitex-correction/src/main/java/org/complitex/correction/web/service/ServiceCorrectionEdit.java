@@ -8,17 +8,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.web.component.domain.DomainSelectLabel;
-import org.complitex.correction.entity.ServiceCorrection;
-import org.complitex.correction.service.ServiceCorrectionBean;
 import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
 import org.complitex.template.web.component.toolbar.DeleteItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
 
-import javax.ejb.EJB;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,24 +24,12 @@ import java.util.Locale;
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
 public class ServiceCorrectionEdit extends FormTemplatePage {
 
-    @EJB
-    private ServiceCorrectionBean serviceCorrectionBean;
 
     private AbstractCorrectionEditPanel correctionEditPanel;
 
     public ServiceCorrectionEdit(PageParameters params) {
-        add(correctionEditPanel = new AbstractCorrectionEditPanel<ServiceCorrection>("service_correction_edit_panel",
+        add(correctionEditPanel = new AbstractCorrectionEditPanel("service_correction_edit_panel", "service",
                 params.get("correction_id").toOptionalLong()) {
-
-            @Override
-            protected ServiceCorrection getCorrection(Long correctionId) {
-                return serviceCorrectionBean.getServiceCorrection(correctionId);
-            }
-
-            @Override
-            protected ServiceCorrection newCorrection() {
-                return new ServiceCorrection();
-            }
 
             @Override
             protected IModel<String> internalObjectLabel(Locale locale) {
@@ -63,11 +47,6 @@ public class ServiceCorrectionEdit extends FormTemplatePage {
             }
 
             @Override
-            protected boolean validateExistence() {
-                return serviceCorrectionBean.getServiceCorrectionsCount(FilterWrapper.of(getCorrection())) > 0;
-            }
-
-            @Override
             protected Class<? extends Page> getBackPageClass() {
                 return ServiceCorrectionList.class;
             }
@@ -75,16 +54,6 @@ public class ServiceCorrectionEdit extends FormTemplatePage {
             @Override
             protected PageParameters getBackPageParameters() {
                 return new PageParameters();
-            }
-
-            @Override
-            protected void save() {
-                serviceCorrectionBean.save(getCorrection());
-            }
-
-            @Override
-            protected void delete() {
-                serviceCorrectionBean.delete(getCorrection());
             }
 
             @Override

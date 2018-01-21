@@ -1,6 +1,7 @@
 package org.complitex.correction.service;
 
 import au.com.bytecode.opencsv.CSVReader;
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.entity.AddressImportFile;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.city.CityStrategy;
@@ -12,10 +13,7 @@ import org.complitex.common.exception.ImportFileReadException;
 import org.complitex.common.exception.ImportObjectLinkException;
 import org.complitex.common.service.AbstractImportService;
 import org.complitex.common.service.IImportListener;
-import org.complitex.correction.entity.BuildingCorrection;
-import org.complitex.correction.entity.CityCorrection;
-import org.complitex.correction.entity.StreetCorrection;
-import org.complitex.correction.entity.StreetTypeCorrection;
+import org.complitex.correction.entity.Correction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +30,7 @@ public class AddressCorrectionImportService extends AbstractImportService {
     private final Logger log = LoggerFactory.getLogger(AddressCorrectionImportService.class);
 
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private CityStrategy cityStrategy;
@@ -60,8 +58,6 @@ public class AddressCorrectionImportService extends AbstractImportService {
 
     /**
      * CITY_ID	REGION_ID	CITY_TYPE_ID	Название населенного пункта
-     * @throws ImportFileNotFoundException
-     * @throws ImportFileReadException
      */
     public void importCityToCorrection(Long orgId, Long intOrgId, IImportListener listener)
             throws ImportFileNotFoundException, ImportFileReadException, ImportObjectLinkException {
@@ -85,7 +81,7 @@ public class AddressCorrectionImportService extends AbstractImportService {
                     throw new ImportObjectLinkException(AddressImportFile.CITY.getFileName(), recordIndex, line[0]);
                 }
 
-                addressCorrectionBean.save(new CityCorrection(externalId, objectId, line[3].trim(), orgId, null, intOrgId));
+                correctionBean.save(new Correction(AddressEntity.CITY.getEntityName(), externalId, objectId, line[3].trim(), orgId, null));
 
                 listener.recordProcessed(AddressImportFile.CITY, recordIndex);
             }
@@ -104,8 +100,6 @@ public class AddressCorrectionImportService extends AbstractImportService {
 
     /**
      * DISTRICT_ID	CITY_ID	Код района	Название района
-     * @throws ImportFileNotFoundException
-     * @throws ImportFileReadException
      */
     public void importDistrictToCorrection(Long orgId, Long intOrgId, IImportListener listener)
             throws ImportFileNotFoundException, ImportFileReadException, ImportObjectLinkException {
@@ -151,8 +145,6 @@ public class AddressCorrectionImportService extends AbstractImportService {
 
     /**
      * STREET_TYPE_ID	Короткое наименование	Название типа улицы
-     * @throws ImportFileNotFoundException
-     * @throws ImportFileReadException
      */
     public void importStreetTypeToCorrection(Long orgId, Long intOrgId, IImportListener listener)
             throws ImportFileNotFoundException, ImportFileReadException, ImportObjectLinkException {
@@ -176,7 +168,7 @@ public class AddressCorrectionImportService extends AbstractImportService {
                     throw new ImportObjectLinkException(AddressImportFile.STREET_TYPE.getFileName(), recordIndex, line[0]);
                 }
 
-                addressCorrectionBean.save(new StreetTypeCorrection(externalId, streetTypeId, line[2].trim(), orgId, null, intOrgId));
+                correctionBean.save(new Correction(AddressEntity.STREET_TYPE.getEntityName(), externalId, streetTypeId, line[2].trim(), orgId, null));
 
                 listener.recordProcessed(AddressImportFile.STREET_TYPE, recordIndex);
             }
@@ -195,8 +187,6 @@ public class AddressCorrectionImportService extends AbstractImportService {
 
     /**
      * STREET_ID	CITY_ID	STREET_TYPE_ID	Название улицы
-     * @throws ImportFileNotFoundException
-     * @throws ImportFileReadException
      */
     public void importStreetToCorrection(Long orgId, Long intOrgId, IImportListener listener)
             throws ImportFileNotFoundException, ImportFileReadException, ImportObjectLinkException {
@@ -230,8 +220,8 @@ public class AddressCorrectionImportService extends AbstractImportService {
                     throw new ImportObjectLinkException(AddressImportFile.STREET.getFileName(), recordIndex, line[2]);
                 }
 
-                addressCorrectionBean.save(new StreetCorrection(cityObjectId, streetTypeObjectId, externalId, streetId,
-                        line[3].trim(), orgId, null, intOrgId));
+                correctionBean.save(new Correction(AddressEntity.STREET.getEntityName(), cityObjectId, streetTypeObjectId,
+                        externalId, streetId, line[3].trim(), orgId, null));
 
                 listener.recordProcessed(AddressImportFile.STREET, recordIndex);
             }
@@ -250,8 +240,6 @@ public class AddressCorrectionImportService extends AbstractImportService {
 
     /**
      * BUILDING_ID	DISTRICT_ID	STREET_ID	Номер дома	Корпус	Строение
-     * @throws ImportFileNotFoundException
-     * @throws ImportFileReadException
      */
     public void importBuildingToCorrection(Long orgId, Long intOrgId, IImportListener listener)
             throws ImportFileNotFoundException, ImportFileReadException, ImportObjectLinkException {
@@ -280,8 +268,8 @@ public class AddressCorrectionImportService extends AbstractImportService {
                     throw new ImportObjectLinkException(AddressImportFile.BUILDING.getFileName(), recordIndex, line[2]);
                 }
 
-                addressCorrectionBean.save(new BuildingCorrection(streetObjectId, externalId, buildingId, line[3].trim(),
-                        line[4].trim(), orgId, null, intOrgId));
+                correctionBean.save(new Correction(AddressEntity.BUILDING.getEntityName(), streetObjectId, externalId,
+                        buildingId, line[3].trim(), line[4].trim(), orgId, null));
 
                 listener.recordProcessed(AddressImportFile.BUILDING, recordIndex);
             }

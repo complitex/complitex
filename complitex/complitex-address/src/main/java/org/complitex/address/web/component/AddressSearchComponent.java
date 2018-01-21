@@ -41,7 +41,7 @@ public class AddressSearchComponent extends WiQuerySearchComponent {
 
     @Override
     protected IChoiceRenderer<DomainObject> newAutocompleteItemRenderer(String entity) {
-        if (getSearchComponentState().get(AddressEntity.CITY.getEntity()) == null && entity.equals("street")){
+        if (getSearchComponentState().get(AddressEntity.CITY.getEntityName()) == null && entity.equals("street")){
             return new IChoiceRenderer<DomainObject>() {
 
                 @Override
@@ -50,7 +50,7 @@ public class AddressSearchComponent extends WiQuerySearchComponent {
                         return getString(NOT_SPECIFIED_KEY);
                     } else {
                         return strategyFactory.getStrategy(entity).displayDomainObject(object, getLocale()) +
-                                " (" + strategyFactory.getStrategy(AddressEntity.CITY.getEntity())
+                                " (" + strategyFactory.getStrategy(AddressEntity.CITY.getEntityName())
                                 .displayDomainObject(object.getParentId(), getLocale()) + ")";
                     }
                 }

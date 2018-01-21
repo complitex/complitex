@@ -8,8 +8,8 @@ import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.util.DateUtil;
-import org.complitex.correction.entity.ServiceCorrection;
-import org.complitex.correction.service.ServiceCorrectionBean;
+import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.organization.strategy.ServiceStrategy;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.privilege.*;
@@ -70,7 +70,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
     private ServiceStrategy serviceStrategy;
 
     @EJB
-    private ServiceCorrectionBean serviceCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private DwellingCharacteristicsFillTaskBean dwellingCharacteristicsFillTaskBean;
@@ -179,12 +179,12 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
         //service code
         String serviceCode = null;
 
-        List<ServiceCorrection> serviceCorrections = serviceCorrectionBean.getServiceCorrections(FilterWrapper.of(
-                new ServiceCorrection(facilityServiceType.getStringField(FacilityServiceTypeDBF.LGCODE),
-                        facilityServiceType.getOrganizationId(), facilityServiceType.getUserOrganizationId())));
+        List<Correction> serviceCorrections = correctionBean.getCorrections(ServiceStrategy.SERVICE_ENTITY,
+                facilityServiceType.getStringField(FacilityServiceTypeDBF.LGCODE),
+                facilityServiceType.getOrganizationId(), facilityServiceType.getUserOrganizationId());
 
         if (!serviceCorrections.isEmpty()){
-            ServiceCorrection serviceCorrection = serviceCorrections.get(0);
+            Correction serviceCorrection = serviceCorrections.get(0);
 
             DomainObject service = serviceStrategy.getDomainObject(serviceCorrection.getObjectId());
 

@@ -1,6 +1,7 @@
 package org.complitex.osznconnection.file.service.privilege;
 
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
@@ -14,11 +15,8 @@ import org.complitex.common.service.LogBean;
 import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.ResourceUtil;
-import org.complitex.correction.entity.CityCorrection;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.entity.StreetCorrection;
-import org.complitex.correction.entity.StreetTypeCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
@@ -50,8 +48,9 @@ public class FacilityReferenceBookBean extends AbstractBean {
     private static final String RESOURCE_BUNDLE = FacilityReferenceBookBean.class.getName();
     private static final String NS = FacilityReferenceBookBean.class.getName();
     private final Logger log = LoggerFactory.getLogger(FacilityReferenceBookBean.class);
+
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private ConfigBean configBean;
@@ -178,8 +177,8 @@ public class FacilityReferenceBookBean extends AbstractBean {
         Long cityId;
         Correction cityCorrection;
 
-        List<CityCorrection> cityCorrections = addressCorrectionBean.getCityCorrections(
-                null, defaultCity, osznId, userOrganizationId);
+        List<Correction> cityCorrections = correctionBean.getCorrections(AddressEntity.CITY,
+                defaultCity, osznId, userOrganizationId);
 
         if (cityCorrections.size() == 1) {
             cityCorrection = cityCorrections.get(0);
@@ -203,9 +202,9 @@ public class FacilityReferenceBookBean extends AbstractBean {
         }
 
         Long streetTypeId;
-        StreetTypeCorrection streetTypeCorrection;
-        List<StreetTypeCorrection> streetTypeCorrections =
-                addressCorrectionBean.getStreetTypeCorrections(null, streetTypeName, osznId, userOrganizationId);
+        Correction streetTypeCorrection;
+        List<Correction> streetTypeCorrections =
+                correctionBean.getCorrections(AddressEntity.STREET_TYPE, streetTypeName, osznId, userOrganizationId);
 
         if (streetTypeCorrections.size() == 1) {
             streetTypeCorrection = streetTypeCorrections.get(0);
@@ -215,13 +214,14 @@ public class FacilityReferenceBookBean extends AbstractBean {
                     locale, printStringValue(streetTypeName, locale)));
         } else {
             // искать по внутренней базе типов улиц
-            List<Long> streetTypeIds = addressCorrectionBean.getStreetTypeIds(streetTypeName);
+            List<Long> streetTypeIds = correctionBean.getObjectIds(AddressEntity.STREET_TYPE,
+                    streetTypeName, StreetTypeStrategy.NAME);
             if (streetTypeIds.size() == 1) {
                 streetTypeId = streetTypeIds.get(0);
-                streetTypeCorrection = new StreetTypeCorrection(null, streetTypeId, streetTypeName.toUpperCase(),
-                         osznId, userOrganizationId, moduleId);
+                streetTypeCorrection = new Correction(AddressEntity.STREET_TYPE.getEntityName(), null,
+                        streetTypeId, streetTypeName.toUpperCase(), osznId, userOrganizationId);
 
-                addressCorrectionBean.save(streetTypeCorrection);
+                correctionBean.save(streetTypeCorrection);
             } else if (streetTypeIds.size() > 1) {
                 throw new ExecuteException(ResourceUtil.getFormatString(RESOURCE_BUNDLE, "facility_internal_street_type.too_many",
                                 locale, printStringValue(streetTypeName, locale)));
@@ -236,11 +236,11 @@ public class FacilityReferenceBookBean extends AbstractBean {
             }
         }
 
-        List<StreetCorrection> streetCorrections = addressCorrectionBean.getStreetCorrections(cityCorrection.getObjectId(),
-                streetTypeCorrection.getObjectId(), null, null, streetName, osznId, userOrganizationId);
+        List<Correction> streetCorrections = correctionBean.getCorrections(AddressEntity.STREET,
+                cityCorrection.getObjectId(), streetTypeCorrection.getObjectId(), streetName, osznId, userOrganizationId);
 
         if (streetCorrections.size() == 1) {
-            StreetCorrection streetCorrection = streetCorrections.get(0);
+//            StreetCorrection streetCorrection = streetCorrections.get(0);
 //            if (!Strings.isEqual(streetCode, streetCorrection.getExternalId())) {
 //                // коды не совпадают, нужно обновить код соответствия.
 //                streetCorrection.setExternalId(streetCode);
@@ -259,11 +259,10 @@ public class FacilityReferenceBookBean extends AbstractBean {
             if (streetIds.size() == 1) {
                 long streetId = streetIds.get(0);
 
-                StreetCorrection streetCorrection =  new StreetCorrection(cityId, streetTypeId,
-                        null, streetId, streetName.toUpperCase(),
-                        osznId, userOrganizationId, moduleId);
+                Correction streetCorrection =  new Correction(AddressEntity.STREET.getEntityName(), cityId, streetTypeId,
+                        null, streetId, streetName.toUpperCase(), osznId, userOrganizationId);
 
-                addressCorrectionBean.save(streetCorrection);
+                correctionBean.save(streetCorrection);
             } else {
                 final DomainObject internalCity = cityStrategy.getDomainObject(cityId, true);
                 final String internalCityName = cityStrategy.displayDomainObject(internalCity, locale);
