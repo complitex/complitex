@@ -84,7 +84,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     private Long getParentObjectId(DomainSync domainSync, Long organizationId) {
         if (domainSync.getParentId() != null) {
             List<Correction> organizationCorrections = correctionBean.getCorrectionsByExternalId(ORGANIZATION_ENTITY,
-                    domainSync.getParentId(), null, organizationId);
+                    domainSync.getParentId(),  organizationId, null);
 
             if (organizationCorrections.isEmpty()) {
                 throw new CorrectionNotFoundException("organization parent correction not found " + domainSync);
@@ -99,7 +99,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
     @Override
     public Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         Correction organizationCorrection = new Correction(ORGANIZATION_ENTITY.getEntityName(), domainSync.getExternalId(),
-                domainObject.getObjectId(), domainSync.getAdditionalExternalId(), organizationId, null);
+                domainObject.getObjectId(), domainSync.getAdditionalParentId(), organizationId, null);
 
         correctionBean.save(organizationCorrection);
 
@@ -108,7 +108,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
-        correction.setCorrection(domainSync.getAdditionalExternalId());
+        correction.setCorrection(domainSync.getAdditionalParentId());
 
         correctionBean.save(correction);
     }

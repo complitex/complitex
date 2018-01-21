@@ -53,31 +53,26 @@
         delete from `${entityName}_correction` where `id` = #{id}
     </delete>
 
-    <sql id="selectCorrectionWhereIf">
-        <if test="object.parentId != null">and c.`parent_id` = #{object.parentId}</if>
-        <if test="object.additionalParentId != null">and c.`additional_parent_id` = #{object.additionalParentId}</if>
-        <if test="object.externalId != null">and c.`external_id` = #{object.externalId}</if>
-        <if test="object.objectId != null">and c.`object_id` = #{object.objectId}</if>
-        <if test="object.correction != null">and upper(c.`correction`) = upper(#{object.correction})</if>
-        <if test="object.additionalCorrection != null">and upper(c.`additional_correction`) = upper(#{object.additionalCorrection})</if>
-        <if test="object.beginDate != null">and c.`begin_date` = #{object.beginDate}</if>
-        <if test="object.endDate != null">and c.`end_date` = #{object.endDate}</if>
-        <if test="object.organizationId != null">and c.`organization_id` = #{object.organizationId}</if>
-        <if test="object.userOrganizationId != null">and c.`user_organization_id` = #{object.userOrganizationId}</if>
-        <if test="object.userOrganizationId == null">and c.`user_organization_id` is null</if>
-        <if test="userOrganizationsString != null">and c.`user_organization_id` in ${userOrganizationsString}</if>
+    <sql id="selectCorrectionWhere">
+        <where>
+            <if test="object.parentId != null">and c.`parent_id` = #{object.parentId}</if>
+            <if test="object.additionalParentId != null">and c.`additional_parent_id` = #{object.additionalParentId}</if>
+            <if test="object.externalId != null">and c.`external_id` = #{object.externalId}</if>
+            <if test="object.objectId != null">and c.`object_id` = #{object.objectId}</if>
+            <if test="object.correction != null">and upper(c.`correction`) = upper(#{object.correction})</if>
+            <if test="object.additionalCorrection != null">and upper(c.`additional_correction`) = upper(#{object.additionalCorrection})</if>
+            <if test="object.beginDate != null">and c.`begin_date` = #{object.beginDate}</if>
+            <if test="object.endDate != null">and c.`end_date` = #{object.endDate}</if>
+            <if test="object.organizationId != null">and c.`organization_id` = #{object.organizationId}</if>
+            <if test="object.userOrganizationId != null">and c.`user_organization_id` = #{object.userOrganizationId}</if>
+            <if test="object.userOrganizationId == null">and c.`user_organization_id` is null</if>
+            <if test="userOrganizationsString != null">and c.`user_organization_id` in ${userOrganizationsString}</if>
+        </where>
     </sql>
 
     <sql id="selectCorrectionOrderLimit">
         <if test="sortProperty != null">order by #{sortProperty} #{asc}</if>
         <if test="count > 0">limit #{first}, #{count}</if>
-    </sql>
-
-    <sql id="selectCorrectionWhere">
-        <where>
-            <include refid="selectCorrectionWhereIf"/>
-        </where>
-        <include refid="selectCorrectionOrderLimit"/>
     </sql>
 
     <select id="selectCorrection" resultMap="correctionResultMap" parameterType="org.complitex.correction.entity.Correction">
@@ -86,13 +81,14 @@
 
     <select id="selectCorrections" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="correctionResultMap">
-        select c.*, '${object.entityName}' entity_name from `${entityName}_correction` c
+        select c.*, '${object.entityName}' entity_name from `${object.entityName}_correction` c
         <include refid="selectCorrectionWhere"/>
+        <include refid="selectCorrectionOrderLimit"/>
     </select>
 
     <select id="selectCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(*) from `${object.entityName}_correction` c
-        <include refid="selectCorrectionWhereIf"/>
+        <include refid="selectCorrectionWhere"/>
     </select>
 
     <select id="selectObjectIds" parameterType="map" resultType="long">

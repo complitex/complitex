@@ -66,7 +66,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
 
     public Long getAdditionalParentObjectId(DomainSync domainSync, Long organizationId){
         List<Correction> streetTypeCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.STREET_TYPE,
-                Long.valueOf(domainSync.getAdditionalParentId()), null, organizationId);
+                Long.valueOf(domainSync.getAdditionalParentId()), organizationId, null);
 
         if (streetTypeCorrections.isEmpty()) {
             throw new CorrectionNotFoundException("street type correction not found" + domainSync);
