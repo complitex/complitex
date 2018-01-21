@@ -24,7 +24,7 @@
 
     <insert id="insertCorrection" parameterType="org.complitex.correction.entity.Correction"
             keyProperty="id" useGeneratedKeys="true">
-        insert into `${entity}_correction` (
+        insert into `${entityName}_correction` (
           <if test="parentId != null">`parent_id`,</if>
           <if test="additionalParentId != null">`additional_parent_id`,</if>
           <if test="additionalCorrection != null">`additional_correction`,</if>
@@ -39,7 +39,7 @@
     </insert>
 
     <update id="updateCorrection" parameterType="org.complitex.correction.entity.Correction">
-        update `${entity}_correction` set
+        update `${entityName}_correction` set
           <if test="parentId != null">`parent_id` = #{parentId},</if>
           <if test="additionalParentId != null">`additional_parent_id` = #{additionalParentId},</if>
           <if test="additionalCorrection != null">`additional_correction` = #{additionalCorrection},</if>
@@ -50,7 +50,7 @@
     </update>
 
     <delete id="deleteCorrection" parameterType="org.complitex.correction.entity.Correction">
-        delete from `${entity}_correction` where `id` = #{id}
+        delete from `${entityName}_correction` where `id` = #{id}
     </delete>
 
     <sql id="selectCorrectionWhereIf">
@@ -86,17 +86,17 @@
 
     <select id="selectCorrections" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="correctionResultMap">
-        select c.*, '${entityName}' entity_name from `${entityName}_correction` c
-        <include refid="selectDistrictCorrectionsWhere"/>
+        select c.*, '${object.entityName}' entity_name from `${entityName}_correction` c
+        <include refid="selectCorrectionWhere"/>
     </select>
 
     <select id="selectCorrectionsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
-        select count(*) from `${entityName}_correction` c
-        <include refid="selectCorrectionsWhereIf"/>
+        select count(*) from `${object.entityName}_correction` c
+        <include refid="selectCorrectionWhereIf"/>
     </select>
 
     <select id="selectObjectIds" parameterType="map" resultType="long">
-        select distinct e.`object_id` from `${entity}` e
+        select distinct e.`object_id` from `${entityName}` e
         left join `${entity}_attribute` attr on (attr.`status` = 1 and e.`object_id` = attr.`object_id`)
         left join `${entity}_string_value` sc on (sc.`id` = attr.`value_id`)
         where e.`status` = 1 and attr.`entity_attribute_id` = #{entityAttributeId} and upper(sc.`value`) = upper(#{correction})

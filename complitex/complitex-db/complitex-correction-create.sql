@@ -255,7 +255,6 @@ CREATE TABLE `organization_correction` (
   KEY `key_user_organization_id` (`user_organization_id`),
   KEY `key_module_id` (`module_id`),
   CONSTRAINT `fk_organization_correction__organization_p` FOREIGN KEY (`parent_id`) REFERENCES `organization` (`object_id`),
-  CONSTRAINT `fk_organization_correction__organization` FOREIGN KEY (`object_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_organization_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_organization_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция организации';
