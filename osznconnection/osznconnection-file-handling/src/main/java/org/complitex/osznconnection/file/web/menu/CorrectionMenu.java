@@ -16,8 +16,8 @@ public class CorrectionMenu extends ResourceTemplateMenu {
         add(CityTypeCorrectionList.class);
         add(CityCorrectionList.class);
         add(DistrictCorrectionList.class);
-        add(StreetCorrectionList.class);
         add(StreetTypeCorrectionList.class);
+        add(StreetCorrectionList.class);
         add(BuildingCorrectionList.class);
         add(OrganizationCorrectionList.class);
         add(OwnershipCorrectionList.class);

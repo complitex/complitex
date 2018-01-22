@@ -97,8 +97,8 @@ public class DistrictStrategy extends TemplateStrategy {
             example.setParentId(cityId);
             example.setParentEntity("city");
         } else {
-            example.setParentId(-1L);
-            example.setParentEntity("");
+            example.setParentId(null);
+            example.setParentEntity(null);
         }
     }
 

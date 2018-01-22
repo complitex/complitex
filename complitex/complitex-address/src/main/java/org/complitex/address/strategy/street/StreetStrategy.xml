@@ -18,20 +18,9 @@
         <if test="additionalParams != null and additionalParams['district'] != null">
             AND (EXISTS(
                     SELECT 1 FROM `building` b
-                        JOIN `building_attribute` district_attr ON (b.`object_id` = district_attr.`object_id` AND district_attr.`status` = 1 AND district_attr.`entity_attribute_id` = 500
-                            AND district_attr.`value_id` = #{additionalParams.district})
-                        JOIN `building_address` addr ON (b.`parent_id` = addr.`object_id` AND addr.`parent_entity_id` = 300)
-                    WHERE b.`status` IN (1, 0) AND addr.`parent_id` = e.`object_id`
-                    )
-                 OR
-                 EXISTS(
-                    SELECT 1 FROM `building` b
-                        JOIN `building_address` addr ON (addr.`status` IN (1, 0) AND addr.`parent_entity_id` = 300)
-                        JOIN `building_attribute` district_attr ON (b.`object_id` = district_attr.`object_id` AND district_attr.`status` = 1 AND district_attr.`entity_attribute_id` = 500
-                            AND district_attr.`value_id` = #{additionalParams.district})
-                        JOIN `building_attribute` ref_attr ON (b.`object_id` = ref_attr.`object_id` AND ref_attr.`status` = 1 AND ref_attr.`entity_attribute_id` = 501
-                            AND ref_attr.`value_id` = addr.`object_id`)
-                    WHERE b.`status` IN (1, 0) AND addr.`parent_id` = e.`object_id`
+                        JOIN `building_attribute` district_attr ON (b.`object_id` = district_attr.`object_id`)
+                    WHERE b.`status` IN (1, 0) AND b.`parent_id` = e.`object_id`  AND district_attr.`status` = 1
+                        AND district_attr.`entity_attribute_id` = 503 AND district_attr.`value_id` = #{additionalParams.district}
                     )
             )
         </if>
