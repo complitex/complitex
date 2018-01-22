@@ -227,6 +227,9 @@ public class DomainSyncService {
                                 handler.getStrategy().update(domainObject);
 
                                 log.info("sync: update domain object {}", domainObject);
+
+                                ds.setStatus(SYNCHRONIZED);
+                                domainSyncBean.updateStatus(ds);
                             }else {
                                 ds.setStatus(DEFERRED);
                                 domainSyncBean.updateStatus(ds);
