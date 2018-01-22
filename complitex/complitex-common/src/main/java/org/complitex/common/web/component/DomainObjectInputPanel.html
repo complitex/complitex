@@ -9,6 +9,15 @@
             <div wicket:id="complexAttributesBefore"></div>
 
             <table class="tbForm">
+                <tr wicket:id="objectId">
+                    <th nowrap="nowrap">
+                        <wicket:message key="objectId"/> :
+                    </th>
+                    <td nowrap="nowrap">
+                        <span wicket:id="label"></span>
+                    </td>
+                </tr>
+
                 <tr wicket:id="simpleAttributes">
                     <th nowrap="nowrap">
                         <wicket:container wicket:id="label"/><wicket:container wicket:id="required"><b class="blue">*</b></wicket:container>:

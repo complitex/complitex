@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -108,6 +109,10 @@ public class DomainObjectInputPanel extends Panel {
     }
 
     private void init() {
+        add(new WebMarkupContainer("objectId")
+                .add(new Label("label", Model.of(object.getObjectId())))
+                .setVisible(object.getObjectId() != null));
+
         //simple attributes
         ListView<Attribute> simpleAttributes = newSimpleAttributeListView("simpleAttributes");
         simpleAttributes.setReuseItems(true);

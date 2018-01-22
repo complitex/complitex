@@ -2,7 +2,6 @@ package org.complitex.sync.handler;
 
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.exception.RemoteCallException;
-import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.region.RegionStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
@@ -122,7 +121,7 @@ public class RegionSyncHandler implements IDomainSyncHandler{
 
     @Override
     public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        domainObject.setParentEntityId(DistrictStrategy.PARENT_ENTITY_ID);
+        domainObject.setParentEntityId(RegionStrategy.PARENT_ENTITY_ID);
         domainObject.setParentId(getParentObjectId(domainSync, organizationId));
         domainObject.setStringValue(RegionStrategy.NAME, domainSync.getName());
         domainObject.setStringValue(RegionStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());

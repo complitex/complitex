@@ -4,6 +4,7 @@ import org.complitex.admin.web.ProfilePage;
 import org.complitex.admin.web.UserEdit;
 import org.complitex.admin.web.UserList;
 import org.complitex.correction.web.address.*;
+import org.complitex.correction.web.organization.OrganizationCorrectionEdit;
 import org.complitex.correction.web.organization.OrganizationCorrectionList;
 import org.complitex.correction.web.service.ServiceCorrectionList;
 import org.complitex.logging.web.LogList;
@@ -93,7 +94,9 @@ public class OsznWebApplication extends ComplitexWebApplication{
         mountPage("/correction/account", PersonAccountList.class);
         mountPage("/correction/privilege", PrivilegeCorrectionList.class);
         mountPage("/correction/service", ServiceCorrectionList.class);
+
         mountPage("/correction/${entity}/${correction_id}", AddressCorrectionEdit.class);
+        mountPage("/correction/organization/${correction_id}", OrganizationCorrectionEdit.class);
 
         //description
         mountPage("/description/${entity}", EntityDescription.class);
@@ -105,8 +108,7 @@ public class OsznWebApplication extends ComplitexWebApplication{
         mountPage("/user", UserList.class);
         mountPage("/user/${user_id}", UserEdit.class);
         mountPage("/domain/${entity}", DomainObjectList.class);
-        mountPage("/domain/${entity}/${strategy}", DomainObjectEdit.class);
-        mountPage("/domain/${entity}/${strategy}/${object_id}", DomainObjectEdit.class);
+        mountPage("/domain/${entity}/${object_id}", DomainObjectEdit.class);
         mountPage("/organization/${object_id}", OrganizationEdit.class);
         mountPage("/description/file", RequestFileDescriptionPage.class);
         mountPage("/import", ImportPage.class);

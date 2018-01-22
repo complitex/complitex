@@ -27,6 +27,7 @@ import org.complitex.common.service.LogBean;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.ChildrenContainer;
 import org.complitex.common.web.component.DomainObjectInputPanel;
 import org.complitex.common.web.component.back.BackInfo;
@@ -40,7 +41,6 @@ import org.complitex.common.web.component.search.SearchComponentState;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -125,10 +125,7 @@ public class DomainObjectEditPanel extends Panel {
 
             @Override
             protected String load() {
-                final String entityName = getStrategy().getEntity().getName(getLocale());
-
-                return isNew() || !sessionBean.isAdmin() ? entityName
-                        : MessageFormat.format(getString("label_edit"), entityName, newObject.getObjectId());
+                return getStrategy().getEntity().getName(getLocale());
             }
         };
         Label title = new Label("title", labelModel);
@@ -215,7 +212,7 @@ public class DomainObjectEditPanel extends Panel {
                     }
                 } catch (Exception e) {
                     LoggerFactory.getLogger(getClass()).error("", e);
-                    error(getString("db_error"));
+                    error(getString("db_error" + " " + ExceptionUtil.getCauseMessage(e)));
                     target.add(messages);
                     scrollToMessages(target);
                 }
