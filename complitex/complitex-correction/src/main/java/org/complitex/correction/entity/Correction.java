@@ -1,7 +1,6 @@
 package org.complitex.correction.entity;
 
 import com.google.common.base.MoreObjects;
-import org.complitex.common.util.DateUtil;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,8 +19,8 @@ public class Correction implements Serializable {
     private Long objectId;
     private String correction;
     private String additionalCorrection;
-    private Date beginDate = DateUtil.MIN_BEGIN_DATE;
-    private Date endDate = DateUtil.MAX_END_DATE;
+    private Date beginDate;
+    private Date endDate;
     private Long organizationId;
     private Long userOrganizationId;
     private Long moduleId;

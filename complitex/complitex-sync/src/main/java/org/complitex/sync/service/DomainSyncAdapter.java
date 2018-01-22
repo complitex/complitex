@@ -17,6 +17,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +78,7 @@ public class DomainSyncAdapter extends AbstractBean {
     }
 
     private Cursor<DomainSync> getDomainSyncCursor(String statement, Date date) throws RemoteCallException{
-        return getDomainSyncCursor(statement, date, null);
+        return getDomainSyncCursor(statement, date, new HashMap<>());
     }
 
         /**
