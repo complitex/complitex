@@ -145,7 +145,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
     @Override
     public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         List<Correction> districtCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.DISTRICT,
-                domainSync.getParentId(), organizationId, null);
+                Long.valueOf(domainSync.getAdditionalParentId()), organizationId, null);
 
         if (districtCorrections.isEmpty()){
             throw new CorrectionNotFoundException("district correction not found " + domainSync);
