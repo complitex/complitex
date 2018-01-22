@@ -6,9 +6,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
@@ -20,7 +19,6 @@ import ru.flexpay.eirc.service.service.ServiceBean;
 import ru.flexpay.eirc.service.web.component.ServicePicker;
 
 import javax.ejb.EJB;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -43,7 +41,7 @@ public class ServiceCorrectionEdit extends FormTemplatePage {
     private static final Long[] ORGANIZATION_TYPES = null;
 
     public ServiceCorrectionEdit(PageParameters params) {
-        add(new AbstractCorrectionEditPanel<ServiceCorrection>("service_edit_panel",
+        add(new AbstractCorrectionEditPanel("service_edit_panel", "service",
                 params.get(CORRECTION_ID).toOptionalLong()) {
 
             @Override
@@ -91,11 +89,6 @@ public class ServiceCorrectionEdit extends FormTemplatePage {
             }
 
             @Override
-            protected boolean validateExistence() {
-                return serviceCorrectionBean.getServiceCorrectionsCount(FilterWrapper.of(getCorrection())) > 0;
-            }
-
-            @Override
             protected Class<? extends Page> getBackPageClass() {
                 return ServiceCorrectionList.class;
             }
@@ -103,16 +96,6 @@ public class ServiceCorrectionEdit extends FormTemplatePage {
             @Override
             protected PageParameters getBackPageParameters() {
                 return new PageParameters();
-            }
-
-            @Override
-            protected void save() {
-                serviceCorrectionBean.save(getCorrection());
-            }
-
-            @Override
-            protected void delete() {
-                serviceCorrectionBean.delete(getCorrection());
             }
 
             @Override

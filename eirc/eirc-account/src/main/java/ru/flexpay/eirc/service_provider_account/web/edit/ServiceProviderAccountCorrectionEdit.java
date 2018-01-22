@@ -6,7 +6,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
 import org.complitex.template.web.security.SecurityRole;
@@ -43,7 +42,7 @@ public class ServiceProviderAccountCorrectionEdit extends FormTemplatePage {
     private static final Long[] ORGANIZATION_TYPES = {Long.valueOf(OrganizationType.PAYMENT_COLLECTOR.getId())};
 
     public ServiceProviderAccountCorrectionEdit(PageParameters params) {
-        add(new AbstractCorrectionEditPanel<ServiceProviderAccountCorrection>("service_provider_account_edit_panel",
+        add(new AbstractCorrectionEditPanel("service_provider_account_edit_panel", "service_provider_account",
                 params.get(CORRECTION_ID).toOptionalLong()) {
 
             @Override
@@ -91,11 +90,6 @@ public class ServiceProviderAccountCorrectionEdit extends FormTemplatePage {
             }
 
             @Override
-            protected boolean validateExistence() {
-                return serviceProviderAccountCorrectionBean.getServiceProviderAccountCorrectionsCount(FilterWrapper.of(getCorrection())) > 0;
-            }
-
-            @Override
             protected Class<? extends Page> getBackPageClass() {
                 return ServiceProviderAccountCorrectionList.class;
             }
@@ -103,16 +97,6 @@ public class ServiceProviderAccountCorrectionEdit extends FormTemplatePage {
             @Override
             protected PageParameters getBackPageParameters() {
                 return new PageParameters();
-            }
-
-            @Override
-            protected void save() {
-                serviceProviderAccountCorrectionBean.save(getCorrection());
-            }
-
-            @Override
-            protected void delete() {
-                serviceProviderAccountCorrectionBean.delete(getCorrection());
             }
 
             @Override

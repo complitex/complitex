@@ -5,7 +5,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.correction.entity.Correction;
@@ -20,7 +19,6 @@ import ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountCo
 import ru.flexpay.eirc.service_provider_account.web.edit.ServiceProviderAccountCorrectionEdit;
 
 import javax.ejb.EJB;
-import java.util.List;
 
 
 /**
@@ -28,7 +26,7 @@ import java.util.List;
  *         Date: 28.11.13 15:36
  */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
-public class ServiceProviderAccountCorrectionList extends AbstractCorrectionList<ServiceProviderAccountCorrection> {
+public class ServiceProviderAccountCorrectionList extends AbstractCorrectionList {
     @EJB
     private ServiceProviderAccountCorrectionBean serviceProviderAccountCorrectionBean;
 
@@ -50,16 +48,6 @@ public class ServiceProviderAccountCorrectionList extends AbstractCorrectionList
     @Override
     protected ServiceProviderAccountCorrection newCorrection() {
         return new ServiceProviderAccountCorrection();
-    }
-
-    @Override
-    protected List<ServiceProviderAccountCorrection> getCorrections(FilterWrapper<ServiceProviderAccountCorrection> filterWrapper) {
-        return serviceProviderAccountCorrectionBean.getServiceProviderAccountCorrections(filterWrapper);
-    }
-
-    @Override
-    protected Long getCorrectionsCount(FilterWrapper<ServiceProviderAccountCorrection> filterWrapper) {
-        return serviceProviderAccountCorrectionBean.getServiceProviderAccountCorrectionsCount(filterWrapper);
     }
 
     @Override

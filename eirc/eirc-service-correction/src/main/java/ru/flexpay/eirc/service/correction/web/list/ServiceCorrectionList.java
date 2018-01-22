@@ -5,7 +5,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.correction.entity.Correction;
@@ -19,7 +18,6 @@ import ru.flexpay.eirc.service.entity.Service;
 import ru.flexpay.eirc.service.service.ServiceBean;
 
 import javax.ejb.EJB;
-import java.util.List;
 
 
 /**
@@ -27,7 +25,7 @@ import java.util.List;
  *         Date: 28.11.13 15:36
  */
 @AuthorizeInstantiation(SecurityRole.AUTHORIZED)
-public class ServiceCorrectionList extends AbstractCorrectionList<ServiceCorrection> {
+public class ServiceCorrectionList extends AbstractCorrectionList {
     @EJB
     private ServiceCorrectionBean serviceCorrectionBean;
 
@@ -49,16 +47,6 @@ public class ServiceCorrectionList extends AbstractCorrectionList<ServiceCorrect
     @Override
     protected ServiceCorrection newCorrection() {
         return new ServiceCorrection();
-    }
-
-    @Override
-    protected List<ServiceCorrection> getCorrections(FilterWrapper<ServiceCorrection> filterWrapper) {
-        return serviceCorrectionBean.getServiceCorrections(filterWrapper);
-    }
-
-    @Override
-    protected Long getCorrectionsCount(FilterWrapper<ServiceCorrection> filterWrapper) {
-        return serviceCorrectionBean.getServiceCorrectionsCount(filterWrapper);
     }
 
     @Override

@@ -11,7 +11,6 @@ import org.complitex.common.service.ConfigBean;
 import org.complitex.common.util.AttributeUtil;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.correction.service.OrganizationCorrectionBean;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,6 @@ import ru.flexpay.eirc.registry.entity.log.Parsing;
 import ru.flexpay.eirc.registry.service.*;
 import ru.flexpay.eirc.registry.util.ParseUtil;
 import ru.flexpay.eirc.registry.util.StringUtil;
-import ru.flexpay.eirc.service.service.ServiceBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -55,8 +53,6 @@ public class RegistryParser implements Serializable {
 
     @EJB
     private RegistryBean registryService;
-    @EJB
-    private ServiceBean serviceBean;
 
     @EJB
     private RegistryWorkflowManager registryWorkflowManager;
@@ -74,9 +70,6 @@ public class RegistryParser implements Serializable {
 
     @EJB
     private ParserQueueProcessor parserQueueProcessor;
-
-    @EJB
-    private OrganizationCorrectionBean organizationCorrectionBean;
 
     @EJB
     private ModuleInstanceStrategy moduleInstanceStrategy;

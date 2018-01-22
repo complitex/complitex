@@ -10,8 +10,8 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.exception.AbstractException;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.util.DateUtil;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
+import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.CorrectionBean;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
@@ -121,7 +121,7 @@ public class EircPaymentsRegistryConverter {
     private EircOrganizationStrategy eircOrganizationStrategy;
 
     @EJB
-    private OrganizationCorrectionBean organizationCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private ServiceCorrectionBean serviceCorrectionBean;
@@ -414,9 +414,9 @@ public class EircPaymentsRegistryConverter {
     private String getExternalServiceProviderId(Registry registry, EircOrganization serviceProviderOrganization,
                                                 Long mbOrganizationId, Long eircOrganizationId, String dataSource) throws MbConverterException {
 
-        List<OrganizationCorrection> organizationCorrections = organizationCorrectionBean.getOrganizationCorrections(dataSource,
-                FilterWrapper.of(new OrganizationCorrection(null, serviceProviderOrganization.getObjectId(), null,
-                        registry.getSenderOrganizationId(), eircOrganizationId, null)));
+        List<Correction> organizationCorrections = null;//correctionBean.getCorrections(dataSource,
+//                FilterWrapper.of(new OrganizationCorrection(null, serviceProviderOrganization.getObjectId(), null,
+//                        registry.getSenderOrganizationId(), eircOrganizationId, null)));
         if (organizationCorrections.size() <= 0) {
             throw new MbConverterException("No service provider correction with id {0}: organizationId={1}, userOrganizationId={2}",
                     serviceProviderOrganization.getObjectId(), registry.getSenderOrganizationId(), eircOrganizationId);

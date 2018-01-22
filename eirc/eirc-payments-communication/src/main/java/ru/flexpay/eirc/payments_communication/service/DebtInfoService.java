@@ -3,7 +3,6 @@ package ru.flexpay.eirc.payments_communication.service;
 import com.google.common.collect.Lists;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.strategy.apartment.ApartmentStrategy;
-import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.room.RoomStrategy;
 import org.complitex.common.entity.Attribute;
 import org.complitex.common.entity.DomainObject;
@@ -11,11 +10,8 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.correction.entity.ApartmentCorrection;
-import org.complitex.correction.entity.BuildingCorrection;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.entity.RoomCorrection;
-import org.complitex.correction.service.AddressCorrectionBean;
+import org.complitex.correction.service.CorrectionBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.dictionary.entity.Address;
@@ -63,10 +59,7 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
     private SaldoOutBean saldoOutBean;
 
     @EJB
-    private AddressCorrectionBean addressCorrectionBean;
-
-    @EJB
-    private BuildingAddressStrategy buildingAddressStrategy;
+    private CorrectionBean correctionBean;
 
     @EJB
     private ApartmentStrategy apartmentStrategy;
@@ -149,13 +142,12 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
         switch (type) {
             case TYPE_BUILDING_NUMBER:
 
-                return getByAddressMasterIndex(searchString, service, new AddressDataProvider<BuildingCorrection>() {
+                return getByAddressMasterIndex(searchString, service, new AddressDataProvider<Correction>() {
                     @Override
-                    protected List<BuildingCorrection> getAddressCorrection(String addressId, Long organizationId) {
-                        FilterWrapper<BuildingCorrection> filter = FilterWrapper.of(
-                                new BuildingCorrection(null, null, null, null, null, organizationId, eircOrganizationId, null)
-                        );
-                        return addressCorrectionBean.getBuildingCorrections(filter);
+                    protected List<Correction> getAddressCorrection(String addressId, Long organizationId) {
+                        return correctionBean.getCorrections(FilterWrapper.of(
+                                new Correction("building", null, null, null,
+                                        organizationId, eircOrganizationId)));
                     }
 
                     @Override
@@ -168,10 +160,10 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
                     }
                 }, moduleOrganizationId, eircOrganizationId);
             case TYPE_APARTMENT_NUMBER:
-                return getByAddressMasterIndex(searchString, service, new AddressDataProvider<ApartmentCorrection>() {
+                return getByAddressMasterIndex(searchString, service, new AddressDataProvider<Correction>() {
                     @Override
-                    protected List<ApartmentCorrection> getAddressCorrection(String addressId, Long organizationId) {
-                        return addressCorrectionBean.getApartmentCorrections(null, null, null, null, organizationId, eircOrganizationId);
+                    protected List<Correction> getAddressCorrection(String addressId, Long organizationId) {
+                        return correctionBean.getCorrections(AddressEntity.APARTMENT,  null, organizationId, eircOrganizationId);
                     }
 
                     @Override
@@ -184,10 +176,10 @@ public class DebtInfoService extends RestAuthorizationService<DebtInfo> {
                     }
                 }, moduleOrganizationId, eircOrganizationId);
             case TYPE_ROOM_NUMBER:
-                return getByAddressMasterIndex(searchString, service, new AddressDataProvider<RoomCorrection>() {
+                return getByAddressMasterIndex(searchString, service, new AddressDataProvider<Correction>() {
                     @Override
-                    protected List<RoomCorrection> getAddressCorrection(String addressId, Long organizationId) {
-                        return addressCorrectionBean.getRoomCorrections(null, null, null, null, null, organizationId, eircOrganizationId);
+                    protected List<Correction> getAddressCorrection(String addressId, Long organizationId) {
+                        return correctionBean.getCorrections(AddressEntity.ROOM, null, organizationId, eircOrganizationId);
                     }
 
                     @Override

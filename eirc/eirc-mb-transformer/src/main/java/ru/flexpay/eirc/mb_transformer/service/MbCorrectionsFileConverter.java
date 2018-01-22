@@ -10,14 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.ibatis.session.SqlSessionManager;
 import org.apache.wicket.util.io.IOUtils;
-import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.exception.AbstractException;
 import org.complitex.common.mybatis.SqlSessionFactoryBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.EjbBeanLocator;
+import org.complitex.correction.entity.Correction;
 import org.complitex.correction.entity.LinkStatus;
-import org.complitex.correction.entity.OrganizationCorrection;
-import org.complitex.correction.service.OrganizationCorrectionBean;
+import org.complitex.correction.service.CorrectionBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.dictionary.entity.Address;
@@ -60,7 +59,7 @@ public class MbCorrectionsFileConverter {
     private static final Logger log = LoggerFactory.getLogger(MbCorrectionsFileConverter.class);
 
     @EJB
-    private OrganizationCorrectionBean organizationCorrectionBean;
+    private CorrectionBean correctionBean;
 
     @EJB
     private ServiceCorrectionBean serviceCorrectionBean;
@@ -90,7 +89,7 @@ public class MbCorrectionsFileConverter {
                         return getSqlSessionManager(configBean.getString(MbTransformerConfig.EIRC_DATA_SOURCE), "remote");
                     }
                 };
-        organizationCorrectionBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
+        correctionBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
 
         serviceCorrectionBean.setSqlSessionFactoryBean(sqlSessionFactoryBean);
 
@@ -101,7 +100,7 @@ public class MbCorrectionsFileConverter {
      * Using in console implementation
      */
     public void init() {
-        organizationCorrectionBean = new OrganizationCorrectionBean();
+        correctionBean = new CorrectionBean();
 
         serviceCorrectionBean = new ServiceCorrectionBean();
 
@@ -444,11 +443,11 @@ public class MbCorrectionsFileConverter {
         }
 		log.debug("fields: {}", fields);
 		log.debug("Getting service provider with id = {} from DB", fields[1]);
-        FilterWrapper<OrganizationCorrection> filter = FilterWrapper.of(new OrganizationCorrection(null, null, "[0]*" + fields[1],
-                context.getMbOrganizationId(), context.getEircOrganizationId(), null));
-        filter.setRegexp(true);
-		List<OrganizationCorrection> organizationCorrections = organizationCorrectionBean.getOrganizationCorrections(getDataSource(),
-                filter);
+////        FilterWrapper<Correction> filter = FilterWrapper.of(new Correction(OrganizationStrategy.ORGANIZATION_ENTITY,
+////                 "[0]*" + fields[1], context.getMbOrganizationId(), context.getEircOrganizationId()));
+//        filter.setRegexp(true);
+		List<Correction> organizationCorrections = null; //organizationCorrectionBean.getOrganizationCorrections(getDataSource(),
+//                filter);
 		if (organizationCorrections.size() <= 0) {
 			throw new MbConverterException("No service provider correction with id {0}", fields[1]);
 		}
