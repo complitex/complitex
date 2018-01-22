@@ -39,7 +39,7 @@ import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.AjaxNavigationToolbar;
 import org.complitex.correction.service.AddressService;
-import org.complitex.correction.web.component.AddressCorrectionDialog;
+import org.complitex.correction.web.address.component.AddressCorrectionDialog;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.TemplatePage;

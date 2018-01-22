@@ -28,7 +28,7 @@ import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.correction.web.component.AddressCorrectionDialog;
+import org.complitex.correction.web.address.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;

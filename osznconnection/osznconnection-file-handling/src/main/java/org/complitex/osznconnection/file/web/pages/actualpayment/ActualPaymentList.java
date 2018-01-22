@@ -26,7 +26,7 @@ import org.complitex.common.service.SessionBean;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.correction.web.component.AddressCorrectionDialog;
+import org.complitex.correction.web.address.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;

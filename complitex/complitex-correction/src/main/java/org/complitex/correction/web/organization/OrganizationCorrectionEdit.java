@@ -8,7 +8,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
+import org.complitex.correction.web.address.component.AbstractCorrectionEditPanel;
 import org.complitex.organization_type.strategy.OrganizationTypeStrategy;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
@@ -24,7 +24,7 @@ public class OrganizationCorrectionEdit extends FormTemplatePage {
     public static final String CORRECTION_ID = "correction_id";
 
     public OrganizationCorrectionEdit(PageParameters params) {
-        add(new AbstractCorrectionEditPanel("organization_edit_panel", "organization",
+        add(new AbstractCorrectionEditPanel("organization", "organization_edit_panel",
                 params.get(CORRECTION_ID).toOptionalLong()) {
 
             @Override

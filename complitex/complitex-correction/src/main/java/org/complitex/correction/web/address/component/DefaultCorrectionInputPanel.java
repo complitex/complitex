@@ -1,4 +1,4 @@
-package org.complitex.correction.web.component;
+package org.complitex.correction.web.address.component;
 
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;

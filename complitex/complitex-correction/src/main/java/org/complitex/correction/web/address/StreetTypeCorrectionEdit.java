@@ -11,7 +11,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.web.component.EntityTypePanel;
-import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
+import org.complitex.correction.web.address.component.AbstractCorrectionEditPanel;
 import org.complitex.template.web.component.toolbar.DeleteItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
@@ -34,7 +34,7 @@ public class StreetTypeCorrectionEdit extends FormTemplatePage {
 
     public StreetTypeCorrectionEdit(PageParameters params) {
         Long correctionId = params.get(CORRECTION_ID).toOptionalLong();
-        add(correctionEditPanel = new AbstractCorrectionEditPanel("correctionEditPanel", STREET_TYPE.getEntityName(),
+        add(correctionEditPanel = new AbstractCorrectionEditPanel(STREET_TYPE.getEntityName(), "correctionEditPanel",
                 correctionId) {
             @Override
             protected IModel<String> internalObjectLabel(Locale locale) {

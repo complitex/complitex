@@ -7,7 +7,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
+import org.complitex.correction.web.address.component.AbstractCorrectionEditPanel;
 import org.complitex.template.web.security.SecurityRole;
 import org.complitex.template.web.template.FormTemplatePage;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;

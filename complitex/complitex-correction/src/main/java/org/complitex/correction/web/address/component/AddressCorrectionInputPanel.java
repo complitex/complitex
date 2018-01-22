@@ -1,4 +1,4 @@
-package org.complitex.correction.web.component;
+package org.complitex.correction.web.address.component;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.Component;

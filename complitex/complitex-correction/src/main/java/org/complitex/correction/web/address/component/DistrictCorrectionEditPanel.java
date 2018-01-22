@@ -1,4 +1,4 @@
-package org.complitex.correction.web.component;
+package org.complitex.correction.web.address.component;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.Page;
@@ -24,7 +24,7 @@ public class DistrictCorrectionEditPanel extends AddressCorrectionEditPanel {
 
 
     public DistrictCorrectionEditPanel(String id, Long correctionId) {
-        super(id, AddressEntity.DISTRICT, correctionId);
+        super(AddressEntity.DISTRICT, id, correctionId);
     }
 
     @Override

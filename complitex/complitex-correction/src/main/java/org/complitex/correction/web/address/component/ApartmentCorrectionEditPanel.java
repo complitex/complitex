@@ -1,20 +1,17 @@
-package org.complitex.correction.web.component;
+package org.complitex.correction.web.address.component;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
-import org.complitex.address.strategy.apartment.ApartmentStrategy;
 import org.complitex.address.strategy.building.BuildingStrategy;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.util.AddressRenderer;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.web.address.RoomCorrectionList;
+import org.complitex.correction.web.address.ApartmentCorrectionList;
 
 import javax.ejb.EJB;
 import java.util.List;
@@ -22,7 +19,7 @@ import java.util.List;
 /**
  * Панель редактирования коррекции района.
  */
-public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel {
+public class ApartmentCorrectionEditPanel extends AddressCorrectionEditPanel {
     @EJB
     private CityStrategy cityStrategy;
 
@@ -32,16 +29,13 @@ public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel {
     @EJB
     private BuildingStrategy buildingStrategy;
 
-    @EJB
-    private ApartmentStrategy apartmentStrategy;
-
-    public RoomCorrectionEditPanel(String id, Long correctionId) {
-        super(id, AddressEntity.ROOM, correctionId);
+    public ApartmentCorrectionEditPanel(String id, Long correctionId) {
+        super(AddressEntity.APARTMENT, id, correctionId);
     }
 
     @Override
     protected List<String> getSearchFilters() {
-        return ImmutableList.of("city", "street", "building", "apartment", "room");
+        return ImmutableList.of("city", "street", "building", "apartment");
     }
 
     @Override
@@ -51,7 +45,7 @@ public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel {
 
     @Override
     protected Class<? extends Page> getBackPageClass() {
-        return RoomCorrectionList.class;
+        return ApartmentCorrectionList.class;
     }
 
     @Override
@@ -72,25 +66,16 @@ public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel {
     protected String displayCorrection() {
         Correction correction = getCorrection();
 
-        String apartment = null;
-        DomainObject buildingDomainObject;
-        if (correction.getAdditionalParentId() == null) {
-            buildingDomainObject = buildingStrategy.getDomainObject(correction.getParentId(), true);
-        } else {
-            DomainObject apartmentDomainObject = apartmentStrategy.getDomainObject(correction.getAdditionalParentId(), true);
-            apartment = apartmentStrategy.displayDomainObject(apartmentDomainObject, getLocale());
-
-            buildingDomainObject = buildingStrategy.getDomainObject(apartmentDomainObject.getParentId(), true);
-        }
+        DomainObject buildingDomainObject = buildingStrategy.getDomainObject(correction.getParentId());
         String building = buildingStrategy.displayDomainObject(buildingDomainObject, getLocale());
 
-        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getParentId(), true);
+        DomainObject streetDomainObject = streetStrategy.getDomainObject(buildingDomainObject.getParentId());
         String street = streetStrategy.displayDomainObject(streetDomainObject, getLocale());
 
-        DomainObject cityDomainObject = cityStrategy.getDomainObject(streetDomainObject.getParentId(), true);
+        DomainObject cityDomainObject = cityStrategy.getDomainObject(streetDomainObject.getParentId());
         String city = cityStrategy.displayDomainObject(cityDomainObject, getLocale());
 
-        return AddressRenderer.displayAddress(null, city, null, street, building, null, apartment, correction.getCorrection(), getLocale());
+        return AddressRenderer.displayAddress(null, city, null, street, building, null, correction.getCorrection(), getLocale());
     }
 
     @Override
@@ -98,8 +83,4 @@ public class RoomCorrectionEditPanel extends AddressCorrectionEditPanel {
         return new AddressCorrectionInputPanel(id, getCorrection());
     }
 
-    @Override
-    protected IModel<String> getTitleModel() {
-        return new StringResourceModel("room_title", this, null);
-    }
 }

@@ -3,7 +3,7 @@ package org.complitex.correction.web.address;
 import com.google.common.collect.Lists;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.correction.web.component.*;
+import org.complitex.correction.web.address.component.*;
 import org.complitex.template.web.component.toolbar.DeleteItemButton;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.security.SecurityRole;
@@ -26,11 +26,23 @@ public class AddressCorrectionEdit extends FormTemplatePage {
         String entity = params.get(CORRECTED_ENTITY).toString();
         Long correctionId = params.get(CORRECTION_ID).toOptionalLong();
         switch (entity) {
+            case "country":
+                addressEditPanel = new CountryCorrectionEditPanel("addressEditPanel", correctionId);
+                break;
+            case "region":
+                addressEditPanel = new RegionCorrectionEditPanel("addressEditPanel", correctionId);
+                break;
+            case "city_type":
+                addressEditPanel = new CityTypeCorrectionEditPanel("addressEditPanel", correctionId);
+                break;
             case "city":
                 addressEditPanel = new CityCorrectionEditPanel("addressEditPanel", correctionId);
                 break;
             case "district":
                 addressEditPanel = new DistrictCorrectionEditPanel("addressEditPanel", correctionId);
+                break;
+            case "street_type":
+                addressEditPanel = new StreetTypeCorrectionEditPanel("addressEditPanel", correctionId);
                 break;
             case "street":
                 addressEditPanel = new StreetCorrectionEditPanel("addressEditPanel", correctionId);
@@ -44,6 +56,9 @@ public class AddressCorrectionEdit extends FormTemplatePage {
             case "room":
                 addressEditPanel = new RoomCorrectionEditPanel("addressEditPanel", correctionId);
                 break;
+                default:
+                    throw new IllegalArgumentException("correction edit not implemented " + entity);
+
         }
         add(addressEditPanel);
     }

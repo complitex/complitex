@@ -1,4 +1,4 @@
-package org.complitex.correction.web.component;
+package org.complitex.correction.web.address.component;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;

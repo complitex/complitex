@@ -18,7 +18,6 @@ import org.complitex.correction.entity.Correction;
 import org.complitex.correction.service.CorrectionBean;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.sync.entity.DomainSync;
-import org.complitex.sync.entity.SyncEntity;
 import org.complitex.sync.service.DomainSyncAdapter;
 
 import java.util.List;
@@ -46,44 +45,47 @@ public class DomainSyncParentColumn extends FilteredColumn<DomainSync>{
     public void populateItem(Item<ICellPopulator<DomainSync>> cellItem, String componentId, IModel<DomainSync> rowModel) {
         DomainSync domainSync = rowModel.getObject();
 
-        String objectName = "";
+        String objectName = null;
 
         CorrectionBean correctionBean = EjbBeanLocator.getBean(CorrectionBean.class);
         Long organizationId = EjbBeanLocator.getBean(DomainSyncAdapter.class).getOrganization().getObjectId();
 
         if (domainSync.getParentId() != null) {
-            objectName = "[" +domainSync.getParentId() + "]";
+            switch (domainSync.getType()){
+                case REGION:
+                    objectName = correctionBean.getCorrectionByExternalId(AddressEntity.COUNTRY, domainSync.getParentId(),
+                            organizationId, null);
+                    break;
+                case DISTRICT:
+                case STREET:
+                    objectName = correctionBean.getCorrectionByExternalId(AddressEntity.CITY, domainSync.getParentId(),
+                            organizationId, null);
+                    break;
+                case BUILDING:
+                    objectName = correctionBean.getCorrectionByExternalId(AddressEntity.STREET, domainSync.getParentId(),
+                            organizationId, null);
+                    break;
+                case ORGANIZATION:
+                    List<Correction> organizationCorrections = correctionBean.getCorrectionsByExternalId(OrganizationStrategy.ORGANIZATION_ENTITY,
+                            domainSync.getParentId(), organizationId, null);
 
-            if (domainSync.getType().equals(SyncEntity.DISTRICT) || domainSync.getType().equals(SyncEntity.STREET)){
-                List<Correction> cityCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.CITY,
-                        domainSync.getParentId(), organizationId, null);
+                    if (!organizationCorrections.isEmpty()){
+                        Long orgId = organizationCorrections.get(0).getObjectId();
 
-                if (!cityCorrections.isEmpty()){
-                    objectName = cityCorrections.get(0).getCorrection();
-                }
-            }else if (domainSync.getType().equals(SyncEntity.BUILDING) ){
-                List<Correction> streetCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.STREET,
-                        domainSync.getParentId(), organizationId, null);
-
-                if (!streetCorrections.isEmpty()){
-                    objectName = streetCorrections.get(0).getCorrection();
-                }
-            } else if (domainSync.getType().equals(SyncEntity.ORGANIZATION)){
-                List<Correction> organizationCorrections = correctionBean.getCorrectionsByExternalId(OrganizationStrategy.ORGANIZATION_ENTITY,
-                        domainSync.getParentId(), organizationId, null);
-
-                if (!organizationCorrections.isEmpty()){
-                    Long orgId = organizationCorrections.get(0).getObjectId();
-
-                    if (orgId != null) {
-                        objectName = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy("organization")
-                                .getDomainObject(orgId)
-                                .getStringValue(IOrganizationStrategy.SHORT_NAME);
+                        if (orgId != null) {
+                            objectName = EjbBeanLocator.getBean(StrategyFactory.class).getStrategy("organization")
+                                    .getDomainObject(orgId)
+                                    .getStringValue(IOrganizationStrategy.SHORT_NAME);
+                        }
                     }
-                }
+                    break;
+            }
+
+            if (objectName == null) {
+                objectName = "[" +domainSync.getParentId() + "]";
             }
         }
 
-        cellItem.add(new Label(componentId, Model.of(objectName)));
+        cellItem.add(new Label(componentId, Model.of(objectName != null ? objectName : "")));
     }
 }

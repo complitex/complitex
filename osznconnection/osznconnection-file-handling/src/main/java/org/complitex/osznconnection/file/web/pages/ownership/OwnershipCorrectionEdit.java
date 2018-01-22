@@ -13,7 +13,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.web.component.DisableAwareDropDownChoice;
 import org.complitex.common.web.component.DomainObjectDisableAwareRenderer;
 import org.complitex.correction.entity.Correction;
-import org.complitex.correction.web.component.AbstractCorrectionEditPanel;
+import org.complitex.correction.web.address.component.AbstractCorrectionEditPanel;
 import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
 import org.complitex.osznconnection.file.strategy.OwnershipStrategy;
 import org.complitex.template.web.component.toolbar.DeleteItemButton;
@@ -82,7 +82,7 @@ public final class OwnershipCorrectionEdit extends FormTemplatePage {
 
     public OwnershipCorrectionEdit(PageParameters params) {
         Long correctionId = params.get(CORRECTION_ID).toOptionalLong();
-        add(correctionEditPanel = new AbstractCorrectionEditPanel("correctionEditPanel", "ownership", correctionId) {
+        add(correctionEditPanel = new AbstractCorrectionEditPanel("ownership", "correctionEditPanel", correctionId) {
 
             @Override
             protected IModel<String> internalObjectLabel(Locale locale) {

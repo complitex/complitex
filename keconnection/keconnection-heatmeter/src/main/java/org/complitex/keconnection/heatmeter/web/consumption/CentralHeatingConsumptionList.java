@@ -24,7 +24,7 @@ import org.complitex.common.web.component.ajax.AjaxLinkLabel;
 import org.complitex.common.web.component.datatable.Action;
 import org.complitex.common.web.component.datatable.FilteredDataTable;
 import org.complitex.common.web.component.datatable.column.EnumColumn;
-import org.complitex.correction.web.component.AddressCorrectionDialog;
+import org.complitex.correction.web.address.component.AddressCorrectionDialog;
 import org.complitex.keconnection.heatmeter.entity.ConsumptionStatusFilter;
 import org.complitex.keconnection.heatmeter.entity.consumption.CentralHeatingConsumption;
 import org.complitex.keconnection.heatmeter.entity.consumption.ConsumptionFile;

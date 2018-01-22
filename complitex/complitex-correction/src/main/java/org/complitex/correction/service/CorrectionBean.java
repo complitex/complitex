@@ -96,7 +96,16 @@ public class CorrectionBean extends AbstractBean{
                 objectId, null, null, organizationId, userOrganizationId)));
     }
 
+    public String getCorrectionByExternalId(IEntityName entityName, Long externalId, Long organizationId, Long userOrganizationId){
+        List<Correction> corrections =  getCorrections(FilterWrapper.of(new Correction(entityName.getEntityName(), null, null, externalId,
+                null, null, null, organizationId, userOrganizationId)));
 
+        if (!corrections.isEmpty()){
+            return corrections.get(0).getCorrection();
+        }
+
+        return null;
+    }
 
 
 }

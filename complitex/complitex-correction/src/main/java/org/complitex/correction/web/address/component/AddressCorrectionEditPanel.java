@@ -1,4 +1,4 @@
-package org.complitex.correction.web.component;
+package org.complitex.correction.web.address.component;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -51,8 +51,8 @@ public abstract class AddressCorrectionEditPanel extends AbstractCorrectionEditP
         }
     }
 
-    public AddressCorrectionEditPanel(String id, AddressEntity addressEntity, Long correctionId) {
-        super(id, addressEntity.getEntityName(), correctionId);
+    public AddressCorrectionEditPanel(AddressEntity addressEntity, String id, Long correctionId) {
+        super(addressEntity.getEntityName(), id, correctionId);
     }
 
     @Override
@@ -70,8 +70,9 @@ public abstract class AddressCorrectionEditPanel extends AbstractCorrectionEditP
             EntityObjectInfo info = getStrategy(entity).findParentInSearchComponent(objectId, null);
             if (info != null) {
                 componentState = getStrategy(entity).getSearchComponentStateForParent(info.getId(), info.getEntityName(), null);
-                componentState.put(entity, findObject(objectId, entity));
             }
+
+            componentState.put(entity, findObject(objectId, entity));
         }
 
         return new WiQuerySearchComponent(id, componentState, getSearchFilters(), new Callback(correction, entity),

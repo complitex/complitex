@@ -93,6 +93,7 @@ public class OsznWebApplication extends ComplitexWebApplication{
         mountPage("/correction/account", PersonAccountList.class);
         mountPage("/correction/privilege", PrivilegeCorrectionList.class);
         mountPage("/correction/service", ServiceCorrectionList.class);
+        mountPage("/correction/${entity}/${correction_id}", AddressCorrectionEdit.class);
 
         //description
         mountPage("/description/${entity}", EntityDescription.class);

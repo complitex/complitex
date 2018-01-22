@@ -1,4 +1,4 @@
-package org.complitex.correction.web.component;
+package org.complitex.correction.web.address.component;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.Page;
@@ -44,7 +44,7 @@ public abstract class AbstractCorrectionEditPanel extends Panel {
 
     private String entityName;
 
-    public AbstractCorrectionEditPanel(String id, String entityName, Long correctionId) {
+    public AbstractCorrectionEditPanel(String entityName, String id, Long correctionId) {
         super(id);
 
         this.entityName = entityName;
