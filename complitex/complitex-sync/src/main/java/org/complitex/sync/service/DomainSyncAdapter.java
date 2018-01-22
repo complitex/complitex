@@ -17,9 +17,10 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.complitex.common.util.MapUtil.of;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -60,23 +61,9 @@ public class DomainSyncAdapter extends AbstractBean {
     }
 
     @SuppressWarnings("unchecked")
-    private Cursor<DomainSync> getDomainSyncCursor(String statement, Date date, String p1, Object v1, String p2, Object v2,
-                                                   String p3, Object v3) throws RemoteCallException{
-        Map<String, Object> param = new HashMap<>();
+    private Cursor<DomainSync> getDomainSyncCursor(String statement, Date date, Map<String, Object> param) throws RemoteCallException{
         param.put("date", date);
         param.put("okCode", 0);
-
-        if (p1 != null){
-            param.put(p1, v1);
-        }
-
-        if (p2 != null){
-            param.put(p2, v2);
-        }
-
-        if (p3 != null){
-            param.put(p3, v3);
-        }
 
         try {
             sqlSession(getDataSource()).selectOne(NS + "." + statement, param);
@@ -89,26 +76,16 @@ public class DomainSyncAdapter extends AbstractBean {
         return new Cursor<>((Integer)param.get("resultCode"), (List<DomainSync>) param.get("out"));
     }
 
-    private Cursor<DomainSync> getDomainSyncCursor(String statement, Date date, String p1, Object v1, String p2, Object v2)
-            throws RemoteCallException{
-        return getDomainSyncCursor(statement, date, p1, v1, p2, v2, null, null);
-    }
-
-
-    private Cursor<DomainSync> getDomainSyncCursor(String statement, Date date, String p1, Object v1) throws RemoteCallException{
-        return getDomainSyncCursor(statement, date, p1, v1, null, null, null, null);
-    }
-
     private Cursor<DomainSync> getDomainSyncCursor(String statement, Date date) throws RemoteCallException{
-        return getDomainSyncCursor(statement, date, null, null, null, null, null, null);
+        return getDomainSyncCursor(statement, date, null);
     }
 
-    /**
-     * z$runtime_sz_utl.getCountries
-     * Типы улиц.
-     * Возвращает: 1 либо код ошибки (INTEGER):
-     * -10 Неопознанная ошибка
-     */
+        /**
+         * z$runtime_sz_utl.getCountries
+         * Типы улиц.
+         * Возвращает: 1 либо код ошибки (INTEGER):
+         * -10 Неопознанная ошибка
+         */
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getCountrySyncs(Date date) throws RemoteCallException {
         return getDomainSyncCursor("selectCountrySyncs", date);
@@ -123,7 +100,7 @@ public class DomainSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getRegionSyncs(String countryName, Date date) throws RemoteCallException {
-        return getDomainSyncCursor("selectRegionSyncs", date,"countryName", countryName);
+        return getDomainSyncCursor("selectRegionSyncs", date, of("countryName", countryName));
     }
 
     @SuppressWarnings("unchecked")
@@ -140,7 +117,7 @@ public class DomainSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getCitySyncs(String regionName, Date date) throws RemoteCallException {
-        return getDomainSyncCursor("selectCitySyncs", date, "regionName", regionName);
+        return getDomainSyncCursor("selectCitySyncs", date, of("regionName", regionName));
     }
 
     /**
@@ -157,7 +134,7 @@ public class DomainSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getDistrictSyncs(String cityTypeName, String cityName, Date date) throws RemoteCallException {
-        return getDomainSyncCursor("selectDistrictSyncs", date, "cityName", cityName, "cityTypeName", cityTypeName);
+        return getDomainSyncCursor("selectDistrictSyncs", date, of("cityName", cityName, "cityTypeName", cityTypeName));
     }
 
     /**
@@ -190,29 +167,33 @@ public class DomainSyncAdapter extends AbstractBean {
      */
     @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getStreetSyncs(String cityName, String cityTypeName, Date date) throws RemoteCallException {
-        return getDomainSyncCursor("selectStreetSyncs", date, "cityName", cityName, "cityTypeName", cityTypeName);
+        return getDomainSyncCursor("selectStreetSyncs", date, of("cityName", cityName, "cityTypeName", cityTypeName));
     }
 
     /**
-     * function z$runtime_sz_utl.getBuildings(
-     * DistrName varchar2,        -- Название района нас.пункта
-     * pStreetName varchar2,    -- Название улицы
-     * pStreetType varchar2,     -- Тип улицы (краткое название)
-     * pDate date,                   -- Дата актуальности
-     * Cur out TCursor
-     * ) return integer;
-     * поля курсора:
-     * BldNum - varchar2,          -- Номер дома
-     * BldPart - varchar2,          -- Номер корпуса
-     * BldID - varchar2,             -- Код дома (ID)
-     * StreetID - varchar2,         -- Код улицы (ID)
-     * возвращаемое значение: 0 - все хорошо, -3 - неизвестный район нас.пункта, -4 - неизвестный тип улицы, -5 - неизвестная улица
+     * z$runtime_sz_utl.getBuildings Дома.
+     * Возвращает: 1 либо код ошибки (INTEGER):
+     * -10 Неопознанная ошибка
+     * -7 Не найдена улица
+     * -6 Не найден тип улицы
+     * -5 Не найден район
+     * -4 Не найден нас.пункт
+     * -3 Не найден тип нас.пункта
+     * Параметры функции:
+     * pCityName VARCHAR2 Название населённого пункта
+     * pCityType VARCHAR2 Название типа населённого пункта
+     * pDistrName VARCHAR2 Название района
+     * pStreetName VARCHAR2 Название улицы
+     * pStreetType VARCHAR2 Название типа улицы pDate
+     * DATE Дата актуальности
+     * Cur ref CURSOR Возвращаемый курсор со списком домов
      */
     @SuppressWarnings("unchecked")
-    public Cursor<DomainSync> getBuildingSyncs(String districtName, String streetTypeName,
-                                               String streetName, Date date) throws RemoteCallException {
-        return getDomainSyncCursor("selectBuildingSyncs", date, "districtName", districtName,
-                "streetName", streetName, "streetTypeName", streetTypeName);
+    public Cursor<DomainSync> getBuildingSyncs(String cityName, String cityTypeName, String districtName,
+                                               String streetTypeName, String streetName, Date date) throws RemoteCallException {
+        return getDomainSyncCursor("selectBuildingSyncs", date, of("cityName", cityName,
+                "cityTypeName", cityTypeName, "districtName", districtName, "streetName", streetName,
+                "streetTypeName", streetTypeName));
     }
 
     @SuppressWarnings("unchecked")

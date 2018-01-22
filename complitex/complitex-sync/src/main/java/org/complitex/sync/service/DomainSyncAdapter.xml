@@ -50,8 +50,9 @@
     </select>
 
     <select id="selectBuildingSyncs" statementType="CALLABLE" parameterType="map">
-        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getBuildings(#{districtName}, #{streetName},
-          #{streetTypeName}, #{date}, #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap})}
+        {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getBuildings(#{cityName}, #{cityTypeName},
+          #{districtName}, #{streetName}, #{streetTypeName}, #{date},
+          #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap})}
     </select>
 
     <select id="selectOrganizationSyncs" statementType="CALLABLE" parameterType="map">

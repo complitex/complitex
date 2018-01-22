@@ -47,12 +47,20 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
     @Override
     public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
-        return domainSyncAdapter.getBuildingSyncs(parentDomainSync.getName(), "", "", date);
+        List<DomainSync> cityTypeDomainSyncs = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.CITY_TYPE,
+                Long.valueOf(parentDomainSync.getAdditionalParentId()))));
+
+        if (cityTypeDomainSyncs.isEmpty()){
+            throw new CorrectionNotFoundException("city type correction not found " + cityTypeDomainSyncs);
+        }
+
+        return domainSyncAdapter.getBuildingSyncs(parentDomainSync.getName(), cityTypeDomainSyncs.get(0).getAdditionalName(), null,
+                null, null, date);
     }
 
     @Override
     public List<DomainSync> getParentDomainSyncs() {
-        return domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.DISTRICT, SYNCHRONIZED)));
+        return domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.CITY, SYNCHRONIZED)));
     }
 
     private Long getParentObjectId(DomainSync domainSync, Long organizationId){
