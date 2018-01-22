@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.IEntityName;
 import org.complitex.common.service.AbstractBean;
+import org.complitex.common.util.DateUtil;
 import org.complitex.correction.entity.Correction;
 
 import javax.ejb.Stateless;
@@ -19,9 +20,12 @@ import java.util.Set;
 public class CorrectionBean extends AbstractBean{
     public static final String CORRECTION_NS = CorrectionBean.class.getName();
 
-    //todo check duplicate
-    public void save(Correction correction){
+    public void save(Correction correction){ //todo check duplicate
         if (correction.getId() == null){
+            if (correction.getBeginDate() == null){
+                correction.setBeginDate(DateUtil.getCurrentDate());
+            }
+
             sqlSession().insert(CORRECTION_NS + ".insertCorrection", correction);
         }else {
             sqlSession().update(CORRECTION_NS + ".updateCorrection", correction);
