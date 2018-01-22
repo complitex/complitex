@@ -4,13 +4,10 @@ import org.complitex.address.resource.CommonResources;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.strategy.StringLocaleBean;
-import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.template.strategy.TemplateStrategy;
 import org.complitex.template.web.security.SecurityRole;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Locale;
@@ -19,20 +16,10 @@ import java.util.Map;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.wicket.util.string.Strings.isEmpty;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 public class CityTypeStrategy extends TemplateStrategy {
     public static final long SHORT_NAME = 1300;
     public static final long NAME = 1301;
-
-    @EJB
-    private StringValueBean stringBean;
-
-    @EJB
-    private StringLocaleBean stringLocaleBean;
 
     @Override
     public String getEntityName() {
@@ -44,19 +31,11 @@ public class CityTypeStrategy extends TemplateStrategy {
         return newArrayList(NAME);
     }
 
-    public String getShortName(Long objectId){
-        DomainObject object = getDomainObject(objectId, true);
-
-        if (object != null){
-            return object.getStringValue(SHORT_NAME);
-        }
-
-        return null;
-    }
-
     @Override
     public String displayDomainObject(DomainObject object, Locale locale) {
-        return object.getStringValue(SHORT_NAME, locale).toLowerCase(locale) + ".";
+        String s = object.getStringValue(SHORT_NAME, locale);
+
+        return s != null ? s : object.getStringValue(NAME, locale);
     }
 
     @Override

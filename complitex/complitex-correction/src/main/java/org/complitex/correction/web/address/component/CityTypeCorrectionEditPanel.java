@@ -2,7 +2,9 @@ package org.complitex.correction.web.address.component;
 
 import org.apache.wicket.Page;
 import org.complitex.address.entity.AddressEntity;
+import org.complitex.correction.web.address.CityTypeCorrectionList;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,11 +18,11 @@ public class CityTypeCorrectionEditPanel extends AddressCorrectionEditPanel{
 
     @Override
     protected List<String> getSearchFilters() {
-        return null;
+        return Collections.singletonList("city_type");
     }
 
     @Override
     protected Class<? extends Page> getBackPageClass() {
-        return null;
+        return CityTypeCorrectionList.class;
     }
 }
