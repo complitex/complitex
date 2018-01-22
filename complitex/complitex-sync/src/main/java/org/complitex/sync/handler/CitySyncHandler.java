@@ -64,9 +64,21 @@ public class CitySyncHandler implements IDomainSyncHandler{
         return cityCorrections.get(0).getObjectId();
     }
 
+    private Long getAdditionalParentObjectId(DomainSync domainSync, Long organizationId){
+        List<Correction> cityTypeCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.CITY_TYPE,
+                Long.valueOf(domainSync.getAdditionalParentId()), organizationId, null);
+
+        if (cityTypeCorrections.isEmpty()){
+            throw new CorrectionNotFoundException("city type correction not found " + domainSync);
+        }
+
+        return cityTypeCorrections.get(0).getObjectId();
+    }
+
      @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         return Objects.equals(domainObject.getParentId(), getParentObjectId(domainSync, organizationId)) &&
+                Objects.equals(domainObject.getValueId(CityStrategy.CITY_TYPE), getAdditionalParentObjectId(domainSync, organizationId)) &&
                 StringUtil.isEqualIgnoreCase(domainObject.getStringValue(CityStrategy.NAME), domainSync.getName()) &&
                 StringUtil.isEqualIgnoreCase(domainObject.getStringValue(CityStrategy.NAME, Locales.getAlternativeLocale()), domainSync.getAltName());
     }
@@ -91,6 +103,7 @@ public class CitySyncHandler implements IDomainSyncHandler{
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("region")
                         .setParentId(getParentObjectId(domainSync, organizationId))
+                        .addAttribute(CityStrategy.CITY_TYPE, getAdditionalParentObjectId(domainSync, organizationId))
                         .addAttribute(CityStrategy.NAME, domainSync.getName())
                         .addAttribute(CityStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
     }
@@ -122,6 +135,7 @@ public class CitySyncHandler implements IDomainSyncHandler{
     public void updateValues(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
         domainObject.setParentEntityId(CityStrategy.PARENT_ENTITY_ID);
         domainObject.setParentId(getParentObjectId(domainSync, organizationId));
+        domainObject.setValueId(CityStrategy.CITY_TYPE, getAdditionalParentObjectId(domainSync, organizationId));
         domainObject.setStringValue(CityStrategy.NAME, domainSync.getName());
         domainObject.setStringValue(CityStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocale());
     }

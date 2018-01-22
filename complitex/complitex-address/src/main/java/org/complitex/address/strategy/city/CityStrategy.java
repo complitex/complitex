@@ -113,8 +113,8 @@ public class CityStrategy extends TemplateStrategy {
                 example.setParentId(regionId);
                 example.setParentEntity("region");
             } else {
-                example.setParentId(-1L);
-                example.setParentEntity("");
+                example.setParentId(null);
+                example.setParentEntity(null);
             }
         }
     }

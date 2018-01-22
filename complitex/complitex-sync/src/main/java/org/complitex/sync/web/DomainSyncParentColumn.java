@@ -56,6 +56,10 @@ public class DomainSyncParentColumn extends FilteredColumn<DomainSync>{
                     objectName = correctionBean.getCorrectionByExternalId(AddressEntity.COUNTRY, domainSync.getParentId(),
                             organizationId, null);
                     break;
+                case CITY:
+                    objectName = correctionBean.getCorrectionByExternalId(AddressEntity.REGION, domainSync.getParentId(),
+                            organizationId, null);
+                    break;
                 case DISTRICT:
                 case STREET:
                     objectName = correctionBean.getCorrectionByExternalId(AddressEntity.CITY, domainSync.getParentId(),
