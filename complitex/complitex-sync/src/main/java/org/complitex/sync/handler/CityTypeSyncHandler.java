@@ -3,7 +3,6 @@ package org.complitex.sync.handler;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
-import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
@@ -72,8 +71,8 @@ public class CityTypeSyncHandler implements IDomainSyncHandler{
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
-                        .addAttribute(DistrictStrategy.NAME, domainSync.getName())
-                        .addAttribute(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(CityTypeStrategy.NAME, domainSync.getName())
+                        .addAttribute(CityTypeStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
     }
 
     @Override

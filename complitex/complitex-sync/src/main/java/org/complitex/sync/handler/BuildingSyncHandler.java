@@ -97,8 +97,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(Correction correction1, Correction correction2) {
-
-        return correction1.getParentId().equals(correction2.getParentId()) &&
+        return Objects.equals(correction1.getParentId(), correction2.getParentId()) &&
                 StringUtil.isEqualIgnoreCase(correction1.getCorrection(), correction2.getCorrection()) &&
                 StringUtil.isEqualIgnoreCase(correction1.getAdditionalCorrection(), correction2.getAdditionalCorrection());
     }

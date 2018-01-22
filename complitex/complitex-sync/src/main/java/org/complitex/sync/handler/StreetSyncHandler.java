@@ -112,7 +112,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     @Override
     public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
            return streetStrategy.getList(
-                new DomainObjectFilter()
+                new DomainObjectFilter() //todo check
                         .setStatus(ShowMode.ACTIVE.name())
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("city")
