@@ -4,9 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.IEntityName;
 import org.complitex.common.service.AbstractBean;
+import org.complitex.common.service.ModuleBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.correction.entity.Correction;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,10 +22,17 @@ import java.util.Set;
 public class CorrectionBean extends AbstractBean{
     public static final String CORRECTION_NS = CorrectionBean.class.getName();
 
+    @EJB
+    private ModuleBean moduleBean;
+
     public void save(Correction correction){ //todo check duplicate
         if (correction.getId() == null){
             if (correction.getBeginDate() == null){
                 correction.setBeginDate(DateUtil.getCurrentDate());
+            }
+
+            if (correction.getModuleId() == null){
+                correction.setModuleId(moduleBean.getModuleId());
             }
 
             sqlSession().insert(CORRECTION_NS + ".insertCorrection", correction);
