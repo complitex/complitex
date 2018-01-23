@@ -1027,7 +1027,7 @@ CREATE TABLE `domain_sync`(
   `balance_holder` BIGINT(20) COMMENT 'Балансодержатель',
   `type` INTEGER NOT NULL COMMENT 'Тип синхронизации',
   `status` INTEGER NOT NULL COMMENT 'Статус синхронизации',
-  `status_detail` INTEGER NULL COMMENT 'Дополнительный статус синхронизации',
+  `status_detail` INTEGER COMMENT 'Дополнительный статус синхронизации',
   `date` DATETIME NOT NULL COMMENT 'Дата актуальности',
   PRIMARY KEY (`id`),
   KEY `key_parent_id` (`parent_id`),
