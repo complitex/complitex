@@ -151,6 +151,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         }
 
         domainObject.setParentId(getParentObjectId(domainSync, organizationId));
+        domainObject.setParentEntityId(BuildingStrategy.PARENT_ENTITY_ID);
         domainObject.setValueId(BuildingStrategy.DISTRICT, districtCorrections.get(0).getObjectId());
         domainObject.setStringValue(BuildingStrategy.NUMBER, domainSync.getName());
         domainObject.setStringValue(BuildingStrategy.NUMBER, domainSync.getAltName(), Locales.getAlternativeLocale());
