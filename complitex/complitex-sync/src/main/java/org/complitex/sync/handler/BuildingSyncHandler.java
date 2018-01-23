@@ -80,7 +80,8 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(DomainObject domainObject, DomainSync domainSync, Long organizationId) {
-        return Objects.equals(domainObject.getParentId(), getParentObjectId(domainSync, organizationId)) &&
+        return domainObject.getParentEntityId().equals(BuildingStrategy.PARENT_ENTITY_ID) &&
+                Objects.equals(domainObject.getParentId(), getParentObjectId(domainSync, organizationId)) &&
                 isEqualIgnoreCase(domainSync.getName(), domainObject.getStringValue(BuildingStrategy.NUMBER)) &&
                 isEqualIgnoreCase(domainSync.getAltName(), domainObject.getStringValue(BuildingStrategy.NUMBER, Locales.getAlternativeLocale())) &&
                 isEqualIgnoreCase(domainSync.getAdditionalName(), domainObject.getStringValue(BuildingStrategy.CORP)) &&
