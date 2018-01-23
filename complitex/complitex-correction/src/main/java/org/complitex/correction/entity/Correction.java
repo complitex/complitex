@@ -19,11 +19,10 @@ public class Correction implements Serializable {
     private Long objectId;
     private String correction;
     private String additionalCorrection;
-    private Date beginDate;
+    private Date startDate;
     private Date endDate;
     private Long organizationId;
     private Long userOrganizationId;
-    private Long moduleId;
 
     private String organizationName;
     private String userOrganizationName;
@@ -145,12 +144,12 @@ public class Correction implements Serializable {
         this.additionalCorrection = additionalCorrection;
     }
 
-    public Date getBeginDate() {
-        return beginDate;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setBeginDate(Date beginDate) {
-        this.beginDate = beginDate;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     public Date getEndDate() {
@@ -175,14 +174,6 @@ public class Correction implements Serializable {
 
     public void setUserOrganizationId(Long userOrganizationId) {
         this.userOrganizationId = userOrganizationId;
-    }
-
-    public Long getModuleId() {
-        return moduleId;
-    }
-
-    public void setModuleId(Long moduleId) {
-        this.moduleId = moduleId;
     }
 
     public String getOrganizationName() {
@@ -242,11 +233,10 @@ public class Correction implements Serializable {
                 .add("objectId", objectId)
                 .add("correction", correction)
                 .add("additionalCorrection", additionalCorrection)
-                .add("beginDate", beginDate)
+                .add("startDate", startDate)
                 .add("endDate", endDate)
                 .add("organizationId", organizationId)
                 .add("userOrganizationId", userOrganizationId)
-                .add("moduleId", moduleId)
                 .add("organizationName", organizationName)
                 .add("userOrganizationName", userOrganizationName)
                 .add("internalObject", internalObject)

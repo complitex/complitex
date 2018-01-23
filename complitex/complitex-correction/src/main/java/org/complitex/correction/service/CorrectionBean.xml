@@ -7,13 +7,11 @@
         <result column="external_id" property="externalId"/>
         <result column="object_id" property="objectId"/>
         <result column="correction" property="correction"/>
-        <result column="begin_date" property="beginDate"/>
+        <result column="start_date" property="startDate"/>
         <result column="end_date" property="endDate"/>
 
         <result column="organization_id" property="organizationId"/>
         <result column="user_organization_id" property="userOrganizationId"/>
-        <result column="module_id" property="moduleId"/>
-
         <result column="entity_name" property="entityName"/>
 
         <association property="organizationName" select="org.complitex.organization.strategy.OrganizationStrategy.selectOrganizationName"
@@ -28,14 +26,12 @@
           <if test="parentId != null">`parent_id`,</if>
           <if test="additionalParentId != null">`additional_parent_id`,</if>
           <if test="additionalCorrection != null">`additional_correction`,</if>
-          `external_id`, `object_id`, `correction`, `begin_date`, `end_date`, `organization_id`, `user_organization_id`,
-          `module_id`)
+          `external_id`, `object_id`, `correction`, `start_date`, `end_date`, `organization_id`, `user_organization_id`)
         values (
           <if test="parentId != null">#{parentId},</if>
           <if test="additionalParentId != null">#{additionalParentId},</if>
           <if test="additionalCorrection != null">#{additionalCorrection},</if>
-          #{externalId}, #{objectId}, #{correction}, #{beginDate}, #{endDate}, #{organizationId}, #{userOrganizationId},
-          #{moduleId})
+          #{externalId}, #{objectId}, #{correction}, #{startDate}, #{endDate}, #{organizationId}, #{userOrganizationId})
     </insert>
 
     <update id="updateCorrection" parameterType="org.complitex.correction.entity.Correction">
@@ -44,7 +40,7 @@
           <if test="additionalParentId != null">`additional_parent_id` = #{additionalParentId},</if>
           <if test="additionalCorrection != null">`additional_correction` = #{additionalCorrection},</if>
           `organization_id` = #{organizationId}, `correction` = #{correction}, `object_id` = #{objectId},
-          `external_id` = #{externalId}, `user_organization_id` = #{userOrganizationId}, `begin_date` = #{beginDate},
+          `external_id` = #{externalId}, `user_organization_id` = #{userOrganizationId}, `start_date` = #{startDate},
           `end_date` = #{endDate}
         where `id` = #{id}
     </update>
@@ -61,7 +57,7 @@
             <if test="object.objectId != null">and c.`object_id` = #{object.objectId}</if>
             <if test="object.correction != null">and upper(c.`correction`) = upper(#{object.correction})</if>
             <if test="object.additionalCorrection != null">and upper(c.`additional_correction`) = upper(#{object.additionalCorrection})</if>
-            <if test="object.beginDate != null">and c.`begin_date` = #{object.beginDate}</if>
+            <if test="object.startDate != null">and c.`start_date` = #{object.startDate}</if>
             <if test="object.endDate != null">and c.`end_date` = #{object.endDate}</if>
             <if test="object.organizationId != null">and c.`organization_id` = #{object.organizationId}</if>
             <if test="object.userOrganizationId != null">and c.`user_organization_id` = #{object.userOrganizationId}</if>
