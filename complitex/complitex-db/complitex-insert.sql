@@ -304,7 +304,7 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1602, 1, U
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1602, 1600, 1, 1602, 1, 0);
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (1603, 1, UPPER('Код')), (1603, 2, UPPER('Код'));
-INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1603, 1600, 1, 1603, 1, 0);
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (1603, 1600, 0, 1603, 1, 0);
 
 INSERT INTO `service`(`object_id`) VALUES (1),(2),(3),(4),(5),(6),(7),(8);
 INSERT INTO `service_string_value`(`id`, `locale_id`, `value`) VALUES

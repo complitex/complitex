@@ -1,8 +1,6 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
-import com.google.common.base.Strings;
 import org.complitex.common.entity.Cursor;
-import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
@@ -183,13 +181,9 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                 facilityServiceType.getOrganizationId(), facilityServiceType.getUserOrganizationId());
 
         if (!serviceCorrections.isEmpty()){
-            Correction serviceCorrection = serviceCorrections.get(0);
+            Long externalId = serviceCorrections.get(0).getExternalId();
 
-            DomainObject service = serviceStrategy.getDomainObject(serviceCorrection.getObjectId());
-
-            if (service != null && !Strings.isNullOrEmpty(service.getStringValue(ServiceStrategy.CODE))){
-                serviceCode = service.getStringValue(ServiceStrategy.CODE);
-            }
+            serviceCode = externalId != null ? externalId.toString() : null;
         }
 
         if (serviceCode == null){
