@@ -212,7 +212,7 @@ public class DomainObjectEditPanel extends Panel {
                     }
                 } catch (Exception e) {
                     LoggerFactory.getLogger(getClass()).error("", e);
-                    error(getString("db_error" + " " + ExceptionUtil.getCauseMessage(e)));
+                    error(getString("db_error") + " " + ExceptionUtil.getCauseMessage(e));
                     target.add(messages);
                     scrollToMessages(target);
                 }

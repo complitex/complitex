@@ -32,7 +32,7 @@ INSERT INTO `sequence` (`sequence_name`, `sequence_value`) VALUES
 ('street_type',1), ('street_type_string_value',1),
 ('organization',1), ('organization_string_value',1),
 ('organization_type',1), ('organization_type_string_value',1),
-('user_info', 3), ('user_info_string_value', 1);
+('user_info', 3), ('user_info_string_value', 1), ('service', 1), ('service_string_value', 1);
 
 
 -- --------------------------------
