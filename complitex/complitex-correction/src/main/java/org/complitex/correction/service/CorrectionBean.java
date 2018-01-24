@@ -49,7 +49,7 @@ public class CorrectionBean extends AbstractBean{
     }
 
     public List<Long> getObjectIds(IEntityName entityName, String correction, Long entityAttributeId){
-        return sqlSession().selectList(CORRECTION_NS + ".selectObjectIds", ImmutableMap.of("entityName", entityName,
+        return sqlSession().selectList(CORRECTION_NS + ".selectObjectIds", ImmutableMap.of("entityName", entityName.getEntityName(),
                 "correction", correction, "entityAttributeId", entityAttributeId));
     }
 
