@@ -156,6 +156,8 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
 
     @Override
     protected RequestFile getRequestFile(PrivilegeFileGroup object) {
-        return object.getDwellingCharacteristicsRequestFile();
+        return object.getDwellingCharacteristicsRequestFile() != null
+                ? object.getDwellingCharacteristicsRequestFile()
+                : object.getFacilityServiceTypeRequestFile();
     }
 }
