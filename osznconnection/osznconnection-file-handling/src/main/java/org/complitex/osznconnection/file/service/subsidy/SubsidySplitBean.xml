@@ -1,4 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.osznconnection.file.service.subsidy.SubsidySplitBean">
+    <resultMap id="subsidySplitRequestMap" type="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit">
+        <id property="id" column="id"/>
+
+        <association property="dbfFields" javaType="map">
+            <result property="1" column="1"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertSubsidySplit" parameterType="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into `subsidy_split`
+        (<foreach collection="dbfFields.keys" item="key" separator=",">
+            `${key}`
+        </foreach>)
+        values
+        (<foreach collection="dbfFields.keys" item="key" separator=",">
+            #{dbfFields.${key}}
+        </foreach>)
+    </insert>
+
+    <update id="updateSubsidySplit" parameterType="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit">
+        update `subsidy_split` set
+        <foreach collection="dbfFieldMap.entrySet()" item="item" index="key" separator=",">
+            `${key}` = #{item}
+        </foreach>
+        where `id` = #{id}
+    </update>
+
+    <select id="selectSubsidySplits" resultMap="subsidySplitRequestMap" parameterType="long">
+        select * from `subsidy_split` where `subsidy_id` = #{subsidyId}
+    </select>
+
+    <delete id="deleteSubsidySplits" parameterType="long">
+        delete from `subsidy_split` where `subsidy_id` = #{subsidyId}
+    </delete>
 </mapper>

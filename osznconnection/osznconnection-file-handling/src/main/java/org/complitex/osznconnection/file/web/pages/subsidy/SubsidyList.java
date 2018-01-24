@@ -320,6 +320,22 @@ public final class SubsidyList extends TemplatePage {
                     }
                 };
                 item.add(lookup);
+
+                item.add(new AjaxLink("subsidy_split") {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        setResponsePage(SubsidySplitList.class, new PageParameters()
+                                .add("subsidy_id", subsidy.getId()).add("request_file_id", subsidy.getRequestFileId()));
+                    }
+
+                    @Override
+                    protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                        super.updateAjaxAttributes(attributes);
+
+                        attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.STOP);
+                    }
+                });
             }
         };
         checkGroup.add(data);
