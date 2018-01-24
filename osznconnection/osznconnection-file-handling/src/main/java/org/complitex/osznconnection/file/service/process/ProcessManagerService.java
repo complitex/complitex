@@ -11,11 +11,8 @@ import org.complitex.common.service.executor.IExecutorListener;
 import org.complitex.common.service.executor.ITaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
-import org.complitex.osznconnection.file.entity.FileHandlingConfig;
-import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
-import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataFile;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.StorageNotFoundException;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBean;
@@ -454,18 +451,6 @@ public class ProcessManagerService {
     public void saveSubsidy(List<Long> ids, Map processParameters) {
         execute(SAVE_SUBSIDY, SubsidySaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
-    }
-
-    public void exportSubsidyMasterData(List<Long> ids, ExportType type, RequestFileType requestFileType, Date date) {
-        List<SubsidyMasterDataFile> list = subsidyBean.getSubsidyMasterDataFiles(ids, type, date);
-
-        //set type
-        for (SubsidyMasterDataFile f : list){
-            f.setType(requestFileType);
-        }
-
-        execute(EXPORT_SUBSIDY_MASTER_DATA, SubsidyMasterDataExportTaskBean.class, list,
-                null, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
     }
 
     public void exportSubsidy(List<Long> ids) {

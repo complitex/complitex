@@ -14,8 +14,6 @@ public class Subsidy extends AbstractAccountRequest<SubsidyDBF> {
             "FIO", "NP_NAME", "CAT_V", "NAME_V", "BLD", "CORP", "FLAT"
     ));
 
-    private List<SubsidyMasterData> masterDataList;
-
     public Subsidy() {
         super(RequestFileType.SUBSIDY);
     }
@@ -23,14 +21,6 @@ public class Subsidy extends AbstractAccountRequest<SubsidyDBF> {
     public String getAddress(Locale locale){
         return AddressRenderer.displayAddress(getStreetType(), getStreet(), getBuildingNumber(), getBuildingCorp(),
                 getApartment(), locale);
-    }
-
-    public List<SubsidyMasterData> getMasterDataList() {
-        return masterDataList;
-    }
-
-    public void setMasterDataList(List<SubsidyMasterData> masterDataList) {
-        this.masterDataList = masterDataList;
     }
 
     public String getFio(){

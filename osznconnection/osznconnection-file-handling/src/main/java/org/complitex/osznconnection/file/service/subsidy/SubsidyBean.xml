@@ -359,40 +359,4 @@
             AND TO_CYRILLIC(`middle_name`) = #{middleName}
             AND TO_CYRILLIC(`last_name`) = #{lastName}
     </select>
-
-    <!--SubsidyMasterDataFile-->
-
-    <resultMap id="subsidyMasterDataFileResultMap" type="org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataFile">
-        <id column="servicingOrganizationId" property="id"/>
-
-        <collection property="masterDataList"
-                    resultMap="org.complitex.osznconnection.file.service.subsidy.SubsidyMasterDataBean.subsidyMasterDataRequestMap"/>
-    </resultMap>
-
-    <select id="selectSubsidyMasterDataFiles" resultMap="subsidyMasterDataFileResultMap" parameterType="map">
-        select smd.`id` smd_id, smd.servicing_organization_id, smd.DOM, smd.REG, smd.LS, smd.DELO,
-        smd.TOT, smd.PERIOD, smd.FIO, smd.ADRES, smd.NKW, smd.KWART, smd.OTOPL, smd.PODOGR, smd.WODA, smd.GAZ, smd.ELEKTR,
-        smd.STOKI, smd.TOT_O, smd.KWART_O, smd.OTOPL_O, smd.GORWODA_O, smd.WODA_O, smd.GAZ_O, smd.ELEKTR_O, smd.STOKI_O,
-        smd.BEGIN0, smd.END0, smd.PR_KV, rf.`user_organization_id`
-
-        from `subsidy_master_data` smd
-          left join `subsidy_master_data_part` smdp on smdp.`subsidy_master_data_id` = smd.`id`
-          left join `subsidy` s on s.`id` = smdp.`subsidy_id`
-          left join `request_file` rf on rf.`id` = s.`request_file_id`
-
-        <if test="type == 'DISTRICT'">
-            left join `organization_attribute` oa on (oa.`object_id` = rf.`organization_id` and oa.`entity_attribute_id` = 902)
-            where oa.`value_id` in
-        </if>
-        <if test="type == 'SERVICING_ORGANIZATION' or type == 'BALANCE_HOLDER'">
-            where smd.`servicing_organization_id` in
-        </if>
-
-        <foreach collection="ids" item="id" open="(" close=")" separator=",">
-            #{id}
-        </foreach>
-
-        and #{date} between smd.BEGIN0 and smd.END0 and rf.`user_organization_id` in ${userOrganizationString}
-    </select>
-
 </mapper>

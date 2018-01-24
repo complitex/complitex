@@ -5,13 +5,11 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.common.service.SessionBean;
-import org.complitex.osznconnection.file.entity.ExportType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.example.SubsidyExample;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
-import org.complitex.osznconnection.file.entity.subsidy.SubsidyMasterDataFile;
 import org.complitex.osznconnection.file.service.AbstractRequestBean;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
@@ -19,12 +17,11 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 public class SubsidyBean extends AbstractRequestBean {
     public static final String NS = SubsidyBean.class.getName();
@@ -191,24 +188,5 @@ public class SubsidyBean extends AbstractRequestBean {
 
     public List<Subsidy> getSubsidies(long requestFileId) {
         return sqlSession().selectList(NS + ".selectSubsidies", requestFileId);
-    }
-
-    public List<SubsidyMasterDataFile> getSubsidyMasterDataFiles(List<Long> ids, ExportType type, Date date){
-        //user organization string
-        String userOrganizationString = sessionBean.getCurrentUserOrganizationsString();
-
-        //add child organizations
-        if (ExportType.BALANCE_HOLDER.equals(type)){
-            List<Long> list = new ArrayList<>();
-
-            for (Long id : ids){
-                list.addAll(organizationStrategy.getTreeChildrenOrganizationIds(id));
-            }
-
-            ids.addAll(list);
-        }
-
-        return sqlSession().selectList("selectSubsidyMasterDataFiles", ImmutableMap.of("ids", ids, "type", type.name(),
-                "date", date, "userOrganizationString", userOrganizationString));
     }
 }
