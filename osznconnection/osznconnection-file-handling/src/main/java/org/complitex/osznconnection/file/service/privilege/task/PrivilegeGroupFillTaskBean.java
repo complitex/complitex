@@ -41,7 +41,6 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 import static org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF.*;
 import static org.complitex.osznconnection.file.entity.privilege.FacilityTarifDBF.TAR_CODE;
 import static org.complitex.osznconnection.file.entity.privilege.FacilityTarifDBF.TAR_SERV;
-import static org.complitex.osznconnection.file.strategy.PrivilegeStrategy.CODE;
 
 /**
  * inheaven on 05.04.2016.
@@ -189,7 +188,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
             DomainObject service = serviceStrategy.getDomainObject(serviceCorrection.getObjectId());
 
             if (service != null && !Strings.isNullOrEmpty(service.getStringValue(ServiceStrategy.CODE))){
-                serviceCode = service.getStringValue(CODE);
+                serviceCode = service.getStringValue(ServiceStrategy.CODE);
             }
         }
 
