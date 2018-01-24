@@ -61,7 +61,7 @@ public class AddressCorrectionService {
         LocalAddress localAddress = new LocalAddress();
 
         //Связывание города
-        List<Correction> cityCorrections = addressCorrectionBean.getCorrections(externalAddress);
+        List<Correction> cityCorrections = null;//addressCorrectionBean.getCorrections(externalAddress);
 
         if (cityCorrections.size() == 1) {
             Correction cityCorrection = cityCorrections.get(0);
@@ -86,7 +86,7 @@ public class AddressCorrectionService {
 
         //Связывание типа улицы
         if(externalAddress.getStreetType() != null){
-            List<Correction> streetTypeCorrections = addressCorrectionBean.getCorrections(externalAddress);
+            List<Correction> streetTypeCorrections = null;//addressCorrectionBean.getCorrections(externalAddress);
 
             if (streetTypeCorrections.size() == 1) {
                 localAddress.setStreetTypeId(streetTypeCorrections.get(0).getObjectId());
@@ -110,7 +110,7 @@ public class AddressCorrectionService {
         }
 
         //Связывание улицы
-        List<Correction> streetCorrections = addressCorrectionBean.getCorrections(localAddress, externalAddress);
+        List<Correction> streetCorrections = null;//addressCorrectionBean.getCorrections(localAddress, externalAddress);
 
         if (streetCorrections.size() == 1){
             Correction streetCorrection = streetCorrections.get(0);
@@ -258,7 +258,7 @@ public class AddressCorrectionService {
         }
 
         //Связывание дома
-        List<Correction> buildingCorrections = addressCorrectionBean.getCorrections(localAddress, externalAddress);
+        List<Correction> buildingCorrections = null;//addressCorrectionBean.getCorrections(localAddress, externalAddress);
 
         if (buildingCorrections.size() == 1) {
             localAddress.setBuildingId(buildingCorrections.get(0).getObjectId());
@@ -413,7 +413,8 @@ public class AddressCorrectionService {
 
         switch (addressEntity) {
             case CITY: {
-                List<Correction> cityCorrections = addressCorrectionBean.getCorrections(externalAddress);
+                List<Correction> cityCorrections = correctionBean.getCorrections(AddressEntity.CITY, externalAddress.getCity(),
+                        externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
 
                 if (cityCorrections.isEmpty()) {
                     Correction cityCorrection = new Correction(AddressEntity.CITY.getEntityName(), null,
@@ -429,7 +430,8 @@ public class AddressCorrectionService {
 
             case STREET_TYPE: {
                 List<Correction> streetTypeCorrections =
-                        addressCorrectionBean.getCorrections(externalAddress);
+                        correctionBean.getCorrections(AddressEntity.STREET_TYPE, externalAddress.getStreetType(),
+                                externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
 
                 if (streetTypeCorrections.isEmpty()) {
                     Correction streetTypeCorrection = new Correction(AddressEntity.STREET_TYPE.getEntityName(),null,
@@ -445,7 +447,8 @@ public class AddressCorrectionService {
 
             case STREET:
                 List<Correction> streetCorrections =
-                        addressCorrectionBean.getCorrections(localAddress, externalAddress);
+                        correctionBean.getCorrections(AddressEntity.STREET, localAddress.getCityId(), localAddress.getStreetTypeId(),
+                                externalAddress.getStreet(), externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
 
                 if (streetCorrections.isEmpty()) {
                     Long streetTypeId = localAddress.getStreetTypeId();
@@ -468,7 +471,9 @@ public class AddressCorrectionService {
 
             case BUILDING:
                 List<Correction> buildingCorrections =
-                        addressCorrectionBean.getCorrections(localAddress, externalAddress);
+                        correctionBean.getCorrections(AddressEntity.BUILDING, localAddress.getStreetId(),
+                                externalAddress.getBuildingNumber(), externalAddress.getBuildingCorp(),
+                                externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
 
                 if (buildingCorrections.isEmpty()) {
                     Correction buildingCorrection = new Correction(AddressEntity.BUILDING.getEntityName(),
