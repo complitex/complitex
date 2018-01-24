@@ -48,9 +48,11 @@ public class CorrectionBean extends AbstractBean{
         return sqlSession().selectOne(CORRECTION_NS + ".selectCorrectionsCount", filterWrapper);
     }
 
+    //todo filter
     public List<Long> getObjectIds(IEntityName entityName, String correction, Long entityAttributeId){
-        return sqlSession().selectList(CORRECTION_NS + ".selectObjectIds", ImmutableMap.of("entityName", entityName.getEntityName(),
-                "correction", correction, "entityAttributeId", entityAttributeId));
+        return sqlSession().selectList(CORRECTION_NS + ".selectObjectIds",
+                ImmutableMap.of("entityName", entityName.getEntityName(), "correction", correction,
+                        "entityAttributeId", entityAttributeId));
     }
 
     public List<Long> getObjectIds(IEntityName entityName, String correction, Long entityAttributeId1, Long entityAttributeId2){
