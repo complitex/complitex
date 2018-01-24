@@ -570,6 +570,78 @@ CREATE TABLE `subsidy` (
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Файлы субсидий';
 
 -- ------------------------------
+-- Subsidy Split
+-- ------------------------------
+
+DROP TABLE IF EXISTS `subsidy_split`;
+
+CREATE TABLE `subsidy_split` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор разбивки субсидии помесячно',
+  `subsidy_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор субсидии',
+
+  `FIO` VARCHAR(30) COMMENT 'ФИО',
+  `ID_RAJ` VARCHAR(5) COMMENT 'Код района',
+  `NP_CODE` VARCHAR(5) COMMENT 'Код населенного пункта',
+  `NP_NAME`VARCHAR(30) COMMENT 'Название населенного пункта',
+  `CAT_V` VARCHAR(7) COMMENT 'Тип улицы',
+  `VULCOD` VARCHAR(8) COMMENT 'Код улицы',
+  `NAME_V` VARCHAR(30) COMMENT 'Название улицы',
+  `BLD` VARCHAR(7) COMMENT 'Номер дома',
+  `CORP` VARCHAR(2) COMMENT 'Номер корпуса',
+  `FLAT` VARCHAR(9) COMMENT 'Номер квартиры',
+  `RASH` VARCHAR(15) COMMENT 'Номер л/с ПУ',
+  `NUMB` VARCHAR(8),
+  `DAT1` DATE COMMENT 'Дата начала периода',
+  `DAT2` DATE COMMENT 'Дата конца периода',
+  `NM_PAY` DECIMAL(9,2) COMMENT 'Начисление в пределах нормы',
+
+  `P1` DECIMAL(9,4),
+  `P2` DECIMAL(9,4),
+  `P3` DECIMAL(9,4),
+  `P4` DECIMAL(9,4),
+  `P5` DECIMAL(9,4),
+  `P6` DECIMAL(9,4),
+  `P7` DECIMAL(9,4),
+  `P8` DECIMAL(9,4),
+
+  `SM1` DECIMAL(9,2),
+  `SM2` DECIMAL(9,2),
+  `SM3` DECIMAL(9,2),
+  `SM4` DECIMAL(9,2),
+  `SM5` DECIMAL(9,2),
+  `SM6` DECIMAL(9,2),
+  `SM7` DECIMAL(9,2),
+  `SM8` DECIMAL(9,2),
+
+  `SB1` DECIMAL(9,2),
+  `SB2` DECIMAL(9,2),
+  `SB3` DECIMAL(9,2),
+  `SB4` DECIMAL(9,2),
+  `SB5` DECIMAL(9,2),
+  `SB6` DECIMAL(9,2),
+  `SB7` DECIMAL(9,2),
+  `SB8` DECIMAL(9,2),
+
+  `OB1` DECIMAL(9,2),
+  `OB2` DECIMAL(9,2),
+  `OB3` DECIMAL(9,2),
+  `OB4` DECIMAL(9,2),
+  `OB5` DECIMAL(9,2),
+  `OB6` DECIMAL(9,2),
+  `OB7` DECIMAL(9,2),
+  `OB8` DECIMAL(9,2),
+
+  `SUMMA` DECIMAL(13,2),
+  `NUMM` INTEGER(2),
+  `SUBS` DECIMAL(13,2),
+  `KVT` INTEGER(3),
+
+  PRIMARY KEY (`id`),
+  KEY `key_subsidy_id` (`subsidy_id`),
+  CONSTRAINT `fk_subsidy_split__subsidy` FOREIGN KEY (`subsidy_id`) REFERENCES `subsidy` (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Разбивка судсидий помесячно';
+
+-- ------------------------------
 -- Dwelling Characteristic
 -- ------------------------------
 

@@ -165,13 +165,7 @@ public abstract class AbstractCorrectionList extends TemplatePage {
             @Override
             protected Long getSize() {
                 long limitCount = filterWrapper.getCount();
-                filterWrapper.setCount(0);
-
-                Long count = getCorrectionsCount(filterWrapper);
-
-                filterWrapper.setCount(limitCount);
-
-                return count;
+                return getCorrectionsCount(filterWrapper);
             }
         };
         dataProvider.setSort("", SortOrder.ASCENDING);
