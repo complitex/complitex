@@ -2,6 +2,7 @@ package org.complitex.osznconnection.file.web.pages.subsidy;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -28,6 +29,7 @@ import java.util.List;
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 21.01.14 18:37
  */
+@AuthorizeInstantiation("SUBSIDY_FILE")
 public class SubsidySplitList extends TemplatePage {
     @EJB
     private SubsidySplitBean subsidySplitBean;
