@@ -365,11 +365,6 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
             } catch (RemoteCallException e) {
                 throw new RuntimeException(e);
             }
-
-            subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
-            subsidyBean.update(subsidy);
-
-            log.error("subsidy fill error: dat1 != 1 {}", subsidy);
         }
     }
 
