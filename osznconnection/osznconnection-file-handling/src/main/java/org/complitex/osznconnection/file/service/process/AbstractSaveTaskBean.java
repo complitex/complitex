@@ -150,8 +150,8 @@ public abstract class AbstractSaveTaskBean{
 
                     RequestFileFieldDescription fieldDescription = description.getField(fieldName);
                     if (fieldDescription == null) {
-                        log.error("Couldn't find field description. Request file type: {}, request id: '{}', field name: '{}'.",
-                                request.getRequestFileType().name(), request.getId(), fieldName);
+                        log.error("save error: field description not found {}, field name: '{}'",
+                                request, fieldName);
                         throw new SaveException(new FieldNotFoundException(fieldName), requestFile);
                     }
 
