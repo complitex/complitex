@@ -52,7 +52,7 @@ public class PrivilegeGroupLoadTaskBean extends AbstractTaskBean<PrivilegeFileGr
         if (facilityServiceTypeRequestFile != null) {
             facilityServiceTypeRequestFile.setGroupId(requestFileGroup.getId());
 
-            skip &= facilityServiceTypeLoadTaskBean.execute(facilityServiceTypeRequestFile, commandParameters);
+            skip |= facilityServiceTypeLoadTaskBean.execute(facilityServiceTypeRequestFile, commandParameters);
         }
 
         return skip;
