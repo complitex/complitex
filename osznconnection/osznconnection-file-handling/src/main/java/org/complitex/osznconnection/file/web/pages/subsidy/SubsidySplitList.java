@@ -3,7 +3,10 @@ package org.complitex.osznconnection.file.web.pages.subsidy;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.*;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.ListDataProvider;
@@ -38,14 +41,12 @@ public class SubsidySplitList extends TemplatePage {
 
         List<IColumn<SubsidySplit, String>> columns = new ArrayList<>();
 
-        columns.add(new PropertyColumn<SubsidySplit, String>(Model.of("ID"), "id"));
-
         for (final SubsidySplitField key : SubsidySplitField.values()){
             columns.add(new AbstractColumn<SubsidySplit, String>(Model.of(key.name())) {
                 @Override
                 public void populateItem(Item<ICellPopulator<SubsidySplit>> cellItem, String componentId,
                                          IModel<SubsidySplit> rowModel) {
-                    cellItem.add(new Label(componentId, new PropertyModel<>(rowModel, "dbfFields." + key.name())));
+                    cellItem.add(new Label(componentId, new PropertyModel<>(rowModel, "fieldMap." + key.name())));
                 }
             });
         }

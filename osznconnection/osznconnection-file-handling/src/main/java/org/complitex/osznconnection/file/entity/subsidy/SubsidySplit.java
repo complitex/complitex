@@ -27,4 +27,12 @@ public class SubsidySplit extends AbstractFieldMapEntity<SubsidySplitField> impl
     public void setSubsidyId(Long subsidyId) {
         this.subsidyId = subsidyId;
     }
+
+    @Override
+    public String toString() {
+        return super.getToStringHelper()
+                .add("id", id)
+                .add("subsidyId", subsidyId)
+                .toString();
+    }
 }

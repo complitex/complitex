@@ -90,7 +90,9 @@ public enum RequestStatus implements IFixedIdType {
     TARIF_NOT_FOUND(254),
     OWNERSHIP_NOT_FOUND(256),
 
-    PROCESSED_WITH_ERROR(257);
+    PROCESSED_WITH_ERROR(257),
+
+    SUBSIDY_SPLITTED(258);
 
     private Integer id;
 

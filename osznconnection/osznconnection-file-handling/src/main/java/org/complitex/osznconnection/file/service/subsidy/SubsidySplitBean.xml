@@ -4,26 +4,49 @@
     <resultMap id="subsidySplitRequestMap" type="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit">
         <id property="id" column="id"/>
 
-        <association property="dbfFields" javaType="map">
-            <result property="1" column="1"/>
+        <association property="fieldMap" javaType="map">
+            <result column="DAT1" property="DAT1"/>
+            <result column="DAT2" property="DAT2"/>
+
+            <result column="SM1" property="SM1"/>
+            <result column="SM2" property="SM2"/>
+            <result column="SM3" property="SM3"/>
+            <result column="SM4" property="SM4"/>
+            <result column="SM5" property="SM5"/>
+            <result column="SM6" property="SM6"/>
+            <result column="SM7" property="SM7"/>
+            <result column="SM8" property="SM8"/>
+            <result column="SB1" property="SB1"/>
+            <result column="SB2" property="SB2"/>
+            <result column="SB3" property="SB3"/>
+            <result column="SB4" property="SB4"/>
+            <result column="SB5" property="SB5"/>
+            <result column="SB6" property="SB6"/>
+            <result column="SB7" property="SB7"/>
+            <result column="SB8" property="SB8"/>
+
+            <result column="SUMMA" property="SUMMA"/>
+            <result column="NUMM" property="NUMM"/>
+            <result column="SUBS" property="SUBS"/>
         </association>
     </resultMap>
 
     <insert id="insertSubsidySplit" parameterType="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit"
             keyProperty="id" useGeneratedKeys="true">
-        insert into `subsidy_split`
-        (<foreach collection="dbfFields.keys" item="key" separator=",">
+        insert into `subsidy_split` (subsidy_id,
+        <foreach collection="fieldMap.keys" item="key" separator=",">
             `${key}`
         </foreach>)
         values
-        (<foreach collection="dbfFields.keys" item="key" separator=",">
-            #{dbfFields.${key}}
+        (#{subsidyId},
+        <foreach collection="fieldMap.keys" item="key" separator=",">
+            #{fieldMap.${key}}
         </foreach>)
     </insert>
 
     <update id="updateSubsidySplit" parameterType="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit">
         update `subsidy_split` set
-        <foreach collection="dbfFieldMap.entrySet()" item="item" index="key" separator=",">
+        <foreach collection="fieldMap.entrySet()" item="item" index="key" separator=",">
             `${key}` = #{item}
         </foreach>
         where `id` = #{id}

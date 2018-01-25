@@ -131,7 +131,7 @@ public final class SubsidyList extends TemplatePage {
 
         content.add(new FeedbackPanel("messages"));
 
-        final Form<Void> filterForm = new Form<>("filterForm");
+        final Form<Void> filterForm = new Form<>("filterForm"); //todo store filter
         content.add(filterForm);
         example = new Model<>(newExample());
 
@@ -335,6 +335,11 @@ public final class SubsidyList extends TemplatePage {
 
                         attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.STOP);
                     }
+
+                    @Override
+                    public boolean isVisible() {
+                        return RequestStatus.SUBSIDY_SPLITTED.equals(subsidy.getStatus());
+                    }
                 });
             }
         };
@@ -366,7 +371,7 @@ public final class SubsidyList extends TemplatePage {
             @Override
             public void onClick() {
                 PageParameters params = new PageParameters();
-                params.set(SubsidyFileList.SCROLL_PARAMETER, fileId);
+//                params.set(SubsidyFileList.SCROLL_PARAMETER, fileId);
                 setResponsePage(SubsidyFileList.class, params);
             }
         });

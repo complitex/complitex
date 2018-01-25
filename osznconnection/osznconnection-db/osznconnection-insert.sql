@@ -1,7 +1,7 @@
 -- --------------------------------
 -- Current database version
 -- --------------------------------
-INSERT INTO `update` (`version`) VALUE ('20180124_0.7.6');
+INSERT INTO `update` (`version`) VALUE ('20180125_0.7.7');
 
 
 -- admin user --

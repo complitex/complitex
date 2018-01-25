@@ -6,17 +6,17 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
-import org.complitex.template.web.pages.ScrollListPage;
+import org.complitex.template.web.template.TemplatePage;
 
 import java.util.List;
 
 @AuthorizeInstantiation("SUBSIDY_FILE")
-public final class SubsidyFileList extends ScrollListPage {
+public final class SubsidyFileList extends TemplatePage {
 
     private final AbstractFileListPanel fileListPanel;
 
     public SubsidyFileList(PageParameters parameters) {
-        super(parameters);
+        super();
 
         add(new Label("title", new ResourceModel("title")));
         add(fileListPanel = new SubsidyFileListPanel("fileListPanel"));
