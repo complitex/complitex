@@ -26,6 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.address.util.AddressRenderer;
+import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.ExceptionUtil;
@@ -53,6 +54,7 @@ import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.template.web.template.TemplatePage;
+import org.complitex.template.web.template.TemplateSession;
 
 import javax.ejb.EJB;
 import java.io.File;
@@ -131,9 +133,10 @@ public final class SubsidyList extends TemplatePage {
 
         content.add(new FeedbackPanel("messages"));
 
-        final Form<Void> filterForm = new Form<>("filterForm"); //todo store filter
+        final Form<Void> filterForm = new Form<>("filterForm");
         content.add(filterForm);
-        example = new Model<>(newExample());
+        example = new Model<>(((TemplateSession) getSession()).getPreferenceObject(getPreferencesPage() + fileId,
+                PreferenceKey.FILTER_OBJECT, newExample()));
 
         StatusDetailPanel<SubsidyExample> statusDetailPanel = new StatusDetailPanel<SubsidyExample>("statusDetailsPanel", example,
                 new SubsidyExampleConfigurator(), new SubsidyStatusDetailRenderer(), content) {
@@ -149,12 +152,16 @@ public final class SubsidyList extends TemplatePage {
 
             @Override
             protected Iterable<? extends Subsidy> getData(long first, long count) {
+                ((TemplateSession)getSession()).putPreferenceObject(getPreferencesPage() + fileId,
+                        PreferenceKey.FILTER_OBJECT, example.getObject());
+
                 example.getObject().setAsc(getSort().isAscending());
                 if (!Strings.isEmpty(getSort().getProperty())) {
                     example.getObject().setOrderByClause(getSort().getProperty());
                 }
                 example.getObject().setFirst(first);
                 example.getObject().setCount(count);
+
                 return subsidyBean.find(example.getObject());
             }
 

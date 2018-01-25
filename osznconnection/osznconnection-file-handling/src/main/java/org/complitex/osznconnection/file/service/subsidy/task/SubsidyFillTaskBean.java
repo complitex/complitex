@@ -200,6 +200,7 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
                         requestFile.getUserOrganizationId(), subsidy.getAccountNumber(),
                         subsidy.getDateField(SubsidyDBF.DAT1),
                         subsidy.getDateField(SubsidyDBF.DAT2));
+
                 if (!subsidyDataCursor.isEmpty()){
                     List<SubsidyData> data = subsidyDataCursor.getData();
 

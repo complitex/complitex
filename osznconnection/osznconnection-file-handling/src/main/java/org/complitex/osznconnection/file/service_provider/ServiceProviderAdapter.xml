@@ -368,7 +368,7 @@
         #{pAcc, mode=IN, javaType=string, jdbcType=VARCHAR},
         #{pDateB, mode=IN, javaType=date, jdbcType=DATE},
         #{pDateE, mode=IN, javaType=date, jdbcType=DATE},
-        #{data, mode=OUT, jdbcType=CURSOR, resultMap=privsMResultMap}
+        #{data, mode=OUT, jdbcType=CURSOR, resultMap=subsidyDataResultMap}
         )}
     </select>
 </mapper>
