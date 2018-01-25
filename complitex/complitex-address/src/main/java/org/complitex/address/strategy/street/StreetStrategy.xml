@@ -75,15 +75,10 @@
           <if test="cityId != null"> and s.`parent_id` = #{cityId}</if>
           and street_name.`value` = #{street}
           and exists(
-            select 1 from `building_address` addr
-              join `building` b on (b.`status` = 1 and ((b.`parent_id` = addr.`object_id` and b.`parent_entity_id` = 1500)
-                or exists(select 1 from `building_attribute` ba where ba.`object_id` = b.`object_id` and ba.`status` = 1
-                  and ba.`entity_attribute_id` = 501 and ba.`value_id` = addr.`object_id`)))
-              join `building_attribute` dstr on (dstr.`status` = 1 and dstr.`object_id` = b.`object_id`)
-              join `organization_attribute` oa on (oa.`status` = 1 and oa.`object_id` = #{organizationId}
-                and oa.`entity_attribute_id` = 902)
-            where addr.`status` = 1 and addr.`parent_id` = s.`object_id` and addr.`parent_entity_id` = 300
-              and dstr.`value_id` = oa.`value_id` )
+            select 1 from `building` b
+              join `building_attribute` ba on (ba.`status` = 1 and ba.`object_id` = b.`object_id` and ba.`entity_attribute_id` = 503)
+              join `organization_attribute` oa on (oa.`status` = 1 and oa.`object_id` = #{organizationId} and oa.`entity_attribute_id` = 902)
+            where ba.`value_id` = oa.`value_id` and b.`status` = 1 and b.`parent_id` = s.`object_id` and b.`parent_entity_id` = 300)
     </select>
 
     <select id="selectStreetIdsByBuilding" parameterType="map" resultType="long">
