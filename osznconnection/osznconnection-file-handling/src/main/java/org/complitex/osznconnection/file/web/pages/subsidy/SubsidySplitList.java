@@ -13,7 +13,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidySplit;
-import org.complitex.osznconnection.file.entity.subsidy.SubsidySplitDBF;
+import org.complitex.osznconnection.file.entity.subsidy.SubsidySplitField;
 import org.complitex.osznconnection.file.service.subsidy.SubsidySplitBean;
 import org.complitex.template.web.template.TemplatePage;
 
@@ -40,7 +40,7 @@ public class SubsidySplitList extends TemplatePage {
 
         columns.add(new PropertyColumn<SubsidySplit, String>(Model.of("ID"), "id"));
 
-        for (final SubsidySplitDBF key : SubsidySplitDBF.values()){
+        for (final SubsidySplitField key : SubsidySplitField.values()){
             columns.add(new AbstractColumn<SubsidySplit, String>(Model.of(key.name())) {
                 @Override
                 public void populateItem(Item<ICellPopulator<SubsidySplit>> cellItem, String componentId,

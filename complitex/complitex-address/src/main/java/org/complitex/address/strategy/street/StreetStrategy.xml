@@ -106,8 +106,4 @@
             </otherwise>
         </choose>
     </select>
-
-    <select id="selectStreetIdByCode" parameterType="string" resultType="long">
-        select object_id from street_attribute where value_id = #{code} and entity_attribute_id = 303 and status = 1
-    </select>
 </mapper>

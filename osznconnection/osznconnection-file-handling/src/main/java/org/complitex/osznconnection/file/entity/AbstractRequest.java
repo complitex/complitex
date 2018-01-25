@@ -1,9 +1,13 @@
 package org.complitex.osznconnection.file.entity;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import org.complitex.common.entity.ILongId;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -12,7 +16,7 @@ import java.util.*;
  * Абстрактное представление записи файла запроса.
  * Используется <code>Map<String, Object></code> для хранения названий и значений полей.
  */
-public abstract class AbstractRequest<E extends Enum> implements ILongId{
+public abstract class AbstractRequest<E extends Enum> extends AbstractFieldMapEntity<E> implements ILongId{
     private Long id;
     private Long requestFileId;
     private Long groupId;
@@ -25,7 +29,6 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
 
     private List<RequestWarning> warnings = Lists.newArrayList();
 
-    private Map<String, Object> dbfFields = new TreeMap<>();
     private Map<String, Object> updateFieldMap = new TreeMap<>();
 
     private Date date;
@@ -34,50 +37,20 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
         this.requestFileType = requestFileType;
     }
 
+    public Map<String, Object> getDbfFields() {
+        return getMap();
+    }
+
+    public void setDbfFields(Map<String, Object> dbfFields) {
+        setMap(dbfFields);
+    }
+
     public Map<String, Object> getUpdateFieldMap() {
         return updateFieldMap;
     }
 
     public void setUpdateFieldMap(Map<String, Object> updateFieldMap) {
         this.updateFieldMap = updateFieldMap;
-    }
-
-    public Object getField(String fieldName) {
-        return dbfFields.get(fieldName);
-    }
-
-    public void putField(String fieldName, Object object) {
-        dbfFields.put(fieldName, object);
-    }
-
-    public void putField(E e, Object object) {
-        putField(e.name(), object);
-    }
-
-    public void putField(E e, String postfix, Object object) {
-        putField(e.name() + postfix, object);
-    }
-
-    public Object getField(E e) {
-        return getField(e.name());
-    }
-
-    public String getUpStringField(E e, String postfix) {
-        Object o = dbfFields.get(e.name() + postfix);
-
-        return o != null ? o.toString().toUpperCase() : null;
-    }
-
-    public String getStringField(E e) {
-        Object o = dbfFields.get(e.name());
-
-        return o != null ? o.toString() : null;
-    }
-
-    public String getStringField(E e, String postfix) {
-        Object o = dbfFields.get(e.name() + postfix);
-
-        return o != null ? o.toString() : null;
     }
 
     public void putUpdateField(E e, Object object) {
@@ -136,14 +109,6 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
         this.status = status;
     }
 
-    public Map<String, Object> getDbfFields() {
-        return dbfFields;
-    }
-
-    public void setDbfFields(Map<String, Object> dbfFields) {
-        this.dbfFields = dbfFields;
-    }
-
     public List<RequestWarning> getWarnings() {
         return warnings;
     }
@@ -158,5 +123,24 @@ public abstract class AbstractRequest<E extends Enum> implements ILongId{
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return getToStringHelper().toString();
+    }
+
+    protected MoreObjects.ToStringHelper getToStringHelper() {
+        return super.getToStringHelper()
+                .add("id", id)
+                .add("requestFileId", requestFileId)
+                .add("groupId", groupId)
+                .add("organizationId", organizationId)
+                .add("userOrganizationId", userOrganizationId)
+                .add("status", status)
+                .add("requestFileType", requestFileType)
+                .add("warnings", warnings)
+                .add("updateFieldMap", updateFieldMap)
+                .add("date", date);
     }
 }

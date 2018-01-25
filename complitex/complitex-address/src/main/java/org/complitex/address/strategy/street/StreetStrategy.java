@@ -12,9 +12,7 @@ import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.AttributeFilter;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.StringLocaleBean;
-import org.complitex.common.strategy.StringValueBean;
 import org.complitex.common.util.BuildingNumberConverter;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.common.util.StringValueUtil;
@@ -32,28 +30,9 @@ import java.util.*;
 
 import static org.complitex.common.util.StringUtil.removeWhiteSpaces;
 
-/**
- * Street strategy.
-
- * <p><b>Important note : </b>
- * In some projects custom logic is needed for some operations. In these cases EJB interceptor technique is used 
- * to intercept calls to relevant operations and to apply custom logic instead of all-project general code. 
- * For example, in pspoffice project <code>org.complitex.pspoffice.address.street.StreetStrategyInterceptor</code>
- * is used to replace logic for "found" and "count" operations.</p>
- *
- * see StreetStrategyInterceptor
- *
- * @author Artem
- */
 @Stateless
 public class StreetStrategy extends TemplateStrategy {
     private static final String STREET_NS = StreetStrategy.class.getName();
-
-    @EJB
-    private StringValueBean stringBean;
-
-    @EJB
-    private StrategyFactory strategyFactory;
 
     @EJB
     private StringLocaleBean stringLocaleBean;
@@ -61,9 +40,6 @@ public class StreetStrategy extends TemplateStrategy {
     @EJB
     private StreetTypeStrategy streetTypeStrategy;
 
-    /*
-     * Attribute type ids
-     */
     public static final long NAME = 300L;
     public static final long STREET_TYPE = 301L;
     public static final long STREET_CODE = 303L;
@@ -334,10 +310,6 @@ public class StreetStrategy extends TemplateStrategy {
         params.put("corp", Strings.isEmpty(preparedCorp) ? null : preparedCorp);
 
         return sqlSession().selectList(STREET_NS + ".selectStreetIdsByBuilding", params);
-    }
-
-    public Long getStreetIdByCode(String code){
-        return sqlSession().selectOne(STREET_NS + ".selectStreetIdByCode", code);
     }
 
     @Override

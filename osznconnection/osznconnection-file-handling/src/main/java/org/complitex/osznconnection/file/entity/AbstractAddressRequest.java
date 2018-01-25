@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.entity;
 
+import com.google.common.base.MoreObjects;
 import org.complitex.address.entity.ExternalAddress;
 import org.complitex.address.entity.LocalAddress;
 
@@ -203,5 +204,34 @@ public abstract class AbstractAddressRequest<E extends Enum> extends AbstractReq
 
     public void setOutgoingApartment(String outgoingApartment) {
         this.outgoingApartment = outgoingApartment;
+    }
+
+    @Override
+    public String toString() {
+        return getToStringHelper().toString();
+    }
+
+    protected MoreObjects.ToStringHelper getToStringHelper() {
+        return super.getToStringHelper()
+                .add("city", city)
+                .add("streetTypeCode", streetTypeCode)
+                .add("streetType", streetType)
+                .add("streetCode", streetCode)
+                .add("street", street)
+                .add("buildingNumber", buildingNumber)
+                .add("buildingCorp", buildingCorp)
+                .add("apartment", apartment)
+                .add("cityId", cityId)
+                .add("streetTypeId", streetTypeId)
+                .add("streetId", streetId)
+                .add("buildingId", buildingId)
+                .add("apartmentId", apartmentId)
+                .add("outgoingCity", outgoingCity)
+                .add("outgoingDistrict", outgoingDistrict)
+                .add("outgoingStreet", outgoingStreet)
+                .add("outgoingStreetType", outgoingStreetType)
+                .add("outgoingBuildingNumber", outgoingBuildingNumber)
+                .add("outgoingBuildingCorp", outgoingBuildingCorp)
+                .add("outgoingApartment", outgoingApartment);
     }
 }

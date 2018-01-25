@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.entity;
 
+import com.google.common.base.MoreObjects;
 import org.complitex.common.entity.PersonalName;
 
 /**
@@ -84,5 +85,21 @@ public abstract class AbstractAccountRequest<E extends Enum> extends AbstractAdd
 
     public String getPuAccountNumber(){
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return getToStringHelper().toString();
+    }
+
+    protected MoreObjects.ToStringHelper getToStringHelper() {
+        return super.getToStringHelper()
+                .add("accountNumber", accountNumber)
+                .add("fio", fio)
+                .add("lastName", lastName)
+                .add("firstName", firstName)
+                .add("middleName", middleName)
+                .add("inn", inn)
+                .add("passport", passport);
     }
 }
