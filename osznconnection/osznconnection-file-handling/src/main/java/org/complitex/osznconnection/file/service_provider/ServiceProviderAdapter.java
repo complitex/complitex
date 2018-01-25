@@ -4,12 +4,14 @@ import com.google.common.base.Predicate;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.address.exception.RemoteCallException;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.exception.DBRuntimeException;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.strategy.StringLocaleBean;
+import org.complitex.common.util.MapUtil;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.organization.strategy.ServiceStrategy;
@@ -1565,5 +1567,25 @@ public class ServiceProviderAdapter extends AbstractBean {
 
     private String getDataSource(Long userOrganizationId){
         return organizationStrategy.getDataSourceByUserOrganizationId(userOrganizationId);
+    }
+
+    private <T> Cursor<T> getData(Long userOrganization, String statement, Map<String, Object> param) throws RemoteCallException {
+        param.put("okCode", 0);
+
+        try {
+            sqlSession(getDataSource(userOrganization)).selectOne(NS + "." + statement, param);
+        } catch (Exception e) {
+            throw new RemoteCallException(e);
+        }
+
+        log.info("{}: {}", statement, param);
+
+        return new Cursor<>((Integer)param.get("resultCode"), (List) param.get("out"));
+    }
+
+    /*Subsidy*/
+
+    public Cursor<SubsidyData> getSubsidyData(Long userOrganization, String pAcc, Date pDateB, Date pDateE) throws RemoteCallException {
+        return getData(userOrganization, NS + ".getSubsidy", MapUtil.of("pDateB", pDateB, "pDateE", pDateE));
     }
 }

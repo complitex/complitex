@@ -349,4 +349,26 @@
         #{data, mode=OUT, jdbcType=CURSOR, resultMap=privsMResultMap}
         )}
     </select>
+    
+    <resultMap id="subsidyDataResultMap" type="org.complitex.osznconnection.file.entity.subsidy.SubsidyData">
+        <result column="SM1" property="sm1"/>
+        <result column="SM2" property="sm2"/>
+        <result column="SM3" property="sm3"/>
+        <result column="SM4" property="sm4"/>
+        <result column="SM5" property="sm5"/>
+        <result column="SM6" property="sm6"/>
+        <result column="SM7" property="sm7"/>
+        <result column="SM8" property="sm8"/>
+        <result column="OPMONTH" property="opMonth"/>
+        <result column="SUBSMONTH" property="subsMonth"/>
+    </resultMap>
+
+    <select id="getSubsidy" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.getSubsidy(
+        #{pAcc, mode=IN, javaType=string, jdbcType=VARCHAR},
+        #{pDateB, mode=IN, javaType=date, jdbcType=DATE},
+        #{pDateE, mode=IN, javaType=date, jdbcType=DATE},
+        #{data, mode=OUT, jdbcType=CURSOR, resultMap=privsMResultMap}
+        )}
+    </select>
 </mapper>
