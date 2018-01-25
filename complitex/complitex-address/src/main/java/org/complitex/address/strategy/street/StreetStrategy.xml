@@ -88,11 +88,11 @@
         AND street_attr_name.`entity_attribute_id` = 300)
         JOIN `street_string_value` street_name ON (street_name.`id` = street_attr_name.`value_id` AND
         street_name.`value` = #{street})
-        JOIN `building_address` addr ON (addr.`status` = 1 AND addr.`parent_id` = s.`object_id` AND addr.`parent_entity_id` = 300)
-        JOIN `building_address_attribute` num_attr ON (num_attr.`status` = 1 AND num_attr.`object_id` = addr.`object_id` AND num_attr.`entity_attribute_id` = 1500)
-        JOIN `building_address_string_value` num ON (num.`id` = num_attr.`value_id` AND num.`value` = #{number})
-        LEFT JOIN `building_address_attribute` corp_attr ON (corp_attr.`status` = 1 AND corp_attr.`object_id` = addr.`object_id` AND corp_attr.`entity_attribute_id` = 1501)
-        LEFT JOIN `building_address_string_value` corp ON (corp.`id` = corp_attr.`value_id`)
+        JOIN `building` b ON (b.`status` = 1 AND b.`parent_id` = s.`object_id` AND b.`parent_entity_id` = 300)
+        JOIN `building_attribute` num_attr ON (num_attr.`status` = 1 AND num_attr.`object_id` = b.`object_id` AND num_attr.`entity_attribute_id` = 500)
+        JOIN `building_string_value` num ON (num.`id` = num_attr.`value_id` AND num.`value` = #{number})
+        LEFT JOIN `building_attribute` corp_attr ON (corp_attr.`status` = 1 AND corp_attr.`object_id` = b.`object_id` AND corp_attr.`entity_attribute_id` = 501)
+        LEFT JOIN `building_string_value` corp ON (corp.`id` = corp_attr.`value_id`)
         WHERE s.`status` = 1
         <if test="cityId != null">AND s.`parent_id` = #{cityId}</if>
         AND s.`parent_entity_id` = 400
