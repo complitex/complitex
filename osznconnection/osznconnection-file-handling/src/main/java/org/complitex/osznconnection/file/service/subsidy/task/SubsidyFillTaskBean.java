@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.math.BigDecimal.ZERO;
 import static java.math.RoundingMode.HALF_EVEN;
@@ -210,6 +211,27 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
             if (!subsidyDataCursor.isEmpty()){
                 List<SubsidyData> data = subsidyDataCursor.getData();
+
+                data = data.stream()
+                        .collect(Collectors.groupingBy(SubsidyData::getSubsMonth))
+                        .values().stream()
+                        .map(l -> l.stream().reduce(new SubsidyData(), (s1, s2) -> {
+                            SubsidyData s = new SubsidyData();
+
+                            s.setSm1((s1.getSm1() != null ? s1.getSm1() : ZERO).add(s2.getSm1()));
+                            s.setSm2((s1.getSm2() != null ? s1.getSm2() : ZERO).add(s2.getSm2()));
+                            s.setSm3((s1.getSm3() != null ? s1.getSm3() : ZERO).add(s2.getSm3()));
+                            s.setSm4((s1.getSm4() != null ? s1.getSm4() : ZERO).add(s2.getSm4()));
+                            s.setSm5((s1.getSm5() != null ? s1.getSm5() : ZERO).add(s2.getSm5()));
+                            s.setSm6((s1.getSm6() != null ? s1.getSm6() : ZERO).add(s2.getSm6()));
+                            s.setSm7((s1.getSm7() != null ? s1.getSm7() : ZERO).add(s2.getSm7()));
+                            s.setSm8((s1.getSm8() != null ? s1.getSm8() : ZERO).add(s2.getSm8()));
+
+                            s.setSubsMonth(s2.getSubsMonth());
+
+                            return s;
+                        }))
+                        .collect(Collectors.toList());
 
                 data.sort(Comparator.comparing(SubsidyData::getSubsMonth));
 
