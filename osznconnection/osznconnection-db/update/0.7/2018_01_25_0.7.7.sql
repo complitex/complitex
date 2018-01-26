@@ -1,4 +1,4 @@
-DROP TABLE IF EXIST `subsidy_split`;
+DROP TABLE IF EXISTS `subsidy_split`;
 
 CREATE TABLE `subsidy_split` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор разбивки субсидии помесячно',
