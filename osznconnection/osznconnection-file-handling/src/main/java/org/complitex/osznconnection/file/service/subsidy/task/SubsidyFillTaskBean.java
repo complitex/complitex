@@ -25,7 +25,6 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -112,65 +111,68 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
             return;
         }
 
-        if (numm > 1 || dat1.until(dat2).getMonths() > 1){
-            if (dat1.getDayOfMonth() == 1){
-                LocalDate date;
+        if (numm > 1 || (numm == 0 && dat1.until(dat2).getMonths() > 1)){
+            LocalDate beginDate = requestFile.getBeginDate().toInstant().atZone(ZoneId.systemDefault())
+                    .withDayOfMonth(1)
+                    .toLocalDate();
 
-                Period dat = dat1.until(dat2.plusDays(1));
+            LocalDate d1, d2;
 
-                if (dat.getMonths() == numm) {
-                    date = dat1;
-                } else if (dat.getMonths() > numm) {
-                    date = requestFile.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-                            .minusMonths(numm);
-                } else {
-                    subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
-                    subsidyBean.update(subsidy);
-
-                    log.error("subsidy fill error: dat2 - dat1 < numm {}", subsidy);
-
-                    return;
+            if (numm != 0){
+                if (beginDate.minusMonths(numm).compareTo(dat1) > 0) {
+                    d1 = beginDate.minusMonths(numm);
+                    d2 = beginDate.minusDays(1);
+                }else{
+                    d1 = dat1;
+                    d2 = dat1.plusMonths(numm).minusDays(1);
                 }
+            }else{
+                d1 = dat1;
+                d2 = dat2.compareTo(beginDate) < 0 ? dat2 : beginDate.plusMonths(1).minusDays(1);
+            }
 
-                split(subsidy, numm, date);
+            if (dat1.getDayOfMonth() == 1){
+                split(subsidy, d1, d2);
             }else {
-                recalculation(requestFile.getUserOrganizationId(), subsidy);
+                recalculation(requestFile.getUserOrganizationId(), subsidy, d1, d2);
             }
         }
     }
 
-    private void split(Subsidy subsidy, Integer numm, LocalDate date) {
+    private void split(Subsidy subsidy, LocalDate d1, LocalDate d2) {
         List<SubsidySplit> subsidySplits = new ArrayList<>();
 
-        for (int i = 0; i < numm; ++i){
+        int n = d1.until(d2.plusDays(1)).getMonths();
+
+        for (int i = 0; i < n; ++i){
             SubsidySplit subsidySplit = new SubsidySplit();
 
             subsidySplit.setSubsidyId(subsidy.getId());
 
-            subsidySplit.putField(SubsidySplitField.DAT1, Date.from(date.plusMonths(i)
+            subsidySplit.putField(SubsidySplitField.DAT1, Date.from(d1.plusMonths(i)
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            subsidySplit.putField(SubsidySplitField.DAT2, Date.from(date.plusMonths(i + 1).minusDays(1)
+            subsidySplit.putField(SubsidySplitField.DAT2, Date.from(d1.plusMonths(i + 1).minusDays(1)
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             subsidySplit.putField(SubsidySplitField.SM1, subsidy.getBigDecimalField(SubsidyDBF.SM1)
-                    .divide(BigDecimal.valueOf(numm), 2, HALF_EVEN));
+                    .divide(BigDecimal.valueOf(n), 2, HALF_EVEN));
             subsidySplit.putField(SubsidySplitField.SM2, subsidy.getBigDecimalField(SubsidyDBF.SM2)
-                    .divide(BigDecimal.valueOf(numm), 2, HALF_EVEN));
+                    .divide(BigDecimal.valueOf(n), 2, HALF_EVEN));
             subsidySplit.putField(SubsidySplitField.SM3, subsidy.getBigDecimalField(SubsidyDBF.SM3)
-                    .divide(BigDecimal.valueOf(numm), 2, HALF_EVEN));
+                    .divide(BigDecimal.valueOf(n), 2, HALF_EVEN));
             subsidySplit.putField(SubsidySplitField.SM4, subsidy.getBigDecimalField(SubsidyDBF.SM4)
-                    .divide(BigDecimal.valueOf(numm), 2, HALF_EVEN));
+                    .divide(BigDecimal.valueOf(n), 2, HALF_EVEN));
             subsidySplit.putField(SubsidySplitField.SM5, subsidy.getBigDecimalField(SubsidyDBF.SM5)
-                    .divide(BigDecimal.valueOf(numm), 2, HALF_EVEN));
+                    .divide(BigDecimal.valueOf(n), 2, HALF_EVEN));
             subsidySplit.putField(SubsidySplitField.SM6, subsidy.getBigDecimalField(SubsidyDBF.SM6)
-                    .divide(BigDecimal.valueOf(numm), 2, HALF_EVEN));
+                    .divide(BigDecimal.valueOf(n), 2, HALF_EVEN));
             subsidySplit.putField(SubsidySplitField.SM7, subsidy.getBigDecimalField(SubsidyDBF.SM7)
-                    .divide(BigDecimal.valueOf(numm), 2, HALF_EVEN));
+                    .divide(BigDecimal.valueOf(n), 2, HALF_EVEN));
             subsidySplit.putField(SubsidySplitField.SM8, subsidy.getBigDecimalField(SubsidyDBF.SM8)
-                    .divide(BigDecimal.valueOf(numm), 2, HALF_EVEN));
+                    .divide(BigDecimal.valueOf(n), 2, HALF_EVEN));
 
             subsidySplit.putField(SubsidySplitField.SUMMA, subsidy.getBigDecimalField(SubsidyDBF.SUMMA)
-                    .divide(BigDecimal.valueOf(numm), 2, HALF_EVEN));
+                    .divide(BigDecimal.valueOf(n), 2, HALF_EVEN));
 
             subsidySplit.putField(SubsidySplitField.SUBS, subsidy.getBigDecimalField(SubsidyDBF.SUBS));
             subsidySplit.putField(SubsidySplitField.NUMM, 1);
@@ -196,12 +198,12 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
         subsidyBean.update(subsidy);
     }
 
-    private void recalculation(Long userOrganizationId, Subsidy subsidy) {
+    private void recalculation(Long userOrganizationId, Subsidy subsidy, LocalDate d1, LocalDate d2) {
         try {
             Cursor<SubsidyData> subsidyDataCursor = serviceProviderAdapter.getSubsidyData(
                     userOrganizationId, subsidy.getAccountNumber(),
-                    subsidy.getDateField(SubsidyDBF.DAT1),
-                    subsidy.getDateField(SubsidyDBF.DAT2));
+                    Date.from(d1.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                    Date.from(d2.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             if (!subsidyDataCursor.isEmpty()){
                 List<SubsidyData> data = subsidyDataCursor.getData();
@@ -386,7 +388,7 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
                         LocalDate dat2 = new Date(subsidy.getDateField(SubsidyDBF.DAT2).getTime()).toInstant()
                                 .atZone(ZoneId.systemDefault()).toLocalDate();
 
-                        split(subsidy, dat1.until(dat2.plusDays(1)).getMonths(), dat1);
+                        split(subsidy, dat1, dat2);
 
                         log.info("subsidy fill: subsidy split recalculated 0 sum {} {}", subsidy, subsidySplits);
                     }else{
