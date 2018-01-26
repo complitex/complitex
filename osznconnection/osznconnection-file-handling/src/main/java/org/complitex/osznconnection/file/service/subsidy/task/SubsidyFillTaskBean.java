@@ -194,7 +194,7 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
                 log.error("subsidy fill error: numm < 1 {}", subsidy);
             }
-        }else{
+        }else if (subsidy.getBigDecimalField(SubsidyDBF.SUMMA).compareTo(ZERO) > 0){
             try {
                 Cursor<SubsidyData> subsidyDataCursor = serviceProviderAdapter.getSubsidyData(
                         requestFile.getUserOrganizationId(), subsidy.getAccountNumber(),
@@ -245,42 +245,58 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
                         if (sm1Sum.compareTo(ZERO) > 0){
                             subsidySplit.putField(SubsidySplitField.SM1, subsidy.getBigDecimalField(SubsidyDBF.SM1)
-                                    .multiply(subsidyData.getSm1().divide(sm1Sum, 2, HALF_EVEN)));
+                                    .multiply(subsidyData.getSm1()).divide(sm1Sum, 2, HALF_EVEN));
+                        }else{
+                            subsidySplit.putField(SubsidySplitField.SM1, ZERO);
                         }
 
                         if (sm2Sum.compareTo(ZERO) > 0) {
                             subsidySplit.putField(SubsidySplitField.SM2, subsidy.getBigDecimalField(SubsidyDBF.SM2)
-                                    .multiply(subsidyData.getSm2().divide(sm2Sum, 2, HALF_EVEN)));
+                                    .multiply(subsidyData.getSm2()).divide(sm2Sum, 2, HALF_EVEN));
+                        }else{
+                            subsidySplit.putField(SubsidySplitField.SM2, ZERO);
                         }
 
                         if (sm3Sum.compareTo(ZERO) > 0) {
                             subsidySplit.putField(SubsidySplitField.SM3, subsidy.getBigDecimalField(SubsidyDBF.SM3)
-                                    .multiply(subsidyData.getSm3().divide(sm3Sum, 2, HALF_EVEN)));
+                                    .multiply(subsidyData.getSm3()).divide(sm3Sum, 2, HALF_EVEN));
+                        }else{
+                            subsidySplit.putField(SubsidySplitField.SM3, ZERO);
                         }
 
                         if (sm4Sum.compareTo(ZERO) > 0) {
                             subsidySplit.putField(SubsidySplitField.SM4, subsidy.getBigDecimalField(SubsidyDBF.SM4)
-                                    .multiply(subsidyData.getSm4().divide(sm4Sum, 2, HALF_EVEN)));
+                                    .multiply(subsidyData.getSm4()).divide(sm4Sum, 2, HALF_EVEN));
+                        }else{
+                            subsidySplit.putField(SubsidySplitField.SM4, ZERO);
                         }
 
                         if (sm5Sum.compareTo(ZERO) > 0) {
                             subsidySplit.putField(SubsidySplitField.SM5, subsidy.getBigDecimalField(SubsidyDBF.SM5)
-                                    .multiply(subsidyData.getSm5().divide(sm5Sum, 2, HALF_EVEN)));
+                                    .multiply(subsidyData.getSm5()).divide(sm5Sum, 2, HALF_EVEN));
+                        }else{
+                            subsidySplit.putField(SubsidySplitField.SM5, ZERO);
                         }
 
                         if (sm6Sum.compareTo(ZERO) > 0) {
                             subsidySplit.putField(SubsidySplitField.SM6, subsidy.getBigDecimalField(SubsidyDBF.SM6)
-                                    .multiply(subsidyData.getSm6().divide(sm6Sum, 2, HALF_EVEN)));
+                                    .multiply(subsidyData.getSm6()).divide(sm6Sum, 2, HALF_EVEN));
+                        }else{
+                            subsidySplit.putField(SubsidySplitField.SM6, ZERO);
                         }
 
                         if (sm7Sum.compareTo(ZERO) > 0) {
                             subsidySplit.putField(SubsidySplitField.SM7, subsidy.getBigDecimalField(SubsidyDBF.SM7)
-                                    .multiply(subsidyData.getSm7().divide(sm7Sum, 2, HALF_EVEN)));
+                                    .multiply(subsidyData.getSm7()).divide(sm7Sum, 2, HALF_EVEN));
+                        }else{
+                            subsidySplit.putField(SubsidySplitField.SM7, ZERO);
                         }
 
                         if (sm8Sum.compareTo(ZERO) > 0) {
                             subsidySplit.putField(SubsidySplitField.SM8, subsidy.getBigDecimalField(SubsidyDBF.SM8)
-                                    .multiply(subsidyData.getSm8().divide(sm8Sum, 2, HALF_EVEN)));
+                                    .multiply(subsidyData.getSm8()).divide(sm8Sum, 2, HALF_EVEN));
+                        }else{
+                            subsidySplit.putField(SubsidySplitField.SM8, ZERO);
                         }
 
                         BigDecimal smSum = subsidyData.getSm1()
@@ -293,14 +309,10 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
                                 .add(subsidyData.getSm8());
 
                         subsidySplit.putField(SubsidySplitField.SUMMA, subsidy.getBigDecimalField(SubsidyDBF.SUMMA)
-                                .multiply(smSum.divide(summa, 2, HALF_EVEN)));
+                                .multiply(smSum).divide(summa, 2, HALF_EVEN));
 
                         subsidySplit.putField(SubsidySplitField.SUBS, subsidy.getBigDecimalField(SubsidyDBF.SUBS));
                         subsidySplit.putField(SubsidySplitField.NUMM, 1);
-
-                        subsidySplitBean.save(subsidySplit);
-
-                        subsidySplits.add(subsidySplit);
                     }
 
                     {
@@ -316,46 +328,59 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
                         subsidySplit.putField(SubsidySplitField.DAT2, Date.from(date.plusMonths(1).minusDays(1)
                                 .atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-                        subsidySplit.putField(SubsidySplitField.SM1, sm1Sum.subtract(subsidySplits.stream()
-                                .map(s -> s.getBigDecimalField(SubsidySplitField.SM1)).reduce(ZERO, BigDecimal::add)));
+                        subsidySplit.putField(SubsidySplitField.SM1, subsidy.getBigDecimalField(SubsidyDBF.SM1)
+                                .subtract(subsidySplits.stream() .map(s -> s.getBigDecimalField(SubsidySplitField.SM1))
+                                        .reduce(ZERO, BigDecimal::add)));
+                        subsidySplit.putField(SubsidySplitField.SM2, subsidy.getBigDecimalField(SubsidyDBF.SM2)
+                                .subtract(subsidySplits.stream() .map(s -> s.getBigDecimalField(SubsidySplitField.SM2))
+                                        .reduce(ZERO, BigDecimal::add)));
+                        subsidySplit.putField(SubsidySplitField.SM3, subsidy.getBigDecimalField(SubsidyDBF.SM3)
+                                .subtract(subsidySplits.stream() .map(s -> s.getBigDecimalField(SubsidySplitField.SM3))
+                                        .reduce(ZERO, BigDecimal::add)));
+                        subsidySplit.putField(SubsidySplitField.SM4, subsidy.getBigDecimalField(SubsidyDBF.SM4)
+                                .subtract(subsidySplits.stream() .map(s -> s.getBigDecimalField(SubsidySplitField.SM4))
+                                        .reduce(ZERO, BigDecimal::add)));
+                        subsidySplit.putField(SubsidySplitField.SM5, subsidy.getBigDecimalField(SubsidyDBF.SM5)
+                                .subtract(subsidySplits.stream() .map(s -> s.getBigDecimalField(SubsidySplitField.SM5))
+                                        .reduce(ZERO, BigDecimal::add)));
+                        subsidySplit.putField(SubsidySplitField.SM6, subsidy.getBigDecimalField(SubsidyDBF.SM6)
+                                .subtract(subsidySplits.stream() .map(s -> s.getBigDecimalField(SubsidySplitField.SM6))
+                                        .reduce(ZERO, BigDecimal::add)));
+                        subsidySplit.putField(SubsidySplitField.SM7, subsidy.getBigDecimalField(SubsidyDBF.SM7)
+                                .subtract(subsidySplits.stream() .map(s -> s.getBigDecimalField(SubsidySplitField.SM7))
+                                        .reduce(ZERO, BigDecimal::add)));
+                        subsidySplit.putField(SubsidySplitField.SM8, subsidy.getBigDecimalField(SubsidyDBF.SM8)
+                                .subtract(subsidySplits.stream().map(s -> s.getBigDecimalField(SubsidySplitField.SM8))
+                                        .reduce(ZERO, BigDecimal::add)));
 
-                        subsidySplit.putField(SubsidySplitField.SM2, sm2Sum.subtract(subsidySplits.stream()
-                                .map(s -> s.getBigDecimalField(SubsidySplitField.SM2)).reduce(ZERO, BigDecimal::add)));
-
-                        subsidySplit.putField(SubsidySplitField.SM3, sm3Sum.subtract(subsidySplits.stream()
-                                .map(s -> s.getBigDecimalField(SubsidySplitField.SM3)).reduce(ZERO, BigDecimal::add)));
-
-                        subsidySplit.putField(SubsidySplitField.SM4, sm4Sum.subtract(subsidySplits.stream()
-                                .map(s -> s.getBigDecimalField(SubsidySplitField.SM4)).reduce(ZERO, BigDecimal::add)));
-
-                        subsidySplit.putField(SubsidySplitField.SM5, sm5Sum.subtract(subsidySplits.stream()
-                                .map(s -> s.getBigDecimalField(SubsidySplitField.SM5)).reduce(ZERO, BigDecimal::add)));
-
-                        subsidySplit.putField(SubsidySplitField.SM6, sm6Sum.subtract(subsidySplits.stream()
-                                .map(s -> s.getBigDecimalField(SubsidySplitField.SM6)).reduce(ZERO, BigDecimal::add)));
-
-                        subsidySplit.putField(SubsidySplitField.SM7, sm7Sum.subtract(subsidySplits.stream()
-                                .map(s -> s.getBigDecimalField(SubsidySplitField.SM7)).reduce(ZERO, BigDecimal::add)));
-
-                        subsidySplit.putField(SubsidySplitField.SM8, sm8Sum.subtract(subsidySplits.stream()
-                                .map(s -> s.getBigDecimalField(SubsidySplitField.SM8)).reduce(ZERO, BigDecimal::add)));
-
-                        subsidySplit.putField(SubsidySplitField.SUMMA, summa.subtract(subsidySplits.stream()
-                                .map(s -> s.getBigDecimalField(SubsidySplitField.SUMMA)).reduce(ZERO, BigDecimal::add)));
+                        subsidySplit.putField(SubsidySplitField.SUMMA, subsidy.getBigDecimalField(SubsidyDBF.SUMMA)
+                                .subtract(subsidySplits.stream().map(s -> s.getBigDecimalField(SubsidySplitField.SUMMA))
+                                        .reduce(ZERO, BigDecimal::add)));
 
                         subsidySplit.putField(SubsidySplitField.SUBS, subsidy.getBigDecimalField(SubsidyDBF.SUBS));
                         subsidySplit.putField(SubsidySplitField.NUMM, 1);
 
-                        subsidySplitBean.save(subsidySplit);
-
                         subsidySplits.add(subsidySplit);
                     }
 
-                    subsidy.setStatus(RequestStatus.SUBSIDY_RECALCULATED);
+                    subsidySplits.forEach(s -> {
+                        if (s.getBigDecimalField(SubsidySplitField.SUMMA).compareTo(ZERO) > 0) {
+                            subsidySplitBean.save(s);
+                        }
+                    });
+
+                    if (subsidy.getBigDecimalField(SubsidyDBF.SUMMA).compareTo(subsidySplits.stream()
+                            .map(s -> s.getBigDecimalField(SubsidySplitField.SUMMA)).reduce(ZERO, BigDecimal::add)) == 0){
+                        subsidy.setStatus(RequestStatus.SUBSIDY_RECALCULATED);
+
+                        log.info("subsidy fill: add subsidy split recalculated {}", subsidySplits);
+                    }else{
+                        subsidy.setStatus(RequestStatus.SUBSIDY_RECALCULATE_ERROR);
+
+                        log.info("subsidy fill error: subsidy split recalculate error {}", subsidySplits);
+                    }
+
                     subsidyBean.update(subsidy);
-
-                    log.info("subsidy fill: add subsidy split recalculated {}", subsidySplits);
-
                 }else{
                     subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
                     subsidyBean.update(subsidy);

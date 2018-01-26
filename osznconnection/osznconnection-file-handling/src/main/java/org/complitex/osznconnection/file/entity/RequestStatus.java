@@ -93,7 +93,8 @@ public enum RequestStatus implements IFixedIdType {
     PROCESSED_WITH_ERROR(257),
 
     SUBSIDY_SPLITTED(258),
-    SUBSIDY_RECALCULATED(258);
+    SUBSIDY_RECALCULATED(258),
+    SUBSIDY_RECALCULATE_ERROR(259);
 
     private Integer id;
 
