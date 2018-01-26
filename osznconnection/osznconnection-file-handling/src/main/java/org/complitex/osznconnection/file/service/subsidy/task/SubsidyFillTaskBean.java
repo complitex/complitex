@@ -136,6 +136,9 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
             }else {
                 recalculation(requestFile.getUserOrganizationId(), subsidy, d1, d2);
             }
+        }else{
+            subsidy.setStatus(RequestStatus.PROCESSED);
+            subsidyBean.update(subsidy);
         }
     }
 
