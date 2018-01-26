@@ -167,10 +167,18 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
                             subsidySplits.add(subsidySplit);
                         }
 
-                        subsidy.setStatus(RequestStatus.SUBSIDY_SPLITTED);
-                        subsidyBean.update(subsidy);
+                        if (subsidy.getBigDecimalField(SubsidyDBF.SUMMA).compareTo(subsidySplits.stream()
+                                .map(s -> s.getBigDecimalField(SubsidySplitField.SUMMA)).reduce(ZERO, BigDecimal::add)) == 0){
+                            subsidy.setStatus(RequestStatus.SUBSIDY_SPLITTED);
 
-                        log.info("subsidy fill: add subsidy splits {}", subsidySplits);
+                            log.info("subsidy fill: add subsidy splits {}", subsidySplits);
+                        }else{
+                            subsidy.setStatus(RequestStatus.SUBSIDY_SPLIT_ERROR);
+
+                            log.info("subsidy fill error: subsidy splits error {}", subsidySplits);
+                        }
+
+                        subsidyBean.update(subsidy);
                     }else{
                         subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
                         subsidyBean.update(subsidy);
