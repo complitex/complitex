@@ -186,6 +186,8 @@ public enum RequestStatus implements IFixedIdType {
                     .add(OWNERSHIP_NOT_FOUND)
                     .add(PROCESSED_WITH_ERROR)
                     .add(TARIF_NOT_FOUND)
+                    .add(SUBSIDY_SPLIT_ERROR)
+                    .add(SUBSIDY_RECALCULATE_ERROR)
                     .build());
 
 

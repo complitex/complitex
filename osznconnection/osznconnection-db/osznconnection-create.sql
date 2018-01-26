@@ -597,6 +597,7 @@ CREATE TABLE `subsidy_split` (
   KEY `key_subsidy_id` (`subsidy_id`),
   CONSTRAINT `fk_subsidy_split__subsidy` FOREIGN KEY (`subsidy_id`) REFERENCES `subsidy` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Разбивка судсидий помесячно';
+
 -- ------------------------------
 -- Dwelling Characteristic
 -- ------------------------------
