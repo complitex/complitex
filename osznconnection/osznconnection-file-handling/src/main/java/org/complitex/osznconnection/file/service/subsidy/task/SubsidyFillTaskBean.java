@@ -12,7 +12,6 @@ import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.RequestFileBean;
-import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidySplitBean;
@@ -58,9 +57,9 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         try {
             //проверяем что не обрабатывается в данный момент
-            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
-                throw new FillException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
-            }
+//            if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) {
+//                throw new FillException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
+//            }
 
             requestFile.setStatus(RequestFileStatus.FILLING);
             requestFileBean.save(requestFile);
@@ -102,6 +101,8 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
         Integer numm = subsidy.getIntegerField(SubsidyDBF.NUMM);
 
+        subsidySplitBean.clearSubsidySplits(subsidy.getId());
+
         if (dat1.getDayOfMonth() == 1){
             if (numm > 1){
                 if (subsidy.getBigDecimalField(SubsidyDBF.SUBS).multiply(BigDecimal.valueOf(numm))
@@ -124,8 +125,6 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
                             return;
                         }
-
-                        subsidySplitBean.clearSubsidySplits(subsidy.getId());
 
                         List<SubsidySplit> subsidySplits = new ArrayList<>();
 
@@ -202,7 +201,14 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
                 log.error("subsidy fill error: numm < 1 {}", subsidy);
             }
-        }else if (subsidy.getBigDecimalField(SubsidyDBF.SUMMA).compareTo(ZERO) > 0){
+        }else {
+            if (subsidy.getBigDecimalField(SubsidyDBF.SUMMA).compareTo(ZERO) == 0){
+                subsidy.setStatus(RequestStatus.PROCESSED);
+                subsidyBean.update(subsidy);
+
+                return;
+            }
+
             try {
                 Cursor<SubsidyData> subsidyDataCursor = serviceProviderAdapter.getSubsidyData(
                         requestFile.getUserOrganizationId(), subsidy.getAccountNumber(),

@@ -345,7 +345,8 @@ public final class SubsidyList extends TemplatePage {
 
                     @Override
                     public boolean isVisible() {
-                        return RequestStatus.SUBSIDY_SPLITTED.equals(subsidy.getStatus());
+                        return RequestStatus.SUBSIDY_SPLITTED.equals(subsidy.getStatus()) ||
+                        RequestStatus.SUBSIDY_RECALCULATED.equals(subsidy.getStatus());
                     }
                 });
             }

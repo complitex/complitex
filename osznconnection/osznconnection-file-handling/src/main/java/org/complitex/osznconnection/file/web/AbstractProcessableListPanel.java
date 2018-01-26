@@ -565,6 +565,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             public void onSubmit(AjaxRequestTarget target, Form form) {
                 bind(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
+
+                target.add(messages, form);
             }
 
             @Override
@@ -580,6 +582,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             public void onSubmit(AjaxRequestTarget target, Form form) {
                 fill(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
+
+                target.add(messages, form);
             }
 
             @Override
@@ -595,6 +599,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             public void onSubmit(AjaxRequestTarget target, Form form) {
                 save(selectManager.getSelectedFileIds(), buildCommandParameters());
                 selectManager.clearSelection();
+
+                target.add(messages, form);
             }
         });
 
@@ -605,6 +611,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             public void onSubmit(AjaxRequestTarget target, Form form) {
                 export(target, selectManager.getSelectedFileIds());
                 selectManager.clearSelection();
+
+                target.add(messages, form);
             }
 
             @Override
