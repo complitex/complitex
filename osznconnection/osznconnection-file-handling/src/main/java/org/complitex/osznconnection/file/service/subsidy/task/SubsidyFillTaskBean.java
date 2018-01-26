@@ -120,7 +120,7 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
             LocalDate d1, d2;
 
             if (numm != 0){
-                if (beginDate.minusMonths(numm).compareTo(dat1) > 0) {
+                if (beginDate.minusMonths(numm).compareTo(dat1) > 0 && beginDate.compareTo(dat2) <=0) {
                     d1 = beginDate.minusMonths(numm);
                     d2 = beginDate.minusDays(1);
                 }else{
