@@ -184,8 +184,6 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
 
         for (AccountDetail accountDetail : cursor.getData()) {
-            request.setAccountNumber(accountDetail.getAccCode());
-
             checkFacilityPerson(request, accountDetail.getAccCode(), date, inn, passport);
 
             if (request.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
@@ -1580,7 +1578,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         log.info("{}: {}", statement, param);
 
-        return new Cursor<>((Integer)param.get("resultCode"), (List) param.get("data"));
+        return new Cursor<>((Integer)param.get("resultCode"), (List) param.get("out"));
     }
 
     /*Subsidy*/
