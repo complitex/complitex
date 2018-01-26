@@ -14,10 +14,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static org.complitex.osznconnection.file.entity.RequestStatus.SUBSIDY_RECALCULATED;
 import static org.complitex.osznconnection.file.entity.RequestStatus.SUBSIDY_SPLITTED;
@@ -73,7 +70,7 @@ public class SubsidySaveTaskBean extends AbstractSaveTaskBean implements ITaskBe
         }
 
         subsidies.addAll(list);
-
+        subsidies.sort(Comparator.comparing(s -> s.getStringField(SubsidyDBF.RASH)));
         return subsidies;
     }
 
