@@ -103,63 +103,38 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
         subsidySplitBean.clearSubsidySplits(subsidy.getId());
 
-        if (dat1.getDayOfMonth() == 1){
-            if (numm > 1){
-                if (subsidy.getBigDecimalField(SubsidyDBF.SUBS).multiply(BigDecimal.valueOf(numm))
-                        .compareTo(subsidy.getBigDecimalField(SubsidyDBF.SUMMA)) == 0){
-                    if (dat2.compareTo(dat1) > 0){
-                        LocalDate date;
+        if (dat1.compareTo(dat2) > 0) {
+            subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
+            subsidyBean.update(subsidy);
 
-                        Period dat = dat1.until(dat2.plusDays(1));
+            log.error("subsidy fill error: dat1 > dat2 {}", subsidy);
 
-                        if (dat.getMonths() == numm){
-                            date = dat1;
-                        }else if (dat.getMonths() > numm){
-                            date = requestFile.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-                                    .minusMonths(numm);
-                        }else{
-                            subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
-                            subsidyBean.update(subsidy);
+            return;
+        }
 
-                            log.error("subsidy fill error: dat2 - dat1 < numm {}", subsidy);
+        if (numm > 1 || dat1.until(dat2).getMonths() > 1){
+            if (dat1.getDayOfMonth() == 1){
+                LocalDate date;
 
-                            return;
-                        }
+                Period dat = dat1.until(dat2.plusDays(1));
 
-                        split(subsidy, numm, date);
-                    }else{
-                        subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
-                        subsidyBean.update(subsidy);
-
-                        log.error("subsidy fill error: dat1 > dat2 {}", subsidy);
-                    }
-                }else {
+                if (dat.getMonths() == numm) {
+                    date = dat1;
+                } else if (dat.getMonths() > numm) {
+                    date = requestFile.getBeginDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                            .minusMonths(numm);
+                } else {
                     subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
                     subsidyBean.update(subsidy);
 
-                    log.error("subsidy fill error: subs*numm != summa {}", subsidy);
+                    log.error("subsidy fill error: dat2 - dat1 < numm {}", subsidy);
+
+                    return;
                 }
-            }else if (numm == 1){
-                if (!RequestStatus.unboundStatuses().contains(subsidy.getStatus())) {
-                    subsidy.setStatus(RequestStatus.PROCESSED);
-                    subsidyBean.update(subsidy);
-                }
-            } else {
-                subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
-                subsidyBean.update(subsidy);
 
-                log.error("subsidy fill error: numm < 1 {}", subsidy);
-            }
-        }else {
-            if (subsidy.getBigDecimalField(SubsidyDBF.SUMMA).compareTo(ZERO) == 0){
-                subsidy.setStatus(RequestStatus.PROCESSED);
-                subsidyBean.update(subsidy);
-
-                return;
-            }
-
-            if (dat1.until(dat2).getMonths() > 1) {
-                recalculation(requestFile, subsidy);
+                split(subsidy, numm, date);
+            }else {
+                recalculation(requestFile.getUserOrganizationId(), subsidy);
             }
         }
     }
@@ -221,10 +196,10 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
         subsidyBean.update(subsidy);
     }
 
-    private void recalculation(RequestFile requestFile, Subsidy subsidy) {
+    private void recalculation(Long userOrganizationId, Subsidy subsidy) {
         try {
             Cursor<SubsidyData> subsidyDataCursor = serviceProviderAdapter.getSubsidyData(
-                    requestFile.getUserOrganizationId(), subsidy.getAccountNumber(),
+                    userOrganizationId, subsidy.getAccountNumber(),
                     subsidy.getDateField(SubsidyDBF.DAT1),
                     subsidy.getDateField(SubsidyDBF.DAT2));
 
