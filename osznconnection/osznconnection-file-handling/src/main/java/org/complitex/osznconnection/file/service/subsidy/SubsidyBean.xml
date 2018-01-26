@@ -340,6 +340,20 @@
             LEFT JOIN `request_warning_parameter` p ON w.`id` = p.`request_warning_id`
         WHERE s.`request_file_id` = #{id}
     </select>
+
+    <select id="selectSubsidy" resultMap="subsidyResultMap" parameterType="long">
+        SELECT s.*,
+
+        TO_CYRILLIC(s.`FIO`) FIO_CYR, TO_CYRILLIC(s.`NP_NAME`) NP_NAME_CYR, TO_CYRILLIC(s.`CAT_V`) CAT_V_CYR,
+        TO_CYRILLIC(s.`NAME_V`) NAME_V_CYR, TO_CYRILLIC(s.`BLD`) BLD_CYR, TO_CYRILLIC(s.`CORP`) CORP_CYR,
+        TO_CYRILLIC(s.`FLAT`) FLAT_CYR,
+
+        TO_CYRILLIC(s.`last_name`) last_name_cyr, TO_CYRILLIC(s.`first_name`) first_name_cyr,
+        TO_CYRILLIC(s.`middle_name`) middle_name_cyr
+        FROM `subsidy` s
+
+        WHERE s.`id` = #{id}
+    </select>
     
     <delete id="deleteSubsidies" parameterType="long">
         DELETE FROM `subsidy` WHERE `request_file_id` = #{id};

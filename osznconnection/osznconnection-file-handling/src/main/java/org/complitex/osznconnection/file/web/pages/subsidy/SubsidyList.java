@@ -40,7 +40,6 @@ import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.SubsidyExample;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
-import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
@@ -80,9 +79,6 @@ public final class SubsidyList extends TemplatePage {
 
     @EJB
     private StatusDetailBean statusDetailBean;
-
-    @EJB(name = "OsznAddressService")
-    private AddressService addressService;
 
     @EJB
     private SessionBean sessionBean;
@@ -263,7 +259,7 @@ public final class SubsidyList extends TemplatePage {
                 item.add(new AjaxEventBehavior("click") {
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
-                        editPanel.open(target, subsidy);
+                        editPanel.open(target, subsidy.getId());
 
                         target.add(item.add(AttributeModifier.append("class", "data-row-hover")));
                     }

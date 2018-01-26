@@ -49,8 +49,8 @@ public class SubsidySaveTaskBean extends AbstractSaveTaskBean implements ITaskBe
 
                     subsidy.setDbfFields(new HashMap<>(s.getDbfFields()));
 
-                    subsidy.putField(SubsidyDBF.DAT1, split.getBigDecimalField(SubsidySplitField.DAT1));
-                    subsidy.putField(SubsidyDBF.DAT2, split.getBigDecimalField(SubsidySplitField.DAT2));
+                    subsidy.putField(SubsidyDBF.DAT1, split.getDateField(SubsidySplitField.DAT1));
+                    subsidy.putField(SubsidyDBF.DAT2, split.getDateField(SubsidySplitField.DAT2));
 
                     subsidy.putField(SubsidyDBF.SM1, split.getBigDecimalField(SubsidySplitField.SM1));
                     subsidy.putField(SubsidyDBF.SM2, split.getBigDecimalField(SubsidySplitField.SM2));
@@ -63,7 +63,7 @@ public class SubsidySaveTaskBean extends AbstractSaveTaskBean implements ITaskBe
 
                     subsidy.putField(SubsidyDBF.SUMMA, split.getBigDecimalField(SubsidySplitField.SUMMA));
                     subsidy.putField(SubsidyDBF.SUBS, split.getBigDecimalField(SubsidySplitField.SUBS));
-                    subsidy.putField(SubsidyDBF.NUMM, split.getBigDecimalField(SubsidySplitField.NUMM));
+                    subsidy.putField(SubsidyDBF.NUMM, split.getIntegerField(SubsidySplitField.NUMM));
 
                     list.add(subsidy);
                 });

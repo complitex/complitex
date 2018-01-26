@@ -186,7 +186,11 @@ public class SubsidyBean extends AbstractRequestBean {
         sqlSession().update(NS + ".markCorrected", params);
     }
 
-    public List<Subsidy> getSubsidies(long requestFileId) {
+    public List<Subsidy> getSubsidies(Long requestFileId) {
         return sqlSession().selectList(NS + ".selectSubsidies", requestFileId);
+    }
+
+    public Subsidy getSubsidy(Long id){
+        return sqlSession().selectOne(NS + ".selectSubsidy", id);
     }
 }
