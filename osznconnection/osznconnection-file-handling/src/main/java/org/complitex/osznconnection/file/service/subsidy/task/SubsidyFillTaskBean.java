@@ -158,11 +158,7 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
                 return;
             }
 
-            if (dat1.until(dat2).getMonths() == 1) {
-                split(subsidy, 1, dat1.withDayOfMonth(1));
-
-                log.info("subsidy fill: subsidy splits recalculate 1 month {}", subsidy);
-            }else{
+            if (dat1.until(dat2).getMonths() > 1) {
                 recalculation(requestFile, subsidy);
             }
         }
