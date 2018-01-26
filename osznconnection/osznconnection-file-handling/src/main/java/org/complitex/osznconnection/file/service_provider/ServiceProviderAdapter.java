@@ -1568,8 +1568,6 @@ public class ServiceProviderAdapter extends AbstractBean {
     }
 
     private <T> Cursor<T> getData(Long userOrganization, String statement, Map<String, Object> param) throws RemoteCallException {
-        param.put("okCode", 0);
-
         try {
             sqlSession(getDataSource(userOrganization)).selectOne(NS + "." + statement, param);
         } catch (Exception e) {
@@ -1578,7 +1576,7 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         log.info("{}: {}", statement, param);
 
-        return new Cursor<>((Integer)param.get("resultCode"), (List) param.get("out"));
+        return new Cursor<>((Integer)param.get("resultCode"), (List) param.get("data"));
     }
 
     /*Subsidy*/
