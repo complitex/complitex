@@ -1,5 +1,7 @@
 package org.complitex.osznconnection.file.entity.subsidy;
 
+import com.google.common.base.MoreObjects;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -90,5 +92,21 @@ public class SubsidyData {
 
     public void setSubsMonth(Date subsMonth) {
         this.subsMonth = subsMonth;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("sm1", sm1)
+                .add("sm2", sm2)
+                .add("sm3", sm3)
+                .add("sm4", sm4)
+                .add("sm5", sm5)
+                .add("sm6", sm6)
+                .add("sm7", sm7)
+                .add("sm8", sm8)
+                .add("opMonth", opMonth)
+                .add("subsMonth", subsMonth)
+                .toString();
     }
 }
