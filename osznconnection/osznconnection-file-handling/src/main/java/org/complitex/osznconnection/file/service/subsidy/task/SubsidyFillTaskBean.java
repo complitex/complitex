@@ -405,6 +405,7 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
                 if (subsidy.getBigDecimalField(SubsidyDBF.SUMMA).compareTo(sumSumma) == 0){
                     subsidy.setStatus(RequestStatus.SUBSIDY_RECALCULATED);
+                    subsidyBean.update(subsidy);
 
                     log.info("subsidy fill: add subsidy split recalculated {}", subsidySplits);
                 }else{
@@ -419,12 +420,11 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
                         log.info("subsidy fill: subsidy split recalculated 0 sum {} {}", subsidy, subsidySplits);
                     }else{
                         subsidy.setStatus(RequestStatus.SUBSIDY_RECALCULATE_ERROR);
+                        subsidyBean.update(subsidy);
 
                         log.info("subsidy fill error: subsidy split recalculate error {}", subsidySplits);
                     }
                 }
-
-                subsidyBean.update(subsidy);
             }else{
                 subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
                 subsidyBean.update(subsidy);
