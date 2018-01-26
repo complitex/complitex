@@ -211,7 +211,7 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
             if (!subsidyDataCursor.isEmpty()){
                 List<SubsidyData> data = subsidyDataCursor.getData();
 
-                data.sort(Comparator.comparing(SubsidyData::getOpMonth));
+                data.sort(Comparator.comparing(SubsidyData::getSubsMonth));
 
                 BigDecimal summa = data.stream()
                         .map(d -> d.getSm1()
@@ -242,7 +242,7 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
                     subsidySplit.setSubsidyId(subsidy.getId());
 
-                    LocalDate date = new Date(data.get(i).getOpMonth().getTime()).toInstant()
+                    LocalDate date = new Date(data.get(i).getSubsMonth().getTime()).toInstant()
                             .atZone(ZoneId.systemDefault()).toLocalDate();
 
                     subsidySplit.putField(SubsidySplitField.DAT1, Date.from(date
@@ -329,7 +329,7 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
                     subsidySplit.setSubsidyId(subsidy.getId());
 
-                    LocalDate date = new Date(data.get(data.size() - 1).getOpMonth().getTime()).toInstant()
+                    LocalDate date = new Date(data.get(data.size() - 1).getSubsMonth().getTime()).toInstant()
                             .atZone(ZoneId.systemDefault()).toLocalDate();
 
                     subsidySplit.putField(SubsidySplitField.DAT1, Date.from(date
