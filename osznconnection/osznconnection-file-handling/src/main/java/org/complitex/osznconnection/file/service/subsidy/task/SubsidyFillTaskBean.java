@@ -320,6 +320,8 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
 
                     subsidySplit.putField(SubsidySplitField.SUBS, subsidy.getBigDecimalField(SubsidyDBF.SUBS));
                     subsidySplit.putField(SubsidySplitField.NUMM, 1);
+
+                    subsidySplits.add(subsidySplit);
                 }
 
                 {
