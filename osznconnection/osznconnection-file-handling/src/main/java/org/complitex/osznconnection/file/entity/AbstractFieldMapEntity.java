@@ -12,14 +12,14 @@ import java.util.TreeMap;
  * 25.01.2018 17:57
  */
 public class AbstractFieldMapEntity<E extends Enum> {
-    private Map<String, Object> fieldMap = new TreeMap<>();
+    private Map<String, Object> dbfFields = new TreeMap<>();
 
     public Object getField(String fieldName) {
-        return fieldMap.get(fieldName);
+        return dbfFields.get(fieldName);
     }
 
     public void putField(String fieldName, Object object) {
-        fieldMap.put(fieldName, object);
+        dbfFields.put(fieldName, object);
     }
 
     public void putField(E e, Object object) {
@@ -35,41 +35,41 @@ public class AbstractFieldMapEntity<E extends Enum> {
     }
 
     public String getUpStringField(E e, String postfix) {
-        Object o = fieldMap.get(e.name() + postfix);
+        Object o = dbfFields.get(e.name() + postfix);
 
         return o != null ? o.toString().toUpperCase() : null;
     }
 
     public String getStringField(E e) {
-        Object o = fieldMap.get(e.name());
+        Object o = dbfFields.get(e.name());
 
         return o != null ? o.toString() : null;
     }
 
     public String getStringField(E e, String postfix) {
-        Object o = fieldMap.get(e.name() + postfix);
+        Object o = dbfFields.get(e.name() + postfix);
 
         return o != null ? o.toString() : null;
     }
 
     public Date getDateField(E e){
-        return (Date) fieldMap.get(e.name());
+        return (Date) dbfFields.get(e.name());
     }
 
     public Integer getIntegerField(E e){
-        return (Integer) fieldMap.get(e.name());
+        return (Integer) dbfFields.get(e.name());
     }
 
     public BigDecimal getBigDecimalField(E e){
-        return (BigDecimal) fieldMap.get(e.name());
+        return (BigDecimal) dbfFields.get(e.name());
     }
 
-    public Map<String, Object> getMap() {
-        return fieldMap;
+    public Map<String, Object> getDbfFields() {
+        return dbfFields;
     }
 
-    public void setMap(Map<String, Object> map) {
-        this.fieldMap = map;
+    public void setDbfFields(Map<String, Object> dbfFields) {
+        this.dbfFields = dbfFields;
     }
 
     @Override
@@ -80,6 +80,6 @@ public class AbstractFieldMapEntity<E extends Enum> {
     protected MoreObjects.ToStringHelper getToStringHelper() {
         return MoreObjects.toStringHelper(this)
                 .omitNullValues()
-                .add("fieldMap", fieldMap);
+                .add("dbfFields", dbfFields);
     }
 }

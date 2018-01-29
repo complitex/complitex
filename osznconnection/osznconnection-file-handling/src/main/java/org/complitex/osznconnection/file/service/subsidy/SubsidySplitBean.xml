@@ -4,7 +4,7 @@
     <resultMap id="subsidySplitRequestMap" type="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit">
         <id property="id" column="id"/>
 
-        <association property="fieldMap" javaType="map">
+        <association property="dbfFields" javaType="map">
             <result column="DAT1" property="DAT1"/>
             <result column="DAT2" property="DAT2"/>
 
@@ -34,19 +34,19 @@
     <insert id="insertSubsidySplit" parameterType="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit"
             keyProperty="id" useGeneratedKeys="true">
         insert into `subsidy_split` (subsidy_id,
-        <foreach collection="fieldMap.keys" item="key" separator=",">
+        <foreach collection="dbfFields.keys" item="key" separator=",">
             `${key}`
         </foreach>)
         values
         (#{subsidyId},
-        <foreach collection="fieldMap.keys" item="key" separator=",">
-            #{fieldMap.${key}}
+        <foreach collection="dbfFields.keys" item="key" separator=",">
+            #{dbfFields.${key}}
         </foreach>)
     </insert>
 
     <update id="updateSubsidySplit" parameterType="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit">
         update `subsidy_split` set
-        <foreach collection="fieldMap.entrySet()" item="item" index="key" separator=",">
+        <foreach collection="dbfFields.entrySet()" item="item" index="key" separator=",">
             `${key}` = #{item}
         </foreach>
         where `id` = #{id}

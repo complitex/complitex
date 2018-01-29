@@ -67,10 +67,8 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
     private RequestWarningBean requestWarningBean;
 
 
-    private boolean resolveAddress(PrivilegeProlongation privilegeProlongation) {
+    private void resolveAddress(PrivilegeProlongation privilegeProlongation) {
         addressService.resolveAddress(privilegeProlongation);
-
-        return privilegeProlongation.getStatus().isAddressResolved();
     }
 
     @SuppressWarnings("Duplicates")
@@ -87,7 +85,7 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
         }
     }
 
-    private boolean resolveRemoteAccountNumber(String serviceProviderCode, PrivilegeProlongation privilegeProlongation) throws MoreOneAccountException {
+    private void resolveRemoteAccountNumber(String serviceProviderCode, PrivilegeProlongation privilegeProlongation) throws MoreOneAccountException {
         serviceProviderAdapter.acquireFacilityPersonAccount(privilegeProlongation,
                 privilegeProlongation.getOutgoingDistrict(), serviceProviderCode, privilegeProlongation.getOutgoingStreetType(),
                 privilegeProlongation.getOutgoingStreet(),
@@ -100,8 +98,6 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
             personAccountService.save(privilegeProlongation, !Strings.isNullOrEmpty(privilegeProlongation.getPuAccountNumber())
                     ? privilegeProlongation.getPuAccountNumber() : privilegeProlongation.getInn());
         }
-
-        return privilegeProlongation.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
     public void bind(String serviceProviderCode, PrivilegeProlongation privilegeProlongation) throws MoreOneAccountException {

@@ -37,14 +37,6 @@ public abstract class AbstractRequest<E extends Enum> extends AbstractFieldMapEn
         this.requestFileType = requestFileType;
     }
 
-    public Map<String, Object> getDbfFields() {
-        return getMap();
-    }
-
-    public void setDbfFields(Map<String, Object> dbfFields) {
-        setMap(dbfFields);
-    }
-
     public Map<String, Object> getUpdateFieldMap() {
         return updateFieldMap;
     }
