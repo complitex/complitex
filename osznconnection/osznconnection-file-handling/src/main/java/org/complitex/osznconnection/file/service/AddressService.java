@@ -173,6 +173,19 @@ public class AddressService extends AbstractBean {
         }
 
         //Связывание улицы
+        if (request.getStreet() == null && request.getStreetCode() != null){
+            try {
+                List<Correction> streetCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.STREET,
+                        Long.valueOf(request.getStreetCode()), osznId, userOrganizationId);
+
+                if (streetCorrections.size() == 1){
+                    request.setStreet(streetCorrections.get(0).getCorrection());
+                }
+            } catch (NumberFormatException e) {
+                log.error("error get street correction {}", request, e);
+            }
+        }
+
         if (request.getStreet() == null || request.getStreet().isEmpty()){
             request.setStatus(RequestStatus.STREET_UNRESOLVED_LOCALLY);
 

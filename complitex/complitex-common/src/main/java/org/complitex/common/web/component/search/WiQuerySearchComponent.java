@@ -98,7 +98,7 @@ public class WiQuerySearchComponent extends Panel {
 
     private List<String> searchFilters;
     private List<SearchFilterSettings> searchFilterSettings;
-    private transient ISearchCallback callback;
+    private ISearchCallback callback;
     private SearchComponentState searchComponentState;
     private boolean enabled;
     private List<IModel<DomainObject>> filterModels;

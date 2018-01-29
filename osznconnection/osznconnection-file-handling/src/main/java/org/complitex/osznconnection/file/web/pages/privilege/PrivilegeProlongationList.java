@@ -28,6 +28,8 @@ import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
+import org.complitex.correction.entity.Correction;
+import org.complitex.correction.service.CorrectionBean;
 import org.complitex.correction.web.address.component.AddressCorrectionDialog;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.example.PrivilegeExample;
@@ -35,7 +37,6 @@ import org.complitex.osznconnection.file.entity.privilege.FacilityStreet;
 import org.complitex.osznconnection.file.entity.privilege.FacilityStreetDBF;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongationDBF;
-import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
 import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
@@ -82,7 +83,7 @@ public class PrivilegeProlongationList extends TemplatePage {
     private StatusDetailBean statusDetailBean;
 
     @EJB
-    private AddressService addressService;
+    private CorrectionBean correctionBean;
 
     @EJB
     private SessionBean sessionBean;
@@ -293,9 +294,23 @@ public class PrivilegeProlongationList extends TemplatePage {
                         ? privilegeProlongation.getStreetType()
                         : "";
 
-                String street = privilegeProlongation.getStreet() != null
-                        ? privilegeProlongation.getStreet()
-                        : "[" + privilegeProlongation.getStreetCode() + "]";
+                String street = privilegeProlongation.getStreet();
+
+                if (street == null){
+                    try {
+                        List<Correction> streetCorrection = correctionBean.getCorrectionsByExternalId(AddressEntity.STREET,
+                                Long.valueOf(privilegeProlongation.getStreetCode()), privilegeProlongation.getOrganizationId(),
+                                privilegeProlongation.getUserOrganizationId());
+
+                        if (streetCorrection.size() == 1){
+                            street = streetCorrection.get(0).getCorrection() + " [" + privilegeProlongation.getStreetCode() + "]";
+                        }else {
+                            street = "[" + privilegeProlongation.getStreetCode() + "]";
+                        }
+                    } catch (NumberFormatException e) {
+                        log.error("error strret correction {}", privilegeProlongation, e);
+                    }
+                }
 
                 item.add(new Label("streetReference", streetType + " " + street));
                 item.add(new Label("building", privilegeProlongation.getBuildingNumber()));
