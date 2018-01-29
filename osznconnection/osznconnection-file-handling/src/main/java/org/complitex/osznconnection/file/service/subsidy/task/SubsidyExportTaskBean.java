@@ -12,6 +12,7 @@ import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.SaveException;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
+import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
@@ -47,6 +48,9 @@ public class SubsidyExportTaskBean extends AbstractTaskBean<RequestFile>{
     @EJB
     private RequestFileBean requestFileBean;
 
+    @EJB
+    private SubsidyService subsidyService;
+
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         requestFile.setStatus(RequestFileStatus.SAVING);
@@ -64,7 +68,7 @@ public class SubsidyExportTaskBean extends AbstractTaskBean<RequestFile>{
             }
         }
 
-        List<Subsidy> list = subsidyBean.getSubsidies(requestFile.getId());
+        List<Subsidy> list = subsidyService.getSubsidyWithSplitList(requestFile.getId());
 
         Date date = requestFile.getBeginDate();
 
