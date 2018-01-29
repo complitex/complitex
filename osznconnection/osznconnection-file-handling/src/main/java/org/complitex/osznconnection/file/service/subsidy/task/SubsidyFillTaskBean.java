@@ -272,56 +272,56 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
                     subsidySplit.putField(SubsidySplitField.DAT2, Date.from(date.plusMonths(1).minusDays(1)
                             .atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-                    if (sm1Sum.compareTo(ZERO) > 0){
+                    if (sm1Sum.compareTo(ZERO) != 0){
                         subsidySplit.putField(SubsidySplitField.SM1, subsidy.getBigDecimalField(SubsidyDBF.SM1)
                                 .multiply(subsidyData.getSm1()).divide(sm1Sum, 2, HALF_EVEN));
                     }else{
                         subsidySplit.putField(SubsidySplitField.SM1, ZERO);
                     }
 
-                    if (sm2Sum.compareTo(ZERO) > 0) {
+                    if (sm2Sum.compareTo(ZERO) != 0) {
                         subsidySplit.putField(SubsidySplitField.SM2, subsidy.getBigDecimalField(SubsidyDBF.SM2)
                                 .multiply(subsidyData.getSm2()).divide(sm2Sum, 2, HALF_EVEN));
                     }else{
                         subsidySplit.putField(SubsidySplitField.SM2, ZERO);
                     }
 
-                    if (sm3Sum.compareTo(ZERO) > 0) {
+                    if (sm3Sum.compareTo(ZERO) != 0) {
                         subsidySplit.putField(SubsidySplitField.SM3, subsidy.getBigDecimalField(SubsidyDBF.SM3)
                                 .multiply(subsidyData.getSm3()).divide(sm3Sum, 2, HALF_EVEN));
                     }else{
                         subsidySplit.putField(SubsidySplitField.SM3, ZERO);
                     }
 
-                    if (sm4Sum.compareTo(ZERO) > 0) {
+                    if (sm4Sum.compareTo(ZERO) != 0) {
                         subsidySplit.putField(SubsidySplitField.SM4, subsidy.getBigDecimalField(SubsidyDBF.SM4)
                                 .multiply(subsidyData.getSm4()).divide(sm4Sum, 2, HALF_EVEN));
                     }else{
                         subsidySplit.putField(SubsidySplitField.SM4, ZERO);
                     }
 
-                    if (sm5Sum.compareTo(ZERO) > 0) {
+                    if (sm5Sum.compareTo(ZERO) != 0) {
                         subsidySplit.putField(SubsidySplitField.SM5, subsidy.getBigDecimalField(SubsidyDBF.SM5)
                                 .multiply(subsidyData.getSm5()).divide(sm5Sum, 2, HALF_EVEN));
                     }else{
                         subsidySplit.putField(SubsidySplitField.SM5, ZERO);
                     }
 
-                    if (sm6Sum.compareTo(ZERO) > 0) {
+                    if (sm6Sum.compareTo(ZERO) != 0) {
                         subsidySplit.putField(SubsidySplitField.SM6, subsidy.getBigDecimalField(SubsidyDBF.SM6)
                                 .multiply(subsidyData.getSm6()).divide(sm6Sum, 2, HALF_EVEN));
                     }else{
                         subsidySplit.putField(SubsidySplitField.SM6, ZERO);
                     }
 
-                    if (sm7Sum.compareTo(ZERO) > 0) {
+                    if (sm7Sum.compareTo(ZERO) != 0) {
                         subsidySplit.putField(SubsidySplitField.SM7, subsidy.getBigDecimalField(SubsidyDBF.SM7)
                                 .multiply(subsidyData.getSm7()).divide(sm7Sum, 2, HALF_EVEN));
                     }else{
                         subsidySplit.putField(SubsidySplitField.SM7, ZERO);
                     }
 
-                    if (sm8Sum.compareTo(ZERO) > 0) {
+                    if (sm8Sum.compareTo(ZERO) != 0) {
                         subsidySplit.putField(SubsidySplitField.SM8, subsidy.getBigDecimalField(SubsidyDBF.SM8)
                                 .multiply(subsidyData.getSm8()).divide(sm8Sum, 2, HALF_EVEN));
                     }else{
