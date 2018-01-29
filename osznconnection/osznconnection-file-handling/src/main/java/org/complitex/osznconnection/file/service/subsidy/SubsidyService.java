@@ -128,11 +128,7 @@ public class SubsidyService {
 
             if (SUBSIDY_SPLITTED.equals(s.getStatus()) || SUBSIDY_RECALCULATED.equals(s.getStatus())) {
                 subsidySplitBean.getSubsidySplits(s.getId()).forEach(split -> {
-                    Subsidy subsidy = new Subsidy();
-
-                    subsidy.setId(s.getId());
-
-                    subsidy.setDbfFields(new HashMap<>(s.getDbfFields()));
+                    Subsidy subsidy = subsidyBean.getSubsidy(s.getId());
 
                     subsidy.putField(SubsidyDBF.DAT1, split.getDateField(SubsidySplitField.DAT1));
                     subsidy.putField(SubsidyDBF.DAT2, split.getDateField(SubsidySplitField.DAT2));
