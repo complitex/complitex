@@ -802,7 +802,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                 Item item = (Item) dataView.get("item" + requestFile.getId());
 
-                R rf = getRequestFile(requestFile.getId()); //todo add service to update processed count
+                R rf = getObject(requestFile.getId()); //todo add service to update processed count
 
                 if (rf != null){
                     //noinspection unchecked
@@ -826,7 +826,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                     Item item = (Item) dataView.get("item" + id);
 
-                    R rf = getRequestFile(id);
+                    R rf = getObject(id);
 
                     if (rf != null){
                         if (!((AbstractRequestFile)item.getModelObject()).getStatus().equals(rf.getStatus())){
@@ -924,15 +924,5 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
     private String getString(String key, Object... parameters) {
         return MessageFormat.format(getString(key), parameters);
-    }
-
-    private R getRequestFile(Long id){
-        F filter = newFilter();
-        filter.setId(id);
-        filter.setCount(1);
-
-        List<R> list =  getObjects(filter);
-
-        return list != null && !list.isEmpty() ? list.get(0) : null;
     }
 }
