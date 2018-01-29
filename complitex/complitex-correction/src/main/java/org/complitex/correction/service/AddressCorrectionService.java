@@ -480,7 +480,7 @@ public class AddressCorrectionService {
                             localAddress.getStreetId(), null,
                             localAddress.getBuildingId(),
                             externalAddress.getBuildingNumber().toUpperCase(),
-                            externalAddress.getBuildingCorp() != null ? externalAddress.getBuildingCorp().toUpperCase() : null,
+                            externalAddress.getBuildingCorp() != null ? externalAddress.getBuildingCorp().toUpperCase() : "",
                             externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
 
                     correctionBean.save(buildingCorrection);

@@ -82,4 +82,13 @@ public class BuildingCorrectionEditPanel extends AddressCorrectionEditPanel {
     protected IModel<String> getTitleModel() {
         return new StringResourceModel("building_title", this, null);
     }
+
+    @Override
+    protected void save() {
+        if (getCorrection().getAdditionalCorrection() == null){
+            getCorrection().setAdditionalCorrection("");
+        }
+
+        super.save();
+    }
 }
