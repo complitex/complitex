@@ -395,7 +395,7 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
                 }
 
                 subsidySplits.forEach(s -> {
-                    if (s.getBigDecimalField(SubsidySplitField.SUMMA).compareTo(ZERO) > 0) {
+                    if (s.getBigDecimalField(SubsidySplitField.SUMMA).compareTo(ZERO) != 0) {
                         subsidySplitBean.save(s);
                     }
                 });
