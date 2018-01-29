@@ -122,12 +122,12 @@
 
     <sql id="markPrivilegeCorrected">
         update `${table}` d
-        left join `request_file` d_rf ON d.`request_file_id` = d_rf.`id`
+        left join `request_file` d_rf ON (d.`request_file_id` = d_rf.`id`)
         left join `facility_street_reference` r on d.`CDUL` = r.`KL_CODEUL`
-        left join `request_file` r_rf ON r.`request_file_id` = r_rf.`id`
+        left join `request_file` r_rf ON (r.`request_file_id` = r_rf.`id` and d_rf.`organization_id` = r_rf.`organization_id`
+          and d_rf.`user_organization_id` = r_rf.`user_organization_id`)
         set d.`status` = 204
         where d.`request_file_id` = #{fileId}
-        and d_rf.`organization_id` = r_rf.`organization_id` and d_rf.`user_organization_id` = r_rf.`user_organization_id`
 
         <if test="streetTypeCode != null and streetCode == null">
             and r.`KL_CODEKUL` = #{streetTypeCode} and d.`status` = 237

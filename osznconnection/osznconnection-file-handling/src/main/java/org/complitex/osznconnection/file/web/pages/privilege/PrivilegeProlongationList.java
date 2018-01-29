@@ -323,16 +323,9 @@ public class PrivilegeProlongationList extends TemplatePage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        privilegeProlongation.setStreet(privilegeProlongation.getStreet() != null
-                                ? privilegeProlongation.getStreet()
-                                : getString("streetCodePrefix") + " " + privilegeProlongation.getStreetCode());
-
-                        privilegeProlongation.setStreetType(privilegeProlongation.getStreetType() != null
-                                ? privilegeProlongation.getStreetType()
-                                : getString("streetTypeNotFound"));
-
                         addressCorrectionDialog.open(target, item.getModel(), privilegeProlongation.getPersonalName(),
-                                privilegeProlongation.getExternalAddress(), privilegeProlongation.getLocalAddress());
+                                privilegeProlongation.getExternalAddress(), privilegeProlongation.getLocalAddress(),
+                                privilegeProlongation.getStreetId() != null);
                     }
                 };
                 addressCorrectionLink.setVisible(privilegeProlongation.getStatus().isAddressCorrectable());

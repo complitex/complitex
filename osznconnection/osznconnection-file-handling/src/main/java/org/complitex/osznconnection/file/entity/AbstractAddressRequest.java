@@ -42,8 +42,8 @@ public abstract class AbstractAddressRequest<E extends Enum> extends AbstractReq
     }
 
     public ExternalAddress getExternalAddress(){
-        return new ExternalAddress(getCity(), getStreetType(), getStreet(), getBuildingNumber(), getBuildingCorp(),
-                getApartment(), null, getOrganizationId(), getUserOrganizationId());
+        return new ExternalAddress(getCity(), getStreetType(), getStreet(), getStreetCode(), getBuildingNumber(),
+                getBuildingCorp(), getApartment(), null, getOrganizationId(), getUserOrganizationId());
     }
 
     public String getCity() {

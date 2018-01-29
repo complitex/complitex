@@ -325,7 +325,10 @@ public class AddressCorrectionDialog<T> extends Panel {
         open(target, model, personalName, localAddress.getFirstEmptyAddressEntity(), externalAddress, localAddress);
     }
 
-
+    public void open(AjaxRequestTarget target, IModel<T> model, PersonalName personalName,
+                     ExternalAddress externalAddress, LocalAddress localAddress, boolean streetType) {
+        open(target, model, personalName, localAddress.getFirstEmptyAddressEntity(streetType), externalAddress, localAddress);
+    }
 
     protected void correctAddress(AddressEntity addressEntity, ExternalAddress externalAddress, LocalAddress localAddress)
             throws CorrectionException{

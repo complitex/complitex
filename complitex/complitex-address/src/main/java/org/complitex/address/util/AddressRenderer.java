@@ -46,7 +46,7 @@ public final class AddressRenderer {
 
     public static String displayStreet(String streetType, String street, Locale locale) {
         if (Strings.isEmpty(streetType)) {
-            return street;
+            return street != null ? street : "";
         } else {
             return streetType + " " + street;
         }
@@ -99,6 +99,18 @@ public final class AddressRenderer {
         return displayStrings(displayCity, displayStreet, displayBuilding, displayApartment, displayRoom);
     }
 
+    public static String displayAddress(String cityType, String city, String streetType, String street, String streetCode,
+                                        String buildingNumber, String buildingCorp, String apartment, String room, Locale locale) {
+        String displayCity = displayCity(cityType, city, locale);
+        String displayStreet = displayStreet(streetType, street, locale) +
+                (streetCode != null ? " [" + streetCode + "]" : "");
+        String displayBuilding = displayBuilding(buildingNumber, buildingCorp, locale);
+        String displayApartment = displayApartment(apartment, locale);
+        String displayRoom = displayRoom(room, locale);
+
+        return displayStrings(displayCity, displayStreet, displayBuilding, displayApartment, displayRoom);
+    }
+
     public static String displayAddress(String cityType, String city, String district, Locale locale) {
         String displayCity = displayCity(cityType, city, locale);
         String displayDistrict = displayDistrict(district, locale);
@@ -108,7 +120,8 @@ public final class AddressRenderer {
 
     public static String displayAddress(ExternalAddress address, Locale locale){
         return displayAddress(null, address.getCity(), address.getStreetType(), address.getStreet(),
-                address.getBuildingNumber(), address.getBuildingCorp(), address.getApartment(), address.getRoom(), locale);
+                address.getStreetCode(), address.getBuildingNumber(), address.getBuildingCorp(), address.getApartment(),
+                address.getRoom(), locale);
     }
 
     private static String displayStrings(String... strings) {

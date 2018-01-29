@@ -24,6 +24,21 @@ public class ExternalAddress implements Serializable{
     public ExternalAddress() {
     }
 
+    public ExternalAddress(String city, String streetType, String street, String streetCode, String buildingNumber,
+                           String buildingCorp, String apartment, String room,
+                           Long organizationId, Long userOrganizationId) {
+        this.city = city;
+        this.streetType = streetType;
+        this.street = street;
+        this.streetCode = streetCode;
+        this.buildingNumber = buildingNumber;
+        this.buildingCorp = buildingCorp;
+        this.apartment = apartment;
+        this.room = room;
+        this.organizationId = organizationId;
+        this.userOrganizationId = userOrganizationId;
+    }
+
     public ExternalAddress(String city, String streetType, String street, String buildingNumber,
                            String buildingCorp, String apartment, String room,
                            Long organizationId, Long userOrganizationId) {

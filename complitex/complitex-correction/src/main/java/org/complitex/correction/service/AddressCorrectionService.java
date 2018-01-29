@@ -446,25 +446,46 @@ public class AddressCorrectionService {
             break;
 
             case STREET:
-                List<Correction> streetCorrections =
-                        correctionBean.getCorrections(AddressEntity.STREET, localAddress.getCityId(), localAddress.getStreetTypeId(),
-                                externalAddress.getStreet(), externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
+                if (externalAddress.getStreet() == null && externalAddress.getStreetCode() != null) {
+                    Long externalId = Long.valueOf(externalAddress.getStreetCode());
 
-                if (streetCorrections.isEmpty()) {
-                    Long streetTypeId = localAddress.getStreetTypeId();
+                    List<Correction> streetCorrections =
+                            correctionBean.getCorrectionsByExternalId(AddressEntity.STREET, externalId,
+                                    externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
 
-                    if (streetTypeId == null){
-                        streetTypeId = streetStrategy.getStreetType(localAddress.getStreetId());
+                    if (streetCorrections.isEmpty()) {
+                        DomainObject street = streetStrategy.getDomainObject(localAddress.getStreetId());
+
+                        Correction streetCorrection = new Correction(AddressEntity.STREET.getEntityName(),
+                                localAddress.getCityId(), street.getValueId(StreetStrategy.STREET_TYPE),
+                                externalId, localAddress.getStreetId(), street.getStringValue(StreetStrategy.NAME),
+                                externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
+
+                        correctionBean.save(streetCorrection);
+                    } else {
+                        throw new DuplicateCorrectionException();
                     }
-
-                    Correction streetCorrection = new Correction(AddressEntity.STREET.getEntityName(),
-                            localAddress.getCityId(), streetTypeId,
-                            null, localAddress.getStreetId(), externalAddress.getStreet().toUpperCase(),
-                            externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
-
-                    correctionBean.save(streetCorrection);
                 } else {
-                    throw new DuplicateCorrectionException();
+                    List<Correction> streetCorrections =
+                            correctionBean.getCorrections(AddressEntity.STREET, localAddress.getCityId(), localAddress.getStreetTypeId(),
+                                    externalAddress.getStreet(), externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
+
+                    if (streetCorrections.isEmpty()) {
+                        Long streetTypeId = localAddress.getStreetTypeId();
+
+                        if (streetTypeId == null){
+                            streetTypeId = streetStrategy.getStreetType(localAddress.getStreetId());
+                        }
+
+                        Correction streetCorrection = new Correction(AddressEntity.STREET.getEntityName(),
+                                localAddress.getCityId(), streetTypeId,
+                                null, localAddress.getStreetId(), externalAddress.getStreet().toUpperCase(),
+                                externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
+
+                        correctionBean.save(streetCorrection);
+                    } else {
+                        throw new DuplicateCorrectionException();
+                    }
                 }
 
                 break;
