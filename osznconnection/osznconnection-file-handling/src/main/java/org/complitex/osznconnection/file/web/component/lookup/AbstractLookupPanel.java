@@ -23,7 +23,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.CloneUtil;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.web.component.ShowMode;
 import org.complitex.common.web.component.search.SearchComponentState;
@@ -430,7 +429,7 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
     protected abstract boolean isInternalAddressCorrect(T request);
 
     public void open(AjaxRequestTarget target, T request, String serviceProviderAccountNumber) {
-        this.request = CloneUtil.cloneObject(request); //todo load
+        this.request = request; //todo load
         initialRequestModel.setObject(request);;
 
         accountDetailModel.setObject(null);
