@@ -105,7 +105,7 @@
         SELECT *,
             (SELECT COUNT(1) FROM `subsidy` WHERE `request_file_id` = rf.`id`) as loaded_record_count,
             (SELECT COUNT(1) FROM `subsidy` WHERE `request_file_id` = rf.`id` AND `account_number` is not null) as binded_record_count,
-            (SELECT COUNT(1) FROM `subsidy` WHERE `request_file_id` = rf.`id` AND `status` = 215) as filled_record_count,
+            (SELECT COUNT(1) FROM `subsidy` WHERE `request_file_id` = rf.`id` AND (`status` = 215 or `status` = 258 or `status` = 260)) as filled_record_count,
             (SELECT SUM(CAST(`SUMMA` AS DECIMAL(15,2))) FROM `subsidy` WHERE `request_file_id` = rf.`id`) as `sum`
         <include refid="org.complitex.osznconnection.file.service.RequestFileBean.fromFilterSort"/>
     </select>
