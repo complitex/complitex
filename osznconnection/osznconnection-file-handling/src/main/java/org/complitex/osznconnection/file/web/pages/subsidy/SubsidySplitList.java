@@ -48,7 +48,7 @@ public class SubsidySplitList extends TemplatePage {
                 @Override
                 public void populateItem(Item<ICellPopulator<SubsidySplit>> cellItem, String componentId,
                                          IModel<SubsidySplit> rowModel) {
-                    cellItem.add(new Label(componentId, new PropertyModel<>(rowModel, "fieldMap." + key.name())));
+                    cellItem.add(new Label(componentId, new PropertyModel<>(rowModel, "dbfFields." + key.name())));
                 }
             });
         }
