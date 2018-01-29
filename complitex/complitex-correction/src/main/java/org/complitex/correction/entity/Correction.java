@@ -56,7 +56,8 @@ public class Correction implements Serializable {
 
     public Correction(String entityName, Long parentId, Long externalId, Long objectId, String correction,
                       String additionalCorrection, Long organizationId, Long userOrganizationId) {
-        this(entityName, parentId, null, externalId, objectId, correction, organizationId, userOrganizationId);
+        this(entityName, parentId, null, externalId, objectId, correction, additionalCorrection,
+                organizationId, userOrganizationId);
     }
 
     public Correction(String entityName, Long parentId, Long externalId, Long objectId, String correction,
