@@ -2,7 +2,6 @@ package org.complitex.osznconnection.file.entity;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
-import org.complitex.common.entity.ILongId;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.TreeMap;
  * Абстрактное представление записи файла запроса.
  * Используется <code>Map<String, Object></code> для хранения названий и значений полей.
  */
-public abstract class AbstractRequest<E extends Enum> extends AbstractFieldMapEntity<E> implements ILongId{
+public abstract class AbstractRequest<E extends Enum> extends AbstractFieldMapEntity<E>{
     private Long id;
     private Long requestFileId;
     private Long groupId;

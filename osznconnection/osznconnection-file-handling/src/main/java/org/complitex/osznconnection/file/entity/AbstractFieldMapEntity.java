@@ -1,6 +1,7 @@
 package org.complitex.osznconnection.file.entity;
 
 import com.google.common.base.MoreObjects;
+import org.complitex.common.entity.ILongId;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.TreeMap;
  * @author Anatoly A. Ivanov
  * 25.01.2018 17:57
  */
-public class AbstractFieldMapEntity<E extends Enum> {
+public abstract class AbstractFieldMapEntity<E extends Enum> implements ILongId {
     private Map<String, Object> dbfFields = new TreeMap<>();
 
     public Object getField(String fieldName) {
