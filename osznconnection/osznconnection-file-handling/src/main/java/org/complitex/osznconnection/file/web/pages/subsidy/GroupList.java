@@ -161,7 +161,7 @@ public class GroupList extends TemplatePage {
         }
 
         @Override
-        protected RequestFileGroup getObject(long id) {
+        protected RequestFileGroup getObject(Long id) {
             return requestFileGroupBean.getRequestFileGroup(id);
         }
 

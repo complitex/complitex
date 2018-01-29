@@ -139,7 +139,7 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
     }
 
     @Override
-    protected PrivilegeFileGroup getObject(long id) {
+    protected PrivilegeFileGroup getObject(Long id) {
         return privilegeFileGroupBean.getPrivilegeFileGroup(id);
     }
 

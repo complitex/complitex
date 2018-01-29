@@ -111,7 +111,7 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
     }
 
     @Override
-    protected RequestFile getObject(long id) {
+    protected RequestFile getObject(Long id) {
         return requestFileBean.getRequestFile(id);
     }
 
