@@ -2,9 +2,9 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 
 import com.google.common.collect.Lists;
 import org.complitex.common.entity.Log;
-import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.executor.AbstractTaskBean;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.ConfigBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -13,9 +13,10 @@ import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Benefit;
 import org.complitex.osznconnection.file.entity.subsidy.Payment;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
-import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.FillException;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
@@ -39,7 +40,7 @@ import java.util.Set;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class GroupFillTaskBean extends AbstractTaskBean<RequestFileGroup> {
+public class GroupFillTaskBean extends AbstractRequestTaskBean<RequestFileGroup> {
     private final Logger log = LoggerFactory.getLogger(GroupFillTaskBean.class);
 
     @EJB
@@ -178,7 +179,7 @@ public class GroupFillTaskBean extends AbstractTaskBean<RequestFileGroup> {
 
                 //обработать payment запись
                 process(payment);
-                onRequest(payment);
+                onRequest(payment, ProcessType.FILL_GROUP);
             }
         }
     }
@@ -221,7 +222,7 @@ public class GroupFillTaskBean extends AbstractTaskBean<RequestFileGroup> {
                     try {
                         benefitBean.update(benefit);
 
-                        onRequest(benefit);
+                        onRequest(benefit, ProcessType.FILL_GROUP);
                     } catch (Exception e) {
                         log.error("The benefit item (id = " + benefit.getId() + ") was processed with error: ", e);
                         throw new FillException(e, false, benefitFile);

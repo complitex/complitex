@@ -3,12 +3,12 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.exception.ExecuteException;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.SaveException;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @author inheaven on 021 21.10.16.
  */
 @Stateless
-public class SubsidyExportTaskBean extends AbstractTaskBean<RequestFile>{
+public class SubsidyExportTaskBean extends AbstractRequestTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(SubsidyExportTaskBean.class);
 
     private final static Class RESOURCE = SubsidyExportTaskBean.class;

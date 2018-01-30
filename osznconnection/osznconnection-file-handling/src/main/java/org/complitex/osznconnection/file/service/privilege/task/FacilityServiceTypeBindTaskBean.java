@@ -2,21 +2,22 @@ package org.complitex.osznconnection.file.service.privilege.task;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.executor.AbstractTaskBean;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.ConfigBean;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -40,7 +41,7 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_AC
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFile> {
+public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(FacilityServiceTypeBindTaskBean.class);
 
     @EJB
@@ -162,7 +163,7 @@ public class FacilityServiceTypeBindTaskBean extends AbstractTaskBean<RequestFil
                 //связать dwelling characteristics запись
                 try {
                     bind(serviceProviderCode, facilityServiceType);
-                    onRequest(facilityServiceType);
+                    onRequest(facilityServiceType, ProcessType.LOAD_FACILITY_STREET_TYPE_REFERENCE);
                 } catch (MoreOneAccountException e) {
                     throw new BindException(e, true, requestFile);
                 }

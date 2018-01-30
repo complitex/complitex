@@ -5,16 +5,17 @@ import org.complitex.common.entity.Log;
 import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.ActualPayment;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.FillException;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ import java.util.*;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class ActualPaymentFillTaskBean extends AbstractTaskBean<RequestFile> {
+public class ActualPaymentFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(ActualPaymentFillTaskBean.class);
 
     @EJB
@@ -159,7 +160,7 @@ public class ActualPaymentFillTaskBean extends AbstractTaskBean<RequestFile> {
 
                 //обработать actualPayment запись
                 process(actualPayment, actualPaymentBean.getFirstDay(actualPayment, actualPaymentFile));
-                onRequest(actualPayment);
+                onRequest(actualPayment, ProcessType.FILL_ACTUAL_PAYMENT);
             }
         }
     }

@@ -2,9 +2,9 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.executor.AbstractTaskBean;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.ConfigBean;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
@@ -12,12 +12,13 @@ import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Payment;
 import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
@@ -44,7 +45,7 @@ import static org.complitex.osznconnection.file.entity.subsidy.PaymentDBF.OWN_NU
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class GroupBindTaskBean extends AbstractTaskBean<RequestFileGroup> {
+public class GroupBindTaskBean extends AbstractRequestTaskBean<RequestFileGroup> {
     private final Logger log = LoggerFactory.getLogger(GroupBindTaskBean.class);
 
     @EJB
@@ -225,7 +226,7 @@ public class GroupBindTaskBean extends AbstractTaskBean<RequestFileGroup> {
 
                 //связать payment запись
                 bind(serviceProviderCode, payment);
-                onRequest(payment);
+                onRequest(payment, ProcessType.BIND_GROUP);
             }
         }
     }

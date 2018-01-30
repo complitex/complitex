@@ -2,22 +2,23 @@ package org.complitex.osznconnection.file.service.privilege.task;
 
 import com.google.common.collect.Lists;
 import org.apache.wicket.util.string.Strings;
-import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.executor.AbstractTaskBean;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.ConfigBean;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -37,7 +38,7 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_AC
 
 @Stateless(name = "DwellingCharacteristicsBindTaskBean")
 @TransactionManagement(TransactionManagementType.BEAN)
-public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<RequestFile> {
+public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(DwellingCharacteristicsBindTaskBean.class);
 
     @EJB
@@ -162,7 +163,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractTaskBean<Reques
                 //связать dwelling characteristics запись
                 try {
                     bind(serviceProviderCode, dwellingCharacteristic);
-                    onRequest(dwellingCharacteristic);
+                    onRequest(dwellingCharacteristic, ProcessType.BIND_PRIVILEGE_GROUP);
                 } catch (MoreOneAccountException e) {
                     throw new BindException(e, true, requestFile);
                 }

@@ -2,11 +2,11 @@ package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.exception.ExecuteException;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.SaveException;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeProlongationBean;
@@ -25,7 +25,7 @@ import java.util.Map;
  * @author inheaven on 028 25.07.16.
  */
 @Stateless
-public class PrivilegeProlongationSaveTaskBean extends AbstractTaskBean<RequestFile>{
+public class PrivilegeProlongationSaveTaskBean extends AbstractRequestTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(PrivilegeProlongationSaveTaskBean.class);
 
     private final static Class RESOURCE = PrivilegeProlongationSaveTaskBean.class;

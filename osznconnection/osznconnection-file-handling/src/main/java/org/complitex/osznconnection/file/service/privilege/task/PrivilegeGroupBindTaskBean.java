@@ -2,19 +2,20 @@ package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeGroup;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
@@ -30,7 +31,7 @@ import java.util.Map;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class PrivilegeGroupBindTaskBean extends AbstractTaskBean<PrivilegeFileGroup>{
+public class PrivilegeGroupBindTaskBean extends AbstractRequestTaskBean<PrivilegeFileGroup> {
     @EJB
     private DwellingCharacteristicsBean dwellingCharacteristicsBean;
 
@@ -115,7 +116,7 @@ public class PrivilegeGroupBindTaskBean extends AbstractTaskBean<PrivilegeFileGr
 
                     }
 
-                    onRequest(p);
+                    onRequest(p, ProcessType.LOAD_PRIVILEGE_GROUP);
                 }
             } catch (Exception e) {
                 throw new BindException(e, false, dwellingCharacteristicsRequestFile != null

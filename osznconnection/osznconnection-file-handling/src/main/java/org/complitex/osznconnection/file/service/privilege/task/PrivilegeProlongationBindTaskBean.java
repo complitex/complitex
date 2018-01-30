@@ -5,11 +5,11 @@ import com.google.common.collect.Lists;
 import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
@@ -17,6 +17,7 @@ import org.complitex.osznconnection.file.service.exception.AlreadyProcessingExce
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeProlongationBean;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
@@ -39,7 +40,7 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_AC
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestFile> {
+public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(PrivilegeProlongationBindTaskBean.class);
 
     @EJB
@@ -167,7 +168,7 @@ public class PrivilegeProlongationBindTaskBean extends AbstractTaskBean<RequestF
                 //связать запись
                 try {
                     bind(serviceProviderCode, privilegeProlongation);
-                    onRequest(privilegeProlongation);
+                    onRequest(privilegeProlongation, ProcessType.BIND_PRIVILEGE_PROLONGATION);
                 } catch (MoreOneAccountException e) {
                     throw new BindException(e, true, requestFile);
                 }

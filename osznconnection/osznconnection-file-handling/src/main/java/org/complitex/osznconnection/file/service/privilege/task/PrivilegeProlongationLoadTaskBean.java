@@ -3,17 +3,18 @@ package org.complitex.osznconnection.file.service.privilege.task;
 import org.complitex.common.entity.PersonalName;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongationDBF;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeProlongationBean;
 import org.complitex.osznconnection.file.service.process.AbstractLoadRequestFile;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.util.FacilityNameParser;
 
 import javax.ejb.EJB;
@@ -28,7 +29,7 @@ import java.util.Map;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class PrivilegeProlongationLoadTaskBean extends AbstractTaskBean<RequestFile> {
+public class PrivilegeProlongationLoadTaskBean extends AbstractRequestTaskBean<RequestFile> {
     @EJB
     private RequestFileBean requestFileBean;
 
@@ -67,7 +68,7 @@ public class PrivilegeProlongationLoadTaskBean extends AbstractTaskBean<RequestF
                 public void save(List<PrivilegeProlongation> batch) {
                     privilegeProlongationBean.insertPrivilegeProlongation(batch);
 
-                    batch.forEach(r -> onRequest(r));
+                    batch.forEach(r -> onRequest(r, ProcessType.LOAD_PRIVILEGE_PROLONGATION));
                 }
 
                 @Override

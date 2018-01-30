@@ -1,20 +1,21 @@
 package org.complitex.osznconnection.file.service.subsidy.task;
 
 import com.google.common.collect.Lists;
-import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.executor.AbstractTaskBean;
+import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
+import org.complitex.common.service.ConfigBean;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.common.exception.CanceledByUserException;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
@@ -35,7 +36,7 @@ import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
+public class SubsidyBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(SubsidyBindTaskBean.class);
 
     @EJB
@@ -121,7 +122,7 @@ public class SubsidyBindTaskBean extends AbstractTaskBean<RequestFile> {
 
                 //связать subsidy запись
                 bind(serviceProviderCode, subsidy, updatePuAccount);
-                onRequest(subsidy);
+                onRequest(subsidy, ProcessType.BIND_SUBSIDY);
             }
         }
     }

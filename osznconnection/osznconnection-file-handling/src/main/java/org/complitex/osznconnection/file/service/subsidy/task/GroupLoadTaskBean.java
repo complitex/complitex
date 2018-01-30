@@ -2,14 +2,15 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 
 import org.complitex.common.entity.Log;
 import org.complitex.common.exception.ExecuteException;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.*;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.AbstractLoadRequestFile;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
@@ -27,7 +28,7 @@ import java.util.Map;
  */
 @Stateless(name = "GroupLoadTaskBean")
 @TransactionManagement(TransactionManagementType.BEAN)
-public class GroupLoadTaskBean extends AbstractTaskBean<RequestFileGroup> {
+public class GroupLoadTaskBean extends AbstractRequestTaskBean<RequestFileGroup> {
 
     @EJB
     protected PaymentBean paymentBean;
@@ -72,7 +73,7 @@ public class GroupLoadTaskBean extends AbstractTaskBean<RequestFileGroup> {
                 public void save(List<Payment> batch) {
                     paymentBean.insert(batch);
 
-                    batch.forEach(r -> onRequest(r));
+                    batch.forEach(r -> onRequest(r, ProcessType.LOAD_GROUP));
                 }
 
                 @Override
@@ -108,7 +109,7 @@ public class GroupLoadTaskBean extends AbstractTaskBean<RequestFileGroup> {
                     public void save(List<Benefit> batch) {
                         benefitBean.insert(batch);
 
-                        batch.forEach(r -> onRequest(r));
+                        batch.forEach(r -> onRequest(r, ProcessType.LOAD_GROUP));
                     }
 
                     @Override

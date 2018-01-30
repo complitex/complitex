@@ -3,7 +3,6 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 import org.complitex.common.entity.Log;
 import org.complitex.common.entity.PersonalName;
 import org.complitex.common.exception.ExecuteException;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.AbstractRequest;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -11,9 +10,11 @@ import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Subsidy;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidyDBF;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.AbstractLoadRequestFile;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyService;
 import org.complitex.osznconnection.file.service.util.SubsidyNameParser;
@@ -27,7 +28,7 @@ import java.util.Map;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidyLoadTaskBean extends AbstractTaskBean<RequestFile> {
+public class SubsidyLoadTaskBean extends AbstractRequestTaskBean<RequestFile> {
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -70,7 +71,7 @@ public class SubsidyLoadTaskBean extends AbstractTaskBean<RequestFile> {
 
                     subsidyBean.insert(batch);
 
-                    batch.forEach(r -> onRequest(r));
+                    batch.forEach(r -> onRequest(r, ProcessType.LOAD_SUBSIDY));
                 }
 
                 @Override

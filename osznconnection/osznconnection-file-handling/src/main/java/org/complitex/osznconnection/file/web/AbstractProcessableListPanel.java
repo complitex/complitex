@@ -77,8 +77,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static org.complitex.common.util.StringUtil.currentTime;
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
@@ -804,7 +802,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                 Item item = (Item) dataView.get("item" + requestFile.getId());
 
-                R rf = getRequestFileAsync(requestFile.getId());
+                R rf = getRequestFile(requestFile.getId());
 
                 if (rf != null){
                     //noinspection unchecked
@@ -828,7 +826,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                     Item item = (Item) dataView.get("item" + id);
 
-                    R rf = getRequestFileAsync(id);
+                    R rf = getRequestFile(id);
 
                     if (rf != null){
                         if (!((AbstractRequestFile)item.getModelObject()).getStatus().equals(rf.getStatus())){
@@ -849,9 +847,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             protected boolean filter(AbstractRequest request) {
-                Long id = request.getGroupId() != null ? request.getGroupId() : request.getRequestFileId();
-
-                return dataView.get("item" + id) != null;
+                return request.getProcessType().equals(loadProcessType) ||
+                        request.getProcessType().equals(bindProcessType) ||
+                        request.getProcessType().equals(fillProcessType) ||
+                        request.getProcessType().equals(saveProcessType);
             }
         });
 
@@ -871,8 +870,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     handler.add(messages, dataViewContainer);
                 }
             }
-
-            //todo filter request file type
         });
     }
 
@@ -936,21 +933,5 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         List<R> list =  getObjects(filter);
 
         return list != null && !list.isEmpty() ? list.get(0) : null;
-    }
-
-    private transient java.util.concurrent.ExecutorService executorService;
-
-    protected R getRequestFileAsync(Long id){
-        if (executorService == null){
-            executorService = Executors.newCachedThreadPool();
-        }
-
-        try {
-            return executorService.submit(() -> getRequestFile(id)).get(30, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            log.error("error get object async", e);
-        }
-
-        return null;
     }
 }

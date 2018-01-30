@@ -4,7 +4,6 @@ import org.apache.wicket.util.string.Strings;
 import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.exception.ExecuteException;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.util.ExceptionUtil;
 import org.complitex.common.util.Locales;
 import org.complitex.common.util.ResourceUtil;
@@ -14,6 +13,7 @@ import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.entity.privilege.FacilityForm2;
 import org.complitex.osznconnection.file.entity.privilege.FacilityForm2DBF;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.LoadException;
 import org.complitex.osznconnection.file.service.file_description.RequestFileDescription;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * @author inheaven on 016 16.11.16.
  */
 @Stateless
-public class FacilityForm2LoadTaskBean extends AbstractTaskBean<RequestFile>{
+public class FacilityForm2LoadTaskBean extends AbstractRequestTaskBean<RequestFile> {
     private Logger log = LoggerFactory.getLogger(FacilityForm2LoadTaskBean.class);
 
     private final static Class RESOURCE = FacilityForm2LoadTaskBean.class;

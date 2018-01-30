@@ -4,13 +4,13 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.service.CorrectionBean;
 import org.complitex.organization.strategy.ServiceStrategy;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.privilege.*;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
@@ -19,6 +19,7 @@ import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristi
 import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeGroupService;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ import static org.complitex.osznconnection.file.entity.privilege.FacilityTarifDB
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGroup>{
+public class PrivilegeGroupFillTaskBean extends AbstractRequestTaskBean<PrivilegeFileGroup> {
     private Logger log = LoggerFactory.getLogger(PrivilegeGroupFillTaskBean.class);
 
     @EJB
@@ -111,7 +112,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractTaskBean<PrivilegeFileGr
                         facilityServiceTypeFillTaskBean.fill(p.getFacilityServiceType());
                     }
 
-                    onRequest(p);
+                    onRequest(p, ProcessType.LOAD_PRIVILEGE_GROUP);
                 }
             } catch (Exception e) {
                 throw new FillException(e, false, dwellingCharacteristicsRequestFile != null

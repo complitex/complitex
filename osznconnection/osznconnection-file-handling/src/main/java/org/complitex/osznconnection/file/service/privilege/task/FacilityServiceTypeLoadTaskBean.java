@@ -4,17 +4,18 @@ import org.complitex.common.entity.Log;
 import org.complitex.common.entity.PersonalName;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.ConfigBean;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.process.AbstractLoadRequestFile;
 import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.util.FacilityNameParser;
 
 import javax.ejb.EJB;
@@ -27,7 +28,7 @@ import java.util.Map;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class FacilityServiceTypeLoadTaskBean extends AbstractTaskBean<RequestFile> {
+public class FacilityServiceTypeLoadTaskBean extends AbstractRequestTaskBean<RequestFile> {
 
     @EJB
     private RequestFileBean requestFileBean;
@@ -62,7 +63,7 @@ public class FacilityServiceTypeLoadTaskBean extends AbstractTaskBean<RequestFil
                 public void save(List<FacilityServiceType> batch) {
                     facilityServiceTypeBean.insert(batch);
 
-                    batch.forEach(r -> onRequest(r));
+                    batch.forEach(r -> onRequest(r, ProcessType.LOAD_PRIVILEGE_GROUP));
                 }
 
                 @Override

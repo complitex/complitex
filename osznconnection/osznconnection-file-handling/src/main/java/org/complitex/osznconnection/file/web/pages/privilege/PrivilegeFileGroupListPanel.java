@@ -8,6 +8,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -135,7 +136,7 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
 
     @Override
     protected List<PrivilegeFileGroup> getObjects(RequestFileFilter filter) {
-        return privilegeFileGroupBean.getPrivilegeFileGroups(filter);
+        return EjbBeanLocator.getBean(PrivilegeFileGroupBean.class).getPrivilegeFileGroups(filter);
     }
 
     @Override

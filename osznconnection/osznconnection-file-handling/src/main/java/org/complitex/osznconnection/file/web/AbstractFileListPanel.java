@@ -9,6 +9,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.LogBean;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.scroll.ScrollListBehavior;
@@ -104,10 +105,11 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
 
     @Override
     protected List<RequestFile> getObjects(RequestFileFilter filter) {
+
         filter.setType(requestFileType);
         filter.setSubType(requestFileSubType);
 
-        return requestFileBean.getRequestFiles(filter);
+        return EjbBeanLocator.getBean(RequestFileBean.class).getRequestFiles(filter);
     }
 
     @Override

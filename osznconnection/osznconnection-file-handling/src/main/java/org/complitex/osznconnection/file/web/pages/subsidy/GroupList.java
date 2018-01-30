@@ -12,6 +12,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.Log;
 import org.complitex.common.service.LogBean;
+import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.web.component.BookmarkablePageLinkPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.scroll.ScrollListBehavior;
@@ -157,7 +158,7 @@ public class GroupList extends TemplatePage {
 
         @Override
         protected List<RequestFileGroup> getObjects(RequestFileGroupFilter filter) {
-            return requestFileGroupBean.getRequestFileGroups(filter);
+            return EjbBeanLocator.getBean(RequestFileGroupBean.class).getRequestFileGroups(filter);
         }
 
         @Override

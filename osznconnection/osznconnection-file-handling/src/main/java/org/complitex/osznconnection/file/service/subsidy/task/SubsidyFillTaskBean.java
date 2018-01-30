@@ -5,14 +5,15 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.Log;
 import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.*;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.FillException;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidySplitBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
@@ -38,7 +39,7 @@ import static java.math.RoundingMode.HALF_EVEN;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
+public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(SubsidyFillTaskBean.class);
 
     @EJB
@@ -73,7 +74,7 @@ public class SubsidyFillTaskBean extends AbstractTaskBean<RequestFile> {
                 }
 
                 fill(requestFile, subsidy);
-                onRequest(subsidy);
+                onRequest(subsidy, ProcessType.FILL_SUBSIDY);
             }
 
             //проверить все ли записи в файле субсидии обработались

@@ -2,6 +2,7 @@ package org.complitex.osznconnection.file.entity;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,8 @@ public abstract class AbstractRequest<E extends Enum> extends AbstractFieldMapEn
     private Map<String, Object> updateFieldMap = new TreeMap<>();
 
     private Date date;
+
+    private ProcessType processType;
 
     public AbstractRequest(RequestFileType requestFileType) {
         this.requestFileType = requestFileType;
@@ -116,6 +119,18 @@ public abstract class AbstractRequest<E extends Enum> extends AbstractFieldMapEn
         this.date = date;
     }
 
+    public void setRequestFileType(RequestFileType requestFileType) {
+        this.requestFileType = requestFileType;
+    }
+
+    public ProcessType getProcessType() {
+        return processType;
+    }
+
+    public void setProcessType(ProcessType processType) {
+        this.processType = processType;
+    }
+
     @Override
     public String toString() {
         return getToStringHelper().toString();
@@ -132,6 +147,7 @@ public abstract class AbstractRequest<E extends Enum> extends AbstractFieldMapEn
                 .add("requestFileType", requestFileType)
                 .add("warnings", warnings)
                 .add("updateFieldMap", updateFieldMap)
-                .add("date", date);
+                .add("date", date)
+                .add("processType", processType);
     }
 }

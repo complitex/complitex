@@ -4,7 +4,6 @@ import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.util.DateUtil;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.service.CorrectionBean;
@@ -14,12 +13,14 @@ import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF;
 import org.complitex.osznconnection.file.entity.privilege.FacilityTarif;
 import org.complitex.osznconnection.file.entity.privilege.FacilityTarifDBF;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.exception.FillException;
 import org.complitex.osznconnection.file.service.privilege.FacilityReferenceBookBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
+import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
 import org.complitex.osznconnection.file.strategy.PrivilegeStrategy;
@@ -48,7 +49,7 @@ import static org.complitex.osznconnection.file.entity.privilege.FacilityTarifDB
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFile>{
+public class FacilityServiceTypeFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(FacilityServiceTypeFillTaskBean.class);
 
     @EJB
@@ -103,7 +104,7 @@ public class FacilityServiceTypeFillTaskBean extends AbstractTaskBean<RequestFil
                     }
 
                     fill(facilityServiceType);
-                    onRequest(facilityServiceType);
+                    onRequest(facilityServiceType, ProcessType.FILL_PRIVILEGE_PROLONGATION);
 
                 }
             }

@@ -1,12 +1,12 @@
 package org.complitex.osznconnection.file.service.privilege.task;
 
 import org.complitex.common.exception.ExecuteException;
-import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileGroupType;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
+import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 
 import javax.ejb.EJB;
@@ -17,7 +17,7 @@ import java.util.Map;
  * inheaven on 05.04.2016.
  */
 @Stateless
-public class PrivilegeGroupLoadTaskBean extends AbstractTaskBean<PrivilegeFileGroup>{
+public class PrivilegeGroupLoadTaskBean extends AbstractRequestTaskBean<PrivilegeFileGroup> {
     @EJB
     private DwellingCharacteristicsLoadTaskBean dwellingCharacteristicsLoadTaskBean;
 
