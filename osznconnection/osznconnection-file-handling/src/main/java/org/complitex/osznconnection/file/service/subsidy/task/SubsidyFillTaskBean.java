@@ -236,17 +236,6 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
 
                 data.sort(Comparator.comparing(SubsidyData::getSubsMonth));
 
-                BigDecimal summa = data.stream()
-                        .map(d -> d.getSm1()
-                                .add(d.getSm2())
-                                .add(d.getSm3())
-                                .add(d.getSm4())
-                                .add(d.getSm5())
-                                .add(d.getSm6())
-                                .add(d.getSm7())
-                                .add(d.getSm8()))
-                        .reduce(ZERO, BigDecimal::add);
-
                 BigDecimal sm1Sum = data.stream().map(SubsidyData::getSm1).reduce(ZERO, BigDecimal::add);
                 BigDecimal sm2Sum = data.stream().map(SubsidyData::getSm2).reduce(ZERO, BigDecimal::add);
                 BigDecimal sm3Sum = data.stream().map(SubsidyData::getSm3).reduce(ZERO, BigDecimal::add);
@@ -338,8 +327,7 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
                             .add(subsidyData.getSm7())
                             .add(subsidyData.getSm8());
 
-                    subsidySplit.putField(SubsidySplitField.SUMMA, subsidy.getBigDecimalField(SubsidyDBF.SUMMA)
-                            .multiply(smSum).divide(summa, 2, HALF_EVEN));
+                    subsidySplit.putField(SubsidySplitField.SUMMA, smSum);
 
                     subsidySplit.putField(SubsidySplitField.SUBS, subsidy.getBigDecimalField(SubsidyDBF.SUBS));
                     subsidySplit.putField(SubsidySplitField.NUMM, 1);
