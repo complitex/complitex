@@ -399,12 +399,7 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
                     log.info("subsidy fill: add subsidy split recalculated {}", subsidySplits);
                 }else{
                     if (sumSumma.equals(ZERO) && subsidy.getBigDecimalField(SubsidyDBF.SUMMA).compareTo(ZERO) != 0) {
-                        LocalDate dat1 = new Date(subsidy.getDateField(SubsidyDBF.DAT1).getTime()).toInstant()
-                                .atZone(ZoneId.systemDefault()).toLocalDate();
-                        LocalDate dat2 = new Date(subsidy.getDateField(SubsidyDBF.DAT2).getTime()).toInstant()
-                                .atZone(ZoneId.systemDefault()).toLocalDate();
-
-                        split(subsidy, dat1, dat2);
+                        split(subsidy, d1, d2);
 
                         log.info("subsidy fill: subsidy split recalculated 0 sum {} {}", subsidy, subsidySplits);
                     }else{
