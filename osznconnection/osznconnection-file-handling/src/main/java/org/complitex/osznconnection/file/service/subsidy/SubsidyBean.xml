@@ -270,10 +270,13 @@
         s.`account_number`
         FROM `subsidy` s
         JOIN `request_file` f ON s.`request_file_id` = f.`id`
-        WHERE s.`request_file_id` = #{requestFileId} AND s.`id` IN
-        <foreach collection="ids" item="id" open="(" close=")" separator=",">
-            #{id}
-        </foreach>
+        WHERE s.`request_file_id` = #{requestFileId}
+        <if test="ids != null">
+            AND s.`id` IN
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
     </select>
     
     <update id="clearBeforeBinding" parameterType="map">

@@ -60,7 +60,7 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
         return new FilterWrapper<>(object, first, count);
     }
 
-    public FilterWrapper<T> add(String key, Object value){
+    public FilterWrapper<T> put(String key, Object value){
         map.put(key, value);
 
         return this;

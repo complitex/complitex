@@ -110,11 +110,16 @@
 
     <select id="selectPersonAccounts" parameterType="org.complitex.common.entity.FilterWrapper"
                 resultMap="personAccountResultMap">
-        SELECT pa.*,
-          IFNULL(oszn_value.`value`, oszn_sys_value.`value`) organization_name,
+        SELECT pa.*
+        <if test="map.loadOrganizationNames">
+          , IFNULL(oszn_value.`value`, oszn_sys_value.`value`) organization_name,
           IFNULL(user_value.`value`, user_sys_value.`value`) user_organization_name,
           IFNULL(calc_value.`value`, calc_sys_value.`value`) calculation_center_name
+        </if>
+
         FROM `person_account` pa
+
+        <if test="map.loadOrganizationNames">
             JOIN `organization_attribute` oszn_a ON (oszn_a.`object_id` = pa.`organization_id` AND oszn_a.`status` = 1 AND oszn_a.`entity_attribute_id` = 900)
             LEFT JOIN `organization_string_value` oszn_value ON (oszn_value.`id` = oszn_a.`value_id` AND oszn_value.`locale_id` = #{stringLocale.id})
             JOIN `organization_string_value` oszn_sys_value ON (oszn_sys_value.`id` = oszn_a.`value_id` AND oszn_sys_value.`locale_id` = (SELECT l.`id` FROM `locale` l WHERE l.`system` = 1))
@@ -126,6 +131,7 @@
             LEFT JOIN `organization_attribute` user_a ON (user_a.`object_id` = pa.`user_organization_id` AND user_a.`status` = 1 AND user_a.`entity_attribute_id` = 900)
             LEFT JOIN `organization_string_value` user_value ON (user_value.`id` = user_a.`value_id` AND user_value.`locale_id` = #{stringLocale.id})
             JOIN `organization_string_value` user_sys_value ON (user_sys_value.`id` = user_a.`value_id` AND user_sys_value.`locale_id` = (SELECT l.`id` FROM `locale` l WHERE l.`system` = 1))
+        </if>
 
         <include refid="selectPersonAccountsWhere"/>
         ${orderLimit}

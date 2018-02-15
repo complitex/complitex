@@ -44,7 +44,7 @@ public abstract class BaseAccountOperation extends Operation {
         FilterWrapper<ServiceProviderAccount> filter = FilterWrapper.of(serviceProviderAccount);
         filter.setSortProperty(null);
         if (inactive) {
-            filter.add("inactive", true);
+            filter.put("inactive", true);
         }
 
         List<ServiceProviderAccount> serviceProviderAccounts =

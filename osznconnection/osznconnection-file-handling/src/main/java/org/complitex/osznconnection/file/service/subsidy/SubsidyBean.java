@@ -17,10 +17,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Stateless
 public class SubsidyBean extends AbstractRequestBean {
@@ -124,9 +121,10 @@ public class SubsidyBean extends AbstractRequestBean {
 
 
     public List<Subsidy> findForOperation(long fileId, List<Long> ids) {
-        Map<String, Object> params = Maps.newHashMap();
+        Map<String, Object> params = new HashMap<>();
         params.put("requestFileId", fileId);
         params.put("ids", ids);
+
         return sqlSession().selectList(NS + ".findForOperation", params);
     }
 

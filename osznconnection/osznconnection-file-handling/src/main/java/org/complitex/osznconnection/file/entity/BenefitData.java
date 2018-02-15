@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.entity;
 
+import com.google.common.base.MoreObjects;
 import org.apache.wicket.util.string.Strings;
 
 import java.io.Serializable;
@@ -146,18 +147,21 @@ public class BenefitData implements Serializable {
 
     @Override
     public String toString() {
-        return "BenefitData{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", middleName='" + middleName + '\'' +
-                ", inn='" + inn + '\'' +
-                ", passportSerial='" + passportSerial + '\'' +
-                ", passportNumber='" + passportNumber + '\'' +
-                ", orderFamily='" + orderFamily + '\'' +
-                ", code='" + code + '\'' +
-                ", userCount='" + userCount + '\'' +
-                ", billingId=" + billingId +
-                ", privilegeCode='" + privilegeCode + '\'' +
-                '}';
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add("firstName", firstName)
+                .add("lastName", lastName)
+                .add("middleName", middleName)
+                .add("inn", inn)
+                .add("passportSerial", passportSerial)
+                .add("passportNumber", passportNumber)
+                .add("orderFamily", orderFamily)
+                .add("code", code)
+                .add("userCount", userCount)
+                .add("budget", budget)
+                .add("dateIn", dateIn)
+                .add("dateOut", dateOut)
+                .add("billingId", billingId)
+                .add("privilegeCode", privilegeCode)
+                .toString();
     }
 }

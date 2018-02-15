@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.entity;
 
+import com.google.common.base.MoreObjects;
 import org.complitex.common.util.DateUtil;
 
 import java.io.File;
@@ -254,28 +255,28 @@ public abstract class AbstractRequestFile extends AbstractExecutorObject{
 
     @Override
     public String toString() {
-        return "RequestFile{" +
-                "id=" + id +
-                ", groupId=" + groupId +
-                ", name='" + name + '\'' +
-                ", directory='" + directory + '\'' +
-                ", absolutePath='" + absolutePath + '\'' +
-                ", length=" + length +
-                ", checkSum='" + checkSum + '\'' +
-                ", dbfRecordCount=" + dbfRecordCount +
-                ", loadedRecordCount=" + loadedRecordCount +
-                ", bindedRecordCount=" + bindedRecordCount +
-                ", filledRecordCount=" + filledRecordCount +
-                ", beginDate=" + beginDate +
-                ", endDate=" + endDate +
-                ", loaded=" + loaded +
-                ", type=" + type +
-                ", subType=" + subType +
-                ", status=" + status +
-                ", organizationId=" + organizationId +
-                ", userOrganizationId=" + userOrganizationId +
-                ", serviceProviderId=" + serviceProviderId +
-                ", userId=" + userId +
-                "} " + super.toString();
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add("id", id)
+                .add("groupId", groupId)
+                .add("name", name)
+                .add("directory", directory)
+                .add("absolutePath", absolutePath)
+                .add("length", length)
+                .add("checkSum", checkSum)
+                .add("dbfRecordCount", dbfRecordCount)
+                .add("loadedRecordCount", loadedRecordCount)
+                .add("bindedRecordCount", bindedRecordCount)
+                .add("filledRecordCount", filledRecordCount)
+                .add("beginDate", beginDate)
+                .add("endDate", endDate)
+                .add("loaded", loaded)
+                .add("type", type)
+                .add("subType", subType)
+                .add("status", status)
+                .add("organizationId", organizationId)
+                .add("userOrganizationId", userOrganizationId)
+                .add("serviceProviderId", serviceProviderId)
+                .add("userId", userId)
+                .toString();
     }
 }

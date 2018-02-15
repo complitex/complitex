@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.service.subsidy.task;
 
-import com.google.common.collect.Lists;
 import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.ConfigBean;
@@ -94,35 +93,19 @@ public class SubsidyBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
         subsidyBean.update(subsidy);
     }
 
-    private void bindSubsidyFile(RequestFile requestFile, Boolean updatePuAccount)
-            throws BindException, CanceledByUserException {
+    private void bindSubsidyFile(RequestFile requestFile, Boolean updatePuAccount) throws CanceledByUserException {
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
-        //извлечь из базы все id подлежащие связыванию для файла subsidy и доставать записи порциями по BATCH_SIZE штук.
-        List<Long> notResolvedSubsidyIds = subsidyBean.findIdsForBinding(requestFile.getId());
+        List<Subsidy> subsidies = subsidyBean.findForOperation(requestFile.getId(), null);
 
-        List<Long> batch = Lists.newArrayList();
+        for (Subsidy subsidy : subsidies) {
+            bind(serviceProviderCode, subsidy, updatePuAccount);
 
-        int batchSize = configBean.getInteger(FileHandlingConfig.BIND_BATCH_SIZE, true);
+            onRequest(subsidy, ProcessType.BIND_SUBSIDY);
 
-        while (notResolvedSubsidyIds.size() > 0) {
-            batch.clear();
-            int toRemoveCount = Math.min(batchSize, notResolvedSubsidyIds.size());
-            for (int i = 0; i < toRemoveCount; i++) {
-                batch.add(notResolvedSubsidyIds.remove(0));
-            }
-
-            //достать из базы очередную порцию записей
-            List<Subsidy> subsidies = subsidyBean.findForOperation(requestFile.getId(), batch);
-            for (Subsidy subsidy : subsidies) {
-                if (requestFile.isCanceled()) {
-                    throw new CanceledByUserException();
-                }
-
-                //связать subsidy запись
-                bind(serviceProviderCode, subsidy, updatePuAccount);
-                onRequest(subsidy, ProcessType.BIND_SUBSIDY);
+            if (requestFile.isCanceled()) {
+                throw new CanceledByUserException();
             }
         }
     }

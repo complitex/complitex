@@ -278,7 +278,7 @@ public class HeatmeterList extends TemplatePage {
 
             @Override
             public void setObject(String object) {
-                filterModel.getObject().add(HeatmeterBean.PAYLOAD1_FILTER_PARAM, object);
+                filterModel.getObject().put(HeatmeterBean.PAYLOAD1_FILTER_PARAM, object);
             }
         };
         filterForm.add(new TextField<>("tg1Filter", tg1FilterModel));
@@ -293,7 +293,7 @@ public class HeatmeterList extends TemplatePage {
 
             @Override
             public void setObject(String object) {
-                filterModel.getObject().add(HeatmeterBean.PAYLOAD2_FILTER_PARAM, object);
+                filterModel.getObject().put(HeatmeterBean.PAYLOAD2_FILTER_PARAM, object);
             }
         };
         filterForm.add(new TextField<>("tg2Filter", tg2FilterModel));
@@ -308,7 +308,7 @@ public class HeatmeterList extends TemplatePage {
 
             @Override
             public void setObject(String object) {
-                filterModel.getObject().add(HeatmeterBean.PAYLOAD3_FILTER_PARAM, object);
+                filterModel.getObject().put(HeatmeterBean.PAYLOAD3_FILTER_PARAM, object);
             }
         };
         filterForm.add(new TextField<>("tg3Filter", tg3FilterModel));
@@ -323,7 +323,7 @@ public class HeatmeterList extends TemplatePage {
 
             @Override
             public void setObject(String object) {
-                filterModel.getObject().add(HeatmeterBean.INPUT_FILTER_PARAM, object);
+                filterModel.getObject().put(HeatmeterBean.INPUT_FILTER_PARAM, object);
             }
         };
         filterForm.add(new TextField<>("inputFilter", inputFilterModel));
@@ -338,7 +338,7 @@ public class HeatmeterList extends TemplatePage {
 
             @Override
             public void setObject(String object) {
-                filterModel.getObject().add(HeatmeterBean.CONSUMPTION1_FILTER_PARAM, object);
+                filterModel.getObject().put(HeatmeterBean.CONSUMPTION1_FILTER_PARAM, object);
             }
         };
         filterForm.add(new TextField<>("consumption1Filter", consumption1FilterModel));
@@ -353,7 +353,7 @@ public class HeatmeterList extends TemplatePage {
 
             @Override
             public void setObject(Date date) {
-                filterModel.getObject().add(HeatmeterBean.PAYLOAD_BEGIN_DATE_FILTER_PARAM, date);
+                filterModel.getObject().put(HeatmeterBean.PAYLOAD_BEGIN_DATE_FILTER_PARAM, date);
             }
         };
         filterForm.add(new MaskedDateInput("beginDateFilter", beginDateFilterModel));
@@ -368,7 +368,7 @@ public class HeatmeterList extends TemplatePage {
 
             @Override
             public void setObject(Date date) {
-                filterModel.getObject().add(HeatmeterBean.INPUT_READOUT_DATE_FILTER_PARAM, date);
+                filterModel.getObject().put(HeatmeterBean.INPUT_READOUT_DATE_FILTER_PARAM, date);
             }
         };
         filterForm.add(new MaskedDateInput("readoutDateFilter", readoutDateFilterModel));
@@ -386,7 +386,7 @@ public class HeatmeterList extends TemplatePage {
                 filter.setAscending(getSort().isAscending());
 
                 if (!sessionBean.isAdmin()){
-                    filter.add("organizations", sessionBean.getUserOrganizationTreeString());
+                    filter.put("organizations", sessionBean.getUserOrganizationTreeString());
                 }
 
                 List<Heatmeter> heatmeters = heatmeterBean.getHeatmeters(filter);

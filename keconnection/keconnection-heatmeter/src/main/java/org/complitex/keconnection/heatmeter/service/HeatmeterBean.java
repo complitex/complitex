@@ -3,9 +3,9 @@ package org.complitex.keconnection.heatmeter.service;
 import com.google.common.collect.ImmutableSet;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.exception.ConcurrentModificationException;
 import org.complitex.common.mybatis.XmlMapper;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.exception.ConcurrentModificationException;
 import org.complitex.common.web.DictionaryFwSession;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.keconnection.heatmeter.entity.Heatmeter;
@@ -116,7 +116,7 @@ public class HeatmeterBean extends AbstractBean {
     }
 
     private void addUnboundStatusParameter(FilterWrapper<Heatmeter> filter) {
-        filter.add("unboundBindingStatus", HeatmeterBindingStatus.UNBOUND);
+        filter.put("unboundBindingStatus", HeatmeterBindingStatus.UNBOUND);
     }
 
     public List<Heatmeter> getHeatmeters(FilterWrapper<Heatmeter> filterWrapper) {

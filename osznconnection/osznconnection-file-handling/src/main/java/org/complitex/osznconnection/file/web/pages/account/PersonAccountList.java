@@ -85,6 +85,7 @@ public class PersonAccountList extends ScrollListPage {
                 filterWrapper.setFirst(first);
                 filterWrapper.setCount(count);
                 filterWrapper.setStringLocale(stringLocaleBean.convert(getLocale()));
+                filterWrapper.put("loadOrganizationNames", true);
 
                 return personAccountBean.getPersonAccounts(filterWrapper);
             }
