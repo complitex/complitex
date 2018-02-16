@@ -166,7 +166,7 @@ public class GroupBindTaskBean extends AbstractRequestTaskBean<RequestFileGroup>
         String accountNumber = payment.getStringField(PaymentDBF.OWN_NUM_SR);
 
         //resolve local account number
-        personAccountService.localResolveAccountNumber(payment, accountNumber, true, billingId);
+        personAccountService.localResolveAccountNumber(payment, accountNumber, billingId, true);
 
         if (!ACCOUNT_NUMBER_RESOLVED.equals(payment.getStatus()) && !MORE_ONE_ACCOUNTS_LOCALLY.equals(payment.getStatus())){
             //resolve address
@@ -174,7 +174,7 @@ public class GroupBindTaskBean extends AbstractRequestTaskBean<RequestFileGroup>
 
             //resolve account number
             if (payment.getStatus().isAddressResolved()){
-                personAccountService.resolveAccountNumber(payment, accountNumber, serviceProviderCode, false);
+                personAccountService.resolveAccountNumber(payment, accountNumber, serviceProviderCode, billingId, false);
 
                 if (MORE_ONE_ACCOUNTS.equals(payment.getStatus())){
                     personAccountService.forceResolveAccountNumber(payment, addressService.resolveOutgoingDistrict(

@@ -129,8 +129,7 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
-    public void localResolveAccountNumber(AbstractAccountRequest request, String puAccountNumber, boolean useAddressNames,
-                                          Long billingId){
+    public void localResolveAccountNumber(AbstractAccountRequest request, String puAccountNumber, Long billingId, boolean useAddressNames){
         try {
             String localAccountNumber = getLocalAccountNumber(request, puAccountNumber, useAddressNames, billingId);
 
@@ -144,11 +143,11 @@ public class PersonAccountService extends AbstractBean {
     }
 
     public void resolveAccountNumber(AbstractAccountRequest request, String puAccountNumber,
-                                     String serviceProviderCode,
+                                     String serviceProviderCode, Long billingId,
                                      boolean updatePuAccount) {
         try {
             //resolve local account
-            String accountNumber = getLocalAccountNumber(request, puAccountNumber, false);
+            String accountNumber = getLocalAccountNumber(request, puAccountNumber, false, billingId);
 
             if (accountNumber != null) {
                 request.setAccountNumber(accountNumber);

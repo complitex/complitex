@@ -107,12 +107,12 @@ public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<R
         privilegeProlongation.setCity(configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY, true));
 
         //resolve local account number
-        personAccountService.localResolveAccountNumber(privilegeProlongation, puAccountNumber, true,
-                billingId);
+        personAccountService.localResolveAccountNumber(privilegeProlongation, puAccountNumber, billingId, true
+        );
 
         if (privilegeProlongation.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
             personAccountService.localResolveAccountNumber(privilegeProlongation, privilegeProlongation.getInn(),
-                    true, billingId);
+                    billingId, true);
         }
 
         boolean checkFacilityPerson = true;

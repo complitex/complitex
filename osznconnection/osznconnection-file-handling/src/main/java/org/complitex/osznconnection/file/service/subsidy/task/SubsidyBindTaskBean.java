@@ -62,7 +62,7 @@ public class SubsidyBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
         String puAccountNumber = subsidy.getStringField(SubsidyDBF.RASH);
 
         //resolve local account number
-        personAccountService.localResolveAccountNumber(subsidy, puAccountNumber, true, billingId);
+        personAccountService.localResolveAccountNumber(subsidy, puAccountNumber, billingId, true);
 
         if (subsidy.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
             //resolve address
@@ -78,7 +78,7 @@ public class SubsidyBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
 
             //resolve account number
             if (subsidy.getStatus().isAddressResolved()){
-                personAccountService.resolveAccountNumber(subsidy, puAccountNumber, serviceProviderCode, false);
+                personAccountService.resolveAccountNumber(subsidy, puAccountNumber, serviceProviderCode, billingId, false);
 
                 if (MORE_ONE_ACCOUNTS.equals(subsidy.getStatus())){
                     personAccountService.forceResolveAccountNumber(subsidy, addressService.resolveOutgoingDistrict(
