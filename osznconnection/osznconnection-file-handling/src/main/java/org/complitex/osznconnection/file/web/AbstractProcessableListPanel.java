@@ -413,6 +413,20 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 return item;
             }
 
+            private Map<Long, String> organizationNameMap = new HashMap<>();
+
+            private String getOrganizationName(Long organizationId){
+                String name = organizationNameMap.get(organizationId);
+
+                if (name == null){
+                    name = organizationStrategy.displayDomainObject(organizationId, getLocale());
+
+                    organizationNameMap.put(organizationId, name);
+                }
+
+                return name;
+            }
+
             @Override
             protected void populateItem(Item<R> item) {
                 item.add(new ItemCheckBoxPanel<R>("itemCheckBoxPanel", selectManager, item.getModel()));
@@ -434,8 +448,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                                 rf.getOrganizationId(), rf.getUserOrganizationId());
 
                         if (organizationId != null){
-                            return organizationStrategy.displayDomainObject(
-                                    organizationStrategy.getDomainObject(organizationId), getLocale());
+                            return getOrganizationName(organizationId);
                         }else {
                             return rf.getEdrpou();
                         }
@@ -459,7 +472,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 item.add(new Label("organization", new LoadableDetachableModel<String>() {
                     @Override
                     protected String load() {
-                        return organizationStrategy.displayDomainObject(item.getModelObject().getOrganizationId(), getLocale());
+                        return getOrganizationName(item.getModelObject().getOrganizationId());
                     }
                 }));
 
@@ -467,7 +480,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 item.add(new Label("userOrganization", new LoadableDetachableModel<String>() {
                     @Override
                     protected String load() {
-                        return organizationStrategy.displayDomainObject(item.getModelObject().getUserOrganizationId(), getLocale());
+                        return getOrganizationName(item.getModelObject().getUserOrganizationId());
                     }
                 }));
 
