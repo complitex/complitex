@@ -24,9 +24,6 @@ public class Correction implements Serializable {
     private Long organizationId;
     private Long userOrganizationId;
 
-    private String organizationName;
-    private String userOrganizationName;
-
     private String internalObject;
     private String displayObject;
 
@@ -177,22 +174,6 @@ public class Correction implements Serializable {
         this.userOrganizationId = userOrganizationId;
     }
 
-    public String getOrganizationName() {
-        return organizationName;
-    }
-
-    public void setOrganizationName(String organizationName) {
-        this.organizationName = organizationName;
-    }
-
-    public String getUserOrganizationName() {
-        return userOrganizationName;
-    }
-
-    public void setUserOrganizationName(String userOrganizationName) {
-        this.userOrganizationName = userOrganizationName;
-    }
-
     public String getInternalObject() {
         return internalObject;
     }
@@ -238,8 +219,6 @@ public class Correction implements Serializable {
                 .add("endDate", endDate)
                 .add("organizationId", organizationId)
                 .add("userOrganizationId", userOrganizationId)
-                .add("organizationName", organizationName)
-                .add("userOrganizationName", userOrganizationName)
                 .add("internalObject", internalObject)
                 .add("displayObject", displayObject);
     }

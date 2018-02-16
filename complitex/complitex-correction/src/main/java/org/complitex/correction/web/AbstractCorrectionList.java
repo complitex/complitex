@@ -29,6 +29,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
+import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
@@ -57,6 +58,9 @@ public abstract class AbstractCorrectionList extends TemplatePage {
 
     @EJB
     private CorrectionBean correctionBean;
+
+    @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
+    private IOrganizationStrategy organizationStrategy;
 
     private String entityName;
     private FilterWrapper<Correction> filterWrapper;
@@ -213,7 +217,8 @@ public abstract class AbstractCorrectionList extends TemplatePage {
             protected void populateItem(Item<Correction> item) {
                 final Correction correction = item.getModelObject();
 
-                item.add(new Label("organization", correction.getOrganizationName()));
+                item.add(new Label("organization", organizationStrategy
+                        .displayShortNameAndCode(correction.getOrganizationId(), getLocale())));
                 item.add(new Label("correction", displayCorrection(correction)));
 
                 item.add(new Label("code", StringUtil.emptyOnNull(correction.getExternalId())));
@@ -222,7 +227,8 @@ public abstract class AbstractCorrectionList extends TemplatePage {
                 item.add(new Label("internalObject", displayInternalObject(correction)));
 
                 //user organization
-                item.add(new Label("userOrganization", correction.getUserOrganizationName()));
+                item.add(new Label("userOrganization", organizationStrategy
+                        .displayShortNameAndCode(correction.getUserOrganizationId(), getLocale())));
 
                 ScrollBookmarkablePageLink link = new ScrollBookmarkablePageLink<WebPage>("edit", getEditPage(),
                         getEditPageParams(correction.getId()), String.valueOf(correction.getId()));

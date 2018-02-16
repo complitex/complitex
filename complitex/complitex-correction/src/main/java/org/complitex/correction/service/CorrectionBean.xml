@@ -13,11 +13,6 @@
         <result column="organization_id" property="organizationId"/>
         <result column="user_organization_id" property="userOrganizationId"/>
         <result column="entity_name" property="entityName"/>
-
-        <association property="organizationName" select="org.complitex.organization.strategy.OrganizationStrategy.selectOrganizationName"
-                     column="organization_id"/>
-        <association property="userOrganizationName" select="org.complitex.organization.strategy.OrganizationStrategy.selectOrganizationName"
-                     column="user_organization_id"/>
     </resultMap>
 
     <insert id="insertCorrection" parameterType="org.complitex.correction.entity.Correction"
