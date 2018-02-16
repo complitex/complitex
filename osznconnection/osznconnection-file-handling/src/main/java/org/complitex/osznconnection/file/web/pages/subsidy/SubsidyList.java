@@ -398,10 +398,12 @@ public final class SubsidyList extends TemplatePage {
             protected void onSubmit(AjaxRequestTarget target, Form form) {
                 Collection<Subsidy> subsidies = checkGroup.getModelObject();
 
+                Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
+
                 for (Subsidy subsidy : subsidies){
                     //noinspection Duplicates
                     try {
-                        subsidyService.bind(serviceProviderCode, subsidy);
+                        subsidyService.bind(serviceProviderCode, billingId, subsidy);
 
                         if (subsidy.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
                             info(getStringFormat("info_bound", subsidy.getFio()));

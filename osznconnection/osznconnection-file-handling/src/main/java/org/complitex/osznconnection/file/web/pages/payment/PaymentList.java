@@ -314,7 +314,9 @@ public final class PaymentList extends TemplatePage {
                         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
-                        groupBindTaskBean.bind(serviceProviderCode, payment);
+                        Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
+
+                        groupBindTaskBean.bind(serviceProviderCode, billingId, payment);
 
                         if (payment.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
                             info(getStringFormat("info_bound", payment.getFio()));

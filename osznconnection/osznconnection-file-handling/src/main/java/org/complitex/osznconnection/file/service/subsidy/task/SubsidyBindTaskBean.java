@@ -17,7 +17,6 @@ import org.complitex.osznconnection.file.service.exception.BindException;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
-import org.complitex.osznconnection.file.web.pages.util.GlobalOptions;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,11 +58,11 @@ public class SubsidyBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
     @EJB
     private OsznOrganizationStrategy organizationStrategy;
 
-    public void bind(String serviceProviderCode, Subsidy subsidy, boolean updatePuAccount) {
+    public void bind(String serviceProviderCode, Long billingId, Subsidy subsidy) {
         String puAccountNumber = subsidy.getStringField(SubsidyDBF.RASH);
 
         //resolve local account number
-        personAccountService.localResolveAccountNumber(subsidy, puAccountNumber, true);
+        personAccountService.localResolveAccountNumber(subsidy, puAccountNumber, true, billingId);
 
         if (subsidy.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
             //resolve address
@@ -93,14 +92,16 @@ public class SubsidyBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
         subsidyBean.update(subsidy);
     }
 
-    private void bindSubsidyFile(RequestFile requestFile, Boolean updatePuAccount) throws CanceledByUserException {
+    private void bindSubsidyFile(RequestFile requestFile) throws CanceledByUserException {
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
+        Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
 
         List<Subsidy> subsidies = subsidyBean.findForOperation(requestFile.getId(), null);
 
         for (Subsidy subsidy : subsidies) {
-            bind(serviceProviderCode, subsidy, updatePuAccount);
+            bind(serviceProviderCode, billingId, subsidy);
 
             onRequest(subsidy, ProcessType.BIND_SUBSIDY);
 
@@ -114,8 +115,8 @@ public class SubsidyBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         try {
             // ищем в параметрах комманды опцию "Переписывать номер л/с ПУ номером л/с МН"
-            final Boolean updatePuAccount = commandParameters.containsKey(GlobalOptions.UPDATE_PU_ACCOUNT)
-                    ? (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT) : false;
+//            final Boolean updatePuAccount = commandParameters.containsKey(GlobalOptions.UPDATE_PU_ACCOUNT)
+//                    ? (Boolean) commandParameters.get(GlobalOptions.UPDATE_PU_ACCOUNT) : false;
 
             if (requestFileBean.getRequestFileStatus(requestFile.getId()).isProcessing()) { //проверяем что не обрабатывается в данный момент
                 throw new BindException(new AlreadyProcessingException(requestFile.getFullName()), true, requestFile);
@@ -130,7 +131,7 @@ public class SubsidyBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
 
             //связывание файла subsidy
             try {
-                bindSubsidyFile(requestFile, updatePuAccount);
+                bindSubsidyFile(requestFile);
             } catch (CanceledByUserException e) {
                 throw new BindException(e, true, requestFile);
             }

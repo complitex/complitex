@@ -103,9 +103,10 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
     }
 
     @SuppressWarnings("Duplicates") //todo extract abstract privilege bind
-    public void bind(String serviceProviderCode, DwellingCharacteristics dwellingCharacteristics) throws MoreOneAccountException {
+    public void bind(String serviceProviderCode, Long billingId, DwellingCharacteristics dwellingCharacteristics) throws MoreOneAccountException {
         //resolve local account number
-        personAccountService.localResolveAccountNumber(dwellingCharacteristics, dwellingCharacteristics.getInn(), true);
+        personAccountService.localResolveAccountNumber(dwellingCharacteristics, dwellingCharacteristics.getInn(), true,
+                billingId);
 
         boolean checkFacilityPerson = true;
 
@@ -139,6 +140,8 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
+        Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
+
         //извлечь из базы все id подлежащие связыванию для файла dwelling characteristics и доставать записи порциями по BATCH_SIZE штук.
         List<Long> notResolvedDwellingCharacteristicsIds = dwellingCharacteristicsBean.findIdsForBinding(requestFile.getId());
         List<Long> batch = Lists.newArrayList();
@@ -162,7 +165,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
 
                 //связать dwelling characteristics запись
                 try {
-                    bind(serviceProviderCode, dwellingCharacteristic);
+                    bind(serviceProviderCode, billingId, dwellingCharacteristic);
                     onRequest(dwellingCharacteristic, ProcessType.BIND_PRIVILEGE_GROUP);
                 } catch (MoreOneAccountException e) {
                     throw new BindException(e, true, requestFile);

@@ -108,8 +108,8 @@ public class SubsidyService {
         }
     }
 
-    public void bind(String serviceProviderCode, Subsidy subsidy) {
-        subsidyBindTaskBean.bind(serviceProviderCode, subsidy, false);
+    public void bind(String serviceProviderCode, Long billingId, Subsidy subsidy) {
+        subsidyBindTaskBean.bind(serviceProviderCode, billingId, subsidy);
 
         if (subsidyBean.isSubsidyFileBound(subsidy.getRequestFileId())) {
             RequestFile requestFile = requestFileBean.getRequestFile(subsidy.getRequestFileId());

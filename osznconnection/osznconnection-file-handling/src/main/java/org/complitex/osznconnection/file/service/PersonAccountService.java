@@ -86,8 +86,12 @@ public class PersonAccountService extends AbstractBean {
 
     public String getLocalAccountNumber(AbstractAccountRequest request, String puAccountNumber, boolean useAddressNames)
             throws MoreOneAccountException {
-        Long billingId = organizationStrategy.getBillingId(request.getUserOrganizationId());
+        return getLocalAccountNumber(request, puAccountNumber, useAddressNames,
+                organizationStrategy.getBillingId(request.getUserOrganizationId()));
+    }
 
+    public String getLocalAccountNumber(AbstractAccountRequest request, String puAccountNumber, boolean useAddressNames,
+                                        Long billingId) throws MoreOneAccountException {
         List<PersonAccount> personAccounts = personAccountBean.getPersonAccounts(FilterWrapper.of(
                 new PersonAccount(request, puAccountNumber, billingId, useAddressNames)).setNullable(true));
 
@@ -125,9 +129,10 @@ public class PersonAccountService extends AbstractBean {
         }
     }
 
-    public void localResolveAccountNumber(AbstractAccountRequest request, String puAccountNumber, boolean useAddressNames){
+    public void localResolveAccountNumber(AbstractAccountRequest request, String puAccountNumber, boolean useAddressNames,
+                                          Long billingId){
         try {
-            String localAccountNumber = getLocalAccountNumber(request, puAccountNumber, useAddressNames);
+            String localAccountNumber = getLocalAccountNumber(request, puAccountNumber, useAddressNames, billingId);
 
             if (localAccountNumber != null) {
                 request.setAccountNumber(localAccountNumber);

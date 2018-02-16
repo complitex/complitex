@@ -81,6 +81,8 @@ public class PrivilegeGroupBindTaskBean extends AbstractRequestTaskBean<Privileg
                     facilityServiceTypeRequestFile.getOrganizationId(), facilityServiceTypeRequestFile.getUserOrganizationId())
                     : null;
 
+            Long billingId = organizationStrategy.getBillingId(group.getUserOrganizationId());
+
             try {
                 for (PrivilegeGroup p : privilegeGroups){
                     if (group.isCanceled()) {
@@ -88,7 +90,7 @@ public class PrivilegeGroupBindTaskBean extends AbstractRequestTaskBean<Privileg
                     }
 
                     if (p.getDwellingCharacteristics() != null){
-                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, p.getDwellingCharacteristics());
+                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, billingId, p.getDwellingCharacteristics());
 
                         if (p.getFacilityServiceType() != null){
                             DwellingCharacteristics d = p.getDwellingCharacteristics();
@@ -112,7 +114,7 @@ public class PrivilegeGroupBindTaskBean extends AbstractRequestTaskBean<Privileg
                             facilityServiceTypeBean.update(f);
                         }
                     }else if (p.getFacilityServiceType() != null){
-                        facilityServiceTypeBindTaskBean.bind(serviceProviderCode, p.getFacilityServiceType());
+                        facilityServiceTypeBindTaskBean.bind(serviceProviderCode, billingId, p.getFacilityServiceType());
 
                     }
 

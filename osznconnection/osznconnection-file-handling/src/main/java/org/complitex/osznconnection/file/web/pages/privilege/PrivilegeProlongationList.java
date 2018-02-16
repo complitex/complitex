@@ -388,13 +388,17 @@ public class PrivilegeProlongationList extends TemplatePage {
                         .getPrivilegeProlongationForOperation(requestFile.getId(),
                                 select.stream().map(AbstractRequest::getId).collect(Collectors.toList()));
 
+                String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                        requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
+                Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
+
                 list.forEach(privilegeProlongation -> {
                     //noinspection Duplicates
                     try {
-                        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
-                                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
-                        privilegeProlongationBindTaskBean.bind(serviceProviderCode, privilegeProlongation);
+
+                        privilegeProlongationBindTaskBean.bind(serviceProviderCode, billingId, privilegeProlongation);
 
                         if (privilegeProlongation.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)) {
                             info(getStringFormat("info_bound", privilegeProlongation.getInn(), privilegeProlongation.getFio()));

@@ -162,11 +162,11 @@ public class GroupBindTaskBean extends AbstractRequestTaskBean<RequestFileGroup>
      * Если не успешно, то попытаться разрешить адрес по схеме "ОСЗН адрес -> локальная адресная база -> адрес центра начислений".
      * Если адрес разрешен, то пытаемся разрешить номер л/c в ЦН.
      */
-    public void bind(String serviceProviderCode, Payment payment){
+    public void bind(String serviceProviderCode, Long billingId, Payment payment){
         String accountNumber = payment.getStringField(PaymentDBF.OWN_NUM_SR);
 
         //resolve local account number
-        personAccountService.localResolveAccountNumber(payment, accountNumber, true);
+        personAccountService.localResolveAccountNumber(payment, accountNumber, true, billingId);
 
         if (!ACCOUNT_NUMBER_RESOLVED.equals(payment.getStatus()) && !MORE_ONE_ACCOUNTS_LOCALLY.equals(payment.getStatus())){
             //resolve address
@@ -204,6 +204,8 @@ public class GroupBindTaskBean extends AbstractRequestTaskBean<RequestFileGroup>
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
+        Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
+
         //извлечь из базы все id подлежащие связыванию для файла payment и доставать записи порциями по BATCH_SIZE штук.
         List<Long> notResolvedPaymentIds = paymentBean.findIdsForBinding(requestFile.getId());
         List<Long> batch = Lists.newArrayList();
@@ -225,7 +227,7 @@ public class GroupBindTaskBean extends AbstractRequestTaskBean<RequestFileGroup>
                 }
 
                 //связать payment запись
-                bind(serviceProviderCode, payment);
+                bind(serviceProviderCode, billingId, payment);
                 onRequest(payment, ProcessType.BIND_GROUP);
             }
         }

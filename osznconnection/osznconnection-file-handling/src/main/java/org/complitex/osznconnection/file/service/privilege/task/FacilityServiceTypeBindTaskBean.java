@@ -105,9 +105,10 @@ public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<Req
         return facilityServiceType.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    public void bind(String serviceProviderCode, FacilityServiceType facilityServiceType) throws MoreOneAccountException {
+    public void bind(String serviceProviderCode, Long billingId, FacilityServiceType facilityServiceType) throws MoreOneAccountException {
         //resolve local account number
-        personAccountService.localResolveAccountNumber(facilityServiceType, facilityServiceType.getInn(), true);
+        personAccountService.localResolveAccountNumber(facilityServiceType, facilityServiceType.getInn(), true,
+                billingId);
 
         boolean checkFacilityPerson = true;
 
@@ -140,6 +141,8 @@ public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<Req
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
+        Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
+
         //извлечь из базы все id подлежащие связыванию для файла facility service type и доставать записи порциями по BATCH_SIZE штук.
         List<Long> notResolvedFacilityServiceTypeIds = facilityServiceTypeBean.findIdsForBinding(requestFile.getId());
         List<Long> batch = Lists.newArrayList();
@@ -162,7 +165,7 @@ public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<Req
 
                 //связать dwelling characteristics запись
                 try {
-                    bind(serviceProviderCode, facilityServiceType);
+                    bind(serviceProviderCode, billingId, facilityServiceType);
                     onRequest(facilityServiceType, ProcessType.LOAD_FACILITY_STREET_TYPE_REFERENCE);
                 } catch (MoreOneAccountException e) {
                     throw new BindException(e, true, requestFile);

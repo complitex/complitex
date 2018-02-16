@@ -367,13 +367,15 @@ public final class FacilityServiceTypeList extends TemplatePage {
             protected void onSubmit(AjaxRequestTarget target, Form form) {
                 Collection<FacilityServiceType> list = checkGroup.getModelObject();
 
+                String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                        requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
+                Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
+
                 //noinspection Duplicates
                 list.forEach(facilityServiceType -> {
                     try {
-                        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
-                                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
-
-                        facilityServiceTypeBindTaskBean.bind(serviceProviderCode, facilityServiceType);
+                        facilityServiceTypeBindTaskBean.bind(serviceProviderCode, billingId, facilityServiceType);
 
                         if (facilityServiceType.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
                             info(getStringFormat("info_bound", facilityServiceType.getInn(), facilityServiceType.getFio()));
@@ -393,7 +395,8 @@ public final class FacilityServiceTypeList extends TemplatePage {
                                 facilityServiceType.getStringField(FacilityServiceTypeDBF.APT));
 
                         if (privilegeGroup.getDwellingCharacteristics() != null){
-                            dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, privilegeGroup.getDwellingCharacteristics());
+                            dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, billingId,
+                                    privilegeGroup.getDwellingCharacteristics());
                         }
                     } catch (Exception e) {
                         error(ExceptionUtil.getCauseMessage(e, true));

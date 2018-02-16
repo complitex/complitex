@@ -379,7 +379,9 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
-                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, dwellingCharacteristics);
+                        Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
+
+                        dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, billingId, dwellingCharacteristics);
 
                         if (dwellingCharacteristics.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
                             info(getStringFormat("info_bound", dwellingCharacteristics.getInn(), dwellingCharacteristics.getFio()));
@@ -399,7 +401,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                                 dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT));
 
                         if (privilegeGroup.getFacilityServiceType() != null){
-                            facilityServiceTypeBindTaskBean.bind(serviceProviderCode, privilegeGroup.getFacilityServiceType());
+                            facilityServiceTypeBindTaskBean.bind(serviceProviderCode, billingId, privilegeGroup.getFacilityServiceType());
                         }
                     } catch (Exception e) {
                         error(ExceptionUtil.getCauseMessage(e, true));

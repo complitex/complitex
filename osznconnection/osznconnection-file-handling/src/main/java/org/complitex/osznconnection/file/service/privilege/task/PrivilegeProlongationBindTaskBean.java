@@ -101,16 +101,18 @@ public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<R
         }
     }
 
-    public void bind(String serviceProviderCode, PrivilegeProlongation privilegeProlongation) throws MoreOneAccountException {
+    public void bind(String serviceProviderCode, Long billingId, PrivilegeProlongation privilegeProlongation) throws MoreOneAccountException {
         String puAccountNumber = privilegeProlongation.getPuAccountNumber();
 
         privilegeProlongation.setCity(configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY, true));
 
         //resolve local account number
-        personAccountService.localResolveAccountNumber(privilegeProlongation, puAccountNumber, true);
+        personAccountService.localResolveAccountNumber(privilegeProlongation, puAccountNumber, true,
+                billingId);
 
         if (privilegeProlongation.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
-            personAccountService.localResolveAccountNumber(privilegeProlongation, privilegeProlongation.getInn(), true);
+            personAccountService.localResolveAccountNumber(privilegeProlongation, privilegeProlongation.getInn(),
+                    true, billingId);
         }
 
         boolean checkFacilityPerson = true;
@@ -144,6 +146,8 @@ public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<R
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
+        Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
+
         //извлечь из базы все id подлежащие связыванию для файла и доставать записи порциями по BATCH_SIZE штук.
         List<Long> prolongationIds = privilegeProlongationBean.getPrivilegeProlongationIds(requestFile.getId());
         List<Long> batch = Lists.newArrayList();
@@ -167,7 +171,7 @@ public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<R
 
                 //связать запись
                 try {
-                    bind(serviceProviderCode, privilegeProlongation);
+                    bind(serviceProviderCode, billingId, privilegeProlongation);
                     onRequest(privilegeProlongation, ProcessType.BIND_PRIVILEGE_PROLONGATION);
                 } catch (MoreOneAccountException e) {
                     throw new BindException(e, true, requestFile);
