@@ -34,7 +34,7 @@ public class LookupBean extends AbstractBean {
      */
 
     public void resolveOutgoingAddress(AbstractAccountRequest request) {
-        addressService.resolveOutgoingAddress(request);
+        addressService.resolveOutgoingAddress(request, organizationStrategy.getBillingId(request.getUserOrganizationId()));
     }
 
     /**

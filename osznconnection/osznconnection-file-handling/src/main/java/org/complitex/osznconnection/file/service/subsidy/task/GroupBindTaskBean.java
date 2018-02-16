@@ -1,14 +1,12 @@
 package org.complitex.osznconnection.file.service.subsidy.task;
 
 import com.google.common.collect.Lists;
-import org.apache.wicket.util.string.Strings;
 import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.osznconnection.file.entity.FileHandlingConfig;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
-import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.Payment;
 import org.complitex.osznconnection.file.entity.subsidy.PaymentDBF;
 import org.complitex.osznconnection.file.entity.subsidy.RequestFileGroup;
@@ -17,7 +15,6 @@ import org.complitex.osznconnection.file.service.AddressService;
 import org.complitex.osznconnection.file.service.PersonAccountService;
 import org.complitex.osznconnection.file.service.exception.AlreadyProcessingException;
 import org.complitex.osznconnection.file.service.exception.BindException;
-import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.service.subsidy.BenefitBean;
 import org.complitex.osznconnection.file.service.subsidy.PaymentBean;
@@ -37,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestStatus.*;
-import static org.complitex.osznconnection.file.entity.subsidy.PaymentDBF.OWN_NUM_SR;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -125,35 +121,6 @@ public class GroupBindTaskBean extends AbstractRequestTaskBean<RequestFileGroup>
         }
     }
 
-    /**
-     * Разрешить адрес по схеме "ОСЗН адрес -> локальная адресная база -> адрес центра начислений"
-     * @param payment Запись запроса начислений
-     * @return Разрешен ли адрес
-     */
-    private boolean resolveAddress(Payment payment) {
-        addressService.resolveAddress(payment);
-
-        return payment.getStatus().isAddressResolved();
-    }
-
-    /**
-     * Разрешить номер личного счета из локальной таблицы person_account
-     * @param payment Запись запроса начислений
-     * @return Разрешен ли номер л/с
-     */
-    private void resolveLocalAccount(Payment payment) {
-        try {
-            String accountNumber = personAccountService.getLocalAccountNumber(payment, payment.getStringField(OWN_NUM_SR));
-
-            if (!Strings.isEmpty(accountNumber)) {
-                payment.setAccountNumber(accountNumber);
-                payment.setStatus(ACCOUNT_NUMBER_RESOLVED);
-                benefitBean.updateAccountNumber(payment.getId(), accountNumber);
-            }
-        } catch (MoreOneAccountException e) {
-            payment.setStatus(RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY);
-        }
-    }
 
     /*
      * Связать payment запись
@@ -170,7 +137,7 @@ public class GroupBindTaskBean extends AbstractRequestTaskBean<RequestFileGroup>
 
         if (!ACCOUNT_NUMBER_RESOLVED.equals(payment.getStatus()) && !MORE_ONE_ACCOUNTS_LOCALLY.equals(payment.getStatus())){
             //resolve address
-            addressService.resolveAddress(payment);
+            addressService.resolveAddress(payment, billingId);
 
             //resolve account number
             if (payment.getStatus().isAddressResolved()){

@@ -68,8 +68,8 @@ public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<Req
     @EJB
     private RequestWarningBean requestWarningBean;
 
-    private boolean resolveAddress(FacilityServiceType facilityServiceType) {
-        addressService.resolveAddress(facilityServiceType);
+    private boolean resolveAddress(FacilityServiceType facilityServiceType, Long billingId) {
+        addressService.resolveAddress(facilityServiceType, billingId);
 
         return facilityServiceType.getStatus().isAddressResolved();
     }
@@ -115,7 +115,7 @@ public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<Req
         //noinspection Duplicates
         if (facilityServiceType.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
             //resolve address
-            resolveAddress(facilityServiceType);
+            resolveAddress(facilityServiceType, billingId);
 
             if (facilityServiceType.getStatus().isAddressResolved()){
                 //resolve local account.

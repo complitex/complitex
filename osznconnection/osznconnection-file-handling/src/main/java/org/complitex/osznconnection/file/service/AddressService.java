@@ -380,10 +380,8 @@ public class AddressService extends AbstractBean {
      * Квартиры не ищем, а проставляем напрямую, обрезая пробелы.
      * Алгоритм аналогичен для поиска остальных составляющих адреса.
      */
-    public void resolveOutgoingAddress(AbstractAddressRequest request) {
+    public void resolveOutgoingAddress(AbstractAddressRequest request, Long billingId) {
         Long userOrganizationId = request.getUserOrganizationId();
-        Long billingId = organizationStrategy.getBillingId(userOrganizationId);
-
         Locale locale = stringLocaleBean.getSystemLocale();
 
         //город
@@ -522,13 +520,13 @@ public class AddressService extends AbstractBean {
      * разрешить адрес по схеме "ОСЗН адрес -> локальная адресная база -> адрес центра начислений"
      */
 
-    public void resolveAddress(AbstractAddressRequest request) {
+    public void resolveAddress(AbstractAddressRequest request, Long billingId) {
         //разрешить адрес локально
         resolveLocalAddress(request);
 
         //если адрес локально разрешен, разрешить адрес для ЦН.
         if (request.getStatus().isAddressResolvedLocally()) {
-            resolveOutgoingAddress(request);
+            resolveOutgoingAddress(request, billingId);
         }
     }
 

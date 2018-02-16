@@ -67,8 +67,8 @@ public class ActualPaymentBindTaskBean extends AbstractRequestTaskBean<RequestFi
     @EJB
     private OsznOrganizationStrategy organizationStrategy;
 
-    private boolean resolveAddress(ActualPayment actualPayment) {
-        addressService.resolveAddress(actualPayment);
+    private boolean resolveAddress(ActualPayment actualPayment, Long billingId) {
+        addressService.resolveAddress(actualPayment, billingId);
 
         return actualPayment.getStatus().isAddressResolved();
     }
@@ -103,9 +103,10 @@ public class ActualPaymentBindTaskBean extends AbstractRequestTaskBean<RequestFi
         return actualPayment.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
-    private void bind(String serviceProviderCode, ActualPayment actualPayment, Date date, Boolean updatePuAccount) throws MoreOneAccountException {
+    private void bind(String serviceProviderCode, Long billingId, ActualPayment actualPayment, Date date,
+                      Boolean updatePuAccount) throws MoreOneAccountException {
         //resolve address
-        resolveAddress(actualPayment);
+        resolveAddress(actualPayment, billingId);
 
         if (actualPayment.getStatus().isAddressResolved()){
             //resolve local account.
@@ -123,6 +124,8 @@ public class ActualPaymentBindTaskBean extends AbstractRequestTaskBean<RequestFi
     private void bindActualPaymentFile(RequestFile requestFile, Boolean updatePuAccount) throws BindException, CanceledByUserException {
         String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
+        Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
 
         //извлечь из базы все id подлежащие связыванию для файла actualPayment и доставать записи порциями по BATCH_SIZE штук.
         List<Long> notResolvedPaymentIds = actualPaymentBean.findIdsForBinding(requestFile.getId());
@@ -146,7 +149,8 @@ public class ActualPaymentBindTaskBean extends AbstractRequestTaskBean<RequestFi
 
                 //связать actualPayment запись
                 try {
-                    bind(serviceProviderCode, actualPayment, actualPaymentBean.getFirstDay(actualPayment, requestFile), updatePuAccount);
+                    bind(serviceProviderCode, billingId, actualPayment, actualPaymentBean.getFirstDay(actualPayment, requestFile),
+                            updatePuAccount);
                     onRequest(actualPayment, ProcessType.BIND_ACTUAL_PAYMENT);
                 } catch (MoreOneAccountException e) {
                     throw new BindException(e, true, requestFile);

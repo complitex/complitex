@@ -72,7 +72,7 @@ public class SubsidyBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
                 subsidy.setCity(configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY));
             }
 
-            addressService.resolveAddress(subsidy);
+            addressService.resolveAddress(subsidy, billingId);
 
             subsidy.setCity(city);
 

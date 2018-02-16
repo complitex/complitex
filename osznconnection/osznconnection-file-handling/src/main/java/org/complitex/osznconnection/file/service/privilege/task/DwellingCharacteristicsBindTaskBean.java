@@ -66,8 +66,8 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
     private RequestWarningBean requestWarningBean;
 
 
-    private boolean resolveAddress(DwellingCharacteristics dwellingCharacteristics) {
-        addressService.resolveAddress(dwellingCharacteristics);
+    private boolean resolveAddress(DwellingCharacteristics dwellingCharacteristics, Long billingId) {
+        addressService.resolveAddress(dwellingCharacteristics, billingId);
 
         return dwellingCharacteristics.getStatus().isAddressResolved();
     }
@@ -113,7 +113,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
         //noinspection Duplicates
         if (dwellingCharacteristics.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
             //resolve address
-            resolveAddress(dwellingCharacteristics);
+            resolveAddress(dwellingCharacteristics, billingId);
 
             if (dwellingCharacteristics.getStatus().isAddressResolved()){
                 //resolve local account.

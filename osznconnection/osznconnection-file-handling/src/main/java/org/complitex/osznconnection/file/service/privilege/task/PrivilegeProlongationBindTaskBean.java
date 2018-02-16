@@ -68,8 +68,8 @@ public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<R
     private RequestWarningBean requestWarningBean;
 
 
-    private void resolveAddress(PrivilegeProlongation privilegeProlongation) {
-        addressService.resolveAddress(privilegeProlongation);
+    private void resolveAddress(PrivilegeProlongation privilegeProlongation, Long billingId) {
+        addressService.resolveAddress(privilegeProlongation, billingId);
     }
 
     @SuppressWarnings("Duplicates")
@@ -120,7 +120,7 @@ public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<R
         //noinspection Duplicates
         if (privilegeProlongation.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
             //resolve address
-            resolveAddress(privilegeProlongation);
+            resolveAddress(privilegeProlongation, billingId);
 
             if (privilegeProlongation.getStatus().isAddressResolved()) {
                 resolveLocalAccount(privilegeProlongation);
