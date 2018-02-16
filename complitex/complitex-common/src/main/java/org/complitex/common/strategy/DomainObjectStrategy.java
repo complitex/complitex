@@ -181,6 +181,11 @@ public abstract class DomainObjectStrategy extends AbstractBean implements IStra
         return NS + ".selectAttributes";
     }
 
+    public Attribute getAttribute(Long objectId, Long entityAttributeId){
+        return sqlSession().selectOne("selectAttribute", MapUtil.of("entityName", getEntityName(),
+                "objectId", objectId, "entityAttributeId", entityAttributeId));
+    }
+
     protected void loadStringValues(List<Attribute> attributes) {
         loadStringValues(null, attributes);
     }

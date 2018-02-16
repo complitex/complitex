@@ -411,9 +411,8 @@ public class AddressService extends AbstractBean {
                 request.getCityId(), billingId, userOrganizationId);
 
         if (districtCorrections.isEmpty()){
-            DomainObject organization = organizationStrategy.getDomainObject(request.getOrganizationId(), true);
+            Long districtId = organizationStrategy.getAttribute(request.getOrganizationId(), IOrganizationStrategy.DISTRICT).getValueId();
 
-            Long districtId = organization.getAttribute(IOrganizationStrategy.DISTRICT).getValueId();
             DomainObject district = districtStrategy.getDomainObject(districtId, true);
 
             if (district != null){

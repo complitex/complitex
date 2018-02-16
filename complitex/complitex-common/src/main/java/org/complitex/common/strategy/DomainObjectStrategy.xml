@@ -369,6 +369,11 @@
           ORDER BY a.`entity_attribute_id`, a.`attribute_id`
     </select>
 
+    <select id="selectAttribute" parameterType="map" resultMap="attributeResultMap">
+        SELECT * FROM `${entityName}_attribute` WHERE  `object_id` = #{objectId}
+          AND `entity_attribute_id` = #{entityAttributeId} AND `status` = 1
+    </select>
+
     <select id="selectHistoryAttributes" parameterType="org.complitex.common.entity.DomainObjectFilter"
             resultMap="attributeResultMap">
         SELECT aa.*
