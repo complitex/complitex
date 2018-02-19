@@ -318,14 +318,14 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
                         subsidySplit.putField(SubsidySplitField.SM8, ZERO);
                     }
 
-                    BigDecimal smSum = subsidyData.getSm1()
-                            .add(subsidyData.getSm2())
-                            .add(subsidyData.getSm3())
-                            .add(subsidyData.getSm4())
-                            .add(subsidyData.getSm5())
-                            .add(subsidyData.getSm6())
-                            .add(subsidyData.getSm7())
-                            .add(subsidyData.getSm8());
+                    BigDecimal smSum = subsidySplit.getBigDecimalField(SubsidySplitField.SM1)
+                            .add(subsidySplit.getBigDecimalField(SubsidySplitField.SM2))
+                            .add(subsidySplit.getBigDecimalField(SubsidySplitField.SM3))
+                            .add(subsidySplit.getBigDecimalField(SubsidySplitField.SM4))
+                            .add(subsidySplit.getBigDecimalField(SubsidySplitField.SM5))
+                            .add(subsidySplit.getBigDecimalField(SubsidySplitField.SM6))
+                            .add(subsidySplit.getBigDecimalField(SubsidySplitField.SM7))
+                            .add(subsidySplit.getBigDecimalField(SubsidySplitField.SM8));
 
                     subsidySplit.putField(SubsidySplitField.SUMMA, smSum);
 
