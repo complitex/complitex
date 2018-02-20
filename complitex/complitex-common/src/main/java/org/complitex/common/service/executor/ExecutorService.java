@@ -58,6 +58,9 @@ public class ExecutorService {
 
         if (executorCommand.getErrorCount() > executorCommand.getMaxErrors()){
             if (executorCommand.isDone()){
+                //listener
+                unprocessed(executorCommand, null);
+
                 executorCommand.clear();
                 executorCommand.setStatus(CRITICAL_ERROR);
 
