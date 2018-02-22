@@ -11,6 +11,7 @@ import org.complitex.osznconnection.file.entity.subsidy.SubsidySplitField;
 import org.complitex.osznconnection.file.entity.subsidy.SubsidySum;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.subsidy.task.SubsidyBindTaskBean;
+import org.complitex.osznconnection.file.service.subsidy.task.SubsidyFillTaskBean;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
 import javax.ejb.EJB;
@@ -39,6 +40,9 @@ public class SubsidyService {
 
     @EJB
     private SubsidyBindTaskBean subsidyBindTaskBean;
+
+    @EJB
+    private SubsidyFillTaskBean subsidyFillTaskBean;
 
     @EJB
     private SubsidySplitBean subsidySplitBean;
@@ -114,6 +118,15 @@ public class SubsidyService {
         if (subsidyBean.isSubsidyFileBound(subsidy.getRequestFileId())) {
             RequestFile requestFile = requestFileBean.getRequestFile(subsidy.getRequestFileId());
             requestFile.setStatus(RequestFileStatus.BOUND);
+            requestFileBean.save(requestFile);
+        }
+    }
+
+    public void fill(RequestFile requestFile, Subsidy subsidy) {
+        subsidyFillTaskBean.fill(requestFile, subsidy);
+
+        if (subsidyBean.isSubsidyFileFilled(subsidy.getRequestFileId())) {
+            requestFile.setStatus(RequestFileStatus.FILLED);
             requestFileBean.save(requestFile);
         }
     }

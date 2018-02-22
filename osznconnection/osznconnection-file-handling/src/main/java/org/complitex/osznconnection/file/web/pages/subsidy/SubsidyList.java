@@ -421,5 +421,25 @@ public final class SubsidyList extends TemplatePage {
                 target.add(content);
             }
         });
+
+        //Обработать
+        filterForm.add(new IndicatingAjaxButton("fill") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form form) {
+                Collection<Subsidy> subsidies = checkGroup.getModelObject();
+
+                for (Subsidy subsidy : subsidies){
+                    //noinspection Duplicates
+                    try {
+                        subsidyService.fill(requestFile, subsidy);
+                    } catch (Exception e) {
+                        error(ExceptionUtil.getCauseMessage(e, true));
+                    }
+                }
+
+                checkGroup.getModelObject().clear();
+                target.add(content);
+            }
+        });
     }
 }
